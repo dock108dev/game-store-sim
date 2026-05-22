@@ -5,8 +5,9 @@ extends Node
 const _ProductVisualFactory: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
-const StoreVisualKitScript: GDScript = preload(
-	"res://game/scripts/visuals/store_visual_kit.gd"
+const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store_visual_kit.gd")
+const ExpandableStoreShellRuntimeScript: GDScript = preload(
+	"res://game/scripts/visuals/expandable_store_shell_runtime.gd"
 )
 
 const EVENTS_PATH: String = "res://game/content/beta/events/customer_events.json"
@@ -95,6 +96,10 @@ const _HIDDEN_NOISE_PATHS: Array[String] = [
 	"ZoneLabels/StaffPicksLabel",
 	"ReadabilityProps/UsedConsoleDressing",
 	"ReadabilityProps/FloorDisplayIsland",
+	"ReadabilityProps/ShelfSpineRuns",
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/SpawnViewFloorDressing",
+	"ReadabilityProps/DayOneRouteMarkers",
 ]
 
 const _BETA_DEFERRED_ROOT_NODES: Array[StringName] = [
@@ -108,11 +113,7 @@ const _BETA_DEFERRED_ROOT_NODES: Array[StringName] = [
 ]
 
 const _BETA_CONTEXT_ROOT_NODES: Array[StringName] = [
-	&"CartRackLeft",
-	&"back_room",
-	&"BetaBackroomWallSide",
-	&"BetaBackroomWallFrontLeft",
-	&"BetaBackroomWallFrontRight",
+	&"ExpandableStoreShell",
 ]
 
 const _BETA_REFERENCE_VISIBLE_PATHS: Array[String] = [
@@ -132,24 +133,11 @@ const _BETA_KEEP_ROOT_NODES: Array[StringName] = [
 	&"FrontLaneFill",
 	&"CheckoutCounterPractical",
 	&"BackroomUtilityLight",
-	&"Floor",
-	&"BackWallBody",
-	&"LeftWallBody",
-	&"RightWallBody",
-	&"Ceiling",
-	&"FrontWallLeftBody",
-	&"FrontWallRightBody",
 	&"EntranceDoor",
 	&"NavigationRegion3D",
 	&"EntryArea",
 	&"RegisterArea",
 	&"checkout_counter",
-	# Authored reference-corner fixtures. Their slot Interactables are disabled
-	# by `_apply_objective_gating`, so E-presses still resolve only against
-	# beta critical-path targets.
-	&"Checkout",
-	&"CartRackLeft",
-	&"InteriorSignage",
 	&"FrontLaneQueue",
 	&"BetaDayOneController",
 	&"BetaDayOneCustomer",
@@ -157,22 +145,7 @@ const _BETA_KEEP_ROOT_NODES: Array[StringName] = [
 	&"BetaRestockShelf",
 	&"BetaDayEndTrigger",
 	&"BetaHiddenClue",
-	&"ZoneLabels",
-	&"ReadabilityProps",
-	# Runtime-authored store dressing and clock fixture. These are created by
-	# StoreController / RetroGames after the beta strip in some scene-entry
-	# paths, so they are listed here as intentional visible beta roots too.
-	&"Decorations",
-	&"TimeClock",
-	&"Storefront",
-	&"EntranceInterior",
-	# Context retained for the current inventory pickup objective. It is not a
-	# reference standard for this phase; screenshots and review beats should
-	# treat it as tutorial-critical context.
-	&"back_room",
-	&"BetaBackroomWallSide",
-	&"BetaBackroomWallFrontLeft",
-	&"BetaBackroomWallFrontRight",
+	&"ExpandableStoreShell",
 ]
 
 const BetaDebugOverlayScript: GDScript = preload("res://game/scripts/beta/beta_debug_overlay.gd")
@@ -499,6 +472,8 @@ func _ready() -> void:
 	if _beta_runtime_scope_enabled():
 		_apply_beta_only_strip()
 		_apply_minimal_scope()
+		_apply_expandable_store_shell()
+		call_deferred("_apply_expandable_store_shell")
 	_configure_beta_customer()
 	_suppress_moments_tray()
 	_load_content()
@@ -754,7 +729,7 @@ func on_beta_backroom_pickup_interacted() -> void:
 		EventBus
 		. toast_requested
 		. emit(
-				"Shipment checked. %d items available in back room." % _current_delivery_quantity,
+			"Shipment checked. %d items available in back room." % _current_delivery_quantity,
 			&"info",
 			2.5,
 		)
@@ -1231,10 +1206,14 @@ func _on_summary_reinvest(option_id: StringName) -> void:
 		_summary_panel.mark_reinvest_applied(
 			"Ordered %d extra used games for tomorrow." % _REORDER_EXTRA_QUANTITY
 		)
-	EventBus.toast_requested.emit(
-		"Order placed: %d extra used games arrive next shift." % _REORDER_EXTRA_QUANTITY,
-		&"sale",
-		3.0,
+	(
+		EventBus
+		. toast_requested
+		. emit(
+			"Order placed: %d extra used games arrive next shift." % _REORDER_EXTRA_QUANTITY,
+			&"sale",
+			3.0,
+		)
 	)
 
 
@@ -1509,7 +1488,8 @@ func _build_repeatable_shift_customer_event(day_number: int) -> Dictionary:
 			{
 				"id": "fair_sale",
 				"label": "Ring it up at the sticker price.",
-				"effects": {
+				"effects":
+				{
 					"cash": 16,
 					"reputation": 1,
 					"manager_trust": 1,
@@ -1532,7 +1512,8 @@ func _build_repeatable_shift_customer_event(day_number: int) -> Dictionary:
 			{
 				"id": "small_discount",
 				"label": "Knock a few dollars off to keep them happy.",
-				"effects": {
+				"effects":
+				{
 					"cash": 12,
 					"reputation": 2,
 					"manager_trust": 0,
@@ -1555,7 +1536,8 @@ func _build_repeatable_shift_customer_event(day_number: int) -> Dictionary:
 			{
 				"id": "no_sale",
 				"label": "Hold firm and let them walk.",
-				"effects": {
+				"effects":
+				{
 					"cash": 0,
 					"reputation": -1,
 					"manager_trust": 0,
@@ -2269,10 +2251,13 @@ func _beta_diagnostics_enabled() -> bool:
 
 
 func _beta_runtime_scope_enabled() -> bool:
-	return GameManager.current_state in [
-		GameManager.State.GAMEPLAY,
-		GameManager.State.STORE_VIEW,
-	]
+	return (
+		GameManager.current_state
+		in [
+			GameManager.State.GAMEPLAY,
+			GameManager.State.STORE_VIEW,
+		]
+	)
 
 
 func _apply_minimal_scope() -> void:
@@ -2287,6 +2272,10 @@ func _apply_minimal_scope() -> void:
 		var target: Node = store.get_node_or_null(NodePath(node_path))
 		if target is Node3D:
 			(target as Node3D).visible = true
+
+
+func _apply_expandable_store_shell() -> void:
+	ExpandableStoreShellRuntimeScript.apply(_store_root())
 
 
 ## Disables `MomentsTray` for the beta loop so the bottom-right corner
@@ -2720,16 +2709,12 @@ func _show_counter_sale_visual(was_sale: bool) -> void:
 	if store == null:
 		return
 	_clear_counter_sale_visual()
-	var checkout: Node = store.get_node_or_null("Checkout")
+	var checkout: Node = store.get_node_or_null("checkout_counter")
 	if not (checkout is Node3D):
 		return
-	var visual: Node3D = _ProductVisualFactory.create_visual_for_item(
-		_beta_restock_visual_data(0)
-	)
+	var visual: Node3D = _ProductVisualFactory.create_visual_for_item(_beta_restock_visual_data(0))
 	if visual == null:
-		visual = (
-			StoreVisualKitScript.instantiate(StoreVisualKitScript.GAME_CASE) as Node3D
-		)
+		visual = (StoreVisualKitScript.instantiate(StoreVisualKitScript.GAME_CASE) as Node3D)
 	if visual == null:
 		visual = _make_fallback_beta_shelf_item()
 	_sale_counter_item = Node3D.new()
@@ -2745,7 +2730,9 @@ func _show_counter_sale_visual(was_sale: bool) -> void:
 	flash_mesh.size = Vector3(0.42, 0.035, 0.12)
 	_register_flash.mesh = flash_mesh
 	var flash_mat := StandardMaterial3D.new()
-	flash_mat.albedo_color = Color(0.25, 0.85, 0.35, 1.0) if was_sale else Color(0.85, 0.65, 0.28, 1.0)
+	flash_mat.albedo_color = (
+		Color(0.25, 0.85, 0.35, 1.0) if was_sale else Color(0.85, 0.65, 0.28, 1.0)
+	)
 	flash_mat.emission_enabled = true
 	flash_mat.emission = flash_mat.albedo_color
 	flash_mat.emission_energy_multiplier = 0.8

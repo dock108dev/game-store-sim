@@ -23,6 +23,7 @@ func after_all() -> void:
 
 # ── Back-wall shelves: tall, against back wall ────────────────────────────────
 
+
 func test_cart_rack_left_is_tall_and_against_back_wall() -> void:
 	var rack: Node3D = _root.get_node_or_null("CartRackLeft") as Node3D
 	assert_not_null(rack, "CartRackLeft must exist")
@@ -33,11 +34,11 @@ func test_cart_rack_left_is_tall_and_against_back_wall() -> void:
 	if mesh and mesh.mesh is BoxMesh:
 		var box: BoxMesh = mesh.mesh as BoxMesh
 		assert_gt(box.size.y, 2.0, "CartRackLeft must be at least 2.0 m tall")
-		assert_gt(box.size.y, box.size.z, "CartRackLeft height must exceed depth (shelf silhouette)")
+		assert_gt(
+			box.size.y, box.size.z, "CartRackLeft height must exceed depth (shelf silhouette)"
+		)
 	assert_lt(
-		rack.global_position.z,
-		-8.0,
-		"CartRackLeft must be positioned against back wall (z < -8.0)"
+		rack.global_position.z, -8.0, "CartRackLeft must be positioned against back wall (z < -8.0)"
 	)
 
 
@@ -51,7 +52,9 @@ func test_cart_rack_right_is_tall_and_against_back_wall() -> void:
 	if mesh and mesh.mesh is BoxMesh:
 		var box: BoxMesh = mesh.mesh as BoxMesh
 		assert_gt(box.size.y, 2.0, "CartRackRight must be at least 2.0 m tall")
-		assert_gt(box.size.y, box.size.z, "CartRackRight height must exceed depth (shelf silhouette)")
+		assert_gt(
+			box.size.y, box.size.z, "CartRackRight height must exceed depth (shelf silhouette)"
+		)
 	assert_lt(
 		rack.global_position.z,
 		-8.0,
@@ -71,13 +74,12 @@ func test_console_shelf_is_tall_and_against_side_wall() -> void:
 		assert_gt(box.size.y, 2.0, "ConsoleShelf must be at least 2.0 m tall")
 		assert_gt(box.size.y, box.size.x, "ConsoleShelf height must exceed width (narrow tower)")
 	assert_gt(
-		shelf.global_position.x,
-		5.0,
-		"ConsoleShelf must be positioned against right wall (x > 5.0)"
+		shelf.global_position.x, 5.0, "ConsoleShelf must be positioned against right wall (x > 5.0)"
 	)
 
 
 # ── Shelf tiers: horizontal boards create visible levels ─────────────────────
+
 
 func test_cart_rack_left_has_shelf_board_tiers() -> void:
 	var rack: Node3D = _root.get_node_or_null("CartRackLeft") as Node3D
@@ -129,6 +131,7 @@ func test_console_shelf_has_shelf_board_tiers() -> void:
 
 # ── Display table: waist-height, wide flat top, center floor ─────────────────
 
+
 func test_glass_case_is_waist_height_and_wider_than_tall() -> void:
 	var case_node: Node3D = _root.get_node_or_null("GlassCase") as Node3D
 	assert_not_null(case_node, "GlassCase display table must exist")
@@ -161,6 +164,7 @@ func test_glass_case_is_in_center_floor_area() -> void:
 # silhouette of slot meshes. The case must still look like glass (alpha < 1.0),
 # but be opaque enough to register as a solid display surface.
 
+
 func test_glass_case_material_is_visible_from_overhead() -> void:
 	var case_node: Node3D = _root.get_node_or_null("GlassCase") as Node3D
 	assert_not_null(case_node, "GlassCase must exist")
@@ -175,11 +179,13 @@ func test_glass_case_material_is_visible_from_overhead() -> void:
 	if not mat:
 		return
 	assert_gte(
-		mat.albedo_color.a, 0.6,
+		mat.albedo_color.a,
+		0.6,
 		"Glass display alpha must be >= 0.6 so the case reads as a solid surface from the overhead camera"
 	)
 	assert_lt(
-		mat.albedo_color.a, 1.0,
+		mat.albedo_color.a,
+		1.0,
 		"Glass display must remain translucent (alpha < 1.0) to read as glass, not painted wood"
 	)
 
@@ -189,6 +195,7 @@ func test_glass_case_material_is_visible_from_overhead() -> void:
 # CaseMesh is offset by Y=0.425 with BoxMesh height 0.85, so the top surface
 # is at local Y=0.85. Slot Y must sit on that top (within a small tolerance)
 # so spawned item placeholders rest on the case rather than hovering.
+
 
 func test_glass_case_slots_rest_on_case_top() -> void:
 	var case_node: Node3D = _root.get_node_or_null("GlassCase") as Node3D
@@ -207,13 +214,18 @@ func test_glass_case_slots_rest_on_case_top() -> void:
 		if not slot:
 			continue
 		assert_almost_eq(
-			slot.position.y, case_top_y, 0.05,
-			"GlassCase/Slot%d Y (%.3f) must sit on the case top (%.3f) so items don't float"
-			% [i, slot.position.y, case_top_y]
+			slot.position.y,
+			case_top_y,
+			0.05,
+			(
+				"GlassCase/Slot%d Y (%.3f) must sit on the case top (%.3f) so items don't float"
+				% [i, slot.position.y, case_top_y]
+			)
 		)
 
 
 # ── Counter: narrow checkout area at front-right, register raised on top ────
+
 
 func test_checkout_counter_does_not_span_front_of_store() -> void:
 	# The counter must read as a checkout pocket on the right side, not a
@@ -228,14 +240,15 @@ func test_checkout_counter_does_not_span_front_of_store() -> void:
 	if mesh and mesh.mesh is BoxMesh:
 		var box: BoxMesh = mesh.mesh as BoxMesh
 		assert_lte(
-			box.size.x, 2.0,
+			box.size.x,
+			2.0,
 			"Counter must be at most 2.0 m wide so it reads as a checkout area, not a barrier"
 		)
 		var counter_left_x: float = checkout.global_position.x - box.size.x * 0.5
 		assert_gte(
-			counter_left_x, 1.5,
-			"Counter left edge x=%.2f must clear the entrance opening (x >= 1.5)"
-			% counter_left_x
+			counter_left_x,
+			1.5,
+			"Counter left edge x=%.2f must clear the entrance opening (x >= 1.5)" % counter_left_x
 		)
 	assert_gt(
 		checkout.global_position.z,
@@ -243,7 +256,8 @@ func test_checkout_counter_does_not_span_front_of_store() -> void:
 		"Checkout counter must be at the front of the store (z > 3.0)"
 	)
 	assert_gt(
-		checkout.global_position.x, 0.0,
+		checkout.global_position.x,
+		0.0,
 		"Checkout counter must sit on the front-right side of the store (x > 0)"
 	)
 
@@ -260,12 +274,8 @@ func test_counter_top_is_visually_distinct_from_counter_body() -> void:
 	assert_not_null(top, "Checkout/CounterTop trim mesh must exist")
 	if not body or not top:
 		return
-	var body_mat: StandardMaterial3D = (
-		body.get_surface_override_material(0) as StandardMaterial3D
-	)
-	var top_mat: StandardMaterial3D = (
-		top.get_surface_override_material(0) as StandardMaterial3D
-	)
+	var body_mat: StandardMaterial3D = body.get_surface_override_material(0) as StandardMaterial3D
+	var top_mat: StandardMaterial3D = top.get_surface_override_material(0) as StandardMaterial3D
 	assert_not_null(body_mat, "CounterMesh must carry a StandardMaterial3D override")
 	assert_not_null(top_mat, "CounterTop must carry a StandardMaterial3D override")
 	if body_mat == null or top_mat == null:
@@ -276,7 +286,8 @@ func test_counter_top_is_visually_distinct_from_counter_body() -> void:
 		+ absf(body_mat.albedo_color.b - top_mat.albedo_color.b)
 	)
 	assert_gt(
-		diff, 0.3,
+		diff,
+		0.3,
 		"Counter top trim must contrast counter body (sum |ΔRGB| > 0.3) so the surface reads as a distinct top, not a single block"
 	)
 
@@ -296,19 +307,22 @@ func test_register_is_readable_from_overhead_camera() -> void:
 		return
 	var size: Vector3 = (register_mesh.mesh as BoxMesh).size
 	assert_gte(
-		size.x, 0.5,
-		"Register mesh width (x=%.2f) must be >= 0.5 m so it reads from overhead"
-		% size.x
+		size.x,
+		0.5,
+		"Register mesh width (x=%.2f) must be >= 0.5 m so it reads from overhead" % size.x
 	)
 	assert_gte(
-		size.z, 0.4,
-		"Register mesh depth (z=%.2f) must be >= 0.4 m so it reads from overhead"
-		% size.z
+		size.z,
+		0.4,
+		"Register mesh depth (z=%.2f) must be >= 0.4 m so it reads from overhead" % size.z
 	)
 	assert_gte(
-		size.y, 0.35,
-		"Register mesh height (y=%.2f) must be >= 0.35 m so the silhouette reads at 52° pitch"
-		% size.y
+		size.y,
+		0.35,
+		(
+			"Register mesh height (y=%.2f) must be >= 0.35 m so the silhouette reads at 52° pitch"
+			% size.y
+		)
 	)
 
 
@@ -341,13 +355,12 @@ func test_register_sits_at_counter_top() -> void:
 # terminal even under cool fluorescent key lighting, and label the checkout
 # area so the pay point is unmistakable.
 
+
 func test_register_has_terminal_monitor_silhouette() -> void:
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
 	if not checkout:
 		return
-	var monitor: Node3D = (
-		checkout.get_node_or_null("Register/TerminalMonitor") as Node3D
-	)
+	var monitor: Node3D = checkout.get_node_or_null("Register/TerminalMonitor") as Node3D
 	assert_not_null(
 		monitor,
 		"Checkout/Register/TerminalMonitor must exist so the register reads as a terminal, not a generic box"
@@ -363,9 +376,12 @@ func test_register_has_terminal_monitor_silhouette() -> void:
 		return
 	var body_aabb: AABB = body_mesh.mesh.get_aabb()
 	assert_gte(
-		body_aabb.size.y, 0.20,
-		"TerminalMonitor body height (y=%.2f) must be >= 0.20 m so the two-tier register silhouette reads at 52° pitch"
-		% body_aabb.size.y
+		body_aabb.size.y,
+		0.20,
+		(
+			"TerminalMonitor body height (y=%.2f) must be >= 0.20 m so the two-tier register silhouette reads at 52° pitch"
+			% body_aabb.size.y
+		)
 	)
 	var base_mesh: MeshInstance3D = (
 		checkout.get_node_or_null("Register/RegisterMesh") as MeshInstance3D
@@ -374,9 +390,13 @@ func test_register_has_terminal_monitor_silhouette() -> void:
 		var base_top_y: float = base_mesh.position.y + (base_mesh.mesh as BoxMesh).size.y * 0.5
 		var monitor_bottom_y: float = monitor.position.y + body_aabb.position.y
 		assert_almost_eq(
-			monitor_bottom_y, base_top_y, 0.05,
-			"TerminalMonitor must sit on the register base top (monitor bottom %.3f vs base top %.3f)"
-			% [monitor_bottom_y, base_top_y]
+			monitor_bottom_y,
+			base_top_y,
+			0.05,
+			(
+				"TerminalMonitor must sit on the register base top (monitor bottom %.3f vs base top %.3f)"
+				% [monitor_bottom_y, base_top_y]
+			)
 		)
 
 
@@ -384,9 +404,7 @@ func test_register_has_glowing_terminal_screen() -> void:
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
 	if not checkout:
 		return
-	var monitor: Node3D = (
-		checkout.get_node_or_null("Register/TerminalMonitor") as Node3D
-	)
+	var monitor: Node3D = checkout.get_node_or_null("Register/TerminalMonitor") as Node3D
 	if monitor == null:
 		return
 	var screen: MeshInstance3D = _find_named_mesh_instance(monitor, "TerminalScreen")
@@ -409,10 +427,7 @@ func test_register_has_glowing_terminal_screen() -> void:
 		glows = (mat as StandardMaterial3D).emission_enabled
 	elif mat is ShaderMaterial:
 		glows = true
-	assert_true(
-		glows,
-		"TerminalScreen material must emit so the screen glows under store lighting"
-	)
+	assert_true(glows, "TerminalScreen material must emit so the screen glows under store lighting")
 
 
 static func _first_mesh_instance(node: Node) -> MeshInstance3D:
@@ -439,9 +454,7 @@ func test_checkout_register_has_overhead_label() -> void:
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
 	if not checkout:
 		return
-	var sign_label: Label3D = (
-		checkout.get_node_or_null("Register/CheckoutSign") as Label3D
-	)
+	var sign_label: Label3D = checkout.get_node_or_null("Register/CheckoutSign") as Label3D
 	assert_not_null(
 		sign_label,
 		"Checkout/Register/CheckoutSign Label3D must exist so the pay point is unmistakable from overhead"
@@ -453,13 +466,17 @@ func test_checkout_register_has_overhead_label() -> void:
 		"CheckoutSign text must contain 'CHECKOUT' (current: '%s')" % sign_label.text
 	)
 	assert_gt(
-		sign_label.position.y, 0.5,
-		"CheckoutSign (y=%.2f) must sit above the register so it's visible at 52° pitch"
-		% sign_label.position.y
+		sign_label.position.y,
+		0.5,
+		(
+			"CheckoutSign (y=%.2f) must sit above the register so it's visible at 52° pitch"
+			% sign_label.position.y
+		)
 	)
 
 
 # ── Open floor: unobstructed gap between counter and display table ────────────
+
 
 func test_open_floor_gap_between_counter_and_display_table() -> void:
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
@@ -510,15 +527,17 @@ func test_required_fixtures_have_static_body_on_store_fixtures_layer() -> void:
 		var body: StaticBody3D = fixture.get_node_or_null("StaticBody3D") as StaticBody3D
 		assert_not_null(
 			body,
-			"%s must have a StaticBody3D child so the player and customers cannot pass through it"
-			% fixture_name
+			(
+				"%s must have a StaticBody3D child so the player and customers cannot pass through it"
+				% fixture_name
+			)
 		)
 		if body == null:
 			continue
 		assert_eq(
-			body.collision_layer, 2,
-			"%s/StaticBody3D.collision_layer must equal 2 (store_fixtures layer)"
-			% fixture_name
+			body.collision_layer,
+			2,
+			"%s/StaticBody3D.collision_layer must equal 2 (store_fixtures layer)" % fixture_name
 		)
 
 
@@ -558,14 +577,20 @@ func test_required_fixtures_collision_shape_approximates_mesh_bounds() -> void:
 		# under 50% of the mesh extent (otherwise gaps appear at the silhouette).
 		for axis: int in range(3):
 			assert_lte(
-				box_size[axis], mesh_size[axis] * 1.25,
-				"%s collision %s-axis (%.3f) must not exceed mesh extent (%.3f) by >25%%"
-				% [fixture_name, ["x", "y", "z"][axis], box_size[axis], mesh_size[axis]]
+				box_size[axis],
+				mesh_size[axis] * 1.25,
+				(
+					"%s collision %s-axis (%.3f) must not exceed mesh extent (%.3f) by >25%%"
+					% [fixture_name, ["x", "y", "z"][axis], box_size[axis], mesh_size[axis]]
+				)
 			)
 			assert_gte(
-				box_size[axis], mesh_size[axis] * 0.5,
-				"%s collision %s-axis (%.3f) must cover at least 50%% of mesh extent (%.3f)"
-				% [fixture_name, ["x", "y", "z"][axis], box_size[axis], mesh_size[axis]]
+				box_size[axis],
+				mesh_size[axis] * 0.5,
+				(
+					"%s collision %s-axis (%.3f) must cover at least 50%% of mesh extent (%.3f)"
+					% [fixture_name, ["x", "y", "z"][axis], box_size[axis], mesh_size[axis]]
+				)
 			)
 
 
@@ -575,17 +600,16 @@ func test_shelf_slot_areas_remain_on_interactable_layer() -> void:
 	# continue to register hover/click via the InteractionRay raycast.
 	var slots: Array[Node] = _root.get_tree().get_nodes_in_group("shelf_slot")
 	assert_gt(
-		slots.size(), 0,
-		"Scene must have at least one shelf slot to verify interactable layer"
+		slots.size(), 0, "Scene must have at least one shelf slot to verify interactable layer"
 	)
 	for slot: Node in slots:
 		var area: Area3D = slot.get_node_or_null("InteractionArea") as Area3D
 		assert_not_null(area, "%s must retain its InteractionArea child" % slot.name)
 		if area:
 			assert_eq(
-				area.collision_layer, Interactable.INTERACTABLE_LAYER,
-				"%s/InteractionArea must remain on Interactable.INTERACTABLE_LAYER"
-				% slot.name
+				area.collision_layer,
+				Interactable.INTERACTABLE_LAYER,
+				"%s/InteractionArea must remain on Interactable.INTERACTABLE_LAYER" % slot.name
 			)
 
 
@@ -620,15 +644,16 @@ func test_storefront_sign_name_renders_to_interior() -> void:
 		sign.no_depth_test,
 		"SignName must keep no_depth_test=false so storefront text doesn't bleed through walls"
 	)
-	var backing: MeshInstance3D = (
-		_root.get_node_or_null("Storefront/SignBacking") as MeshInstance3D
-	)
+	var backing: MeshInstance3D = _root.get_node_or_null("Storefront/SignBacking") as MeshInstance3D
 	if backing != null:
 		var offset: float = absf(sign.position.z - backing.position.z)
 		assert_gte(
-			offset, _MIN_BACKING_CLEARANCE,
-			"SignName z-offset from SignBacking (%.3f) must be >= %.2f to avoid z-clipping"
-			% [offset, _MIN_BACKING_CLEARANCE]
+			offset,
+			_MIN_BACKING_CLEARANCE,
+			(
+				"SignName z-offset from SignBacking (%.3f) must be >= %.2f to avoid z-clipping"
+				% [offset, _MIN_BACKING_CLEARANCE]
+			)
 		)
 
 
@@ -645,33 +670,36 @@ func test_storefront_sign_tagline_renders_to_interior() -> void:
 		sign.no_depth_test,
 		"SignTagline must keep no_depth_test=false so storefront text doesn't bleed through walls"
 	)
-	var backing: MeshInstance3D = (
-		_root.get_node_or_null("Storefront/SignBacking") as MeshInstance3D
-	)
+	var backing: MeshInstance3D = _root.get_node_or_null("Storefront/SignBacking") as MeshInstance3D
 	if backing != null:
 		var offset: float = absf(sign.position.z - backing.position.z)
 		assert_gte(
-			offset, _MIN_BACKING_CLEARANCE,
-			"SignTagline z-offset from SignBacking (%.3f) must be >= %.2f to avoid z-clipping"
-			% [offset, _MIN_BACKING_CLEARANCE]
+			offset,
+			_MIN_BACKING_CLEARANCE,
+			(
+				"SignTagline z-offset from SignBacking (%.3f) must be >= %.2f to avoid z-clipping"
+				% [offset, _MIN_BACKING_CLEARANCE]
+			)
 		)
 
 
 func test_interior_back_wall_banner_faces_player() -> void:
-	var sign: Label3D = (
-		_root.get_node_or_null("InteriorSignage/StoreNameBanner") as Label3D
-	)
+	var sign: Label3D = _root.get_node_or_null("InteriorSignage/StoreNameBanner") as Label3D
 	assert_not_null(sign, "InteriorSignage/StoreNameBanner Label3D must exist")
 	if sign == null:
 		return
 	# Identity x/z basis (no Y rotation flip) is required so the readable
 	# face points toward the player approaching from +Z.
 	assert_almost_eq(
-		sign.transform.basis.x.x, 1.0, 0.001,
+		sign.transform.basis.x.x,
+		1.0,
+		0.001,
 		"StoreNameBanner basis.x.x must be 1 (not mirrored) so the text isn't reversed"
 	)
 	assert_almost_eq(
-		sign.transform.basis.z.z, 1.0, 0.001,
+		sign.transform.basis.z.z,
+		1.0,
+		0.001,
 		"StoreNameBanner basis.z.z must be 1 so the readable face points at the player"
 	)
 	assert_false(
@@ -681,9 +709,12 @@ func test_interior_back_wall_banner_faces_player() -> void:
 	# Push out from the back wall by at least 0.03 m so the label plane
 	# doesn't z-fight with the wall mesh at z = -10.0.
 	assert_gte(
-		sign.global_position.z - _BACK_WALL_INNER_Z, _MIN_BACKING_CLEARANCE,
-		"StoreNameBanner (z=%.3f) must clear the back wall (z=%.2f) by >= %.2f"
-		% [sign.global_position.z, _BACK_WALL_INNER_Z, _MIN_BACKING_CLEARANCE]
+		sign.global_position.z - _BACK_WALL_INNER_Z,
+		_MIN_BACKING_CLEARANCE,
+		(
+			"StoreNameBanner (z=%.3f) must clear the back wall (z=%.2f) by >= %.2f"
+			% [sign.global_position.z, _BACK_WALL_INNER_Z, _MIN_BACKING_CLEARANCE]
+		)
 	)
 
 
@@ -693,11 +724,15 @@ func test_interior_back_wall_games_sign_faces_player() -> void:
 	if sign == null:
 		return
 	assert_almost_eq(
-		sign.transform.basis.x.x, 1.0, 0.001,
+		sign.transform.basis.x.x,
+		1.0,
+		0.001,
 		"GamesSign basis.x.x must be 1 (not mirrored) so the text isn't reversed"
 	)
 	assert_almost_eq(
-		sign.transform.basis.z.z, 1.0, 0.001,
+		sign.transform.basis.z.z,
+		1.0,
+		0.001,
 		"GamesSign basis.z.z must be 1 so the readable face points at the player"
 	)
 	assert_false(
@@ -705,9 +740,12 @@ func test_interior_back_wall_games_sign_faces_player() -> void:
 		"GamesSign must keep no_depth_test=false so the wall occludes it from outside"
 	)
 	assert_gte(
-		sign.global_position.z - _BACK_WALL_INNER_Z, _MIN_BACKING_CLEARANCE,
-		"GamesSign (z=%.3f) must clear the back wall (z=%.2f) by >= %.2f"
-		% [sign.global_position.z, _BACK_WALL_INNER_Z, _MIN_BACKING_CLEARANCE]
+		sign.global_position.z - _BACK_WALL_INNER_Z,
+		_MIN_BACKING_CLEARANCE,
+		(
+			"GamesSign (z=%.3f) must clear the back wall (z=%.2f) by >= %.2f"
+			% [sign.global_position.z, _BACK_WALL_INNER_Z, _MIN_BACKING_CLEARANCE]
+		)
 	)
 
 
@@ -726,11 +764,13 @@ func test_zone_labels_are_fixed_facing_diegetic_signs() -> void:
 		elif node is MeshInstance3D:
 			backings.append(node as MeshInstance3D)
 	assert_gte(
-		labels.size(), 4,
+		labels.size(),
+		4,
 		"zone_label group must contain at least 4 Label3D markers (Shelves, Checkout, Exit, Backroom)"
 	)
 	assert_gte(
-		backings.size(), labels.size(),
+		backings.size(),
+		labels.size(),
 		(
 			"zone_label group must include one MeshInstance3D backing per Label3D "
 			+ "so each zone sign reads as a mounted panel, not floating UI"
@@ -738,11 +778,15 @@ func test_zone_labels_are_fixed_facing_diegetic_signs() -> void:
 	)
 	for label: Label3D in labels:
 		assert_ne(
-			label.billboard, BaseMaterial3D.BILLBOARD_ENABLED,
+			label.billboard,
+			BaseMaterial3D.BILLBOARD_ENABLED,
 			(
-				"%s must not billboard — fixed-facing diegetic signs read as "
-				+ "physically mounted, not always-facing-camera UI"
-			) % label.name
+				(
+					"%s must not billboard — fixed-facing diegetic signs read as "
+					+ "physically mounted, not always-facing-camera UI"
+				)
+				% label.name
+			)
 		)
 
 
@@ -758,7 +802,8 @@ func test_bargain_bin_section_sign_faces_main_floor_approach() -> void:
 	if sign == null:
 		return
 	assert_eq(
-		sign.billboard, BaseMaterial3D.BILLBOARD_ENABLED,
+		sign.billboard,
+		BaseMaterial3D.BILLBOARD_ENABLED,
 		"bargain_bin/SectionSign must billboard so it faces the main-floor approach from any angle"
 	)
 
@@ -785,30 +830,31 @@ func _box_world_size(mesh_inst: MeshInstance3D) -> Vector3:
 
 
 func test_silhouette_header_panel_clears_ceiling() -> void:
-	var header: MeshInstance3D = _root.get_node_or_null(
-		"Storefront/SilhouetteHeaderPanel"
-	) as MeshInstance3D
+	var header: MeshInstance3D = (
+		_root.get_node_or_null("Storefront/SilhouetteHeaderPanel") as MeshInstance3D
+	)
 	assert_not_null(header, "Storefront/SilhouetteHeaderPanel must exist")
 	if header == null:
 		return
 	var size: Vector3 = _box_world_size(header)
 	var top_edge: float = header.global_position.y + size.y * 0.5
 	assert_lte(
-		top_edge, _CEILING_HEIGHT,
+		top_edge,
+		_CEILING_HEIGHT,
 		(
-			"SilhouetteHeaderPanel top edge (y=%.3f) must not clip above the "
-			+ "%.2f m ceiling"
-		) % [top_edge, _CEILING_HEIGHT]
+			("SilhouetteHeaderPanel top edge (y=%.3f) must not clip above the " + "%.2f m ceiling")
+			% [top_edge, _CEILING_HEIGHT]
+		)
 	)
 
 
 func test_silhouette_header_panel_stays_subordinate_to_sign() -> void:
-	var header: MeshInstance3D = _root.get_node_or_null(
-		"Storefront/SilhouetteHeaderPanel"
-	) as MeshInstance3D
-	var sign_backing: MeshInstance3D = _root.get_node_or_null(
-		"Storefront/SignBacking"
-	) as MeshInstance3D
+	var header: MeshInstance3D = (
+		_root.get_node_or_null("Storefront/SilhouetteHeaderPanel") as MeshInstance3D
+	)
+	var sign_backing: MeshInstance3D = (
+		_root.get_node_or_null("Storefront/SignBacking") as MeshInstance3D
+	)
 	assert_not_null(header, "Storefront/SilhouetteHeaderPanel must exist")
 	assert_not_null(sign_backing, "Storefront/SignBacking must exist")
 	if header == null or sign_backing == null:
@@ -816,11 +862,15 @@ func test_silhouette_header_panel_stays_subordinate_to_sign() -> void:
 	var header_width: float = _box_world_size(header).x
 	var sign_width: float = _box_world_size(sign_backing).x
 	assert_lte(
-		header_width, sign_width,
+		header_width,
+		sign_width,
 		(
-			"SilhouetteHeaderPanel width (%.3f m) must be <= SignBacking width "
-			+ "(%.3f m) so the lit sign reads as the dominant entrance element"
-		) % [header_width, sign_width]
+			(
+				"SilhouetteHeaderPanel width (%.3f m) must be <= SignBacking width "
+				+ "(%.3f m) so the lit sign reads as the dominant entrance element"
+			)
+			% [header_width, sign_width]
+		)
 	)
 
 
@@ -837,23 +887,19 @@ func test_silhouette_side_pilasters_unchanged() -> void:
 		if panel == null:
 			continue
 		var size: Vector3 = _box_world_size(panel)
-		assert_almost_eq(
-			size.x, 0.46, 0.01,
-			"%s rendered width should remain ≈0.46 m" % path
-		)
-		assert_almost_eq(
-			size.y, 3.5, 0.01,
-			"%s rendered height should remain ≈3.5 m" % path
-		)
+		assert_almost_eq(size.x, 0.46, 0.01, "%s rendered width should remain ≈0.46 m" % path)
+		assert_almost_eq(size.y, 3.5, 0.01, "%s rendered height should remain ≈3.5 m" % path)
 
 
-func test_interior_signage_visible_in_beta() -> void:
+func test_interior_signage_remains_authored_for_non_boot_reference() -> void:
 	var interior: Node3D = _root.get_node_or_null("InteriorSignage") as Node3D
 	assert_not_null(interior, "InteriorSignage node must exist")
 	if interior == null:
 		return
 	assert_true(
 		interior.visible,
-		"InteriorSignage must stay visible — it is in _BETA_KEEP_ROOT_NODES "
-		+ "and brands the back wall during beta day one"
+		(
+			"InteriorSignage must remain authored for editor/reference views; runtime boot uses "
+			+ "ExpandableStoreShell for visible branding"
+		)
 	)

@@ -1,10 +1,8 @@
+# gdlint:disable=max-public-methods
 ## Tests interaction ray focus/unfocus signal emission for hover state changes.
 extends GutTest
 
-
-const _InteractionRayScript: GDScript = preload(
-	"res://game/scripts/player/interaction_ray.gd"
-)
+const INTERACTION_RAY_SCRIPT: GDScript = preload("res://game/scripts/player/interaction_ray.gd")
 
 var _ray: Node
 var _focused_labels: Array[String] = []
@@ -19,7 +17,7 @@ func before_each() -> void:
 	_unfocused_count = 0
 	_notifications.clear()
 	_ray = Node.new()
-	_ray.set_script(_InteractionRayScript)
+	_ray.set_script(INTERACTION_RAY_SCRIPT)
 	add_child_autofree(_ray)
 	EventBus.interactable_focused.connect(_on_interactable_focused)
 	EventBus.interactable_focused_disabled.connect(_on_interactable_focused_disabled)
@@ -87,13 +85,11 @@ func test_default_ray_distance_capped_for_first_person() -> void:
 	# FP gameplay must require walking up to a fixture; a long default would
 	# let the player interact across the 16x20m store from the entrance.
 	assert_lt(
-		_ray.ray_distance, 2.51,
+		_ray.ray_distance,
+		2.51,
 		"Default ray_distance must be <= 2.5m to preserve gaze-based FP interaction"
 	)
-	assert_gt(
-		_ray.ray_distance, 0.0,
-		"Default ray_distance must be positive"
-	)
+	assert_gt(_ray.ray_distance, 0.0, "Default ray_distance must be positive")
 
 
 func test_unfocus_emits_when_target_cleared() -> void:
@@ -113,9 +109,7 @@ func test_target_loss_emits_unfocus_when_hovered_node_exits_tree() -> void:
 	await get_tree().process_frame
 
 	assert_eq(
-		_unfocused_count,
-		1,
-		"Hovered target exiting the tree should emit interactable_unfocused"
+		_unfocused_count, 1, "Hovered target exiting the tree should emit interactable_unfocused"
 	)
 	assert_null(_ray.get_hovered_target(), "Hovered target should be cleared after tree exit")
 
@@ -185,8 +179,7 @@ func test_clearing_target_resets_can_interact_cache() -> void:
 	_ray._set_hovered_target(null)
 
 	assert_false(
-		_ray._hovered_can_interact,
-		"Clearing the hovered target must reset the can_interact cache"
+		_ray._hovered_can_interact, "Clearing the hovered target must reset the can_interact cache"
 	)
 
 
@@ -200,7 +193,7 @@ func test_hovered_action_label_returns_disabled_reason() -> void:
 	assert_eq(
 		_ray.get_hovered_action_label(),
 		"Shelf full",
-		"Disabled-state focus should still expose the reason via get_hovered_action_label() so AuditOverlay reflects it"
+		"Disabled focus should expose the reason via get_hovered_action_label()"
 	)
 
 
@@ -360,11 +353,51 @@ func test_poll_no_op_when_no_target_hovered() -> void:
 	)
 
 
+func test_actionable_proximity_target_overrides_empty_disabled_raycast_hit() -> void:
+	var dead_hint := _StatefulTarget.new()
+	dead_hint.can = false
+	dead_hint.disabled_reason = ""
+	add_child_autofree(dead_hint)
+	var active_objective := _StatefulTarget.new()
+	active_objective.can = true
+	add_child_autofree(active_objective)
+
+	var selected: Interactable = _ray._choose_hover_target(dead_hint, active_objective)
+
+	assert_eq(
+		selected,
+		active_objective,
+		"An active nearby objective must beat a disabled empty raycast hit"
+	)
+	assert_eq(
+		String(_ray._last_target_source),
+		"proximity",
+		"Target source must identify the forgiving proximity path"
+	)
+
+
+func test_actionable_proximity_target_overrides_disabled_raycast_with_hint_copy() -> void:
+	var disabled_with_reason := _StatefulTarget.new()
+	disabled_with_reason.can = false
+	disabled_with_reason.disabled_reason = "Check the back room first."
+	add_child_autofree(disabled_with_reason)
+	var active_far_context := _StatefulTarget.new()
+	active_far_context.can = true
+	add_child_autofree(active_far_context)
+
+	var selected: Interactable = _ray._choose_hover_target(disabled_with_reason, active_far_context)
+
+	assert_eq(
+		selected,
+		active_far_context,
+		"An active nearby objective must beat disabled raycast hint copy"
+	)
+	assert_eq(String(_ray._last_target_source), "proximity")
+
+
 func test_get_open_panel_count_starts_at_zero() -> void:
 	assert_eq(
-		_ray.get_open_panel_count(),
-		0,
-		"InteractionRay.get_open_panel_count() should start at zero"
+		_ray.get_open_panel_count(), 0, "InteractionRay.get_open_panel_count() should start at zero"
 	)
 
 
@@ -372,29 +405,15 @@ func test_get_open_panel_count_tracks_panel_signals() -> void:
 	# Public accessor must mirror the private counter so debug overlays and
 	# audit tooling can read modal-lock depth without poking internals.
 	EventBus.panel_opened.emit("debug_panel_one")
-	assert_eq(
-		_ray.get_open_panel_count(),
-		1,
-		"panel_opened should increment the open panel count"
-	)
+	assert_eq(_ray.get_open_panel_count(), 1, "panel_opened should increment the open panel count")
 	EventBus.panel_opened.emit("debug_panel_two")
 	assert_eq(
-		_ray.get_open_panel_count(),
-		2,
-		"Concurrent open panels should accumulate in the count"
+		_ray.get_open_panel_count(), 2, "Concurrent open panels should accumulate in the count"
 	)
 	EventBus.panel_closed.emit("debug_panel_one")
-	assert_eq(
-		_ray.get_open_panel_count(),
-		1,
-		"panel_closed should decrement the open panel count"
-	)
+	assert_eq(_ray.get_open_panel_count(), 1, "panel_closed should decrement the open panel count")
 	EventBus.panel_closed.emit("debug_panel_two")
-	assert_eq(
-		_ray.get_open_panel_count(),
-		0,
-		"Closing all panels should return the count to zero"
-	)
+	assert_eq(_ray.get_open_panel_count(), 0, "Closing all panels should return the count to zero")
 
 
 func test_debug_overlay_node_present_in_debug_build() -> void:
@@ -406,8 +425,7 @@ func test_debug_overlay_node_present_in_debug_build() -> void:
 		return
 	var overlay: Node = _ray.get_node_or_null("DebugInteractionOverlay")
 	assert_not_null(
-		overlay,
-		"InteractionRay should attach a DebugInteractionOverlay child in debug builds"
+		overlay, "InteractionRay should attach a DebugInteractionOverlay child in debug builds"
 	)
 	assert_true(
 		overlay is CanvasLayer,
@@ -423,8 +441,7 @@ func test_interaction_blocked_when_input_focus_pushes_modal() -> void:
 	focus._reset_for_tests()
 	focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
 	assert_false(
-		_ray._interaction_blocked(),
-		"Pre-condition: store_gameplay context must allow interaction"
+		_ray._interaction_blocked(), "Pre-condition: store_gameplay context must allow interaction"
 	)
 
 	focus.push_context(InputFocus.CTX_MODAL)
@@ -507,7 +524,8 @@ func _on_notification_requested(message: String) -> void:
 ## Test stub that returns false from `can_interact()` and exposes a settable
 ## `disabled_reason` field. Mirrors the production override pattern used by
 ## the retro-games checkout counter and ShelfSlot empty-state migrations.
-class _DisabledTarget extends Interactable:
+class _DisabledTarget:
+	extends Interactable
 	var disabled_reason: String = ""
 
 	func can_interact(_actor: Node = null) -> bool:
@@ -520,7 +538,8 @@ class _DisabledTarget extends Interactable:
 ## Test stub whose `can_interact()` result is driven by a public flag, so a
 ## test can flip the value mid-hover and assert the per-frame poll re-emits
 ## the correct focus/disabled signal pair.
-class _StatefulTarget extends Interactable:
+class _StatefulTarget:
+	extends Interactable
 	var can: bool = true
 	var disabled_reason: String = ""
 

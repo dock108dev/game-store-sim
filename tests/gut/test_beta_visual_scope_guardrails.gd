@@ -15,25 +15,20 @@ const VISUAL_ONLY_ROOTS: Array[String] = [
 ]
 
 const REQUIRED_BETA_KEEP_ROOTS: Array[String] = [
-	"Checkout",
-	"CartRackLeft",
-	"InteriorSignage",
-	"ZoneLabels",
-	"ReadabilityProps",
-	"Storefront",
-	"EntranceInterior",
-	"back_room",
+	"ExpandableStoreShell",
+	"checkout_counter",
+	"FrontLaneQueue",
+	"BetaDayOneCustomer",
 	"BetaBackroomPickup",
 	"BetaRestockShelf",
 	"BetaDayEndTrigger",
 ]
 
 const REQUIRED_VISIBLE_SIGNS: Array[String] = [
-	"Checkout/Register/CheckoutSign",
-	"InteriorSignage/GamesSign",
-	"InteriorSignage/StoreNameBanner",
-	"ZoneLabels/ShelvesLabel",
-	"ZoneLabels/BackroomLabel",
+	"ExpandableStoreShell/StarterSignLabel",
+	"ExpandableStoreShell/GamesBayLabel",
+	"ExpandableStoreShell/StockroomLabel",
+	"ExpandableStoreShell/ExpansionLabel",
 ]
 
 const REQUIRED_HIDDEN_DEFERRED_ROOTS: Array[String] = [
@@ -47,11 +42,7 @@ const REQUIRED_HIDDEN_DEFERRED_ROOTS: Array[String] = [
 ]
 
 const REQUIRED_CONTEXT_ROOTS: Array[String] = [
-	"CartRackLeft",
-	"back_room",
-	"BetaBackroomWallSide",
-	"BetaBackroomWallFrontLeft",
-	"BetaBackroomWallFrontRight",
+	"ExpandableStoreShell",
 ]
 
 const APPROVED_AMBIENT_INTERACTABLES: Array[String] = [
@@ -75,41 +66,15 @@ const ALLOWED_VISIBLE_CATEGORIES: Array[String] = [
 ]
 
 const VISIBLE_ROOT_CLASSIFICATIONS: Dictionary = {
-	"Floor": ["fixture"],
-	"BackWallBody": ["fixture"],
-	"LeftWallBody": ["fixture"],
-	"RightWallBody": ["fixture"],
-	"Ceiling": ["fixture"],
-	"FrontWallLeftBody": ["fixture"],
-	"FrontWallRightBody": ["fixture"],
 	"EntranceDoor": ["fixture"],
 	"checkout_counter": ["fixture"],
-	"Checkout": ["fixture", "sign"],
-	"CartRackLeft": ["fixture", "product"],
-	"InteriorSignage": ["sign"],
 	"FrontLaneQueue": ["fixture", "gameplay_marker"],
 	"BetaDayOneCustomer": ["gameplay_marker"],
 	"BetaBackroomPickup": ["gameplay_marker", "product", "sign"],
 	"BetaRestockShelf": ["gameplay_marker", "product"],
 	"BetaDayEndTrigger": ["gameplay_marker"],
 	"BetaHiddenClue": ["intentional_dressing"],
-	"ZoneLabels": ["sign", "gameplay_marker"],
-	"ReadabilityProps":
-	[
-		"intentional_dressing",
-		"fixture",
-		"product",
-		"sign",
-		"gameplay_marker",
-	],
-	"Decorations": ["intentional_dressing", "sign"],
-	"TimeClock": ["fixture", "gameplay_marker"],
-	"Storefront": ["fixture", "sign"],
-	"EntranceInterior": ["fixture", "intentional_dressing"],
-	"back_room": ["fixture", "product", "intentional_dressing"],
-	"BetaBackroomWallSide": ["fixture"],
-	"BetaBackroomWallFrontLeft": ["fixture"],
-	"BetaBackroomWallFrontRight": ["fixture"],
+	"ExpandableStoreShell": ["fixture", "sign", "intentional_dressing"],
 }
 
 var _root: Node3D
@@ -229,8 +194,7 @@ func test_deferred_and_context_roots_match_runtime_scope() -> void:
 		assert_not_null(node, "Deferred full-store root must remain authored: %s" % root_name)
 		if node is Node3D:
 			assert_false(
-				(node as Node3D).visible,
-				"%s must be hidden by beta runtime scope" % root_name
+				(node as Node3D).visible, "%s must be hidden by beta runtime scope" % root_name
 			)
 	for root_name: String in REQUIRED_CONTEXT_ROOTS:
 		var root_key: StringName = StringName(root_name)
@@ -240,8 +204,10 @@ func test_deferred_and_context_roots_match_runtime_scope() -> void:
 		)
 		assert_true(
 			BetaDayOneController._BETA_KEEP_ROOT_NODES.has(root_key),
-			"%s context must remain visible until the current tutorial no longer needs it"
-			% root_name
+			(
+				"%s context must remain visible until the current tutorial no longer needs it"
+				% root_name
+			)
 		)
 
 
@@ -269,37 +235,29 @@ func test_objective_targets_keep_visible_context_bundles() -> void:
 	var bundles: Dictionary = {
 		"BetaDayOneCustomer":
 		[
-			"Checkout",
-			"Checkout/Register",
-			"Checkout/Register/CheckoutSign",
 			"FrontLaneQueue",
-			"ReadabilityProps/CheckoutCounterDressing",
+			"ExpandableStoreShell",
+			"ExpandableStoreShell/StarterSignLabel",
 		],
 		"BetaBackroomPickup":
 		[
-			"back_room",
 			"BackroomUtilityLight",
-			"ReadabilityProps/BackroomDressing",
-			"ReadabilityProps/ZoneIdentity/BackroomFloorMat",
+			"ExpandableStoreShell/StockroomPartition",
+			"ExpandableStoreShell/StockroomLabel",
 			"BetaBackroomPickup/StockBox",
 			"BetaBackroomPickup/StockBoxLabel",
 		],
 		"BetaRestockShelf":
 		[
-			"CartRackLeft",
-			"ZoneLabels/ShelvesLabel",
-			"ReadabilityProps/ShelfSpineRuns",
-			"ReadabilityProps/ProductDisplayRows",
-			"ReadabilityProps/SpawnViewFloorDressing/LowDisplayTableTop",
+			"ExpandableStoreShell/StarterBackWall",
+			"ExpandableStoreShell/GamesBayLabel",
 			"BetaRestockShelf/RestockCrate",
 		],
 		"BetaDayEndTrigger":
 		[
-			"Checkout",
-			"Checkout/Register",
-			"Checkout/Register/CheckoutSign",
 			"FrontLaneQueue",
-			"ReadabilityProps/CheckoutCounterDressing",
+			"ExpandableStoreShell",
+			"ExpandableStoreShell/StarterSignLabel",
 		],
 	}
 	for target_name: String in bundles.keys():
@@ -355,9 +313,13 @@ func test_checkout_and_hidden_clue_roles_do_not_compete_for_e_press() -> void:
 		assert_false(passive_register_hint.can_interact())
 	for disabled_path: String in ["Checkout/Register", "checkout_counter/Interactable"]:
 		var disabled_register: Interactable = _root.get_node_or_null(disabled_path) as Interactable
-		assert_not_null(disabled_register, "%s must exist as a distinct checkout role" % disabled_path)
+		assert_not_null(
+			disabled_register, "%s must exist as a distinct checkout role" % disabled_path
+		)
 		if disabled_register != null:
-			assert_false(disabled_register.enabled, "%s must not compete during beta" % disabled_path)
+			assert_false(
+				disabled_register.enabled, "%s must not compete during beta" % disabled_path
+			)
 	assert_true(_root.get_node_or_null("RegisterArea") is Area3D)
 	var hidden_clue: Interactable = (
 		_root.get_node_or_null("BetaHiddenClue/Interactable") as Interactable

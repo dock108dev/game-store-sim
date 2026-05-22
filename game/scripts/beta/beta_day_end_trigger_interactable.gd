@@ -8,8 +8,8 @@ func _ready() -> void:
 	action_verb = "End"
 	interaction_type = InteractionType.REGISTER
 	interactable_id = &"register_day_end"
-	proximity_radius = 2.25
-	proximity_facing_dot = 0.4
+	proximity_radius = 3.25
+	proximity_facing_dot = 0.25
 	super._ready()
 
 

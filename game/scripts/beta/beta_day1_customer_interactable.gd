@@ -13,8 +13,8 @@ func _ready() -> void:
 	# fallback (interaction_ray.gd::_find_best_proximity_target) with a
 	# generous 2.75 m reach and a wide ~70° facing cone so the prompt
 	# fires at normal conversational distance without pixel hunting.
-	proximity_radius = 2.75
-	proximity_facing_dot = 0.35
+	proximity_radius = 3.4
+	proximity_facing_dot = 0.22
 	super._ready()
 
 

@@ -32,14 +32,14 @@ func after_all() -> void:
 
 # ── Camera / movement (embedded orbit controller, Path B) ────────────────────
 
+
 func test_scene_embeds_player_controller() -> void:
 	# Path B: the orbit PlayerController is authored directly in this scene so
 	# the hub-mode injector falls through to `_activate_store_camera` and
 	# activates the embedded StoreCamera through CameraAuthority.
 	var controller: Node = _root.get_node_or_null("PlayerController")
 	assert_not_null(
-		controller,
-		"retro_games.tscn must embed a PlayerController node for the orbit camera"
+		controller, "retro_games.tscn must embed a PlayerController node for the orbit camera"
 	)
 
 
@@ -48,15 +48,13 @@ func test_scene_ships_exactly_one_camera_3d_under_player_controller() -> void:
 	# PlayerController) so CameraAuthority's single-active guarantee holds.
 	var cameras: Array[Node] = []
 	_collect_by_class(_root, "Camera3D", cameras)
-	assert_eq(
-		cameras.size(), 1,
-		"Scene must ship exactly one Camera3D (the embedded StoreCamera)"
-	)
+	assert_eq(cameras.size(), 1, "Scene must ship exactly one Camera3D (the embedded StoreCamera)")
 	if cameras.size() != 1:
 		return
 	var cam := cameras[0] as Camera3D
 	assert_eq(
-		cam.name, &"StoreCamera",
+		cam.name,
+		&"StoreCamera",
 		"The embedded camera must be named StoreCamera so PlayerController._resolve_camera binds it"
 	)
 	assert_true(
@@ -64,8 +62,7 @@ func test_scene_ships_exactly_one_camera_3d_under_player_controller() -> void:
 		"StoreCamera must be in the 'cameras' group for CameraAuthority lookups"
 	)
 	assert_false(
-		cam.current,
-		"StoreCamera must ship with current=false — CameraAuthority owns activation"
+		cam.current, "StoreCamera must ship with current=false — CameraAuthority owns activation"
 	)
 
 
@@ -76,8 +73,7 @@ func test_scene_authors_player_entry_spawn_marker() -> void:
 	# spawn returns true and positions the body just inside the entrance.
 	var marker: Node = _root.get_node_or_null("PlayerEntrySpawn")
 	assert_not_null(
-		marker,
-		"retro_games.tscn must author a PlayerEntrySpawn Marker3D for the FP body spawn"
+		marker, "retro_games.tscn must author a PlayerEntrySpawn Marker3D for the FP body spawn"
 	)
 	if marker == null:
 		return
@@ -87,12 +83,11 @@ func test_scene_authors_player_entry_spawn_marker() -> void:
 	)
 	# Spawn sits just inside the front entrance opening (front threshold ~10 m).
 	var pos: Vector3 = (marker as Marker3D).global_position
-	assert_gte(pos.x, 1.6,
-		"PlayerEntrySpawn.x should bias toward the checkout lane")
-	assert_lte(pos.x, 2.8,
-		"PlayerEntrySpawn.x should stay inside the entrance approach")
-	assert_gt(pos.z, 8.0,
-		"PlayerEntrySpawn.z should sit near the front entrance, not at world origin")
+	assert_gte(pos.x, 1.6, "PlayerEntrySpawn.x should bias toward the checkout lane")
+	assert_lte(pos.x, 2.8, "PlayerEntrySpawn.x should stay inside the entrance approach")
+	assert_gt(
+		pos.z, 8.0, "PlayerEntrySpawn.z should sit near the front entrance, not at world origin"
+	)
 
 
 func test_player_entry_spawn_frames_checkout_customer_in_view() -> void:
@@ -108,21 +103,14 @@ func test_player_entry_spawn_frames_checkout_customer_in_view() -> void:
 	assert_lt(
 		forward.z,
 		-0.72,
-		"PlayerEntrySpawn forward vector must face into the store; got %.3f"
-		% forward.z
+		"PlayerEntrySpawn forward vector must face into the store; got %.3f" % forward.z
 	)
 	var customer_dir: Vector3 = _flat_direction(marker.global_position, customer.global_position)
 	var checkout_dir: Vector3 = _flat_direction(marker.global_position, checkout.global_position)
 	assert_gt(
-		forward.dot(customer_dir),
-		0.55,
-		"BetaDayOneCustomer must be inside the spawn view cone"
+		forward.dot(customer_dir), 0.55, "BetaDayOneCustomer must be inside the spawn view cone"
 	)
-	assert_gt(
-		forward.dot(checkout_dir),
-		0.55,
-		"Checkout must be inside the spawn view cone"
-	)
+	assert_gt(forward.dot(checkout_dir), 0.55, "Checkout must be inside the spawn view cone")
 	assert_gt(
 		_flat_right(marker).dot(customer_dir),
 		0.15,
@@ -138,39 +126,23 @@ func test_day_one_route_targets_are_front_back_shelf_register() -> void:
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
 	for target: Node3D in [customer, pickup, shelf, close_day, checkout]:
 		assert_not_null(target, "Critical Day-1 route target must exist")
-	if (
-		customer == null
-		or pickup == null
-		or shelf == null
-		or close_day == null
-		or checkout == null
-	):
+	if customer == null or pickup == null or shelf == null or close_day == null or checkout == null:
 		return
 	assert_gt(
-		customer.global_position.z,
-		7.5,
-		"Customer beat must stage at the front checkout lane"
+		customer.global_position.z, 7.5, "Customer beat must stage at the front checkout lane"
 	)
 	assert_gt(
-		pickup.global_position.x,
-		5.4,
-		"Back-room pickup must sit inside the back-room doorway path"
+		pickup.global_position.x, 5.4, "Back-room pickup must sit inside the back-room doorway path"
 	)
 	assert_lt(
-		pickup.global_position.z,
-		-7.2,
-		"Back-room pickup must stage in the rear storage zone"
+		pickup.global_position.z, -7.2, "Back-room pickup must stage in the rear storage zone"
 	)
 	assert_lt(
 		shelf.global_position.x,
 		-2.0,
 		"Restock shelf must stage on the used-shelf side of the store"
 	)
-	assert_lt(
-		shelf.global_position.z,
-		-7.0,
-		"Restock shelf must stage in the rear shelf zone"
-	)
+	assert_lt(shelf.global_position.z, -7.0, "Restock shelf must stage in the rear shelf zone")
 	assert_lt(
 		_flat_distance(close_day.global_position, checkout.global_position),
 		0.6,
@@ -178,10 +150,10 @@ func test_day_one_route_targets_are_front_back_shelf_register() -> void:
 	)
 
 
-func test_day_one_route_readability_props_survive_beta_strip() -> void:
+func test_day_one_route_props_remain_authored_but_shell_owns_beta_boot() -> void:
 	assert_true(
-		BetaDayOneController._BETA_KEEP_ROOT_NODES.has(&"ReadabilityProps"),
-		"ReadabilityProps must stay visible in the beta slice"
+		BetaDayOneController._BETA_KEEP_ROOT_NODES.has(&"ExpandableStoreShell"),
+		"ExpandableStoreShell must be the visible beta boot shell"
 	)
 	var props: Node3D = _root.get_node_or_null("ReadabilityProps") as Node3D
 	assert_not_null(props, "ReadabilityProps must exist")
@@ -225,12 +197,12 @@ func test_day_one_zone_identity_props_are_distinct_muted_visuals() -> void:
 	assert_not_null(identity, "ZoneIdentity must group checkout, back-room, and shelf accents")
 	if identity == null:
 		return
-	var checkout: MeshInstance3D = identity.get_node_or_null(
-		"CheckoutCounterAccent"
-	) as MeshInstance3D
-	var backroom: MeshInstance3D = identity.get_node_or_null(
-		"BackroomDoorThreshold"
-	) as MeshInstance3D
+	var checkout: MeshInstance3D = (
+		identity.get_node_or_null("CheckoutCounterAccent") as MeshInstance3D
+	)
+	var backroom: MeshInstance3D = (
+		identity.get_node_or_null("BackroomDoorThreshold") as MeshInstance3D
+	)
 	var shelf: MeshInstance3D = identity.get_node_or_null("ShelfStockAccent") as MeshInstance3D
 	for accent: MeshInstance3D in [checkout, backroom, shelf]:
 		assert_not_null(accent, "Each Day-1 zone must have a visual accent")
@@ -262,9 +234,10 @@ func test_day_one_zone_identity_props_are_distinct_muted_visuals() -> void:
 
 
 func test_day_one_route_markers_are_floor_accents_not_waypoints() -> void:
-	var marker: MeshInstance3D = _root.get_node_or_null(
-		"ReadabilityProps/DayOneRouteMarkers/BackroomStepA"
-	) as MeshInstance3D
+	var marker: MeshInstance3D = (
+		_root.get_node_or_null("ReadabilityProps/DayOneRouteMarkers/BackroomStepA")
+		as MeshInstance3D
+	)
 	assert_not_null(marker, "BackroomStepA route marker must exist")
 	if marker == null:
 		return
@@ -285,12 +258,8 @@ func test_day_one_route_markers_are_floor_accents_not_waypoints() -> void:
 
 
 func test_back_room_and_shelf_stock_props_share_case_language() -> void:
-	var backroom_cases: Node = _root.get_node_or_null(
-		"BetaBackroomPickup/StockBox/CaseSpines"
-	)
-	var shelf_cases: Node = _root.get_node_or_null(
-		"BetaRestockShelf/RestockCrate/CaseSpines"
-	)
+	var backroom_cases: Node = _root.get_node_or_null("BetaBackroomPickup/StockBox/CaseSpines")
+	var shelf_cases: Node = _root.get_node_or_null("BetaRestockShelf/RestockCrate/CaseSpines")
 	assert_not_null(backroom_cases, "Back-room stock box must expose visible case spines")
 	assert_not_null(shelf_cases, "Shelf restock crate must expose visible case spines")
 	if backroom_cases == null or shelf_cases == null:
@@ -347,11 +316,13 @@ func test_player_controller_pivot_bounds_match_room_footprint() -> void:
 	var min_bound: Vector3 = controller.get("store_bounds_min")
 	var max_bound: Vector3 = controller.get("store_bounds_max")
 	assert_eq(
-		min_bound, Vector3(-7.5, 0.0, -9.5),
+		min_bound,
+		Vector3(-7.5, 0.0, -9.5),
 		"store_bounds_min must match the 16×20 room footprint with 0.5 m wall margin"
 	)
 	assert_eq(
-		max_bound, Vector3(7.5, 0.0, 9.5),
+		max_bound,
+		Vector3(7.5, 0.0, 9.5),
 		"store_bounds_max must clamp the pivot inside the front entrance gap (z<=9.5)"
 	)
 
@@ -359,13 +330,8 @@ func test_player_controller_pivot_bounds_match_room_footprint() -> void:
 func test_interaction_ray_attached_to_store_camera() -> void:
 	# InteractionRay must live under StoreCamera so its raycast samples the
 	# active camera's transform every frame.
-	var ray: Node = _root.get_node_or_null(
-		"PlayerController/StoreCamera/InteractionRay"
-	)
-	assert_not_null(
-		ray,
-		"InteractionRay must be a child of PlayerController/StoreCamera"
-	)
+	var ray: Node = _root.get_node_or_null("PlayerController/StoreCamera/InteractionRay")
+	assert_not_null(ray, "InteractionRay must be a child of PlayerController/StoreCamera")
 	if ray == null:
 		return
 	var script: Script = ray.get_script()
@@ -388,13 +354,17 @@ func test_orbit_controller_disabled_on_ready_when_fp_spawn_present() -> void:
 	if controller == null:
 		return
 	assert_eq(
-		controller.process_mode, Node.PROCESS_MODE_DISABLED,
-		"PlayerController must ship with process_mode=DISABLED on _ready when "
-		+ "PlayerEntrySpawn is present (FP startup path)"
+		controller.process_mode,
+		Node.PROCESS_MODE_DISABLED,
+		(
+			"PlayerController must ship with process_mode=DISABLED on _ready when "
+			+ "PlayerEntrySpawn is present (FP startup path)"
+		)
 	)
 
 
 # ── Debug zone labels (removed — replaced by InteractionPrompt) ──────────────
+
 
 func test_no_billboard_debug_labels_in_scene() -> void:
 	# The DebugLabels Node3D + 5 billboard Label3D children were removed in
@@ -424,12 +394,12 @@ func test_no_billboard_debug_labels_in_scene() -> void:
 		for banned: String in removed_texts:
 			assert_false(
 				lbl.text.contains(banned),
-				"Label3D '%s' must not contain banned debug text '%s'"
-				% [lbl.name, banned]
+				"Label3D '%s' must not contain banned debug text '%s'" % [lbl.name, banned]
 			)
 
 
 # ── Shelf slot interaction contract ──────────────────────────────────────────
+
 
 func test_shelf_slots_present_and_in_group() -> void:
 	var slots: Array[Node] = _root.get_tree().get_nodes_in_group("shelf_slot")
@@ -447,11 +417,15 @@ func test_shelf_slots_have_collision_on_interactable_layer() -> void:
 		assert_not_null(area, "%s must have an InteractionArea child" % slot.name)
 		if area:
 			assert_eq(
-				area.collision_layer, Interactable.INTERACTABLE_LAYER,
+				area.collision_layer,
+				Interactable.INTERACTABLE_LAYER,
 				(
-					"%s/InteractionArea.collision_layer must equal "
-					+ "Interactable.INTERACTABLE_LAYER for InteractionRay"
-				) % slot.name
+					(
+						"%s/InteractionArea.collision_layer must equal "
+						+ "Interactable.INTERACTABLE_LAYER for InteractionRay"
+					)
+					% slot.name
+				)
 			)
 
 
@@ -460,13 +434,11 @@ func test_shelf_slots_have_interactable_script() -> void:
 	assert_gt(slots.size(), 0, "Must have shelf slots to test")
 	for slot: Node in slots:
 		assert_not_null(slot.get_script(), "%s must have ShelfSlot script" % slot.name)
-		assert_true(
-			slot.has_method("place_item"),
-			"%s must expose place_item method" % slot.name
-		)
+		assert_true(slot.has_method("place_item"), "%s must expose place_item method" % slot.name)
 
 
 # ── Customer path markers ─────────────────────────────────────────────────────
+
 
 func test_customer_spawn_marker_present() -> void:
 	var spawn: Node = _root.get_node_or_null("CustomerSpawn")
@@ -504,6 +476,7 @@ func test_customer_exit_is_farther_than_spawn() -> void:
 
 
 # ── Ceiling visibility and camera defaults ───────────────────────────────────
+
 
 func test_ceiling_visible_false() -> void:
 	# The original orbit-camera era required Ceiling.visible = false so
@@ -549,6 +522,7 @@ func test_camera_default_z_inside_front_wall() -> void:
 
 # ── Nav zone structure (ISSUE-005) ───────────────────────────────────────────
 
+
 func test_nav_zones_container_exists() -> void:
 	assert_not_null(
 		_root.get_node_or_null("NavZones"),
@@ -579,8 +553,7 @@ func test_nav_zones_have_nav_zone_interactable_script() -> void:
 			"%s must have interact() from NavZoneInteractable" % zone.name
 		)
 		assert_true(
-			zone.get("zone_index") != null,
-			"%s must expose zone_index property" % zone.name
+			zone.get("zone_index") != null, "%s must expose zone_index property" % zone.name
 		)
 
 
@@ -592,11 +565,15 @@ func test_nav_zones_have_interaction_area_on_interactable_layer() -> void:
 		assert_not_null(area, "%s must have an InteractionArea child" % zone.name)
 		if area:
 			assert_eq(
-				area.collision_layer, Interactable.INTERACTABLE_LAYER,
+				area.collision_layer,
+				Interactable.INTERACTABLE_LAYER,
 				(
-					"%s/InteractionArea.collision_layer must equal "
-					+ "Interactable.INTERACTABLE_LAYER for raycast"
-				) % zone.name
+					(
+						"%s/InteractionArea.collision_layer must equal "
+						+ "Interactable.INTERACTABLE_LAYER for raycast"
+					)
+					% zone.name
+				)
 			)
 
 
@@ -604,20 +581,27 @@ func test_nav_zone_positions_within_store_bounds() -> void:
 	var zones: Array[Node] = _root.get_tree().get_nodes_in_group("nav_zone")
 	for zone: Node in zones:
 		var pos: Vector3 = (zone as Node3D).global_position
-		assert_gte(pos.x, _STORE_BOUNDS_MIN.x - 0.01,
-			"%s.x must be within store bounds min" % zone.name)
-		assert_lte(pos.x, _STORE_BOUNDS_MAX.x + 0.01,
-			"%s.x must be within store bounds max" % zone.name)
-		assert_gte(pos.z, _STORE_BOUNDS_MIN.z - 0.01,
-			"%s.z must be within store bounds min" % zone.name)
-		assert_lte(pos.z, _STORE_BOUNDS_MAX.z + 0.01,
-			"%s.z must be within store bounds max" % zone.name)
+		assert_gte(
+			pos.x, _STORE_BOUNDS_MIN.x - 0.01, "%s.x must be within store bounds min" % zone.name
+		)
+		assert_lte(
+			pos.x, _STORE_BOUNDS_MAX.x + 0.01, "%s.x must be within store bounds max" % zone.name
+		)
+		assert_gte(
+			pos.z, _STORE_BOUNDS_MIN.z - 0.01, "%s.z must be within store bounds min" % zone.name
+		)
+		assert_lte(
+			pos.z, _STORE_BOUNDS_MAX.z + 0.01, "%s.z must be within store bounds max" % zone.name
+		)
 
 
 # ── Navigation mesh boundary ─────────────────────────────────────────────────
 
+
 func test_nav_mesh_front_z_covers_entry_area() -> void:
-	var nav_region: NavigationRegion3D = _root.get_node_or_null("NavigationRegion3D") as NavigationRegion3D
+	var nav_region: NavigationRegion3D = (
+		_root.get_node_or_null("NavigationRegion3D") as NavigationRegion3D
+	)
 	assert_not_null(nav_region, "NavigationRegion3D must exist in scene")
 	if not nav_region:
 		return
@@ -643,6 +627,7 @@ func test_nav_mesh_front_z_covers_entry_area() -> void:
 
 # ── Storefront sign geometry ──────────────────────────────────────────────────
 
+
 func test_sign_name_text_is_correct() -> void:
 	var lbl: Label3D = _root.get_node_or_null("Storefront/SignName") as Label3D
 	assert_not_null(lbl, "Storefront/SignName must exist")
@@ -657,10 +642,7 @@ func test_sign_tagline_text_is_correct() -> void:
 	var lbl: Label3D = _root.get_node_or_null("Storefront/SignTagline") as Label3D
 	assert_not_null(lbl, "Storefront/SignTagline must exist")
 	if lbl:
-		assert_eq(
-			lbl.text, "BUY · SELL · TRADE",
-			"SignTagline.text must be 'BUY · SELL · TRADE'"
-		)
+		assert_eq(lbl.text, "BUY · SELL · TRADE", "SignTagline.text must be 'BUY · SELL · TRADE'")
 
 
 func test_sign_labels_have_adequate_vertical_separation() -> void:
@@ -674,7 +656,10 @@ func test_sign_labels_have_adequate_vertical_separation() -> void:
 	assert_gte(
 		gap,
 		0.50,
-		"SignName-to-SignTagline center gap must be >= 0.50 wu to prevent text overlap; got %.3f" % gap
+		(
+			"SignName-to-SignTagline center gap must be >= 0.50 wu to prevent text overlap; got %.3f"
+			% gap
+		)
 	)
 
 
@@ -697,15 +682,19 @@ func test_sign_labels_have_z_clearance_above_backing() -> void:
 		assert_gt(
 			sign_name.global_position.z,
 			min_clearance_z,
-			"SignName Z must exceed %.3f for z-fight-free clearance; got %.4f"
-			% [min_clearance_z, sign_name.global_position.z]
+			(
+				"SignName Z must exceed %.3f for z-fight-free clearance; got %.4f"
+				% [min_clearance_z, sign_name.global_position.z]
+			)
 		)
 	if sign_tagline:
 		assert_gt(
 			sign_tagline.global_position.z,
 			min_clearance_z,
-			"SignTagline Z must exceed %.3f for z-fight-free clearance; got %.4f"
-			% [min_clearance_z, sign_tagline.global_position.z]
+			(
+				"SignTagline Z must exceed %.3f for z-fight-free clearance; got %.4f"
+				% [min_clearance_z, sign_tagline.global_position.z]
+			)
 		)
 
 
@@ -755,16 +744,18 @@ func test_storefront_hidden_during_interior_gameplay() -> void:
 
 # ── StoreReadyContract interface methods on retro_games root ─────────────────
 
+
 func test_root_exposes_controller_initialized_after_ready() -> void:
 	assert_true(
 		_root.has_method("is_controller_initialized"),
-		"retro_games root must expose StoreReadyContract method "
-		+ "is_controller_initialized()"
+		"retro_games root must expose StoreReadyContract method " + "is_controller_initialized()"
 	)
 	assert_true(
 		_root.is_controller_initialized(),
-		"retro_games initialize() runs in _ready() so the root must report "
-		+ "is_controller_initialized()=true once added to the tree"
+		(
+			"retro_games initialize() runs in _ready() so the root must report "
+			+ "is_controller_initialized()=true once added to the tree"
+		)
 	)
 
 
@@ -791,13 +782,16 @@ func test_objective_matches_action_passes_for_day_one_text() -> void:
 	_root.set_objective_text("Stock the item on the Used Shelves")
 	assert_true(
 		_root.objective_matches_action(),
-		"Day 1 stock-the-item objective must match at least one registered "
-		+ "interactable; shelf slots ship with action_verb='Stock' and at "
-		+ "least one slot carries an 'Item' display token"
+		(
+			"Day 1 stock-the-item objective must match at least one registered "
+			+ "interactable; shelf slots ship with action_verb='Stock' and at "
+			+ "least one slot carries an 'Item' display token"
+		)
 	)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 func _collect_by_class(node: Node, class_name_str: String, out: Array[Node]) -> void:
 	if node.is_class(class_name_str):

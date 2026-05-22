@@ -8,8 +8,8 @@ func _ready() -> void:
 	action_verb = "Check"
 	interaction_type = InteractionType.BACKROOM
 	interactable_id = &"beta_back_room_inventory"
-	proximity_radius = 2.25
-	proximity_facing_dot = 0.4
+	proximity_radius = 3.25
+	proximity_facing_dot = 0.25
 	super._ready()
 
 

@@ -204,10 +204,8 @@ func _update_raycast() -> void:
 	var ray_end: Vector3 = ray_origin + ray_dir * ray_distance
 
 	var space_state: PhysicsDirectSpaceState3D = world.direct_space_state
-	var query: PhysicsRayQueryParameters3D = (
-		PhysicsRayQueryParameters3D.create(
-			ray_origin, ray_end, interaction_mask
-		)
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
+		ray_origin, ray_end, interaction_mask
 	)
 	query.collide_with_areas = true
 	query.collide_with_bodies = true
@@ -233,13 +231,7 @@ func _update_raycast() -> void:
 	# (default proximity_radius = 0) so the raycast still wins for them.
 	var proximity_target: Interactable = _find_best_proximity_target(ray_origin, ray_dir)
 
-	var new_target: Interactable = raycast_target
-	_last_target_source = &"none"
-	if new_target != null:
-		_last_target_source = &"raycast"
-	elif proximity_target != null:
-		new_target = proximity_target
-		_last_target_source = &"proximity"
+	var new_target: Interactable = _choose_hover_target(raycast_target, proximity_target)
 
 	if new_target != _hovered_target:
 		_set_hovered_target(new_target)
@@ -247,14 +239,36 @@ func _update_raycast() -> void:
 		_poll_hovered_can_interact()
 
 
+func _choose_hover_target(
+	raycast_target: Interactable, proximity_target: Interactable
+) -> Interactable:
+	_last_target_source = &"none"
+	if (
+		proximity_target != null
+		and proximity_target.can_interact()
+		and (
+			raycast_target == null
+			or not raycast_target.can_interact()
+			or raycast_target.get_disabled_reason().strip_edges().is_empty()
+		)
+	):
+		_last_target_source = &"proximity"
+		return proximity_target
+	if raycast_target != null:
+		_last_target_source = &"raycast"
+		return raycast_target
+	if proximity_target != null:
+		_last_target_source = &"proximity"
+		return proximity_target
+	return null
+
+
 ## Scans `interactable` group for opt-in proximity targets and returns the
 ## best match by `facing_dot * 2 - distance * 0.25`. Skips disabled targets,
 ## raycast-only targets (`proximity_radius <= 0`), and targets the player
 ## isn't roughly facing. Caller decides whether to use the result (only when
 ## the precise raycast missed).
-func _find_best_proximity_target(
-	cam_pos: Vector3, cam_forward: Vector3
-) -> Interactable:
+func _find_best_proximity_target(cam_pos: Vector3, cam_forward: Vector3) -> Interactable:
 	_last_proximity_target_name = ""
 	_last_proximity_distance = INF
 	_last_proximity_facing_dot = 0.0
@@ -365,24 +379,16 @@ func _set_hovered_target(new_target: Interactable) -> void:
 		return
 
 	if _hovered_target and is_instance_valid(_hovered_target):
-		if _hovered_target.tree_exiting.is_connected(
-			_on_hovered_target_tree_exiting
-		):
-			_hovered_target.tree_exiting.disconnect(
-				_on_hovered_target_tree_exiting
-			)
+		if _hovered_target.tree_exiting.is_connected(_on_hovered_target_tree_exiting):
+			_hovered_target.tree_exiting.disconnect(_on_hovered_target_tree_exiting)
 		_hovered_target.unhighlight()
 		_hovered_target.unfocused.emit()
 
 	_hovered_target = new_target if is_instance_valid(new_target) else null
 
 	if _hovered_target:
-		if not _hovered_target.tree_exiting.is_connected(
-			_on_hovered_target_tree_exiting
-		):
-			_hovered_target.tree_exiting.connect(
-				_on_hovered_target_tree_exiting
-			)
+		if not _hovered_target.tree_exiting.is_connected(_on_hovered_target_tree_exiting):
+			_hovered_target.tree_exiting.connect(_on_hovered_target_tree_exiting)
 		_hovered_target.highlight()
 		_hovered_target.focused.emit()
 		# Branch on the runtime `can_interact()` gate so the HUD layer can
@@ -404,9 +410,7 @@ func _set_hovered_target(new_target: Interactable) -> void:
 		# The hover transition runs every physics frame, so the scoped
 		# cursor/label update stays inside the interaction latency budget.
 		EventBus.interactable_hovered.emit(
-			_hovered_target.resolve_interactable_id(),
-			_hovered_target.store_id,
-			action_label
+			_hovered_target.resolve_interactable_id(), _hovered_target.store_id, action_label
 		)
 		Input.set_default_cursor_shape(Input.CURSOR_POINTING_HAND)
 		_emit_tooltip_for_target(_hovered_target)
@@ -425,12 +429,8 @@ func _resolve_interactable(collider: Node) -> Interactable:
 func _on_hovered_target_tree_exiting() -> void:
 	var exiting_target: Interactable = _hovered_target
 	if exiting_target and is_instance_valid(exiting_target):
-		if exiting_target.tree_exiting.is_connected(
-			_on_hovered_target_tree_exiting
-		):
-			exiting_target.tree_exiting.disconnect(
-				_on_hovered_target_tree_exiting
-			)
+		if exiting_target.tree_exiting.is_connected(_on_hovered_target_tree_exiting):
+			exiting_target.tree_exiting.disconnect(_on_hovered_target_tree_exiting)
 		exiting_target.unfocused.emit()
 	_hovered_target = null
 	_hovered_action_label = ""
@@ -471,9 +471,7 @@ func _emit_tooltip_for_target(target: Interactable) -> void:
 	if not slot.is_occupied():
 		EventBus.item_tooltip_hidden.emit()
 		return
-	var item: ItemInstance = _inventory_system.get_item(
-		slot.get_item_instance_id()
-	)
+	var item: ItemInstance = _inventory_system.get_item(slot.get_item_instance_id())
 	if item:
 		EventBus.item_tooltip_requested.emit(item)
 	else:
@@ -585,10 +583,9 @@ func _update_debug_overlay() -> void:
 	var focus_depth: int = InputFocus.depth()
 	if not is_instance_valid(_hovered_target):
 		_debug_overlay.text = (
-			"[no interactable hovered]\n"
-			+ "Panels:   %d\n"
-			+ "Focus:    %s (depth %d)"
-		) % [_open_panel_count, focus_text, focus_depth]
+			("[no interactable hovered]\n" + "Panels:   %d\n" + "Focus:    %s (depth %d)")
+			% [_open_panel_count, focus_text, focus_depth]
+		)
 		return
 	var t: Interactable = _hovered_target
 	var reason: String = "—"
@@ -597,22 +594,25 @@ func _update_debug_overlay() -> void:
 		if not disabled_reason.is_empty():
 			reason = disabled_reason
 	_debug_overlay.text = (
-		"Name:     %s\n"
-		+ "Path:     %s\n"
-		+ "Layer:    %d\n"
-		+ "Mask:     %d\n"
-		+ "Enabled:  %s\n"
-		+ "Reason:   %s\n"
-		+ "Panels:   %d\n"
-		+ "Focus:    %s (depth %d)"
-	) % [
-		t.display_name,
-		str(t.get_path()),
-		t.collision_layer,
-		t.collision_mask,
-		str(t.enabled),
-		reason,
-		_open_panel_count,
-		focus_text,
-		focus_depth,
-	]
+		(
+			"Name:     %s\n"
+			+ "Path:     %s\n"
+			+ "Layer:    %d\n"
+			+ "Mask:     %d\n"
+			+ "Enabled:  %s\n"
+			+ "Reason:   %s\n"
+			+ "Panels:   %d\n"
+			+ "Focus:    %s (depth %d)"
+		)
+		% [
+			t.display_name,
+			str(t.get_path()),
+			t.collision_layer,
+			t.collision_mask,
+			str(t.enabled),
+			reason,
+			_open_panel_count,
+			focus_text,
+			focus_depth,
+		]
+	)
