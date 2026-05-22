@@ -4,6 +4,10 @@
 class_name StoreController
 extends Node
 
+const _ProductVisualFactory: GDScript = preload(
+	"res://game/scripts/visuals/product_visual_factory.gd"
+)
+
 var store_type: String = ""
 
 ## Mirrors ObjectiveDirector's day text so StoreReadyContract invariant 10
@@ -641,11 +645,16 @@ func _on_slot_stocked_visual(item_id: String, shelf_id: String) -> void:
 	if slot.is_occupied():
 		return
 	var category: String = ""
+	var visual_data: Dictionary = {}
 	if _inventory_system:
 		var item: ItemInstance = _inventory_system.get_item(item_id)
 		if item and item.definition:
 			category = item.definition.category
-	slot.place_item(item_id, category)
+			visual_data = _ProductVisualFactory.visual_data_from_item(item)
+	if visual_data.is_empty():
+		slot.place_item(item_id, category)
+	else:
+		slot.place_item_with_data(visual_data)
 
 
 ## Clears the 3D mesh on the matching ShelfSlot when an item leaves it.

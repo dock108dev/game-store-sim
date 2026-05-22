@@ -151,8 +151,8 @@ func test_shift_note_baseline_when_all_objectives_complete() -> void:
 	controller.set("_completed_objectives", completed)
 	var note: String = controller.call("_build_shift_note") as String
 	assert_string_contains(
-		note, "You made it through your first shift",
-		"All-complete shift note must use the baseline positive copy"
+		note, "You made it through the shift",
+		"All-complete shift note must use repeatable-shift positive copy"
 	)
 	assert_false(
 		note.begins_with("You closed without"),
@@ -217,5 +217,4 @@ func test_shift_note_joins_multiple_skipped_with_and() -> void:
 		note, " and ",
 		"Two skipped objectives must join with ' and ' to read as a sentence"
 	)
-
 

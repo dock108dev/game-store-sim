@@ -1,5 +1,5 @@
 ## Floating "next step" chip anchored above the active Day-1 chain
-## interactable. Renders a small green "▶ E" panel projected from the
+## interactable. Renders a small green pointer panel projected from the
 ## target's world position to screen via `Camera3D.unproject_position`, so it
 ## works in first-person and orbit views without per-mesh material swaps or a
 ## custom outline shader.
@@ -95,7 +95,7 @@ func _build_chip() -> void:
 
 	_chip_label = Label.new()
 	_chip_label.name = "Label"
-	_chip_label.text = "▶ E"
+	_chip_label.text = "▶"
 	_chip_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_chip_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_chip_label.add_theme_font_size_override("font_size", _CHIP_FONT_SIZE)

@@ -20,7 +20,6 @@ func before_each() -> void:
 func after_each() -> void:
 	if EventBus.unlock_granted.is_connected(_on_unlock_granted):
 		EventBus.unlock_granted.disconnect(_on_unlock_granted)
-	_cleanup_test_entries()
 
 
 func _on_unlock_granted(unlock_id: StringName) -> void:
@@ -42,13 +41,6 @@ func _register_test_unlock_entries() -> void:
 				{"id": id, "name": id.replace("_", " ").capitalize()},
 				"unlock"
 			)
-
-
-func _cleanup_test_entries() -> void:
-	pass
-
-
-# --- grant_unlock adds to granted and emits signal ---
 
 
 func test_grant_unlock_adds_to_granted() -> void:
@@ -80,9 +72,6 @@ func test_duplicate_grant_is_noop() -> void:
 	)
 
 
-# --- is_unlocked returns correct state ---
-
-
 func test_is_unlocked_false_before_grant() -> void:
 	assert_false(
 		_system.is_unlocked(&"extended_hours_unlock"),
@@ -95,9 +84,6 @@ func test_is_unlocked_unknown_id_returns_false() -> void:
 		_system.is_unlocked(&"nonexistent_unlock"),
 		"Unknown ID should return false without error"
 	)
-
-
-# --- get_all_granted returns correct list ---
 
 
 func test_get_all_granted_empty_initially() -> void:
@@ -115,9 +101,6 @@ func test_get_all_granted_contains_granted_ids() -> void:
 	assert_eq(granted.size(), 2, "Should contain 2 granted IDs")
 	assert_has(granted, &"order_catalog_expansion_1")
 	assert_has(granted, &"extended_hours_unlock")
-
-
-# --- save/load ---
 
 
 func test_get_save_data_format() -> void:
@@ -183,9 +166,6 @@ func test_save_load_round_trip() -> void:
 	assert_true(new_system.is_unlocked(&"order_catalog_expansion_1"))
 	assert_true(new_system.is_unlocked(&"vip_customer_events"))
 	assert_false(new_system.is_unlocked(&"prestige_nameplate"))
-
-
-# --- milestone_unlocked signal wiring ---
 
 
 func test_milestone_unlock_reward_grants_unlock() -> void:

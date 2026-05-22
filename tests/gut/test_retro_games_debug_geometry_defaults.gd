@@ -4,6 +4,29 @@
 extends GutTest
 
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
+const SHOW_DEBUG_MESHES_SETTING: String = "mallcore/debug/show_nav_zone_meshes"
+const SCREENSHOT_MODE_SETTING: String = "mallcore/test/screenshot_mode"
+
+var _prior_show_debug_meshes: Variant
+var _prior_screenshot_mode: Variant
+
+
+func before_each() -> void:
+	_prior_show_debug_meshes = ProjectSettings.get_setting(
+		SHOW_DEBUG_MESHES_SETTING, false
+	)
+	_prior_screenshot_mode = ProjectSettings.get_setting(
+		SCREENSHOT_MODE_SETTING, false
+	)
+	ProjectSettings.set_setting(SHOW_DEBUG_MESHES_SETTING, false)
+	ProjectSettings.set_setting(SCREENSHOT_MODE_SETTING, false)
+
+
+func after_each() -> void:
+	ProjectSettings.set_setting(
+		SHOW_DEBUG_MESHES_SETTING, _prior_show_debug_meshes
+	)
+	ProjectSettings.set_setting(SCREENSHOT_MODE_SETTING, _prior_screenshot_mode)
 
 
 func _instantiate_without_tree() -> Node3D:
@@ -66,28 +89,54 @@ func test_nav_zone_debug_meshes_visible_false_in_scene() -> void:
 	root.free()
 
 
-func test_debug_visuals_show_in_debug_build_after_ready() -> void:
-	# The runtime opt-in path: when each NavZone enters the tree in a debug
-	# build (which the test environment is), NavZoneInteractable._ready() runs
-	# _apply_debug_visibility() and flips its MeshInstance3D children
-	# (the DebugMesh) to visible=true.
-	if not OS.is_debug_build():
-		return
+func test_debug_visuals_stay_hidden_after_ready_by_default() -> void:
 	var root: Node3D = _instantiate_without_tree()
 	if root == null:
 		return
 	add_child(root)
-	var nav_zones: Node = root.get_node_or_null("NavZones")
-	if nav_zones:
-		for zone: Node in nav_zones.get_children():
-			var dm: MeshInstance3D = zone.get_node_or_null("DebugMesh") as MeshInstance3D
-			if dm:
-				assert_true(
-					dm.visible,
-					"NavZones/%s/DebugMesh must be visible after _ready in a debug build"
-					% zone.name
-				)
+	_assert_nav_zone_debug_meshes_visible(root, false, "remain hidden by default")
 	root.queue_free()
+
+
+func test_debug_visuals_show_only_with_explicit_opt_in() -> void:
+	if not OS.is_debug_build():
+		return
+	ProjectSettings.set_setting(SHOW_DEBUG_MESHES_SETTING, true)
+	var root: Node3D = _instantiate_without_tree()
+	if root == null:
+		return
+	add_child(root)
+	_assert_nav_zone_debug_meshes_visible(root, true, "show with explicit opt-in")
+	root.queue_free()
+
+
+func test_screenshot_mode_keeps_debug_visuals_hidden() -> void:
+	ProjectSettings.set_setting(SHOW_DEBUG_MESHES_SETTING, true)
+	ProjectSettings.set_setting(SCREENSHOT_MODE_SETTING, true)
+	var root: Node3D = _instantiate_without_tree()
+	if root == null:
+		return
+	add_child(root)
+	_assert_nav_zone_debug_meshes_visible(root, false, "stay hidden in screenshots")
+	root.queue_free()
+
+
+func _assert_nav_zone_debug_meshes_visible(
+	root: Node3D, expected_visible: bool, reason: String
+) -> void:
+	var nav_zones: Node = root.get_node_or_null("NavZones")
+	assert_not_null(nav_zones, "NavZones container must exist")
+	if nav_zones == null:
+		return
+	for zone: Node in nav_zones.get_children():
+		var dm: MeshInstance3D = zone.get_node_or_null("DebugMesh") as MeshInstance3D
+		if dm == null:
+			continue
+		assert_eq(
+			dm.visible,
+			expected_visible,
+			"NavZones/%s/DebugMesh must %s" % [zone.name, reason]
+		)
 
 
 func _collect_named(node: Node, target_name: String, out: Array[MeshInstance3D]) -> void:

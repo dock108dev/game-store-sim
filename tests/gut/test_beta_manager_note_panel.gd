@@ -182,7 +182,7 @@ func test_panel_starts_hidden_until_show_note_called() -> void:
 	)
 
 
-# ── Controller integration: Day 1 starts immediately; later notes still work ─
+# ── Controller integration: repeatable shifts start immediately ──────────────
 
 func test_day1_starts_without_opening_note_panel() -> void:
 	# Day 1 should land directly on the first actionable beat. This keeps
@@ -270,15 +270,21 @@ func test_dismissing_note_emits_manager_note_dismissed_with_id() -> void:
 # advance to STAGE_TALK_TO_CUSTOMER on dismiss. This rules out the rail /
 # gating ever showing the customer beat before the player has read the note.
 
-func test_day2_stage_is_vic_note_while_note_panel_is_up() -> void:
+func test_day2_starts_on_customer_without_note_gate() -> void:
 	BetaRunState.day = 2
 	await _load_beta_scene()
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
+	var panel: BetaManagerNotePanel = (
+		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	)
+	assert_not_null(panel, "Controller must still own the note panel for manual note beats")
+	if panel != null:
+		assert_false(panel.visible, "Repeatable Day 2 start must not open a note gate")
 	assert_eq(
-		String(controller.get("_stage")), "vic_note",
-		"Stage must sit at STAGE_VIC_NOTE while the morning note is on screen"
+		String(controller.get("_stage")), "talk_to_customer",
+		"Day 2 must start as playable store work, not a morning-note gate"
 	)
 
 
@@ -300,13 +306,12 @@ func test_day2_dismiss_advances_stage_past_vic_note() -> void:
 	)
 
 
-# ── Note-phase rail copy ────────────────────────────────────────────────────
-# AC: while the note is on screen, the rail emits 'Read Vic's morning note.'
-# rather than the customer beat. On Day 2, `_open_day` enters the Vic-note
-# gate from a deferred _ready call, so loading the scene + waiting two frames
-# is enough to capture it.
+# ── Repeat-shift rail copy ──────────────────────────────────────────────────
+# AC: Day 2 starts by emitting the normal customer objective instead of
+# surfacing a note-gate instruction. Authored/manual Vic notes can still use
+# STAGE_VIC_NOTE, but the repeatable store loop should not block on one.
 
-func test_rail_emits_note_phase_copy_before_dismiss() -> void:
+func test_day2_rail_emits_customer_phase_copy_on_start() -> void:
 	# `watch_signals` must be attached before the deferred
 	# `_open_day` runs, so the signal capture has to be scheduled before the
 	# scene is added to the tree.
@@ -320,7 +325,7 @@ func test_rail_emits_note_phase_copy_before_dismiss() -> void:
 	add_child(_root)
 	await get_tree().process_frame
 	await get_tree().process_frame
-	var found_note_phase_copy: bool = false
+	var found_customer_phase_copy: bool = false
 	for params: Array in get_signal_parameters_all(
 		EventBus, "objective_changed"
 	):
@@ -331,13 +336,12 @@ func test_rail_emits_note_phase_copy_before_dismiss() -> void:
 			continue
 		var payload: Dictionary = payload_variant as Dictionary
 		var text: String = String(payload.get("text", ""))
-		if text == "Read Vic's morning note.":
-			found_note_phase_copy = true
+		if text == "Talk to the customer at the register.":
+			found_customer_phase_copy = true
 			break
 	assert_true(
-		found_note_phase_copy,
-		"Rail must emit 'Read Vic's morning note.' before the player dismisses "
-		+ "the note panel."
+		found_customer_phase_copy,
+		"Day 2 rail must emit the playable customer objective on shift start."
 	)
 
 

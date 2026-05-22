@@ -16,6 +16,8 @@ This is the active project documentation set for the current Godot project.
   areas, and CI validation jobs.
 - [Configuration and Deployment](configuration-deployment.md) — project
   settings, user data paths, export presets, and checked-in automation.
+- [Maintenance Follow-up](maintenance/cleanup-follow-up.md) — tracked
+  oversized files that need deliberate follow-up refactors.
 
 ## Style
 
@@ -35,8 +37,6 @@ not part of the hand-maintained docs set.
 ## Boundary
 
 `README.md` is the only active project doc at the repository root.
-`BRAINDUMP.md` (also at the repository root) is the customer-voice state
-assessment and is not edited by documentation passes. Markdown under
-`.github/`, `tools/`, `addons/`, `.aidlc/`, and similar folders is
-configuration, templates, vendored material, generated run output, or tooling
-support rather than the active game documentation set.
+Markdown under `.github/`, `addons/`, `.aidlc/`, and similar folders is
+configuration, vendored material, generated run output, or platform tooling
+rather than the active game documentation set.

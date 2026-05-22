@@ -211,6 +211,72 @@ func test_get_queue_position_with_markers() -> void:
 	)
 
 
+func test_bound_queue_markers_drive_runtime_wait_positions() -> void:
+	var markers: Array[Marker3D] = []
+	for position: Vector3 in [
+		Vector3(5.0, 0.0, 8.5),
+		Vector3(4.0, 0.0, 8.6),
+		Vector3(3.0, 0.0, 8.7),
+	]:
+		var marker: Marker3D = Marker3D.new()
+		marker.position = position
+		add_child_autofree(marker)
+		markers.append(marker)
+	_queue_system.bind_queue_markers(markers)
+	_queue_system.setup_queue_positions(
+		markers[0].global_position, Vector3(0.0, 0.0, 10.0)
+	)
+
+	var c1: Customer = _make_customer()
+	var c2: Customer = _make_customer()
+	var c3: Customer = _make_customer()
+	_queue_system.enqueue_customer(c1)
+	_queue_system.enqueue_customer(c2)
+	_queue_system.enqueue_customer(c3)
+
+	assert_eq(
+		_get_customer_target(c2),
+		markers[1].global_position,
+		"Second customer must wait at QueueMarker2"
+	)
+	assert_eq(
+		_get_customer_target(c3),
+		markers[2].global_position,
+		"Third customer must wait at QueueMarker3"
+	)
+
+
+func test_setup_queue_positions_before_initialize_is_preserved() -> void:
+	var queue_system := QueueSystem.new()
+	add_child_autofree(queue_system)
+	var marker_positions: Array[Vector3] = [
+		Vector3(5.0, 0.0, 8.5),
+		Vector3(4.0, 0.0, 8.6),
+		Vector3(3.0, 0.0, 8.7),
+	]
+	for index: int in [2, 0, 1]:
+		var marker: Marker3D = Marker3D.new()
+		marker.name = "QueueMarker%d" % (index + 1)
+		marker.position = marker_positions[index]
+		marker.add_to_group("queue_markers")
+		add_child_autofree(marker)
+	queue_system.setup_queue_positions(
+		marker_positions[0], Vector3(0.0, 0.0, 10.0)
+	)
+	queue_system.initialize()
+
+	var c1: Customer = _make_customer()
+	var c2: Customer = _make_customer()
+	queue_system.enqueue_customer(c1)
+	queue_system.enqueue_customer(c2)
+
+	assert_eq(
+		_get_customer_target(c2),
+		marker_positions[1],
+		"Pre-initialize setup must bind ordered scene queue markers"
+	)
+
+
 # --- checkout_completed advances queue ---
 
 
@@ -258,6 +324,15 @@ func test_checkout_completed_emits_queue_advanced() -> void:
 		_queue_advanced_signals.back(), 0,
 		"Queue should be empty after last customer completes"
 	)
+
+
+func _get_customer_target(customer: Customer) -> Vector3:
+	var agent: NavigationAgent3D = (
+		customer.get_node_or_null("NavigationAgent3D") as NavigationAgent3D
+	)
+	if agent == null:
+		return Vector3.ZERO
+	return agent.target_position
 
 
 # --- FIFO order ---

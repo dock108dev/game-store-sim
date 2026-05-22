@@ -8,11 +8,11 @@ const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 
 const EXPECTED_WAYPOINTS: Dictionary = {
 	"EntryPoint": Vector3(0.0, 0.05, 9.0),
-	"BrowseWaypoint01": Vector3(-3.5, 0.05, -8.5),
-	"BrowseWaypoint02": Vector3(3.5, 0.05, -8.5),
-	"BrowseWaypoint03": Vector3(0.0, 0.05, -4.0),
-	"BrowseWaypoint04": Vector3(-6.0, 0.05, 0.0),
-	"CheckoutApproach": Vector3(5.35, 0.05, 6.95),
+	"BrowseWaypoint01": Vector3(-4.6, 0.05, -8.55),
+	"BrowseWaypoint02": Vector3(6.25, 0.05, -4.25),
+	"BrowseWaypoint03": Vector3(0.0, 0.05, -3.7),
+	"BrowseWaypoint04": Vector3(-6.2, 0.05, -1.2),
+	"CheckoutApproach": Vector3(5.05, 0.05, 8.45),
 	"ExitPoint": Vector3(0.0, 0.05, 10.5),
 }
 
@@ -182,6 +182,72 @@ func test_customer_nav_config_getters_return_authored_positions() -> void:
 		)
 
 
+func test_checkout_queue_markers_share_register_flow() -> void:
+	var register_area: Area3D = _root.get_node_or_null("RegisterArea") as Area3D
+	var checkout_marker: Marker3D = (
+		_root.get_node_or_null("CustomerNavConfig/CheckoutApproach") as Marker3D
+	)
+	assert_not_null(register_area, "RegisterArea must exist")
+	assert_not_null(checkout_marker, "CheckoutApproach must exist")
+	if register_area == null or checkout_marker == null:
+		return
+	var queue_markers: Array[Marker3D] = []
+	for index: int in range(1, RegisterQueue.MAX_QUEUE_SIZE + 1):
+		var marker: Marker3D = (
+			_root.get_node_or_null("QueueMarker%d" % index) as Marker3D
+		)
+		assert_not_null(marker, "QueueMarker%d must exist" % index)
+		if marker != null:
+			queue_markers.append(marker)
+	assert_eq(
+		queue_markers.size(),
+		RegisterQueue.MAX_QUEUE_SIZE,
+		"Checkout must expose one queue marker per queue slot",
+	)
+	if queue_markers.size() != RegisterQueue.MAX_QUEUE_SIZE:
+		return
+
+	var first_to_register: float = _xz_distance(
+		queue_markers[0].global_position,
+		register_area.global_position
+	)
+	assert_lt(
+		first_to_register,
+		0.05,
+		"QueueMarker1 must align with RegisterArea"
+	)
+	assert_lt(
+		_xz_distance(
+			queue_markers[0].global_position,
+			checkout_marker.global_position
+		),
+		0.05,
+		"QueueMarker1 must align with CheckoutApproach"
+	)
+	for index: int in range(1, queue_markers.size()):
+		var spacing: float = _xz_distance(
+			queue_markers[index - 1].global_position,
+			queue_markers[index].global_position
+		)
+		assert_between(
+			spacing,
+			0.95,
+			1.15,
+			"Queue marker spacing must keep a practical checkout lane"
+		)
+		assert_gt(
+			_xz_distance(
+				queue_markers[index].global_position,
+				register_area.global_position
+			),
+			_xz_distance(
+				queue_markers[index - 1].global_position,
+				register_area.global_position
+			),
+			"Queue markers must be ordered away from the register"
+		)
+
+
 # ── Furniture obstacle avoidance ────────────────────────────────────────────
 
 func test_each_furniture_carries_navigation_obstacle_with_expected_radius() -> void:
@@ -204,3 +270,7 @@ func test_each_furniture_carries_navigation_obstacle_with_expected_radius() -> v
 			obstacle.height, 0.0,
 			"%s height must be positive so it covers customer extents" % path,
 		)
+
+
+func _xz_distance(a: Vector3, b: Vector3) -> float:
+	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))

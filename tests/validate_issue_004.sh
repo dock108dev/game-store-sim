@@ -37,22 +37,12 @@ else
 	fail "known-fail manifest missing: $KNOWN_FAIL_FILE"
 fi
 
-# Helper — run the script with a synthetic log + supporting fixtures.
+# Helper — run the script with a synthetic AuditLog-format log.
 # Args: <log-content> [extra known-fail entries appended to defaults] -> stdout
 _run_gate() {
 	local log_content="$1"
 	local log_file="$TMP_DIR/audit_$RANDOM.log"
 	printf '%s\n' "$log_content" > "$log_file"
-
-	# Synthesize the legacy [AUDIT] PASS lines so the legacy gate passes —
-	# we only care about the new manifest gate here.
-	{
-		echo "[AUDIT] boot_complete: PASS"
-		echo "[AUDIT] store_entered: PASS"
-		echo "[AUDIT] refurb_completed: PASS"
-		echo "[AUDIT] transaction_completed: PASS"
-		echo "[AUDIT] day_closed: PASS"
-	} >> "$log_file"
 
 	AUDIT_SKIP_RUN=1 AUDIT_LOG="$log_file" bash "$SCRIPT" 2>&1
 }

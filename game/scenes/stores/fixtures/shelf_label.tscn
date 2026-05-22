@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_sign_backing.tres" id="1"]
+
+[sub_resource type="BoxMesh" id="label_mesh"]
+size = Vector3(0.55, 0.18, 0.03)
+
+[node name="ShelfLabel" type="Node3D" groups=["fixture"]]
+
+[node name="LabelBacking" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+mesh = SubResource("label_mesh")
+surface_material_override/0 = ExtResource("1")
+
+[node name="LabelText" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0.025)
+pixel_size = 0.003
+modulate = Color(1, 0.92, 0.55, 1)
+double_sided = false
+font_size = 24
+text = "A1"
+horizontal_alignment = 1
+outline_size = 6
+outline_modulate = Color(0.05, 0.05, 0.05, 1)
+shaded = false
+billboard = 0

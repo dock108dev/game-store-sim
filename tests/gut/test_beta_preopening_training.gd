@@ -3,12 +3,16 @@ extends GutTest
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 
 var _root: Node3D
+var _completed_feedback: Array[String] = []
+var _toast_feedback: Array[String] = []
 
 
 func before_each() -> void:
 	BetaRunState.reset_new_run()
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
+	_completed_feedback.clear()
+	_toast_feedback.clear()
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load")
 	if scene == null:
@@ -23,6 +27,10 @@ func before_each() -> void:
 func after_each() -> void:
 	ModalQueue._reset_for_tests()
 	InputFocus._reset_for_tests()
+	if EventBus.objective_completed.is_connected(_on_objective_completed):
+		EventBus.objective_completed.disconnect(_on_objective_completed)
+	if EventBus.toast_requested.is_connected(_on_toast_requested):
+		EventBus.toast_requested.disconnect(_on_toast_requested)
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
@@ -41,6 +49,32 @@ func test_new_game_enters_preopening_training_before_day_one() -> void:
 		"New Game must start with the pre-opening manager beat, not real Day 1"
 	)
 	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
+
+
+func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
+	var controller: Node = _controller()
+	assert_not_null(controller)
+	if controller == null:
+		return
+	var customer: Interactable = _customer_interactable()
+	assert_not_null(customer, "Manager beat must use the reachable customer proxy")
+	if customer == null:
+		return
+
+	assert_eq(customer.display_name, "manager")
+	assert_eq(customer.prompt_text, "Talk to")
+	assert_eq(customer.action_verb, "Talk")
+	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
+
+	var snapshot: Dictionary = controller.get_state_snapshot()
+	assert_eq(str(snapshot.get("active_objective_id", "")), "talk_to_manager")
+	assert_eq(
+		str(snapshot.get("active_objective_label", "")),
+		"Talk to the manager at checkout."
+	)
+	assert_eq(str(snapshot.get("active_objective_action", "")), "Talk to manager")
+	assert_true(_proxy_part_visible("Badge"))
+	assert_true(_proxy_part_visible("Clipboard"))
 
 
 func test_training_walks_required_mechanics_before_open_store() -> void:
@@ -70,6 +104,77 @@ func test_training_walks_required_mechanics_before_open_store() -> void:
 	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
 
 
+func test_role_prompt_copy_changes_between_training_and_customer_stages() -> void:
+	var controller: Node = _controller()
+	if controller == null:
+		return
+	controller.on_beta_customer_interacted()
+	await get_tree().process_frame
+	controller.on_beta_register_interacted()
+	await get_tree().process_frame
+	controller.on_beta_backroom_pickup_interacted()
+	await get_tree().process_frame
+	controller.on_beta_restock_interacted()
+	await get_tree().process_frame
+
+	var customer: Interactable = _customer_interactable()
+	assert_not_null(customer)
+	if customer == null:
+		return
+	assert_eq(String(controller.current_stage()), "training_practice_customer")
+	assert_eq(customer.display_name, "practice customer")
+	assert_eq(customer.prompt_text, "Run")
+	assert_eq(customer.action_verb, "Practice")
+	var practice_snapshot: Dictionary = controller.get_state_snapshot()
+	assert_eq(str(practice_snapshot.get("active_objective_id", "")), "practice_customer")
+	assert_eq(
+		str(practice_snapshot.get("active_objective_label", "")),
+		"Run a practice customer decision."
+	)
+	assert_eq(str(practice_snapshot.get("active_objective_action", "")), "Practice customer")
+	assert_false(_proxy_part_visible("Badge"))
+	assert_false(_proxy_part_visible("Clipboard"))
+
+	controller.set("_stage", BetaDayOneController.STAGE_TRAINING_OPEN_STORE)
+	controller.set("_objectives", controller.get("_training_objectives"))
+	controller.call("_apply_objective_gating")
+	controller.on_beta_register_interacted()
+	await get_tree().process_frame
+
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
+	assert_eq(customer.display_name, "customer")
+	assert_eq(customer.prompt_text, "Talk to")
+	assert_eq(customer.action_verb, "Talk")
+	var customer_snapshot: Dictionary = controller.get_state_snapshot()
+	assert_eq(str(customer_snapshot.get("active_objective_id", "")), "talk_to_customer")
+	assert_eq(
+		str(customer_snapshot.get("active_objective_label", "")),
+		"Talk to the customer at the register."
+	)
+	assert_eq(str(customer_snapshot.get("active_objective_action", "")), "Talk to the customer")
+	assert_false(_proxy_part_visible("Badge"))
+	assert_false(_proxy_part_visible("Clipboard"))
+
+
+func test_manager_completion_feedback_is_short() -> void:
+	var controller: Node = _controller()
+	if controller == null:
+		return
+	EventBus.objective_completed.connect(_on_objective_completed)
+	EventBus.toast_requested.connect(_on_toast_requested)
+
+	controller.on_beta_customer_interacted()
+	await get_tree().process_frame
+
+	assert_true(_completed_feedback.has("Manager walkthrough complete."))
+	assert_true(_toast_feedback.has("Manager walkthrough complete."))
+	assert_false(
+		_toast_feedback.has(
+			"Morning. Before we unlock the doors, I need to show you how this place works."
+		)
+	)
+
+
 func test_open_store_transitions_to_real_day_one_customer() -> void:
 	var controller: Node = _controller()
 	if controller == null:
@@ -77,13 +182,23 @@ func test_open_store_transitions_to_real_day_one_customer() -> void:
 	controller.set("_stage", BetaDayOneController.STAGE_TRAINING_OPEN_STORE)
 	controller.set("_objectives", controller.get("_training_objectives"))
 	controller.call("_apply_objective_gating")
+	watch_signals(EventBus)
 
 	controller.on_beta_register_interacted()
 	await get_tree().process_frame
 
 	assert_true(BetaRunState.preopening_complete)
+	assert_signal_emitted(
+		EventBus,
+		"run_state_changed",
+		"Opening the store must notify HUD surfaces that preopening is complete"
+	)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
+	assert_true(
+		BetaHUD.get_right_panel().get_header_text().begins_with("DAY 1 —"),
+		"Right panel must switch from opening-shift training to Day 1 store-hours copy"
+	)
 
 
 func test_manager_proxy_uses_blocky_readable_silhouette() -> void:
@@ -116,6 +231,31 @@ func test_manager_proxy_has_clerk_detail_props() -> void:
 
 func _controller() -> Node:
 	return get_tree().get_first_node_in_group("beta_day_one_controller")
+
+
+func _customer_interactable() -> Interactable:
+	var controller: Node = _controller()
+	var store_root: Node = _root
+	if controller != null and controller.get_parent() != null:
+		store_root = controller.get_parent()
+	if store_root == null:
+		return null
+	return store_root.get_node_or_null("BetaDayOneCustomer/Interactable") as Interactable
+
+
+func _proxy_part_visible(part_name: String) -> bool:
+	var part: Node3D = (
+		_root.get_node_or_null("BetaDayOneCustomer/CustomerProxy/%s" % part_name) as Node3D
+	)
+	return part != null and part.visible
+
+
+func _on_objective_completed(_objective_id: StringName, label: String) -> void:
+	_completed_feedback.append(label)
+
+
+func _on_toast_requested(message: String, _category: StringName, _duration: float) -> void:
+	_toast_feedback.append(message)
 
 
 func _active_targets() -> PackedStringArray:

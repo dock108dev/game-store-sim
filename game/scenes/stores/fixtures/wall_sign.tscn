@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_sign_backing.tres" id="1"]
+
+[sub_resource type="BoxMesh" id="sign_mesh"]
+size = Vector3(1.4, 0.45, 0.03)
+
+[sub_resource type="BoxMesh" id="rail_mesh"]
+size = Vector3(1.48, 0.05, 0.045)
+
+[sub_resource type="BoxShape3D" id="sign_shape"]
+size = Vector3(1.4, 0.45, 0.03)
+
+[node name="WallSign" type="Node3D" groups=["fixture"]]
+
+[node name="SignPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+mesh = SubResource("sign_mesh")
+surface_material_override/0 = ExtResource("1")
+
+[node name="TopRail" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.90, 0.01)
+mesh = SubResource("rail_mesh")
+surface_material_override/0 = ExtResource("1")
+
+[node name="BottomRail" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.40, 0.01)
+mesh = SubResource("rail_mesh")
+surface_material_override/0 = ExtResource("1")
+
+[node name="SignText" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0.025)
+pixel_size = 0.004
+modulate = Color(1, 0.92, 0.55, 1)
+double_sided = false
+font_size = 40
+text = "SPECIALS"
+horizontal_alignment = 1
+outline_size = 6
+outline_modulate = Color(0.05, 0.05, 0.05, 1)
+shaded = false
+billboard = 0
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+shape = SubResource("sign_shape")

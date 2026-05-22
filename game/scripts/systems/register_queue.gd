@@ -8,6 +8,7 @@ const QUEUE_SPACING: float = 1.0
 var _queue: Array[Customer] = []
 var _register_position: Vector3 = Vector3.ZERO
 var _queue_direction: Vector3 = Vector3.ZERO
+var _authored_positions: Array[Vector3] = []
 
 
 ## Sets up the queue with register and entry positions for direction calculation.
@@ -18,6 +19,16 @@ func initialize(register_pos: Vector3, entry_pos: Vector3) -> void:
 	if dir.length_squared() < 0.01:
 		dir = Vector3.BACK
 	_queue_direction = dir.normalized()
+
+
+## Sets explicit queue slot positions authored by the active store scene.
+func set_authored_positions(positions: Array[Vector3]) -> void:
+	_authored_positions.clear()
+	for position: Vector3 in positions:
+		_authored_positions.append(position)
+		if _authored_positions.size() >= MAX_QUEUE_SIZE:
+			break
+	_reposition_queue()
 
 
 ## Attempts to add a customer to the queue. Returns true if added.
@@ -110,6 +121,8 @@ func clear() -> void:
 
 
 func _get_position(index: int) -> Vector3:
+	if index >= 0 and index < _authored_positions.size():
+		return _authored_positions[index]
 	return _register_position + _queue_direction * QUEUE_SPACING * index
 
 

@@ -273,7 +273,7 @@ func test_restock_unlocks_after_backroom_pickup() -> void:
 	)
 
 
-func test_restock_visuals_reset_to_empty_state_between_days() -> void:
+func test_restock_visuals_persist_shelf_stock_between_days() -> void:
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
@@ -287,18 +287,20 @@ func test_restock_visuals_reset_to_empty_state_between_days() -> void:
 	if shelf == null:
 		return
 	assert_gt(_count_beta_shelf_items(shelf), 0, "Pre-condition: shelf is stocked")
+	var stocked_count: int = _count_beta_shelf_items(shelf)
 	controller._reset_scene_for_day(2)
 	await get_tree().process_frame
 	assert_eq(
-		_count_beta_shelf_items(shelf), 0,
-		"Beta-only shelf item meshes must not survive a day reset"
+		_count_beta_shelf_items(shelf),
+		stocked_count,
+		"Shelf stock must remain visible across repeatable shift resets"
 	)
 	var overlay: Node3D = shelf.get_node_or_null("EmptyOverlay") as Node3D
 	assert_not_null(overlay, "EmptyOverlay must still exist after reset")
 	if overlay != null:
-		assert_true(
+		assert_false(
 			overlay.visible,
-			"EmptyOverlay must return when beta restock visuals reset"
+			"EmptyOverlay must stay hidden while persistent shelf stock remains"
 		)
 
 

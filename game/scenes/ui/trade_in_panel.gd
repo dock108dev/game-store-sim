@@ -206,8 +206,6 @@ func _render_for_state(state: int) -> void:
 		TradeInSystem.State.AWAITING_PLAYER_DECISION:
 			_offer_value_label.text = "$%.2f" % system.current_offer
 			_show_section_layout(true, true, true, false, true, false)
-		TradeInSystem.State.ACCEPT_PATH, TradeInSystem.State.REJECT_PATH:
-			pass
 		TradeInSystem.State.RECEIPT_SHOWN:
 			_show_receipt()
 

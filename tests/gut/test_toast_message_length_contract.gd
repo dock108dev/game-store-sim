@@ -22,10 +22,11 @@ func test_beta_day1_toasts_fit_under_limit() -> void:
 	# should be added here so the limit is enforced at test time, not at
 	# the first time a player triggers the chain in debug.
 	var samples: Array[String] = [
-		"Training: talk to the manager.",
-		"Shipment checked. 5 items available in back room.",
-		"Stocked 5 games on the used games shelf.",
+		"Opening training ready.",
+		"Shipment checked. 2 items available in back room.",
+		"Stocked 2 games on the used games shelf.",
 		"Closing time. Wrap up at the register.",
+		"Store open for customers.",
 		"Sale complete: +$18",
 		"She thanked you and walked off.",
 		"Still too early to close. Finish out the shift first.",

@@ -4,9 +4,8 @@ const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const PROMPT_SCENE_PATH: String = "res://game/scenes/ui/interaction_prompt.tscn"
 const EVENT_ID: String = "day01_wrong_console_parent"
 const REQUIRED_VISIBLE_ZONE_LABELS: Array[String] = [
-	"SHELVES",
-	"STAFF PICKS",
-	"BACKROOM",
+	"RETRO GAMES SHELF",
+	"BACK ROOM",
 ]
 
 var _root: Node3D = null
@@ -160,7 +159,7 @@ func test_restock_requires_carrying_and_repeated_stocking_does_not_duplicate() -
 	)
 
 
-func test_summary_continue_routes_to_day_two_placeholder_without_content_dependency() -> void:
+func test_summary_continue_starts_next_shift_with_content_or_generated_customer() -> void:
 	var controller: BetaDayOneController = _controller()
 	if controller == null:
 		return
@@ -185,14 +184,33 @@ func test_summary_continue_routes_to_day_two_placeholder_without_content_depende
 
 	(summary.get("_continue_button") as Button).pressed.emit()
 	await get_tree().process_frame
-	var placeholder: ModalPanel = controller.get("_day_two_placeholder_panel") as ModalPanel
-	assert_not_null(placeholder, "Continue must route to a Day 2 placeholder panel")
-	if placeholder == null:
-		return
-	assert_true(placeholder.visible, "Missing Day 2 content must not soft-lock Continue")
+
 	assert_eq(BetaRunState.day, 2)
 	assert_eq(GameManager.get_current_day(), 2)
-	assert_eq(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_ne(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
+	assert_eq(
+		String((controller.get("_active_event") as Dictionary).get("id", "")),
+		"repeat_shift_customer_day_02",
+		"Continue must generate playable Day 2 store work when authored content is absent"
+	)
+
+	controller.call("_start_day", 3)
+	await get_tree().process_frame
+	assert_eq(BetaRunState.day, 3)
+	assert_eq(
+		String((controller.get("_active_event") as Dictionary).get("id", "")),
+		"repeat_shift_customer_day_03",
+		"Days without authored events must generate a normal customer so the loop repeats"
+	)
+	await _choose_customer_option(&"fair_sale")
+	await _acknowledge_customer_result()
+	assert_eq(
+		String(controller.current_stage()),
+		"back_room_inventory",
+		"Generated normal customer events must advance into the same store-work loop"
+	)
+	assert_gt(BetaRunState.daily_cash_delta, 0, "Generated customer sale must add daily cash")
 
 
 func test_required_zone_labels_props_and_debug_surfaces_are_validation_ready() -> void:
@@ -207,15 +225,22 @@ func test_required_zone_labels_props_and_debug_surfaces_are_validation_ready() -
 	if props != null:
 		for path: String in [
 			"DayOneRouteMarkers",
-			"FloorDisplayIsland",
 			"WallPosters",
 			"CartRackProductStacks",
 		]:
 			var prop_node: Node = props.get_node_or_null(path)
 			assert_not_null(prop_node, "ReadabilityProps/%s must exist" % path)
-			assert_true(
-				prop_node is Node3D and (prop_node as Node3D).visible,
-				"ReadabilityProps/%s must be visible by default" % path
+		var posters: Node3D = props.get_node_or_null("WallPosters") as Node3D
+		assert_true(
+			posters != null and posters.visible,
+			"ReadabilityProps/WallPosters must remain visible beta context"
+		)
+		var floor_display: Node3D = props.get_node_or_null("FloorDisplayIsland") as Node3D
+		assert_not_null(floor_display, "ReadabilityProps/FloorDisplayIsland must remain authored")
+		if floor_display != null:
+			assert_false(
+				floor_display.visible,
+				"ReadabilityProps/FloorDisplayIsland must stay deferred in beta review scope"
 			)
 
 	var debug_overlay: CanvasLayer = _controller().get("_debug_overlay") as CanvasLayer
@@ -346,7 +371,11 @@ func _spawned_shelf_item_count() -> int:
 
 func _visible_label_with_text(text: String) -> Label3D:
 	for label: Label3D in _gather_labels(_root):
-		if label.visible and label.text.strip_edges() == text:
+		var label_text: String = label.text.strip_edges()
+		var matches_text: bool = (
+			label_text == text or label_text.begins_with("%s\n" % text)
+		)
+		if label.visible and matches_text:
 			return label
 	return null
 

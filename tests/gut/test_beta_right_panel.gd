@@ -113,9 +113,28 @@ func test_preopening_header_stays_readable_without_truncation() -> void:
 	add_child_autofree(panel)
 	assert_eq(
 		panel.get_header_text(),
-		"PRE-OPENING",
-		"Pre-opening header must be short enough to render in the panel"
+		"OPENING SHIFT",
+		"Pre-opening header must read as player-facing shift copy"
 	)
+
+
+func test_run_state_changed_switches_preopening_panel_to_store_hours() -> void:
+	var panel: BetaRightPanel = BetaRightPanel.new()
+	panel.set_objectives(_TRAINING_OBJECTIVES)
+	add_child_autofree(panel)
+	assert_eq(panel.get_header_text(), "OPENING SHIFT")
+	BetaRunState.preopening_complete = true
+	EventBus.run_state_changed.emit()
+	await get_tree().process_frame
+	assert_true(
+		panel.get_header_text().begins_with("DAY 1 —"),
+		"Panel must leave opening-shift copy as soon as preopening completes"
+	)
+	_assert_label_contains(panel, "First customer")
+	_assert_no_label_contains(panel, "Manager")
+	_assert_no_label_contains(panel, "Register")
+	_assert_no_label_contains(panel, "Practice")
+	_assert_no_label_contains(panel, "Open store")
 
 
 func test_compact_store_stat_rows_seed_at_zero() -> void:

@@ -317,6 +317,25 @@ func test_event_log_filters_debug_entries_before_panel() -> void:
 	assert_eq(panel.get_latest_row_text(), "Customer served.")
 
 
+func test_event_log_lifecycle_rows_use_player_facing_shift_copy() -> void:
+	var panel: BetaEventLogPanel = _make_panel()
+	EventBus.day_started.emit(1)
+	EventBus.gameplay_ready.emit()
+	await get_tree().process_frame
+	assert_eq(panel.get_visible_entry_count(), 2)
+	assert_eq(
+		panel.get_row_text_for_test(0),
+		"Opening shift started.",
+		"Day startup row must not expose raw Day 1 lifecycle copy"
+	)
+	assert_eq(
+		panel.get_latest_row_text(),
+		"Store is in pre-opening.",
+		"Gameplay-ready row must read as player-facing pre-opening status"
+	)
+	assert_false(panel.get_latest_row_text().contains("Game started"))
+
+
 # ── width / layout contract ───────────────────────────────────────────────────
 
 func test_background_is_constrained_to_content_width() -> void:

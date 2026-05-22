@@ -46,6 +46,7 @@ The checked-in content tree under `game/content/`:
 | `staff/` | `staff_definitions.json`. |
 | `suppliers/` | `supplier_catalog.json`. |
 | `unlocks/` | `unlocks.json`. |
+| `visuals/` | `retro_games_product_visual_catalog.json` — visual-only product and platform presentation data. |
 | `beta/days/` | `day_01.json`, `day_02.json` — loaded directly by `BetaDayOneController`, routed to `ignore` in the loader table. |
 | `beta/events/` | `customer_events.json`, `hidden_thread_events.json` — same path as above. |
 
@@ -60,8 +61,8 @@ Top-level config / data JSON files at the content root:
 - `tutorial_contexts.json`
 - `upgrades.json`
 
-A `localization/` directory is present at the content root and is currently
-empty; the project-side translation resources live under
+A `localization/` directory is present at the content root and currently
+contains only `.gdkeep`; the project-side translation resources live under
 `game/assets/localization/` and are referenced from `project.godot`.
 
 `game/content/` is the single canonical content root. `DataLoaderSingleton`
@@ -90,7 +91,7 @@ Routes fall into three buckets in `_TYPE_ROUTES`:
    `personality_data`, `archetypes_data`, `platforms_data`,
    `manager_notes_data`, `onboarding_config_data`,
    `tutorial_contexts_data`, `retro_games_grades_data`,
-   `beta_day_data`, `beta_events_data`).
+   `product_visual_catalog_data`, `beta_day_data`, `beta_events_data`).
 
 For entry-bucket dictionary-shaped files, entries come from `entries`,
 `items`, or `definitions` arrays when present. Otherwise the loader uses the
@@ -159,7 +160,6 @@ for these main domains:
 | `UnlockDefinition` | Unlock effects and messages. |
 | `UpgradeDefinition` | Store upgrade cost and effect data. |
 | `AmbientMomentDefinition` | Ambient flavor-moment triggers and presentation. |
-| `PerformanceReport` | Structured end-of-day report data. |
 
 ## Non-resource content
 
@@ -175,6 +175,11 @@ Not every content file becomes a typed `Resource`. Current examples include:
   (`DataLoaderSingleton.get_retro_games_config()`)
 - beta day-1/day-2 day files and beta event files, which
   `BetaDayOneController` reads directly from disk
+- product/platform visual catalog data under `game/content/visuals/`, which
+  is recognized by `DataLoader` but remains visual-only data rather than a
+  typed gameplay resource
+- `PerformanceReport`, which is a runtime Resource built by
+  `PerformanceReportSystem`, not a JSON-loaded content resource
 
 ## Validation
 

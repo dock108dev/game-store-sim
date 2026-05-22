@@ -8,7 +8,7 @@ are driven by the versioned Godot export presets and GitHub Actions workflows.
 
 ## Run locally
 
-1. Install a standard Godot 4.x editor build.
+1. Install a standard Godot 4.6.2 editor build.
 2. Import `project.godot`.
 3. Let Godot import project assets.
 4. Run the project with F5.
@@ -24,10 +24,9 @@ bash tests/run_tests.sh
 The test runner resolves Godot from `GODOT`, `GODOT_EXECUTABLE`, `godot` on
 `PATH`, or common macOS install paths, imports assets, runs GUT headlessly,
 runs `game/tests/run_tests.gd` when present, writes output to
-`tests/test_run.log`, and then runs shell validators matching
-`tests/validate_*.sh` plus the SSOT tripwires under `scripts/`
-(`validate_translations.sh`, `validate_single_store_ui.sh`,
-`validate_tutorial_single_source.sh`).
+`tests/test_run.log`, and then runs the maintained shell validators under
+`tests/` plus the SSOT tripwires under `scripts/` (`validate_translations.sh`,
+`validate_single_store_ui.sh`, `validate_tutorial_single_source.sh`).
 
 ## Deployment basics
 
@@ -53,3 +52,4 @@ Supporting project docs live under `docs/`:
 - [Testing](docs/testing.md)
 - [Configuration and Deployment](docs/configuration-deployment.md)
 - [Visual Grammar](docs/style/visual-grammar.md)
+- [Cleanup Follow-up](docs/maintenance/cleanup-follow-up.md)

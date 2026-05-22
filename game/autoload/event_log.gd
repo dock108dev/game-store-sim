@@ -283,7 +283,11 @@ func _format_message(action: String, target: String, params: Dictionary) -> Stri
 			var satisfied: bool = bool(params.get("satisfied", true))
 			result = "Customer left (%s)." % ("satisfied" if satisfied else "unhappy")
 		"day_started":
-			result = "Day %d started." % int(params.get("day", 0))
+			var day: int = int(params.get("day", 0))
+			if day <= 1:
+				result = "Opening shift started."
+			else:
+				result = "Shift %d started." % day
 		"stat_changed":
 			var stat: String = str(params.get("stat", ""))
 			if stat == "money":
@@ -293,7 +297,7 @@ func _format_message(action: String, target: String, params: Dictionary) -> Stri
 			else:
 				result = "%s changed." % stat
 		"game_started":
-			result = "Game started."
+			result = "Store is in pre-opening."
 		"modal_opened":
 			result = "Modal opened: %s." % str(params.get("modal_id", ""))
 		"modal_closed":

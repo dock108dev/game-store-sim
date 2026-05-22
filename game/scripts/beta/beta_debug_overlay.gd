@@ -12,6 +12,9 @@ extends CanvasLayer
 enum DisplayMode { HIDDEN, COMPACT, EXPANDED }
 
 const REFRESH_INTERVAL: float = 0.15
+const DEBUG_UI_SETTING: String = "debug/ui_enabled"
+const BETA_DIAGNOSTICS_SETTING: String = "debug/beta_diagnostics_enabled"
+const SCREENSHOT_MODE_SETTING: String = "mallcore/test/screenshot_mode"
 
 const _MODE_LABEL := {
 	DisplayMode.HIDDEN: "off",
@@ -31,11 +34,12 @@ var _interaction_ray: Node = null
 
 
 func _ready() -> void:
-	if not _diagnostics_enabled():
-		queue_free()
-		return
 	layer = 90
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	process_mode = (
+		Node.PROCESS_MODE_ALWAYS
+		if _diagnostics_enabled()
+		else Node.PROCESS_MODE_DISABLED
+	)
 
 	_panel = PanelContainer.new()
 	_panel.anchor_left = 0.0
@@ -151,9 +155,12 @@ func _cycle_mode() -> void:
 
 
 func _diagnostics_enabled() -> bool:
-	return OS.is_debug_build() or ProjectSettings.get_setting(
-		"debug/beta_diagnostics_enabled",
-		false
+	return (
+		not bool(ProjectSettings.get_setting(SCREENSHOT_MODE_SETTING, false))
+		and (
+			bool(ProjectSettings.get_setting(DEBUG_UI_SETTING, false))
+			or bool(ProjectSettings.get_setting(BETA_DIAGNOSTICS_SETTING, false))
+		)
 	)
 
 

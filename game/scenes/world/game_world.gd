@@ -2,98 +2,49 @@
 ## Root scene for the playable game world. Instantiates runtime systems and UI.
 extends Node3D
 
-const _HUD_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/hud.tscn"
-)
-const _INVENTORY_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/inventory_panel.tscn"
-)
-const _CHECKOUT_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/checkout_panel.tscn"
-)
-const _PRICING_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/pricing_panel.tscn"
-)
-const _HAGGLE_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/haggle_panel.tscn"
-)
-const _DAY_SUMMARY_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/day_summary.tscn"
-)
-const _CLOSING_CHECKLIST_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/closing_checklist.tscn"
-)
+const _HUD_SCENE: PackedScene = preload("res://game/scenes/ui/hud.tscn")
+const _INVENTORY_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/inventory_panel.tscn")
+const _CHECKOUT_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/checkout_panel.tscn")
+const _PRICING_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/pricing_panel.tscn")
+const _HAGGLE_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/haggle_panel.tscn")
+const _DAY_SUMMARY_SCENE: PackedScene = preload("res://game/scenes/ui/day_summary.tscn")
+const _CLOSING_CHECKLIST_SCENE: PackedScene = preload("res://game/scenes/ui/closing_checklist.tscn")
 const _CLOSE_DAY_CONFIRMATION_PANEL_SCENE: PackedScene = preload(
 	"res://game/scenes/ui/close_day_confirmation_panel.tscn"
 )
-const _FIXTURE_CATALOG_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/fixture_catalog.tscn"
-)
-const _MILESTONES_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/milestones_panel.tscn"
-)
+const _FIXTURE_CATALOG_SCENE: PackedScene = preload("res://game/scenes/ui/fixture_catalog.tscn")
+const _MILESTONES_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/milestones_panel.tscn")
 const _COMPLETION_TRACKER_PANEL_SCENE: PackedScene = preload(
 	"res://game/scenes/ui/completion_tracker_panel.tscn"
 )
-const _ORDER_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/order_panel.tscn"
-)
-const _TRENDS_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/trends_panel.tscn"
-)
-const _PERFORMANCE_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/performance_panel.tscn"
-)
-const _PAUSE_MENU_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/pause_menu.tscn"
-)
-const _SAVE_LOAD_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/save_load_panel.tscn"
-)
-const _SETTINGS_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/settings_panel.tscn"
-)
-const _MALL_HALLWAY_SCENE: PackedScene = preload(
-	"res://game/scenes/world/mall_hallway.tscn"
-)
-const _STAFF_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/staff_panel.tscn"
-)
-const _TUTORIAL_OVERLAY_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/tutorial_overlay.tscn"
-)
+const _ORDER_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/order_panel.tscn")
+const _TRENDS_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/trends_panel.tscn")
+const _PERFORMANCE_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/performance_panel.tscn")
+const _PAUSE_MENU_SCENE: PackedScene = preload("res://game/scenes/ui/pause_menu.tscn")
+const _SAVE_LOAD_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/save_load_panel.tscn")
+const _SETTINGS_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/settings_panel.tscn")
+const _MALL_HALLWAY_SCENE: PackedScene = preload("res://game/scenes/world/mall_hallway.tscn")
+const _STAFF_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/staff_panel.tscn")
+const _TUTORIAL_OVERLAY_SCENE: PackedScene = preload("res://game/scenes/ui/tutorial_overlay.tscn")
 const _FIRST_RUN_CUE_OVERLAY_SCENE: PackedScene = preload(
 	"res://game/scenes/ui/first_run_cue_overlay.tscn"
 )
-const _ITEM_TOOLTIP_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/item_tooltip.tscn"
-)
-const _VISUAL_FEEDBACK_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/visual_feedback.tscn"
-)
-const _ENDING_SCREEN_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/ending_screen.tscn"
-)
-const _UPGRADE_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/upgrade_panel.tscn"
-)
+const _ITEM_TOOLTIP_SCENE: PackedScene = preload("res://game/scenes/ui/item_tooltip.tscn")
+const _VISUAL_FEEDBACK_SCENE: PackedScene = preload("res://game/scenes/ui/visual_feedback.tscn")
+const _ENDING_SCREEN_SCENE: PackedScene = preload("res://game/scenes/ui/ending_screen.tscn")
+const _UPGRADE_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/upgrade_panel.tscn")
 const _REFURBISHMENT_DIALOG_SCENE: PackedScene = preload(
 	"res://game/scenes/ui/refurbishment_dialog.tscn"
 )
 const _REFURB_QUEUE_PANEL_SCENE: PackedScene = preload(
 	"res://game/scenes/ui/refurb_queue_panel.tscn"
 )
-const _MOMENTS_TRAY_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/moments_tray.tscn"
-)
-const _MOMENTS_LOG_PANEL_SCENE: PackedScene = preload(
-	"res://game/scenes/ui/moments_log_panel.tscn"
-)
-const _DEBUG_OVERLAY_SCENE: PackedScene = preload(
-	"res://game/scenes/debug/debug_overlay.tscn"
-)
-const _STORE_PLAYER_SCENE: PackedScene = preload(
-	"res://game/scenes/player/store_player_body.tscn"
+const _MOMENTS_TRAY_SCENE: PackedScene = preload("res://game/scenes/ui/moments_tray.tscn")
+const _MOMENTS_LOG_PANEL_SCENE: PackedScene = preload("res://game/scenes/ui/moments_log_panel.tscn")
+const _DEBUG_OVERLAY_SCENE: PackedScene = preload("res://game/scenes/debug/debug_overlay.tscn")
+const _STORE_PLAYER_SCENE: PackedScene = preload("res://game/scenes/player/store_player_body.tscn")
+const _STORE_LAYOUT_RUNTIME_SCRIPT: GDScript = preload(
+	"res://game/scripts/visuals/store_layout_runtime.gd"
 )
 const _PLAYER_ENTRY_SPAWN_NAME: String = "PlayerEntrySpawn"
 
@@ -117,6 +68,7 @@ var _refurbishment_dialog: RefurbishmentDialog = null
 var _refurb_queue_panel: RefurbQueuePanel = null
 var _deferred_panels_loaded: bool = false
 var _nav_mesh_rebaker: NavMeshRebaker = null
+var _store_layout_runtime: Node = null
 
 var _day_manager: DayManager = null
 
@@ -142,32 +94,18 @@ var _hub_active_store_scene: Node3D = null
 @onready var order_system: OrderSystem = $OrderSystem
 @onready var staff_system: StaffSystem = $StaffSystem
 @onready var build_mode: BuildModeSystem = $BuildModeSystem
-@onready var fixture_placement: FixturePlacementSystem = (
-	$FixturePlacementSystem
-)
+@onready var fixture_placement: FixturePlacementSystem = $FixturePlacementSystem
 @onready var tutorial_system: TutorialSystem = $TutorialSystem
 @onready var performance_manager: PerformanceManager = $PerformanceManager
-@onready var performance_report_system: PerformanceReportSystem = (
-	$PerformanceReportSystem
-)
+@onready var performance_report_system: PerformanceReportSystem = $PerformanceReportSystem
 @onready var random_event_system: RandomEventSystem = $RandomEventSystem
-@onready var ambient_moments_system: AmbientMomentsSystem = (
-	$AmbientMomentsSystem
-)
-@onready var regulars_log_system: RegularsLogSystem = (
-	$RegularsLogSystem
-)
-@onready var ending_evaluator: EndingEvaluatorSystem = (
-	$EndingEvaluatorSystem
-)
-@onready var store_upgrade_system: StoreUpgradeSystem = (
-	$StoreUpgradeSystem
-)
+@onready var ambient_moments_system: AmbientMomentsSystem = $AmbientMomentsSystem
+@onready var regulars_log_system: RegularsLogSystem = $RegularsLogSystem
+@onready var ending_evaluator: EndingEvaluatorSystem = $EndingEvaluatorSystem
+@onready var store_upgrade_system: StoreUpgradeSystem = $StoreUpgradeSystem
 @onready var completion_tracker: CompletionTracker = $CompletionTracker
 @onready var save_manager: SaveManager = $SaveManager
-@onready var day_cycle_controller: DayCycleController = (
-	$DayCycleController
-)
+@onready var day_cycle_controller: DayCycleController = $DayCycleController
 @onready var day_phase_lighting: DayPhaseLighting = $DayPhaseLighting
 
 @onready var _ui_layer: CanvasLayer = $UILayer
@@ -180,31 +118,26 @@ func _ready() -> void:
 	_setup_ui()
 	if _mall_hallway:
 		_mall_hallway.set_systems(
-			economy_system, ReputationSystemSingleton,
-			inventory_system, progression_system, store_state_manager
+			economy_system,
+			ReputationSystemSingleton,
+			inventory_system,
+			progression_system,
+			store_state_manager
 		)
-		_mall_hallway.set_ambient_systems(
-			customer_system, time_system
-		)
+		_mall_hallway.set_ambient_systems(customer_system, time_system)
 		_mall_hallway.apply_unlock_state(progression_system)
 	# Hub-mode wiring runs after `initialize_game_systems` (which calls
 	# `finalize_system_wiring`) so an early click cannot route to systems that
 	# are still being constructed. The injector seam routes hub-mode entries
 	# through StoreDirector while preserving all 30+ in-tree systems.
 	if _hub_transition != null:
-		StoreDirector.set_scene_injector(
-			Callable(self, "_inject_store_into_container")
-		)
+		StoreDirector.set_scene_injector(Callable(self, "_inject_store_into_container"))
 		EventBus.enter_store_requested.connect(_on_hub_enter_store_requested)
 		EventBus.exit_store_requested.connect(_on_hub_exit_store_requested)
 	EventBus.game_state_changed.connect(_on_game_state_changed)
 	EventBus.store_entered.connect(_on_store_entered)
-	EventBus.all_milestones_completed.connect(
-		_on_all_milestones_completed
-	)
-	EventBus.ending_triggered.connect(
-		_on_ending_triggered
-	)
+	EventBus.all_milestones_completed.connect(_on_all_milestones_completed)
+	EventBus.ending_triggered.connect(_on_ending_triggered)
 	GameManager.finalize_gameplay_start(self)
 
 
@@ -242,9 +175,7 @@ func initialize_systems() -> void:
 func initialize_tier_1_data() -> void:
 	time_system.initialize()
 	economy_system.initialize(_get_configured_starting_cash())
-	time_system.set_day_end_summary_provider(
-		Callable(economy_system, "get_day_end_summary")
-	)
+	time_system.set_day_end_summary_provider(Callable(economy_system, "get_day_end_summary"))
 
 
 ## Initializes Tier 2 state systems that depend on the data tier.
@@ -252,9 +183,7 @@ func initialize_tier_1_data() -> void:
 ## to prevent cascading null-reference errors on partially-initialized systems.
 func initialize_tier_2_state() -> bool:
 	if market_event_system == null:
-		push_error(
-			"GameWorld: cannot initialize Tier 2 without MarketEventSystem"
-		)
+		push_error("GameWorld: cannot initialize Tier 2 without MarketEventSystem")
 		return false
 	inventory_system.initialize(GameManager.data_loader)
 	economy_system.set_inventory_system(inventory_system)
@@ -267,9 +196,12 @@ func initialize_tier_2_state() -> bool:
 	market_event_system.initialize()
 	economy_system.set_market_event_system(market_event_system)
 
-	market_value_system.initialize(
-		inventory_system,
-		market_event_system,
+	(
+		market_value_system
+		. initialize(
+			inventory_system,
+			market_event_system,
+		)
 	)
 	return true
 
@@ -278,27 +210,18 @@ func initialize_tier_2_state() -> bool:
 func initialize_tier_3_operational() -> void:
 	var store_ctrl: StoreController = _find_store_controller(false)
 
-	ReputationSystemSingleton.initialize_store(
-		String(GameManager.get_active_store_id())
-	)
+	ReputationSystemSingleton.initialize_store(String(GameManager.get_active_store_id()))
 
-	customer_system.initialize(
-		store_ctrl, inventory_system, ReputationSystemSingleton
-	)
+	customer_system.initialize(store_ctrl, inventory_system, ReputationSystemSingleton)
 	if store_ctrl:
-		customer_system.set_store_id(
-			GameManager.get_active_store_id()
-		)
+		customer_system.set_store_id(GameManager.get_active_store_id())
 
 	npc_spawner_system.initialize(inventory_system)
 
 	haggle_system.initialize(ReputationSystemSingleton)
 
 	checkout_system.initialize(
-		economy_system,
-		inventory_system,
-		customer_system,
-		ReputationSystemSingleton
+		economy_system, inventory_system, customer_system, ReputationSystemSingleton
 	)
 	checkout_system.set_haggle_system(haggle_system)
 	checkout_system.set_market_value_system(market_value_system)
@@ -306,12 +229,8 @@ func initialize_tier_3_operational() -> void:
 		var reg: Area3D = store_ctrl.get_register_area()
 		var ent: Area3D = store_ctrl.get_entry_area()
 		if reg and ent:
-			checkout_system.setup_queue_positions(
-				reg.global_position, ent.global_position
-			)
-			queue_system.setup_queue_positions(
-				reg.global_position, ent.global_position
-			)
+			checkout_system.setup_queue_positions(reg.global_position, ent.global_position)
+			queue_system.setup_queue_positions(reg.global_position, ent.global_position)
 
 	queue_system.initialize()
 
@@ -319,15 +238,16 @@ func initialize_tier_3_operational() -> void:
 
 	milestone_system.initialize()
 
-	order_system.initialize(
-		inventory_system, ReputationSystemSingleton, progression_system
-	)
+	order_system.initialize(inventory_system, ReputationSystemSingleton, progression_system)
 
-	staff_system.initialize(
-		economy_system,
-		ReputationSystemSingleton,
-		inventory_system,
-		GameManager.data_loader,
+	(
+		staff_system
+		. initialize(
+			economy_system,
+			ReputationSystemSingleton,
+			inventory_system,
+			GameManager.data_loader,
+		)
 	)
 
 
@@ -346,10 +266,7 @@ func initialize_tier_5_meta() -> void:
 	performance_report_system.initialize()
 
 	random_event_system.initialize(
-		GameManager.data_loader,
-		inventory_system,
-		ReputationSystemSingleton,
-		economy_system
+		GameManager.data_loader, inventory_system, ReputationSystemSingleton, economy_system
 	)
 
 	ambient_moments_system.initialize(inventory_system, time_system)
@@ -362,31 +279,33 @@ func initialize_tier_5_meta() -> void:
 	add_child(_day_manager)
 	_day_manager.initialize(economy_system, ending_evaluator)
 
-	store_upgrade_system.initialize(
-		GameManager.data_loader,
-		economy_system,
-		ReputationSystemSingleton,
+	(
+		store_upgrade_system
+		. initialize(
+			GameManager.data_loader,
+			economy_system,
+			ReputationSystemSingleton,
+		)
 	)
 
 	completion_tracker.initialize(GameManager.data_loader)
 
 	LedgerSystem.initialize(time_system)
 
-	day_cycle_controller.initialize(
-		time_system,
-		economy_system,
-		staff_system,
-		progression_system,
-		ending_evaluator,
-		performance_report_system,
+	(
+		day_cycle_controller
+		. initialize(
+			time_system,
+			economy_system,
+			staff_system,
+			progression_system,
+			ending_evaluator,
+			performance_report_system,
+		)
 	)
 	day_cycle_controller.set_day_manager(_day_manager)
-	day_cycle_controller.set_ambient_moments_system(
-		ambient_moments_system
-	)
-	day_cycle_controller.set_ensure_panels_callback(
-		_ensure_deferred_panels
-	)
+	day_cycle_controller.set_ambient_moments_system(ambient_moments_system)
+	day_cycle_controller.set_ensure_panels_callback(_ensure_deferred_panels)
 
 
 ## Wires systems that require all initialization tiers to be complete first.
@@ -397,10 +316,13 @@ func finalize_system_wiring() -> void:
 
 
 func _wire_save_manager() -> void:
-	save_manager.initialize(
-		economy_system,
-		inventory_system,
-		time_system,
+	(
+		save_manager
+		. initialize(
+			economy_system,
+			inventory_system,
+			time_system,
+		)
 	)
 	save_manager.set_order_system(order_system)
 	save_manager.set_store_state_manager(store_state_manager)
@@ -416,9 +338,7 @@ func _wire_save_manager() -> void:
 	save_manager.set_ending_evaluator(ending_evaluator)
 	save_manager.set_store_upgrade_system(store_upgrade_system)
 	save_manager.set_completion_tracker(completion_tracker)
-	save_manager.set_performance_report_system(
-		performance_report_system
-	)
+	save_manager.set_performance_report_system(performance_report_system)
 	# UnlockSystemSingleton / OnboardingSystemSingleton are autoloads
 	# (project.godot:37,39); the dead `get_node_or_null + null check`
 	# pattern is the §EH-13/§EH-15 dead-guard shape — replaced with direct
@@ -440,48 +360,34 @@ func _setup_ui() -> void:
 	var hud: CanvasLayer = _HUD_SCENE.instantiate()
 	_ui_layer.add_child(hud)
 
-	_inventory_panel = (
-		_INVENTORY_PANEL_SCENE.instantiate() as InventoryPanel
-	)
+	_inventory_panel = (_INVENTORY_PANEL_SCENE.instantiate() as InventoryPanel)
 	_inventory_panel.inventory_system = inventory_system
 	_inventory_panel.store_id = String(GameManager.get_active_store_id())
 	_ui_layer.add_child(_inventory_panel)
 
-	var pricing_panel: PricingPanel = (
-		_PRICING_PANEL_SCENE.instantiate() as PricingPanel
-	)
+	var pricing_panel: PricingPanel = _PRICING_PANEL_SCENE.instantiate() as PricingPanel
 	pricing_panel.inventory_system = inventory_system
 	pricing_panel.economy_system = economy_system
 	_ui_layer.add_child(pricing_panel)
 	_inventory_panel.pricing_panel = pricing_panel
 
-	var checkout_panel: CheckoutPanel = (
-		_CHECKOUT_PANEL_SCENE.instantiate() as CheckoutPanel
-	)
+	var checkout_panel: CheckoutPanel = _CHECKOUT_PANEL_SCENE.instantiate() as CheckoutPanel
 	_ui_layer.add_child(checkout_panel)
 	checkout_system.set_checkout_panel(checkout_panel)
 
-	var haggle_panel: HagglePanel = (
-		_HAGGLE_PANEL_SCENE.instantiate() as HagglePanel
-	)
+	var haggle_panel: HagglePanel = _HAGGLE_PANEL_SCENE.instantiate() as HagglePanel
 	_ui_layer.add_child(haggle_panel)
 	checkout_system.set_haggle_panel(haggle_panel)
 
-	_item_tooltip = (
-		_ITEM_TOOLTIP_SCENE.instantiate() as ItemTooltip
-	)
+	_item_tooltip = (_ITEM_TOOLTIP_SCENE.instantiate() as ItemTooltip)
 	_item_tooltip.economy_system = economy_system
 	_item_tooltip.inventory_system = inventory_system
 	_ui_layer.add_child(_item_tooltip)
 
-	var visual_feedback: VisualFeedback = (
-		_VISUAL_FEEDBACK_SCENE.instantiate() as VisualFeedback
-	)
+	var visual_feedback: VisualFeedback = _VISUAL_FEEDBACK_SCENE.instantiate() as VisualFeedback
 	_ui_layer.add_child(visual_feedback)
 
-	_tutorial_overlay = (
-		_TUTORIAL_OVERLAY_SCENE.instantiate() as TutorialOverlay
-	)
+	_tutorial_overlay = (_TUTORIAL_OVERLAY_SCENE.instantiate() as TutorialOverlay)
 	_tutorial_overlay.tutorial_system = tutorial_system
 	_ui_layer.add_child(_tutorial_overlay)
 
@@ -501,17 +407,11 @@ func _setup_deferred_panels() -> void:
 
 	_day_summary = _DAY_SUMMARY_SCENE.instantiate() as DaySummary
 	_ui_layer.add_child(_day_summary)
-	_day_summary.review_inventory_requested.connect(
-		_on_day_summary_review_inventory
-	)
-	_day_summary.main_menu_requested.connect(
-		_on_day_summary_main_menu_requested
-	)
+	_day_summary.review_inventory_requested.connect(_on_day_summary_review_inventory)
+	_day_summary.main_menu_requested.connect(_on_day_summary_main_menu_requested)
 	day_cycle_controller.set_day_summary(_day_summary)
 
-	_closing_checklist = (
-		_CLOSING_CHECKLIST_SCENE.instantiate() as ClosingChecklist
-	)
+	_closing_checklist = (_CLOSING_CHECKLIST_SCENE.instantiate() as ClosingChecklist)
 	_ui_layer.add_child(_closing_checklist)
 	day_cycle_controller.set_closing_checklist(_closing_checklist)
 
@@ -519,8 +419,7 @@ func _setup_deferred_panels() -> void:
 	# `EventBus.day_close_confirmation_requested` in `_ready`; nothing else
 	# needs to wire it.
 	var close_day_confirmation: CloseDayConfirmationPanel = (
-		_CLOSE_DAY_CONFIRMATION_PANEL_SCENE.instantiate()
-		as CloseDayConfirmationPanel
+		_CLOSE_DAY_CONFIRMATION_PANEL_SCENE.instantiate() as CloseDayConfirmationPanel
 	)
 	_ui_layer.add_child(close_day_confirmation)
 
@@ -536,17 +435,13 @@ func _setup_deferred_panels() -> void:
 	performance_panel.performance_report_system = performance_report_system
 	_ui_layer.add_child(performance_panel)
 
-	_fixture_catalog = (
-		_FIXTURE_CATALOG_SCENE.instantiate()
-	)
+	_fixture_catalog = (_FIXTURE_CATALOG_SCENE.instantiate())
 	_fixture_catalog.data_loader = GameManager.data_loader
 	_fixture_catalog.economy_system = economy_system
 	_fixture_catalog.store_type = GameManager.DEFAULT_STARTING_STORE
 	_ui_layer.add_child(_fixture_catalog)
 
-	var milestones_panel: MilestonesPanel = (
-		_MILESTONES_PANEL_SCENE.instantiate() as MilestonesPanel
-	)
+	var milestones_panel: MilestonesPanel = _MILESTONES_PANEL_SCENE.instantiate() as MilestonesPanel
 	milestones_panel.progression_system = progression_system
 	_ui_layer.add_child(milestones_panel)
 
@@ -556,9 +451,7 @@ func _setup_deferred_panels() -> void:
 	completion_tracker_panel.completion_tracker = completion_tracker
 	_ui_layer.add_child(completion_tracker_panel)
 
-	var order_panel: OrderPanel = (
-		_ORDER_PANEL_SCENE.instantiate() as OrderPanel
-	)
+	var order_panel: OrderPanel = _ORDER_PANEL_SCENE.instantiate() as OrderPanel
 	order_panel.order_system = order_system
 	order_panel.economy_system = economy_system
 	order_panel.store_type = String(GameManager.get_active_store_id())
@@ -566,15 +459,11 @@ func _setup_deferred_panels() -> void:
 	if _inventory_panel:
 		_inventory_panel.order_panel = order_panel
 
-	var trends_panel: TrendsPanel = (
-		_TRENDS_PANEL_SCENE.instantiate() as TrendsPanel
-	)
+	var trends_panel: TrendsPanel = _TRENDS_PANEL_SCENE.instantiate() as TrendsPanel
 	trends_panel.trend_system = trend_system
 	_ui_layer.add_child(trends_panel)
 
-	_settings_panel = (
-		_SETTINGS_PANEL_SCENE.instantiate() as SettingsPanel
-	)
+	_settings_panel = (_SETTINGS_PANEL_SCENE.instantiate() as SettingsPanel)
 	_ui_layer.add_child(_settings_panel)
 
 	_pause_menu = _PAUSE_MENU_SCENE.instantiate() as PauseMenu
@@ -583,31 +472,19 @@ func _setup_deferred_panels() -> void:
 	_pause_menu.save_manager = save_manager
 	_pause_menu.settings_panel = _settings_panel
 	_ui_layer.add_child(_pause_menu)
-	_pause_menu.return_to_menu_pressed.connect(
-		_on_return_to_menu_pressed
-	)
-	_pause_menu.view_day_summary_requested.connect(
-		_on_view_day_summary_requested
-	)
+	_pause_menu.return_to_menu_pressed.connect(_on_return_to_menu_pressed)
+	_pause_menu.view_day_summary_requested.connect(_on_view_day_summary_requested)
 
-	_save_load_panel = (
-		_SAVE_LOAD_PANEL_SCENE.instantiate() as SaveLoadPanel
-	)
+	_save_load_panel = (_SAVE_LOAD_PANEL_SCENE.instantiate() as SaveLoadPanel)
 	_save_load_panel.save_manager = save_manager
 	_ui_layer.add_child(_save_load_panel)
-	_save_load_panel.save_requested.connect(
-		_on_save_slot_requested
-	)
-	_save_load_panel.load_requested.connect(
-		_on_load_slot_requested
-	)
+	_save_load_panel.save_requested.connect(_on_save_slot_requested)
+	_save_load_panel.load_requested.connect(_on_load_slot_requested)
 
 	_staff_panel = _STAFF_PANEL_SCENE.instantiate() as StaffPanel
 	_ui_layer.add_child(_staff_panel)
 
-	var upgrade_panel: UpgradePanel = (
-		_UPGRADE_PANEL_SCENE.instantiate() as UpgradePanel
-	)
+	var upgrade_panel: UpgradePanel = _UPGRADE_PANEL_SCENE.instantiate() as UpgradePanel
 	upgrade_panel.upgrade_system = store_upgrade_system
 	upgrade_panel.economy_system = economy_system
 	upgrade_panel.reputation_system = ReputationSystemSingleton
@@ -615,14 +492,10 @@ func _setup_deferred_panels() -> void:
 	upgrade_panel.store_type = GameManager.DEFAULT_STARTING_STORE
 	_ui_layer.add_child(upgrade_panel)
 
-	_ending_screen = (
-		_ENDING_SCREEN_SCENE.instantiate() as EndingScreen
-	)
+	_ending_screen = (_ENDING_SCREEN_SCENE.instantiate() as EndingScreen)
 	add_child(_ending_screen)
 
-	var moments_tray: MomentsTray = (
-		_MOMENTS_TRAY_SCENE.instantiate() as MomentsTray
-	)
+	var moments_tray: MomentsTray = _MOMENTS_TRAY_SCENE.instantiate() as MomentsTray
 	add_child(moments_tray)
 
 	_setup_debug_overlay()
@@ -655,11 +528,7 @@ func _initialize_build_mode() -> void:
 		player_node.set_inventory_system(inventory_system)
 	var floor_center := Vector3(0.0, 0.05, 0.0)
 
-	build_mode.initialize(
-		player_node,
-		BuildModeGrid.StoreSize.SMALL,
-		floor_center
-	)
+	build_mode.initialize(player_node, BuildModeGrid.StoreSize.SMALL, floor_center)
 
 	var grid_size: Vector2i = build_mode.get_grid().grid_size
 	var entry_edge_y: int = grid_size.y - 2
@@ -675,6 +544,7 @@ func _initialize_build_mode() -> void:
 	if GameManager.data_loader:
 		fixture_placement.set_data_loader(GameManager.data_loader)
 
+	_initialize_store_layout_runtime()
 	build_mode.set_placement_system(fixture_placement)
 
 	var nav_region: NavigationRegion3D = _find_nav_region()
@@ -689,7 +559,25 @@ func _initialize_build_mode() -> void:
 	build_transition.name = "BuildModeTransition"
 	add_child(build_transition)
 
-	_register_initial_fixtures()
+
+func _initialize_store_layout_runtime() -> void:
+	var store_ctrl: StoreController = _find_store_controller(false)
+	if store_ctrl == null:
+		return
+	if is_instance_valid(_store_layout_runtime):
+		_store_layout_runtime.queue_free()
+	_store_layout_runtime = _STORE_LAYOUT_RUNTIME_SCRIPT.new()
+	_store_layout_runtime.name = "StoreLayoutRuntime"
+	store_ctrl.add_child(_store_layout_runtime)
+	(
+		_store_layout_runtime
+		. call(
+			"initialize",
+			fixture_placement,
+			build_mode.get_grid(),
+			StringName(store_ctrl.store_type),
+		)
+	)
 
 
 func _find_player_node(camera: Camera3D) -> Node:
@@ -701,39 +589,24 @@ func _find_player_node(camera: Camera3D) -> Node:
 	return null
 
 
-func _on_game_state_changed(
-	_old_state: int, new_state: int
-) -> void:
+func _on_game_state_changed(_old_state: int, new_state: int) -> void:
 	var new_gs: GameManager.State = new_state as GameManager.State
-	var should_pause: bool = (
-		new_gs == GameManager.State.PAUSED
-		or new_gs == GameManager.State.BUILD
-	)
+	var should_pause: bool = new_gs == GameManager.State.PAUSED or new_gs == GameManager.State.BUILD
 	_set_systems_paused(should_pause)
 
 
-func _find_store_controller(
-	should_warn: bool = true
-) -> StoreController:
-	var result: StoreController = (
-		_find_store_controller_recursive(_store_container)
-	)
+func _find_store_controller(should_warn: bool = true) -> StoreController:
+	var result: StoreController = _find_store_controller_recursive(_store_container)
 	if should_warn and not result:
-		push_warning(
-			"GameWorld: no StoreController found in StoreContainer"
-		)
+		push_warning("GameWorld: no StoreController found in StoreContainer")
 	return result
 
 
-func _find_store_controller_recursive(
-	node: Node
-) -> StoreController:
+func _find_store_controller_recursive(node: Node) -> StoreController:
 	if node is StoreController:
 		return node as StoreController
 	for child: Node in node.get_children():
-		var found: StoreController = (
-			_find_store_controller_recursive(child)
-		)
+		var found: StoreController = _find_store_controller_recursive(child)
 		if found:
 			return found
 	return null
@@ -761,17 +634,13 @@ func _on_day_summary_main_menu_requested() -> void:
 
 func _find_nav_region() -> NavigationRegion3D:
 	for child: Node in _store_container.get_children():
-		var region: NavigationRegion3D = (
-			_find_node_of_type(child, "NavigationRegion3D")
-		)
+		var region: NavigationRegion3D = _find_node_of_type(child, "NavigationRegion3D")
 		if region:
 			return region as NavigationRegion3D
 	return null
 
 
-func _find_node_of_type(
-	node: Node, type_name: String
-) -> Node:
+func _find_node_of_type(node: Node, type_name: String) -> Node:
 	if node.get_class() == type_name:
 		return node
 	for child: Node in node.get_children():
@@ -779,52 +648,6 @@ func _find_node_of_type(
 		if found:
 			return found
 	return null
-
-
-func _register_initial_fixtures() -> void:
-	var store_ctrl: StoreController = _find_store_controller(false)
-	if not store_ctrl:
-		return
-
-	var store_def: StoreDefinition = null
-	if GameManager.data_loader:
-		store_def = GameManager.data_loader.get_store(
-			store_ctrl.store_type
-		)
-	if not store_def:
-		return
-
-	var grid: BuildModeGrid = build_mode.get_grid()
-	var col_offset: int = 1
-
-	for i: int in range(store_def.fixtures.size()):
-		var fix_data: Dictionary = store_def.fixtures[i]
-		var fix_id: String = fix_data.get("id", "fixture_%d" % i)
-		var fix_type: String = fix_data.get("type", "shelf")
-		var is_register: bool = fix_type == "counter"
-		var price: float = FixturePlacementSystem.FIXTURE_PRICES.get(
-			fix_type, 0.0
-		)
-
-		var size: Vector2i = FixturePlacementSystem.FIXTURE_SIZES.get(
-			fix_type, Vector2i(1, 1)
-		)
-		var row: int = int(i / 3.0) * (size.y + 3)
-		var col: int = col_offset
-		col_offset += size.x + 3
-		if col_offset + size.x > grid.grid_size.x:
-			col_offset = 1
-
-		var pos := Vector2i(col, row + 2)
-		if not grid.is_valid_cell(pos):
-			pos = Vector2i(
-				clampi(col, 0, grid.grid_size.x - size.x),
-				clampi(row + 2, 0, grid.grid_size.y - size.y - 2)
-			)
-
-		fixture_placement.register_existing_fixture(
-			fix_id, fix_type, pos, 0, is_register, price
-		)
 
 
 ## Hub-mode entry: routes through StoreDirector so the 6-state machine,
@@ -842,9 +665,7 @@ func _on_hub_enter_store_requested(store_id: StringName) -> void:
 ## emits `EventBus.store_entered`, and returns the scene root so the director
 ## can run `StoreReadyContract.check` against it. Returns null on any load
 ## failure — StoreDirector treats null as a load failure and FAILs the run.
-func _inject_store_into_container(
-	scene_path: String, store_id: StringName
-) -> Node:
+func _inject_store_into_container(scene_path: String, store_id: StringName) -> Node:
 	if scene_path.is_empty():
 		push_error("GameWorld: hub injector — empty scene_path for '%s'" % store_id)
 		return null
@@ -862,34 +683,32 @@ func _inject_store_into_container(
 	# null returned here flows into StoreDirector's `_fail()` cleanly without
 	# an extra Godot engine error from add_child.
 	var instantiated: Node = null
-	await _hub_transition.crossfade(func() -> void:
-		instantiated = store_packed.instantiate()
-		_hub_active_store_scene = instantiated as Node3D
-		if _hub_active_store_scene == null:
-			push_error(
-				"GameWorld: hub injector — scene root for '%s' is not Node3D"
-				% canonical
-			)
-			if instantiated != null:
-				instantiated.queue_free()
-			return
-		_store_container.add_child(_hub_active_store_scene)
-		# §F-47: Hide hallway storefronts (z=0.1) so they don't bleed into
-		# the interior camera sightline. `_mall_hallway` is null in shipping
-		# hub mode (walkable_mall=false) — the guard is forward-compat for
-		# a future walkable-mall variant routing through the same injector.
-		if _mall_hallway:
-			_mall_hallway.visible = false
-		var fp_spawned: bool = _spawn_player_in_store(
-			_hub_active_store_scene, canonical
-		)
-		# Skip orbit-camera activation when an FP body spawned — its embedded
-		# Camera3D is already current via CameraAuthority.request_current
-		# (StorePlayerBody._ready). Activating the orbit StoreCamera here would
-		# clear the FP camera and revert the viewport to overhead on entry.
-		if not fp_spawned:
-			_activate_store_camera(_hub_active_store_scene, canonical)
-		EventBus.store_entered.emit(canonical)
+	await _hub_transition.crossfade(
+		func() -> void:
+			instantiated = store_packed.instantiate()
+			_hub_active_store_scene = instantiated as Node3D
+			if _hub_active_store_scene == null:
+				push_error(
+					"GameWorld: hub injector — scene root for '%s' is not Node3D" % canonical
+				)
+				if instantiated != null:
+					instantiated.queue_free()
+				return
+			_store_container.add_child(_hub_active_store_scene)
+			# §F-47: Hide hallway storefronts (z=0.1) so they don't bleed into
+			# the interior camera sightline. `_mall_hallway` is null in shipping
+			# hub mode (walkable_mall=false) — the guard is forward-compat for
+			# a future walkable-mall variant routing through the same injector.
+			if _mall_hallway:
+				_mall_hallway.visible = false
+			var fp_spawned: bool = _spawn_player_in_store(_hub_active_store_scene, canonical)
+			# Skip orbit-camera activation when an FP body spawned — its embedded
+			# Camera3D is already current via CameraAuthority.request_current
+			# (StorePlayerBody._ready). Activating the orbit StoreCamera here would
+			# clear the FP camera and revert the viewport to overhead on entry.
+			if not fp_spawned:
+				_activate_store_camera(_hub_active_store_scene, canonical)
+			EventBus.store_entered.emit(canonical)
 	)
 	if _hub_active_store_scene == null:
 		_hub_is_inside_store = false
@@ -901,16 +720,17 @@ func _on_hub_exit_store_requested() -> void:
 	if not _hub_is_inside_store:
 		return
 	var leaving_id: StringName = GameManager.get_active_store_id()
-	await _hub_transition.crossfade(func() -> void:
-		if _hub_active_store_scene != null:
-			_hub_active_store_scene.queue_free()
-			_hub_active_store_scene = null
-		_hub_is_inside_store = false
-		# §F-47 — restore hallway visibility on exit. Same null-guard
-		# rationale as the enter path.
-		if _mall_hallway:
-			_mall_hallway.visible = true
-		EventBus.store_exited.emit(leaving_id)
+	await _hub_transition.crossfade(
+		func() -> void:
+			if _hub_active_store_scene != null:
+				_hub_active_store_scene.queue_free()
+				_hub_active_store_scene = null
+			_hub_is_inside_store = false
+			# §F-47 — restore hallway visibility on exit. Same null-guard
+			# rationale as the enter path.
+			if _mall_hallway:
+				_mall_hallway.visible = true
+			EventBus.store_exited.emit(leaving_id)
 	)
 
 
@@ -925,18 +745,13 @@ func _on_hub_exit_store_requested() -> void:
 ## fall through to `_activate_store_camera`, which makes the in-scene
 ## `StoreCamera` current per ownership.md row 4.
 func _spawn_player_in_store(store_root: Node, store_id: StringName) -> bool:
-	var marker: Marker3D = (
-		store_root.get_node_or_null(_PLAYER_ENTRY_SPAWN_NAME) as Marker3D
-	)
+	var marker: Marker3D = store_root.get_node_or_null(_PLAYER_ENTRY_SPAWN_NAME) as Marker3D
 	if marker == null:
 		return false
 	var instantiated: Node = _STORE_PLAYER_SCENE.instantiate()
 	var player: StorePlayerBody = instantiated as StorePlayerBody
 	if player == null:
-		push_error(
-			"GameWorld: failed to instantiate store_player_body for '%s'"
-			% store_id
-		)
+		push_error("GameWorld: failed to instantiate store_player_body for '%s'" % store_id)
 		if instantiated != null:
 			instantiated.queue_free()
 		return false
@@ -971,16 +786,20 @@ func _apply_marker_bounds_override(player: StorePlayerBody, marker: Marker3D) ->
 		player.bounds_min = bmin
 	elif bmin != null:
 		push_error(
-			"GameWorld: PlayerEntrySpawn.bounds_min is %s, expected Vector3 — using default"
-			% type_string(typeof(bmin))
+			(
+				"GameWorld: PlayerEntrySpawn.bounds_min is %s, expected Vector3 — using default"
+				% type_string(typeof(bmin))
+			)
 		)
 	var bmax: Variant = marker.get_meta(&"bounds_max", null)
 	if bmax is Vector3:
 		player.bounds_max = bmax
 	elif bmax != null:
 		push_error(
-			"GameWorld: PlayerEntrySpawn.bounds_max is %s, expected Vector3 — using default"
-			% type_string(typeof(bmax))
+			(
+				"GameWorld: PlayerEntrySpawn.bounds_max is %s, expected Vector3 — using default"
+				% type_string(typeof(bmax))
+			)
 		)
 
 
@@ -1011,10 +830,12 @@ func _activate_store_camera(store_root: Node, store_id: StringName) -> void:
 	if camera == null:
 		push_error(
 			(
-				"GameWorld: store '%s' has no Camera3D — rendering will fall back"
-				+ " to the default clear color (brown)"
+				(
+					"GameWorld: store '%s' has no Camera3D — rendering will fall back"
+					+ " to the default clear color (brown)"
+				)
+				% store_id
 			)
-			% store_id
 		)
 		return
 	CameraAuthority.request_current(camera, store_id)
@@ -1066,9 +887,7 @@ func _on_store_entered(store_id: StringName) -> void:
 
 	var store_ctrl: StoreController = _find_store_controller(true)
 	if store_ctrl and store_state_manager:
-		store_state_manager.restore_store_state(
-			String(store_id), store_ctrl
-		)
+		store_state_manager.restore_store_state(String(store_id), store_ctrl)
 	# Hub auto-enter emits `EventBus.store_entered` directly without routing
 	# through `StoreStateManager.set_active_store`, leaving `active_store_id`
 	# empty. Set it here so readers (InventoryPanel, tutorial gates, etc.)
@@ -1140,19 +959,13 @@ func _ensure_refurbishment_ui(
 	refurb: RefurbishmentSystem,
 ) -> void:
 	if not _refurbishment_dialog:
-		_refurbishment_dialog = (
-			_REFURBISHMENT_DIALOG_SCENE.instantiate()
-			as RefurbishmentDialog
-		)
+		_refurbishment_dialog = (_REFURBISHMENT_DIALOG_SCENE.instantiate() as RefurbishmentDialog)
 		_ui_layer.add_child(_refurbishment_dialog)
 	_refurbishment_dialog.set_refurbishment_system(refurb)
 	if _inventory_panel:
 		_inventory_panel.refurbishment_dialog = _refurbishment_dialog
 	if not _refurb_queue_panel:
-		_refurb_queue_panel = (
-			_REFURB_QUEUE_PANEL_SCENE.instantiate()
-			as RefurbQueuePanel
-		)
+		_refurb_queue_panel = (_REFURB_QUEUE_PANEL_SCENE.instantiate() as RefurbQueuePanel)
 		_ui_layer.add_child(_refurb_queue_panel)
 	_refurb_queue_panel.refurbishment_system = refurb
 	_refurb_queue_panel.inventory_system = inventory_system
@@ -1217,15 +1030,10 @@ func _auto_enter_default_store_in_hub() -> void:
 
 
 ## Populates and validates the default store before the player sees the hallway.
-func bootstrap_new_game_state(
-	store_id: StringName = GameManager.DEFAULT_STARTING_STORE
-) -> void:
+func bootstrap_new_game_state(store_id: StringName = GameManager.DEFAULT_STARTING_STORE) -> void:
 	var slot_index: int = _find_store_slot_index(store_id)
 	if slot_index < 0:
-		push_error(
-			"GameWorld: default store '%s' not found in storefront slots"
-			% store_id
-		)
+		push_error("GameWorld: default store '%s' not found in storefront slots" % store_id)
 		return
 	if not store_state_manager:
 		push_error("GameWorld: cannot bootstrap new game without StoreStateManager")
@@ -1250,14 +1058,14 @@ func _find_store_slot_index(store_id: StringName) -> int:
 func _create_default_store_inventory(store_id: StringName) -> void:
 	if not GameManager.data_loader or not inventory_system:
 		push_error(
-			"GameWorld: cannot create starter inventory — "
-			+ "missing data_loader or inventory_system"
+			(
+				"GameWorld: cannot create starter inventory — "
+				+ "missing data_loader or inventory_system"
+			)
 		)
 		return
-	var items: Array[ItemInstance] = (
-		GameManager.data_loader.create_starting_inventory(
-			String(store_id)
-		)
+	var items: Array[ItemInstance] = GameManager.data_loader.create_starting_inventory(
+		String(store_id)
 	)
 	# §F-83 — Pass 12: surface a content-authoring regression at the call
 	# site too. `create_starting_inventory` already warns when the store id
@@ -1267,8 +1075,10 @@ func _create_default_store_inventory(store_id: StringName) -> void:
 	# loop would have nothing to stock and silently stall.
 	if items.is_empty():
 		push_warning(
-			"GameWorld: starter inventory for '%s' is empty — Day 1 backroom will be empty"
-			% store_id
+			(
+				"GameWorld: starter inventory for '%s' is empty — Day 1 backroom will be empty"
+				% store_id
+			)
 		)
 	for item: ItemInstance in items:
 		inventory_system.add_item(store_id, item)
@@ -1278,9 +1088,7 @@ func _get_configured_starting_cash() -> float:
 	var starting_cash: float = Constants.STARTING_CASH
 	if not GameManager.data_loader:
 		return starting_cash
-	var economy_config: EconomyConfig = (
-		GameManager.data_loader.get_economy_config()
-	)
+	var economy_config: EconomyConfig = GameManager.data_loader.get_economy_config()
 	if economy_config:
 		starting_cash = economy_config.starting_cash
 	return starting_cash
@@ -1289,27 +1097,20 @@ func _get_configured_starting_cash() -> float:
 ## Matches `EconomySystem.initialize`: base config × difficulty starting_cash_multiplier.
 func _get_effective_starting_cash() -> float:
 	var base: float = _get_configured_starting_cash()
-	var cash_mult: float = DifficultySystemSingleton.get_modifier(
-		&"starting_cash_multiplier"
-	)
+	var cash_mult: float = DifficultySystemSingleton.get_modifier(&"starting_cash_multiplier")
 	return base * cash_mult
 
 
 func _validate_loaded_game_state(save_metadata: Dictionary = {}) -> void:
 	var expected_cash: Variant = save_metadata.get("cash", null)
-	var active_store_raw: String = str(
-		save_metadata.get("active_store_id", "")
-	)
+	var active_store_raw: String = str(save_metadata.get("active_store_id", ""))
 	var expected_active_store: StringName = &""
 	if not active_store_raw.is_empty():
 		expected_active_store = ContentRegistry.resolve(active_store_raw)
 		if expected_active_store.is_empty():
 			expected_active_store = StringName(active_store_raw)
 	var errors: Array[String] = _collect_state_validation_errors(
-		expected_active_store,
-		expected_cash,
-		true,
-		save_metadata.has("active_store_id")
+		expected_active_store, expected_cash, true, save_metadata.has("active_store_id")
 	)
 	for msg: String in errors:
 		# §F-16: push_error is intentional (state inconsistency detected), but the
@@ -1319,16 +1120,11 @@ func _validate_loaded_game_state(save_metadata: Dictionary = {}) -> void:
 
 
 func _validate_new_game_state(store_id: StringName) -> void:
-	var canonical_store_id: StringName = ContentRegistry.resolve(
-		String(store_id)
-	)
+	var canonical_store_id: StringName = ContentRegistry.resolve(String(store_id))
 	if canonical_store_id.is_empty():
 		canonical_store_id = store_id
 	var errors: Array[String] = _collect_state_validation_errors(
-		canonical_store_id,
-		_get_effective_starting_cash(),
-		true,
-		false
+		canonical_store_id, _get_effective_starting_cash(), true, false
 	)
 	for msg: String in errors:
 		# §F-16: same as load validation — push_error is diagnostic, non-blocking.
@@ -1353,25 +1149,24 @@ func _collect_state_validation_errors(
 	if economy_system:
 		if is_nan(economy_system.get_cash()):
 			errors.append("Player cash is NaN")
-		elif expected_cash != null and not is_equal_approx(
-			economy_system.get_cash(),
-			float(expected_cash)
+		elif (
+			expected_cash != null
+			and not is_equal_approx(economy_system.get_cash(), float(expected_cash))
 		):
 			errors.append(
-				"Player cash %.2f does not match expected %.2f"
-				% [economy_system.get_cash(), float(expected_cash)]
+				(
+					"Player cash %.2f does not match expected %.2f"
+					% [economy_system.get_cash(), float(expected_cash)]
+				)
 			)
 
 	if time_system and time_system.current_day < 1:
-		errors.append(
-			"Current day is %d (expected >= 1)" % time_system.current_day
-		)
+		errors.append("Current day is %d (expected >= 1)" % time_system.current_day)
 
 	if not expected_store_id.is_empty():
 		if not GameManager.is_store_owned(String(expected_store_id)):
 			errors.append(
-				"Expected owned store '%s' is missing from owned_stores"
-				% expected_store_id
+				"Expected owned store '%s' is missing from owned_stores" % expected_store_id
 			)
 		if store_state_manager:
 			var has_expected_slot: bool = false
@@ -1380,18 +1175,11 @@ func _collect_state_validation_errors(
 					has_expected_slot = true
 					break
 			if not has_expected_slot:
-				errors.append(
-					"StoreStateManager has no owned slot for '%s'"
-					% expected_store_id
-				)
+				errors.append("StoreStateManager has no owned slot for '%s'" % expected_store_id)
 		if require_inventory and inventory_system:
-			var store_stock: Array[ItemInstance] = inventory_system.get_stock(
-				expected_store_id
-			)
+			var store_stock: Array[ItemInstance] = inventory_system.get_stock(expected_store_id)
 			if store_stock.is_empty():
-				errors.append(
-					"InventorySystem has no stock for '%s'" % expected_store_id
-				)
+				errors.append("InventorySystem has no stock for '%s'" % expected_store_id)
 	elif require_inventory and inventory_system and inventory_system.get_item_count() == 0:
 		errors.append("Inventory is empty")
 
@@ -1399,8 +1187,10 @@ func _collect_state_validation_errors(
 		var actual_active_store: StringName = GameManager.get_active_store_id()
 		if actual_active_store != expected_store_id:
 			errors.append(
-				"Active store '%s' does not match saved active_store_id '%s'"
-				% [actual_active_store, expected_store_id]
+				(
+					"Active store '%s' does not match saved active_store_id '%s'"
+					% [actual_active_store, expected_store_id]
+				)
 			)
 
 	return errors
@@ -1430,7 +1220,5 @@ func _on_all_milestones_completed() -> void:
 	EventBus.ending_requested.emit("voluntary")
 
 
-func _on_ending_triggered(
-	_ending_id: StringName, _final_stats: Dictionary
-) -> void:
+func _on_ending_triggered(_ending_id: StringName, _final_stats: Dictionary) -> void:
 	_ensure_deferred_panels()

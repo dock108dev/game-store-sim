@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="1"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_wood_light.tres" id="2"]
+
+[sub_resource type="BoxMesh" id="bin_mesh"]
+size = Vector3(1.2, 0.52, 0.75)
+
+[sub_resource type="BoxMesh" id="rim_mesh"]
+size = Vector3(1.25, 0.08, 0.80)
+
+[sub_resource type="BoxShape3D" id="bin_shape"]
+size = Vector3(1.2, 0.52, 0.75)
+
+[sub_resource type="BoxShape3D" id="slot_shape"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[node name="ControllerBin" type="Node3D" groups=["fixture"]]
+
+[node name="BinMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+mesh = SubResource("bin_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="BinRim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, 0)
+mesh = SubResource("rim_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+shape = SubResource("bin_shape")
+
+[node name="Slot1" type="Area3D" parent="." groups=["shelf_slot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.63, 0)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+slot_id = "controller_bin_1"
+accepted_category = "accessory"
+display_name = "Controller Bin Slot"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Slot1"]
+shape = SubResource("slot_shape")
+
+[node name="Slot2" type="Area3D" parent="." groups=["shelf_slot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.63, 0)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+slot_id = "controller_bin_2"
+accepted_category = "accessory"
+display_name = "Controller Bin Slot"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Slot2"]
+shape = SubResource("slot_shape")

@@ -1,0 +1,445 @@
+{
+  "type": "product_visual_catalog_data",
+  "catalog_id": "retro_games_product_visuals",
+  "version": 1,
+  "store_id": "retro_games",
+  "usage_surfaces": [
+    "authored_scene_props",
+    "runtime_shelf_products",
+    "staff_picks",
+    "used_consoles"
+  ],
+  "resource_contract": {
+    "template_lookup_key": "box_art_key",
+    "platform_lookup_key": "platform_visual_id",
+    "fallback_order": [
+      "box_art_key",
+      "platform_id",
+      "category"
+    ],
+    "visual_only": true
+  },
+  "game_box_templates": [
+    {
+      "template_id": "goblin_kart_neo_ignite",
+      "display_title": "Goblin Kart",
+      "catalog_definition_ids": [],
+      "visual_family": "party_racer",
+      "case_shape": "tall_disc_case",
+      "front_color": "#1F4F9A",
+      "title_block": {
+        "text": "GOBLIN KART",
+        "fill_color": "#F4D23E",
+        "text_color": "#171511"
+      },
+      "simple_symbol": {
+        "symbol_id": "drift_spark",
+        "shape": "tilted_wheel_with_three_sparks",
+        "color": "#9CFF64"
+      },
+      "spine_color": "#2D63B8",
+      "spine_label": {
+        "text": "GOBLIN KART",
+        "text_color": "#FFF3B0",
+        "platform_text": "NEO IGNITE"
+      },
+      "platform_stripe": {
+        "platform_id": "neo_ignite",
+        "platform_visual_id": "neo_ignite_disc_tower",
+        "catalog_label": "Neo Ignite",
+        "alias_label": "NovaCube Compatible",
+        "fill_color": "#101722",
+        "accent_color": "#5AD6FF",
+        "position": "top"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [1.0, 1.12, 0.12],
+        "spine_width": 0.12
+      },
+      "feature_bullets": ["8 Cups", "Mirror Tracks", "Trap Crates"],
+      "rating_badge": "ALL AGES"
+    },
+    {
+      "template_id": "goblin_kart_canopy_wave",
+      "display_title": "Goblin Kart",
+      "catalog_definition_ids": [],
+      "visual_family": "party_racer",
+      "case_shape": "compact_square_case",
+      "front_color": "#4FAE3A",
+      "title_block": {
+        "text": "GOBLIN KART",
+        "fill_color": "#FFF2A6",
+        "text_color": "#183018"
+      },
+      "simple_symbol": {
+        "symbol_id": "party_turnip",
+        "shape": "round_turnip_pickup_with_speed_lines",
+        "color": "#F7CF44"
+      },
+      "spine_color": "#42B947",
+      "spine_label": {
+        "text": "GOBLIN KART",
+        "text_color": "#183018",
+        "platform_text": "CANOPY WAVE"
+      },
+      "platform_stripe": {
+        "platform_id": "canopy_wave",
+        "platform_visual_id": "canopy_wave_cube",
+        "catalog_label": "Canopy Wave",
+        "alias_label": "PrismBox Compatible",
+        "fill_color": "#F8F8EA",
+        "accent_color": "#52C878",
+        "position": "top_tab"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [0.9, 0.9, 0.16],
+        "spine_width": 0.16
+      },
+      "feature_bullets": ["4-Player Cup", "Party Rules", "Shortcut Chaos"],
+      "rating_badge": "ALL AGES"
+    },
+    {
+      "template_id": "motorway_kings_neo_ignite",
+      "display_title": "Motorway Kings",
+      "catalog_definition_ids": ["neo_ignite_motorway_kings_loose"],
+      "visual_family": "city_racer",
+      "case_shape": "tall_disc_case",
+      "front_color": "#2C3440",
+      "title_block": {
+        "text": "MOTORWAY KINGS",
+        "fill_color": "#D9A441",
+        "text_color": "#161616"
+      },
+      "simple_symbol": {
+        "symbol_id": "city_overpass",
+        "shape": "overpass_curve_with_lane_ticks",
+        "color": "#E86B3C"
+      },
+      "spine_color": "#151A20",
+      "spine_label": {
+        "text": "MOTORWAY KINGS",
+        "text_color": "#F2D084",
+        "platform_text": "NEO IGNITE"
+      },
+      "platform_stripe": {
+        "platform_id": "neo_ignite",
+        "platform_visual_id": "neo_ignite_disc_tower",
+        "catalog_label": "Neo Ignite",
+        "alias_label": "",
+        "fill_color": "#101722",
+        "accent_color": "#5AD6FF",
+        "position": "top"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "spine",
+        "scale": [1.0, 1.12, 0.12],
+        "spine_width": 0.12
+      },
+      "feature_bullets": ["Open City", "Radio Dial", "Night Runs"],
+      "rating_badge": "TEEN"
+    },
+    {
+      "template_id": "marble_bash_canopy_wave",
+      "display_title": "Marble Bash Party",
+      "catalog_definition_ids": ["canopy_wave_marble_bash_party_loose"],
+      "visual_family": "party_puzzle",
+      "case_shape": "compact_square_case",
+      "front_color": "#8B57C7",
+      "title_block": {
+        "text": "MARBLE BASH PARTY",
+        "fill_color": "#F5E5FF",
+        "text_color": "#28183F"
+      },
+      "simple_symbol": {
+        "symbol_id": "marble_starburst",
+        "shape": "three_marbles_orbiting_star",
+        "color": "#75D7FF"
+      },
+      "spine_color": "#6840A0",
+      "spine_label": {
+        "text": "MARBLE BASH",
+        "text_color": "#F5E5FF",
+        "platform_text": "CANOPY WAVE"
+      },
+      "platform_stripe": {
+        "platform_id": "canopy_wave",
+        "platform_visual_id": "canopy_wave_cube",
+        "catalog_label": "Canopy Wave",
+        "alias_label": "",
+        "fill_color": "#F8F8EA",
+        "accent_color": "#52C878",
+        "position": "top_tab"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [0.9, 0.9, 0.16],
+        "spine_width": 0.16
+      },
+      "feature_bullets": ["Couch Versus", "Puzzle Boards", "Bonus Bells"],
+      "rating_badge": "ALL AGES"
+    },
+    {
+      "template_id": "brain_drill_wave_pocket",
+      "display_title": "Brain Drill Academy",
+      "catalog_definition_ids": ["wave_pocket_brain_drill_loose"],
+      "visual_family": "handheld_study",
+      "case_shape": "small_handheld_clamshell",
+      "front_color": "#F0EFE7",
+      "title_block": {
+        "text": "BRAIN DRILL ACADEMY",
+        "fill_color": "#2C7A90",
+        "text_color": "#FFFFFF"
+      },
+      "simple_symbol": {
+        "symbol_id": "notebook_bolt",
+        "shape": "open_notebook_with_lightning_mark",
+        "color": "#E85D75"
+      },
+      "spine_color": "#2C7A90",
+      "spine_label": {
+        "text": "BRAIN DRILL",
+        "text_color": "#FFFFFF",
+        "platform_text": "WAVE POCKET"
+      },
+      "platform_stripe": {
+        "platform_id": "wave_pocket",
+        "platform_visual_id": "wave_pocket_clamshell",
+        "catalog_label": "Wave Pocket",
+        "alias_label": "",
+        "fill_color": "#E7F8FF",
+        "accent_color": "#2C7A90",
+        "position": "left_tab"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [0.68, 0.82, 0.1],
+        "spine_width": 0.1
+      },
+      "feature_bullets": ["Logic Sprints", "Daily Scores", "Stylus Notes"],
+      "rating_badge": "ALL AGES"
+    },
+    {
+      "template_id": "star_pantry_rangers_vecforce_hd",
+      "display_title": "Star Pantry Rangers",
+      "catalog_definition_ids": ["vecforce_hd_star_pantry_rangers_loose"],
+      "visual_family": "cozy_space_strategy",
+      "case_shape": "wide_disc_case",
+      "front_color": "#243B55",
+      "title_block": {
+        "text": "STAR PANTRY RANGERS",
+        "fill_color": "#FFE27A",
+        "text_color": "#162033"
+      },
+      "simple_symbol": {
+        "symbol_id": "orbiting_soup_star",
+        "shape": "ringed_star_with_tiny_can",
+        "color": "#FF8A5B"
+      },
+      "spine_color": "#182A40",
+      "spine_label": {
+        "text": "STAR PANTRY",
+        "text_color": "#FFE27A",
+        "platform_text": "VECFORCE HD"
+      },
+      "platform_stripe": {
+        "platform_id": "vecforce_hd",
+        "platform_visual_id": "vecforce_hd_slab",
+        "catalog_label": "VecForce HD",
+        "alias_label": "",
+        "fill_color": "#2A2F31",
+        "accent_color": "#D5F35B",
+        "position": "top"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [1.08, 0.92, 0.12],
+        "spine_width": 0.13
+      },
+      "feature_bullets": ["Tiny Crews", "Kitchen Nebulas", "Snack Routes"],
+      "rating_badge": "ALL AGES"
+    },
+    {
+      "template_id": "signal_warden_zero_ignite_go",
+      "display_title": "Signal Warden Zero",
+      "catalog_definition_ids": ["ignite_go_signal_warden_zero_loose"],
+      "visual_family": "portable_tactics",
+      "case_shape": "small_handheld_clamshell",
+      "front_color": "#20262E",
+      "title_block": {
+        "text": "SIGNAL WARDEN ZERO",
+        "fill_color": "#B7F26D",
+        "text_color": "#101410"
+      },
+      "simple_symbol": {
+        "symbol_id": "antenna_shield",
+        "shape": "signal_antenna_inside_hex_shield",
+        "color": "#FF8E45"
+      },
+      "spine_color": "#11161D",
+      "spine_label": {
+        "text": "SIGNAL ZERO",
+        "text_color": "#B7F26D",
+        "platform_text": "IGNITE GO"
+      },
+      "platform_stripe": {
+        "platform_id": "ignite_go",
+        "platform_visual_id": "ignite_go_wedge",
+        "catalog_label": "Ignite Go",
+        "alias_label": "",
+        "fill_color": "#23272D",
+        "accent_color": "#FF8E45",
+        "position": "left_tab"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "spine",
+        "scale": [0.76, 0.82, 0.1],
+        "spine_width": 0.12
+      },
+      "feature_bullets": ["Grid Patrol", "Signal Chains", "Pocket Skirmish"],
+      "rating_badge": "TEEN"
+    }
+  ],
+  "platform_visual_identities": [
+    {
+      "platform_visual_id": "neo_ignite_disc_tower",
+      "platform_id": "neo_ignite",
+      "display_label": "Neo Ignite",
+      "used_console_label": "Neo Ignite Console",
+      "shelf_label": "Ignite-compatible",
+      "silhouette": {
+        "shape": "vertical_tower_with_offset_disc_tray",
+        "profile": "tall_rectangular",
+        "controller_ports": 2
+      },
+      "body_color": "#1B2028",
+      "accent_color": "#5AD6FF",
+      "label_plate_color": "#D8E9F2",
+      "prop_scale": [1.0, 0.28, 1.38]
+    },
+    {
+      "platform_visual_id": "canopy_wave_cube",
+      "platform_id": "canopy_wave",
+      "display_label": "Canopy Wave",
+      "used_console_label": "Canopy Wave Console",
+      "shelf_label": "Wave-compatible",
+      "silhouette": {
+        "shape": "rounded_cube_with_top_handle_groove",
+        "profile": "compact_cube",
+        "controller_ports": 4
+      },
+      "body_color": "#E9E6D5",
+      "accent_color": "#52C878",
+      "label_plate_color": "#34523F",
+      "prop_scale": [0.9, 0.9, 0.7]
+    },
+    {
+      "platform_visual_id": "vecforce_hd_slab",
+      "platform_id": "vecforce_hd",
+      "display_label": "VecForce HD",
+      "used_console_label": "VecForce HD Console",
+      "shelf_label": "HD-compatible",
+      "silhouette": {
+        "shape": "wide_slab_with_inset_drive_band",
+        "profile": "low_wide",
+        "controller_ports": 2
+      },
+      "body_color": "#2A2F31",
+      "accent_color": "#D5F35B",
+      "label_plate_color": "#ECEFE1",
+      "prop_scale": [1.35, 0.9, 0.34]
+    },
+    {
+      "platform_visual_id": "wave_pocket_clamshell",
+      "platform_id": "wave_pocket",
+      "display_label": "Wave Pocket",
+      "used_console_label": "Wave Pocket Handheld",
+      "shelf_label": "Pocket-compatible",
+      "silhouette": {
+        "shape": "hinged_clamshell_with_dual_screen_marks",
+        "profile": "small_folded",
+        "controller_ports": 0
+      },
+      "body_color": "#D9F1F7",
+      "accent_color": "#2C7A90",
+      "label_plate_color": "#FFFFFF",
+      "prop_scale": [0.72, 0.48, 0.18]
+    },
+    {
+      "platform_visual_id": "ignite_go_wedge",
+      "platform_id": "ignite_go",
+      "display_label": "Ignite Go",
+      "used_console_label": "Ignite Go Handheld",
+      "shelf_label": "Go-compatible",
+      "silhouette": {
+        "shape": "wide_handheld_wedge_with_center_screen",
+        "profile": "thin_wide",
+        "controller_ports": 0
+      },
+      "body_color": "#23272D",
+      "accent_color": "#FF8E45",
+      "label_plate_color": "#F8EEE5",
+      "prop_scale": [1.05, 0.46, 0.14]
+    }
+  ],
+  "authored_scene_mappings": [
+    {
+      "surface": "authored_scene_props",
+      "node_path": "ReadabilityProps/ProductDisplayRows/KartClerkDeluxe_ShelfA",
+      "box_art_key": "goblin_kart_canopy_wave",
+      "visual_fallback": "existing_svg_cover_texture"
+    },
+    {
+      "surface": "authored_scene_props",
+      "node_path": "ReadabilityProps/ProductDisplayRows/DungeonDad64_ShelfA",
+      "box_art_key": "motorway_kings_neo_ignite",
+      "visual_fallback": "existing_svg_cover_texture"
+    },
+    {
+      "surface": "staff_picks",
+      "node_path": "staff_picks_table/StaffPickKartClerk",
+      "box_art_key": "goblin_kart_canopy_wave",
+      "visual_fallback": "existing_staff_pick_cover_mesh"
+    },
+    {
+      "surface": "runtime_shelf_products",
+      "node_path": "ShelfSlot",
+      "box_art_key": "motorway_kings_neo_ignite",
+      "visual_fallback": "category_placeholder_scene"
+    },
+    {
+      "surface": "used_consoles",
+      "node_path": "ReadabilityProps/UsedConsoleDressing/NeoIgniteSilhouetteA",
+      "platform_visual_id": "neo_ignite_disc_tower",
+      "visual_fallback": "existing_console_silhouette"
+    }
+  ],
+  "visual_aliases": [
+    {
+      "alias_id": "goblin_kart_novacube",
+      "alias_title": "Goblin Kart",
+      "alias_platform": "NovaCube",
+      "platform_id": "neo_ignite",
+      "platform_visual_id": "neo_ignite_disc_tower",
+      "box_art_key": "goblin_kart_neo_ignite",
+      "usage": "wrong_platform_copy"
+    },
+    {
+      "alias_id": "goblin_kart_prismbox",
+      "alias_title": "Goblin Kart",
+      "alias_platform": "PrismBox",
+      "platform_id": "canopy_wave",
+      "platform_visual_id": "canopy_wave_cube",
+      "box_art_key": "goblin_kart_canopy_wave",
+      "usage": "correct_platform_copy"
+    }
+  ]
+}

@@ -17,7 +17,9 @@ bash tests/run_tests.sh
 3. Runs GUT with `res://addons/gut/gut_cmdln.gd`.
 4. Runs `res://game/tests/run_tests.gd` when that file exists.
 5. Writes the combined output stream to `tests/test_run.log`.
-6. Runs every shell validator matching `tests/validate_*.sh`.
+6. Runs maintained shell validators under `tests/`. Archived one-off
+   acceptance scripts can still be run directly, but are not part of the
+   default regression gate.
 7. Runs the SSOT tripwires under `scripts/`
    (`validate_translations.sh`, `validate_single_store_ui.sh`,
    `validate_tutorial_single_source.sh`) when present and executable.
@@ -51,7 +53,7 @@ tests/gut/          Broad gameplay and scene-oriented GUT coverage
 tests/unit/         Narrow unit-style GUT coverage
 tests/integration/  Integration-style test scripts under the main tests tree
 game/tests/         Additional GUT tests invoked directly and included in .gutconfig
-tests/validate_*.sh Shell validators for issue- and structure-level checks
+tests/validate_*.sh Shell validators for structure and targeted checks
 ```
 
 ## Current coverage areas

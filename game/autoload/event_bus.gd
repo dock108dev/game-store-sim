@@ -22,7 +22,7 @@ signal input_focus_changed(owner: StringName)
 signal camera_authority_changed(camera_path: NodePath)
 
 # ── Content Pipeline ──────────────────────────────────────────────────────────
-signal content_loaded()
+signal content_loaded
 signal content_load_failed(errors: Array[String])
 
 # ── Time ──────────────────────────────────────────────────────────────────────
@@ -30,7 +30,7 @@ signal day_started(day: int)
 signal hour_changed(hour: int)
 signal day_ended(day: int)
 ## Emitted by the player via HUD to request early end-of-day.
-signal day_close_requested()
+signal day_close_requested
 ## Emitted by DayCycleController when the player requests day-close before
 ## completing one stock→sell loop for the active day. `reason` is human-
 ## readable copy that distinguishes "shelves empty" from "no sale yet" so the
@@ -40,7 +40,7 @@ signal day_close_confirmation_requested(reason: String)
 ## Emitted by the close-day confirmation modal after the player chooses to
 ## close anyway. DayCycleController routes this through to `_on_day_ended`,
 ## bypassing the loop-completion gate.
-signal day_close_confirmed()
+signal day_close_confirmed
 ## Emitted by DayCycleController after all store_day_closed signals have fired.
 ## summary keys: day, total_revenue, total_expenses, net_profit, items_sold,
 ## rent, net_cash, store_revenue, discrepancy, staff_wages, inventory_remaining
@@ -51,17 +51,17 @@ signal speed_reduced_by_event(reason: String)
 signal time_speed_requested(speed_tier: int)
 
 # ── Game State ────────────────────────────────────────────────────────────────
-signal boot_completed()
+signal boot_completed
 signal game_state_changed(old_state: int, new_state: int)
 ## Emitted by GameState on any mutation to the active run state
 ## (active_store_id, day, money, flags). Parameterless on purpose — listeners
 ## read the current values directly from the GameState autoload. Distinct from
 ## game_state_changed, which is the GameManager FSM transition signal.
-signal run_state_changed()
-signal gameplay_ready()
-signal game_over_triggered()
-signal next_day_confirmed()
-signal day_acknowledged()
+signal run_state_changed
+signal gameplay_ready
+signal game_over_triggered
+signal next_day_confirmed
+signal day_acknowledged
 
 # ── Economy and Leasing ───────────────────────────────────────────────────────
 signal transaction_completed(amount: float, success: bool, message: String)
@@ -82,9 +82,9 @@ signal defective_item_received(item_id: String)
 signal lease_requested(store_id: StringName, slot_index: int, store_name: String)
 signal lease_completed(store_id: StringName, success: bool, message: String)
 signal owned_slots_restored(slots: Dictionary)
-signal player_bankrupt()
-signal bankruptcy_declared()
-signal player_quit_to_end()
+signal player_bankrupt
+signal bankruptcy_declared
+signal player_quit_to_end
 
 # ── Store Transitions ─────────────────────────────────────────────────────────
 ## Emitted by each StoreController when day_ended fires. store_summary contains
@@ -96,12 +96,12 @@ signal active_store_changed(store_id: StringName)
 signal store_opened(store_id: String)
 signal store_closed(store_id: String)
 signal enter_store_requested(store_id: StringName)
-signal exit_store_requested()
+signal exit_store_requested
 signal store_leased(slot_index: int, store_type: String)
 signal store_unlocked(store_type: String, lease_cost: float)
 signal store_switched(old_store_id: String, new_store_id: String)
 signal storefront_entered(slot_index: int, store_id: String)
-signal storefront_exited()
+signal storefront_exited
 signal storefront_zone_entered(store_id: String)
 signal storefront_zone_exited(store_id: String)
 ## Emitted by DrawerHost when a store drawer has begun opening for store_id.
@@ -111,7 +111,7 @@ signal drawer_closed(store_id: StringName)
 ## Emitted by ActionDrawer when it opens a mechanic content pane. mode is ActionDrawer.Mode int.
 signal action_drawer_opened(mode: int)
 ## Emitted by ActionDrawer when it collapses back to the chrome button bar (IDLE).
-signal action_drawer_closed()
+signal action_drawer_closed
 
 # ── Store Actions (ActionDrawer) ──────────────────────────────────────────────
 ## Emitted by a StoreController when it enters; carries the list of action
@@ -123,7 +123,7 @@ signal action_requested(action_id: StringName, store_id: StringName)
 
 # ── Inventory and Pricing ─────────────────────────────────────────────────────
 signal inventory_updated(store_id: StringName)
-signal inventory_changed()
+signal inventory_changed
 signal inventory_item_added(store_id: StringName, item_id: StringName)
 signal item_stocked(item_id: String, shelf_id: String)
 signal item_removed_from_shelf(item_id: String, shelf_id: String)
@@ -180,9 +180,7 @@ signal npc_despawned(npc_id: StringName)
 ## a confused-parent customer. correct is true when the chosen platform_id
 ## matches the customer's referenced platform. Fires on every selection so the
 ## embedded tutorial's PLATFORM_MATCH beat advances on engagement, not accuracy.
-signal customer_platform_identified(
-	customer_id: StringName, platform_id: StringName, correct: bool
-)
+signal customer_platform_identified(customer_id: StringName, platform_id: StringName, correct: bool)
 
 # ── Checkout ──────────────────────────────────────────────────────────────────
 signal customer_reached_checkout(customer: Node)
@@ -223,11 +221,11 @@ signal haggle_negotiation_started(
 ## Emitted by HaggleSystem alongside its local customer_countered for ActionDrawer listeners.
 signal haggle_customer_countered(new_offer: float, round_number: int, max_rounds: int)
 ## Emitted by ActionDrawer when the player accepts the current haggle offer.
-signal haggle_player_accepted()
+signal haggle_player_accepted
 ## Emitted by ActionDrawer when the player submits a counter-offer.
 signal haggle_player_countered(price: float)
 ## Emitted by ActionDrawer when the player declines to negotiate further.
-signal haggle_player_declined()
+signal haggle_player_declined
 
 # ── Reputation ────────────────────────────────────────────────────────────────
 ## Emitted by ReputationSystem after every reputation mutation.
@@ -250,16 +248,17 @@ signal payroll_cash_deduct(amount: float, reason: String, result: Array)
 signal staff_restocked_shelf(staff_id: String, item_id: String)
 
 # ── Build Mode ────────────────────────────────────────────────────────────────
-signal build_mode_entered()
-signal build_mode_exited()
+signal build_mode_entered
+signal build_mode_exited
 signal fixture_catalog_requested(fixture_id: String)
 signal fixture_placed(fixture_id: String, grid_pos: Vector2i, rotation: int)
 signal fixture_removed(fixture_id: String, grid_pos: Vector2i)
 signal fixture_selected(fixture_id: String)
 signal fixture_upgraded(fixture_id: String, new_tier: int)
+signal fixture_state_loaded
 signal fixture_placement_invalid(reason: String)
-signal placement_mode_entered()
-signal placement_mode_exited()
+signal placement_mode_entered
+signal placement_mode_exited
 ## Emitted alongside `placement_mode_entered` when a specific item is being
 ## placed. `item_name` is the localized display name; consumers render a
 ## persistent hint such as "Click a shelf slot to place <item_name>" because
@@ -271,11 +270,11 @@ signal placement_hint_requested(item_name: String)
 ## item_category identifies which ShelfSlot category markers to reveal.
 signal stocking_cursor_active(item_category: StringName)
 ## Emitted when inventory closes or the player stops hovering a stockable item.
-signal stocking_cursor_inactive()
+signal stocking_cursor_inactive
 
-signal nav_mesh_baked()
-signal customer_spawning_disabled()
-signal customer_spawning_enabled()
+signal nav_mesh_baked
+signal customer_spawning_disabled
+signal customer_spawning_enabled
 
 # ── Camera ────────────────────────────────────────────────────────────────────
 signal active_camera_changed(camera: Camera3D)
@@ -342,7 +341,7 @@ signal milestone_reached(milestone_id: StringName)
 signal milestone_reputation_reward(milestone_id: StringName, delta: int)
 signal milestone_unlock_granted(unlock_id: StringName)
 signal store_slot_unlocked(slot_index: int)
-signal all_milestones_completed()
+signal all_milestones_completed
 signal completion_reached(reason: String)
 ## Emitted by UnlockSystem when a feature unlock is granted.
 signal unlock_granted(unlock_id: StringName)
@@ -355,14 +354,14 @@ signal store_upgrade_effect_applied(
 	effect_type: String,
 	effect_value: float,
 )
-signal toggle_upgrade_panel()
+signal toggle_upgrade_panel
 
 # ── Tutorial ──────────────────────────────────────────────────────────────────
 signal tutorial_step_changed(step_id: String)
 signal tutorial_step_completed(step_id: String)
-signal tutorial_completed()
-signal tutorial_skipped()
-signal skip_tutorial_requested()
+signal tutorial_completed
+signal tutorial_skipped
+signal skip_tutorial_requested
 signal contextual_tip_requested(tip_text: String)
 ## Emitted when the active tutorial context swaps to the store the player just
 ## entered. `context_id` is the StoreDefinition.tutorial_context_id;
@@ -371,11 +370,11 @@ signal tutorial_context_entered(
 	store_id: StringName, context_id: StringName, first_step_text: String
 )
 ## Emitted when leaving a store clears the active tutorial context.
-signal tutorial_context_cleared()
+signal tutorial_context_cleared
 
 # ── Onboarding ───────────────────────────────────────────────────────────────
 signal onboarding_hint_shown(hint_id: StringName, message: String, position_hint: String)
-signal onboarding_disabled()
+signal onboarding_disabled
 
 # ── Regulars Log ──────────────────────────────────────────────────────────────
 ## Emitted when a customer's visit count first reaches the recognition threshold.
@@ -390,8 +389,8 @@ signal thread_resolved(thread_id: String, resolution_type: String)
 signal mystery_item_inspected(instance_id: String)
 signal odd_notification_read(notification_id: String)
 signal discrepancy_noticed(day: int)
-signal renovation_sounds_heard()
-signal wrong_name_customer_interacted()
+signal renovation_sounds_heard
+signal wrong_name_customer_interacted
 signal ambient_moment_queued(moment_id: StringName)
 signal ambient_moment_delivered(
 	moment_id: StringName,
@@ -405,7 +404,7 @@ signal moment_displayed(moment_id: StringName, flavor_text: String, duration_sec
 ## Emitted when a moment card's display duration expires and it is dismissed.
 signal moment_expired(moment_id: StringName)
 ## Emitted when all active moment slots are empty and the waiting queue is also empty.
-signal moment_queue_empty()
+signal moment_queue_empty
 
 # ── 30-Day Arc ────────────────────────────────────────────────────────────────
 ## Emitted by DayManager the first time a day-threshold unlock is reached.
@@ -426,7 +425,7 @@ signal quarterly_lease_review(day: int)
 signal ending_requested(trigger_type: String)
 signal ending_stats_snapshot_ready(stats: Dictionary)
 signal ending_triggered(ending_id: StringName, final_stats: Dictionary)
-signal ending_dismissed()
+signal ending_dismissed
 
 # ── Performance Reports ───────────────────────────────────────────────────────
 signal performance_report_ready(report: PerformanceReport)
@@ -446,9 +445,7 @@ signal player_mistake_recorded(mistake_type: String, context: String)
 signal hidden_thread_consequence_triggered(text: String)
 ## Emitted by InventoryDiscrepancyChecker (or the closing checklist) per
 ## flagged discrepancy. Accumulated daily; reset at day_started.
-signal inventory_discrepancy_flagged(
-	item_id: String, expected: int, actual: int
-)
+signal inventory_discrepancy_flagged(item_id: String, expected: int, actual: int)
 ## Emitted by DayCycleController when the closing checklist completes (or is
 ## skipped) so listeners may proceed to the day-summary stage.
 signal closing_checklist_completed(day: int)
@@ -467,7 +464,7 @@ signal interactable_focused(action_label: String)
 ## banner) render this without an E-key affordance and with a visually
 ## muted treatment, distinguishing it from the active focus signal.
 signal interactable_focused_disabled(reason: String)
-signal interactable_unfocused()
+signal interactable_unfocused
 ## Emitted by NavZoneInteractable when clicked or triggered by keyboard shortcut.
 ## PlayerController subscribes to snap _pivot to zone_position instantly.
 signal nav_zone_selected(zone_position: Vector3)
@@ -475,21 +472,17 @@ signal nav_zone_selected(zone_position: Vector3)
 ## its owning store_id. Listeners should prefer these over the target-reference
 ## signals above when they need to reason about *which* interactable in *which*
 ## store fired — no global fallback handler exists.
-signal interactable_hovered(
-	interactable_id: StringName, store_id: StringName, label: String
-)
-signal interactable_clicked(
-	interactable_id: StringName, store_id: StringName
-)
+signal interactable_hovered(interactable_id: StringName, store_id: StringName, label: String)
+signal interactable_clicked(interactable_id: StringName, store_id: StringName)
 
 # ── UI ────────────────────────────────────────────────────────────────────────
 ## Emitted when a hub store card should be highlighted (e.g. from objective routing).
 signal hub_store_highlighted(store_id: StringName)
-signal toggle_milestones_panel()
-signal toggle_staff_panel()
-signal toggle_refurb_queue_panel()
+signal toggle_milestones_panel
+signal toggle_staff_panel
+signal toggle_refurb_queue_panel
 ## Opens/closes the hub-accessible Completion Tracker panel.
-signal toggle_completion_tracker_panel()
+signal toggle_completion_tracker_panel
 signal notification_requested(message: String)
 ## Emitted for critical player-action messages that must display even during active tutorial steps.
 signal critical_notification_requested(message: String)
@@ -558,7 +551,7 @@ signal objective_changed(payload: Dictionary)
 signal objective_updated(payload: Dictionary)
 signal keybind_changed(action: String, new_event: InputEventKey)
 signal item_tooltip_requested(item: ItemInstance)
-signal item_tooltip_hidden()
+signal item_tooltip_hidden
 ## Emitted by the HUD when first-person mode is toggled. Listeners that need
 ## to switch their layout/visibility based on whether the player is in FP
 ## (e.g. ObjectiveRail surfaces the focused interactable inline; the
@@ -567,8 +560,8 @@ signal item_tooltip_hidden()
 signal fp_mode_changed(enabled: bool)
 
 # ── Input ─────────────────────────────────────────────────────────────────
-signal cursor_locked()
-signal cursor_unlocked()
+signal cursor_locked
+signal cursor_unlocked
 
 # ── Accessibility ─────────────────────────────────────────────────────────────
 signal colorblind_mode_changed(enabled: bool)
@@ -640,7 +633,6 @@ signal midday_event_fired(beat: Dictionary)
 ## is the position in beat.choices that was chosen.
 signal midday_event_resolved(beat_id: StringName, choice_index: int)
 
-
 # ── Store Artifact Interactables ─────────────────────────────────────────────
 ## Emitted by RetroGames when the player examines the front-counter Delivery
 ## Manifest interactable. Hidden Thread tier-1 trigger plus a pre-open ritual
@@ -653,7 +645,6 @@ signal inventory_variance_noted(
 	store_id: StringName, item_id: StringName, expected: int, actual: int
 )
 
-
 # ── Hidden-Thread Interactables ──────────────────────────────────────────────
 ## Emitted when the player examines the customer Hold Shelf. suspicious_slip_count
 ## is the number of slips on the shelf whose requestor_tier is SHADY or higher
@@ -665,9 +656,7 @@ signal warranty_binder_examined(store_id: StringName, day: int)
 ## Emitted when the player examines a backordered item still tagged in the
 ## back room. days_pending is the number of days the unit has been listed as
 ## awaiting stock. Hidden Thread tier-1 trigger.
-signal backordered_item_examined(
-	store_id: StringName, item_id: StringName, days_pending: int
-)
+signal backordered_item_examined(store_id: StringName, item_id: StringName, days_pending: int)
 ## Emitted when the player examines a handwritten register-side note.
 ## Hidden Thread tier-1 trigger.
 signal register_note_examined(store_id: StringName, day: int)
@@ -680,7 +669,6 @@ signal returned_item_examined(store_id: StringName, item_id: StringName)
 ## Emitted when the player examines the printed employee shift schedule.
 ## Hidden Thread tier-1 trigger; also increments paper_trail_score by +1.0.
 signal employee_schedule_examined(store_id: StringName, day: int)
-
 
 # ── Hold List / Reservation ──────────────────────────────────────────────────
 ## Emitted by RetroGames when a hold slip is added to the store-local HoldList.
@@ -696,15 +684,11 @@ signal hold_added(
 ## Emitted by RetroGames when a slip is fulfilled (terminal action or via the
 ## conflict resolution flow). reason is "manual", "earliest_expiry", or
 ## "manager_escalation".
-signal hold_fulfilled(
-	store_id: StringName, slip_id: String, item_id: StringName, reason: String
-)
+signal hold_fulfilled(store_id: StringName, slip_id: String, item_id: StringName, reason: String)
 ## Emitted by RetroGames at day_started for each slip whose expiry_day has
 ## passed. Listeners (visualization, hidden thread system) consume this to
 ## crumple the physical slip prop and re-spawn it near the register.
-signal hold_expired(
-	store_id: StringName, slip_id: String, item_id: StringName
-)
+signal hold_expired(store_id: StringName, slip_id: String, item_id: StringName)
 ## Emitted by RetroGames when a hold request collides with an existing active
 ## slip (same serial + different name OR same name + different serial).
 ## new_slip_id and existing_slip_id reference the two HOLD-#### records;
@@ -727,15 +711,12 @@ signal hold_shady_request_received(
 ## bypassing all competing holds and giving the unit to a walk-in customer.
 ## Hidden-thread listeners consume this as a Tier 2 trigger.
 ## disputed_slip_ids is the list of HOLD-#### records transitioned to DISPUTED.
-signal hold_conflict_bypassed(
-	store_id: StringName, item_id: StringName, disputed_slip_ids: Array
-)
+signal hold_conflict_bypassed(store_id: StringName, item_id: StringName, disputed_slip_ids: Array)
 ## Emitted when the player resolves a hold-vs-walk-in conflict in the embedded
 ## tutorial. honored is true when the original hold slip wins the unit, false
 ## when the walk-in offer is accepted. Fires on either resolution so tutorial
 ## progression is non-blocking.
 signal hold_decision_made(item_id: StringName, honored: bool)
-
 
 # ── Trade-In Intake ──────────────────────────────────────────────────────────
 ## Emitted by TradeInPanel when a customer trade-in interaction begins.
@@ -749,9 +730,7 @@ signal trade_in_offer_made(
 	offer_value: float,
 )
 ## Emitted by TradeInPanel when the player confirms the offer to the customer.
-signal trade_in_accepted(
-	customer_id: String, instance_id: String, credit_value: float
-)
+signal trade_in_accepted(customer_id: String, instance_id: String, credit_value: float)
 ## Emitted by TradeInPanel when the player declines or silently cancels the
 ## interaction. Carries the customer id so listeners can route the customer
 ## back to a normal exit.
@@ -767,7 +746,6 @@ signal trade_in_condition_graded(item_id: StringName, grade: String)
 ## offered_price is the depreciated value the player accepted. Gates the
 ## embedded tutorial's SPORTS_DEPRECIATION beat.
 signal trade_in_price_confirmed(item_id: StringName, offered_price: float)
-
 
 # ── Hidden Thread ────────────────────────────────────────────────────────────
 ## Emitted by HiddenThreadSystem on every Tier 1, Tier 2, or Tier 3 trigger.
@@ -796,15 +774,12 @@ signal hidden_thread_interacted(thread_id: StringName)
 ## suspicious active hold. HiddenThreadSystem consumes this as a Tier 1 trigger.
 signal display_exposes_weird_inventory(store_id: StringName)
 
-
 # ── Manager Relationship ─────────────────────────────────────────────────────
 ## Emitted by ManagerRelationshipManager at day_started after note selection.
 ## note_id matches an entry id in manager_notes.json so listeners can render or
 ## telemetry-tag the specific note. allow_auto_dismiss is false on Day 1 and on
 ## unlock-override mornings so the panel must be dismissed manually.
-signal manager_note_shown(
-	note_id: String, body_text: String, allow_auto_dismiss: bool
-)
+signal manager_note_shown(note_id: String, body_text: String, allow_auto_dismiss: bool)
 ## Emitted by MorningNotePanel when the player explicitly dismisses the note
 ## (E-key, click on the panel, or auto-dismiss timer). note_id matches the id
 ## passed to manager_note_shown so listeners can scope reactions to a specific
@@ -854,6 +829,7 @@ func _on_day_started(_day: int) -> void:
 # Thin type-safe wrappers around the Phase 1 signals. No logic — the wrappers
 # exist so callers get a method signature GDScript can typecheck, rather than
 # passing arbitrary args to `emit_signal("…", …)`.
+
 
 func emit_store_ready(store_id: StringName) -> void:
 	store_ready.emit(store_id)

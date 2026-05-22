@@ -1,12 +1,12 @@
 ## Verifies the Day 1 ObjectiveRail surfaces the first step of the chain
-## ("Talk to the customer at the register checkout.") with a "Press E" action and an
+## ("Talk to the customer at the register.") with a "Press E" action and an
 ## "E" key badge, that the rail occupies a different screen zone than the
 ## InteractionPrompt, and that the Day1ReadinessAudit objective check passes
 ## once the day starts and the player enters the store.
 extends GutTest
 
 
-const _OBJECTIVE_TEXT: String = "Talk to the customer at the register checkout."
+const _OBJECTIVE_TEXT: String = "Talk to the customer at the register."
 const _ACTION_TEXT: String = "Press E at the counter"
 const _KEY_TEXT: String = "E"
 
@@ -238,7 +238,7 @@ func test_chain_advance_updates_rail_with_next_step_copy() -> void:
 	)
 	EventBus.placement_mode_entered.emit()
 	assert_eq(
-		rail._objective_label.text, "Stock the Retro Games shelves.",
+		rail._objective_label.text, "Stock the Retro Games shelf.",
 		"placement_mode_entered at BACK_ROOM_INVENTORY must re-render with step 3"
 	)
 	EventBus.item_stocked.emit("item_001", "shelf_a")

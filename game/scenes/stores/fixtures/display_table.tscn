@@ -1,0 +1,101 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="1"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_wood_medium.tres" id="2"]
+
+[sub_resource type="BoxMesh" id="table_mesh"]
+size = Vector3(1.6, 0.10, 1.0)
+
+[sub_resource type="BoxMesh" id="leg_mesh"]
+size = Vector3(0.08, 0.68, 0.08)
+
+[sub_resource type="BoxMesh" id="lip_mesh"]
+size = Vector3(1.64, 0.08, 0.08)
+
+[sub_resource type="BoxShape3D" id="table_shape"]
+size = Vector3(1.6, 0.75, 1.0)
+
+[sub_resource type="BoxShape3D" id="slot_shape"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[node name="DisplayTable" type="Node3D" groups=["fixture"]]
+
+[node name="TableMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("table_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="FrontLip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0.50)
+mesh = SubResource("lip_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="BackLip" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, -0.50)
+mesh = SubResource("lip_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="LegFrontLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68, 0.34, 0.42)
+mesh = SubResource("leg_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="LegFrontRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.68, 0.34, 0.42)
+mesh = SubResource("leg_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="LegBackLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68, 0.34, -0.42)
+mesh = SubResource("leg_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="LegBackRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.68, 0.34, -0.42)
+mesh = SubResource("leg_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.375, 0)
+shape = SubResource("table_shape")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="StaticBody3D"]
+radius = 0.85
+height = 1.0
+
+[node name="Slot1" type="Area3D" parent="." groups=["shelf_slot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.82, -0.18)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+slot_id = "display_table_1"
+display_name = "Display Table Slot"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Slot1"]
+shape = SubResource("slot_shape")
+
+[node name="Slot2" type="Area3D" parent="." groups=["shelf_slot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, -0.18)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+slot_id = "display_table_2"
+display_name = "Display Table Slot"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Slot2"]
+shape = SubResource("slot_shape")
+
+[node name="Slot3" type="Area3D" parent="." groups=["shelf_slot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.82, -0.18)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+slot_id = "display_table_3"
+display_name = "Display Table Slot"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Slot3"]
+shape = SubResource("slot_shape")

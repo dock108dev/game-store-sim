@@ -240,6 +240,19 @@ func get_latest_row_text() -> String:
 	return ""
 
 
+## Test seam — returns the visible text at `index` (0 = oldest row), or an
+## empty string when out of range.
+func get_row_text_for_test(index: int) -> String:
+	if _entry_container == null:
+		return ""
+	if index < 0 or index >= _entry_container.get_child_count():
+		return ""
+	var row: Node = _entry_container.get_child(index)
+	if row is Label:
+		return (row as Label).text
+	return ""
+
+
 ## Test seam — returns the font color the panel would apply for `tag`.
 ## Accepts either the bare key (`"STOCK"`) or the bracketed form
 ## (`"[STOCK]"`) so call sites can use whichever they have on hand.

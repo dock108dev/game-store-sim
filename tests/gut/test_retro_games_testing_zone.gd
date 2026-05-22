@@ -63,13 +63,14 @@ func test_testing_zone_sits_in_left_mid_quadrant() -> void:
 	if crt == null:
 		return
 	var pos: Vector3 = crt.global_position
-	# Left-mid per the resized floor plan: x in [-5.6, -4.0], z in [-7.9, -6.4].
+	# Left-mid per the recomposed floor plan: parked beside the main path,
+	# clear of the rear shelf/backroom lanes.
 	assert_between(
-		pos.x, -5.6, -4.0,
+		pos.x, -6.9, -5.5,
 		"Testing zone x=%.2f must sit in the left-mid quadrant" % pos.x,
 	)
 	assert_between(
-		pos.z, -7.9, -6.4,
+		pos.z, -1.9, -0.5,
 		"Testing zone z=%.2f must sit in the left-mid quadrant" % pos.z,
 	)
 
@@ -126,9 +127,11 @@ func test_coming_soon_label_exists_and_faces_camera() -> void:
 		label.visible,
 		"ComingSoonLabel must be visible"
 	)
-	assert_string_contains(
-		label.text.to_lower(), "coming soon",
-		"ComingSoonLabel text should communicate the parked state"
+	var label_text: String = label.text.to_lower()
+	assert_true(
+		label_text.contains("soon")
+			and (label_text.contains("try") or label_text.contains("testing")),
+		"ComingSoonLabel text should communicate the parked try-it state"
 	)
 	# Storefront SignName uses Transform3D(-1,…,-1,…) — a 180° Y rotation that
 	# orients the Label3D toward the front of the store (toward the camera).
@@ -147,6 +150,50 @@ func test_coming_soon_label_exists_and_faces_camera() -> void:
 			"ComingSoonLabel must face the camera (front of store, +Z); "
 			+ "expected a 180° Y-axis rotation but found basis.z.z=%.3f"
 		) % basis.z.z,
+	)
+
+
+func test_lockout_props_do_not_block_crt_or_sign_readability() -> void:
+	var monitor: Node3D = _root.get_node_or_null(
+		"crt_demo_area/CRTMonitor"
+	) as Node3D
+	var label: Label3D = _root.get_node_or_null(
+		"crt_demo_area/ComingSoonLabel"
+	) as Label3D
+	var rail: Node3D = _root.get_node_or_null(
+		"crt_demo_area/SetupBarrierRail"
+	) as Node3D
+	var cover: Node3D = _root.get_node_or_null(
+		"crt_demo_area/DustCover"
+	) as Node3D
+	var lock_tag: Label3D = _root.get_node_or_null(
+		"crt_demo_area/SetupLockTag"
+	) as Label3D
+	for node: Node in [monitor, label, rail, cover, lock_tag]:
+		assert_not_null(node, "Testing-zone lockout/readability node must exist")
+	if (
+		monitor == null
+		or label == null
+		or rail == null
+		or cover == null
+		or lock_tag == null
+	):
+		return
+	assert_lt(
+		rail.global_position.y,
+		label.global_position.y - 0.4,
+		"Setup barrier rail must stay below ComingSoonLabel sightline"
+	)
+	assert_lt(
+		cover.global_position.y,
+		monitor.global_position.y,
+		"Dust cover must sit below the CRT monitor center so the CRT remains readable"
+	)
+	assert_between(
+		lock_tag.global_position.y,
+		monitor.global_position.y - 0.25,
+		label.global_position.y - 0.35,
+		"Locked setup tag must live between the CRT and main sign without blocking either"
 	)
 
 

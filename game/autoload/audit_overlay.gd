@@ -97,15 +97,12 @@ func pass_check(key: StringName) -> void:
 	if _results.get(key) == true:
 		return
 	_results[key] = true
-	print("[AUDIT] %s: PASS" % key)
+	AuditLog.pass_check(key)
 
 
 func fail_check(key: StringName, reason: String = "") -> void:
 	_results[key] = false
-	var msg := "[AUDIT] %s: FAIL" % key
-	if reason:
-		msg += " (%s)" % reason
-	push_warning(msg)
+	AuditLog.fail_check(key, reason)
 
 
 func all_passed() -> bool:
@@ -127,16 +124,15 @@ func report_interactable(name: String) -> void:
 func _wire_signals() -> void:
 	EventBus.boot_completed.connect(func(): pass_check(&"boot_complete"))
 	EventBus.store_entered.connect(func(_sid: StringName): pass_check(&"store_entered"))
-	EventBus.panel_opened.connect(func(panel_name: String) -> void:
-		if panel_name == "inventory":
-			pass_check(&"inventory_open")
+	EventBus.panel_opened.connect(
+		func(panel_name: String) -> void:
+			if panel_name == "inventory":
+				pass_check(&"inventory_open")
 	)
 	EventBus.item_stocked.connect(
 		func(_item_id: String, _shelf_id: String): pass_check(&"shelf_stock")
 	)
-	EventBus.price_set.connect(
-		func(_item_id: String, _price: float): pass_check(&"price_set")
-	)
+	EventBus.price_set.connect(func(_item_id: String, _price: float): pass_check(&"price_set"))
 	EventBus.refurbishment_completed.connect(
 		func(_iid: String, _ok: bool, _nc: String): pass_check(&"refurb_completed")
 	)
@@ -144,9 +140,10 @@ func _wire_signals() -> void:
 		func(_amt: float, _ok: bool, _msg: String): pass_check(&"transaction_completed")
 	)
 	EventBus.day_closed.connect(func(_day: int, _sum: Dictionary): pass_check(&"day_closed"))
-	EventBus.customer_left.connect(func(data: Dictionary) -> void:
-		if not data.get("satisfied", true) and data.has("reason"):
-			pass_check(&"customer_walked")
+	EventBus.customer_left.connect(
+		func(data: Dictionary) -> void:
+			if not data.get("satisfied", true) and data.has("reason"):
+				pass_check(&"customer_walked")
 	)
 	EventBus.storefront_zone_entered.connect(func(sid: String): _last_interactable = sid)
 	EventBus.storefront_zone_exited.connect(func(_sid: String): _last_interactable = "none")
@@ -353,14 +350,10 @@ func _refresh_braindump_fields(active_panel_name: String, queued_count: int) -> 
 		_label_active_objective.text = "ActiveObjective: —"
 
 	_label_on_shelves.text = (
-		"OnShelves: %d" % _beta_shelf_count
-		if _beta_shelf_count >= 0
-		else "OnShelves: —"
+		"OnShelves: %d" % _beta_shelf_count if _beta_shelf_count >= 0 else "OnShelves: —"
 	)
 	_label_back_room.text = (
-		"BackRoom: %d" % _beta_back_room_count
-		if _beta_back_room_count >= 0
-		else "BackRoom: —"
+		"BackRoom: %d" % _beta_back_room_count if _beta_back_room_count >= 0 else "BackRoom: —"
 	)
 
 	_label_open_modal.text = "OpenModal: %s" % active_panel_name
@@ -377,10 +370,13 @@ func _phase_name(phase: int) -> String:
 	if OS.is_debug_build():
 		push_warning(
 			(
-				"AuditOverlay._phase_name: unmapped DayPhase '%d' "
-				+ "— rendering as 'UNKNOWN'. Add the phase to the "
-				+ "match in audit_overlay.gd."
-			) % phase
+				(
+					"AuditOverlay._phase_name: unmapped DayPhase '%d' "
+					+ "— rendering as 'UNKNOWN'. Add the phase to the "
+					+ "match in audit_overlay.gd."
+				)
+				% phase
+			)
 		)
 	return "UNKNOWN"
 

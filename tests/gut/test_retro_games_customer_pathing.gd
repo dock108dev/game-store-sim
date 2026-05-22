@@ -109,10 +109,11 @@ func test_register_area_position_matches_floor_plan() -> void:
 		register_area.is_in_group("register_area"),
 		"RegisterArea must be in 'register_area' group so StoreController._collect_areas finds it"
 	)
-	# Floor plan: register at (~+5.5, ~+8.0). Y is irrelevant for XZ pathing
-	# but the trigger is authored at Y=1.0 to overlap the player capsule.
-	assert_almost_eq(register_area.global_position.x, 5.5, 0.5)
-	assert_almost_eq(register_area.global_position.z, 8.0, 0.5)
+	# Floor plan: the active customer spot is just in front of the counter.
+	# Y is irrelevant for XZ pathing but the trigger is authored at Y=1.0 to
+	# overlap the player capsule.
+	assert_almost_eq(register_area.global_position.x, 5.05, 0.5)
+	assert_almost_eq(register_area.global_position.z, 8.45, 0.5)
 
 
 func test_entry_area_is_grouped_for_collection() -> void:
@@ -157,6 +158,62 @@ func test_customer_nav_config_present_with_all_markers() -> void:
 			marker,
 			"CustomerNavConfig must expose Marker3D '%s'" % marker_name
 		)
+
+
+func test_checkout_navigation_relationships_keep_queue_reachable() -> void:
+	var config: Node = _root.get_node_or_null("CustomerNavConfig")
+	var checkout_approach: Marker3D = (
+		config.get_node_or_null("CheckoutApproach") as Marker3D if config != null else null
+	)
+	var register_area: Area3D = _root.get_node_or_null("RegisterArea") as Area3D
+	var entry_area: Area3D = _root.get_node_or_null("EntryArea") as Area3D
+	assert_not_null(checkout_approach, "CheckoutApproach must exist")
+	assert_not_null(register_area, "RegisterArea must exist")
+	assert_not_null(entry_area, "EntryArea must exist")
+	if checkout_approach == null or register_area == null or entry_area == null:
+		return
+
+	var queue_markers: Array[Marker3D] = []
+	for i: int in range(RegisterQueue.MAX_QUEUE_SIZE):
+		var marker: Marker3D = _root.get_node_or_null(
+			"QueueMarker%d" % (i + 1)
+		) as Marker3D
+		assert_not_null(marker, "QueueMarker%d must exist" % (i + 1))
+		if marker != null:
+			queue_markers.append(marker)
+	assert_eq(
+		queue_markers.size(),
+		RegisterQueue.MAX_QUEUE_SIZE,
+		"Queue markers must support the current three-position queue"
+	)
+	if queue_markers.size() != RegisterQueue.MAX_QUEUE_SIZE:
+		return
+
+	assert_lte(
+		_xz_distance(checkout_approach.global_position, register_area.global_position),
+		0.15,
+		"CheckoutApproach must remain colocated with RegisterArea for customer handoff"
+	)
+	assert_lte(
+		_xz_distance(queue_markers[0].global_position, register_area.global_position),
+		1.0,
+		"First queue marker must remain at the register/customer service spot"
+	)
+	assert_lt(
+		_xz_distance(queue_markers[0].global_position, register_area.global_position),
+		_xz_distance(queue_markers[1].global_position, register_area.global_position),
+		"Queue marker order must advance toward the register"
+	)
+	assert_lt(
+		_xz_distance(queue_markers[1].global_position, register_area.global_position),
+		_xz_distance(queue_markers[2].global_position, register_area.global_position),
+		"Third queue marker must be behind the second marker"
+	)
+	assert_lt(
+		_xz_distance(entry_area.global_position, queue_markers[2].global_position),
+		_xz_distance(entry_area.global_position, queue_markers[0].global_position),
+		"Fallback direction must still run from register toward the entry side"
+	)
 
 
 # ── CustomerSystem parenting: Gate 2 holds at runtime ────────────────────────
@@ -259,6 +316,10 @@ func _find_navigation_region_from(node: Node) -> NavigationRegion3D:
 				return child as NavigationRegion3D
 		current = current.get_parent()
 	return null
+
+
+func _xz_distance(a: Vector3, b: Vector3) -> float:
+	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))
 
 
 func _make_profile() -> CustomerTypeDefinition:

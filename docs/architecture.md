@@ -102,9 +102,11 @@ in [`docs/architecture/ownership.md`](architecture/ownership.md).
 
 ## Signal Bus Model
 
-All inter-system communication flows through `EventBus`. Direct `$NodePath` or
-`get_node()` references across system boundaries are merge-blocked. Systems
-may hold refs to their own child nodes only.
+`EventBus` is the central cross-system signal hub. Owner autoloads such as
+`StoreDirector`, `SceneRouter`, `GameState`, `InputFocus`, and
+`CameraAuthority` remain the authoritative emitters for their owned events;
+`EventBus` carries mirrored or gameplay-facing signals for listeners that do
+not own those systems.
 
 Pattern:
 
@@ -160,15 +162,13 @@ scene under `StoreContainer` rather than swap the root scene; the
 
 ## Visual Systems
 
-The following reusable building blocks govern all visual work. Any PR adding
-a visual feature should reuse an entry; new controllers, shaders, or tooltip
-panels are merge-blocked unless the existing one is reused or a documented
-exception applies.
+The following reusable building blocks are the current code-backed visual
+surfaces and helpers.
 
 | Need | Use this | File |
 |---|---|---|
 | First-person in-store player body (WASD, mouse-look, sprint, interact) | `StorePlayerBody` spawned at `PlayerEntrySpawn` by `GameWorld._spawn_player_in_store` | `game/scripts/player/store_player_body.gd` |
-| Eye-level interaction ray cast from the FP camera | `InteractionRay` parented to the `StoreCamera` node | `game/scripts/player/interaction_ray.gd` |
+| Reticle-driven interaction ray from the active store camera | `InteractionRay` (authored under `PlayerController/StoreCamera` in `retro_games.tscn`; the reusable player scene also carries an `InteractionRay` child that binds to `CameraManager.active_camera`) | `game/scripts/player/interaction_ray.gd` |
 | Debug overhead/orbit camera (F1 dev toggle) | `PlayerController` (orbit pivot + ortho framing) | `game/scripts/player/player_controller.gd` |
 | Build-mode orbit / pan / zoom camera with Tween transitions | `BuildModeCamera` | `game/scripts/world/build_mode_camera.gd` |
 | Camera ownership / single-current assertion | `CameraAuthority.request_current(cam, source)` | `game/autoload/camera_authority.gd` |

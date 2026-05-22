@@ -1148,7 +1148,7 @@ func _slot_index_size_ok() -> bool:
 
 func _ensure_save_dir() -> void:
 	if SAVE_DIR == "user://":
-		return  # user:// always exists; the push_warning below is unreachable (§F-07).
+		return
 	if DirAccess.dir_exists_absolute(SAVE_DIR):
 		return
 	var err: Error = DirAccess.make_dir_recursive_absolute(SAVE_DIR)

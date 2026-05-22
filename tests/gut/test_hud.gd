@@ -6,9 +6,24 @@ var _hud: CanvasLayer
 const _HudScene: PackedScene = preload(
 	"res://game/scenes/ui/hud.tscn"
 )
+const _TRAINING_OBJECTIVES: Array[Dictionary] = [
+	{"id": "talk_to_manager"},
+	{"id": "check_register"},
+	{"id": "check_back_room_inventory"},
+	{"id": "training_stock_shelf"},
+	{"id": "practice_customer"},
+	{"id": "open_store"},
+]
+
+
+class BetaObjectiveControllerStub:
+	extends Node
+
+	var _objectives: Array[Dictionary] = []
 
 
 func before_each() -> void:
+	BetaRunState.reset_new_run()
 	_hud = _HudScene.instantiate()
 	add_child_autofree(_hud)
 
@@ -49,6 +64,56 @@ func test_day_updates_on_day_started() -> void:
 func test_hour_updates_on_hour_changed() -> void:
 	EventBus.hour_changed.emit(14)
 	assert_eq(_hud._current_hour, 14)
+
+
+func test_hud_initial_time_uses_preopening_hour() -> void:
+	var label: Label = _hud.get_node("TopBar/TimeLabel")
+	assert_string_contains(label.text, "7:00 AM")
+	assert_false(
+		label.text.contains("9:00 AM"),
+		"HUD must not render the opening-hour default before TimeSystem signals"
+	)
+
+
+func test_fp_time_label_uses_opening_shift_during_preopening_training() -> void:
+	_add_beta_controller_with_objectives(_TRAINING_OBJECTIVES)
+	EventBus.day_started.emit(1)
+	EventBus.hour_changed.emit(8)
+	var label: Label = _hud.get_node("FPTimeLabel")
+	assert_string_contains(label.text, "Opening Shift")
+	assert_string_contains(label.text, "8:00 AM")
+	assert_false(
+		label.text.contains("Day 1"),
+		"FP time label must not present preopening training as normal Day 1 store hours"
+	)
+
+
+func test_fp_time_label_requires_training_milestones_for_opening_shift() -> void:
+	_add_beta_controller_with_objectives([{"id": "talk_to_manager"}])
+	EventBus.day_started.emit(1)
+	EventBus.hour_changed.emit(8)
+	var label: Label = _hud.get_node("FPTimeLabel")
+	assert_false(
+		label.text.contains("Opening Shift"),
+		"Opening Shift label requires the full beta training milestone set"
+	)
+	assert_string_contains(label.text, "Day 1")
+	assert_string_contains(label.text, "8:00 AM")
+
+
+func test_run_state_changed_clears_preopening_fp_time_label() -> void:
+	_add_beta_controller_with_objectives(_TRAINING_OBJECTIVES)
+	EventBus.day_started.emit(1)
+	EventBus.hour_changed.emit(8)
+	var label: Label = _hud.get_node("FPTimeLabel")
+	assert_string_contains(label.text, "Opening Shift")
+	BetaRunState.preopening_complete = true
+	EventBus.run_state_changed.emit()
+	assert_false(
+		label.text.contains("Opening Shift"),
+		"run_state_changed must refresh FP time when preopening completes"
+	)
+	assert_string_contains(label.text, "Day 1")
 
 
 func test_phase_updates_on_day_phase_changed() -> void:
@@ -621,3 +686,11 @@ func test_input_focus_context_changed_no_double_bind() -> void:
 			second_count += 1
 	assert_eq(first_count, 1, "First HUD must own one InputFocus binding")
 	assert_eq(second_count, 1, "Second HUD must own one InputFocus binding")
+
+
+func _add_beta_controller_with_objectives(objectives: Array[Dictionary]) -> void:
+	var controller := BetaObjectiveControllerStub.new()
+	controller.name = "BetaObjectiveControllerStub"
+	controller._objectives = objectives.duplicate(true)
+	controller.add_to_group("beta_day_one_controller")
+	add_child_autofree(controller)

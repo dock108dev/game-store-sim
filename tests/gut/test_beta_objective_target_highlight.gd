@@ -1,4 +1,4 @@
-## Tests for `BetaObjectiveTargetHighlight` — the floating "▶ E" chip that
+## Tests for `BetaObjectiveTargetHighlight` — the floating pointer chip that
 ## marks the active Day-1 chain interactable.
 ##
 ## Covers the visual spec (green chip color matching `sign_backing_mat`
@@ -75,14 +75,18 @@ func test_chip_color_matches_sign_neon_palette() -> void:
 		)
 
 
-func test_chip_label_shows_pointer_and_key() -> void:
-	# AC: chip displays "▶ E".
+func test_chip_label_shows_pointer_without_key_copy() -> void:
+	# The interaction key belongs to InteractionPrompt; this chip only points.
 	var highlight: BetaObjectiveTargetHighlight = _make_highlight()
 	var chip: PanelContainer = highlight.get_chip()
 	var label: Label = chip.get_node_or_null("Label") as Label
 	assert_not_null(label, "Chip must own a Label child")
 	if label != null:
-		assert_eq(label.text, "▶ E", "Chip label must read '▶ E'")
+		assert_eq(label.text, "▶", "Chip label must only show the target pointer")
+		assert_false(
+			label.text.contains("E"),
+			"Target highlight must not duplicate interaction key copy"
+		)
 		assert_eq(
 			label.get_theme_color("font_color"), Color(0.3, 1.0, 0.5),
 			"Chip label text must use the neon-green color"

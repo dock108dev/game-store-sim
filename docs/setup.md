@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- A standard Godot 4.x editor build (non-.NET).
+- A standard Godot 4.6.2 editor build (non-.NET).
 - Bash for the helper scripts and test runner.
 - No external package manager is required for gameplay code.
 
@@ -65,7 +65,7 @@ The runner:
 3. Runs GUT through `res://addons/gut/gut_cmdln.gd`.
 4. Runs `res://game/tests/run_tests.gd` when that file exists.
 5. Writes combined output to `tests/test_run.log`.
-6. Runs shell validators matching `tests/validate_*.sh`.
+6. Runs maintained shell validators under `tests/`.
 7. Runs the SSOT tripwires under `scripts/`
    (`validate_translations.sh`, `validate_single_store_ui.sh`,
    `validate_tutorial_single_source.sh`).
@@ -82,7 +82,6 @@ game/scripts/        Systems, controllers, and gameplay support scripts
 tests/               Main GUT suite, integration/unit tests, shell validators
 game/tests/          Additional GUT coverage included by .gutconfig.json
 docs/                Active supporting project docs and audit notes
-tools/               Local tooling and templates
 ```
 
 Generated cache directories such as `.godot/` are editor/runtime artifacts, not

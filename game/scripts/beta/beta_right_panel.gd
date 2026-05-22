@@ -112,6 +112,7 @@ func _ready() -> void:
 	EventBus.customer_purchased.connect(_on_customer_purchased)
 	EventBus.item_sold.connect(_on_item_sold)
 	EventBus.beta_objective_completed.connect(_on_beta_objective_completed)
+	EventBus.run_state_changed.connect(_on_run_state_changed)
 	InputFocus.context_changed.connect(_on_input_focus_changed)
 
 
@@ -130,6 +131,8 @@ func _exit_tree() -> void:
 		EventBus.item_sold.disconnect(_on_item_sold)
 	if EventBus.beta_objective_completed.is_connected(_on_beta_objective_completed):
 		EventBus.beta_objective_completed.disconnect(_on_beta_objective_completed)
+	if EventBus.run_state_changed.is_connected(_on_run_state_changed):
+		EventBus.run_state_changed.disconnect(_on_run_state_changed)
 	if InputFocus.context_changed.is_connected(_on_input_focus_changed):
 		InputFocus.context_changed.disconnect(_on_input_focus_changed)
 
@@ -271,7 +274,7 @@ func _refresh_header() -> void:
 	if _header == null:
 		return
 	if _is_preopening_training():
-		_header.text = "PRE-OPENING"
+		_header.text = "OPENING SHIFT"
 		return
 	var phase_name: String
 	if _PHASE_NAMES.has(_current_phase):
@@ -309,6 +312,8 @@ func _rebuild_milestones() -> void:
 	_milestone_labels.clear()
 	if _is_preopening_training():
 		_milestones = _TRAINING_MILESTONES.duplicate(true)
+	elif _matches_training_objectives(_milestones):
+		_milestones = _DAY_ONE_MILESTONES.duplicate(true)
 	elif _milestones.is_empty():
 		_milestones = _DAY_ONE_MILESTONES.duplicate(true)
 	for entry: Dictionary in _milestones:
@@ -374,7 +379,7 @@ func _milestones_for_objectives(objectives: Array[Dictionary]) -> Array[Dictiona
 func _matches_day_one_objectives(objectives: Array[Dictionary]) -> bool:
 	var ids: Dictionary = {}
 	for entry: Dictionary in objectives:
-		ids[StringName(str(entry.get("id", "")))] = true
+		ids[_objective_id_for_match(entry)] = true
 	for milestone: Dictionary in _DAY_ONE_MILESTONES:
 		var objective_id: StringName = StringName(str(milestone.get("objective_id", "")))
 		if not ids.has(objective_id):
@@ -385,12 +390,19 @@ func _matches_day_one_objectives(objectives: Array[Dictionary]) -> bool:
 func _matches_training_objectives(objectives: Array[Dictionary]) -> bool:
 	var ids: Dictionary = {}
 	for entry: Dictionary in objectives:
-		ids[StringName(str(entry.get("id", "")))] = true
+		ids[_objective_id_for_match(entry)] = true
 	for milestone: Dictionary in _TRAINING_MILESTONES:
 		var objective_id: StringName = StringName(str(milestone.get("objective_id", "")))
 		if not ids.has(objective_id):
 			return false
 	return true
+
+
+func _objective_id_for_match(entry: Dictionary) -> StringName:
+	var objective_id: String = str(entry.get("objective_id", "")).strip_edges()
+	if objective_id.is_empty():
+		objective_id = str(entry.get("id", "")).strip_edges()
+	return StringName(objective_id)
 
 
 func _on_day_started(day: int) -> void:
@@ -432,6 +444,12 @@ func _refresh_section_labels() -> void:
 func _on_day_phase_changed(new_phase: int) -> void:
 	_current_phase = new_phase as TimeSystem.DayPhase
 	_refresh_header()
+
+
+func _on_run_state_changed() -> void:
+	_refresh_header()
+	_refresh_all_values()
+	_rebuild_milestones()
 
 
 func _on_beta_shelf_count_changed(count: int) -> void:

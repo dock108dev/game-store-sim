@@ -1,0 +1,92 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="1"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_wood_grain_textured.tres" id="2"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_metal_dark.tres" id="3"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_wood_light.tres" id="4"]
+[ext_resource type="PackedScene" path="res://game/scenes/stores/fixtures/prop_register.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://game/scenes/stores/fixtures/prop_card_reader.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://game/scenes/stores/fixtures/prop_receipt_printer.tscn" id="7"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_laminate_counter.tres" id="8"]
+
+[sub_resource type="BoxMesh" id="counter_mesh"]
+size = Vector3(1.8, 0.92, 0.62)
+
+[sub_resource type="BoxMesh" id="counter_top_mesh"]
+size = Vector3(1.9, 0.07, 0.72)
+
+[sub_resource type="BoxMesh" id="toe_kick_mesh"]
+size = Vector3(1.55, 0.14, 0.08)
+
+[sub_resource type="BoxShape3D" id="counter_shape"]
+size = Vector3(1.8, 0.92, 0.62)
+
+[sub_resource type="BoxShape3D" id="slot_shape"]
+size = Vector3(0.3, 0.3, 0.3)
+
+[node name="CheckoutCounter" type="Node3D" groups=["fixture"]]
+
+[node name="CounterMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0)
+mesh = SubResource("counter_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="CounterTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.955, 0)
+mesh = SubResource("counter_top_mesh")
+surface_material_override/0 = ExtResource("8")
+
+[node name="FrontToeKick" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0.35)
+mesh = SubResource("toe_kick_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="BackToeKick" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, -0.35)
+mesh = SubResource("toe_kick_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46, 0)
+shape = SubResource("counter_shape")
+
+[node name="NavigationObstacle3D" type="NavigationObstacle3D" parent="StaticBody3D"]
+radius = 1.0
+height = 1.5
+
+[node name="RegisterVisual" parent="." instance=ExtResource("5")]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 0.33, 0.99, -0.13)
+
+[node name="CardReaderVisual" parent="." instance=ExtResource("6")]
+transform = Transform3D(0.78, 0, 0, 0, 0.78, 0, 0, 0, 0.78, 0.63, 1.0, 0.09)
+
+[node name="ReceiptPrinterVisual" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.82, 0, 0, 0, 0.82, 0, 0, 0, 0.82, -0.44, 1.0, -0.08)
+
+[node name="ImpulseSlot1" type="Area3D" parent="." groups=["shelf_slot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 1.12, 0.22)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+slot_id = "counter_impulse_1"
+slot_size = "small"
+display_name = "Impulse Item"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ImpulseSlot1"]
+shape = SubResource("slot_shape")
+
+[node name="ImpulseSlot2" type="Area3D" parent="." groups=["shelf_slot"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 1.12, 0.22)
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1")
+slot_id = "counter_impulse_2"
+slot_size = "small"
+display_name = "Impulse Item"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ImpulseSlot2"]
+shape = SubResource("slot_shape")

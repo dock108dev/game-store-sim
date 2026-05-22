@@ -13,6 +13,10 @@ const MIN_SIGN_HEIGHT: float = 2.0
 const DAY_ONE_SIGN_COLOR: Color = Color(1, 0.92, 0.55, 1)
 const DAY_ONE_SIGN_OUTLINE: Color = Color(0.05, 0.05, 0.05, 1)
 const MAX_OVERHEAD_SIGN_HEIGHT: float = 3.15
+const RIGHT_WALL_SIGN_MAX_X: float = 7.9
+const SIGN_FRONT_OFFSET_MIN: float = 0.005
+const SIGN_FRONT_OFFSET_MAX: float = 0.08
+const SIGN_BACKING_DEPTH: float = 0.03
 
 var _root: Node3D = null
 
@@ -114,7 +118,6 @@ func test_wall_mounted_zone_signs_clear_slot_height() -> void:
 		"Checkout/Register/CheckoutSign",
 		"InteriorSignage/StoreNameBanner",
 		"InteriorSignage/GamesSign",
-		"ZoneLabels/CloseDayLabel",
 		"ZoneLabels/UsedConsolesLabel",
 	]
 	for path: String in paths:
@@ -138,9 +141,11 @@ func test_day_one_signs_share_visual_vocabulary() -> void:
 		"InteriorSignage/GamesSign",
 		"ZoneLabels/ShelvesLabel",
 		"ZoneLabels/BackroomLabel",
-		"ZoneLabels/CloseDayLabel",
 		"ZoneLabels/UsedConsolesLabel",
+		"ZoneLabels/StaffPicksLabel",
 		"BetaBackroomPickup/StockBoxLabel",
+		"crt_demo_area/ComingSoonLabel",
+		"ReadabilityProps/BackroomDressing/TodayDeliverySign",
 	]
 	for path: String in paths:
 		var sign: Label3D = _find_visible_label(path, path)
@@ -176,9 +181,11 @@ func test_day_one_signs_have_physical_backing_panels() -> void:
 		"ZoneLabels/ShelvesLabel": "ZoneLabels/ShelvesBacking",
 		"ZoneLabels/CheckoutLabel": "ZoneLabels/CheckoutBacking",
 		"ZoneLabels/BackroomLabel": "ZoneLabels/BackroomBacking",
-		"ZoneLabels/CloseDayLabel": "ZoneLabels/CloseDayBacking",
 		"ZoneLabels/UsedConsolesLabel": "ZoneLabels/UsedConsolesBacking",
+		"ZoneLabels/StaffPicksLabel": "ZoneLabels/StaffPicksBacking",
 		"BetaBackroomPickup/StockBoxLabel": "BetaBackroomPickup/StockBox/StockBoxLabelBacking",
+		"crt_demo_area/ComingSoonLabel": "crt_demo_area/ComingSoonBacking",
+		"ReadabilityProps/BackroomDressing/TodayDeliverySign": "ReadabilityProps/BackroomDressing/PickupBayLabelPlate",
 	}
 	var reference_backing: MeshInstance3D = _root.get_node(
 		"ZoneLabels/ShelvesBacking"
@@ -200,15 +207,16 @@ func test_day_one_signs_have_physical_backing_panels() -> void:
 			expected_mat,
 			"%s must use the shared Day-1 sign backing material" % label_path,
 		)
+		assert_almost_eq(
+			_backing_depth(backing),
+			SIGN_BACKING_DEPTH,
+			0.001,
+			"%s backing must use the shared shallow sign-board depth" % label_path,
+		)
 
 
 func test_major_signs_face_approach_without_billboarding() -> void:
-	for path: String in [
-		"Checkout/Register/CheckoutSign",
-		"BetaBackroomPickup/StockBoxLabel",
-		"ZoneLabels/CloseDayLabel",
-		"ZoneLabels/UsedConsolesLabel",
-	]:
+	for path: String in _sign_contract_label_paths():
 		var sign: Label3D = _root.get_node_or_null(path) as Label3D
 		assert_not_null(sign, "%s must exist" % path)
 		if sign == null:
@@ -217,6 +225,10 @@ func test_major_signs_face_approach_without_billboarding() -> void:
 			sign.billboard,
 			BaseMaterial3D.BILLBOARD_ENABLED,
 			"%s must be a fixed diegetic sign, not always-facing UI" % path,
+		)
+		assert_false(
+			sign.double_sided,
+			"%s must use a plain-back treatment instead of exposing rear text" % path,
 		)
 
 
@@ -233,19 +245,170 @@ func test_used_consoles_sign_clears_wall_and_ceiling_paths() -> void:
 		return
 	assert_lt(
 		sign.global_position.x,
-		8.0,
-		"UsedConsolesLabel must sit inside the right wall, not clipped by it",
+		RIGHT_WALL_SIGN_MAX_X,
+		"UsedConsolesLabel must leave a wall-clearance margin",
 	)
 	assert_lt(
 		backing.global_position.x,
-		8.0,
-		"UsedConsolesBacking must sit inside the right wall, not clipped by it",
+		RIGHT_WALL_SIGN_MAX_X,
+		"UsedConsolesBacking must leave a wall-clearance margin",
 	)
 	assert_lte(
 		sign.global_position.y,
 		MAX_OVERHEAD_SIGN_HEIGHT,
 		"UsedConsolesLabel must stay below the ceiling/camera path",
 	)
+
+
+func test_day_one_signs_use_role_specific_hierarchy() -> void:
+	var store_banner: Label3D = _root.get_node_or_null(
+		"InteriorSignage/StoreNameBanner"
+	) as Label3D
+	var checkout_sign: Label3D = _root.get_node_or_null(
+		"Checkout/Register/CheckoutSign"
+	) as Label3D
+	var games_header: Label3D = _root.get_node_or_null(
+		"InteriorSignage/GamesSign"
+	) as Label3D
+	var used_header: Label3D = _root.get_node_or_null(
+		"ZoneLabels/UsedConsolesLabel"
+	) as Label3D
+	var shelf_label: Label3D = _root.get_node_or_null(
+		"ZoneLabels/ShelvesLabel"
+	) as Label3D
+	var staff_label: Label3D = _root.get_node_or_null(
+		"ZoneLabels/StaffPicksLabel"
+	) as Label3D
+	var coming_soon: Label3D = _root.get_node_or_null(
+		"crt_demo_area/ComingSoonLabel"
+	) as Label3D
+	var fixture_badge: Label3D = _root.get_node_or_null(
+		"BetaBackroomPickup/StockBoxLabel"
+	) as Label3D
+	assert_gt(
+		_sign_text_scale(store_banner),
+		_sign_text_scale(games_header),
+		"RETRO GAMES must remain the dominant store banner",
+	)
+	assert_gt(
+		_sign_text_scale(checkout_sign),
+		_sign_text_scale(shelf_label),
+		"Checkout identity must visually dominate nearby shelf labels",
+	)
+	for subordinate: Label3D in [shelf_label, staff_label, coming_soon, fixture_badge]:
+		assert_gt(
+			_sign_text_scale(used_header),
+			_sign_text_scale(subordinate),
+			"Zone headers must visually dominate shelf labels, parked notices, and fixture badges",
+		)
+	var min_widths: Dictionary = {
+		"InteriorSignage/StoreNameBacking": 2.3,
+		"InteriorSignage/GamesBacking": 1.55,
+		"Checkout/Register/CheckoutSignBacking": 1.25,
+		"ZoneLabels/ShelvesBacking": 1.15,
+		"ZoneLabels/BackroomBacking": 1.15,
+		"ZoneLabels/StaffPicksBacking": 1.55,
+		"ZoneLabels/UsedConsolesBacking": 1.55,
+		"crt_demo_area/ComingSoonBacking": 1.25,
+		"BetaBackroomPickup/StockBox/StockBoxLabelBacking": 0.75,
+		"ReadabilityProps/BackroomDressing/PickupBayLabelPlate": 0.55,
+	}
+	for path: String in min_widths.keys():
+		var backing: MeshInstance3D = _root.get_node_or_null(path) as MeshInstance3D
+		assert_not_null(backing, "%s must exist" % path)
+		if backing == null:
+			continue
+		assert_gte(
+			_backing_width(backing),
+			float(min_widths[path]),
+			"%s must use the expected role-specific sign panel width" % path,
+		)
+
+
+func test_day_one_signs_are_not_mirrored_or_floating() -> void:
+	for spec: Dictionary in _day_one_sign_specs():
+		var label_path: String = String(spec["label"])
+		var backing_path: String = String(spec["backing"])
+		var label: Label3D = _root.get_node_or_null(label_path) as Label3D
+		var backing: MeshInstance3D = _root.get_node_or_null(
+			backing_path
+		) as MeshInstance3D
+		assert_not_null(label, "%s must exist" % label_path)
+		assert_not_null(backing, "%s must have a backing" % label_path)
+		if label == null or backing == null:
+			continue
+		_assert_positive_scale(label, label_path)
+		_assert_positive_scale(backing, backing_path)
+		_assert_label_sits_in_front(
+			label,
+			backing,
+			spec["facing"] as Vector3,
+			label_path,
+		)
+
+
+func test_day_one_sign_backs_are_finished_blank_boards() -> void:
+	for spec: Dictionary in _day_one_sign_specs():
+		var label_path: String = String(spec["label"])
+		var backing_path: String = String(spec["backing"])
+		var label: Label3D = _root.get_node_or_null(label_path) as Label3D
+		var backing: MeshInstance3D = _root.get_node_or_null(
+			backing_path
+		) as MeshInstance3D
+		assert_not_null(label, "%s must exist" % label_path)
+		assert_not_null(backing, "%s must have a finished backing" % label_path)
+		if label == null or backing == null:
+			continue
+		assert_false(
+			label.double_sided,
+			"%s must keep its back blank instead of mirroring text" % label_path,
+		)
+		var material: StandardMaterial3D = backing.get_surface_override_material(
+			0
+		) as StandardMaterial3D
+		assert_not_null(
+			material,
+			"%s must have an authored material on both sides of the backing"
+			% backing_path,
+		)
+		if material == null:
+			continue
+		assert_gte(
+			material.albedo_color.a,
+			0.95,
+			"%s backing must be opaque enough to read as a finished board"
+			% backing_path,
+		)
+		assert_gte(
+			material.roughness,
+			0.4,
+			"%s backing must use a non-gloss finish for blank backs"
+			% backing_path,
+		)
+
+
+func test_hidden_zone_signs_are_exempt_from_visible_sign_contract() -> void:
+	var hidden_paths: Array[String] = [
+		"ZoneLabels/CheckoutBacking",
+		"ZoneLabels/CheckoutLabel",
+		"ZoneLabels/ExitBacking",
+		"ZoneLabels/ExitLabel",
+		"ZoneLabels/TradeInsBacking",
+		"ZoneLabels/TradeInsLabel",
+		"ZoneLabels/ClearanceBacking",
+		"ZoneLabels/ClearanceLabel",
+		"ZoneLabels/CloseDayBacking",
+		"ZoneLabels/CloseDayLabel",
+	]
+	for path: String in hidden_paths:
+		var node: Node3D = _root.get_node_or_null(path) as Node3D
+		assert_not_null(node, "%s must exist for objective-copy and future polish hooks" % path)
+		if node == null:
+			continue
+		assert_false(
+			_is_visible_in_tree(node),
+			"%s must stay hidden unless it owns a unique visible signage role" % path,
+		)
 
 
 func test_day_one_sign_text_is_player_facing_copy() -> void:
@@ -289,3 +452,133 @@ func _gather_labels(node: Node) -> Array[Label3D]:
 	for child: Node in node.get_children():
 		result.append_array(_gather_labels(child))
 	return result
+
+
+func _day_one_sign_specs() -> Array[Dictionary]:
+	return [
+		{
+			"label": "Checkout/Register/CheckoutSign",
+			"backing": "Checkout/Register/CheckoutSignBacking",
+			"facing": Vector3.BACK,
+		},
+		{
+			"label": "InteriorSignage/StoreNameBanner",
+			"backing": "InteriorSignage/StoreNameBacking",
+			"facing": Vector3.BACK,
+		},
+		{
+			"label": "InteriorSignage/GamesSign",
+			"backing": "InteriorSignage/GamesBacking",
+			"facing": Vector3.BACK,
+		},
+		{
+			"label": "ZoneLabels/ShelvesLabel",
+			"backing": "ZoneLabels/ShelvesBacking",
+			"facing": Vector3.BACK,
+		},
+		{
+			"label": "ZoneLabels/BackroomLabel",
+			"backing": "ZoneLabels/BackroomBacking",
+			"facing": Vector3.LEFT,
+		},
+		{
+			"label": "ZoneLabels/StaffPicksLabel",
+			"backing": "ZoneLabels/StaffPicksBacking",
+			"facing": Vector3.FORWARD,
+		},
+		{
+			"label": "ZoneLabels/UsedConsolesLabel",
+			"backing": "ZoneLabels/UsedConsolesBacking",
+			"facing": Vector3.LEFT,
+		},
+		{
+			"label": "BetaBackroomPickup/StockBoxLabel",
+			"backing": "BetaBackroomPickup/StockBox/StockBoxLabelBacking",
+			"facing": Vector3.BACK,
+		},
+		{
+			"label": "crt_demo_area/ComingSoonLabel",
+			"backing": "crt_demo_area/ComingSoonBacking",
+			"facing": Vector3.BACK,
+		},
+		{
+			"label": "ReadabilityProps/BackroomDressing/TodayDeliverySign",
+			"backing": "ReadabilityProps/BackroomDressing/PickupBayLabelPlate",
+			"facing": Vector3.BACK,
+		},
+	]
+
+
+func _sign_text_scale(sign: Label3D) -> float:
+	if sign == null:
+		return 0.0
+	return float(sign.font_size) * sign.pixel_size
+
+
+func _backing_width(backing: MeshInstance3D) -> float:
+	var box: BoxMesh = backing.mesh as BoxMesh
+	if box == null:
+		return 0.0
+	return box.size.x * backing.global_transform.basis.x.length()
+
+
+func _backing_depth(backing: MeshInstance3D) -> float:
+	var box: BoxMesh = backing.mesh as BoxMesh
+	if box == null:
+		return 0.0
+	return box.size.z
+
+
+func _sign_contract_label_paths() -> Array[String]:
+	var paths: Array[String] = []
+	for spec: Dictionary in _day_one_sign_specs():
+		paths.append(String(spec["label"]))
+	return paths
+
+
+func _is_visible_in_tree(node: Node3D) -> bool:
+	var cursor: Node = node
+	while cursor != null and cursor != _root:
+		if cursor is Node3D and not (cursor as Node3D).visible:
+			return false
+		cursor = cursor.get_parent()
+	return node.visible
+
+
+func _assert_positive_scale(node: Node3D, path: String) -> void:
+	assert_gt(
+		node.scale.x,
+		0.0,
+		"%s scale.x must stay positive; signs must not be mirrored" % path,
+	)
+	assert_gt(
+		node.scale.y,
+		0.0,
+		"%s scale.y must stay positive; signs must not be mirrored" % path,
+	)
+	assert_gt(
+		node.scale.z,
+		0.0,
+		"%s scale.z must stay positive; signs must not be mirrored" % path,
+	)
+
+
+func _assert_label_sits_in_front(
+	label: Label3D,
+	backing: MeshInstance3D,
+	world_facing: Vector3,
+	label_path: String,
+) -> void:
+	var distance: float = (
+		label.global_position - backing.global_position
+	).dot(world_facing.normalized())
+	assert_gt(
+		distance,
+		SIGN_FRONT_OFFSET_MIN,
+		"%s must sit in front of its backing panel" % label_path,
+	)
+	assert_lt(
+		distance,
+		SIGN_FRONT_OFFSET_MAX,
+		"%s must stay close to its backing instead of floating like HUD" % label_path,
+	)

@@ -32,6 +32,14 @@ const _SPEED_CYCLE: Array[TimeSystem.SpeedTier] = [
 	TimeSystem.SpeedTier.FAST,
 	TimeSystem.SpeedTier.ULTRA,
 ]
+const _TRAINING_OBJECTIVE_IDS: Array[StringName] = [
+	&"talk_to_manager",
+	&"check_register",
+	&"check_back_room_inventory",
+	&"training_stock_shelf",
+	&"practice_customer",
+	&"open_store",
+]
 
 const _TIER_THRESHOLDS: Array[float] = [80.0, 50.0, 25.0, 0.0]
 const _TIER_COLORS: Array[Color] = [
@@ -89,7 +97,7 @@ const _HINT_STOCK_FLOOR: String = "Stock shelves to open the lane."
 const _HINT_AWAITING_CUSTOMER: String = "Waiting for the first customer…"
 
 var _current_day: int = 1
-var _current_hour: int = Constants.STORE_OPEN_HOUR
+var _current_hour: int = 7
 var _current_phase: TimeSystem.DayPhase = TimeSystem.DayPhase.PRE_OPEN
 var _displayed_cash: float = 0.0
 var _target_cash: float = 0.0
@@ -395,6 +403,9 @@ func _create_close_day_button() -> void:
 func _on_run_state_changed() -> void:
 	if is_instance_valid(_close_day_button):
 		_close_day_button.tooltip_text = ""
+	_refresh_time_display()
+	_refresh_close_day_hint_state()
+	_refresh_zero_state_hint()
 
 
 ## Pulses the Close Day button once the first sale lands so the affordance
@@ -688,7 +699,51 @@ func _refresh_time_display() -> void:
 	_time_label.tooltip_text = tr(phase_key)
 	_time_label.modulate = phase_color
 	if is_instance_valid(_fp_time_label):
-		_fp_time_label.text = rendered
+		_fp_time_label.text = _format_fp_time_label(rendered, formatted)
+
+
+func _format_fp_time_label(standard_text: String, formatted_hour: String) -> String:
+	if _is_preopening_training():
+		return "Opening Shift — %s" % formatted_hour
+	return standard_text
+
+
+func _is_preopening_training() -> bool:
+	return (
+		_current_day == 1
+		and not BetaRunState.preopening_complete
+		and _has_training_milestones()
+	)
+
+
+func _has_training_milestones() -> bool:
+	var objectives: Array[Dictionary] = _active_beta_objectives()
+	if objectives.is_empty():
+		return false
+	var ids: Dictionary = {}
+	for entry: Dictionary in objectives:
+		ids[StringName(str(entry.get("id", "")))] = true
+	for objective_id: StringName in _TRAINING_OBJECTIVE_IDS:
+		if not ids.has(objective_id):
+			return false
+	return true
+
+
+func _active_beta_objectives() -> Array[Dictionary]:
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return []
+	var controller: Node = tree.get_first_node_in_group("beta_day_one_controller")
+	if controller == null:
+		return []
+	var raw_objectives: Variant = controller.get("_objectives")
+	if raw_objectives is not Array:
+		return []
+	var output: Array[Dictionary] = []
+	for entry: Variant in raw_objectives as Array:
+		if entry is Dictionary:
+			output.append(entry as Dictionary)
+	return output
 
 
 func _format_hour_12(hour: int) -> String:

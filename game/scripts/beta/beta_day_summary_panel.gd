@@ -4,6 +4,7 @@ extends ModalPanel
 signal continue_pressed()
 signal replay_pressed()
 signal main_menu_pressed()
+signal reinvest_pressed(option_id: StringName)
 
 const _SECTION_HEADER_FONT_SIZE: int = 17
 const _SECTION_SEPARATION: int = 18
@@ -27,9 +28,13 @@ var _audit_backroom_label: Label
 var _note_label: Label
 var _hidden_thread_label: Label
 var _reputation_label: Label
+var _reinvest_section: VBoxContainer
+var _reinvest_button: Button
+var _reinvest_status_label: Label
 var _replay_button: Button
 var _main_menu_button: Button
 var _continue_button: Button
+var _active_reinvest_option_id: StringName = &""
 
 
 func _ready() -> void:
@@ -126,6 +131,19 @@ func _ready() -> void:
 	# ── Section D: REPUTATION ───────────────────────────────────────────
 	var reputation_section := _make_section(v, "REPUTATION")
 	_reputation_label = _make_body_label(reputation_section)
+
+	# ── Section E: REINVEST ─────────────────────────────────────────────
+	_reinvest_section = _make_section(v, "REINVEST")
+	_reinvest_button = Button.new()
+	_reinvest_button.custom_minimum_size = Vector2(0, 40)
+	_reinvest_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	BetaModalTheme.apply_button_theme(_reinvest_button)
+	_reinvest_button.pressed.connect(_on_reinvest_pressed)
+	_reinvest_section.add_child(_reinvest_button)
+	_reinvest_status_label = _make_body_label(_reinvest_section)
+	_reinvest_status_label.add_theme_color_override(
+		"font_color", BetaModalTheme.COLOR_TEXT_MUTED
+	)
 
 	# ── Button row ──────────────────────────────────────────────────────
 	var button_row := HBoxContainer.new()
@@ -313,6 +331,8 @@ func _on_queued_open(payload: Dictionary) -> void:
 	else:
 		_continue_button.text = "Continue to next day"
 
+	_render_reinvest_options(summary)
+
 
 func _on_review_inventory_pressed() -> void:
 	# Toggle the audit detail rows in place. Handled entirely inside the
@@ -323,6 +343,39 @@ func _on_review_inventory_pressed() -> void:
 	_review_inventory_button.text = (
 		_AUDIT_TEXT_EXPANDED if now_visible else _AUDIT_TEXT_COLLAPSED
 	)
+
+
+func _render_reinvest_options(summary: Dictionary) -> void:
+	var options: Array = summary.get("reinvest_options", []) as Array
+	if options.is_empty():
+		_reinvest_section.visible = false
+		_active_reinvest_option_id = &""
+		return
+	var option: Dictionary = options[0] as Dictionary
+	var option_id: StringName = StringName(str(option.get("id", "")))
+	var label: String = str(option.get("label", "Order more stock"))
+	var cost: int = int(option.get("cost", 0))
+	var quantity: int = int(option.get("quantity", 0))
+	var affordable: bool = bool(option.get("affordable", true))
+	_active_reinvest_option_id = option_id
+	_reinvest_section.visible = true
+	_reinvest_button.disabled = option_id.is_empty() or not affordable
+	_reinvest_button.text = "%s  -  $%d" % [label, cost]
+	if affordable:
+		_reinvest_status_label.text = "%d more used games arrive next shift." % quantity
+	else:
+		_reinvest_status_label.text = "Not enough cash to place this order."
+
+
+func mark_reinvest_applied(message: String) -> void:
+	_reinvest_button.disabled = true
+	_reinvest_status_label.text = message
+
+
+func _on_reinvest_pressed() -> void:
+	if _active_reinvest_option_id.is_empty():
+		return
+	reinvest_pressed.emit(_active_reinvest_option_id)
 
 
 func _on_continue_pressed() -> void:

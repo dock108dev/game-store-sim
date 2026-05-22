@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 # Headless interaction audit runner + Runtime Truth gate.
 #
-# Two parsing passes:
-#   1. Legacy `[AUDIT] <key>: PASS|FAIL` lines emitted by AuditOverlay
-#      (issue 002). Drives the per-day Markdown summary table.
-#   2. Structured `AUDIT: PASS <name>` / `AUDIT: FAIL <name>` lines emitted
-#      by AuditLog (issue 001). Compared against the required-checkpoint
-#      manifest derived from docs/audit/pass-fail-matrix.md, with optional
-#      whitelisting via tests/audit_known_fail.txt.
+# Structured `AUDIT: PASS <name>` / `AUDIT: FAIL <name>` lines emitted
+# by AuditLog are the only accepted checkpoint source. They are compared
+# against the required-checkpoint manifest derived from
+# docs/audit/pass-fail-matrix.md, with optional whitelisting via
+# tests/audit_known_fail.txt.
 #
 # Final summary line is exactly one `AUDIT: N/M verified`. Exit 1 if any
 # required checkpoint is unaccounted for, or any AUDIT: FAIL line appears
@@ -20,9 +18,6 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 AUDIT_LOG="${AUDIT_LOG:-$ROOT/tests/audit.log}"
-AUDITS_DIR="$ROOT/docs/audits"
-DATE_STAMP="$(date -u +%Y-%m-%d)"
-AUDIT_TABLE="$AUDITS_DIR/${DATE_STAMP}-audit.md"
 REQUIRED_FILE="$ROOT/tests/audit_required_checkpoints.txt"
 KNOWN_FAIL_FILE="$ROOT/tests/audit_known_fail.txt"
 EXIT_CODE=0
@@ -47,8 +42,6 @@ _resolve_godot_bin() {
 	done
 	return 1
 }
-
-mkdir -p "$AUDITS_DIR"
 
 # ── Run headless audit (unless test hook bypassed) ────────────────────────────
 if [ "${AUDIT_SKIP_RUN:-0}" != "1" ]; then
@@ -93,6 +86,24 @@ _strip_manifest() {
 		| grep -v '^$' || true
 }
 
+_list_contains() {
+	local needle="$1"
+	shift
+	local item
+	for item in "$@"; do
+		if [ "$item" = "$needle" ]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+_text_contains_line() {
+	local needle="$1"
+	local haystack="$2"
+	printf '%s' "$haystack" | grep -Fxq "$needle"
+}
+
 if [ ! -f "$REQUIRED_FILE" ]; then
 	echo "ERROR: required-checkpoint manifest missing: $REQUIRED_FILE" >&2
 	exit 1
@@ -110,91 +121,31 @@ if [ -f "$KNOWN_FAIL_FILE" ]; then
 	done < <(_strip_manifest < "$KNOWN_FAIL_FILE")
 fi
 
-declare -A REQUIRED_SET
-for ck in "${REQUIRED_LIST[@]}"; do
-	REQUIRED_SET[$ck]=1
-done
-
-declare -A KNOWN_FAIL_SET
-for ck in "${KNOWN_FAIL_LIST[@]}"; do
-	KNOWN_FAIL_SET[$ck]=1
-done
-
 # Orphan check: known-fail entries must reference a required checkpoint.
 for ck in "${KNOWN_FAIL_LIST[@]}"; do
-	if [ -z "${REQUIRED_SET[$ck]:-}" ]; then
+	if ! _list_contains "$ck" "${REQUIRED_LIST[@]}"; then
 		echo "AUDIT FAILED: known-fail entry '$ck' is not in required manifest." >&2
 		EXIT_CODE=1
 	fi
 done
 
-# ── Parse legacy [AUDIT] lines (AuditOverlay) ─────────────────────────────────
-LEGACY_CHECKPOINTS=("boot_complete" "store_entered" "refurb_completed" "transaction_completed" "day_closed")
-declare -A LEGACY_RESULTS
-for key in "${LEGACY_CHECKPOINTS[@]}"; do
-	LEGACY_RESULTS[$key]="PENDING"
-done
-
 # ── Parse structured AUDIT: PASS|FAIL <name> lines (AuditLog) ─────────────────
-declare -A AUDIT_PASS
-declare -A AUDIT_FAIL
+AUDIT_PASS_TEXT=""
+AUDIT_FAIL_TEXT=""
 
 while IFS= read -r line; do
-	if [[ "$line" =~ \[AUDIT\]\ ([^:]+):\ (PASS|FAIL)(.*)?$ ]]; then
-		LEGACY_RESULTS[${BASH_REMATCH[1]}]="${BASH_REMATCH[2]}"
-		continue
-	fi
 	if [[ "$line" =~ ^AUDIT:\ PASS\ ([A-Za-z0-9_]+) ]]; then
-		AUDIT_PASS[${BASH_REMATCH[1]}]=1
+		AUDIT_PASS_TEXT="${AUDIT_PASS_TEXT}${BASH_REMATCH[1]}"$'\n'
 		continue
 	fi
 	if [[ "$line" =~ ^AUDIT:\ FAIL\ ([A-Za-z0-9_]+) ]]; then
-		AUDIT_FAIL[${BASH_REMATCH[1]}]=1
+		AUDIT_FAIL_TEXT="${AUDIT_FAIL_TEXT}${BASH_REMATCH[1]}"$'\n'
 		continue
 	fi
 done < "$AUDIT_LOG"
 
 # Also count GUT failures
 GUT_FAIL_COUNT=$(grep -c "^FAILED\b\|^ *[0-9]* failed\b\|Tests: [0-9]*, Passing: [0-9]*, Failing: [1-9]" "$AUDIT_LOG" 2>/dev/null || true)
-
-# ── Generate Markdown table for legacy checkpoints ────────────────────────────
-{
-	echo "# Interaction Audit — ${DATE_STAMP}"
-	echo ""
-	echo "| Checkpoint | Result |"
-	echo "|---|---|"
-	for key in "${LEGACY_CHECKPOINTS[@]}"; do
-		status="${LEGACY_RESULTS[$key]:-PENDING}"
-		icon="⏳"
-		[ "$status" = "PASS" ] && icon="✅"
-		[ "$status" = "FAIL" ] && icon="❌"
-		echo "| \`${key}\` | ${icon} ${status} |"
-	done
-	echo ""
-	echo "_Generated: $(date -u +"%Y-%m-%dT%H:%M:%SZ")_"
-} > "$AUDIT_TABLE"
-
-echo ""
-echo "Audit table written to: $AUDIT_TABLE"
-echo ""
-
-# ── Print legacy summary ──────────────────────────────────────────────────────
-echo "| Checkpoint | Result |"
-echo "|---|---|"
-for key in "${LEGACY_CHECKPOINTS[@]}"; do
-	status="${LEGACY_RESULTS[$key]:-PENDING}"
-	echo "| $key | $status |"
-done
-echo ""
-
-# Legacy gating: PENDING == failure (silent instrumentation regression).
-for key in "${LEGACY_CHECKPOINTS[@]}"; do
-	status="${LEGACY_RESULTS[$key]:-PENDING}"
-	if [ "$status" != "PASS" ]; then
-		echo "AUDIT FAILED: checkpoint '$key' status is $status (expected PASS)." >&2
-		EXIT_CODE=1
-	fi
-done
 
 if [ "$GUT_FAIL_COUNT" -gt 0 ]; then
 	echo "AUDIT FAILED: $GUT_FAIL_COUNT GUT test failure(s)." >&2
@@ -204,11 +155,11 @@ fi
 # ── Runtime Truth gate (matrix-derived manifest) ──────────────────────────────
 M=${#REQUIRED_LIST[@]}
 N=0
-MISSING=()
+MISSING=("")
 for ck in "${REQUIRED_LIST[@]}"; do
-	if [ -n "${AUDIT_PASS[$ck]:-}" ]; then
+	if _text_contains_line "$ck" "$AUDIT_PASS_TEXT"; then
 		N=$((N + 1))
-	elif [ -n "${KNOWN_FAIL_SET[$ck]:-}" ]; then
+	elif _list_contains "$ck" "${KNOWN_FAIL_LIST[@]}"; then
 		: # whitelisted — counted toward M but not toward N
 	else
 		MISSING+=("$ck")
@@ -216,15 +167,21 @@ for ck in "${REQUIRED_LIST[@]}"; do
 done
 
 # Surface unexpected AUDIT: FAIL lines (real runtime failures).
-for ck in "${!AUDIT_FAIL[@]}"; do
-	if [ -z "${KNOWN_FAIL_SET[$ck]:-}" ]; then
+while IFS= read -r ck; do
+	if [ -z "$ck" ]; then
+		continue
+	fi
+	if ! _list_contains "$ck" "${KNOWN_FAIL_LIST[@]}"; then
 		echo "AUDIT FAILED: AUDIT: FAIL '$ck' emitted (not whitelisted)." >&2
 		EXIT_CODE=1
 	fi
-done
+done <<< "$AUDIT_FAIL_TEXT"
 
 # Surface required checkpoints that have neither PASS nor known-fail entry.
 for ck in "${MISSING[@]}"; do
+	if [ -z "$ck" ]; then
+		continue
+	fi
 	echo "AUDIT FAILED: required checkpoint '$ck' produced no AUDIT: PASS line and is not in tests/audit_known_fail.txt." >&2
 	echo "              Either implement the emitter or whitelist it explicitly." >&2
 	EXIT_CODE=1
@@ -232,7 +189,7 @@ done
 
 # Detect stale known-fail entries (whitelisted but actually emitted PASS).
 for ck in "${KNOWN_FAIL_LIST[@]}"; do
-	if [ -n "${AUDIT_PASS[$ck]:-}" ]; then
+	if _text_contains_line "$ck" "$AUDIT_PASS_TEXT"; then
 		echo "AUDIT FAILED: '$ck' emitted PASS but is still listed in tests/audit_known_fail.txt — remove it." >&2
 		EXIT_CODE=1
 	fi

@@ -22,7 +22,8 @@
       "unlock_rep": 0,
       "unlock_day": 0,
       "requires_wall": true,
-      "visual_category": "shelf"
+      "visual_category": "shelf",
+      "scene_path": "res://game/scenes/stores/fixtures/retail_wall_shelf.tscn"
     },
     {
       "id": "glass_case",
@@ -62,7 +63,8 @@
       "store_type_restriction": "",
       "unlock_rep": 0,
       "unlock_day": 0,
-      "visual_category": "rack"
+      "visual_category": "rack",
+      "scene_path": "res://game/scenes/stores/fixtures/retail_gondola_shelf.tscn"
     },
     {
       "id": "counter",
@@ -88,7 +90,8 @@
       "store_type_restriction": "",
       "unlock_rep": 0,
       "unlock_day": 0,
-      "visual_category": "counter"
+      "visual_category": "counter",
+      "scene_path": "res://game/scenes/stores/fixtures/checkout_counter.tscn"
     },
     {
       "id": "register",
@@ -180,7 +183,8 @@
       "store_type_restriction": "retro_games",
       "unlock_rep": 0,
       "unlock_day": 0,
-      "visual_category": "display"
+      "visual_category": "display",
+      "scene_path": "res://game/scenes/stores/fixtures/receiving_table.tscn"
     },
     {
       "id": "import_wall_fixture",
@@ -233,7 +237,8 @@
       "store_type_restriction": "retro_games",
       "unlock_rep": 15,
       "unlock_day": 3,
-      "visual_category": "case"
+      "visual_category": "case",
+      "scene_path": "res://game/scenes/stores/fixtures/repair_workbench.tscn"
     }
   ]
 }

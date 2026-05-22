@@ -1,8 +1,5 @@
-## Screenshot capture for the beta validation harness (Section 7 of the
-## beta-readability brief). F10 saves a PNG of the current viewport to
-## `user://screenshots/<timestamp>_<scene>.png` so visual regressions on the
-## named beats (title, store post-intro, customer, decision modal, etc.) can
-## be diffed manually without a full image-diff pipeline.
+## Screenshot capture for the beta validation harness. F10 saves the current
+## viewport to `user://screenshots/<timestamp>_<scene>.png` for manual review.
 ##
 ## Resolves the OS-specific user dir on first save:
 ##   * macOS:   ~/Library/Application Support/Godot/app_userdata/<project>/screenshots/
@@ -13,6 +10,9 @@
 ## the on-screen toast so the player knows where the file landed.
 extends CanvasLayer
 
+const _BetaScreenshotSweep: GDScript = preload(
+	"res://game/scripts/beta/beta_screenshot_sweep.gd"
+)
 const SAVE_DIR: String = "user://screenshots"
 const TOAST_DURATION: float = 2.5
 ## Cap the scene-slug component of the saved filename. Godot already strips
@@ -20,7 +20,7 @@ const TOAST_DURATION: float = 2.5
 ## disk; bounding it (and the allowed charset below) is defense-in-depth so
 ## a future renamed scene cannot land an oversized or weirdly-glyphed
 ## filename in `user://screenshots/`.
-const _MAX_SLUG_LENGTH: int = 48
+const _SCENE_SLUG_LENGTH: int = 48
 
 var _toast: Label = null
 var _toast_timer: float = 0.0
@@ -79,26 +79,28 @@ func _capture_enabled() -> bool:
 	)
 
 
-func _capture() -> void:
-	var dir_err: int = DirAccess.make_dir_recursive_absolute(SAVE_DIR)
-	if dir_err != OK and dir_err != ERR_ALREADY_EXISTS:
-		_show_toast("Screenshot failed: cannot create %s (err=%d)" % [SAVE_DIR, dir_err])
-		return
+## Captures the current viewport and returns the saved PNG path details.
+func capture_current_viewport(beat_name: String = "") -> Dictionary:
+	var slug: String = _scene_slug()
+	if not beat_name.is_empty():
+		slug = _BetaScreenshotSweep.sanitize_slug(beat_name)
+	var filename: String = "%s_%s.png" % [_timestamp(), slug]
+	var result: Dictionary = _BetaScreenshotSweep.save_viewport_png(
+		get_viewport(),
+		SAVE_DIR,
+		filename
+	)
+	if not bool(result.get("ok", false)):
+		_show_toast("Screenshot failed: %s" % str(result.get("error", "unknown error")))
+		return result
 
-	var image: Image = get_viewport().get_texture().get_image()
-	if image == null:
-		_show_toast("Screenshot failed: viewport texture unavailable")
-		return
-
-	var filename: String = "%s_%s.png" % [_timestamp(), _scene_slug()]
-	var path: String = "%s/%s" % [SAVE_DIR, filename]
-	var save_err: int = image.save_png(path)
-	if save_err != OK:
-		_show_toast("Screenshot failed: save_png err=%d" % save_err)
-		return
-
-	var absolute: String = ProjectSettings.globalize_path(path)
+	var absolute: String = str(result.get("absolute_path", ""))
 	_show_toast("Saved: %s" % absolute)
+	return result
+
+
+func _capture() -> void:
+	capture_current_viewport()
 
 
 func _timestamp() -> String:
@@ -117,21 +119,7 @@ func _scene_slug() -> String:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return "scene"
-	var raw: String = String(scene.name).to_lower()
-	var sanitized: String = ""
-	for i: int in range(raw.length()):
-		var codepoint: int = raw.unicode_at(i)
-		if (codepoint >= 0x30 and codepoint <= 0x39) \
-				or (codepoint >= 0x61 and codepoint <= 0x7A) \
-				or codepoint == 0x5F:
-			sanitized += char(codepoint)
-		elif codepoint == 0x20 or codepoint == 0x2D:
-			sanitized += "_"
-	if sanitized.is_empty():
-		sanitized = "scene"
-	if sanitized.length() > _MAX_SLUG_LENGTH:
-		sanitized = sanitized.substr(0, _MAX_SLUG_LENGTH)
-	return sanitized
+	return _BetaScreenshotSweep.sanitize_slug(String(scene.name), _SCENE_SLUG_LENGTH)
 
 
 func _show_toast(text: String) -> void:

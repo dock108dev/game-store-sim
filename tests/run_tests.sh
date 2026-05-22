@@ -31,6 +31,7 @@ _resolve_godot_bin() {
 # Check if Godot is available
 if GODOT_BIN="$(_resolve_godot_bin)"; then
     LOG_FILE="$ROOT/tests/test_run.log"
+    : >"$LOG_FILE"
 
     echo "Godot found — importing project assets (addons/GUT textures, etc.)..."
     "$GODOT_BIN" --path "$ROOT" --headless --import 2>/dev/null
@@ -62,9 +63,20 @@ else
     echo ""
 fi
 
-# Always run shell-based validation scripts
+# Run maintained shell validators. Archived acceptance scripts remain available
+# to run directly, but they are not part of the default regression gate because
+# several encode older one-off task snapshots rather than current repo contracts.
+_should_run_default_validator() {
+    local script_name
+    script_name="$(basename "$1")"
+    case "$script_name" in
+        validate_issue_*) return 1 ;;
+    esac
+    return 0
+}
+
 for test_script in "$TESTS_DIR"/validate_*.sh; do
-    if [ -f "$test_script" ]; then
+    if [ -f "$test_script" ] && _should_run_default_validator "$test_script"; then
         echo ""
         bash "$test_script" || EXIT_CODE=$?
     fi

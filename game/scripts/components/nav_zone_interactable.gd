@@ -2,11 +2,13 @@
 ##
 ## Left-clicking or pressing the mapped keyboard shortcut (nav_zone_N) snaps
 ## the PlayerController pivot to this zone's world position. The collision
-## shape remains active in all builds; any MeshInstance3D children (the
-## DebugMesh placeholder) are hidden in release builds via
-## `_apply_debug_visibility()`.
+## shape remains active in all builds; the DebugMesh placeholder is hidden
+## unless an explicit debug-visual setting opts in.
 class_name NavZoneInteractable
 extends Interactable
+
+const SHOW_DEBUG_MESHES_SETTING: String = "mallcore/debug/show_nav_zone_meshes"
+const SCREENSHOT_MODE_SETTING: String = "mallcore/test/screenshot_mode"
 
 ## Keyboard shortcut index (1–5). PlayerController maps nav_zone_N actions to
 ## nodes in the "nav_zone" group by matching this value.
@@ -27,7 +29,15 @@ func interact(by: Node = null) -> void:
 
 
 func _apply_debug_visibility() -> void:
-	var show_debug: bool = OS.is_debug_build()
-	for child: Node in get_children():
-		if child is MeshInstance3D:
-			(child as MeshInstance3D).visible = show_debug
+	var debug_mesh: MeshInstance3D = get_node_or_null("DebugMesh") as MeshInstance3D
+	if debug_mesh == null:
+		return
+	debug_mesh.visible = _should_show_debug_mesh()
+
+
+func _should_show_debug_mesh() -> bool:
+	return (
+		OS.is_debug_build()
+		and not bool(ProjectSettings.get_setting(SCREENSHOT_MODE_SETTING, false))
+		and bool(ProjectSettings.get_setting(SHOW_DEBUG_MESHES_SETTING, false))
+	)

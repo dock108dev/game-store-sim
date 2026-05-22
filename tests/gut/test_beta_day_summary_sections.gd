@@ -54,6 +54,7 @@ func _summary_payload(day: int = 1) -> Dictionary:
 		"shift_note": "",
 		"hidden_thread_note": "",
 		"reputation_delta": 0,
+		"reinvest_options": [],
 	}
 
 
@@ -232,7 +233,51 @@ func _has_progress_bar_descendant(node: Node) -> bool:
 	return false
 
 
-# ── Continue / Finish button copy ──────────────────────────────────────────
+# ── Reinvest / Continue button copy ────────────────────────────────────────
+
+
+func test_reinvest_section_hidden_without_options() -> void:
+	_panel.show_summary(_summary_payload())
+	var reinvest_section: VBoxContainer = _panel.get("_reinvest_section") as VBoxContainer
+	assert_not_null(reinvest_section, "Panel must own a reinvest section")
+	if reinvest_section == null:
+		return
+	assert_false(
+		reinvest_section.visible,
+		"Reinvest section must stay hidden when there is nothing to buy"
+	)
+
+
+func test_reinvest_option_emits_selected_option_id() -> void:
+	var payload: Dictionary = _summary_payload()
+	payload["reinvest_options"] = [
+		{
+			"id": "order_used_games",
+			"label": "Order 2 used games",
+			"cost": 20,
+			"quantity": 2,
+			"affordable": true,
+		}
+	]
+	_panel.show_summary(payload)
+	var reinvest_section: VBoxContainer = _panel.get("_reinvest_section") as VBoxContainer
+	var reinvest_button: Button = _panel.get("_reinvest_button") as Button
+	assert_not_null(reinvest_section)
+	assert_not_null(reinvest_button)
+	if reinvest_section == null or reinvest_button == null:
+		return
+	assert_true(reinvest_section.visible)
+	assert_string_contains(reinvest_button.text, "Order 2 used games")
+	watch_signals(_panel)
+
+	reinvest_button.pressed.emit()
+
+	assert_signal_emitted_with_parameters(
+		_panel,
+		"reinvest_pressed",
+		[&"order_used_games"],
+		"Reinvest button must emit the concrete option id"
+	)
 
 func test_continue_button_reads_finish_shift_on_final_day() -> void:
 	_panel.show_summary(_summary_payload(), true)
@@ -291,7 +336,7 @@ func test_section_headers_use_brand_header_color_and_size() -> void:
 	# uniformly and no header drifts to body color.
 	_panel.show_summary(_summary_payload())
 	var expected_titles: Array[String] = [
-		"MONEY", "STORE PERFORMANCE", "THE MARK", "REPUTATION"
+		"MONEY", "STORE PERFORMANCE", "THE MARK", "REPUTATION", "REINVEST"
 	]
 	var found: Array[String] = []
 	for label: Label in _collect_labels(_panel):

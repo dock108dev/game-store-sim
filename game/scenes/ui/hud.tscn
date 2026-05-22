@@ -37,7 +37,7 @@ clip_text = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "Day 1 — 9:00 AM"
+text = "Day 1 — 7:00 AM"
 horizontal_alignment = 1
 clip_text = true
 
@@ -124,7 +124,7 @@ offset_bottom = 56.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "Day 1 — 9:00 AM"
+text = "Day 1 — 7:00 AM"
 horizontal_alignment = 1
 clip_text = true
 

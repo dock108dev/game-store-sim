@@ -407,11 +407,9 @@ func _on_entrance_door_interacted() -> void:
 ## debug build, satisfying the quarantine rule that non-Day-1 surfaces stay
 ## behind a debug-build flag or a later-day gate.
 ##
-## testing_station is intentionally excluded: its Interactable ships disabled
-## (the testing flow is not wired up yet) and the visual zone — CRT prop,
-## bench, neon panels, "Coming Soon" Label3D — lives under crt_demo_area, which
-## stays visible so the testing area reads as a deliberate parked feature
-## rather than missing scenery.
+## testing_station carries the inactive interaction wrapper. The visual zone
+## lives under crt_demo_area and is hidden by the beta controller's review
+## scope while remaining authored for full-store completeness.
 ##
 ## §F-41 — silent return on a missing node is intentional: future store
 ## variants may legitimately omit refurb_bench (e.g. an early-game

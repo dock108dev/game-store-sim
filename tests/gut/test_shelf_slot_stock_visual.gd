@@ -24,8 +24,7 @@ func test_item_stocked_signal_occupies_slot() -> void:
 	EventBus.item_stocked.emit("inst_vis_01", "vis_slot_01")
 
 	assert_true(
-		slot.is_occupied(),
-		"Slot must be occupied after item_stocked fires for its shelf_id"
+		slot.is_occupied(), "Slot must be occupied after item_stocked fires for its shelf_id"
 	)
 
 
@@ -64,10 +63,7 @@ func test_item_stocked_unknown_shelf_id_no_effect() -> void:
 
 	EventBus.item_stocked.emit("inst_vis_04", "completely_different_shelf")
 
-	assert_false(
-		slot.is_occupied(),
-		"Slot must not be occupied when shelf_id does not match"
-	)
+	assert_false(slot.is_occupied(), "Slot must not be occupied when shelf_id does not match")
 
 
 func test_item_stocked_occupied_slot_keeps_first_item() -> void:
@@ -84,7 +80,155 @@ func test_item_stocked_occupied_slot_keeps_first_item() -> void:
 	)
 
 
+func test_item_stocked_with_plural_category_uses_runtime_visual_key() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+
+	var ok: bool = slot.place_item("inst_plural_cart", "cartridges")
+
+	assert_true(ok, "place_item must accept plural content categories")
+	assert_eq(
+		slot.get_held_category(),
+		"cartridge",
+		"Held category must be normalized before visual spawning"
+	)
+	assert_not_null(slot._item_node, "Stocking must spawn a visible item node")
+	if slot._item_node != null:
+		assert_eq(
+			String(slot._item_node.name),
+			"PlaceholderPropGameCartridge",
+			"Plural cartridges must spawn the cartridge display template"
+		)
+
+
+func test_duplicate_place_does_not_replace_visual_or_count() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+	assert_true(slot.place_item("inst_first", "cartridges"))
+	var first_visual: Node3D = slot._item_node
+	var child_count: int = slot.get_children().size()
+
+	var placed_again: bool = slot.place_item("inst_second", "consoles")
+
+	assert_false(placed_again, "Occupied capacity-1 slot must reject restock")
+	assert_eq(slot.get_item_instance_id(), "inst_first")
+	assert_eq(slot.get_occupied(), 1, "Occupied count must stay at one")
+	assert_eq(slot._item_node, first_visual, "Existing visual must not be replaced")
+	assert_eq(
+		slot.get_children().size(),
+		child_count,
+		"Rejected restock must not add another visible stock visual"
+	)
+
+
+func test_unknown_category_uses_default_visible_visual() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+
+	assert_true(slot.place_item("inst_unknown", "missing_display_metadata"))
+
+	assert_true(slot.is_occupied(), "Fallback visual path must preserve stock state")
+	assert_eq(slot.get_occupied(), 1)
+	assert_not_null(slot._item_node, "Fallback path must still spawn a visual")
+	if slot._item_node != null:
+		assert_eq(
+			String(slot._item_node.name),
+			"PlaceholderPropShelfProduct",
+			"Unknown categories must use the default shelf product visual"
+		)
+		assert_true(slot._item_node.visible, "Fallback visual must be visible")
+
+
+func test_item_with_visual_metadata_spawns_designed_case_node() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+
+	var item_data: Dictionary = {
+		"instance_id": "inst_catalog_case",
+		"category": "cartridge",
+		"box_art_key": "motorway_kings_neo_ignite",
+	}
+	var placed: bool = slot.place_item_with_data(item_data)
+
+	assert_true(placed, "Metadata placement must keep the normal occupancy contract")
+	assert_true(slot.is_occupied(), "Catalog-backed placement must occupy the slot")
+	assert_not_null(slot._item_node, "Catalog-backed placement must spawn a visual")
+	if slot._item_node != null:
+		assert_eq(
+			String(slot._item_node.name),
+			"ProductVisualCaseRoot",
+			"Known box_art_key must render the designed case template"
+		)
+		for child_name: String in [
+			"FrontPanel",
+			"SpinePanel",
+			"SpineTitleLabel",
+			"SpinePlatformLabel",
+			"PlatformStripe",
+			"TitleLabel",
+		]:
+			assert_not_null(
+				slot._item_node.get_node_or_null(child_name),
+				"Designed shelf case missing %s" % child_name
+			)
+
+
+func test_malformed_visual_metadata_falls_back_without_breaking_slot_state() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+	var changed_count: Array[int] = [0]
+	slot.slot_changed.connect(func(_changed_slot: ShelfSlot) -> void: changed_count[0] += 1)
+
+	var item_data: Dictionary = {
+		"instance_id": "inst_bad_visual",
+		"category": "guide",
+		"box_art_key": "does_not_exist",
+		"platform_stripe": 12,
+	}
+	var placed: bool = slot.place_item_with_data(item_data)
+
+	assert_true(placed, "Bad visual metadata must not block shelf placement")
+	assert_eq(changed_count[0], 1, "Successful placement must emit slot_changed once")
+	assert_true(slot.is_occupied(), "Fallback placement must still occupy the slot")
+	assert_eq(slot.get_item_instance_id(), "inst_bad_visual")
+	assert_not_null(slot._item_node, "Fallback placement must still spawn a visual")
+	if slot._item_node != null:
+		assert_eq(
+			String(slot._item_node.name),
+			"PlaceholderPropShelfProduct",
+			"Malformed visual metadata must return to category placeholders"
+		)
+
+
+func test_remove_item_clears_catalog_backed_visual_state() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+	slot.place_item_with_data(
+		{
+			"instance_id": "inst_remove_catalog_case",
+			"category": "cartridge",
+			"box_art_key": "brain_drill_wave_pocket",
+		}
+	)
+
+	var removed: String = slot.remove_item()
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	assert_eq(removed, "inst_remove_catalog_case")
+	assert_false(slot.is_occupied(), "remove_item must clear occupancy")
+	assert_eq(slot._held_item_visual_data.size(), 0, "remove_item must clear visual metadata")
+	assert_eq(slot._item_node, null, "remove_item must clear designed visual reference")
+
+
+func test_remove_empty_slot_does_not_emit_slot_changed() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+	var changed_count: Array[int] = [0]
+	slot.slot_changed.connect(func(_changed_slot: ShelfSlot) -> void: changed_count[0] += 1)
+
+	var removed: String = slot.remove_item()
+
+	assert_eq(removed, "", "Empty remove must keep the existing empty result")
+	assert_eq(slot.get_occupied(), 0, "Empty remove must not decrement below zero")
+	assert_eq(changed_count[0], 0, "Empty remove must not emit a clear event")
+
+
 # ── _update_visual SSOT entry point ───────────────────────────────────────────
+
 
 func _make_bare_slot() -> ShelfSlot:
 	var slot := ShelfSlot.new()
@@ -132,10 +276,7 @@ func test_update_visual_zero_frees_existing_mesh() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	assert_eq(
-		slot._item_node, null,
-		"_update_visual(0) must clear the held item mesh reference"
-	)
+	assert_eq(slot._item_node, null, "_update_visual(0) must clear the held item mesh reference")
 
 
 func test_update_visual_idempotent_for_repeated_positive_quantity() -> void:
@@ -147,12 +288,14 @@ func test_update_visual_idempotent_for_repeated_positive_quantity() -> void:
 	slot._update_visual(1)
 
 	assert_eq(
-		slot._item_node, first_node,
+		slot._item_node,
+		first_node,
 		"_update_visual(1) must not respawn the placeholder when one already exists"
 	)
 
 
 # ── Per-category color tinting ────────────────────────────────────────────────
+
 
 func _find_mesh_in_subtree(root: Node) -> MeshInstance3D:
 	if root is MeshInstance3D:
@@ -177,11 +320,15 @@ func test_placeholder_mesh_receives_category_tint() -> void:
 	assert_not_null(std_mat, "Override must be a StandardMaterial3D")
 	var expected: Color = ShelfSlot.CATEGORY_COLORS.get("cartridge", Color.WHITE)
 	assert_almost_eq(
-		std_mat.albedo_color.r, expected.r, 0.001,
+		std_mat.albedo_color.r,
+		expected.r,
+		0.001,
 		"Cartridge tint red component must match the category color table"
 	)
 	assert_almost_eq(
-		std_mat.albedo_color.g, expected.g, 0.001,
+		std_mat.albedo_color.g,
+		expected.g,
+		0.001,
 		"Cartridge tint green component must match the category color table"
 	)
 
@@ -204,6 +351,7 @@ func test_placeholder_tint_distinguishes_categories() -> void:
 
 
 # ── Stocked-item prompt label ─────────────────────────────────────────────────
+
 
 func test_prompt_uses_stocked_item_name_after_set_display_data() -> void:
 	var slot := ShelfSlot.new()

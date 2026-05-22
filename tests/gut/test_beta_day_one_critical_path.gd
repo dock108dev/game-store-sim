@@ -271,9 +271,7 @@ func test_day_one_start_emits_opening_toast() -> void:
 			continue
 		var message: String = String(params[1])
 		found = (
-			message.contains("Day 1 started")
-			and message.contains("first customer")
-			and message.contains("register")
+			message == "Store open for customers."
 			and params[2] == &"info"
 			and float(params[3]) > 0.0
 		)
@@ -281,7 +279,7 @@ func test_day_one_start_emits_opening_toast() -> void:
 			break
 	assert_true(
 		found,
-		"Day 1 start must emit a toast that points to the first customer/register beat"
+		"Day 1 start must emit a short status toast, not objective instructions"
 	)
 
 
@@ -1097,6 +1095,57 @@ func test_backroom_pickup_emits_shipment_checked_toast() -> void:
 	)
 
 
+func test_beta_restock_spawns_catalog_backed_product_visuals() -> void:
+	var controller: Node = _beta_controller()
+	assert_not_null(controller, "Beta controller must exist")
+	if controller == null:
+		return
+	controller.call("_reset_restock_shelf_visuals")
+
+	var spawned: int = int(controller.call("_spawn_visible_shelf_items", 5))
+
+	assert_eq(spawned, 5, "Beta restock shelf must spawn the delivery count")
+	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	assert_not_null(shelf, "BetaRestockShelf must exist")
+	if shelf == null:
+		return
+	var designed_count: int = 0
+	for child: Node in shelf.get_children():
+		if not String(child.name).begins_with("BetaShelfItem"):
+			continue
+		var item := child as Node3D
+		assert_not_null(item, "BetaShelfItem must be a Node3D")
+		if item == null:
+			continue
+		if str(item.get_meta("product_visual_kind", "")) == "game_case":
+			designed_count += 1
+			var designed_root: Node = item.get_node_or_null("ProductVisualCaseRoot")
+			assert_not_null(
+				designed_root,
+				"Beta restock designed item must include its case template child"
+			)
+			if designed_root == null:
+				continue
+			assert_not_null(
+				designed_root.get_node_or_null("FrontPanel"),
+				"Beta restock designed item must include a front panel"
+			)
+			assert_not_null(
+				designed_root.get_node_or_null("PlatformStripe"),
+				"Beta restock designed item must include a platform stripe"
+			)
+			assert_gt(
+				item.position.y,
+				1.0,
+				"Beta restock product visuals must sit on the shelf board"
+			)
+	assert_eq(
+		designed_count,
+		5,
+		"Beta restock should use catalog-backed game-case visuals when available"
+	)
+
+
 ## Acceptance: the pickup toast AND the carry HUD signal must fire on the
 ## same call stack as the pickup interaction so there is no visible gap
 ## between the back-room item disappearing and the carry indicator appearing.
@@ -1321,11 +1370,10 @@ func test_current_stage_getter_reports_active_stage() -> void:
 	)
 
 
-# ── Day-summary continue: close before placeholder ─────────────────────────
+# ── Day-summary continue: close before next playable shift ─────────────────
 # `_on_summary_continue` must pop CTX_MODAL via `_summary_panel.close()`
-# *before* it opens the Day 2 placeholder. If the pop is deferred (or absent),
-# the placeholder would stack on top of the summary and leave modal focus
-# ownership ambiguous.
+# before it starts the next shift. If the pop is deferred (or absent),
+# gameplay would resume with a stale summary modal frame on the focus stack.
 
 
 func test_summary_continue_pops_modal_focus_before_starting_next_day() -> void:
@@ -1370,20 +1418,19 @@ func test_summary_continue_pops_modal_focus_before_starting_next_day() -> void:
 		bool(panel.get("_focus_pushed")),
 		(
 			"_on_summary_continue must pop the panel's CTX_MODAL frame so the "
-			+ "Day 2 placeholder can own modal input cleanly"
+			+ "next shift can resume gameplay input cleanly"
 		)
 	)
-	var placeholder: ModalPanel = controller.get("_day_two_placeholder_panel") as ModalPanel
-	assert_not_null(placeholder, "Controller must own a Day 2 placeholder panel")
-	if placeholder == null:
-		return
-	assert_true(
-		bool(placeholder.get("_focus_pushed")),
-		"Day 2 placeholder must own modal focus after Continue"
+	assert_ne(
+		InputFocus.current(),
+		InputFocus.CTX_MODAL,
+		"Continue must leave modal focus before the next playable shift starts"
 	)
+	assert_eq(BetaRunState.day, 2)
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
 
 
-func test_summary_continue_opens_day2_placeholder_without_starting_gameplay() -> void:
+func test_summary_continue_starts_day2_gameplay_with_authored_event() -> void:
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
@@ -1402,26 +1449,19 @@ func test_summary_continue_opens_day2_placeholder_without_starting_gameplay() ->
 	controller._on_summary_continue()
 	await get_tree().process_frame
 
-	var placeholder: ModalPanel = controller.get("_day_two_placeholder_panel") as ModalPanel
-	assert_not_null(placeholder, "Continue must open the Day 2 placeholder")
-	if placeholder == null:
-		return
-	assert_true(placeholder.visible, "Day 2 placeholder must be visible after Continue")
-	assert_same(
-		ModalQueue.active_panel(),
-		placeholder,
-		"Continue must route to the placeholder, not Day 2 gameplay"
-	)
-	assert_eq(BetaRunState.day, 2, "Continue still labels the placeholder as Day 2")
-	assert_signal_not_emitted(
+	assert_null(ModalQueue.active_panel(), "Continue must not open a placeholder modal")
+	assert_eq(BetaRunState.day, 2, "Continue must advance the persistent store loop to Day 2")
+	assert_signal_emitted_with_parameters(
 		EventBus,
 		"day_started",
-		"Continue must not emit day_started for unfinished Day 2 gameplay"
+		[2],
+		"Continue must emit day_started for the next playable shift"
 	)
-	assert_ne(
-		String(controller.get("_stage")),
-		"vic_note",
-		"Continue must not enter the Day 2 note/gameplay opener"
+	assert_eq(String(controller.get("_stage")), "talk_to_customer")
+	assert_eq(
+		String((controller.get("_active_event") as Dictionary).get("id", "")),
+		"day02_trade_in_dispute",
+		"Day 2 should use the authored trade-in customer event, not a preview stop"
 	)
 
 

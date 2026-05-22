@@ -13,6 +13,12 @@ const _GAME_CARTRIDGE_SCENE: PackedScene = preload(
 const _GAME_CONSOLE_SCENE: PackedScene = preload(
 	"res://game/assets/models/props/prop_game_console.tscn"
 )
+const _ShelfCategoryNormalizer: GDScript = preload(
+	"res://game/scripts/stores/shelf_category_normalizer.gd"
+)
+const _ProductVisualFactory: GDScript = preload(
+	"res://game/scripts/visuals/product_visual_factory.gd"
+)
 const CATEGORY_SCENES: Dictionary = {
 	"sealed_product": _SHELF_PRODUCT_SCENE,
 	"cartridge": _GAME_CARTRIDGE_SCENE,
@@ -63,6 +69,7 @@ const STOCK_VERB_FORMAT: String = "Stock %s"
 var _occupied: bool = false
 var _held_item_id: String = ""
 var _held_category: String = ""
+var _held_item_visual_data: Dictionary = {}
 var _item_node: Node3D = null
 var _placement_active: bool = false
 var _info_label: Label3D = null
@@ -80,16 +87,12 @@ func _ready() -> void:
 	interaction_type = InteractionType.SHELF_SLOT
 	if display_name.is_empty():
 		display_name = "Shelf Slot"
-	# Shelf slots are stocked, not generically "interacted with". Only override
-	# when the scene left the inherited Interactable default in place so authored
-	# verbs (e.g. "Inspect") still win.
+	# Preserve authored verbs; only replace the inherited default.
 	if action_verb == "Interact":
 		action_verb = "Stock"
 	add_to_group("shelf_slot")
 	super._ready()
-	# Capture the authored display name AFTER super._ready() so _refresh_prompt_state
-	# can restore it whenever the slot is in the "default" state (occupied + not
-	# in placement mode + set_display_data has not yet populated _stocked_item_name).
+	# Capture after super._ready() so prompt refresh can restore authored copy.
 	_authored_display_name = display_name
 	_empty_ghost = _ensure_empty_ghost()
 	_update_empty_indicator()
@@ -98,10 +101,7 @@ func _ready() -> void:
 	EventBus.placement_hint_requested.connect(_on_placement_hint_requested)
 	EventBus.stocking_cursor_active.connect(_on_stocking_cursor_active)
 	EventBus.stocking_cursor_inactive.connect(_on_stocking_cursor_inactive)
-	# Label3D shows only while the interaction ray is focused on this slot.
-	# At FP eye height a permanently-visible label renders ~30–40 cm wide and
-	# clutters the view; hover-gated visibility keeps the in-world price tag
-	# readable when the player aims at the item and silent otherwise.
+	# Hover-gated labels avoid cluttering FP eye height.
 	focused.connect(_on_label_focused)
 	unfocused.connect(_on_label_unfocused)
 	slot_changed.connect(_on_self_slot_changed)
@@ -140,14 +140,38 @@ func get_occupied() -> int:
 	return 1 if _occupied else 0
 
 
+## Returns the normalized runtime category for the held item, or empty if empty.
+func get_held_category() -> String:
+	if _occupied:
+		return _held_category
+	return ""
+
+
 ## Places an item into this slot, returning true on success.
-## Returning false on a re-stock of an occupied slot is a typed contract,
-## not a silent failure — see docs/audits/error-handling-report.md EH-01.
+## Returning false on a re-stock keeps the current item and visual intact.
 func place_item(instance_id: String, category: String = "") -> bool:
 	if _occupied:
 		return false
+	_held_item_visual_data = {}
+	return _place_item_internal(instance_id, category)
+
+
+## Places an item with optional visual-only packaging metadata.
+## Missing or malformed visual metadata falls back to the category placeholder.
+func place_item_with_data(item_data: Dictionary) -> bool:
+	if _occupied:
+		return false
+	var instance_id: String = str(item_data.get("instance_id", item_data.get("id", "")))
+	var category: String = str(item_data.get("category", ""))
+	_held_item_visual_data = item_data.duplicate(true)
+	return _place_item_internal(instance_id, category)
+
+
+func _place_item_internal(instance_id: String, category: String = "") -> bool:
+	if _occupied:
+		return false
 	_held_item_id = instance_id
-	_held_category = category
+	_held_category = _ShelfCategoryNormalizer.normalize(category)
 	_occupied = true
 	_update_visual(get_occupied())
 	slot_changed.emit(self)
@@ -160,14 +184,14 @@ func assign_item(id: StringName) -> bool:
 
 
 ## Removes the item from this slot and returns its instance ID.
-## Empty string on an already-empty slot is a typed contract, not a silent
-## failure — see docs/audits/error-handling-report.md EH-01.
+## Empty string on an already-empty slot is a no-op result.
 func remove_item() -> String:
 	if not _occupied:
 		return ""
 	var item_id: String = _held_item_id
 	_held_item_id = ""
 	_held_category = ""
+	_held_item_visual_data = {}
 	_stocked_item_name = ""
 	_occupied = false
 	_update_visual(get_occupied())
@@ -176,12 +200,7 @@ func remove_item() -> String:
 	return item_id
 
 
-## Single entry point that synchronizes the slot's 3D placeholder with current
-## occupancy. quantity == 0 frees any stocked mesh and reveals the empty
-## indicator (when in placement mode); quantity >= 1 spawns the category
-## placeholder if it isn't already present. ShelfSlot's capacity is 1, so
-## quantity tops out at 1 in production — the parameter is named for
-## symmetry with multi-capacity callers (e.g. fixture-level totals).
+## Synchronizes the slot's 3D placeholder with current occupancy.
 func _update_visual(quantity: int) -> void:
 	if quantity <= 0:
 		_free_item_mesh()
@@ -200,9 +219,7 @@ func deassign() -> void:
 func set_display_data(item_name: String, condition: String, price: float) -> void:
 	if not _info_label:
 		_info_label = Label3D.new()
-		# Sized for the fixed isometric/orthographic store camera at
-		# pitch=52° / ortho_size_default=10. Smaller values render as a
-		# pixel-soup smudge on the overhead view.
+		# Sized for the fixed orthographic store camera; smaller smudges.
 		_info_label.pixel_size = 0.005
 		_info_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		_info_label.no_depth_test = true
@@ -235,11 +252,7 @@ func clear_display_data() -> void:
 	_refresh_prompt_state()
 
 
-## Two-tier empty-slot visibility: the always-on dim ghost reveals empty
-## capacity from FP eye height during normal play, while the brighter
-## PlaceholderMesh layer continues to gate on placement mode so stocking
-## focus highlights and the stocking-cursor cyan tint keep their existing
-## contracts.
+## Keeps empty capacity visible while preserving placement-only highlights.
 func _update_empty_indicator() -> void:
 	if not is_node_ready():
 		return
@@ -249,9 +262,7 @@ func _update_empty_indicator() -> void:
 		_empty_ghost.visible = not _occupied
 
 
-## Creates the always-on dim ghost child if it does not already exist. Built
-## programmatically so the same indicator applies to slots authored inline
-## (e.g. retro_games.tscn) as well as instances of shelf_slot.tscn.
+## Creates the always-on dim ghost child if it does not already exist.
 func _ensure_empty_ghost() -> MeshInstance3D:
 	var existing: MeshInstance3D = get_node_or_null(
 		String(_EMPTY_GHOST_NAME)
@@ -272,35 +283,38 @@ func _ensure_empty_ghost() -> MeshInstance3D:
 	return ghost
 
 
-## Spawns a placeholder scene representing the placed item, then tints its
-## mesh with a per-category color so different stocked items read as visually
-## distinct cubes on the shelf.
+## Spawns a catalog-backed product visual when metadata resolves. Otherwise
+## spawns the existing placeholder scene and applies the category tint.
 func _spawn_item_mesh(category: String) -> void:
 	_free_item_mesh()
+	var runtime_category: String = _ShelfCategoryNormalizer.normalize(category)
+	var visual_data: Dictionary = _held_item_visual_data.duplicate(true)
+	if not visual_data.is_empty():
+		visual_data["category"] = runtime_category
+		var catalog_visual: Node3D = _ProductVisualFactory.create_visual_for_item(
+			visual_data
+		)
+		if catalog_visual != null:
+			_item_node = catalog_visual
+			add_child(catalog_visual)
+			return
 	var scene: PackedScene = CATEGORY_SCENES.get(
-		category, DEFAULT_ITEM_SCENE
+		runtime_category, DEFAULT_ITEM_SCENE
 	)
 	var instance: Node3D = scene.instantiate()
 	_item_node = instance
 	add_child(instance)
-	_apply_category_color(instance, category)
+	_apply_category_color(instance, runtime_category)
 
 
-## Tints the first MeshInstance3D found in the placeholder subtree with the
-## per-category color so empty / stocked / different-category slots look
-## visually distinct without waiting on final art.
-## §F-110 — Cosmetic-only path. Failure (no MeshInstance3D in the placeholder
-## subtree) means a placeholder won't be tinted, not a gameplay break. All
-## current `CATEGORY_SCENES` entries contain a mesh; the null-guard is
-## paranoia for future scene authoring. The `CATEGORY_COLORS.get(category,
-## DEFAULT_PLACEHOLDER_COLOR)` fallback below is the legitimate empty-category
-## case for `place_item(instance_id, category="")` from legacy callers.
+## Tints the first MeshInstance3D in the placeholder subtree when present.
 func _apply_category_color(root: Node3D, category: String) -> void:
 	var mesh: MeshInstance3D = _find_first_mesh_instance(root)
 	if mesh == null:
 		return
+	var runtime_category: String = _ShelfCategoryNormalizer.normalize(category)
 	var color: Color = CATEGORY_COLORS.get(
-		category, DEFAULT_PLACEHOLDER_COLOR
+		runtime_category, DEFAULT_PLACEHOLDER_COLOR
 	)
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
@@ -339,11 +353,7 @@ func _resolve_empty_mesh() -> MeshInstance3D:
 	return get_node_or_null("Marker") as MeshInstance3D
 
 
-## State-aware prompt label that mirrors the player-facing HUD label. Format
-## matches InteractionRay._build_action_label so this method and the runtime
-## label stay in lockstep. State is driven by display_name and prompt_text,
-## which _refresh_prompt_state() rewrites whenever placement / occupancy /
-## pending-item-name change.
+## State-aware prompt label matching InteractionRay label formatting.
 func get_prompt_label() -> String:
 	var verb: String = prompt_text.strip_edges()
 	var target_name: String = display_name.strip_edges()
@@ -359,24 +369,10 @@ func get_prompt_label() -> String:
 ## Returns true when the slot would accept the given category. Empty
 ## accepted_category accepts any item (unfiltered counter / impulse slots).
 func accepts_category(item_category: String) -> bool:
-	if accepted_category.is_empty():
-		return true
-	return accepted_category == item_category
+	return _ShelfCategoryNormalizer.matches(accepted_category, item_category)
 
 
-## Recomputes display_name and prompt_text for the current state so the
-## InteractionPrompt and PlacementHintUI HUD reflect the slot accurately.
-##
-## §F-111 — Occupied + outside placement mode renders the stocked item name
-## with the current quantity (e.g. "Motorway Kings ×1") when
-## set_display_data has populated _stocked_item_name; otherwise falls back to
-## the authored slot name. Verb stays empty: pressing E on an already-stocked
-## slot is a no-op in InventoryPanel._on_interactable_interacted (the open()
-## branch is gated on `not slot.is_occupied()`), so the prompt drops the dead
-## "Press E" cue while still surfacing what the player is looking at. The
-## empty-`_stocked_item_name` arm falls back to `_authored_display_name`
-## (legitimate alt-path when set_display_data hasn't been called yet, e.g.
-## scene-authored slots in unit tests).
+## Recomputes prompt state for placement, empty, and occupied shelf states.
 func _refresh_prompt_state() -> void:
 	if _placement_active and _occupied:
 		display_name = PROMPT_SHELF_FULL

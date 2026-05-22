@@ -9,10 +9,11 @@ var _processing: bool = false
 var _queue_markers: Array[Marker3D] = []
 var _wait_times: Dictionary = {}
 var _patience_limits: Dictionary = {}
+var _has_queue_origin: bool = false
 
 
 func initialize() -> void:
-	_register_queue = RegisterQueue.new()
+	_ensure_register_queue()
 	EventBus.customer_reached_checkout.connect(_on_customer_reached_checkout)
 	EventBus.checkout_completed.connect(_on_checkout_completed)
 	EventBus.store_exited.connect(_on_store_exited)
@@ -22,7 +23,13 @@ func initialize() -> void:
 func setup_queue_positions(
 	register_pos: Vector3, entry_pos: Vector3
 ) -> void:
+	_ensure_register_queue()
+	_has_queue_origin = true
 	_register_queue.initialize(register_pos, entry_pos)
+	if _queue_markers.is_empty() and is_inside_tree():
+		_bind_markers_from_group()
+	else:
+		_sync_register_queue_markers()
 
 
 func get_queue_size() -> int:
@@ -70,7 +77,8 @@ func get_queue_position(index: int) -> Vector3:
 
 
 func bind_queue_markers(markers: Array[Marker3D]) -> void:
-	_queue_markers = markers
+	_queue_markers = _sorted_queue_markers(markers)
+	_sync_register_queue_markers()
 
 
 func _process(delta: float) -> void:
@@ -134,7 +142,33 @@ func _bind_markers_from_group() -> void:
 	for node: Node in nodes:
 		if node is Marker3D:
 			markers.append(node as Marker3D)
-	_queue_markers = markers
+	_queue_markers = _sorted_queue_markers(markers)
+	_sync_register_queue_markers()
+
+
+func _ensure_register_queue() -> void:
+	if _register_queue == null:
+		_register_queue = RegisterQueue.new()
+
+
+func _sync_register_queue_markers() -> void:
+	if _register_queue == null or not _has_queue_origin:
+		return
+	var positions: Array[Vector3] = []
+	for marker: Marker3D in _queue_markers:
+		if marker != null and is_instance_valid(marker):
+			positions.append(marker.global_position)
+	_register_queue.set_authored_positions(positions)
+
+
+func _sorted_queue_markers(markers: Array[Marker3D]) -> Array[Marker3D]:
+	var sorted: Array[Marker3D] = markers.duplicate()
+	sorted.sort_custom(_compare_queue_markers)
+	return sorted
+
+
+func _compare_queue_markers(a: Marker3D, b: Marker3D) -> bool:
+	return String(a.name).naturalnocasecmp_to(String(b.name)) < 0
 
 
 func _try_dispatch_next() -> void:

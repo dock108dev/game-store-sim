@@ -1,0 +1,85 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://game/scenes/stores/fixtures/queue_post.tscn" id="1"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_metal_dark.tres" id="2"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_slot_marker.tres" id="3"]
+
+[sub_resource type="BoxMesh" id="runner_mesh"]
+size = Vector3(2.7, 0.028, 0.82)
+
+[sub_resource type="BoxMesh" id="queue_slot_mesh"]
+size = Vector3(0.48, 0.018, 0.42)
+
+[sub_resource type="BoxMesh" id="guide_rope_mesh"]
+size = Vector3(2.35, 0.05, 0.05)
+
+[sub_resource type="BoxMesh" id="arrow_shaft_mesh"]
+size = Vector3(0.74, 0.014, 0.08)
+
+[sub_resource type="BoxMesh" id="arrow_head_mesh"]
+size = Vector3(0.42, 0.014, 0.08)
+
+[node name="FixtureQueueLane" type="Node3D" groups=["fixture"]]
+
+[node name="OpenFloorGuide" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014, 0)
+mesh = SubResource("runner_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="QueueMat01" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.985, 0, -0.174, 0, 1, 0, 0.174, 0, 0.985, 0.99, 0.032, -0.22)
+mesh = SubResource("queue_slot_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="QueueMat02" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996, 0, -0.087, 0, 1, 0, 0.087, 0, 0.996, 0, 0.032, 0)
+mesh = SubResource("queue_slot_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="QueueMat03" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996, 0, 0.087, 0, 1, 0, -0.087, 0, 0.996, -0.99, 0.032, 0.22)
+mesh = SubResource("queue_slot_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="DirectionArrowShaft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44, 0.046, 0)
+mesh = SubResource("arrow_shaft_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="DirectionArrowHeadLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707, 0, -0.707, 0, 1, 0, 0.707, 0, 0.707, 0.86, 0.047, -0.15)
+mesh = SubResource("arrow_head_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="DirectionArrowHeadRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707, 0, 0.707, 0, 1, 0, -0.707, 0, 0.707, 0.86, 0.047, 0.15)
+mesh = SubResource("arrow_head_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="LeftGuideRope" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.5)
+mesh = SubResource("guide_rope_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="RightGuideRope" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0.5)
+mesh = SubResource("guide_rope_mesh")
+surface_material_override/0 = ExtResource("2")
+
+[node name="BackLeftPost" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.18, 0, -0.5)
+
+[node name="MiddleLeftPost" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+
+[node name="RegisterLeftPost" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18, 0, -0.5)
+
+[node name="BackRightPost" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.18, 0, 0.5)
+
+[node name="MiddleRightPost" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="RegisterRightPost" parent="." instance=ExtResource("1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18, 0, 0.5)

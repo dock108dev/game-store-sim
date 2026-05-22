@@ -6,8 +6,8 @@
 # through must be added to the DENY array below.
 #
 # Scope: game/content/**/*.json, game/scenes/**, game/scripts/stores/**.
-# Test fixtures and audit notes under tests/, docs/, and .aidlc/ are
-# excluded; those reference real brands for context and are not shipped.
+# Test fixtures and audit notes under tests/ and docs/ are outside this
+# shipped-content scan.
 set -u
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -47,6 +47,18 @@ DENY=(
 	"Grand Theft Auto"
 	"Tetris"
 	"Sonic the Hedgehog"
+	"Nike"
+	"Adidas"
+	"Reebok"
+	"Puma"
+	"Jordan Brand"
+	"Air Jordan"
+	"Converse"
+	"Foot Locker"
+	"Footlocker"
+	"New Balance"
+	"Under Armour"
+	"Yeezy"
 )
 
 FAIL=0

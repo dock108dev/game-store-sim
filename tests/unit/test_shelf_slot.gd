@@ -157,6 +157,30 @@ func test_empty_accepted_category_matches_any() -> void:
 	assert_not_null(mat, "Empty accepted_category must match any item category")
 
 
+func test_plural_content_categories_match_runtime_slot_keys() -> void:
+	var slot := _make_slot_with_marker()
+	slot.accepted_category = "cartridge"
+
+	assert_true(
+		slot.accepts_category("cartridges"),
+		"Plural content category must match singular runtime shelf key"
+	)
+	assert_false(
+		slot.accepts_category("consoles"),
+		"Different normalized categories must still reject"
+	)
+
+
+func test_plural_accepted_categories_match_singular_item_keys() -> void:
+	var slot := _make_slot_with_marker()
+	slot.accepted_category = "sealed_products"
+
+	assert_true(
+		slot.accepts_category("sealed_product"),
+		"Plural slot filters must match singular runtime item keys"
+	)
+
+
 # ── Empty ghost visibility tests ──────────────────────────────────────────────
 
 

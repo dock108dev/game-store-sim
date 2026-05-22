@@ -57,6 +57,8 @@ const _TYPE_ROUTES: Dictionary = {
 	"regulars_threads_data": "ignore",
 	"platforms_data": "ignore",
 	"manager_notes_data": "ignore",
+	"product_visual_catalog_data": "ignore",
+	"store_visual_layout_catalog": "ignore",
 	# Beta day-1/day-2 content — loaded directly by BetaDayOneController.
 	"beta_day_data": "ignore",
 	"beta_events_data": "ignore",
@@ -143,12 +145,8 @@ func load_all_content_from_root(root: String) -> void:
 	for path: String in files:
 		_process_file(path, economy_data, root)
 	if not economy_data.is_empty():
-		_economy_config = ContentParser.parse_economy_config(
-			economy_data
-		)
-		ContentRegistry.register(
-			&"economy_config", _economy_config, "economy"
-		)
+		_economy_config = ContentParser.parse_economy_config(economy_data)
+		ContentRegistry.register(&"economy_config", _economy_config, "economy")
 	_normalize_store_types()
 	var validation_errors: Array[String] = ContentRegistry.validate_all_references()
 	for err: String in validation_errors:
@@ -212,29 +210,26 @@ func _scan_dir(path: String, files: Array[String]) -> void:
 		file_name = dir.get_next()
 
 
-func _process_file(
-	path: String, economy_data: Dictionary, _root: String
-) -> void:
+func _process_file(path: String, economy_data: Dictionary, _root: String) -> void:
 	var data: Variant = _load_json_with_error(path)
 	if data == null:
 		return
 	if data is not Dictionary:
 		_record_load_error(
-			"%s: root must be a Dictionary with a 'type' field (got %s)"
-			% [path, typeof_string(data)]
+			(
+				"%s: root must be a Dictionary with a 'type' field (got %s)"
+				% [path, typeof_string(data)]
+			)
 		)
 		return
 	var dict: Dictionary = data as Dictionary
 	if not dict.has("type"):
-		_record_load_error(
-			"%s: missing required 'type' field at root" % path
-		)
+		_record_load_error("%s: missing required 'type' field at root" % path)
 		return
 	var content_type: String = str(dict["type"])
 	if not _TYPE_ROUTES.has(content_type):
 		_record_load_error(
-			"%s: unknown content type '%s' (not in DataLoader._TYPE_ROUTES)"
-			% [path, content_type]
+			"%s: unknown content type '%s' (not in DataLoader._TYPE_ROUTES)" % [path, content_type]
 		)
 		return
 	var route: String = str(_TYPE_ROUTES[content_type])
@@ -264,8 +259,7 @@ func _process_file(
 			_build_and_register(entry_kind, entry, path)
 		return
 	_record_load_error(
-		"%s: internal routing error for type '%s' (route='%s')"
-		% [path, content_type, route]
+		"%s: internal routing error for type '%s' (route='%s')" % [path, content_type, route]
 	)
 
 
@@ -314,14 +308,9 @@ func _extract_entries(data: Variant) -> Array[Dictionary]:
 	return entries
 
 
-func _build_and_register(
-	content_type: String, entry: Dictionary, source_path: String = ""
-) -> void:
+func _build_and_register(content_type: String, entry: Dictionary, source_path: String = "") -> void:
 	if not entry.has("id"):
-		_record_load_error(
-			"%s entry missing 'id' in %s: %s"
-			% [content_type, source_path, entry]
-		)
+		_record_load_error("%s entry missing 'id' in %s: %s" % [content_type, source_path, entry])
 		return
 	var trademark_errors: Array[String] = TrademarkValidator.validate_entry(
 		entry, content_type, source_path
@@ -330,37 +319,26 @@ func _build_and_register(
 		for err: String in trademark_errors:
 			_record_load_error(err)
 		return
-	var schema_errors: Array[String] = ContentSchema.validate(
-		entry, content_type, source_path
-	)
+	var schema_errors: Array[String] = ContentSchema.validate(entry, content_type, source_path)
 	if not schema_errors.is_empty():
 		for err: String in schema_errors:
 			_record_load_error(err)
 		return
 	var id: String = str(entry["id"])
-	var resource: Resource = _build_resource(
-		content_type, entry, source_path
-	)
+	var resource: Resource = _build_resource(content_type, entry, source_path)
 	if resource == null:
-		_record_load_error(
-			"failed to parse %s '%s' from %s"
-			% [content_type, id, source_path]
-		)
+		_record_load_error("failed to parse %s '%s' from %s" % [content_type, id, source_path])
 		return
 	if not _store_in_dict(content_type, id, resource):
 		return
-	ContentRegistry.register(
-		StringName(id), resource, content_type
-	)
+	ContentRegistry.register(StringName(id), resource, content_type)
 	var reg_entry: Dictionary = entry.duplicate()
 	if not reg_entry.has("name") and reg_entry.has("display_name"):
 		reg_entry["name"] = reg_entry["display_name"]
 	ContentRegistry.register_entry(reg_entry, content_type)
 
 
-func _build_resource(
-	content_type: String, data: Dictionary, source_path: String = ""
-) -> Resource:
+func _build_resource(content_type: String, data: Dictionary, source_path: String = "") -> Resource:
 	match content_type:
 		"item", "item_definition":
 			return ContentParser.parse_item(data)
@@ -385,9 +363,7 @@ func _build_resource(
 			return ContentParser.build_resource(content_type, data)
 
 
-func _store_in_dict(
-	content_type: String, id: String, resource: Resource
-) -> bool:
+func _store_in_dict(content_type: String, id: String, resource: Resource) -> bool:
 	match content_type:
 		"item":
 			return _try_register(id, _items, resource)
@@ -402,9 +378,7 @@ func _store_in_dict(
 		"random_event":
 			return _try_register(id, _random_events, resource)
 		"staff":
-			return _try_register(
-				id, _staff_definitions, resource
-			)
+			return _try_register(id, _staff_definitions, resource)
 		"milestone":
 			return _try_register(id, _milestones, resource)
 		"upgrade":
@@ -414,16 +388,12 @@ func _store_in_dict(
 		"unlock":
 			return _try_register(id, _unlocks, resource)
 		"ambient_moment":
-			return _try_register(
-				id, _ambient_moments, resource
-			)
+			return _try_register(id, _ambient_moments, resource)
 	_record_load_error("unknown type '%s' for id '%s'" % [content_type, id])
 	return false
 
 
-func _try_register(
-	id: String, registry: Dictionary, resource: Resource
-) -> bool:
+func _try_register(id: String, registry: Dictionary, resource: Resource) -> bool:
 	if registry.has(id):
 		_record_load_error("duplicate id '%s'" % id)
 		return false
@@ -444,9 +414,7 @@ func _load_endings(data: Variant) -> void:
 			for err: String in ending_trademark_errors:
 				_record_load_error(err)
 			continue
-		var ending_errors: Array[String] = ContentSchema.validate(
-			entry, "ending", "ending_config"
-		)
+		var ending_errors: Array[String] = ContentSchema.validate(entry, "ending", "ending_config")
 		if not ending_errors.is_empty():
 			for err: String in ending_errors:
 				_record_load_error(err)
@@ -461,9 +429,7 @@ func _normalize_store_types() -> void:
 	for item: ItemDefinition in _items.values():
 		if item.store_type.is_empty():
 			continue
-		var canonical: StringName = ContentRegistry.resolve(
-			item.store_type
-		)
+		var canonical: StringName = ContentRegistry.resolve(item.store_type)
 		if not canonical.is_empty():
 			item.store_type = String(canonical)
 	for profile: CustomerTypeDefinition in _customers.values():
@@ -501,24 +467,18 @@ func _load_json_with_error(path: String) -> Variant:
 	return _read_json_file(path, _record_load_error)
 
 
-static func _read_json_file(
-	path: String,
-	on_error: Callable = Callable()
-) -> Variant:
+static func _read_json_file(path: String, on_error: Callable = Callable()) -> Variant:
 	if not FileAccess.file_exists(path):
 		return _report_json_error("file not found: %s" % path, on_error)
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if not file:
 		return _report_json_error(
-			"failed to open '%s' — %s"
-			% [path, error_string(FileAccess.get_open_error())],
-			on_error
+			"failed to open '%s' — %s" % [path, error_string(FileAccess.get_open_error())], on_error
 		)
 	if file.get_length() > MAX_JSON_FILE_BYTES:
 		file.close()
 		return _report_json_error(
-			"file '%s' exceeds maximum supported size (%d bytes)"
-			% [path, MAX_JSON_FILE_BYTES],
+			"file '%s' exceeds maximum supported size (%d bytes)" % [path, MAX_JSON_FILE_BYTES],
 			on_error
 		)
 	var json_text: String = file.get_as_text()
@@ -526,17 +486,12 @@ static func _read_json_file(
 	var json: JSON = JSON.new()
 	if json.parse(json_text) != OK:
 		return _report_json_error(
-			"parse error in %s: %s"
-			% [path, json.get_error_message()],
-			on_error
+			"parse error in %s: %s" % [path, json.get_error_message()], on_error
 		)
 	return json.data
 
 
-static func _report_json_error(
-	message: String,
-	on_error: Callable
-) -> Variant:
+static func _report_json_error(message: String, on_error: Callable) -> Variant:
 	if on_error.is_valid():
 		on_error.call(message)
 	else:
@@ -566,9 +521,7 @@ func get_all_items() -> Array[ItemDefinition]:
 	return r
 
 
-func get_items_by_store(
-	store_type: String
-) -> Array[ItemDefinition]:
+func get_items_by_store(store_type: String) -> Array[ItemDefinition]:
 	var canonical: String = store_type
 	if ContentRegistry.exists(store_type):
 		var resolved: StringName = ContentRegistry.resolve(store_type)
@@ -581,9 +534,7 @@ func get_items_by_store(
 	return r
 
 
-func get_items_by_category(
-	category: String
-) -> Array[ItemDefinition]:
+func get_items_by_category(category: String) -> Array[ItemDefinition]:
 	var r: Array[ItemDefinition] = []
 	for item: ItemDefinition in _items.values():
 		if item.category == category:
@@ -614,9 +565,7 @@ func get_store_count() -> int:
 	return _stores.size()
 
 
-func get_customer_types_for_store(
-	store_type: String
-) -> Array[CustomerTypeDefinition]:
+func get_customer_types_for_store(store_type: String) -> Array[CustomerTypeDefinition]:
 	var r: Array[CustomerTypeDefinition] = []
 	for p: CustomerTypeDefinition in _customers.values():
 		if store_type in p.store_types:
@@ -666,9 +615,7 @@ func get_all_fixtures() -> Array[FixtureDefinition]:
 	return r
 
 
-func get_fixtures_for_store(
-	store_type: String
-) -> Array[FixtureDefinition]:
+func get_fixtures_for_store(store_type: String) -> Array[FixtureDefinition]:
 	var r: Array[FixtureDefinition] = []
 	var store_candidates: Dictionary = {}
 	store_candidates[store_type] = true
@@ -683,9 +630,7 @@ func get_fixtures_for_store(
 			if store_candidates.has(restricted_store):
 				r.append(f)
 				break
-			var canonical_restriction: StringName = ContentRegistry.resolve(
-				restricted_store
-			)
+			var canonical_restriction: StringName = ContentRegistry.resolve(restricted_store)
 			if not canonical_restriction.is_empty():
 				if store_candidates.has(String(canonical_restriction)):
 					r.append(f)
@@ -711,9 +656,7 @@ func get_all_market_events() -> Array[MarketEventDefinition]:
 	return r
 
 
-func get_market_events_for_store(
-	store_type: String
-) -> Array[MarketEventDefinition]:
+func get_market_events_for_store(store_type: String) -> Array[MarketEventDefinition]:
 	var r: Array[MarketEventDefinition] = []
 	for e: MarketEventDefinition in _market_events.values():
 		if e.target_store_types.is_empty():
@@ -753,9 +696,7 @@ func get_all_upgrades() -> Array[UpgradeDefinition]:
 	return r
 
 
-func get_upgrades_for_store(
-	store_type: String
-) -> Array[UpgradeDefinition]:
+func get_upgrades_for_store(store_type: String) -> Array[UpgradeDefinition]:
 	var r: Array[UpgradeDefinition] = []
 	for u: UpgradeDefinition in _upgrades.values():
 		if u.is_universal() or u.store_type == store_type:
@@ -777,9 +718,7 @@ func get_all_suppliers() -> Array[SupplierDefinition]:
 	return r
 
 
-func get_suppliers_for_store(
-	store_type: String
-) -> Array[SupplierDefinition]:
+func get_suppliers_for_store(store_type: String) -> Array[SupplierDefinition]:
 	var r: Array[SupplierDefinition] = []
 	for s: SupplierDefinition in _suppliers.values():
 		if s.store_type == store_type:
@@ -787,9 +726,7 @@ func get_suppliers_for_store(
 	return r
 
 
-func get_suppliers_by_tier(
-	store_type: String, tier: int
-) -> Array[SupplierDefinition]:
+func get_suppliers_by_tier(store_type: String, tier: int) -> Array[SupplierDefinition]:
 	var r: Array[SupplierDefinition] = []
 	for s: SupplierDefinition in _suppliers.values():
 		if s.store_type == store_type and s.tier == tier:
@@ -833,27 +770,23 @@ func get_all_ambient_moments() -> Array[AmbientMomentDefinition]:
 ## unresolved canonical, missing StoreDefinition) is escalated at the source
 ## rather than masquerading as "the player has no items today".
 ## See docs/audits/error-handling-report.md §EH-16.
-func create_starting_inventory(
-	store_id: String
-) -> Array[ItemInstance]:
+func create_starting_inventory(store_id: String) -> Array[ItemInstance]:
 	if not ContentRegistry.exists(store_id):
-		push_error(
-			"DataLoader.create_starting_inventory: unknown store id '%s'"
-			% store_id
-		)
+		push_error("DataLoader.create_starting_inventory: unknown store id '%s'" % store_id)
 		return []
 	var canonical: StringName = ContentRegistry.resolve(store_id)
 	if canonical.is_empty():
 		push_error(
-			"DataLoader.create_starting_inventory: '%s' resolved to empty canonical id"
-			% store_id
+			"DataLoader.create_starting_inventory: '%s' resolved to empty canonical id" % store_id
 		)
 		return []
 	var store: StoreDefinition = get_store(String(canonical))
 	if not store:
 		push_error(
-			"DataLoader.create_starting_inventory: no StoreDefinition for '%s' (canonical '%s')"
-			% [store_id, canonical]
+			(
+				"DataLoader.create_starting_inventory: no StoreDefinition for '%s' (canonical '%s')"
+				% [store_id, canonical]
+			)
 		)
 		return []
 	var allowed: PackedStringArray = store.allowed_categories
@@ -867,14 +800,18 @@ func create_starting_inventory(
 			# missing definition is surfaced as `push_error` so the CI
 			# stderr scan catches a single typo before it ships.
 			push_error(
-				"DataLoader: skipping starter '%s' — no ItemDefinition (typo or unloaded?)"
-				% item_id
+				(
+					"DataLoader: skipping starter '%s' — no ItemDefinition (typo or unloaded?)"
+					% item_id
+				)
 			)
 			continue
 		if not allowed.is_empty() and not allowed.has(def.category):
 			push_warning(
-				"DataLoader: skipping starter '%s' — category '%s' not in '%s' allowed_categories"
-				% [item_id, def.category, canonical]
+				(
+					"DataLoader: skipping starter '%s' — category '%s' not in '%s' allowed_categories"
+					% [item_id, def.category, canonical]
+				)
 			)
 			continue
 		var inst: ItemInstance = ItemInstance.create_from_definition(def, "good")
@@ -889,9 +826,7 @@ func create_starting_inventory(
 	return instances
 
 
-func generate_starter_inventory(
-	store_type: String
-) -> Array[ItemInstance]:
+func generate_starter_inventory(store_type: String) -> Array[ItemInstance]:
 	if store_type == "sports":
 		return _generate_legacy_sports_starter_inventory()
 	if not ContentRegistry.exists(store_type):
@@ -918,9 +853,7 @@ func generate_starter_inventory(
 	common.shuffle()
 	var instances: Array[ItemInstance] = []
 	for i: int in range(count):
-		instances.append(
-			ItemInstance.create_from_definition(common[i], "good")
-		)
+		instances.append(ItemInstance.create_from_definition(common[i], "good"))
 	return instances
 
 
@@ -941,9 +874,7 @@ func _generate_legacy_sports_starter_inventory() -> Array[ItemInstance]:
 	var count: int = randi_range(6, 10)
 	var instances: Array[ItemInstance] = []
 	for i: int in range(count):
-		instances.append(
-			ItemInstance.create_from_definition(definitions[i], "good")
-		)
+		instances.append(ItemInstance.create_from_definition(definitions[i], "good"))
 	return instances
 
 
@@ -965,4 +896,3 @@ func get_unlock_count() -> int:
 ## Returns a defensive copy; mutating the result does not affect future calls.
 func get_midday_events() -> Array:
 	return _midday_events.duplicate(true)
-
