@@ -140,6 +140,7 @@ func enter_store(store_id: StringName) -> bool:
 		return await _fail(result.reason, result.failed_invariant())
 
 	_to(State.READY, "store_id=%s" % store_id)
+	_commit_active_store(store_id)
 	store_ready.emit(store_id)
 	# Reset to IDLE so subsequent enter_store calls are accepted. The READY
 	# checkpoint above is the durable "we got there" record.
@@ -258,6 +259,23 @@ func _autoload(name_str: String) -> Node:
 	if root == null:
 		return null
 	return root.get_node_or_null(name_str)
+
+
+func _commit_active_store(store_id: StringName) -> void:
+	var game_state: Node = _autoload("GameState")
+	if game_state != null and game_state.has_method("set_active_store"):
+		game_state.call("set_active_store", store_id)
+
+	var game_manager: Node = _autoload("GameManager")
+	if game_manager != null:
+		if "current_store_id" in game_manager:
+			game_manager.current_store_id = store_id
+		if game_manager.has_method("get_store_state_manager"):
+			var manager: Variant = game_manager.call("get_store_state_manager")
+			if manager is Node and manager.has_method("set_active_store"):
+				var active: StringName = manager.active_store_id if "active_store_id" in manager else &""
+				if active != store_id:
+					manager.call("set_active_store", store_id, false)
 
 
 func _to(next: State, detail: String) -> void:

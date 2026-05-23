@@ -2,7 +2,6 @@
 ## In-game HUD — persistent top bar with cash, day/time, speed, and reputation.
 extends CanvasLayer
 
-
 const _PHASE_KEYS: Dictionary = {
 	TimeSystem.DayPhase.PRE_OPEN: "HUD_PHASE_PRE_OPEN",
 	TimeSystem.DayPhase.MORNING_RAMP: "HUD_PHASE_MORNING",
@@ -37,8 +36,6 @@ const _TRAINING_OBJECTIVE_IDS: Array[StringName] = [
 	&"check_register",
 	&"check_back_room_inventory",
 	&"training_stock_shelf",
-	&"practice_customer",
-	&"open_store",
 ]
 
 const _TIER_THRESHOLDS: Array[float] = [80.0, 50.0, 25.0, 0.0]
@@ -170,7 +167,7 @@ var _beta_backroom_count: int = 0
 @onready var _cash_label: Label = $TopBar/CashLabel
 @onready var _time_label: Label = $TopBar/TimeLabel
 ## Static FP-mode primary readouts authored in `hud.tscn` as direct
-	## CanvasLayer-root children, anchored top-left/top-center. Always present and
+## CanvasLayer-root children, anchored top-left/top-center. Always present and
 ## always visible — never reparented. They mirror `_cash_label` /
 ## `_time_label` via the existing update handlers.
 @onready var _fp_cash_label: Label = $FPCashLabel
@@ -228,9 +225,7 @@ func _connect_signals() -> void:
 	if not EventBus.critical_notification_requested.is_connected(
 		_on_critical_notification_requested
 	):
-		EventBus.critical_notification_requested.connect(
-			_on_critical_notification_requested
-		)
+		EventBus.critical_notification_requested.connect(_on_critical_notification_requested)
 	if not EventBus.reputation_changed.is_connected(_on_reputation_changed):
 		EventBus.reputation_changed.connect(_on_reputation_changed)
 	if not EventBus.store_opened.is_connected(_on_store_opened):
@@ -265,9 +260,7 @@ func _connect_signals() -> void:
 		EventBus.beta_carry_changed.connect(_on_beta_carry_changed)
 	if not EventBus.beta_shelf_count_changed.is_connected(_on_beta_shelf_count_changed):
 		EventBus.beta_shelf_count_changed.connect(_on_beta_shelf_count_changed)
-	if not EventBus.beta_backroom_count_changed.is_connected(
-		_on_beta_backroom_count_changed
-	):
+	if not EventBus.beta_backroom_count_changed.is_connected(_on_beta_backroom_count_changed):
 		EventBus.beta_backroom_count_changed.connect(_on_beta_backroom_count_changed)
 	if not EventBus.customer_purchased.is_connected(_on_customer_purchased_hud):
 		EventBus.customer_purchased.connect(_on_customer_purchased_hud)
@@ -334,10 +327,7 @@ func _seed_cash_from_economy() -> void:
 	if economy == null:
 		return
 	var cash: float = economy.get_cash()
-	if (
-		is_equal_approx(_displayed_cash, cash)
-		and is_equal_approx(_target_cash, cash)
-	):
+	if is_equal_approx(_displayed_cash, cash) and is_equal_approx(_target_cash, cash):
 		return
 	PanelAnimator.kill_tween(_cash_count_tween)
 	_displayed_cash = cash
@@ -361,9 +351,7 @@ func _on_day_phase_changed(new_phase: int) -> void:
 	_refresh_time_display()
 
 
-func _on_money_changed(
-	old_amount: float, new_amount: float
-) -> void:
+func _on_money_changed(old_amount: float, new_amount: float) -> void:
 	_target_cash = new_amount
 	_animate_cash_count(old_amount, new_amount)
 	_pulse_cash_label(new_amount - old_amount)
@@ -378,9 +366,7 @@ func _on_speed_changed(new_speed: float) -> void:
 	_update_speed_display(new_speed)
 
 
-func _on_reputation_changed(
-	_store_id: String, _old_score: float, new_value: float
-) -> void:
+func _on_reputation_changed(_store_id: String, _old_score: float, new_value: float) -> void:
 	var old_value: float = _last_reputation
 	_last_reputation = new_value
 	_update_reputation_display(new_value)
@@ -417,18 +403,12 @@ func _on_run_state_changed() -> void:
 ## in `_create_close_day_button` during `_ready` and lives for the lifetime
 ## of the HUD; missing instance means we are already shutting down and
 ## animating it would be wasted work, not a missed signal.
-func _on_first_sale_completed_hud(
-	_store_id: StringName, _item_id: String, _price: float
-) -> void:
+func _on_first_sale_completed_hud(_store_id: StringName, _item_id: String, _price: float) -> void:
 	if not is_instance_valid(_close_day_button):
 		return
-	PanelAnimator.pulse_scale(
-		_close_day_button, _COUNTER_PULSE_SCALE, _COUNTER_PULSE_DURATION
-	)
+	PanelAnimator.pulse_scale(_close_day_button, _COUNTER_PULSE_SCALE, _COUNTER_PULSE_DURATION)
 	PanelAnimator.flash_color(
-		_close_day_button,
-		UIThemeConstants.get_positive_color(),
-		_COUNTER_PULSE_DURATION
+		_close_day_button, UIThemeConstants.get_positive_color(), _COUNTER_PULSE_DURATION
 	)
 
 
@@ -502,8 +482,10 @@ func _beta_day_one_controller() -> BetaDayOneController:
 func _open_close_day_preview() -> void:
 	if not is_instance_valid(_close_day_preview):
 		push_error(
-			"HUD._open_close_day_preview: CloseDayPreview child missing; "
-			+ "skipping preview modal and closing day directly."
+			(
+				"HUD._open_close_day_preview: CloseDayPreview child missing; "
+				+ "skipping preview modal and closing day directly."
+			)
 		)
 		EventBus.day_close_requested.emit()
 		return
@@ -536,9 +518,7 @@ func _get_active_store_snapshot() -> Array:
 	if String(store_id).is_empty():
 		var generic: Array = inventory.get_shelf_items()
 		return generic
-	var typed: Array[ItemInstance] = inventory.get_shelf_items_for_store(
-		String(store_id)
-	)
+	var typed: Array[ItemInstance] = inventory.get_shelf_items_for_store(String(store_id))
 	var generic_items: Array = []
 	for item: ItemInstance in typed:
 		generic_items.append(item)
@@ -562,9 +542,7 @@ func _on_hub_back_pressed() -> void:
 
 func _on_store_entered_hub(_store_id: StringName) -> void:
 	if is_instance_valid(_hub_back_button):
-		_hub_back_button.visible = (
-			GameManager.current_state == GameManager.State.STORE_VIEW
-		)
+		_hub_back_button.visible = (GameManager.current_state == GameManager.State.STORE_VIEW)
 
 
 func _on_store_exited_hub(_store_id: StringName) -> void:
@@ -617,9 +595,7 @@ func _apply_state_visibility(state: GameManager.State) -> void:
 			# while the player is still learning the stock-and-sell loop. Hide the
 			# button on Day 1 STORE_VIEW; it remains accessible from MALL_OVERVIEW
 			# and re-appears in STORE_VIEW on Day 2+.
-			_milestones_button.visible = (
-				GameManager.get_current_day() > 1
-			)
+			_milestones_button.visible = (GameManager.get_current_day() > 1)
 			_close_day_button.visible = true
 			# BRAINDUMP Rule 3: 'Top Left: Money only'. The right-side
 			# BetaRightPanel is the canonical readout for shelf / back-room /
@@ -676,9 +652,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif event.is_action("time_toggle_pause"):
 		var tier: TimeSystem.SpeedTier = (
-			TimeSystem.SpeedTier.NORMAL
-			if _current_speed <= 0.0
-			else TimeSystem.SpeedTier.PAUSED
+			TimeSystem.SpeedTier.NORMAL if _current_speed <= 0.0 else TimeSystem.SpeedTier.PAUSED
 		)
 		EventBus.time_speed_requested.emit(tier as int)
 		get_viewport().set_input_as_handled()
@@ -686,15 +660,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _refresh_time_display() -> void:
 	var formatted: String = _format_hour_12(_current_hour)
-	var phase_key: String = _PHASE_KEYS.get(
-		_current_phase, "HUD_PHASE_MORNING"
-	)
-	var phase_color: Color = _PHASE_COLORS.get(
-		_current_phase, Color.WHITE
-	)
-	var rendered: String = tr("HUD_DAY_FORMAT") % [
-		_current_day, formatted
-	]
+	var phase_key: String = _PHASE_KEYS.get(_current_phase, "HUD_PHASE_MORNING")
+	var phase_color: Color = _PHASE_COLORS.get(_current_phase, Color.WHITE)
+	var rendered: String = tr("HUD_DAY_FORMAT") % [_current_day, formatted]
 	_time_label.text = rendered
 	_time_label.tooltip_text = tr(phase_key)
 	_time_label.modulate = phase_color
@@ -709,11 +677,7 @@ func _format_fp_time_label(standard_text: String, formatted_hour: String) -> Str
 
 
 func _is_preopening_training() -> bool:
-	return (
-		_current_day == 1
-		and not BetaRunState.preopening_complete
-		and _has_training_milestones()
-	)
+	return _current_day == 1 and not BetaRunState.preopening_complete and _has_training_milestones()
 
 
 func _has_training_milestones() -> bool:
@@ -780,15 +744,12 @@ func _format_cash(amount: float) -> String:
 	return "%s%s.%02d" % [prefix, ",".join(groups), cents]
 
 
-func _animate_cash_count(
-	from_amount: float, to_amount: float
-) -> void:
+func _animate_cash_count(from_amount: float, to_amount: float) -> void:
 	PanelAnimator.kill_tween(_cash_count_tween)
 	_displayed_cash = from_amount
 	_cash_count_tween = _cash_label.create_tween()
 	_cash_count_tween.tween_method(
-		_on_cash_count_step, from_amount, to_amount,
-		_CASH_COUNT_DURATION
+		_on_cash_count_step, from_amount, to_amount, _CASH_COUNT_DURATION
 	)
 
 
@@ -803,19 +764,14 @@ func _pulse_cash_label(delta: float) -> void:
 	PanelAnimator.kill_tween(_cash_scale_tween)
 	PanelAnimator.kill_tween(_cash_color_tween)
 	var is_income: bool = delta > 0.0
-	var target_scale: float = (
-		_CASH_INCOME_SCALE if is_income else _CASH_EXPENSE_SCALE
-	)
+	var target_scale: float = _CASH_INCOME_SCALE if is_income else _CASH_EXPENSE_SCALE
 	var pulse_color: Color = (
-		UIThemeConstants.get_positive_color() if is_income
+		UIThemeConstants.get_positive_color()
+		if is_income
 		else UIThemeConstants.get_negative_color()
 	)
-	_cash_scale_tween = PanelAnimator.pulse_scale(
-		_cash_label, target_scale, _CASH_PULSE_DURATION
-	)
-	_cash_color_tween = PanelAnimator.flash_color(
-		_cash_label, pulse_color, _CASH_PULSE_DURATION
-	)
+	_cash_scale_tween = PanelAnimator.pulse_scale(_cash_label, target_scale, _CASH_PULSE_DURATION)
+	_cash_color_tween = PanelAnimator.flash_color(_cash_label, pulse_color, _CASH_PULSE_DURATION)
 
 
 ## Spawns a transient floating delta label adjacent to the active cash readout.
@@ -840,8 +796,7 @@ func _spawn_money_delta_pop(delta: float) -> void:
 	var sign_char: String = "+" if delta > 0.0 else "-"
 	label.text = "%s$%s" % [sign_char, _format_cash(absf(delta))]
 	var pop_color: Color = (
-		_MONEY_DELTA_COLOR_POSITIVE if delta > 0.0
-		else _MONEY_DELTA_COLOR_NEGATIVE
+		_MONEY_DELTA_COLOR_POSITIVE if delta > 0.0 else _MONEY_DELTA_COLOR_NEGATIVE
 	)
 	label.add_theme_color_override("font_color", pop_color)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -866,22 +821,37 @@ func _spawn_money_delta_pop(delta: float) -> void:
 	var start_bottom: float = label.offset_bottom
 	var tween: Tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(
-		label, "offset_top",
-		start_top - _MONEY_DELTA_FLOAT_DISTANCE,
-		_MONEY_DELTA_DURATION,
+	(
+		tween
+		. tween_property(
+			label,
+			"offset_top",
+			start_top - _MONEY_DELTA_FLOAT_DISTANCE,
+			_MONEY_DELTA_DURATION,
+		)
 	)
-	tween.tween_property(
-		label, "offset_bottom",
-		start_bottom - _MONEY_DELTA_FLOAT_DISTANCE,
-		_MONEY_DELTA_DURATION,
+	(
+		tween
+		. tween_property(
+			label,
+			"offset_bottom",
+			start_bottom - _MONEY_DELTA_FLOAT_DISTANCE,
+			_MONEY_DELTA_DURATION,
+		)
 	)
-	tween.tween_property(
-		label, "modulate:a", 0.0, _MONEY_DELTA_DURATION,
+	(
+		tween
+		. tween_property(
+			label,
+			"modulate:a",
+			0.0,
+			_MONEY_DELTA_DURATION,
+		)
 	)
-	tween.finished.connect(func() -> void:
-		if is_instance_valid(label):
-			label.queue_free()
+	tween.finished.connect(
+		func() -> void:
+			if is_instance_valid(label):
+				label.queue_free()
 	)
 
 
@@ -906,9 +876,7 @@ func _get_next_speed_tier() -> TimeSystem.SpeedTier:
 
 func _update_reputation_display(score: float) -> void:
 	_reputation_label.text = _format_reputation(score)
-	_reputation_label.add_theme_color_override(
-		"font_color", _get_tier_color(score)
-	)
+	_reputation_label.add_theme_color_override("font_color", _get_tier_color(score))
 
 
 func _format_reputation(score: float) -> String:
@@ -933,36 +901,44 @@ func _get_tier_color(score: float) -> Color:
 	return _TIER_COLORS[_TIER_COLORS.size() - 1]
 
 
-func _flash_reputation_label(
-	old_value: float, new_value: float
-) -> void:
+func _flash_reputation_label(old_value: float, new_value: float) -> void:
 	if is_equal_approx(old_value, new_value):
 		return
 	PanelAnimator.kill_tween(_rep_arrow_tween)
 	var increased: bool = new_value > old_value
 	var color: Color = (
-		UIThemeConstants.get_positive_color() if increased
+		UIThemeConstants.get_positive_color()
+		if increased
 		else UIThemeConstants.get_negative_color()
 	)
 	var arrow: String = " \u25B2" if increased else " \u25BC"
 	var label_text: String = _format_reputation(new_value)
 	_reputation_label.text = label_text + arrow
 	_rep_arrow_tween = _reputation_label.create_tween()
-	_rep_arrow_tween.tween_property(
-		_reputation_label,
-		"theme_override_colors/font_color", color,
-		_REP_ARROW_FADE_IN,
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_rep_arrow_tween.tween_interval(_REP_ARROW_HOLD)
-	_rep_arrow_tween.tween_callback(func() -> void:
-		_reputation_label.text = label_text
+	(
+		_rep_arrow_tween
+		. tween_property(
+			_reputation_label,
+			"theme_override_colors/font_color",
+			color,
+			_REP_ARROW_FADE_IN,
+		)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_CUBIC)
 	)
-	_rep_arrow_tween.tween_property(
-		_reputation_label,
-		"theme_override_colors/font_color",
-		UIThemeConstants.BODY_FONT_COLOR,
-		_REP_ARROW_FADE_OUT,
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	_rep_arrow_tween.tween_interval(_REP_ARROW_HOLD)
+	_rep_arrow_tween.tween_callback(func() -> void: _reputation_label.text = label_text)
+	(
+		_rep_arrow_tween
+		. tween_property(
+			_reputation_label,
+			"theme_override_colors/font_color",
+			UIThemeConstants.BODY_FONT_COLOR,
+			_REP_ARROW_FADE_OUT,
+		)
+		. set_ease(Tween.EASE_IN)
+		. set_trans(Tween.TRANS_CUBIC)
+	)
 
 
 ## Receives ObjectiveRail payloads so the FP close-day affordance can react to
@@ -1013,9 +989,7 @@ func _on_store_opened(store_id: String) -> void:
 		return
 	var display_name: String = _get_store_display_name(store_id)
 	_store_label.text = display_name
-	var accent: Color = UIThemeConstants.get_store_accent(
-		StringName(store_id)
-	)
+	var accent: Color = UIThemeConstants.get_store_accent(StringName(store_id))
 	_store_label.add_theme_color_override("font_color", accent)
 	_store_label.visible = true
 
@@ -1029,11 +1003,15 @@ func _on_random_event_telegraphed(message: String) -> void:
 	var text: String = message.strip_edges()
 	if _tutorial_step_active or text.is_empty():
 		return
-	EventBus.toast_requested_with_id.emit(
-		StringName("random_event_telegraph:%s" % text),
-		"Coming: %s" % text,
-		&"random_event",
-		4.0,
+	(
+		EventBus
+		. toast_requested_with_id
+		. emit(
+			StringName("random_event_telegraph:%s" % text),
+			"Coming: %s" % text,
+			&"random_event",
+			4.0,
+		)
 	)
 
 
@@ -1050,9 +1028,7 @@ func _on_tutorial_hint_ended() -> void:
 func _get_store_display_name(store_id: String) -> String:
 	if not GameManager.data_loader:
 		return store_id.capitalize()
-	var store_def: StoreDefinition = (
-		GameManager.data_loader.get_store(store_id)
-	)
+	var store_def: StoreDefinition = GameManager.data_loader.get_store(store_id)
 	if store_def:
 		return store_def.store_name
 	return store_id.capitalize()
@@ -1087,11 +1063,12 @@ func _tween_children_alpha(target: float, tween_ease: int) -> void:
 	_dim_tween = create_tween()
 	for child: Node in get_children():
 		if child is CanvasItem:
-			_dim_tween.parallel().tween_property(
-				child, "modulate:a", target,
-				PanelAnimator.BUILD_MODE_TRANSITION
-			).set_ease(tween_ease).set_trans(
-				Tween.TRANS_CUBIC
+			(
+				_dim_tween
+				. parallel()
+				. tween_property(child, "modulate:a", target, PanelAnimator.BUILD_MODE_TRANSITION)
+				. set_ease(tween_ease)
+				. set_trans(Tween.TRANS_CUBIC)
 			)
 
 
@@ -1214,9 +1191,7 @@ func _apply_modal_dim(modal_now: bool) -> void:
 	_modal_dim_tween.set_parallel(true)
 	for child: Node in get_children():
 		if child is CanvasItem:
-			_modal_dim_tween.tween_property(
-				child, "modulate:a", target, _MODAL_DIM_DURATION
-			)
+			_modal_dim_tween.tween_property(child, "modulate:a", target, _MODAL_DIM_DURATION)
 
 
 ## Public read of the current modal-dim state for the debug overlay and
@@ -1240,8 +1215,7 @@ func _refresh_zero_state_hint() -> void:
 	if not _beta_mode_active():
 		var state: GameManager.State = GameManager.current_state
 		var in_store: bool = (
-			state == GameManager.State.STORE_VIEW
-			or state == GameManager.State.GAMEPLAY
+			state == GameManager.State.STORE_VIEW or state == GameManager.State.GAMEPLAY
 		)
 		if in_store and InputFocus.current() != InputFocus.CTX_MODAL:
 			if _items_placed_count <= 0:
@@ -1271,17 +1245,17 @@ func _refresh_zero_state_hint() -> void:
 ## than a broader customer-departed event so non-sale outcomes (browse,
 ## walk-out) do not inflate the counter. Resets on `day_started`.
 func _on_customer_purchased_hud(
-	_store_id: StringName, _item_id: StringName,
-	_price: float, _customer_id: StringName,
+	_store_id: StringName,
+	_item_id: StringName,
+	_price: float,
+	_customer_id: StringName,
 ) -> void:
 	_customers_served_today_count += 1
 	_update_customers_display(_customers_served_today_count)
 	_pulse_counter(_customers_label, true)
 
 
-func _on_item_sold(
-	_item_id: String, _price: float, _category: String
-) -> void:
+func _on_item_sold(_item_id: String, _price: float, _category: String) -> void:
 	_sales_today_count += 1
 	_update_sales_today_display(_sales_today_count)
 	_pulse_counter(_sales_today_label, true)
@@ -1328,27 +1302,56 @@ func _pulse_counter(label: Label, positive: bool) -> void:
 	label.scale = Vector2.ONE
 	label.modulate = Color.WHITE
 	var color: Color = (
-		UIThemeConstants.get_positive_color() if positive
-		else UIThemeConstants.get_negative_color()
+		UIThemeConstants.get_positive_color() if positive else UIThemeConstants.get_negative_color()
 	)
 	var dur: float = _COUNTER_PULSE_DURATION
 	var scale_tween: Tween = label.create_tween()
-	scale_tween.tween_property(
-		label, "scale",
-		Vector2(_COUNTER_PULSE_SCALE, _COUNTER_PULSE_SCALE),
-		dur * 0.4,
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
-	scale_tween.tween_property(
-		label, "scale", Vector2.ONE, dur * 0.6,
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	(
+		scale_tween
+		. tween_property(
+			label,
+			"scale",
+			Vector2(_COUNTER_PULSE_SCALE, _COUNTER_PULSE_SCALE),
+			dur * 0.4,
+		)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_BACK)
+	)
+	(
+		scale_tween
+		. tween_property(
+			label,
+			"scale",
+			Vector2.ONE,
+			dur * 0.6,
+		)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_CUBIC)
+	)
 	_counter_scale_tweens[label] = scale_tween
 	var color_tween: Tween = label.create_tween()
-	color_tween.tween_property(
-		label, "modulate", color, dur * 0.3,
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	color_tween.tween_property(
-		label, "modulate", Color.WHITE, dur * 0.7,
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	(
+		color_tween
+		. tween_property(
+			label,
+			"modulate",
+			color,
+			dur * 0.3,
+		)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_CUBIC)
+	)
+	(
+		color_tween
+		. tween_property(
+			label,
+			"modulate",
+			Color.WHITE,
+			dur * 0.7,
+		)
+		. set_ease(Tween.EASE_IN)
+		. set_trans(Tween.TRANS_CUBIC)
+	)
 	_counter_color_tweens[label] = color_tween
 
 

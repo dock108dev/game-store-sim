@@ -62,8 +62,6 @@ const _TRAINING_MILESTONES: Array[Dictionary] = [
 		"label": "Back room",
 	},
 	{"id": "shelf", "objective_id": "training_stock_shelf", "label": "Shelf stock"},
-	{"id": "practice", "objective_id": "practice_customer", "label": "Practice"},
-	{"id": "open", "objective_id": "open_store", "label": "Open store"},
 ]
 
 const _PHASE_NAMES: Dictionary = {
@@ -148,9 +146,7 @@ func seed_for_day(day: int) -> void:
 	_customers_served_today = 0
 	_sold_today_count = 0
 	_completed_objective_ids.clear()
-	var controller: Node = get_tree().get_first_node_in_group(
-		"beta_day_one_controller"
-	)
+	var controller: Node = get_tree().get_first_node_in_group("beta_day_one_controller")
 	if controller != null:
 		var objs: Variant = controller.get("_objectives")
 		if objs is Array:
@@ -281,9 +277,7 @@ func _refresh_header() -> void:
 		phase_name = str(_PHASE_NAMES[_current_phase])
 	else:
 		if OS.is_debug_build():
-			push_warning(
-				"BetaRightPanel: unmapped TimeSystem.DayPhase '%d'" % int(_current_phase)
-			)
+			push_warning("BetaRightPanel: unmapped TimeSystem.DayPhase '%d'" % int(_current_phase))
 		phase_name = "UNKNOWN"
 	_header.text = "DAY %d — %s" % [_current_day, phase_name]
 
@@ -291,9 +285,7 @@ func _refresh_header() -> void:
 func _refresh_all_values() -> void:
 	_refresh_section_labels()
 	if _on_shelves_value != null:
-		_on_shelves_value.text = "%d / %d" % [
-			_on_shelves_count, _shelf_target_count
-		]
+		_on_shelves_value.text = "%d / %d" % [_on_shelves_count, _shelf_target_count]
 	if _back_room_value != null:
 		_back_room_value.text = str(_back_room_count)
 	if _customers_value != null:
@@ -368,11 +360,16 @@ func _milestones_for_objectives(objectives: Array[Dictionary]) -> Array[Dictiona
 			display_label = str(entry.get("label", "")).strip_edges()
 		if display_label.is_empty():
 			display_label = objective_id.capitalize()
-		fallback.append({
-			"id": objective_id,
-			"objective_id": objective_id,
-			"label": display_label,
-		})
+		(
+			fallback
+			. append(
+				{
+					"id": objective_id,
+					"objective_id": objective_id,
+					"label": display_label,
+				}
+			)
+		)
 	return fallback
 
 
@@ -416,11 +413,7 @@ func _on_day_started(day: int) -> void:
 
 
 func _is_preopening_training() -> bool:
-	return (
-		_current_day == 1
-		and not BetaRunState.preopening_complete
-		and _has_training_milestones()
-	)
+	return _current_day == 1 and not BetaRunState.preopening_complete and _has_training_milestones()
 
 
 func _has_training_milestones() -> bool:
@@ -465,8 +458,10 @@ func _on_beta_backroom_count_changed(count: int) -> void:
 
 
 func _on_customer_purchased(
-	_store_id: StringName, _item_id: StringName,
-	_price: float, _customer_id: StringName,
+	_store_id: StringName,
+	_item_id: StringName,
+	_price: float,
+	_customer_id: StringName,
 ) -> void:
 	_customers_served_today += 1
 	_refresh_all_values()
@@ -485,9 +480,7 @@ func _on_beta_objective_completed(objective_id: StringName) -> void:
 
 
 func _on_input_focus_changed(new_ctx: StringName, _old_ctx: StringName) -> void:
-	var target: float = (
-		_MODAL_DIM_ALPHA if new_ctx == InputFocus.CTX_MODAL else 1.0
-	)
+	var target: float = _MODAL_DIM_ALPHA if new_ctx == InputFocus.CTX_MODAL else 1.0
 	for child: Node in get_children():
 		if child is CanvasItem:
 			(child as CanvasItem).modulate.a = target

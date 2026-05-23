@@ -384,14 +384,6 @@ func test_training_stage_gating_enables_only_current_target_and_ambient() -> voi
 			"stage": BetaDayOneController.STAGE_TRAINING_STOCK_SHELF,
 			"target": "BetaRestockShelf/Interactable",
 		},
-		{
-			"stage": BetaDayOneController.STAGE_TRAINING_PRACTICE_CUSTOMER,
-			"target": "BetaDayOneCustomer/Interactable",
-		},
-		{
-			"stage": BetaDayOneController.STAGE_TRAINING_OPEN_STORE,
-			"target": "BetaDayEndTrigger/Interactable",
-		},
 	]
 	for row: Dictionary in stages:
 		_set_controller_stage(row["stage"], _controller().get("_training_objectives"), {})

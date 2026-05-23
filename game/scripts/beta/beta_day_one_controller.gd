@@ -1,4 +1,4 @@
-# gdlint:disable=max-file-lines
+# gdlint:disable=max-file-lines,max-public-methods,max-returns,load-constant-name
 class_name BetaDayOneController
 extends Node
 
@@ -263,26 +263,6 @@ var _training_objectives: Array[Dictionary] = [
 		"target_path": "BetaRestockShelf/Interactable",
 		"time_cost_minutes": 0,
 		"required": true,
-	},
-	{
-		"id": "practice_customer",
-		"stage": "training_practice_customer",
-		"label": "Run a practice customer decision.",
-		"action": "Practice customer",
-		"key": "E",
-		"target_path": "BetaDayOneCustomer/Interactable",
-		"time_cost_minutes": 0,
-		"required": true,
-	},
-	{
-		"id": "open_store",
-		"stage": "training_open_store",
-		"label": "Open the store.",
-		"action": "Open the store",
-		"key": "E",
-		"target_path": "BetaDayEndTrigger/Interactable",
-		"time_cost_minutes": 0,
-		"required": false,
 	},
 ]
 
@@ -1702,6 +1682,9 @@ func _advance_stage_after(completed_id: StringName) -> void:
 			idx = i
 			break
 	if idx == -1 or idx + 1 >= _objectives.size():
+		if completed_id == &"training_stock_shelf":
+			_open_store_after_training()
+			return
 		_stage = STAGE_END_DAY
 	else:
 		_stage = StringName(str(_objectives[idx + 1].get("stage", STAGE_END_DAY)))

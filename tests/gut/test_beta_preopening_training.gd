@@ -68,16 +68,13 @@ func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
 
 	var snapshot: Dictionary = controller.get_state_snapshot()
 	assert_eq(str(snapshot.get("active_objective_id", "")), "talk_to_manager")
-	assert_eq(
-		str(snapshot.get("active_objective_label", "")),
-		"Talk to the manager at checkout."
-	)
+	assert_eq(str(snapshot.get("active_objective_label", "")), "Talk to the manager at checkout.")
 	assert_eq(str(snapshot.get("active_objective_action", "")), "Talk to manager")
 	assert_true(_proxy_part_visible("Badge"))
 	assert_true(_proxy_part_visible("Clipboard"))
 
 
-func test_training_walks_required_mechanics_before_open_store() -> void:
+func test_training_walks_required_mechanics_then_opens_store() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
@@ -99,7 +96,8 @@ func test_training_walks_required_mechanics_before_open_store() -> void:
 
 	controller.on_beta_restock_interacted()
 	await get_tree().process_frame
-	assert_eq(String(controller.current_stage()), "training_practice_customer")
+	assert_true(BetaRunState.preopening_complete)
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_false(BetaRunState.carrying_stock)
 	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
 
@@ -121,26 +119,6 @@ func test_role_prompt_copy_changes_between_training_and_customer_stages() -> voi
 	assert_not_null(customer)
 	if customer == null:
 		return
-	assert_eq(String(controller.current_stage()), "training_practice_customer")
-	assert_eq(customer.display_name, "practice customer")
-	assert_eq(customer.prompt_text, "Run")
-	assert_eq(customer.action_verb, "Practice")
-	var practice_snapshot: Dictionary = controller.get_state_snapshot()
-	assert_eq(str(practice_snapshot.get("active_objective_id", "")), "practice_customer")
-	assert_eq(
-		str(practice_snapshot.get("active_objective_label", "")),
-		"Run a practice customer decision."
-	)
-	assert_eq(str(practice_snapshot.get("active_objective_action", "")), "Practice customer")
-	assert_false(_proxy_part_visible("Badge"))
-	assert_false(_proxy_part_visible("Clipboard"))
-
-	controller.set("_stage", BetaDayOneController.STAGE_TRAINING_OPEN_STORE)
-	controller.set("_objectives", controller.get("_training_objectives"))
-	controller.call("_apply_objective_gating")
-	controller.on_beta_register_interacted()
-	await get_tree().process_frame
-
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_eq(customer.display_name, "customer")
 	assert_eq(customer.prompt_text, "Talk to")
@@ -175,16 +153,19 @@ func test_manager_completion_feedback_is_short() -> void:
 	)
 
 
-func test_open_store_transitions_to_real_day_one_customer() -> void:
+func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	controller.set("_stage", BetaDayOneController.STAGE_TRAINING_OPEN_STORE)
-	controller.set("_objectives", controller.get("_training_objectives"))
-	controller.call("_apply_objective_gating")
 	watch_signals(EventBus)
 
+	controller.on_beta_customer_interacted()
+	await get_tree().process_frame
 	controller.on_beta_register_interacted()
+	await get_tree().process_frame
+	controller.on_beta_backroom_pickup_interacted()
+	await get_tree().process_frame
+	controller.on_beta_restock_interacted()
 	await get_tree().process_frame
 
 	assert_true(BetaRunState.preopening_complete)
@@ -212,8 +193,10 @@ func test_manager_proxy_uses_blocky_readable_silhouette() -> void:
 		if part != null:
 			assert_true(
 				part.mesh is BoxMesh,
-				"%s must use a BoxMesh so the NPC does not read as a capsule placeholder"
+				(
+					"%s must use a BoxMesh so the NPC does not read as a capsule placeholder"
 					% part_name
+				)
 			)
 
 

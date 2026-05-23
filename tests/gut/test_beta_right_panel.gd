@@ -9,7 +9,6 @@
 ##   - the panel stays mode-agnostic and dims under modal focus.
 extends GutTest
 
-
 const _OBJECTIVES: Array[Dictionary] = [
 	{
 		"id": "talk_to_customer",
@@ -57,8 +56,6 @@ const _TRAINING_OBJECTIVES: Array[Dictionary] = [
 	{"id": "check_register", "action": "Check the register"},
 	{"id": "check_back_room_inventory", "action": "Check back room"},
 	{"id": "training_stock_shelf", "action": "Stock shelf"},
-	{"id": "practice_customer", "action": "Practice checkout"},
-	{"id": "open_store", "action": "Open store"},
 ]
 
 
@@ -92,9 +89,7 @@ func test_panel_uses_compact_top_right_safe_zone() -> void:
 		"Right panel width must stay compact while leaving room for readable copy"
 	)
 	assert_gte(
-		root_panel.offset_top,
-		80.0,
-		"Right panel must start below the top HUD/time safe band"
+		root_panel.offset_top, 80.0, "Right panel must start below the top HUD/time safe band"
 	)
 
 
@@ -252,9 +247,7 @@ func test_milestone_copy_is_compact_and_not_action_copy() -> void:
 
 func test_pending_rows_use_muted_alpha() -> void:
 	var panel: BetaRightPanel = _make_panel()
-	var label: Label = panel.get_node_or_null(
-		"Panel/Column/Milestone_talk_to_customer"
-	) as Label
+	var label: Label = panel.get_node_or_null("Panel/Column/Milestone_talk_to_customer") as Label
 	assert_not_null(label, "Pending milestone label must exist")
 	if label == null:
 		return
@@ -263,12 +256,19 @@ func test_pending_rows_use_muted_alpha() -> void:
 
 func test_objective_changed_does_not_restamp_passive_milestones() -> void:
 	var panel: BetaRightPanel = _make_panel()
-	EventBus.objective_changed.emit({
-		"text": "Day 1: Check today's back room stock.",
-		"steps": [
-			{"id": "back_room_inventory", "text": "Check", "state": "active"},
-		],
-	})
+	(
+		EventBus
+		. objective_changed
+		. emit(
+			{
+				"text": "Day 1: Check today's back room stock.",
+				"steps":
+				[
+					{"id": "back_room_inventory", "text": "Check", "state": "active"},
+				],
+			}
+		)
+	)
 	await get_tree().process_frame
 	assert_eq(panel.get_item_glyph(&"back_room_inventory"), "•")
 	assert_eq(panel.get_row_state(&"back_room_inventory"), "pending")
@@ -280,7 +280,8 @@ func test_panel_does_not_connect_objective_changed() -> void:
 	for entry: Dictionary in connections:
 		var callable: Callable = entry.get("callable") as Callable
 		assert_ne(
-			callable.get_object(), panel,
+			callable.get_object(),
+			panel,
 			"BetaRightPanel must not mirror active objective_changed payloads"
 		)
 
@@ -344,16 +345,17 @@ func _assert_no_label_contains(root: Node, needle: String) -> void:
 			var text: String = (child as Label).text
 			assert_false(
 				text.contains(needle),
-				"No Label descendant may contain '%s'; found '%s' on %s"
-				% [needle, text, child.get_path()]
+				(
+					"No Label descendant may contain '%s'; found '%s' on %s"
+					% [needle, text, child.get_path()]
+				)
 			)
 		_assert_no_label_contains(child, needle)
 
 
 func _assert_label_contains(root: Node, needle: String) -> void:
 	assert_true(
-		_has_label_containing(root, needle),
-		"Expected a Label descendant containing '%s'" % needle
+		_has_label_containing(root, needle), "Expected a Label descendant containing '%s'" % needle
 	)
 
 

@@ -73,9 +73,12 @@ func _evaluate(store_id: StringName) -> Dictionary:
 	var active_id: StringName = &""
 	if game_state != null and "active_store_id" in game_state:
 		active_id = game_state.active_store_id
+	if active_id.is_empty() and GameManager != null:
+		active_id = GameManager.get_active_store_id()
 	if active_id != store_id:
-		return _fail_dict(_COND_ACTIVE_STORE,
-			"%s (expected %s)" % [String(active_id), String(store_id)])
+		return _fail_dict(
+			_COND_ACTIVE_STORE, "%s (expected %s)" % [String(active_id), String(store_id)]
+		)
 
 	var player_count: int = _count_players_in_scene()
 	if player_count < 1:
@@ -114,6 +117,8 @@ func _evaluate(store_id: StringName) -> Dictionary:
 		return _fail_dict(_COND_OBJECTIVE, "false")
 
 	return {}
+
+
 # gdlint:enable=max-returns
 
 
@@ -191,9 +196,7 @@ func _resolve_backroom_count(store_id: StringName) -> int:
 	var inventory: Node = _find_inventory_system()
 	if inventory == null or not inventory.has_method("get_backroom_items_for_store"):
 		return 0
-	var items: Variant = inventory.call(
-		"get_backroom_items_for_store", String(store_id)
-	)
+	var items: Variant = inventory.call("get_backroom_items_for_store", String(store_id))
 	if items is Array:
 		return (items as Array).size()
 	return 0

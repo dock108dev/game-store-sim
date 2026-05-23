@@ -19,6 +19,8 @@ var _audit: Node
 
 
 func before_each() -> void:
+	GameState.reset_new_game()
+
 	_audit = AuditLogScript.new()
 	add_child_autofree(_audit)
 	_audit.clear()
@@ -30,6 +32,10 @@ func before_each() -> void:
 	add_child_autofree(_director)
 	_director.set_registry_for_tests(_registry)
 	_director.set_audit_for_tests(_audit)
+
+
+func after_each() -> void:
+	GameState.reset_new_game()
 
 
 # ---------- mock router ----------------------------------------------------
@@ -160,6 +166,11 @@ func test_happy_path_emits_store_ready_once() -> void:
 	assert_true(ok, "enter_store(fixture_store) must return true on READY")
 	assert_eq(ready_emissions.size(), 1, "store_ready must fire exactly once")
 	assert_eq(ready_emissions[0], &"fixture_store")
+	assert_eq(
+		GameState.active_store_id,
+		&"fixture_store",
+		"store_ready subscribers must see active_store_id already committed"
+	)
 	assert_eq(_director.state, StoreDirectorScript.State.IDLE,
 		"director should return to IDLE after READY so subsequent calls are accepted")
 	assert_eq(router.route_calls.size(), 1)

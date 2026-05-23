@@ -1,18 +1,14 @@
+## gdlint:disable=max-public-methods,load-constant-name,class-definitions-order
 ## Tests for HUD signal-driven updates, cash animation, and speed cycling.
 extends GutTest
 
-
 var _hud: CanvasLayer
-const _HudScene: PackedScene = preload(
-	"res://game/scenes/ui/hud.tscn"
-)
+const _HudScene: PackedScene = preload("res://game/scenes/ui/hud.tscn")
 const _TRAINING_OBJECTIVES: Array[Dictionary] = [
 	{"id": "talk_to_manager"},
 	{"id": "check_register"},
 	{"id": "check_back_room_inventory"},
 	{"id": "training_stock_shelf"},
-	{"id": "practice_customer"},
-	{"id": "open_store"},
 ]
 
 
@@ -42,18 +38,12 @@ func test_cash_count_animation_target() -> void:
 
 func test_cash_flash_green_on_income() -> void:
 	EventBus.money_changed.emit(100.0, 200.0)
-	assert_not_null(
-		_hud._cash_color_tween,
-		"Should create a color flash tween for income"
-	)
+	assert_not_null(_hud._cash_color_tween, "Should create a color flash tween for income")
 
 
 func test_cash_flash_red_on_expense() -> void:
 	EventBus.money_changed.emit(200.0, 100.0)
-	assert_not_null(
-		_hud._cash_color_tween,
-		"Should create a color flash tween for expense"
-	)
+	assert_not_null(_hud._cash_color_tween, "Should create a color flash tween for expense")
 
 
 func test_day_updates_on_day_started() -> void:
@@ -135,31 +125,21 @@ func test_speed_paused_display() -> void:
 
 func test_speed_cycle_emits_time_speed_requested() -> void:
 	var received: Array[int] = []
-	EventBus.time_speed_requested.connect(
-		func(tier: int) -> void: received.append(tier)
-	)
+	EventBus.time_speed_requested.connect(func(tier: int) -> void: received.append(tier))
 	_hud._current_speed = 1.0
 	GameManager.current_state = GameManager.State.GAMEPLAY
 	_hud._on_speed_button_pressed()
 	assert_eq(received.size(), 1)
-	assert_eq(
-		received[0], TimeSystem.SpeedTier.FAST,
-		"Normal -> Fast in speed cycle"
-	)
+	assert_eq(received[0], TimeSystem.SpeedTier.FAST, "Normal -> Fast in speed cycle")
 
 
 func test_speed_cycle_wraps_around() -> void:
 	var received: Array[int] = []
-	EventBus.time_speed_requested.connect(
-		func(tier: int) -> void: received.append(tier)
-	)
+	EventBus.time_speed_requested.connect(func(tier: int) -> void: received.append(tier))
 	_hud._current_speed = 6.0
 	GameManager.current_state = GameManager.State.GAMEPLAY
 	_hud._on_speed_button_pressed()
-	assert_eq(
-		received[0], TimeSystem.SpeedTier.PAUSED,
-		"Ultra -> Paused wraps around"
-	)
+	assert_eq(received[0], TimeSystem.SpeedTier.PAUSED, "Ultra -> Paused wraps around")
 
 
 func test_reputation_updates_on_signal() -> void:
@@ -172,8 +152,7 @@ func test_reputation_tier_color_applied_by_display_update() -> void:
 	_hud._update_reputation_display(80.0)
 	var expected: Color = Color(1.0, 0.84, 0.0)
 	assert_true(
-		label.has_theme_color_override("font_color"),
-		"Should have font_color override for tier"
+		label.has_theme_color_override("font_color"), "Should have font_color override for tier"
 	)
 	var actual: Color = label.get_theme_color("font_color")
 	assert_eq(actual, expected, "Legendary tier should use gold color")
@@ -183,20 +162,17 @@ func test_no_direct_system_references() -> void:
 	var script: GDScript = _hud.get_script()
 	var source: String = script.source_code
 	assert_false(
-		source.contains("_find_time_system"),
-		"HUD should not reference TimeSystem directly"
+		source.contains("_find_time_system"), "HUD should not reference TimeSystem directly"
 	)
 	assert_false(
-		source.contains("_find_economy_system"),
-		"HUD should not reference EconomySystem directly"
+		source.contains("_find_economy_system"), "HUD should not reference EconomySystem directly"
 	)
 	assert_false(
 		source.contains("_find_reputation_system"),
 		"HUD should not reference ReputationSystem directly"
 	)
 	assert_false(
-		source.contains("time_sys.set_speed"),
-		"HUD should not call TimeSystem.set_speed directly"
+		source.contains("time_sys.set_speed"), "HUD should not call TimeSystem.set_speed directly"
 	)
 
 
@@ -217,76 +193,53 @@ func test_cash_format_small() -> void:
 
 func test_cash_pulse_scale_income() -> void:
 	EventBus.money_changed.emit(100.0, 200.0)
-	assert_not_null(
-		_hud._cash_scale_tween,
-		"Should create a scale pulse tween for income"
-	)
+	assert_not_null(_hud._cash_scale_tween, "Should create a scale pulse tween for income")
 
 
 func test_cash_pulse_scale_expense() -> void:
 	EventBus.money_changed.emit(200.0, 100.0)
-	assert_not_null(
-		_hud._cash_scale_tween,
-		"Should create a scale pulse tween for expense"
-	)
+	assert_not_null(_hud._cash_scale_tween, "Should create a scale pulse tween for expense")
 
 
 func test_expense_scale_is_smaller_than_income_scale() -> void:
-	assert_gt(
-		_hud._CASH_EXPENSE_SCALE, 1.0,
-		"Expense scale should still pulse above 1.0"
-	)
+	assert_gt(_hud._CASH_EXPENSE_SCALE, 1.0, "Expense scale should still pulse above 1.0")
 	assert_lt(
-		_hud._CASH_EXPENSE_SCALE, _hud._CASH_INCOME_SCALE,
+		_hud._CASH_EXPENSE_SCALE,
+		_hud._CASH_INCOME_SCALE,
 		"Expense pulse should be smaller than income pulse"
 	)
 
 
 func test_income_scale_grows() -> void:
-	assert_gt(
-		_hud._CASH_INCOME_SCALE, 1.0,
-		"Income scale should grow above 1.0"
-	)
+	assert_gt(_hud._CASH_INCOME_SCALE, 1.0, "Income scale should grow above 1.0")
 
 
 func test_reputation_arrow_tween_on_increase() -> void:
 	EventBus.reputation_changed.emit("test_store", 0.0, 60.0)
 	_hud._last_reputation = 60.0
 	EventBus.reputation_changed.emit("test_store", 0.0, 70.0)
-	assert_not_null(
-		_hud._rep_arrow_tween,
-		"Should create arrow tween on reputation increase"
-	)
+	assert_not_null(_hud._rep_arrow_tween, "Should create arrow tween on reputation increase")
 
 
 func test_reputation_arrow_tween_on_decrease() -> void:
 	EventBus.reputation_changed.emit("test_store", 0.0, 60.0)
 	_hud._last_reputation = 60.0
 	EventBus.reputation_changed.emit("test_store", 0.0, 50.0)
-	assert_not_null(
-		_hud._rep_arrow_tween,
-		"Should create arrow tween on reputation decrease"
-	)
+	assert_not_null(_hud._rep_arrow_tween, "Should create arrow tween on reputation decrease")
 
 
 func test_reputation_arrow_up_text() -> void:
 	_hud._last_reputation = 50.0
 	EventBus.reputation_changed.emit("test_store", 0.0, 60.0)
 	var label: Label = _hud.get_node("TopBar/ReputationLabel")
-	assert_string_contains(
-		label.text, "\u25B2",
-		"Should show up arrow on increase"
-	)
+	assert_string_contains(label.text, "\u25B2", "Should show up arrow on increase")
 
 
 func test_reputation_arrow_down_text() -> void:
 	_hud._last_reputation = 60.0
 	EventBus.reputation_changed.emit("test_store", 0.0, 50.0)
 	var label: Label = _hud.get_node("TopBar/ReputationLabel")
-	assert_string_contains(
-		label.text, "\u25BC",
-		"Should show down arrow on decrease"
-	)
+	assert_string_contains(label.text, "\u25BC", "Should show down arrow on decrease")
 
 
 func test_reputation_flash_uses_configured_timing() -> void:
@@ -322,9 +275,7 @@ func test_reputation_decrease_flashes_negative_color() -> void:
 func test_reputation_arrow_removed_after_hold() -> void:
 	_hud._last_reputation = 50.0
 	EventBus.reputation_changed.emit("test_store", 0.0, 60.0)
-	await get_tree().create_timer(
-		_hud._REP_ARROW_FADE_IN + _hud._REP_ARROW_HOLD + 0.05
-	).timeout
+	await get_tree().create_timer(_hud._REP_ARROW_FADE_IN + _hud._REP_ARROW_HOLD + 0.05).timeout
 	var label: Label = _hud.get_node("TopBar/ReputationLabel")
 	assert_false(
 		label.text.contains("\u25B2") or label.text.contains("\u25BC"),
@@ -335,12 +286,13 @@ func test_reputation_arrow_removed_after_hold() -> void:
 func test_reputation_color_fades_to_body_font_color() -> void:
 	_hud._last_reputation = 50.0
 	EventBus.reputation_changed.emit("test_store", 0.0, 60.0)
-	await get_tree().create_timer(
-		_hud._REP_ARROW_FADE_IN
-		+ _hud._REP_ARROW_HOLD
-		+ _hud._REP_ARROW_FADE_OUT
-		+ 0.05
-	).timeout
+	await (
+		get_tree()
+		. create_timer(
+			_hud._REP_ARROW_FADE_IN + _hud._REP_ARROW_HOLD + _hud._REP_ARROW_FADE_OUT + 0.05
+		)
+		. timeout
+	)
 	var label: Label = _hud.get_node("TopBar/ReputationLabel")
 	assert_eq(
 		label.get_theme_color("font_color"),
@@ -352,10 +304,7 @@ func test_reputation_color_fades_to_body_font_color() -> void:
 func test_no_arrow_on_same_reputation() -> void:
 	_hud._last_reputation = 50.0
 	EventBus.reputation_changed.emit("test_store", 0.0, 50.0)
-	assert_null(
-		_hud._rep_arrow_tween,
-		"No arrow tween when reputation unchanged"
-	)
+	assert_null(_hud._rep_arrow_tween, "No arrow tween when reputation unchanged")
 
 
 func test_simultaneous_cash_and_reputation_effects() -> void:
@@ -383,15 +332,12 @@ func test_day_started_seeds_cash_from_economy_system() -> void:
 	EventBus.day_started.emit(1)
 	var label: Label = _hud.get_node("TopBar/CashLabel")
 	assert_string_contains(
-		label.text, "500",
-		"CashLabel must reflect EconomySystem.get_cash() after day_started"
+		label.text, "500", "CashLabel must reflect EconomySystem.get_cash() after day_started"
 	)
+	assert_eq(_hud._target_cash, 500.0, "day_started must seed _target_cash from EconomySystem")
 	assert_eq(
-		_hud._target_cash, 500.0,
-		"day_started must seed _target_cash from EconomySystem"
-	)
-	assert_eq(
-		_hud._displayed_cash, 500.0,
+		_hud._displayed_cash,
+		500.0,
 		"day_started must snap _displayed_cash so no 0 → 500 tween shows"
 	)
 
@@ -405,7 +351,8 @@ func test_day_started_seed_does_not_break_subsequent_money_changed() -> void:
 	# Live update path must keep working after the seed.
 	EventBus.money_changed.emit(500.0, 525.50)
 	assert_eq(
-		_hud._target_cash, 525.50,
+		_hud._target_cash,
+		525.50,
 		"money_changed must still set _target_cash after a day_started seed"
 	)
 
@@ -452,19 +399,17 @@ func test_items_placed_decrements_when_inventory_changes() -> void:
 	item_b.current_location = "backroom"
 	inventory.add_item(&"retro_games", item_a)
 	inventory.add_item(&"retro_games", item_b)
-	inventory.assign_to_shelf(
-		&"retro_games", StringName(item_a.instance_id), &"slot_a"
-	)
-	inventory.assign_to_shelf(
-		&"retro_games", StringName(item_b.instance_id), &"slot_b"
-	)
+	inventory.assign_to_shelf(&"retro_games", StringName(item_a.instance_id), &"slot_a")
+	inventory.assign_to_shelf(&"retro_games", StringName(item_b.instance_id), &"slot_b")
 	assert_eq(
-		_hud._items_placed_count, 2,
+		_hud._items_placed_count,
+		2,
 		"On Shelves must reflect both stocked items after assign_to_shelf"
 	)
 	inventory.remove_item(item_a.instance_id)
 	assert_eq(
-		_hud._items_placed_count, 1,
+		_hud._items_placed_count,
+		1,
 		"On Shelves must decrement when inventory.remove_item is called"
 	)
 
@@ -482,23 +427,15 @@ func test_day_started_resets_all_three_day_counters_to_zero() -> void:
 	# system is in the tree (Tier-5 init silent return — the next
 	# inventory_changed re-populates it).
 	EventBus.day_started.emit(2)
-	assert_eq(
-		_hud._customers_served_today_count, 0,
-		"Cust must reset to 0 at the start of Day 2"
-	)
-	assert_eq(
-		_hud._sales_today_count, 0,
-		"Sold Today must reset to 0 at the start of Day 2"
-	)
+	assert_eq(_hud._customers_served_today_count, 0, "Cust must reset to 0 at the start of Day 2")
+	assert_eq(_hud._sales_today_count, 0, "Sold Today must reset to 0 at the start of Day 2")
 	var customers_label: Label = _hud.get_node("TopBar/CustomersLabel")
 	var sales_label: Label = _hud.get_node("TopBar/SalesTodayLabel")
 	assert_string_contains(
-		customers_label.text, "0",
-		"CustomersLabel text must show 0 after Day 2 reset"
+		customers_label.text, "0", "CustomersLabel text must show 0 after Day 2 reset"
 	)
 	assert_string_contains(
-		sales_label.text, "0",
-		"SalesTodayLabel text must show 0 after Day 2 reset"
+		sales_label.text, "0", "SalesTodayLabel text must show 0 after Day 2 reset"
 	)
 
 
@@ -515,9 +452,7 @@ func test_items_placed_pulses_green_on_increment() -> void:
 	var item: ItemInstance = ItemInstance.create(def, "good", 0, def.base_price)
 	item.current_location = "backroom"
 	inventory.add_item(&"retro_games", item)
-	inventory.assign_to_shelf(
-		&"retro_games", StringName(item.instance_id), &"slot_inc"
-	)
+	inventory.assign_to_shelf(&"retro_games", StringName(item.instance_id), &"slot_inc")
 	var label: Label = _hud.get_node("TopBar/ItemsPlacedLabel")
 	assert_true(
 		_hud._counter_scale_tweens.has(label),
@@ -527,13 +462,10 @@ func test_items_placed_pulses_green_on_increment() -> void:
 
 func test_customers_pulses_on_customer_purchased() -> void:
 	_hud._customers_served_today_count = 0
-	EventBus.customer_purchased.emit(
-		&"retro_games", &"item_a", 12.0, &"c_pulse"
-	)
+	EventBus.customer_purchased.emit(&"retro_games", &"item_a", 12.0, &"c_pulse")
 	var label: Label = _hud.get_node("TopBar/CustomersLabel")
 	assert_true(
-		_hud._counter_scale_tweens.has(label),
-		"Cust increment must create a scale-pulse tween"
+		_hud._counter_scale_tweens.has(label), "Cust increment must create a scale-pulse tween"
 	)
 
 
@@ -581,10 +513,7 @@ func test_connect_signals_is_idempotent_on_single_instance() -> void:
 	var before: int = EventBus.objective_changed.get_connections().size()
 	_hud._connect_signals()
 	var after: int = EventBus.objective_changed.get_connections().size()
-	assert_eq(
-		after, before,
-		"Re-calling _connect_signals must not double an existing connection"
-	)
+	assert_eq(after, before, "Re-calling _connect_signals must not double an existing connection")
 
 
 func test_objective_changed_fires_handler_once_per_instance() -> void:
@@ -603,14 +532,8 @@ func test_objective_changed_fires_handler_once_per_instance() -> void:
 			first_bindings += 1
 		elif callable_obj == second_hud:
 			second_bindings += 1
-	assert_eq(
-		first_bindings, 1,
-		"First HUD must be bound exactly once to objective_changed"
-	)
-	assert_eq(
-		second_bindings, 1,
-		"Second HUD must be bound exactly once to objective_changed"
-	)
+	assert_eq(first_bindings, 1, "First HUD must be bound exactly once to objective_changed")
+	assert_eq(second_bindings, 1, "Second HUD must be bound exactly once to objective_changed")
 
 
 func test_no_signal_double_connects_after_second_hud_instantiated() -> void:
@@ -662,14 +585,8 @@ func test_no_signal_double_connects_after_second_hud_instantiated() -> void:
 				first_count += 1
 			elif obj == second_hud:
 				second_count += 1
-		assert_eq(
-			first_count, 1,
-			"First HUD must own exactly one binding on %s" % sig_name
-		)
-		assert_eq(
-			second_count, 1,
-			"Second HUD must own exactly one binding on %s" % sig_name
-		)
+		assert_eq(first_count, 1, "First HUD must own exactly one binding on %s" % sig_name)
+		assert_eq(second_count, 1, "Second HUD must own exactly one binding on %s" % sig_name)
 
 
 func test_input_focus_context_changed_no_double_bind() -> void:

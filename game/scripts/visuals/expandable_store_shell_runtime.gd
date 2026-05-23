@@ -393,6 +393,142 @@ static func _rebuild_shell(shell: Node3D) -> void:
 		shell, "StarterPriceCard", Vector3(-2.28, 0.94, 1.82), Vector3(0.28, 0.05, 0.18), paper_mat
 	)
 
+	# The starter footprint is the player's whole first impression. Keep it
+	# compact, but make every visible wall read as a worked retail surface.
+	for index: int in range(7):
+		var x_line: float = -3.0 + float(index) * 1.0
+		_add_box(
+			shell,
+			"FloorBoardSeam%02d" % index,
+			Vector3(x_line, 0.072, 1.85),
+			Vector3(0.018, 0.012, 10.2),
+			_mat(Color(0.23, 0.13, 0.08, 1.0))
+		)
+	for index: int in range(6):
+		var z_line: float = -2.75 + float(index) * 1.65
+		_add_box(
+			shell,
+			"FloorTrafficScuff%02d" % index,
+			Vector3(-0.25, 0.076, z_line),
+			Vector3(3.5, 0.008, 0.035),
+			_mat(Color(0.28, 0.17, 0.10, 1.0))
+		)
+
+	_add_box(shell, "QueuePostA", Vector3(1.18, 0.52, 4.95), Vector3(0.08, 1.04, 0.08), dark_mat)
+	_add_box(shell, "QueuePostB", Vector3(0.48, 0.52, 5.18), Vector3(0.08, 1.04, 0.08), dark_mat)
+	_add_box(shell, "QueueRope", Vector3(0.83, 1.02, 5.06), Vector3(0.76, 0.055, 0.055), gold_mat)
+	_add_box(
+		shell,
+		"CustomerStandHereMat",
+		Vector3(2.34, 0.082, 4.85),
+		Vector3(0.82, 0.018, 0.58),
+		_mat(Color(0.18, 0.20, 0.16, 1.0))
+	)
+	_add_box(
+		shell,
+		"CounterPolicyPlacard",
+		Vector3(3.05, 1.20, 3.14),
+		Vector3(0.42, 0.035, 0.20),
+		paper_mat
+	)
+	_add_label(shell, "CounterPolicyText", "7 DAY\nEXCHANGE", Vector3(3.05, 1.24, 3.10), 18)
+	_add_box(
+		shell,
+		"ReceiptCurl",
+		Vector3(3.34, 0.96, 3.26),
+		Vector3(0.18, 0.018, 0.36),
+		_mat(Color(0.95, 0.87, 0.69, 1.0))
+	)
+
+	_add_box(
+		shell,
+		"WallPosterTradeBacking",
+		Vector3(-3.90, 1.85, -0.45),
+		Vector3(0.07, 1.10, 0.78),
+		sign_mat
+	)
+	_add_label(
+		shell,
+		"WallPosterTradeText",
+		"TRADE\nWEEK",
+		Vector3(-3.84, 1.88, -0.45),
+		24,
+		Vector3(0.0, -90.0, 0.0)
+	)
+	_add_box(
+		shell,
+		"WallPosterPolicyBacking",
+		Vector3(-3.90, 1.58, 0.80),
+		Vector3(0.07, 0.72, 0.95),
+		_mat(Color(0.18, 0.12, 0.10, 1.0))
+	)
+	_add_label(
+		shell,
+		"WallPosterPolicyText",
+		"CHECK ID",
+		Vector3(-3.84, 1.59, 0.80),
+		20,
+		Vector3(0.0, -90.0, 0.0)
+	)
+
+	for index: int in range(4):
+		var x_face: float = -1.86 + float(index) * 0.68
+		_add_box(
+			shell,
+			"FeaturedBoxArtBacking%02d" % index,
+			Vector3(x_face, 1.12, -3.07),
+			Vector3(0.42, 0.30, 0.035),
+			[red_case_mat, blue_case_mat, green_case_mat, paper_mat][index]
+		)
+		_add_box(
+			shell,
+			"FeaturedBoxArtStripe%02d" % index,
+			Vector3(x_face, 1.24, -3.04),
+			Vector3(0.34, 0.035, 0.025),
+			gold_mat
+		)
+
+	_add_box(
+		shell,
+		"BackCounterPegboard",
+		Vector3(3.88, 1.42, -2.35),
+		Vector3(0.055, 1.24, 1.36),
+		_mat(Color(0.32, 0.22, 0.15, 1.0))
+	)
+	for index: int in range(5):
+		var peg_z: float = -2.86 + float(index) * 0.26
+		_add_box(
+			shell,
+			"BackCounterPegRow%02d" % index,
+			Vector3(3.84, 1.22, peg_z),
+			Vector3(0.035, 0.035, 0.16),
+			dark_mat
+		)
+	_add_box(
+		shell,
+		"OpenShipmentFlapA",
+		Vector3(2.83, 0.78, -2.22),
+		Vector3(0.48, 0.035, 0.34),
+		stock_box_mat
+	)
+	_add_box(
+		shell,
+		"OpenShipmentFlapB",
+		Vector3(3.31, 0.78, -2.22),
+		Vector3(0.48, 0.035, 0.34),
+		stock_box_mat
+	)
+
+	for index: int in range(3):
+		var light_x: float = -2.15 + float(index) * 2.15
+		_add_box(
+			shell,
+			"CeilingFluorescent%02d" % index,
+			Vector3(light_x, 3.39, 1.20),
+			Vector3(1.05, 0.035, 0.16),
+			_mat(Color(0.96, 0.91, 0.70, 1.0), Color(1.0, 0.84, 0.42, 1.0), 0.55)
+		)
+
 
 static func _add_wall(
 	parent: Node3D, name: String, position: Vector3, size: Vector3, material: StandardMaterial3D
