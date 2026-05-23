@@ -3,8 +3,11 @@ extends GutTest
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const PROMPT_SCENE_PATH: String = "res://game/scenes/ui/interaction_prompt.tscn"
 const EVENT_ID: String = "day01_wrong_console_parent"
+const RegisterScreenStateScript: GDScript = preload(
+	"res://game/scripts/beta/register_screen_state.gd"
+)
 const REQUIRED_VISIBLE_ZONE_LABELS: Array[String] = [
-	"RETRO GAMES SHELF",
+	"USED GAMES SHELF",
 	"BACK ROOM",
 ]
 
@@ -63,10 +66,14 @@ func test_day_one_prompts_are_visible_only_on_the_active_beat() -> void:
 
 	controller.on_beta_backroom_pickup_interacted()
 	await get_tree().process_frame
-	_assert_active_prompt("BetaRestockShelf", "Stock shelf")
+	_assert_active_prompt("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
 	assert_true(BetaRunState.carrying_stock, "Back-room pickup must set carrying state")
 
-	controller.on_beta_restock_interacted()
+	controller.on_beta_restock_interacted(false)
+	await get_tree().process_frame
+	_assert_active_prompt("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+
+	controller.on_beta_restock_interacted(false)
 	await get_tree().process_frame
 	_assert_active_prompt("BetaDayEndTrigger", "Close day")
 	_assert_inactive("BetaBackroomPickup")
@@ -126,6 +133,114 @@ func test_upsell_bundle_result_acknowledges_without_modal_leak() -> void:
 
 func test_refuse_return_result_acknowledges_without_modal_leak() -> void:
 	await _assert_choice_result_flow(&"refuse_return", "Exchange Refused")
+
+
+func test_customer_exit_state_tracks_acknowledged_walk_hidden_and_reset() -> void:
+	var controller: BetaDayOneController = _controller()
+	if controller == null:
+		return
+	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
+	assert_not_null(customer, "BetaDayOneCustomer must remain authored")
+	if customer == null:
+		return
+	var states: Array[StringName] = []
+	controller.customer_exit_state_changed.connect(
+		func(state: StringName) -> void:
+			states.append(state)
+	)
+
+	assert_eq(
+		controller.customer_exit_state(),
+		BetaDayOneController.CUSTOMER_EXIT_NOT_STARTED,
+		"Customer exit starts idle before the result is acknowledged"
+	)
+
+	await _choose_customer_option(&"refuse_return")
+	assert_eq(
+		controller.customer_exit_state(),
+		BetaDayOneController.CUSTOMER_EXIT_NOT_STARTED,
+		"Selecting a choice must not start exit before the result Continue"
+	)
+
+	await _acknowledge_customer_result()
+	assert_true(
+		states.has(BetaDayOneController.CUSTOMER_EXIT_RESULT_ACKNOWLEDGED),
+		"Continue must record result acknowledgement before the exit walk"
+	)
+	assert_true(
+		states.has(BetaDayOneController.CUSTOMER_EXIT_IN_PROGRESS),
+		"Continue must record the customer exit walk as in progress"
+	)
+	assert_lt(
+		states.find(BetaDayOneController.CUSTOMER_EXIT_RESULT_ACKNOWLEDGED),
+		states.find(BetaDayOneController.CUSTOMER_EXIT_IN_PROGRESS),
+		"Exit state order must distinguish acknowledgement from walk start"
+	)
+	assert_eq(
+		controller.customer_exit_state(),
+		BetaDayOneController.CUSTOMER_EXIT_IN_PROGRESS,
+		"Exit walk state must be inspectable without waiting on tween duration"
+	)
+	_assert_active_prompt("BetaBackroomPickup", "Check back room inventory")
+	_assert_inactive("BetaDayOneCustomer")
+
+	controller.call("_finalize_customer_exit", customer)
+	assert_eq(
+		controller.customer_exit_state(),
+		BetaDayOneController.CUSTOMER_EXIT_EXITED,
+		"Finalized exit must mark the customer hidden"
+	)
+	assert_true(controller.is_customer_exit_complete())
+	assert_false(customer.visible, "Finalized exit must hide the customer proxy")
+
+	controller.call("_reset_scene_for_day", 2)
+	assert_eq(
+		controller.customer_exit_state(),
+		BetaDayOneController.CUSTOMER_EXIT_NOT_STARTED,
+		"Day reset must clear the prior customer exit state"
+	)
+	assert_false(controller.is_customer_exit_complete())
+	assert_true(customer.visible, "Day reset must restore the customer proxy")
+
+
+func test_day_start_clears_unresolved_customer_visuals_and_register_state() -> void:
+	var controller: BetaDayOneController = _controller()
+	var screen = _screen()
+	if controller == null or screen == null:
+		return
+
+	controller.on_beta_customer_interacted()
+	await get_tree().process_frame
+	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	assert_not_null(decision, "Customer decision must open before selecting a choice")
+	if decision == null:
+		return
+	var button: Button = _choice_button(decision, &"refuse_return")
+	assert_not_null(button, "Refused-return choice must exist")
+	if button == null:
+		return
+	button.pressed.emit()
+	await get_tree().process_frame
+
+	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
+	assert_not_null(result, "Customer result must be visible before day reset")
+	if result == null:
+		return
+	assert_true(result.visible)
+	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_CUSTOMER_RESULT)
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_NO_SALE)
+	assert_eq(_customer_counter_anchor_count(), 1)
+
+	controller.call("_start_day", 2)
+	await get_tree().process_frame
+
+	assert_false(result.visible)
+	assert_false(decision.visible)
+	assert_ne(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_GAMEPLAY)
+	assert_eq(_customer_counter_anchor_count(), 0)
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_READY)
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
 
 
 func test_restock_requires_carrying_and_repeated_stocking_does_not_duplicate() -> void:
@@ -213,6 +328,50 @@ func test_summary_continue_starts_next_shift_with_content_or_generated_customer(
 	assert_gt(BetaRunState.daily_cash_delta, 0, "Generated customer sale must add daily cash")
 
 
+func test_reinvest_order_charges_once_and_delivery_consumes_once() -> void:
+	var controller: BetaDayOneController = _controller()
+	if controller == null:
+		return
+	BetaRunState.cash = 100
+	controller.set("_stage", BetaDayOneController.STAGE_END_DAY)
+	controller.call("_on_day_close_confirmed")
+	await get_tree().process_frame
+	var summary: BetaDaySummaryPanel = controller.get("_summary_panel") as BetaDaySummaryPanel
+	assert_not_null(summary, "End-day confirmation must open the summary")
+	if summary == null:
+		return
+
+	controller.call("_on_summary_reinvest", BetaDayOneController._REORDER_OPTION_ID)
+	await get_tree().process_frame
+	assert_eq(BetaRunState.cash, 80)
+	assert_eq(int(controller.get("_pending_extra_delivery_quantity")), 2)
+
+	controller.call("_on_summary_reinvest", BetaDayOneController._REORDER_OPTION_ID)
+	await get_tree().process_frame
+	assert_eq(BetaRunState.cash, 80, "A second press must not charge again")
+	assert_eq(
+		int(controller.get("_pending_extra_delivery_quantity")),
+		BetaDayOneController._REORDER_EXTRA_QUANTITY
+	)
+
+	controller.call("_on_summary_continue")
+	await get_tree().process_frame
+	assert_eq(BetaRunState.day, 2)
+	assert_eq(
+		int(controller.get("_current_delivery_quantity")),
+		BetaDayOneController._BACKROOM_DELIVERY_QUANTITY
+		+ BetaDayOneController._REORDER_EXTRA_QUANTITY
+	)
+	assert_eq(int(controller.get("_pending_extra_delivery_quantity")), 0)
+
+	controller.call("_start_day", 3)
+	await get_tree().process_frame
+	assert_eq(
+		int(controller.get("_current_delivery_quantity")),
+		BetaDayOneController._BACKROOM_DELIVERY_QUANTITY
+	)
+
+
 func test_required_zone_labels_props_and_debug_surfaces_are_validation_ready() -> void:
 	for expected_text: String in REQUIRED_VISIBLE_ZONE_LABELS:
 		var label: Label3D = _visible_label_with_text(expected_text)
@@ -267,22 +426,44 @@ func test_new_game_reset_clears_day_cash_flags_and_carry_state() -> void:
 
 
 func _assert_choice_result_flow(choice_id: StringName, expected_headline: String) -> void:
+	var anchor_before: Node3D = _customer_counter_anchor()
+	assert_not_null(
+		anchor_before,
+		"Customer beat must show the shared counter item before the decision opens"
+	)
+	if anchor_before != null:
+		assert_true(anchor_before.visible)
+		assert_false(anchor_before is Interactable, "Counter item must not become a prompt target")
+		assert_eq(_customer_counter_anchor_count(), 1, "Customer flow must own one counter item")
+		assert_eq(str(anchor_before.get_meta("counter_state", "")), "pending")
+		_assert_counter_anchor_receipt_visible(anchor_before)
 	await _choose_customer_option(choice_id)
 	var controller: BetaDayOneController = _controller()
 	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
 	assert_not_null(result, "Customer choice must open a result screen")
 	if result == null:
 		return
+	var anchor_after_choice: Node3D = _customer_counter_anchor()
+	assert_not_null(anchor_after_choice, "Choice result must update the same shared counter item")
+	if anchor_after_choice != null:
+		if anchor_before != null:
+			assert_eq(anchor_after_choice.get_instance_id(), anchor_before.get_instance_id())
+		assert_true(anchor_after_choice.visible)
+		assert_eq(str(anchor_after_choice.get_meta("counter_state", "")), _expected_counter_state(choice_id))
+		assert_eq(_customer_counter_anchor_count(), 1, "Choice result must not spawn per-choice props")
 	assert_true(result.visible)
-	assert_eq((result.get("_title_label") as Label).text, expected_headline)
+	_assert_acknowledgement_panel_quiet(result, expected_headline)
 	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_CUSTOMER_RESULT)
 	assert_eq(controller.current_stage(), BetaDayOneController.STAGE_TALK_TO_CUSTOMER)
 
 	await _acknowledge_customer_result()
+	await get_tree().process_frame
+	assert_eq(_customer_counter_anchor_count(), 0, "Settled customer outcome must clear the counter item")
 	assert_false(result.visible, "Acknowledgement must close the customer result")
 	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_GAMEPLAY)
 	assert_ne(InputFocus.current(), InputFocus.CTX_MODAL)
 	assert_eq(controller.current_stage(), BetaDayOneController.STAGE_BACK_ROOM_INVENTORY)
+	_assert_active_prompt("BetaBackroomPickup", "Check back room inventory")
 
 
 func _choose_customer_option(choice_id: StringName) -> void:
@@ -330,6 +511,25 @@ func _choice_button(decision: BetaDecisionCardPanel, choice_id: StringName) -> B
 	return null
 
 
+func _assert_acknowledgement_panel_quiet(result: ModalPanel, expected_headline: String) -> void:
+	assert_eq((result.get("_title_label") as Label).text, expected_headline)
+	assert_null(
+		result.get("_consequences_box"),
+		"Customer result must not render cash, inventory, or reputation rows"
+	)
+	var acknowledgement: Label = result.get("_acknowledgement_label") as Label
+	assert_not_null(acknowledgement, "Customer result must show concise acknowledgement copy")
+	if acknowledgement == null:
+		return
+	assert_gt(acknowledgement.text.length(), 0)
+	assert_lt(acknowledgement.text.length(), 96)
+	for disallowed: String in ["$", "Inventory", "Reputation", "manager trust"]:
+		assert_false(
+			acknowledgement.text.contains(disallowed),
+			"Acknowledgement copy must stay secondary to room and HUD evidence"
+		)
+
+
 func _assert_active_prompt(parent_name: String, expected_label: String) -> void:
 	var interactable: Interactable = _interactable(parent_name)
 	assert_not_null(interactable, "%s/Interactable must exist" % parent_name)
@@ -356,6 +556,51 @@ func _interactable(parent_name: String) -> Interactable:
 
 func _controller() -> BetaDayOneController:
 	return get_tree().get_first_node_in_group("beta_day_one_controller") as BetaDayOneController
+
+
+func _customer_counter_anchor() -> Node3D:
+	if _root == null:
+		return null
+	return _root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+
+
+func _customer_counter_anchor_count() -> int:
+	if _root == null:
+		return 0
+	var checkout: Node = _root.get_node_or_null("checkout_counter")
+	if checkout == null:
+		return 0
+	var count: int = 0
+	for child: Node in checkout.get_children():
+		if child.name == &"BetaCustomerCounterAnchor":
+			count += 1
+	return count
+
+
+func _screen():
+	if _root == null:
+		return null
+	var screen: Node = _root.get_node_or_null("Checkout/Register/RegisterScreenState")
+	if screen == null or screen.get_script() != RegisterScreenStateScript:
+		return null
+	return screen
+
+
+func _assert_counter_anchor_receipt_visible(anchor: Node3D) -> void:
+	var receipt: MeshInstance3D = anchor.get_node_or_null("SharedReceiptSlip") as MeshInstance3D
+	assert_not_null(receipt, "Shared counter item must include the visible receipt surface")
+	if receipt != null:
+		assert_true(receipt.visible)
+
+
+func _expected_counter_state(choice_id: StringName) -> String:
+	match choice_id:
+		&"upsell_bundle":
+			return "bundle"
+		&"refuse_return":
+			return "refused"
+		_:
+			return "clean_exchange"
 
 
 func _spawned_shelf_item_count() -> int:

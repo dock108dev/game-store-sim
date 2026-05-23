@@ -14,6 +14,7 @@ fail() {
 
 [ -f "export_presets.cfg" ] || fail "export_presets.cfg not found"
 [ -f "project.godot" ] || fail "project.godot not found"
+[ -f ".github/workflows/export.yml" ] || fail ".github/workflows/export.yml not found"
 
 for preset in 'name="Windows Desktop"' 'name="macOS"' 'name="Linux/X11"'; do
 	grep -q "$preset" export_presets.cfg || fail "Missing required preset: $preset"
@@ -47,5 +48,11 @@ fi
 
 grep -q '^textures/vram_compression/import_etc2_astc=true$' project.godot \
 	|| fail "Universal macOS export requires ETC2 ASTC import support in project.godot"
+
+grep -q 'bash scripts/godot_exec.sh --path "$GITHUB_WORKSPACE" --headless --export-release' .github/workflows/export.yml \
+	|| fail "Export workflow must pass an explicit project path before --export-release"
+for preset in '"Windows Desktop"' '"macOS"' '"Linux/X11"'; do
+	grep -q "$preset" .github/workflows/export.yml || fail "Export workflow missing preset argument: $preset"
+done
 
 echo "Export config validation: OK"

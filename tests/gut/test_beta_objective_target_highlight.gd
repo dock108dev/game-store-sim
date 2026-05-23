@@ -38,6 +38,7 @@ func _make_store_root_with_stage(stage: StringName) -> Node3D:
 		n.name = child_name
 		root.add_child(n)
 	var stub: _StageStub = _StageStub.new()
+	stub.name = "StageStub"
 	stub.add_to_group("beta_day_one_controller")
 	stub.stage = stage
 	root.add_child(stub)
@@ -189,6 +190,31 @@ func test_back_room_inventory_targets_backroom_pickup_node() -> void:
 	)
 
 
+func test_training_stages_target_manager_register_backroom_and_shelf() -> void:
+	var root: Node3D = _make_store_root_with_stage(&"training_talk_manager")
+	var stub: _StageStub = root.get_node("StageStub") as _StageStub
+	var highlight: BetaObjectiveTargetHighlight = BetaObjectiveTargetHighlight.new()
+	root.add_child(highlight)
+
+	var expected: Dictionary = {
+		&"training_talk_manager": "BetaDayOneCustomer",
+		&"training_check_register": "BetaDayEndTrigger",
+		&"training_back_room_inventory": "BetaBackroomPickup",
+		&"training_stock_shelf": "BetaRestockShelf",
+	}
+	for stage_name: StringName in expected.keys():
+		stub.stage = stage_name
+		stub.carrying = stage_name == &"training_stock_shelf"
+		EventBus.objective_changed.emit({})
+		await get_tree().process_frame
+		assert_eq(
+			highlight.get_target_node(),
+			root.get_node(String(expected[stage_name])) as Node3D,
+			"Training stage %s must derive its highlight target from the controller"
+			% String(stage_name)
+		)
+
+
 func test_stock_shelf_targets_restock_shelf_node() -> void:
 	var highlight: BetaObjectiveTargetHighlight = _make_highlight()
 	var root: Node3D = _make_store_root_with_stage(&"stock_shelf")
@@ -328,6 +354,10 @@ func test_stage_y_offsets_are_positive_for_chain_stages() -> void:
 	# The chip projects from `target.global_position + Vector3(0, y, 0)` so
 	# y must be positive — otherwise the chip would render below the floor.
 	for stage_name: String in [
+		"training_talk_manager",
+		"training_check_register",
+		"training_back_room_inventory",
+		"training_stock_shelf",
 		"talk_to_customer",
 		"back_room_inventory",
 		"stock_shelf",
@@ -362,3 +392,22 @@ class _StageStub:
 
 	func can_interact_restock() -> bool:
 		return carrying
+
+	func active_objective_target_node_path() -> String:
+		var entry: Variant = BetaObjectiveTargetHighlight.STAGE_TARGETS.get(stage, null)
+		if entry == null:
+			return ""
+		return str((entry as Array)[0])
+
+	func active_objective_highlight_y_offset() -> float:
+		var entry: Variant = BetaObjectiveTargetHighlight.STAGE_TARGETS.get(stage, null)
+		if entry == null:
+			return 0.0
+		return float((entry as Array)[1])
+
+	func should_show_active_objective_highlight() -> bool:
+		if not BetaObjectiveTargetHighlight.STAGE_TARGETS.has(stage):
+			return false
+		if stage == &"stock_shelf" or stage == &"training_stock_shelf":
+			return carrying
+		return true

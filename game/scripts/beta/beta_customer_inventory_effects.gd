@@ -319,10 +319,21 @@ func _applied(
 		"op": str(operation.get("op", "")),
 		"instance_id": item.instance_id,
 		"definition_id": item.definition.id if item.definition else "",
+		"category": item.definition.category if item.definition else "",
+		"store_id": _store_id_for_applied(operation, item),
 		"from_location": from_location,
 		"to_location": to_location,
 		"reason": str(operation.get("reason", "")),
 	}
+
+
+func _store_id_for_applied(operation: Dictionary, item: ItemInstance) -> String:
+	var operation_store_id: String = str(operation.get("store_id", ""))
+	if not operation_store_id.is_empty():
+		return operation_store_id
+	if item.definition == null:
+		return ""
+	return String(item.definition.store_type)
 
 
 func _applied_noop(operation: Dictionary) -> Dictionary:

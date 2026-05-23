@@ -157,20 +157,23 @@ func test_customer_result_escape_does_not_close() -> void:
 	panel.close()
 
 
-func test_customer_result_renders_authored_consequence_rows() -> void:
+func test_customer_result_renders_acknowledgement_only() -> void:
 	var panel: ModalPanel = _add_result_panel()
 	panel.call("show_result", _result_payload())
 	await get_tree().process_frame
 
-	var box: VBoxContainer = panel.get("_consequences_box") as VBoxContainer
-	assert_not_null(box)
-	if box != null:
-		assert_eq(
-			box.get_child_count(),
-			4,
-			"Customer result must render each authored consequence row"
+	var acknowledgement: Label = panel.get("_acknowledgement_label") as Label
+	assert_not_null(acknowledgement)
+	if acknowledgement != null:
+		assert_eq(acknowledgement.text, "Exchange logged.")
+		assert_false(
+			acknowledgement.text.contains("$"),
+			"Acknowledgement copy must not carry cash evidence"
 		)
-		assert_string_contains((box.get_child(2) as Label).text, "Inventory")
+	assert_null(
+		panel.get("_consequences_box"),
+		"Customer result must not render consequence rows"
+	)
 	panel.close()
 
 
@@ -266,6 +269,7 @@ func _result_payload() -> Dictionary:
 		"effects": {"cash": 15, "reputation": 2},
 		"result": {
 			"headline": "Exchange Accepted",
+			"acknowledgement": "Exchange logged.",
 			"customer_reaction": "The parent relaxes.",
 			"store_outcome": "The line keeps moving.",
 			"manager_note": "Clean call.",

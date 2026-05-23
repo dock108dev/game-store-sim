@@ -131,7 +131,7 @@ func apply_decision_effect(
 		# `economy == null` is a documented test/headless seam (§EH-10
 		# pattern): callers can exercise the beta ledger without a full
 		# GameWorld in the tree. Production beta path runs after Tier-1 init.
-	if cash_delta != 0:
+	if cash_delta != 0 and not bool(effects.get("cash_booked_by_sale_signal", false)):
 		var economy: EconomySystem = GameManager.get_economy_system()
 		if economy != null:
 			var reason: String = "Day %d: %s" % [day, choice_id]
@@ -196,6 +196,7 @@ func advance_day() -> void:
 	daily_events_resolved.clear()
 	daily_reputation_delta = 0
 	daily_cash_delta = 0
+	carrying_stock = false
 	set_input_mode(INPUT_MODE_GAMEPLAY)
 
 

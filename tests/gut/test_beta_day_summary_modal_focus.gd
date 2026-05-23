@@ -209,12 +209,12 @@ func test_cash_block_renders_three_lines_with_positive_delta() -> void:
 		"Sales must render the day's gross revenue; got: '%s'" % label.text
 	)
 	assert_true(
-		label.text.contains("Rent:") and label.text.contains("$50"),
-		"Rent must render the day's fixed cost; got: '%s'" % label.text
+		label.text.contains("Rent (review only):") and label.text.contains("$50"),
+		"Rent must render as a review-only fixed cost; got: '%s'" % label.text
 	)
 	assert_true(
-		label.text.contains("Profit:") and label.text.contains("-$35"),
-		"Loss-day profit must render with a minus sign; got: '%s'" % label.text
+		label.text.contains("Profit after rent:") and label.text.contains("-$35"),
+		"Loss-day profit after rent must render with a minus sign; got: '%s'" % label.text
 	)
 	assert_true(
 		label.text.contains("Ending Cash:") and label.text.contains("$15"),
@@ -247,7 +247,7 @@ func test_cash_block_renders_zero_delta_as_dollar_zero() -> void:
 		% label.text
 	)
 	assert_true(
-		label.text.contains("Profit:") and label.text.contains("-$50"),
+		label.text.contains("Profit after rent:") and label.text.contains("-$50"),
 		"Zero-sales day must show a loss on the Profit line; got: '%s'" % label.text
 	)
 
@@ -256,8 +256,8 @@ func test_cash_block_renders_negative_delta_with_minus_sign() -> void:
 	# Cash delta < 0 (refund-only day) still has zero sales revenue — refunds
 	# do not tick the controller's _sales_today counter — but the loss
 	# accumulates in the controller's cash totals. The Money block reflects
-	# this: Sales: $0, Rent: -$50, Profit: -$50, Ending Cash carries the
-	# refund-adjusted total.
+	# this: Sales: $0, review-only rent: -$50, profit after rent: -$50,
+	# and Ending Cash carries the refund-adjusted total.
 	var payload: Dictionary = _summary_payload()
 	payload["cash"] = 5
 	payload["cash_delta"] = -10
@@ -277,7 +277,7 @@ func test_cash_block_renders_negative_delta_with_minus_sign() -> void:
 		"Starting Cash must reflect the carry-in; got: '%s'" % label.text
 	)
 	assert_true(
-		label.text.contains("Profit:") and label.text.contains("-$50"),
+		label.text.contains("Profit after rent:") and label.text.contains("-$50"),
 		"Negative profit must render with explicit minus sign; got: '%s'" % label.text
 	)
 	assert_true(

@@ -403,9 +403,4 @@ func _is_load_game_enabled() -> bool:
 
 
 func _format_cash(amount: float) -> String:
-	if amount >= 1000.0:
-		return "%s,%03d" % [
-			str(int(amount / 1000.0)),
-			int(fmod(amount, 1000.0)),
-		]
-	return str(int(amount))
+	return UIThemeConstants.format_cash_whole(amount)

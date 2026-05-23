@@ -60,7 +60,7 @@ func _seed_cash_from_economy() -> void:
 	if economy == null:
 		return
 	_current_cash = economy.get_cash()
-	_cash_label.text = _format_cash(_current_cash)
+	_cash_label.text = UIThemeConstants.format_cash_whole(_current_cash, true)
 
 
 func _on_day_closed(_day: int, _summary: Dictionary) -> void:
@@ -69,7 +69,7 @@ func _on_day_closed(_day: int, _summary: Dictionary) -> void:
 
 func _on_money_changed(_old: float, new_amount: float) -> void:
 	_current_cash = new_amount
-	_cash_label.text = _format_cash(_current_cash)
+	_cash_label.text = UIThemeConstants.format_cash_whole(_current_cash, true)
 
 
 func _on_reputation_changed(_store_id: String, _old: float, new_score: float) -> void:
@@ -85,7 +85,7 @@ func _on_milestone_reached(_milestone_id: StringName) -> void:
 
 func _refresh_all() -> void:
 	_day_label.text = "Day %d" % _current_day
-	_cash_label.text = _format_cash(_current_cash)
+	_cash_label.text = UIThemeConstants.format_cash_whole(_current_cash, true)
 	_rep_label.text = _rep_tier_name(_best_reputation)
 	_refresh_milestone_bar()
 
@@ -130,9 +130,3 @@ static func _rep_tier_name(score: float) -> String:
 	if score >= 10.0:
 		return "Known"
 	return "Unknown"
-
-
-static func _format_cash(amount: float) -> String:
-	if amount < 0.0:
-		return "-$%d" % int(-amount)
-	return "$%d" % int(amount)

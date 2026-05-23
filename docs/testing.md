@@ -71,18 +71,6 @@ The checked-in tests currently cover:
   beta Day 1 critical-path smoke
 - settings, audio, camera, environment, tooltips, and UI panels
 
-## When changes should come with tests
-
-Add or update coverage when changing:
-
-- content-loading rules or JSON schema expectations
-- event names or payload shapes on `EventBus`
-- save/load dictionary shape or migration behavior
-- economy formulas or difficulty modifiers
-- cross-system ownership boundaries
-- store-specific mechanics or controller wiring
-- UI scripts that emit gameplay events or depend on system state
-
 ## CI validation
 
 `.github/workflows/validate.yml` currently runs these jobs:

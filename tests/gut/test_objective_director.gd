@@ -180,7 +180,7 @@ func test_day1_chain_advances_through_each_signal_in_order() -> void:
 	# Step 1 → 2: player enters placement mode by picking up the back-room box.
 	EventBus.placement_mode_entered.emit()
 	assert_eq(received[received.size() - 1].get("text", ""),
-		"Stock the Retro Games shelf.",
+		"Stock the used games shelf.",
 		"placement_mode_entered must advance to step 3 (stock shelf)")
 	# Step 2 → 3: the item lands on the restock shelf.
 	EventBus.item_stocked.emit("item_001", "shelf_a")

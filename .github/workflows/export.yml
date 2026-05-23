@@ -135,7 +135,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          bash scripts/godot_exec.sh --headless --export-release \
+          bash scripts/godot_exec.sh --path "$GITHUB_WORKSPACE" --headless --export-release \
             "Windows Desktop" \
             "build/windows/MallcoreSim.exe"
         timeout-minutes: 10
@@ -191,7 +191,7 @@ jobs:
       - name: Export macOS
         run: |
           set -euo pipefail
-          bash scripts/godot_exec.sh --headless --export-release \
+          bash scripts/godot_exec.sh --path "$GITHUB_WORKSPACE" --headless --export-release \
             "macOS" \
             "build/macos/mallcore-sim-macos.zip"
         timeout-minutes: 10
@@ -240,7 +240,7 @@ jobs:
       - name: Export Linux
         run: |
           set -euo pipefail
-          bash scripts/godot_exec.sh --headless --export-release \
+          bash scripts/godot_exec.sh --path "$GITHUB_WORKSPACE" --headless --export-release \
             "Linux/X11" \
             "build/linux/MallcoreSim.x86_64"
         timeout-minutes: 10

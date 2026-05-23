@@ -1,44 +1,63 @@
-# Documentation Consolidation Pass - 2026-05-21
+# Documentation Consolidation Pass - 2026-05-23
 
 ## Changed
 
-### `docs/architecture/ownership.md`
+### `README.md`
 
-- Corrected the input-focus row so it matches current code: `ModalQueue`
-  coordinates queued `ModalPanel` instances, while direct-open panel scripts
-  still pair their own `InputFocus.push_context(CTX_MODAL)` /
-  `pop_context()` calls.
-- Corrected the audit-log row so `AuditLog` is the only structured audit
-  checkpoint owner and `tests/audit_run.sh` accepts only `AUDIT: PASS/FAIL`
-  lines.
-- Reworded the cross-system eventing row from an overbroad "sole permitted
-  route" claim to the current owner/mirror model: `EventBus` is the typed
-  gameplay signal hub, while owner autoload APIs still handle command-style
-  operations.
+- Tightened the root README to the required surface: repository identity,
+  local run steps, test command pointer, deployment basics, and links into
+  `docs/`.
+- Removed the stale maintenance follow-up link.
 
-### `docs/audits/docs-consolidation.md`
+### `docs/index.md`
 
-- Replaced the stale 2026-05-20 report with this pass record.
-- Removed unrelated code-cleanup pass content that had been appended to the
-  documentation consolidation report.
+- Removed the stale maintenance follow-up entry.
+- Added the beta code-to-screen audit to the audit notes.
+
+### `docs/content-data.md`
+
+- Added `game/content/visuals/store_visual_layouts.json` to the documented
+  content layout.
+- Added `store_visual_layout_catalog` to the recognized `DataLoader` ignored
+  route list.
+- Documented store visual layout data as non-resource content.
+
+### `docs/configuration-deployment.md`
+
+- Expanded the export-workflow validation summary to include the icon-path,
+  local macOS path, and code-signing password checks currently present in
+  `.github/workflows/export.yml` and `scripts/validate_export_config.sh`.
+
+### `docs/testing.md`
+
+- Removed the process-advice section about when changes should include tests;
+  it was policy guidance, not a statement owned by code/config.
+
+### `docs/audits/beta-code-to-screen-readiness.md`
+
+- Rewrote the audit as a current evidence map for the beta Day 1 route proof
+  contract, route manifest, code owners, automated coverage, and runtime
+  artifacts.
+- Removed stale readiness judgments and roadmap recommendations.
 
 ## Deleted
 
-- `docs/audits/cleanup-report.md` — an untracked code-cleanup pass record.
-  It documented source/test changes, not active project documentation, and
-  duplicated content that had also been appended into
-  `docs/audits/docs-consolidation.md`.
+- `docs/audits/cleanup-report.md` — untracked code-cleanup report. It
+  documented source/test refactor work rather than active project
+  documentation.
+- `docs/maintenance/cleanup-follow-up.md` — stale LOC inventory and refactor
+  recommendation list. It was drift-prone and duplicated information that can
+  be regenerated from the current tree.
 
 ## Statements Removed As Unverifiable Or Non-Current
 
-- The claim that all modal panels route through `ModalQueue` rather than
-  directly pushing `CTX_MODAL`.
-- Legacy `[AUDIT]` / `AuditOverlay` checkpoint compatibility in the audit
-  runner.
-- The claim that `EventBus` is the sole permitted cross-system route and that
-  all direct owner/autoload lookups are forbidden.
-- The prior appended cleanup-report content about source-code refactors and
-  file-size inventory; that material is outside this docs-only pass.
+- The cleanup report's source-refactor summary and test-count claims.
+- The cleanup follow-up's old large-file line counts and open-ended refactor
+  recommendations.
+- The beta audit's stale claim that the first customer route was not proven by
+  the latest run.
+- The beta audit's roadmap/build-decision recommendations.
+- The testing doc's general advice about when changes should come with tests.
 
 ## Intentional Gaps
 
@@ -46,8 +65,9 @@
   and pull-request templates from that location.
 - Markdown under `addons/` remains in place because it is vendored GUT
   material.
-- Markdown under `.aidlc/` remains in place because it is generated/tooling
-  run output outside the active docs boundary.
+- Markdown under `.aidlc/` remains in place because it is generated/tooling run
+  output outside the active docs boundary.
+- `BRAINDUMP.md` remains untouched because it is customer voice.
 - Existing non-doc dirty-tree changes were left untouched because this was a
   docs-only consolidation pass.
 
@@ -58,30 +78,27 @@
   `.gutconfig.json`, `tests/run_tests.sh`, `tests/audit_run.sh`,
   `scripts/godot_import.sh`, `scripts/godot_exec.sh`,
   `scripts/run_godot_tests.sh`, `scripts/validate_export_config.sh`,
-  `scripts/validate_originality.sh`, `scripts/validate_translations.sh`,
-  `scripts/validate_single_store_ui.sh`,
-  `scripts/validate_tutorial_single_source.sh`,
   `game/scripts/core/boot.gd`, `game/autoload/data_loader.gd`,
   `game/autoload/content_registry.gd`, `game/autoload/game_manager.gd`,
   `game/scenes/world/game_world.gd`, `game/autoload/store_director.gd`,
   `game/autoload/scene_router.gd`, `game/autoload/input_focus.gd`,
   `game/autoload/modal_queue.gd`, `game/autoload/event_bus.gd`,
-  `game/autoload/audit_log.gd`, `game/autoload/audit_overlay.gd`,
-  `game/autoload/beta_hud.gd`, `game/autoload/event_log.gd`,
+  `game/autoload/audit_log.gd`, `game/autoload/camera_authority.gd`,
   `game/scripts/core/save_manager.gd`,
-  `game/scripts/player/interaction_ray.gd`,
-  `game/scripts/ui/objective_rail.gd`, `game/scenes/ui/hud.gd`,
-  `game/scripts/beta/beta_right_panel.gd`,
-  `game/scripts/beta/beta_event_log_panel.gd`,
-  `game/scripts/ui/ui_theme_constants.gd`, and
-  `game/content/visuals/retro_games_product_visual_catalog.json`.
+  `game/scripts/ui/ui_theme_constants.gd`,
+  `game/scripts/beta/beta_code_to_screen_proof_contract.gd`,
+  `game/scripts/beta/beta_manual_day_one_route_capture.gd`,
+  `game/scripts/beta/beta_day_one_controller.gd`,
+  `game/scripts/beta/register_screen_state.gd`,
+  `game/scripts/beta/beta_carried_stock_marker.gd`, and
+  `game/scripts/beta/beta_inventory_count_adapter.gd`.
 - Markdown link check over `README.md` and `docs/**/*.md`: passed
   (`Markdown links OK`).
 - `bash scripts/validate_export_config.sh`: passed
   (`Export config validation: OK`).
 - `git diff --check -- README.md docs`: passed.
-- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 380`,
-  `Tests 4593`, `Passing 4593`; the configured shell validators also passed.
+- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 387`,
+  `Tests 4644`, `Passing 4644`; the configured shell validators also passed.
 
 ## Escalations
 

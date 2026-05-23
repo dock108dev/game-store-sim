@@ -129,6 +129,7 @@ func begin_new_run() -> void:
 	GameState.day = get_current_day()
 	if BetaRunState != null:
 		BetaRunState.reset_new_run()
+		EventBus.beta_carry_changed.emit("")
 	if AuditLog != null:
 		AuditLog.pass_check(
 			&"new_game_clicked",

@@ -36,14 +36,14 @@ const _CHIP_PADDING: int = 6
 const _CHIP_CORNER_RADIUS: int = 6
 const _CHIP_BG: Color = Color(0.05, 0.07, 0.05, 0.85)
 
-## Stage → [scene-relative node path under the store root, world Y offset
-## in metres above the parent origin]. The Y offset places the chip near
-## the top of the visible geometry for each chain target so the projected
-## screen position lands above the silhouette in both first-person and orbit
-## views. Values derive from `retro_games.tscn` authored transforms:
-## customer capsule top ~1.65 m, back-room stock box top ~0.9 m, restock
-## shelf top ~1.15 m, day-end trigger sits on the counter at y=1.05 m.
+## Compatibility fallback for isolated tests without the real controller
+## objective table. Production target paths and offsets come from
+## `BetaDayOneController.active_objective_*`.
 const STAGE_TARGETS: Dictionary = {
+	&"training_talk_manager": ["BetaDayOneCustomer", 1.9],
+	&"training_check_register": ["BetaDayEndTrigger", 0.6],
+	&"training_back_room_inventory": ["BetaBackroomPickup", 1.3],
+	&"training_stock_shelf": ["BetaRestockShelf", 1.7],
 	&"talk_to_customer": ["BetaDayOneCustomer", 1.9],
 	&"back_room_inventory": ["BetaBackroomPickup", 1.3],
 	&"stock_shelf": ["BetaRestockShelf", 1.7],
@@ -167,13 +167,11 @@ func _apply_stage(stage: StringName, controller: Node) -> void:
 	if not _stage_target_is_actionable(stage, controller):
 		_set_target(null, 0.0)
 		return
-	var entry: Variant = STAGE_TARGETS.get(stage, null)
-	if entry == null:
+	var node_path: String = _controller_target_node_path(stage, controller)
+	if node_path.is_empty():
 		_set_target(null, 0.0)
 		return
-	var arr: Array = entry as Array
-	var node_path: String = str(arr[0])
-	var y_offset: float = float(arr[1])
+	var y_offset: float = _controller_target_y_offset(stage, controller)
 	var store_root: Node = controller.get_parent()
 	if store_root == null:
 		_set_target(null, 0.0)
@@ -183,11 +181,33 @@ func _apply_stage(stage: StringName, controller: Node) -> void:
 
 
 func _stage_target_is_actionable(stage: StringName, controller: Node) -> bool:
-	if stage != &"stock_shelf":
+	if controller != null and controller.has_method("should_show_active_objective_highlight"):
+		return bool(controller.call("should_show_active_objective_highlight"))
+	if stage != &"stock_shelf" and stage != &"training_stock_shelf":
 		return true
 	if controller != null and controller.has_method("can_interact_restock"):
 		return bool(controller.call("can_interact_restock"))
 	return BetaRunState.carrying_stock
+
+
+func _controller_target_node_path(stage: StringName, controller: Node) -> String:
+	if controller != null and controller.has_method("active_objective_target_node_path"):
+		return str(controller.call("active_objective_target_node_path"))
+	var entry: Variant = STAGE_TARGETS.get(stage, null)
+	if entry == null:
+		return ""
+	var arr: Array = entry as Array
+	return str(arr[0])
+
+
+func _controller_target_y_offset(stage: StringName, controller: Node) -> float:
+	if controller != null and controller.has_method("active_objective_highlight_y_offset"):
+		return float(controller.call("active_objective_highlight_y_offset"))
+	var entry: Variant = STAGE_TARGETS.get(stage, null)
+	if entry == null:
+		return 0.0
+	var arr: Array = entry as Array
+	return float(arr[1])
 
 
 func _set_target(node: Node3D, y_offset: float) -> void:

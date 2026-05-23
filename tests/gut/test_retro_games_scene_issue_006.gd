@@ -152,7 +152,7 @@ func test_day_one_route_targets_are_front_back_shelf_register() -> void:
 
 func test_day_one_route_props_remain_authored_but_shell_owns_beta_boot() -> void:
 	assert_true(
-		BetaDayOneController._BETA_KEEP_ROOT_NODES.has(&"ExpandableStoreShell"),
+		BetaDayOneController.BETA_KEEP_ROOT_NODES.has(&"ExpandableStoreShell"),
 		"ExpandableStoreShell must be the visible beta boot shell"
 	)
 	var props: Node3D = _root.get_node_or_null("ReadabilityProps") as Node3D

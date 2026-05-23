@@ -79,6 +79,8 @@ var _on_shelves_value: Label
 var _back_room_value: Label
 var _customers_value: Label
 var _sold_today_value: Label
+var _reputation_value: Label
+var _manager_trust_value: Label
 var _today_anchor: Label
 var _store_anchor: Label
 
@@ -145,6 +147,9 @@ func seed_for_day(day: int) -> void:
 	_current_day = day
 	_customers_served_today = 0
 	_sold_today_count = 0
+	_on_shelves_count = 0
+	_back_room_count = 0
+	_shelf_target_count = 0
 	_completed_objective_ids.clear()
 	var controller: Node = get_tree().get_first_node_in_group("beta_day_one_controller")
 	if controller != null:
@@ -211,6 +216,8 @@ func _build_panel() -> void:
 	_back_room_value = _build_stat_row("Stockroom")
 	_customers_value = _build_stat_row("Customers")
 	_sold_today_value = _build_stat_row("Sales")
+	_reputation_value = _build_stat_row("Reputation")
+	_manager_trust_value = _build_stat_row("Trust")
 	_today_anchor = _build_section_label("TodaySection", "TODAY")
 
 
@@ -292,6 +299,16 @@ func _refresh_all_values() -> void:
 		_customers_value.text = str(_customers_served_today)
 	if _sold_today_value != null:
 		_sold_today_value.text = str(_sold_today_count)
+	if _reputation_value != null:
+		_reputation_value.text = _format_signed_delta(BetaRunState.reputation)
+	if _manager_trust_value != null:
+		_manager_trust_value.text = _format_signed_delta(BetaRunState.manager_trust)
+
+
+func _format_signed_delta(value: int) -> String:
+	if value > 0:
+		return "+%d" % value
+	return str(value)
 
 
 func _rebuild_milestones() -> void:
@@ -503,6 +520,10 @@ func get_stat_value(stat_name: String) -> String:
 			label = _customers_value
 		"Sales", "Sold Today":
 			label = _sold_today_value
+		"Reputation", "Rep":
+			label = _reputation_value
+		"Trust", "Manager Trust":
+			label = _manager_trust_value
 	if label == null:
 		return ""
 	return label.text

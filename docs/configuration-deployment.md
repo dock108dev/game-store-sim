@@ -124,9 +124,10 @@ and currently includes:
 
 `.github/workflows/export.yml` runs on tags matching `v*` and currently:
 
-1. validates `export_presets.cfg` (preset names, x86_64 Windows, no
-   hardcoded code-signing identity, no absolute export paths, no obvious
-   secrets, ETC2 ASTC import support in `project.godot`)
+1. validates `export_presets.cfg` (preset names, Windows/macOS icon paths,
+   x86_64 Windows, disabled built-in code signing, no absolute export paths,
+   no local macOS paths, no hardcoded code-signing identity/password, no
+   obvious secrets, ETC2 ASTC import support in `project.godot`)
 2. installs Godot plus export templates via `chickensoft-games/setup-godot@v2`
 3. imports project assets
 4. exports Windows, macOS, and Linux release artifacts in parallel jobs

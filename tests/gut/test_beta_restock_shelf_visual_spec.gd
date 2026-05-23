@@ -188,7 +188,7 @@ func test_empty_overlay_hidden_after_stocking() -> void:
 	await get_tree().process_frame
 	controller.on_beta_backroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted()
+	controller.on_beta_restock_interacted(false)
 	await get_tree().process_frame
 	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
 	if shelf == null:
@@ -237,7 +237,7 @@ func test_restock_interaction_without_carrying_stock_is_blocked() -> void:
 	controller._stage = controller.STAGE_STOCK_SHELF
 	BetaRunState.carrying_stock = false
 	watch_signals(EventBus)
-	controller.on_beta_restock_interacted()
+	controller.on_beta_restock_interacted(false)
 	await get_tree().process_frame
 	assert_signal_not_emitted(
 		EventBus, "beta_shelf_count_changed",
@@ -270,6 +270,107 @@ func test_restock_unlocks_after_backroom_pickup() -> void:
 		controller.can_interact_restock(),
 		"can_interact_restock() must return true once the player is "
 		+ "carrying the back-room delivery."
+	)
+
+
+func test_carrying_stock_shows_shelf_placement_affordance() -> void:
+	var controller: Node = _beta_controller()
+	if controller == null:
+		return
+	await _walk_to_carrying_stock(controller)
+	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	if shelf == null:
+		return
+	var affordance: Node3D = (
+		shelf.get_node_or_null("BetaRestockPlacementAffordance") as Node3D
+	)
+	assert_not_null(
+		affordance,
+		"Carrying stock must create a physical placement affordance on the shelf"
+	)
+	if affordance == null:
+		return
+	assert_true(affordance.visible, "Placement affordance must show while stock is carried")
+	var first_marker: Node3D = shelf.get_node_or_null("SlotMarker0") as Node3D
+	assert_not_null(first_marker, "SlotMarker0 must remain the first authored placement slot")
+	if first_marker != null:
+		assert_almost_eq(affordance.position.x, first_marker.position.x, 0.01)
+
+
+func test_restock_places_one_item_per_input_until_delivery_done() -> void:
+	var controller: Node = _beta_controller()
+	if controller == null:
+		return
+	await _walk_to_carrying_stock(controller)
+	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	if shelf == null:
+		return
+	watch_signals(EventBus)
+	controller.on_beta_restock_interacted(false)
+	await get_tree().process_frame
+	assert_eq(_count_beta_shelf_items(shelf), 1, "First placement must fill one shelf slot")
+	assert_true(BetaRunState.carrying_stock, "Carry state must remain while one item is left")
+	assert_false(
+		bool(controller.is_objective_completed(&"stock_shelf")),
+		"Shelf objective must wait for the full placement contract"
+	)
+	_assert_signal_emitted_with_int(
+		"beta_shelf_count_changed",
+		1,
+		"First placement must emit a shelf count matching rendered items"
+	)
+	controller.on_beta_restock_interacted(false)
+	await get_tree().process_frame
+	assert_eq(
+		_count_beta_shelf_items(shelf),
+		BetaDayOneController._BACKROOM_DELIVERY_QUANTITY,
+		"Final placement must render the full delivery"
+	)
+	assert_false(BetaRunState.carrying_stock, "Carry state must clear after final placement")
+	assert_true(
+		bool(controller.is_objective_completed(&"stock_shelf")),
+		"Shelf objective must complete after the final placement"
+	)
+	controller.on_beta_restock_interacted(false)
+	await get_tree().process_frame
+	assert_eq(
+		_count_beta_shelf_items(shelf),
+		BetaDayOneController._BACKROOM_DELIVERY_QUANTITY,
+		"Repeated input after the delivery is stocked must not duplicate shelf visuals"
+	)
+
+
+func test_restock_capacity_limit_places_available_slots_and_reports_backroom_remainder() -> void:
+	var controller: Node = _beta_controller()
+	if controller == null:
+		return
+	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	if shelf == null:
+		return
+	for i: int in range(1, SLOT_MARKER_NAMES.size()):
+		var marker: Node = shelf.get_node_or_null(SLOT_MARKER_NAMES[i])
+		if marker != null:
+			shelf.remove_child(marker)
+			marker.free()
+	await _walk_to_carrying_stock(controller)
+	watch_signals(EventBus)
+	controller.on_beta_restock_interacted()
+	await get_tree().process_frame
+	assert_eq(_count_beta_shelf_items(shelf), 1, "Only the available slot may be filled")
+	assert_false(BetaRunState.carrying_stock, "Carry state must clear when capacity is exhausted")
+	assert_true(
+		bool(controller.is_objective_completed(&"stock_shelf")),
+		"Capacity-limited stocking still completes after all available slots fill"
+	)
+	_assert_signal_emitted_with_int(
+		"beta_shelf_count_changed",
+		1,
+		"Capacity-limited placement must emit the rendered shelf count"
+	)
+	_assert_signal_emitted_with_int(
+		"beta_backroom_count_changed",
+		1,
+		"Overflow delivery must remain visible in the back-room count"
 	)
 
 
@@ -460,6 +561,26 @@ func _count_beta_shelf_items(shelf: Node) -> int:
 		if String(child.name).begins_with("BetaShelfItem"):
 			count += 1
 	return count
+
+
+func _walk_to_carrying_stock(controller: Node) -> void:
+	controller._on_choice_selected(&"clean_exchange", {})
+	await get_tree().process_frame
+	controller.on_beta_backroom_pickup_interacted()
+	await get_tree().process_frame
+
+
+func _assert_signal_emitted_with_int(
+	signal_name: String,
+	expected_value: int,
+	message: String
+) -> void:
+	var found: bool = false
+	for params: Array in get_signal_parameters_all(EventBus, signal_name):
+		if params.size() == 1 and int(params[0]) == expected_value:
+			found = true
+			break
+	assert_true(found, message)
 
 
 ## GUT's `get_signal_parameters` returns the params of one emission and

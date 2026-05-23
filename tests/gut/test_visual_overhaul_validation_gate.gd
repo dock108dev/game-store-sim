@@ -4,6 +4,7 @@ const _BetaScreenshotSweep: GDScript = preload(
 	"res://game/scripts/beta/beta_screenshot_sweep.gd"
 )
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
+const REFERENCE_REVIEW_MODE_SETTING: String = "mallcore/test/reference_corner_review_mode"
 const LOCKED_FEATURE_ROOTS: Array[String] = [
 	"crt_demo_area",
 	"staff_picks_table",
@@ -22,11 +23,16 @@ var _root: Node3D = null
 var _camera: Camera3D = null
 var _saved_state: GameManager.State
 var _saved_day: int
+var _saved_reference_review_mode: Variant
 
 
 func before_each() -> void:
 	_saved_state = GameManager.current_state
 	_saved_day = GameManager.get_current_day()
+	_saved_reference_review_mode = ProjectSettings.get_setting(
+		REFERENCE_REVIEW_MODE_SETTING, false
+	)
+	ProjectSettings.set_setting(REFERENCE_REVIEW_MODE_SETTING, true)
 	GameManager.current_state = GameManager.State.STORE_VIEW
 	GameManager.set_current_day(1)
 	BetaRunState.reset_new_run()
@@ -62,6 +68,7 @@ func after_each() -> void:
 	BetaRunState.reset_new_run()
 	GameManager.current_state = _saved_state
 	GameManager.set_current_day(_saved_day)
+	ProjectSettings.set_setting(REFERENCE_REVIEW_MODE_SETTING, _saved_reference_review_mode)
 
 
 func test_reference_corner_sweep_frames_beta_review_anchors() -> void:

@@ -222,10 +222,11 @@ func _on_queued_open(payload: Dictionary) -> void:
 	_title_label.text = "Day %d Summary" % day
 
 	# Money — five lines: Starting Cash (carry-in), Sales (gross revenue
-	# today), Rent (fixed daily operating cost), Profit (sales − rent), and
-	# Ending Cash (cumulative). Rent/Sales/Profit are BRAINDUMP First-Day
-	# Flow Step 6 requirements. Older payloads without the new keys fall
-	# back to derived defaults so the layout still renders.
+	# today), review-only Rent (fixed daily operating cost), Profit after
+	# rent, and Ending Cash (cumulative wallet). Rent is surfaced as a review
+	# cost in the current beta loop; it does not reduce Ending Cash here.
+	# Older payloads without the new keys fall back to derived defaults so
+	# the layout still renders.
 	var ending_cash: int = int(
 		summary.get("ending_cash", summary.get("cash", 0))
 	)
@@ -251,8 +252,8 @@ func _on_queued_open(payload: Dictionary) -> void:
 	_metrics_label.text = (
 		"[b]Starting Cash:[/b] $%d\n"
 		+ "[b]Sales:[/b] $%d\n"
-		+ "[b]Rent:[/b] -$%d\n"
-		+ "[b]Profit:[/b] %s$%d\n"
+		+ "[b]Rent (review only):[/b] -$%d\n"
+		+ "[b]Profit after rent:[/b] %s$%d\n"
 		+ "[b]Ending Cash:[/b] $%d"
 	) % [
 		starting_cash,

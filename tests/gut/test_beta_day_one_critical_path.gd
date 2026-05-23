@@ -1,7 +1,8 @@
 ## Day-1 critical-path smoke test for the Shelf Life beta.
 ##
 ## Covers the linear objective chain enforced by `BetaDayOneController`:
-##   TALK_TO_CUSTOMER → INSPECT_CLUE → CHECK_SHELF → END_DAY
+##   PREOPENING_TRAINING → TALK_TO_CUSTOMER → BACK_ROOM_INVENTORY
+##   → STOCK_SHELF → END_DAY → SUMMARY → DAY_2
 ## Each stage enables exactly one critical-path interactable; close-day
 ## remains gated until every required predecessor is complete.
 ##
@@ -20,6 +21,13 @@ extends GutTest
 
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const HUD_SCENE_PATH: String = "res://game/scenes/ui/hud.tscn"
+const RegisterScreenStateScript: GDScript = preload(
+	"res://game/scripts/beta/register_screen_state.gd"
+)
+const _STORE_ID: StringName = &"retro_games"
+const _SALE_GAME_ID: String = "neo_ignite_motorway_kings_loose"
+const _RETURN_GAME_ID: String = "neo_ignite_motorway_kings_westside_loose"
+const _BUNDLE_CONTROLLER_ID: String = "neo_ignite_controller_standard"
 const _DAY_ONE_UNLOCK_IDS: Array[StringName] = [
 	&"employee_register_access",
 	&"employee_stocking_trained",
@@ -47,9 +55,9 @@ func before_each() -> void:
 	_register_day_one_unlock_entries()
 	UnlockSystemSingleton.initialize()
 	# Reset InputFocus and ModalQueue between tests so a leaked frame /
-		# active-queue entry from a prior test (e.g. a freed summary panel
-		# whose `_exit_tree` auto-popped but ran after this test's scene was
-		# already mid-load) doesn't bleed into the assertions below.
+	# active-queue entry from a prior test (e.g. a freed summary panel
+	# whose `_exit_tree` auto-popped but ran after this test's scene was
+	# already mid-load) doesn't bleed into the assertions below.
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
 	_toast_with_id_emissions.clear()
@@ -64,9 +72,9 @@ func before_each() -> void:
 	# settle before tests inspect controller state.
 	await get_tree().process_frame
 	await get_tree().process_frame
-	# Compatibility no-op for older fixtures: Day 1 now starts directly at
-	# the customer beat, but keep this helper guarded so the same fixture works
-	# if a test explicitly switches to a later-day note gate.
+	# Most legacy tests in this file target the store-hours Day 1 chain, so
+	# their shared fixture skips preopening. The full-route test below reloads
+	# a fresh scene and walks preopening through real Interactable paths.
 	_dismiss_vic_note_for_test()
 	_complete_preopening_for_test()
 	await get_tree().process_frame
@@ -283,6 +291,248 @@ func test_day_one_start_emits_opening_toast() -> void:
 	)
 
 
+func test_full_day_one_route_reaches_summary_and_day_two() -> void:
+	await _reload_preopening_route_scene()
+	var controller: BetaDayOneController = _beta_controller() as BetaDayOneController
+	assert_not_null(controller, "Fresh route scene must expose the beta controller")
+	if controller == null:
+		return
+	var route_fixture: Dictionary = _seed_salable_day_one_inventory()
+	var economy: EconomySystem = route_fixture.get("economy", null) as EconomySystem
+	assert_not_null(economy, "Route fixture must expose the visible economy wallet")
+	if economy == null:
+		return
+	watch_signals(EventBus)
+
+	assert_false(BetaRunState.preopening_complete)
+	assert_eq(String(controller.current_stage()), "training_talk_manager")
+	var register_screen = _register_screen_state()
+	assert_not_null(register_screen, "Route scene must expose the persistent register screen")
+	if register_screen == null:
+		return
+	assert_false(register_screen is Interactable, "Register screen must stay non-interactive")
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_INACTIVE)
+	_assert_route_target("BetaDayOneCustomer", "Talk to manager")
+	_assert_right_panel_header("OPENING SHIFT")
+	await _interact_route_target("BetaDayOneCustomer", "Talk to manager")
+
+	_assert_route_target("BetaDayEndTrigger", "Check register")
+	assert_eq(String(controller.current_stage()), "training_check_register")
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_READY)
+	assert_eq(register_screen.display_text(), "READY")
+	await _interact_route_target("BetaDayEndTrigger", "Check register")
+
+	_assert_route_target("BetaBackroomPickup", "Check back room inventory")
+	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)
+	assert_eq(register_screen.display_text(), "BACK\nROOM")
+	await _interact_route_target("BetaBackroomPickup", "Check back room inventory")
+	assert_signal_emitted_with_parameters(
+		EventBus,
+		"beta_backroom_count_changed",
+		[BetaDayOneController._BACKROOM_DELIVERY_QUANTITY]
+	)
+
+	_assert_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	assert_eq(String(controller.current_stage()), "training_stock_shelf")
+	await _interact_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	assert_false(BetaRunState.preopening_complete)
+	assert_true(BetaRunState.carrying_stock)
+	_assert_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+	await _interact_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+	assert_true(BetaRunState.preopening_complete)
+	assert_false(BetaRunState.carrying_stock)
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
+	_assert_route_target("BetaDayOneCustomer", "Talk to customer")
+	_assert_right_panel_header_prefix("DAY 1")
+
+	_assert_close_day_blocked(controller, "Talk to the customer first.")
+	await _open_customer_decision_from_interactable()
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(register_screen.display_text(), "SALE\nOPEN")
+	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	assert_not_null(decision, "Customer interaction must open the authored decision modal")
+	if decision == null:
+		return
+	assert_true(decision.visible)
+	assert_eq(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_eq(
+		String((controller.get("_active_event") as Dictionary).get("id", "")),
+		"day01_wrong_console_parent"
+	)
+	_press_choice(decision, &"clean_exchange")
+	await get_tree().process_frame
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(register_screen.current_amount(), 15)
+	assert_eq(register_screen.display_text(), "SALE\n$15")
+
+	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
+	assert_not_null(result, "Choosing an authored option must open the result modal")
+	if result == null:
+		return
+	assert_true(result.visible)
+	assert_eq(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_CUSTOMER_RESULT)
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
+	assert_false(bool(controller.is_objective_completed(&"talk_to_customer")))
+	_acknowledge_customer_result(result)
+	await get_tree().process_frame
+
+	assert_ne(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_GAMEPLAY)
+	assert_true(bool(controller.is_objective_completed(&"talk_to_customer")))
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)
+	assert_eq(register_screen.display_text(), "BACK\nROOM")
+	assert_eq(controller.customer_exit_state(), BetaDayOneController.CUSTOMER_EXIT_IN_PROGRESS)
+	assert_signal_emitted(EventBus, "item_sold")
+	assert_signal_emitted(EventBus, "customer_purchased")
+	var sold_params: Array = get_signal_parameters(EventBus, "item_sold", 0)
+	assert_ne(str(sold_params[0]), _SALE_GAME_ID)
+	assert_true(str(sold_params[0]).begins_with(_SALE_GAME_ID))
+	assert_eq(float(sold_params[1]), 15.0)
+	assert_eq(str(sold_params[2]), "cartridges")
+	var purchased_params: Array = get_signal_parameters(EventBus, "customer_purchased", 0)
+	assert_eq(purchased_params[0], _STORE_ID)
+	assert_eq(purchased_params[1], StringName(str(sold_params[0])))
+	assert_eq(float(purchased_params[2]), 15.0)
+	assert_false(String(purchased_params[3]).is_empty())
+	assert_signal_emitted_with_parameters(EventBus, "beta_shelf_count_changed", [1])
+	assert_signal_emitted_with_parameters(EventBus, "beta_backroom_count_changed", [1])
+	_assert_right_panel_stat("Customers", "1")
+	_assert_right_panel_stat("Sales", "1")
+	_assert_route_target("BetaBackroomPickup", "Check back room inventory")
+	_assert_close_day_blocked(controller, "Check the back room first.")
+
+	await _interact_route_target("BetaBackroomPickup", "Check back room inventory")
+	assert_true(BetaRunState.carrying_stock)
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_STOCKING)
+	assert_eq(register_screen.display_text(), "STOCK\nSHELF")
+	assert_signal_emitted_with_parameters(
+		EventBus,
+		"beta_backroom_count_changed",
+		[BetaDayOneController._BACKROOM_DELIVERY_QUANTITY + 1]
+	)
+	_assert_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	_assert_close_day_blocked(controller, "Stock the used games shelf before closing.")
+
+	await _interact_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	assert_true(BetaRunState.carrying_stock)
+	assert_signal_emitted_with_parameters(EventBus, "beta_shelf_count_changed", [2])
+	assert_signal_emitted_with_parameters(EventBus, "beta_backroom_count_changed", [2])
+	_assert_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+
+	await _interact_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+	assert_false(BetaRunState.carrying_stock)
+	var expected_shelf_count: int = BetaDayOneController._BACKROOM_DELIVERY_QUANTITY + 1
+	assert_signal_emitted_with_parameters(
+		EventBus,
+		"beta_shelf_count_changed",
+		[expected_shelf_count]
+	)
+	assert_signal_emitted_with_parameters(EventBus, "beta_backroom_count_changed", [1])
+	assert_eq(_spawned_shelf_item_count(), expected_shelf_count)
+	_assert_right_panel_stat("Shelf", "%d / %d" % [expected_shelf_count, expected_shelf_count + 1])
+	_assert_right_panel_stat("Stockroom", "1")
+	_assert_route_target("BetaDayEndTrigger", "Close day")
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_CLOSE_READY)
+	assert_eq(register_screen.display_text(), "CLOSE\nDAY")
+	assert_ne(register_screen.display_text(), "READY")
+
+	await _interact_route_target("BetaDayEndTrigger", "Close day")
+	var close_day_panel: CanvasLayer = controller.get("_close_day_panel") as CanvasLayer
+	assert_not_null(close_day_panel, "Close-day request must open the confirmation modal")
+	if close_day_panel == null:
+		return
+	assert_true(close_day_panel.visible)
+	assert_eq(InputFocus.current(), InputFocus.CTX_MODAL)
+	_press_close_day_confirm(controller)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_INACTIVE)
+	assert_eq(register_screen.display_text(), "CLOSED")
+
+	var summary_panel: BetaDaySummaryPanel = controller.get("_summary_panel") as BetaDaySummaryPanel
+	assert_not_null(summary_panel, "Close-day confirm must open the summary")
+	if summary_panel == null:
+		return
+	assert_true(summary_panel.visible)
+	assert_eq(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_signal_emitted_with_parameters(EventBus, "beta_objective_completed", [&"close_day"])
+	var metrics: RichTextLabel = summary_panel.get("_metrics_label") as RichTextLabel
+	assert_not_null(metrics)
+	if metrics != null:
+		assert_string_contains(metrics.text, "Starting Cash:[/b] $500")
+		assert_string_contains(metrics.text, "Sales:[/b] $15")
+		assert_string_contains(metrics.text, "Rent (review only):[/b] -$50")
+		assert_string_contains(metrics.text, "Profit after rent:[/b] -$35")
+		assert_string_contains(metrics.text, "Ending Cash:[/b] $515")
+	_assert_summary_label(summary_panel, "_customers_helped_label", "Customers Helped: 1")
+	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 2")
+	_assert_summary_label(summary_panel, "_sales_completed_label", "Sales Completed: 1")
+	_assert_summary_label(
+		summary_panel,
+		"_shelf_inventory_label",
+		"Shelf Inventory: %d" % expected_shelf_count
+	)
+	_assert_summary_label(summary_panel, "_backroom_inventory_label", "Back Room Inventory: 1")
+	var review_button: Button = summary_panel.get("_review_inventory_button") as Button
+	var audit_details: VBoxContainer = summary_panel.get("_audit_details") as VBoxContainer
+	assert_not_null(review_button, "Summary must expose Review Inventory")
+	assert_not_null(audit_details, "Summary must own inventory audit detail rows")
+	if review_button != null and audit_details != null:
+		assert_false(audit_details.visible)
+		review_button.pressed.emit()
+		assert_true(audit_details.visible)
+		_assert_summary_label(
+			summary_panel,
+			"_audit_shelf_label",
+			"  • On-shelf count at close: %d" % expected_shelf_count
+		)
+		_assert_summary_label(
+			summary_panel,
+			"_audit_backroom_label",
+			"  • Back room remaining at close: 1"
+		)
+
+	var reinvest_button: Button = summary_panel.get("_reinvest_button") as Button
+	var reinvest_status: Label = summary_panel.get("_reinvest_status_label") as Label
+	assert_not_null(reinvest_button, "Summary must expose the reorder action")
+	assert_not_null(reinvest_status, "Summary must expose reorder status copy")
+	if reinvest_button != null and reinvest_status != null:
+		assert_false(reinvest_button.disabled, "Reorder must be affordable after the sale route")
+		assert_string_contains(reinvest_button.text, "$20")
+		assert_string_contains(reinvest_status.text, "2 more used games arrive next shift")
+		reinvest_button.pressed.emit()
+		await get_tree().process_frame
+		assert_true(reinvest_button.disabled, "Applied reorder must disable the button")
+		assert_string_contains(reinvest_status.text, "Ordered 2 extra used games")
+		assert_almost_eq(economy.get_cash(), 495.0, 0.01)
+		assert_eq(int(controller.get("_pending_extra_delivery_quantity")), 2)
+
+	var continue_button: Button = summary_panel.get("_continue_button") as Button
+	assert_not_null(continue_button, "Summary must expose Continue")
+	if continue_button == null:
+		return
+	watch_signals(EventBus)
+	continue_button.pressed.emit()
+	await get_tree().process_frame
+
+	assert_eq(BetaRunState.day, 2)
+	assert_eq(GameManager.get_current_day(), 2)
+	assert_eq(
+		int(controller.get("_current_delivery_quantity")),
+		BetaDayOneController._BACKROOM_DELIVERY_QUANTITY
+		+ BetaDayOneController._REORDER_EXTRA_QUANTITY
+	)
+	assert_ne(InputFocus.current(), InputFocus.CTX_MODAL)
+	assert_signal_emitted_with_parameters(EventBus, "day_started", [2])
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
+	assert_eq(
+		String((controller.get("_active_event") as Dictionary).get("id", "")),
+		"day02_trade_in_dispute"
+	)
+
+
 func test_customer_choice_opens_result_before_next_stage() -> void:
 	var controller: Node = _beta_controller()
 	assert_not_null(controller)
@@ -315,10 +565,17 @@ func test_customer_choice_opens_result_before_next_stage() -> void:
 		bool(controller.is_objective_completed(&"talk_to_customer")),
 		"Customer objective must wait for result acknowledgement"
 	)
-	var rows: VBoxContainer = result.get("_consequences_box") as VBoxContainer
-	assert_not_null(rows)
-	if rows != null:
-		assert_eq(rows.get_child_count(), 4)
+	var acknowledgement: Label = result.get("_acknowledgement_label") as Label
+	assert_not_null(acknowledgement)
+	if acknowledgement != null:
+		assert_false(
+			acknowledgement.text.contains("$"),
+			"Result acknowledgement must not be the cash evidence surface"
+		)
+	assert_null(
+		result.get("_consequences_box"),
+		"Result acknowledgement must not render consequence rows"
+	)
 
 	var continue_button: Button = result.get("_continue_button") as Button
 	assert_not_null(continue_button)
@@ -338,6 +595,11 @@ func test_customer_choice_opens_result_before_next_stage() -> void:
 		"Missing real stock must not emit a false customer_purchased signal"
 	)
 	assert_eq(BetaRunState.cash, 0, "Missing real stock must not book positive sale cash")
+	assert_eq(
+		BetaRunState.reputation,
+		0,
+		"Missing real stock must not book positive reputation from a failed sale"
+	)
 	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_GAMEPLAY)
 	assert_eq(
 		Array(_stage_critical_path_targets()),
@@ -345,6 +607,62 @@ func test_customer_choice_opens_result_before_next_stage() -> void:
 		"Continue must return control on the next Day 1 objective"
 	)
 	assert_true(bool(controller.is_objective_completed(&"talk_to_customer")))
+
+
+func test_customer_choice_with_missing_stock_fails_closed() -> void:
+	var controller: Node = _beta_controller()
+	assert_not_null(controller)
+	if controller == null:
+		return
+	_seed_day_one_inventory_systems()
+	watch_signals(EventBus)
+
+	controller._on_choice_selected(&"clean_exchange", _choice_effects(controller, &"clean_exchange"))
+	await get_tree().process_frame
+
+	assert_signal_not_emitted(EventBus, "item_sold")
+	assert_signal_not_emitted(EventBus, "customer_purchased")
+	assert_eq(BetaRunState.cash, 0)
+	assert_eq(BetaRunState.reputation, 0)
+	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
+	assert_gt(transactions.size(), 0)
+	var transaction: Dictionary = transactions.back() as Dictionary
+	assert_false(bool(transaction.get("ok", true)))
+	var failures: Array = transaction.get("failed", []) as Array
+	assert_gt(failures.size(), 0)
+	assert_eq(str((failures[0] as Dictionary).get("reason", "")), "missing_matching_stock")
+
+
+func test_customer_choice_with_unsupported_inventory_op_fails_closed() -> void:
+	var controller: Node = _beta_controller()
+	assert_not_null(controller)
+	if controller == null:
+		return
+	_seed_day_one_inventory_systems()
+	var effects: Dictionary = {
+		"cash": 20,
+		"reputation": 2,
+		"manager_trust": 1,
+		"requires_inventory_success": true,
+		"inventory": [{"op": "unsupported", "store_id": String(_STORE_ID)}],
+	}
+	watch_signals(EventBus)
+
+	controller._on_choice_selected(&"clean_exchange", effects)
+	await get_tree().process_frame
+
+	assert_signal_not_emitted(EventBus, "item_sold")
+	assert_signal_not_emitted(EventBus, "customer_purchased")
+	assert_eq(BetaRunState.cash, 0)
+	assert_eq(BetaRunState.reputation, 0)
+	assert_eq(BetaRunState.manager_trust, 0)
+	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
+	assert_gt(transactions.size(), 0)
+	var transaction: Dictionary = transactions.back() as Dictionary
+	assert_false(bool(transaction.get("ok", true)))
+	var failures: Array = transaction.get("failed", []) as Array
+	assert_gt(failures.size(), 0)
+	assert_eq(str((failures[0] as Dictionary).get("reason", "")), "unsupported_operation")
 
 
 func test_chain_walks_customer_then_back_room_then_stock_then_close() -> void:
@@ -532,7 +850,7 @@ func test_beta_prompt_copy_uses_plain_action_language() -> void:
 	assert_eq(
 		_interaction_label(_beta_interactable("BetaBackroomPickup")), "Check back room inventory"
 	)
-	assert_eq(_interaction_label(_beta_interactable("BetaRestockShelf")), "Stock shelf")
+	assert_eq(_interaction_label(_beta_interactable("BetaRestockShelf")), "Stock used games shelf")
 	assert_eq(_interaction_label(_beta_interactable("BetaDayEndTrigger")), "Close day")
 
 
@@ -549,7 +867,7 @@ func test_future_stage_disabled_reasons_name_next_prerequisite() -> void:
 	controller.on_beta_backroom_pickup_interacted()
 	await get_tree().process_frame
 	assert_eq(
-		String(controller.day_end_disabled_reason()), "Stock the Retro Games shelf before closing."
+		String(controller.day_end_disabled_reason()), "Stock the used games shelf before closing."
 	)
 
 
@@ -953,6 +1271,277 @@ func _stage_critical_path_targets() -> PackedStringArray:
 	return out
 
 
+func _reload_preopening_route_scene() -> void:
+	ModalQueue._reset_for_tests()
+	InputFocus._reset_for_tests()
+	if is_instance_valid(_root):
+		_root.free()
+	_root = null
+	BetaRunState.reset_new_run()
+	BetaRunState.preopening_complete = false
+	GameManager.set_current_day(1)
+	UnlockSystemSingleton.initialize()
+	var scene: PackedScene = load(SCENE_PATH)
+	assert_not_null(scene, "retro_games.tscn must load for the full route")
+	if scene == null:
+		return
+	_root = scene.instantiate() as Node3D
+	add_child(_root)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+
+func _seed_salable_day_one_inventory() -> Dictionary:
+	var fixture: Dictionary = _seed_day_one_inventory_systems()
+	var inventory: InventorySystem = fixture.get("inventory", null) as InventorySystem
+	var data_loader: DataLoader = fixture.get("data_loader", null) as DataLoader
+	if inventory == null or data_loader == null:
+		return fixture
+	var definition: ItemDefinition = data_loader.get_item(_SALE_GAME_ID)
+	assert_not_null(definition, "Route sale fixture must seed the Day 1 sale item")
+	if definition == null:
+		return fixture
+	var item: ItemInstance = ItemInstance.create(definition, "good", 0, definition.base_price)
+	item.current_location = "shelf:day_one_route"
+	inventory.add_item(_STORE_ID, item)
+	fixture["item"] = item
+	return fixture
+
+
+func _seed_bundle_day_one_inventory() -> Dictionary:
+	var fixture: Dictionary = _seed_salable_day_one_inventory()
+	var inventory: InventorySystem = fixture.get("inventory", null) as InventorySystem
+	var data_loader: DataLoader = fixture.get("data_loader", null) as DataLoader
+	if inventory == null or data_loader == null:
+		return fixture
+	var definition: ItemDefinition = data_loader.get_item(_BUNDLE_CONTROLLER_ID)
+	assert_not_null(definition, "Bundle sale fixture must seed the add-on controller")
+	if definition == null:
+		return fixture
+	var item: ItemInstance = ItemInstance.create(definition, "good", 0, definition.base_price)
+	item.current_location = "shelf:day_one_bundle_controller"
+	inventory.add_item(_STORE_ID, item)
+	fixture["bundle_item"] = item
+	return fixture
+
+
+func _seed_day_one_inventory_systems() -> Dictionary:
+	var data_loader: DataLoader = DataLoader.new()
+	add_child_autofree(data_loader)
+	_seed_route_item_definitions(data_loader)
+	var inventory: InventorySystem = InventorySystem.new()
+	add_child_autofree(inventory)
+	inventory.initialize(data_loader)
+	var economy: EconomySystem = EconomySystem.new()
+	add_child_autofree(economy)
+	economy.initialize(500.0)
+	return {
+		"data_loader": data_loader,
+		"inventory": inventory,
+		"economy": economy,
+	}
+
+
+func _seed_route_item_definitions(data_loader: DataLoader) -> void:
+	var items: Dictionary = {}
+	items[_SALE_GAME_ID] = _route_item_definition(
+		_SALE_GAME_ID,
+		"Motorway Kings",
+		&"cartridges",
+		22.0
+	)
+	items[_RETURN_GAME_ID] = _route_item_definition(
+		_RETURN_GAME_ID,
+		"Motorway Kings: Westside",
+		&"cartridges",
+		32.0
+	)
+	items[_BUNDLE_CONTROLLER_ID] = _route_item_definition(
+		_BUNDLE_CONTROLLER_ID,
+		"Neo Ignite Controller",
+		&"accessories",
+		24.0
+	)
+	data_loader.set("_items", items)
+
+
+func _route_item_definition(
+	definition_id: String,
+	display_name: String,
+	category: StringName,
+	base_price: float
+) -> ItemDefinition:
+	var definition: ItemDefinition = ItemDefinition.new()
+	definition.id = definition_id
+	definition.item_name = display_name
+	definition.store_type = _STORE_ID
+	definition.category = category
+	definition.base_price = base_price
+	definition.rarity = "common"
+	return definition
+
+
+func _assert_route_target(parent_name: String, expected_label: String) -> void:
+	assert_eq(
+		Array(_stage_critical_path_targets()),
+		[parent_name],
+		"Only %s must be active on this route step" % parent_name
+	)
+	var controller: BetaDayOneController = _beta_controller() as BetaDayOneController
+	assert_not_null(controller, "Route target assertion requires beta controller")
+	if controller != null:
+		assert_eq(
+			controller.active_objective_target_node_path(),
+			parent_name,
+			"Controller active target must drive the route target"
+		)
+		assert_eq(
+			controller.active_objective_prompt_label(),
+			expected_label,
+			"Controller prompt copy must match the active interactable"
+		)
+		assert_true(
+			controller.should_show_active_objective_highlight(),
+			"Controller highlight visibility must be true for the active route target"
+		)
+	var interactable: Interactable = _beta_interactable(parent_name)
+	assert_not_null(interactable, "%s/Interactable must exist" % parent_name)
+	if interactable == null:
+		return
+	assert_true(interactable.enabled, "%s must be enabled" % parent_name)
+	assert_true(interactable.can_interact(), "%s must accept interaction" % parent_name)
+	assert_eq(interactable.get_prompt_label(), expected_label)
+
+
+func _interact_route_target(parent_name: String, expected_label: String) -> void:
+	_assert_route_target(parent_name, expected_label)
+	var interactable: Interactable = _beta_interactable(parent_name)
+	if interactable == null:
+		return
+	interactable.interact()
+	await get_tree().process_frame
+
+
+func _open_customer_decision_from_interactable() -> void:
+	await _interact_route_target("BetaDayOneCustomer", "Talk to customer")
+	await get_tree().process_frame
+
+
+func _press_choice(decision: BetaDecisionCardPanel, choice_id: StringName) -> void:
+	var button: Button = _choice_button(decision, choice_id)
+	assert_not_null(button, "Choice button %s must exist" % String(choice_id))
+	if button == null:
+		return
+	button.pressed.emit()
+
+
+func _choice_button(decision: BetaDecisionCardPanel, choice_id: StringName) -> Button:
+	var controller: Node = _beta_controller()
+	if controller == null:
+		return null
+	var event_data: Dictionary = controller.get("_active_event") as Dictionary
+	var choices: Array = event_data.get("choices", []) as Array
+	var buttons: Array = decision.get("_choice_buttons") as Array
+	for idx: int in range(choices.size()):
+		var choice: Dictionary = choices[idx] as Dictionary
+		if StringName(str(choice.get("id", ""))) == choice_id and idx < buttons.size():
+			return buttons[idx] as Button
+	return null
+
+
+func _choice_effects(controller: Node, choice_id: StringName) -> Dictionary:
+	var event_data: Dictionary = controller.get("_active_event") as Dictionary
+	var choices: Array = event_data.get("choices", []) as Array
+	for choice_variant: Variant in choices:
+		if choice_variant is not Dictionary:
+			continue
+		var choice: Dictionary = choice_variant as Dictionary
+		if StringName(str(choice.get("id", ""))) != choice_id:
+			continue
+		return (choice.get("effects", {}) as Dictionary).duplicate(true)
+	return {}
+
+
+func _acknowledge_customer_result(result: ModalPanel) -> void:
+	var continue_button: Button = result.get("_continue_button") as Button
+	assert_not_null(continue_button, "Customer result must expose Continue")
+	if continue_button == null:
+		return
+	continue_button.pressed.emit()
+
+
+func _assert_close_day_blocked(controller: BetaDayOneController, expected_reason: String) -> void:
+	assert_false(bool(controller.can_interact_day_end()))
+	assert_eq(String(controller.day_end_disabled_reason()), expected_reason)
+	assert_false(
+		Array(_stage_critical_path_targets()).has("BetaDayEndTrigger"),
+		"Close-day trigger must not be active before prerequisites are complete"
+	)
+
+
+func _assert_right_panel_header(expected: String) -> void:
+	var panel: BetaRightPanel = BetaHUD.get_right_panel()
+	assert_not_null(panel, "Beta right panel must exist")
+	if panel == null:
+		return
+	assert_eq(panel.get_header_text(), expected)
+
+
+func _assert_right_panel_header_prefix(expected_prefix: String) -> void:
+	var panel: BetaRightPanel = BetaHUD.get_right_panel()
+	assert_not_null(panel, "Beta right panel must exist")
+	if panel == null:
+		return
+	assert_true(
+		panel.get_header_text().begins_with(expected_prefix),
+		"Right-panel header must begin with %s" % expected_prefix
+	)
+
+
+func _assert_right_panel_stat(stat_name: String, expected: String) -> void:
+	var panel: BetaRightPanel = BetaHUD.get_right_panel()
+	assert_not_null(panel, "Beta right panel must exist")
+	if panel == null:
+		return
+	assert_eq(panel.get_stat_value(stat_name), expected)
+
+
+func _assert_empty_shelf_overlay_visible(expected: bool) -> void:
+	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	assert_not_null(shelf, "BetaRestockShelf must exist")
+	if shelf == null:
+		return
+	var overlay: Node3D = shelf.get_node_or_null("EmptyOverlay") as Node3D
+	assert_not_null(overlay, "BetaRestockShelf must expose EmptyOverlay")
+	if overlay == null:
+		return
+	assert_eq(overlay.visible, expected)
+
+
+func _spawned_shelf_item_count() -> int:
+	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	if shelf == null:
+		return 0
+	var count: int = 0
+	for child: Node in shelf.get_children():
+		if String(child.name).begins_with("BetaShelfItem"):
+			count += 1
+	return count
+
+
+func _assert_summary_label(
+	panel: BetaDaySummaryPanel,
+	property_name: String,
+	expected: String
+) -> void:
+	var label: Label = panel.get(property_name) as Label
+	assert_not_null(label, "Summary panel must expose %s" % property_name)
+	if label == null:
+		return
+	assert_eq(label.text, expected)
+
+
 # ── Stock-shelf label and carry-state contract ─────────────────────────────
 # The stock_shelf objective copy must name the specific destination ("used
 # games shelf"), not a generic plural. Generic copy ("the shelves") drove
@@ -963,7 +1552,7 @@ func _stage_critical_path_targets() -> PackedStringArray:
 # without an interactable in focus.
 
 
-func test_stock_shelf_label_names_the_retro_games_shelf() -> void:
+func test_stock_shelf_label_names_the_used_games_shelf() -> void:
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
@@ -976,10 +1565,10 @@ func test_stock_shelf_label_names_the_retro_games_shelf() -> void:
 	var label: String = String(stock_entry.get("label", ""))
 	assert_string_contains(
 		label,
-		"Retro Games shelf",
+		"used games shelf",
 		(
 			"stock_shelf label must name the specific destination "
-			+ "('Retro Games shelf'); got: '%s'" % label
+			+ "('used games shelf'); got: '%s'" % label
 		)
 	)
 	assert_false(
@@ -1040,6 +1629,89 @@ func test_stock_box_visually_disappears_after_pickup_fade() -> void:
 	assert_false(
 		stock_label.visible, "StockBoxLabel must be invisible after the pickup fade completes"
 	)
+
+
+func test_carried_stock_marker_and_carry_hud_follow_pickup_restock_and_new_run_reset() -> void:
+	var controller: Node = _beta_controller()
+	if controller == null:
+		return
+	var scene: PackedScene = load(HUD_SCENE_PATH)
+	assert_not_null(scene, "HUD scene must load")
+	if scene == null:
+		return
+	var hud: CanvasLayer = scene.instantiate() as CanvasLayer
+	add_child_autofree(hud)
+	await get_tree().process_frame
+	var carry_label: Label = hud.get_node_or_null("CarryHUD/BetaCarryLabel") as Label
+	var carry_icon: ColorRect = hud.get_node_or_null("CarryHUD/BetaCarryIcon") as ColorRect
+	assert_not_null(carry_label, "HUD carry label must exist")
+	assert_not_null(carry_icon, "HUD carry icon must exist")
+	if carry_label == null or carry_icon == null:
+		return
+	var pickup: Node = _root.get_node_or_null("BetaBackroomPickup")
+	assert_not_null(pickup, "BetaBackroomPickup must exist")
+	if pickup == null:
+		return
+	var stock_box: Node3D = pickup.get_node_or_null("StockBox") as Node3D
+	var open_box: Node3D = pickup.get_node_or_null("StockBoxOpen") as Node3D
+	assert_not_null(stock_box, "BetaBackroomPickup/StockBox must exist")
+	assert_not_null(open_box, "BetaBackroomPickup/StockBoxOpen must exist")
+	if stock_box == null or open_box == null:
+		return
+	var marker: Node3D = _root.find_child("BetaCarriedStockMarker", true, false) as Node3D
+	assert_not_null(marker, "A carried stock marker must be owned by the beta controller")
+	if marker == null:
+		return
+	assert_false(marker.visible, "Carried stock marker must start hidden")
+	assert_false(carry_label.visible, "Carry HUD label must start hidden")
+	assert_false(carry_icon.visible, "Carry HUD icon must start hidden")
+
+	controller._on_choice_selected(&"clean_exchange", {})
+	await get_tree().process_frame
+	controller.on_beta_backroom_pickup_interacted()
+	await get_tree().process_frame
+
+	marker = _root.find_child("BetaCarriedStockMarker", true, false) as Node3D
+	assert_not_null(marker, "Carried stock marker must remain discoverable after camera attach")
+	if marker == null:
+		return
+	assert_true(BetaRunState.carrying_stock, "Back-room pickup must set carry state")
+	assert_true(marker.visible, "Carried stock marker must show while stock is carried")
+	assert_false(stock_box.visible, "Closed pickup box must hide while carried stock is active")
+	assert_true(open_box.visible, "Opened pickup box must show while carried stock is active")
+	var marker_label: Label3D = marker.get_node_or_null("UsedGamesBoxLabel") as Label3D
+	assert_not_null(marker_label, "Carried marker must name the same used-games box as the HUD")
+	if marker_label != null:
+		assert_eq(marker_label.text, "USED GAMES BOX")
+	assert_true(carry_label.visible, "Carry HUD label must show while stock is carried")
+	assert_eq(carry_label.text, "Carrying: Used Games Box")
+	assert_true(carry_icon.visible, "Carry HUD icon must show while stock is carried")
+	assert_true(
+		marker.get_parent() is Camera3D,
+		"Carried stock marker must attach to the view camera for first-person readability"
+	)
+	assert_gt(marker.position.x, 0.25, "Marker must sit to the right of the reticle")
+	assert_lt(marker.position.y, -0.20, "Marker must sit below the reticle")
+	assert_lt(marker.position.z, -0.50, "Marker must sit in front of the camera")
+
+	controller.on_beta_restock_interacted()
+	await get_tree().process_frame
+	assert_false(BetaRunState.carrying_stock, "Restocking must clear carry state")
+	assert_false(marker.visible, "Carried stock marker must clear after shelf stocking")
+	assert_false(carry_label.visible, "Carry HUD label must clear after shelf stocking")
+	assert_false(carry_icon.visible, "Carry HUD icon must clear after shelf stocking")
+
+	BetaRunState.carrying_stock = true
+	EventBus.beta_carry_changed.emit("Used Games Box")
+	await get_tree().process_frame
+	assert_true(marker.visible, "Pre-condition: marker can show before a new-run reset")
+	assert_true(carry_label.visible, "Pre-condition: HUD can show before a new-run reset")
+	GameManager.begin_new_run()
+	await get_tree().process_frame
+	assert_false(BetaRunState.carrying_stock, "New-run reset must clear carry state")
+	assert_false(marker.visible, "Carried stock marker must clear on new-run reset")
+	assert_false(carry_label.visible, "Carry HUD label must clear on new-run reset")
+	assert_false(carry_icon.visible, "Carry HUD icon must clear on new-run reset")
 
 
 ## Back-room pickup must surface a "Shipment checked" toast that names the
@@ -1206,8 +1878,7 @@ func test_completing_customer_step_emits_beta_objective_completed() -> void:
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"beta_objective_completed",
-		[&"talk_to_customer"],
-		"Customer step completion must emit beta_objective_completed(talk_to_customer)"
+		[&"talk_to_customer"]
 	)
 
 
@@ -1223,8 +1894,7 @@ func test_completing_back_room_step_emits_beta_objective_completed() -> void:
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"beta_objective_completed",
-		[&"back_room_inventory"],
-		"Back-room pickup must emit beta_objective_completed(back_room_inventory)"
+		[&"back_room_inventory"]
 	)
 
 
@@ -1242,8 +1912,7 @@ func test_completing_stock_shelf_step_emits_beta_objective_completed() -> void:
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"beta_objective_completed",
-		[&"stock_shelf"],
-		"Restock interact must emit beta_objective_completed(stock_shelf)"
+		[&"stock_shelf"]
 	)
 
 
@@ -1270,8 +1939,7 @@ func test_close_day_request_emits_beta_objective_completed() -> void:
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"beta_objective_completed",
-		[&"close_day"],
-		"Close-day confirm must emit beta_objective_completed(close_day)"
+		[&"close_day"]
 	)
 	assert_true(
 		UnlockSystemSingleton.is_unlocked(&"employee_closing_certified"),
@@ -1336,7 +2004,7 @@ func test_objective_rail_uses_specified_copy_for_each_chain_stage() -> void:
 	var expected: Dictionary = {
 		"talk_to_customer": "Talk to the customer at the register.",
 		"back_room_inventory": "Check the back room delivery.",
-		"stock_shelf": "Stock the Retro Games shelf.",
+			"stock_shelf": "Stock the used games shelf.",
 		"end_day": "Close the day at the register.",
 	}
 	for entry: Dictionary in controller.get("_OBJECTIVES"):
@@ -1454,8 +2122,7 @@ func test_summary_continue_starts_day2_gameplay_with_authored_event() -> void:
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"day_started",
-		[2],
-		"Continue must emit day_started for the next playable shift"
+		[2]
 	)
 	assert_eq(String(controller.get("_stage")), "talk_to_customer")
 	assert_eq(
@@ -1480,35 +2147,50 @@ func test_beta_controller_spawns_right_panel_on_ready() -> void:
 ## The HUD's "Sold Today" and "Customers Served" counters increment only on
 ## EventBus.item_sold and EventBus.customer_purchased respectively. The beta
 ## decision-card path bypasses the production checkout pipeline, so the
-## controller has to emit those signals itself when the chosen effect carries
-## a positive cash delta. Refunds and no-sale outcomes (cash_delta ≤ 0) must
-## not tick the counters.
+## controller has to emit those signals itself only when a positive cash
+## outcome removed concrete stock. Refunds, no-sale outcomes, and unresolved
+## inventory must not tick the counters.
 
 
-func test_sale_choice_emits_item_sold_with_cash_price() -> void:
+func test_stocked_sale_choice_emits_item_sold_with_inventory_instance() -> void:
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
+	var fixture: Dictionary = _seed_salable_day_one_inventory()
+	var item: ItemInstance = fixture.get("item", null) as ItemInstance
+	assert_not_null(item)
+	if item == null:
+		return
 	watch_signals(EventBus)
-	controller._on_choice_selected(&"upsell_bundle", {"cash": 18})
+	controller._on_choice_selected(
+		&"clean_exchange", _choice_effects(controller, &"clean_exchange")
+	)
 	await get_tree().process_frame
-	# 4th positional arg of GUT's assert_signal_emitted_with_parameters is
-	# `index` (int), not a message — passing a string here would crash inside
-	# the signal watcher's `index == -1` comparison.
-	assert_signal_emitted_with_parameters(EventBus, "item_sold", ["used_game", 18.0, "used_games"])
+	assert_signal_emitted_with_parameters(
+		EventBus, "item_sold", [String(item.instance_id), 15.0, "cartridges"]
+	)
 
 
-func test_sale_choice_emits_customer_purchased_with_cash_price() -> void:
+func test_stocked_sale_choice_emits_customer_purchased_with_inventory_instance() -> void:
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
+	var fixture: Dictionary = _seed_salable_day_one_inventory()
+	var item: ItemInstance = fixture.get("item", null) as ItemInstance
+	assert_not_null(item)
+	if item == null:
+		return
 	watch_signals(EventBus)
-	controller._on_choice_selected(&"upsell_bundle", {"cash": 18})
+	controller._on_choice_selected(
+		&"clean_exchange", _choice_effects(controller, &"clean_exchange")
+	)
 	await get_tree().process_frame
+	var params: Array = get_signal_parameters(EventBus, "customer_purchased", 0)
+	assert_false(String(params[3]).is_empty())
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"customer_purchased",
-		[EconomySystem.BETA_COUNTER_ONLY_STORE_ID, &"used_game", 18.0, &"beta_customer_01"]
+		[_STORE_ID, StringName(item.instance_id), 15.0, params[3]]
 	)
 
 
@@ -1516,16 +2198,20 @@ func test_sale_choice_credits_visible_wallet_once() -> void:
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
-	var economy: EconomySystem = EconomySystem.new()
-	add_child_autofree(economy)
-	economy.initialize(500.0)
+	var fixture: Dictionary = _seed_salable_day_one_inventory()
+	var economy: EconomySystem = fixture.get("economy", null) as EconomySystem
+	assert_not_null(economy)
+	if economy == null:
+		return
 
-	controller._on_choice_selected(&"upsell_bundle", {"cash": 18})
+	controller._on_choice_selected(
+		&"clean_exchange", _choice_effects(controller, &"clean_exchange")
+	)
 	await get_tree().process_frame
 
 	assert_almost_eq(
 		economy.get_cash(),
-		518.0,
+		515.0,
 		0.01,
 		"Beta sale choice must credit the EconomySystem wallet exactly once"
 	)
@@ -1538,15 +2224,260 @@ func test_sale_choice_credits_visible_wallet_once() -> void:
 	)
 
 
+func test_clean_exchange_sale_reconciles_visible_shelf_from_inventory_delta() -> void:
+	var controller: Node = _beta_controller()
+	if controller == null:
+		return
+	_seed_salable_day_one_inventory()
+	assert_eq(int(controller.call("_spawn_visible_shelf_items", 2)), 2)
+	watch_signals(EventBus)
+
+	controller._on_choice_selected(
+		&"clean_exchange", _choice_effects(controller, &"clean_exchange")
+	)
+	await get_tree().process_frame
+
+	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
+	assert_gt(transactions.size(), 0, "Sale choice must record an inventory transaction")
+	var transaction: Dictionary = transactions.back() as Dictionary
+	var counts: Dictionary = transaction.get("beta_inventory_counts", {}) as Dictionary
+	assert_eq(int(counts.get("applied_shelf_removed_quantity", -1)), 1)
+	assert_eq(_spawned_shelf_item_count(), 1)
+	assert_signal_emitted_with_parameters(EventBus, "beta_shelf_count_changed", [1])
+	assert_signal_emitted_with_parameters(EventBus, "beta_backroom_count_changed", [1])
+	_assert_right_panel_stat("Shelf", "1 / 2")
+	_assert_empty_shelf_overlay_visible(false)
+
+
+func test_clean_exchange_presents_room_outcome_before_summary() -> void:
+	var controller: BetaDayOneController = _beta_controller() as BetaDayOneController
+	if controller == null:
+		return
+	var screen = _register_screen_state()
+	assert_not_null(screen)
+	if screen == null:
+		return
+	_seed_salable_day_one_inventory()
+	assert_eq(int(controller.call("_spawn_visible_shelf_items", 2)), 2)
+
+	controller.on_beta_customer_interacted()
+	await get_tree().process_frame
+	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	assert_not_null(decision, "Clean exchange must start from the authored decision card")
+	if decision == null:
+		return
+	_press_choice(decision, &"clean_exchange")
+	await get_tree().process_frame
+
+	assert_eq(BetaRunState.cash, 15)
+	assert_eq(BetaRunState.reputation, 2)
+	assert_eq(BetaRunState.manager_trust, 2)
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(screen.current_amount(), 15)
+	assert_eq(screen.display_text(), "SALE\n$15")
+
+	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
+	assert_gt(transactions.size(), 0, "Clean exchange must record the stock movement")
+	var transaction: Dictionary = transactions.back() as Dictionary
+	var counts: Dictionary = transaction.get("beta_inventory_counts", {}) as Dictionary
+	assert_true(bool(transaction.get("ok", false)))
+	assert_eq(int(counts.get("applied_shelf_removed_quantity", -1)), 1)
+	assert_eq(int(counts.get("applied_backroom_created_quantity", -1)), 1)
+
+	var anchor: Node3D = (
+		_root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+	)
+	assert_not_null(anchor, "Clean exchange must keep the shared counter item readable")
+	if anchor != null:
+		assert_eq(str(anchor.get_meta("counter_state", "")), "clean_exchange")
+		assert_eq(int(anchor.get_meta("settled_amount", 0)), 15)
+		assert_true(bool(anchor.get_meta("inventory_ok", false)))
+		var shared_item: Node3D = anchor.get_node_or_null("SharedCustomerItem") as Node3D
+		assert_not_null(shared_item, "Clean exchange must keep the counter item visible")
+		if shared_item != null:
+			assert_true(shared_item.visible)
+
+	var shelf_gap: Node3D = (
+		_root.get_node_or_null("BetaRestockShelf/CleanExchangeShelfGap") as Node3D
+	)
+	assert_not_null(shelf_gap, "Clean exchange must mark the shelf copy that left")
+	if shelf_gap != null:
+		assert_true(shelf_gap.visible)
+		assert_eq(str(shelf_gap.get_meta("outcome", "")), "clean_exchange")
+
+	var returned_copy: Node3D = (
+		_root.get_node_or_null("BetaBackroomPickup/CleanExchangeReturnedCopy") as Node3D
+	)
+	assert_not_null(returned_copy, "Clean exchange must show the returned copy in back room")
+	if returned_copy != null:
+		assert_true(returned_copy.visible)
+		assert_eq(
+			str(returned_copy.get_meta("definition_id", "")),
+			_RETURN_GAME_ID
+		)
+		assert_eq(str(returned_copy.get_meta("location", "")), "backroom")
+		assert_not_null(returned_copy.get_node_or_null("ReturnedCopyLabel"))
+
+	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
+	assert_not_null(customer, "Clean exchange must keep the customer readable before exit")
+	if customer != null:
+		assert_eq(str(customer.get_meta("exit_reaction", "")), "relieved")
+		assert_not_null(customer.get_node_or_null("CleanExchangeReliefCue"))
+
+	var summary_before: BetaDaySummaryPanel = controller.get("_summary_panel") as BetaDaySummaryPanel
+	assert_true(
+		summary_before == null or not summary_before.visible,
+		"Clean exchange outcome must appear before day summary opens"
+	)
+	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
+	assert_not_null(result, "Clean exchange must wait for result acknowledgement")
+	if result == null:
+		return
+	_acknowledge_customer_result(result)
+	await get_tree().process_frame
+
+	assert_eq(_spawned_shelf_item_count(), 1)
+	assert_not_null(
+		_root.get_node_or_null("BetaBackroomPickup/CleanExchangeReturnedCopy"),
+		"Returned copy must persist into the back-room objective"
+	)
+	var summary_after: BetaDaySummaryPanel = controller.get("_summary_panel") as BetaDaySummaryPanel
+	assert_true(summary_after == null or not summary_after.visible)
+	assert_eq(String(controller.current_stage()), "back_room_inventory")
+
+
+func test_bundle_sale_reconciles_two_visible_shelf_items_from_inventory_delta() -> void:
+	var controller: Node = _beta_controller()
+	if controller == null:
+		return
+	_seed_bundle_day_one_inventory()
+	assert_eq(int(controller.call("_spawn_visible_shelf_items", 2)), 2)
+	watch_signals(EventBus)
+
+	controller._on_choice_selected(
+		&"upsell_bundle", _choice_effects(controller, &"upsell_bundle")
+	)
+	await get_tree().process_frame
+
+	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
+	assert_gt(transactions.size(), 0, "Bundle choice must record an inventory transaction")
+	var transaction: Dictionary = transactions.back() as Dictionary
+	var counts: Dictionary = transaction.get("beta_inventory_counts", {}) as Dictionary
+	assert_eq(int(counts.get("applied_shelf_removed_quantity", -1)), 2)
+	assert_eq(_spawned_shelf_item_count(), 0)
+	assert_signal_emitted_with_parameters(EventBus, "beta_shelf_count_changed", [0])
+	assert_signal_emitted_with_parameters(EventBus, "beta_backroom_count_changed", [1])
+	_assert_right_panel_stat("Shelf", "0 / 1")
+	_assert_empty_shelf_overlay_visible(true)
+
+
+func test_bundle_sale_presents_distinct_room_outcome_before_summary() -> void:
+	var controller: BetaDayOneController = _beta_controller() as BetaDayOneController
+	if controller == null:
+		return
+	var screen = _register_screen_state()
+	assert_not_null(screen)
+	if screen == null:
+		return
+	_seed_bundle_day_one_inventory()
+	assert_eq(int(controller.call("_spawn_visible_shelf_items", 2)), 2)
+
+	controller.on_beta_customer_interacted()
+	await get_tree().process_frame
+	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	assert_not_null(decision, "Bundle sale must start from the authored decision card")
+	if decision == null:
+		return
+	watch_signals(EventBus)
+	_press_choice(decision, &"upsell_bundle")
+	await get_tree().process_frame
+
+	assert_eq(BetaRunState.cash, 18)
+	assert_eq(BetaRunState.reputation, 1)
+	assert_eq(BetaRunState.manager_trust, 0)
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(screen.current_amount(), 18)
+	assert_eq(screen.display_text(), "SALE\n$18")
+
+	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
+	assert_gt(transactions.size(), 0, "Bundle sale must record the stock movement")
+	var transaction: Dictionary = transactions.back() as Dictionary
+	var counts: Dictionary = transaction.get("beta_inventory_counts", {}) as Dictionary
+	assert_true(bool(transaction.get("ok", false)))
+	assert_eq(int(counts.get("applied_shelf_removed_quantity", -1)), 2)
+	assert_eq(int(counts.get("applied_backroom_created_quantity", -1)), 1)
+
+	var anchor: Node3D = (
+		_root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+	)
+	assert_not_null(anchor, "Bundle sale must keep the shared counter anchor readable")
+	if anchor != null:
+		assert_eq(str(anchor.get_meta("counter_state", "")), "bundle")
+		assert_ne(str(anchor.get_meta("counter_state", "")), "clean_exchange")
+		assert_eq(int(anchor.get_meta("settled_amount", 0)), 18)
+		assert_true(bool(anchor.get_meta("inventory_ok", false)))
+		assert_eq(int(anchor.get_meta("sale_side_stock_removed", 0)), 2)
+		var stack: Node3D = anchor.get_node_or_null("BundleItemStack") as Node3D
+		assert_not_null(stack, "Bundle sale must present a bundled-item counter stack")
+		if stack != null:
+			assert_eq(int(stack.get_meta("item_count", 0)), 2)
+			assert_not_null(stack.get_node_or_null("BundleGameItem"))
+			assert_not_null(stack.get_node_or_null("BundleControllerItem"))
+		var shared_item: Node3D = anchor.get_node_or_null("SharedCustomerItem") as Node3D
+		assert_not_null(shared_item, "Bundle state must still own the shared item node")
+		if shared_item != null:
+			assert_false(shared_item.visible, "Bundle stack must replace the single shared item")
+
+	var game_gap: Node3D = _root.get_node_or_null("BetaRestockShelf/BundleGameShelfGap") as Node3D
+	var controller_gap: Node3D = (
+		_root.get_node_or_null("BetaRestockShelf/BundleControllerShelfGap") as Node3D
+	)
+	assert_not_null(game_gap, "Bundle sale must mark the game copy that left")
+	assert_not_null(controller_gap, "Bundle sale must mark the controller that left")
+	if game_gap != null:
+		assert_eq(str(game_gap.get_meta("outcome", "")), "bundle")
+		assert_eq(str(game_gap.get_meta("item_role", "")), "game")
+	if controller_gap != null:
+		assert_eq(str(controller_gap.get_meta("outcome", "")), "bundle")
+		assert_eq(str(controller_gap.get_meta("item_role", "")), "controller")
+	assert_null(_root.get_node_or_null("BetaRestockShelf/CleanExchangeShelfGap"))
+
+	var returned_copy: Node3D = _root.get_node_or_null("BetaBackroomPickup/BundleReturnedCopy") as Node3D
+	assert_not_null(returned_copy, "Bundle sale must show the returned copy in back room")
+	if returned_copy != null:
+		assert_eq(str(returned_copy.get_meta("definition_id", "")), _RETURN_GAME_ID)
+		assert_eq(str(returned_copy.get_meta("location", "")), "backroom")
+		assert_not_null(returned_copy.get_node_or_null("BundleReturnedCopyLabel"))
+	assert_null(_root.get_node_or_null("BetaBackroomPickup/CleanExchangeReturnedCopy"))
+
+	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
+	assert_not_null(customer, "Bundle sale must keep the customer readable before exit")
+	if customer != null:
+		assert_eq(str(customer.get_meta("exit_reaction", "")), "pressured_bundle")
+		assert_not_null(customer.get_node_or_null("BundlePressureCue"))
+	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
+	assert_not_null(result, "Bundle sale result must wait for acknowledgement")
+	if result == null:
+		return
+	_acknowledge_customer_result(result)
+	await get_tree().process_frame
+
+	assert_eq(_spawned_shelf_item_count(), 0)
+	assert_signal_emitted(EventBus, "item_sold")
+	assert_signal_emitted(EventBus, "customer_purchased")
+	_assert_right_panel_stat("Sales", "1")
+	_assert_right_panel_stat("Customers", "1")
+	_assert_right_panel_stat("Reputation", "+1")
+	_assert_right_panel_stat("Trust", "0")
+
+
 func test_close_day_summary_uses_economy_cash_accounting() -> void:
 	var controller: Node = _beta_controller()
 	if controller == null:
 		return
-	var economy: EconomySystem = EconomySystem.new()
-	add_child_autofree(economy)
-	economy.initialize(500.0)
+	_seed_salable_day_one_inventory()
 
-	controller._on_choice_selected(&"upsell_bundle", {"cash": 18})
+	controller._on_choice_selected(&"clean_exchange", _choice_effects(controller, &"clean_exchange"))
 	await get_tree().process_frame
 	controller.on_beta_backroom_pickup_interacted()
 	await get_tree().process_frame
@@ -1568,10 +2499,10 @@ func test_close_day_summary_uses_economy_cash_accounting() -> void:
 		return
 	var text: String = metrics.text
 	assert_string_contains(text, "Starting Cash:[/b] $500")
-	assert_string_contains(text, "Sales:[/b] $18")
-	assert_string_contains(text, "Rent:[/b] -$50")
-	assert_string_contains(text, "Profit:[/b] -$32")
-	assert_string_contains(text, "Ending Cash:[/b] $518")
+	assert_string_contains(text, "Sales:[/b] $15")
+	assert_string_contains(text, "Rent (review only):[/b] -$50")
+	assert_string_contains(text, "Profit after rent:[/b] -$35")
+	assert_string_contains(text, "Ending Cash:[/b] $515")
 
 
 func test_zero_cash_choice_does_not_emit_sale_signals() -> void:
@@ -1599,6 +2530,98 @@ func test_negative_cash_choice_does_not_emit_sale_signals() -> void:
 	assert_signal_not_emitted(EventBus, "customer_purchased")
 
 
+func test_refused_return_marks_loss_without_sale_or_stock_movement() -> void:
+	var controller: BetaDayOneController = _beta_controller() as BetaDayOneController
+	if controller == null:
+		return
+	var screen = _register_screen_state()
+	assert_not_null(screen)
+	if screen == null:
+		return
+	var initial_shelf_count: int = int(controller.get("_shelf_stock_count"))
+
+	controller.on_beta_customer_interacted()
+	await get_tree().process_frame
+	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	assert_not_null(decision, "Refused-return path must open from the customer decision card")
+	if decision == null:
+		return
+
+	watch_signals(EventBus)
+	_press_choice(decision, &"refuse_return")
+	await get_tree().process_frame
+
+	assert_eq(BetaRunState.cash, 0)
+	assert_eq(BetaRunState.daily_cash_delta, 0)
+	assert_eq(BetaRunState.reputation, -3)
+	assert_eq(BetaRunState.manager_trust, -2)
+	assert_true(bool(BetaRunState.flags.get(&"parent_refused_return", false)))
+	assert_true(BetaRunState.hidden_thread_signals_seen.has(&"parent_refused_return_risk"))
+	assert_eq(int(controller.get("_shelf_stock_count")), initial_shelf_count)
+	assert_eq(_spawned_shelf_item_count(), 0)
+	assert_signal_not_emitted(EventBus, "item_sold")
+	assert_signal_not_emitted(EventBus, "customer_purchased")
+	assert_signal_not_emitted(EventBus, "beta_shelf_count_changed")
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_NO_SALE)
+	assert_eq(screen.display_text(), "NO SALE")
+	_assert_right_panel_stat("Sales", "0")
+	_assert_right_panel_stat("Customers", "0")
+	_assert_right_panel_stat("Reputation", "-3")
+	_assert_right_panel_stat("Trust", "-2")
+
+	var anchor: Node3D = (
+		_root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+	)
+	assert_not_null(anchor, "Refused return must keep the shared counter anchor readable")
+	if anchor != null:
+		assert_eq(str(anchor.get_meta("counter_state", "")), "refused")
+		var customer_item: Node3D = anchor.get_node_or_null("SharedCustomerItem") as Node3D
+		assert_not_null(customer_item, "Counter anchor must still own the shared item node")
+		if customer_item != null:
+			assert_false(customer_item.visible, "Refused state must not read as an item sold")
+
+	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
+	assert_not_null(result, "Refused-return result must wait for acknowledgement")
+	if result == null:
+		return
+	_acknowledge_customer_result(result)
+	await get_tree().process_frame
+
+	assert_signal_not_emitted(EventBus, "item_sold")
+	assert_signal_not_emitted(EventBus, "customer_purchased")
+	var refusal_toast_seen: bool = false
+	for params: Array in get_signal_parameters_all(EventBus, "toast_requested"):
+		if params.size() < 3:
+			continue
+		if String(params[0]).contains("left upset") and params[1] == &"reputation_down":
+			refusal_toast_seen = true
+			break
+	assert_true(refusal_toast_seen, "Refused return must show negative no-sale feedback")
+
+	controller.on_beta_backroom_pickup_interacted()
+	await get_tree().process_frame
+	controller.on_beta_restock_interacted()
+	await get_tree().process_frame
+	controller.on_beta_day_end_requested()
+	await get_tree().process_frame
+	_press_close_day_confirm(controller)
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	var summary_panel: BetaDaySummaryPanel = controller.get("_summary_panel") as BetaDaySummaryPanel
+	assert_not_null(summary_panel, "Refused-return route must still reach summary")
+	if summary_panel == null:
+		return
+	var metrics: RichTextLabel = summary_panel.get("_metrics_label") as RichTextLabel
+	assert_not_null(metrics, "Summary must own money metrics")
+	if metrics != null:
+		assert_string_contains(metrics.text, "Sales:[/b] $0")
+		assert_string_contains(metrics.text, "Profit after rent:[/b] -$50")
+	_assert_summary_label(summary_panel, "_customers_helped_label", "Customers Helped: 1")
+	_assert_summary_label(summary_panel, "_sales_completed_label", "Sales Completed: 0")
+	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 2")
+
+
 func test_disabled_reason_at_stock_shelf_does_not_echo_generic_shelves() -> void:
 	# AC 3: the disabled-reason for wrong interactable presses while the
 	# player is on the stock_shelf stage must not echo a legacy generic
@@ -1623,7 +2646,7 @@ func test_disabled_reason_at_stock_shelf_does_not_echo_generic_shelves() -> void
 	var reason: String = String(controller.customer_disabled_reason())
 	assert_string_contains(
 		reason,
-		"Retro Games shelf",
+		"used games shelf",
 		"Disabled-reason must name the specific destination; got: '%s'" % reason
 	)
 	assert_false(
@@ -1644,6 +2667,15 @@ func _register_status_indicator() -> Interactable:
 	if _root == null:
 		return null
 	return _root.get_node_or_null("checkout_counter/RegisterStatusIndicator") as Interactable
+
+
+func _register_screen_state():
+	if _root == null:
+		return null
+	var screen: Node = _root.get_node_or_null("Checkout/Register/RegisterScreenState")
+	if screen == null or screen.get_script() != RegisterScreenStateScript:
+		return null
+	return screen
 
 
 func test_register_status_indicator_is_authored_under_checkout_counter() -> void:
@@ -1672,7 +2704,7 @@ func test_register_status_indicator_never_lets_e_fire() -> void:
 
 func test_register_status_indicator_is_raycast_only() -> void:
 	# proximity_radius = 0 prevents the indicator from competing with
-	# BetaDayEndTrigger's 2.25 m proximity zone; the player must aim at the
+	# BetaDayEndTrigger's 3.25 m proximity zone; the player must aim at the
 	# register face to see the hint, not just walk near the counter.
 	var indicator: Interactable = _register_status_indicator()
 	if indicator == null:
@@ -1727,7 +2759,7 @@ func test_register_status_indicator_hints_back_room_during_back_room_stage() -> 
 
 func test_register_status_indicator_hints_shelf_during_stock_stage() -> void:
 	# Acceptance: during STAGE_STOCK_SHELF, aiming at the register shows
-	# 'Stock the Retro Games shelf before closing.'
+	# 'Stock the used games shelf before closing.'
 	var controller: Node = _beta_controller()
 	var indicator: Interactable = _register_status_indicator()
 	if controller == null or indicator == null:
@@ -1743,7 +2775,7 @@ func test_register_status_indicator_hints_shelf_during_stock_stage() -> void:
 	)
 	assert_eq(
 		indicator.get_disabled_reason(),
-		"Stock the Retro Games shelf before closing.",
+		"Stock the used games shelf before closing.",
 		"Indicator must point the player at the shelf during the stock stage"
 	)
 
@@ -1831,7 +2863,7 @@ func test_register_status_indicator_does_not_break_close_day_path() -> void:
 const _EXPECTED_STEP_LABELS: Array[String] = [
 	"Talk to the customer at the register.",
 	"Check the back room delivery.",
-	"Stock the Retro Games shelf.",
+	"Stock the used games shelf.",
 	"Close the day at the register.",
 ]
 

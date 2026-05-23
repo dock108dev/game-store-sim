@@ -14,7 +14,7 @@ const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const ZONE_GROUP: StringName = &"zone_label"
 const VISIBLE_DAY1_NAV_LABELS: Dictionary = {
 	"ZoneLabels/ShelvesLabel": {
-		"normalized_text": "retro games shelf",
+		"normalized_text": "used games shelf",
 		"objective_step": "stock_shelf",
 	},
 	"ZoneLabels/BackroomLabel": {

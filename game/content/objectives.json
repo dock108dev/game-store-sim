@@ -30,8 +30,8 @@
         },
         {
           "id": "stock_shelf",
-          "text": "Stock the Retro Games shelf.",
-          "action": "Press E at the restock shelf",
+          "text": "Stock the used games shelf.",
+          "action": "Press E at the used games shelf",
           "key": "E"
         },
         {

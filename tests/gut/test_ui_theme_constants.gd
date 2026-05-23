@@ -1,6 +1,8 @@
 ## Tests for UIThemeConstants: store accent lookup, semantic descriptors, and palette coverage.
 extends GutTest
 
+const GAME_THEME: Theme = preload("res://game/themes/game_theme.tres")
+
 
 func test_retro_games_store_accent_defined() -> void:
 	var c: Color = UIThemeConstants.STORE_ACCENTS.get(
@@ -77,6 +79,16 @@ func test_get_semantic_display_includes_icon_and_label() -> void:
 	assert_string_contains(display, UIThemeConstants.SEMANTIC_ICON_SUCCESS)
 
 
+func test_format_cash_whole_without_symbol() -> void:
+	assert_eq(UIThemeConstants.format_cash_whole(15750.0), "15,750")
+	assert_eq(UIThemeConstants.format_cash_whole(-2500.0), "-2,500")
+
+
+func test_format_cash_whole_with_symbol() -> void:
+	assert_eq(UIThemeConstants.format_cash_whole(15750.0, true), "$15,750")
+	assert_eq(UIThemeConstants.format_cash_whole(-2500.0, true), "-$2,500")
+
+
 func test_dark_panel_text_contrast_ratio_gte_15() -> void:
 	# Verify WCAG AAA contrast for dark panel primary text vs fill.
 	# Contrast = (L1 + 0.05) / (L2 + 0.05) where L1 > L2.
@@ -128,7 +140,7 @@ func test_accent_color_amber_value() -> void:
 
 
 func test_button_hover_border_uses_interact_blue() -> void:
-	var theme: Theme = load("res://game/themes/game_theme.tres")
+	var theme: Theme = GAME_THEME
 	assert_not_null(theme, "game_theme.tres must be loadable")
 	var hover_style: StyleBoxFlat = theme.get_stylebox("hover", "Button") as StyleBoxFlat
 	assert_not_null(hover_style, "Button hover StyleBox must be a StyleBoxFlat")
@@ -142,7 +154,7 @@ func test_button_hover_border_uses_interact_blue() -> void:
 
 
 func test_button_pressed_border_uses_crt_amber() -> void:
-	var theme: Theme = load("res://game/themes/game_theme.tres")
+	var theme: Theme = GAME_THEME
 	assert_not_null(theme, "game_theme.tres must be loadable")
 	var pressed_style: StyleBoxFlat = theme.get_stylebox("pressed", "Button") as StyleBoxFlat
 	assert_not_null(pressed_style, "Button pressed StyleBox must be a StyleBoxFlat")

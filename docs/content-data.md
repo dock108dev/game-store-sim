@@ -46,7 +46,7 @@ The checked-in content tree under `game/content/`:
 | `staff/` | `staff_definitions.json`. |
 | `suppliers/` | `supplier_catalog.json`. |
 | `unlocks/` | `unlocks.json`. |
-| `visuals/` | `retro_games_product_visual_catalog.json` — visual-only product and platform presentation data. |
+| `visuals/` | `retro_games_product_visual_catalog.json` and `store_visual_layouts.json` — visual-only presentation/layout data. |
 | `beta/days/` | `day_01.json`, `day_02.json` — loaded directly by `BetaDayOneController`, routed to `ignore` in the loader table. |
 | `beta/events/` | `customer_events.json`, `hidden_thread_events.json` — same path as above. |
 
@@ -91,7 +91,8 @@ Routes fall into three buckets in `_TYPE_ROUTES`:
    `personality_data`, `archetypes_data`, `platforms_data`,
    `manager_notes_data`, `onboarding_config_data`,
    `tutorial_contexts_data`, `retro_games_grades_data`,
-   `product_visual_catalog_data`, `beta_day_data`, `beta_events_data`).
+   `product_visual_catalog_data`, `store_visual_layout_catalog`,
+   `beta_day_data`, `beta_events_data`).
 
 For entry-bucket dictionary-shaped files, entries come from `entries`,
 `items`, or `definitions` arrays when present. Otherwise the loader uses the
@@ -178,6 +179,8 @@ Not every content file becomes a typed `Resource`. Current examples include:
 - product/platform visual catalog data under `game/content/visuals/`, which
   is recognized by `DataLoader` but remains visual-only data rather than a
   typed gameplay resource
+- store visual layout data under `game/content/visuals/`, which is recognized
+  by `DataLoader` and consumed by visual/store presentation code
 - `PerformanceReport`, which is a runtime Resource built by
   `PerformanceReportSystem`, not a JSON-loaded content resource
 

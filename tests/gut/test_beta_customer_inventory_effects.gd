@@ -3,6 +3,9 @@ extends GutTest
 const BetaCustomerInventoryEffectsScript: GDScript = preload(
 	"res://game/scripts/beta/beta_customer_inventory_effects.gd"
 )
+const BetaInventoryCountAdapterScript: GDScript = preload(
+	"res://game/scripts/beta/beta_inventory_count_adapter.gd"
+)
 const STORE_ID: StringName = &"retro_games"
 const GAME_ID: String = "neo_ignite_motorway_kings_loose"
 const GAME_IN_ID: String = "neo_ignite_motorway_kings_westside_loose"
@@ -60,6 +63,10 @@ func test_swap_removes_shelf_item_creates_backroom_return_and_clears_slot() -> v
 	assert_false(slot.is_occupied(), "Visible shelf slot should clear after sale")
 	assert_eq(_inventory.get_backroom_items_for_store(String(STORE_ID)).size(), 1)
 	assert_eq(int((result["inventory_counts"] as Dictionary).get("backroom", -1)), 1)
+	var removed: Dictionary = (result.get("applied", []) as Array)[0] as Dictionary
+	assert_eq(str(removed.get("instance_id", "")), String(sold.instance_id))
+	assert_eq(str(removed.get("category", "")), "cartridges")
+	assert_eq(str(removed.get("store_id", "")), String(STORE_ID))
 
 
 func test_bundle_sale_removes_two_stocked_items_atomically() -> void:
@@ -82,6 +89,61 @@ func test_bundle_sale_removes_two_stocked_items_atomically() -> void:
 	assert_null(_inventory.get_item(game.instance_id))
 	assert_null(_inventory.get_item(controller.instance_id))
 	assert_eq((result.get("applied", []) as Array).size(), 2)
+
+
+func test_count_adapter_summarizes_real_sale_without_double_counting() -> void:
+	var sold: ItemInstance = _add_item(GAME_ID, "good", "shelf:slot_a")
+	_add_slot("slot_a", sold.instance_id)
+
+	var result: Dictionary = _apply_effects(
+		{
+			"inventory":
+			[
+				_remove_effect(GAME_ID, 1),
+				{
+					"op": "create_item",
+					"store_id": String(STORE_ID),
+					"definition_id": GAME_IN_ID,
+					"condition": "near_mint",
+					"location": "backroom",
+					"quantity": 1,
+					"acquired_price": 0,
+					"reason": "customer_exchange_in",
+				},
+			],
+		}
+	)
+	var counts: Dictionary = _count_adapter().call("from_transaction", result) as Dictionary
+
+	assert_eq(str(counts.get("source", "")), "real_inventory")
+	assert_true(bool(counts.get("ok", false)))
+	assert_eq(int(counts.get("shelf", -1)), 0)
+	assert_eq(int(counts.get("backroom", -1)), 1)
+	assert_eq(int(counts.get("damaged", -1)), 0)
+	assert_eq(int(counts.get("applied_remove_quantity", -1)), 1)
+	assert_eq(int(counts.get("applied_create_quantity", -1)), 1)
+	assert_eq(int(counts.get("applied_shelf_removed_quantity", -1)), 1)
+	assert_eq(int(counts.get("applied_backroom_created_quantity", -1)), 1)
+	assert_eq(int(counts.get("returned_backroom_count", -1)), 1)
+	assert_eq(int((counts["inventory_counts"] as Dictionary).get("backroom", -1)), 1)
+
+
+func test_presentation_counts_are_marked_as_tutorial_state() -> void:
+	_add_item(GAME_ID, "good", "shelf:slot_a")
+	_add_item(GAME_IN_ID, "near_mint", "backroom")
+
+	var counts: Dictionary = (
+		_count_adapter().call("presentation_counts", 2, 3, 0, 1) as Dictionary
+	)
+
+	assert_eq(str(counts.get("source", "")), "presentation_tutorial")
+	assert_true(bool(counts.get("ok", false)))
+	assert_eq(int(counts.get("shelf", -1)), 2)
+	assert_eq(int(counts.get("backroom", -1)), 3)
+	assert_eq(int(counts.get("returned_backroom_count", -1)), 1)
+	assert_eq(int(counts.get("applied_remove_quantity", -1)), 0)
+	assert_eq(int(counts.get("applied_create_quantity", -1)), 0)
+	assert_eq(int((counts["inventory_counts"] as Dictionary).get("shelf", -1)), 2)
 
 
 func test_decline_no_sale_does_not_emit_inventory_change() -> void:
@@ -130,6 +192,10 @@ func test_insufficient_quantity_keeps_existing_stock_and_emits_no_signal() -> vo
 
 func _adapter() -> RefCounted:
 	return BetaCustomerInventoryEffectsScript.new(_inventory, _shelf_root) as RefCounted
+
+
+func _count_adapter() -> RefCounted:
+	return BetaInventoryCountAdapterScript.new(_inventory, STORE_ID) as RefCounted
 
 
 func _apply_effects(effects: Dictionary) -> Dictionary:

@@ -29,6 +29,7 @@ func test_beta_day1_toasts_fit_under_limit() -> void:
 		"Store open for customers.",
 		"Sale complete: +$18",
 		"She thanked you and walked off.",
+		"No sale. The customer left upset.",
 		"Still too early to close. Finish out the shift first.",
 	]
 	for s: String in samples:

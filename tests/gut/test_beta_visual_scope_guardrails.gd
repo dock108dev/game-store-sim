@@ -132,7 +132,7 @@ func test_visible_beta_roots_have_explicit_scene_categories() -> void:
 			continue
 		var root_name: String = str(child.name)
 		assert_true(
-			BetaDayOneController._BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
+			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
 			"%s must be beta-kept before it can remain visible" % root_name
 		)
 		assert_true(
@@ -144,7 +144,7 @@ func test_visible_beta_roots_have_explicit_scene_categories() -> void:
 		)
 	for root_name: String in VISIBLE_ROOT_CLASSIFICATIONS.keys():
 		assert_true(
-			BetaDayOneController._BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
+			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
 			"%s classification must match a beta-visible root" % root_name
 		)
 		var categories: Array = VISIBLE_ROOT_CLASSIFICATIONS[root_name] as Array
@@ -159,7 +159,7 @@ func test_visible_beta_roots_have_explicit_scene_categories() -> void:
 func test_beta_keep_roots_and_signs_stay_visible_after_scope_strip() -> void:
 	for root_name: String in REQUIRED_BETA_KEEP_ROOTS:
 		assert_true(
-			BetaDayOneController._BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
+			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
 			"%s must stay in the beta-visible root set" % root_name
 		)
 		var node: Node = _root.get_node_or_null(root_name)
@@ -183,11 +183,11 @@ func test_deferred_and_context_roots_match_runtime_scope() -> void:
 	for root_name: String in REQUIRED_HIDDEN_DEFERRED_ROOTS:
 		var root_key: StringName = StringName(root_name)
 		assert_true(
-			BetaDayOneController._BETA_DEFERRED_ROOT_NODES.has(root_key),
+			BetaDayOneController.BETA_DEFERRED_ROOT_NODES.has(root_key),
 			"%s must be classified as deferred beta scope" % root_name
 		)
 		assert_false(
-			BetaDayOneController._BETA_KEEP_ROOT_NODES.has(root_key),
+			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(root_key),
 			"%s must not be promoted as a beta-visible root" % root_name
 		)
 		var node: Node = _root.get_node_or_null(root_name)
@@ -199,11 +199,11 @@ func test_deferred_and_context_roots_match_runtime_scope() -> void:
 	for root_name: String in REQUIRED_CONTEXT_ROOTS:
 		var root_key: StringName = StringName(root_name)
 		assert_true(
-			BetaDayOneController._BETA_CONTEXT_ROOT_NODES.has(root_key),
+			BetaDayOneController.BETA_CONTEXT_ROOT_NODES.has(root_key),
 			"%s must be classified as retained tutorial context" % root_name
 		)
 		assert_true(
-			BetaDayOneController._BETA_KEEP_ROOT_NODES.has(root_key),
+			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(root_key),
 			(
 				"%s context must remain visible until the current tutorial no longer needs it"
 				% root_name
@@ -279,7 +279,7 @@ func test_objective_tables_keep_beta_target_paths_and_hidden_clue_non_objective(
 	for target_path: String in OBJECTIVE_TARGET_PATHS:
 		var root_name: String = target_path.get_slice("/", 0)
 		assert_true(
-			BetaDayOneController._BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
+			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
 			"%s must stay in the beta keep list" % root_name
 		)
 		assert_not_null(_root.get_node_or_null(target_path), "%s must exist" % target_path)

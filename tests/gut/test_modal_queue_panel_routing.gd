@@ -87,6 +87,7 @@ func _result_payload() -> Dictionary:
 		"effects": {"cash": 10},
 		"result": {
 			"headline": "Help Accepted",
+			"acknowledgement": "Help logged.",
 			"customer_reaction": "They relax.",
 			"store_outcome": "The line keeps moving.",
 			"consequences": [
@@ -230,18 +231,22 @@ func test_customer_result_show_routes_through_queue() -> void:
 	panel.close()
 
 
-func test_customer_result_payload_renders_consequence_rows() -> void:
+func test_customer_result_payload_renders_acknowledgement_only() -> void:
 	var panel: ModalPanel = BetaCustomerResultPanelScript.new() as ModalPanel
 	add_child_autofree(panel)
 
 	panel.call("show_result", _result_payload())
 
 	assert_true(panel.visible)
-	var box: VBoxContainer = panel.get("_consequences_box") as VBoxContainer
-	assert_not_null(box)
-	if box != null:
-		assert_eq(box.get_child_count(), 1,
-			"_on_queued_open must render the result consequence rows")
+	var acknowledgement: Label = panel.get("_acknowledgement_label") as Label
+	assert_not_null(acknowledgement)
+	if acknowledgement != null:
+		assert_eq(
+			acknowledgement.text,
+			"Help logged.",
+			"_on_queued_open must render concise acknowledgement copy"
+		)
+	assert_null(panel.get("_consequences_box"))
 	panel.close()
 
 

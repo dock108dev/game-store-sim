@@ -45,6 +45,8 @@
           },
           "result": {
             "headline": "Exchange Accepted",
+            "acknowledgement": "Exchange logged. The customer relaxes at the counter.",
+            "ack_prompt": "Done",
             "customer_reaction": "The parent exhales hard, then gives you a tired, grateful nod.",
             "store_outcome": "You swap the sealed copy for the right platform, keep the sale, and move the line along without drama.",
             "manager_note": "Vic would rather eat a clean exchange than lose a customer over a box that never got opened.",
@@ -116,6 +118,8 @@
           },
           "result": {
             "headline": "Bundle Sold",
+            "acknowledgement": "Bundle logged. The customer accepts the extra item.",
+            "ack_prompt": "Done",
             "customer_reaction": "The parent hesitates at the extra total, then caves when you point out the used controller discount.",
             "store_outcome": "The register lands a bigger sale, but the exchange feels a little less like help and a little more like pressure.",
             "manager_note": "Good numbers, softer trust. Vic notices both.",
@@ -160,6 +164,8 @@
           },
           "result": {
             "headline": "Exchange Refused",
+            "acknowledgement": "No sale logged. The customer gathers the box to leave.",
+            "ack_prompt": "Done",
             "customer_reaction": "The parent goes quiet, gathers the game, and leaves with the receipt crushed in one hand.",
             "store_outcome": "The register stays unchanged, but the next customer in line watches the whole thing happen.",
             "manager_note": "Policy protected the drawer. It did not protect the room.",
@@ -225,6 +231,33 @@
                 "reason": "trade_in_damaged_disc"
               }
             ]
+          },
+          "result": {
+            "headline": "Full Value Accepted",
+            "acknowledgement": "Trade-in logged. The regular leaves with full credit.",
+            "ack_prompt": "Done",
+            "customer_reaction": "The regular looks relieved that you honored the relationship.",
+            "store_outcome": "You take the scratched disc into the damaged bin and keep the rest of the trade-in moving.",
+            "manager_note": "Vic can live with a small hit when it keeps a repeat customer steady.",
+            "tone": "positive",
+            "consequences": [
+              {
+                "label": "Money",
+                "text": "-$8 in extra trade-in value."
+              },
+              {
+                "label": "Reputation",
+                "text": "+3 from backing a regular."
+              },
+              {
+                "label": "Inventory",
+                "text": "Two clean trade-ins move to the back room; the scratched disc goes to damaged stock."
+              },
+              {
+                "label": "Policy",
+                "text": "+1 manager trust for keeping the exception controlled."
+              }
+            ]
           }
         },
         {
@@ -256,6 +289,33 @@
                 "reason": "trade_in_damaged_disc"
               }
             ]
+          },
+          "result": {
+            "headline": "Partial Value Offered",
+            "acknowledgement": "Trade-in logged. The regular accepts the split valuation.",
+            "ack_prompt": "Done",
+            "customer_reaction": "He grumbles, then nods when you separate the clean cases from the scratched one.",
+            "store_outcome": "The store gets the good stock and keeps the damaged disc from being priced like shelf-ready inventory.",
+            "manager_note": "That is the kind of middle lane Vic wants: fair, clear, and documented.",
+            "tone": "positive",
+            "consequences": [
+              {
+                "label": "Money",
+                "text": "$0 net after balancing the trade-in credit."
+              },
+              {
+                "label": "Reputation",
+                "text": "+1 for treating the regular fairly."
+              },
+              {
+                "label": "Inventory",
+                "text": "Two clean trade-ins move to the back room; the scratched disc is tracked separately."
+              },
+              {
+                "label": "Policy",
+                "text": "+2 manager trust for valuing condition honestly."
+              }
+            ]
           }
         },
         {
@@ -279,6 +339,33 @@
               {
                 "op": "no_inventory_change",
                 "reason": "scratched_disc_declined"
+              }
+            ]
+          },
+          "result": {
+            "headline": "Scratched Disc Declined",
+            "acknowledgement": "Trade-in logged. The regular keeps the damaged disc.",
+            "ack_prompt": "Done",
+            "customer_reaction": "He is annoyed, but he still lets you process the clean cases.",
+            "store_outcome": "You protect the damaged-bin standard and add the usable trade-ins to back-room stock.",
+            "manager_note": "Vic will take the cleaner books, even if the conversation cooled off.",
+            "tone": "mixed",
+            "consequences": [
+              {
+                "label": "Money",
+                "text": "+$4 after declining the damaged disc."
+              },
+              {
+                "label": "Reputation",
+                "text": "-2 from a disappointed regular."
+              },
+              {
+                "label": "Inventory",
+                "text": "Only the clean trade-ins move into store inventory."
+              },
+              {
+                "label": "Policy",
+                "text": "+1 manager trust for holding the damaged-stock line."
               }
             ]
           }

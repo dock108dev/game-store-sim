@@ -15,12 +15,18 @@ extends GutTest
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 
 var _root: Node3D = null
+var _captured_backroom_counts: Array[int] = []
+var _captured_shelf_counts: Array[int] = []
 
 
 func before_each() -> void:
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
 	BetaRunState.reset_new_run()
+	_captured_backroom_counts.clear()
+	_captured_shelf_counts.clear()
+	EventBus.beta_backroom_count_changed.connect(_capture_backroom_count)
+	EventBus.beta_shelf_count_changed.connect(_capture_shelf_count)
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load")
 	if scene == null:
@@ -34,6 +40,10 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	if EventBus.beta_backroom_count_changed.is_connected(_capture_backroom_count):
+		EventBus.beta_backroom_count_changed.disconnect(_capture_backroom_count)
+	if EventBus.beta_shelf_count_changed.is_connected(_capture_shelf_count):
+		EventBus.beta_shelf_count_changed.disconnect(_capture_shelf_count)
 	# Reset autoload state BEFORE freeing the scene so each panel's
 	# `_exit_tree` sees an empty CTX_MODAL stack and skips the safety-net
 	# push_error in `modal_panel.gd::_exit_tree`. Reversed ordering
@@ -44,6 +54,14 @@ func after_each() -> void:
 		_root.free()
 	_root = null
 	BetaRunState.reset_new_run()
+
+
+func _capture_backroom_count(count: int) -> void:
+	_captured_backroom_counts.append(count)
+
+
+func _capture_shelf_count(count: int) -> void:
+	_captured_shelf_counts.append(count)
 
 
 func _controller() -> Node:
@@ -70,26 +88,26 @@ func _dismiss_vic_note() -> void:
 # emitted on each so a copy-paste bug that emits a stale literal cannot slip
 # past CI.
 
-func test_backroom_pickup_emits_count_changed_with_delivery_quantity() -> void:
+func test_backroom_pickup_emits_tutorial_delivery_quantity() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	watch_signals(EventBus)
+	_captured_backroom_counts.clear()
 	controller.on_beta_backroom_pickup_interacted()
 	await get_tree().process_frame
 	var expected: int = BetaDayOneController._BACKROOM_DELIVERY_QUANTITY
-	assert_signal_emitted_with_parameters(
-		EventBus, "beta_backroom_count_changed", [expected],
+	assert_true(
+		_captured_backroom_counts.has(expected),
 		(
 			"Back-room pickup must emit beta_backroom_count_changed(%d) so"
-			+ " the HUD's Back Room readout ticks to the day's delivery quantity"
+			+ " the HUD's Back Room readout shows tutorial delivery state"
 		) % expected
 	)
 
 
-func test_restock_emits_shelf_count_matching_delivery_quantity() -> void:
+func test_restock_emits_shelf_count_matching_tutorial_delivery() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
@@ -97,23 +115,22 @@ func test_restock_emits_shelf_count_matching_delivery_quantity() -> void:
 	await get_tree().process_frame
 	controller.on_beta_backroom_pickup_interacted()
 	await get_tree().process_frame
-	watch_signals(EventBus)
+	_captured_shelf_counts.clear()
 	controller.on_beta_restock_interacted()
 	await get_tree().process_frame
 	var expected: int = BetaDayOneController._BACKROOM_DELIVERY_QUANTITY
-	assert_signal_emitted_with_parameters(
-		EventBus, "beta_shelf_count_changed", [expected],
+	assert_true(
+		_captured_shelf_counts.has(expected),
 		(
 			"Restocking the shelf must emit beta_shelf_count_changed(%d)"
-			+ " — same count the back room just drained"
+			+ " from tutorial delivery without duplicating back-room stock"
 		) % expected
 	)
 
 
-func test_restock_drains_backroom_count_to_zero() -> void:
-	# Complementarity contract: stocking flips the delivery from the back
-	# room onto the shelf, so the back-room counter must drain in the same
-	# call as the shelf counter ticks up.
+func test_restock_drains_tutorial_backroom_count_to_zero() -> void:
+	# This fixture has no real inventory transaction. Stocking consumes only
+	# tutorial delivery, so the back-room presentation count drains to zero.
 	var controller: Node = _controller()
 	if controller == null:
 		return
@@ -121,12 +138,12 @@ func test_restock_drains_backroom_count_to_zero() -> void:
 	await get_tree().process_frame
 	controller.on_beta_backroom_pickup_interacted()
 	await get_tree().process_frame
-	watch_signals(EventBus)
+	_captured_backroom_counts.clear()
 	controller.on_beta_restock_interacted()
 	await get_tree().process_frame
-	assert_signal_emitted_with_parameters(
-		EventBus, "beta_backroom_count_changed", [0],
-		"Restock must emit beta_backroom_count_changed(0) so the Back Room readout drains"
+	assert_true(
+		_captured_backroom_counts.has(0),
+		"Restock must drain tutorial delivery from the Back Room readout"
 	)
 
 
@@ -217,4 +234,3 @@ func test_shift_note_joins_multiple_skipped_with_and() -> void:
 		note, " and ",
 		"Two skipped objectives must join with ' and ' to read as a sentence"
 	)
-

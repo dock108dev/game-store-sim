@@ -238,7 +238,7 @@ func test_chain_advance_updates_rail_with_next_step_copy() -> void:
 	)
 	EventBus.placement_mode_entered.emit()
 	assert_eq(
-		rail._objective_label.text, "Stock the Retro Games shelf.",
+		rail._objective_label.text, "Stock the used games shelf.",
 		"placement_mode_entered at BACK_ROOM_INVENTORY must re-render with step 3"
 	)
 	EventBus.item_stocked.emit("item_001", "shelf_a")

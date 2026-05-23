@@ -1,17 +1,4 @@
-## Passive register-side hint for the back-room and stocking phases.
-##
-## During STAGE_BACK_ROOM_INVENTORY and STAGE_STOCK_SHELF the active
-## interactable is elsewhere in the store (back room, then the used-games
-## shelf), so aiming at the register today shows nothing — BetaDayEndTrigger
-## is silently disabled and BetaDayOneCustomer is not on the chain. This
-## indicator fills the gap with a muted disabled-reason hint that points the
-## player back at the current beat.
-##
-## Always returns `false` from `can_interact`, so E never fires here and the
-## HUD always renders the disabled-reason copy. Stays additive: BetaDayOneCustomer
-## and BetaDayEndTrigger continue to own STAGE_TALK_TO_CUSTOMER and
-## STAGE_END_DAY respectively, and the indicator returns an empty string for
-## those stages so the active interactable's prompt is the one the player sees.
+## Passive register-side hint for beats owned elsewhere in the store.
 class_name RegisterStatusIndicator
 extends BetaDayOneInteractableBase
 
@@ -21,11 +8,7 @@ func _ready() -> void:
 	prompt_text = ""
 	action_verb = "Check"
 	interactable_id = &"register_status_hint"
-	# Raycast-only: a proximity radius here would compete with the
-	# BetaDayEndTrigger's 2.25 m proximity zone and the customer's trigger,
-	# stealing focus from the active interactable when the player walks past.
-	# The tight CollisionShape3D in the scene means the player must point the
-	# reticle at the register face for this hint to surface.
+	# Raycast-only so this hint never steals focus from the active beat owner.
 	proximity_radius = 0.0
 	super._ready()
 
@@ -42,6 +25,6 @@ func get_disabled_reason(_actor: Node = null) -> String:
 		BetaDayOneController.STAGE_BACK_ROOM_INVENTORY:
 			return "Check the back room first."
 		BetaDayOneController.STAGE_STOCK_SHELF:
-			return "Stock the Retro Games shelf before closing."
+			return "Stock the used games shelf before closing."
 		_:
 			return ""

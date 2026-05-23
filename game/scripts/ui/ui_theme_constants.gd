@@ -261,6 +261,19 @@ static func format_thousands(value: int) -> String:
 	return sign_str + out
 
 
+## Shared whole-dollar cash formatter for save previews and compact KPI labels.
+static func format_cash_whole(amount: float, include_symbol: bool = false) -> String:
+	var whole: int = int(absf(amount))
+	var rendered: String = format_thousands(whole)
+	if amount < 0.0:
+		rendered = "-" + rendered
+	if include_symbol:
+		if rendered.begins_with("-"):
+			return "-$" + rendered.substr(1)
+		return "$" + rendered
+	return rendered
+
+
 ## Returns a markup text label based on price-to-market ratio.
 static func get_markup_label(ratio: float) -> String:
 	if ratio <= MARKUP_LABEL_FAIR_MAX:

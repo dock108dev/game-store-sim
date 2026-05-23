@@ -2,93 +2,84 @@
 
 Date: 2026-05-23
 
-This audit answers a narrower question than "do tests pass?": for each intended
-player beat, can we point to the screen object, input target, state mutation,
-player feedback, next enabled action, and regression coverage?
+This audit maps the current beta Day 1 route proof surfaces. It is separate
+from the store-entry readiness checkpoint: `Day1ReadinessAudit` emits
+`day1_playable_ready`, while the route proof artifacts below cover the
+player-facing Day 1 loop after entry.
 
-## Audit Model
+## Proof Contract
 
-A beat is build-ready only when all seven columns are true:
+`game/scripts/beta/beta_code_to_screen_proof_contract.gd` defines the required
+proof fields for each route beat:
 
-| Gate | Meaning |
+| Field | Code meaning |
 | --- | --- |
-| Screen object | The player can see the thing they are supposed to care about. |
-| Input affordance | The prompt appears from normal play distance and pressing the key reaches the intended script. |
-| Code owner | One controller or system owns the behavior; no duplicate owner competes for the beat. |
-| State mutation | Pressing the input changes durable game state, not only text. |
-| Screen feedback | The player sees the consequence without reading logs. |
-| Next beat | The prior interaction disables and the next interaction enables. |
-| Test or capture | A test or recorded manual pass proves the full chain still works. |
+| `screen_object` | Visible object or panel that must appear for the beat. |
+| `input_affordance` | Prompt, modal control, or normal route input used by the beat. |
+| `code_owner` | Script that owns the behavior. |
+| `state_mutation` | Stage, objective, count, customer, inventory, cash, or summary state expected from the beat. |
+| `screen_feedback` | Screenshot-facing evidence expected for the beat. |
+| `next_beat` | Route step enabled by completing the beat. |
+| `test_capture` | Automated assertion references plus the capture helper call. |
 
-If a beat only satisfies code owner and state mutation, it is scaffold. If it
-also satisfies screen object, input, feedback, and next beat, it is gameplay.
+`tests/gut/test_manual_day_one_route_capture.gd` validates that every manifest
+beat includes the full proof payload.
 
-## Current Result
+## Route Manifest
 
-| Beat | Status | Evidence | Gap |
-| --- | --- | --- | --- |
-| Boot into Shelf Life | Ready | Runtime log now reaches `AUDIT: PASS day1_playable_ready store_id=retro_games`; `Day1ReadinessAudit` checks active store, player, camera, input focus, stockable shelf, backroom stock, and active objective. | Entry readiness is not the same as loop readiness. |
-| Opening manager | Ready but thin | `BetaDayOneCustomer/Interactable` is reused as manager, prompt copy changes to manager, and tests cover objective/proxy copy. | The conversation is a one-press completion, so it teaches controls but not decision-making. |
-| Register check | Wired but thin | `BetaDayEndTrigger/Interactable` advances `training_check_register`, grants register access, and shows a toast. | The register does not yet have an inspectable screen or visible state change beyond checklist/toast. |
-| Back-room pickup | Wired | `BetaBackroomPickup/Interactable` advances to shelf stock, emits carry/backroom count changes, and swaps the stock box visual. | Needs a manual capture that starts at register check and reaches the pickup in one continuous run. |
-| Stock shelf | Buildable | `BetaRestockShelf/Interactable` drains carry/backroom state, emits shelf count, hides empty overlay, and renders visible shelf items. | The act is still instant; there is no stocking mini-loop or placement choice. |
-| First customer decision | Wired, not proven by latest run | Day 1 content has one customer event with three choices; choice selection mutates cash/reputation/manager trust, inventory effects, customer exit, sale signals, HUD counters, and outcome toast. | Latest manual log stopped after register. Need a capture that proves the decision card, result panel, customer exit, sale stats, and next objective all appear in one run. |
-| Close day | Wired, needs capture | Close-day target is gated until required objectives complete, summary payload includes sales, rent, profit, inventory, customers helped, skipped-objective notes, and reinvest options. | Need an end-to-end capture from first customer through summary. |
-| Repeatable gameplay | Not ready | There are production systems for inventory, queueing, customer purchase, reports, day summary, and beta events. | The beta slice is still a single authored chain. It does not yet express a repeatable shelf -> customer -> queue -> checkout -> restock loop on screen. |
+`game/scripts/beta/beta_manual_day_one_route_capture.gd` writes a
+`manual_day1_loop_route` manifest under
+`user://screenshots/manual_routes/retro_games_day_one_loop`. The manifest
+contains ordered beats, a manual review checklist, capture metadata, and the
+proof contract metadata.
 
-## What Is Actually Ready
+Required review beats in the script:
 
-- Store entry is ready: boot, scene routing, active-store state, player spawn,
-  input focus, and Day 1 readiness now have a passing audit.
-- Day 1 scripted progression is mostly ready: manager, register, back room,
-  shelf, first customer, and close day all have code owners and tests.
-- HUD ownership is mostly coherent: right panel owns stats/checklist, event log
-  owns recent event copy, interaction prompt owns the bottom-right affordance,
-  and toasts own transient feedback.
+| Beat | Route surface |
+| --- | --- |
+| `manager_prompt` | Manager proxy at checkout and opening checklist. |
+| `register_prompt` | Register target and register prompt. |
+| `backroom_pickup_prompt` | Back-room pickup target and stockroom counter. |
+| `training_shelf_transition` | Shelf stocking prompt after stock pickup. |
+| `before_customer` | Customer proxy at checkout before the decision card. |
+| `customer_decision_card` | Customer decision modal. |
+| `after_result_customer_exit` | Customer exit state after result acknowledgement. |
+| `stocked_shelf_stat_change` | Post-customer shelf and stat update. |
+| `close_day_prompt` | Close-day register trigger. |
+| `close_day_summary` | Day summary panel. |
 
-## What Is Not Ready
+## Current Code Owners
 
-- A repeatable gameplay spine is not chosen clearly enough. The repo currently
-  mixes a first-person store, a scripted checklist, modal decision cards,
-  inventory effects, and customer/queue systems. All are plausible, but the
-  player-facing loop is not yet one obvious grammar.
-- The screen does not yet prove consequences strongly enough. Logs and state
-  changes are ahead of visual feedback.
-- "More visual pass" is now low leverage. The missing progress is not another
-  shelf prop; it is an end-to-end interaction loop that can be replayed.
+| Surface | Current owner |
+| --- | --- |
+| Day 1 route state machine, objective advancement, customer resolution, summary payload | `game/scripts/beta/beta_day_one_controller.gd` |
+| Back-room pickup interaction bridge | `game/scripts/beta/beta_backroom_pickup_interactable.gd` |
+| Shelf stocking interaction bridge | `game/scripts/beta/beta_restock_interactable.gd` |
+| Customer interaction bridge | `game/scripts/beta/beta_day1_customer_interactable.gd` |
+| Customer decision modal | `game/scripts/beta/beta_decision_card_panel.gd` |
+| Customer result acknowledgement modal | `game/scripts/beta/beta_customer_result_panel.gd` |
+| Persistent register display state | `game/scripts/beta/register_screen_state.gd` |
+| First-person carried stock marker | `game/scripts/beta/beta_carried_stock_marker.gd` |
+| Real-inventory vs tutorial-count adapter | `game/scripts/beta/beta_inventory_count_adapter.gd` |
+| Beta day summary panel | `game/scripts/beta/beta_day_summary_panel.gd` |
 
-## Recommended Next Milestone
+## Automated Coverage
 
-Build one vertical Day 1 loop and stop treating this as a general beta polish
-problem:
+Current GUT coverage tied to this route includes:
 
-1. Customer is visible at the counter with a readable need.
-2. Player talks to customer and sees the decision card.
-3. Player chooses an option.
-4. Customer visibly reacts and exits or stays.
-5. Register/shelf/HUD change visibly.
-6. Back-room or shelf work becomes the next physical task.
-7. Closing summary reflects exactly what happened.
+| Test file | Covered surface |
+| --- | --- |
+| `tests/gut/test_beta_day_one_critical_path.gd` | Full Day 1 route through summary, route target activation, shelf visuals, customer decision/result flow, sale/exchange/refusal variants, close-day gating. |
+| `tests/gut/test_beta_day_one_vertical_slice_validation.gd` | Prompt visibility, decision modal visibility, customer exit visibility, result reset, shelf item rendering, summary visibility, counter/receipt anchor visibility. |
+| `tests/gut/test_beta_customer_repeat_loop.gd` | Two-customer route ordering, Day 2 result visibility, repeat-customer no-stock routing. |
+| `tests/gut/test_beta_customer_inventory_effects.gd` | Customer inventory transactions and beta inventory-count adapter behavior. |
+| `tests/gut/test_manual_day_one_route_capture.gd` | Route manifest schema, required beat list, capture metadata, proof payload completeness. |
+| `tests/gut/test_register_screen_state.gd` | Persistent register screen states and receipt visibility. |
+| `tests/gut/test_beta_restock_shelf_visual_spec.gd` | Stock carry, shelf count, and visible shelf item behavior. |
 
-The target validation should be one automated critical-path test plus one
-manual capture checklist. The manual checklist should not be "look around the
-store"; it should be:
+## Runtime Artifacts
 
-```text
-New Game -> manager -> register -> back room -> stock shelf -> customer choice
--> result acknowledgement -> visible customer exit -> stats tick -> close day
--> summary values match the choice
-```
-
-## Build Decision
-
-Before adding more features, choose the primary gameplay grammar:
-
-| Option | What the game becomes | Why it helps |
-| --- | --- | --- |
-| Retail sim loop | Customers browse, queue, buy; player stocks/prices/handles register pressure. | Best if the core fun is spatial retail management. |
-| Narrative decision loop | Store is a walkable frame around customer cases and consequences. | Best if the core fun is making retail calls with story fallout. |
-
-Right now the project is trying to be both. The quickest way out of beta is to
-pick one as the spine and demote the other to support.
-
+The beta screenshot helper writes viewport captures under
+`user://screenshots/`. `BetaManualDayOneRouteCapture.write_route_manifest()`
+writes `route_manifest.json` and `manual_review.md` into a timestamped
+manual-route run directory.

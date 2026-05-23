@@ -1,0 +1,500 @@
+## Manifest writer for the manual Day 1 route capture.
+class_name BetaManualDayOneRouteCapture
+extends RefCounted
+
+const _BetaScreenshotSweep: GDScript = preload(
+	"res://game/scripts/beta/beta_screenshot_sweep.gd"
+)
+const _ProofContract: GDScript = preload("res://game/scripts/beta/beta_code_to_screen_proof_contract.gd")
+
+const ARTIFACT_DIR: String = "user://screenshots/manual_routes/retro_games_day_one_loop"
+const MANIFEST_FILENAME: String = "route_manifest.json"
+const MANUAL_REVIEW_FILENAME: String = "manual_review.md"
+const CAPTURE_DIR_NAME: String = "captures"
+const SNAPSHOT_DIR_NAME: String = "snapshots"
+const ARTIFACT_TYPE: String = "manual_day1_loop_route"
+const SCHEMA_VERSION: int = 1
+
+const REQUIRED_REVIEW_BEATS: Array[String] = [
+	"manager_prompt",
+	"register_prompt",
+	"backroom_pickup_prompt",
+	"training_shelf_transition",
+	"before_customer",
+	"customer_decision_card",
+	"after_result_customer_exit",
+	"stocked_shelf_stat_change",
+	"close_day_prompt",
+	"close_day_summary",
+]
+
+## Returns the ordered manual capture beats for the continuous Day 1 route.
+static func route_beats() -> Array[Dictionary]:
+	return [
+		_beat(
+			1,
+			"manager_prompt",
+			"Manager prompt",
+			"01_manager_prompt.png",
+			"Walk to the manager proxy at checkout before interacting.",
+			"training_talk_manager",
+			"talk_to_manager",
+			"Talk to manager",
+			{
+				"header": "OPENING SHIFT",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "0"}
+			},
+			{"shelf": 0, "backroom": 0},
+			{"state": "manager_role_visible", "event_id": ""},
+			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
+			{},
+			[
+				"tests/gut/test_beta_day_one_critical_path.gd:307",
+				"tests/gut/test_beta_day_one_critical_path.gd:315",
+			]
+		),
+		_beat(
+			2,
+			"register_prompt",
+			"Register prompt",
+			"02_register_prompt.png",
+			"Press interact on the manager prompt and walk to the register.",
+			"training_check_register",
+			"check_register",
+			"Check register",
+			{
+				"header": "OPENING SHIFT",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "0"}
+			},
+			{"shelf": 0, "backroom": 0},
+			{"state": "waiting_for_register_check", "event_id": ""},
+			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
+			{},
+			[
+				"tests/gut/test_beta_day_one_critical_path.gd:315",
+				"tests/gut/test_beta_day_one_critical_path.gd:316",
+				"tests/gut/test_beta_day_one_critical_path.gd:319",
+			]
+		),
+		_beat(
+			3,
+			"backroom_pickup_prompt",
+			"Backroom pickup prompt",
+			"03_backroom_pickup_prompt.png",
+			"Press interact at the register and walk to the back room pickup.",
+			"training_back_room_inventory",
+			"back_room_inventory",
+			"Check back room inventory",
+			{
+				"header": "OPENING SHIFT",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "4"}
+			},
+			{"shelf": 0, "backroom": 4},
+			{"state": "pickup_enabled", "event_id": ""},
+			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
+			{},
+			[
+				"tests/gut/test_beta_day_one_critical_path.gd:321",
+				"tests/gut/test_beta_day_one_critical_path.gd:322",
+				"tests/gut/test_beta_day_one_critical_path.gd:326",
+			]
+		),
+		_beat(
+			4,
+			"training_shelf_transition",
+			"Training shelf transition",
+			"04_training_shelf_transition.png",
+			"Pick up the back room stock and walk to the training shelf.",
+			"training_stock_shelf",
+			"stock_shelf",
+			"Stock used games shelf",
+			{
+				"header": "OPENING SHIFT",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 4", "Stockroom": "4"}
+			},
+			{"shelf": 0, "backroom": 4, "carrying_stock": true},
+			{"state": "stocking_training_enabled", "event_id": ""},
+			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
+			{},
+			[
+				"tests/gut/test_beta_day_one_critical_path.gd:330",
+				"tests/gut/test_beta_day_one_critical_path.gd:336",
+				"tests/gut/test_beta_day_one_critical_path.gd:338",
+			]
+		),
+		_beat(
+			5,
+			"before_customer",
+			"Before customer",
+			"05_before_customer.png",
+			"Stock the training shelf and return to the customer at checkout.",
+			"talk_to_customer",
+			"talk_to_customer",
+			"Talk to customer",
+			{
+				"header_prefix": "DAY 1",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "4 / 4", "Stockroom": "0"}
+			},
+			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"state": "waiting_for_customer_decision", "event_id": "day01_wrong_console_parent"},
+			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
+			{},
+			[
+				"tests/gut/test_beta_day_one_critical_path.gd:339",
+				"tests/gut/test_beta_day_one_critical_path.gd:342",
+				"tests/gut/test_beta_day_one_critical_path.gd:343",
+			]
+		),
+		_beat(
+			6,
+			"customer_decision_card",
+			"Customer decision card",
+			"06_customer_decision_card.png",
+			"Interact with the customer and leave the decision card open.",
+			"talk_to_customer",
+			"talk_to_customer",
+			"Decision card visible",
+			{
+				"modal": "customer_decision",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "4 / 4", "Stockroom": "0"}
+			},
+			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"state": "choice_pending", "event_id": "day01_wrong_console_parent"},
+			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
+			{},
+				[
+					"tests/gut/test_beta_day_one_critical_path.gd:345",
+					"tests/gut/test_beta_day_one_critical_path.gd:346",
+					"tests/gut/test_beta_day_one_critical_path.gd:350",
+				]
+			),
+		_beat(
+			7,
+			"result_acknowledgement",
+			"Result acknowledgement",
+			"07_result_acknowledgement.png",
+			"Choose the canonical exchange option and leave the result panel open.",
+			"talk_to_customer",
+			"talk_to_customer",
+			"Result panel visible",
+			{
+				"modal": "customer_result",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "4 / 4", "Stockroom": "0"}
+			},
+			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"state": "result_visible", "event_id": "day01_wrong_console_parent"},
+			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
+			{},
+				[
+					"tests/gut/test_beta_day_one_critical_path.gd:359",
+					"tests/gut/test_beta_day_one_critical_path.gd:363",
+					"tests/gut/test_beta_day_one_critical_path.gd:366",
+				]
+			),
+		_beat(
+			8,
+			"after_result_customer_exit",
+			"After result and customer exit",
+			"08_after_result_customer_exit.png",
+			"Acknowledge the result and capture after the customer starts leaving.",
+			"talk_to_customer",
+			"back_room_inventory",
+			"Check back room inventory",
+			{
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 4", "Stockroom": "0"}
+			},
+			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"state": "exit_in_progress", "event_id": "day01_wrong_console_parent"},
+			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
+			{},
+				[
+					"tests/gut/test_beta_day_one_critical_path.gd:373",
+					"tests/gut/test_beta_day_one_critical_path.gd:374",
+					"tests/gut/test_beta_day_one_critical_path.gd:375",
+					"tests/gut/test_beta_day_one_critical_path.gd:395",
+					"tests/gut/test_beta_day_one_critical_path.gd:397",
+				]
+		),
+		_beat(
+			9,
+			"stocked_shelf_stat_change",
+			"Stocked shelf stat change",
+			"09_stocked_shelf_stat_change.png",
+			"Complete the post-customer backroom pickup and shelf restock.",
+			"end_day",
+			"close_day",
+			"Close day",
+			{
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 4", "Stockroom": "1"}
+			},
+			{"shelf": 3, "backroom": 1, "carrying_stock": false},
+			{"state": "customer_served_and_shelf_stocked", "event_id": "day01_wrong_console_parent"},
+			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
+			{},
+				[
+					"tests/gut/test_beta_day_one_critical_path.gd:402",
+					"tests/gut/test_beta_day_one_critical_path.gd:406",
+					"tests/gut/test_beta_day_one_critical_path.gd:410",
+					"tests/gut/test_beta_day_one_critical_path.gd:416",
+				]
+			),
+		_beat(
+			10,
+			"close_day_prompt",
+			"Close day prompt",
+			"10_close_day_prompt.png",
+			"Walk to the close-day trigger after the final shelf/stat update.",
+			"end_day",
+			"close_day",
+			"Close day",
+			{
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 4", "Stockroom": "1"}
+			},
+			{"shelf": 3, "backroom": 1, "carrying_stock": false},
+			{"state": "close_day_enabled", "event_id": "day01_wrong_console_parent"},
+			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
+			{},
+				[
+					"tests/gut/test_beta_day_one_critical_path.gd:420",
+					"tests/gut/test_beta_day_one_critical_path.gd:421",
+					"tests/gut/test_beta_day_one_critical_path.gd:422",
+					"tests/gut/test_beta_day_one_critical_path.gd:427",
+				]
+			),
+		_beat(
+			11,
+			"close_day_summary",
+			"Close day summary",
+			"11_close_day_summary.png",
+			"Confirm close day and capture the summary panel.",
+			"summary",
+			"summary",
+			"Summary visible",
+			{
+				"modal": "day_summary",
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 4", "Stockroom": "1"}
+			},
+			{"shelf": 3, "backroom": 1, "carrying_stock": false},
+			{"state": "summary_visible", "event_id": "day01_wrong_console_parent"},
+			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
+			{
+				"starting_cash": 500,
+				"sales": 15,
+				"rent": -50,
+				"profit": -35,
+				"ending_cash": 515,
+				"customers_helped": 1,
+				"items_stocked": 2,
+				"sales_completed": 1,
+				"shelf_inventory": 3,
+				"backroom_inventory": 1,
+			},
+				[
+					"tests/gut/test_beta_day_one_critical_path.gd:437",
+					"tests/gut/test_beta_day_one_critical_path.gd:439",
+					"tests/gut/test_beta_day_one_critical_path.gd:443",
+					"tests/gut/test_beta_day_one_critical_path.gd:447",
+					"tests/gut/test_beta_day_one_critical_path.gd:451",
+					"tests/gut/test_beta_day_one_critical_path.gd:455",
+					"tests/gut/test_beta_day_one_critical_path.gd:458",
+					"tests/gut/test_beta_day_one_critical_path.gd:464",
+					"tests/gut/test_beta_day_one_critical_path.gd:499",
+					"tests/gut/test_beta_day_one_critical_path.gd:507",
+				]
+			),
+	]
+
+## Returns a manifest payload without touching the filesystem.
+static func build_manifest(
+	dir_path: String = ARTIFACT_DIR,
+	run_id: String = "",
+	capture_results: Dictionary = {}
+) -> Dictionary:
+	var resolved_run_id: String = run_id
+	if resolved_run_id.is_empty():
+		resolved_run_id = "%s_day1_loop" % _timestamp()
+	resolved_run_id = _BetaScreenshotSweep.sanitize_slug(resolved_run_id)
+	var run_dir: String = "%s/%s" % [dir_path, resolved_run_id]
+	return {
+		"schema_version": SCHEMA_VERSION,
+		"artifact_type": ARTIFACT_TYPE,
+		"route_id": "retro_games_day_one_loop",
+		"run_id": resolved_run_id,
+		"artifact_dir": ProjectSettings.globalize_path(run_dir),
+		"capture_dir": ProjectSettings.globalize_path("%s/%s" % [run_dir, CAPTURE_DIR_NAME]),
+		"snapshot_dir": ProjectSettings.globalize_path("%s/%s" % [run_dir, SNAPSHOT_DIR_NAME]),
+		"manual_review_path": ProjectSettings.globalize_path(
+			"%s/%s" % [run_dir, MANUAL_REVIEW_FILENAME]
+		),
+		"capture_helper": {
+			"script": "res://game/scripts/beta/beta_screenshot_helper.gd",
+			"method": "capture_current_viewport",
+			"argument_field": "capture_beat_name",
+		},
+		"code_to_screen_contract": _ProofContract.contract_metadata(),
+		"canonical_customer_choice": {
+			"event_id": "day01_wrong_console_parent",
+			"choice_id": "clean_exchange",
+			"expected_outcome": {
+				"cash_delta": 15,
+				"reputation_delta": 2,
+				"manager_trust_delta": 2,
+				"customers_helped_delta": 1,
+				"sales_delta": 1,
+				"customer_exits": true,
+				"summary_must_include_customer": true
+			}
+		},
+		"required_review_beats": REQUIRED_REVIEW_BEATS.duplicate(),
+		"beats": _beats_with_capture_results(route_beats(), capture_results),
+		"manual_review_template": _manual_review_template(route_beats())
+	}
+
+## Writes the route manifest and manual review checklist into a run directory.
+static func write_route_manifest(
+	dir_path: String = ARTIFACT_DIR,
+	run_id: String = "",
+	capture_results: Dictionary = {}
+) -> Dictionary:
+	var manifest: Dictionary = build_manifest(dir_path, run_id, capture_results)
+	var run_dir: String = _run_dir(dir_path, str(manifest.get("run_id", "")))
+	for path: String in [
+		run_dir,
+		"%s/%s" % [run_dir, CAPTURE_DIR_NAME],
+		"%s/%s" % [run_dir, SNAPSHOT_DIR_NAME],
+	]:
+		var dir_result: Dictionary = _BetaScreenshotSweep.ensure_artifact_dir(path)
+		if not bool(dir_result.get("ok", false)):
+			return dir_result
+
+	var manifest_path: String = "%s/%s" % [run_dir, MANIFEST_FILENAME]
+	var file: FileAccess = FileAccess.open(manifest_path, FileAccess.WRITE)
+	if file == null:
+		return _error("Cannot write route manifest: %s" % manifest_path)
+	file.store_string(JSON.stringify(manifest, "\t"))
+	file.close()
+
+	var review_result: Dictionary = _write_manual_review(run_dir, manifest)
+	if not bool(review_result.get("ok", false)):
+		return review_result
+
+	return {
+		"ok": true,
+		"path": manifest_path,
+		"absolute_path": ProjectSettings.globalize_path(manifest_path),
+		"manual_review_path": review_result.get("path", ""),
+		"run_id": manifest.get("run_id", ""),
+	}
+
+static func _beat(
+	index: int,
+	beat_name: String,
+	label: String,
+	filename: String,
+	player_action: String,
+	stage: String,
+	objective_id: String,
+	active_prompt: String,
+	hud_right_panel: Dictionary,
+	counts: Dictionary,
+	customer_state: Dictionary,
+	inventory_cash_deltas: Dictionary,
+	summary_values: Dictionary,
+	automated_assertions: Array[String]
+) -> Dictionary:
+	var beat: Dictionary = {
+		"index": index,
+		"beat_name": beat_name,
+		"capture_beat_name": beat_name,
+		"capture_helper_call": "capture_current_viewport(\"%s\")" % beat_name,
+		"label": label,
+		"filename": filename,
+		"snapshot_filename": filename.get_basename() + ".json",
+		"player_action_before_capture": player_action,
+		"expected_objective": objective_id,
+		"expected_stage": stage,
+		"active_prompt": active_prompt,
+		"hud_right_panel": hud_right_panel,
+		"shelf_backroom_counts": counts,
+		"customer_state": customer_state,
+		"inventory_cash_deltas": inventory_cash_deltas,
+		"summary_values": summary_values,
+		"automated_route_assertions": automated_assertions,
+	}
+	beat["code_to_screen_proof"] = _ProofContract.proof_from_route_beat(beat)
+	return beat
+
+static func _beats_with_capture_results(
+	beats: Array[Dictionary],
+	capture_results: Dictionary
+) -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for beat: Dictionary in beats:
+		var copy: Dictionary = beat.duplicate(true)
+		var beat_name: String = str(copy.get("beat_name", ""))
+		copy["capture_result"] = capture_results.get(beat_name, {})
+		out.append(copy)
+	return out
+
+static func _manual_review_template(beats: Array[Dictionary]) -> Dictionary:
+	var verdicts: Array[Dictionary] = []
+	for beat: Dictionary in beats:
+		verdicts.append({
+			"beat_name": str(beat.get("beat_name", "")),
+			"capture_beat_name": str(beat.get("capture_beat_name", "")),
+			"status": "pending",
+			"screenshot_matches_state": false,
+			"automated_assertion_checked": false,
+			"notes": "",
+		})
+	return {
+		"verdicts": verdicts,
+	}
+
+static func _write_manual_review(run_dir: String, manifest: Dictionary) -> Dictionary:
+	var path: String = "%s/%s" % [run_dir, MANUAL_REVIEW_FILENAME]
+	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	if file == null:
+		return _error("Cannot write manual review checklist: %s" % path)
+	var lines: PackedStringArray = PackedStringArray()
+	lines.append("# Manual Day 1 Route Capture")
+	lines.append("")
+	lines.append("Run id: %s" % str(manifest.get("run_id", "")))
+	lines.append("")
+	for beat_variant: Variant in manifest.get("beats", []):
+		var beat: Dictionary = beat_variant as Dictionary
+		lines.append(
+			"- [ ] %02d %s -> `%s`"
+			% [
+				int(beat.get("index", 0)),
+				str(beat.get("label", "")),
+				str(beat.get("filename", "")),
+			]
+		)
+		lines.append("  - Capture: `%s`" % str(beat.get("capture_helper_call", "")))
+		lines.append("  - Expected stage: `%s`" % str(beat.get("expected_stage", "")))
+		lines.append("  - Expected prompt: `%s`" % str(beat.get("active_prompt", "")))
+		for field: String in _ProofContract.REQUIRED_FIELDS:
+			lines.append(
+				"  - %s: %s"
+				% [field.capitalize().replace("_", " "), str((beat.get("code_to_screen_proof", {}) as Dictionary).get(field, ""))]
+			)
+	file.store_string("\n".join(lines))
+	file.close()
+	return {
+		"ok": true,
+		"path": path,
+		"absolute_path": ProjectSettings.globalize_path(path),
+	}
+
+static func _run_dir(dir_path: String, run_id: String) -> String:
+	return "%s/%s" % [dir_path, _BetaScreenshotSweep.sanitize_slug(run_id)]
+
+static func _timestamp() -> String:
+	var d: Dictionary = Time.get_datetime_dict_from_system()
+	return "%04d%02d%02d_%02d%02d%02d" % [int(d.get("year", 0)), int(d.get("month", 0)),
+		int(d.get("day", 0)), int(d.get("hour", 0)), int(d.get("minute", 0)),
+		int(d.get("second", 0))]
+
+static func _error(message: String) -> Dictionary:
+	return {"ok": false, "error": message}

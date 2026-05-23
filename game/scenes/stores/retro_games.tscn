@@ -1,4 +1,4 @@
-[gd_scene load_steps=193 format=3 uid="uid://retro_games_001"]
+[gd_scene load_steps=194 format=3 uid="uid://retro_games_001"]
 
 [ext_resource type="Script" path="res://game/scripts/stores/retro_games.gd" id="1"]
 [ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="2"]
@@ -52,6 +52,7 @@
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_sign_backing.tres" id="66_sign_backing"]
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_fluorescent_panel.tres" id="67_fluorescent"]
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_product_retro_games_textured.tres" id="68_product_retro"]
+[ext_resource type="Script" path="res://game/scripts/beta/register_screen_state.gd" id="69_register_screen_state"]
 
 [sub_resource type="BoxMesh" id="floor_mesh"]
 size = Vector3(16, 0.1, 20)
@@ -1385,7 +1386,7 @@ shape = SubResource("entrance_door_interactable_shape")
 ; interactable slot zone (slots sit at Y≤1.6).
 ;
 ; Visibility: kept visible by default and listed in
-; `_BETA_KEEP_ROOT_NODES` (beta_day_one_controller.gd) so the
+; `BETA_KEEP_ROOT_NODES` (beta_day_one_controller.gd) so the
 ; "RETRO GAMES" / "GAMES" labels brand the back wall throughout
 ; beta day one. The storefront-facing fascia (Storefront/SignName,
 ; Storefront/SignTagline) handles mall-corridor identity; this
@@ -1453,7 +1454,7 @@ pixel_size = 0.007
 modulate = Color(1, 0.92, 0.55, 1)
 double_sided = false
 font_size = 32
-text = "RETRO GAMES SHELF"
+text = "USED GAMES SHELF"
 horizontal_alignment = 1
 outline_size = 6
 outline_modulate = Color(0.05, 0.05, 0.05, 1)
@@ -2647,7 +2648,7 @@ visible = false
 
 ; Paired display case adjacent to the primary GlassCase. Nested as a child
 ; so the beta strip preserves it via the parent's keep status without
-; needing an extra entry in `_BETA_KEEP_ROOT_NODES`. Visual-only (no slots)
+; needing an extra entry in `BETA_KEEP_ROOT_NODES`. Visual-only (no slots)
 ; so the existing `cib_display` fixture slot count stays at 6; the second
 ; case anchors the central display area as a paired counter silhouette.
 [node name="GlassCase2" type="Node3D" parent="GlassCase"]
@@ -2959,6 +2960,21 @@ surface_material_override/0 = ExtResource("14")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.245)
 mesh = SubResource("register_screen_mesh")
 surface_material_override/0 = SubResource("register_screen_mat")
+
+[node name="RegisterScreenState" type="Node3D" parent="Checkout/Register"]
+script = ExtResource("69_register_screen_state")
+
+[node name="StateLabel" type="Label3D" parent="Checkout/Register/RegisterScreenState"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.055, -0.271)
+pixel_size = 0.0018
+double_sided = false
+font_size = 52
+text = "CLOSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+outline_size = 4
+outline_modulate = Color(0.015, 0.04, 0.015, 1)
+shaded = false
 
 [node name="TerminalMonitor" parent="Checkout/Register" instance=ExtResource("30")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.385, 0.025)
@@ -4488,7 +4504,7 @@ script = ExtResource("47_beta_controller")
 ; source of truth (the controller does not override it at runtime).
 ; §F-PUNCH1 — Back-room enclosure. The back-room atmosphere props
 ; (RefurbBenchCrate, SortCartCrate, inventory shelf, damaged bin) live
-; under the `back_room` Node3D, which is added to _BETA_KEEP_ROOT_NODES
+; under the `back_room` Node3D, which is added to BETA_KEEP_ROOT_NODES
 ; so they're visible during beta. These walls form a south + west
 ; partition with a 1.5 m doorway gap centered on the south face, so the
 ; player approaches from the storefront side and walks in.
