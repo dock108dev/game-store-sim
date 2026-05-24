@@ -153,6 +153,7 @@ var _fp_close_day_hint: Label
 ## bottom-center, pairing with `_fp_close_day_hint` on the same row to
 ## fulfill the BRAINDUMP "bottom-bar = sentence + control hint" spec.
 var _fp_sentence_label: Label
+var _fp_objective_sentence: String = ""
 ## §F-L3 — When set, overrides the InventorySystem-derived "On Shelves"
 ## count for the store_session day-1 loop. -1 means "no override; read from
 ## inventory as usual." Set via `EventBus.store_shelf_count_changed`.
@@ -677,7 +678,11 @@ func _format_fp_time_label(standard_text: String, formatted_hour: String) -> Str
 
 
 func _is_preopening_training() -> bool:
-	return _current_day == 1 and not StoreSessionState.preopening_complete and _has_training_milestones()
+	return (
+		_current_day == 1
+		and not StoreSessionState.preopening_complete
+		and _has_training_milestones()
+	)
 
 
 func _has_training_milestones() -> bool:
@@ -944,7 +949,12 @@ func _flash_reputation_label(old_value: float, new_value: float) -> void:
 ## Receives ObjectiveRail payloads so the FP close-day affordance can react to
 ## store_session-chain progress without owning the rail's display surface.
 func _on_objective_payload(_payload: Dictionary) -> void:
+	if bool(_payload.get("hidden", false)):
+		_fp_objective_sentence = ""
+	else:
+		_fp_objective_sentence = str(_payload.get("text", "")).strip_edges()
 	_refresh_close_day_hint_state()
+	_refresh_zero_state_hint()
 
 
 func _refresh_close_day_hint_state() -> void:
@@ -1212,18 +1222,21 @@ func is_modal_dim_active() -> bool:
 func _refresh_zero_state_hint() -> void:
 	var hint_text: String = ""
 	var should_show: bool = false
-	if not _store_session_mode_active():
-		var state: GameManager.State = GameManager.current_state
-		var in_store: bool = (
-			state == GameManager.State.STORE_VIEW or state == GameManager.State.GAMEPLAY
-		)
-		if in_store and InputFocus.current() != InputFocus.CTX_MODAL:
-			if _items_placed_count <= 0:
-				hint_text = _HINT_STOCK_FLOOR
-				should_show = true
-			elif _active_customer_count <= 0:
-				hint_text = _HINT_AWAITING_CUSTOMER
-				should_show = true
+	var state: GameManager.State = GameManager.current_state
+	var in_store: bool = (
+		state == GameManager.State.STORE_VIEW or state == GameManager.State.GAMEPLAY
+	)
+	var can_show: bool = in_store and InputFocus.current() != InputFocus.CTX_MODAL
+	if can_show and _store_session_mode_active() and not _fp_objective_sentence.is_empty():
+		hint_text = _fp_objective_sentence
+		should_show = true
+	elif can_show and not _store_session_mode_active():
+		if _items_placed_count <= 0:
+			hint_text = _HINT_STOCK_FLOOR
+			should_show = true
+		elif _active_customer_count <= 0:
+			hint_text = _HINT_AWAITING_CUSTOMER
+			should_show = true
 	if _fp_mode:
 		if is_instance_valid(_zero_state_hint):
 			_zero_state_hint.visible = false
@@ -1472,6 +1485,7 @@ func _apply_fp_visibility_overrides() -> void:
 ## share a single HUD instance across multiple test functions via before_all().
 func _reset_for_tests() -> void:
 	_tutorial_step_active = false
+	_fp_objective_sentence = ""
 	_telegraph_card.visible = false
 	_active_customer_count = 0
 	_items_placed_count = 0

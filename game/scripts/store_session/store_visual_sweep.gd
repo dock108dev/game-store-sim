@@ -114,7 +114,10 @@ static func full_store_review_context() -> Dictionary:
 	return {
 		"review_target": "full_store_context",
 		"acceptance_role": "secondary_context_only",
-		"notes": "Whole-room context may be reviewed separately; this phase passes or fails on the first-ten-seconds route views.",
+			"notes": (
+				"Whole-room context may be reviewed separately; "
+				+ "this phase passes or fails on the first-ten-seconds route views."
+			),
 		"beats": _serializable_rows(full_store_rows()),
 	}
 

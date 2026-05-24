@@ -2,10 +2,12 @@
 class_name ManualDayOneRouteCapture
 extends RefCounted
 
-const _StoreVisualSweep: GDScript = preload(
+const StoreVisualSweepScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
-const _StoreProofContract: GDScript = preload("res://game/scripts/store_session/store_code_to_screen_proof_contract.gd")
+const StoreProofContractScript: GDScript = preload(
+	"res://game/scripts/store_session/store_code_to_screen_proof_contract.gd"
+)
 
 const ARTIFACT_DIR: String = "user://screenshots/manual_routes/retro_games_day_one_loop"
 const MANIFEST_FILENAME: String = "route_manifest.json"
@@ -313,7 +315,7 @@ static func build_manifest(
 	var resolved_run_id: String = run_id
 	if resolved_run_id.is_empty():
 		resolved_run_id = "%s_day1_loop" % _timestamp()
-	resolved_run_id = _StoreVisualSweep.sanitize_slug(resolved_run_id)
+	resolved_run_id = StoreVisualSweepScript.sanitize_slug(resolved_run_id)
 	var run_dir: String = "%s/%s" % [dir_path, resolved_run_id]
 	return {
 		"schema_version": SCHEMA_VERSION,
@@ -331,7 +333,7 @@ static func build_manifest(
 			"method": "capture_current_viewport",
 			"argument_field": "capture_beat_name",
 		},
-		"code_to_screen_contract": _StoreProofContract.contract_metadata(),
+		"code_to_screen_contract": StoreProofContractScript.contract_metadata(),
 		"canonical_customer_choice": {
 			"event_id": "day01_wrong_console_parent",
 			"choice_id": "clean_exchange",
@@ -363,7 +365,7 @@ static func write_route_manifest(
 		"%s/%s" % [run_dir, CAPTURE_DIR_NAME],
 		"%s/%s" % [run_dir, SNAPSHOT_DIR_NAME],
 	]:
-		var dir_result: Dictionary = _StoreVisualSweep.ensure_artifact_dir(path)
+		var dir_result: Dictionary = StoreVisualSweepScript.ensure_artifact_dir(path)
 		if not bool(dir_result.get("ok", false)):
 			return dir_result
 
@@ -421,7 +423,7 @@ static func _beat(
 		"summary_values": summary_values,
 		"automated_route_assertions": automated_assertions,
 	}
-	beat["code_to_screen_proof"] = _StoreProofContract.proof_from_route_beat(beat)
+	beat["code_to_screen_proof"] = StoreProofContractScript.proof_from_route_beat(beat)
 	return beat
 
 static func _beats_with_capture_results(
@@ -474,10 +476,11 @@ static func _write_manual_review(run_dir: String, manifest: Dictionary) -> Dicti
 		lines.append("  - Capture: `%s`" % str(beat.get("capture_helper_call", "")))
 		lines.append("  - Expected stage: `%s`" % str(beat.get("expected_stage", "")))
 		lines.append("  - Expected prompt: `%s`" % str(beat.get("active_prompt", "")))
-		for field: String in _StoreProofContract.REQUIRED_FIELDS:
+		for field: String in StoreProofContractScript.REQUIRED_FIELDS:
+			var proof: Dictionary = beat.get("code_to_screen_proof", {}) as Dictionary
 			lines.append(
 				"  - %s: %s"
-				% [field.capitalize().replace("_", " "), str((beat.get("code_to_screen_proof", {}) as Dictionary).get(field, ""))]
+				% [field.capitalize().replace("_", " "), str(proof.get(field, ""))]
 			)
 	file.store_string("\n".join(lines))
 	file.close()
@@ -488,7 +491,7 @@ static func _write_manual_review(run_dir: String, manifest: Dictionary) -> Dicti
 	}
 
 static func _run_dir(dir_path: String, run_id: String) -> String:
-	return "%s/%s" % [dir_path, _StoreVisualSweep.sanitize_slug(run_id)]
+	return "%s/%s" % [dir_path, StoreVisualSweepScript.sanitize_slug(run_id)]
 
 static func _timestamp() -> String:
 	var d: Dictionary = Time.get_datetime_dict_from_system()

@@ -13,10 +13,10 @@ const _GAME_CARTRIDGE_SCENE: PackedScene = preload(
 const _GAME_CONSOLE_SCENE: PackedScene = preload(
 	"res://game/assets/models/props/prop_game_console.tscn"
 )
-const _ShelfCategoryNormalizer: GDScript = preload(
+const ShelfCategoryNormalizerScript: GDScript = preload(
 	"res://game/scripts/stores/shelf_category_normalizer.gd"
 )
-const _ProductVisualFactory: GDScript = preload(
+const ProductVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
 const CATEGORY_SCENES: Dictionary = {
@@ -171,7 +171,7 @@ func _place_item_internal(instance_id: String, category: String = "") -> bool:
 	if _occupied:
 		return false
 	_held_item_id = instance_id
-	_held_category = _ShelfCategoryNormalizer.normalize(category)
+	_held_category = ShelfCategoryNormalizerScript.normalize(category)
 	_occupied = true
 	_update_visual(get_occupied())
 	slot_changed.emit(self)
@@ -287,11 +287,11 @@ func _ensure_empty_ghost() -> MeshInstance3D:
 ## spawns the existing placeholder scene and applies the category tint.
 func _spawn_item_mesh(category: String) -> void:
 	_free_item_mesh()
-	var runtime_category: String = _ShelfCategoryNormalizer.normalize(category)
+	var runtime_category: String = ShelfCategoryNormalizerScript.normalize(category)
 	var visual_data: Dictionary = _held_item_visual_data.duplicate(true)
 	if not visual_data.is_empty():
 		visual_data["category"] = runtime_category
-		var catalog_visual: Node3D = _ProductVisualFactory.create_visual_for_item(
+		var catalog_visual: Node3D = ProductVisualFactoryScript.create_visual_for_item(
 			visual_data
 		)
 		if catalog_visual != null:
@@ -312,7 +312,7 @@ func _apply_category_color(root: Node3D, category: String) -> void:
 	var mesh: MeshInstance3D = _find_first_mesh_instance(root)
 	if mesh == null:
 		return
-	var runtime_category: String = _ShelfCategoryNormalizer.normalize(category)
+	var runtime_category: String = ShelfCategoryNormalizerScript.normalize(category)
 	var color: Color = CATEGORY_COLORS.get(
 		runtime_category, DEFAULT_PLACEHOLDER_COLOR
 	)
@@ -369,7 +369,7 @@ func get_prompt_label() -> String:
 ## Returns true when the slot would accept the given category. Empty
 ## accepted_category accepts any item (unfiltered counter / impulse slots).
 func accepts_category(item_category: String) -> bool:
-	return _ShelfCategoryNormalizer.matches(accepted_category, item_category)
+	return ShelfCategoryNormalizerScript.matches(accepted_category, item_category)
 
 
 ## Recomputes prompt state for placement, empty, and occupied shelf states.

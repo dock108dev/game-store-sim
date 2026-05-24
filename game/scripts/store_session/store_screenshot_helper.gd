@@ -1,5 +1,5 @@
-## Screenshot capture for the store_session validation harness. F10 saves the current
-## viewport to `user://screenshots/<timestamp>_<scene>.png` for manual review.
+## Screenshot capture for the store_session validation harness. F10 saves the
+## current viewport to `user://screenshots/<timestamp>_<scene>.png`.
 ##
 ## Resolves the OS-specific user dir on first save:
 ##   * macOS:   ~/Library/Application Support/Godot/app_userdata/<project>/screenshots/
@@ -10,7 +10,7 @@
 ## the on-screen toast so the player knows where the file landed.
 extends CanvasLayer
 
-const _StoreVisualSweep: GDScript = preload(
+const StoreVisualSweepScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
 const SAVE_DIR: String = "user://screenshots"
@@ -83,9 +83,9 @@ func _capture_enabled() -> bool:
 func capture_current_viewport(beat_name: String = "") -> Dictionary:
 	var slug: String = _scene_slug()
 	if not beat_name.is_empty():
-		slug = _StoreVisualSweep.sanitize_slug(beat_name)
+		slug = StoreVisualSweepScript.sanitize_slug(beat_name)
 	var filename: String = "%s_%s.png" % [_timestamp(), slug]
-	var result: Dictionary = _StoreVisualSweep.save_viewport_png(
+	var result: Dictionary = StoreVisualSweepScript.save_viewport_png(
 		get_viewport(),
 		SAVE_DIR,
 		filename
@@ -119,7 +119,7 @@ func _scene_slug() -> String:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return "scene"
-	return _StoreVisualSweep.sanitize_slug(String(scene.name), _SCENE_SLUG_LENGTH)
+	return StoreVisualSweepScript.sanitize_slug(String(scene.name), _SCENE_SLUG_LENGTH)
 
 
 func _show_toast(text: String) -> void:

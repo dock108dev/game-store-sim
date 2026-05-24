@@ -4,7 +4,7 @@
 class_name StoreController
 extends Node
 
-const _ProductVisualFactory: GDScript = preload(
+const ProductVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
 
@@ -650,7 +650,7 @@ func _on_slot_stocked_visual(item_id: String, shelf_id: String) -> void:
 		var item: ItemInstance = _inventory_system.get_item(item_id)
 		if item and item.definition:
 			category = item.definition.category
-			visual_data = _ProductVisualFactory.visual_data_from_item(item)
+			visual_data = ProductVisualFactoryScript.visual_data_from_item(item)
 	if visual_data.is_empty():
 		slot.place_item(item_id, category)
 	else:

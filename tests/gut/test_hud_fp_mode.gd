@@ -445,6 +445,52 @@ func test_fp_mode_sentence_shows_waiting_hint_when_no_customers() -> void:
 	)
 
 
+func test_fp_mode_sentence_shows_store_session_objective() -> void:
+	_emit_state(GameManager.State.STORE_VIEW)
+	var stub: Node = Node.new()
+	stub.add_to_group("store_session_controller")
+	add_child_autofree(stub)
+	_hud.set_fp_mode(true)
+
+	EventBus.objective_changed.emit({
+		"text": "Check the register.",
+		"action": "Check register",
+		"key": "E",
+	})
+	await get_tree().process_frame
+
+	var sentence: Label = _hud.get_node_or_null("FpSentenceLabel") as Label
+	assert_not_null(sentence)
+	if sentence == null:
+		return
+	assert_true(
+		sentence.visible,
+		"Bottom-bar sentence must show the active store-session objective in FP mode"
+	)
+	assert_eq(sentence.text, "Check the register.")
+
+
+func test_fp_mode_sentence_hides_hidden_store_session_objective() -> void:
+	_emit_state(GameManager.State.STORE_VIEW)
+	var stub: Node = Node.new()
+	stub.add_to_group("store_session_controller")
+	add_child_autofree(stub)
+	_hud.set_fp_mode(true)
+
+	EventBus.objective_changed.emit({"text": "Check the register."})
+	EventBus.objective_changed.emit({"hidden": true})
+	await get_tree().process_frame
+
+	var sentence: Label = _hud.get_node_or_null("FpSentenceLabel") as Label
+	assert_not_null(sentence)
+	if sentence == null:
+		return
+	assert_false(
+		sentence.visible,
+		"Hidden objective payloads must clear the FP objective sentence"
+	)
+
+
 func test_fp_mode_sentence_hides_when_loop_active() -> void:
 	_emit_state(GameManager.State.STORE_VIEW)
 	_hud.set_fp_mode(true)

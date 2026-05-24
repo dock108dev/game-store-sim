@@ -182,28 +182,30 @@ func _location_score(item: ItemInstance, preferred: String) -> int:
 
 
 func _matches_selector(item: ItemInstance, selector: Dictionary) -> bool:
+	var matches: bool = true
 	var instance_id: String = str(selector.get("instance_id", ""))
 	if not instance_id.is_empty():
-		return item.instance_id == instance_id
-	if item.definition == null:
-		return false
-	var definition_id: String = str(selector.get("definition_id", ""))
-	var category: String = str(selector.get("category", ""))
-	var fallback_category: String = str(selector.get("fallback_category", ""))
-	var condition: String = str(selector.get("condition", ""))
-	var allow_any_condition: bool = bool(selector.get("allow_any_condition", false))
-	if not definition_id.is_empty() and item.definition.id != definition_id:
-		if fallback_category.is_empty() or item.definition.category != fallback_category:
-			return false
-	elif definition_id.is_empty() and not category.is_empty():
-		if item.definition.category != category:
-			return false
-	elif definition_id.is_empty() and not fallback_category.is_empty():
-		if item.definition.category != fallback_category:
-			return false
-	if not condition.is_empty() and not allow_any_condition:
-		return item.condition == condition
-	return true
+		matches = item.instance_id == instance_id
+	elif item.definition == null:
+		matches = false
+	else:
+		var definition_id: String = str(selector.get("definition_id", ""))
+		var category: String = str(selector.get("category", ""))
+		var fallback_category: String = str(selector.get("fallback_category", ""))
+		if not definition_id.is_empty() and item.definition.id != definition_id:
+			matches = (
+				not fallback_category.is_empty()
+				and item.definition.category == fallback_category
+			)
+		elif definition_id.is_empty() and not category.is_empty():
+			matches = item.definition.category == category
+		elif definition_id.is_empty() and not fallback_category.is_empty():
+			matches = item.definition.category == fallback_category
+	if matches and not bool(selector.get("allow_any_condition", false)):
+		var condition: String = str(selector.get("condition", ""))
+		if not condition.is_empty():
+			matches = item.condition == condition
+	return matches
 
 
 func _apply_plan(plan: Dictionary, result: Dictionary) -> bool:

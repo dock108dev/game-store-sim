@@ -430,7 +430,11 @@ func _on_day_started(day: int) -> void:
 
 
 func _is_preopening_training() -> bool:
-	return _current_day == 1 and not StoreSessionState.preopening_complete and _has_training_milestones()
+	return (
+		_current_day == 1
+		and not StoreSessionState.preopening_complete
+		and _has_training_milestones()
+	)
 
 
 func _has_training_milestones() -> bool:

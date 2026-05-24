@@ -4,7 +4,7 @@ extends RefCounted
 
 const DEFAULT_PATH: String = "res://game/content/visuals/retro_games_product_visual_catalog.json"
 const SCRIPT_PATH: String = "res://game/scripts/visuals/product_visual_catalog.gd"
-const _ShelfCategoryNormalizer: GDScript = preload(
+const ShelfCategoryNormalizerScript: GDScript = preload(
 	"res://game/scripts/stores/shelf_category_normalizer.gd"
 )
 const CATEGORY_FALLBACKS: Dictionary = {
@@ -121,6 +121,7 @@ func get_platform_identity_for_item(item: Dictionary) -> Dictionary:
 
 
 ## Resolves the best reusable case template for item metadata.
+# gdlint:disable=max-returns
 func find_template_for_item(item: Dictionary) -> Dictionary:
 	if item.is_empty():
 		return {}
@@ -144,11 +145,12 @@ func find_template_for_item(item: Dictionary) -> Dictionary:
 	var platform_visual_id: String = str(item.get("platform_visual_id", ""))
 	if not platform_visual_id.is_empty() and _templates_by_platform_visual_id.has(platform_visual_id):
 		return (_templates_by_platform_visual_id[platform_visual_id] as Dictionary).duplicate(true)
-	var category: String = _ShelfCategoryNormalizer.normalize(item.get("category", ""))
+	var category: String = ShelfCategoryNormalizerScript.normalize(item.get("category", ""))
 	var fallback_id: String = str(CATEGORY_FALLBACKS.get(category, ""))
 	if not fallback_id.is_empty():
 		return get_template(fallback_id)
 	return {}
+# gdlint:enable=max-returns
 
 
 ## Returns true when item metadata can resolve to a reusable case template.

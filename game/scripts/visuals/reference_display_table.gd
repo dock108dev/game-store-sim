@@ -1,13 +1,13 @@
 ## Builds visual-only catalog product cases for the reusable display table fixture.
 extends Node3D
 
-const _ProductVisualCatalog: GDScript = preload(
+const ProductVisualCatalogScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_catalog.gd"
 )
-const _ProductVisualFactory: GDScript = preload(
+const ProductVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
-const _MeshBoundsUtil: GDScript = preload(
+const MeshBoundsUtilScript: GDScript = preload(
 	"res://game/scripts/visuals/mesh_bounds_util.gd"
 )
 
@@ -45,7 +45,7 @@ func rebuild_preview_products() -> void:
 	var preview_layer: Node3D = _ensure_preview_layer()
 	_clear_children(preview_layer)
 
-	var catalog: RefCounted = _ProductVisualCatalog.load_default()
+	var catalog: RefCounted = ProductVisualCatalogScript.load_default()
 	if catalog == null or not str(catalog.get("load_error")).is_empty():
 		push_warning("Display table product catalog did not load")
 		return
@@ -81,7 +81,7 @@ func _add_preview_case(
 
 	var visual_data: Dictionary = item.duplicate(true)
 	visual_data["instance_id"] = "display_table_preview_%d" % index
-	var visual: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
+	var visual: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
 		visual_data, catalog
 	)
 	if visual == null:
@@ -109,7 +109,7 @@ func _find_slot(slot_id: String) -> Node3D:
 func _position_visual_on_slot(
 	preview_layer: Node3D, visual: Node3D, slot_position: Vector3
 ) -> void:
-	var bounds: AABB = _MeshBoundsUtil.visual_bounds(preview_layer, visual)
+	var bounds: AABB = MeshBoundsUtilScript.visual_bounds(preview_layer, visual)
 	if bounds.size == Vector3.ZERO:
 		visual.position = slot_position + Vector3(0.0, _SURFACE_CLEARANCE, 0.0)
 		return

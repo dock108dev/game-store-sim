@@ -85,25 +85,26 @@ func _normalized_state(state: StringName) -> StringName:
 
 
 func _text_for_state(state: StringName, amount: int) -> String:
+	var text: String = "CLOSED"
 	match state:
 		STATE_READY:
-			return "READY"
+			text = "READY"
 		STATE_TRANSACTION:
 			if amount > 0:
-				return "SALE\n$%d" % amount
-			return "SALE\nOPEN"
+				text = "SALE\n$%d" % amount
+			else:
+				text = "SALE\nOPEN"
 		STATE_SETTLED:
-			return "RECEIPT\n$%d" % amount
+			text = "RECEIPT\n$%d" % amount
 		STATE_NO_SALE:
-			return "NO SALE"
+			text = "NO SALE"
 		STATE_BACKROOM:
-			return "BACK\nROOM"
+			text = "BACK\nROOM"
 		STATE_STOCKING:
-			return "STOCK\nSHELF"
+			text = "STOCK\nSHELF"
 		STATE_CLOSE_READY:
-			return "CLOSE\nDAY"
-		_:
-			return "CLOSED"
+			text = "CLOSE\nDAY"
+	return text
 
 
 func _apply_visual_state() -> void:
@@ -117,21 +118,21 @@ func _apply_visual_state() -> void:
 
 
 func _color_for_state(state: StringName) -> Color:
+	var color: Color = Color(0.18, 0.36, 0.18, 1.0)
 	match state:
 		STATE_READY:
-			return Color(0.48, 0.95, 0.42, 1.0)
+			color = Color(0.48, 0.95, 0.42, 1.0)
 		STATE_TRANSACTION:
-			return Color(0.38, 0.88, 1.0, 1.0)
+			color = Color(0.38, 0.88, 1.0, 1.0)
 		STATE_SETTLED:
-			return Color(1.0, 0.84, 0.38, 1.0)
+			color = Color(1.0, 0.84, 0.38, 1.0)
 		STATE_NO_SALE:
-			return Color(1.0, 0.65, 0.28, 1.0)
+			color = Color(1.0, 0.65, 0.28, 1.0)
 		STATE_BACKROOM, STATE_STOCKING:
-			return Color(0.72, 0.70, 0.52, 1.0)
+			color = Color(0.72, 0.70, 0.52, 1.0)
 		STATE_CLOSE_READY:
-			return Color(0.98, 0.88, 0.42, 1.0)
-		_:
-			return Color(0.18, 0.36, 0.18, 1.0)
+			color = Color(0.98, 0.88, 0.42, 1.0)
+	return color
 
 
 func _material_for_state(state: StringName) -> StandardMaterial3D:

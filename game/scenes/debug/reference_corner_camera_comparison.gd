@@ -45,6 +45,7 @@ func _ready() -> void:
 
 ## Builds the debug comparison scene. Returns false if required store anchors
 ## are missing, leaving normal gameplay scenes untouched.
+# gdlint:disable=max-returns
 func setup_comparison() -> bool:
 	if _store_root != null and is_instance_valid(_store_root):
 		return true
@@ -71,6 +72,7 @@ func setup_comparison() -> bool:
 	if auto_select_first_mode:
 		return select_mode(Mode.FIRST_PERSON)
 	return true
+# gdlint:enable=max-returns
 
 
 ## Selects one comparison mode and activates exactly one camera via

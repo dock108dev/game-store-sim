@@ -51,7 +51,10 @@ static func validate_route_beats(beats: Array) -> Array[String]:
 	return errors
 
 
-static func validate_proof_payload(proof: Dictionary, label: String = "proof") -> Array[String]:
+static func validate_proof_payload(
+	proof: Dictionary,
+	label: String = "proof"
+) -> Array[String]:
 	var errors: Array[String] = []
 	for field: String in REQUIRED_FIELDS:
 		if not proof.has(field) or _is_blank(proof.get(field, "")):
@@ -84,18 +87,30 @@ static func _input_affordance(beat_name: String, beat: Dictionary) -> String:
 	match beat_name:
 		"customer_decision_card", "result_acknowledgement", "close_day_summary":
 			return "Modal choice/acknowledgement controls are selectable from normal route input."
-	return "Interaction prompt `%s` appears during the normal route and reaches its beat owner." % prompt
+	return (
+		"Interaction prompt `%s` appears during the normal route "
+		+ "and reaches its beat owner."
+	) % prompt
 
 
 static func _code_owner(beat_name: String) -> String:
 	match beat_name:
 		"backroom_pickup_prompt":
-			return "stockroom_pickup_interactable.gd bridges input; store_session_controller.gd owns progression."
+			return (
+				"stockroom_pickup_interactable.gd bridges input; "
+				+ "store_session_controller.gd owns progression."
+			)
 		"training_shelf_transition", "stocked_shelf_stat_change":
-			return "restock_interactable.gd bridges input; store_session_controller.gd owns shelf progression."
+			return (
+				"restock_interactable.gd bridges input; "
+				+ "store_session_controller.gd owns shelf progression."
+			)
 		"before_customer", "customer_decision_card", "result_acknowledgement", \
 		"after_result_customer_exit":
-			return "first_day_customer_interactable.gd bridges input; store_session_controller.gd owns customer progression."
+			return (
+				"first_day_customer_interactable.gd bridges input; "
+				+ "store_session_controller.gd owns customer progression."
+			)
 		"close_day_prompt", "close_day_summary":
 			return "store_session_controller.gd owns close-day flow and summary payload."
 	return "store_session_controller.gd owns Day 1 progression for this beat."

@@ -1,3 +1,4 @@
+# gdlint:disable=max-file-lines
 ## Runtime visual shell for the one-store expansion model.
 ##
 ## `retro_games.tscn` still owns gameplay anchors and interactables, but boot

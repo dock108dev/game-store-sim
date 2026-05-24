@@ -14,6 +14,8 @@ extends ModalPanel
 
 const PANEL_SIZE: Vector2 = Vector2(560, 260)
 
+var _answered: bool = false
+
 @onready var _root: Control = $Root
 @onready var _overlay: ColorRect = $Root/Overlay
 @onready var _panel: PanelContainer = $Root/Panel
@@ -24,8 +26,6 @@ const PANEL_SIZE: Vector2 = Vector2(560, 260)
 @onready var _confirm_button: Button = (
 	$Root/Panel/Margin/VBox/ButtonRow/ConfirmButton
 )
-
-var _answered: bool = false
 
 
 func _ready() -> void:

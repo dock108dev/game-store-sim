@@ -2,10 +2,10 @@
 class_name InventoryShelfActions
 extends RefCounted
 
-const _ShelfCategoryNormalizer: GDScript = preload(
+const ShelfCategoryNormalizerScript: GDScript = preload(
 	"res://game/scripts/stores/shelf_category_normalizer.gd"
 )
-const _ProductVisualFactory: GDScript = preload(
+const ProductVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
 
@@ -79,7 +79,7 @@ func place_item(
 	inventory_system.move_item(
 		item.instance_id, "shelf:%s" % slot.slot_id
 	)
-	slot.place_item_with_data(_ProductVisualFactory.visual_data_from_item(item))
+	slot.place_item_with_data(ProductVisualFactoryScript.visual_data_from_item(item))
 	EventBus.item_stocked.emit(item.instance_id, slot.slot_id)
 	if not item_name.is_empty():
 		EventBus.notification_requested.emit(
@@ -188,7 +188,7 @@ static func _find_compatible_empty_slot(
 static func _normalized_item_category(item: ItemInstance) -> String:
 	if item == null or item.definition == null:
 		return ""
-	return _ShelfCategoryNormalizer.normalize(item.definition.category)
+	return ShelfCategoryNormalizerScript.normalize(item.definition.category)
 
 
 func remove_item_from_shelf(slot: ShelfSlot) -> void:

@@ -185,7 +185,9 @@ const STORE_SESSION_KEEP_ROOT_NODES: Array[StringName] = [
 	&"ExpandableStoreShell",
 ]
 
-const StoreDebugOverlayScript: GDScript = preload("res://game/scripts/store_session/store_debug_overlay.gd")
+const StoreDebugOverlayScript: GDScript = preload(
+	"res://game/scripts/store_session/store_debug_overlay.gd"
+)
 const StoreScreenshotHelperScript: GDScript = preload(
 	"res://game/scripts/store_session/store_screenshot_helper.gd"
 )
@@ -3831,7 +3833,12 @@ func _finalize_customer_exit(customer_3d: Node3D, completed_tween: Tween = null)
 
 
 func _sync_customer_counter_anchor_for_stage() -> void:
-	if _stage == STAGE_TALK_TO_CUSTOMER and StoreSessionState.day == 1 and not _active_event.is_empty():
+	var has_day_one_customer: bool = (
+		_stage == STAGE_TALK_TO_CUSTOMER
+		and StoreSessionState.day == 1
+		and not _active_event.is_empty()
+	)
+	if has_day_one_customer:
 		_set_customer_counter_anchor_state(_COUNTER_STATE_PENDING)
 	else:
 		_clear_customer_counter_anchor()
