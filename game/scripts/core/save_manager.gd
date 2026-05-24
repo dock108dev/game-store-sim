@@ -494,8 +494,8 @@ func _collect_save_data() -> Dictionary:
 	if _onboarding_system:
 		data["onboarding_progress"] = _onboarding_system.get_save_data()
 
-	if BetaRunState != null:
-		data["beta_run_state"] = BetaRunState.get_save_data()
+	if StoreSessionState != null:
+		data["store_session_state"] = StoreSessionState.get_save_data()
 
 	data["difficulty"] = DifficultySystemSingleton.get_save_data()
 
@@ -680,9 +680,12 @@ func _distribute_save_data(data: Dictionary) -> void:
 				onboarding_data as Dictionary
 			)
 
-	var beta_data: Variant = data.get("beta_run_state", {})
-	if beta_data is Dictionary and BetaRunState != null:
-		BetaRunState.load_save_data(beta_data as Dictionary)
+	var store_session_data: Variant = data.get("store_session_state", null)
+	if not (store_session_data is Dictionary):
+		# legacy-beta: old saves used the pre-store-session key.
+		store_session_data = data.get("beta_run_state", {})
+	if store_session_data is Dictionary and StoreSessionState != null:
+		StoreSessionState.load_save_data(store_session_data as Dictionary)
 
 	var difficulty_data: Variant = data.get("difficulty", {})
 	if difficulty_data is Dictionary:

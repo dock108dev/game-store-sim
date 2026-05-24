@@ -57,6 +57,21 @@ func _ready() -> void:
 	EventBus.fp_mode_changed.connect(_on_fp_mode_changed)
 
 
+func _reset_for_tests() -> void:
+	if _fade_tween and _fade_tween.is_valid():
+		_fade_tween.kill()
+	_has_focus_target = false
+	_fp_mode_active = false
+	if _label != null:
+		_label.text = ""
+		_label.modulate = _ACTIVE_LABEL_MODULATE
+	if _key_badge != null:
+		_key_badge.visible = true
+	if _panel != null:
+		_panel.modulate = Color(1.0, 1.0, 1.0, 0.0)
+		_panel.visible = false
+
+
 func _on_interactable_focused(action_label: String) -> void:
 	_apply_active_styling()
 	_label.text = action_label

@@ -28,7 +28,7 @@ func before_each() -> void:
 	_saved_unlock_grants = UnlockSystemSingleton._granted.duplicate(true)
 	GameState.reset_new_game()
 	AuditLog.clear()
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 func after_each() -> void:
@@ -39,7 +39,7 @@ func after_each() -> void:
 	UnlockSystemSingleton._valid_ids = _saved_unlock_valid_ids.duplicate(true)
 	UnlockSystemSingleton._granted = _saved_unlock_grants.duplicate(true)
 	GameState.reset_new_game()
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 func test_begin_new_run_clears_tutorial_skipped_flag() -> void:
@@ -99,7 +99,7 @@ func test_begin_new_run_clears_unlock_grants() -> void:
 	GameManager.begin_new_run()
 	assert_true(
 		UnlockSystemSingleton.get_all_granted().is_empty(),
-		"begin_new_run() must clear unlock grants for a fresh beta run"
+		"begin_new_run() must clear unlock grants for a fresh store_session run"
 	)
 
 
@@ -126,82 +126,82 @@ func test_objective_director_loop_completed_survives_other_days() -> void:
 	)
 
 
-# ── BetaRunState defaults restored on replay ──────────────────────────────────
-# `GameManager.begin_new_run()` calls `BetaRunState.reset_new_run()` to zero
+# ── StoreSessionState defaults restored on replay ──────────────────────────────────
+# `GameManager.begin_new_run()` calls `StoreSessionState.reset_new_run()` to zero
 # every per-run accumulator (day / cash / reputation / event lists / flags /
 # carry flag). Without this contract, Day 1 numbers carry into the replay
 # and the day-summary panel renders cumulative-since-last-replay totals
 # instead of fresh Day 1 values.
 
 
-func test_begin_new_run_resets_beta_run_state_day_to_one() -> void:
-	BetaRunState.day = 2
+func test_begin_new_run_resets_store_session_state_day_to_one() -> void:
+	StoreSessionState.day = 2
 	GameManager.begin_new_run()
 	assert_eq(
-		BetaRunState.day, 1,
-		"begin_new_run() must reset BetaRunState.day to 1"
+		StoreSessionState.day, 1,
+		"begin_new_run() must reset StoreSessionState.day to 1"
 	)
 
 
-func test_begin_new_run_resets_beta_run_state_cash_and_reputation() -> void:
-	BetaRunState.cash = 250
-	BetaRunState.daily_cash_delta = 75
-	BetaRunState.reputation = 5
-	BetaRunState.daily_reputation_delta = 3
+func test_begin_new_run_resets_store_session_state_cash_and_reputation() -> void:
+	StoreSessionState.cash = 250
+	StoreSessionState.daily_cash_delta = 75
+	StoreSessionState.reputation = 5
+	StoreSessionState.daily_reputation_delta = 3
 	GameManager.begin_new_run()
-	assert_eq(BetaRunState.cash, 0, "begin_new_run() must zero BetaRunState.cash")
+	assert_eq(StoreSessionState.cash, 0, "begin_new_run() must zero StoreSessionState.cash")
 	assert_eq(
-		BetaRunState.daily_cash_delta, 0,
-		"begin_new_run() must zero BetaRunState.daily_cash_delta"
+		StoreSessionState.daily_cash_delta, 0,
+		"begin_new_run() must zero StoreSessionState.daily_cash_delta"
 	)
 	assert_eq(
-		BetaRunState.reputation, 0,
-		"begin_new_run() must zero BetaRunState.reputation"
+		StoreSessionState.reputation, 0,
+		"begin_new_run() must zero StoreSessionState.reputation"
 	)
 	assert_eq(
-		BetaRunState.daily_reputation_delta, 0,
-		"begin_new_run() must zero BetaRunState.daily_reputation_delta"
+		StoreSessionState.daily_reputation_delta, 0,
+		"begin_new_run() must zero StoreSessionState.daily_reputation_delta"
 	)
 
 
-func test_begin_new_run_clears_beta_run_state_event_lists_and_flags() -> void:
-	BetaRunState.completed_events.append(&"day01_wrong_console_parent")
-	BetaRunState.daily_events_resolved.append(&"day01_wrong_console_parent")
-	BetaRunState.hidden_thread_signals_seen.append(&"some_signal")
-	BetaRunState.flags[&"some_flag"] = true
+func test_begin_new_run_clears_store_session_state_event_lists_and_flags() -> void:
+	StoreSessionState.completed_events.append(&"day01_wrong_console_parent")
+	StoreSessionState.daily_events_resolved.append(&"day01_wrong_console_parent")
+	StoreSessionState.hidden_thread_signals_seen.append(&"some_signal")
+	StoreSessionState.flags[&"some_flag"] = true
 	GameManager.begin_new_run()
 	assert_true(
-		BetaRunState.completed_events.is_empty(),
-		"begin_new_run() must clear BetaRunState.completed_events"
+		StoreSessionState.completed_events.is_empty(),
+		"begin_new_run() must clear StoreSessionState.completed_events"
 	)
 	assert_true(
-		BetaRunState.daily_events_resolved.is_empty(),
-		"begin_new_run() must clear BetaRunState.daily_events_resolved"
+		StoreSessionState.daily_events_resolved.is_empty(),
+		"begin_new_run() must clear StoreSessionState.daily_events_resolved"
 	)
 	assert_true(
-		BetaRunState.hidden_thread_signals_seen.is_empty(),
-		"begin_new_run() must clear BetaRunState.hidden_thread_signals_seen"
+		StoreSessionState.hidden_thread_signals_seen.is_empty(),
+		"begin_new_run() must clear StoreSessionState.hidden_thread_signals_seen"
 	)
 	assert_true(
-		BetaRunState.flags.is_empty(),
-		"begin_new_run() must clear BetaRunState.flags"
+		StoreSessionState.flags.is_empty(),
+		"begin_new_run() must clear StoreSessionState.flags"
 	)
 
 
-func test_begin_new_run_clears_beta_run_state_carrying_stock() -> void:
-	BetaRunState.carrying_stock = true
+func test_begin_new_run_clears_store_session_state_carrying_stock() -> void:
+	StoreSessionState.carrying_stock = true
 	GameManager.begin_new_run()
 	assert_false(
-		BetaRunState.carrying_stock,
-		"begin_new_run() must clear BetaRunState.carrying_stock so replay starts unencumbered"
+		StoreSessionState.carrying_stock,
+		"begin_new_run() must clear StoreSessionState.carrying_stock so replay starts unencumbered"
 	)
 
 
-func test_begin_new_run_resets_beta_run_state_counters_and_input() -> void:
-	BetaRunState.manager_trust = 4
-	BetaRunState.hidden_thread_score = 3
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DECISION_CARD)
+func test_begin_new_run_resets_store_session_state_counters_and_input() -> void:
+	StoreSessionState.manager_trust = 4
+	StoreSessionState.hidden_thread_score = 3
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DECISION_CARD)
 	GameManager.begin_new_run()
-	assert_eq(BetaRunState.manager_trust, 0)
-	assert_eq(BetaRunState.hidden_thread_score, 0)
-	assert_eq(BetaRunState.input_mode, BetaRunState.INPUT_MODE_GAMEPLAY)
+	assert_eq(StoreSessionState.manager_trust, 0)
+	assert_eq(StoreSessionState.hidden_thread_score, 0)
+	assert_eq(StoreSessionState.input_mode, StoreSessionState.INPUT_MODE_GAMEPLAY)

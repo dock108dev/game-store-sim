@@ -35,7 +35,7 @@ var _tutorial_suppressing: bool = false
 func _ready() -> void:
 	visible = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if _beta_mode_active():
+	if _store_session_mode_active():
 		return
 	_tutorial_suppressing = _is_tutorial_active_at_boot()
 	EventBus.store_entered.connect(_on_store_entered)
@@ -166,8 +166,8 @@ func _is_inventory_empty(store_id: StringName) -> bool:
 	return stock.is_empty()
 
 
-func _beta_mode_active() -> bool:
+func _store_session_mode_active() -> bool:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	return not tree.get_nodes_in_group("beta_day_one_controller").is_empty()
+	return not tree.get_nodes_in_group("store_session_controller").is_empty()

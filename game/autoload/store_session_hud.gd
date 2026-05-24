@@ -1,8 +1,8 @@
-## Session-level owner of the beta HUD panels.
+## Session-level owner of the store_session HUD panels.
 ##
-## Single autoload that spawns `BetaRightPanel` and `BetaEventLogPanel`
+## Single autoload that spawns `StoreStatusPanel` and `StoreEventLogPanel`
 ## once at boot and keeps them alive for the lifetime of the process.
-## `BetaDayOneController` calls `activate(day)` in its `_ready` instead of
+## `StoreSessionController` calls `activate(day)` in its `_ready` instead of
 ## instantiating panels directly, so a day transition that tears down the
 ## controller does not free the HUD surfaces it was driving.
 ##
@@ -13,31 +13,31 @@
 ## the bottom-left log, and the interaction affordance stays bottom-right.
 ##
 ## Load order: must be registered after `EventBus`, `InputFocus`, and
-## `BetaRunState` in `project.godot` — both panels read `BetaRunState.day`
+## `StoreSessionState` in `project.godot` — both panels read `StoreSessionState.day`
 ## and subscribe to `EventBus` / `InputFocus` signals in their `_ready`.
 ##
-## No `class_name` declaration — the autoload singleton named `BetaHUD`
+## No `class_name` declaration — the autoload singleton named `StoreSessionHUD`
 ## already provides global access; declaring a class with the same name
 ## would shadow it and break parsing.
 extends Node
 
-var _right_panel: BetaRightPanel
-var _event_log: BetaEventLogPanel
+var _right_panel: StoreStatusPanel
+var _event_log: StoreEventLogPanel
 var _active: bool = false
 
 
 func _ready() -> void:
-	_right_panel = BetaRightPanel.new()
-	_right_panel.name = "BetaRightPanel"
+	_right_panel = StoreStatusPanel.new()
+	_right_panel.name = "StoreStatusPanel"
 	add_child(_right_panel)
-	_event_log = BetaEventLogPanel.new()
-	_event_log.name = "BetaEventLogPanel"
+	_event_log = StoreEventLogPanel.new()
+	_event_log.name = "StoreEventLogPanel"
 	add_child(_event_log)
 	_set_visible(false)
 
 
 ## Marks the session active, shows the panels, and reseeds the right
-## panel from the current `BetaRunState.day` and the active day
+## panel from the current `StoreSessionState.day` and the active day
 ## controller's `_objectives`. Force-seeding here is the day-transition
 ## safety net: if the next day's `day_started` already fired (via the
 ## controller's `_reset_scene_for_day`) before this `activate(day)` call
@@ -61,13 +61,13 @@ func is_active() -> bool:
 ## Read-only accessor for tests / external systems that need a direct
 ## handle on the right panel (e.g. to assert state without traversing the
 ## scene tree).
-func get_right_panel() -> BetaRightPanel:
+func get_right_panel() -> StoreStatusPanel:
 	return _right_panel
 
 
 ## Read-only accessor for tests / external systems that need a direct
 ## handle on the event-log panel.
-func get_event_log_panel() -> BetaEventLogPanel:
+func get_event_log_panel() -> StoreEventLogPanel:
 	return _event_log
 
 

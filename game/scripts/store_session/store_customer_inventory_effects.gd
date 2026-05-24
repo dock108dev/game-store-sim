@@ -1,4 +1,4 @@
-class_name BetaCustomerInventoryEffects
+class_name StoreCustomerInventoryEffects
 extends RefCounted
 
 const OP_REMOVE_STOCK: String = "remove_stock"

@@ -150,10 +150,10 @@ func test_day_one_route_targets_are_front_back_shelf_register() -> void:
 	)
 
 
-func test_day_one_route_props_remain_authored_but_shell_owns_beta_boot() -> void:
+func test_day_one_route_props_remain_authored_but_shell_owns_store_session_boot() -> void:
 	assert_true(
-		BetaDayOneController.BETA_KEEP_ROOT_NODES.has(&"ExpandableStoreShell"),
-		"ExpandableStoreShell must be the visible beta boot shell"
+		StoreSessionController.STORE_SESSION_KEEP_ROOT_NODES.has(&"ExpandableStoreShell"),
+		"ExpandableStoreShell must be the visible store_session boot shell"
 	)
 	var props: Node3D = _root.get_node_or_null("ReadabilityProps") as Node3D
 	assert_not_null(props, "ReadabilityProps must exist")
@@ -633,7 +633,7 @@ func test_sign_name_text_is_correct() -> void:
 	assert_not_null(lbl, "Storefront/SignName must exist")
 	if lbl:
 		# Storefront sign was renamed in the strip-to-bones refactor —
-		# the single-store beta is branded "SHELF LIFE" rather than the
+		# the single-store store_session is branded "SHELF LIFE" rather than the
 		# original placeholder "Retro Games".
 		assert_eq(lbl.text, "SHELF LIFE", "SignName.text must be 'SHELF LIFE'")
 

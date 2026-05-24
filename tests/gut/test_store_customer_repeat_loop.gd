@@ -14,8 +14,8 @@ func before_each() -> void:
 	_saved_day = GameManager.get_current_day()
 	GameManager.current_state = GameManager.State.STORE_VIEW
 	GameManager.set_current_day(1)
-	BetaRunState.reset_new_run()
-	BetaRunState.preopening_complete = true
+	StoreSessionState.reset_new_run()
+	StoreSessionState.preopening_complete = true
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
 	_register_unlock_entries()
@@ -35,14 +35,14 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	UnlockSystemSingleton.initialize()
 	GameManager.current_state = _saved_state
 	GameManager.set_current_day(_saved_day)
 
 
 func test_two_customer_events_resolve_in_order_before_close_day() -> void:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
 	await _configure_two_customer_day(controller)
@@ -58,9 +58,9 @@ func test_two_customer_events_resolve_in_order_before_close_day() -> void:
 	assert_eq(int(controller.get("_current_event_index")), 0)
 	assert_eq(int(controller.get("_resolved_events_today")), 1)
 
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
@@ -79,13 +79,13 @@ func test_two_customer_events_resolve_in_order_before_close_day() -> void:
 	assert_true(controller.can_interact_day_end())
 	assert_eq(Array(_stage_critical_path_targets()), ["BetaDayEndTrigger"])
 
-	controller.on_beta_day_end_requested()
+	controller.on_store_day_end_requested()
 	await get_tree().process_frame
 	_press_close_day_confirm(controller)
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	var summary_panel: BetaDaySummaryPanel = controller.get("_summary_panel") as BetaDaySummaryPanel
+	var summary_panel: DaySummaryPanel = controller.get("_summary_panel") as DaySummaryPanel
 	assert_not_null(summary_panel, "Two-customer route must still open the day summary")
 	if summary_panel == null:
 		return
@@ -95,7 +95,7 @@ func test_two_customer_events_resolve_in_order_before_close_day() -> void:
 
 
 func test_authored_next_shift_customer_uses_result_acknowledgement_path() -> void:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
 
@@ -126,18 +126,18 @@ func test_authored_next_shift_customer_uses_result_acknowledgement_path() -> voi
 
 
 func test_repeat_customer_with_empty_shelf_routes_to_no_stock_result() -> void:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
 	await _configure_two_customer_day(controller)
 
 	await _choose_customer_option(&"refuse_return")
 	await _acknowledge_customer_result()
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	controller.set("_shelf_stock_count", 0)
 	controller.set("_carried_stock_remaining", 0)
-	BetaRunState.carrying_stock = false
+	StoreSessionState.carrying_stock = false
 	controller.call("_complete_current_objective")
 	await get_tree().process_frame
 
@@ -152,12 +152,12 @@ func test_repeat_customer_with_empty_shelf_routes_to_no_stock_result() -> void:
 
 	assert_signal_not_emitted(EventBus, "item_sold")
 	assert_signal_not_emitted(EventBus, "customer_purchased")
-	assert_eq(BetaRunState.cash, 0)
+	assert_eq(StoreSessionState.cash, 0)
 	assert_eq(String(controller.current_stage()), "end_day")
 	assert_eq(int(controller.get("_resolved_events_today")), 2)
 
 
-func _configure_two_customer_day(controller: BetaDayOneController) -> void:
+func _configure_two_customer_day(controller: StoreSessionController) -> void:
 	var first_event: Dictionary = (controller.get("_active_event") as Dictionary).duplicate(true)
 	var second_event: Dictionary = (
 		controller.call("_build_repeatable_shift_customer_event", 1) as Dictionary
@@ -169,12 +169,12 @@ func _configure_two_customer_day(controller: BetaDayOneController) -> void:
 
 
 func _choose_customer_option(choice_id: StringName) -> void:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
-	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
 	assert_not_null(decision, "Decision card must open before selecting a choice")
 	if decision == null:
 		return
@@ -187,7 +187,7 @@ func _choose_customer_option(choice_id: StringName) -> void:
 
 
 func _acknowledge_customer_result() -> void:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
 	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
@@ -210,7 +210,7 @@ func _press_close_day_confirm(controller: Node) -> void:
 	panel.call("_on_confirm_pressed")
 
 
-func _assert_summary_label(summary_panel: BetaDaySummaryPanel, field: String, expected: String) -> void:
+func _assert_summary_label(summary_panel: DaySummaryPanel, field: String, expected: String) -> void:
 	var label: Label = summary_panel.get(field) as Label
 	assert_not_null(label, "Summary must own %s" % field)
 	if label == null:
@@ -218,7 +218,7 @@ func _assert_summary_label(summary_panel: BetaDaySummaryPanel, field: String, ex
 	assert_eq(label.text, expected)
 
 
-func _choice_button(decision: BetaDecisionCardPanel, choice_id: StringName) -> Button:
+func _choice_button(decision: DecisionCardPanel, choice_id: StringName) -> Button:
 	var event_data: Dictionary = _controller().get("_active_event") as Dictionary
 	var choices: Array = event_data.get("choices", []) as Array
 	var buttons: Array = decision.get("_choice_buttons") as Array
@@ -257,8 +257,8 @@ func _interactable(parent_name: String) -> Interactable:
 	return _root.get_node_or_null("%s/Interactable" % parent_name) as Interactable
 
 
-func _controller() -> BetaDayOneController:
-	return get_tree().get_first_node_in_group("beta_day_one_controller") as BetaDayOneController
+func _controller() -> StoreSessionController:
+	return get_tree().get_first_node_in_group("store_session_controller") as StoreSessionController
 
 
 func _register_unlock_entries() -> void:

@@ -1,4 +1,4 @@
-class_name BetaCustomerResultPanel
+class_name CustomerResultPanel
 extends ModalPanel
 
 signal result_acknowledged(event_id: StringName, choice_id: StringName)
@@ -17,7 +17,7 @@ func _ready() -> void:
 	layer = 80
 	visible = false
 	var blocker := ColorRect.new()
-	blocker.color = BetaModalTheme.COLOR_BLOCKER
+	blocker.color = StoreModalTheme.COLOR_BLOCKER
 	blocker.mouse_filter = Control.MOUSE_FILTER_STOP
 	blocker.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(blocker)
@@ -32,7 +32,7 @@ func _ready() -> void:
 	panel.offset_top = -140
 	panel.offset_right = 280
 	panel.offset_bottom = 140
-	panel.add_theme_stylebox_override("panel", BetaModalTheme.make_panel_style())
+	panel.add_theme_stylebox_override("panel", StoreModalTheme.make_panel_style())
 	blocker.add_child(panel)
 
 	var root := VBoxContainer.new()
@@ -42,24 +42,24 @@ func _ready() -> void:
 	_tag_label = Label.new()
 	_tag_label.text = "OUTCOME NOTED"
 	_tag_label.add_theme_font_size_override("font_size", 14)
-	_tag_label.add_theme_color_override("font_color", BetaModalTheme.COLOR_TEXT_MUTED)
+	_tag_label.add_theme_color_override("font_color", StoreModalTheme.COLOR_TEXT_MUTED)
 	root.add_child(_tag_label)
 
 	_title_label = Label.new()
 	_title_label.add_theme_font_size_override("font_size", 24)
-	_title_label.add_theme_color_override("font_color", BetaModalTheme.COLOR_TEXT_PRIMARY)
+	_title_label.add_theme_color_override("font_color", StoreModalTheme.COLOR_TEXT_PRIMARY)
 	_title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(_title_label)
 
-	_subhead_label = _make_body_label(root, BetaModalTheme.COLOR_TEXT_MUTED)
-	_choice_label = _make_body_label(root, BetaModalTheme.COLOR_TEXT_MUTED)
-	_acknowledgement_label = _make_body_label(root, BetaModalTheme.COLOR_TEXT_PRIMARY)
+	_subhead_label = _make_body_label(root, StoreModalTheme.COLOR_TEXT_MUTED)
+	_choice_label = _make_body_label(root, StoreModalTheme.COLOR_TEXT_MUTED)
+	_acknowledgement_label = _make_body_label(root, StoreModalTheme.COLOR_TEXT_PRIMARY)
 
 	_continue_button = Button.new()
 	_continue_button.text = "Done"
 	_continue_button.custom_minimum_size = Vector2(0, 48)
 	_continue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	BetaModalTheme.apply_button_theme(_continue_button)
+	StoreModalTheme.apply_button_theme(_continue_button)
 	_continue_button.pressed.connect(_on_continue_pressed)
 	root.add_child(_continue_button)
 

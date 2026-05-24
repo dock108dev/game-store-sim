@@ -408,7 +408,7 @@ func _on_entrance_door_interacted() -> void:
 ## behind a debug-build flag or a later-day gate.
 ##
 ## testing_station carries the inactive interaction wrapper. The visual zone
-## lives under crt_demo_area and is hidden by the beta controller's review
+## lives under crt_demo_area and is hidden by the store_session controller's review
 ## scope while remaining authored for full-store completeness.
 ##
 ## §F-41 — silent return on a missing node is intentional: future store

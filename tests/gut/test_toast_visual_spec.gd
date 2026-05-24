@@ -18,7 +18,7 @@ func before_each() -> void:
 # ── Card geometry ─────────────────────────────────────────────────────────────
 
 
-func test_panel_width_is_compact_beta_lane() -> void:
+func test_panel_width_is_compact_store_session_lane() -> void:
 	assert_eq(
 		ToastNotificationUI.TOAST_WIDTH, 420.0,
 		"Toast panels must fit Day-1 tutorial copy without ellipsis"

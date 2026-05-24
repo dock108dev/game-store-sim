@@ -129,7 +129,7 @@ func _process(delta: float) -> void:
 		var current_frame_hour: int = int(game_time_minutes / 60.0)
 		_emit_hour_changes(current_frame_hour)
 		_check_phase_transition()
-		if game_time_minutes >= _get_day_end_minutes() and not _beta_owns_day_end():
+		if game_time_minutes >= _get_day_end_minutes() and not _store_session_owns_day_end():
 			_end_day()
 		return
 
@@ -144,20 +144,20 @@ func _process(delta: float) -> void:
 	_emit_hour_changes(new_hour)
 	_check_phase_transitions_between(previous_minutes, game_time_minutes)
 
-	if game_time_minutes >= _get_day_end_minutes() and not _beta_owns_day_end():
+	if game_time_minutes >= _get_day_end_minutes() and not _store_session_owns_day_end():
 		_end_day()
 
 
-## §F-FIX1 — When a beta day-1 controller is in the tree it is the source
+## §F-FIX1 — When a store_session day-1 controller is in the tree it is the source
 ## of truth for when the day ends; the player's E-press at the close-day
 ## trigger drives `_end_day` via the controller, not the wall clock. This
 ## guard prevents the auto-end at 17:00 from yanking the player into the
 ## summary if they take a while to walk between beats.
-func _beta_owns_day_end() -> bool:
+func _store_session_owns_day_end() -> bool:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	return tree.get_first_node_in_group("beta_day_one_controller") != null
+	return tree.get_first_node_in_group("store_session_controller") != null
 
 
 func set_speed(tier: SpeedTier) -> void:
@@ -235,7 +235,7 @@ func get_play_time_seconds() -> float:
 
 ## Pushes the in-game clock forward by `minutes`, emitting `hour_changed`
 ## and `day_phase_changed` for every boundary crossed and triggering `_end_day`
-## if the new time crosses the day's end. Used by event-driven flows (beta
+## if the new time crosses the day's end. Used by event-driven flows (store_session
 ## Day-1 objective completions, scripted scene beats) where the clock should
 ## reflect player progress instead of waiting for real-time accumulation.
 ##

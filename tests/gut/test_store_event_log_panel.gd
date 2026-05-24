@@ -1,4 +1,4 @@
-## Tests for the bottom-left beta event-log surface (`BetaEventLogPanel`).
+## Tests for the bottom-left store_session event-log surface (`StoreEventLogPanel`).
 ##
 ## Covers the visual contract (dark-indigo background, tag color tokens),
 ## the 4-row visible cap with descending-alpha fade, the bracket-tag strip,
@@ -10,8 +10,8 @@ func before_each() -> void:
 	InputFocus._reset_for_tests()
 
 
-func _make_panel() -> BetaEventLogPanel:
-	var panel: BetaEventLogPanel = BetaEventLogPanel.new()
+func _make_panel() -> StoreEventLogPanel:
+	var panel: StoreEventLogPanel = StoreEventLogPanel.new()
 	add_child_autofree(panel)
 	return panel
 
@@ -19,7 +19,7 @@ func _make_panel() -> BetaEventLogPanel:
 # ── visibility / wiring ───────────────────────────────────────────────────────
 
 func test_panel_is_visible_at_ready() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	assert_true(
 		panel.visible,
 		"Event-log panel must be visible immediately after _ready"
@@ -28,17 +28,17 @@ func test_panel_is_visible_at_ready() -> void:
 
 func test_panel_sits_on_layer_30() -> void:
 	# AC: matches the right-side stats panel layer so the design family
-	# (BetaRightPanel, BetaEventLogPanel) shares
+	# (StoreStatusPanel, StoreEventLogPanel) shares
 	# the same z-tier and the same modal-dim contract.
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	assert_eq(
 		panel.layer, 30,
-		"BetaEventLogPanel must sit on layer 30 alongside the other Today panels"
+		"StoreEventLogPanel must sit on layer 30 alongside the other Today panels"
 	)
 
 
 func test_panel_starts_with_zero_entries() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	assert_eq(
 		panel.get_visible_entry_count(), 0,
 		"Panel must start with no entries"
@@ -48,7 +48,7 @@ func test_panel_starts_with_zero_entries() -> void:
 # ── event_logged subscription ─────────────────────────────────────────────────
 
 func test_event_logged_emit_renders_row() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	EventBus.event_logged.emit("[STOCK]", "Stocked Crash Bandicoot 2.")
 	await get_tree().process_frame
 	assert_eq(
@@ -58,7 +58,7 @@ func test_event_logged_emit_renders_row() -> void:
 
 
 func test_empty_message_is_ignored() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	EventBus.event_logged.emit("[STOCK]", "")
 	await get_tree().process_frame
 	assert_eq(
@@ -73,7 +73,7 @@ func test_max_visible_entries_is_three() -> void:
 	# AC pin: the rendered cap is exactly 3 — the constant is part of the
 	# spec contract, not a tunable.
 	assert_eq(
-		BetaEventLogPanel.MAX_VISIBLE_ENTRIES, 3,
+		StoreEventLogPanel.MAX_VISIBLE_ENTRIES, 3,
 		"Spec pins the rendered cap at 3 rows"
 	)
 
@@ -81,13 +81,13 @@ func test_max_visible_entries_is_three() -> void:
 func test_panel_caps_visible_entries_at_max() -> void:
 	# AC: panel never displays more than MAX_VISIBLE_ENTRIES rows; the oldest
 	# is queue_free()'d when a 5th arrives.
-	var panel: BetaEventLogPanel = _make_panel()
-	for i: int in range(BetaEventLogPanel.MAX_VISIBLE_ENTRIES + 4):
+	var panel: StoreEventLogPanel = _make_panel()
+	for i: int in range(StoreEventLogPanel.MAX_VISIBLE_ENTRIES + 4):
 		EventBus.event_logged.emit("[STOCK]", "Stocked item %d." % i)
 	await get_tree().process_frame
 	assert_eq(
 		panel.get_visible_entry_count(),
-		BetaEventLogPanel.MAX_VISIBLE_ENTRIES,
+		StoreEventLogPanel.MAX_VISIBLE_ENTRIES,
 		"Panel must cap rendered rows at MAX_VISIBLE_ENTRIES"
 	)
 
@@ -97,16 +97,16 @@ func test_panel_caps_visible_entries_at_max() -> void:
 func test_alpha_descends_from_oldest_to_newest_when_full() -> void:
 	# AC: row 0 (oldest) renders at ALPHA_OLDEST; the last row at 1.0;
 	# intermediate rows interpolate linearly.
-	var panel: BetaEventLogPanel = _make_panel()
-	for i: int in range(BetaEventLogPanel.MAX_VISIBLE_ENTRIES):
+	var panel: StoreEventLogPanel = _make_panel()
+	for i: int in range(StoreEventLogPanel.MAX_VISIBLE_ENTRIES):
 		EventBus.event_logged.emit("[STOCK]", "Stocked item %d." % i)
 	await get_tree().process_frame
 	var oldest: float = panel.get_row_alpha(0)
 	var newest: float = panel.get_row_alpha(
-		BetaEventLogPanel.MAX_VISIBLE_ENTRIES - 1
+		StoreEventLogPanel.MAX_VISIBLE_ENTRIES - 1
 	)
 	assert_almost_eq(
-		oldest, BetaEventLogPanel.ALPHA_OLDEST, 0.001,
+		oldest, StoreEventLogPanel.ALPHA_OLDEST, 0.001,
 		"Oldest visible row must sit at ALPHA_OLDEST (0.35)"
 	)
 	assert_almost_eq(
@@ -115,7 +115,7 @@ func test_alpha_descends_from_oldest_to_newest_when_full() -> void:
 	)
 	# Monotonic interpolation — every step strictly increases.
 	var prev: float = -1.0
-	for i: int in range(BetaEventLogPanel.MAX_VISIBLE_ENTRIES):
+	for i: int in range(StoreEventLogPanel.MAX_VISIBLE_ENTRIES):
 		var a: float = panel.get_row_alpha(i)
 		assert_gt(
 			a, prev,
@@ -128,15 +128,15 @@ func test_alpha_recomputes_immediately_after_eviction() -> void:
 	# AC: existing rows update their modulate.a immediately, not on the next
 	# frame. After overflowing the cap the surviving oldest still reads at
 	# ALPHA_OLDEST without waiting for any deferred refresh.
-	var panel: BetaEventLogPanel = _make_panel()
-	for i: int in range(BetaEventLogPanel.MAX_VISIBLE_ENTRIES + 3):
+	var panel: StoreEventLogPanel = _make_panel()
+	for i: int in range(StoreEventLogPanel.MAX_VISIBLE_ENTRIES + 3):
 		EventBus.event_logged.emit("[STOCK]", "Stocked item %d." % i)
 	assert_almost_eq(
-		panel.get_row_alpha(0), BetaEventLogPanel.ALPHA_OLDEST, 0.001,
+		panel.get_row_alpha(0), StoreEventLogPanel.ALPHA_OLDEST, 0.001,
 		"Oldest surviving row must sit at ALPHA_OLDEST right after eviction"
 	)
 	assert_almost_eq(
-		panel.get_row_alpha(BetaEventLogPanel.MAX_VISIBLE_ENTRIES - 1),
+		panel.get_row_alpha(StoreEventLogPanel.MAX_VISIBLE_ENTRIES - 1),
 		1.0,
 		0.001,
 		"Newest row must sit at 1.0 right after eviction"
@@ -147,7 +147,7 @@ func test_alpha_recomputes_immediately_after_eviction() -> void:
 
 func test_display_text_strips_bracket_tag_prefix() -> void:
 	# AC: no visible row contains a bracket-wrapped tag like '[STOCK]'.
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	EventBus.event_logged.emit("[STOCK]", "Stocked Crash Bandicoot 2.")
 	await get_tree().process_frame
 	var latest: String = panel.get_latest_row_text()
@@ -164,7 +164,7 @@ func test_display_text_strips_bracket_tag_prefix() -> void:
 func test_tag_colors_match_spec() -> void:
 	# AC: TAG_COLORS covers STOCK (blue-teal), CUSTOMER (green),
 	# DAY (amber/gold), SYSTEM (medium gray), OBJECTIVE (cyan).
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	assert_eq(
 		panel.get_tag_color("STOCK"),
 		Color(0.3, 0.75, 0.85, 1.0),
@@ -195,7 +195,7 @@ func test_tag_colors_match_spec() -> void:
 func test_tag_color_accepts_bracketed_form() -> void:
 	# Call sites that already have the bracketed token should not need to
 	# unwrap it themselves.
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	assert_eq(
 		panel.get_tag_color("[STOCK]"),
 		panel.get_tag_color("STOCK"),
@@ -206,7 +206,7 @@ func test_tag_color_accepts_bracketed_form() -> void:
 func test_unknown_tag_falls_back_to_near_white() -> void:
 	# AC: entries with an unrecognized or missing tag fall back to near-white
 	# — no crash, no blank row.
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	EventBus.event_logged.emit("[NEWTHING]", "Surface me.")
 	await get_tree().process_frame
 	assert_eq(
@@ -222,7 +222,7 @@ func test_unknown_tag_falls_back_to_near_white() -> void:
 # ── modal-dim contract ────────────────────────────────────────────────────────
 
 func test_panel_dims_under_modal_context() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	InputFocus.push_context(InputFocus.CTX_MODAL)
 	await get_tree().process_frame
 	var any_dimmed: bool = false
@@ -247,7 +247,7 @@ func test_panel_dims_under_modal_context() -> void:
 # ── FP-mode ownership ─────────────────────────────────────────────────────────
 
 func test_fp_mode_changed_does_not_hide_panel() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	EventBus.fp_mode_changed.emit(true)
 	await get_tree().process_frame
 	assert_true(
@@ -263,13 +263,13 @@ func test_fp_mode_changed_does_not_hide_panel() -> void:
 
 
 func test_panel_does_not_connect_fp_mode_changed() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	var connections: Array = EventBus.fp_mode_changed.get_connections()
 	for entry: Dictionary in connections:
 		var callable: Callable = entry.get("callable") as Callable
 		assert_ne(
 			callable.get_object(), panel,
-			"BetaEventLogPanel must not connect to fp_mode_changed"
+			"StoreEventLogPanel must not connect to fp_mode_changed"
 		)
 
 
@@ -279,7 +279,7 @@ func test_event_log_record_broadcasts_event_logged() -> void:
 	# AC: 'The surface subscribes to EventBus.event_logged(tag, message)'.
 	# EventLog._record must emit player-facing beats so a release build still
 	# drives the panel even though the ring buffer is debug-only.
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	EventBus.item_stocked.emit("crash_2", "shelf_a")
 	await get_tree().process_frame
 	assert_gt(
@@ -298,7 +298,7 @@ func test_event_log_record_broadcasts_event_logged() -> void:
 
 
 func test_event_log_filters_debug_entries_before_panel() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	var customer: Node = Node.new()
 	add_child_autofree(customer)
 	EventBus.modal_opened.emit(&"CanvasLayer/DecisionCard")
@@ -318,14 +318,14 @@ func test_event_log_filters_debug_entries_before_panel() -> void:
 
 
 func test_event_log_lifecycle_rows_use_player_facing_shift_copy() -> void:
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	EventBus.day_started.emit(1)
 	EventBus.gameplay_ready.emit()
 	await get_tree().process_frame
 	assert_eq(panel.get_visible_entry_count(), 2)
 	assert_eq(
 		panel.get_row_text_for_test(0),
-		"Opening shift started.",
+		"First-day training started.",
 		"Day startup row must not expose raw Day 1 lifecycle copy"
 	)
 	assert_eq(
@@ -343,7 +343,7 @@ func test_background_is_constrained_to_content_width() -> void:
 	# anchor — never spanning the full viewport width. Otherwise the bottom
 	# of the screen reads as a single fused console with the interaction
 	# prompt.
-	var panel: BetaEventLogPanel = _make_panel()
+	var panel: StoreEventLogPanel = _make_panel()
 	await get_tree().process_frame
 	var anchor: Control = panel.get_node("Anchor") as Control
 	assert_not_null(anchor, "Panel must own a sized Anchor control")
@@ -355,7 +355,7 @@ func test_background_is_constrained_to_content_width() -> void:
 	)
 	var anchor_width: float = anchor.offset_right - anchor.offset_left
 	assert_almost_eq(
-		anchor_width, BetaEventLogPanel._PANEL_WIDTH, 0.5,
+		anchor_width, StoreEventLogPanel._PANEL_WIDTH, 0.5,
 		"Anchor width (%.0fpx) must match the compact panel content width"
 			% anchor_width
 	)
@@ -373,12 +373,12 @@ func test_background_is_constrained_to_content_width() -> void:
 
 func test_panel_footprint_stays_compact_for_fp_view() -> void:
 	assert_lte(
-		BetaEventLogPanel._PANEL_WIDTH,
+		StoreEventLogPanel._PANEL_WIDTH,
 		248.0,
 		"Event log must stay narrow enough for the bottom-left safe zone"
 	)
 	assert_lte(
-		BetaEventLogPanel._PANEL_HEIGHT,
+		StoreEventLogPanel._PANEL_HEIGHT,
 		90.0,
 		"Event log must stay short enough to avoid becoming a second panel"
 	)

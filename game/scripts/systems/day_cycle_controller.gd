@@ -88,7 +88,7 @@ func _on_day_close_requested() -> void:
 ## Player chose "Close Day" inside the confirmation modal. Bypasses the gate
 ## and runs the same close path as the unguarded request.
 func _on_day_close_confirmed() -> void:
-	if _is_beta_day_one_flow_active():
+	if _is_store_session_day_one_flow_active():
 		return
 	if not _time_system:
 		push_warning(
@@ -98,14 +98,14 @@ func _on_day_close_confirmed() -> void:
 	_on_day_ended(_time_system.current_day)
 
 
-func _is_beta_day_one_flow_active() -> bool:
+func _is_store_session_day_one_flow_active() -> bool:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	# The beta day-one controller owns its close confirmation and summary
+	# The store_session day-one controller owns its close confirmation and summary
 	# while mounted. Production still handles clock-driven day_ended events,
 	# but must not consume the shared confirmation modal answer.
-	return tree.get_first_node_in_group("beta_day_one_controller") != null
+	return tree.get_first_node_in_group("store_session_controller") != null
 
 
 ## §EH-37 — Direct typed autoload access. The prior chain

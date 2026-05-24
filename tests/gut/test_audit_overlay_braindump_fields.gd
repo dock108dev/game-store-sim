@@ -5,7 +5,7 @@
 ## These tests exercise the data-source wiring without spinning up a full
 ## GameWorld. The overlay must read OpenModal from `ModalQueue` (the
 ## single source of truth for active-modal state), and shelf/back-room
-## counts must update off the beta count signals on EventBus.
+## counts must update off the store_session count signals on EventBus.
 extends GutTest
 
 
@@ -41,35 +41,35 @@ func test_braindump_labels_exist() -> void:
 	assert_not_null(AuditOverlay._label_queued_modals, "QueuedModals label missing")
 
 
-func test_day_field_reflects_beta_run_state() -> void:
-	var prior_day: int = BetaRunState.day
-	BetaRunState.day = 7
+func test_day_field_reflects_store_session_state() -> void:
+	var prior_day: int = StoreSessionState.day
+	StoreSessionState.day = 7
 	AuditOverlay._refresh_braindump_fields("none", 0)
 	assert_eq(
 		AuditOverlay._label_day.text,
 		"Day: 7",
-		"Day field must mirror BetaRunState.day"
+		"Day field must mirror StoreSessionState.day"
 	)
-	BetaRunState.day = prior_day
+	StoreSessionState.day = prior_day
 
 
 func test_shelf_count_signal_updates_label() -> void:
-	EventBus.beta_shelf_count_changed.emit(4)
+	EventBus.store_shelf_count_changed.emit(4)
 	AuditOverlay._refresh_braindump_fields("none", 0)
 	assert_eq(
 		AuditOverlay._label_on_shelves.text,
 		"OnShelves: 4",
-		"OnShelves field must reflect beta_shelf_count_changed signal"
+		"OnShelves field must reflect store_shelf_count_changed signal"
 	)
 
 
 func test_back_room_count_signal_updates_label() -> void:
-	EventBus.beta_backroom_count_changed.emit(3)
+	EventBus.store_backroom_count_changed.emit(3)
 	AuditOverlay._refresh_braindump_fields("none", 0)
 	assert_eq(
 		AuditOverlay._label_back_room.text,
 		"BackRoom: 3",
-		"BackRoom field must reflect beta_backroom_count_changed signal"
+		"BackRoom field must reflect store_backroom_count_changed signal"
 	)
 
 
@@ -148,8 +148,8 @@ func test_phase_name_covers_all_day_phases() -> void:
 	assert_eq(AuditOverlay._phase_name(TimeSystem.DayPhase.LATE_EVENING), "LATE_EVENING")
 
 
-func test_fields_degrade_gracefully_without_beta_controller() -> void:
-	# Without a BetaDayOneController in the tree, customer/sales/objective
+func test_fields_degrade_gracefully_without_store_session_controller() -> void:
+	# Without a StoreSessionController in the tree, customer/sales/objective
 	# fields must show "—" instead of asserting or printing 0 (which would
 	# mask the missing data source).
 	AuditOverlay._refresh_braindump_fields("none", 0)
@@ -158,14 +158,14 @@ func test_fields_degrade_gracefully_without_beta_controller() -> void:
 	assert_eq(AuditOverlay._label_active_objective.text, "ActiveObjective: —")
 
 
-func test_money_field_falls_back_to_beta_run_state_cash() -> void:
-	# Without an EconomySystem in the tree, Money must mirror BetaRunState.cash.
-	var prior_cash: int = BetaRunState.cash
-	BetaRunState.cash = 250
+func test_money_field_falls_back_to_store_session_state_cash() -> void:
+	# Without an EconomySystem in the tree, Money must mirror StoreSessionState.cash.
+	var prior_cash: int = StoreSessionState.cash
+	StoreSessionState.cash = 250
 	AuditOverlay._refresh_braindump_fields("none", 0)
 	assert_eq(
 		AuditOverlay._label_money.text,
 		"Money: $250",
-		"Money field must fall back to BetaRunState.cash without EconomySystem"
+		"Money field must fall back to StoreSessionState.cash without EconomySystem"
 	)
-	BetaRunState.cash = prior_cash
+	StoreSessionState.cash = prior_cash

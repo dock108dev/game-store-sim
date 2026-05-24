@@ -83,7 +83,7 @@ func test_is_eligible_respects_cooldown() -> void:
 func test_seeds_two_beats_when_pool_has_two_eligible() -> void:
 	var pool: Array = [
 		_make_beat("alpha"),
-		_make_beat("beta"),
+		_make_beat("store_session"),
 	]
 	MiddayEventSystem.set_beat_pool(pool)
 	EventBus.day_started.emit(1)
@@ -119,7 +119,7 @@ func test_dedup_guard_avoids_repeat_two_days_in_a_row() -> void:
 	# the prior day's queue.
 	var pool: Array = [
 		_make_beat("alpha", 1, 30, 0),
-		_make_beat("beta", 1, 30, 0),
+		_make_beat("store_session", 1, 30, 0),
 		_make_beat("gamma", 1, 30, 0),
 	]
 	MiddayEventSystem.set_beat_pool(pool)

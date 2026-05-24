@@ -33,7 +33,7 @@ var _hovered_can_interact: bool = false
 var _inventory_system: InventorySystem = null
 var _open_panel_count: int = 0
 ## Last raycast diagnostic info, updated each frame. Public-but-underscored
-## so the BetaDebugOverlay can surface targeting state without having to
+## so the StoreDebugOverlay can surface targeting state without having to
 ## re-run the query. Populated by `_update_raycast`.
 var _last_raycast_collider_name: String = ""
 var _last_raycast_resolved: String = ""
@@ -58,10 +58,10 @@ func _ready() -> void:
 		_apply_camera(CameraManager.active_camera)
 	if OS.is_debug_build():
 		_setup_debug_overlay()
-		# In beta mode the BetaDebugOverlay surfaces the same info; defer one
-		# frame so the beta controller has registered, then hide the older
+		# In store_session mode the StoreDebugOverlay surfaces the same info; defer one
+		# frame so the store_session controller has registered, then hide the older
 		# overlay to avoid two stacked widgets at top-left.
-		call_deferred("_suppress_debug_overlay_if_beta")
+		call_deferred("_suppress_store_debug_overlay")
 
 
 ## Sets the InventorySystem reference for shelf item tooltip lookups.
@@ -85,7 +85,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _interaction_blocked():
 		return
 	if event.is_action_pressed("interact"):
-		if _is_keyboard_captured_by_ui() and not _beta_mode_active():
+		if _is_keyboard_captured_by_ui() and not _store_session_mode_active():
 			return
 		if _hovered_target and _hovered_can_interact:
 			_log_interaction_dispatch(_hovered_target)
@@ -112,11 +112,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			)
 
 
-func _beta_mode_active() -> bool:
+func _store_session_mode_active() -> bool:
+	if not is_inside_tree():
+		return false
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	return not tree.get_nodes_in_group("beta_day_one_controller").is_empty()
+	return not tree.get_nodes_in_group("store_session_controller").is_empty()
 
 
 ## Returns the currently hovered interactable, or null.
@@ -319,7 +321,7 @@ func _find_best_proximity_target(cam_pos: Vector3, cam_forward: Vector3) -> Inte
 	return best
 
 
-## Public read-only accessors for the BetaDebugOverlay so it can surface
+## Public read-only accessors for the StoreDebugOverlay so it can surface
 ## targeting diagnostics without re-running the physics query. Snapshot of
 ## the most recent `_update_raycast` pass.
 func get_targeting_debug() -> Dictionary:
@@ -549,8 +551,8 @@ func _log_interaction_dispatch(target: Interactable) -> void:
 ## release export templates never allocate the node tree and pay no per-frame
 ## cost. Layer 128 keeps it above gameplay HUD without interfering with
 ## existing UI layers.
-func _suppress_debug_overlay_if_beta() -> void:
-	if not _beta_mode_active():
+func _suppress_store_debug_overlay() -> void:
+	if not _store_session_mode_active():
 		return
 	if _debug_overlay != null:
 		var canvas: Node = _debug_overlay.get_parent()

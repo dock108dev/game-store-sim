@@ -29,8 +29,8 @@ const _MODAL_DIM_DURATION: float = 0.15
 const _DISABLED_LABEL_MODULATE: Color = Color(0.78, 0.78, 0.78, 0.7)
 const _ACTIVE_LABEL_MODULATE: Color = Color(1.0, 1.0, 1.0, 1.0)
 
-## Step-slot styling. Anchored to BetaModalTheme so the rail's progress
-## checklist reads as the same family as the beta modals (decision card,
+## Step-slot styling. Anchored to StoreModalTheme so the rail's progress
+## checklist reads as the same family as the store_session modals (decision card,
 ## day summary, manager note). Slot font_size is applied at runtime via
 ## `add_theme_font_size_override` so the .tscn does not carry a sub-18pt
 ## override that would trip the project-theme legibility tripwire.
@@ -66,14 +66,14 @@ var _cached_key: String = ""
 ## prompt" so this flag clears on `interactable_focused_disabled` to keep
 ## the wrong-target hint from masquerading as an active affordance.
 var _interactable_focused_state: bool = false
-## True while `BetaRunState.carrying_stock` is set (mirrored via the
-## `EventBus.beta_carry_changed` payload). Outside the beta loop the
+## True while `StoreSessionState.carrying_stock` is set (mirrored via the
+## `EventBus.store_carry_changed` payload). Outside the store_session loop the
 ## carry signal is never emitted, so this stays false and the right side
 ## renders the cached action/hint as before.
 var _carry_active: bool = false
-## Mirrors `HUD._fp_mode` via `EventBus.fp_mode_changed`. In beta FP mode the
-## whole rail is hidden so `BetaRightPanel` owns objectives and
-## `InteractionPrompt` owns the bottom-right action affordance. Outside beta,
+## Mirrors `HUD._fp_mode` via `EventBus.fp_mode_changed`. In store_session FP mode the
+## whole rail is hidden so `StoreStatusPanel` owns objectives and
+## `InteractionPrompt` owns the bottom-right action affordance. Outside store_session,
 ## the legacy FP rail chip can still render focused-interactable copy.
 var _fp_mode_active: bool = false
 ## Action-label text from the most recent `interactable_focused*` payload.
@@ -114,7 +114,7 @@ func _ready() -> void:
 		_on_interactable_focused_disabled_rail
 	)
 	EventBus.interactable_unfocused.connect(_on_interactable_unfocused_rail)
-	EventBus.beta_carry_changed.connect(_on_beta_carry_changed_rail)
+	EventBus.store_carry_changed.connect(_on_store_carry_changed_rail)
 	EventBus.fp_mode_changed.connect(_on_fp_mode_changed)
 	# §EH-15 — `InputFocus` is an autoload (project.godot); `context_changed`
 	# is owner-declared on input_focus.gd. The `if InputFocus != null` guard
@@ -223,11 +223,11 @@ func _on_objective_updated(payload: Dictionary) -> void:
 ## Renders up to four step slots from the objective payload's `steps` array.
 ## Each step is `{text: String, state: "completed"|"active"|"future"}`. Empty
 ## or missing arrays hide the StepsContainer entirely so non-multi-step
-## payloads (e.g. ObjectiveDirector emissions outside the beta loop) keep
+## payloads (e.g. ObjectiveDirector emissions outside the store_session loop) keep
 ## the legacy single-line ObjectiveLabel render path with no visual bulk.
 ##
-## State styling is anchored to BetaModalTheme so the rail's progress
-## checklist reads as the same visual family as the beta modals:
+## State styling is anchored to StoreModalTheme so the rail's progress
+## checklist reads as the same visual family as the store_session modals:
 ##   * completed → "✓ " prefix in COLOR_ACCENT (green)
 ##   * active    → COLOR_TEXT_HEADER (warm gold), full opacity
 ##   * future    → COLOR_TEXT_MUTED at 0.5 alpha (visually subordinate)
@@ -270,19 +270,19 @@ func _render_steps(steps: Array) -> void:
 			"completed":
 				slot.text = _STEP_PREFIX_COMPLETED + step_text
 				slot.add_theme_color_override(
-					"font_color", BetaModalTheme.COLOR_ACCENT
+					"font_color", StoreModalTheme.COLOR_ACCENT
 				)
 				slot.modulate = Color(1.0, 1.0, 1.0, 1.0)
 			"active":
 				slot.text = step_text
 				slot.add_theme_color_override(
-					"font_color", BetaModalTheme.COLOR_TEXT_HEADER
+					"font_color", StoreModalTheme.COLOR_TEXT_HEADER
 				)
 				slot.modulate = Color(1.0, 1.0, 1.0, 1.0)
 			_:
 				slot.text = step_text
 				slot.add_theme_color_override(
-					"font_color", BetaModalTheme.COLOR_TEXT_MUTED
+					"font_color", StoreModalTheme.COLOR_TEXT_MUTED
 				)
 				slot.modulate = Color(1.0, 1.0, 1.0, _STEP_FUTURE_ALPHA)
 
@@ -304,12 +304,12 @@ func _set_hint_text(key_text: String) -> void:
 	_hint_label.visible = key_text != ""
 
 
-## Tracks `BetaRunState.carrying_stock` via the public `beta_carry_changed`
-## signal so the rail does not need a hard dependency on BetaRunState. Empty
-## payload = not carrying. Outside the beta loop the signal never emits and
+## Tracks `StoreSessionState.carrying_stock` via the public `store_carry_changed`
+## signal so the rail does not need a hard dependency on StoreSessionState. Empty
+## payload = not carrying. Outside the store_session loop the signal never emits and
 ## `_carry_active` stays false, leaving the rail behavior unchanged for
 ## production gameplay.
-func _on_beta_carry_changed_rail(text: String) -> void:
+func _on_store_carry_changed_rail(text: String) -> void:
 	_carry_active = not text.strip_edges().is_empty()
 	_apply_right_side_visibility()
 
@@ -325,8 +325,8 @@ func _on_interactable_focused_rail(action_label_text: String) -> void:
 ## right-side chip when not in FP mode — the standalone InteractionPrompt
 ## still surfaces the muted reason text, and the rail must not advertise an
 ## active "Press E" chip while the player is looking at a node they cannot
-## interact with. In non-beta FP mode the rail can still render disabled focus
-## copy; beta FP suppresses the whole rail before this chip reaches screen.
+## interact with. In non-store_session FP mode the rail can still render disabled focus
+## copy; store_session FP suppresses the whole rail before this chip reaches screen.
 func _on_interactable_focused_disabled_rail(reason: String) -> void:
 	_interactable_focused_state = false
 	_focused_action_text = reason
@@ -342,8 +342,8 @@ func _on_interactable_unfocused_rail() -> void:
 
 
 ## Mirrors `HUD._fp_mode` inside first-person camera views. Re-renders
-## visibility and the right-side chip immediately so beta FP toggles hide the
-## rail, while legacy non-beta FP focus copy does not wait for a fresh
+## visibility and the right-side chip immediately so store_session FP toggles hide the
+## rail, while legacy non-store_session FP focus copy does not wait for a fresh
 ## InteractionRay event.
 func _on_fp_mode_changed(enabled: bool) -> void:
 	if _fp_mode_active == enabled:
@@ -355,11 +355,11 @@ func _on_fp_mode_changed(enabled: bool) -> void:
 
 ## Re-renders the right-side action/hint chip based on cached payload and
 ## the current carry/focus state. Three rendering modes:
-##   * Non-beta FP-mode + interactable focused: the focused action text replaces the
+##   * Non-store_session FP-mode + interactable focused: the focused action text replaces the
 ##     cached objective action, the styled KeyBadge appears for active focus
 ##     (muted modulate + no badge for disabled focus). Cached HintLabel is
-##     remains a legacy fallback; beta FP hides the whole rail instead.
-##   * Beta carry without focus: the chip is suppressed entirely so the
+##     remains a legacy fallback; store_session FP hides the whole rail instead.
+##   * Store-session carry without focus: the chip is suppressed entirely so the
 ##     prompt doesn't appear over unrelated nodes during navigation to the
 ##     shelf — the focused-target highlight becomes the sole spatial cue.
 ##   * Default (cached payload render): ActionLabel + HintLabel reflect the
@@ -433,7 +433,7 @@ func _refresh_visibility() -> void:
 			and not _auto_hidden
 			and not _current_payload.is_empty()
 			and _state_allows_rail()
-			and not _beta_fp_suppressed()
+			and not _store_session_fp_suppressed()
 		)
 	if should_show and not visible:
 		_flash()
@@ -448,13 +448,13 @@ func _state_allows_rail() -> bool:
 	)
 
 
-func _beta_fp_suppressed() -> bool:
+func _store_session_fp_suppressed() -> bool:
 	if not _fp_mode_active:
 		return false
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	return tree.get_first_node_in_group("beta_day_one_controller") != null
+	return tree.get_first_node_in_group("store_session_controller") != null
 
 
 ## Fades the rail in over one second whenever the objective content changes.

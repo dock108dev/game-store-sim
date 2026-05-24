@@ -81,19 +81,19 @@ func _focus_default_button() -> void:
 
 func _apply_modal_style() -> void:
 	_root.mouse_filter = Control.MOUSE_FILTER_STOP
-	_overlay.color = BetaModalTheme.COLOR_BLOCKER
+	_overlay.color = StoreModalTheme.COLOR_BLOCKER
 	_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	_panel.custom_minimum_size = PANEL_SIZE
 	_panel.offset_left = -PANEL_SIZE.x * 0.5
 	_panel.offset_top = -PANEL_SIZE.y * 0.5
 	_panel.offset_right = PANEL_SIZE.x * 0.5
 	_panel.offset_bottom = PANEL_SIZE.y * 0.5
-	_panel.add_theme_stylebox_override("panel", BetaModalTheme.make_panel_style())
+	_panel.add_theme_stylebox_override("panel", StoreModalTheme.make_panel_style())
 	_reason_label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_PRIMARY
+		"font_color", StoreModalTheme.COLOR_TEXT_PRIMARY
 	)
-	BetaModalTheme.apply_button_theme(_cancel_button)
-	BetaModalTheme.apply_button_theme(_confirm_button)
+	StoreModalTheme.apply_button_theme(_cancel_button)
+	StoreModalTheme.apply_button_theme(_confirm_button)
 
 
 func _on_cancel_pressed() -> void:

@@ -1,4 +1,4 @@
-class_name BetaDaySummaryPanel
+class_name DaySummaryPanel
 extends ModalPanel
 
 signal continue_pressed()
@@ -41,7 +41,7 @@ func _ready() -> void:
 	layer = 81
 	visible = false
 	var blocker := ColorRect.new()
-	blocker.color = BetaModalTheme.COLOR_BLOCKER
+	blocker.color = StoreModalTheme.COLOR_BLOCKER
 	blocker.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(blocker)
 
@@ -55,7 +55,7 @@ func _ready() -> void:
 	panel.offset_top = -330
 	panel.offset_right = 360
 	panel.offset_bottom = 330
-	panel.add_theme_stylebox_override("panel", BetaModalTheme.make_panel_style())
+	panel.add_theme_stylebox_override("panel", StoreModalTheme.make_panel_style())
 	blocker.add_child(panel)
 
 	var v := VBoxContainer.new()
@@ -65,7 +65,7 @@ func _ready() -> void:
 	_title_label = Label.new()
 	_title_label.add_theme_font_size_override("font_size", 30)
 	_title_label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_HEADER
+		"font_color", StoreModalTheme.COLOR_TEXT_HEADER
 	)
 	v.add_child(_title_label)
 
@@ -77,7 +77,7 @@ func _ready() -> void:
 	_metrics_label.scroll_active = false
 	_metrics_label.custom_minimum_size = Vector2(0, 140)
 	_metrics_label.add_theme_color_override(
-		"default_color", BetaModalTheme.COLOR_TEXT_PRIMARY
+		"default_color", StoreModalTheme.COLOR_TEXT_PRIMARY
 	)
 	money_section.add_child(_metrics_label)
 
@@ -98,17 +98,17 @@ func _ready() -> void:
 	perf_section.add_child(_audit_details)
 	_audit_shelf_label = _make_body_label(_audit_details)
 	_audit_shelf_label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_MUTED
+		"font_color", StoreModalTheme.COLOR_TEXT_MUTED
 	)
 	_audit_backroom_label = _make_body_label(_audit_details)
 	_audit_backroom_label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_MUTED
+		"font_color", StoreModalTheme.COLOR_TEXT_MUTED
 	)
 
 	_review_inventory_button = Button.new()
 	_review_inventory_button.text = _AUDIT_TEXT_COLLAPSED
 	_review_inventory_button.custom_minimum_size = Vector2(0, 32)
-	BetaModalTheme.apply_button_theme(_review_inventory_button)
+	StoreModalTheme.apply_button_theme(_review_inventory_button)
 	_review_inventory_button.pressed.connect(_on_review_inventory_pressed)
 	perf_section.add_child(_review_inventory_button)
 
@@ -117,14 +117,14 @@ func _ready() -> void:
 	_note_label = Label.new()
 	_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_note_label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_PRIMARY
+		"font_color", StoreModalTheme.COLOR_TEXT_PRIMARY
 	)
 	mark_section.add_child(_note_label)
 
 	_hidden_thread_label = Label.new()
 	_hidden_thread_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_hidden_thread_label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_MUTED
+		"font_color", StoreModalTheme.COLOR_TEXT_MUTED
 	)
 	mark_section.add_child(_hidden_thread_label)
 
@@ -137,12 +137,12 @@ func _ready() -> void:
 	_reinvest_button = Button.new()
 	_reinvest_button.custom_minimum_size = Vector2(0, 40)
 	_reinvest_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	BetaModalTheme.apply_button_theme(_reinvest_button)
+	StoreModalTheme.apply_button_theme(_reinvest_button)
 	_reinvest_button.pressed.connect(_on_reinvest_pressed)
 	_reinvest_section.add_child(_reinvest_button)
 	_reinvest_status_label = _make_body_label(_reinvest_section)
 	_reinvest_status_label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_MUTED
+		"font_color", StoreModalTheme.COLOR_TEXT_MUTED
 	)
 
 	# ── Button row ──────────────────────────────────────────────────────
@@ -154,7 +154,7 @@ func _ready() -> void:
 	_replay_button.text = "Replay Day 1"
 	_replay_button.custom_minimum_size = Vector2(0, 48)
 	_replay_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	BetaModalTheme.apply_button_theme(_replay_button)
+	StoreModalTheme.apply_button_theme(_replay_button)
 	_replay_button.pressed.connect(_on_replay_pressed)
 	button_row.add_child(_replay_button)
 
@@ -162,7 +162,7 @@ func _ready() -> void:
 	_main_menu_button.text = "Main Menu"
 	_main_menu_button.custom_minimum_size = Vector2(0, 48)
 	_main_menu_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	BetaModalTheme.apply_button_theme(_main_menu_button)
+	StoreModalTheme.apply_button_theme(_main_menu_button)
 	_main_menu_button.pressed.connect(_on_main_menu_pressed)
 	button_row.add_child(_main_menu_button)
 
@@ -170,7 +170,7 @@ func _ready() -> void:
 	_continue_button.text = "Continue to next day"
 	_continue_button.custom_minimum_size = Vector2(0, 48)
 	_continue_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	BetaModalTheme.apply_button_theme(_continue_button)
+	StoreModalTheme.apply_button_theme(_continue_button)
 	_continue_button.pressed.connect(_on_continue_pressed)
 	button_row.add_child(_continue_button)
 
@@ -189,7 +189,7 @@ func _make_section(parent: VBoxContainer, header_text: String) -> VBoxContainer:
 		"font_size", _SECTION_HEADER_FONT_SIZE
 	)
 	header.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_HEADER
+		"font_color", StoreModalTheme.COLOR_TEXT_HEADER
 	)
 	section.add_child(header)
 	return section
@@ -198,7 +198,7 @@ func _make_section(parent: VBoxContainer, header_text: String) -> VBoxContainer:
 func _make_body_label(parent: Container) -> Label:
 	var label := Label.new()
 	label.add_theme_color_override(
-		"font_color", BetaModalTheme.COLOR_TEXT_PRIMARY
+		"font_color", StoreModalTheme.COLOR_TEXT_PRIMARY
 	)
 	parent.add_child(label)
 	return label
@@ -224,7 +224,7 @@ func _on_queued_open(payload: Dictionary) -> void:
 	# Money — five lines: Starting Cash (carry-in), Sales (gross revenue
 	# today), review-only Rent (fixed daily operating cost), Profit after
 	# rent, and Ending Cash (cumulative wallet). Rent is surfaced as a review
-	# cost in the current beta loop; it does not reduce Ending Cash here.
+	# cost in the current store_session loop; it does not reduce Ending Cash here.
 	# Older payloads without the new keys fall back to derived defaults so
 	# the layout still renders.
 	var ending_cash: int = int(
@@ -326,7 +326,7 @@ func _on_queued_open(payload: Dictionary) -> void:
 
 	if is_final_day:
 		# Final-day copy must not read as "Continue" — there is no Day N+1
-		# beyond the beta loop, and a forward-leaning verb here would
+		# beyond the store_session loop, and a forward-leaning verb here would
 		# imply another shift is coming.
 		_continue_button.text = "Finish shift"
 	else:

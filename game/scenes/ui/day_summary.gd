@@ -746,7 +746,7 @@ func _on_continue_pressed() -> void:
 
 ## Restarts Day 1 by routing through GameManager.start_new_game(), which
 ## resets session state and reloads the gameplay scene. This is the primary
-## replay CTA in the single-day beta context.
+## replay CTA in the single-day store_session context.
 func _on_replay_pressed() -> void:
 	hide_summary()
 	GameManager.start_new_game()

@@ -1,8 +1,8 @@
-## Tests for the beta-suppression hook on `MomentsTray`.
+## Tests for the store_session-suppression hook on `MomentsTray`.
 ##
-## Covers `disable_for_beta()` — the disconnect+clear+hide path that
+## Covers `disable_for_store_session()` — the disconnect+clear+hide path that
 ## prevents an ambient `EventBus.moment_displayed` from spawning a card
-## in the bottom-right corner where the beta Today checklist now lives.
+## in the bottom-right corner where the store_session Today checklist now lives.
 extends GutTest
 
 
@@ -15,7 +15,7 @@ func _make_tray() -> MomentsTray:
 
 
 func test_tray_registers_in_moments_tray_group_on_ready() -> void:
-	# Group registration is what `BetaDayOneController._suppress_moments_tray`
+	# Group registration is what `StoreSessionController._suppress_moments_tray`
 	# uses to find the tray without a hard import dependency on game_world.
 	var tray: MomentsTray = _make_tray()
 	assert_true(
@@ -24,22 +24,22 @@ func test_tray_registers_in_moments_tray_group_on_ready() -> void:
 	)
 
 
-func test_disable_for_beta_disconnects_moment_displayed() -> void:
+func test_disable_for_store_session_disconnects_moment_displayed() -> void:
 	var tray: MomentsTray = _make_tray()
 	assert_true(
 		EventBus.moment_displayed.is_connected(tray._on_moment_displayed),
 		"Pre-condition: tray listens on moment_displayed at construction"
 	)
-	tray.disable_for_beta()
+	tray.disable_for_store_session()
 	assert_false(
 		EventBus.moment_displayed.is_connected(tray._on_moment_displayed),
-		"disable_for_beta() must disconnect the moment_displayed listener"
+		"disable_for_store_session() must disconnect the moment_displayed listener"
 	)
 
 
-func test_disable_for_beta_drops_subsequent_moment_emissions() -> void:
+func test_disable_for_store_session_drops_subsequent_moment_emissions() -> void:
 	var tray: MomentsTray = _make_tray()
-	tray.disable_for_beta()
+	tray.disable_for_store_session()
 	EventBus.moment_displayed.emit(&"ambient_drop", "should be ignored", 5.0)
 	await get_tree().process_frame
 	assert_eq(
@@ -48,7 +48,7 @@ func test_disable_for_beta_drops_subsequent_moment_emissions() -> void:
 	)
 
 
-func test_disable_for_beta_clears_pending_queue() -> void:
+func test_disable_for_store_session_clears_pending_queue() -> void:
 	var tray: MomentsTray = _make_tray()
 	tray.suspend()
 	for i: int in range(3):
@@ -56,29 +56,29 @@ func test_disable_for_beta_clears_pending_queue() -> void:
 			"moment_id": "m%d" % i, "flavor_text": "t",
 			"duration_seconds": 5.0, "character_name": "", "display_type": "toast",
 		})
-	tray.disable_for_beta()
+	tray.disable_for_store_session()
 	assert_eq(
 		tray.get_queue_depth(), 0,
-		"disable_for_beta() must clear any queued cards"
+		"disable_for_store_session() must clear any queued cards"
 	)
 
 
-func test_disable_for_beta_hides_tray() -> void:
+func test_disable_for_store_session_hides_tray() -> void:
 	var tray: MomentsTray = _make_tray()
-	tray.disable_for_beta()
+	tray.disable_for_store_session()
 	assert_false(
 		tray.visible,
-		"disable_for_beta() must hide the tray CanvasLayer"
+		"disable_for_store_session() must hide the tray CanvasLayer"
 	)
 
 
-func test_disable_for_beta_is_idempotent() -> void:
-	# Beta scene reloads (Day 1 → Day 2 → Day 1) might call this more than
+func test_disable_for_store_session_is_idempotent() -> void:
+	# Store session scene reloads (Day 1 → Day 2 → Day 1) might call this more than
 	# once. The disconnect call must not raise on the second invocation.
 	var tray: MomentsTray = _make_tray()
-	tray.disable_for_beta()
-	tray.disable_for_beta()
+	tray.disable_for_store_session()
+	tray.disable_for_store_session()
 	assert_false(
 		EventBus.moment_displayed.is_connected(tray._on_moment_displayed),
-		"Second disable_for_beta() must remain a clean no-op"
+		"Second disable_for_store_session() must remain a clean no-op"
 	)

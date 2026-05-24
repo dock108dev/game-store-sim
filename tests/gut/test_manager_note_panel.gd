@@ -1,4 +1,4 @@
-## Tests for the beta manager note panel (`BetaManagerNotePanel`).
+## Tests for the store_session manager note panel (`ManagerNotePanel`).
 ##
 ## Covers the AC for the pre-chain passive overlay: dismiss button grabs
 ## keyboard focus on open() (Enter / Space dismiss without the mouse),
@@ -17,7 +17,7 @@ var _root: Node3D = null
 
 
 func before_each() -> void:
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	# Reset InputFocus and ModalQueue between tests so a leaked CTX_MODAL
 	# push or active-queue entry from a prior test doesn't bleed into the
 	# assertions below. ModalQueue routes panel dispatch — without the
@@ -33,10 +33,10 @@ func after_each() -> void:
 	# leaked CTX_MODAL frame. Tests that have already dismissed the panel
 	# (most of them) hit no-op branches inside close() and note_dismissed.
 	if is_instance_valid(_root):
-		var controller: Node = _beta_controller()
+		var controller: Node = _store_session_controller()
 		if controller != null:
-			var panel: BetaManagerNotePanel = (
-				controller.get("_vic_note_panel") as BetaManagerNotePanel
+			var panel: ManagerNotePanel = (
+				controller.get("_vic_note_panel") as ManagerNotePanel
 			)
 			if panel != null and panel.visible:
 				panel.close()
@@ -48,7 +48,7 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 # ── Standalone panel: focus, signal, body, modal contract ───────────────────
@@ -56,7 +56,7 @@ func after_each() -> void:
 func test_dismiss_button_grabs_focus_on_show() -> void:
 	# AC: 'Got it' button must receive keyboard focus immediately on panel
 	# open so the player can dismiss with Enter or Space without the mouse.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note(SAMPLE_BODY)
 	await get_tree().process_frame
@@ -68,7 +68,7 @@ func test_dismiss_button_grabs_focus_on_show() -> void:
 
 
 func test_show_note_renders_body_text() -> void:
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note(SAMPLE_BODY)
 	assert_eq(
@@ -81,7 +81,7 @@ func test_show_note_does_not_push_ctx_modal() -> void:
 	# Passive-overlay contract: the note must NOT claim CTX_MODAL, so the
 	# player can keep moving / looking around while reading it. Chain
 	# progression is gated by `_stage`, not the input focus stack.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note(SAMPLE_BODY)
 	assert_ne(
@@ -91,7 +91,7 @@ func test_show_note_does_not_push_ctx_modal() -> void:
 
 
 func test_dismiss_button_press_emits_note_dismissed() -> void:
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note(SAMPLE_BODY)
 	watch_signals(panel)
@@ -105,7 +105,7 @@ func test_dismiss_button_press_emits_note_dismissed() -> void:
 func test_dismiss_does_not_touch_input_focus_stack() -> void:
 	# Symmetry guard: a no-op pop would corrupt a sibling's frame, so the
 	# panel must leave the stack untouched on close.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	InputFocus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
 	var baseline_depth: int = InputFocus.depth()
@@ -122,7 +122,7 @@ func test_interact_key_dismisses_note() -> void:
 	# AC: pressing E (interact) while the note is up dismisses it. The
 	# panel marks the press as handled so it cannot also fire a world
 	# interaction behind the note.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note(SAMPLE_BODY)
 	watch_signals(panel)
@@ -138,7 +138,7 @@ func test_interact_key_dismisses_note() -> void:
 
 func test_ui_cancel_dismisses_note() -> void:
 	# AC: pressing Escape (ui_cancel) while the note is up dismisses it.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note(SAMPLE_BODY)
 	watch_signals(panel)
@@ -155,7 +155,7 @@ func test_ui_cancel_dismisses_note() -> void:
 func test_keypress_after_dismiss_is_ignored() -> void:
 	# Once the note is dismissed it must stop swallowing input — a second
 	# E press should fall through to world interactables.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note(SAMPLE_BODY)
 	panel._dismiss_button.emit_signal("pressed")
@@ -171,10 +171,10 @@ func test_keypress_after_dismiss_is_ignored() -> void:
 
 
 func test_panel_starts_hidden_until_show_note_called() -> void:
-	# Panels are constructed in BetaDayOneController._ensure_panels() before
+	# Panels are constructed in StoreSessionController._ensure_panels() before
 	# the player has a chance to dismiss anything. They must stay invisible
 	# until show_note() opens them or the screen will flash a blocker.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	assert_false(
 		panel.visible,
@@ -187,16 +187,16 @@ func test_panel_starts_hidden_until_show_note_called() -> void:
 func test_day1_starts_without_opening_note_panel() -> void:
 	# Day 1 should land directly on the first actionable beat. This keeps
 	# first play from requiring a note dismissal before the tutorial begins.
-	BetaRunState.preopening_complete = true
-	await _load_beta_scene()
-	var controller: Node = _beta_controller()
-	assert_not_null(controller, "BetaDayOneController must exist after scene load")
+	StoreSessionState.preopening_complete = true
+	await _load_store_session_scene()
+	var controller: Node = _store_session_controller()
+	assert_not_null(controller, "StoreSessionController must exist after scene load")
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
-	assert_not_null(panel, "Controller must own a BetaManagerNotePanel after _ready")
+	assert_not_null(panel, "Controller must own a ManagerNotePanel after _ready")
 	if panel == null:
 		return
 	assert_false(
@@ -220,15 +220,15 @@ func test_dismissing_note_arms_chain_in_same_frame() -> void:
 	# AC: After note dismissed the objective rail must show 'Talk to the
 	# customer at the register.' within the same frame — _start_day fires
 	# synchronously inside _on_vic_note_dismissed, not deferred.
-	BetaRunState.day = 2
-	await _load_beta_scene()
-	var controller: Node = _beta_controller()
+	StoreSessionState.day = 2
+	await _load_store_session_scene()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
-	assert_not_null(panel, "Controller must own a BetaManagerNotePanel")
+	assert_not_null(panel, "Controller must own a ManagerNotePanel")
 	if panel == null:
 		return
 	watch_signals(EventBus)
@@ -246,15 +246,15 @@ func test_dismissing_note_arms_chain_in_same_frame() -> void:
 
 func test_dismissing_note_emits_manager_note_dismissed_with_id() -> void:
 	# Sanity: the controller forwards the dismiss to EventBus with the
-	# stable note id so any non-beta listener (e.g. ObjectiveDirector) can
+	# stable note id so any non-store_session listener (e.g. ObjectiveDirector) can
 	# react. Day 2 keeps the opening-note path, so it emits `vic_day02`.
-	BetaRunState.day = 2
-	await _load_beta_scene()
-	var controller: Node = _beta_controller()
+	StoreSessionState.day = 2
+	await _load_store_session_scene()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	if panel == null:
 		return
@@ -271,13 +271,13 @@ func test_dismissing_note_emits_manager_note_dismissed_with_id() -> void:
 # gating ever showing the customer beat before the player has read the note.
 
 func test_day2_starts_on_customer_without_note_gate() -> void:
-	BetaRunState.day = 2
-	await _load_beta_scene()
-	var controller: Node = _beta_controller()
+	StoreSessionState.day = 2
+	await _load_store_session_scene()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	assert_not_null(panel, "Controller must still own the note panel for manual note beats")
 	if panel != null:
@@ -289,13 +289,13 @@ func test_day2_starts_on_customer_without_note_gate() -> void:
 
 
 func test_day2_dismiss_advances_stage_past_vic_note() -> void:
-	BetaRunState.day = 2
-	await _load_beta_scene()
-	var controller: Node = _beta_controller()
+	StoreSessionState.day = 2
+	await _load_store_session_scene()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	if panel == null:
 		return
@@ -319,7 +319,7 @@ func test_day2_rail_emits_customer_phase_copy_on_start() -> void:
 	assert_not_null(scene, "retro_games.tscn must load for the note-phase test")
 	if scene == null:
 		return
-	BetaRunState.day = 2
+	StoreSessionState.day = 2
 	watch_signals(EventBus)
 	_root = scene.instantiate() as Node3D
 	add_child(_root)
@@ -353,13 +353,13 @@ func test_day2_rail_emits_customer_phase_copy_on_start() -> void:
 # event — toast is reserved for transient confirmations.
 
 func test_dismiss_emits_back_room_delivery_notification() -> void:
-	BetaRunState.day = 2
-	await _load_beta_scene()
-	var controller: Node = _beta_controller()
+	StoreSessionState.day = 2
+	await _load_store_session_scene()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	if panel == null:
 		return
@@ -384,7 +384,7 @@ func test_dismiss_emits_back_room_delivery_notification() -> void:
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
 
-func _load_beta_scene() -> void:
+func _load_store_session_scene() -> void:
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load for the integration test")
 	if scene == null:
@@ -397,8 +397,8 @@ func _load_beta_scene() -> void:
 	await get_tree().process_frame
 
 
-func _beta_controller() -> Node:
-	return get_tree().get_first_node_in_group("beta_day_one_controller")
+func _store_session_controller() -> Node:
+	return get_tree().get_first_node_in_group("store_session_controller")
 
 
 ## GUT's `get_signal_parameters` returns the params of one emission and

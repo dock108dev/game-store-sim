@@ -1,11 +1,11 @@
-## Enforces the "one blocking modal at a time" invariant across the beta
+## Enforces the "one blocking modal at a time" invariant across the store_session
 ## Day-1 critical path. Three contracts are covered:
 ##
 ##   1. CheckoutPanel.show_checkout() refuses to open when ModalQueue is
 ##      already busy (a higher-priority panel is on screen). The CTX_MODAL
 ##      depth must stay at 1 — no orphaned frame can leak into the next
 ##      modal's lifetime.
-##   2. BetaDaySummaryPanel routes through ModalQueue at DAY_SUMMARY
+##   2. DaySummaryPanel routes through ModalQueue at DAY_SUMMARY
 ##      priority and dedups on repeated requests for the same panel
 ##      instance, so a double-invoke of the close-day handler can never
 ##      enqueue two summary requests.
@@ -18,8 +18,8 @@ extends GutTest
 const CheckoutPanelScene: PackedScene = preload(
 	"res://game/scenes/ui/checkout_panel.tscn"
 )
-const BetaDaySummaryPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_day_summary_panel.gd"
+const DaySummaryPanelScript: GDScript = preload(
+	"res://game/scripts/store_session/day_summary_panel.gd"
 )
 const InteractionPromptScene: PackedScene = preload(
 	"res://game/scenes/ui/interaction_prompt.tscn"
@@ -137,7 +137,7 @@ func test_checkout_opens_normally_when_queue_is_idle() -> void:
 	checkout.hide_checkout(true)
 
 
-# ── BetaDaySummaryPanel idempotency ─────────────────────────────────────────
+# ── DaySummaryPanel idempotency ─────────────────────────────────────────
 
 func test_summary_dedups_repeated_show_requests() -> void:
 	# Calling `show_summary` twice on the same panel must not enqueue a
@@ -145,8 +145,8 @@ func test_summary_dedups_repeated_show_requests() -> void:
 	# `_on_day_close_confirmed → _summary_spawned` controller-side guard:
 	# even if a re-emit slips past, the queue refuses to double-stack.
 	_focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
-	var panel: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var panel: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
 	add_child_autofree(panel)
 	var payload: Dictionary = {
@@ -188,8 +188,8 @@ func test_modal_queue_depth_stays_at_one_during_summary() -> void:
 	# summary returns the InputFocus depth to its pre-modal baseline.
 	_focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
 	var baseline: int = _focus.depth()
-	var summary: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var summary: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
 	add_child_autofree(summary)
 	summary.show_summary({"day": 1})
@@ -216,7 +216,7 @@ func test_modal_queue_depth_stays_at_one_during_summary() -> void:
 	)
 
 
-# ── BetaDaySummaryPanel renders Money/Rent/Profit lines ─────────────────────
+# ── DaySummaryPanel renders Money/Rent/Profit lines ─────────────────────
 
 func test_summary_renders_rent_sales_profit_lines() -> void:
 	# BRAINDUMP First-Day Flow Step 6 — rent / sales / profit must be
@@ -224,8 +224,8 @@ func test_summary_renders_rent_sales_profit_lines() -> void:
 	# binds them as integers so the assertions check substring presence
 	# rather than exact format (typography may shift in future passes).
 	_focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
-	var panel: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var panel: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
 	add_child_autofree(panel)
 	panel.show_summary({
@@ -263,8 +263,8 @@ func test_summary_renders_rent_sales_profit_lines() -> void:
 func test_summary_renders_negative_profit_with_sign() -> void:
 	# Zero-sales Day 1 with non-zero rent must read as a loss, not as "+$50".
 	_focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
-	var panel: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var panel: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
 	add_child_autofree(panel)
 	panel.show_summary({

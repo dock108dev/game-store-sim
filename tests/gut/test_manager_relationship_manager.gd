@@ -292,14 +292,14 @@ func test_day_started_consumes_pending_unlock() -> void:
 	)
 
 
-func test_day_started_skips_emission_when_beta_controller_active() -> void:
-	# Beta day-1 runs its own morning note via `BetaManagerNotePanel`.
+func test_day_started_skips_emission_when_store_session_controller_active() -> void:
+	# Store session day-1 runs its own morning note via `ManagerNotePanel`.
 	# When the controller is in the scene tree the global MorningNotePanel
 	# must stay quiet so two manager notes do not stack on top of each
 	# other after the day-summary Continue click. Mirrors the guards in
 	# `midday_event_system.gd` and `milestone_system.gd`.
 	var stub: Node = Node.new()
-	stub.add_to_group("beta_day_one_controller")
+	stub.add_to_group("store_session_controller")
 	add_child_autofree(stub)
 	watch_signals(EventBus)
 	EventBus.day_started.emit(1)
@@ -315,7 +315,7 @@ func test_day1_gameplay_start_skips_global_manager_note_before_store_exists() ->
 	assert_signal_not_emitted(
 		EventBus,
 		"manager_note_shown",
-		"Fresh beta gameplay must not show the global Day-1 parchment before the store tutorial starts"
+		"Fresh store_session gameplay must not show the global Day-1 parchment before the store tutorial starts"
 	)
 
 

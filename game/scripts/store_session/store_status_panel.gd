@@ -1,10 +1,10 @@
-## Compact right-anchored Day panel for the beta loop.
+## Compact right-anchored Day panel for the store_session loop.
 ##
 ## Owns quiet store status and passive Day milestone progress. The active
 ## objective label, action copy, key badge, and target hint belong to
 ## `ObjectiveRail` and `InteractionPrompt`, so this panel never paints an
 ## active objective row or rail-style stepper.
-class_name BetaRightPanel
+class_name StoreStatusPanel
 extends CanvasLayer
 
 const LAYER_INDEX: int = 30
@@ -98,7 +98,7 @@ var _shelf_target_count: int = 0
 
 
 func _ready() -> void:
-	add_to_group("beta_right_panel")
+	add_to_group("store_status_panel")
 	layer = LAYER_INDEX
 	_build_panel()
 	_seed_initial_state()
@@ -107,11 +107,11 @@ func _ready() -> void:
 	_rebuild_milestones()
 	EventBus.day_started.connect(_on_day_started)
 	EventBus.day_phase_changed.connect(_on_day_phase_changed)
-	EventBus.beta_shelf_count_changed.connect(_on_beta_shelf_count_changed)
-	EventBus.beta_backroom_count_changed.connect(_on_beta_backroom_count_changed)
+	EventBus.store_shelf_count_changed.connect(_on_store_shelf_count_changed)
+	EventBus.store_backroom_count_changed.connect(_on_store_backroom_count_changed)
 	EventBus.customer_purchased.connect(_on_customer_purchased)
 	EventBus.item_sold.connect(_on_item_sold)
-	EventBus.beta_objective_completed.connect(_on_beta_objective_completed)
+	EventBus.store_objective_completed.connect(_on_store_objective_completed)
 	EventBus.run_state_changed.connect(_on_run_state_changed)
 	InputFocus.context_changed.connect(_on_input_focus_changed)
 
@@ -121,16 +121,16 @@ func _exit_tree() -> void:
 		EventBus.day_started.disconnect(_on_day_started)
 	if EventBus.day_phase_changed.is_connected(_on_day_phase_changed):
 		EventBus.day_phase_changed.disconnect(_on_day_phase_changed)
-	if EventBus.beta_shelf_count_changed.is_connected(_on_beta_shelf_count_changed):
-		EventBus.beta_shelf_count_changed.disconnect(_on_beta_shelf_count_changed)
-	if EventBus.beta_backroom_count_changed.is_connected(_on_beta_backroom_count_changed):
-		EventBus.beta_backroom_count_changed.disconnect(_on_beta_backroom_count_changed)
+	if EventBus.store_shelf_count_changed.is_connected(_on_store_shelf_count_changed):
+		EventBus.store_shelf_count_changed.disconnect(_on_store_shelf_count_changed)
+	if EventBus.store_backroom_count_changed.is_connected(_on_store_backroom_count_changed):
+		EventBus.store_backroom_count_changed.disconnect(_on_store_backroom_count_changed)
 	if EventBus.customer_purchased.is_connected(_on_customer_purchased):
 		EventBus.customer_purchased.disconnect(_on_customer_purchased)
 	if EventBus.item_sold.is_connected(_on_item_sold):
 		EventBus.item_sold.disconnect(_on_item_sold)
-	if EventBus.beta_objective_completed.is_connected(_on_beta_objective_completed):
-		EventBus.beta_objective_completed.disconnect(_on_beta_objective_completed)
+	if EventBus.store_objective_completed.is_connected(_on_store_objective_completed):
+		EventBus.store_objective_completed.disconnect(_on_store_objective_completed)
 	if EventBus.run_state_changed.is_connected(_on_run_state_changed):
 		EventBus.run_state_changed.disconnect(_on_run_state_changed)
 	if InputFocus.context_changed.is_connected(_on_input_focus_changed):
@@ -151,7 +151,7 @@ func seed_for_day(day: int) -> void:
 	_back_room_count = 0
 	_shelf_target_count = 0
 	_completed_objective_ids.clear()
-	var controller: Node = get_tree().get_first_node_in_group("beta_day_one_controller")
+	var controller: Node = get_tree().get_first_node_in_group("store_session_controller")
 	if controller != null:
 		var objs: Variant = controller.get("_objectives")
 		if objs is Array:
@@ -265,7 +265,7 @@ func _build_stat_row(label_text: String) -> Label:
 
 
 func _seed_initial_state() -> void:
-	_current_day = BetaRunState.day
+	_current_day = StoreSessionState.day
 	_customers_served_today = 0
 	_on_shelves_count = 0
 	_back_room_count = 0
@@ -277,14 +277,14 @@ func _refresh_header() -> void:
 	if _header == null:
 		return
 	if _is_preopening_training():
-		_header.text = "OPENING SHIFT"
+		_header.text = "FIRST DAY"
 		return
 	var phase_name: String
 	if _PHASE_NAMES.has(_current_phase):
 		phase_name = str(_PHASE_NAMES[_current_phase])
 	else:
 		if OS.is_debug_build():
-			push_warning("BetaRightPanel: unmapped TimeSystem.DayPhase '%d'" % int(_current_phase))
+			push_warning("StoreStatusPanel: unmapped TimeSystem.DayPhase '%d'" % int(_current_phase))
 		phase_name = "UNKNOWN"
 	_header.text = "DAY %d — %s" % [_current_day, phase_name]
 
@@ -300,9 +300,9 @@ func _refresh_all_values() -> void:
 	if _sold_today_value != null:
 		_sold_today_value.text = str(_sold_today_count)
 	if _reputation_value != null:
-		_reputation_value.text = _format_signed_delta(BetaRunState.reputation)
+		_reputation_value.text = _format_signed_delta(StoreSessionState.reputation)
 	if _manager_trust_value != null:
-		_manager_trust_value.text = _format_signed_delta(BetaRunState.manager_trust)
+		_manager_trust_value.text = _format_signed_delta(StoreSessionState.manager_trust)
 
 
 func _format_signed_delta(value: int) -> String:
@@ -430,7 +430,7 @@ func _on_day_started(day: int) -> void:
 
 
 func _is_preopening_training() -> bool:
-	return _current_day == 1 and not BetaRunState.preopening_complete and _has_training_milestones()
+	return _current_day == 1 and not StoreSessionState.preopening_complete and _has_training_milestones()
 
 
 func _has_training_milestones() -> bool:
@@ -462,13 +462,13 @@ func _on_run_state_changed() -> void:
 	_rebuild_milestones()
 
 
-func _on_beta_shelf_count_changed(count: int) -> void:
+func _on_store_shelf_count_changed(count: int) -> void:
 	_on_shelves_count = count
 	_shelf_target_count = max(_shelf_target_count, _on_shelves_count)
 	_refresh_all_values()
 
 
-func _on_beta_backroom_count_changed(count: int) -> void:
+func _on_store_backroom_count_changed(count: int) -> void:
 	_back_room_count = count
 	_shelf_target_count = max(_shelf_target_count, _on_shelves_count + count)
 	_refresh_all_values()
@@ -489,7 +489,7 @@ func _on_item_sold(_item_id: String, _price: float, _category: String) -> void:
 	_refresh_all_values()
 
 
-func _on_beta_objective_completed(objective_id: StringName) -> void:
+func _on_store_objective_completed(objective_id: StringName) -> void:
 	if not _milestone_labels.has(objective_id):
 		return
 	_completed_objective_ids[objective_id] = true

@@ -1,18 +1,18 @@
-## BetaDaySummaryPanel inherits from ModalPanel and is the only authority for
+## DaySummaryPanel inherits from ModalPanel and is the only authority for
 ## input focus during the close-day → summary flow. Verifies that show_summary
 ## pushes exactly one CTX_MODAL frame and that close round-trips depth back to
 ## the pre-modal baseline (the dual-system desync this consolidation fixes).
 extends GutTest
 
 
-const BetaDaySummaryPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_day_summary_panel.gd"
+const DaySummaryPanelScript: GDScript = preload(
+	"res://game/scripts/store_session/day_summary_panel.gd"
 )
 
 
 var _focus: Node
 var _queue: Node
-var _panel: BetaDaySummaryPanel
+var _panel: DaySummaryPanel
 
 
 func before_each() -> void:
@@ -24,7 +24,7 @@ func before_each() -> void:
 		_focus._reset_for_tests()
 	if _queue != null:
 		_queue._reset_for_tests()
-	_panel = BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	_panel = DaySummaryPanelScript.new() as DaySummaryPanel
 	add_child_autofree(_panel)
 
 

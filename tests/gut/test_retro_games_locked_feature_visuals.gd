@@ -140,7 +140,7 @@ func _assert_hidden_node(path: String) -> void:
 	if node != null:
 		assert_false(
 			_is_visible_through_ancestors(node),
-			"%s must be hidden by beta runtime scope" % path
+			"%s must be hidden by store_session runtime scope" % path
 		)
 
 

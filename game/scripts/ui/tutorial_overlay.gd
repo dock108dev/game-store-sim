@@ -82,7 +82,7 @@ func _can_show_tutorial() -> bool:
 		return false
 	if ModalQueue.is_busy():
 		return false
-	if _beta_mode_active():
+	if _store_session_mode_active():
 		return false
 	return true
 
@@ -204,8 +204,8 @@ func _kill_tween() -> void:
 	_current_tween = null
 
 
-func _beta_mode_active() -> bool:
+func _store_session_mode_active() -> bool:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	return tree.get_first_node_in_group("beta_day_one_controller") != null
+	return tree.get_first_node_in_group("store_session_controller") != null

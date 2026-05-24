@@ -1,4 +1,4 @@
-class_name BetaInventoryCountAdapter
+class_name StoreInventoryCountAdapter
 extends RefCounted
 
 const DEFAULT_STORE_ID: StringName = &"retro_games"
@@ -35,7 +35,7 @@ func from_transaction(transaction: Dictionary) -> Dictionary:
 	return summary
 
 
-## Returns beta tutorial counts that are explicitly presentation state.
+## Returns store_session tutorial counts that are explicitly presentation state.
 func presentation_counts(
 	shelf_count: int,
 	backroom_count: int,
@@ -119,7 +119,7 @@ func _current_inventory_counts() -> Dictionary:
 	for item: ItemInstance in _inventory_system.get_stock(_store_id):
 		if item.current_location.begins_with("shelf:"):
 			counts["shelf"] = int(counts["shelf"]) + 1
-		elif item.current_location == BetaCustomerInventoryEffects.LOCATION_BACKROOM:
+		elif item.current_location == StoreCustomerInventoryEffects.LOCATION_BACKROOM:
 			counts["backroom"] = int(counts["backroom"]) + 1
 		elif item.current_location == InventorySystem.DAMAGED_BIN_LOCATION:
 			counts["damaged"] = int(counts["damaged"]) + 1
@@ -131,19 +131,19 @@ func _accumulate_applied(summary: Dictionary, applied: Dictionary) -> void:
 	var from_location: String = str(applied.get("from_location", ""))
 	var to_location: String = str(applied.get("to_location", ""))
 	match op:
-		BetaCustomerInventoryEffects.OP_REMOVE_STOCK:
+		StoreCustomerInventoryEffects.OP_REMOVE_STOCK:
 			summary["applied_remove_quantity"] = int(summary["applied_remove_quantity"]) + 1
 			if from_location.begins_with("shelf:"):
 				summary["applied_shelf_removed_quantity"] = (
 					int(summary["applied_shelf_removed_quantity"]) + 1
 				)
-			elif from_location == BetaCustomerInventoryEffects.LOCATION_BACKROOM:
+			elif from_location == StoreCustomerInventoryEffects.LOCATION_BACKROOM:
 				summary["applied_backroom_removed_quantity"] = (
 					int(summary["applied_backroom_removed_quantity"]) + 1
 				)
-		BetaCustomerInventoryEffects.OP_CREATE_ITEM:
+		StoreCustomerInventoryEffects.OP_CREATE_ITEM:
 			summary["applied_create_quantity"] = int(summary["applied_create_quantity"]) + 1
-			if to_location == BetaCustomerInventoryEffects.LOCATION_BACKROOM:
+			if to_location == StoreCustomerInventoryEffects.LOCATION_BACKROOM:
 				summary["applied_backroom_created_quantity"] = (
 					int(summary["applied_backroom_created_quantity"]) + 1
 				)
@@ -153,7 +153,7 @@ func _accumulate_applied(summary: Dictionary, applied: Dictionary) -> void:
 					int(summary["applied_damaged_created_quantity"]) + 1
 				)
 				summary["damaged_return_count"] = int(summary["damaged_return_count"]) + 1
-		BetaCustomerInventoryEffects.OP_MOVE_EXISTING:
+		StoreCustomerInventoryEffects.OP_MOVE_EXISTING:
 			summary["applied_move_quantity"] = int(summary["applied_move_quantity"]) + 1
 			if from_location.begins_with("shelf:"):
 				summary["applied_moved_from_shelf_quantity"] = (
@@ -163,7 +163,7 @@ func _accumulate_applied(summary: Dictionary, applied: Dictionary) -> void:
 				summary["applied_moved_to_shelf_quantity"] = (
 					int(summary["applied_moved_to_shelf_quantity"]) + 1
 				)
-			elif to_location == BetaCustomerInventoryEffects.LOCATION_BACKROOM:
+			elif to_location == StoreCustomerInventoryEffects.LOCATION_BACKROOM:
 				summary["applied_moved_to_backroom_quantity"] = (
 					int(summary["applied_moved_to_backroom_quantity"]) + 1
 				)

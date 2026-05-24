@@ -52,13 +52,13 @@ func _is_debug_ui_enabled() -> bool:
 	return bool(ProjectSettings.get_setting("debug/ui_enabled", false))
 
 
-## Suppresses the tray for beta runs. Disconnects the ambient moment
+## Suppresses the tray for store_session runs. Disconnects the ambient moment
 ## listener so any system that still emits `EventBus.moment_displayed`
 ## (background NPC schedulers, milestone bleed-through, etc.) cannot
 ## queue a card, clears any in-flight cards/queues, and hides the tray
-## entirely so the bottom-right corner stays clear for the beta Today
+## entirely so the bottom-right corner stays clear for the store_session Today
 ## checklist. Idempotent — safe to call multiple times.
-func disable_for_beta() -> void:
+func disable_for_store_session() -> void:
 	if EventBus.moment_displayed.is_connected(_on_moment_displayed):
 		EventBus.moment_displayed.disconnect(_on_moment_displayed)
 	clear_queue()

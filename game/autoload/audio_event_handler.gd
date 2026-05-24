@@ -34,9 +34,9 @@ func _connect_sfx_signals() -> void:
 	EventBus.refurbishment_started.connect(_on_refurbishment_started)
 	EventBus.refurbishment_completed.connect(_on_refurbishment_completed)
 	EventBus.customer_interacted.connect(_on_customer_interacted)
-	EventBus.beta_backroom_count_changed.connect(_on_beta_backroom_count_changed)
-	EventBus.beta_shelf_count_changed.connect(_on_beta_shelf_count_changed)
-	EventBus.beta_hidden_clue_inspected.connect(_on_beta_hidden_clue_inspected)
+	EventBus.store_backroom_count_changed.connect(_on_store_backroom_count_changed)
+	EventBus.store_shelf_count_changed.connect(_on_store_shelf_count_changed)
+	EventBus.store_hidden_clue_inspected.connect(_on_store_hidden_clue_inspected)
 	EventBus.objective_completed.connect(_on_objective_completed)
 	EventBus.interactable_focused_disabled.connect(_on_interactable_focused_disabled)
 	EventBus.modal_opened.connect(_on_modal_opened)
@@ -86,17 +86,17 @@ func _on_item_stocked(_id: String, _shelf: String) -> void:
 	_audio.play_sfx("item_placement")
 
 
-func _on_beta_backroom_count_changed(count: int) -> void:
+func _on_store_backroom_count_changed(count: int) -> void:
 	if count > 0:
 		_audio.play_sfx("ui_click")
 
 
-func _on_beta_shelf_count_changed(count: int) -> void:
+func _on_store_shelf_count_changed(count: int) -> void:
 	if count > 0:
 		_audio.play_sfx("item_placement")
 
 
-func _on_beta_hidden_clue_inspected(_clue_id: StringName) -> void:
+func _on_store_hidden_clue_inspected(_clue_id: StringName) -> void:
 	_audio.play_sfx("notification_ping")
 
 

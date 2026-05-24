@@ -232,7 +232,7 @@ func test_refresh_load_button_state_disables_load_when_save_present() -> void:
 
 	assert_true(
 		button.disabled,
-		"load button must stay disabled while beta load is unavailable"
+		"load button must stay disabled while store_session load is unavailable"
 	)
 	assert_eq(button.text, "Load Game - Coming Soon")
 	button.free()
@@ -254,7 +254,7 @@ func test_on_load_pressed_no_op_when_no_save() -> void:
 	)
 
 
-func test_on_load_pressed_no_op_when_beta_load_is_unavailable() -> void:
+func test_on_load_pressed_no_op_when_store_session_load_is_unavailable() -> void:
 	var slot_zero_path: String = _menu.SLOT_PATHS.get(0, "")
 	var pre_existing: bool = FileAccess.file_exists(slot_zero_path)
 	if not pre_existing:
@@ -268,7 +268,7 @@ func test_on_load_pressed_no_op_when_beta_load_is_unavailable() -> void:
 	_menu._on_load_pressed()
 	assert_false(
 		_menu._load_panel_visible,
-		"load panel must not open while beta load is unavailable"
+		"load panel must not open while store_session load is unavailable"
 	)
 
 	if not pre_existing and FileAccess.file_exists(slot_zero_path):

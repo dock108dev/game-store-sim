@@ -34,12 +34,12 @@ const _PHASE_NAMES: Dictionary = {
 
 var _results: Dictionary = {}
 var _last_interactable: String = "none"
-## Beta shelf/back-room counts mirror the values driven by
-## `EventBus.beta_shelf_count_changed` / `beta_backroom_count_changed`. Read-only
+## Store-session shelf/back-room counts mirror the values driven by
+## `EventBus.store_shelf_count_changed` / `store_backroom_count_changed`. Read-only
 ## elsewhere — only the signal handlers write. Initialized to -1 so the HUD
 ## renders "—" before the first emit instead of a misleading 0.
-var _beta_shelf_count: int = -1
-var _beta_back_room_count: int = -1
+var _store_shelf_count: int = -1
+var _store_back_room_count: int = -1
 
 var _label_scene_path: Label
 var _label_controller_state: Label
@@ -147,8 +147,8 @@ func _wire_signals() -> void:
 	)
 	EventBus.storefront_zone_entered.connect(func(sid: String): _last_interactable = sid)
 	EventBus.storefront_zone_exited.connect(func(_sid: String): _last_interactable = "none")
-	EventBus.beta_shelf_count_changed.connect(func(c: int): _beta_shelf_count = c)
-	EventBus.beta_backroom_count_changed.connect(func(c: int): _beta_back_room_count = c)
+	EventBus.store_shelf_count_changed.connect(func(c: int): _store_shelf_count = c)
+	EventBus.store_backroom_count_changed.connect(func(c: int): _store_back_room_count = c)
 
 
 func _build_hud() -> void:
@@ -308,7 +308,7 @@ func _refresh_hud() -> void:
 ## singleton or scene-tree controller is not present (e.g. unit-test
 ## fixtures), so the overlay is always safe to display.
 func _refresh_braindump_fields(active_panel_name: String, queued_count: int) -> void:
-	_label_day.text = "Day: %d" % BetaRunState.day
+	_label_day.text = "Day: %d" % StoreSessionState.day
 
 	var time_sys: TimeSystem = GameManager.get_time_system()
 	if time_sys != null:
@@ -326,10 +326,10 @@ func _refresh_braindump_fields(active_panel_name: String, queued_count: int) -> 
 	if economy != null:
 		money = int(economy.get_cash())
 	else:
-		money = BetaRunState.cash
+		money = StoreSessionState.cash
 	_label_money.text = "Money: $%d" % money
 
-	var ctrl: BetaDayOneController = _beta_controller()
+	var ctrl: StoreSessionController = _store_session_controller()
 	if ctrl != null:
 		var snap: Dictionary = ctrl.get_state_snapshot()
 		_label_customers.text = "Customers: %d" % int(snap.get("customers_helped", 0))
@@ -350,10 +350,10 @@ func _refresh_braindump_fields(active_panel_name: String, queued_count: int) -> 
 		_label_active_objective.text = "ActiveObjective: —"
 
 	_label_on_shelves.text = (
-		"OnShelves: %d" % _beta_shelf_count if _beta_shelf_count >= 0 else "OnShelves: —"
+		"OnShelves: %d" % _store_shelf_count if _store_shelf_count >= 0 else "OnShelves: —"
 	)
 	_label_back_room.text = (
-		"BackRoom: %d" % _beta_back_room_count if _beta_back_room_count >= 0 else "BackRoom: —"
+		"BackRoom: %d" % _store_back_room_count if _store_back_room_count >= 0 else "BackRoom: —"
 	)
 
 	_label_open_modal.text = "OpenModal: %s" % active_panel_name
@@ -381,16 +381,16 @@ func _phase_name(phase: int) -> String:
 	return "UNKNOWN"
 
 
-## Locates the Day-1 controller via its `beta_day_one_controller` group
+## Locates the Day-1 controller via its `store_session_controller` group
 ## registration. Returns null in unit-test fixtures where the controller is
 ## not in the scene tree — callers degrade to "—" for the affected fields.
-func _beta_controller() -> BetaDayOneController:
+func _store_session_controller() -> StoreSessionController:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return null
-	var node: Node = tree.get_first_node_in_group("beta_day_one_controller")
-	if node is BetaDayOneController:
-		return node as BetaDayOneController
+	var node: Node = tree.get_first_node_in_group("store_session_controller")
+	if node is StoreSessionController:
+		return node as StoreSessionController
 	return null
 
 

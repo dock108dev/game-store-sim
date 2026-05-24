@@ -104,7 +104,7 @@ func clear_active_context() -> void:
 ##
 ## ModalQueue.is_busy() is checked alongside InputFocus so passive-overlay
 ## ModalPanels that participate in queue ordering without claiming CTX_MODAL
-## (e.g. `BetaManagerNotePanel`'s Vic letter at VIC_NOTE priority) still
+## (e.g. `ManagerNotePanel`'s Vic letter at VIC_NOTE priority) still
 ## suppress the tutorial context emission. BRAINDUMP requires "letter first,
 ## tutorial unlock popup after letter closes" — without the queue check, a
 ## tutorial trigger fired while the Vic letter is active would emit

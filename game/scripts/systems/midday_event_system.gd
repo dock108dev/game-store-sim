@@ -306,12 +306,12 @@ func _on_hour_changed(hour: int) -> void:
 		return
 	if _day_queue.is_empty():
 		return
-	# §F-FIX1 — beta day-1 has its own scripted chain (BetaDayOneController);
-	# production midday events would stack on top of beta beats and surface
+	# §F-FIX1 — store_session day-1 has its own scripted chain (StoreSessionController);
+	# production midday events would stack on top of store_session beats and surface
 	# as overlapping modals (especially when the day summary is open).
-	# Mirrors MilestoneSystem's beta-mode short-circuit at line 147.
+	# Mirrors MilestoneSystem's store_session-mode short-circuit at line 147.
 	var tree: SceneTree = get_tree()
-	if tree != null and tree.get_first_node_in_group("beta_day_one_controller") != null:
+	if tree != null and tree.get_first_node_in_group("store_session_controller") != null:
 		return
 	# Don't fire during the day-summary modal — events arriving on top of
 	# the summary cause the two-modals-stacked screen the player saw.

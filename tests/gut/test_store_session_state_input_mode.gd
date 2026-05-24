@@ -1,4 +1,4 @@
-## BetaRunState.set_input_mode is bookkeeping for the debug overlay only —
+## StoreSessionState.set_input_mode is bookkeeping for the debug overlay only —
 ## cursor lock and input gating are owned by InputFocus (push/pop via
 ## ModalPanel). These tests guard against regressions where the cursor side
 ## effects or InputFocus stack writes get reintroduced.
@@ -17,11 +17,11 @@ func before_each() -> void:
 	_emitted_modes.clear()
 	EventBus.cursor_locked.connect(_on_cursor_locked)
 	EventBus.cursor_unlocked.connect(_on_cursor_unlocked)
-	BetaRunState.input_mode_changed.connect(_on_input_mode_changed)
+	StoreSessionState.input_mode_changed.connect(_on_input_mode_changed)
 	_focus = get_tree().root.get_node_or_null("InputFocus")
 	if _focus != null:
 		_focus._reset_for_tests()
-	BetaRunState.input_mode = BetaRunState.INPUT_MODE_GAMEPLAY
+	StoreSessionState.input_mode = StoreSessionState.INPUT_MODE_GAMEPLAY
 
 
 func after_each() -> void:
@@ -29,11 +29,11 @@ func after_each() -> void:
 		EventBus.cursor_locked.disconnect(_on_cursor_locked)
 	if EventBus.cursor_unlocked.is_connected(_on_cursor_unlocked):
 		EventBus.cursor_unlocked.disconnect(_on_cursor_unlocked)
-	if BetaRunState.input_mode_changed.is_connected(_on_input_mode_changed):
-		BetaRunState.input_mode_changed.disconnect(_on_input_mode_changed)
+	if StoreSessionState.input_mode_changed.is_connected(_on_input_mode_changed):
+		StoreSessionState.input_mode_changed.disconnect(_on_input_mode_changed)
 	if _focus != null and is_instance_valid(_focus):
 		_focus._reset_for_tests()
-	BetaRunState.input_mode = BetaRunState.INPUT_MODE_GAMEPLAY
+	StoreSessionState.input_mode = StoreSessionState.INPUT_MODE_GAMEPLAY
 
 
 func _on_cursor_locked() -> void:
@@ -49,7 +49,7 @@ func _on_input_mode_changed(new_mode: int) -> void:
 
 
 func test_set_input_mode_decision_card_does_not_emit_cursor_signals() -> void:
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DECISION_CARD)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DECISION_CARD)
 
 	assert_eq(
 		_cursor_unlocked_count, 0,
@@ -62,7 +62,7 @@ func test_set_input_mode_decision_card_does_not_emit_cursor_signals() -> void:
 
 
 func test_set_input_mode_day_summary_does_not_emit_cursor_signals() -> void:
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DAY_SUMMARY)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DAY_SUMMARY)
 
 	assert_eq(
 		_cursor_unlocked_count, 0,
@@ -75,9 +75,9 @@ func test_set_input_mode_day_summary_does_not_emit_cursor_signals() -> void:
 
 
 func test_set_input_mode_gameplay_does_not_emit_cursor_signals() -> void:
-	BetaRunState.input_mode = BetaRunState.INPUT_MODE_DECISION_CARD
+	StoreSessionState.input_mode = StoreSessionState.INPUT_MODE_DECISION_CARD
 
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_GAMEPLAY)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 
 	assert_eq(
 		_cursor_locked_count, 0,
@@ -95,9 +95,9 @@ func test_set_input_mode_does_not_push_input_focus() -> void:
 		return
 	var baseline: int = _focus.depth()
 
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DAY_SUMMARY)
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DECISION_CARD)
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_GAMEPLAY)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DAY_SUMMARY)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DECISION_CARD)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 
 	assert_eq(
 		_focus.depth(), baseline,
@@ -106,20 +106,20 @@ func test_set_input_mode_does_not_push_input_focus() -> void:
 
 
 func test_set_input_mode_emits_input_mode_changed_signal() -> void:
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DAY_SUMMARY)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DAY_SUMMARY)
 
 	assert_eq(
 		_emitted_modes,
-		[BetaRunState.INPUT_MODE_DAY_SUMMARY],
+		[StoreSessionState.INPUT_MODE_DAY_SUMMARY],
 		"set_input_mode must still emit input_mode_changed for the debug overlay"
 	)
 
 
 func test_set_input_mode_equality_guard_skips_redundant_emit() -> void:
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DAY_SUMMARY)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DAY_SUMMARY)
 	_emitted_modes.clear()
 
-	BetaRunState.set_input_mode(BetaRunState.INPUT_MODE_DAY_SUMMARY)
+	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DAY_SUMMARY)
 
 	assert_eq(
 		_emitted_modes,

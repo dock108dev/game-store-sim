@@ -1,13 +1,13 @@
-## Verifies that the beta-day panels documented in the BRAINDUMP modal
+## Verifies that the store_session-day panels documented in the BRAINDUMP modal
 ## discipline section route through ModalQueue at the expected priorities,
 ## dedup repeated requests, and serialize so only one panel is visible at a
 ## time.
 ##
 ## Panels covered:
-##   - BetaDaySummaryPanel   → DAY_SUMMARY priority
-##   - BetaDecisionCardPanel → DAY_SUMMARY priority
-##   - BetaCustomerResultPanel → DAY_SUMMARY priority
-##   - BetaManagerNotePanel  → VIC_NOTE priority
+##   - DaySummaryPanel   → DAY_SUMMARY priority
+##   - DecisionCardPanel → DAY_SUMMARY priority
+##   - CustomerResultPanel → DAY_SUMMARY priority
+##   - ManagerNotePanel  → VIC_NOTE priority
 ##
 ## MorningNotePanel (the global autoload) is intentionally excluded — it
 ## overrides open()/close() to skip the CTX_MODAL push because clock-in and
@@ -17,17 +17,17 @@
 extends GutTest
 
 
-const BetaDaySummaryPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_day_summary_panel.gd"
+const DaySummaryPanelScript: GDScript = preload(
+	"res://game/scripts/store_session/day_summary_panel.gd"
 )
-const BetaDecisionCardPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_decision_card_panel.gd"
+const DecisionCardPanelScript: GDScript = preload(
+	"res://game/scripts/store_session/decision_card_panel.gd"
 )
-const BetaCustomerResultPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_customer_result_panel.gd"
+const CustomerResultPanelScript: GDScript = preload(
+	"res://game/scripts/store_session/customer_result_panel.gd"
 )
-const BetaManagerNotePanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_manager_note_panel.gd"
+const ManagerNotePanelScript: GDScript = preload(
+	"res://game/scripts/store_session/manager_note_panel.gd"
 )
 
 
@@ -97,11 +97,11 @@ func _result_payload() -> Dictionary:
 	}
 
 
-# ── BetaDaySummaryPanel routing ──────────────────────────────────────────────
+# ── DaySummaryPanel routing ──────────────────────────────────────────────
 
 func test_summary_show_routes_through_queue_at_day_summary_priority() -> void:
-	var panel: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var panel: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
 	add_child_autofree(panel)
 	# Block the queue with a TOAST-priority sentinel so the summary's
@@ -132,8 +132,8 @@ func test_summary_payload_renders_in_on_queued_open() -> void:
 	# The summary populates labels in `_on_queued_open` so a deferred
 	# dispatch (queue busy at show_summary time) still renders the right
 	# day's data when the panel finally opens.
-	var panel: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var panel: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
 	add_child_autofree(panel)
 	var payload: Dictionary = _summary_payload()
@@ -151,8 +151,8 @@ func test_summary_payload_renders_in_on_queued_open() -> void:
 
 
 func test_summary_repeated_show_dedups_at_queue_layer() -> void:
-	var panel: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var panel: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
 	add_child_autofree(panel)
 	var baseline_depth: int = _focus.depth()
@@ -168,11 +168,11 @@ func test_summary_repeated_show_dedups_at_queue_layer() -> void:
 	panel.close()
 
 
-# ── BetaDecisionCardPanel routing ────────────────────────────────────────────
+# ── DecisionCardPanel routing ────────────────────────────────────────────
 
 func test_decision_show_event_routes_through_queue() -> void:
-	var panel: BetaDecisionCardPanel = (
-		BetaDecisionCardPanelScript.new() as BetaDecisionCardPanel
+	var panel: DecisionCardPanel = (
+		DecisionCardPanelScript.new() as DecisionCardPanel
 	)
 	add_child_autofree(panel)
 	var sentinel: ModalPanel = ModalPanel.new()
@@ -194,8 +194,8 @@ func test_decision_show_event_routes_through_queue() -> void:
 
 
 func test_decision_payload_renders_choices_in_on_queued_open() -> void:
-	var panel: BetaDecisionCardPanel = (
-		BetaDecisionCardPanelScript.new() as BetaDecisionCardPanel
+	var panel: DecisionCardPanel = (
+		DecisionCardPanelScript.new() as DecisionCardPanel
 	)
 	add_child_autofree(panel)
 
@@ -210,10 +210,10 @@ func test_decision_payload_renders_choices_in_on_queued_open() -> void:
 	panel.close()
 
 
-# ── BetaCustomerResultPanel routing ──────────────────────────────────────────
+# ── CustomerResultPanel routing ──────────────────────────────────────────
 
 func test_customer_result_show_routes_through_queue() -> void:
-	var panel: ModalPanel = BetaCustomerResultPanelScript.new() as ModalPanel
+	var panel: ModalPanel = CustomerResultPanelScript.new() as ModalPanel
 	add_child_autofree(panel)
 	var sentinel: ModalPanel = ModalPanel.new()
 	add_child_autofree(sentinel)
@@ -232,7 +232,7 @@ func test_customer_result_show_routes_through_queue() -> void:
 
 
 func test_customer_result_payload_renders_acknowledgement_only() -> void:
-	var panel: ModalPanel = BetaCustomerResultPanelScript.new() as ModalPanel
+	var panel: ModalPanel = CustomerResultPanelScript.new() as ModalPanel
 	add_child_autofree(panel)
 
 	panel.call("show_result", _result_payload())
@@ -250,17 +250,17 @@ func test_customer_result_payload_renders_acknowledgement_only() -> void:
 	panel.close()
 
 
-# ── BetaManagerNotePanel routing ─────────────────────────────────────────────
+# ── ManagerNotePanel routing ─────────────────────────────────────────────
 
 func test_vic_note_show_routes_through_queue_at_vic_note_priority() -> void:
-	var panel: BetaManagerNotePanel = (
-		BetaManagerNotePanelScript.new() as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		ManagerNotePanelScript.new() as ManagerNotePanel
 	)
 	add_child_autofree(panel)
 	# Decision card at DAY_SUMMARY blocks the queue; the VIC_NOTE entry
 	# must wait for it to close.
-	var blocker: BetaDecisionCardPanel = (
-		BetaDecisionCardPanelScript.new() as BetaDecisionCardPanel
+	var blocker: DecisionCardPanel = (
+		DecisionCardPanelScript.new() as DecisionCardPanel
 	)
 	add_child_autofree(blocker)
 	blocker.show_event(_event_payload())
@@ -280,8 +280,8 @@ func test_vic_note_show_routes_through_queue_at_vic_note_priority() -> void:
 
 
 func test_vic_note_payload_renders_body_in_on_queued_open() -> void:
-	var panel: BetaManagerNotePanel = (
-		BetaManagerNotePanelScript.new() as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		ManagerNotePanelScript.new() as ManagerNotePanel
 	)
 	add_child_autofree(panel)
 	var body: String = "Body text supplied at show_note time."
@@ -303,11 +303,11 @@ func test_summary_then_vic_note_dispatch_in_priority_order() -> void:
 	# Day-N → Day-(N+1) hand-off: the summary closes, which drains the
 	# next entry — Vic's note for the new day. Only one panel is ever
 	# visible during the hand-off.
-	var summary: BetaDaySummaryPanel = (
-		BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	var summary: DaySummaryPanel = (
+		DaySummaryPanelScript.new() as DaySummaryPanel
 	)
-	var vic_note: BetaManagerNotePanel = (
-		BetaManagerNotePanelScript.new() as BetaManagerNotePanel
+	var vic_note: ManagerNotePanel = (
+		ManagerNotePanelScript.new() as ManagerNotePanel
 	)
 	add_child_autofree(summary)
 	add_child_autofree(vic_note)
@@ -357,6 +357,6 @@ func test_morning_note_panel_does_not_push_ctx_modal() -> void:
 		+ "design is intentional and depended on by the pre-open flow")
 	assert_false(_queue.is_busy(),
 		"MorningNotePanel must not occupy ModalQueue — global note panel "
-		+ "is exempt from the queue (BetaManagerNotePanel handles the "
-		+ "VIC_NOTE slot in beta runs)")
+		+ "is exempt from the queue (ManagerNotePanel handles the "
+		+ "VIC_NOTE slot in store_session runs)")
 	panel.call("dismiss")

@@ -59,9 +59,9 @@ const _TYPE_ROUTES: Dictionary = {
 	"manager_notes_data": "ignore",
 	"product_visual_catalog_data": "ignore",
 	"store_visual_layout_catalog": "ignore",
-	# Beta day-1/day-2 content — loaded directly by BetaDayOneController.
-	"beta_day_data": "ignore",
-	"beta_events_data": "ignore",
+	# Store session day-1/day-2 content — loaded directly by StoreSessionController.
+	"store_session_day_data": "ignore",
+	"store_session_events_data": "ignore",
 }
 
 var _items: Dictionary = {}
@@ -160,6 +160,8 @@ func load_all_content_from_root(root: String) -> void:
 
 
 func _set_game_manager_data_loader() -> void:
+	if not is_inside_tree():
+		return
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return

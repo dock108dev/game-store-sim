@@ -27,7 +27,7 @@ const FADE_OUT_DURATION: float = 0.4
 const DEFAULT_DURATION: float = 3.0
 const MAX_QUEUE_SIZE: int = 5
 const TOAST_WIDTH: float = 420.0
-## Upper toast lane: below the top HUD and immediately left of the beta right
+## Upper toast lane: below the top HUD and immediately left of the store_session right
 ## panel. This keeps passive notices out of the center sightline.
 const TOAST_OFFSET_TOP: float = 96.0
 const TOAST_RIGHT_PANEL_WIDTH: float = 300.0
@@ -50,7 +50,7 @@ const TEXT_FONT_SIZE: int = 15
 
 ## Left-border tint per category. Designers reach for these via the category
 ## arg on `EventBus.toast_requested`. `&"sale"` and `&"positive_cash"` are
-## aliases the beta day-1 outcome path uses for cash-positive events.
+## aliases the store_session day-1 outcome path uses for cash-positive events.
 ## `&"unlock"` is emitted by `UnlockSystem.grant_unlock` when a milestone
 ## reward grants a new fixture slot or content category — cyan reads as
 ## "new capability available" and stays distinct from milestone gold.

@@ -172,8 +172,8 @@ func test_gameplay_ready_emits_system_game_started_entry() -> void:
 
 
 func test_modal_opened_and_closed_emit_distinct_modal_entries() -> void:
-	EventBus.modal_opened.emit(&"BetaDecisionCardPanel")
-	EventBus.modal_closed.emit(&"BetaDecisionCardPanel")
+	EventBus.modal_opened.emit(&"DecisionCardPanel")
+	EventBus.modal_closed.emit(&"DecisionCardPanel")
 	var entries: Array[Dictionary] = EventLog.recent(8)
 	assert_eq(entries.size(), 2, "open + close must produce two entries")
 	var opened: Dictionary = entries[entries.size() - 2]
@@ -190,7 +190,7 @@ func test_modal_opened_and_closed_emit_distinct_modal_entries() -> void:
 	)
 	assert_eq(
 		String(opened.get("params", {}).get("modal_id", "")),
-		"BetaDecisionCardPanel",
+		"DecisionCardPanel",
 		"modal_id must be carried as a String"
 	)
 

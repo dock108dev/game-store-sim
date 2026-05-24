@@ -16,13 +16,13 @@ func test_max_message_chars_constant_is_72() -> void:
 	)
 
 
-func test_beta_day1_toasts_fit_under_limit() -> void:
+func test_store_day1_toasts_fit_under_limit() -> void:
 	# Hardcoded sample of the literal Day-1 toast strings (with realistic
 	# format-args substituted). Any future Day-1 toast that gets added
 	# should be added here so the limit is enforced at test time, not at
 	# the first time a player triggers the chain in debug.
 	var samples: Array[String] = [
-		"Opening training ready.",
+		"First-day training ready.",
 		"Shipment checked. 2 items available in back room.",
 		"Stocked 2 games on the used games shelf.",
 		"Closing time. Wrap up at the register.",

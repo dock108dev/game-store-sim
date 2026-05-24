@@ -12,12 +12,12 @@ const TRANSACTION_HISTORY_LIMIT: int = 100
 const MONTHLY_LEASE_BASE: float = 300.0
 const DAYS_PER_MONTH: int = 30
 const DAYS_PER_QUARTER: int = 90
-## Beta customer choices apply cash through BetaRunState so the same decision
-## updates reputation, flags, and daily deltas in one place. The beta
+## Store-session customer choices apply cash through StoreSessionState so the same decision
+## updates reputation, flags, and daily deltas in one place. The store_session
 ## controller still emits customer_purchased with this sentinel store id so
 ## HUD/customer counters tick, but EconomySystem must not credit that signal
 ## a second time.
-const BETA_COUNTER_ONLY_STORE_ID: StringName = &"beta_store"
+const STORE_SESSION_COUNTER_ONLY_STORE_ID: StringName = &"store_session_counter"
 ## Constant pass-throughs for backwards compatibility with tests and external code.
 const DEFAULT_DEMAND: float = EconomyValueCalculator.DEFAULT_DEMAND
 const DEMAND_CAP: float = EconomyValueCalculator.DEMAND_CAP
@@ -723,7 +723,7 @@ func _on_customer_purchased(
 ) -> void:
 	if price <= 0.0:
 		return
-	if store_id == BETA_COUNTER_ONLY_STORE_ID:
+	if store_id == STORE_SESSION_COUNTER_ONLY_STORE_ID:
 		return
 	add_cash(price, "Sale: %s at %s" % [item_id, store_id])
 	if not String(store_id).is_empty():

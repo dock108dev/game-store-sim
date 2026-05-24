@@ -46,7 +46,7 @@ var _buffer_enabled: bool = OS.is_debug_build()
 ## Probabilistic sweep tests (`test_customer_purchase`,
 ## `test_day1_first_sale_probability`) push thousands of FSM transitions
 ## through `_record` in a tight loop. Each `event_logged` emit can fan out
-## to `BetaEventLogPanel` listeners that allocate UI nodes per row —
+## to `StoreEventLogPanel` listeners that allocate UI nodes per row —
 ## benign in gameplay but a 200×/iter slowdown in those sweeps. Tests
 ## that drive the customer FSM at sweep rates flip this off around their
 ## loop and restore it after, leaving the ring buffer / stdout side
@@ -125,7 +125,7 @@ func _on_customer_state_changed(customer: Node, new_state: int) -> void:
 	# with `new_state == current_state` — those produce `X -> X` rows that
 	# carry no signal for the on-screen log surface and burn the FSM hot
 	# path with redundant `event_logged` emits + per-row tween work in
-	# every BetaEventLogPanel listener.
+	# every StoreEventLogPanel listener.
 	if prev_state == new_state:
 		return
 	if prev_state < 0:
@@ -285,7 +285,7 @@ func _format_message(action: String, target: String, params: Dictionary) -> Stri
 		"day_started":
 			var day: int = int(params.get("day", 0))
 			if day <= 1:
-				result = "Opening shift started."
+				result = "First-day training started."
 			else:
 				result = "Shift %d started." % day
 		"stat_changed":
@@ -305,7 +305,7 @@ func _format_message(action: String, target: String, params: Dictionary) -> Stri
 		"objective_completed":
 			# Past-tense `label` is the player-facing completion copy supplied
 			# by the chain controller (see
-			# `BetaDayOneController._objective_completion_label`); the log row
+			# `StoreSessionController._objective_completion_label`); the log row
 			# is just that label verbatim.
 			result = str(params.get("label", ""))
 		_:

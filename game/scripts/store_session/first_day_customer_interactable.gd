@@ -1,5 +1,5 @@
-class_name BetaDay1CustomerInteractable
-extends BetaDayOneInteractableBase
+class_name FirstDayCustomerInteractable
+extends StoreSessionInteractableBase
 
 
 func _ready() -> void:
@@ -8,7 +8,7 @@ func _ready() -> void:
 	action_verb = "Talk"
 	interaction_type = InteractionType.CUSTOMER
 	interactable_id = &"customer_wrong_console_parent"
-	# Beta Day-1 has exactly one customer at a known location, so the
+	# Store session day-1 has exactly one customer at a known location, so the
 	# precision-raycast model is overkill. Opt into the proximity+facing
 	# fallback (interaction_ray.gd::_find_best_proximity_target) with a
 	# generous 2.75 m reach and a wide ~70° facing cone so the prompt
@@ -19,14 +19,14 @@ func _ready() -> void:
 
 
 func can_interact(_actor: Node = null) -> bool:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return false
 	return controller.can_interact_customer()
 
 
 func get_disabled_reason(_actor: Node = null) -> String:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return "Customer flow unavailable."
 	return controller.customer_disabled_reason()
@@ -37,4 +37,4 @@ func interact(by: Node = null) -> void:
 		return
 	super.interact(by)
 	EventBus.customer_interacted.emit(self)
-	get_tree().call_group("beta_day_one_controller", "on_beta_customer_interacted")
+	get_tree().call_group("store_session_controller", "on_store_customer_interacted")

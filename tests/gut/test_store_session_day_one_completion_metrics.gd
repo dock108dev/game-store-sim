@@ -4,10 +4,10 @@
 ## leave open: explicit value asserts on the back-room / shelf count
 ## signals and the `_build_shift_note` skipped-objective copy contract.
 ##
-## Most existing Day-1 tests sit in `test_beta_day_one_critical_path.gd`
+## Most existing Day-1 tests sit in `test_store_session_day_one_critical_path.gd`
 ## (chain walking, alignment, signals firing). This file covers the
 ## orthogonal "after the interaction, what does the data say?" surface.
-## Replay/reset assertions for BetaRunState fields live alongside the
+## Replay/reset assertions for StoreSessionState fields live alongside the
 ## GameState flag clears in `test_day_one_replay_state_reset.gd`.
 extends GutTest
 
@@ -22,11 +22,11 @@ var _captured_shelf_counts: Array[int] = []
 func before_each() -> void:
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	_captured_backroom_counts.clear()
 	_captured_shelf_counts.clear()
-	EventBus.beta_backroom_count_changed.connect(_capture_backroom_count)
-	EventBus.beta_shelf_count_changed.connect(_capture_shelf_count)
+	EventBus.store_backroom_count_changed.connect(_capture_backroom_count)
+	EventBus.store_shelf_count_changed.connect(_capture_shelf_count)
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load")
 	if scene == null:
@@ -40,10 +40,10 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.beta_backroom_count_changed.is_connected(_capture_backroom_count):
-		EventBus.beta_backroom_count_changed.disconnect(_capture_backroom_count)
-	if EventBus.beta_shelf_count_changed.is_connected(_capture_shelf_count):
-		EventBus.beta_shelf_count_changed.disconnect(_capture_shelf_count)
+	if EventBus.store_backroom_count_changed.is_connected(_capture_backroom_count):
+		EventBus.store_backroom_count_changed.disconnect(_capture_backroom_count)
+	if EventBus.store_shelf_count_changed.is_connected(_capture_shelf_count):
+		EventBus.store_shelf_count_changed.disconnect(_capture_shelf_count)
 	# Reset autoload state BEFORE freeing the scene so each panel's
 	# `_exit_tree` sees an empty CTX_MODAL stack and skips the safety-net
 	# push_error in `modal_panel.gd::_exit_tree`. Reversed ordering
@@ -53,7 +53,7 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 func _capture_backroom_count(count: int) -> void:
@@ -65,15 +65,15 @@ func _capture_shelf_count(count: int) -> void:
 
 
 func _controller() -> Node:
-	return get_tree().get_first_node_in_group("beta_day_one_controller")
+	return get_tree().get_first_node_in_group("store_session_controller")
 
 
 func _dismiss_vic_note() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	if panel == null:
 		return
@@ -83,7 +83,7 @@ func _dismiss_vic_note() -> void:
 
 # ── Inventory count signal value contract ──────────────────────────────────────
 # The HUD's `Back Room` / `Shelf` readouts are driven exclusively by
-# `EventBus.beta_backroom_count_changed` / `beta_shelf_count_changed`. The
+# `EventBus.store_backroom_count_changed` / `store_shelf_count_changed`. The
 # critical-path tests assert these signals fire; this file pins the *value*
 # emitted on each so a copy-paste bug that emits a stale literal cannot slip
 # past CI.
@@ -95,13 +95,13 @@ func test_backroom_pickup_emits_tutorial_delivery_quantity() -> void:
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
 	_captured_backroom_counts.clear()
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	var expected: int = BetaDayOneController._BACKROOM_DELIVERY_QUANTITY
+	var expected: int = StoreSessionController._BACKROOM_DELIVERY_QUANTITY
 	assert_true(
 		_captured_backroom_counts.has(expected),
 		(
-			"Back-room pickup must emit beta_backroom_count_changed(%d) so"
+			"Back-room pickup must emit store_backroom_count_changed(%d) so"
 			+ " the HUD's Back Room readout shows tutorial delivery state"
 		) % expected
 	)
@@ -113,16 +113,16 @@ func test_restock_emits_shelf_count_matching_tutorial_delivery() -> void:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	_captured_shelf_counts.clear()
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
-	var expected: int = BetaDayOneController._BACKROOM_DELIVERY_QUANTITY
+	var expected: int = StoreSessionController._BACKROOM_DELIVERY_QUANTITY
 	assert_true(
 		_captured_shelf_counts.has(expected),
 		(
-			"Restocking the shelf must emit beta_shelf_count_changed(%d)"
+			"Restocking the shelf must emit store_shelf_count_changed(%d)"
 			+ " from tutorial delivery without duplicating back-room stock"
 		) % expected
 	)
@@ -136,10 +136,10 @@ func test_restock_drains_tutorial_backroom_count_to_zero() -> void:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	_captured_backroom_counts.clear()
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 	assert_true(
 		_captured_backroom_counts.has(0),

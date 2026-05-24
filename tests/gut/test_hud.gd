@@ -19,7 +19,7 @@ class BetaObjectiveControllerStub:
 
 
 func before_each() -> void:
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	_hud = _HudScene.instantiate()
 	add_child_autofree(_hud)
 
@@ -65,12 +65,12 @@ func test_hud_initial_time_uses_preopening_hour() -> void:
 	)
 
 
-func test_fp_time_label_uses_opening_shift_during_preopening_training() -> void:
-	_add_beta_controller_with_objectives(_TRAINING_OBJECTIVES)
+func test_fp_time_label_uses_first_day_during_preopening_training() -> void:
+	_add_store_session_controller_with_objectives(_TRAINING_OBJECTIVES)
 	EventBus.day_started.emit(1)
 	EventBus.hour_changed.emit(8)
 	var label: Label = _hud.get_node("FPTimeLabel")
-	assert_string_contains(label.text, "Opening Shift")
+	assert_string_contains(label.text, "First Day")
 	assert_string_contains(label.text, "8:00 AM")
 	assert_false(
 		label.text.contains("Day 1"),
@@ -78,29 +78,29 @@ func test_fp_time_label_uses_opening_shift_during_preopening_training() -> void:
 	)
 
 
-func test_fp_time_label_requires_training_milestones_for_opening_shift() -> void:
-	_add_beta_controller_with_objectives([{"id": "talk_to_manager"}])
+func test_fp_time_label_requires_training_milestones_for_first_day_training() -> void:
+	_add_store_session_controller_with_objectives([{"id": "talk_to_manager"}])
 	EventBus.day_started.emit(1)
 	EventBus.hour_changed.emit(8)
 	var label: Label = _hud.get_node("FPTimeLabel")
 	assert_false(
-		label.text.contains("Opening Shift"),
-		"Opening Shift label requires the full beta training milestone set"
+		label.text.contains("First Day"),
+		"First Day label requires the full store_session training milestone set"
 	)
 	assert_string_contains(label.text, "Day 1")
 	assert_string_contains(label.text, "8:00 AM")
 
 
 func test_run_state_changed_clears_preopening_fp_time_label() -> void:
-	_add_beta_controller_with_objectives(_TRAINING_OBJECTIVES)
+	_add_store_session_controller_with_objectives(_TRAINING_OBJECTIVES)
 	EventBus.day_started.emit(1)
 	EventBus.hour_changed.emit(8)
 	var label: Label = _hud.get_node("FPTimeLabel")
-	assert_string_contains(label.text, "Opening Shift")
-	BetaRunState.preopening_complete = true
+	assert_string_contains(label.text, "First Day")
+	StoreSessionState.preopening_complete = true
 	EventBus.run_state_changed.emit()
 	assert_false(
-		label.text.contains("Opening Shift"),
+		label.text.contains("First Day"),
 		"run_state_changed must refresh FP time when preopening completes"
 	)
 	assert_string_contains(label.text, "Day 1")
@@ -479,19 +479,19 @@ func test_sales_today_pulses_on_item_sold() -> void:
 	)
 
 
-func test_beta_carry_changed_toggles_label_and_icon() -> void:
+func test_store_carry_changed_toggles_label_and_icon() -> void:
 	var label: Label = _hud.get_node("CarryHUD/BetaCarryLabel")
 	var icon: ColorRect = _hud.get_node("CarryHUD/BetaCarryIcon")
 	assert_false(label.visible, "Carry label must start hidden")
 	assert_false(icon.visible, "Carry icon must start hidden")
 
-	EventBus.beta_carry_changed.emit("Used Console Box")
+	EventBus.store_carry_changed.emit("Used Console Box")
 	await get_tree().process_frame
 	assert_true(label.visible, "Carry label must show while holding stock")
 	assert_eq(label.text, "Carrying: Used Console Box")
 	assert_true(icon.visible, "Carry icon must show with the carry label")
 
-	EventBus.beta_carry_changed.emit("")
+	EventBus.store_carry_changed.emit("")
 	await get_tree().process_frame
 	assert_false(label.visible, "Carry label must hide when stock clears")
 	assert_false(icon.visible, "Carry icon must hide when stock clears")
@@ -561,9 +561,9 @@ func test_no_signal_double_connects_after_second_hud_instantiated() -> void:
 		&"store_entered",
 		&"store_exited",
 		&"inventory_changed",
-		&"beta_carry_changed",
-		&"beta_shelf_count_changed",
-		&"beta_backroom_count_changed",
+		&"store_carry_changed",
+		&"store_shelf_count_changed",
+		&"store_backroom_count_changed",
 		&"customer_purchased",
 		&"item_sold",
 		&"customer_spawned",
@@ -605,9 +605,9 @@ func test_input_focus_context_changed_no_double_bind() -> void:
 	assert_eq(second_count, 1, "Second HUD must own one InputFocus binding")
 
 
-func _add_beta_controller_with_objectives(objectives: Array[Dictionary]) -> void:
+func _add_store_session_controller_with_objectives(objectives: Array[Dictionary]) -> void:
 	var controller := BetaObjectiveControllerStub.new()
 	controller.name = "BetaObjectiveControllerStub"
 	controller._objectives = objectives.duplicate(true)
-	controller.add_to_group("beta_day_one_controller")
+	controller.add_to_group("store_session_controller")
 	add_child_autofree(controller)

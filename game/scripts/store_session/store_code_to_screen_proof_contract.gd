@@ -1,5 +1,5 @@
-## Shared code-to-screen proof schema for beta route artifacts.
-class_name BetaCodeToScreenProofContract
+## Shared code-to-screen proof schema for store_session route artifacts.
+class_name StoreCodeToScreenProofContract
 extends RefCounted
 
 const REQUIRED_FIELDS: Array[String] = [
@@ -76,7 +76,7 @@ static func _screen_object(beat_name: String, beat: Dictionary) -> String:
 			return "Close-day register trigger plus completed Day 1 checklist state."
 		"close_day_summary":
 			return "Day summary panel with sales, rent, profit, inventory, and customer values."
-	return "%s route capture surface." % str(beat.get("label", "Beta route"))
+	return "%s route capture surface." % str(beat.get("label", "store route"))
 
 
 static func _input_affordance(beat_name: String, beat: Dictionary) -> String:
@@ -90,15 +90,15 @@ static func _input_affordance(beat_name: String, beat: Dictionary) -> String:
 static func _code_owner(beat_name: String) -> String:
 	match beat_name:
 		"backroom_pickup_prompt":
-			return "beta_backroom_pickup_interactable.gd bridges input; beta_day_one_controller.gd owns progression."
+			return "stockroom_pickup_interactable.gd bridges input; store_session_controller.gd owns progression."
 		"training_shelf_transition", "stocked_shelf_stat_change":
-			return "beta_restock_interactable.gd bridges input; beta_day_one_controller.gd owns shelf progression."
+			return "restock_interactable.gd bridges input; store_session_controller.gd owns shelf progression."
 		"before_customer", "customer_decision_card", "result_acknowledgement", \
 		"after_result_customer_exit":
-			return "beta_day1_customer_interactable.gd bridges input; beta_day_one_controller.gd owns customer progression."
+			return "first_day_customer_interactable.gd bridges input; store_session_controller.gd owns customer progression."
 		"close_day_prompt", "close_day_summary":
-			return "beta_day_one_controller.gd owns close-day flow and summary payload."
-	return "beta_day_one_controller.gd owns Day 1 progression for this beat."
+			return "store_session_controller.gd owns close-day flow and summary payload."
+	return "store_session_controller.gd owns Day 1 progression for this beat."
 
 
 static func _state_mutation(beat: Dictionary) -> String:

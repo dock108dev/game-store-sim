@@ -1,5 +1,5 @@
-class_name BetaDayEndTriggerInteractable
-extends BetaDayOneInteractableBase
+class_name DayEndTriggerInteractable
+extends StoreSessionInteractableBase
 
 
 func _ready() -> void:
@@ -14,14 +14,14 @@ func _ready() -> void:
 
 
 func can_interact(_actor: Node = null) -> bool:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return false
 	return controller.can_interact_day_end()
 
 
 func get_disabled_reason(_actor: Node = null) -> String:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return "Day-end flow unavailable."
 	return controller.day_end_disabled_reason()
@@ -31,4 +31,4 @@ func interact(by: Node = null) -> void:
 	if not can_interact(by):
 		return
 	super.interact(by)
-	get_tree().call_group("beta_day_one_controller", "on_beta_register_interacted")
+	get_tree().call_group("store_session_controller", "on_store_register_interacted")

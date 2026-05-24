@@ -1,4 +1,4 @@
-## Bottom-left on-screen event log surface for the beta Day-1 loop.
+## Bottom-left on-screen event log surface for the store_session Day-1 loop.
 ##
 ## Subscribes to `EventBus.event_logged(tag, message)` and renders the
 ## most-recent entries as a stacked list of message-only `Label` rows. The
@@ -9,18 +9,18 @@
 ## `EventLog`, which emits `event_logged` unconditionally even though its
 ## ring buffer is debug-only.
 ##
-## Visual contract mirrors `BetaRightPanel` so the two surfaces read as
+## Visual contract mirrors `StoreStatusPanel` so the two surfaces read as
 ## a single design family: same `_PANEL_BG`, same 12 px padding, no border.
 ## Width 260 px, height ~120 px, anchored bottom-left above the carry label
 ## (which sits at `offset_top = -200` from bottom — we stop at -204).
 ## Stays visible in first-person mode: this surface owns recent events only,
-## while `BetaRightPanel` owns objectives and `InteractionPrompt` owns the
+## while `StoreStatusPanel` owns objectives and `InteractionPrompt` owns the
 ## bottom-right action affordance.
 ##
-## Owned by the `BetaHUD` autoload (spawned in `BetaHUD._ready`); persists
+## Owned by the `StoreSessionHUD` autoload (spawned in `StoreSessionHUD._ready`); persists
 ## across day-controller teardown so it survives day transitions without
 ## losing in-flight rows.
-class_name BetaEventLogPanel
+class_name StoreEventLogPanel
 extends CanvasLayer
 
 ## Hard cap on rendered rows. A 4th entry queue_free()'s the oldest so the
@@ -35,7 +35,7 @@ const ALPHA_OLDEST: float = 0.35
 
 ## CanvasLayer ordering — sits below ModalDimOverlay (49) so the day-end /
 ## decision modals dim it, and below ObjectiveRail (40) so the rail's
-## active-step chip always wins. Layer 30 matches `BetaRightPanel` — the
+## active-step chip always wins. Layer 30 matches `StoreStatusPanel` — the
 ## two panels share a tier.
 const LAYER_INDEX: int = 30
 
@@ -75,7 +75,7 @@ var _entry_container: VBoxContainer
 
 
 func _ready() -> void:
-	add_to_group("beta_event_log_panel")
+	add_to_group("store_event_log_panel")
 	layer = LAYER_INDEX
 	_build_panel()
 	# §EH-13 — direct typed connection; `event_logged` is owner-declared on

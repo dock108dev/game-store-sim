@@ -1,7 +1,7 @@
 {
-  "type": "beta_day_data",
+  "type": "store_session_day_data",
   "day_number": 1,
-  "date_label": "Opening Shift",
+  "date_label": "First Day",
   "store_context": "First shift on the floor at Shelf Life. One customer is already waiting at the counter.",
   "required_events": [
     "day01_wrong_console_parent"

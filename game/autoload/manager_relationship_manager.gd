@@ -40,7 +40,7 @@ const MANAGER_NAME: String = "Vic Harlow"
 ## `NOTES_PATH` is a baked `res://` content file on shipped builds, so present-
 ## day exposure is content-author error rather than user tampering, but
 ## matching the project-wide invariant closes the convention gap with the
-## other four JSON loaders (DataLoader, SaveManager, MainMenu, BetaDayOne).
+## other four JSON loaders (DataLoader, SaveManager, MainMenu, StoreSessionController).
 const MAX_NOTES_FILE_BYTES: int = 1_048_576
 
 const TRUST_MIN: float = 0.0
@@ -295,11 +295,11 @@ func _on_day_started(day: int) -> void:
 		)
 		return
 	_last_started_day = day
-	# Beta owns its first-minute guidance. On a fresh run, GameWorld emits
+	# StoreSessionController owns its first-minute guidance. On a fresh run, GameWorld emits
 	# day_started(1) before the default store scene exists, so the group check
-	# cannot see BetaDayOneController yet; suppress that global Day-1 note
+	# cannot see StoreSessionController yet; suppress that global Day-1 note
 	# from session state as well as from the active-controller path.
-	if _should_skip_beta_opening_note(day):
+	if _should_skip_store_session_opening_note(day):
 		return
 	_confrontation_emitted_this_day = false
 	var note: Dictionary = select_note_for_day(day)
@@ -317,11 +317,11 @@ func _on_day_started(day: int) -> void:
 	)
 
 
-func _should_skip_beta_opening_note(day: int) -> bool:
+func _should_skip_store_session_opening_note(day: int) -> bool:
 	var tree: SceneTree = get_tree()
 	if (
 		tree != null
-		and tree.get_first_node_in_group("beta_day_one_controller") != null
+		and tree.get_first_node_in_group("store_session_controller") != null
 	):
 		return true
 	if day != 1:

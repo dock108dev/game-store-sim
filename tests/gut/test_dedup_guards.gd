@@ -44,10 +44,10 @@ func after_each() -> void:
 	if EventBus.tutorial_context_entered.is_connected(_on_tutorial_context_entered):
 		EventBus.tutorial_context_entered.disconnect(_on_tutorial_context_entered)
 	if is_instance_valid(_root):
-		var controller: Node = get_tree().get_first_node_in_group("beta_day_one_controller")
+		var controller: Node = get_tree().get_first_node_in_group("store_session_controller")
 		if controller != null:
-			var panel: BetaManagerNotePanel = (
-				controller.get("_vic_note_panel") as BetaManagerNotePanel
+			var panel: ManagerNotePanel = (
+				controller.get("_vic_note_panel") as ManagerNotePanel
 			)
 			if panel != null and panel.visible:
 				panel.close()
@@ -59,7 +59,7 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	TutorialContextSystem.clear_active_context()
 	TutorialContextSystem.reload()
 	GameManager.current_state = _saved_state
@@ -82,7 +82,7 @@ func _on_tutorial_context_entered(
 ## ModalQueue before the first customer objective.
 ##
 ## "Exactly one" is asserted against the current controller's
-## `_vic_note_panel` field rather than a tree-wide walk. BetaDayOneController
+## `_vic_note_panel` field rather than a tree-wide walk. StoreSessionController
 ## parents the panel under `_ui_root()`, which falls back to `/root` when no
 ## UILayer is present (the headless test environment). The in-process GUT
 ## runner does not garbage-collect panels created by prior tests' (now-freed)
@@ -91,8 +91,8 @@ func _on_tutorial_context_entered(
 ## `_ensure_panels` guards on `_vic_note_panel == null`, so structurally there
 ## can only be one panel per controller instance.
 func test_morning_note_not_visible_on_day1_start() -> void:
-	# Sweep visible BetaManagerNotePanel instances left over from earlier
-	# tests in the suite. `BetaDayOneController._ensure_panels` parents the
+	# Sweep visible ManagerNotePanel instances left over from earlier
+	# tests in the suite. `StoreSessionController._ensure_panels` parents the
 	# Vic note under `_ui_root()`, which falls back to `/root` in headless
 	# mode, so any prior test that walked past `_on_summary_continue`
 	# (which opens the Day-2 Vic note) leaves its panel `visible = true`
@@ -101,8 +101,8 @@ func test_morning_note_not_visible_on_day1_start() -> void:
 	# on the active panel. Closing them up front keeps the visible-count
 	# assertion below scoped to this test's freshly-spawned panel.
 	for node: Node in get_tree().root.get_children():
-		if node is BetaManagerNotePanel and (node as BetaManagerNotePanel).visible:
-			(node as BetaManagerNotePanel).close()
+		if node is ManagerNotePanel and (node as ManagerNotePanel).visible:
+			(node as ManagerNotePanel).close()
 
 	var scene: PackedScene = load(_STORE_SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load")
@@ -114,16 +114,16 @@ func test_morning_note_not_visible_on_day1_start() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 
-	var controller: Node = get_tree().get_first_node_in_group("beta_day_one_controller")
-	assert_not_null(controller, "BetaDayOneController must be in the scene tree after _ready")
+	var controller: Node = get_tree().get_first_node_in_group("store_session_controller")
+	assert_not_null(controller, "StoreSessionController must be in the scene tree after _ready")
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	assert_not_null(
 		panel,
-		"BetaDayOneController._ensure_panels must still spawn a Vic note panel for later-day use"
+		"StoreSessionController._ensure_panels must still spawn a Vic note panel for later-day use"
 	)
 	if panel == null:
 		return
@@ -143,12 +143,12 @@ func test_morning_note_not_visible_on_day1_start() -> void:
 
 	var visible_count: int = 0
 	for node: Node in get_tree().root.get_children():
-		if node is BetaManagerNotePanel and (node as BetaManagerNotePanel).visible:
+		if node is ManagerNotePanel and (node as ManagerNotePanel).visible:
 			visible_count += 1
 	assert_eq(
 		visible_count, 0,
 		(
-			"No BetaManagerNotePanel should be visible after Day-1 boot; got %d"
+			"No ManagerNotePanel should be visible after Day-1 boot; got %d"
 		) % visible_count
 	)
 

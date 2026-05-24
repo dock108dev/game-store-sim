@@ -153,8 +153,8 @@ func test_fp_labels_visible_by_default_in_tscn() -> void:
 	assert_true(fp_time.visible, "FPTimeLabel must be visible by default")
 
 
-func test_fp_labels_do_not_overlap_beta_right_panel_band() -> void:
-		# Vertical-stack guard: BetaRightPanel anchors at offset_top=56 on the
+func test_fp_labels_do_not_overlap_store_status_panel_band() -> void:
+		# Vertical-stack guard: StoreStatusPanel anchors at offset_top=56 on the
 		# right edge. The static FP labels must sit fully above that band.
 	var fp_cash: Label = _hud.get_node_or_null("FPCashLabel") as Label
 	var fp_time: Label = _hud.get_node_or_null("FPTimeLabel") as Label
@@ -164,11 +164,11 @@ func test_fp_labels_do_not_overlap_beta_right_panel_band() -> void:
 		return
 	assert_lte(
 		fp_cash.offset_bottom, 56.0,
-		"FPCashLabel bottom edge must sit at or above the BetaRightPanel band (y=56)"
+		"FPCashLabel bottom edge must sit at or above the StoreStatusPanel band (y=56)"
 	)
 	assert_lte(
 		fp_time.offset_bottom, 56.0,
-		"FPTimeLabel bottom edge must sit at or above the BetaRightPanel band (y=56)"
+		"FPTimeLabel bottom edge must sit at or above the StoreStatusPanel band (y=56)"
 	)
 
 

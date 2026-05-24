@@ -1,4 +1,4 @@
-class_name BetaCarriedStockMarker
+class_name StoreCarriedStockMarker
 extends Node3D
 
 const CARRY_LABEL: String = "Used Games Box"
@@ -13,7 +13,7 @@ var _label: Label3D = null
 ## Initializes the first-person stock-box marker and binds it to carry-state signals.
 func configure(store_root: Node) -> void:
 	_store_root = store_root
-	name = "BetaCarriedStockMarker"
+	name = "StoreCarriedStockMarker"
 	visible = false
 	process_mode = Node.PROCESS_MODE_INHERIT
 	_build_visuals()
@@ -26,19 +26,19 @@ func _enter_tree() -> void:
 
 
 func _exit_tree() -> void:
-	if EventBus.beta_carry_changed.is_connected(_on_beta_carry_changed):
-		EventBus.beta_carry_changed.disconnect(_on_beta_carry_changed)
+	if EventBus.store_carry_changed.is_connected(_on_store_carry_changed):
+		EventBus.store_carry_changed.disconnect(_on_store_carry_changed)
 
 
 func _process(_delta: float) -> void:
-	if visible and not bool(BetaRunState.carrying_stock):
+	if visible and not bool(StoreSessionState.carrying_stock):
 		_set_carry_visible(false)
 		return
 	if visible:
 		_attach_to_view_camera()
 
 
-func _on_beta_carry_changed(text: String) -> void:
+func _on_store_carry_changed(text: String) -> void:
 	var has_carry: bool = not text.strip_edges().is_empty()
 	_set_carry_visible(has_carry)
 	if has_carry and _label != null:
@@ -46,12 +46,12 @@ func _on_beta_carry_changed(text: String) -> void:
 
 
 func _connect_carry_signal() -> void:
-	if not EventBus.beta_carry_changed.is_connected(_on_beta_carry_changed):
-		EventBus.beta_carry_changed.connect(_on_beta_carry_changed)
+	if not EventBus.store_carry_changed.is_connected(_on_store_carry_changed):
+		EventBus.store_carry_changed.connect(_on_store_carry_changed)
 
 
 func _sync_from_run_state() -> void:
-	_set_carry_visible(bool(BetaRunState.carrying_stock))
+	_set_carry_visible(bool(StoreSessionState.carrying_stock))
 
 
 func _set_carry_visible(has_carry: bool) -> void:

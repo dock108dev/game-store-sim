@@ -1,7 +1,7 @@
 ## Single dim overlay shown above gameplay/HUD whenever a modal owns InputFocus.
 ##
 ## Layer 49 sits below modal panels (which authorise themselves at layer 50+
-## — see `BetaDecisionCardPanel` at 80 and `BetaDaySummaryPanel` at 81) and
+## — see `DecisionCardPanel` at 80 and `DaySummaryPanel` at 81) and
 ## above all gameplay and HUD layers (HUD at 30, ObjectiveRail at 40). One
 ## ColorRect handles every modal depth level — the dim must not stack, so we
 ## fade only on the boolean transition `was_modal != is_modal_now`, never on

@@ -4,7 +4,7 @@
 ## is named after the brief's numbered acceptance criterion.
 ##
 ## NOTE: instantiates `retro_games.tscn` directly via the same fixture
-## pattern as `test_beta_day_one_critical_path.gd` — exercises the beta
+## pattern as `test_store_session_day_one_critical_path.gd` — exercises the store_session
 ## Day-1 controller without driving the full GameManager scene-swap path.
 extends GutTest
 
@@ -21,7 +21,7 @@ var _milestone_card: MilestoneCard = null
 func before_each() -> void:
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load for onboarding tests")
 	if scene == null:
@@ -54,21 +54,21 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
-func _beta_controller() -> BetaDayOneController:
+func _store_session_controller() -> StoreSessionController:
 	if _root == null:
 		return null
-	return _root.get_node_or_null("BetaDayOneController") as BetaDayOneController
+	return _root.get_node_or_null("StoreSessionController") as StoreSessionController
 
 
 func _dismiss_vic_note() -> void:
-	var controller: BetaDayOneController = _beta_controller()
+	var controller: StoreSessionController = _store_session_controller()
 	if controller == null:
 		return
-	var panel: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var panel: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	if panel == null:
 		return
@@ -86,12 +86,12 @@ func _dismiss_vic_note() -> void:
 
 
 func test_opening_milestone_does_not_stack_ctx_modal_at_spawn() -> void:
-	var controller: BetaDayOneController = _beta_controller()
+	var controller: StoreSessionController = _store_session_controller()
 	assert_not_null(controller, "Day-1 controller must spawn from retro_games.tscn")
 	if controller == null:
 		return
-	var note: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var note: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	assert_not_null(note, "Vic note panel must exist after Day-1 spawn")
 	if note == null:
@@ -158,7 +158,7 @@ func test_vic_note_body_does_not_contain_duplicate_paragraphs() -> void:
 	# The body constant is the single source of truth — sanity-check it
 	# does not concatenate the same paragraph twice. (A future content
 	# edit could accidentally do this and we'd want CI to catch it.)
-	var body: String = BetaDayOneController.VIC_NOTE_BODY
+	var body: String = StoreSessionController.VIC_NOTE_BODY
 	var paragraphs: PackedStringArray = body.split("\n\n", false)
 	var seen: Dictionary = {}
 	for raw: String in paragraphs:
@@ -173,19 +173,19 @@ func test_vic_note_body_does_not_contain_duplicate_paragraphs() -> void:
 
 
 func test_vic_note_body_replaces_not_appends_on_reopen() -> void:
-	var controller: BetaDayOneController = _beta_controller()
+	var controller: StoreSessionController = _store_session_controller()
 	if controller == null:
 		return
-	var note: BetaManagerNotePanel = (
-		controller.get("_vic_note_panel") as BetaManagerNotePanel
+	var note: ManagerNotePanel = (
+		controller.get("_vic_note_panel") as ManagerNotePanel
 	)
 	if note == null:
 		return
 	var label: RichTextLabel = note.get("_body_label") as RichTextLabel
-	assert_not_null(label, "BetaManagerNotePanel must expose _body_label")
+	assert_not_null(label, "ManagerNotePanel must expose _body_label")
 	if label == null:
 		return
-	note.show_note(BetaDayOneController.VIC_NOTE_BODY)
+	note.show_note(StoreSessionController.VIC_NOTE_BODY)
 	await get_tree().process_frame
 	var first_length: int = label.text.length()
 	assert_gt(first_length, 0, "Vic note body must render text on initial open")
@@ -194,7 +194,7 @@ func test_vic_note_body_replaces_not_appends_on_reopen() -> void:
 	# the length.
 	note.close()
 	await get_tree().process_frame
-	note.show_note(BetaDayOneController.VIC_NOTE_BODY)
+	note.show_note(StoreSessionController.VIC_NOTE_BODY)
 	await get_tree().process_frame
 	assert_eq(
 		label.text.length(),

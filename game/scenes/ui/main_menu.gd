@@ -133,7 +133,7 @@ func _on_load_pressed() -> void:
 	if not _is_load_game_enabled():
 		_refresh_load_button_state()
 		EventBus.notification_requested.emit(
-			"Load Game is coming soon for beta saves."
+			"Load Game is coming soon for store_session saves."
 		)
 		return
 	# Belt for the disabled-button contract: refresh the affordance and bail
@@ -242,7 +242,7 @@ func _start_game_session(slot: int) -> void:
 	if slot >= 0:
 		if not _is_load_game_enabled():
 			EventBus.notification_requested.emit(
-				"Load Game is coming soon for beta saves."
+				"Load Game is coming soon for store_session saves."
 			)
 			return
 		GameManager.load_game(slot)

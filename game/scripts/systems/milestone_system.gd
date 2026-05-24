@@ -136,15 +136,15 @@ func _connect_signals() -> void:
 func _on_milestone_unlocked(
 	milestone_id: StringName, _reward: Dictionary
 ) -> void:
-	# Beta Day-1 has its own scripted objective chain (BetaDayOneController).
+	# Store session day-1 has its own scripted objective chain (StoreSessionController).
 	# Production milestone toasts compete with that flow and surface as
-	# "spam later" because they fire on signals the beta scripts also
+	# "spam later" because they fire on signals the store_session scripts also
 	# observe (item_sold, item_stocked, etc.). Suppress them while the
-	# beta controller is active so the player only sees the chain's own
-	# notifications. Production play (no beta controller in tree) is
+	# store_session controller is active so the player only sees the chain's own
+	# notifications. Production play (no store_session controller in tree) is
 	# unaffected.
 	var tree: SceneTree = get_tree()
-	if tree != null and tree.get_first_node_in_group("beta_day_one_controller") != null:
+	if tree != null and tree.get_first_node_in_group("store_session_controller") != null:
 		return
 	var display_name: String = ContentRegistry.get_display_name(
 		milestone_id

@@ -1,5 +1,5 @@
-class_name BetaHiddenClueInteractable
-extends BetaDayOneInteractableBase
+class_name HiddenClueInteractable
+extends StoreSessionInteractableBase
 
 const CLUE_ID: StringName = &"day01_backroom_modded_console_hint"
 
@@ -19,14 +19,14 @@ func _ready() -> void:
 
 
 func can_interact(_actor: Node = null) -> bool:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return false
 	return controller.can_interact_hidden_clue()
 
 
 func get_disabled_reason(_actor: Node = null) -> String:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return ""
 	return controller.hidden_clue_disabled_reason()
@@ -38,9 +38,9 @@ func interact(by: Node = null) -> void:
 	super.interact(by)
 	# Route through the controller so the hidden-thread signal, the
 	# notification, and the stage advance all live in one place. The
-	# previous `BetaRunState.mark_hidden_thread_signal` direct call is
+	# previous `StoreSessionState.mark_hidden_thread_signal` direct call is
 	# kept inside the controller's handler so the consequence pipeline
 	# still sees the signal exactly once per day.
 	get_tree().call_group(
-		"beta_day_one_controller", "on_beta_hidden_clue_interacted"
+		"store_session_controller", "on_store_hidden_clue_interacted"
 	)

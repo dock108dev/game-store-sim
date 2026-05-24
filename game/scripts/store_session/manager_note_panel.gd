@@ -11,7 +11,7 @@
 ## dismiss with Enter or Space without touching the mouse. The panel also
 ## responds to the `interact` action (E) and `ui_cancel` (Escape) so all
 ## three keyboard paths converge on the same dismiss.
-class_name BetaManagerNotePanel
+class_name ManagerNotePanel
 extends ModalPanel
 
 signal note_dismissed()
@@ -29,7 +29,7 @@ func _ready() -> void:
 	visible = false
 
 	var blocker := ColorRect.new()
-	blocker.color = BetaModalTheme.COLOR_BLOCKER
+	blocker.color = StoreModalTheme.COLOR_BLOCKER
 	blocker.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(blocker)
 
@@ -43,7 +43,7 @@ func _ready() -> void:
 	panel.offset_top = -160
 	panel.offset_right = 280
 	panel.offset_bottom = 160
-	panel.add_theme_stylebox_override("panel", BetaModalTheme.make_panel_style())
+	panel.add_theme_stylebox_override("panel", StoreModalTheme.make_panel_style())
 	blocker.add_child(panel)
 
 	var v := VBoxContainer.new()
@@ -56,14 +56,14 @@ func _ready() -> void:
 	_body_label.scroll_active = false
 	_body_label.custom_minimum_size = Vector2(0, 220)
 	_body_label.add_theme_color_override(
-		"default_color", BetaModalTheme.COLOR_TEXT_PRIMARY
+		"default_color", StoreModalTheme.COLOR_TEXT_PRIMARY
 	)
 	v.add_child(_body_label)
 
 	_dismiss_button = Button.new()
 	_dismiss_button.text = "Got it"
 	_dismiss_button.custom_minimum_size = Vector2(0, 48)
-	BetaModalTheme.apply_button_theme(_dismiss_button)
+	StoreModalTheme.apply_button_theme(_dismiss_button)
 	_dismiss_button.pressed.connect(_on_dismiss_pressed)
 	v.add_child(_dismiss_button)
 
@@ -75,7 +75,7 @@ func _ready() -> void:
 ## right body even when its dispatch is deferred behind another modal.
 ##
 ## §F-S9 trust contract — `_body_label.bbcode_enabled = true`. The two
-## callers today are the constants `BetaDayOneController.VIC_NOTE_BODY` and
+## callers today are the constants `StoreSessionController.VIC_NOTE_BODY` and
 ## `VIC_NOTE_DAY2_BODY`, both of which intentionally use `[b]…[/b]` markup,
 ## so escaping in this function would break the intended copy. Any future
 ## caller that passes content-derived or save-derived `body` text must

@@ -1,10 +1,10 @@
 extends GutTest
 
-const BetaCustomerInventoryEffectsScript: GDScript = preload(
-	"res://game/scripts/beta/beta_customer_inventory_effects.gd"
+const StoreCustomerInventoryEffectsScript: GDScript = preload(
+	"res://game/scripts/store_session/store_customer_inventory_effects.gd"
 )
-const BetaInventoryCountAdapterScript: GDScript = preload(
-	"res://game/scripts/beta/beta_inventory_count_adapter.gd"
+const StoreInventoryCountAdapterScript: GDScript = preload(
+	"res://game/scripts/store_session/store_inventory_count_adapter.gd"
 )
 const STORE_ID: StringName = &"retro_games"
 const GAME_ID: String = "neo_ignite_motorway_kings_loose"
@@ -191,11 +191,11 @@ func test_insufficient_quantity_keeps_existing_stock_and_emits_no_signal() -> vo
 
 
 func _adapter() -> RefCounted:
-	return BetaCustomerInventoryEffectsScript.new(_inventory, _shelf_root) as RefCounted
+	return StoreCustomerInventoryEffectsScript.new(_inventory, _shelf_root) as RefCounted
 
 
 func _count_adapter() -> RefCounted:
-	return BetaInventoryCountAdapterScript.new(_inventory, STORE_ID) as RefCounted
+	return StoreInventoryCountAdapterScript.new(_inventory, STORE_ID) as RefCounted
 
 
 func _apply_effects(effects: Dictionary) -> Dictionary:

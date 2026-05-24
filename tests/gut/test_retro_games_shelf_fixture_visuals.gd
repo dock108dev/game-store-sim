@@ -197,7 +197,7 @@ func test_cart_racks_are_merchandised_fixture_walls() -> void:
 	root.free()
 
 
-func test_beta_restock_shelf_keeps_objective_target_inside_merch_fixture() -> void:
+func test_store_restock_shelf_keeps_objective_target_inside_merch_fixture() -> void:
 	var root: Node3D = _instantiate_store()
 	if root == null:
 		return
@@ -233,10 +233,10 @@ func test_beta_restock_shelf_keeps_objective_target_inside_merch_fixture() -> vo
 	for child: Node in frame.get_children():
 		if child.is_in_group(&"product_display"):
 			product_facings += 1
-	assert_gte(product_facings, 2, "Beta restock shelf must show featured product facings")
+	assert_gte(product_facings, 2, "Store-session restock shelf must show featured product facings")
 	assert_false(
 		_has_area_descendant(frame),
-		"Beta restock shelf merchandising frame must stay visual-only"
+		"Store-session restock shelf merchandising frame must stay visual-only"
 	)
 	root.free()
 

@@ -1,12 +1,12 @@
 extends GutTest
 
 const _BetaManualDayOneRouteCapture: GDScript = preload(
-	"res://game/scripts/beta/beta_manual_day_one_route_capture.gd"
+	"res://game/scripts/store_session/manual_day_one_route_capture.gd"
 )
-const _ProofContract: GDScript = preload(
-	"res://game/scripts/beta/beta_code_to_screen_proof_contract.gd"
+const _StoreProofContract: GDScript = preload(
+	"res://game/scripts/store_session/store_code_to_screen_proof_contract.gd"
 )
-const _ROUTE_ASSERTION_FILE: String = "res://tests/gut/test_beta_day_one_critical_path.gd"
+const _ROUTE_ASSERTION_FILE: String = "res://tests/gut/test_store_session_day_one_critical_path.gd"
 const _TEST_ARTIFACT_DIR: String = "user://screenshots/manual_routes/schema_validation"
 const _REQUIRED_BEAT_FIELDS: Array[String] = [
 	"index",
@@ -47,7 +47,7 @@ func test_route_manifest_schema_covers_required_review_beats() -> void:
 	var contract: Dictionary = manifest.get("code_to_screen_contract", {}) as Dictionary
 	assert_true(bool(contract.get("loop_readiness_artifact", false)))
 	assert_eq(str(contract.get("entry_readiness_checkpoint", "")), "day1_playable_ready")
-	assert_eq(contract.get("fields", []), _ProofContract.REQUIRED_FIELDS)
+	assert_eq(contract.get("fields", []), _StoreProofContract.REQUIRED_FIELDS)
 	assert_eq(
 		str((manifest.get("capture_helper", {}) as Dictionary).get("argument_field", "")),
 		"capture_beat_name",
@@ -57,7 +57,7 @@ func test_route_manifest_schema_covers_required_review_beats() -> void:
 	var beats: Array = manifest.get("beats", []) as Array
 	assert_gt(beats.size(), 0, "Manual route manifest must contain capture beats")
 	assert_eq(
-		_ProofContract.validate_route_beats(beats),
+		_StoreProofContract.validate_route_beats(beats),
 		[],
 		"Every route beat must include complete code-to-screen proof"
 	)
@@ -145,7 +145,7 @@ func test_route_beats_link_to_existing_automated_assertions() -> void:
 		)
 		for ref_variant: Variant in refs:
 			var ref: String = str(ref_variant)
-			assert_true(ref.begins_with("tests/gut/test_beta_day_one_critical_path.gd:"))
+			assert_true(ref.begins_with("tests/gut/test_store_session_day_one_critical_path.gd:"))
 			var line_number: int = int(ref.get_slice(":", 1))
 			assert_true(line_number > 0 and line_number <= lines.size(), "Bad ref %s" % ref)
 			if line_number > 0 and line_number <= lines.size():
@@ -166,7 +166,7 @@ func test_incomplete_code_to_screen_proof_is_flagged() -> void:
 		"next_beat": "",
 		"test_capture": "",
 	}
-	var errors: Array[String] = _ProofContract.validate_proof_payload(incomplete, "state_only")
+	var errors: Array[String] = _StoreProofContract.validate_proof_payload(incomplete, "state_only")
 	assert_true(errors.has("state_only missing screen_object"))
 	assert_true(errors.has("state_only missing screen_feedback"))
 	assert_true(errors.has("state_only missing next_beat"))
@@ -199,7 +199,7 @@ func _assert_route_beat_schema(beat: Dictionary) -> void:
 
 func _assert_code_to_screen_proof(beat: Dictionary) -> void:
 	var proof: Dictionary = beat.get("code_to_screen_proof", {}) as Dictionary
-	for field: String in _ProofContract.REQUIRED_FIELDS:
+	for field: String in _StoreProofContract.REQUIRED_FIELDS:
 		assert_true(proof.has(field), "Proof must include %s" % field)
 		assert_false(str(proof.get(field, "")).strip_edges().is_empty())
 	assert_true(str(proof.get("screen_feedback", "")).contains(str(beat.get("filename", ""))))

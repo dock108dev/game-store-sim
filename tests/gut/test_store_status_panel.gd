@@ -1,5 +1,5 @@
 ## gdlint:disable=max-public-methods
-## Tests for the passive right-side beta panel.
+## Tests for the passive right-side store_session panel.
 ##
 ## Covers the compact Day panel contract:
 ##   - visible header and store stats seed immediately;
@@ -61,11 +61,11 @@ const _TRAINING_OBJECTIVES: Array[Dictionary] = [
 
 func before_each() -> void:
 	InputFocus._reset_for_tests()
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
-func _make_panel(with_objectives: bool = true) -> BetaRightPanel:
-	var panel: BetaRightPanel = BetaRightPanel.new()
+func _make_panel(with_objectives: bool = true) -> StoreStatusPanel:
+	var panel: StoreStatusPanel = StoreStatusPanel.new()
 	if with_objectives:
 		panel.set_objectives(_OBJECTIVES)
 	add_child_autofree(panel)
@@ -73,12 +73,12 @@ func _make_panel(with_objectives: bool = true) -> BetaRightPanel:
 
 
 func test_panel_is_visible_at_ready_without_signals() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	assert_true(panel.visible, "Right panel must be visible immediately")
 
 
 func test_panel_uses_compact_top_right_safe_zone() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	var root_panel: PanelContainer = panel.get_node_or_null("Panel") as PanelContainer
 	assert_not_null(root_panel, "Right panel must own its PanelContainer")
 	if root_panel == null:
@@ -94,36 +94,36 @@ func test_panel_uses_compact_top_right_safe_zone() -> void:
 
 
 func test_header_reads_day_and_phase_at_ready() -> void:
-	BetaRunState.day = 2
-	var panel: BetaRightPanel = _make_panel()
+	StoreSessionState.day = 2
+	var panel: StoreStatusPanel = _make_panel()
 	assert_true(
 		panel.get_header_text().begins_with("DAY 2 —"),
-		"Header must reflect BetaRunState.day at construction"
+		"Header must reflect StoreSessionState.day at construction"
 	)
 
 
 func test_preopening_header_stays_readable_without_truncation() -> void:
-	var panel: BetaRightPanel = BetaRightPanel.new()
+	var panel: StoreStatusPanel = StoreStatusPanel.new()
 	panel.set_objectives(_TRAINING_OBJECTIVES)
 	add_child_autofree(panel)
 	assert_eq(
 		panel.get_header_text(),
-		"OPENING SHIFT",
+		"FIRST DAY",
 		"Pre-opening header must read as player-facing shift copy"
 	)
 
 
 func test_run_state_changed_switches_preopening_panel_to_store_hours() -> void:
-	var panel: BetaRightPanel = BetaRightPanel.new()
+	var panel: StoreStatusPanel = StoreStatusPanel.new()
 	panel.set_objectives(_TRAINING_OBJECTIVES)
 	add_child_autofree(panel)
-	assert_eq(panel.get_header_text(), "OPENING SHIFT")
-	BetaRunState.preopening_complete = true
+	assert_eq(panel.get_header_text(), "FIRST DAY")
+	StoreSessionState.preopening_complete = true
 	EventBus.run_state_changed.emit()
 	await get_tree().process_frame
 	assert_true(
 		panel.get_header_text().begins_with("DAY 1 —"),
-		"Panel must leave opening-shift copy as soon as preopening completes"
+		"Panel must leave first-day copy as soon as preopening completes"
 	)
 	_assert_label_contains(panel, "First customer")
 	_assert_no_label_contains(panel, "Manager")
@@ -133,7 +133,7 @@ func test_run_state_changed_switches_preopening_panel_to_store_hours() -> void:
 
 
 func test_compact_store_stat_rows_seed_at_zero() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	assert_eq(panel.get_stat_value("Shelf"), "0 / 0")
 	assert_eq(panel.get_stat_value("Stockroom"), "0")
 	assert_eq(panel.get_stat_value("Customers"), "0")
@@ -141,14 +141,14 @@ func test_compact_store_stat_rows_seed_at_zero() -> void:
 
 
 func test_legacy_stat_name_aliases_still_resolve() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	assert_eq(panel.get_stat_value("On Shelves"), panel.get_stat_value("Shelf"))
 	assert_eq(panel.get_stat_value("Back Room"), panel.get_stat_value("Stockroom"))
 	assert_eq(panel.get_stat_value("Sold Today"), panel.get_stat_value("Sales"))
 
 
 func test_column_layout_has_store_and_today_section_labels() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	var store: Label = panel.get_node_or_null("Panel/Column/StoreSection") as Label
 	var today: Label = panel.get_node_or_null("Panel/Column/TodaySection") as Label
 	assert_not_null(store, "Column must contain a STORE section label")
@@ -160,13 +160,13 @@ func test_column_layout_has_store_and_today_section_labels() -> void:
 
 
 func test_column_has_no_unlock_or_recent_label() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	_assert_no_label_contains(panel, "Unlocked")
 	_assert_no_label_contains(panel, "Recent")
 
 
 func test_stat_row_labels_are_compact() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	_assert_label_contains(panel, "Shelf")
 	_assert_label_contains(panel, "Stockroom")
 	_assert_label_contains(panel, "Sales")
@@ -176,24 +176,24 @@ func test_stat_row_labels_are_compact() -> void:
 
 
 func test_shelf_stat_tracks_target_from_inventory_events() -> void:
-	var panel: BetaRightPanel = _make_panel()
-	EventBus.beta_backroom_count_changed.emit(5)
+	var panel: StoreStatusPanel = _make_panel()
+	EventBus.store_backroom_count_changed.emit(5)
 	await get_tree().process_frame
 	assert_eq(panel.get_stat_value("Shelf"), "0 / 5")
-	EventBus.beta_shelf_count_changed.emit(3)
+	EventBus.store_shelf_count_changed.emit(3)
 	await get_tree().process_frame
 	assert_eq(panel.get_stat_value("Shelf"), "3 / 5")
 
 
 func test_backroom_count_updates_stockroom_value() -> void:
-	var panel: BetaRightPanel = _make_panel()
-	EventBus.beta_backroom_count_changed.emit(5)
+	var panel: StoreStatusPanel = _make_panel()
+	EventBus.store_backroom_count_changed.emit(5)
 	await get_tree().process_frame
 	assert_eq(panel.get_stat_value("Stockroom"), "5")
 
 
 func test_customer_purchased_increments_customers_value() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	EventBus.customer_purchased.emit(&"retro_games", &"item_x", 5.0, &"cust1")
 	EventBus.customer_purchased.emit(&"retro_games", &"item_y", 8.0, &"cust2")
 	await get_tree().process_frame
@@ -201,7 +201,7 @@ func test_customer_purchased_increments_customers_value() -> void:
 
 
 func test_item_sold_increments_sales_value() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	EventBus.item_sold.emit("item_a", 5.0, "games")
 	EventBus.item_sold.emit("item_b", 9.0, "games")
 	await get_tree().process_frame
@@ -209,12 +209,12 @@ func test_item_sold_increments_sales_value() -> void:
 
 
 func test_day_started_updates_header_resets_daily_values_and_milestones() -> void:
-	var panel: BetaRightPanel = _make_panel()
-	EventBus.beta_backroom_count_changed.emit(5)
-	EventBus.beta_shelf_count_changed.emit(3)
+	var panel: StoreStatusPanel = _make_panel()
+	EventBus.store_backroom_count_changed.emit(5)
+	EventBus.store_shelf_count_changed.emit(3)
 	EventBus.customer_purchased.emit(&"retro_games", &"item_x", 5.0, &"cust1")
 	EventBus.item_sold.emit("item_a", 5.0, "games")
-	EventBus.beta_objective_completed.emit(&"talk_to_customer")
+	EventBus.store_objective_completed.emit(&"talk_to_customer")
 	await get_tree().process_frame
 	EventBus.day_started.emit(2)
 	await get_tree().process_frame
@@ -226,7 +226,7 @@ func test_day_started_updates_header_resets_daily_values_and_milestones() -> voi
 
 
 func test_all_day_one_milestones_seed_as_pending() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	assert_eq(panel.get_visible_item_count(), _OBJECTIVES.size())
 	for entry: Dictionary in _OBJECTIVES:
 		var obj_id: StringName = StringName(str(entry.get("id", "")))
@@ -235,7 +235,7 @@ func test_all_day_one_milestones_seed_as_pending() -> void:
 
 
 func test_milestone_copy_is_compact_and_not_action_copy() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	_assert_label_contains(panel, "First customer")
 	_assert_label_contains(panel, "Delivery")
 	_assert_label_contains(panel, "Shelf stock")
@@ -246,7 +246,7 @@ func test_milestone_copy_is_compact_and_not_action_copy() -> void:
 
 
 func test_pending_rows_use_muted_alpha() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	var label: Label = panel.get_node_or_null("Panel/Column/Milestone_talk_to_customer") as Label
 	assert_not_null(label, "Pending milestone label must exist")
 	if label == null:
@@ -255,7 +255,7 @@ func test_pending_rows_use_muted_alpha() -> void:
 
 
 func test_objective_changed_does_not_restamp_passive_milestones() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	(
 		EventBus
 		. objective_changed
@@ -275,20 +275,20 @@ func test_objective_changed_does_not_restamp_passive_milestones() -> void:
 
 
 func test_panel_does_not_connect_objective_changed() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	var connections: Array = EventBus.objective_changed.get_connections()
 	for entry: Dictionary in connections:
 		var callable: Callable = entry.get("callable") as Callable
 		assert_ne(
 			callable.get_object(),
 			panel,
-			"BetaRightPanel must not mirror active objective_changed payloads"
+			"StoreStatusPanel must not mirror active objective_changed payloads"
 		)
 
 
 func test_completion_signal_marks_row_done_without_collapsing() -> void:
-	var panel: BetaRightPanel = _make_panel()
-	EventBus.beta_objective_completed.emit(&"talk_to_customer")
+	var panel: StoreStatusPanel = _make_panel()
+	EventBus.store_objective_completed.emit(&"talk_to_customer")
 	await get_tree().process_frame
 	assert_eq(panel.get_item_glyph(&"talk_to_customer"), "✓")
 	assert_eq(panel.get_row_state(&"talk_to_customer"), "completed")
@@ -297,15 +297,15 @@ func test_completion_signal_marks_row_done_without_collapsing() -> void:
 
 
 func test_completion_signal_for_unknown_id_is_a_noop() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	var before: int = panel.get_visible_item_count()
-	EventBus.beta_objective_completed.emit(&"not_a_real_objective")
+	EventBus.store_objective_completed.emit(&"not_a_real_objective")
 	await get_tree().process_frame
 	assert_eq(panel.get_visible_item_count(), before)
 
 
 func test_fp_mode_changed_does_not_hide_panel() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	EventBus.fp_mode_changed.emit(true)
 	await get_tree().process_frame
 	assert_true(panel.visible)
@@ -315,7 +315,7 @@ func test_fp_mode_changed_does_not_hide_panel() -> void:
 
 
 func test_panel_does_not_connect_fp_mode_changed() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	var connections: Array = EventBus.fp_mode_changed.get_connections()
 	for entry: Dictionary in connections:
 		var callable: Callable = entry.get("callable") as Callable
@@ -323,7 +323,7 @@ func test_panel_does_not_connect_fp_mode_changed() -> void:
 
 
 func test_panel_dims_under_modal_context() -> void:
-	var panel: BetaRightPanel = _make_panel()
+	var panel: StoreStatusPanel = _make_panel()
 	InputFocus.push_context(InputFocus.CTX_MODAL)
 	await get_tree().process_frame
 	var any_dimmed: bool = false

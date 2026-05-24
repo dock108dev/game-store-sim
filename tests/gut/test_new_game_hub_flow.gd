@@ -39,7 +39,7 @@ var _fake_transition: FakeSceneTransition
 
 
 func before_each() -> void:
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	_orig_state = GameManager.current_state
 	_orig_pending_load_slot = GameManager.pending_load_slot
 	_orig_data_loader = GameManager.data_loader
@@ -65,7 +65,7 @@ func after_each() -> void:
 		_fake_loader.free()
 	if is_instance_valid(_fake_transition):
 		_fake_transition.free()
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 ## GAMEPLAY_SCENE_PATH must be gameplay_shell.tscn — the hub is the direct destination.
@@ -128,16 +128,16 @@ func test_new_game_and_load_game_share_gameplay_scene_path() -> void:
 	)
 
 
-func test_default_new_game_store_scene_loads_beta_entry_nodes() -> void:
+func test_default_new_game_store_scene_loads_store_session_entry_nodes() -> void:
 	assert_eq(
 		GameManager.DEFAULT_STARTING_STORE,
 		&"retro_games",
-		"Default new-game store must be the beta store"
+		"Default new-game store must be the store_session store"
 	)
 	var scene_path: String = "res://game/scenes/stores/retro_games.tscn"
 	assert_true(
 		scene_path.ends_with("retro_games.tscn"),
-		"Default new-game store must resolve to the beta store scene"
+		"Default new-game store must resolve to the store_session store scene"
 	)
 	var scene: PackedScene = load(scene_path) as PackedScene
 	assert_not_null(scene, "Default new-game store scene must load")
@@ -152,19 +152,19 @@ func test_default_new_game_store_scene_loads_beta_entry_nodes() -> void:
 	await get_tree().process_frame
 
 	assert_not_null(
-		root.get_node_or_null("BetaDayOneController"),
-		"Default store boot must include the beta Day 1 controller"
+		root.get_node_or_null("StoreSessionController"),
+		"Default store boot must include the store_session Day 1 controller"
 	)
 	assert_not_null(
 		root.get_node_or_null("PlayerEntrySpawn"),
 		"Default store boot must include the first-person spawn marker"
 	)
-	var controller: Node = root.get_node_or_null("BetaDayOneController")
+	var controller: Node = root.get_node_or_null("StoreSessionController")
 	if controller != null:
 		assert_eq(
 			String(controller.call("current_stage")),
 			"training_talk_manager",
-			"Default beta store boot must start on the pre-opening manager beat"
+			"Default store_session store boot must start on the pre-opening manager beat"
 		)
 	root.free()
 
@@ -221,7 +221,7 @@ func test_start_game_session_negative_slot_routes_to_hub() -> void:
 	)
 
 
-## Main menu does not route load slots while beta load is unavailable.
+## Main menu does not route load slots while store_session load is unavailable.
 func test_start_game_session_with_slot_does_not_route_to_hub() -> void:
 	var menu: Control = load("res://game/scenes/ui/main_menu.gd").new()
 	menu._start_game_session(2)
@@ -229,5 +229,5 @@ func test_start_game_session_with_slot_does_not_route_to_hub() -> void:
 
 	assert_eq(
 		_fake_transition.requested_paths.size(), 0,
-		"_start_game_session(slot) must not route while beta load is unavailable"
+		"_start_game_session(slot) must not route while store_session load is unavailable"
 	)

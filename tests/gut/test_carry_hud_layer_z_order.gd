@@ -72,7 +72,7 @@ func test_carry_hud_layer_is_below_toast_and_modal_layers() -> void:
 	)
 
 
-func test_beta_carry_label_is_child_of_carry_hud() -> void:
+func test_store_carry_label_is_child_of_carry_hud() -> void:
 	var carry_layer: CanvasLayer = _hud.get_node_or_null("CarryHUD") as CanvasLayer
 	if carry_layer == null:
 		return

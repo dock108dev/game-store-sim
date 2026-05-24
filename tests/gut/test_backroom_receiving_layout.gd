@@ -128,7 +128,7 @@ func test_hidden_clue_stays_accessible_flavor_not_objective_clutter() -> void:
 
 	assert_eq(
 		(interactable.get_script() as Script).resource_path,
-		"res://game/scripts/beta/beta_hidden_clue_interactable.gd",
+		"res://game/scripts/store_session/hidden_clue_interactable.gd",
 		"Hidden clue must keep its hidden-thread interactable script"
 	)
 	assert_lte(

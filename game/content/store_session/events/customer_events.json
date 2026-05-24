@@ -1,5 +1,5 @@
 {
-  "type": "beta_events_data",
+  "type": "store_session_events_data",
   "events": [
     {
       "id": "day01_wrong_console_parent",

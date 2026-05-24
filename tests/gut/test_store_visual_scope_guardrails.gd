@@ -14,7 +14,7 @@ const VISUAL_ONLY_ROOTS: Array[String] = [
 	"ReadabilityProps/DayOneRouteMarkers",
 ]
 
-const REQUIRED_BETA_KEEP_ROOTS: Array[String] = [
+const REQUIRED_STORE_SESSION_KEEP_ROOTS: Array[String] = [
 	"ExpandableStoreShell",
 	"checkout_counter",
 	"FrontLaneQueue",
@@ -87,7 +87,7 @@ func before_each() -> void:
 	_saved_day = GameManager.get_current_day()
 	GameManager.current_state = GameManager.State.STORE_VIEW
 	GameManager.set_current_day(1)
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
 	var scene: PackedScene = load(SCENE_PATH)
@@ -107,7 +107,7 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	GameManager.current_state = _saved_state
 	GameManager.set_current_day(_saved_day)
 
@@ -124,7 +124,7 @@ func test_visual_dressing_roots_remain_visual_only() -> void:
 		)
 
 
-func test_visible_beta_roots_have_explicit_scene_categories() -> void:
+func test_visible_store_session_roots_have_explicit_scene_categories() -> void:
 	for child: Node in _root.get_children():
 		if not _is_visible_through_ancestors(child):
 			continue
@@ -132,8 +132,8 @@ func test_visible_beta_roots_have_explicit_scene_categories() -> void:
 			continue
 		var root_name: String = str(child.name)
 		assert_true(
-			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
-			"%s must be beta-kept before it can remain visible" % root_name
+			StoreSessionController.STORE_SESSION_KEEP_ROOT_NODES.has(StringName(root_name)),
+			"%s must be store_session-kept before it can remain visible" % root_name
 		)
 		assert_true(
 			VISIBLE_ROOT_CLASSIFICATIONS.has(root_name),
@@ -144,8 +144,8 @@ func test_visible_beta_roots_have_explicit_scene_categories() -> void:
 		)
 	for root_name: String in VISIBLE_ROOT_CLASSIFICATIONS.keys():
 		assert_true(
-			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
-			"%s classification must match a beta-visible root" % root_name
+			StoreSessionController.STORE_SESSION_KEEP_ROOT_NODES.has(StringName(root_name)),
+			"%s classification must match a store_session-visible root" % root_name
 		)
 		var categories: Array = VISIBLE_ROOT_CLASSIFICATIONS[root_name] as Array
 		assert_gt(categories.size(), 0, "%s must have at least one category" % root_name)
@@ -156,14 +156,14 @@ func test_visible_beta_roots_have_explicit_scene_categories() -> void:
 			)
 
 
-func test_beta_keep_roots_and_signs_stay_visible_after_scope_strip() -> void:
-	for root_name: String in REQUIRED_BETA_KEEP_ROOTS:
+func test_store_keep_roots_and_signs_stay_visible_after_scope_strip() -> void:
+	for root_name: String in REQUIRED_STORE_SESSION_KEEP_ROOTS:
 		assert_true(
-			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
-			"%s must stay in the beta-visible root set" % root_name
+			StoreSessionController.STORE_SESSION_KEEP_ROOT_NODES.has(StringName(root_name)),
+			"%s must stay in the store_session-visible root set" % root_name
 		)
 		var node: Node = _root.get_node_or_null(root_name)
-		assert_not_null(node, "Beta-visible root must exist: %s" % root_name)
+		assert_not_null(node, "Store-session-visible root must exist: %s" % root_name)
 		if node != null:
 			assert_true(
 				_is_visible_through_ancestors(node),
@@ -171,7 +171,7 @@ func test_beta_keep_roots_and_signs_stay_visible_after_scope_strip() -> void:
 			)
 	for sign_path: String in REQUIRED_VISIBLE_SIGNS:
 		var sign: Node = _root.get_node_or_null(sign_path)
-		assert_not_null(sign, "Required beta sign must exist: %s" % sign_path)
+		assert_not_null(sign, "Required store_session sign must exist: %s" % sign_path)
 		if sign != null:
 			assert_true(
 				_is_visible_through_ancestors(sign),
@@ -183,27 +183,27 @@ func test_deferred_and_context_roots_match_runtime_scope() -> void:
 	for root_name: String in REQUIRED_HIDDEN_DEFERRED_ROOTS:
 		var root_key: StringName = StringName(root_name)
 		assert_true(
-			BetaDayOneController.BETA_DEFERRED_ROOT_NODES.has(root_key),
-			"%s must be classified as deferred beta scope" % root_name
+			StoreSessionController.STORE_SESSION_DEFERRED_ROOT_NODES.has(root_key),
+			"%s must be classified as deferred store_session scope" % root_name
 		)
 		assert_false(
-			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(root_key),
-			"%s must not be promoted as a beta-visible root" % root_name
+			StoreSessionController.STORE_SESSION_KEEP_ROOT_NODES.has(root_key),
+			"%s must not be promoted as a store_session-visible root" % root_name
 		)
 		var node: Node = _root.get_node_or_null(root_name)
 		assert_not_null(node, "Deferred full-store root must remain authored: %s" % root_name)
 		if node is Node3D:
 			assert_false(
-				(node as Node3D).visible, "%s must be hidden by beta runtime scope" % root_name
+				(node as Node3D).visible, "%s must be hidden by store_session runtime scope" % root_name
 			)
 	for root_name: String in REQUIRED_CONTEXT_ROOTS:
 		var root_key: StringName = StringName(root_name)
 		assert_true(
-			BetaDayOneController.BETA_CONTEXT_ROOT_NODES.has(root_key),
+			StoreSessionController.STORE_SESSION_CONTEXT_ROOT_NODES.has(root_key),
 			"%s must be classified as retained tutorial context" % root_name
 		)
 		assert_true(
-			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(root_key),
+			StoreSessionController.STORE_SESSION_KEEP_ROOT_NODES.has(root_key),
 			(
 				"%s context must remain visible until the current tutorial no longer needs it"
 				% root_name
@@ -212,20 +212,20 @@ func test_deferred_and_context_roots_match_runtime_scope() -> void:
 
 
 func test_hidden_noise_roots_stay_hidden_and_disabled() -> void:
-	for node_path: String in BetaDayOneController._HIDDEN_NOISE_PATHS:
+	for node_path: String in StoreSessionController._HIDDEN_NOISE_PATHS:
 		var node: Node = _root.get_node_or_null(node_path)
-		assert_not_null(node, "Hidden beta noise root must exist: %s" % node_path)
+		assert_not_null(node, "Hidden store_session noise root must exist: %s" % node_path)
 		if node == null:
 			continue
 		if node is Node3D:
-			assert_false((node as Node3D).visible, "%s must stay hidden in beta" % node_path)
+			assert_false((node as Node3D).visible, "%s must stay hidden in store_session" % node_path)
 		var interactables: Array[Interactable] = []
 		_collect_interactables(node, interactables)
 		for interactable: Interactable in interactables:
 			assert_false(
 				interactable.enabled,
 				(
-					"%s must not leave an enabled Interactable under hidden beta noise"
+					"%s must not leave an enabled Interactable under hidden store_session noise"
 					% _relative_path(interactable)
 				)
 			)
@@ -275,12 +275,12 @@ func test_objective_targets_keep_visible_context_bundles() -> void:
 				)
 
 
-func test_objective_tables_keep_beta_target_paths_and_hidden_clue_non_objective() -> void:
+func test_objective_tables_keep_store_session_target_paths_and_hidden_clue_non_objective() -> void:
 	for target_path: String in OBJECTIVE_TARGET_PATHS:
 		var root_name: String = target_path.get_slice("/", 0)
 		assert_true(
-			BetaDayOneController.BETA_KEEP_ROOT_NODES.has(StringName(root_name)),
-			"%s must stay in the beta keep list" % root_name
+			StoreSessionController.STORE_SESSION_KEEP_ROOT_NODES.has(StringName(root_name)),
+			"%s must stay in the store_session keep list" % root_name
 		)
 		assert_not_null(_root.get_node_or_null(target_path), "%s must exist" % target_path)
 	var seen_paths: Array[String] = []
@@ -292,7 +292,7 @@ func test_objective_tables_keep_beta_target_paths_and_hidden_clue_non_objective(
 			var target_path: String = str(entry.get("target_path", ""))
 			assert_true(
 				OBJECTIVE_TARGET_PATHS.has(target_path),
-				"Objective target must remain one of the beta-critical interactables"
+				"Objective target must remain one of the store_session-critical interactables"
 			)
 			seen_paths.append(target_path)
 	for target_path: String in OBJECTIVE_TARGET_PATHS:
@@ -318,7 +318,7 @@ func test_checkout_and_hidden_clue_roles_do_not_compete_for_e_press() -> void:
 		)
 		if disabled_register != null:
 			assert_false(
-				disabled_register.enabled, "%s must not compete during beta" % disabled_path
+				disabled_register.enabled, "%s must not compete during store_session" % disabled_path
 			)
 	assert_true(_root.get_node_or_null("RegisterArea") is Area3D)
 	var hidden_clue: Interactable = (
@@ -339,22 +339,22 @@ func test_day_one_stage_gating_enables_only_current_target_and_ambient() -> void
 	}
 	var stages: Array[Dictionary] = [
 		{
-			"stage": BetaDayOneController.STAGE_TALK_TO_CUSTOMER,
+			"stage": StoreSessionController.STAGE_TALK_TO_CUSTOMER,
 			"target": "BetaDayOneCustomer/Interactable",
 			"completed": {},
 		},
 		{
-			"stage": BetaDayOneController.STAGE_BACK_ROOM_INVENTORY,
+			"stage": StoreSessionController.STAGE_BACK_ROOM_INVENTORY,
 			"target": "BetaBackroomPickup/Interactable",
 			"completed": {&"talk_to_customer": true},
 		},
 		{
-			"stage": BetaDayOneController.STAGE_STOCK_SHELF,
+			"stage": StoreSessionController.STAGE_STOCK_SHELF,
 			"target": "BetaRestockShelf/Interactable",
 			"completed": {&"talk_to_customer": true, &"back_room_inventory": true},
 		},
 		{
-			"stage": BetaDayOneController.STAGE_END_DAY,
+			"stage": StoreSessionController.STAGE_END_DAY,
 			"target": "BetaDayEndTrigger/Interactable",
 			"completed": completed_for_close,
 		},
@@ -369,19 +369,19 @@ func test_day_one_stage_gating_enables_only_current_target_and_ambient() -> void
 func test_training_stage_gating_enables_only_current_target_and_ambient() -> void:
 	var stages: Array[Dictionary] = [
 		{
-			"stage": BetaDayOneController.STAGE_TRAINING_TALK_MANAGER,
+			"stage": StoreSessionController.STAGE_TRAINING_TALK_MANAGER,
 			"target": "BetaDayOneCustomer/Interactable",
 		},
 		{
-			"stage": BetaDayOneController.STAGE_TRAINING_CHECK_REGISTER,
+			"stage": StoreSessionController.STAGE_TRAINING_CHECK_REGISTER,
 			"target": "BetaDayEndTrigger/Interactable",
 		},
 		{
-			"stage": BetaDayOneController.STAGE_TRAINING_BACK_ROOM,
+			"stage": StoreSessionController.STAGE_TRAINING_BACK_ROOM,
 			"target": "BetaBackroomPickup/Interactable",
 		},
 		{
-			"stage": BetaDayOneController.STAGE_TRAINING_STOCK_SHELF,
+			"stage": StoreSessionController.STAGE_TRAINING_STOCK_SHELF,
 			"target": "BetaRestockShelf/Interactable",
 		},
 	]
@@ -393,12 +393,12 @@ func test_training_stage_gating_enables_only_current_target_and_ambient() -> voi
 func _controller() -> Node:
 	if _root == null:
 		return null
-	return _root.get_node_or_null("BetaDayOneController")
+	return _root.get_node_or_null("StoreSessionController")
 
 
 func _set_controller_stage(stage: StringName, objectives: Array, completed: Dictionary) -> void:
 	var controller: Node = _controller()
-	assert_not_null(controller, "BetaDayOneController must exist")
+	assert_not_null(controller, "StoreSessionController must exist")
 	if controller == null:
 		return
 	controller.set("_objectives", objectives.duplicate(true))

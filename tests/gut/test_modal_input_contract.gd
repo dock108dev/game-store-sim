@@ -2,10 +2,10 @@ extends GutTest
 
 
 const DecisionPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_decision_card_panel.gd"
+	"res://game/scripts/store_session/decision_card_panel.gd"
 )
 const ResultPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_customer_result_panel.gd"
+	"res://game/scripts/store_session/customer_result_panel.gd"
 )
 const CloseDayPanelScene: PackedScene = preload(
 	"res://game/scenes/ui/close_day_confirmation_panel.tscn"
@@ -35,7 +35,7 @@ func after_each() -> void:
 
 
 func test_decision_card_focuses_first_choice_on_open() -> void:
-	var panel: BetaDecisionCardPanel = _add_decision_panel()
+	var panel: DecisionCardPanel = _add_decision_panel()
 
 	panel.show_event(_event_payload())
 	await get_tree().process_frame
@@ -51,7 +51,7 @@ func test_decision_card_focuses_first_choice_on_open() -> void:
 
 
 func test_decision_card_numeric_shortcut_selects_once() -> void:
-	var panel: BetaDecisionCardPanel = _add_decision_panel()
+	var panel: DecisionCardPanel = _add_decision_panel()
 	panel.show_event(_event_payload())
 	await get_tree().process_frame
 	watch_signals(panel)
@@ -67,7 +67,7 @@ func test_decision_card_numeric_shortcut_selects_once() -> void:
 
 
 func test_decision_card_enter_activates_focused_choice() -> void:
-	var panel: BetaDecisionCardPanel = _add_decision_panel()
+	var panel: DecisionCardPanel = _add_decision_panel()
 	panel.show_event(_event_payload())
 	await get_tree().process_frame
 	watch_signals(panel)
@@ -81,7 +81,7 @@ func test_decision_card_enter_activates_focused_choice() -> void:
 
 
 func test_decision_card_escape_does_not_close() -> void:
-	var panel: BetaDecisionCardPanel = _add_decision_panel()
+	var panel: DecisionCardPanel = _add_decision_panel()
 	panel.show_event(_event_payload())
 	await get_tree().process_frame
 	watch_signals(panel)
@@ -96,7 +96,7 @@ func test_decision_card_escape_does_not_close() -> void:
 
 
 func test_decision_card_tab_focus_wraps_inside_choices() -> void:
-	var panel: BetaDecisionCardPanel = _add_decision_panel()
+	var panel: DecisionCardPanel = _add_decision_panel()
 	panel.show_event(_event_payload())
 	await get_tree().process_frame
 	var buttons: Array = panel.get("_choice_buttons") as Array
@@ -206,7 +206,7 @@ func test_close_day_panel_enter_uses_focused_button_once() -> void:
 
 
 func test_close_day_panel_queues_behind_active_decision() -> void:
-	var decision: BetaDecisionCardPanel = _add_decision_panel()
+	var decision: DecisionCardPanel = _add_decision_panel()
 	var close_day: CloseDayConfirmationPanel = _add_close_day_panel()
 	decision.show_event(_event_payload())
 
@@ -225,9 +225,9 @@ func test_close_day_panel_queues_behind_active_decision() -> void:
 	close_day.close()
 
 
-func _add_decision_panel() -> BetaDecisionCardPanel:
-	var panel: BetaDecisionCardPanel = (
-		DecisionPanelScript.new() as BetaDecisionCardPanel
+func _add_decision_panel() -> DecisionCardPanel:
+	var panel: DecisionCardPanel = (
+		DecisionPanelScript.new() as DecisionCardPanel
 	)
 	add_child_autofree(panel)
 	return panel

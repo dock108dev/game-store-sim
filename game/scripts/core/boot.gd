@@ -26,7 +26,7 @@ func initialize() -> void:
 		_show_error(msg)
 		return
 	# Legacy full-roster validation intentionally remains disabled for the
-	# beta's single-store content set: store_ids.size() < 5
+	# store_session's single-store content set: store_ids.size() < 5
 
 	var arc_errors: Array[String] = _validate_arc_unlocks()
 	if not arc_errors.is_empty():

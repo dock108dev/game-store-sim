@@ -52,9 +52,9 @@ func test_enabling_setting_restores_tray_visibility() -> void:
 
 
 func test_gate_does_not_disconnect_event_listeners() -> void:
-	# Hiding the tray must not block the beta suppression hook from
-	# observing the moment_displayed listener — `disable_for_beta()`
-	# still needs to disconnect it in beta runs.
+	# Hiding the tray must not block the store_session suppression hook from
+	# observing the moment_displayed listener — `disable_for_store_session()`
+	# still needs to disconnect it in store_session runs.
 	var tray: MomentsTray = _make_tray()
 	assert_true(
 		EventBus.moment_displayed.is_connected(tray._on_moment_displayed),

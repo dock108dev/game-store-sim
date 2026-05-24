@@ -220,10 +220,10 @@ func test_replay_button_present_in_button_row() -> void:
 	)
 
 
-func test_continue_button_hidden_in_beta() -> void:
+func test_continue_button_hidden_in_store_session() -> void:
 	assert_false(
 		_day_summary._continue_button.visible,
-		"Next Day button must be hidden in single-day beta"
+		"Next Day button must be hidden in single-day store_session"
 	)
 
 

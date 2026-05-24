@@ -367,19 +367,19 @@ func test_non_fp_mode_does_not_route_focused_text_into_rail() -> void:
 	)
 
 
-func test_beta_fp_mode_hides_objective_rail_surface() -> void:
+func test_store_fp_mode_hides_objective_rail_surface() -> void:
 	var rail := _make_rail()
 	_start_day1_after_note_dismiss()
-	assert_true(rail.visible, "Pre-condition: rail visible before beta FP suppression")
-	var beta_controller: Node = Node.new()
-	beta_controller.add_to_group("beta_day_one_controller")
-	add_child_autofree(beta_controller)
+	assert_true(rail.visible, "Pre-condition: rail visible before store_session FP suppression")
+	var store_session_controller: Node = Node.new()
+	store_session_controller.add_to_group("store_session_controller")
+	add_child_autofree(store_session_controller)
 
 	EventBus.fp_mode_changed.emit(true)
 
 	assert_false(
 		rail.visible,
-		"Beta FP mode must hide ObjectiveRail so the right panel is the only checklist"
+		"Store-session FP mode must hide ObjectiveRail so the right panel is the only checklist"
 	)
 
 
@@ -438,7 +438,7 @@ func test_steps_payload_shrink_blanks_out_of_range_slots() -> void:
 
 
 func test_steps_absent_blanks_every_slot() -> void:
-	# A payload that omits the `steps` key entirely (the legacy non-beta
+	# A payload that omits the `steps` key entirely (the legacy non-store_session
 	# render path) must clear every slot — otherwise a later payload with
 	# steps would surface ghost text from the prior multi-step render.
 	var rail := _make_rail()

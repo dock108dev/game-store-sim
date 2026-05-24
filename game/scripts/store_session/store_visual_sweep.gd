@@ -1,146 +1,108 @@
-## Shared manifest and PNG writer for the beta store visual review sweep.
-class_name BetaScreenshotSweep
+## Shared manifest and PNG writer for the store_session store visual review sweep.
+class_name StoreVisualSweep
 extends RefCounted
 
 const ARTIFACT_DIR: String = "user://screenshots/visual_sweep/retro_games_day_one"
 const REVIEW_MANIFEST_FILENAME: String = "review_manifest.json"
 const VIEWPORT_MARGIN_PX: float = 8.0
-const ACCEPTANCE_TARGET: String = "reference_corner_first_run"
-const HUD_CONTEXT_LABEL: String = "Opening Shift — 8:00 AM"
+const ACCEPTANCE_TARGET: String = "first_ten_seconds_route_views"
+const HUD_CONTEXT_LABEL: String = "First Day — 8:00 AM"
 const _MAX_SLUG_LENGTH: int = 64
 
 
-## Returns the normal beta review beats. These are the reference-corner
+## Returns the normal store_session review beats. These are the first-ten-seconds
 ## acceptance target for this phase; broader whole-room checks stay secondary.
 static func rows() -> Array[Dictionary]:
-	return reference_corner_rows()
+	return first_ten_seconds_rows()
 
 
-## Returns phase-specific first-run captures for the checkout/shelf corner.
-static func reference_corner_rows() -> Array[Dictionary]:
+## Returns phase-specific first-run captures for the route views players see first.
+static func first_ten_seconds_rows() -> Array[Dictionary]:
 	return [
 		{
 			"index": 1,
-			"name": "spawn_toward_checkout",
-			"label": "Spawn toward checkout",
-			"filename": "01_spawn_toward_checkout.png",
-			"camera": Vector3(2.2, 1.7, 8.75),
-			"focus": "Checkout/Register/CheckoutSign",
+			"name": "spawn_first_look",
+			"label": "Spawn first look",
+			"filename": "01_spawn_first_look.png",
+			"camera": Vector3(0.0, 1.70, 5.82),
+			"focus": "ExpandableStoreShell/StarterSignLabel",
 			"anchors":
 			[
-				"Checkout",
-				"BetaDayOneCustomer",
-				"BetaDayEndTrigger",
-				"ReadabilityProps/CheckoutCounterDressing",
+				"ExpandableStoreShell/StarterSignLabel",
+				"ExpandableStoreShell/ShelfHeroBacker",
+				"ExpandableStoreShell/SpawnSightlineLeftWallSlatA",
+				"ExpandableStoreShell/SpawnForegroundTradeBin",
 			],
 			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopRegister",
-			"next_destination": "checkout register",
-			"local_action": "walk to the register and read the checkout prompt",
-			"scope": "reference_corner",
+			"next_destination": "manager and checkout register",
+			"local_action": "take in the store identity and walk to the counter",
+			"scope": "first_ten_seconds",
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
 		{
 			"index": 2,
-			"name": "customer_register_spot",
-			"label": "Customer standing spot at register",
-			"filename": "02_customer_register_spot.png",
-			"camera": Vector3(2.8, 1.55, 5.95),
-			"focus": "BetaDayOneCustomer",
+			"name": "checkout_manager_counter",
+			"label": "Checkout and manager counter",
+			"filename": "02_checkout_manager_counter.png",
+			"camera": Vector3(1.36, 1.52, 5.48),
+			"focus": "ExpandableStoreShell/CheckoutReceiptPrinterBase",
 			"anchors":
 			[
-				"FrontLaneQueue",
+				"Checkout/Register",
 				"BetaDayOneCustomer",
-				"ReadabilityProps/CheckoutCounterDressing/CustomerServiceSpotMat",
+				"ExpandableStoreShell/CheckoutFrontLaminatePanel",
+				"ExpandableStoreShell/CheckoutImpulseRack",
+				"ExpandableStoreShell/CheckoutReceiptPrinterBase",
+				"ExpandableStoreShell/CustomerStandHereMat",
 			],
 			"route_anchor": "BetaDayOneCustomer",
-			"next_destination": "practice customer",
-			"local_action": "notice where the customer waits at the register",
-			"scope": "reference_corner",
+			"next_destination": "checkout counter",
+			"local_action": "talk to the manager/register area",
+			"scope": "first_ten_seconds",
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
 		{
 			"index": 3,
-			"name": "behind_side_checkout",
-			"label": "Behind/side checkout",
-			"filename": "03_behind_side_checkout.png",
-			"camera": Vector3(6.35, 1.65, 4.7),
-			"focus": "Checkout/Register/CheckoutDetails",
+			"name": "shelf_wall_product_focus",
+			"label": "Shelf wall product focus",
+			"filename": "03_shelf_wall_product_focus.png",
+			"camera": Vector3(-0.18, 1.58, 0.02),
+			"focus": "ExpandableStoreShell/ShelfHeroCase0104",
 			"anchors":
 			[
-				"Checkout/Register",
-				"Checkout/Register/CustomerWaitPosition",
-				"ReadabilityProps/CheckoutCounterDressing",
-				"ReadabilityProps/ZoneIdentity/ReferenceCornerWallPanel",
+				"BetaRestockShelf",
+				"ExpandableStoreShell/ShelfHeroBacker",
+				"ExpandableStoreShell/ShelfHeroHeaderRail",
+				"ExpandableStoreShell/ShelfEndcapFaceout00",
 			],
-			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopRegister",
-			"next_destination": "checkout register",
-			"local_action": "understand the register-side interaction zone",
-			"scope": "reference_corner",
+			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
+			"next_destination": "restock shelf",
+			"local_action": "read the stocked product wall and shelf target",
+			"scope": "first_ten_seconds",
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
 		{
 			"index": 4,
-			"name": "shelf_ten_feet",
-			"label": "Shelf from roughly 10 feet",
-			"filename": "04_shelf_ten_feet.png",
-			"camera": Vector3(-1.0, 1.75, -3.85),
-			"focus": "ZoneLabels/ShelvesLabel",
+			"name": "stockroom_path_work_area",
+			"label": "Stockroom path work area",
+			"filename": "04_stockroom_path_work_area.png",
+			"camera": Vector3(1.35, 1.58, 1.56),
+			"focus": "BetaBackroomPickup/StockBoxLabel",
 			"anchors":
 			[
-				"CartRackLeft",
-				"BetaRestockShelf",
-				"ReadabilityProps/ShelfSpineRuns",
-				"ReadabilityProps/ProductDisplayRows",
+				"BetaBackroomPickup",
+				"ExpandableStoreShell/StockroomReceivingBacker",
+				"ExpandableStoreShell/StockroomWorkShelf",
+				"ExpandableStoreShell/StockroomWallTaskCard",
+				"ExpandableStoreShell/StockroomHandTruckFrame",
 			],
-			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
-			"next_destination": "restock shelf",
-			"local_action": "walk to the shelf run from the checkout corner",
-			"scope": "reference_corner",
-			"review_target": ACCEPTANCE_TARGET,
-			"hud_context_required": HUD_CONTEXT_LABEL,
-		},
-		{
-			"index": 5,
-			"name": "product_shelf_closeup",
-			"label": "Close-up product shelf",
-			"filename": "05_product_shelf_closeup.png",
-			"camera": Vector3(-0.45, 1.35, -1.55),
-			"focus": "ReadabilityProps/ProductDisplayRows/DungeonDad64_ShelfA",
-			"anchors":
-			[
-				"BetaRestockShelf",
-				"ReadabilityProps/ProductDisplayRows/DungeonDad64_ShelfA",
-				"ReadabilityProps/ProductDisplayRows/SpaceMall3_ShelfA",
-				"ReadabilityProps/ShelfSpineRuns",
-			],
-			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
-			"next_destination": "restock shelf",
-			"local_action": "read the shelf product area and stock target",
-			"scope": "reference_corner",
-			"review_target": ACCEPTANCE_TARGET,
-			"hud_context_required": HUD_CONTEXT_LABEL,
-		},
-		{
-			"index": 6,
-			"name": "checkout_shelf_walk_path",
-			"label": "Walking path between checkout and shelf",
-			"filename": "06_checkout_shelf_walk_path.png",
-			"camera": Vector3(3.45, 1.65, 2.75),
-			"focus": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
-			"anchors":
-			[
-				"Checkout",
-				"BetaRestockShelf",
-				"ReadabilityProps/DayOneRouteMarkers",
-				"ReadabilityProps/ZoneIdentity/ReferenceCornerFloorInset",
-			],
-			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
-			"next_destination": "restock shelf",
-			"local_action": "follow the path from checkout to shelf",
-			"scope": "reference_corner",
+			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopBackroom",
+			"next_destination": "stockroom pickup",
+			"local_action": "walk to the stock box and pickup work area",
+			"scope": "first_ten_seconds",
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -152,7 +114,7 @@ static func full_store_review_context() -> Dictionary:
 	return {
 		"review_target": "full_store_context",
 		"acceptance_role": "secondary_context_only",
-		"notes": "Whole-room context may be reviewed separately; this phase passes or fails on the reference-corner beats.",
+		"notes": "Whole-room context may be reviewed separately; this phase passes or fails on the first-ten-seconds route views.",
 		"beats": _serializable_rows(full_store_rows()),
 	}
 
@@ -253,13 +215,13 @@ static func full_store_rows() -> Array[Dictionary]:
 
 ## Returns the human review checks that must be applied to every sweep image.
 static func review_criteria() -> Array[String]:
-	return reference_corner_review_criteria()
+	return first_ten_seconds_review_criteria()
 
 
-## Returns reference-corner checks reviewers apply to the phase artifacts.
-static func reference_corner_review_criteria() -> Array[String]:
+## Returns first-ten-seconds checks reviewers apply to the phase artifacts.
+static func first_ten_seconds_review_criteria() -> Array[String]:
 	return [
-		"reference-corner legibility",
+		"first-look store identity",
 		"new player can infer the next destination",
 		"new player can infer the local action",
 		"no debug/editor UI",
@@ -267,15 +229,20 @@ static func reference_corner_review_criteria() -> Array[String]:
 		"no misleading unavailable destination",
 		"readable local prompt ownership",
 		"checkout/shelf/queue flow is understandable",
+		"used game store reads without HUD text",
+		"spawn view is not a sparse box",
+		"shelf wall reads stocked",
+		"checkout reads as a service counter",
+		"stockroom path reads as a work area",
 		"walking paths",
 		"cramped/empty balance",
 		"backwards signs",
 		"random cubes/panels",
 		"product alignment",
-		"opening-shift UI state",
-		"Opening Shift — 8:00 AM is visible",
-		"HUD supports rather than fights the reference corner",
-		"deferred surfaces not promoted",
+		"first-day UI state",
+		"First Day — 8:00 AM is visible",
+		"HUD supports rather than fights the route views",
+		"camera-visible density replaces hidden prop count",
 	]
 
 
@@ -393,7 +360,7 @@ static func write_review_manifest(
 		"artifact_dir": ProjectSettings.globalize_path(dir_path),
 		"acceptance_target": ACCEPTANCE_TARGET,
 		"review_criteria": review_criteria(),
-		"reference_corner_review_criteria": reference_corner_review_criteria(),
+		"first_ten_seconds_review_criteria": first_ten_seconds_review_criteria(),
 		"design_failure_criteria": design_failure_criteria(),
 		"first_run_flow_steps": first_run_flow_steps(),
 		"full_store_review_context": full_store_review_context(),

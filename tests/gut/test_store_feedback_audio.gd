@@ -1,4 +1,4 @@
-## Day-1 beta feedback audio coverage.
+## Day-1 store_session feedback audio coverage.
 ##
 ## Uses AudioManager.audio_played as the observable contract so tests do not
 ## depend on AudioServer playback in headless runs.
@@ -31,21 +31,21 @@ func test_customer_interaction_uses_ui_feedback_audio() -> void:
 
 
 func test_backroom_and_stock_feedback_use_distinct_audio_keys() -> void:
-	EventBus.beta_backroom_count_changed.emit(5)
-	EventBus.beta_shelf_count_changed.emit(5)
+	EventBus.store_backroom_count_changed.emit(5)
+	EventBus.store_shelf_count_changed.emit(5)
 	assert_true(
 		_audio_key_seen("ui_click"),
 		"Checking the back-room delivery must emit immediate feedback"
 	)
 	assert_true(
 		_audio_key_seen("item_placement"),
-		"Stocking the beta shelf must reuse the item-placement feedback"
+		"Stocking the store_session shelf must reuse the item-placement feedback"
 	)
 
 
 func test_modal_and_day_close_feedback_are_observable() -> void:
-	EventBus.modal_opened.emit(&"BetaDecisionCardPanel")
-	EventBus.modal_closed.emit(&"BetaDecisionCardPanel")
+	EventBus.modal_opened.emit(&"DecisionCardPanel")
+	EventBus.modal_closed.emit(&"DecisionCardPanel")
 	EventBus.day_close_requested.emit()
 	EventBus.day_close_confirmed.emit()
 	assert_gte(
@@ -59,7 +59,7 @@ func test_modal_and_day_close_feedback_are_observable() -> void:
 
 
 func test_optional_hidden_clue_feedback_is_observable() -> void:
-	EventBus.beta_hidden_clue_inspected.emit(&"day01_backroom_modded_console_hint")
+	EventBus.store_hidden_clue_inspected.emit(&"day01_backroom_modded_console_hint")
 	assert_true(
 		_audio_key_seen("notification_ping"),
 		"Inspecting the optional console stack must emit a subtle acknowledgement"
@@ -70,7 +70,7 @@ func test_objective_completion_feedback_is_observable() -> void:
 	EventBus.objective_completed.emit(&"stock_shelf", "Shelf stocked.")
 	assert_true(
 		_audio_key_seen("notification_ping"),
-		"Completing a beta objective must emit an observable acknowledgement key"
+		"Completing a store_session objective must emit an observable acknowledgement key"
 	)
 
 

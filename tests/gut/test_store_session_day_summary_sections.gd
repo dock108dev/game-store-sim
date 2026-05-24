@@ -1,4 +1,4 @@
-## Section-restructure coverage for BetaDaySummaryPanel.
+## Section-restructure coverage for DaySummaryPanel.
 ##
 ## After the 4-section restructure the panel splits Money, Store
 ## Performance, The Mark, and Reputation/Trust into discrete subtrees;
@@ -8,14 +8,14 @@
 extends GutTest
 
 
-const BetaDaySummaryPanelScript: GDScript = preload(
-	"res://game/scripts/beta/beta_day_summary_panel.gd"
+const DaySummaryPanelScript: GDScript = preload(
+	"res://game/scripts/store_session/day_summary_panel.gd"
 )
 
 
 var _focus: Node
 var _queue: Node
-var _panel: BetaDaySummaryPanel
+var _panel: DaySummaryPanel
 
 
 func before_each() -> void:
@@ -27,7 +27,7 @@ func before_each() -> void:
 		_focus._reset_for_tests()
 	if _queue != null:
 		_queue._reset_for_tests()
-	_panel = BetaDaySummaryPanelScript.new() as BetaDaySummaryPanel
+	_panel = DaySummaryPanelScript.new() as DaySummaryPanel
 	add_child_autofree(_panel)
 
 
@@ -213,14 +213,14 @@ func test_mark_section_hides_hidden_thread_label_when_empty() -> void:
 # ── Reputation section ─────────────────────────────────────────────────────
 
 func test_reputation_section_uses_compact_text_no_progress_bars() -> void:
-	# Defends the "compact text rows — no ProgressBar nodes for beta"
+	# Defends the "compact text rows — no ProgressBar nodes for store_session"
 	# invariant. The panel walks itself looking for any ProgressBar and
 	# fails if it finds one, since the production day-summary's bars are
-	# intentionally absent from the beta surface.
+	# intentionally absent from the store_session surface.
 	_panel.show_summary(_summary_payload())
 	assert_false(
 		_has_progress_bar_descendant(_panel),
-		"Beta day summary must not contain any ProgressBar nodes"
+		"Store-session day summary must not contain any ProgressBar nodes"
 	)
 
 
@@ -332,7 +332,7 @@ func test_main_menu_button_emits_main_menu_pressed_signal() -> void:
 func test_section_headers_use_brand_header_color_and_size() -> void:
 	# Pulls the four section headers out by walking the visible label tree
 	# and verifies they share the warm-gold header color and the documented
-	# 16–18px section size, so a theme tweak in BetaModalTheme propagates
+	# 16–18px section size, so a theme tweak in StoreModalTheme propagates
 	# uniformly and no header drifts to body color.
 	_panel.show_summary(_summary_payload())
 	var expected_titles: Array[String] = [
@@ -344,7 +344,7 @@ func test_section_headers_use_brand_header_color_and_size() -> void:
 			found.append(label.text)
 			var color: Color = label.get_theme_color("font_color")
 			assert_eq(
-				color, BetaModalTheme.COLOR_TEXT_HEADER,
+				color, StoreModalTheme.COLOR_TEXT_HEADER,
 				"Section header '%s' must use COLOR_TEXT_HEADER" % label.text
 			)
 			var size: int = label.get_theme_font_size("font_size")

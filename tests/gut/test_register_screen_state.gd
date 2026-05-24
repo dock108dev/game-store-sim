@@ -2,7 +2,7 @@ extends GutTest
 
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const RegisterScreenStateScript: GDScript = preload(
-	"res://game/scripts/beta/register_screen_state.gd"
+	"res://game/scripts/store_session/register_screen_state.gd"
 )
 
 var _root: Node3D = null
@@ -16,7 +16,7 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
 
@@ -49,7 +49,7 @@ func test_register_screen_state_is_authored_on_checkout_register() -> void:
 
 
 func test_training_register_check_sets_screen_ready_then_backroom_detour() -> void:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	var screen = _screen()
 	if controller == null or screen == null:
 		return
@@ -57,13 +57,13 @@ func test_training_register_check_sets_screen_ready_then_backroom_detour() -> vo
 	assert_eq(String(controller.current_stage()), "training_talk_manager")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_INACTIVE)
 
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_READY)
 	assert_eq(screen.display_text(), "READY")
 
-	controller.on_beta_register_interacted()
+	controller.on_store_register_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)
@@ -72,7 +72,7 @@ func test_training_register_check_sets_screen_ready_then_backroom_detour() -> vo
 
 func test_customer_sale_sets_transaction_then_receipt_state() -> void:
 	await _load_store(true)
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	var screen = _screen()
 	if controller == null or screen == null:
 		return
@@ -80,12 +80,12 @@ func test_customer_sale_sets_transaction_then_receipt_state() -> void:
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_READY)
 
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
 	assert_eq(screen.current_amount(), 0)
 	assert_eq(screen.display_text(), "SALE\nOPEN")
-	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
 	assert_not_null(decision, "Customer interaction must open a decision card")
 	if decision == null:
 		return
@@ -114,14 +114,14 @@ func test_customer_sale_sets_transaction_then_receipt_state() -> void:
 
 func test_customer_no_sale_sets_non_sale_state() -> void:
 	await _load_store(true)
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	var screen = _screen()
 	if controller == null or screen == null:
 		return
 
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
-	var decision: BetaDecisionCardPanel = controller.get("_decision_panel") as BetaDecisionCardPanel
+	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
 	assert_not_null(decision, "Customer interaction must open a decision card")
 	if decision == null:
 		return
@@ -155,8 +155,8 @@ func _load_store(preopening_complete: bool) -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
-	BetaRunState.preopening_complete = preopening_complete
+	StoreSessionState.reset_new_run()
+	StoreSessionState.preopening_complete = preopening_complete
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
 	var scene: PackedScene = load(SCENE_PATH)
@@ -179,7 +179,7 @@ func _screen():
 	return screen
 
 
-func _controller() -> BetaDayOneController:
+func _controller() -> StoreSessionController:
 	if _root == null:
 		return null
-	return _root.get_node_or_null("BetaDayOneController") as BetaDayOneController
+	return _root.get_node_or_null("StoreSessionController") as StoreSessionController

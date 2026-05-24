@@ -163,16 +163,16 @@ func test_reload_clears_dedup_gate_between_test_cases() -> void:
 func test_modal_queue_busy_suppresses_tutorial_context_emission() -> void:
 	# BRAINDUMP §4.4: "letter first, tutorial unlock popup after letter
 	# closes — no tutorial text appears behind the Vic letter." Open a
-	# BetaManagerNotePanel through ModalQueue at VIC_NOTE priority and then
+	# ManagerNotePanel through ModalQueue at VIC_NOTE priority and then
 	# fire a tutorial trigger (store_entered). With ModalQueue.is_busy()
 	# folded into is_tutorial_rendering_allowed(), the emission is
 	# suppressed and the tutorial does not stack on top of the Vic letter.
-	var panel: BetaManagerNotePanel = BetaManagerNotePanel.new()
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)
 	panel.show_note("Sample Vic note body for ModalQueue suppression test.")
 	assert_true(
 		ModalQueue.is_busy(),
-		"BetaManagerNotePanel.show_note must mark the queue as busy"
+		"ManagerNotePanel.show_note must mark the queue as busy"
 	)
 
 	EventBus.store_entered.emit(_STORE_ID)

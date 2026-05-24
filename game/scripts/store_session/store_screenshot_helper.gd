@@ -1,4 +1,4 @@
-## Screenshot capture for the beta validation harness. F10 saves the current
+## Screenshot capture for the store_session validation harness. F10 saves the current
 ## viewport to `user://screenshots/<timestamp>_<scene>.png` for manual review.
 ##
 ## Resolves the OS-specific user dir on first save:
@@ -10,8 +10,8 @@
 ## the on-screen toast so the player knows where the file landed.
 extends CanvasLayer
 
-const _BetaScreenshotSweep: GDScript = preload(
-	"res://game/scripts/beta/beta_screenshot_sweep.gd"
+const _StoreVisualSweep: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
 const SAVE_DIR: String = "user://screenshots"
 const TOAST_DURATION: float = 2.5
@@ -74,7 +74,7 @@ func _process(delta: float) -> void:
 
 func _capture_enabled() -> bool:
 	return OS.is_debug_build() or ProjectSettings.get_setting(
-		"debug/beta_screenshot_capture_enabled",
+		"debug/store_visual_capture_enabled",
 		false
 	)
 
@@ -83,9 +83,9 @@ func _capture_enabled() -> bool:
 func capture_current_viewport(beat_name: String = "") -> Dictionary:
 	var slug: String = _scene_slug()
 	if not beat_name.is_empty():
-		slug = _BetaScreenshotSweep.sanitize_slug(beat_name)
+		slug = _StoreVisualSweep.sanitize_slug(beat_name)
 	var filename: String = "%s_%s.png" % [_timestamp(), slug]
-	var result: Dictionary = _BetaScreenshotSweep.save_viewport_png(
+	var result: Dictionary = _StoreVisualSweep.save_viewport_png(
 		get_viewport(),
 		SAVE_DIR,
 		filename
@@ -119,7 +119,7 @@ func _scene_slug() -> String:
 	var scene: Node = get_tree().current_scene
 	if scene == null:
 		return "scene"
-	return _BetaScreenshotSweep.sanitize_slug(String(scene.name), _SCENE_SLUG_LENGTH)
+	return _StoreVisualSweep.sanitize_slug(String(scene.name), _SCENE_SLUG_LENGTH)
 
 
 func _show_toast(text: String) -> void:

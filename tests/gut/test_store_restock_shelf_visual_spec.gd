@@ -1,4 +1,4 @@
-## Visual-spec contract for the beta restock shelf (Day 1).
+## Visual-spec contract for the store_session restock shelf (Day 1).
 ##
 ## The before/after-stocking read is the core feedback for the chain's
 ## stock_shelf beat: the empty board must clearly say "items belong here"
@@ -23,8 +23,8 @@ var _root: Node3D = null
 
 
 func before_each() -> void:
-	BetaRunState.reset_new_run()
-	BetaRunState.preopening_complete = true
+	StoreSessionState.reset_new_run()
+	StoreSessionState.preopening_complete = true
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load for the visual-spec test")
 	if scene == null:
@@ -37,10 +37,10 @@ func before_each() -> void:
 	await get_tree().process_frame
 	# Day 1 starts directly at the customer beat. Keep this guarded dismiss
 	# only for tests that explicitly switch to a later-day note gate.
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller != null:
-		var panel: BetaManagerNotePanel = (
-			controller.get("_vic_note_panel") as BetaManagerNotePanel
+		var panel: ManagerNotePanel = (
+			controller.get("_vic_note_panel") as ManagerNotePanel
 		)
 		if panel != null and panel.visible:
 			panel.close()
@@ -52,12 +52,12 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 # ── Empty-shelf "before" state: 5 dark slot markers on the ShelfBoard ──────
 
-func test_beta_restock_shelf_authors_five_slot_markers() -> void:
+func test_store_restock_shelf_authors_five_slot_markers() -> void:
 	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
 	assert_not_null(shelf, "BetaRestockShelf must exist under the store root")
 	if shelf == null:
@@ -89,7 +89,7 @@ func test_slot_markers_align_with_spawn_x_positions_on_board_top() -> void:
 			continue
 		assert_almost_eq(
 			marker.position.x, EXPECTED_SLOT_X[i], 0.01,
-			"%s.x must match the BetaShelfItem spawn x (%.2f); got %.2f"
+			"%s.x must match the StoreShelfItem spawn x (%.2f); got %.2f"
 			% [SLOT_MARKER_NAMES[i], EXPECTED_SLOT_X[i], marker.position.x]
 		)
 		assert_gte(
@@ -175,20 +175,20 @@ func test_backroom_pickup_label_names_delivery_quantity() -> void:
 	if label == null:
 		return
 	assert_string_contains(
-		label.text, str(BetaDayOneController._BACKROOM_DELIVERY_QUANTITY),
+		label.text, str(StoreSessionController._BACKROOM_DELIVERY_QUANTITY),
 		"Back-room delivery label must name the available item count"
 	)
 
 
 func test_empty_overlay_hidden_after_stocking() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted(false)
+	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
 	if shelf == null:
@@ -211,11 +211,11 @@ func test_restock_locked_when_not_carrying_stock() -> void:
 	# chain rewire, a save-load gap), the shelf must refuse interaction
 	# and surface the explicit "go to the back room" copy. Force the edge
 	# case directly so the gate is exercised regardless of chain order.
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	controller._stage = controller.STAGE_STOCK_SHELF
-	BetaRunState.carrying_stock = false
+	StoreSessionState.carrying_stock = false
 	assert_false(
 		controller.can_interact_restock(),
 		"can_interact_restock() must return false at STOCK_SHELF when the "
@@ -231,16 +231,16 @@ func test_restock_locked_when_not_carrying_stock() -> void:
 
 
 func test_restock_interaction_without_carrying_stock_is_blocked() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	controller._stage = controller.STAGE_STOCK_SHELF
-	BetaRunState.carrying_stock = false
+	StoreSessionState.carrying_stock = false
 	watch_signals(EventBus)
-	controller.on_beta_restock_interacted(false)
+	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_signal_not_emitted(
-		EventBus, "beta_shelf_count_changed",
+		EventBus, "store_shelf_count_changed",
 		"Restock must not flip shelf count when the player is not carrying stock"
 	)
 	assert_false(
@@ -259,12 +259,12 @@ func test_restock_interaction_without_carrying_stock_is_blocked() -> void:
 
 
 func test_restock_unlocks_after_backroom_pickup() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	assert_true(
 		controller.can_interact_restock(),
@@ -274,7 +274,7 @@ func test_restock_unlocks_after_backroom_pickup() -> void:
 
 
 func test_carrying_stock_shows_shelf_placement_affordance() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	await _walk_to_carrying_stock(controller)
@@ -298,7 +298,7 @@ func test_carrying_stock_shows_shelf_placement_affordance() -> void:
 
 
 func test_restock_places_one_item_per_input_until_delivery_done() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	await _walk_to_carrying_stock(controller)
@@ -306,42 +306,42 @@ func test_restock_places_one_item_per_input_until_delivery_done() -> void:
 	if shelf == null:
 		return
 	watch_signals(EventBus)
-	controller.on_beta_restock_interacted(false)
+	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	assert_eq(_count_beta_shelf_items(shelf), 1, "First placement must fill one shelf slot")
-	assert_true(BetaRunState.carrying_stock, "Carry state must remain while one item is left")
+	assert_eq(_count_store_shelf_items(shelf), 1, "First placement must fill one shelf slot")
+	assert_true(StoreSessionState.carrying_stock, "Carry state must remain while one item is left")
 	assert_false(
 		bool(controller.is_objective_completed(&"stock_shelf")),
 		"Shelf objective must wait for the full placement contract"
 	)
 	_assert_signal_emitted_with_int(
-		"beta_shelf_count_changed",
+		"store_shelf_count_changed",
 		1,
 		"First placement must emit a shelf count matching rendered items"
 	)
-	controller.on_beta_restock_interacted(false)
+	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(
-		_count_beta_shelf_items(shelf),
-		BetaDayOneController._BACKROOM_DELIVERY_QUANTITY,
+		_count_store_shelf_items(shelf),
+		StoreSessionController._BACKROOM_DELIVERY_QUANTITY,
 		"Final placement must render the full delivery"
 	)
-	assert_false(BetaRunState.carrying_stock, "Carry state must clear after final placement")
+	assert_false(StoreSessionState.carrying_stock, "Carry state must clear after final placement")
 	assert_true(
 		bool(controller.is_objective_completed(&"stock_shelf")),
 		"Shelf objective must complete after the final placement"
 	)
-	controller.on_beta_restock_interacted(false)
+	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(
-		_count_beta_shelf_items(shelf),
-		BetaDayOneController._BACKROOM_DELIVERY_QUANTITY,
+		_count_store_shelf_items(shelf),
+		StoreSessionController._BACKROOM_DELIVERY_QUANTITY,
 		"Repeated input after the delivery is stocked must not duplicate shelf visuals"
 	)
 
 
 func test_restock_capacity_limit_places_available_slots_and_reports_backroom_remainder() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
@@ -354,45 +354,45 @@ func test_restock_capacity_limit_places_available_slots_and_reports_backroom_rem
 			marker.free()
 	await _walk_to_carrying_stock(controller)
 	watch_signals(EventBus)
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
-	assert_eq(_count_beta_shelf_items(shelf), 1, "Only the available slot may be filled")
-	assert_false(BetaRunState.carrying_stock, "Carry state must clear when capacity is exhausted")
+	assert_eq(_count_store_shelf_items(shelf), 1, "Only the available slot may be filled")
+	assert_false(StoreSessionState.carrying_stock, "Carry state must clear when capacity is exhausted")
 	assert_true(
 		bool(controller.is_objective_completed(&"stock_shelf")),
 		"Capacity-limited stocking still completes after all available slots fill"
 	)
 	_assert_signal_emitted_with_int(
-		"beta_shelf_count_changed",
+		"store_shelf_count_changed",
 		1,
 		"Capacity-limited placement must emit the rendered shelf count"
 	)
 	_assert_signal_emitted_with_int(
-		"beta_backroom_count_changed",
+		"store_backroom_count_changed",
 		1,
 		"Overflow delivery must remain visible in the back-room count"
 	)
 
 
 func test_restock_visuals_persist_shelf_stock_between_days() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
 	if shelf == null:
 		return
-	assert_gt(_count_beta_shelf_items(shelf), 0, "Pre-condition: shelf is stocked")
-	var stocked_count: int = _count_beta_shelf_items(shelf)
+	assert_gt(_count_store_shelf_items(shelf), 0, "Pre-condition: shelf is stocked")
+	var stocked_count: int = _count_store_shelf_items(shelf)
 	controller._reset_scene_for_day(2)
 	await get_tree().process_frame
 	assert_eq(
-		_count_beta_shelf_items(shelf),
+		_count_store_shelf_items(shelf),
 		stocked_count,
 		"Shelf stock must remain visible across repeatable shift resets"
 	)
@@ -408,22 +408,22 @@ func test_restock_visuals_persist_shelf_stock_between_days() -> void:
 # ── After-stock "after" state: warm amber emission on spawned items ────────
 
 func test_spawned_shelf_items_emit_warm_amber_not_cool_blue() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	# Walk the chain into the stock_shelf stage and run the spawn.
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
 	if shelf == null:
 		return
 	var checked_any: bool = false
 	for child: Node in shelf.get_children():
-		if not String(child.name).begins_with("BetaShelfItem"):
+		if not String(child.name).begins_with("StoreShelfItem"):
 			continue
 		var mesh_node: MeshInstance3D = child as MeshInstance3D
 		if mesh_node == null:
@@ -456,7 +456,7 @@ func test_spawned_shelf_items_emit_warm_amber_not_cool_blue() -> void:
 		checked_any = true
 	assert_true(
 		checked_any,
-		"At least one BetaShelfItem must spawn after stocking the shelf "
+		"At least one StoreShelfItem must spawn after stocking the shelf "
 		+ "so the post-stock visual state has something to verify."
 	)
 
@@ -464,20 +464,20 @@ func test_spawned_shelf_items_emit_warm_amber_not_cool_blue() -> void:
 # ── Spawned items are upright with the wide face toward the player ─────────
 
 func test_spawned_shelf_items_are_upright_with_wide_face_forward() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
 	if shelf == null:
 		return
 	for child: Node in shelf.get_children():
-		if not String(child.name).begins_with("BetaShelfItem"):
+		if not String(child.name).begins_with("StoreShelfItem"):
 			continue
 		var mesh_node: MeshInstance3D = child as MeshInstance3D
 		if mesh_node == null:
@@ -522,15 +522,15 @@ func test_restock_toast_names_the_used_games_shelf() -> void:
 	# interaction prompt's display_name says "used games shelf"; the
 	# notification must name the same destination so the player closes
 	# the loop on a consistent term, not three different phrasings.
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	watch_signals(EventBus)
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 	var emitted_any: bool = false
 	for params: Array in get_signal_parameters_all(
@@ -551,14 +551,14 @@ func test_restock_toast_names_the_used_games_shelf() -> void:
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 
-func _beta_controller() -> Node:
-	return get_tree().get_first_node_in_group("beta_day_one_controller")
+func _store_session_controller() -> Node:
+	return get_tree().get_first_node_in_group("store_session_controller")
 
 
-func _count_beta_shelf_items(shelf: Node) -> int:
+func _count_store_shelf_items(shelf: Node) -> int:
 	var count: int = 0
 	for child: Node in shelf.get_children():
-		if String(child.name).begins_with("BetaShelfItem"):
+		if String(child.name).begins_with("StoreShelfItem"):
 			count += 1
 	return count
 
@@ -566,7 +566,7 @@ func _count_beta_shelf_items(shelf: Node) -> int:
 func _walk_to_carrying_stock(controller: Node) -> void:
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 
 

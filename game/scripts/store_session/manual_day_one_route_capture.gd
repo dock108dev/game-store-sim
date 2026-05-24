@@ -1,11 +1,11 @@
 ## Manifest writer for the manual Day 1 route capture.
-class_name BetaManualDayOneRouteCapture
+class_name ManualDayOneRouteCapture
 extends RefCounted
 
-const _BetaScreenshotSweep: GDScript = preload(
-	"res://game/scripts/beta/beta_screenshot_sweep.gd"
+const _StoreVisualSweep: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
-const _ProofContract: GDScript = preload("res://game/scripts/beta/beta_code_to_screen_proof_contract.gd")
+const _StoreProofContract: GDScript = preload("res://game/scripts/store_session/store_code_to_screen_proof_contract.gd")
 
 const ARTIFACT_DIR: String = "user://screenshots/manual_routes/retro_games_day_one_loop"
 const MANIFEST_FILENAME: String = "route_manifest.json"
@@ -41,7 +41,7 @@ static func route_beats() -> Array[Dictionary]:
 			"talk_to_manager",
 			"Talk to manager",
 			{
-				"header": "OPENING SHIFT",
+				"header": "FIRST DAY",
 				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "0"}
 			},
 			{"shelf": 0, "backroom": 0},
@@ -49,8 +49,8 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 			[
-				"tests/gut/test_beta_day_one_critical_path.gd:307",
-				"tests/gut/test_beta_day_one_critical_path.gd:315",
+				"tests/gut/test_store_session_day_one_critical_path.gd:307",
+				"tests/gut/test_store_session_day_one_critical_path.gd:315",
 			]
 		),
 		_beat(
@@ -63,7 +63,7 @@ static func route_beats() -> Array[Dictionary]:
 			"check_register",
 			"Check register",
 			{
-				"header": "OPENING SHIFT",
+				"header": "FIRST DAY",
 				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "0"}
 			},
 			{"shelf": 0, "backroom": 0},
@@ -71,9 +71,9 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 			[
-				"tests/gut/test_beta_day_one_critical_path.gd:315",
-				"tests/gut/test_beta_day_one_critical_path.gd:316",
-				"tests/gut/test_beta_day_one_critical_path.gd:319",
+				"tests/gut/test_store_session_day_one_critical_path.gd:315",
+				"tests/gut/test_store_session_day_one_critical_path.gd:316",
+				"tests/gut/test_store_session_day_one_critical_path.gd:319",
 			]
 		),
 		_beat(
@@ -86,7 +86,7 @@ static func route_beats() -> Array[Dictionary]:
 			"back_room_inventory",
 			"Check back room inventory",
 			{
-				"header": "OPENING SHIFT",
+				"header": "FIRST DAY",
 				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "4"}
 			},
 			{"shelf": 0, "backroom": 4},
@@ -94,9 +94,9 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 			[
-				"tests/gut/test_beta_day_one_critical_path.gd:321",
-				"tests/gut/test_beta_day_one_critical_path.gd:322",
-				"tests/gut/test_beta_day_one_critical_path.gd:326",
+				"tests/gut/test_store_session_day_one_critical_path.gd:321",
+				"tests/gut/test_store_session_day_one_critical_path.gd:322",
+				"tests/gut/test_store_session_day_one_critical_path.gd:326",
 			]
 		),
 		_beat(
@@ -109,7 +109,7 @@ static func route_beats() -> Array[Dictionary]:
 			"stock_shelf",
 			"Stock used games shelf",
 			{
-				"header": "OPENING SHIFT",
+				"header": "FIRST DAY",
 				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 4", "Stockroom": "4"}
 			},
 			{"shelf": 0, "backroom": 4, "carrying_stock": true},
@@ -117,9 +117,9 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 			[
-				"tests/gut/test_beta_day_one_critical_path.gd:330",
-				"tests/gut/test_beta_day_one_critical_path.gd:336",
-				"tests/gut/test_beta_day_one_critical_path.gd:338",
+				"tests/gut/test_store_session_day_one_critical_path.gd:330",
+				"tests/gut/test_store_session_day_one_critical_path.gd:336",
+				"tests/gut/test_store_session_day_one_critical_path.gd:338",
 			]
 		),
 		_beat(
@@ -140,9 +140,9 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 			[
-				"tests/gut/test_beta_day_one_critical_path.gd:339",
-				"tests/gut/test_beta_day_one_critical_path.gd:342",
-				"tests/gut/test_beta_day_one_critical_path.gd:343",
+				"tests/gut/test_store_session_day_one_critical_path.gd:339",
+				"tests/gut/test_store_session_day_one_critical_path.gd:342",
+				"tests/gut/test_store_session_day_one_critical_path.gd:343",
 			]
 		),
 		_beat(
@@ -163,9 +163,9 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 				[
-					"tests/gut/test_beta_day_one_critical_path.gd:345",
-					"tests/gut/test_beta_day_one_critical_path.gd:346",
-					"tests/gut/test_beta_day_one_critical_path.gd:350",
+					"tests/gut/test_store_session_day_one_critical_path.gd:345",
+					"tests/gut/test_store_session_day_one_critical_path.gd:346",
+					"tests/gut/test_store_session_day_one_critical_path.gd:350",
 				]
 			),
 		_beat(
@@ -186,9 +186,9 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_beta_day_one_critical_path.gd:359",
-					"tests/gut/test_beta_day_one_critical_path.gd:363",
-					"tests/gut/test_beta_day_one_critical_path.gd:366",
+					"tests/gut/test_store_session_day_one_critical_path.gd:359",
+					"tests/gut/test_store_session_day_one_critical_path.gd:363",
+					"tests/gut/test_store_session_day_one_critical_path.gd:366",
 				]
 			),
 		_beat(
@@ -208,11 +208,11 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_beta_day_one_critical_path.gd:373",
-					"tests/gut/test_beta_day_one_critical_path.gd:374",
-					"tests/gut/test_beta_day_one_critical_path.gd:375",
-					"tests/gut/test_beta_day_one_critical_path.gd:395",
-					"tests/gut/test_beta_day_one_critical_path.gd:397",
+					"tests/gut/test_store_session_day_one_critical_path.gd:373",
+					"tests/gut/test_store_session_day_one_critical_path.gd:374",
+					"tests/gut/test_store_session_day_one_critical_path.gd:375",
+					"tests/gut/test_store_session_day_one_critical_path.gd:395",
+					"tests/gut/test_store_session_day_one_critical_path.gd:397",
 				]
 		),
 		_beat(
@@ -232,10 +232,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_beta_day_one_critical_path.gd:402",
-					"tests/gut/test_beta_day_one_critical_path.gd:406",
-					"tests/gut/test_beta_day_one_critical_path.gd:410",
-					"tests/gut/test_beta_day_one_critical_path.gd:416",
+					"tests/gut/test_store_session_day_one_critical_path.gd:402",
+					"tests/gut/test_store_session_day_one_critical_path.gd:406",
+					"tests/gut/test_store_session_day_one_critical_path.gd:410",
+					"tests/gut/test_store_session_day_one_critical_path.gd:416",
 				]
 			),
 		_beat(
@@ -255,10 +255,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_beta_day_one_critical_path.gd:420",
-					"tests/gut/test_beta_day_one_critical_path.gd:421",
-					"tests/gut/test_beta_day_one_critical_path.gd:422",
-					"tests/gut/test_beta_day_one_critical_path.gd:427",
+					"tests/gut/test_store_session_day_one_critical_path.gd:420",
+					"tests/gut/test_store_session_day_one_critical_path.gd:421",
+					"tests/gut/test_store_session_day_one_critical_path.gd:422",
+					"tests/gut/test_store_session_day_one_critical_path.gd:427",
 				]
 			),
 		_beat(
@@ -290,16 +290,16 @@ static func route_beats() -> Array[Dictionary]:
 				"backroom_inventory": 1,
 			},
 				[
-					"tests/gut/test_beta_day_one_critical_path.gd:437",
-					"tests/gut/test_beta_day_one_critical_path.gd:439",
-					"tests/gut/test_beta_day_one_critical_path.gd:443",
-					"tests/gut/test_beta_day_one_critical_path.gd:447",
-					"tests/gut/test_beta_day_one_critical_path.gd:451",
-					"tests/gut/test_beta_day_one_critical_path.gd:455",
-					"tests/gut/test_beta_day_one_critical_path.gd:458",
-					"tests/gut/test_beta_day_one_critical_path.gd:464",
-					"tests/gut/test_beta_day_one_critical_path.gd:499",
-					"tests/gut/test_beta_day_one_critical_path.gd:507",
+					"tests/gut/test_store_session_day_one_critical_path.gd:437",
+					"tests/gut/test_store_session_day_one_critical_path.gd:439",
+					"tests/gut/test_store_session_day_one_critical_path.gd:443",
+					"tests/gut/test_store_session_day_one_critical_path.gd:447",
+					"tests/gut/test_store_session_day_one_critical_path.gd:451",
+					"tests/gut/test_store_session_day_one_critical_path.gd:455",
+					"tests/gut/test_store_session_day_one_critical_path.gd:458",
+					"tests/gut/test_store_session_day_one_critical_path.gd:464",
+					"tests/gut/test_store_session_day_one_critical_path.gd:499",
+					"tests/gut/test_store_session_day_one_critical_path.gd:507",
 				]
 			),
 	]
@@ -313,7 +313,7 @@ static func build_manifest(
 	var resolved_run_id: String = run_id
 	if resolved_run_id.is_empty():
 		resolved_run_id = "%s_day1_loop" % _timestamp()
-	resolved_run_id = _BetaScreenshotSweep.sanitize_slug(resolved_run_id)
+	resolved_run_id = _StoreVisualSweep.sanitize_slug(resolved_run_id)
 	var run_dir: String = "%s/%s" % [dir_path, resolved_run_id]
 	return {
 		"schema_version": SCHEMA_VERSION,
@@ -327,11 +327,11 @@ static func build_manifest(
 			"%s/%s" % [run_dir, MANUAL_REVIEW_FILENAME]
 		),
 		"capture_helper": {
-			"script": "res://game/scripts/beta/beta_screenshot_helper.gd",
+			"script": "res://game/scripts/store_session/store_screenshot_helper.gd",
 			"method": "capture_current_viewport",
 			"argument_field": "capture_beat_name",
 		},
-		"code_to_screen_contract": _ProofContract.contract_metadata(),
+		"code_to_screen_contract": _StoreProofContract.contract_metadata(),
 		"canonical_customer_choice": {
 			"event_id": "day01_wrong_console_parent",
 			"choice_id": "clean_exchange",
@@ -363,7 +363,7 @@ static func write_route_manifest(
 		"%s/%s" % [run_dir, CAPTURE_DIR_NAME],
 		"%s/%s" % [run_dir, SNAPSHOT_DIR_NAME],
 	]:
-		var dir_result: Dictionary = _BetaScreenshotSweep.ensure_artifact_dir(path)
+		var dir_result: Dictionary = _StoreVisualSweep.ensure_artifact_dir(path)
 		if not bool(dir_result.get("ok", false)):
 			return dir_result
 
@@ -421,7 +421,7 @@ static func _beat(
 		"summary_values": summary_values,
 		"automated_route_assertions": automated_assertions,
 	}
-	beat["code_to_screen_proof"] = _ProofContract.proof_from_route_beat(beat)
+	beat["code_to_screen_proof"] = _StoreProofContract.proof_from_route_beat(beat)
 	return beat
 
 static func _beats_with_capture_results(
@@ -474,7 +474,7 @@ static func _write_manual_review(run_dir: String, manifest: Dictionary) -> Dicti
 		lines.append("  - Capture: `%s`" % str(beat.get("capture_helper_call", "")))
 		lines.append("  - Expected stage: `%s`" % str(beat.get("expected_stage", "")))
 		lines.append("  - Expected prompt: `%s`" % str(beat.get("active_prompt", "")))
-		for field: String in _ProofContract.REQUIRED_FIELDS:
+		for field: String in _StoreProofContract.REQUIRED_FIELDS:
 			lines.append(
 				"  - %s: %s"
 				% [field.capitalize().replace("_", " "), str((beat.get("code_to_screen_proof", {}) as Dictionary).get(field, ""))]
@@ -488,7 +488,7 @@ static func _write_manual_review(run_dir: String, manifest: Dictionary) -> Dicti
 	}
 
 static func _run_dir(dir_path: String, run_id: String) -> String:
-	return "%s/%s" % [dir_path, _BetaScreenshotSweep.sanitize_slug(run_id)]
+	return "%s/%s" % [dir_path, _StoreVisualSweep.sanitize_slug(run_id)]
 
 static func _timestamp() -> String:
 	var d: Dictionary = Time.get_datetime_dict_from_system()

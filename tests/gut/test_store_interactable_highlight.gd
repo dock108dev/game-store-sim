@@ -1,8 +1,8 @@
-## Beta Day-1 interactable highlight contract.
+## Store session day-1 interactable highlight contract.
 ##
 ## The hover outline is the player's single visual signal that an in-world
 ## object is interactable. The contract for Day-1 is:
-##   * Every beta interactable shares one outline color and width — there is
+##   * Every store_session interactable shares one outline color and width — there is
 ##     no per-class custom highlight style. A consistent rim across the
 ##     customer, back-room pickup, restock shelf, day-end trigger, and hidden
 ##     clue is what teaches "this can be pressed".
@@ -14,12 +14,12 @@
 ##     stays a no-op safe pure visual call (defense in depth).
 extends GutTest
 
-const _BETA_INTERACTABLE_SCRIPTS: Array[GDScript] = [
-	preload("res://game/scripts/beta/beta_day1_customer_interactable.gd"),
-	preload("res://game/scripts/beta/beta_backroom_pickup_interactable.gd"),
-	preload("res://game/scripts/beta/beta_restock_interactable.gd"),
-	preload("res://game/scripts/beta/beta_day_end_trigger_interactable.gd"),
-	preload("res://game/scripts/beta/beta_hidden_clue_interactable.gd"),
+const _STORE_SESSION_INTERACTABLE_SCRIPTS: Array[GDScript] = [
+	preload("res://game/scripts/store_session/first_day_customer_interactable.gd"),
+	preload("res://game/scripts/store_session/stockroom_pickup_interactable.gd"),
+	preload("res://game/scripts/store_session/restock_interactable.gd"),
+	preload("res://game/scripts/store_session/day_end_trigger_interactable.gd"),
+	preload("res://game/scripts/store_session/hidden_clue_interactable.gd"),
 ]
 
 
@@ -30,12 +30,12 @@ func _build(script: GDScript) -> Interactable:
 	return node
 
 
-func test_all_beta_interactables_share_the_default_highlight_color() -> void:
-	# AC: "same color across all 5 beta Day 1 interactables — no per-class
+func test_all_store_session_interactables_share_the_default_highlight_color() -> void:
+	# AC: "same color across all 5 store_session Day 1 interactables — no per-class
 	# custom highlight styles." Verified by asserting each subclass leaves
 	# `highlight_color` at the base default rather than overriding it.
 	var expected: Color = Color(1.0, 0.95, 0.85, 0.7)
-	for script: GDScript in _BETA_INTERACTABLE_SCRIPTS:
+	for script: GDScript in _STORE_SESSION_INTERACTABLE_SCRIPTS:
 		var node: Interactable = _build(script)
 		assert_eq(
 			node.highlight_color,
@@ -44,8 +44,8 @@ func test_all_beta_interactables_share_the_default_highlight_color() -> void:
 		)
 
 
-func test_all_beta_interactables_share_the_default_outline_width() -> void:
-	for script: GDScript in _BETA_INTERACTABLE_SCRIPTS:
+func test_all_store_session_interactables_share_the_default_outline_width() -> void:
+	for script: GDScript in _STORE_SESSION_INTERACTABLE_SCRIPTS:
 		var node: Interactable = _build(script)
 		assert_eq(
 			node.highlight_outline_width,
@@ -57,8 +57,8 @@ func test_all_beta_interactables_share_the_default_outline_width() -> void:
 func test_highlight_idempotent_does_not_flicker() -> void:
 	# AC: "if the InteractionRay hovers the same target across multiple
 	# frames, the outline is stable (no per-frame toggle)." Each
-	# beta interactable must stay highlight-active across repeated calls.
-	for script: GDScript in _BETA_INTERACTABLE_SCRIPTS:
+	# store_session interactable must stay highlight-active across repeated calls.
+	for script: GDScript in _STORE_SESSION_INTERACTABLE_SCRIPTS:
 		var node: Interactable = _build(script)
 		var mesh: MeshInstance3D = MeshInstance3D.new()
 		mesh.mesh = BoxMesh.new()
@@ -84,7 +84,7 @@ func test_highlight_idempotent_does_not_flicker() -> void:
 func test_unhighlight_restores_original_material() -> void:
 	# AC: "look away → outline gone." The unhighlight path must restore the
 	# pre-hover material so the outline does not linger after the ray clears.
-	for script: GDScript in _BETA_INTERACTABLE_SCRIPTS:
+	for script: GDScript in _STORE_SESSION_INTERACTABLE_SCRIPTS:
 		var node: Interactable = _build(script)
 		var mesh: MeshInstance3D = MeshInstance3D.new()
 		mesh.mesh = BoxMesh.new()

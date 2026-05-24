@@ -74,7 +74,7 @@ signal item_lost(item_id: String, reason: String)
 ## customer return, broken-on-arrival). Drives angry_return_customer spawn gate.
 signal defective_sale_occurred(item_id: String, reason: String)
 ## Emitted when an item enters the damaged bin so listeners can update the
-## bin UI and inventory variance accounting. The post-strip-to-bones beta
+## bin UI and inventory variance accounting. The post-strip-to-bones store_session
 ## has no live emitter (ReturnsSystem was deleted); `LedgerSystem` and
 ## `HiddenThreadSystemSingleton` listen and `tests/unit/test_hidden_thread_system.gd`
 ## exercises the listener contract by emitting this directly.
@@ -520,25 +520,25 @@ signal modal_closed(modal_id: StringName)
 ## not starts — is doctrinal: per BRAINDUMP, echoing the active rail label
 ## into the log on objective-start is the canonical 'Bad' pattern.
 signal objective_completed(objective_id: StringName, label: String)
-## §F-L2 — Beta day-1 carry/shelf state. Driven by `BetaDayOneController` so
+## §F-L2 — Store session day-1 carry/shelf state. Driven by `StoreSessionController` so
 ## the FP HUD can surface "Carrying: X" and override the "On Shelves: N"
 ## counter without poking InventorySystem. Empty `text` clears the carry
 ## label; `count` is the literal display value.
-signal beta_carry_changed(text: String)
-signal beta_shelf_count_changed(count: int)
-## Companion to `beta_shelf_count_changed`: drives the FP HUD's "Back Room"
+signal store_carry_changed(text: String)
+signal store_shelf_count_changed(count: int)
+## Companion to `store_shelf_count_changed`: drives the FP HUD's "Back Room"
 ## counter so the back-room delivery quantity is visible at the same tier
 ## as on-shelf stock. The Day-1 chain emits `count = 5` on backroom pickup
 ## and `count = 0` after the player stocks the shelf (the on-shelves
 ## counter ticks in the opposite direction on the same beat).
-signal beta_backroom_count_changed(count: int)
+signal store_backroom_count_changed(count: int)
 ## Emitted when the optional Day-1 console-stack flavor object is inspected.
-signal beta_hidden_clue_inspected(clue_id: StringName)
-## Emitted by `BetaDayOneController` when one of the day-1 chain
+signal store_hidden_clue_inspected(clue_id: StringName)
+## Emitted by `StoreSessionController` when one of the day-1 chain
 ## objectives is marked complete. Lets the Today checklist mark the
 ## item with a checkmark and collapse it without coupling the checklist
 ## to the controller's private state.
-signal beta_objective_completed(objective_id: StringName)
+signal store_objective_completed(objective_id: StringName)
 signal panel_opened(panel_name: String)
 signal panel_closed(panel_name: String)
 ## Emitted by ObjectiveDirector whenever the three-slot objective display should update.

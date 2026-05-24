@@ -79,14 +79,14 @@ func test_inventory_state_resets_to_definition_defaults() -> void:
 
 func test_initializes_one_state_per_definition() -> void:
 	var alpha: PlatformDefinition = _make_definition(&"alpha", 5)
-	var beta: PlatformDefinition = _make_definition(&"beta", 1)
-	PlatformSystem._set_catalog_for_testing([alpha, beta])
+	var store_session: PlatformDefinition = _make_definition(&"store_session", 1)
+	PlatformSystem._set_catalog_for_testing([alpha, store_session])
 	var ids: Array[StringName] = PlatformSystem.get_all_platform_ids()
 	assert_eq(ids.size(), 2)
 	assert_true(ids.has(&"alpha"))
-	assert_true(ids.has(&"beta"))
-	# Beta starts in shortage because initial_stock < shortage_threshold.
-	assert_true(PlatformSystem.is_shortage(&"beta"))
+	assert_true(ids.has(&"store_session"))
+	# Store session starts in shortage because initial_stock < shortage_threshold.
+	assert_true(PlatformSystem.is_shortage(&"store_session"))
 	assert_false(PlatformSystem.is_shortage(&"alpha"))
 
 

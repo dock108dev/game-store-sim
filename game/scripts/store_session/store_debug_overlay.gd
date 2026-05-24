@@ -1,11 +1,11 @@
-## Beta debug overlay — compact telemetry panel for the Day-1 critical path.
+## Store debug overlay — compact telemetry panel for the Day-1 critical path.
 ##
 ## Three states cycled via F2: HIDDEN → COMPACT → EXPANDED → HIDDEN. Default
-## is HIDDEN so the playable beta is not dominated by debug text. COMPACT
+## is HIDDEN so the playable store_session is not dominated by debug text. COMPACT
 ## shows a fixed 7-line summary (scene / input / modal / day-state /
 ## objective / hovered / distance) — that is enough to diagnose the
 ## prompt-alignment, focus-stack, and stage-gating issues we hit during
-## beta polish without covering the viewport. EXPANDED appends the full
+## store_session polish without covering the viewport. EXPANDED appends the full
 ## per-interactable list (enabled state + distance) for deeper digging.
 extends CanvasLayer
 
@@ -13,7 +13,7 @@ enum DisplayMode { HIDDEN, COMPACT, EXPANDED }
 
 const REFRESH_INTERVAL: float = 0.15
 const DEBUG_UI_SETTING: String = "debug/ui_enabled"
-const BETA_DIAGNOSTICS_SETTING: String = "debug/beta_diagnostics_enabled"
+const STORE_DIAGNOSTICS_SETTING: String = "debug/store_session_diagnostics_enabled"
 const SCREENSHOT_MODE_SETTING: String = "mallcore/test/screenshot_mode"
 
 const _MODE_LABEL := {
@@ -58,7 +58,7 @@ func _ready() -> void:
 
 	_label = Label.new()
 	_label.add_theme_font_size_override("font_size", 12)
-	_label.text = "[BetaDebug] booting..."
+	_label.text = "[StoreDebug] booting..."
 	_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	margin.add_child(_label)
 
@@ -81,20 +81,20 @@ func _input(event: InputEvent) -> void:
 
 ## Prints the FSM snapshot to stdout in a single block so a regression
 ## report can paste console output instead of guessing from the overlay.
-## The snapshot itself comes from BetaDayOneController.get_state_snapshot
+## The snapshot itself comes from StoreSessionController.get_state_snapshot
 ## so the overlay and the dump always agree on what state we think we're
 ## in.
 func _dump_state_to_console() -> void:
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	if controller == null or not controller.has_method("get_state_snapshot"):
-		print("[BetaDebug] F8 dump — no beta controller in scene")
+		print("[StoreDebug] F8 dump — no store_session controller in scene")
 		return
 	var snap: Dictionary = controller.call("get_state_snapshot")
 	var ray: Node = _resolve_interaction_ray()
 	var ray_dbg: Dictionary = {}
 	if ray != null and ray.has_method("get_targeting_debug"):
 		ray_dbg = ray.call("get_targeting_debug")
-	print("---- [BetaDebug] F8 state dump ----")
+	print("---- [StoreDebug] F8 state dump ----")
 	print("Day: %d  Time: %s  Stage: %s" % [
 		int(snap.get("day", 0)),
 		_format_time_minutes(float(snap.get("time_minutes", -1.0))),
@@ -159,7 +159,7 @@ func _diagnostics_enabled() -> bool:
 		not bool(ProjectSettings.get_setting(SCREENSHOT_MODE_SETTING, false))
 		and (
 			bool(ProjectSettings.get_setting(DEBUG_UI_SETTING, false))
-			or bool(ProjectSettings.get_setting(BETA_DIAGNOSTICS_SETTING, false))
+			or bool(ProjectSettings.get_setting(STORE_DIAGNOSTICS_SETTING, false))
 		)
 	)
 
@@ -179,11 +179,11 @@ func _apply_mode() -> void:
 
 func _build_debug_text() -> String:
 	var lines: PackedStringArray = []
-	lines.append("[BetaDebug] %s — F2 cycles" % _MODE_LABEL[_mode])
+	lines.append("[StoreDebug] %s — F2 cycles" % _MODE_LABEL[_mode])
 	lines.append("Scene: %s" % _current_scene_name())
 	lines.append("Input: %s | Modal: %s" % [_input_focus_text(), _modal_text()])
 
-	var controller: Node = _beta_controller()
+	var controller: Node = _store_session_controller()
 	var stage_text: String = "—"
 	var event_text: String = "—"
 	if controller != null:
@@ -225,11 +225,11 @@ func _build_debug_text() -> String:
 	if _mode == DisplayMode.EXPANDED:
 		lines.append("")
 		lines.append("Day:%d Cash:$%d Rep:%d Trust:%d Hidden:%d" % [
-			BetaRunState.day,
-			BetaRunState.cash,
-			BetaRunState.reputation,
-			BetaRunState.manager_trust,
-			BetaRunState.hidden_thread_score,
+			StoreSessionState.day,
+			StoreSessionState.cash,
+			StoreSessionState.reputation,
+			StoreSessionState.manager_trust,
+			StoreSessionState.hidden_thread_score,
 		])
 		lines.append("")
 		lines.append("Interactables (state / dist):")
@@ -324,21 +324,21 @@ func _mouse_capture_text() -> String:
 
 
 func _modal_text() -> String:
-	match BetaRunState.input_mode:
-		BetaRunState.INPUT_MODE_GAMEPLAY:
+	match StoreSessionState.input_mode:
+		StoreSessionState.INPUT_MODE_GAMEPLAY:
 			return "none"
-		BetaRunState.INPUT_MODE_DECISION_CARD:
+		StoreSessionState.INPUT_MODE_DECISION_CARD:
 			return "decision_card"
-		BetaRunState.INPUT_MODE_PAUSE_MENU:
+		StoreSessionState.INPUT_MODE_PAUSE_MENU:
 			return "pause_menu"
-		BetaRunState.INPUT_MODE_DAY_SUMMARY:
+		StoreSessionState.INPUT_MODE_DAY_SUMMARY:
 			return "day_summary"
 		_:
-			return "unknown(%d)" % BetaRunState.input_mode
+			return "unknown(%d)" % StoreSessionState.input_mode
 
 
-func _beta_controller() -> Node:
-	var nodes: Array[Node] = get_tree().get_nodes_in_group("beta_day_one_controller")
+func _store_session_controller() -> Node:
+	var nodes: Array[Node] = get_tree().get_nodes_in_group("store_session_controller")
 	if nodes.is_empty():
 		return null
 	return nodes[0]

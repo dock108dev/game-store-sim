@@ -9,7 +9,7 @@ var _root: Node3D = null
 
 
 func before_all() -> void:
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "Retro Games scene should load")
 	_root = scene.instantiate() as Node3D
@@ -20,7 +20,7 @@ func after_all() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 func test_root_navigation_and_required_children_exist() -> void:
@@ -144,8 +144,8 @@ func test_checkout_register_node_is_disabled() -> void:
 		)
 
 
-func test_initial_beta_boot_does_not_enable_register_actions() -> void:
-	# The beta controller owns the Day-1 interaction gate. The scene now boots
+func test_initial_store_session_boot_does_not_enable_register_actions() -> void:
+	# The store_session controller owns the Day-1 interaction gate. The scene now boots
 	# through the pre-opening manager beat before any register action is live,
 	# so register-type interactables must exist but stay disabled until the
 	# active objective moves to a register beat.
@@ -158,7 +158,7 @@ func test_initial_beta_boot_does_not_enable_register_actions() -> void:
 	assert_eq(
 		parents,
 		[] as Array[String],
-		"Initial beta boot must not expose register actions; got: %s" % str(parents)
+		"Initial store_session boot must not expose register actions; got: %s" % str(parents)
 	)
 
 

@@ -137,14 +137,14 @@ func _on_manager_note_shown(
 
 
 func _resolve_current_day() -> int:
-	# Beta runs: BetaRunState is the authoritative day counter (initialized to
+	# Store session runs: StoreSessionState is the authoritative day counter (initialized to
 	# 1 on new game). Prefer it when present; falls back to GameState for any
-	# non-beta path.
-	var beta: Node = get_node_or_null("/root/BetaRunState")
-	if beta != null and "day" in beta:
-		var beta_raw: Variant = beta.get("day")
-		if typeof(beta_raw) == TYPE_INT and int(beta_raw) > 0:
-			return int(beta_raw)
+	# non-store_session path.
+	var store_session: Node = get_node_or_null("/root/StoreSessionState")
+	if store_session != null and "day" in store_session:
+		var store_session_raw: Variant = store_session.get("day")
+		if typeof(store_session_raw) == TYPE_INT and int(store_session_raw) > 0:
+			return int(store_session_raw)
 	var state: Node = get_node_or_null("/root/GameState")
 	if state != null and "day" in state:
 		var raw: Variant = state.get("day")

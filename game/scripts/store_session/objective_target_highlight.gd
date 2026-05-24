@@ -10,8 +10,8 @@
 ## without strobing, and hides under `InputFocus.CTX_MODAL` so it does not
 ## fight with the day-summary / decision / morning-note panels.
 ##
-## Owned by `BetaDayOneController._ensure_panels`. Not an autoload.
-class_name BetaObjectiveTargetHighlight
+## Owned by `StoreSessionController._ensure_panels`. Not an autoload.
+class_name StoreObjectiveTargetHighlight
 extends CanvasLayer
 
 ## CanvasLayer ordering — below ObjectiveRail (40) and ModalDimOverlay (49)
@@ -38,7 +38,7 @@ const _CHIP_BG: Color = Color(0.05, 0.07, 0.05, 0.85)
 
 ## Compatibility fallback for isolated tests without the real controller
 ## objective table. Production target paths and offsets come from
-## `BetaDayOneController.active_objective_*`.
+## `StoreSessionController.active_objective_*`.
 const STAGE_TARGETS: Dictionary = {
 	&"training_talk_manager": ["BetaDayOneCustomer", 1.9],
 	&"training_check_register": ["BetaDayEndTrigger", 0.6],
@@ -59,7 +59,7 @@ var _pulse_tween: Tween = null
 
 
 func _ready() -> void:
-	add_to_group("beta_objective_target_highlight")
+	add_to_group("store_objective_target_highlight")
 	layer = LAYER_INDEX
 	_build_chip()
 	_apply_visibility()
@@ -187,7 +187,7 @@ func _stage_target_is_actionable(stage: StringName, controller: Node) -> bool:
 		return true
 	if controller != null and controller.has_method("can_interact_restock"):
 		return bool(controller.call("can_interact_restock"))
-	return BetaRunState.carrying_stock
+	return StoreSessionState.carrying_stock
 
 
 func _controller_target_node_path(stage: StringName, controller: Node) -> String:
@@ -232,7 +232,7 @@ func _resolve_controller() -> Node:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return null
-	var node: Node = tree.get_first_node_in_group("beta_day_one_controller")
+	var node: Node = tree.get_first_node_in_group("store_session_controller")
 	if node == null:
 		return null
 	if not node.has_method("current_stage"):
@@ -266,7 +266,7 @@ func is_pulse_active() -> bool:
 
 
 ## Test seam — drives the stage→target resolution path without going through
-## EventBus, so fixtures that don't own a real BetaDayOneController can
+## EventBus, so fixtures that don't own a real StoreSessionController can
 ## still verify the mapping.
 func set_active_stage_for_test(stage: StringName, store_root: Node) -> void:
 	if not _stage_target_is_actionable(stage, null):

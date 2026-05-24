@@ -85,7 +85,7 @@ const _COUNTER_PULSE_DURATION: float = PanelAnimator.FEEDBACK_PULSE_DURATION
 ## FP-mode primary readout typography is authored in `hud.tscn` on the
 ## static `FPCashLabel` / `FPTimeLabel` nodes (18 px, full white). The
 ## secondary stat cluster the previous reparenting model styled is gone —
-## `BetaRightPanel` now owns shelves / back-room / customers / sold-today.
+## `StoreStatusPanel` now owns shelves / back-room / customers / sold-today.
 
 ## Day-1 onboarding zero-state hint copy. Condition A (empty shelves) wins
 ## over Condition B (no customers): with no stock the player can't attract
@@ -141,7 +141,7 @@ var _counter_color_tweens: Dictionary = {}
 # First-person HUD mode — set via `set_fp_mode(true)` by `StorePlayerBody._ready`.
 # When enabled, the heavy `TopBar` HBoxContainer is hidden and the static
 # `FPCashLabel` / `FPTimeLabel` nodes anchored top-left/top-center (authored in
-# `hud.tscn`) carry the primary cash/time readout. `BetaRightPanel` owns the
+# `hud.tscn`) carry the primary cash/time readout. `StoreStatusPanel` owns the
 # secondary stat block (on-shelves, back-room, customers, sold-today). A
 # bottom-right F4 key-hint label exposes the close-day affordance without
 # the TopBar button.
@@ -154,14 +154,14 @@ var _fp_close_day_hint: Label
 ## fulfill the BRAINDUMP "bottom-bar = sentence + control hint" spec.
 var _fp_sentence_label: Label
 ## §F-L3 — When set, overrides the InventorySystem-derived "On Shelves"
-## count for the beta day-1 loop. -1 means "no override; read from
-## inventory as usual." Set via `EventBus.beta_shelf_count_changed`.
-var _beta_shelf_count_override: int = -1
-## Beta day-1 back-room delivery quantity, mirrored from
-## `EventBus.beta_backroom_count_changed`. Has no InventorySystem backing —
+## count for the store_session day-1 loop. -1 means "no override; read from
+## inventory as usual." Set via `EventBus.store_shelf_count_changed`.
+var _store_shelf_count_override: int = -1
+## Store session day-1 back-room delivery quantity, mirrored from
+## `EventBus.store_backroom_count_changed`. Has no InventorySystem backing —
 ## the Day-1 chain is the single writer — so a plain int suffices instead of
-## the override sentinel pattern used for `_beta_shelf_count_override`.
-var _beta_backroom_count: int = 0
+## the override sentinel pattern used for `_store_shelf_count_override`.
+var _store_backroom_count: int = 0
 
 @onready var _top_bar: HBoxContainer = $TopBar
 @onready var _cash_label: Label = $TopBar/CashLabel
@@ -186,8 +186,8 @@ var _beta_backroom_count: int = 0
 ## §F-L2 — Carry-state label lives on its own CanvasLayer (layer 41) so it
 ## renders above the ObjectiveRail (layer 40); a child Label of the HUD
 ## CanvasLayer (layer 30) was occluded by the rail.
-@onready var _beta_carry_label: Label = $CarryHUD/BetaCarryLabel
-@onready var _beta_carry_icon: ColorRect = $CarryHUD/BetaCarryIcon
+@onready var _store_carry_label: Label = $CarryHUD/BetaCarryLabel
+@onready var _store_carry_icon: ColorRect = $CarryHUD/BetaCarryIcon
 
 
 func _ready() -> void:
@@ -256,12 +256,12 @@ func _connect_signals() -> void:
 		EventBus.store_exited.connect(_on_store_exited_hub)
 	if not EventBus.inventory_changed.is_connected(_on_inventory_changed):
 		EventBus.inventory_changed.connect(_on_inventory_changed)
-	if not EventBus.beta_carry_changed.is_connected(_on_beta_carry_changed):
-		EventBus.beta_carry_changed.connect(_on_beta_carry_changed)
-	if not EventBus.beta_shelf_count_changed.is_connected(_on_beta_shelf_count_changed):
-		EventBus.beta_shelf_count_changed.connect(_on_beta_shelf_count_changed)
-	if not EventBus.beta_backroom_count_changed.is_connected(_on_beta_backroom_count_changed):
-		EventBus.beta_backroom_count_changed.connect(_on_beta_backroom_count_changed)
+	if not EventBus.store_carry_changed.is_connected(_on_store_carry_changed):
+		EventBus.store_carry_changed.connect(_on_store_carry_changed)
+	if not EventBus.store_shelf_count_changed.is_connected(_on_store_shelf_count_changed):
+		EventBus.store_shelf_count_changed.connect(_on_store_shelf_count_changed)
+	if not EventBus.store_backroom_count_changed.is_connected(_on_store_backroom_count_changed):
+		EventBus.store_backroom_count_changed.connect(_on_store_backroom_count_changed)
 	if not EventBus.customer_purchased.is_connected(_on_customer_purchased_hud):
 		EventBus.customer_purchased.connect(_on_customer_purchased_hud)
 	if not EventBus.item_sold.is_connected(_on_item_sold):
@@ -416,22 +416,22 @@ func _on_close_day_pressed() -> void:
 	var state := GameManager.current_state
 	if state != GameManager.State.STORE_VIEW and state != GameManager.State.GAMEPLAY:
 		return
-	if not _beta_close_day_allowed():
-		# Beta day-1 has its own gating chain; refuse with the grounded
+	if not _store_session_close_day_allowed():
+		# Store session day-1 has its own gating chain; refuse with the grounded
 		# reason so the player understands why F4 / the button did nothing.
 		return
 	_open_close_day_preview()
 
 
-## §F-C1 — Returns true when the beta day-1 controller either is absent
+## §F-C1 — Returns true when the store_session day-1 controller either is absent
 ## (production gameplay) or reports `can_interact_day_end()`. Otherwise emits
 ## a refusal toast using the controller's grounded reason and returns false.
 ## Centralizes the early-close guard so the F4 keybind, the top-bar button,
 ## and any future trigger all funnel through the same check.
-func _beta_close_day_allowed() -> bool:
-	if _beta_close_day_allowed_quiet():
+func _store_session_close_day_allowed() -> bool:
+	if _store_session_close_day_allowed_quiet():
 		return true
-	var reason: String = _beta_close_day_reason()
+	var reason: String = _store_session_close_day_reason()
 	if reason.is_empty():
 		reason = "Still too early to close. Finish out the shift first."
 	EventBus.toast_requested.emit(reason, &"system", 3.0)
@@ -439,33 +439,33 @@ func _beta_close_day_allowed() -> bool:
 
 
 ## Non-toasting variant for HUD state updates (dim the F4 hint without
-## spamming a toast every time the chain advances). `BetaDayOneController`
+## spamming a toast every time the chain advances). `StoreSessionController`
 ## is the typed `class_name` autoload-style controller — the typed access
 ## (vs. `has_method` + `call`) makes signature renames fail at parse time.
 ## See §EH-23.
-func _beta_close_day_allowed_quiet() -> bool:
-	var controller: BetaDayOneController = _beta_day_one_controller()
+func _store_session_close_day_allowed_quiet() -> bool:
+	var controller: StoreSessionController = _store_session_controller()
 	if controller == null:
 		return true
 	return controller.can_interact_day_end()
 
 
-func _beta_close_day_reason() -> String:
-	var controller: BetaDayOneController = _beta_day_one_controller()
+func _store_session_close_day_reason() -> String:
+	var controller: StoreSessionController = _store_session_controller()
 	if controller == null:
 		return ""
 	return controller.close_day_disabled_reason()
 
 
 ## Returns null in unit-test fixtures that don't add the controller to the
-## scene tree; production beta path always group-registers the controller in
-## `BetaDayOneController._ready` (`beta_day_one_controller.gd`). See §EH-23.
-func _beta_day_one_controller() -> BetaDayOneController:
+## scene tree; production store_session path always group-registers the controller in
+## `StoreSessionController._ready` (`store_session_controller.gd`). See §EH-23.
+func _store_session_controller() -> StoreSessionController:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return null
-	var node: Node = tree.get_first_node_in_group("beta_day_one_controller")
-	return node as BetaDayOneController
+	var node: Node = tree.get_first_node_in_group("store_session_controller")
+	return node as StoreSessionController
 
 
 ## Opens the dry-run preview modal. The preview's Confirm button is the only
@@ -598,7 +598,7 @@ func _apply_state_visibility(state: GameManager.State) -> void:
 			_milestones_button.visible = (GameManager.get_current_day() > 1)
 			_close_day_button.visible = true
 			# BRAINDUMP Rule 3: 'Top Left: Money only'. The right-side
-			# BetaRightPanel is the canonical readout for shelf / back-room /
+			# StoreStatusPanel is the canonical readout for shelf / back-room /
 			# sold-today counts; the redundant TopBar copies are authored
 			# hidden in hud.tscn and re-asserted here so a future state
 			# transition cannot leak them back in.
@@ -637,7 +637,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action("close_day"):
 		get_viewport().set_input_as_handled()
-		if not _beta_close_day_allowed():
+		if not _store_session_close_day_allowed():
 			return
 		_open_close_day_preview()
 		return
@@ -672,16 +672,16 @@ func _refresh_time_display() -> void:
 
 func _format_fp_time_label(standard_text: String, formatted_hour: String) -> String:
 	if _is_preopening_training():
-		return "Opening Shift — %s" % formatted_hour
+		return "First Day — %s" % formatted_hour
 	return standard_text
 
 
 func _is_preopening_training() -> bool:
-	return _current_day == 1 and not BetaRunState.preopening_complete and _has_training_milestones()
+	return _current_day == 1 and not StoreSessionState.preopening_complete and _has_training_milestones()
 
 
 func _has_training_milestones() -> bool:
-	var objectives: Array[Dictionary] = _active_beta_objectives()
+	var objectives: Array[Dictionary] = _active_store_session_objectives()
 	if objectives.is_empty():
 		return false
 	var ids: Dictionary = {}
@@ -693,11 +693,11 @@ func _has_training_milestones() -> bool:
 	return true
 
 
-func _active_beta_objectives() -> Array[Dictionary]:
+func _active_store_session_objectives() -> Array[Dictionary]:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return []
-	var controller: Node = tree.get_first_node_in_group("beta_day_one_controller")
+	var controller: Node = tree.get_first_node_in_group("store_session_controller")
 	if controller == null:
 		return []
 	var raw_objectives: Variant = controller.get("_objectives")
@@ -942,7 +942,7 @@ func _flash_reputation_label(old_value: float, new_value: float) -> void:
 
 
 ## Receives ObjectiveRail payloads so the FP close-day affordance can react to
-## beta-chain progress without owning the rail's display surface.
+## store_session-chain progress without owning the rail's display surface.
 func _on_objective_payload(_payload: Dictionary) -> void:
 	_refresh_close_day_hint_state()
 
@@ -950,7 +950,7 @@ func _on_objective_payload(_payload: Dictionary) -> void:
 func _refresh_close_day_hint_state() -> void:
 	if not is_instance_valid(_fp_close_day_hint):
 		return
-	var allowed: bool = _beta_close_day_allowed_quiet()
+	var allowed: bool = _store_session_close_day_allowed_quiet()
 	_fp_close_day_hint.visible = allowed
 	_fp_close_day_hint.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
@@ -1081,7 +1081,7 @@ func _tween_children_alpha(target: float, tween_ease: int) -> void:
 ## reloads mid-day, so seeding from zero matches the contract.
 func _seed_counters_from_systems() -> void:
 	_refresh_items_placed()
-	_update_back_room_display(_beta_backroom_count)
+	_update_back_room_display(_store_backroom_count)
 	_update_customers_display(_customers_served_today_count)
 	var economy: EconomySystem = GameManager.get_economy_system()
 	if economy != null:
@@ -1094,15 +1094,15 @@ func _on_inventory_changed() -> void:
 
 
 func _refresh_items_placed() -> void:
-	# §F-L3 — when the beta override is set, ignore InventorySystem and
-	# show the override value. Beta day-1 doesn't push items through the
+	# §F-L3 — when the store_session override is set, ignore InventorySystem and
+	# show the override value. Store session day-1 doesn't push items through the
 	# real inventory system; the override exists so the visible
 	# stocked-items count matches the player's action.
-	if _beta_shelf_count_override >= 0:
-		if _beta_shelf_count_override == _items_placed_count:
+	if _store_shelf_count_override >= 0:
+		if _store_shelf_count_override == _items_placed_count:
 			return
-		var override_delta: int = _beta_shelf_count_override - _items_placed_count
-		_items_placed_count = _beta_shelf_count_override
+		var override_delta: int = _store_shelf_count_override - _items_placed_count
+		_items_placed_count = _store_shelf_count_override
 		_update_items_placed_display(_items_placed_count)
 		_pulse_counter(_items_placed_label, override_delta > 0)
 		_refresh_zero_state_hint()
@@ -1128,33 +1128,33 @@ func _refresh_items_placed() -> void:
 ## CanvasLayer (layer 41) authored in `hud.tscn`, so it renders above the
 ## ObjectiveRail (layer 40) instead of being occluded by it. Empty text
 ## hides the label.
-func _on_beta_carry_changed(text: String) -> void:
-	if not is_instance_valid(_beta_carry_label):
+func _on_store_carry_changed(text: String) -> void:
+	if not is_instance_valid(_store_carry_label):
 		return
 	if text.strip_edges().is_empty():
-		_beta_carry_label.text = ""
-		_beta_carry_label.visible = false
-		if is_instance_valid(_beta_carry_icon):
-			_beta_carry_icon.visible = false
+		_store_carry_label.text = ""
+		_store_carry_label.visible = false
+		if is_instance_valid(_store_carry_icon):
+			_store_carry_icon.visible = false
 		return
-	_beta_carry_label.text = "Carrying: %s" % text
-	_beta_carry_label.visible = true
-	if is_instance_valid(_beta_carry_icon):
-		_beta_carry_icon.visible = true
+	_store_carry_label.text = "Carrying: %s" % text
+	_store_carry_label.visible = true
+	if is_instance_valid(_store_carry_icon):
+		_store_carry_icon.visible = true
 
 
-func _on_beta_shelf_count_changed(count: int) -> void:
-	_beta_shelf_count_override = max(0, count)
+func _on_store_shelf_count_changed(count: int) -> void:
+	_store_shelf_count_override = max(0, count)
 	_refresh_items_placed()
 
 
-func _on_beta_backroom_count_changed(count: int) -> void:
+func _on_store_backroom_count_changed(count: int) -> void:
 	var clamped: int = max(0, count)
-	if clamped == _beta_backroom_count:
+	if clamped == _store_backroom_count:
 		return
-	var delta: int = clamped - _beta_backroom_count
-	_beta_backroom_count = clamped
-	_update_back_room_display(_beta_backroom_count)
+	var delta: int = clamped - _store_backroom_count
+	_store_backroom_count = clamped
+	_update_back_room_display(_store_backroom_count)
 	_pulse_counter(_back_room_label, delta > 0)
 
 
@@ -1212,7 +1212,7 @@ func is_modal_dim_active() -> bool:
 func _refresh_zero_state_hint() -> void:
 	var hint_text: String = ""
 	var should_show: bool = false
-	if not _beta_mode_active():
+	if not _store_session_mode_active():
 		var state: GameManager.State = GameManager.current_state
 		var in_store: bool = (
 			state == GameManager.State.STORE_VIEW or state == GameManager.State.GAMEPLAY
@@ -1360,7 +1360,7 @@ func _pulse_counter(label: Label, positive: bool) -> void:
 ##
 ## In FP mode the heavy `TopBar` HBoxContainer is hidden; the static
 ## `FPCashLabel` / `FPTimeLabel` nodes (authored in `hud.tscn`, always
-## visible top-right) carry the primary readouts and `BetaRightPanel` owns
+## visible top-right) carry the primary readouts and `StoreStatusPanel` owns
 ## the secondary stat cluster. The close-day affordance moves to a
 ## bottom-right `F4 — Close Day` hint label. No node reparenting occurs.
 ##
@@ -1487,8 +1487,8 @@ func _reset_for_tests() -> void:
 			(child as CanvasItem).modulate.a = 1.0
 
 
-func _beta_mode_active() -> bool:
+func _store_session_mode_active() -> bool:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	return not tree.get_nodes_in_group("beta_day_one_controller").is_empty()
+	return not tree.get_nodes_in_group("store_session_controller").is_empty()

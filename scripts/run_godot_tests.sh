@@ -10,6 +10,8 @@ set -euo pipefail
 GUT_OUTPUT_FILE="$(mktemp)"
 echo "GUT_OUTPUT_FILE=$GUT_OUTPUT_FILE" >> "${GITHUB_ENV:-/dev/null}"
 
+"$GITHUB_WORKSPACE/tests/validate_store_session_naming.sh"
+
 # Strip engine-shutdown noise emitted *after* GUT finishes, before it reaches
 # the log or the CI display. In headless mode the renderer-cleanup pass runs
 # while autoload-held UI (AuditOverlay, ErrorBanner, ObjectiveRail,
@@ -18,7 +20,7 @@ echo "GUT_OUTPUT_FILE=$GUT_OUTPUT_FILE" >> "${GITHUB_ENV:-/dev/null}"
 # "leaked at exit." These messages do not indicate test failures and are not
 # actionable from GDScript — filter both the headers and their
 # `     at: ...` continuation lines so the log shows test signal only.
-SHUTDOWN_NOISE_RE='^WARNING: [0-9]+ RIDs? of type "[^"]+" (was|were) leaked\.$|^WARNING: ObjectDB instances leaked at exit|^ERROR: [0-9]+ RID allocations of type .+ were leaked at exit\.$|^ERROR: [0-9]+ resources still in use at exit|^ +at: _free_rids \(servers/rendering/renderer_canvas_cull|^ +at: cleanup \(core/object/object\.cpp|^ +at: clear \(core/io/resource\.cpp'
+SHUTDOWN_NOISE_RE='^WARNING: [0-9]+ RIDs? of type "[^"]+" (was|were) leaked\.$|^WARNING: ObjectDB instances leaked at exit|^ERROR: [0-9]+ RID allocations of type .+ were leaked at exit\.$|^ERROR: [0-9]+ resources still in use at exit|^ERROR: Pages in use exist at exit in PagedAllocator: .+$|^ +at: _free_rids \(servers/rendering/renderer_canvas_cull|^ +at: cleanup \(core/object/object\.cpp|^ +at: clear \(core/io/resource\.cpp|^ +at: ~PagedAllocator \(\./core/templates/paged_allocator\.h'
 
 godot --path "$GITHUB_WORKSPACE" --headless \
 	--script res://addons/gut/gut_cmdln.gd -- \

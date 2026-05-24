@@ -1,5 +1,5 @@
-class_name BetaBackroomPickupInteractable
-extends BetaDayOneInteractableBase
+class_name StockroomPickupInteractable
+extends StoreSessionInteractableBase
 
 
 func _ready() -> void:
@@ -7,21 +7,21 @@ func _ready() -> void:
 	prompt_text = "Check"
 	action_verb = "Check"
 	interaction_type = InteractionType.BACKROOM
-	interactable_id = &"beta_back_room_inventory"
+	interactable_id = &"store_back_room_inventory"
 	proximity_radius = 3.25
 	proximity_facing_dot = 0.25
 	super._ready()
 
 
 func can_interact(_actor: Node = null) -> bool:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return false
 	return controller.can_interact_pickup()
 
 
 func get_disabled_reason(_actor: Node = null) -> String:
-	var controller: BetaDayOneController = _controller()
+	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return "Pickup flow unavailable."
 	return controller.pickup_disabled_reason()
@@ -31,4 +31,4 @@ func interact(by: Node = null) -> void:
 	if not can_interact(by):
 		return
 	super.interact(by)
-	get_tree().call_group("beta_day_one_controller", "on_beta_backroom_pickup_interacted")
+	get_tree().call_group("store_session_controller", "on_store_stockroom_pickup_interacted")

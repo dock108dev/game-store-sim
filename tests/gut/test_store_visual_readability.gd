@@ -63,7 +63,7 @@ const FLOOR_DETAIL_MAX_AXIS: float = 0.78
 const RETAIL_CEILING_Y: float = 3.55
 const ZONE_FILL_MIN_ENERGY: float = 0.35
 const ZONE_FILL_MAX_ENERGY: float = 0.62
-const BETA_VISUAL_LANDMARKS: Array[String] = [
+const STORE_VISUAL_LANDMARKS: Array[String] = [
 	"ReadabilityProps/ZoneLighting/MainAisleWarmFill",
 	"ReadabilityProps/ZoneLighting/CheckoutAmberFill",
 	"ReadabilityProps/ZoneIdentity/CheckoutCeilingPractical",
@@ -450,7 +450,7 @@ func test_register_screen_emission_clears_spawn_distance_floor() -> void:
 	root.free()
 
 
-func test_beta_store_has_visual_landmark_overhaul_nodes() -> void:
+func test_store_store_has_visual_landmark_overhaul_nodes() -> void:
 	var scene: PackedScene = load(RETRO_GAMES_SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load")
 	if scene == null:
@@ -458,10 +458,10 @@ func test_beta_store_has_visual_landmark_overhaul_nodes() -> void:
 	var root: Node3D = scene.instantiate() as Node3D
 	if root == null:
 		return
-	for node_path: String in BETA_VISUAL_LANDMARKS:
+	for node_path: String in STORE_VISUAL_LANDMARKS:
 		assert_not_null(
 			root.get_node_or_null(node_path),
-			"Beta visual landmark missing: %s" % node_path
+			"Store-session visual landmark missing: %s" % node_path
 		)
 	root.free()
 
@@ -698,7 +698,7 @@ func test_product_display_rows_have_at_least_four_named_products() -> void:
 	assert_gte(
 		product_nodes.size(),
 		4,
-		"Beta store must render at least four named product displays"
+		"Store session must render at least four named product displays"
 	)
 	for required_name: String in [
 		"DungeonDad64_ShelfA",
@@ -830,7 +830,7 @@ func test_product_display_rows_are_rail_supported_and_forward_offset() -> void:
 	root.free()
 
 
-func test_beta_store_visual_lighting_clears_readability_floor() -> void:
+func test_store_store_visual_lighting_clears_readability_floor() -> void:
 	var scene: PackedScene = load(RETRO_GAMES_SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load")
 	if scene == null:
@@ -1707,7 +1707,7 @@ func test_layout_floor_seams_are_not_visible_route_paint() -> void:
 	root.free()
 
 
-func test_beta_store_removes_floating_unanchored_zone_signs() -> void:
+func test_store_store_removes_floating_unanchored_zone_signs() -> void:
 	var scene: PackedScene = load(RETRO_GAMES_SCENE_PATH)
 	assert_not_null(scene, "retro_games.tscn must load")
 	if scene == null:

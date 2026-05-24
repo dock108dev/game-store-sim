@@ -18,10 +18,10 @@ func before_each() -> void:
 
 func test_three_sequential_toasts_queued_in_fifo_order() -> void:
 	EventBus.toast_requested.emit("Alpha", &"system", 5.0)
-	EventBus.toast_requested.emit("Beta", &"system", 5.0)
+	EventBus.toast_requested.emit("Sample", &"system", 5.0)
 	EventBus.toast_requested.emit("Gamma", &"system", 5.0)
 	assert_eq(_ui._queue.size(), 2, "Two toasts should be queued behind the active one")
-	assert_eq(_ui._queue[0]["message"], "Beta", "Beta should be first in queue (FIFO)")
+	assert_eq(_ui._queue[0]["message"], "Sample", "Sample should be first in queue (FIFO)")
 	assert_eq(_ui._queue[1]["message"], "Gamma", "Gamma should be second in queue (FIFO)")
 
 
@@ -258,7 +258,7 @@ func test_category_unlock_border_is_cyan() -> void:
 
 
 func test_category_sale_border_is_positive_green() -> void:
-	# `&"sale"` is the BetaDayOneController outcome path's canonical category
+	# `&"sale"` is the StoreSessionController outcome path's canonical category
 	# for cash-positive customer outcomes. It must paint the positive (green)
 	# border so the player reads the toast as a successful sale.
 	EventBus.toast_requested.emit("Sale complete: +$18", &"sale", 3.0)

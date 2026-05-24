@@ -15,8 +15,8 @@ const PANEL_NAME: String = "inventory"
 const SOURCE_BACKROOM: String = "backroom"
 const SOURCE_SHELVES: String = "shelves"
 const SOURCE_ALL: String = "all"
-const _BETA_DISABLED_MESSAGE: String = (
-	"Beta mode: carry stock boxes from backroom and place them on shelves."
+const _STORE_SESSION_DISABLED_MESSAGE: String = (
+	"Store session: carry stock boxes from backroom and place them on shelves."
 )
 
 var inventory_system: InventorySystem
@@ -144,10 +144,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not key_event.pressed or key_event.echo:
 		return
 	if key_event.is_action_pressed("toggle_inventory"):
-		if _beta_inventory_disabled():
+		if _store_session_inventory_disabled():
 			if _is_open:
 				close(true)
-			EventBus.notification_requested.emit(_BETA_DISABLED_MESSAGE)
+			EventBus.notification_requested.emit(_STORE_SESSION_DISABLED_MESSAGE)
 			get_viewport().set_input_as_handled()
 			return
 		_toggle()
@@ -165,10 +165,10 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func open(source: String = SOURCE_BACKROOM) -> void:
-	if _beta_inventory_disabled():
+	if _store_session_inventory_disabled():
 		if _is_open:
 			close(true)
-		EventBus.notification_requested.emit(_BETA_DISABLED_MESSAGE)
+		EventBus.notification_requested.emit(_STORE_SESSION_DISABLED_MESSAGE)
 		return
 	if _is_open:
 		return
@@ -684,7 +684,7 @@ func _on_context_action(id: int) -> void:
 func _on_interactable_interacted(
 	target: Interactable, type: int
 ) -> void:
-	if _beta_inventory_disabled():
+	if _store_session_inventory_disabled():
 		if _is_open:
 			close(true)
 		return
@@ -715,7 +715,7 @@ func _on_interactable_interacted(
 func _on_interactable_right_clicked(
 	target: Interactable, type: int
 ) -> void:
-	if _beta_inventory_disabled():
+	if _store_session_inventory_disabled():
 		return
 	if type != Interactable.InteractionType.SHELF_SLOT:
 		return
@@ -760,11 +760,11 @@ func _on_active_store_changed(new_store_id: StringName) -> void:
 	_apply_store_accent(new_store_id)
 
 
-func _beta_inventory_disabled() -> bool:
+func _store_session_inventory_disabled() -> bool:
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false
-	return tree.get_first_node_in_group("beta_day_one_controller") != null
+	return tree.get_first_node_in_group("store_session_controller") != null
 
 
 func _apply_store_accent(store_id_sn: StringName) -> void:

@@ -8,7 +8,7 @@ var _toast_feedback: Array[String] = []
 
 
 func before_each() -> void:
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
 	_completed_feedback.clear()
@@ -34,7 +34,7 @@ func after_each() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 
 
 func test_new_game_enters_preopening_training_before_day_one() -> void:
@@ -42,7 +42,7 @@ func test_new_game_enters_preopening_training_before_day_one() -> void:
 	assert_not_null(controller)
 	if controller == null:
 		return
-	assert_false(BetaRunState.preopening_complete)
+	assert_false(StoreSessionState.preopening_complete)
 	assert_eq(
 		String(controller.current_stage()),
 		"training_talk_manager",
@@ -78,27 +78,27 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	assert_eq(Array(_active_targets()), ["BetaDayEndTrigger"])
 
-	controller.on_beta_register_interacted()
+	controller.on_store_register_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 	assert_eq(Array(_active_targets()), ["BetaBackroomPickup"])
 
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_stock_shelf")
-	assert_true(BetaRunState.carrying_stock)
+	assert_true(StoreSessionState.carrying_stock)
 	assert_eq(Array(_active_targets()), ["BetaRestockShelf"])
 
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
-	assert_true(BetaRunState.preopening_complete)
+	assert_true(StoreSessionState.preopening_complete)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
-	assert_false(BetaRunState.carrying_stock)
+	assert_false(StoreSessionState.carrying_stock)
 	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
 
 
@@ -106,13 +106,13 @@ func test_role_prompt_copy_changes_between_training_and_customer_stages() -> voi
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
-	controller.on_beta_register_interacted()
+	controller.on_store_register_interacted()
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 
 	var customer: Interactable = _customer_interactable()
@@ -141,7 +141,7 @@ func test_manager_completion_feedback_is_short() -> void:
 	EventBus.objective_completed.connect(_on_objective_completed)
 	EventBus.toast_requested.connect(_on_toast_requested)
 
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
 
 	assert_true(_completed_feedback.has("Manager walkthrough complete."))
@@ -159,16 +159,16 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 		return
 	watch_signals(EventBus)
 
-	controller.on_beta_customer_interacted()
+	controller.on_store_customer_interacted()
 	await get_tree().process_frame
-	controller.on_beta_register_interacted()
+	controller.on_store_register_interacted()
 	await get_tree().process_frame
-	controller.on_beta_backroom_pickup_interacted()
+	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	controller.on_beta_restock_interacted()
+	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 
-	assert_true(BetaRunState.preopening_complete)
+	assert_true(StoreSessionState.preopening_complete)
 	assert_signal_emitted(
 		EventBus,
 		"run_state_changed",
@@ -177,8 +177,8 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
 	assert_true(
-		BetaHUD.get_right_panel().get_header_text().begins_with("DAY 1 —"),
-		"Right panel must switch from opening-shift training to Day 1 store-hours copy"
+		StoreSessionHUD.get_right_panel().get_header_text().begins_with("DAY 1 —"),
+		"Right panel must switch from first-day training to Day 1 store-hours copy"
 	)
 
 
@@ -213,7 +213,7 @@ func test_manager_proxy_has_clerk_detail_props() -> void:
 
 
 func _controller() -> Node:
-	return get_tree().get_first_node_in_group("beta_day_one_controller")
+	return get_tree().get_first_node_in_group("store_session_controller")
 
 
 func _customer_interactable() -> Interactable:

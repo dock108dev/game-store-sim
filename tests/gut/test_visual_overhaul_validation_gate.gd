@@ -1,7 +1,7 @@
 extends GutTest
 
-const _BetaScreenshotSweep: GDScript = preload(
-	"res://game/scripts/beta/beta_screenshot_sweep.gd"
+const _StoreVisualSweep: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const REFERENCE_REVIEW_MODE_SETTING: String = "mallcore/test/reference_corner_review_mode"
@@ -10,13 +10,11 @@ const LOCKED_FEATURE_ROOTS: Array[String] = [
 	"staff_picks_table",
 	"testing_station",
 ]
-const REQUIRED_REFERENCE_BEATS: Array[String] = [
-	"spawn_toward_checkout",
-	"customer_register_spot",
-	"behind_side_checkout",
-	"shelf_ten_feet",
-	"product_shelf_closeup",
-	"checkout_shelf_walk_path",
+const REQUIRED_FIRST_TEN_SECONDS_BEATS: Array[String] = [
+	"spawn_first_look",
+	"checkout_manager_counter",
+	"shelf_wall_product_focus",
+	"stockroom_path_work_area",
 ]
 
 var _root: Node3D = null
@@ -35,10 +33,11 @@ func before_each() -> void:
 	ProjectSettings.set_setting(REFERENCE_REVIEW_MODE_SETTING, true)
 	GameManager.current_state = GameManager.State.STORE_VIEW
 	GameManager.set_current_day(1)
-	BetaRunState.reset_new_run()
-	BetaRunState.preopening_complete = true
+	StoreSessionState.reset_new_run()
+	StoreSessionState.preopening_complete = true
 	InputFocus._reset_for_tests()
 	ModalQueue._reset_for_tests()
+	InteractionPrompt._reset_for_tests()
 
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "Retro Games scene must load for validation")
@@ -61,33 +60,34 @@ func before_each() -> void:
 func after_each() -> void:
 	ModalQueue._reset_for_tests()
 	InputFocus._reset_for_tests()
+	InteractionPrompt._reset_for_tests()
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
 	_camera = null
-	BetaRunState.reset_new_run()
+	StoreSessionState.reset_new_run()
 	GameManager.current_state = _saved_state
 	GameManager.set_current_day(_saved_day)
 	ProjectSettings.set_setting(REFERENCE_REVIEW_MODE_SETTING, _saved_reference_review_mode)
 
 
-func test_reference_corner_sweep_frames_beta_review_anchors() -> void:
+func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 	var rows: Array[Dictionary] = _sweep_rows()
-	assert_eq(rows.size(), 6, "Validation sweep must cover six reference-corner beats")
+	assert_eq(rows.size(), 4, "Validation sweep must cover four first-ten-seconds route views")
 	var seen_beats: Array[String] = []
 	for row: Dictionary in rows:
 		seen_beats.append(str(row.get("name", "")))
 		_assert_sweep_row_frames_focus(row)
-		assert_eq(str(row.get("scope", "")), "reference_corner")
+		assert_eq(str(row.get("scope", "")), "first_ten_seconds")
 		assert_eq(
 			str(row.get("review_target", "")),
-			_BetaScreenshotSweep.ACCEPTANCE_TARGET,
-			"%s sweep must target reference-corner acceptance" % row["name"]
+			_StoreVisualSweep.ACCEPTANCE_TARGET,
+			"%s sweep must target first-ten-seconds acceptance" % row["name"]
 		)
 		assert_eq(
 			str(row.get("hud_context_required", "")),
-			_BetaScreenshotSweep.HUD_CONTEXT_LABEL,
-			"%s sweep must require opening-shift HUD context" % row["name"]
+			_StoreVisualSweep.HUD_CONTEXT_LABEL,
+			"%s sweep must require first-day HUD context" % row["name"]
 		)
 		assert_false(
 			str(row.get("next_destination", "")).is_empty(),
@@ -113,10 +113,10 @@ func test_reference_corner_sweep_frames_beta_review_anchors() -> void:
 					_is_visible_through_ancestors(anchor),
 					"%s sweep anchor must be visible: %s" % [row["name"], anchor_path]
 				)
-	for required: String in REQUIRED_REFERENCE_BEATS:
+	for required: String in REQUIRED_FIRST_TEN_SECONDS_BEATS:
 		assert_true(
 			seen_beats.has(required),
-			"Reference-corner sweep must include phase beat %s" % required
+			"First-ten-seconds sweep must include phase beat %s" % required
 		)
 
 
@@ -125,9 +125,9 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 	for row: Dictionary in rows:
 		_assert_sweep_row_frames_focus(row)
 		await get_tree().process_frame
-		var result: Dictionary = _BetaScreenshotSweep.save_viewport_png(
+		var result: Dictionary = _StoreVisualSweep.save_viewport_png(
 			get_viewport(),
-			_BetaScreenshotSweep.ARTIFACT_DIR,
+			_StoreVisualSweep.ARTIFACT_DIR,
 			str(row["filename"]),
 			true
 		)
@@ -158,8 +158,8 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 					"Placeholder sweep images are only allowed under headless display"
 				)
 
-	var manifest: Dictionary = _BetaScreenshotSweep.write_review_manifest(
-		_BetaScreenshotSweep.ARTIFACT_DIR,
+	var manifest: Dictionary = _StoreVisualSweep.write_review_manifest(
+		_StoreVisualSweep.ARTIFACT_DIR,
 		rows
 	)
 	assert_true(
@@ -172,7 +172,7 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 			"Screenshot sweep review manifest must exist on disk"
 		)
 		var payload: Dictionary = _read_json_file(str(manifest["path"]))
-		assert_eq(str(payload.get("acceptance_target", "")), _BetaScreenshotSweep.ACCEPTANCE_TARGET)
+		assert_eq(str(payload.get("acceptance_target", "")), _StoreVisualSweep.ACCEPTANCE_TARGET)
 		var beats: Array = payload.get("beats", []) as Array
 		assert_eq(beats.size(), rows.size(), "Manifest must write one entry per artifact")
 		var template: Dictionary = payload.get("manual_review_template", {}) as Dictionary
@@ -182,23 +182,23 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 		assert_eq(
 			str(full_store_context.get("acceptance_role", "")),
 			"secondary_context_only",
-			"Full-store sweep context must not replace reference-corner acceptance"
+			"Full-store sweep context must not replace first-ten-seconds acceptance"
 		)
 		var full_store_beats: Array = full_store_context.get("beats", []) as Array
 		assert_eq(full_store_beats.size(), 8, "Full-store context must keep eight legacy beats")
 		for beat: Dictionary in beats:
-			assert_eq(str(beat.get("review_target", "")), _BetaScreenshotSweep.ACCEPTANCE_TARGET)
+			assert_eq(str(beat.get("review_target", "")), _StoreVisualSweep.ACCEPTANCE_TARGET)
 			assert_eq(
 				str(beat.get("hud_context_required", "")),
-				_BetaScreenshotSweep.HUD_CONTEXT_LABEL,
-				"Manifest beat must preserve the opening-shift HUD requirement"
+				_StoreVisualSweep.HUD_CONTEXT_LABEL,
+				"Manifest beat must preserve the first-day HUD requirement"
 			)
 
 
 func test_screenshot_sweep_documents_human_review_criteria() -> void:
-	var review_criteria: Array[String] = _BetaScreenshotSweep.review_criteria()
+	var review_criteria: Array[String] = _StoreVisualSweep.review_criteria()
 	for required: String in [
-		"reference-corner legibility",
+		"first-look store identity",
 		"new player can infer the next destination",
 		"new player can infer the local action",
 		"no debug/editor UI",
@@ -206,22 +206,27 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 		"no misleading unavailable destination",
 		"readable local prompt ownership",
 		"checkout/shelf/queue flow is understandable",
+		"used game store reads without HUD text",
+		"spawn view is not a sparse box",
+		"shelf wall reads stocked",
+		"checkout reads as a service counter",
+		"stockroom path reads as a work area",
 		"walking paths",
 		"cramped/empty balance",
 		"backwards signs",
 		"random cubes/panels",
 		"product alignment",
-		"opening-shift UI state",
-		"Opening Shift — 8:00 AM is visible",
-		"HUD supports rather than fights the reference corner",
-		"deferred surfaces not promoted",
+		"first-day UI state",
+		"First Day — 8:00 AM is visible",
+		"HUD supports rather than fights the route views",
+		"camera-visible density replaces hidden prop count",
 	]:
 		assert_true(
 			review_criteria.has(required),
 			"Sweep review criteria must include %s" % required
 		)
 
-	var failure_criteria: Array[String] = _BetaScreenshotSweep.design_failure_criteria()
+	var failure_criteria: Array[String] = _StoreVisualSweep.design_failure_criteria()
 	for required: String in [
 		"oversized signs dominate the composition",
 		"slab shelves dominate the composition",
@@ -237,7 +242,7 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 
 
 func test_first_run_flow_review_markers_remain_visible() -> void:
-	var steps: Array[Dictionary] = _BetaScreenshotSweep.first_run_flow_steps()
+	var steps: Array[Dictionary] = _StoreVisualSweep.first_run_flow_steps()
 	assert_eq(
 		steps.size(),
 		6,
@@ -257,9 +262,9 @@ func test_first_run_flow_review_markers_remain_visible() -> void:
 			)
 
 
-func test_reference_corner_beats_stay_aligned_with_first_run_route() -> void:
+func test_first_ten_seconds_beats_stay_aligned_with_first_run_route() -> void:
 	var first_run_anchors: Dictionary = {}
-	for step: Dictionary in _BetaScreenshotSweep.first_run_flow_steps():
+	for step: Dictionary in _StoreVisualSweep.first_run_flow_steps():
 		first_run_anchors[str(step.get("anchor", ""))] = true
 	for row: Dictionary in _sweep_rows():
 		assert_true(
@@ -270,7 +275,7 @@ func test_reference_corner_beats_stay_aligned_with_first_run_route() -> void:
 
 func test_locked_feature_visuals_do_not_mutate_runtime_state() -> void:
 	var controller: Node = _controller()
-	assert_not_null(controller, "BetaDayOneController must exist")
+	assert_not_null(controller, "StoreSessionController must exist")
 	if controller == null:
 		return
 	var before: Dictionary = _runtime_state_snapshot(controller)
@@ -302,7 +307,7 @@ func test_locked_feature_visuals_do_not_mutate_runtime_state() -> void:
 		"customer_purchased",
 		"money_changed",
 		"day_phase_changed",
-		"beta_shelf_count_changed",
+		"store_shelf_count_changed",
 	]:
 		assert_signal_not_emitted(
 			EventBus,
@@ -313,17 +318,17 @@ func test_locked_feature_visuals_do_not_mutate_runtime_state() -> void:
 
 func test_preopening_hud_prompt_and_debug_surfaces_have_single_owners() -> void:
 	var controller: Node = _controller()
-	assert_not_null(controller, "BetaDayOneController must exist")
+	assert_not_null(controller, "StoreSessionController must exist")
 	if controller == null:
 		return
 
-	assert_true(BetaHUD.is_active(), "BetaHUD must be active after scene ready")
+	assert_true(StoreSessionHUD.is_active(), "StoreSessionHUD must be active after scene ready")
 	assert_true(
-		BetaHUD.get_right_panel().visible,
-		"Right panel owns checklist and stock stats during beta play"
+		StoreSessionHUD.get_right_panel().visible,
+		"Right panel owns checklist and stock stats during store_session play"
 	)
 	assert_true(
-		BetaHUD.get_event_log_panel().visible,
+		StoreSessionHUD.get_event_log_panel().visible,
 		"Event log panel owns bottom-left recent-event output"
 	)
 	var debug_overlay: CanvasLayer = controller.get("_debug_overlay") as CanvasLayer
@@ -370,7 +375,7 @@ func _assert_sweep_row_frames_focus(row: Dictionary) -> void:
 
 
 func _sweep_rows() -> Array[Dictionary]:
-	return _BetaScreenshotSweep.rows()
+	return _StoreVisualSweep.rows()
 
 
 func _runtime_state_snapshot(controller: Node) -> Dictionary:
@@ -384,7 +389,7 @@ func _runtime_state_snapshot(controller: Node) -> Dictionary:
 	return {
 		"stage": String(controller.call("current_stage")),
 		"completed_objectives": completed,
-		"run_state": BetaRunState.get_save_data(),
+		"run_state": StoreSessionState.get_save_data(),
 		"unlocks": unlocks,
 		"economy_cash": _economy_cash_or_null(),
 		"time_phase": _time_phase_or_null(),
@@ -453,7 +458,7 @@ func _node3d(path: String) -> Node3D:
 func _controller() -> Node:
 	if _root == null:
 		return null
-	return _root.get_node_or_null("BetaDayOneController")
+	return _root.get_node_or_null("StoreSessionController")
 
 
 func _collect_interactables(node: Node, out: Array[Interactable]) -> void:
@@ -464,10 +469,10 @@ func _collect_interactables(node: Node, out: Array[Interactable]) -> void:
 
 
 func _point_inside_viewport(point: Vector2, viewport_size: Vector2) -> bool:
-	return point.x >= _BetaScreenshotSweep.VIEWPORT_MARGIN_PX \
-		and point.y >= _BetaScreenshotSweep.VIEWPORT_MARGIN_PX \
-		and point.x <= viewport_size.x - _BetaScreenshotSweep.VIEWPORT_MARGIN_PX \
-		and point.y <= viewport_size.y - _BetaScreenshotSweep.VIEWPORT_MARGIN_PX
+	return point.x >= _StoreVisualSweep.VIEWPORT_MARGIN_PX \
+		and point.y >= _StoreVisualSweep.VIEWPORT_MARGIN_PX \
+		and point.x <= viewport_size.x - _StoreVisualSweep.VIEWPORT_MARGIN_PX \
+		and point.y <= viewport_size.y - _StoreVisualSweep.VIEWPORT_MARGIN_PX
 
 
 func _is_visible_through_ancestors(node: Node) -> bool:

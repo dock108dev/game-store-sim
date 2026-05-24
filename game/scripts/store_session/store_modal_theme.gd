@@ -1,8 +1,8 @@
-## Shared StyleBox factory for beta modals (decision card, day summary, etc.)
+## Shared StyleBox factory for store_session modals (decision card, day summary, etc.)
 ## so they read as the same family — dark translucent paper with warm
 ## brown/gold borders and cream text. Centralised here so a one-line palette
-## tweak propagates to every beta modal without per-panel edits.
-class_name BetaModalTheme
+## tweak propagates to every store_session modal without per-panel edits.
+class_name StoreModalTheme
 extends RefCounted
 
 const COLOR_PANEL_BG: Color = Color(0.094, 0.078, 0.067, 0.94)
