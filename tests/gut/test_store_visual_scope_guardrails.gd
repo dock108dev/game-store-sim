@@ -18,10 +18,10 @@ const REQUIRED_STORE_SESSION_KEEP_ROOTS: Array[String] = [
 	"ExpandableStoreShell",
 	"checkout_counter",
 	"FrontLaneQueue",
-	"BetaDayOneCustomer",
-	"BetaBackroomPickup",
-	"BetaRestockShelf",
-	"BetaDayEndTrigger",
+	"StoreSessionDayOneCustomer",
+	"StoreSessionBackroomPickup",
+	"StoreSessionRestockShelf",
+	"StoreSessionDayEndTrigger",
 ]
 
 const REQUIRED_VISIBLE_SIGNS: Array[String] = [
@@ -51,10 +51,10 @@ const APPROVED_AMBIENT_INTERACTABLES: Array[String] = [
 ]
 
 const OBJECTIVE_TARGET_PATHS: Array[String] = [
-	"BetaDayOneCustomer/Interactable",
-	"BetaBackroomPickup/Interactable",
-	"BetaRestockShelf/Interactable",
-	"BetaDayEndTrigger/Interactable",
+	"StoreSessionDayOneCustomer/Interactable",
+	"StoreSessionBackroomPickup/Interactable",
+	"StoreSessionRestockShelf/Interactable",
+	"StoreSessionDayEndTrigger/Interactable",
 ]
 
 const ALLOWED_VISIBLE_CATEGORIES: Array[String] = [
@@ -69,11 +69,11 @@ const VISIBLE_ROOT_CLASSIFICATIONS: Dictionary = {
 	"EntranceDoor": ["fixture"],
 	"checkout_counter": ["fixture"],
 	"FrontLaneQueue": ["fixture", "gameplay_marker"],
-	"BetaDayOneCustomer": ["gameplay_marker"],
-	"BetaBackroomPickup": ["gameplay_marker", "product", "sign"],
-	"BetaRestockShelf": ["gameplay_marker", "product"],
-	"BetaDayEndTrigger": ["gameplay_marker"],
-	"BetaHiddenClue": ["intentional_dressing"],
+	"StoreSessionDayOneCustomer": ["gameplay_marker"],
+	"StoreSessionBackroomPickup": ["gameplay_marker", "product", "sign"],
+	"StoreSessionRestockShelf": ["gameplay_marker", "product"],
+	"StoreSessionDayEndTrigger": ["gameplay_marker"],
+	"StoreSessionHiddenClue": ["intentional_dressing"],
 	"ExpandableStoreShell": ["fixture", "sign", "intentional_dressing"],
 }
 
@@ -233,27 +233,27 @@ func test_hidden_noise_roots_stay_hidden_and_disabled() -> void:
 
 func test_objective_targets_keep_visible_context_bundles() -> void:
 	var bundles: Dictionary = {
-		"BetaDayOneCustomer":
+		"StoreSessionDayOneCustomer":
 		[
 			"FrontLaneQueue",
 			"ExpandableStoreShell",
 			"ExpandableStoreShell/StarterSignLabel",
 		],
-		"BetaBackroomPickup":
+		"StoreSessionBackroomPickup":
 		[
 			"BackroomUtilityLight",
 			"ExpandableStoreShell/StockroomPartition",
 			"ExpandableStoreShell/StockroomLabel",
-			"BetaBackroomPickup/StockBox",
-			"BetaBackroomPickup/StockBoxLabel",
+			"StoreSessionBackroomPickup/StockBox",
+			"StoreSessionBackroomPickup/StockBoxLabel",
 		],
-		"BetaRestockShelf":
+		"StoreSessionRestockShelf":
 		[
 			"ExpandableStoreShell/StarterBackWall",
 			"ExpandableStoreShell/GamesBayLabel",
-			"BetaRestockShelf/RestockCrate",
+			"StoreSessionRestockShelf/RestockCrate",
 		],
-		"BetaDayEndTrigger":
+		"StoreSessionDayEndTrigger":
 		[
 			"FrontLaneQueue",
 			"ExpandableStoreShell",
@@ -298,8 +298,8 @@ func test_objective_tables_keep_store_session_target_paths_and_hidden_clue_non_o
 	for target_path: String in OBJECTIVE_TARGET_PATHS:
 		assert_true(seen_paths.has(target_path), "%s must be used by an objective" % target_path)
 	assert_false(
-		seen_paths.has("BetaHiddenClue/Interactable"),
-		"BetaHiddenClue must remain ambient context, not an objective target"
+		seen_paths.has("StoreSessionHiddenClue/Interactable"),
+		"StoreSessionHiddenClue must remain ambient context, not an objective target"
 	)
 
 
@@ -322,9 +322,9 @@ func test_checkout_and_hidden_clue_roles_do_not_compete_for_e_press() -> void:
 			)
 	assert_true(_root.get_node_or_null("RegisterArea") is Area3D)
 	var hidden_clue: Interactable = (
-		_root.get_node_or_null("BetaHiddenClue/Interactable") as Interactable
+		_root.get_node_or_null("StoreSessionHiddenClue/Interactable") as Interactable
 	)
-	assert_not_null(hidden_clue, "BetaHiddenClue/Interactable must remain authored")
+	assert_not_null(hidden_clue, "StoreSessionHiddenClue/Interactable must remain authored")
 	if hidden_clue != null:
 		assert_eq(hidden_clue.proximity_radius, 2.25)
 		assert_eq(hidden_clue.proximity_facing_dot, 0.4)
@@ -340,22 +340,22 @@ func test_day_one_stage_gating_enables_only_current_target_and_ambient() -> void
 	var stages: Array[Dictionary] = [
 		{
 			"stage": StoreSessionController.STAGE_TALK_TO_CUSTOMER,
-			"target": "BetaDayOneCustomer/Interactable",
+			"target": "StoreSessionDayOneCustomer/Interactable",
 			"completed": {},
 		},
 		{
 			"stage": StoreSessionController.STAGE_BACK_ROOM_INVENTORY,
-			"target": "BetaBackroomPickup/Interactable",
+			"target": "StoreSessionBackroomPickup/Interactable",
 			"completed": {&"talk_to_customer": true},
 		},
 		{
 			"stage": StoreSessionController.STAGE_STOCK_SHELF,
-			"target": "BetaRestockShelf/Interactable",
+			"target": "StoreSessionRestockShelf/Interactable",
 			"completed": {&"talk_to_customer": true, &"back_room_inventory": true},
 		},
 		{
 			"stage": StoreSessionController.STAGE_END_DAY,
-			"target": "BetaDayEndTrigger/Interactable",
+			"target": "StoreSessionDayEndTrigger/Interactable",
 			"completed": completed_for_close,
 		},
 	]
@@ -370,19 +370,19 @@ func test_training_stage_gating_enables_only_current_target_and_ambient() -> voi
 	var stages: Array[Dictionary] = [
 		{
 			"stage": StoreSessionController.STAGE_TRAINING_TALK_MANAGER,
-			"target": "BetaDayOneCustomer/Interactable",
+			"target": "StoreSessionDayOneCustomer/Interactable",
 		},
 		{
 			"stage": StoreSessionController.STAGE_TRAINING_CHECK_REGISTER,
-			"target": "BetaDayEndTrigger/Interactable",
+			"target": "StoreSessionDayEndTrigger/Interactable",
 		},
 		{
 			"stage": StoreSessionController.STAGE_TRAINING_BACK_ROOM,
-			"target": "BetaBackroomPickup/Interactable",
+			"target": "StoreSessionBackroomPickup/Interactable",
 		},
 		{
 			"stage": StoreSessionController.STAGE_TRAINING_STOCK_SHELF,
-			"target": "BetaRestockShelf/Interactable",
+			"target": "StoreSessionRestockShelf/Interactable",
 		},
 	]
 	for row: Dictionary in stages:

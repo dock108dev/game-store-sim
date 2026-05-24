@@ -40,14 +40,14 @@ const _CHIP_BG: Color = Color(0.05, 0.07, 0.05, 0.85)
 ## objective table. Production target paths and offsets come from
 ## `StoreSessionController.active_objective_*`.
 const STAGE_TARGETS: Dictionary = {
-	&"training_talk_manager": ["BetaDayOneCustomer", 1.9],
-	&"training_check_register": ["BetaDayEndTrigger", 0.6],
-	&"training_back_room_inventory": ["BetaBackroomPickup", 1.3],
-	&"training_stock_shelf": ["BetaRestockShelf", 1.7],
-	&"talk_to_customer": ["BetaDayOneCustomer", 1.9],
-	&"back_room_inventory": ["BetaBackroomPickup", 1.3],
-	&"stock_shelf": ["BetaRestockShelf", 1.7],
-	&"end_day": ["BetaDayEndTrigger", 0.6],
+	&"training_talk_manager": ["StoreSessionDayOneCustomer", 1.9],
+	&"training_check_register": ["StoreSessionDayEndTrigger", 0.6],
+	&"training_back_room_inventory": ["StoreSessionBackroomPickup", 1.3],
+	&"training_stock_shelf": ["StoreSessionRestockShelf", 1.7],
+	&"talk_to_customer": ["StoreSessionDayOneCustomer", 1.9],
+	&"back_room_inventory": ["StoreSessionBackroomPickup", 1.3],
+	&"stock_shelf": ["StoreSessionRestockShelf", 1.7],
+	&"end_day": ["StoreSessionDayEndTrigger", 0.6],
 }
 
 var _chip: PanelContainer

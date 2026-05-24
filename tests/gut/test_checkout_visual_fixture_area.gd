@@ -194,7 +194,7 @@ func test_checkout_cue_hierarchy_keeps_sign_and_register_primary() -> void:
 		_root.get_node_or_null("Checkout/Register/RegisterScreen") as MeshInstance3D
 	)
 	var customer_mat: MeshInstance3D = (
-		_root.get_node_or_null("Checkout/BetaCustomerFloorMat") as MeshInstance3D
+		_root.get_node_or_null("Checkout/StoreSessionCustomerFloorMat") as MeshInstance3D
 	)
 	var service_spot: MeshInstance3D = (
 		_root.get_node_or_null("ReadabilityProps/CheckoutCounterDressing/CustomerServiceSpotMat")

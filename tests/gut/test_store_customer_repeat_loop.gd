@@ -50,7 +50,7 @@ func test_two_customer_events_resolve_in_order_before_close_day() -> void:
 	assert_eq(String((controller.get("_active_event") as Dictionary).get("id", "")), FIRST_EVENT_ID)
 	assert_eq(int(controller.get("_current_event_index")), 0)
 	assert_eq(int(controller.get("_resolved_events_today")), 0)
-	assert_eq(Array(_stage_critical_path_targets()), ["BetaDayOneCustomer"])
+	assert_eq(Array(_stage_critical_path_targets()), ["StoreSessionDayOneCustomer"])
 
 	await _choose_customer_option(&"refuse_return")
 	await _acknowledge_customer_result()
@@ -68,7 +68,7 @@ func test_two_customer_events_resolve_in_order_before_close_day() -> void:
 	assert_eq(int(controller.get("_current_event_index")), 1)
 	assert_eq(int(controller.get("_resolved_events_today")), 1)
 	assert_false(controller.can_interact_day_end())
-	assert_eq(Array(_stage_critical_path_targets()), ["BetaDayOneCustomer"])
+	assert_eq(Array(_stage_critical_path_targets()), ["StoreSessionDayOneCustomer"])
 
 	await _choose_customer_option(&"no_sale")
 	await _acknowledge_customer_result()
@@ -77,7 +77,7 @@ func test_two_customer_events_resolve_in_order_before_close_day() -> void:
 	assert_eq(int(controller.get("_current_event_index")), 1)
 	assert_eq(int(controller.get("_resolved_events_today")), 2)
 	assert_true(controller.can_interact_day_end())
-	assert_eq(Array(_stage_critical_path_targets()), ["BetaDayEndTrigger"])
+	assert_eq(Array(_stage_critical_path_targets()), ["StoreSessionDayEndTrigger"])
 
 	controller.on_store_day_end_requested()
 	await get_tree().process_frame
@@ -240,10 +240,10 @@ func _choice_ids(event_data: Dictionary) -> Array[StringName]:
 func _stage_critical_path_targets() -> PackedStringArray:
 	var enabled := PackedStringArray()
 	for parent_name: String in [
-		"BetaDayOneCustomer",
-		"BetaBackroomPickup",
-		"BetaRestockShelf",
-		"BetaDayEndTrigger",
+		"StoreSessionDayOneCustomer",
+		"StoreSessionBackroomPickup",
+		"StoreSessionRestockShelf",
+		"StoreSessionDayEndTrigger",
 	]:
 		var interactable := _interactable(parent_name)
 		if interactable != null and interactable.enabled:

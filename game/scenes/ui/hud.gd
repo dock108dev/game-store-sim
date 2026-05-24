@@ -187,8 +187,8 @@ var _store_backroom_count: int = 0
 ## §F-L2 — Carry-state label lives on its own CanvasLayer (layer 41) so it
 ## renders above the ObjectiveRail (layer 40); a child Label of the HUD
 ## CanvasLayer (layer 30) was occluded by the rail.
-@onready var _store_carry_label: Label = $CarryHUD/BetaCarryLabel
-@onready var _store_carry_icon: ColorRect = $CarryHUD/BetaCarryIcon
+@onready var _store_carry_label: Label = $CarryHUD/StoreSessionCarryLabel
+@onready var _store_carry_icon: ColorRect = $CarryHUD/StoreSessionCarryIcon
 
 
 func _ready() -> void:

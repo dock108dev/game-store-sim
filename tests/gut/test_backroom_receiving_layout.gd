@@ -1,10 +1,10 @@
 extends GutTest
 
 const RETRO_GAMES_SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
-const PICKUP_PATH: String = "BetaBackroomPickup"
-const PICKUP_INTERACTABLE_PATH: String = "BetaBackroomPickup/Interactable"
-const HIDDEN_CLUE_PATH: String = "BetaHiddenClue"
-const HIDDEN_CLUE_INTERACTABLE_PATH: String = "BetaHiddenClue/Interactable"
+const PICKUP_PATH: String = "StoreSessionBackroomPickup"
+const PICKUP_INTERACTABLE_PATH: String = "StoreSessionBackroomPickup/Interactable"
+const HIDDEN_CLUE_PATH: String = "StoreSessionHiddenClue"
+const HIDDEN_CLUE_INTERACTABLE_PATH: String = "StoreSessionHiddenClue/Interactable"
 const LOADING_MAT_PATH: String = "ReadabilityProps/BackroomDressing/LoadingZoneMat"
 const RECEIVING_TABLE_PATH: String = "ReadabilityProps/BackroomDressing/ReceivingTableTop"
 const DOOR_THRESHOLD_PATH: String = "ReadabilityProps/ZoneIdentity/BackroomDoorThreshold"
@@ -142,9 +142,9 @@ func test_hidden_clue_stays_accessible_flavor_not_objective_clutter() -> void:
 		"Hidden clue must not compete with the inventory pickup hotspot"
 	)
 	for prop_path: String in [
-		"BetaHiddenClue/ClueConsoleBase",
-		"BetaHiddenClue/ClueConsoleShell",
-		"BetaHiddenClue/ClueRepairTag",
+		"StoreSessionHiddenClue/ClueConsoleBase",
+		"StoreSessionHiddenClue/ClueConsoleShell",
+		"StoreSessionHiddenClue/ClueRepairTag",
 	]:
 		assert_not_null(
 			_root.get_node_or_null(prop_path),

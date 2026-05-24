@@ -201,17 +201,17 @@ func test_store_restock_shelf_keeps_objective_target_inside_merch_fixture() -> v
 	var root: Node3D = _instantiate_store()
 	if root == null:
 		return
-	var shelf: Node3D = root.get_node_or_null("BetaRestockShelf") as Node3D
-	assert_not_null(shelf, "BetaRestockShelf must exist")
+	var shelf: Node3D = root.get_node_or_null("StoreSessionRestockShelf") as Node3D
+	assert_not_null(shelf, "StoreSessionRestockShelf must exist")
 	if shelf == null:
 		root.free()
 		return
 	assert_not_null(
 		shelf.get_node_or_null("Interactable"),
-		"BetaRestockShelf/Interactable must remain the stocking target"
+		"StoreSessionRestockShelf/Interactable must remain the stocking target"
 	)
 	var frame: Node = shelf.get_node_or_null("MerchandisingFrame")
-	assert_not_null(frame, "BetaRestockShelf must have a merchandised shelf frame")
+	assert_not_null(frame, "StoreSessionRestockShelf must have a merchandised shelf frame")
 	if frame == null:
 		root.free()
 		return
@@ -227,7 +227,7 @@ func test_store_restock_shelf_keeps_objective_target_inside_merch_fixture() -> v
 	]:
 		assert_not_null(
 			frame.get_node_or_null(node_path),
-			"BetaRestockShelf/MerchandisingFrame/%s must exist" % node_path
+			"StoreSessionRestockShelf/MerchandisingFrame/%s must exist" % node_path
 		)
 	var product_facings: int = 0
 	for child: Node in frame.get_children():

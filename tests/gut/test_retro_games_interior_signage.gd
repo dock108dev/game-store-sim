@@ -143,7 +143,7 @@ func test_day_one_signs_share_visual_vocabulary() -> void:
 		"ZoneLabels/BackroomLabel",
 		"ZoneLabels/UsedConsolesLabel",
 		"ZoneLabels/StaffPicksLabel",
-		"BetaBackroomPickup/StockBoxLabel",
+		"StoreSessionBackroomPickup/StockBoxLabel",
 		"crt_demo_area/ComingSoonLabel",
 		"ReadabilityProps/BackroomDressing/TodayDeliverySign",
 	]
@@ -183,7 +183,7 @@ func test_day_one_signs_have_physical_backing_panels() -> void:
 		"ZoneLabels/BackroomLabel": "ZoneLabels/BackroomBacking",
 		"ZoneLabels/UsedConsolesLabel": "ZoneLabels/UsedConsolesBacking",
 		"ZoneLabels/StaffPicksLabel": "ZoneLabels/StaffPicksBacking",
-		"BetaBackroomPickup/StockBoxLabel": "BetaBackroomPickup/StockBox/StockBoxLabelBacking",
+		"StoreSessionBackroomPickup/StockBoxLabel": "StoreSessionBackroomPickup/StockBox/StockBoxLabelBacking",
 		"crt_demo_area/ComingSoonLabel": "crt_demo_area/ComingSoonBacking",
 		"ReadabilityProps/BackroomDressing/TodayDeliverySign": "ReadabilityProps/BackroomDressing/PickupBayLabelPlate",
 	}
@@ -283,7 +283,7 @@ func test_day_one_signs_use_role_specific_hierarchy() -> void:
 		"crt_demo_area/ComingSoonLabel"
 	) as Label3D
 	var fixture_badge: Label3D = _root.get_node_or_null(
-		"BetaBackroomPickup/StockBoxLabel"
+		"StoreSessionBackroomPickup/StockBoxLabel"
 	) as Label3D
 	assert_gt(
 		_sign_text_scale(store_banner),
@@ -310,7 +310,7 @@ func test_day_one_signs_use_role_specific_hierarchy() -> void:
 		"ZoneLabels/StaffPicksBacking": 1.55,
 		"ZoneLabels/UsedConsolesBacking": 1.55,
 		"crt_demo_area/ComingSoonBacking": 1.25,
-		"BetaBackroomPickup/StockBox/StockBoxLabelBacking": 0.75,
+		"StoreSessionBackroomPickup/StockBox/StockBoxLabelBacking": 0.75,
 		"ReadabilityProps/BackroomDressing/PickupBayLabelPlate": 0.55,
 	}
 	for path: String in min_widths.keys():
@@ -492,8 +492,8 @@ func _day_one_sign_specs() -> Array[Dictionary]:
 			"facing": Vector3.LEFT,
 		},
 		{
-			"label": "BetaBackroomPickup/StockBoxLabel",
-			"backing": "BetaBackroomPickup/StockBox/StockBoxLabelBacking",
+			"label": "StoreSessionBackroomPickup/StockBoxLabel",
+			"backing": "StoreSessionBackroomPickup/StockBox/StockBoxLabelBacking",
 			"facing": Vector3.BACK,
 		},
 		{

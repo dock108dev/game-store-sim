@@ -29,10 +29,10 @@ func _make_store_root_with_stage(stage: StringName) -> Node3D:
 	var root: Node3D = Node3D.new()
 	add_child_autofree(root)
 	for child_name: String in [
-		"BetaDayOneCustomer",
-		"BetaBackroomPickup",
-		"BetaRestockShelf",
-		"BetaDayEndTrigger",
+		"StoreSessionDayOneCustomer",
+		"StoreSessionBackroomPickup",
+		"StoreSessionRestockShelf",
+		"StoreSessionDayEndTrigger",
 	]:
 		var n: Node3D = Node3D.new()
 		n.name = child_name
@@ -168,14 +168,14 @@ func test_chip_hides_under_ctx_modal() -> void:
 
 # ── stage → target resolution ─────────────────────────────────────────────
 
-func test_talk_to_customer_targets_legacy_customer_node() -> void:
+func test_talk_to_customer_targets_store_session_customer_node() -> void:
 	var highlight: StoreObjectiveTargetHighlight = _make_highlight()
 	var root: Node3D = _make_store_root_with_stage(&"talk_to_customer")
 	highlight.set_active_stage_for_test(&"talk_to_customer", root)
-	var expected: Node3D = root.get_node("BetaDayOneCustomer") as Node3D
+	var expected: Node3D = root.get_node("StoreSessionDayOneCustomer") as Node3D
 	assert_eq(
 		highlight.get_target_node(), expected,
-		"TALK_TO_CUSTOMER must target the BetaDayOneCustomer node"
+		"TALK_TO_CUSTOMER must target the StoreSessionDayOneCustomer node"
 	)
 
 
@@ -183,10 +183,10 @@ func test_back_room_inventory_targets_backroom_pickup_node() -> void:
 	var highlight: StoreObjectiveTargetHighlight = _make_highlight()
 	var root: Node3D = _make_store_root_with_stage(&"back_room_inventory")
 	highlight.set_active_stage_for_test(&"back_room_inventory", root)
-	var expected: Node3D = root.get_node("BetaBackroomPickup") as Node3D
+	var expected: Node3D = root.get_node("StoreSessionBackroomPickup") as Node3D
 	assert_eq(
 		highlight.get_target_node(), expected,
-		"BACK_ROOM_INVENTORY must target the BetaBackroomPickup node"
+		"BACK_ROOM_INVENTORY must target the StoreSessionBackroomPickup node"
 	)
 
 
@@ -197,10 +197,10 @@ func test_training_stages_target_manager_register_backroom_and_shelf() -> void:
 	root.add_child(highlight)
 
 	var expected: Dictionary = {
-		&"training_talk_manager": "BetaDayOneCustomer",
-		&"training_check_register": "BetaDayEndTrigger",
-		&"training_back_room_inventory": "BetaBackroomPickup",
-		&"training_stock_shelf": "BetaRestockShelf",
+		&"training_talk_manager": "StoreSessionDayOneCustomer",
+		&"training_check_register": "StoreSessionDayEndTrigger",
+		&"training_back_room_inventory": "StoreSessionBackroomPickup",
+		&"training_stock_shelf": "StoreSessionRestockShelf",
 	}
 	for stage_name: StringName in expected.keys():
 		stub.stage = stage_name
@@ -220,10 +220,10 @@ func test_stock_shelf_targets_restock_shelf_node() -> void:
 	var root: Node3D = _make_store_root_with_stage(&"stock_shelf")
 	StoreSessionState.carrying_stock = true
 	highlight.set_active_stage_for_test(&"stock_shelf", root)
-	var expected: Node3D = root.get_node("BetaRestockShelf") as Node3D
+	var expected: Node3D = root.get_node("StoreSessionRestockShelf") as Node3D
 	assert_eq(
 		highlight.get_target_node(), expected,
-		"STOCK_SHELF must target the BetaRestockShelf node"
+		"STOCK_SHELF must target the StoreSessionRestockShelf node"
 	)
 
 
@@ -242,10 +242,10 @@ func test_end_day_targets_day_end_trigger_node() -> void:
 	var highlight: StoreObjectiveTargetHighlight = _make_highlight()
 	var root: Node3D = _make_store_root_with_stage(&"end_day")
 	highlight.set_active_stage_for_test(&"end_day", root)
-	var expected: Node3D = root.get_node("BetaDayEndTrigger") as Node3D
+	var expected: Node3D = root.get_node("StoreSessionDayEndTrigger") as Node3D
 	assert_eq(
 		highlight.get_target_node(), expected,
-		"END_DAY must target the BetaDayEndTrigger node"
+		"END_DAY must target the StoreSessionDayEndTrigger node"
 	)
 
 
@@ -278,10 +278,10 @@ func test_objective_changed_signal_refreshes_target_via_group() -> void:
 	var root: Node3D = Node3D.new()
 	add_child_autofree(root)
 	for child_name: String in [
-		"BetaDayOneCustomer",
-		"BetaBackroomPickup",
-		"BetaRestockShelf",
-		"BetaDayEndTrigger",
+		"StoreSessionDayOneCustomer",
+		"StoreSessionBackroomPickup",
+		"StoreSessionRestockShelf",
+		"StoreSessionDayEndTrigger",
 	]:
 		var n: Node3D = Node3D.new()
 		n.name = child_name
@@ -303,7 +303,7 @@ func test_objective_changed_signal_refreshes_target_via_group() -> void:
 	await get_tree().process_frame
 	assert_eq(
 		highlight.get_target_node(),
-		root.get_node("BetaDayOneCustomer") as Node3D,
+		root.get_node("StoreSessionDayOneCustomer") as Node3D,
 		"objective_changed must re-resolve to the new stage's target"
 	)
 	stub.stage = &"stock_shelf"
@@ -312,7 +312,7 @@ func test_objective_changed_signal_refreshes_target_via_group() -> void:
 	await get_tree().process_frame
 	assert_eq(
 		highlight.get_target_node(),
-		root.get_node("BetaRestockShelf") as Node3D,
+		root.get_node("StoreSessionRestockShelf") as Node3D,
 		"Subsequent objective_changed must overwrite the prior target"
 	)
 
@@ -327,11 +327,11 @@ func test_only_one_target_at_a_time_across_stage_transitions() -> void:
 	var highlight: StoreObjectiveTargetHighlight = _make_highlight()
 	var root: Node3D = _make_store_root_with_stage(&"talk_to_customer")
 	highlight.set_active_stage_for_test(&"talk_to_customer", root)
-	var customer: Node3D = root.get_node("BetaDayOneCustomer") as Node3D
+	var customer: Node3D = root.get_node("StoreSessionDayOneCustomer") as Node3D
 	assert_eq(highlight.get_target_node(), customer)
 
 	highlight.set_active_stage_for_test(&"back_room_inventory", root)
-	var pickup: Node3D = root.get_node("BetaBackroomPickup") as Node3D
+	var pickup: Node3D = root.get_node("StoreSessionBackroomPickup") as Node3D
 	assert_eq(
 		highlight.get_target_node(), pickup,
 		"Stage advance must overwrite the prior target"

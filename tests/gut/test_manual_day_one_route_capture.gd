@@ -1,6 +1,6 @@
 extends GutTest
 
-const _BetaManualDayOneRouteCapture: GDScript = preload(
+const _StoreSessionManualDayOneRouteCapture: GDScript = preload(
 	"res://game/scripts/store_session/manual_day_one_route_capture.gd"
 )
 const _StoreProofContract: GDScript = preload(
@@ -38,7 +38,7 @@ const _MAJOR_ROUTE_BEATS: Array[String] = [
 
 
 func test_route_manifest_schema_covers_required_review_beats() -> void:
-	var manifest: Dictionary = _BetaManualDayOneRouteCapture.build_manifest(
+	var manifest: Dictionary = _StoreSessionManualDayOneRouteCapture.build_manifest(
 		_TEST_ARTIFACT_DIR,
 		"schema_test_run"
 	)
@@ -67,7 +67,7 @@ func test_route_manifest_schema_covers_required_review_beats() -> void:
 		_assert_route_beat_schema(beat)
 		seen.append(str(beat.get("beat_name", "")))
 
-	for required: String in _BetaManualDayOneRouteCapture.REQUIRED_REVIEW_BEATS:
+	for required: String in _StoreSessionManualDayOneRouteCapture.REQUIRED_REVIEW_BEATS:
 		assert_true(
 			seen.has(required),
 			"Manual route manifest must include required review beat %s" % required
@@ -96,7 +96,7 @@ func test_route_manifest_writes_checklist_and_capture_metadata() -> void:
 			"path": "user://screenshots/20260523_120000_manager_prompt.png",
 		},
 	}
-	var result: Dictionary = _BetaManualDayOneRouteCapture.write_route_manifest(
+	var result: Dictionary = _StoreSessionManualDayOneRouteCapture.write_route_manifest(
 		_TEST_ARTIFACT_DIR,
 		"schema_test_run",
 		capture_results
@@ -136,7 +136,7 @@ func test_route_manifest_writes_checklist_and_capture_metadata() -> void:
 func test_route_beats_link_to_existing_automated_assertions() -> void:
 	var lines: PackedStringArray = _read_lines(_ROUTE_ASSERTION_FILE)
 	assert_gt(lines.size(), 0, "Automated route assertion file must be readable")
-	for beat: Dictionary in _BetaManualDayOneRouteCapture.route_beats():
+	for beat: Dictionary in _StoreSessionManualDayOneRouteCapture.route_beats():
 		var refs: Array = beat.get("automated_route_assertions", []) as Array
 		assert_gt(
 			refs.size(),

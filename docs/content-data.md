@@ -47,8 +47,8 @@ The checked-in content tree under `game/content/`:
 | `suppliers/` | `supplier_catalog.json`. |
 | `unlocks/` | `unlocks.json`. |
 | `visuals/` | `retro_games_product_visual_catalog.json` and `store_visual_layouts.json` — visual-only presentation/layout data. |
-| `beta/days/` | `day_01.json`, `day_02.json` — loaded directly by `BetaDayOneController`, routed to `ignore` in the loader table. |
-| `beta/events/` | `customer_events.json`, `hidden_thread_events.json` — same path as above. |
+| `store_session/days/` | `day_01.json`, `day_02.json` — loaded directly by `StoreSessionController`, routed to `ignore` in the loader table. |
+| `store_session/events/` | `customer_events.json`, `hidden_thread_events.json` — same path as above. |
 
 Top-level config / data JSON files at the content root:
 
@@ -92,7 +92,7 @@ Routes fall into three buckets in `_TYPE_ROUTES`:
    `manager_notes_data`, `onboarding_config_data`,
    `tutorial_contexts_data`, `retro_games_grades_data`,
    `product_visual_catalog_data`, `store_visual_layout_catalog`,
-   `beta_day_data`, `beta_events_data`).
+   `store_session_day_data`, `store_session_events_data`).
 
 For entry-bucket dictionary-shaped files, entries come from `entries`,
 `items`, or `definitions` arrays when present. Otherwise the loader uses the
@@ -174,8 +174,8 @@ Not every content file becomes a typed `Resource`. Current examples include:
   `DataLoaderSingleton.get_difficulty_config()`
 - the `retro_games` per-store config dictionary
   (`DataLoaderSingleton.get_retro_games_config()`)
-- beta day-1/day-2 day files and beta event files, which
-  `BetaDayOneController` reads directly from disk
+- store-session day files and event files, which `StoreSessionController`
+  reads directly from disk
 - product/platform visual catalog data under `game/content/visuals/`, which
   is recognized by `DataLoader` but remains visual-only data rather than a
   typed gameplay resource

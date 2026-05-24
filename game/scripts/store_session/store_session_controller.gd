@@ -42,7 +42,7 @@ const MAX_JSON_FILE_BYTES: int = 1048576
 ## Tone rule: objective text is grounded retail-shift language only. No
 ## "odd" / "strange" / "mysterious" / "anomaly" / "secret" — the player
 ## decides what's weird; the UI doesn't announce it. The console stack
-## (BetaHiddenClue) is retained ambient scene context, never the active
+## (StoreSessionHiddenClue) is retained ambient scene context, never the active
 ## objective, and never advances the chain.
 ## Pre-chain note phase. Used for later-day Vic notes; Day 1 now skips this
 ## gate and starts directly at STAGE_TALK_TO_CUSTOMER so the tutorial's first
@@ -77,11 +77,11 @@ const _OBJECTIVE_UNLOCK_GRANTS: Dictionary = {
 }
 const _DAY_ONE_CLOSE_UNLOCK_GRANT: StringName = &"employee_closing_certified"
 const _REGISTER_UNLOCK_GRANT: StringName = &"employee_register_access"
-const _CUSTOMER_COUNTER_ANCHOR_NAME: String = "BetaCustomerCounterAnchor"
+const _CUSTOMER_COUNTER_ANCHOR_NAME: String = "StoreSessionCustomerCounterAnchor"
 const _CUSTOMER_COUNTER_RECEIPT_NAME: String = "SharedReceiptSlip"
 const _CUSTOMER_COUNTER_ITEM_NAME: String = "SharedCustomerItem"
 const _CUSTOMER_COUNTER_STRIP_NAME: String = "OutcomeStrip"
-const _RESTOCK_PLACEMENT_AFFORDANCE_NAME: String = "BetaRestockPlacementAffordance"
+const _RESTOCK_PLACEMENT_AFFORDANCE_NAME: String = "StoreSessionRestockPlacementAffordance"
 const _RESTOCK_SLOT_PREFIX: String = "SlotMarker"
 const _COUNTER_STATE_PENDING: StringName = &"pending"
 const _COUNTER_STATE_CLEAN_EXCHANGE: StringName = &"clean_exchange"
@@ -177,11 +177,11 @@ const STORE_SESSION_KEEP_ROOT_NODES: Array[StringName] = [
 	&"checkout_counter",
 	&"FrontLaneQueue",
 	&"StoreSessionController",
-	&"BetaDayOneCustomer",
-	&"BetaBackroomPickup",
-	&"BetaRestockShelf",
-	&"BetaDayEndTrigger",
-	&"BetaHiddenClue",
+	&"StoreSessionDayOneCustomer",
+	&"StoreSessionBackroomPickup",
+	&"StoreSessionRestockShelf",
+	&"StoreSessionDayEndTrigger",
+	&"StoreSessionHiddenClue",
 	&"ExpandableStoreShell",
 ]
 
@@ -272,7 +272,7 @@ var _training_objectives: Array[Dictionary] = [
 		"label": "Talk to the manager at checkout.",
 		"action": "Talk to manager",
 		"key": "E",
-		"target_path": "BetaDayOneCustomer/Interactable",
+		"target_path": "StoreSessionDayOneCustomer/Interactable",
 		"prompt_display_name": "manager",
 		"prompt_text": "Talk to",
 		"action_verb": "Talk",
@@ -286,7 +286,7 @@ var _training_objectives: Array[Dictionary] = [
 		"label": "Check the register.",
 		"action": "Check register",
 		"key": "E",
-		"target_path": "BetaDayEndTrigger/Interactable",
+		"target_path": "StoreSessionDayEndTrigger/Interactable",
 		"prompt_display_name": "register",
 		"prompt_text": "Check",
 		"action_verb": "Check",
@@ -300,7 +300,7 @@ var _training_objectives: Array[Dictionary] = [
 		"label": "Check back room inventory.",
 		"action": "Check back room inventory",
 		"key": "E",
-		"target_path": "BetaBackroomPickup/Interactable",
+		"target_path": "StoreSessionBackroomPickup/Interactable",
 		"prompt_display_name": "back room inventory",
 		"prompt_text": "Check",
 		"action_verb": "Check",
@@ -314,7 +314,7 @@ var _training_objectives: Array[Dictionary] = [
 		"label": "Stock the used games shelf.",
 		"action": "Stock used games shelf",
 		"key": "E",
-		"target_path": "BetaRestockShelf/Interactable",
+		"target_path": "StoreSessionRestockShelf/Interactable",
 		"prompt_display_name": "used games shelf",
 		"prompt_text": "Stock",
 		"action_verb": "Stock",
@@ -331,7 +331,7 @@ var _day_one_objectives: Array[Dictionary] = [
 		"label": "Talk to the customer at the register.",
 		"action": "Talk to the customer",
 		"key": "E",
-		"target_path": "BetaDayOneCustomer/Interactable",
+		"target_path": "StoreSessionDayOneCustomer/Interactable",
 		"prompt_display_name": "customer",
 		"prompt_text": "Talk to",
 		"action_verb": "Talk",
@@ -345,7 +345,7 @@ var _day_one_objectives: Array[Dictionary] = [
 		"label": "Check the back room delivery.",
 		"action": "Check inventory",
 		"key": "E",
-		"target_path": "BetaBackroomPickup/Interactable",
+		"target_path": "StoreSessionBackroomPickup/Interactable",
 		"prompt_display_name": "back room inventory",
 		"prompt_text": "Check",
 		"action_verb": "Check",
@@ -359,7 +359,7 @@ var _day_one_objectives: Array[Dictionary] = [
 		"label": "Stock the used games shelf.",
 		"action": "Stock used games shelf",
 		"key": "E",
-		"target_path": "BetaRestockShelf/Interactable",
+		"target_path": "StoreSessionRestockShelf/Interactable",
 		"prompt_display_name": "used games shelf",
 		"prompt_text": "Stock",
 		"action_verb": "Stock",
@@ -373,7 +373,7 @@ var _day_one_objectives: Array[Dictionary] = [
 		"label": "Close the day at the register.",
 		"action": "Close the day",
 		"key": "E",
-		"target_path": "BetaDayEndTrigger/Interactable",
+		"target_path": "StoreSessionDayEndTrigger/Interactable",
 		"prompt_display_name": "day",
 		"prompt_text": "Close",
 		"action_verb": "End",
@@ -788,7 +788,7 @@ func _open_store_after_training() -> void:
 
 ## Required back-room beat. Pressing E on the inventory pickup completes
 ## the back-room objective and advances the chain. Inspecting the
-## console stack flavor object (BetaHiddenClue) is independent — it does
+## console stack flavor object (StoreSessionHiddenClue) is independent — it does
 ## not satisfy this beat.
 func on_store_stockroom_pickup_interacted() -> void:
 	if _stage != STAGE_BACK_ROOM_INVENTORY and _stage != STAGE_TRAINING_BACK_ROOM:
@@ -1388,7 +1388,7 @@ func _store_customer_signal_id() -> StringName:
 	var store: Node = _store_root()
 	if store == null:
 		return &""
-	var customer_node: Node = store.get_node_or_null("BetaDayOneCustomer")
+	var customer_node: Node = store.get_node_or_null("StoreSessionDayOneCustomer")
 	if customer_node == null:
 		return &""
 	return StringName(str(customer_node.get_instance_id()))
@@ -1867,7 +1867,7 @@ func _restore_customer_for_next_event() -> void:
 		_customer_exit_tween.kill()
 		_customer_exit_tween = null
 	_set_customer_exit_state(CUSTOMER_EXIT_NOT_STARTED)
-	var customer: Node = store.get_node_or_null("BetaDayOneCustomer")
+	var customer: Node = store.get_node_or_null("StoreSessionDayOneCustomer")
 	if customer is Node3D:
 		var customer_3d: Node3D = customer as Node3D
 		if _initial_customer_position_captured:
@@ -1881,7 +1881,7 @@ func _restore_customer_for_next_event() -> void:
 			var albedo: Color = mat.albedo_color
 			albedo.a = 1.0
 			mat.albedo_color = albedo
-	var floor_mat: Node = store.get_node_or_null("Checkout/BetaCustomerFloorMat")
+	var floor_mat: Node = store.get_node_or_null("Checkout/StoreSessionCustomerFloorMat")
 	if floor_mat is Node3D:
 		(floor_mat as Node3D).visible = true
 	_clear_customer_counter_anchor()
@@ -2046,7 +2046,7 @@ func _advance_to_open_hour_if_early() -> void:
 
 
 ## Restores the scene-side state Day N mutated at runtime so Day N+1 can
-## walk the same chain. The exit tween hid `BetaDayOneCustomer` and faded
+## walk the same chain. The exit tween hid `StoreSessionDayOneCustomer` and faded
 ## its body alpha; the back-room pickup swapped the closed box for its
 ## open base and hid both the closed-box mesh and label. Idempotent — Day 1
 ## sees fresh authored state and the resets are no-ops.
@@ -2058,7 +2058,7 @@ func _reset_scene_for_day(_day_number: int) -> void:
 		_customer_exit_tween.kill()
 		_customer_exit_tween = null
 	_set_customer_exit_state(CUSTOMER_EXIT_NOT_STARTED)
-	var customer: Node = store.get_node_or_null("BetaDayOneCustomer")
+	var customer: Node = store.get_node_or_null("StoreSessionDayOneCustomer")
 	if customer is Node3D:
 		var customer_3d: Node3D = customer as Node3D
 		if _initial_customer_position_captured:
@@ -2075,10 +2075,10 @@ func _reset_scene_for_day(_day_number: int) -> void:
 			var albedo: Color = mat.albedo_color
 			albedo.a = 1.0
 			mat.albedo_color = albedo
-	var floor_mat: Node = store.get_node_or_null("Checkout/BetaCustomerFloorMat")
+	var floor_mat: Node = store.get_node_or_null("Checkout/StoreSessionCustomerFloorMat")
 	if floor_mat is Node3D:
 		(floor_mat as Node3D).visible = true
-	var pickup: Node = store.get_node_or_null("BetaBackroomPickup")
+	var pickup: Node = store.get_node_or_null("StoreSessionBackroomPickup")
 	if pickup is Node3D:
 		var pickup_3d: Node3D = pickup as Node3D
 		pickup_3d.visible = true
@@ -2382,7 +2382,7 @@ func _apply_customer_profile(event_data: Dictionary) -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var node: Node = store.get_node_or_null("BetaDayOneCustomer/Interactable")
+	var node: Node = store.get_node_or_null("StoreSessionDayOneCustomer/Interactable")
 	if node is Interactable:
 		var customer_name: String = str(event_data.get("customer_name", "customer")).strip_edges()
 		if customer_name.is_empty():
@@ -2501,7 +2501,7 @@ func _apply_objective_gating() -> void:
 		_set_interactable_enabled(store, path, is_active)
 	_refresh_interactable_prompt_copy(store)
 	# Console stack — ambient context, never an active Day-1 prompt.
-	_set_interactable_enabled(store, "BetaHiddenClue/Interactable", false)
+	_set_interactable_enabled(store, "StoreSessionHiddenClue/Interactable", false)
 	# Register status indicator — passive disabled-reason hint shown during
 	# the back-room and stocking phases. Kept enabled across every stage so
 	# the InteractionRay's raycast can still hover it (the rest of the gating
@@ -2522,7 +2522,7 @@ func _refresh_interactable_prompt_copy(store: Node) -> void:
 		target.prompt_text = str(entry.get("prompt_text", target.prompt_text))
 		target.action_verb = str(entry.get("action_verb", target.action_verb))
 	var customer: Interactable = (
-		store.get_node_or_null("BetaDayOneCustomer/Interactable") as Interactable
+		store.get_node_or_null("StoreSessionDayOneCustomer/Interactable") as Interactable
 	)
 	if customer != null:
 		if _stage == STAGE_TRAINING_TALK_MANAGER:
@@ -2534,7 +2534,7 @@ func _refresh_interactable_prompt_copy(store: Node) -> void:
 			customer.enabled = true
 	_set_customer_proxy_manager_details_visible(store, _stage == STAGE_TRAINING_TALK_MANAGER)
 	var register: Interactable = (
-		store.get_node_or_null("BetaDayEndTrigger/Interactable") as Interactable
+		store.get_node_or_null("StoreSessionDayEndTrigger/Interactable") as Interactable
 	)
 	if register != null:
 		match _stage:
@@ -2890,7 +2890,7 @@ func _is_kept_root_node(node_name: StringName) -> bool:
 ## Builds the customer's visible body proxy and resizes the Interactable's
 ## CollisionShape3D so the visible mesh, the trigger volume, and the world
 ## position are anchored at the same Node3D origin. The .tscn drives
-## BetaDayOneCustomer.position — this method does not move the node.
+## StoreSessionDayOneCustomer.position — this method does not move the node.
 ##
 ## The body is a small blocky proxy under `CustomerProxy` so the silhouette
 ## reads as "a person standing here" from across the store without looking
@@ -2898,17 +2898,17 @@ func _is_kept_root_node(node_name: StringName) -> bool:
 ## is freed on first run because a duplicate body mesh at the same anchor
 ## would z-fight and double the visible footprint.
 ## See §EH-27. `_store_root() == null` is the documented test seam; a
-## missing `BetaDayOneCustomer` node is a wiring regression (the node is
+## missing `StoreSessionDayOneCustomer` node is a wiring regression (the node is
 ## authored in `retro_games.tscn` for the store_session) — fail loud.
 func _configure_store_customer() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var customer_node_ref: Node = store.get_node_or_null("BetaDayOneCustomer")
+	var customer_node_ref: Node = store.get_node_or_null("StoreSessionDayOneCustomer")
 	if not (customer_node_ref is Node3D):
 		push_error(
 			(
-				"StoreSessionController: `BetaDayOneCustomer` Node3D missing under store "
+				"StoreSessionController: `StoreSessionDayOneCustomer` Node3D missing under store "
 				+ "root '%s'; store_session customer setup skipped." % store.name
 			)
 		)
@@ -3079,7 +3079,7 @@ func _configure_store_customer() -> void:
 
 
 func _set_customer_proxy_manager_details_visible(store: Node, is_manager_role: bool) -> void:
-	var proxy: Node = store.get_node_or_null("BetaDayOneCustomer/CustomerProxy")
+	var proxy: Node = store.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
 	if proxy == null:
 		return
 	for part_name: String in ["Badge", "Clipboard", "NameTag", "Lanyard"]:
@@ -3130,7 +3130,7 @@ func _resize_customer_trigger(customer_node: Node3D) -> void:
 	if interactable_node == null:
 		push_error(
 			(
-				"StoreSessionController: BetaDayOneCustomer is missing its "
+				"StoreSessionController: StoreSessionDayOneCustomer is missing its "
 				+ "`Interactable` child; customer cannot be aimed at."
 			)
 		)
@@ -3141,7 +3141,7 @@ func _resize_customer_trigger(customer_node: Node3D) -> void:
 	if collision == null:
 		push_error(
 			(
-				"StoreSessionController: BetaDayOneCustomer/Interactable has no "
+				"StoreSessionController: StoreSessionDayOneCustomer/Interactable has no "
 				+ "CollisionShape3D descendant; trigger resize skipped."
 			)
 		)
@@ -3348,7 +3348,7 @@ func _show_clean_exchange_shelf_gap() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var shelf: Node3D = store.get_node_or_null("BetaRestockShelf") as Node3D
+	var shelf: Node3D = store.get_node_or_null("StoreSessionRestockShelf") as Node3D
 	if shelf == null:
 		return
 	var existing: Node = shelf.get_node_or_null(_CLEAN_EXCHANGE_SHELF_GAP_NAME)
@@ -3380,7 +3380,7 @@ func _show_bundle_shelf_gap(gap_name: String, slot_index: int, item_role: String
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var shelf: Node3D = store.get_node_or_null("BetaRestockShelf") as Node3D
+	var shelf: Node3D = store.get_node_or_null("StoreSessionRestockShelf") as Node3D
 	if shelf == null:
 		return
 	var existing: Node = shelf.get_node_or_null(gap_name)
@@ -3408,7 +3408,7 @@ func _show_clean_exchange_returned_copy() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var pickup: Node3D = store.get_node_or_null("BetaBackroomPickup") as Node3D
+	var pickup: Node3D = store.get_node_or_null("StoreSessionBackroomPickup") as Node3D
 	if pickup == null:
 		return
 	var existing: Node = pickup.get_node_or_null(_CLEAN_EXCHANGE_RETURNED_COPY_NAME)
@@ -3441,7 +3441,7 @@ func _show_bundle_returned_copy() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var pickup: Node3D = store.get_node_or_null("BetaBackroomPickup") as Node3D
+	var pickup: Node3D = store.get_node_or_null("StoreSessionBackroomPickup") as Node3D
 	if pickup == null:
 		return
 	var existing: Node = pickup.get_node_or_null(_BUNDLE_RETURNED_COPY_NAME)
@@ -3474,7 +3474,7 @@ func _show_clean_exchange_customer_reaction() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var customer: Node3D = store.get_node_or_null("BetaDayOneCustomer") as Node3D
+	var customer: Node3D = store.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
 	if customer == null:
 		return
 	var existing: Node = customer.get_node_or_null(_CLEAN_EXCHANGE_REACTION_NAME)
@@ -3500,7 +3500,7 @@ func _show_bundle_customer_reaction() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var customer: Node3D = store.get_node_or_null("BetaDayOneCustomer") as Node3D
+	var customer: Node3D = store.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
 	if customer == null:
 		return
 	var existing: Node = customer.get_node_or_null(_BUNDLE_REACTION_NAME)
@@ -3563,15 +3563,15 @@ func _clear_clean_exchange_room_outcome() -> void:
 	if store == null:
 		return
 	var removals: Array[String] = [
-		"BetaRestockShelf/%s" % _CLEAN_EXCHANGE_SHELF_GAP_NAME,
-		"BetaBackroomPickup/%s" % _CLEAN_EXCHANGE_RETURNED_COPY_NAME,
-		"BetaDayOneCustomer/%s" % _CLEAN_EXCHANGE_REACTION_NAME,
+		"StoreSessionRestockShelf/%s" % _CLEAN_EXCHANGE_SHELF_GAP_NAME,
+		"StoreSessionBackroomPickup/%s" % _CLEAN_EXCHANGE_RETURNED_COPY_NAME,
+		"StoreSessionDayOneCustomer/%s" % _CLEAN_EXCHANGE_REACTION_NAME,
 	]
 	for path: String in removals:
 		var node: Node = store.get_node_or_null(path)
 		if node != null:
 			node.queue_free()
-	var customer: Node = store.get_node_or_null("BetaDayOneCustomer")
+	var customer: Node = store.get_node_or_null("StoreSessionDayOneCustomer")
 	if customer != null and customer.has_meta("exit_reaction"):
 		customer.remove_meta("exit_reaction")
 
@@ -3581,10 +3581,10 @@ func _clear_bundle_room_outcome() -> void:
 	if store == null:
 		return
 	var removals: Array[String] = [
-		"BetaRestockShelf/%s" % _BUNDLE_GAME_SHELF_GAP_NAME,
-		"BetaRestockShelf/%s" % _BUNDLE_CONTROLLER_SHELF_GAP_NAME,
-		"BetaBackroomPickup/%s" % _BUNDLE_RETURNED_COPY_NAME,
-		"BetaDayOneCustomer/%s" % _BUNDLE_REACTION_NAME,
+		"StoreSessionRestockShelf/%s" % _BUNDLE_GAME_SHELF_GAP_NAME,
+		"StoreSessionRestockShelf/%s" % _BUNDLE_CONTROLLER_SHELF_GAP_NAME,
+		"StoreSessionBackroomPickup/%s" % _BUNDLE_RETURNED_COPY_NAME,
+		"StoreSessionDayOneCustomer/%s" % _BUNDLE_REACTION_NAME,
 	]
 	for path: String in removals:
 		var node: Node = store.get_node_or_null(path)
@@ -3594,12 +3594,12 @@ func _clear_bundle_room_outcome() -> void:
 		var stack: Node = _customer_counter_anchor.get_node_or_null(_BUNDLE_STACK_NAME)
 		if stack != null:
 			stack.queue_free()
-	var customer: Node = store.get_node_or_null("BetaDayOneCustomer")
+	var customer: Node = store.get_node_or_null("StoreSessionDayOneCustomer")
 	if customer != null and str(customer.get_meta("exit_reaction", "")) == "pressured_bundle":
 		customer.remove_meta("exit_reaction")
 
 
-## Swaps the BetaBackroomPickup branch from its closed-box state to its
+## Swaps the StoreSessionBackroomPickup branch from its closed-box state to its
 ## open-box state on pickup: `StockBox` and `StockBoxLabel` flip invisible
 ## while the pre-authored `StockBoxOpen` sibling becomes visible. This
 ## replaces the earlier alpha-fade-to-invisible because a vanishing box
@@ -3611,7 +3611,7 @@ func _hide_stock_box_in_world() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var pickup: Node = store.get_node_or_null("BetaBackroomPickup")
+	var pickup: Node = store.get_node_or_null("StoreSessionBackroomPickup")
 	if not (pickup is Node3D):
 		return
 	var pickup_3d: Node3D = pickup as Node3D
@@ -3645,7 +3645,7 @@ func _ensure_restock_placement_affordance() -> MeshInstance3D:
 	var store: Node = _store_root()
 	if store == null:
 		return null
-	var shelf: Node3D = store.get_node_or_null("BetaRestockShelf") as Node3D
+	var shelf: Node3D = store.get_node_or_null("StoreSessionRestockShelf") as Node3D
 	if shelf == null:
 		return null
 	var existing: MeshInstance3D = (
@@ -3674,7 +3674,7 @@ func _restock_slot_capacity() -> int:
 	var store: Node = _store_root()
 	if store == null:
 		return 0
-	var shelf: Node = store.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return 0
 	var count: int = 0
@@ -3692,7 +3692,7 @@ func _restock_slot_position(index: int) -> Vector3:
 	var store: Node = _store_root()
 	if store == null:
 		return Vector3.ZERO
-	var shelf: Node = store.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return Vector3.ZERO
 	var marker: Node3D = (
@@ -3717,7 +3717,7 @@ func _reset_restock_shelf_visuals() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var shelf: Node = store.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	for child: Node in shelf.get_children():
@@ -3733,7 +3733,7 @@ func _reset_restock_shelf_visuals() -> void:
 	_shelf_stock_count = 0
 
 
-## Walks BetaDayOneCustomer from the register out through the entrance
+## Walks StoreSessionDayOneCustomer from the register out through the entrance
 ## door before hiding the node, so the register reads as "they thanked
 ## the player and left" rather than "they popped out of existence."
 ##
@@ -3753,7 +3753,7 @@ func _animate_customer_exit() -> void:
 	var store: Node = _store_root()
 	if store == null:
 		return
-	var customer: Node = store.get_node_or_null("BetaDayOneCustomer")
+	var customer: Node = store.get_node_or_null("StoreSessionDayOneCustomer")
 	if customer == null:
 		return
 	var inter: Node = customer.get_node_or_null("Interactable")
@@ -3790,7 +3790,7 @@ func _animate_customer_exit() -> void:
 		fade_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 		body.material_override = fade_mat
 
-	var floor_mat_node: Node = store.get_node_or_null("Checkout/BetaCustomerFloorMat")
+	var floor_mat_node: Node = store.get_node_or_null("Checkout/StoreSessionCustomerFloorMat")
 
 	if _customer_exit_tween != null:
 		_customer_exit_tween.kill()
@@ -4012,7 +4012,7 @@ func _visible_shelf_item_count() -> int:
 	var store: Node = _store_root()
 	if store == null:
 		return 0
-	var shelf: Node = store.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return 0
 	var count: int = 0
@@ -4022,13 +4022,13 @@ func _visible_shelf_item_count() -> int:
 	return count
 
 
-## Spawns `count` small box meshes on top of `BetaRestockShelf`'s ShelfBoard
+## Spawns `count` small box meshes on top of `StoreSessionRestockShelf`'s ShelfBoard
 ## so the player can see what they put up. Returns the actual number
 ## spawned (clamped by the shelf width). Items spread evenly along the
 ## board so 5 reads as a row instead of a stack.
 ##
 ## `_store_root() == null` is the documented test-fixture seam. The
-## missing-`BetaRestockShelf` branch is a scene-wiring regression
+## missing-`StoreSessionRestockShelf` branch is a scene-wiring regression
 ## (`retro_games.tscn` ships the node at the root of the store) — fail
 ## loud so a node rename / accidental delete is caught in CI rather than
 ## shipping as "Stocked 0 games on the used games shelf." See §EH-26.
@@ -4043,11 +4043,11 @@ func _render_visible_shelf_items(count: int) -> int:
 	var store: Node = _store_root()
 	if store == null:
 		return 0
-	var shelf: Node = store.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null or not (shelf is Node3D):
 		push_error(
 			(
-				"StoreSessionController: `BetaRestockShelf` Node3D missing under store root "
+				"StoreSessionController: `StoreSessionRestockShelf` Node3D missing under store root "
 				+ "'%s'; visible stock spawn skipped." % store.name
 			)
 		)

@@ -324,9 +324,9 @@ func test_first_run_route_has_obvious_front_back_return_order() -> void:
 	var shelf: Marker3D = _root.get_node_or_null(
 		"CustomerNavConfig/BrowseWaypoint01"
 	) as Marker3D
-	var backroom: Node3D = _root.get_node_or_null("BetaBackroomPickup") as Node3D
-	var restock_shelf: Node3D = _root.get_node_or_null("BetaRestockShelf") as Node3D
-	var day_end: Node3D = _root.get_node_or_null("BetaDayEndTrigger") as Node3D
+	var backroom: Node3D = _root.get_node_or_null("StoreSessionBackroomPickup") as Node3D
+	var restock_shelf: Node3D = _root.get_node_or_null("StoreSessionRestockShelf") as Node3D
+	var day_end: Node3D = _root.get_node_or_null("StoreSessionDayEndTrigger") as Node3D
 	for node: Node3D in [
 		entry,
 		checkout,

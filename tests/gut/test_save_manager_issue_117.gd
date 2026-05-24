@@ -137,6 +137,48 @@ func test_load_version_0_save_is_rejected_as_too_old() -> void:
 	)
 
 
+func test_removed_store_session_state_key_is_rejected() -> void:
+	var removed_key: String = String.chr(98) + "eta_run_state"
+	var removed_state_data: Dictionary = {
+		"save_version": SaveManager.CURRENT_SAVE_VERSION,
+		"time": {"current_day": 8},
+		"economy": {"current_cash": 999.0},
+		"inventory": _inventory.get_save_data(),
+		"reputation": _reputation.get_save_data(),
+		"owned_stores": ["retro_games"],
+		removed_key: {"day": 2},
+	}
+	_write_save(MANUAL_SLOT_A, removed_state_data)
+
+	var pre_day: int = _time_system.current_day
+	var pre_cash: float = _economy.get_cash()
+	var failure_reasons: Array[String] = []
+	var handler: Callable = func(_slot: int, reason: String) -> void:
+		failure_reasons.append(reason)
+	EventBus.save_load_failed.connect(handler)
+
+	var loaded: bool = _save_manager.load_game(MANUAL_SLOT_A)
+
+	EventBus.save_load_failed.disconnect(handler)
+	assert_false(loaded, "Removed store-session state key must fail load")
+	assert_eq(
+		failure_reasons,
+		["Legacy path removed — use SSOT implementation"],
+		"Removed state key must fail loudly instead of falling back"
+	)
+	assert_eq(
+		_time_system.current_day,
+		pre_day,
+		"Rejected load must not mutate day"
+	)
+	assert_almost_eq(
+		_economy.get_cash(),
+		pre_cash,
+		0.01,
+		"Rejected load must not mutate cash"
+	)
+
+
 func test_auto_save_waits_for_day_acknowledged() -> void:
 	_configure_state(3, 900.0, [&"retro_games"], &"retro_games")
 

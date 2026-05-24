@@ -348,13 +348,13 @@ func _objective_anchor_for_stage(stage: Variant) -> String:
 	var stage_name: String = str(stage)
 	match stage_name:
 		"talk_to_customer":
-			return "BetaDayOneCustomer"
+			return "StoreSessionDayOneCustomer"
 		"back_room_inventory":
-			return "BetaBackroomPickup"
+			return "StoreSessionBackroomPickup"
 		"stock_shelf":
-			return "BetaRestockShelf"
+			return "StoreSessionRestockShelf"
 		"end_day":
-			return "BetaDayEndTrigger"
+			return "StoreSessionDayEndTrigger"
 		_:
 			return "—"
 

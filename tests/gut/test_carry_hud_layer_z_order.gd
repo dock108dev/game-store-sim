@@ -1,4 +1,4 @@
-## Tests that the BetaCarryLabel renders above the ObjectiveRail.
+## Tests that the StoreSessionCarryLabel renders above the ObjectiveRail.
 ##
 ## Regression: the label was previously created lazily as a direct child of
 ## the HUD CanvasLayer (layer 30), which placed it behind the ObjectiveRail
@@ -30,7 +30,7 @@ func test_carry_hud_lives_on_dedicated_canvas_layer() -> void:
 	var carry_layer: CanvasLayer = _hud.get_node_or_null("CarryHUD") as CanvasLayer
 	assert_not_null(
 		carry_layer,
-		"hud.tscn must wrap BetaCarryLabel in a dedicated CarryHUD CanvasLayer "
+		"hud.tscn must wrap StoreSessionCarryLabel in a dedicated CarryHUD CanvasLayer "
 		+ "so its z-order is independent of the HUD CanvasLayer"
 	)
 
@@ -76,18 +76,18 @@ func test_store_carry_label_is_child_of_carry_hud() -> void:
 	var carry_layer: CanvasLayer = _hud.get_node_or_null("CarryHUD") as CanvasLayer
 	if carry_layer == null:
 		return
-	var label: Label = carry_layer.get_node_or_null("BetaCarryLabel") as Label
+	var label: Label = carry_layer.get_node_or_null("StoreSessionCarryLabel") as Label
 	assert_not_null(
 		label,
-		"BetaCarryLabel must be parented under CarryHUD"
+		"StoreSessionCarryLabel must be parented under CarryHUD"
 	)
 	if label == null:
 		return
 	assert_false(
 		label.visible,
-		"BetaCarryLabel must default to hidden until the player picks up stock"
+		"StoreSessionCarryLabel must default to hidden until the player picks up stock"
 	)
 	assert_eq(
 		label.text, "",
-		"BetaCarryLabel must default to empty text"
+		"StoreSessionCarryLabel must default to empty text"
 	)

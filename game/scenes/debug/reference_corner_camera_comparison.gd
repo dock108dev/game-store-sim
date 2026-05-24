@@ -25,7 +25,7 @@ const STORE_SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const FIXED_CONTROLLER_PATH: NodePath = ^"PlayerController"
 
 const _FIRST_PERSON_FOCUS_PATH: String = "Checkout/Register/CheckoutSign"
-const _COUNTER_FOCUS_PATH: String = "BetaDayOneCustomer"
+const _COUNTER_FOCUS_PATH: String = "StoreSessionDayOneCustomer"
 const _FIRST_PERSON_CAMERA_POSITION := Vector3(2.2, 1.7, 8.75)
 const _FIXED_PIVOT := Vector3(3.35, 0.0, 3.2)
 const _COUNTER_CAMERA_POSITION := Vector3(2.8, 1.55, 5.95)
@@ -121,7 +121,7 @@ func get_visual_evidence_rows() -> Array[Dictionary]:
 			"focus": _FIRST_PERSON_FOCUS_PATH,
 			"anchors": [
 				"Checkout",
-				"BetaDayEndTrigger",
+				"StoreSessionDayEndTrigger",
 				"ReadabilityProps/CheckoutCounterDressing",
 				"ReadabilityProps/ZoneIdentity/ReferenceCornerWallPanel",
 			],
@@ -136,7 +136,7 @@ func get_visual_evidence_rows() -> Array[Dictionary]:
 			"focus": "ReadabilityProps/ZoneIdentity/ReferenceCornerFloorInset",
 			"anchors": [
 				"Checkout",
-				"BetaRestockShelf",
+				"StoreSessionRestockShelf",
 				"ReadabilityProps/DayOneRouteMarkers",
 				"ReadabilityProps/ZoneIdentity/ReferenceCornerFloorInset",
 			],
@@ -151,7 +151,7 @@ func get_visual_evidence_rows() -> Array[Dictionary]:
 			"focus": _COUNTER_FOCUS_PATH,
 			"anchors": [
 				"FrontLaneQueue",
-				"BetaDayOneCustomer",
+				"StoreSessionDayOneCustomer",
 				"ReadabilityProps/CheckoutCounterDressing/CustomerServiceSpotMat",
 			],
 			"suggested_filename": "camera_compare_counter_focus.png",

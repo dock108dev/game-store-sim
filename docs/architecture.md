@@ -82,8 +82,8 @@ reference earlier ones. Five entries are scenes
 | 29 | `StoreRegistry` | `game/autoload/store_registry.gd` — runtime cache seeded from `ContentRegistry` |
 | 30 | `StoreDirector` | `game/autoload/store_director.gd` |
 | 31 | `GameState` | `game/autoload/game_state.gd` — run-state SSOT (active store, day, money) |
-| 32 | `BetaRunState` | `game/scripts/beta/beta_run_state.gd` — beta-only run-state (current beta day, day-1 chain progress, end-of-day summary payload) |
-| 33 | `BetaHUD` | `game/autoload/beta_hud.gd` — session-level owner of the beta HUD panels (`BetaRightPanel` + `BetaEventLogPanel`); spawns both panels once at boot, exposes `activate(day)` / `deactivate()`. Registered after `BetaRunState`/`EventBus`/`InputFocus` so the panels can read `BetaRunState.day` and subscribe to signals in `_ready` |
+| 32 | `StoreSessionState` | `game/scripts/store_session/store_session_state.gd` — store-session run-state SSOT (active day, pre-opening progress, carried stock, customer/customer-result fields, counters, and end-of-day summary payload). Old beta run-state save keys are unsupported. |
+| 33 | `StoreSessionHUD` | `game/autoload/store_session_hud.gd` — session-level owner of the store-session status and event-log panels; spawns both panels once at boot and exposes `activate(day)` / `deactivate()`. Registered after `StoreSessionState`/`EventBus`/`InputFocus` so panels can read the current store-session state and subscribe to signals in `_ready`. |
 | 34 | `EmploymentSystem` | `game/autoload/employment_system.gd` — seasonal-employee state (trust, approval, hours, status), daily wages, and end-of-season retention/firing evaluation |
 | 35 | `PlatformSystem` | `game/scripts/systems/platform_system.gd` — per-platform supply/demand/hype, daily price ticks, and platform-affinity spawn weighting |
 | 36 | `StoreCustomizationSystem` | `game/scripts/systems/store_customization_system.gd` — per-day featured-display and promotional-poster choices, spawn-weight and demand multipliers, and trust/hidden-thread linkage |

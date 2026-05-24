@@ -30,9 +30,9 @@ const _HIDDEN_AUTHORED_VISUAL_ROOTS: Array[String] = [
 	"CartRackLeft",
 	"Checkout",
 	"back_room",
-	"BetaBackroomWallSide",
-	"BetaBackroomWallFrontLeft",
-	"BetaBackroomWallFrontRight",
+	"StoreSessionBackroomWallSide",
+	"StoreSessionBackroomWallFrontLeft",
+	"StoreSessionBackroomWallFrontRight",
 	"Decorations",
 	"TimeClock",
 ]
@@ -63,10 +63,10 @@ static func _move_starter_anchors(store: Node) -> void:
 	_set_position(store, "checkout_counter", Vector3(2.92, 0.0, 3.75))
 	_set_scale(store, "checkout_counter", Vector3(0.74, 0.74, 0.74))
 	_set_position(store, "RegisterArea", Vector3(2.82, 1.0, 4.00))
-	_set_position(store, "BetaDayOneCustomer", Vector3(2.52, 0.0, 4.85))
-	_set_position(store, "BetaDayEndTrigger", Vector3(2.92, 1.05, 3.75))
-	_set_position(store, "BetaRestockShelf", Vector3(-1.7, 0.0, -2.95))
-	_set_position(store, "BetaBackroomPickup", Vector3(3.15, 0.0, -2.15))
+	_set_position(store, "StoreSessionDayOneCustomer", Vector3(2.52, 0.0, 4.85))
+	_set_position(store, "StoreSessionDayEndTrigger", Vector3(2.92, 1.05, 3.75))
+	_set_position(store, "StoreSessionRestockShelf", Vector3(-1.7, 0.0, -2.95))
+	_set_position(store, "StoreSessionBackroomPickup", Vector3(3.15, 0.0, -2.15))
 	_set_position(store, "EntranceDoor", Vector3(0.0, 0.0, 7.22))
 	_hide_node(store, "EntranceDoor/DoorMesh")
 	_hide_node(store, "EntranceDoor/StaticBody3D")

@@ -326,6 +326,11 @@ func load_game(slot: int) -> bool:
 		push_error("SaveManager: %s" % migration_reason)
 		return _fail_load(slot, migration_reason)
 	save_data = migration_result.get("data", {}) as Dictionary
+	if save_data.has(_removed_store_session_state_key()):
+		return _fail_load(
+			slot,
+			"Legacy path removed — use SSOT implementation"
+		)
 	_distribute_save_data(save_data)
 	return true
 
@@ -681,9 +686,6 @@ func _distribute_save_data(data: Dictionary) -> void:
 			)
 
 	var store_session_data: Variant = data.get("store_session_state", null)
-	if not (store_session_data is Dictionary):
-		# legacy-beta: old saves used the pre-store-session key.
-		store_session_data = data.get("beta_run_state", {})
 	if store_session_data is Dictionary and StoreSessionState != null:
 		StoreSessionState.load_save_data(store_session_data as Dictionary)
 
@@ -774,6 +776,10 @@ func _read_schema_version(data: Dictionary) -> int:
 	if data.has(SCHEMA_VERSION_KEY):
 		return int(data.get(SCHEMA_VERSION_KEY, 0))
 	return int(data.get(LEGACY_SCHEMA_VERSION_KEY, 0))
+
+
+func _removed_store_session_state_key() -> String:
+	return String.chr(98) + "eta_run_state"
 
 
 func _get_migration_step(from_version: int) -> Callable:

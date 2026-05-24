@@ -49,7 +49,7 @@ const _PANEL_BG: Color = Color(0.08, 0.08, 0.14, 0.76)
 const _PANEL_WIDTH: float = 248.0
 const _PANEL_HEIGHT: float = 90.0
 const _PADDING: int = 10
-## Bottom inset chosen so the panel sits flush above `BetaCarryLabel`
+## Bottom inset chosen so the panel sits flush above `StoreSessionCarryLabel`
 ## (which lives at `offset_top = -200` on CarryHUD); 4 px clearance keeps
 ## the carry-state amber strip from kissing the panel edge.
 const _BOTTOM_INSET: float = 196.0

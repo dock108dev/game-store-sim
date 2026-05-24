@@ -38,7 +38,7 @@ signal_violations="$(
 _fail_block "EventBus/runtime signals must not use beta_ prefixes" "$signal_violations"
 
 hard_reference_violations="$(
-	rg -n 'game/scripts/beta|game/content/beta|res://game/scripts/beta|res://game/content/beta|debug/beta_|beta_hud\.gd|BetaRunState|BetaHUD|BetaDayOneController|BetaRightPanel|BetaEventLogPanel|BetaDaySummaryPanel|BetaManagerNotePanel|BetaModalTheme' game tests scripts project.godot \
+	rg -n 'game/scripts/beta|game/content/beta|res://game/scripts/beta|res://game/content/beta|debug/beta_|beta_hud\.gd|beta_run_state|BetaRunState|BetaHUD|BetaDayOneController|BetaRightPanel|BetaEventLogPanel|BetaDaySummaryPanel|BetaManagerNotePanel|BetaModalTheme' game tests scripts project.godot \
 		| grep -v -E '^tests/validate_store_session_naming\.sh:' \
 		|| true
 )"
@@ -46,12 +46,7 @@ _fail_block "runtime references must use store-session names" "$hard_reference_v
 
 language_violations="$(
 	rg -n '\b[Bb]eta\b|beta_|BETA_' game tests scripts project.godot \
-		| grep -v -E 'legacy-beta' \
 		| grep -v -E '^tests/validate_store_session_naming.sh:' \
-		| grep -v -E 'BetaDayOneCustomer|BetaBackroomPickup|BetaRestockShelf|BetaDayEndTrigger|BetaHiddenClue|BetaCustomerCounterAnchor|BetaCustomerFloorMat|BetaCarry(Label|Icon)|BetaBackroomWall' \
-		| grep -v -E 'beta_run_state' \
-		| grep -v -E '^tests/validate_store_session_naming.sh:' \
-		| grep -v -E '^game/scenes/stores/retro_games\.tscn:.*(id="beta_|SubResource\("beta_|SubResource\("beta_)' \
 		|| true
 )"
 _fail_block "runtime language must not describe playable systems as beta" "$language_violations"

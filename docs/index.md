@@ -25,8 +25,6 @@ This is the active project documentation set for the current Godot project.
 
 ## Audit notes
 
-- [Beta Code-To-Screen Readiness](audits/beta-code-to-screen-readiness.md)
-  records the current beta Day 1 route proof surfaces.
 - [`docs/audits/docs-consolidation.md`](audits/docs-consolidation.md) records
   the most recent documentation review pass.
 

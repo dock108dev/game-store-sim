@@ -92,10 +92,10 @@ func test_scene_authors_player_entry_spawn_marker() -> void:
 
 func test_player_entry_spawn_frames_checkout_customer_in_view() -> void:
 	var marker: Marker3D = _root.get_node_or_null("PlayerEntrySpawn") as Marker3D
-	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
+	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
 	assert_not_null(marker, "PlayerEntrySpawn must exist")
-	assert_not_null(customer, "BetaDayOneCustomer must exist")
+	assert_not_null(customer, "StoreSessionDayOneCustomer must exist")
 	assert_not_null(checkout, "Checkout must exist")
 	if marker == null or customer == null or checkout == null:
 		return
@@ -108,21 +108,21 @@ func test_player_entry_spawn_frames_checkout_customer_in_view() -> void:
 	var customer_dir: Vector3 = _flat_direction(marker.global_position, customer.global_position)
 	var checkout_dir: Vector3 = _flat_direction(marker.global_position, checkout.global_position)
 	assert_gt(
-		forward.dot(customer_dir), 0.55, "BetaDayOneCustomer must be inside the spawn view cone"
+		forward.dot(customer_dir), 0.55, "StoreSessionDayOneCustomer must be inside the spawn view cone"
 	)
 	assert_gt(forward.dot(checkout_dir), 0.55, "Checkout must be inside the spawn view cone")
 	assert_gt(
 		_flat_right(marker).dot(customer_dir),
 		0.15,
-		"BetaDayOneCustomer should read as central-to-right from spawn"
+		"StoreSessionDayOneCustomer should read as central-to-right from spawn"
 	)
 
 
 func test_day_one_route_targets_are_front_back_shelf_register() -> void:
-	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
-	var pickup: Node3D = _root.get_node_or_null("BetaBackroomPickup") as Node3D
-	var shelf: Node3D = _root.get_node_or_null("BetaRestockShelf") as Node3D
-	var close_day: Node3D = _root.get_node_or_null("BetaDayEndTrigger") as Node3D
+	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var pickup: Node3D = _root.get_node_or_null("StoreSessionBackroomPickup") as Node3D
+	var shelf: Node3D = _root.get_node_or_null("StoreSessionRestockShelf") as Node3D
+	var close_day: Node3D = _root.get_node_or_null("StoreSessionDayEndTrigger") as Node3D
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
 	for target: Node3D in [customer, pickup, shelf, close_day, checkout]:
 		assert_not_null(target, "Critical Day-1 route target must exist")
@@ -258,8 +258,8 @@ func test_day_one_route_markers_are_floor_accents_not_waypoints() -> void:
 
 
 func test_back_room_and_shelf_stock_props_share_case_language() -> void:
-	var backroom_cases: Node = _root.get_node_or_null("BetaBackroomPickup/StockBox/CaseSpines")
-	var shelf_cases: Node = _root.get_node_or_null("BetaRestockShelf/RestockCrate/CaseSpines")
+	var backroom_cases: Node = _root.get_node_or_null("StoreSessionBackroomPickup/StockBox/CaseSpines")
+	var shelf_cases: Node = _root.get_node_or_null("StoreSessionRestockShelf/RestockCrate/CaseSpines")
 	assert_not_null(backroom_cases, "Back-room stock box must expose visible case spines")
 	assert_not_null(shelf_cases, "Shelf restock crate must expose visible case spines")
 	if backroom_cases == null or shelf_cases == null:

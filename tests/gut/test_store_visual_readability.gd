@@ -261,10 +261,10 @@ const SUPPRESSED_VISUAL_JUNK_PATHS: Array[String] = [
 const SPAWN_VIEW_CRITICAL_MARKERS: Array[String] = [
 	"PlayerEntrySpawn",
 	"Checkout",
-	"BetaDayOneCustomer",
-	"BetaBackroomPickup",
-	"BetaRestockShelf",
-	"BetaDayEndTrigger",
+	"StoreSessionDayOneCustomer",
+	"StoreSessionBackroomPickup",
+	"StoreSessionRestockShelf",
+	"StoreSessionDayEndTrigger",
 ]
 const SALES_FLOOR_PALETTE_NODE_PATHS: Array[String] = [
 	"ReadabilityProps/ZoneIdentity/CheckoutCounterAccent",
@@ -1769,10 +1769,10 @@ func test_backroom_entry_reads_as_service_bay_not_tiny_closet() -> void:
 	if root == null:
 		return
 	var left_wall: Node3D = root.get_node_or_null(
-		"BetaBackroomWallFrontLeft"
+		"StoreSessionBackroomWallFrontLeft"
 	) as Node3D
 	var right_wall: Node3D = root.get_node_or_null(
-		"BetaBackroomWallFrontRight"
+		"StoreSessionBackroomWallFrontRight"
 	) as Node3D
 	var floor_mat: MeshInstance3D = root.get_node_or_null(
 		"ReadabilityProps/ZoneIdentity/BackroomFloorMat"

@@ -48,7 +48,7 @@ func test_new_game_enters_preopening_training_before_day_one() -> void:
 		"training_talk_manager",
 		"New Game must start with the pre-opening manager beat, not real Day 1"
 	)
-	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
+	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
 
 
 func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
@@ -64,7 +64,7 @@ func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
 	assert_eq(customer.display_name, "manager")
 	assert_eq(customer.prompt_text, "Talk to")
 	assert_eq(customer.action_verb, "Talk")
-	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
+	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
 
 	var snapshot: Dictionary = controller.get_state_snapshot()
 	assert_eq(str(snapshot.get("active_objective_id", "")), "talk_to_manager")
@@ -81,25 +81,25 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
-	assert_eq(Array(_active_targets()), ["BetaDayEndTrigger"])
+	assert_eq(Array(_active_targets()), ["StoreSessionDayEndTrigger"])
 
 	controller.on_store_register_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
-	assert_eq(Array(_active_targets()), ["BetaBackroomPickup"])
+	assert_eq(Array(_active_targets()), ["StoreSessionBackroomPickup"])
 
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_stock_shelf")
 	assert_true(StoreSessionState.carrying_stock)
-	assert_eq(Array(_active_targets()), ["BetaRestockShelf"])
+	assert_eq(Array(_active_targets()), ["StoreSessionRestockShelf"])
 
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 	assert_true(StoreSessionState.preopening_complete)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_false(StoreSessionState.carrying_stock)
-	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
+	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
 
 
 func test_role_prompt_copy_changes_between_training_and_customer_stages() -> void:
@@ -175,7 +175,7 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 		"Opening the store must notify HUD surfaces that preopening is complete"
 	)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
-	assert_eq(Array(_active_targets()), ["BetaDayOneCustomer"])
+	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
 	assert_true(
 		StoreSessionHUD.get_right_panel().get_header_text().begins_with("DAY 1 —"),
 		"Right panel must switch from first-day training to Day 1 store-hours copy"
@@ -183,7 +183,7 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 
 
 func test_manager_proxy_uses_blocky_readable_silhouette() -> void:
-	var proxy: Node = _root.get_node_or_null("BetaDayOneCustomer/CustomerProxy")
+	var proxy: Node = _root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
 	assert_not_null(proxy, "Training manager/customer proxy must exist")
 	if proxy == null:
 		return
@@ -201,7 +201,7 @@ func test_manager_proxy_uses_blocky_readable_silhouette() -> void:
 
 
 func test_manager_proxy_has_clerk_detail_props() -> void:
-	var proxy: Node = _root.get_node_or_null("BetaDayOneCustomer/CustomerProxy")
+	var proxy: Node = _root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
 	assert_not_null(proxy, "Training manager/customer proxy must exist")
 	if proxy == null:
 		return
@@ -223,12 +223,12 @@ func _customer_interactable() -> Interactable:
 		store_root = controller.get_parent()
 	if store_root == null:
 		return null
-	return store_root.get_node_or_null("BetaDayOneCustomer/Interactable") as Interactable
+	return store_root.get_node_or_null("StoreSessionDayOneCustomer/Interactable") as Interactable
 
 
 func _proxy_part_visible(part_name: String) -> bool:
 	var part: Node3D = (
-		_root.get_node_or_null("BetaDayOneCustomer/CustomerProxy/%s" % part_name) as Node3D
+		_root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy/%s" % part_name) as Node3D
 	)
 	return part != null and part.visible
 
@@ -248,10 +248,10 @@ func _active_targets() -> PackedStringArray:
 	if controller != null and controller.get_parent() != null:
 		store_root = controller.get_parent()
 	for node_name: String in [
-		"BetaDayOneCustomer",
-		"BetaBackroomPickup",
-		"BetaRestockShelf",
-		"BetaDayEndTrigger",
+		"StoreSessionDayOneCustomer",
+		"StoreSessionBackroomPickup",
+		"StoreSessionRestockShelf",
+		"StoreSessionDayEndTrigger",
 	]:
 		var interactable: Interactable = (
 			store_root.get_node_or_null("%s/Interactable" % node_name) as Interactable

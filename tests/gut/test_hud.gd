@@ -12,7 +12,7 @@ const _TRAINING_OBJECTIVES: Array[Dictionary] = [
 ]
 
 
-class BetaObjectiveControllerStub:
+class StoreSessionObjectiveControllerStub:
 	extends Node
 
 	var _objectives: Array[Dictionary] = []
@@ -480,8 +480,8 @@ func test_sales_today_pulses_on_item_sold() -> void:
 
 
 func test_store_carry_changed_toggles_label_and_icon() -> void:
-	var label: Label = _hud.get_node("CarryHUD/BetaCarryLabel")
-	var icon: ColorRect = _hud.get_node("CarryHUD/BetaCarryIcon")
+	var label: Label = _hud.get_node("CarryHUD/StoreSessionCarryLabel")
+	var icon: ColorRect = _hud.get_node("CarryHUD/StoreSessionCarryIcon")
 	assert_false(label.visible, "Carry label must start hidden")
 	assert_false(icon.visible, "Carry icon must start hidden")
 
@@ -606,8 +606,8 @@ func test_input_focus_context_changed_no_double_bind() -> void:
 
 
 func _add_store_session_controller_with_objectives(objectives: Array[Dictionary]) -> void:
-	var controller := BetaObjectiveControllerStub.new()
-	controller.name = "BetaObjectiveControllerStub"
+	var controller := StoreSessionObjectiveControllerStub.new()
+	controller.name = "StoreSessionObjectiveControllerStub"
 	controller._objectives = objectives.duplicate(true)
 	controller.add_to_group("store_session_controller")
 	add_child_autofree(controller)

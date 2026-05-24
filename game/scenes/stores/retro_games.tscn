@@ -253,64 +253,64 @@ size = Vector3(1.5, 1.5, 1.5)
 ; §F-PUNCH1 — Back-room enclosing walls. Three boxes with a 1.5 m
 ; doorway gap on the south face so the back room reads as a separate
 ; space. Heights match store walls (3.5 m) and use mat_wall_cream.
-[sub_resource type="BoxMesh" id="beta_backroom_side_wall_mesh"]
+[sub_resource type="BoxMesh" id="store_session_backroom_side_wall_mesh"]
 size = Vector3(0.1, 3.5, 3.25)
 
-[sub_resource type="BoxShape3D" id="beta_backroom_side_wall_shape"]
+[sub_resource type="BoxShape3D" id="store_session_backroom_side_wall_shape"]
 size = Vector3(0.1, 3.5, 3.25)
 
-[sub_resource type="BoxMesh" id="beta_backroom_front_wall_left_mesh"]
+[sub_resource type="BoxMesh" id="store_session_backroom_front_wall_left_mesh"]
 size = Vector3(0.35, 3.5, 0.1)
 
-[sub_resource type="BoxShape3D" id="beta_backroom_front_wall_left_shape"]
+[sub_resource type="BoxShape3D" id="store_session_backroom_front_wall_left_shape"]
 size = Vector3(0.35, 3.5, 0.1)
 
-[sub_resource type="BoxMesh" id="beta_backroom_front_wall_right_mesh"]
+[sub_resource type="BoxMesh" id="store_session_backroom_front_wall_right_mesh"]
 size = Vector3(1.15, 3.5, 0.1)
 
-[sub_resource type="BoxShape3D" id="beta_backroom_front_wall_right_shape"]
+[sub_resource type="BoxShape3D" id="store_session_backroom_front_wall_right_shape"]
 size = Vector3(1.15, 3.5, 0.1)
 
 ; §F-L1 — Visible-feedback resources for the store_session day-1 loop. Customer
 ; body is a 1.6 m capsule (proxy for the parent at the register), the
 ; stock-box highlight is a soft amber to draw the eye in the dim back
 ; room, and the shelf-item mesh is a generic boxed-game placeholder.
-[sub_resource type="CapsuleMesh" id="beta_customer_body_mesh"]
+[sub_resource type="CapsuleMesh" id="store_session_customer_body_mesh"]
 radius = 0.32
 height = 1.6
 
-[sub_resource type="StandardMaterial3D" id="beta_customer_body_mat"]
+[sub_resource type="StandardMaterial3D" id="store_session_customer_body_mat"]
 albedo_color = Color(0.55, 0.4, 0.3, 1)
 
 ; Customer-standing-spot floor mat at the register: a 0.6 m square in a
 ; warm neutral tone that ties into the counter top trim's wood palette so
 ; it reads as a retail floor mat rather than a bright UI waypoint.
-[sub_resource type="PlaneMesh" id="beta_customer_mat_mesh"]
+[sub_resource type="PlaneMesh" id="store_session_customer_mat_mesh"]
 size = Vector2(0.6, 0.6)
 
-[sub_resource type="StandardMaterial3D" id="beta_customer_mat_material"]
+[sub_resource type="StandardMaterial3D" id="store_session_customer_mat_material"]
 albedo_color = Color(0.72, 0.58, 0.42, 1)
 roughness = 0.9
 
-[sub_resource type="BoxMesh" id="beta_shelf_item_mesh"]
+[sub_resource type="BoxMesh" id="store_session_shelf_item_mesh"]
 size = Vector3(0.18, 0.22, 0.06)
 
-[sub_resource type="StandardMaterial3D" id="beta_shelf_item_mat"]
+[sub_resource type="StandardMaterial3D" id="store_session_shelf_item_mat"]
 albedo_color = Color(0.35, 0.55, 0.78, 1)
 emission_enabled = true
 emission = Color(0.6, 0.42, 0.18, 1)
 emission_energy_multiplier = 0.45
 
-[sub_resource type="BoxMesh" id="beta_restock_slot_marker_mesh"]
+[sub_resource type="BoxMesh" id="store_session_restock_slot_marker_mesh"]
 size = Vector3(0.15, 0.03, 0.12)
 
-[sub_resource type="StandardMaterial3D" id="beta_restock_slot_marker_mat"]
+[sub_resource type="StandardMaterial3D" id="store_session_restock_slot_marker_mat"]
 albedo_color = Color(0.65, 0.52, 0.38, 1)
 
-[sub_resource type="BoxMesh" id="beta_restock_empty_overlay_mesh"]
+[sub_resource type="BoxMesh" id="store_session_restock_empty_overlay_mesh"]
 size = Vector3(2.4, 0.28, 0.02)
 
-[sub_resource type="StandardMaterial3D" id="beta_restock_empty_overlay_mat"]
+[sub_resource type="StandardMaterial3D" id="store_session_restock_empty_overlay_mat"]
 transparency = 1
 albedo_color = Color(0.08, 0.06, 0.05, 0.55)
 
@@ -3116,10 +3116,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -1.285, 0.71)
 ; sits directly across the counter from the register, on the customer-facing
 ; side of the open queue lane. Lifted to Y=0.01 so it doesn't z-fight with
 ; the floor.
-[node name="BetaCustomerFloorMat" type="MeshInstance3D" parent="Checkout"]
+[node name="StoreSessionCustomerFloorMat" type="MeshInstance3D" parent="Checkout"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.01, 0.63)
-mesh = SubResource("beta_customer_mat_mesh")
-surface_material_override/0 = SubResource("beta_customer_mat_material")
+mesh = SubResource("store_session_customer_mat_mesh")
+surface_material_override/0 = SubResource("store_session_customer_mat_material")
 
 [node name="FrontLaneQueue" type="Node3D" parent="."]
 
@@ -3280,7 +3280,7 @@ shape = SubResource("checkout_counter_shape")
 ; RegisterStatusIndicator — passive raycast-only Interactable that surfaces
 ; a muted disabled-reason hint when the player aims at the register face
 ; during STAGE_BACK_ROOM_INVENTORY and STAGE_STOCK_SHELF (when neither
-; BetaDayOneCustomer nor BetaDayEndTrigger is the active beat). The tight
+; StoreSessionDayOneCustomer nor StoreSessionDayEndTrigger is the active beat). The tight
 ; collision volume sits flush at the register screen so walking near the
 ; counter without targeting it does not steal focus from the active
 ; chain interactable elsewhere in the store.
@@ -4496,7 +4496,7 @@ shaded = false
 [node name="StoreSessionController" type="Node" parent="."]
 script = ExtResource("47_store_session_controller")
 
-; BetaDayOneCustomer — parked directly across the counter from the
+; StoreSessionDayOneCustomer — parked directly across the counter from the
 ; register (X aligns with Checkout center at 5.35), on the customer-facing
 ; side ~0.36 m south of the counter face. Identity rotation = facing -Z
 ; (toward the counter); the player approaches from the front entrance
@@ -4508,68 +4508,68 @@ script = ExtResource("47_store_session_controller")
 ; so they're visible during store_session. These walls form a south + west
 ; partition with a 1.5 m doorway gap centered on the south face, so the
 ; player approaches from the storefront side and walks in.
-[node name="BetaBackroomWallSide" type="Node3D" parent="."]
+[node name="StoreSessionBackroomWallSide" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.05, 1.75, -8.375)
 
-[node name="WallMesh" type="MeshInstance3D" parent="BetaBackroomWallSide"]
-mesh = SubResource("beta_backroom_side_wall_mesh")
+[node name="WallMesh" type="MeshInstance3D" parent="StoreSessionBackroomWallSide"]
+mesh = SubResource("store_session_backroom_side_wall_mesh")
 surface_material_override/0 = ExtResource("5")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="BetaBackroomWallSide"]
+[node name="StaticBody3D" type="StaticBody3D" parent="StoreSessionBackroomWallSide"]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaBackroomWallSide/StaticBody3D"]
-shape = SubResource("beta_backroom_side_wall_shape")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionBackroomWallSide/StaticBody3D"]
+shape = SubResource("store_session_backroom_side_wall_shape")
 
-[node name="BetaBackroomWallFrontLeft" type="Node3D" parent="."]
+[node name="StoreSessionBackroomWallFrontLeft" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.225, 1.75, -6.75)
 
-[node name="WallMesh" type="MeshInstance3D" parent="BetaBackroomWallFrontLeft"]
-mesh = SubResource("beta_backroom_front_wall_left_mesh")
+[node name="WallMesh" type="MeshInstance3D" parent="StoreSessionBackroomWallFrontLeft"]
+mesh = SubResource("store_session_backroom_front_wall_left_mesh")
 surface_material_override/0 = ExtResource("5")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="BetaBackroomWallFrontLeft"]
+[node name="StaticBody3D" type="StaticBody3D" parent="StoreSessionBackroomWallFrontLeft"]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaBackroomWallFrontLeft/StaticBody3D"]
-shape = SubResource("beta_backroom_front_wall_left_shape")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionBackroomWallFrontLeft/StaticBody3D"]
+shape = SubResource("store_session_backroom_front_wall_left_shape")
 
-[node name="BetaBackroomWallFrontRight" type="Node3D" parent="."]
+[node name="StoreSessionBackroomWallFrontRight" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7, 1.75, -6.75)
 
-[node name="WallMesh" type="MeshInstance3D" parent="BetaBackroomWallFrontRight"]
-mesh = SubResource("beta_backroom_front_wall_right_mesh")
+[node name="WallMesh" type="MeshInstance3D" parent="StoreSessionBackroomWallFrontRight"]
+mesh = SubResource("store_session_backroom_front_wall_right_mesh")
 surface_material_override/0 = ExtResource("5")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="BetaBackroomWallFrontRight"]
+[node name="StaticBody3D" type="StaticBody3D" parent="StoreSessionBackroomWallFrontRight"]
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaBackroomWallFrontRight/StaticBody3D"]
-shape = SubResource("beta_backroom_front_wall_right_shape")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionBackroomWallFrontRight/StaticBody3D"]
+shape = SubResource("store_session_backroom_front_wall_right_shape")
 
-[node name="BetaDayOneCustomer" type="Node3D" parent="."]
+[node name="StoreSessionDayOneCustomer" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 0, 8.45)
 
 ; §F-L4 — visible body proxy so the player can see who they're talking to.
 ; Capsule centered at Y=0.85 puts the bottom on the floor and the head at
 ; ~1.65 m. Hidden by the controller after the dialog resolves.
-[node name="CustomerBody" type="MeshInstance3D" parent="BetaDayOneCustomer"]
+[node name="CustomerBody" type="MeshInstance3D" parent="StoreSessionDayOneCustomer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
-mesh = SubResource("beta_customer_body_mesh")
-surface_material_override/0 = SubResource("beta_customer_body_mat")
+mesh = SubResource("store_session_customer_body_mesh")
+surface_material_override/0 = SubResource("store_session_customer_body_mat")
 
-[node name="Interactable" type="Area3D" parent="BetaDayOneCustomer"]
+[node name="Interactable" type="Area3D" parent="StoreSessionDayOneCustomer"]
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("48_first_day_customer")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaDayOneCustomer/Interactable"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionDayOneCustomer/Interactable"]
 shape = SubResource("nav_zone_shape")
 
-[node name="BetaBackroomPickup" type="Node3D" parent="."]
+[node name="StoreSessionBackroomPickup" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 0, -8.15)
 
 ; §F-L1 — readable stock box (was 16 cm, easy to miss). Scaled to ~50 cm
@@ -4577,55 +4577,55 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 0, -8.15)
 ; pickup (0.4 s alpha tween) so the visible feedback is "the box is gone
 ; now." Raised to local Y=0.5 so the box sits clearly off the floor and
 ; reads as a real container at the doorway, not a flat sticker.
-[node name="StockBox" type="MeshInstance3D" parent="BetaBackroomPickup"]
+[node name="StockBox" type="MeshInstance3D" parent="StoreSessionBackroomPickup"]
 transform = Transform3D(1.4, 0, 0, 0, 1.6, 0, 0, 0, 1.4, 0, 0.5, 0)
 mesh = SubResource("backordered_console_box_mesh")
 surface_material_override/0 = SubResource("back_room_clutter_mat")
 
-[node name="StockBoxLabelBacking" type="MeshInstance3D" parent="BetaBackroomPickup/StockBox"]
+[node name="StockBoxLabelBacking" type="MeshInstance3D" parent="StoreSessionBackroomPickup/StockBox"]
 transform = Transform3D(0.42, 0, 0, 0, 0.6, 0, 0, 0, 1, 0, 0.28, 0.12)
 mesh = SubResource("zone_label_backing_mesh")
 surface_material_override/0 = ExtResource("66_sign_backing")
 
-[node name="CaseSpines" type="Node3D" parent="BetaBackroomPickup/StockBox"]
+[node name="CaseSpines" type="Node3D" parent="StoreSessionBackroomPickup/StockBox"]
 
-[node name="CaseSpine0" type="MeshInstance3D" parent="BetaBackroomPickup/StockBox/CaseSpines"]
+[node name="CaseSpine0" type="MeshInstance3D" parent="StoreSessionBackroomPickup/StockBox/CaseSpines"]
 transform = Transform3D(0.92, 0, 0.39, 0, 1, 0, -0.39, 0, 0.92, -0.18, 0.17, -0.05)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
-[node name="CaseSpine1" type="MeshInstance3D" parent="BetaBackroomPickup/StockBox/CaseSpines"]
+[node name="CaseSpine1" type="MeshInstance3D" parent="StoreSessionBackroomPickup/StockBox/CaseSpines"]
 transform = Transform3D(0.96, 0, 0.28, 0, 1, 0, -0.28, 0, 0.96, -0.09, 0.17, -0.035)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
-[node name="CaseSpine2" type="MeshInstance3D" parent="BetaBackroomPickup/StockBox/CaseSpines"]
+[node name="CaseSpine2" type="MeshInstance3D" parent="StoreSessionBackroomPickup/StockBox/CaseSpines"]
 transform = Transform3D(1, 0, 0.08, 0, 1, 0, -0.08, 0, 1, 0, 0.17, -0.025)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
-[node name="CaseSpine3" type="MeshInstance3D" parent="BetaBackroomPickup/StockBox/CaseSpines"]
+[node name="CaseSpine3" type="MeshInstance3D" parent="StoreSessionBackroomPickup/StockBox/CaseSpines"]
 transform = Transform3D(0.96, 0, -0.28, 0, 1, 0, 0.28, 0, 0.96, 0.09, 0.17, -0.035)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
-[node name="CaseSpine4" type="MeshInstance3D" parent="BetaBackroomPickup/StockBox/CaseSpines"]
+[node name="CaseSpine4" type="MeshInstance3D" parent="StoreSessionBackroomPickup/StockBox/CaseSpines"]
 transform = Transform3D(0.92, 0, -0.39, 0, 1, 0, 0.39, 0, 0.92, 0.18, 0.17, -0.05)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
 ; Post-pickup open-state sibling. Hidden until the player presses E on
-; BetaBackroomPickup; the controller flips StockBox.visible = false and
+; StoreSessionBackroomPickup; the controller flips StockBox.visible = false and
 ; StockBoxOpen.visible = true so the floor reads as "the box was opened
 ; here" instead of phasing out. Y matches the closed box's footprint so
 ; the slab sits on the same spot. backroom-box-scene-layout.md §3 Option A.
-[node name="StockBoxOpen" type="MeshInstance3D" parent="BetaBackroomPickup"]
+[node name="StockBoxOpen" type="MeshInstance3D" parent="StoreSessionBackroomPickup"]
 transform = Transform3D(1.4, 0, 0, 0, 1.0, 0, 0, 0, 1.4, 0, 0.18, 0)
 visible = false
 mesh = SubResource("stock_box_open_mesh")
 surface_material_override/0 = SubResource("back_room_clutter_mat")
 
-[node name="StockBoxLabel" type="Label3D" parent="BetaBackroomPickup"]
+[node name="StockBoxLabel" type="Label3D" parent="StoreSessionBackroomPickup"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.175)
 pixel_size = 0.0042
 modulate = Color(1, 0.92, 0.55, 1)
@@ -4637,40 +4637,40 @@ outline_size = 6
 outline_modulate = Color(0.05, 0.05, 0.05, 1)
 shaded = false
 
-[node name="Interactable" type="Area3D" parent="BetaBackroomPickup"]
+[node name="Interactable" type="Area3D" parent="StoreSessionBackroomPickup"]
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("52_stockroom_pickup")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaBackroomPickup/Interactable"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionBackroomPickup/Interactable"]
 shape = SubResource("nav_zone_shape")
 
-[node name="BetaRestockShelf" type="Node3D" parent="."]
+[node name="StoreSessionRestockShelf" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, -8.05)
 
-[node name="ShelfBoard" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="ShelfBoard" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 1.1, 0)
 mesh = SubResource("shelf_board_wide_mesh")
 surface_material_override/0 = ExtResource("10")
 
-[node name="RestockCrate" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="RestockCrate" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(0.35, 0, 0, 0, 0.28, 0, 0, 0, 0.35, 0, 0.5, 0)
 mesh = SubResource("backordered_console_box_mesh")
 surface_material_override/0 = SubResource("back_room_clutter_mat")
 
-[node name="CaseSpines" type="Node3D" parent="BetaRestockShelf/RestockCrate"]
+[node name="CaseSpines" type="Node3D" parent="StoreSessionRestockShelf/RestockCrate"]
 
-[node name="CaseSpine0" type="MeshInstance3D" parent="BetaRestockShelf/RestockCrate/CaseSpines"]
+[node name="CaseSpine0" type="MeshInstance3D" parent="StoreSessionRestockShelf/RestockCrate/CaseSpines"]
 transform = Transform3D(0.96, 0, 0.28, 0, 1, 0, -0.28, 0, 0.96, -0.11, 0.18, -0.02)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
-[node name="CaseSpine1" type="MeshInstance3D" parent="BetaRestockShelf/RestockCrate/CaseSpines"]
+[node name="CaseSpine1" type="MeshInstance3D" parent="StoreSessionRestockShelf/RestockCrate/CaseSpines"]
 transform = Transform3D(1, 0, 0.08, 0, 1, 0, -0.08, 0, 1, 0, 0.18, -0.02)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
-[node name="CaseSpine2" type="MeshInstance3D" parent="BetaRestockShelf/RestockCrate/CaseSpines"]
+[node name="CaseSpine2" type="MeshInstance3D" parent="StoreSessionRestockShelf/RestockCrate/CaseSpines"]
 transform = Transform3D(0.96, 0, -0.28, 0, 1, 0, 0.28, 0, 0.96, 0.11, 0.18, -0.02)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
@@ -4683,30 +4683,30 @@ surface_material_override/0 = SubResource("readability_stock_case_mat")
 ; occluded by the spawned 0.22 m-tall items after the stock interaction.
 ; Y = 1.165 = ShelfBoard top face (1.15) + half marker height (0.015) so
 ; the marker bottom sits flush on the wood.
-[node name="SlotMarker0" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="SlotMarker0" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.165, 0)
-mesh = SubResource("beta_restock_slot_marker_mesh")
-surface_material_override/0 = SubResource("beta_restock_slot_marker_mat")
+mesh = SubResource("store_session_restock_slot_marker_mesh")
+surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat")
 
-[node name="SlotMarker1" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="SlotMarker1" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 1.165, 0)
-mesh = SubResource("beta_restock_slot_marker_mesh")
-surface_material_override/0 = SubResource("beta_restock_slot_marker_mat")
+mesh = SubResource("store_session_restock_slot_marker_mesh")
+surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat")
 
-[node name="SlotMarker2" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="SlotMarker2" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.165, 0)
-mesh = SubResource("beta_restock_slot_marker_mesh")
-surface_material_override/0 = SubResource("beta_restock_slot_marker_mat")
+mesh = SubResource("store_session_restock_slot_marker_mesh")
+surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat")
 
-[node name="SlotMarker3" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="SlotMarker3" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1.165, 0)
-mesh = SubResource("beta_restock_slot_marker_mesh")
-surface_material_override/0 = SubResource("beta_restock_slot_marker_mat")
+mesh = SubResource("store_session_restock_slot_marker_mesh")
+surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat")
 
-[node name="SlotMarker4" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="SlotMarker4" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.165, 0)
-mesh = SubResource("beta_restock_slot_marker_mesh")
-surface_material_override/0 = SubResource("beta_restock_slot_marker_mat")
+mesh = SubResource("store_session_restock_slot_marker_mesh")
+surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat")
 
 ; Empty-state overlay — a translucent dark panel flush against the
 ; ShelfBoard front face that paints the empty shelf so it reads as
@@ -4715,108 +4715,108 @@ surface_material_override/0 = SubResource("beta_restock_slot_marker_mat")
 ; Local position centers the panel at the front edge of the 0.55 m-deep
 ; (0.7 scale) board (z = 0.55 * 0.7 / 2 ≈ 0.193) and at half the panel
 ; height above the ShelfBoard top face (1.15 + 0.14 = 1.29).
-[node name="EmptyOverlay" type="MeshInstance3D" parent="BetaRestockShelf"]
+[node name="EmptyOverlay" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.29, 0.193)
-mesh = SubResource("beta_restock_empty_overlay_mesh")
-surface_material_override/0 = SubResource("beta_restock_empty_overlay_mat")
+mesh = SubResource("store_session_restock_empty_overlay_mesh")
+surface_material_override/0 = SubResource("store_session_restock_empty_overlay_mat")
 
-[node name="MerchandisingFrame" type="Node3D" parent="BetaRestockShelf"]
+[node name="MerchandisingFrame" type="Node3D" parent="StoreSessionRestockShelf"]
 
-[node name="BackPanel" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="BackPanel" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(1.25, 0, 0, 0, 2.8, 0, 0, 0, 1, 0, 1.28, -0.18)
 mesh = SubResource("zone_label_backing_mesh")
 surface_material_override/0 = SubResource("product_shelf_backer_mat")
 
-[node name="UpperShelfBoard" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="UpperShelfBoard" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(0.86, 0, 0, 0, 0.62, 0, 0, 0, 0.58, 0, 1.56, 0.02)
 mesh = SubResource("shelf_board_wide_mesh")
 surface_material_override/0 = ExtResource("10")
 
-[node name="MiddleShelfLip" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="MiddleShelfLip" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(3.0, 0, 0, 0, 0.45, 0, 0, 0, 1, 0, 1.12, 0.305)
 mesh = SubResource("retail_shelf_lip_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
-[node name="BottomShelfLip" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="BottomShelfLip" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(3.0, 0, 0, 0, 0.45, 0, 0, 0, 1, 0, 0.74, 0.305)
 mesh = SubResource("retail_shelf_lip_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
-[node name="LeftDivider" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="LeftDivider" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(0.62, 0, 0, 0, 1.0, 0, 0, 0, 1, -0.74, 1.13, 0.305)
 mesh = SubResource("retail_shelf_divider_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
-[node name="RightDivider" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="RightDivider" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(0.62, 0, 0, 0, 1.0, 0, 0, 0, 1, 0.74, 1.13, 0.305)
 mesh = SubResource("retail_shelf_divider_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
-[node name="FeaturedRestockFaceA" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame" groups=["product_display"]]
+[node name="FeaturedRestockFaceA" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame" groups=["product_display"]]
 transform = Transform3D(0.78, 0, 0.10, 0, 0.78, 0, -0.10, 0, 0.78, -0.40, 1.71, 0.24)
 mesh = SubResource("product_case_cover_mesh")
 surface_material_override/0 = SubResource("product_kart_clerk_mat")
 
-[node name="FeaturedRestockFaceB" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame" groups=["product_display"]]
+[node name="FeaturedRestockFaceB" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame" groups=["product_display"]]
 transform = Transform3D(0.78, 0, -0.10, 0, 0.78, 0, 0.10, 0, 0.78, 0.08, 1.71, 0.24)
 mesh = SubResource("product_case_cover_mesh")
 surface_material_override/0 = SubResource("product_pixel_pets_mat")
 
-[node name="RestockEmptyGhost" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="RestockEmptyGhost" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(0.88, 0, 0.02, 0, 0.72, 0, -0.02, 0, 0.88, 0.56, 1.31, 0.24)
 mesh = SubResource("retail_shelf_empty_slot_mesh")
 surface_material_override/0 = SubResource("product_empty_slot_mat")
 
-[node name="RestockPriceTag" type="MeshInstance3D" parent="BetaRestockShelf/MerchandisingFrame"]
+[node name="RestockPriceTag" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
 transform = Transform3D(0.76, 0, 0, 0, 0.66, 0, 0, 0, 1, -0.48, 1.12, 0.34)
 mesh = SubResource("product_price_tag_mesh")
 surface_material_override/0 = SubResource("price_tag_mat")
 
-[node name="Interactable" type="Area3D" parent="BetaRestockShelf"]
+[node name="Interactable" type="Area3D" parent="StoreSessionRestockShelf"]
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("51_restock")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaRestockShelf/Interactable"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionRestockShelf/Interactable"]
 shape = SubResource("nav_zone_shape")
 
-; BetaDayEndTrigger — sits at the register on the Checkout counter so the
+; StoreSessionDayEndTrigger — sits at the register on the Checkout counter so the
 ; "close the day" affordance is tied to a visible location.
-[node name="BetaDayEndTrigger" type="Node3D" parent="."]
+[node name="StoreSessionDayEndTrigger" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 1.05, 7.82)
 
-[node name="Interactable" type="Area3D" parent="BetaDayEndTrigger" groups=["interactables"]]
+[node name="Interactable" type="Area3D" parent="StoreSessionDayEndTrigger" groups=["interactables"]]
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("49_day_end")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaDayEndTrigger/Interactable"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionDayEndTrigger/Interactable"]
 shape = SubResource("nav_zone_shape")
 
-[node name="BetaHiddenClue" type="Node3D" parent="."]
+[node name="StoreSessionHiddenClue" type="Node3D" parent="."]
 transform = Transform3D(0.966, 0, -0.259, 0, 1, 0, 0.259, 0, 0.966, 5.12, 0.48, -8.92)
 
-[node name="ClueConsoleBase" type="MeshInstance3D" parent="BetaHiddenClue"]
+[node name="ClueConsoleBase" type="MeshInstance3D" parent="StoreSessionHiddenClue"]
 transform = Transform3D(0.62, 0, 0, 0, 0.32, 0, 0, 0, 0.44, -0.08, 0.0, 0.02)
 mesh = SubResource("back_room_clutter_mesh_c")
 surface_material_override/0 = SubResource("back_room_clutter_mat")
 
-[node name="ClueConsoleShell" type="MeshInstance3D" parent="BetaHiddenClue"]
+[node name="ClueConsoleShell" type="MeshInstance3D" parent="StoreSessionHiddenClue"]
 transform = Transform3D(0.38, 0, 0.08, 0, 0.22, 0, -0.08, 0, 0.38, 0.12, 0.13, -0.02)
 mesh = SubResource("back_room_clutter_mesh_a")
 surface_material_override/0 = SubResource("back_room_crt_housing_mat")
 
-[node name="ClueRepairTag" type="MeshInstance3D" parent="BetaHiddenClue"]
+[node name="ClueRepairTag" type="MeshInstance3D" parent="StoreSessionHiddenClue"]
 transform = Transform3D(0.42, 0, -0.12, 0, 1, 0, 0.12, 0, 0.42, -0.12, 0.18, 0.16)
 mesh = SubResource("delivery_manifest_mesh")
 surface_material_override/0 = SubResource("delivery_manifest_mat")
 
-[node name="Interactable" type="Area3D" parent="BetaHiddenClue"]
+[node name="Interactable" type="Area3D" parent="StoreSessionHiddenClue"]
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("50_hidden_clue")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="BetaHiddenClue/Interactable"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionHiddenClue/Interactable"]
 shape = SubResource("nav_zone_shape")
 
 ; ============================================================
@@ -5482,7 +5482,7 @@ surface_material_override/0 = ExtResource("11")
 [node name="OverflowB" type="MeshInstance3D" parent="ReadabilityProps/BargainBinOverflow"]
 transform = Transform3D(0.77, 0, -0.64, 0, 1, 0, 0.64, 0, 0.77, 0.78, 0.075, 0.05)
 mesh = SubResource("readability_bargain_overflow_mesh")
-surface_material_override/0 = SubResource("beta_shelf_item_mat")
+surface_material_override/0 = SubResource("store_session_shelf_item_mat")
 
 [node name="OverflowC" type="MeshInstance3D" parent="ReadabilityProps/BargainBinOverflow"]
 transform = Transform3D(0.98, 0, 0.17, 0, 1, 0, -0.17, 0, 0.98, -0.65, 0.075, 0.62)
@@ -5492,7 +5492,7 @@ surface_material_override/0 = ExtResource("11")
 [node name="OverflowD" type="MeshInstance3D" parent="ReadabilityProps/BargainBinOverflow"]
 transform = Transform3D(0.71, 0, 0.71, 0, 1, 0, -0.71, 0, 0.71, 0.66, 0.075, -0.6)
 mesh = SubResource("readability_bargain_overflow_mesh")
-surface_material_override/0 = SubResource("beta_shelf_item_mat")
+surface_material_override/0 = SubResource("store_session_shelf_item_mat")
 
 [node name="CartRackProductStacks" type="Node3D" parent="ReadabilityProps"]
 visible = false

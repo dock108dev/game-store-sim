@@ -198,7 +198,7 @@ func test_stockroom_path_reads_as_work_area_in_boot_shell() -> void:
 
 
 func test_manager_customer_proxy_reads_as_person_silhouette() -> void:
-	var proxy: Node3D = _root.get_node_or_null("BetaDayOneCustomer/CustomerProxy") as Node3D
+	var proxy: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy") as Node3D
 	assert_not_null(proxy, "Customer proxy must be generated for the first route target")
 	if proxy == null:
 		return
@@ -228,9 +228,9 @@ func test_critical_day_one_anchors_move_into_the_starter_footprint() -> void:
 	_assert_position_near("PlayerEntrySpawn", Vector3(0.0, 0.0, 5.65), 0.05)
 	_assert_position_near("EntranceDoor", Vector3(0.0, 0.0, 7.22), 0.05)
 	_assert_position_near("checkout_counter", Vector3(2.92, 0.0, 3.75), 0.05)
-	_assert_position_near("BetaDayOneCustomer", Vector3(2.52, 0.0, 4.85), 0.05)
-	_assert_position_near("BetaRestockShelf", Vector3(-1.7, 0.0, -2.95), 0.05)
-	_assert_position_near("BetaBackroomPickup", Vector3(3.15, 0.0, -2.15), 0.05)
+	_assert_position_near("StoreSessionDayOneCustomer", Vector3(2.52, 0.0, 4.85), 0.05)
+	_assert_position_near("StoreSessionRestockShelf", Vector3(-1.7, 0.0, -2.95), 0.05)
+	_assert_position_near("StoreSessionBackroomPickup", Vector3(3.15, 0.0, -2.15), 0.05)
 
 
 func test_shell_signs_do_not_render_mirrored_from_the_back_side() -> void:

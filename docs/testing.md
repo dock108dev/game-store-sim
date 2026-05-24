@@ -68,7 +68,7 @@ The checked-in tests currently cover:
 - milestones, unlocks, upgrades, completion, onboarding, and endings
 - retro-games store mechanics (testing station, refurbishment queue,
   hold-shelf flow, manifest/poster/featured-display interactables) plus the
-  beta Day 1 critical-path smoke
+  store-session Day 1 critical-path smoke
 - settings, audio, camera, environment, tooltips, and UI panels
 
 ## CI validation

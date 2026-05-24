@@ -58,15 +58,15 @@ func after_each() -> void:
 # ── Empty-shelf "before" state: 5 dark slot markers on the ShelfBoard ──────
 
 func test_store_restock_shelf_authors_five_slot_markers() -> void:
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
-	assert_not_null(shelf, "BetaRestockShelf must exist under the store root")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
+	assert_not_null(shelf, "StoreSessionRestockShelf must exist under the store root")
 	if shelf == null:
 		return
 	for marker_name: String in SLOT_MARKER_NAMES:
 		var marker: Node = shelf.get_node_or_null(marker_name)
 		assert_not_null(
 			marker,
-			"BetaRestockShelf must author %s as a child slot marker so the "
+			"StoreSessionRestockShelf must author %s as a child slot marker so the "
 			% marker_name + "empty shelf reads as 'items belong here'."
 		)
 
@@ -77,7 +77,7 @@ func test_slot_markers_align_with_spawn_x_positions_on_board_top() -> void:
 	# interaction. They must also rest just above the ShelfBoard top face
 	# (local Y = 1.15) so they read as flat marks on the shelf surface, not
 	# floating tiles.
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	for i: int in range(SLOT_MARKER_NAMES.size()):
@@ -106,7 +106,7 @@ func test_slot_markers_align_with_spawn_x_positions_on_board_top() -> void:
 
 
 func test_slot_marker_material_is_warm_tan_peg_label() -> void:
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	var marker: MeshInstance3D = shelf.get_node_or_null(
@@ -148,14 +148,14 @@ func test_slot_marker_material_is_warm_tan_peg_label() -> void:
 # ── Empty-state overlay: present when empty, hidden after stocking ─────────
 
 func test_empty_overlay_visible_on_unstocked_shelf() -> void:
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
-	assert_not_null(shelf, "BetaRestockShelf must exist under the store root")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
+	assert_not_null(shelf, "StoreSessionRestockShelf must exist under the store root")
 	if shelf == null:
 		return
 	var overlay: Node3D = shelf.get_node_or_null("EmptyOverlay") as Node3D
 	assert_not_null(
 		overlay,
-		"BetaRestockShelf must author an EmptyOverlay child so the empty "
+		"StoreSessionRestockShelf must author an EmptyOverlay child so the empty "
 		+ "shelf reads as 'intentionally empty' from FP standing height."
 	)
 	if overlay == null:
@@ -169,9 +169,9 @@ func test_empty_overlay_visible_on_unstocked_shelf() -> void:
 
 func test_backroom_pickup_label_names_delivery_quantity() -> void:
 	var label: Label3D = (
-		_root.get_node_or_null("BetaBackroomPickup/StockBoxLabel") as Label3D
+		_root.get_node_or_null("StoreSessionBackroomPickup/StockBoxLabel") as Label3D
 	)
-	assert_not_null(label, "BetaBackroomPickup must label the delivery crate")
+	assert_not_null(label, "StoreSessionBackroomPickup must label the delivery crate")
 	if label == null:
 		return
 	assert_string_contains(
@@ -190,7 +190,7 @@ func test_empty_overlay_hidden_after_stocking() -> void:
 	await get_tree().process_frame
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	var overlay: Node3D = shelf.get_node_or_null("EmptyOverlay") as Node3D
@@ -278,11 +278,11 @@ func test_carrying_stock_shows_shelf_placement_affordance() -> void:
 	if controller == null:
 		return
 	await _walk_to_carrying_stock(controller)
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	var affordance: Node3D = (
-		shelf.get_node_or_null("BetaRestockPlacementAffordance") as Node3D
+		shelf.get_node_or_null("StoreSessionRestockPlacementAffordance") as Node3D
 	)
 	assert_not_null(
 		affordance,
@@ -302,7 +302,7 @@ func test_restock_places_one_item_per_input_until_delivery_done() -> void:
 	if controller == null:
 		return
 	await _walk_to_carrying_stock(controller)
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	watch_signals(EventBus)
@@ -344,7 +344,7 @@ func test_restock_capacity_limit_places_available_slots_and_reports_backroom_rem
 	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	for i: int in range(1, SLOT_MARKER_NAMES.size()):
@@ -384,7 +384,7 @@ func test_restock_visuals_persist_shelf_stock_between_days() -> void:
 	await get_tree().process_frame
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	assert_gt(_count_store_shelf_items(shelf), 0, "Pre-condition: shelf is stocked")
@@ -418,7 +418,7 @@ func test_spawned_shelf_items_emit_warm_amber_not_cool_blue() -> void:
 	await get_tree().process_frame
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	var checked_any: bool = false
@@ -473,7 +473,7 @@ func test_spawned_shelf_items_are_upright_with_wide_face_forward() -> void:
 	await get_tree().process_frame
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return
 	for child: Node in shelf.get_children():

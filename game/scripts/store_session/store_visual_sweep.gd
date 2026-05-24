@@ -50,13 +50,13 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"anchors":
 			[
 				"Checkout/Register",
-				"BetaDayOneCustomer",
+				"StoreSessionDayOneCustomer",
 				"ExpandableStoreShell/CheckoutFrontLaminatePanel",
 				"ExpandableStoreShell/CheckoutImpulseRack",
 				"ExpandableStoreShell/CheckoutReceiptPrinterBase",
 				"ExpandableStoreShell/CustomerStandHereMat",
 			],
-			"route_anchor": "BetaDayOneCustomer",
+			"route_anchor": "StoreSessionDayOneCustomer",
 			"next_destination": "checkout counter",
 			"local_action": "talk to the manager/register area",
 			"scope": "first_ten_seconds",
@@ -72,7 +72,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"focus": "ExpandableStoreShell/ShelfHeroCase0104",
 			"anchors":
 			[
-				"BetaRestockShelf",
+				"StoreSessionRestockShelf",
 				"ExpandableStoreShell/ShelfHeroBacker",
 				"ExpandableStoreShell/ShelfHeroHeaderRail",
 				"ExpandableStoreShell/ShelfEndcapFaceout00",
@@ -90,10 +90,10 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"label": "Stockroom path work area",
 			"filename": "04_stockroom_path_work_area.png",
 			"camera": Vector3(1.35, 1.58, 1.56),
-			"focus": "BetaBackroomPickup/StockBoxLabel",
+			"focus": "StoreSessionBackroomPickup/StockBoxLabel",
 			"anchors":
 			[
-				"BetaBackroomPickup",
+				"StoreSessionBackroomPickup",
 				"ExpandableStoreShell/StockroomReceivingBacker",
 				"ExpandableStoreShell/StockroomWorkShelf",
 				"ExpandableStoreShell/StockroomWallTaskCard",
@@ -143,7 +143,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"filename": "02_center_to_checkout.png",
 			"camera": Vector3(0.0, 1.75, 0.25),
 			"focus": "Checkout/Register/CheckoutSign",
-			"anchors": ["Checkout", "BetaDayEndTrigger", "ReadabilityProps/CheckoutCounterDressing"],
+			"anchors": ["Checkout", "StoreSessionDayEndTrigger", "ReadabilityProps/CheckoutCounterDressing"],
 			"scope": "full_store",
 			"review_target": "full_store_context",
 		},
@@ -154,7 +154,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"filename": "03_center_to_shelves.png",
 			"camera": Vector3(0.0, 1.75, 0.25),
 			"focus": "ZoneLabels/ShelvesLabel",
-			"anchors": ["BetaRestockShelf", "ReadabilityProps/ShelfSpineRuns", "AccessoriesBin"],
+			"anchors": ["StoreSessionRestockShelf", "ReadabilityProps/ShelfSpineRuns", "AccessoriesBin"],
 			"scope": "full_store",
 			"review_target": "full_store_context",
 		},
@@ -164,8 +164,8 @@ static func full_store_rows() -> Array[Dictionary]:
 			"label": "Center to backroom",
 			"filename": "04_center_to_backroom.png",
 			"camera": Vector3(0.0, 1.75, 0.25),
-			"focus": "BetaBackroomPickup/StockBoxLabel",
-			"anchors": ["back_room", "BetaBackroomPickup", "ReadabilityProps/BackroomDressing"],
+			"focus": "StoreSessionBackroomPickup/StockBoxLabel",
+			"anchors": ["back_room", "StoreSessionBackroomPickup", "ReadabilityProps/BackroomDressing"],
 			"scope": "full_store",
 			"review_target": "full_store_context",
 		},
@@ -287,12 +287,12 @@ static func first_run_flow_steps() -> Array[Dictionary]:
 		{
 			"step": "practice customer",
 			"destination": "practice customer",
-			"anchor": "BetaDayOneCustomer",
+			"anchor": "StoreSessionDayOneCustomer",
 		},
 		{
 			"step": "open-store",
 			"destination": "open-store closeout",
-			"anchor": "BetaDayEndTrigger",
+			"anchor": "StoreSessionDayEndTrigger",
 		},
 	]
 

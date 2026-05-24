@@ -33,13 +33,6 @@
 - Removed the process-advice section about when changes should include tests;
   it was policy guidance, not a statement owned by code/config.
 
-### `docs/audits/beta-code-to-screen-readiness.md`
-
-- Rewrote the audit as a current evidence map for the beta Day 1 route proof
-  contract, route manifest, code owners, automated coverage, and runtime
-  artifacts.
-- Removed stale readiness judgments and roadmap recommendations.
-
 ## Deleted
 
 - `docs/audits/cleanup-report.md` — untracked code-cleanup report. It
@@ -48,15 +41,16 @@
 - `docs/maintenance/cleanup-follow-up.md` — stale LOC inventory and refactor
   recommendation list. It was drift-prone and duplicated information that can
   be regenerated from the current tree.
+- The obsolete route-readiness audit was removed. The current route proof
+  contract lives under store-session scripts and tests.
 
 ## Statements Removed As Unverifiable Or Non-Current
 
 - The cleanup report's source-refactor summary and test-count claims.
 - The cleanup follow-up's old large-file line counts and open-ended refactor
   recommendations.
-- The beta audit's stale claim that the first customer route was not proven by
-  the latest run.
-- The beta audit's roadmap/build-decision recommendations.
+- The obsolete beta audit's stale route proof and roadmap/build-decision
+  recommendations.
 - The testing doc's general advice about when changes should come with tests.
 
 ## Intentional Gaps
@@ -86,12 +80,12 @@
   `game/autoload/audit_log.gd`, `game/autoload/camera_authority.gd`,
   `game/scripts/core/save_manager.gd`,
   `game/scripts/ui/ui_theme_constants.gd`,
-  `game/scripts/beta/beta_code_to_screen_proof_contract.gd`,
-  `game/scripts/beta/beta_manual_day_one_route_capture.gd`,
-  `game/scripts/beta/beta_day_one_controller.gd`,
-  `game/scripts/beta/register_screen_state.gd`,
-  `game/scripts/beta/beta_carried_stock_marker.gd`, and
-  `game/scripts/beta/beta_inventory_count_adapter.gd`.
+  `game/scripts/store_session/store_code_to_screen_proof_contract.gd`,
+  `game/scripts/store_session/manual_day_one_route_capture.gd`,
+  `game/scripts/store_session/store_session_controller.gd`,
+  `game/scripts/store_session/register_screen_state.gd`,
+  `game/scripts/store_session/store_carried_stock_marker.gd`, and
+  `game/scripts/store_session/store_inventory_count_adapter.gd`.
 - Markdown link check over `README.md` and `docs/**/*.md`: passed
   (`Markdown links OK`).
 - `bash scripts/validate_export_config.sh`: passed

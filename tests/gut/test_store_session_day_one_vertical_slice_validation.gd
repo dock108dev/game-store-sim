@@ -52,32 +52,32 @@ func test_day_one_prompts_are_visible_only_on_the_active_beat() -> void:
 	if controller == null:
 		return
 
-	_assert_active_prompt("BetaDayOneCustomer", "Talk to customer")
-	_assert_inactive("BetaBackroomPickup")
-	_assert_inactive("BetaRestockShelf")
-	_assert_inactive("BetaDayEndTrigger")
+	_assert_active_prompt("StoreSessionDayOneCustomer", "Talk to customer")
+	_assert_inactive("StoreSessionBackroomPickup")
+	_assert_inactive("StoreSessionRestockShelf")
+	_assert_inactive("StoreSessionDayEndTrigger")
 
 	await _choose_customer_option(&"refuse_return")
 	await _acknowledge_customer_result()
-	_assert_active_prompt("BetaBackroomPickup", "Check back room inventory")
-	_assert_inactive("BetaDayOneCustomer")
-	_assert_inactive("BetaRestockShelf")
-	_assert_inactive("BetaDayEndTrigger")
+	_assert_active_prompt("StoreSessionBackroomPickup", "Check back room inventory")
+	_assert_inactive("StoreSessionDayOneCustomer")
+	_assert_inactive("StoreSessionRestockShelf")
+	_assert_inactive("StoreSessionDayEndTrigger")
 
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	_assert_active_prompt("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	_assert_active_prompt("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
 	assert_true(StoreSessionState.carrying_stock, "Back-room pickup must set carrying state")
 
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	_assert_active_prompt("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+	_assert_active_prompt("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
 
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	_assert_active_prompt("BetaDayEndTrigger", "Close day")
-	_assert_inactive("BetaBackroomPickup")
-	_assert_inactive("BetaRestockShelf")
+	_assert_active_prompt("StoreSessionDayEndTrigger", "Close day")
+	_assert_inactive("StoreSessionBackroomPickup")
+	_assert_inactive("StoreSessionRestockShelf")
 
 
 func test_decision_modal_opens_from_customer_interaction_with_authored_data() -> void:
@@ -139,8 +139,8 @@ func test_customer_exit_state_tracks_acknowledged_walk_hidden_and_reset() -> voi
 	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
-	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
-	assert_not_null(customer, "BetaDayOneCustomer must remain authored")
+	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	assert_not_null(customer, "StoreSessionDayOneCustomer must remain authored")
 	if customer == null:
 		return
 	var states: Array[StringName] = []
@@ -181,8 +181,8 @@ func test_customer_exit_state_tracks_acknowledged_walk_hidden_and_reset() -> voi
 		StoreSessionController.CUSTOMER_EXIT_IN_PROGRESS,
 		"Exit walk state must be inspectable without waiting on tween duration"
 	)
-	_assert_active_prompt("BetaBackroomPickup", "Check back room inventory")
-	_assert_inactive("BetaDayOneCustomer")
+	_assert_active_prompt("StoreSessionBackroomPickup", "Check back room inventory")
+	_assert_inactive("StoreSessionDayOneCustomer")
 
 	controller.call("_finalize_customer_exit", customer)
 	assert_eq(
@@ -463,7 +463,7 @@ func _assert_choice_result_flow(choice_id: StringName, expected_headline: String
 	assert_eq(StoreSessionState.input_mode, StoreSessionState.INPUT_MODE_GAMEPLAY)
 	assert_ne(InputFocus.current(), InputFocus.CTX_MODAL)
 	assert_eq(controller.current_stage(), StoreSessionController.STAGE_BACK_ROOM_INVENTORY)
-	_assert_active_prompt("BetaBackroomPickup", "Check back room inventory")
+	_assert_active_prompt("StoreSessionBackroomPickup", "Check back room inventory")
 
 
 func _choose_customer_option(choice_id: StringName) -> void:
@@ -561,7 +561,7 @@ func _controller() -> StoreSessionController:
 func _customer_counter_anchor() -> Node3D:
 	if _root == null:
 		return null
-	return _root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+	return _root.get_node_or_null("checkout_counter/StoreSessionCustomerCounterAnchor") as Node3D
 
 
 func _customer_counter_anchor_count() -> int:
@@ -572,7 +572,7 @@ func _customer_counter_anchor_count() -> int:
 		return 0
 	var count: int = 0
 	for child: Node in checkout.get_children():
-		if child.name == &"BetaCustomerCounterAnchor":
+		if child.name == &"StoreSessionCustomerCounterAnchor":
 			count += 1
 	return count
 
@@ -604,7 +604,7 @@ func _expected_counter_state(choice_id: StringName) -> String:
 
 
 func _spawned_shelf_item_count() -> int:
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return 0
 	var count: int = 0

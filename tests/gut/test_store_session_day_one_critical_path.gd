@@ -179,8 +179,8 @@ func _on_toast_requested_with_id(
 
 
 func test_customer_is_staged_at_the_register() -> void:
-	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
-	assert_not_null(customer, "BetaDayOneCustomer must be authored under the store root")
+	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	assert_not_null(customer, "StoreSessionDayOneCustomer must be authored under the store root")
 	if customer == null:
 		return
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
@@ -203,8 +203,8 @@ func test_customer_is_staged_at_the_register() -> void:
 
 
 func test_day_end_trigger_sits_on_the_register_counter() -> void:
-	var trigger: Node3D = _root.get_node_or_null("BetaDayEndTrigger") as Node3D
-	assert_not_null(trigger, "BetaDayEndTrigger must be authored under the store root")
+	var trigger: Node3D = _root.get_node_or_null("StoreSessionDayEndTrigger") as Node3D
+	assert_not_null(trigger, "StoreSessionDayEndTrigger must be authored under the store root")
 	if trigger == null:
 		return
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
@@ -217,7 +217,7 @@ func test_day_end_trigger_sits_on_the_register_counter() -> void:
 	assert_lt(
 		horiz_distance,
 		0.5,
-		"BetaDayEndTrigger must sit at the Checkout counter (got %.2f m)" % horiz_distance
+		"StoreSessionDayEndTrigger must sit at the Checkout counter (got %.2f m)" % horiz_distance
 	)
 
 
@@ -226,11 +226,11 @@ func test_day_end_trigger_sits_on_the_register_counter() -> void:
 
 func test_store_interactables_have_aligned_trigger_volumes() -> void:
 	for parent_name: String in [
-		"BetaDayOneCustomer",
-		"BetaBackroomPickup",
-		"BetaRestockShelf",
-		"BetaDayEndTrigger",
-		"BetaHiddenClue",
+		"StoreSessionDayOneCustomer",
+		"StoreSessionBackroomPickup",
+		"StoreSessionRestockShelf",
+		"StoreSessionDayEndTrigger",
+		"StoreSessionHiddenClue",
 	]:
 		var parent: Node3D = _root.get_node_or_null(parent_name) as Node3D
 		assert_not_null(parent, "%s must exist under the store root" % parent_name)
@@ -265,7 +265,7 @@ func test_stage_talk_to_customer_enables_only_the_customer() -> void:
 	var enabled: PackedStringArray = _stage_critical_path_targets()
 	assert_eq(
 		Array(enabled),
-		["BetaDayOneCustomer"],
+		["StoreSessionDayOneCustomer"],
 		"On day start, only the customer must be the active critical-path beat"
 	)
 
@@ -312,38 +312,38 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 		return
 	assert_false(register_screen is Interactable, "Register screen must stay non-interactive")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_INACTIVE)
-	_assert_route_target("BetaDayOneCustomer", "Talk to manager")
+	_assert_route_target("StoreSessionDayOneCustomer", "Talk to manager")
 	_assert_right_panel_header("FIRST DAY")
-	await _interact_route_target("BetaDayOneCustomer", "Talk to manager")
+	await _interact_route_target("StoreSessionDayOneCustomer", "Talk to manager")
 
-	_assert_route_target("BetaDayEndTrigger", "Check register")
+	_assert_route_target("StoreSessionDayEndTrigger", "Check register")
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_READY)
 	assert_eq(register_screen.display_text(), "READY")
-	await _interact_route_target("BetaDayEndTrigger", "Check register")
+	await _interact_route_target("StoreSessionDayEndTrigger", "Check register")
 
-	_assert_route_target("BetaBackroomPickup", "Check back room inventory")
+	_assert_route_target("StoreSessionBackroomPickup", "Check back room inventory")
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)
 	assert_eq(register_screen.display_text(), "BACK\nROOM")
-	await _interact_route_target("BetaBackroomPickup", "Check back room inventory")
+	await _interact_route_target("StoreSessionBackroomPickup", "Check back room inventory")
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"store_backroom_count_changed",
 		[StoreSessionController._BACKROOM_DELIVERY_QUANTITY]
 	)
 
-	_assert_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	_assert_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
 	assert_eq(String(controller.current_stage()), "training_stock_shelf")
-	await _interact_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	await _interact_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
 	assert_false(StoreSessionState.preopening_complete)
 	assert_true(StoreSessionState.carrying_stock)
-	_assert_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
-	await _interact_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+	_assert_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
+	await _interact_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
 	assert_true(StoreSessionState.preopening_complete)
 	assert_false(StoreSessionState.carrying_stock)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
-	_assert_route_target("BetaDayOneCustomer", "Talk to customer")
+	_assert_route_target("StoreSessionDayOneCustomer", "Talk to customer")
 	_assert_right_panel_header_prefix("DAY 1")
 
 	_assert_close_day_blocked(controller, "Talk to the customer first.")
@@ -400,10 +400,10 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [1])
 	_assert_right_panel_stat("Customers", "1")
 	_assert_right_panel_stat("Sales", "1")
-	_assert_route_target("BetaBackroomPickup", "Check back room inventory")
+	_assert_route_target("StoreSessionBackroomPickup", "Check back room inventory")
 	_assert_close_day_blocked(controller, "Check the back room first.")
 
-	await _interact_route_target("BetaBackroomPickup", "Check back room inventory")
+	await _interact_route_target("StoreSessionBackroomPickup", "Check back room inventory")
 	assert_true(StoreSessionState.carrying_stock)
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_STOCKING)
 	assert_eq(register_screen.display_text(), "STOCK\nSHELF")
@@ -412,16 +412,16 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 		"store_backroom_count_changed",
 		[StoreSessionController._BACKROOM_DELIVERY_QUANTITY + 1]
 	)
-	_assert_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	_assert_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
 	_assert_close_day_blocked(controller, "Stock the used games shelf before closing.")
 
-	await _interact_route_target("BetaRestockShelf", "Place game 1 of 2 on used games shelf")
+	await _interact_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
 	assert_true(StoreSessionState.carrying_stock)
 	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [2])
 	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [2])
-	_assert_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+	_assert_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
 
-	await _interact_route_target("BetaRestockShelf", "Place game 2 of 2 on used games shelf")
+	await _interact_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
 	assert_false(StoreSessionState.carrying_stock)
 	var expected_shelf_count: int = StoreSessionController._BACKROOM_DELIVERY_QUANTITY + 1
 	assert_signal_emitted_with_parameters(
@@ -433,12 +433,12 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	assert_eq(_spawned_shelf_item_count(), expected_shelf_count)
 	_assert_right_panel_stat("Shelf", "%d / %d" % [expected_shelf_count, expected_shelf_count + 1])
 	_assert_right_panel_stat("Stockroom", "1")
-	_assert_route_target("BetaDayEndTrigger", "Close day")
+	_assert_route_target("StoreSessionDayEndTrigger", "Close day")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_CLOSE_READY)
 	assert_eq(register_screen.display_text(), "CLOSE\nDAY")
 	assert_ne(register_screen.display_text(), "READY")
 
-	await _interact_route_target("BetaDayEndTrigger", "Close day")
+	await _interact_route_target("StoreSessionDayEndTrigger", "Close day")
 	var close_day_panel: CanvasLayer = controller.get("_close_day_panel") as CanvasLayer
 	assert_not_null(close_day_panel, "Close-day request must open the confirmation modal")
 	if close_day_panel == null:
@@ -603,7 +603,7 @@ func test_customer_choice_opens_result_before_next_stage() -> void:
 	assert_eq(StoreSessionState.input_mode, StoreSessionState.INPUT_MODE_GAMEPLAY)
 	assert_eq(
 		Array(_stage_critical_path_targets()),
-		["BetaBackroomPickup"],
+		["StoreSessionBackroomPickup"],
 		"Continue must return control on the next Day 1 objective"
 	)
 	assert_true(bool(controller.is_objective_completed(&"talk_to_customer")))
@@ -691,7 +691,7 @@ func test_chain_walks_customer_then_back_room_then_stock_then_close() -> void:
 	await get_tree().process_frame
 	assert_eq(
 		Array(_stage_critical_path_targets()),
-		["BetaBackroomPickup"],
+		["StoreSessionBackroomPickup"],
 		"After resolving the customer, the back-room beat must be active"
 	)
 	assert_true(
@@ -712,7 +712,7 @@ func test_chain_walks_customer_then_back_room_then_stock_then_close() -> void:
 	await get_tree().process_frame
 	assert_eq(
 		Array(_stage_critical_path_targets()),
-		["BetaRestockShelf"],
+		["StoreSessionRestockShelf"],
 		"After the back-room check, the stock-shelf beat must be active"
 	)
 	assert_true(bool(controller.is_objective_completed(&"back_room_inventory")))
@@ -731,7 +731,7 @@ func test_chain_walks_customer_then_back_room_then_stock_then_close() -> void:
 	await get_tree().process_frame
 	assert_eq(
 		Array(_stage_critical_path_targets()),
-		["BetaDayEndTrigger"],
+		["StoreSessionDayEndTrigger"],
 		"After stocking the shelf, the day-end trigger must be active"
 	)
 	assert_true(bool(controller.is_objective_completed(&"stock_shelf")))
@@ -762,7 +762,7 @@ func test_pregranted_unlocks_do_not_skip_day_one_objectives() -> void:
 	)
 	assert_eq(
 		Array(_stage_critical_path_targets()),
-		["BetaDayOneCustomer"],
+		["StoreSessionDayOneCustomer"],
 		"Pregranted employee unlocks must not enable later Day 1 targets"
 	)
 	assert_false(
@@ -834,7 +834,7 @@ func test_close_day_is_locked_at_day_start() -> void:
 	# single-event days; this test fails fast if that regression returns.
 	var enabled: PackedStringArray = _enabled_store_critical_path_targets()
 	assert_false(
-		Array(enabled).has("BetaDayEndTrigger"),
+		Array(enabled).has("StoreSessionDayEndTrigger"),
 		(
 			"Day-end trigger must be disabled at day start (not enabled until "
 			+ "all required objectives complete). Enabled list: %s" % str(enabled)
@@ -846,12 +846,12 @@ func test_store_prompt_copy_uses_plain_action_language() -> void:
 	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	assert_eq(_interaction_label(_store_interactable("BetaDayOneCustomer")), "Talk to customer")
+	assert_eq(_interaction_label(_store_interactable("StoreSessionDayOneCustomer")), "Talk to customer")
 	assert_eq(
-		_interaction_label(_store_interactable("BetaBackroomPickup")), "Check back room inventory"
+		_interaction_label(_store_interactable("StoreSessionBackroomPickup")), "Check back room inventory"
 	)
-	assert_eq(_interaction_label(_store_interactable("BetaRestockShelf")), "Stock used games shelf")
-	assert_eq(_interaction_label(_store_interactable("BetaDayEndTrigger")), "Close day")
+	assert_eq(_interaction_label(_store_interactable("StoreSessionRestockShelf")), "Stock used games shelf")
+	assert_eq(_interaction_label(_store_interactable("StoreSessionDayEndTrigger")), "Close day")
 
 
 func test_future_stage_disabled_reasons_name_next_prerequisite() -> void:
@@ -996,8 +996,8 @@ func test_hidden_clue_does_not_expose_active_prompt_during_chain() -> void:
 	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var clue: Interactable = _store_interactable("BetaHiddenClue")
-	assert_not_null(clue, "BetaHiddenClue/Interactable must exist")
+	var clue: Interactable = _store_interactable("StoreSessionHiddenClue")
+	assert_not_null(clue, "StoreSessionHiddenClue/Interactable must exist")
 	if clue == null:
 		return
 	assert_false(clue.enabled, "Hidden clue must not steal the customer prompt")
@@ -1240,15 +1240,15 @@ func _signal_first_arg_seen(emissions: Array, expected_id: StringName) -> bool:
 ## Returns the names of the store_session day-1 critical-path parents whose
 ## Interactable child is currently enabled. Stable across iterations so an
 ## `assert_eq(Array(...), [...])` matches predictably. Includes the
-## ambient-flavor BetaHiddenClue, which is always-on until inspected.
+## ambient-flavor StoreSessionHiddenClue, which is always-on until inspected.
 func _enabled_store_critical_path_targets() -> PackedStringArray:
 	var out: PackedStringArray = []
 	for parent_name: String in [
-		"BetaDayOneCustomer",
-		"BetaHiddenClue",
-		"BetaBackroomPickup",
-		"BetaRestockShelf",
-		"BetaDayEndTrigger",
+		"StoreSessionDayOneCustomer",
+		"StoreSessionHiddenClue",
+		"StoreSessionBackroomPickup",
+		"StoreSessionRestockShelf",
+		"StoreSessionDayEndTrigger",
 	]:
 		var parent: Node = _root.get_node_or_null(parent_name)
 		if parent == null:
@@ -1260,12 +1260,12 @@ func _enabled_store_critical_path_targets() -> PackedStringArray:
 
 
 ## Like `_enabled_store_critical_path_targets`, but filters out the
-## always-on BetaHiddenClue flavor object so chain-progression assertions
+## always-on StoreSessionHiddenClue flavor object so chain-progression assertions
 ## can match a singleton list against the active stage's target.
 func _stage_critical_path_targets() -> PackedStringArray:
 	var out: PackedStringArray = []
 	for parent_name: String in _enabled_store_critical_path_targets():
-		if parent_name == "BetaHiddenClue":
+		if parent_name == "StoreSessionHiddenClue":
 			continue
 		out.append(parent_name)
 	return out
@@ -1424,7 +1424,7 @@ func _interact_route_target(parent_name: String, expected_label: String) -> void
 
 
 func _open_customer_decision_from_interactable() -> void:
-	await _interact_route_target("BetaDayOneCustomer", "Talk to customer")
+	await _interact_route_target("StoreSessionDayOneCustomer", "Talk to customer")
 	await get_tree().process_frame
 
 
@@ -1475,7 +1475,7 @@ func _assert_close_day_blocked(controller: StoreSessionController, expected_reas
 	assert_false(bool(controller.can_interact_day_end()))
 	assert_eq(String(controller.day_end_disabled_reason()), expected_reason)
 	assert_false(
-		Array(_stage_critical_path_targets()).has("BetaDayEndTrigger"),
+		Array(_stage_critical_path_targets()).has("StoreSessionDayEndTrigger"),
 		"Close-day trigger must not be active before prerequisites are complete"
 	)
 
@@ -1508,19 +1508,19 @@ func _assert_right_panel_stat(stat_name: String, expected: String) -> void:
 
 
 func _assert_empty_shelf_overlay_visible(expected: bool) -> void:
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
-	assert_not_null(shelf, "BetaRestockShelf must exist")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
+	assert_not_null(shelf, "StoreSessionRestockShelf must exist")
 	if shelf == null:
 		return
 	var overlay: Node3D = shelf.get_node_or_null("EmptyOverlay") as Node3D
-	assert_not_null(overlay, "BetaRestockShelf must expose EmptyOverlay")
+	assert_not_null(overlay, "StoreSessionRestockShelf must expose EmptyOverlay")
 	if overlay == null:
 		return
 	assert_eq(overlay.visible, expected)
 
 
 func _spawned_shelf_item_count() -> int:
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return 0
 	var count: int = 0
@@ -1607,12 +1607,12 @@ func test_stock_box_visually_disappears_after_pickup_fade() -> void:
 	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
-	var pickup: Node = _root.get_node_or_null("BetaBackroomPickup")
-	assert_not_null(pickup, "BetaBackroomPickup must exist")
+	var pickup: Node = _root.get_node_or_null("StoreSessionBackroomPickup")
+	assert_not_null(pickup, "StoreSessionBackroomPickup must exist")
 	var stock_box: Node3D = pickup.get_node_or_null("StockBox") as Node3D
 	var stock_label: Node3D = pickup.get_node_or_null("StockBoxLabel") as Node3D
-	assert_not_null(stock_box, "BetaBackroomPickup/StockBox must exist")
-	assert_not_null(stock_label, "BetaBackroomPickup/StockBoxLabel must exist")
+	assert_not_null(stock_box, "StoreSessionBackroomPickup/StockBox must exist")
+	assert_not_null(stock_label, "StoreSessionBackroomPickup/StockBoxLabel must exist")
 	assert_true(
 		stock_box.visible and stock_label.visible,
 		"Pre-condition: StockBox + label visible at day start"
@@ -1642,20 +1642,20 @@ func test_carried_stock_marker_and_carry_hud_follow_pickup_restock_and_new_run_r
 	var hud: CanvasLayer = scene.instantiate() as CanvasLayer
 	add_child_autofree(hud)
 	await get_tree().process_frame
-	var carry_label: Label = hud.get_node_or_null("CarryHUD/BetaCarryLabel") as Label
-	var carry_icon: ColorRect = hud.get_node_or_null("CarryHUD/BetaCarryIcon") as ColorRect
+	var carry_label: Label = hud.get_node_or_null("CarryHUD/StoreSessionCarryLabel") as Label
+	var carry_icon: ColorRect = hud.get_node_or_null("CarryHUD/StoreSessionCarryIcon") as ColorRect
 	assert_not_null(carry_label, "HUD carry label must exist")
 	assert_not_null(carry_icon, "HUD carry icon must exist")
 	if carry_label == null or carry_icon == null:
 		return
-	var pickup: Node = _root.get_node_or_null("BetaBackroomPickup")
-	assert_not_null(pickup, "BetaBackroomPickup must exist")
+	var pickup: Node = _root.get_node_or_null("StoreSessionBackroomPickup")
+	assert_not_null(pickup, "StoreSessionBackroomPickup must exist")
 	if pickup == null:
 		return
 	var stock_box: Node3D = pickup.get_node_or_null("StockBox") as Node3D
 	var open_box: Node3D = pickup.get_node_or_null("StockBoxOpen") as Node3D
-	assert_not_null(stock_box, "BetaBackroomPickup/StockBox must exist")
-	assert_not_null(open_box, "BetaBackroomPickup/StockBoxOpen must exist")
+	assert_not_null(stock_box, "StoreSessionBackroomPickup/StockBox must exist")
+	assert_not_null(open_box, "StoreSessionBackroomPickup/StockBoxOpen must exist")
 	if stock_box == null or open_box == null:
 		return
 	var marker: Node3D = _root.find_child("StoreCarriedStockMarker", true, false) as Node3D
@@ -1777,8 +1777,8 @@ func test_store_restock_spawns_catalog_backed_product_visuals() -> void:
 	var spawned: int = int(controller.call("_spawn_visible_shelf_items", 5))
 
 	assert_eq(spawned, 5, "Store-session restock shelf must spawn the delivery count")
-	var shelf: Node = _root.get_node_or_null("BetaRestockShelf")
-	assert_not_null(shelf, "BetaRestockShelf must exist")
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
+	assert_not_null(shelf, "StoreSessionRestockShelf must exist")
 	if shelf == null:
 		return
 	var designed_count: int = 0
@@ -2285,7 +2285,7 @@ func test_clean_exchange_presents_room_outcome_before_summary() -> void:
 	assert_eq(int(counts.get("applied_backroom_created_quantity", -1)), 1)
 
 	var anchor: Node3D = (
-		_root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+		_root.get_node_or_null("checkout_counter/StoreSessionCustomerCounterAnchor") as Node3D
 	)
 	assert_not_null(anchor, "Clean exchange must keep the shared counter item readable")
 	if anchor != null:
@@ -2298,7 +2298,7 @@ func test_clean_exchange_presents_room_outcome_before_summary() -> void:
 			assert_true(shared_item.visible)
 
 	var shelf_gap: Node3D = (
-		_root.get_node_or_null("BetaRestockShelf/CleanExchangeShelfGap") as Node3D
+		_root.get_node_or_null("StoreSessionRestockShelf/CleanExchangeShelfGap") as Node3D
 	)
 	assert_not_null(shelf_gap, "Clean exchange must mark the shelf copy that left")
 	if shelf_gap != null:
@@ -2306,7 +2306,7 @@ func test_clean_exchange_presents_room_outcome_before_summary() -> void:
 		assert_eq(str(shelf_gap.get_meta("outcome", "")), "clean_exchange")
 
 	var returned_copy: Node3D = (
-		_root.get_node_or_null("BetaBackroomPickup/CleanExchangeReturnedCopy") as Node3D
+		_root.get_node_or_null("StoreSessionBackroomPickup/CleanExchangeReturnedCopy") as Node3D
 	)
 	assert_not_null(returned_copy, "Clean exchange must show the returned copy in back room")
 	if returned_copy != null:
@@ -2318,7 +2318,7 @@ func test_clean_exchange_presents_room_outcome_before_summary() -> void:
 		assert_eq(str(returned_copy.get_meta("location", "")), "backroom")
 		assert_not_null(returned_copy.get_node_or_null("ReturnedCopyLabel"))
 
-	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
+	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
 	assert_not_null(customer, "Clean exchange must keep the customer readable before exit")
 	if customer != null:
 		assert_eq(str(customer.get_meta("exit_reaction", "")), "relieved")
@@ -2338,7 +2338,7 @@ func test_clean_exchange_presents_room_outcome_before_summary() -> void:
 
 	assert_eq(_spawned_shelf_item_count(), 1)
 	assert_not_null(
-		_root.get_node_or_null("BetaBackroomPickup/CleanExchangeReturnedCopy"),
+		_root.get_node_or_null("StoreSessionBackroomPickup/CleanExchangeReturnedCopy"),
 		"Returned copy must persist into the back-room objective"
 	)
 	var summary_after: DaySummaryPanel = controller.get("_summary_panel") as DaySummaryPanel
@@ -2408,7 +2408,7 @@ func test_bundle_sale_presents_distinct_room_outcome_before_summary() -> void:
 	assert_eq(int(counts.get("applied_backroom_created_quantity", -1)), 1)
 
 	var anchor: Node3D = (
-		_root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+		_root.get_node_or_null("checkout_counter/StoreSessionCustomerCounterAnchor") as Node3D
 	)
 	assert_not_null(anchor, "Bundle sale must keep the shared counter anchor readable")
 	if anchor != null:
@@ -2428,9 +2428,9 @@ func test_bundle_sale_presents_distinct_room_outcome_before_summary() -> void:
 		if shared_item != null:
 			assert_false(shared_item.visible, "Bundle stack must replace the single shared item")
 
-	var game_gap: Node3D = _root.get_node_or_null("BetaRestockShelf/BundleGameShelfGap") as Node3D
+	var game_gap: Node3D = _root.get_node_or_null("StoreSessionRestockShelf/BundleGameShelfGap") as Node3D
 	var controller_gap: Node3D = (
-		_root.get_node_or_null("BetaRestockShelf/BundleControllerShelfGap") as Node3D
+		_root.get_node_or_null("StoreSessionRestockShelf/BundleControllerShelfGap") as Node3D
 	)
 	assert_not_null(game_gap, "Bundle sale must mark the game copy that left")
 	assert_not_null(controller_gap, "Bundle sale must mark the controller that left")
@@ -2440,17 +2440,17 @@ func test_bundle_sale_presents_distinct_room_outcome_before_summary() -> void:
 	if controller_gap != null:
 		assert_eq(str(controller_gap.get_meta("outcome", "")), "bundle")
 		assert_eq(str(controller_gap.get_meta("item_role", "")), "controller")
-	assert_null(_root.get_node_or_null("BetaRestockShelf/CleanExchangeShelfGap"))
+	assert_null(_root.get_node_or_null("StoreSessionRestockShelf/CleanExchangeShelfGap"))
 
-	var returned_copy: Node3D = _root.get_node_or_null("BetaBackroomPickup/BundleReturnedCopy") as Node3D
+	var returned_copy: Node3D = _root.get_node_or_null("StoreSessionBackroomPickup/BundleReturnedCopy") as Node3D
 	assert_not_null(returned_copy, "Bundle sale must show the returned copy in back room")
 	if returned_copy != null:
 		assert_eq(str(returned_copy.get_meta("definition_id", "")), _RETURN_GAME_ID)
 		assert_eq(str(returned_copy.get_meta("location", "")), "backroom")
 		assert_not_null(returned_copy.get_node_or_null("BundleReturnedCopyLabel"))
-	assert_null(_root.get_node_or_null("BetaBackroomPickup/CleanExchangeReturnedCopy"))
+	assert_null(_root.get_node_or_null("StoreSessionBackroomPickup/CleanExchangeReturnedCopy"))
 
-	var customer: Node3D = _root.get_node_or_null("BetaDayOneCustomer") as Node3D
+	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
 	assert_not_null(customer, "Bundle sale must keep the customer readable before exit")
 	if customer != null:
 		assert_eq(str(customer.get_meta("exit_reaction", "")), "pressured_bundle")
@@ -2570,7 +2570,7 @@ func test_refused_return_marks_loss_without_sale_or_stock_movement() -> void:
 	_assert_right_panel_stat("Trust", "-2")
 
 	var anchor: Node3D = (
-		_root.get_node_or_null("checkout_counter/BetaCustomerCounterAnchor") as Node3D
+		_root.get_node_or_null("checkout_counter/StoreSessionCustomerCounterAnchor") as Node3D
 	)
 	assert_not_null(anchor, "Refused return must keep the shared counter anchor readable")
 	if anchor != null:
@@ -2658,7 +2658,7 @@ func test_disabled_reason_at_stock_shelf_does_not_echo_generic_shelves() -> void
 # ── Register status indicator: stage-aware passive hint ────────────────────
 # A raycast-only Interactable on the checkout counter that returns false from
 # can_interact() and surfaces a muted disabled-reason during the back-room
-# and stocking phases. BetaDayOneCustomer and BetaDayEndTrigger keep owning
+# and stocking phases. StoreSessionDayOneCustomer and StoreSessionDayEndTrigger keep owning
 # their stages — the indicator stays empty during STAGE_TALK_TO_CUSTOMER and
 # STAGE_END_DAY so the active interactable's prompt is what the player sees.
 
@@ -2704,7 +2704,7 @@ func test_register_status_indicator_never_lets_e_fire() -> void:
 
 func test_register_status_indicator_is_raycast_only() -> void:
 	# proximity_radius = 0 prevents the indicator from competing with
-	# BetaDayEndTrigger's 3.25 m proximity zone; the player must aim at the
+	# StoreSessionDayEndTrigger's 3.25 m proximity zone; the player must aim at the
 	# register face to see the hint, not just walk near the counter.
 	var indicator: Interactable = _register_status_indicator()
 	if indicator == null:
@@ -2717,7 +2717,7 @@ func test_register_status_indicator_is_raycast_only() -> void:
 
 
 func test_register_status_indicator_silent_during_talk_to_customer() -> void:
-	# Day 1 opens on STAGE_TALK_TO_CUSTOMER — BetaDayOneCustomer owns that
+	# Day 1 opens on STAGE_TALK_TO_CUSTOMER — StoreSessionDayOneCustomer owns that
 	# beat. The indicator returns "" so the HUD does not double up a hint
 	# alongside the customer's "Help the customer" prompt.
 	var controller: Node = _store_session_controller()
@@ -2732,7 +2732,7 @@ func test_register_status_indicator_silent_during_talk_to_customer() -> void:
 	assert_eq(
 		indicator.get_disabled_reason(),
 		"",
-		"Indicator must be silent while BetaDayOneCustomer owns the beat"
+		"Indicator must be silent while StoreSessionDayOneCustomer owns the beat"
 	)
 
 
@@ -2782,7 +2782,7 @@ func test_register_status_indicator_hints_shelf_during_stock_stage() -> void:
 
 func test_register_status_indicator_silent_during_end_day() -> void:
 	# Acceptance: during STAGE_END_DAY the indicator shows nothing —
-	# BetaDayEndTrigger's "Close the day" prompt is the active beat.
+	# StoreSessionDayEndTrigger's "Close the day" prompt is the active beat.
 	var controller: Node = _store_session_controller()
 	var indicator: Interactable = _register_status_indicator()
 	if controller == null or indicator == null:
@@ -2801,7 +2801,7 @@ func test_register_status_indicator_silent_during_end_day() -> void:
 	assert_eq(
 		indicator.get_disabled_reason(),
 		"",
-		"Indicator must be silent so BetaDayEndTrigger owns the close-day beat"
+		"Indicator must be silent so StoreSessionDayEndTrigger owns the close-day beat"
 	)
 
 
@@ -2828,7 +2828,7 @@ func test_register_status_indicator_stays_enabled_across_stages() -> void:
 
 
 func test_register_status_indicator_does_not_break_close_day_path() -> void:
-	# Regression guard: BetaDayEndTrigger must keep working with the
+	# Regression guard: StoreSessionDayEndTrigger must keep working with the
 	# indicator added. Walk the chain and assert close-day still resolves
 	# without a phantom block from the new node.
 	var controller: Node = _store_session_controller()
@@ -2841,15 +2841,15 @@ func test_register_status_indicator_does_not_break_close_day_path() -> void:
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
 	var trigger: Interactable = (
-		_root.get_node_or_null("BetaDayEndTrigger/Interactable") as Interactable
+		_root.get_node_or_null("StoreSessionDayEndTrigger/Interactable") as Interactable
 	)
-	assert_not_null(trigger, "BetaDayEndTrigger/Interactable must still exist")
+	assert_not_null(trigger, "StoreSessionDayEndTrigger/Interactable must still exist")
 	if trigger == null:
 		return
-	assert_true(trigger.enabled, "BetaDayEndTrigger must be enabled at STAGE_END_DAY")
+	assert_true(trigger.enabled, "StoreSessionDayEndTrigger must be enabled at STAGE_END_DAY")
 	assert_true(
 		trigger.can_interact(),
-		"BetaDayEndTrigger.can_interact() must still gate true at STAGE_END_DAY"
+		"StoreSessionDayEndTrigger.can_interact() must still gate true at STAGE_END_DAY"
 	)
 
 
