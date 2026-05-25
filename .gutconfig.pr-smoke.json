@@ -4,6 +4,7 @@
     "res://tests/gut/test_boot_sequence.gd",
     "res://tests/unit/test_content_integrity.gd",
     "res://tests/unit/test_store_ready_contract.gd",
+    "res://tests/unit/test_pure_gameplay_rules.gd",
     "res://tests/gut/test_store_session_day_one_critical_path.gd",
     "res://tests/gut/test_save_reload_smoke_flow.gd",
     "res://tests/gut/test_hud_ready_checkpoint.gd",

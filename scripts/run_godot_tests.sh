@@ -7,6 +7,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 source "$ROOT/scripts/artifact_paths.sh"
+source "$ROOT/scripts/godot_resolver.sh"
 ARTIFACT_ROOT="$(resolve_mallcore_artifact_root "$ROOT")"
 export MALLCORE_ARTIFACT_DIR="$ARTIFACT_ROOT"
 GUT_LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/gut")"
@@ -20,6 +21,12 @@ if [ -n "${GITHUB_ENV:-}" ]; then
 fi
 
 "$ROOT/tests/validate_store_session_naming.sh"
+MALLCORE_SKIP_IMPORT=1 "$ROOT/scripts/validate_resource_integrity.sh"
+
+if ! GODOT_BIN="$(resolve_mallcore_godot)"; then
+	echo "ERROR: Godot not found (tried: $(mallcore_configured_godot)). Set GODOT to your 4.x editor binary." >&2
+	exit 1
+fi
 
 # Strip engine-shutdown noise emitted *after* GUT finishes, before it reaches
 # the log or the CI display. In headless mode the renderer-cleanup pass runs
@@ -32,7 +39,7 @@ fi
 SHUTDOWN_NOISE_RE='^WARNING: [0-9]+ RIDs? of type "[^"]+" (was|were) leaked\.$|^WARNING: ObjectDB instances leaked at exit|^ERROR: [0-9]+ RID allocations of type .+ were leaked at exit\.$|^ERROR: [0-9]+ resources still in use at exit|^ERROR: Pages in use exist at exit in PagedAllocator: .+$|^ +at: _free_rids \(servers/rendering/renderer_canvas_cull|^ +at: cleanup \(core/object/object\.cpp|^ +at: clear \(core/io/resource\.cpp|^ +at: ~PagedAllocator \(\./core/templates/paged_allocator\.h'
 
 set +e
-godot --path "$ROOT" --headless \
+"$GODOT_BIN" --path "$ROOT" --headless \
 	--script res://addons/gut/gut_cmdln.gd -- \
 	-gconfig=res://.gutconfig.json -gexit \
 	2>&1 | grep -vE "$SHUTDOWN_NOISE_RE" | tee "$GUT_OUTPUT_FILE"

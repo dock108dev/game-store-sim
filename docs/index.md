@@ -36,6 +36,8 @@ artifact tree. Hand-maintained audit notes stay under `docs/audits/`.
 `README.md` is the only active project doc at the repository root.
 Markdown under `.github/`, `addons/`, `.aidlc/`, and similar folders is
 configuration, vendored material, generated run output, or platform tooling
-rather than the active game documentation set. The four `tests/**/README.md`
-ownership-contract files remain because `tests/validate_gut_config_discovery.sh`
-requires them.
+rather than the active game documentation set. The four validator-required
+test ownership contracts remain at `tests/automation/README.md`,
+`tests/baselines/README.md`, `tests/flows/README.md`, and
+`tests/visual/README.md` because `tests/validate_gut_config_discovery.sh`
+requires them. Visual-baseline policy lives in [Testing](testing.md).

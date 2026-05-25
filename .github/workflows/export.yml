@@ -1,6 +1,12 @@
-name: Export
+name: Release Playtest and Export
 
 on:
+  workflow_dispatch:
+    inputs:
+      release_candidate_label:
+        description: "Release-candidate label for uploaded playtest artifacts"
+        required: false
+        default: "manual-rc"
   push:
     tags:
       - "v*"
@@ -10,98 +16,179 @@ permissions:
 
 env:
   GODOT_VERSION: "4.6.2"
+  VALIDATION_GODOT_VERSION: "4.6.2-stable"
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  MALLCORE_ARTIFACT_DIR: ${{ github.workspace }}/artifacts
 
 jobs:
-  validate-export-config:
-    name: Validate Export Config
+  validate-release-ref:
+    name: Release Lane - Validate Trigger
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    steps:
+      - name: Validate release trigger
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+            if [[ ! "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+              echo "::error::Tagged release publishing only accepts version tags such as v1.2.3."
+              exit 1
+            fi
+            echo "Tagged release publish: ${GITHUB_REF_NAME}"
+          else
+            echo "Manual release-candidate build: ${GITHUB_REF_NAME}"
+          fi
 
+  static-repo-guards:
+    name: Static Lane - Repo Guards
+    needs: validate-release-ref
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run static repo guards
+        run: bash scripts/validate_static_repo_guards.sh
+
+  gdscript-lint:
+    name: Static Lane - GDScript Lint
+    needs: validate-release-ref
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install gdtoolkit
+        run: pip install "gdtoolkit==4.*"
+
+      - name: Run gdlint
+        run: gdlint game/
+
+  full-gut-tests:
+    name: Unit Lane - Full GUT Tests
+    needs: validate-release-ref
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    env:
+      GODOT_VERSION: ${{ env.VALIDATION_GODOT_VERSION }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Godot import cache
+        uses: actions/cache@v5
+        with:
+          path: .godot
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
+      - name: Install Godot
+        run: bash scripts/setup_godot.sh
+
+      - name: Import project
+        run: bash scripts/godot_import.sh
+
+      - name: Seed GUT editor environment
+        run: |
+          godot --path "$GITHUB_WORKSPACE" --headless \
+            --script res://tests/setup_gut_env.gd 2>/dev/null || true
+
+      - name: Run full GUT tests
+        run: bash scripts/run_godot_tests.sh
+
+      - name: Run fresh install smoke
+        run: bash scripts/run_fresh_install_smoke.sh
+
+      - name: Upload release GUT artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-gut-artifacts-${{ github.run_number }}
+          path: |
+            artifacts/logs/gut/
+            artifacts/logs/scenario/
+            artifacts/reports/scenario/
+            artifacts/screenshots/scenario/
+            artifacts/manifests/
+          if-no-files-found: warn
+
+  interaction-audit:
+    name: Scene and Flow Lane - Interaction Audit
+    needs: validate-release-ref
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      GODOT_VERSION: ${{ env.VALIDATION_GODOT_VERSION }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Godot import cache
+        uses: actions/cache@v5
+        with:
+          path: .godot
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
+      - name: Install Godot
+        run: bash scripts/setup_godot.sh
+
+      - name: Import project
+        run: bash scripts/godot_import.sh
+
+      - name: Run interaction audit
+        run: bash tests/audit_run.sh
+
+      - name: Upload release interaction audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-interaction-audit-artifacts-${{ github.run_number }}
+          path: |
+            docs/audits/
+            artifacts/logs/scenario/
+            artifacts/reports/scenario/
+            artifacts/screenshots/scenario/
+            artifacts/manifests/
+          if-no-files-found: warn
+
+  validate-export-config:
+    name: Release Lane - Validate Export Config
+    needs: validate-release-ref
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
       - name: Validate export presets
         shell: bash
-        run: |
-          set -euo pipefail
-
-          if [ ! -f "export_presets.cfg" ]; then
-            echo "::error::export_presets.cfg not found"
-            exit 1
-          fi
-
-          if [ ! -f "project.godot" ]; then
-            echo "::error::project.godot not found"
-            exit 1
-          fi
-
-          for preset in 'name="Windows Desktop"' 'name="macOS"' 'name="Linux/X11"'; do
-            if ! grep -q "$preset" export_presets.cfg; then
-              echo "::error::Missing required preset: $preset"
-              exit 1
-            fi
-          done
-
-          ICON_COUNT="$(grep -c '^application/icon="res://icon.svg"$' export_presets.cfg || true)"
-          if [ "$ICON_COUNT" -lt 2 ]; then
-            echo "::error::Windows and macOS presets must both use res://icon.svg"
-            exit 1
-          fi
-
-          if ! grep -q '^codesign/enable=false$' export_presets.cfg; then
-            echo "::error::Windows preset must not enable built-in code signing"
-            exit 1
-          fi
-
-          if ! grep -q '^codesign/codesign=0$' export_presets.cfg; then
-            echo "::error::macOS preset must not enable built-in code signing"
-            exit 1
-          fi
-
-          if ! grep -q '^binary_format/architecture="x86_64"$' export_presets.cfg; then
-            echo "::error::Windows preset must target x86_64 for Godot export templates"
-            exit 1
-          fi
-
-          if grep -Eq 'export_path="([A-Za-z]:|/|~)' export_presets.cfg; then
-            echo "::error::export_presets.cfg contains an absolute export_path"
-            exit 1
-          fi
-
-          if grep -q '/Users/' export_presets.cfg; then
-            echo "::error::export_presets.cfg contains a local macOS path"
-            exit 1
-          fi
-
-          if grep -Eq '^codesign/identity="[^"]+"' export_presets.cfg; then
-            echo "::error::export_presets.cfg contains a hardcoded code signing identity"
-            exit 1
-          fi
-
-          if grep -Eq '^codesign/password="[^"]+"' export_presets.cfg; then
-            echo "::error::export_presets.cfg contains a hardcoded code signing password"
-            exit 1
-          fi
-
-          if grep -Eqi '(secret|token|apikey|api_key)' export_presets.cfg; then
-            echo "::error::export_presets.cfg appears to contain secret material"
-            exit 1
-          fi
-
-          if ! grep -q '^textures/vram_compression/import_etc2_astc=true$' project.godot; then
-            echo "::error::Universal macOS export requires ETC2 ASTC import support in project.godot"
-            exit 1
-          fi
+        run: bash scripts/validate_export_config.sh
 
   export-windows:
-    name: Export Windows Build
-    needs: validate-export-config
+    name: Release Lane - Export Windows Build
+    needs:
+      - static-repo-guards
+      - gdscript-lint
+      - full-gut-tests
+      - interaction-audit
+      - validate-export-config
     runs-on: windows-latest
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v6
 
@@ -145,7 +232,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ ! -f "build/windows/MallcoreSim.exe" ]; then
-            echo "::error::Export failed — MallcoreSim.exe not produced"
+            echo "::error::Export failed - MallcoreSim.exe not produced"
             exit 1
           fi
           echo "Export artifact size: $(du -h build/windows/MallcoreSim.exe | cut -f1)"
@@ -156,21 +243,25 @@ jobs:
           Compress-Archive -Path "build\windows\MallcoreSim.exe" `
             -DestinationPath "build\windows\mallcore-sim-windows.zip" -Force
 
-      - name: Upload artifact
+      - name: Upload Windows release-candidate artifact
         uses: actions/upload-artifact@v7
         with:
-          name: windows-build
+          name: release-windows-build-${{ github.run_number }}
           path: build/windows/mallcore-sim-windows.zip
           if-no-files-found: error
-          retention-days: 5
+          retention-days: 14
 
   export-macos:
-    name: Export macOS Build
-    needs: validate-export-config
+    name: Release Lane - Export macOS Build
+    needs:
+      - static-repo-guards
+      - gdscript-lint
+      - full-gut-tests
+      - interaction-audit
+      - validate-export-config
     runs-on: macos-latest
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v6
 
@@ -200,26 +291,30 @@ jobs:
         run: |
           set -euo pipefail
           if [ ! -f "build/macos/mallcore-sim-macos.zip" ]; then
-            echo "::error::Export failed — mallcore-sim-macos.zip not produced"
+            echo "::error::Export failed - mallcore-sim-macos.zip not produced"
             exit 1
           fi
           echo "Export artifact size: $(du -h build/macos/mallcore-sim-macos.zip | cut -f1)"
 
-      - name: Upload artifact
+      - name: Upload macOS release-candidate artifact
         uses: actions/upload-artifact@v7
         with:
-          name: macos-build
+          name: release-macos-build-${{ github.run_number }}
           path: build/macos/mallcore-sim-macos.zip
           if-no-files-found: error
-          retention-days: 5
+          retention-days: 14
 
   export-linux:
-    name: Export Linux Build
-    needs: validate-export-config
+    name: Release Lane - Export Linux Build
+    needs:
+      - static-repo-guards
+      - gdscript-lint
+      - full-gut-tests
+      - interaction-audit
+      - validate-export-config
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v6
 
@@ -249,7 +344,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ ! -f "build/linux/MallcoreSim.x86_64" ]; then
-            echo "::error::Export failed — MallcoreSim.x86_64 not produced"
+            echo "::error::Export failed - MallcoreSim.x86_64 not produced"
             exit 1
           fi
           echo "Export artifact size: $(du -h build/linux/MallcoreSim.x86_64 | cut -f1)"
@@ -259,39 +354,131 @@ jobs:
           tar -czf build/linux/mallcore-sim-linux.tar.gz \
             -C build/linux MallcoreSim.x86_64
 
-      - name: Upload artifact
+      - name: Upload Linux release-candidate artifact
         uses: actions/upload-artifact@v7
         with:
-          name: linux-build
+          name: release-linux-build-${{ github.run_number }}
           path: build/linux/mallcore-sim-linux.tar.gz
           if-no-files-found: error
-          retention-days: 5
+          retention-days: 14
+
+  release-playtest-manifest:
+    name: Advisory Review Lane - Release Playtest Manifest
+    needs:
+      - export-windows
+      - export-macos
+      - export-linux
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Generate release playtest checklist
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build artifacts/manifests
+          cat > build/release-playtest-checklist.md <<'EOF'
+          # Mallcore Sim Release Playtest Checklist
+
+          ## Build Metadata
+
+          - Commit: ${{ github.sha }}
+          - Ref: ${{ github.ref_name }}
+          - Candidate label: ${{ github.event.inputs.release_candidate_label || github.ref_name }}
+          - Godot version: ${{ env.GODOT_VERSION }}
+          - Workflow run: ${{ github.run_id }}
+          - Publishing mode: tag pushes publish; manual dispatches only upload candidate artifacts
+
+          ## Artifact Verification
+
+          - [ ] Windows artifact downloaded and unzipped
+          - [ ] macOS artifact downloaded and unzipped
+          - [ ] Linux artifact downloaded and unzipped
+          - [ ] Artifact names match the intended release version
+          - [ ] No absolute local paths appear in package names or metadata
+
+          ## Launch Smoke
+
+          - [ ] Game reaches main menu
+          - [ ] New session starts
+          - [ ] First store scene loads
+          - [ ] Player can move
+          - [ ] Camera follows expected target
+          - [ ] Primary interaction prompt appears
+          - [ ] Pause/settings panel opens and closes
+          - [ ] Audio settings can be adjusted
+          - [ ] Save action completes without visible error
+          - [ ] Quit flow returns cleanly
+
+          ## Day 1 Critical Path
+
+          - [ ] Manager prompt is readable
+          - [ ] Register/backroom/shelf route is understandable
+          - [ ] First customer interaction can complete
+          - [ ] Result acknowledgement is clear
+          - [ ] Close-day summary opens and is readable
+          EOF
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = {
+              "artifact_type": "release_playtest_manifest",
+              "commit": "${{ github.sha }}",
+              "ref": "${{ github.ref_name }}",
+              "candidate_label": "${{ github.event.inputs.release_candidate_label || github.ref_name }}",
+              "godot_version": "${{ env.GODOT_VERSION }}",
+              "workflow_run": "${{ github.run_id }}",
+              "publishes_release": "${{ github.event_name }}" == "push",
+              "advisory_only": True,
+              "checklist": "build/release-playtest-checklist.md",
+          }
+          Path("artifacts/manifests/release-playtest-manifest.json").write_text(
+              json.dumps(payload, indent=2) + "\n"
+          )
+          PY
+
+      - name: Upload release playtest checklist
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-playtest-manifest-${{ github.run_number }}
+          path: |
+            build/release-playtest-checklist.md
+            artifacts/manifests/release-playtest-manifest.json
+          if-no-files-found: error
+          retention-days: 30
 
   release:
-    name: Create GitHub Release
-    needs: [export-windows, export-macos, export-linux]
+    name: Release Lane - Publish Version Tag
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs:
+      - export-windows
+      - export-macos
+      - export-linux
+      - release-playtest-manifest
     runs-on: ubuntu-latest
     permissions:
       contents: write
       actions: read
-
     steps:
       - name: Download macOS artifact
         uses: actions/download-artifact@v8
         with:
-          name: macos-build
+          name: release-macos-build-${{ github.run_number }}
           path: artifacts/macos
 
       - name: Download Windows artifact
         uses: actions/download-artifact@v8
         with:
-          name: windows-build
+          name: release-windows-build-${{ github.run_number }}
           path: artifacts/windows
 
       - name: Download Linux artifact
         uses: actions/download-artifact@v8
         with:
-          name: linux-build
+          name: release-linux-build-${{ github.run_number }}
           path: artifacts/linux
 
       - name: Create Release

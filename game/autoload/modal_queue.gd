@@ -22,9 +22,16 @@
 extends Node
 
 
+const AutomationModeScript: GDScript = preload(
+	"res://game/scripts/automation/automation_mode.gd"
+)
+
+
 ## Emitted when the active panel changes. Argument is the new active panel,
 ## or `null` when the queue empties.
 signal active_changed(panel: ModalPanel)
+signal modal_ready(snapshot: Dictionary)
+signal modal_closed(snapshot: Dictionary)
 
 
 ## Priority levels. Lower numbers are dispatched first. DAY_SUMMARY must run
@@ -89,8 +96,10 @@ func request_open(
 func notify_closed(panel: ModalPanel) -> void:
 	if _active == null or _active.panel != panel:
 		return
+	var closed_snapshot: Dictionary = get_modal_snapshot()
 	_active = null
 	active_changed.emit(null)
+	modal_closed.emit(closed_snapshot)
 	if not _queue.is_empty():
 		_dispatch(_queue.pop_front())
 
@@ -126,10 +135,41 @@ func pending_count() -> int:
 	return _queue.size()
 
 
+## Returns active and pending modal state without exposing queue entries.
+func get_modal_snapshot() -> Dictionary:
+	var active_name: String = ""
+	var active_visible: bool = false
+	var active_focus_pushed: bool = false
+	if _active != null and _active.panel != null:
+		active_name = _active.panel.name
+		active_visible = _active.panel.visible
+		if _active.panel.has_method("get_modal_snapshot"):
+			var panel_snapshot: Dictionary = _active.panel.call("get_modal_snapshot")
+			active_focus_pushed = bool(panel_snapshot.get("focus_pushed", false))
+	return {
+		"busy": _active != null,
+		"active_panel": active_name,
+		"active_visible": active_visible,
+		"active_focus_pushed": active_focus_pushed,
+		"pending_count": _queue.size(),
+	}
+
+
+## Acknowledges the active modal through its public automation method.
+func acknowledge_active_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	var panel: ModalPanel = active_panel()
+	if panel == null or not panel.has_method("acknowledge_for_automation"):
+		return false
+	return bool(panel.call("acknowledge_for_automation"))
+
+
 func _dispatch(entry: QueueEntry) -> void:
 	_active = entry
 	entry.panel._open_from_queue(entry.payload)
 	active_changed.emit(entry.panel)
+	modal_ready.emit(get_modal_snapshot())
 
 
 func _insert_sorted(entry: QueueEntry) -> void:
@@ -152,9 +192,13 @@ func _insert_sorted(entry: QueueEntry) -> void:
 ## ensures `notify_closed`/`cancel` from those calls become no-ops instead
 ## of dispatching a stale entry into a half-built scene.
 func clear() -> void:
+	var had_active: bool = _active != null
+	var closed_snapshot: Dictionary = get_modal_snapshot()
 	_active = null
 	_queue.clear()
 	active_changed.emit(null)
+	if had_active:
+		modal_closed.emit(closed_snapshot)
 
 
 ## Test seam — clears state without dispatching the next panel. Pair with

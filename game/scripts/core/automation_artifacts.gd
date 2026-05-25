@@ -267,6 +267,29 @@ static func sanitize_slug(raw: String, max_length: int = _MAX_SLUG_LENGTH) -> St
 	return sanitized
 
 
+## Sanitizes a filename stem while preserving the older screenshot fallback.
+static func sanitize_filename_slug(
+	raw: String,
+	max_length: int = _MAX_SLUG_LENGTH,
+	fallback: String = "screenshot"
+) -> String:
+	var lowered: String = raw.get_basename().to_lower()
+	var sanitized: String = ""
+	for i: int in range(lowered.length()):
+		var codepoint: int = lowered.unicode_at(i)
+		if (codepoint >= 0x30 and codepoint <= 0x39) \
+				or (codepoint >= 0x61 and codepoint <= 0x7A) \
+				or codepoint == 0x5F:
+			sanitized += char(codepoint)
+		elif codepoint == 0x20 or codepoint == 0x2D:
+			sanitized += "_"
+	if sanitized.is_empty():
+		sanitized = fallback
+	if max_length > 0 and sanitized.length() > max_length:
+		sanitized = sanitized.substr(0, max_length)
+	return sanitized
+
+
 static func _entry(
 	artifact_type: String,
 	path: String,

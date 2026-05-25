@@ -23,31 +23,36 @@ const TIME_AUTOMATION_CONTROLLER_SCRIPT: GDScript = preload(
 # supports TimeSystem tiers. Clamp upward so requested speed never runs slower
 # than the automation caller asked for, and expose that in the parsed config.
 const SUPPORTED_SPEEDS: Dictionary = {
-	"1x": {
+	"1x":
+	{
 		"requested_multiplier": 1.0,
 		"speed_multiplier": 1.0,
 		"speed_tier": 1,
 		"clamped": false,
 	},
-	"2x": {
+	"2x":
+	{
 		"requested_multiplier": 2.0,
 		"speed_multiplier": 3.0,
 		"speed_tier": 3,
 		"clamped": true,
 	},
-	"3x": {
+	"3x":
+	{
 		"requested_multiplier": 3.0,
 		"speed_multiplier": 3.0,
 		"speed_tier": 3,
 		"clamped": false,
 	},
-	"4x": {
+	"4x":
+	{
 		"requested_multiplier": 4.0,
 		"speed_multiplier": 6.0,
 		"speed_tier": 6,
 		"clamped": true,
 	},
-	"6x": {
+	"6x":
+	{
 		"requested_multiplier": 6.0,
 		"speed_multiplier": 6.0,
 		"speed_tier": 6,
@@ -104,13 +109,11 @@ func parse_cli_args(args: PackedStringArray) -> Dictionary:
 		_apply_flag(config, errors, flag, value, parsed_flag)
 		i += consumed
 	if saw_automation_flag and not bool(config.get("enabled", false)):
-		errors.append(_validation_error(
-			"missing_flag",
-			"--test-mode",
-			"",
-			"automation flags require --test-mode",
-			config
-		))
+		errors.append(
+			_validation_error(
+				"missing_flag", "--test-mode", "", "automation flags require --test-mode", config
+			)
+		)
 	if bool(config.get("enabled", false)):
 		_finalize_config(config, errors)
 	return {"config": config, "errors": errors}
@@ -194,17 +197,17 @@ func _apply_flag(
 	match flag:
 		"--scenario":
 			if value.is_empty():
-				errors.append(_validation_error(
-					"missing_value", flag, value, "scenario id required", config
-				))
+				errors.append(
+					_validation_error("missing_value", flag, value, "scenario id required", config)
+				)
 			else:
 				config["scenario_id"] = value
 				config["scenario_explicit"] = true
 		"--seed":
 			if value.is_empty():
-				errors.append(_validation_error(
-					"missing_value", flag, value, "seed value required", config
-				))
+				errors.append(
+					_validation_error("missing_value", flag, value, "seed value required", config)
+				)
 			else:
 				config["seed"] = value
 		"--fresh-save":
@@ -224,29 +227,30 @@ func _apply_flag(
 		"--speed":
 			_apply_speed(config, errors, flag, value)
 		_:
-			errors.append(_validation_error(
-				"unsupported_flag",
-				flag,
-				str(parsed_flag.get("value", "")),
-				"unsupported automation flag",
-				config
-			))
+			errors.append(
+				_validation_error(
+					"unsupported_flag",
+					flag,
+					str(parsed_flag.get("value", "")),
+					"unsupported automation flag",
+					config
+				)
+			)
 
 
 func _apply_speed(
-	config: Dictionary,
-	errors: Array[Dictionary],
-	flag: String,
-	value: String
+	config: Dictionary, errors: Array[Dictionary], flag: String, value: String
 ) -> void:
 	if not SUPPORTED_SPEEDS.has(value):
-		errors.append(_validation_error(
-			"invalid_value",
-			flag,
-			value,
-			"accepted values: %s" % _join_strings(SUPPORTED_SPEEDS.keys()),
-			config
-		))
+		errors.append(
+			_validation_error(
+				"invalid_value",
+				flag,
+				value,
+				"accepted values: %s" % _join_strings(SUPPORTED_SPEEDS.keys()),
+				config
+			)
+		)
 		return
 	var speed_config: Dictionary = SUPPORTED_SPEEDS[value] as Dictionary
 	config["speed"] = value
@@ -264,13 +268,15 @@ func _finalize_config(config: Dictionary, errors: Array[Dictionary]) -> void:
 		config["scenario_defaulted"] = false
 	var scenario_id: String = str(config.get("scenario_id", ""))
 	if not SUPPORTED_SCENARIOS.has(scenario_id):
-		errors.append(_validation_error(
-			"invalid_value",
-			"--scenario",
-			scenario_id,
-			"accepted values: %s" % _join_strings(SUPPORTED_SCENARIOS),
-			config
-		))
+		errors.append(
+			_validation_error(
+				"invalid_value",
+				"--scenario",
+				scenario_id,
+				"accepted values: %s" % _join_strings(SUPPORTED_SCENARIOS),
+				config
+			)
+		)
 	if bool(config.get("fresh_save", false)):
 		var root: String = str(config.get("fresh_save_root", ""))
 		if root.is_empty():
@@ -278,23 +284,28 @@ func _finalize_config(config: Dictionary, errors: Array[Dictionary]) -> void:
 		elif UserDataPaths != null:
 			root = UserDataPaths.resolve_test_run_root(root)
 		if root.is_empty():
-			errors.append(_validation_error(
-				"invalid_value",
-				"--fresh-save",
-				str(config.get("fresh_save_root", "")),
-				"fresh-save root must be under user://test_runs/",
-				config
-			))
+			errors.append(
+				_validation_error(
+					"invalid_value",
+					"--fresh-save",
+					str(config.get("fresh_save_root", "")),
+					"fresh-save root must be under user://test_runs/",
+					config
+				)
+			)
 		config["fresh_save_root"] = root
 
 
 func _default_fresh_save_root(config: Dictionary) -> String:
 	var scenario_id: String = str(config.get("scenario_id", DEFAULT_SCENARIO_ID))
 	var seed_text: String = str(config.get("seed", "automation_default"))
-	return "user://test_runs/%s_%s" % [
-		_fresh_save_segment(scenario_id),
-		_fresh_save_segment(seed_text),
-	]
+	return (
+		"user://test_runs/%s_%s"
+		% [
+			_fresh_save_segment(scenario_id),
+			_fresh_save_segment(seed_text),
+		]
+	)
 
 
 func _fresh_save_segment(raw: String) -> String:
@@ -305,11 +316,7 @@ func _fresh_save_segment(raw: String) -> String:
 
 
 func _validation_error(
-	code: String,
-	flag: String,
-	value: String,
-	message: String,
-	config: Dictionary
+	code: String, flag: String, value: String, message: String, config: Dictionary
 ) -> Dictionary:
 	return {
 		"type": "automation_error",
@@ -324,9 +331,7 @@ func _validation_error(
 
 func _fail_validation_errors() -> void:
 	var config_for_exit: Dictionary = _config.duplicate(true)
-	config_for_exit["scenario_id"] = str(
-		config_for_exit.get("scenario_id", DEFAULT_SCENARIO_ID)
-	)
+	config_for_exit["scenario_id"] = str(config_for_exit.get("scenario_id", DEFAULT_SCENARIO_ID))
 	ScenarioExit.arm(config_for_exit)
 	for error: Dictionary in _errors:
 		_print_machine_line(error)
@@ -389,13 +394,15 @@ func _prepare_fresh_save_root_early() -> void:
 	var root: String = str(_config.get("fresh_save_root", ""))
 	var err: Error = UserDataPaths.configure_automation_root(root, true)
 	if err != OK:
-		_errors.append(_validation_error(
-			"path_error",
-			"--fresh-save",
-			root,
-			"failed to prepare fresh-save root: %s" % error_string(err),
-			_config
-		))
+		_errors.append(
+			_validation_error(
+				"path_error",
+				"--fresh-save",
+				root,
+				"failed to prepare fresh-save root: %s" % error_string(err),
+				_config
+			)
+		)
 
 
 func _on_gameplay_ready() -> void:
@@ -428,9 +435,7 @@ func _run_selected_scenario() -> void:
 	add_child(runner)
 	var options: Dictionary = _config.duplicate(true)
 	var result: Dictionary = await runner.call(
-		"run_by_id",
-		str(_config.get("scenario_id", DEFAULT_SCENARIO_ID)),
-		options
+		"run_by_id", str(_config.get("scenario_id", DEFAULT_SCENARIO_ID)), options
 	)
 	runner.queue_free()
 	automation_completed.emit(result)
@@ -449,6 +454,7 @@ func _run_selected_scenario() -> void:
 func _open_main_menu_and_run_selected_scenario() -> void:
 	GameManager.change_state(GameManager.State.MAIN_MENU)
 	await SceneRouter.route_to(&"main_menu")
+	await get_tree().process_frame
 	_run_selected_scenario()
 
 

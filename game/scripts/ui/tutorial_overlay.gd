@@ -6,6 +6,9 @@ extends CanvasLayer
 
 const SLIDE_DURATION: float = 0.3
 const SLIDE_OFFSET: float = 100.0
+const AutomationModeScript: GDScript = preload(
+	"res://game/scripts/automation/automation_mode.gd"
+)
 
 ## Game states each tutorial step requires before its prompt may appear.
 ## Steps absent from this map have no state restriction.
@@ -22,6 +25,9 @@ const _STEP_REQUIRED_STATES: Dictionary = {
 	"hidden_thread": GameManager.State.STORE_VIEW,
 	"close_day": GameManager.State.STORE_VIEW,
 }
+
+signal surface_ready(snapshot: Dictionary)
+signal surface_closed(snapshot: Dictionary)
 
 var tutorial_system: TutorialSystem
 
@@ -115,6 +121,7 @@ func _on_tutorial_step_changed(step_id: String) -> void:
 
 func _on_tutorial_completed() -> void:
 	_pending_step_id = ""
+	surface_closed.emit(get_surface_snapshot())
 	_slide_out_and_free()
 
 
@@ -138,6 +145,7 @@ func _on_tutorial_context_cleared() -> void:
 		return
 	_kill_tween()
 	_bottom_bar.visible = false
+	surface_closed.emit(get_surface_snapshot())
 
 
 func _on_game_state_changed(_old_state: int, _new_state: int) -> void:
@@ -161,6 +169,7 @@ func _reevaluate_visibility() -> void:
 		if not _can_show_tutorial() or not _step_allowed_in_state(_pending_step_id):
 			_kill_tween()
 			_bottom_bar.visible = false
+			surface_closed.emit(get_surface_snapshot())
 		return
 	if _pending_step_id.is_empty():
 		return
@@ -180,6 +189,7 @@ func _show_step(prompt_text: String) -> void:
 	_prompt_label.text = prompt_text
 	_bottom_bar.visible = true
 	_slide_in()
+	surface_ready.emit(get_surface_snapshot())
 
 
 func _slide_in() -> void:
@@ -209,6 +219,36 @@ func _kill_tween() -> void:
 	if _current_tween and _current_tween.is_valid():
 		_current_tween.kill()
 	_current_tween = null
+
+
+## Returns current tutorial surface state for scenario waits.
+func get_surface_snapshot() -> Dictionary:
+	return {
+		"visible": _bottom_bar.visible,
+		"pending_step_id": _pending_step_id,
+		"prompt": _prompt_label.text,
+		"can_show": _can_show_tutorial(),
+	}
+
+
+## Skips the visible tutorial prompt only when automation is enabled.
+func acknowledge_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if not _bottom_bar.visible:
+		return false
+	_on_skip_pressed()
+	return true
+
+
+## Collapses tutorial slide tweens so scenarios can assert the final pose.
+func fast_forward_animations_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	_kill_tween()
+	if _bottom_bar.visible:
+		_bottom_bar.offset_top = _rest_offset_top
+	return true
 
 
 func _store_session_mode_active() -> bool:

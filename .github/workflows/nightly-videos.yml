@@ -1,4 +1,4 @@
-name: Nightly Scenario Videos
+name: Nightly Video Review
 
 on:
   schedule:
@@ -23,7 +23,7 @@ env:
 
 jobs:
   render-videos:
-    name: Render Scenario Videos
+    name: Video Lane - Scenario Movies
     runs-on: ubuntu-latest
     timeout-minutes: 45
     permissions:
@@ -62,9 +62,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: nightly-scenario-videos-${{ github.run_number }}
+          name: nightly-video-review-scenario-videos-${{ github.run_number }}
           path: |
             artifacts/videos/scenario/nightly/
             artifacts/logs/scenario/nightly-videos/
+            artifacts/manifests/
           if-no-files-found: error
           retention-days: 14

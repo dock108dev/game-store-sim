@@ -78,6 +78,16 @@ func stack_snapshot() -> Array[StringName]:
 	return _stack.duplicate()
 
 
+## Snapshot of the current focus owner for automation and diagnostics.
+func get_focus_snapshot() -> Dictionary:
+	return {
+		"current": String(current()),
+		"depth": _stack.size(),
+		"stack": _stack.duplicate(),
+		"blocked_reason": why_blocked(),
+	}
+
+
 ## Returns a human-readable reason why gameplay input is currently blocked,
 ## or an empty string when gameplay (`CTX_STORE_GAMEPLAY`) is the active
 ## context. Intended for the debug overlay and player-facing diagnostics.

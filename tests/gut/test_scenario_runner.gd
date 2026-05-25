@@ -20,6 +20,35 @@ class ScenarioProbe:
 		return "called"
 
 
+class StoreSessionPromptProbe:
+	extends Node
+
+	var exit_state: String = "not_started"
+	var acknowledged: bool = false
+
+	func _init() -> void:
+		add_to_group("store_session_controller")
+
+	func get_session_progress_snapshot() -> Dictionary:
+		return {
+			"stage": "talk_to_customer",
+			"objective":
+			{
+				"id": "talk_to_customer",
+				"target_path": "StoreSessionDayOneCustomer/Interactable",
+			},
+			"customer":
+			{
+				"exit_state": exit_state,
+				"result_visible": not acknowledged,
+			},
+		}
+
+	func acknowledge_prompt_for_automation() -> bool:
+		acknowledged = true
+		return true
+
+
 func test_catalog_lists_stable_scenario_slots() -> void:
 	var loader = LOADER_SCRIPT.new()
 	var ids: PackedStringArray = loader.available_scenario_ids()
@@ -94,6 +123,60 @@ func test_long_day_soak_fixture_uses_accelerated_runner_step() -> void:
 			found_soak_step = true
 			break
 	assert_true(found_soak_step)
+
+
+func test_bad_state_resistance_fixture_uses_dedicated_runner_step() -> void:
+	var loader = LOADER_SCRIPT.new()
+	var result: Dictionary = loader.load_by_id("bad_state_resistance")
+	var scenario: Dictionary = result.get("scenario", {}) as Dictionary
+	var steps: Array = scenario.get("steps", []) as Array
+	var found_flow_step: bool = false
+
+	assert_true(bool(result.get("ok", false)), str(result.get("error", "")))
+	for step: Dictionary in steps:
+		if str(step.get("type", "")) == "run_bad_state_resistance":
+			found_flow_step = true
+			break
+	assert_true(found_flow_step)
+
+
+func test_tutorial_full_fixture_uses_fixed_seed_and_route_runner() -> void:
+	var loader = LOADER_SCRIPT.new()
+	var result: Dictionary = loader.load_by_id("tutorial_full")
+	var scenario: Dictionary = result.get("scenario", {}) as Dictionary
+	var steps: Array = scenario.get("steps", []) as Array
+	var found_store_route_step: bool = false
+	var found_route_step: bool = false
+
+	assert_true(bool(result.get("ok", false)), str(result.get("error", "")))
+	assert_eq(str(scenario.get("fixed_seed", "")), "tutorial_full_day1_seed")
+	for step: Dictionary in steps:
+		if str(step.get("id", "")) == "load_retro_games_store":
+			found_store_route_step = true
+			assert_eq(str(step.get("input_focus_context", "")), "store_gameplay")
+		if str(step.get("type", "")) == "run_store_session_tutorial_full":
+			found_route_step = true
+	assert_true(found_store_route_step)
+	assert_true(found_route_step)
+
+
+func test_runner_applies_fixture_fixed_seed() -> void:
+	var runner: Node = _runner()
+	var result: Dictionary = await (
+		runner
+		. call(
+			"run",
+			{
+				"id": "fixed_seed_test",
+				"fixed_seed": "fixed_seed_value",
+				"steps": [{"id": "finish", "type": "finish"}],
+			},
+			{"seed": "caller_seed"}
+		)
+	)
+
+	assert_true(bool(result.get("ok", false)), str(result.get("summary", "")))
+	assert_eq(str(result.get("seed", "")), "fixed_seed_value")
 
 
 func test_protected_outcome_signal_emit_fails_without_override() -> void:
@@ -330,6 +413,115 @@ func test_screenshot_step_writes_checkpoint_metadata() -> void:
 	assert_eq(str(metadata.get("scenario_id", "")), "screenshot_step_test")
 	assert_eq(str(metadata.get("seed", "")), "runner_seed")
 	assert_eq(str(metadata.get("checkpoint_slug", "")), "005_store_ui_open")
+
+
+func test_modal_wait_and_acknowledge_use_public_hooks() -> void:
+	GameRandom.enable_test_mode("modal_ack_runner")
+	InputFocus._reset_for_tests()
+	ModalQueue._reset_for_tests()
+	var panel := ModalPanel.new()
+	panel.name = "RunnerModal"
+	panel.visible = false
+	add_child_autofree(panel)
+	InputFocus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
+	ModalQueue.request_open(panel, ModalQueue.Priority.DAY_SUMMARY)
+
+	var runner: Node = _runner()
+	var result: Dictionary = await (
+		runner
+		. call(
+			"run",
+			{
+				"id": "modal_ack_test",
+				"steps":
+				[
+					{
+						"id": "wait_modal",
+						"type": "wait_modal",
+						"match": {"active_panel": "RunnerModal"},
+					},
+					{"id": "ack_modal", "type": "acknowledge_modal"},
+					{"id": "wait_closed", "type": "wait_modal", "state": "closed"},
+				],
+			}
+		)
+	)
+
+	assert_true(bool(result.get("ok", false)), str(result.get("summary", "")))
+	assert_false(ModalQueue.is_busy())
+	GameRandom.disable_test_mode()
+	ModalQueue._reset_for_tests()
+	InputFocus._reset_for_tests()
+
+
+func test_store_session_prompt_waits_match_nested_snapshot_values() -> void:
+	GameRandom.enable_test_mode("prompt_wait_runner")
+	var probe := StoreSessionPromptProbe.new()
+	probe.name = "StoreSessionPromptProbe"
+	add_child_autofree(probe)
+
+	var runner: Node = _runner()
+	var result: Dictionary = await (
+		runner
+		. call(
+			"run",
+			{
+				"id": "prompt_wait_test",
+				"steps":
+				[
+					{
+						"id": "wait_prompt",
+						"type": "wait_store_session_prompt",
+						"match":
+						{
+							"stage": "talk_to_customer",
+							"objective.id": "talk_to_customer",
+							"customer.result_visible": true,
+						},
+					},
+					{"id": "ack_prompt", "type": "acknowledge_prompt"},
+				],
+			}
+		)
+	)
+
+	assert_true(bool(result.get("ok", false)), str(result.get("summary", "")))
+	assert_true(probe.acknowledged)
+	GameRandom.disable_test_mode()
+
+
+func test_wait_input_focus_and_customer_exit_use_snapshots() -> void:
+	GameRandom.enable_test_mode("focus_exit_runner")
+	InputFocus._reset_for_tests()
+	InputFocus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
+	var probe := StoreSessionPromptProbe.new()
+	probe.name = "CustomerExitPromptProbe"
+	probe.exit_state = "exited_hidden"
+	add_child_autofree(probe)
+
+	var runner: Node = _runner()
+	var result: Dictionary = await (
+		runner
+		. call(
+			"run",
+			{
+				"id": "focus_exit_test",
+				"steps":
+				[
+					{
+						"id": "wait_focus",
+						"type": "wait_input_focus",
+						"match": {"current": "store_gameplay", "depth": 1},
+					},
+					{"id": "wait_exit", "type": "wait_customer_exit"},
+				],
+			}
+		)
+	)
+
+	assert_true(bool(result.get("ok", false)), str(result.get("summary", "")))
+	GameRandom.disable_test_mode()
+	InputFocus._reset_for_tests()
 
 
 func _runner() -> Node:

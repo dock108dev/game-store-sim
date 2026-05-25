@@ -3,32 +3,12 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 source "$ROOT/scripts/artifact_paths.sh"
+source "$ROOT/scripts/godot_resolver.sh"
 
 ARTIFACT_ROOT="$(resolve_mallcore_artifact_root "$ROOT")"
 export MALLCORE_ARTIFACT_DIR="$ARTIFACT_ROOT"
 
-_resolve_godot_bin() {
-	local configured="${GODOT:-${GODOT_EXECUTABLE:-godot}}"
-	local candidates=(
-		"$configured"
-		"/Applications/Godot.app/Contents/MacOS/Godot"
-		"$HOME/Applications/Godot.app/Contents/MacOS/Godot"
-	)
-	local candidate=""
-	for candidate in "${candidates[@]}"; do
-		if [ -x "$candidate" ]; then
-			echo "$candidate"
-			return 0
-		fi
-		if command -v "$candidate" &>/dev/null; then
-			command -v "$candidate"
-			return 0
-		fi
-	done
-	return 1
-}
-
-GODOT_BIN="$(_resolve_godot_bin)"
+GODOT_BIN="$(resolve_mallcore_godot)"
 LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/scenario")"
 mkdir -p "$LOG_DIR"
 LOG_FILE="$LOG_DIR/fresh_install_smoke.log"
@@ -41,4 +21,3 @@ LOG_FILE="$LOG_DIR/fresh_install_smoke.log"
 	--record-screenshots \
 	--exit-on-complete \
 	2>&1 | tee "$LOG_FILE"
-

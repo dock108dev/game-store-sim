@@ -60,13 +60,15 @@ bash tests/run_tests.sh
 
 The runner:
 
-1. Resolves a Godot binary.
-2. Imports project assets.
-3. Runs GUT through `res://addons/gut/gut_cmdln.gd`.
-4. Runs `res://game/tests/run_tests.gd` when that file exists.
-5. Writes combined output to `artifacts/logs/gut/test_run.log`.
-6. Runs maintained shell validators under `tests/`.
-7. Runs the SSOT tripwires under `scripts/`
+1. Runs `scripts/validate_static_repo_guards.sh`.
+2. Resolves a Godot binary.
+3. Imports project assets.
+4. Runs `scripts/validate_resource_integrity.sh` when Godot is available.
+5. Runs GUT through `res://addons/gut/gut_cmdln.gd`.
+6. Runs `res://game/tests/run_tests.gd` when that file exists.
+7. Writes combined output to `artifacts/logs/gut/test_run.log`.
+8. Runs maintained shell validators under `tests/`.
+9. Runs the SSOT tripwires under `scripts/`
    (`validate_translations.sh`, `validate_single_store_ui.sh`,
    `validate_tutorial_single_source.sh`).
 
@@ -82,7 +84,8 @@ game/scripts/        Systems, controllers, and gameplay support scripts
 tests/automation/    GUT hooks, scenario helpers, and automation runners
 tests/baselines/     Golden manifests, snapshots, and expected outputs
 tests/flows/         End-to-end player and store-session route tests
-tests/visual/        UI, layout, screenshot, and visual-state tests
+tests/visual/        UI, layout, screenshot, visual-state tests, and
+                     display-backed store visual sweep baselines
 tests/               Main GUT suite, integration/unit tests, shell validators
 game/tests/          Additional GUT coverage included by .gutconfig.json
 docs/                Active supporting project docs and audit notes

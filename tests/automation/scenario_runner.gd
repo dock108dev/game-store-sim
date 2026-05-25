@@ -37,6 +37,9 @@ const ECONOMY_LOOP_RUNNER_SCRIPT: GDScript = preload(
 const SAVE_RELOAD_RUNNER_SCRIPT: GDScript = preload(
 	"res://game/scripts/automation/save_reload_smoke_runner.gd"
 )
+const BAD_STATE_RESISTANCE_RUNNER_SCRIPT: GDScript = preload(
+	"res://game/scripts/automation/bad_state_resistance_runner.gd"
+)
 const SOAK_METRICS_SCRIPT: GDScript = preload("res://game/scripts/automation/npc_soak_metrics.gd")
 const RUNTIME_HELPERS_SCRIPT: GDScript = preload(
 	"res://tests/automation/scenario_runtime_helpers.gd"
@@ -44,6 +47,10 @@ const RUNTIME_HELPERS_SCRIPT: GDScript = preload(
 const LONG_DAY_SOAK_STEP_SCRIPT: GDScript = preload(
 	"res://tests/automation/scenario_long_day_soak_step.gd"
 )
+const STORE_SESSION_TUTORIAL_FULL_STEP_SCRIPT: GDScript = preload(
+	"res://tests/automation/store_session_tutorial_full_step.gd"
+)
+const AUTOMATION_MODE_SCRIPT: GDScript = preload("res://game/scripts/automation/automation_mode.gd")
 
 var _is_running: bool = false
 var _cancelled: bool = false
@@ -51,6 +58,7 @@ var _cancel_reason: String = ""
 var _active_connections: Array[Dictionary] = []
 var _seen_bus: Array[Dictionary] = []
 var _last_result: Dictionary = {}
+
 
 ## Loads a scenario by id from the stable scenario catalog and executes it.
 func run_by_id(scenario_id: String, options: Dictionary = {}) -> Dictionary:
@@ -67,6 +75,7 @@ func run_by_id(scenario_id: String, options: Dictionary = {}) -> Dictionary:
 		return _finish_result(result)
 	return await run(loaded.get("scenario", {}) as Dictionary, options)
 
+
 ## Executes a validated scenario dictionary.
 func run(scenario: Dictionary, options: Dictionary = {}) -> Dictionary:
 	if _is_running:
@@ -78,6 +87,7 @@ func run(scenario: Dictionary, options: Dictionary = {}) -> Dictionary:
 	_reset_runtime_state()
 	_is_running = true
 	var scenario_id: String = str(scenario.get("id", ""))
+	options = _options_with_scenario_defaults(scenario, options)
 	var result: Dictionary = RUNTIME_HELPERS_SCRIPT.base_result(scenario_id, options)
 	result["events"] = _seen_bus
 	result["source_path"] = str(scenario.get("source_path", ""))
@@ -119,15 +129,18 @@ func run(scenario: Dictionary, options: Dictionary = {}) -> Dictionary:
 	result["report"] = report
 	return _finish_result(result)
 
+
 ## Cancels the active scenario and releases temporary listeners.
 func cancel(reason: String = "cancelled") -> void:
 	_cancelled = true
 	_cancel_reason = reason
 	_cleanup_connections()
 
+
 ## Returns a copy of the most recent run result.
 func get_last_result() -> Dictionary:
 	return _last_result.duplicate(true)
+
 
 func _execute_step(
 	index: int, step: Dictionary, result: Dictionary, options: Dictionary
@@ -146,6 +159,20 @@ func _execute_step(
 			step_result = await _step_wait_audit(step_result, step)
 		"wait_bus":
 			step_result = await _step_wait_bus(step_result, step)
+		"wait_modal":
+			step_result = await _step_wait_modal(step_result, step)
+		"acknowledge_modal":
+			step_result = await _step_acknowledge_modal(step_result)
+		"wait_input_focus":
+			step_result = await _step_wait_input_focus(step_result, step)
+		"wait_store_session_prompt":
+			step_result = await _step_wait_store_session_prompt(step_result, step)
+		"acknowledge_prompt":
+			step_result = await _step_acknowledge_prompt(step_result, step)
+		"wait_customer_exit":
+			step_result = await _step_wait_customer_exit(step_result, step)
+		"fast_forward_animations":
+			step_result = _step_fast_forward_animations(step_result, step)
 		"emit_bus":
 			step_result = _step_emit_bus(step_result, step, options)
 		"enter_store":
@@ -174,8 +201,14 @@ func _execute_step(
 			step_result = _step_run_economy_loop(step_result, result)
 		"run_save_reload_smoke":
 			step_result = _step_run_save_reload_smoke(step_result, result)
+		"run_bad_state_resistance":
+			step_result = _step_run_bad_state_resistance(step_result, result)
 		"run_long_day_soak":
 			step_result = await LONG_DAY_SOAK_STEP_SCRIPT.new().execute(
+				self, step_result, step, result, options
+			)
+		"run_store_session_tutorial_full":
+			step_result = await STORE_SESSION_TUTORIAL_FULL_STEP_SCRIPT.new().execute(
 				self, step_result, step, result, options
 			)
 		"finish":
@@ -185,6 +218,7 @@ func _execute_step(
 	step_result["ended_frame"] = Engine.get_process_frames()
 	step_result["elapsed_frames"] = int(step_result["ended_frame"]) - started_frame
 	return step_result
+
 
 func _step_wait_audit(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	if AuditLog == null:
@@ -223,6 +257,7 @@ func _step_wait_audit(step_result: Dictionary, step: Dictionary) -> Dictionary:
 		"timed out after %d frames waiting for AUDIT %s %s" % [timeout_frames, status, checkpoint]
 	)
 
+
 func _step_wait_bus(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	var signal_name := StringName(str(step.get("signal", "")))
 	if not EventBus.has_signal(signal_name):
@@ -255,6 +290,146 @@ func _step_wait_bus(step_result: Dictionary, step: Dictionary) -> Dictionary:
 		)
 	return step_result
 
+
+func _step_wait_modal(step_result: Dictionary, step: Dictionary) -> Dictionary:
+	if ModalQueue == null:
+		return _step_error(step_result, "ModalQueue missing")
+	var timeout_frames: int = _timeout(step)
+	var state: String = str(step.get("state", "ready"))
+	var expected: Dictionary = step.get("match", {}) as Dictionary
+	for _i: int in range(timeout_frames):
+		var snapshot: Dictionary = ModalQueue.get_modal_snapshot()
+		var state_ok: bool = (
+			(not bool(snapshot.get("busy", false)))
+			if state == "closed"
+			else bool(snapshot.get("busy", false))
+		)
+		if state_ok and _snapshot_matches(snapshot, expected):
+			step_result["ok"] = true
+			step_result["data"] = snapshot
+			return step_result
+		await get_tree().process_frame
+	return _step_error(step_result, "timed out waiting for modal %s" % state)
+
+
+func _step_acknowledge_modal(step_result: Dictionary) -> Dictionary:
+	if ModalQueue == null:
+		return _step_error(step_result, "ModalQueue missing")
+	if not AUTOMATION_MODE_SCRIPT.is_enabled():
+		return _step_error(step_result, "automation mode is not enabled")
+	if not ModalQueue.acknowledge_active_for_automation():
+		return _step_error(step_result, "active modal could not be acknowledged")
+	await get_tree().process_frame
+	step_result["ok"] = true
+	step_result["data"] = ModalQueue.get_modal_snapshot()
+	return step_result
+
+
+func _step_wait_input_focus(step_result: Dictionary, step: Dictionary) -> Dictionary:
+	if InputFocus == null:
+		return _step_error(step_result, "InputFocus missing")
+	var expected: Dictionary = step.get("match", {}) as Dictionary
+	var timeout_frames: int = _timeout(step)
+	for _i: int in range(timeout_frames):
+		var snapshot: Dictionary = InputFocus.get_focus_snapshot()
+		if _snapshot_matches(snapshot, expected):
+			step_result["ok"] = true
+			step_result["data"] = snapshot
+			return step_result
+		await get_tree().process_frame
+	return _step_error(step_result, "timed out waiting for InputFocus match=%s" % expected)
+
+
+func _step_wait_store_session_prompt(step_result: Dictionary, step: Dictionary) -> Dictionary:
+	var controller: Node = _resolve_store_session_controller(step)
+	if controller == null:
+		return _step_error(step_result, "store-session controller unavailable")
+	if not controller.has_method("get_session_progress_snapshot"):
+		return _step_error(step_result, "store-session controller missing snapshot method")
+	var expected: Dictionary = step.get("match", {}) as Dictionary
+	var timeout_frames: int = _timeout(step)
+	for _i: int in range(timeout_frames):
+		var snapshot: Dictionary = controller.call("get_session_progress_snapshot")
+		if _snapshot_matches(snapshot, expected):
+			step_result["ok"] = true
+			step_result["data"] = snapshot
+			return step_result
+		await get_tree().process_frame
+	return _step_error(step_result, "timed out waiting for store-session prompt")
+
+
+func _step_acknowledge_prompt(step_result: Dictionary, step: Dictionary) -> Dictionary:
+	if not AUTOMATION_MODE_SCRIPT.is_enabled():
+		return _step_error(step_result, "automation mode is not enabled")
+	var target_path: String = str(step.get("target", ""))
+	if not target_path.is_empty():
+		var node: Node = _resolve_node(target_path)
+		if node == null:
+			return _step_error(step_result, "node not found: %s" % target_path)
+		if not node.has_method("acknowledge_for_automation"):
+			return _step_error(step_result, "node missing acknowledge_for_automation")
+		if not bool(node.call("acknowledge_for_automation")):
+			return _step_error(step_result, "node could not acknowledge prompt")
+		step_result["ok"] = true
+		return step_result
+	var controller: Node = _resolve_store_session_controller(step)
+	if (
+		controller != null
+		and controller.has_method("acknowledge_prompt_for_automation")
+		and bool(controller.call("acknowledge_prompt_for_automation"))
+	):
+		step_result["ok"] = true
+		return step_result
+	if ModalQueue != null and ModalQueue.acknowledge_active_for_automation():
+		step_result["ok"] = true
+		return step_result
+	return _step_error(step_result, "no prompt could be acknowledged")
+
+
+func _step_wait_customer_exit(step_result: Dictionary, step: Dictionary) -> Dictionary:
+	var controller: Node = _resolve_store_session_controller(step)
+	if controller == null:
+		return _step_error(step_result, "store-session controller unavailable")
+	var expected_state: String = str(step.get("state", "exited_hidden"))
+	var expected: Dictionary = step.get("match", {}) as Dictionary
+	if not expected.has("customer.exit_state"):
+		expected["customer.exit_state"] = expected_state
+	var timeout_frames: int = _timeout(step)
+	for _i: int in range(timeout_frames):
+		var snapshot: Dictionary = controller.call("get_session_progress_snapshot")
+		if _snapshot_matches(snapshot, expected):
+			step_result["ok"] = true
+			step_result["data"] = snapshot
+			return step_result
+		await get_tree().process_frame
+	return _step_error(step_result, "timed out waiting for customer exit")
+
+
+func _step_fast_forward_animations(step_result: Dictionary, step: Dictionary) -> Dictionary:
+	if not AUTOMATION_MODE_SCRIPT.is_enabled():
+		return _step_error(step_result, "automation mode is not enabled")
+	var targets: Array[Node] = []
+	var target_path: String = str(step.get("target", ""))
+	if not target_path.is_empty():
+		var target_node: Node = _resolve_node(target_path)
+		if target_node == null:
+			return _step_error(step_result, "node not found: %s" % target_path)
+		targets.append(target_node)
+	else:
+		if ModalQueue != null and ModalQueue.active_panel() != null:
+			targets.append(ModalQueue.active_panel())
+		targets.append_array(get_tree().get_nodes_in_group("ui.tutorial_panel"))
+		targets.append_array(get_tree().get_nodes_in_group("store_session_controller"))
+	var advanced: int = 0
+	for node: Node in targets:
+		if node != null and node.has_method("fast_forward_animations_for_automation"):
+			if bool(node.call("fast_forward_animations_for_automation")):
+				advanced += 1
+	step_result["ok"] = true
+	step_result["data"] = {"advanced_count": advanced}
+	return step_result
+
+
 func _step_emit_bus(step_result: Dictionary, step: Dictionary, options: Dictionary) -> Dictionary:
 	var signal_name := StringName(str(step.get("signal", "")))
 	if not EventBus.has_signal(signal_name):
@@ -272,6 +447,7 @@ func _step_emit_bus(step_result: Dictionary, step: Dictionary, options: Dictiona
 	step_result["data"] = {"signal": String(signal_name), "args": args}
 	return step_result
 
+
 func _step_enter_store(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	if StoreDirector == null:
 		return _step_error(step_result, "StoreDirector missing")
@@ -283,8 +459,10 @@ func _step_enter_store(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	step_result["ok"] = true
 	return step_result
 
+
 func _step_route_scene(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	return await ROUTE_STEP_SCRIPT.new().execute(self, step_result, step)
+
 
 func _step_wait_node(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	var timeout_frames: int = _timeout(step)
@@ -296,6 +474,7 @@ func _step_wait_node(step_result: Dictionary, step: Dictionary) -> Dictionary:
 			return step_result
 		await get_tree().process_frame
 	return _step_error(step_result, "node not found: %s" % str(step.get("target", "")))
+
 
 func _step_call_node(step_result: Dictionary, step: Dictionary, options: Dictionary) -> Dictionary:
 	var node: Node = _resolve_node(str(step.get("target", "")))
@@ -310,6 +489,7 @@ func _step_call_node(step_result: Dictionary, step: Dictionary, options: Diction
 	step_result["ok"] = true
 	step_result["data"] = {"return_value": value}
 	return step_result
+
 
 func _step_assert_node(
 	step_result: Dictionary, step: Dictionary, options: Dictionary
@@ -327,16 +507,19 @@ func _step_assert_node(
 		step_result["reason"] = str(assertion.get("reason", "assertion failed"))
 	return step_result
 
+
 func _step_advance_frames(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	for _i: int in range(int(step.get("count", 1))):
 		await get_tree().process_frame
 	step_result["ok"] = true
 	return step_result
 
+
 func _step_time_speed(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	EventBus.time_speed_requested.emit(int(step.get("tier", 1)))
 	step_result["ok"] = true
 	return step_result
+
 
 func _step_time_step(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	var time_system: TimeSystem = GameManager.get_time_system()
@@ -349,6 +532,7 @@ func _step_time_step(step_result: Dictionary, step: Dictionary) -> Dictionary:
 	step_result["ok"] = true
 	step_result["data"] = {"minutes_advanced": advanced}
 	return step_result
+
 
 func _step_capture(step_result: Dictionary, step: Dictionary, result: Dictionary) -> Dictionary:
 	var label: String = str(step.get("label", step.get("id", "capture")))
@@ -372,6 +556,7 @@ func _step_capture(step_result: Dictionary, step: Dictionary, result: Dictionary
 			return _step_error(step_result, "unsupported capture mode")
 	step_result["ok"] = true
 	return step_result
+
 
 func _step_screenshot(step_result: Dictionary, step: Dictionary, result: Dictionary) -> Dictionary:
 	var label: String = str(step.get("label", step.get("id", "screenshot")))
@@ -398,6 +583,7 @@ func _step_screenshot(step_result: Dictionary, step: Dictionary, result: Diction
 	}
 	return step_result
 
+
 func _step_run_economy_loop(step_result: Dictionary, result: Dictionary) -> Dictionary:
 	var runner: Node = ECONOMY_LOOP_RUNNER_SCRIPT.new()
 	add_child(runner)
@@ -407,8 +593,9 @@ func _step_run_economy_loop(step_result: Dictionary, result: Dictionary) -> Dict
 	step_result["data"] = proof
 	step_result["ok"] = bool(proof.get("ok", false))
 	if not bool(step_result.get("ok", false)):
-			step_result["reason"] = "economy loop proof failed: %s" % str(proof.get("failures", []))
+		step_result["reason"] = "economy loop proof failed: %s" % str(proof.get("failures", []))
 	return step_result
+
 
 func _step_run_save_reload_smoke(step_result: Dictionary, result: Dictionary) -> Dictionary:
 	var runner: Node = SAVE_RELOAD_RUNNER_SCRIPT.new()
@@ -422,6 +609,29 @@ func _step_run_save_reload_smoke(step_result: Dictionary, result: Dictionary) ->
 		step_result["reason"] = "save-reload smoke failed: %s" % str(proof.get("failures", []))
 	return step_result
 
+
+func _step_run_bad_state_resistance(step_result: Dictionary, result: Dictionary) -> Dictionary:
+	var runner: Node = BAD_STATE_RESISTANCE_RUNNER_SCRIPT.new()
+	add_child(runner)
+	var proof: Dictionary = runner.call(
+		"run",
+		{
+			"scenario_id": str(result.get("scenario_id", "")),
+			"seed": str(result.get("seed", "")),
+			"record_screenshots": true,
+		}
+	)
+	runner.queue_free()
+	result["captures"]["bad_state_resistance_report"] = proof
+	step_result["data"] = proof
+	step_result["ok"] = bool(proof.get("ok", false))
+	if not bool(step_result.get("ok", false)):
+		step_result["reason"] = (
+			"bad-state resistance proof failed: %s" % str(proof.get("failures", []))
+		)
+	return step_result
+
+
 func _resolve_node(path: String) -> Node:
 	if path.is_empty():
 		return null
@@ -433,13 +643,64 @@ func _resolve_node(path: String) -> Node:
 		return get_tree().current_scene.get_node_or_null(NodePath(path))
 	return get_node_or_null(NodePath(path))
 
+
+func _resolve_store_session_controller(step: Dictionary) -> Node:
+	var target_path: String = str(step.get("target", ""))
+	if not target_path.is_empty():
+		return _resolve_node(target_path)
+	var controllers: Array[Node] = get_tree().get_nodes_in_group("store_session_controller")
+	if controllers.is_empty():
+		return null
+	return controllers[0]
+
+
+func _snapshot_matches(snapshot: Dictionary, expected: Dictionary) -> bool:
+	for key: String in expected.keys():
+		var actual: Variant = _snapshot_value(snapshot, key)
+		var wanted: Variant = expected[key]
+		if actual is StringName:
+			actual = String(actual)
+		if wanted is StringName:
+			wanted = String(wanted)
+		if actual != wanted:
+			return false
+	return true
+
+
+func _snapshot_value(snapshot: Dictionary, key: String) -> Variant:
+	if snapshot.has(key):
+		return snapshot[key]
+	var parts: PackedStringArray = key.split(".")
+	var current: Variant = snapshot
+	for part: String in parts:
+		if current is not Dictionary:
+			return null
+		var dict: Dictionary = current as Dictionary
+		if not dict.has(part):
+			return null
+		current = dict[part]
+	return current
+
+
 func _timeout(step: Dictionary) -> int:
 	return int(step.get("timeout_frames", DEFAULT_STEP_TIMEOUT_FRAMES))
+
+
+func _options_with_scenario_defaults(scenario: Dictionary, options: Dictionary) -> Dictionary:
+	var resolved: Dictionary = options.duplicate(true)
+	var fixed_seed: String = str(scenario.get("fixed_seed", "")).strip_edges()
+	if not fixed_seed.is_empty():
+		resolved["seed"] = fixed_seed
+		if GameRandom != null and GameRandom.has_method("enable_test_mode"):
+			GameRandom.enable_test_mode(fixed_seed)
+	return resolved
+
 
 func _step_error(step_result: Dictionary, reason: String) -> Dictionary:
 	step_result["ok"] = false
 	step_result["reason"] = reason
 	return step_result
+
 
 func _fail_result(result: Dictionary, index: int, step: Dictionary, reason: String) -> void:
 	result["ok"] = false
@@ -453,7 +714,8 @@ func _fail_result(result: Dictionary, index: int, step: Dictionary, reason: Stri
 			reason,
 			"reports/scenario/%s" % str(result.get("scenario_id", "")),
 		]
-		)
+	)
+
 
 func _finish_result(result: Dictionary) -> Dictionary:
 	_cleanup_connections()
@@ -465,11 +727,13 @@ func _finish_result(result: Dictionary) -> Dictionary:
 		scenario_failed.emit(result)
 	return result
 
+
 func _reset_runtime_state() -> void:
 	_cleanup_connections()
 	_seen_bus.clear()
 	_cancelled = false
 	_cancel_reason = ""
+
 
 func _cleanup_connections() -> void:
 	for entry: Dictionary in _active_connections:
@@ -479,6 +743,7 @@ func _cleanup_connections() -> void:
 			entry.get("callable") as Callable
 		)
 	_active_connections.clear()
+
 
 func _disconnect(object: Object, signal_name: StringName, callable: Callable) -> void:
 	if object != null and callable.is_valid() and object.is_connected(signal_name, callable):

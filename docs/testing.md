@@ -11,17 +11,20 @@ bash tests/run_tests.sh
 
 `tests/run_tests.sh` currently does the following:
 
-1. Resolves Godot from `GODOT`, `GODOT_EXECUTABLE`, `godot` on `PATH`, or common
+1. Runs `scripts/validate_static_repo_guards.sh`.
+2. Resolves Godot from `GODOT`, `GODOT_EXECUTABLE`, `godot` on `PATH`, or common
    macOS install paths.
-2. Runs a headless import.
-3. Runs GUT with `res://addons/gut/gut_cmdln.gd`.
-4. Runs `res://game/tests/run_tests.gd` when that file exists.
-5. Writes the combined GUT output stream to
+3. Runs a headless import.
+4. Runs `scripts/validate_resource_integrity.sh` when Godot is available.
+5. Seeds the GUT editor environment through `res://tests/setup_gut_env.gd`.
+6. Runs GUT with `res://addons/gut/gut_cmdln.gd`.
+7. Runs `res://game/tests/run_tests.gd` when that file exists.
+8. Writes the combined GUT output stream to
    `artifacts/logs/gut/test_run.log`.
-6. Runs maintained shell validators under `tests/`. Archived one-off
+9. Runs maintained shell validators under `tests/`. Archived one-off
    acceptance scripts can still be run directly, but are not part of the
    default regression gate.
-7. Runs the SSOT tripwires under `scripts/`
+10. Runs the SSOT tripwires under `scripts/`
    (`validate_translations.sh`, `validate_single_store_ui.sh`,
    `validate_tutorial_single_source.sh`) when present and executable.
 
@@ -42,6 +45,7 @@ Stable automation artifact subpaths:
 | gallery screenshots | `artifacts/screenshots/gallery/<gallery>/` |
 | scenario reports | `artifacts/reports/scenario/<scenario>/` |
 | visual sweep reports | `artifacts/reports/visual_sweep/<suite>/` |
+| visual sweep current captures / diffs | `artifacts/visual_sweep/<suite>/` |
 | JUnit XML | `artifacts/junit/` |
 | scenario videos | `artifacts/videos/scenario/` |
 | aggregate manifest | `artifacts/manifests/artifact_manifest.json` |
@@ -49,9 +53,10 @@ Stable automation artifact subpaths:
 Manual F10/debug screenshots remain under `user://screenshots`.
 
 If no Godot binary can be resolved and neither `GODOT` nor `GODOT_EXECUTABLE`
-is set, the GUT step is skipped and only the shell validators and tripwires
-run. If either env var is set but does not point at an executable binary, the
-runner exits with an error.
+is set, the Godot-backed import, resource-integrity, and GUT steps are skipped;
+static repo guards, maintained shell validators, and tripwires still run. If
+either env var is set but does not point at an executable binary, the runner
+exits with an error.
 
 ## GUT configuration
 
@@ -75,6 +80,8 @@ The current config also uses:
 - `should_exit: true`
 - `should_exit_on_success: true`
 - `pre_run_script: "res://tests/automation/gut_pre_run.gd"`
+- `post_run_script: "res://tests/automation/gut_post_run.gd"` in the full
+  `.gutconfig.json`
 
 ## Test layout
 
@@ -84,8 +91,10 @@ tests/unit/        Isolated script/resource tests
 tests/integration/ Multi-system tests with controlled fixtures; migrate into
                    full discovery only as files are stabilized
 tests/flows/       End-to-end player and store-session route tests
-tests/visual/      UI, layout, readability, screenshot, and visual-state tests
-tests/baselines/   Golden fixtures and expected outputs; no executable tests
+tests/visual/      UI, layout, readability, screenshot, visual-state tests,
+                   and store visual sweep baselines
+tests/baselines/   Golden fixtures and expected outputs shared across tests;
+                   no executable tests
 tests/gut/         Legacy broad gameplay and scene-oriented GUT coverage
 game/tests/        Runtime-adjacent game tests included in .gutconfig
 tests/validate_*.sh Shell validators for structure and targeted checks
@@ -95,6 +104,25 @@ tests/validate_*.sh Shell validators for structure and targeted checks
 points around the automation tree.
 `tests/validate_gut_config_discovery.sh` verifies that the full and PR-smoke
 GUT configs do not double-discover the same script.
+
+## Automation CLI
+
+Automation mode is owned by `AutomationRunner` and requires `--test-mode`.
+Supported scenario IDs are `bad_state_resistance`,
+`economy_loop_seed_001`, `fresh_install_smoke`, `layout_torture`,
+`long_day_soak`, `save_reload_smoke`, `smoke`, and `tutorial_full`.
+
+Supported user flags:
+
+| Flag | Effect |
+| --- | --- |
+| `--scenario=<id>` | Selects a supported scenario; defaults to `fresh_install_smoke`. |
+| `--seed=<value>` | Enables deterministic test-mode random streams with that seed. |
+| `--fresh-save[=<id>]` | Routes persistence under `user://test_runs/<id>/`; an omitted id is derived from scenario and seed. |
+| `--record-screenshots` | Enables scenario screenshot capture where the runner supports it. |
+| `--record-video` | Parsed but rejected for standard automation; video capture is handled by the Movie Maker runner. |
+| `--exit-on-complete` | Quits through `ScenarioExit` after the scenario completes. |
+| `--speed=1x|2x|3x|4x|6x` | Applies an automation speed tier; `2x` clamps to `3x`, and `4x` clamps to `6x`. |
 
 ## Current coverage areas
 
@@ -133,27 +161,27 @@ an automation runner arms it. Scenario logs use stable `SCENARIO: PASS`,
 
 ## CI validation
 
-`.github/workflows/validate.yml` currently runs these jobs:
+`.github/workflows/validate.yml` is the fast PR gate. It runs static repo
+guards, `gdlint`, Godot resource/autoload integrity, and the explicit
+`.gutconfig.pr-smoke.json` GUT smoke set.
 
-1. `lint-docs` - required-file and repository-shape checks (requires
-   `project.godot`, `README.md`, `LICENSE`, and `docs/architecture.md`; also
-   fails on any committed `.DS_Store`).
-2. `gut-tests` - installs Godot `4.6.2-stable`, imports project assets, and
-   runs GUT headlessly. Trusts GUT's `All tests passed` summary line for
-   pass/fail; also scans stderr for `push_error()` output (excluding known
-   engine RID-leak noise during shutdown). It then runs
-   `scripts/run_fresh_install_smoke.sh`.
-3. `interaction-audit` - runs the headless audit and regenerates the daily
-   audit summary under `docs/audits/`.
-4. `content-originality` - grep-based banned-term check for real brands,
-   trademarks, and copyrighted characters.
-5. `lint-gdscript` - `gdlint` via `gdtoolkit`.
+`.github/workflows/nightly.yml` is the full validation gate. It runs the same
+static/lint surface plus full GUT, fresh-install smoke, interaction audit, the
+soft visual snapshot sweep, and the long-day soak scenario. Visual snapshot
+review is advisory until baselines are intentionally promoted.
 
-Tagged release exports are handled separately by `.github/workflows/export.yml`,
-which installs Godot `4.6.2` plus export templates.
+`scripts/run_store_visual_sweep.sh` reads reviewed PNG baselines from
+`tests/visual/baselines/retro_games_day_one/<godot-version>/linux/` by default
+or from `MALLCORE_VISUAL_BASELINE_DIR` when set. If the baseline bucket is
+absent, the diff step writes current captures and reports missing baselines
+without failing because the nightly visual lane is advisory.
 
-`.github/workflows/nightly-videos.yml` is scheduled at `17 8 * * *` UTC and
-can also be dispatched manually. It installs Godot `4.6.2-stable`, imports the
-project, runs `scripts/render_nightly_videos.sh` under `xvfb-run`, and uploads
-the generated Movie Maker videos and logs from `artifacts/videos/scenario/nightly/`
-and `artifacts/logs/scenario/nightly-videos/`.
+`.github/workflows/nightly-videos.yml` is the scheduled/manual video lane. It
+renders Movie Maker scenario videos and uploads video/log artifacts from
+`artifacts/videos/scenario/nightly/` and
+`artifacts/logs/scenario/nightly-videos/`.
+
+Tagged and manual release-candidate exports are handled by
+`.github/workflows/export.yml`, which runs release validation, exports Windows,
+macOS, and Linux artifacts, uploads a playtest checklist, and publishes only on
+version tag pushes.

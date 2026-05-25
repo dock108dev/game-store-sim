@@ -11,6 +11,8 @@
 extends Node
 
 const INTERACTION_RAY_GROUP: StringName = &"interaction_ray"
+const BLOCKED_BY_PANEL_REASON: String = "Close open panel to interact"
+const BLOCKED_BY_FOCUS_REASON: String = "Close current menu to interact"
 
 ## Maximum ray distance in meters. Sized for first-person store gameplay so
 ## the player must walk up to a fixture (counter-depth ~1m, aisle reach ~2m)
@@ -82,15 +84,18 @@ func _process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _interaction_blocked():
-		return
 	if event.is_action_pressed("interact"):
+		if _interaction_blocked():
+			_emit_blocked_interaction_status()
+			return
 		if _is_keyboard_captured_by_ui() and not _store_session_mode_active():
 			return
 		if _hovered_target and _hovered_can_interact:
 			_log_interaction_dispatch(_hovered_target)
 			_hovered_target.interact()
 			EventBus.player_interacted.emit(_hovered_target)
+		return
+	if _interaction_blocked():
 		return
 
 	if not event is InputEventMouseButton:
@@ -148,6 +153,15 @@ func get_open_panel_count() -> int:
 	return _open_panel_count
 
 
+## Returns player-facing copy for why interaction input is currently blocked.
+func get_blocked_interaction_reason() -> String:
+	if _open_panel_count > 0:
+		return BLOCKED_BY_PANEL_REASON
+	if _input_focus_blocks_interaction():
+		return BLOCKED_BY_FOCUS_REASON
+	return ""
+
+
 ## Combined gate: blocks interactions when any non-`store_gameplay` context is
 ## active on `InputFocus`, OR when the legacy `panel_opened` counter is
 ## non-zero. The InputFocus check is the new primary authority (matches the
@@ -158,6 +172,13 @@ func _interaction_blocked() -> bool:
 	if _open_panel_count > 0:
 		return true
 	return _input_focus_blocks_interaction()
+
+
+func _emit_blocked_interaction_status() -> void:
+	var reason: String = get_blocked_interaction_reason()
+	if reason.is_empty():
+		return
+	EventBus.interactable_focused_disabled.emit(reason)
 
 
 ## Returns true when the current `InputFocus` context is anything other than

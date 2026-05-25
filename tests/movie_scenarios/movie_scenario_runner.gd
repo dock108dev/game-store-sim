@@ -74,9 +74,9 @@ const SCENARIOS: Dictionary = {
 	},
 	"gallery_walkthrough_smoke": {
 		"duration_frames": 840,
-		"scene_path": DEFAULT_SCENE_PATH,
+		"scene_path": "res://tests/visual/visual_gallery.tscn",
 		"title": "Gallery Walkthrough Smoke",
-		"objective": "Short gallery-style pass using shared video artifact paths.",
+		"objective": "Internal asset gallery pass using shared video artifact paths.",
 		"camera_position": Vector3(-1.8, 3.2, 10.2),
 		"camera_rotation": Vector3(deg_to_rad(-12.0), deg_to_rad(170.0), 0.0),
 		"events": [

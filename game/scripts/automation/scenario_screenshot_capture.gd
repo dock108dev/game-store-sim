@@ -119,7 +119,9 @@ static func _metadata(
 	}
 
 
-static func _record_screenshot(screenshot_path: String, scenario_id: String, metadata: Dictionary) -> void:
+static func _record_screenshot(
+	screenshot_path: String, scenario_id: String, metadata: Dictionary
+) -> void:
 	var capture_mode: String = str(metadata.get("capture_mode", CAPTURE_MODE_VIEWPORT))
 	AutomationArtifactsScript.record_artifact(
 		"screenshot", screenshot_path, scenario_id, SCENARIO_SUITE, capture_mode
@@ -138,6 +140,12 @@ static func _blank_assertion_counts() -> Dictionary:
 
 
 static func _has_numeric_prefix(slug: String) -> bool:
+	if slug.length() >= 3 and slug[2] == "_":
+		for i: int in range(2):
+			var two_digit_codepoint: int = slug.unicode_at(i)
+			if two_digit_codepoint < 0x30 or two_digit_codepoint > 0x39:
+				return false
+		return true
 	if slug.length() < 4 or slug[3] != "_":
 		return false
 	for i: int in range(3):

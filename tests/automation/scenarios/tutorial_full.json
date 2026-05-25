@@ -1,9 +1,43 @@
 {
 	"id": "tutorial_full",
-	"title": "Tutorial Full Slot",
-	"tags": ["slot", "tutorial"],
-	"timeout_frames": 3600,
+	"title": "Tutorial Full Day 1",
+	"tags": ["tutorial", "store_session", "visual_evidence"],
+	"fixed_seed": "tutorial_full_day1_seed",
+	"timeout_frames": 7200,
 	"steps": [
-		{"id": "placeholder_finish", "type": "finish", "timeout_frames": 30}
+		{
+			"id": "reset_store_session_state",
+			"type": "call_node",
+			"target": "/root/StoreSessionState",
+			"method": "reset_new_run",
+			"timeout_frames": 30
+		},
+		{
+			"id": "set_day_one",
+			"type": "call_node",
+			"target": "/root/GameManager",
+			"method": "set_current_day",
+			"args": [1],
+			"timeout_frames": 30
+		},
+		{
+			"id": "load_retro_games_store",
+			"type": "route_scene",
+			"scene_path": "res://game/scenes/stores/retro_games.tscn",
+			"input_focus_context": "store_gameplay",
+			"timeout_frames": 600
+		},
+		{
+			"id": "settle_store_session_boot",
+			"type": "advance_frames",
+			"count": 3,
+			"timeout_frames": 30
+		},
+		{
+			"id": "capture_day_one_route",
+			"type": "run_store_session_tutorial_full",
+			"allow_placeholder": true,
+			"timeout_frames": 900
+		}
 	]
 }

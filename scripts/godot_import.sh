@@ -4,30 +4,10 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-G="${GODOT:-${GODOT_EXECUTABLE:-godot}}"
+source "$ROOT/scripts/godot_resolver.sh"
 
-_resolve_godot() {
-	local candidates=(
-		"$G"
-		"/Applications/Godot.app/Contents/MacOS/Godot"
-		"$HOME/Applications/Godot.app/Contents/MacOS/Godot"
-	)
-	local candidate=""
-	for candidate in "${candidates[@]}"; do
-		if [ -x "$candidate" ]; then
-			echo "$candidate"
-			return 0
-		fi
-		if command -v "$candidate" >/dev/null 2>&1; then
-			command -v "$candidate"
-			return 0
-		fi
-	done
-	return 1
-}
-
-if ! GODOT_BIN="$(_resolve_godot)"; then
-	echo "ERROR: Godot not found (tried: $G). Set GODOT to your 4.x editor binary." >&2
+if ! GODOT_BIN="$(resolve_mallcore_godot)"; then
+	echo "ERROR: Godot not found (tried: $(mallcore_configured_godot)). Set GODOT to your 4.x editor binary." >&2
 	exit 1
 fi
 

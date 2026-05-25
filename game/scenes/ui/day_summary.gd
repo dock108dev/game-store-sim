@@ -9,6 +9,7 @@ signal continue_pressed
 signal dismissed
 signal review_inventory_requested
 signal main_menu_requested
+signal surface_ready(snapshot: Dictionary)
 
 const OVERLAY_FADE_DURATION: float = 0.2
 const OVERLAY_TARGET_ALPHA: float = 0.9
@@ -22,6 +23,9 @@ const HIDDEN_THREAD_FADE_DURATION: float = 0.5
 const HIDDEN_THREAD_COLOR: Color = Color(0.78, 0.72, 0.62, 0.85)
 const TIER_CHANGE_COLOR := Color(1.0, 0.84, 0.0)
 const SECONDARY_BUTTON_MODULATE := Color(1.0, 1.0, 1.0, 0.65)
+const AutomationModeScript: GDScript = preload(
+	"res://game/scripts/automation/automation_mode.gd"
+)
 
 ## Per-archetype path subtext shown below ArchetypeLabel. Framed as a natural
 ## expansion (full game career path) rather than a paywall threat.
@@ -228,6 +232,7 @@ func show_summary(
 	_push_modal_focus()
 	_start_auto_advance(day)
 	_animate_open()
+	surface_ready.emit(get_surface_snapshot())
 
 
 ## Re-shows the last day summary if available.
@@ -311,6 +316,55 @@ func _pop_modal_focus() -> void:
 ## Test seam — clears _focus_pushed without calling pop_context.
 func _reset_for_tests() -> void:
 	_focus_pushed = false
+
+
+## Returns day-summary state for deterministic automation waits.
+func get_surface_snapshot() -> Dictionary:
+	return {
+		"visible": visible,
+		"panel_visible": _panel.visible,
+		"day": _current_day,
+		"continue_ready": (
+			_continue_button != null
+			and _continue_button.visible
+			and not _continue_button.disabled
+		),
+		"focus_pushed": _focus_pushed,
+	}
+
+
+## Acknowledges the day summary through the same path as the continue button.
+func acknowledge_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if not visible or _continue_button == null or _continue_button.disabled:
+		return false
+	_on_continue_pressed()
+	return true
+
+
+## Completes nonessential reveal tweens in automation/test mode only.
+func fast_forward_animations_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	_kill_all_tweens()
+	visible = true
+	_overlay.visible = true
+	_overlay.color.a = OVERLAY_TARGET_ALPHA
+	_panel.visible = true
+	_reset_animated_controls()
+	_button_row.visible = true
+	_button_row.modulate = Color.WHITE
+	_continue_button.visible = true
+	_continue_button.disabled = false
+	if _hidden_thread_timer != null:
+		_hidden_thread_timer.stop()
+	if not _pending_hidden_thread_text.is_empty():
+		_hidden_thread_label.text = _pending_hidden_thread_text
+		_hidden_thread_separator.visible = true
+		_hidden_thread_label.visible = true
+		_hidden_thread_label.modulate.a = 1.0
+	return true
 
 
 func _animate_open() -> void:

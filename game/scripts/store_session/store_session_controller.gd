@@ -5,6 +5,7 @@ extends Node
 ## File-size note: Day-1 orchestration stays in one owner until the presenter
 ## slices named in docs/audits/cleanup-report.md can be extracted together.
 signal customer_exit_state_changed(state: StringName)
+signal session_prompt_changed(snapshot: Dictionary)
 
 const _ProductVisualFactory: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
@@ -16,12 +17,16 @@ const StoreSessionCharacterVisualFactoryScript: GDScript = preload(
 const ExpandableStoreShellRuntimeScript: GDScript = preload(
 	"res://game/scripts/visuals/expandable_store_shell_runtime.gd"
 )
+const StoreVisualScopeProfileScript: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_scope_profile.gd"
+)
 const RegisterScreenStateScript: GDScript = preload(
 	"res://game/scripts/store_session/register_screen_state.gd"
 )
 const StoreCarriedStockMarkerScript: GDScript = preload(
 	"res://game/scripts/store_session/store_carried_stock_marker.gd"
 )
+const AutomationModeScript: GDScript = preload("res://game/scripts/automation/automation_mode.gd")
 
 const EVENTS_PATH: String = "res://game/content/store_session/events/customer_events.json"
 const DAY_PATHS: Dictionary = {
@@ -118,89 +123,17 @@ const _BUNDLE_GAME_ID: String = "neo_ignite_motorway_kings_loose"
 const _BUNDLE_CONTROLLER_ID: String = "neo_ignite_controller_standard"
 const _BUNDLE_RETURN_ID: String = "neo_ignite_motorway_kings_westside_loose"
 
-## Store surfaces hidden only for the store_session runtime review scope. The authored
-## roots stay in `retro_games.tscn` for full-store completeness; store_session narrows
-## normal presentation to checkout, the nearby restock shelf, and the current
-## inventory pickup context.
-const _HIDDEN_NOISE_PATHS: Array[String] = [
-	"new_console_display",
-	"poster_slot",
-	"delivery_manifest",
-	"featured_display",
-	"release_notes_clipboard",
-	"employee_area",
-	"StoreAtmosphereProps",
-	"new_release_wall",
-	"old_gen_shelf",
-	"hold_shelf",
-	"testing_station",
-	"refurb_bench",
-	"CartRackRight",
-	"GlassCase",
-	"ConsoleShelf",
-	"AccessoriesBin",
-	"bargain_bin",
-	"crt_demo_area",
-	"staff_picks_table",
-	"ZoneLabels/UsedConsolesLabel",
-	"ZoneLabels/StaffPicksLabel",
-	"ReadabilityProps/UsedConsoleDressing",
-	"ReadabilityProps/FloorDisplayIsland",
-	"ReadabilityProps/ShelfSpineRuns",
-	"ReadabilityProps/ProductDisplayRows",
-	"ReadabilityProps/SpawnViewFloorDressing",
-	"ReadabilityProps/DayOneRouteMarkers",
-]
-
-const STORE_SESSION_DEFERRED_ROOT_NODES: Array[StringName] = [
-	&"CartRackRight",
-	&"GlassCase",
-	&"ConsoleShelf",
-	&"AccessoriesBin",
-	&"bargain_bin",
-	&"crt_demo_area",
-	&"staff_picks_table",
-]
-
-const STORE_SESSION_CONTEXT_ROOT_NODES: Array[StringName] = [
-	&"ExpandableStoreShell",
-]
-
-const _STORE_SESSION_REFERENCE_VISIBLE_PATHS: Array[String] = [
-	"Checkout",
-	"CartRackLeft",
-	"ReadabilityProps/CheckoutCounterDressing",
-	"ReadabilityProps/ShelfSpineRuns",
-	"ReadabilityProps/ProductDisplayRows",
-	"ReadabilityProps/SpawnViewFloorDressing",
-	"ReadabilityProps/DayOneRouteMarkers",
-	"ReadabilityProps/ZoneIdentity",
-]
-
-const STORE_SESSION_KEEP_ROOT_NODES: Array[StringName] = [
-	&"PlayerController",
-	&"PlayerEntrySpawn",
-	&"FluorescentKeyLight",
-	&"WarmNeonFill",
-	&"GreenNeonFill",
-	&"CheckoutLaneSpotlight",
-	&"FrontLaneFill",
-	&"CheckoutCounterPractical",
-	&"BackroomUtilityLight",
-	&"EntranceDoor",
-	&"NavigationRegion3D",
-	&"EntryArea",
-	&"RegisterArea",
-	&"checkout_counter",
-	&"FrontLaneQueue",
-	&"StoreSessionController",
-	&"StoreSessionDayOneCustomer",
-	&"StoreSessionBackroomPickup",
-	&"StoreSessionRestockShelf",
-	&"StoreSessionDayEndTrigger",
-	&"StoreSessionHiddenClue",
-	&"ExpandableStoreShell",
-]
+const _HIDDEN_NOISE_PATHS: Array[String] = StoreVisualScopeProfileScript.HIDDEN_NOISE_PATHS
+const STORE_SESSION_DEFERRED_ROOT_NODES: Array[StringName] = (
+	StoreVisualScopeProfileScript.DEFERRED_ROOT_NODES
+)
+const STORE_SESSION_CONTEXT_ROOT_NODES: Array[StringName] = (
+	StoreVisualScopeProfileScript.CONTEXT_ROOT_NODES
+)
+const _STORE_SESSION_REFERENCE_VISIBLE_PATHS: Array[String] = (
+	StoreVisualScopeProfileScript.REFERENCE_VISIBLE_PATHS
+)
+const STORE_SESSION_KEEP_ROOT_NODES: Array[StringName] = StoreVisualScopeProfileScript.KEEP_ROOT_NODES
 
 const StoreDebugOverlayScript: GDScript = preload(
 	"res://game/scripts/store_session/store_debug_overlay.gd"
@@ -562,8 +495,7 @@ func _ready() -> void:
 	_ensure_carried_stock_marker()
 	_suppress_moments_tray()
 	_load_content()
-	_ensure_panels()
-	_connect_panel_signals()
+	call_deferred("_ensure_panels_ready")
 	# Hand the persistent store_session HUD surfaces off to the autoload owner.
 	# `StoreSessionHUD` spawns the right panel + event log once at boot and keeps
 	# them alive across a day-controller teardown; `activate(day)` seeds
@@ -624,6 +556,7 @@ func _start_preopening_training() -> void:
 	call_deferred("_apply_objective_gating")
 	_training_gating_refresh_frames = 5
 	StoreSessionHUD.activate(StoreSessionState.day)
+	_emit_session_prompt_changed()
 	(
 		EventBus
 		. toast_requested_with_id
@@ -700,6 +633,7 @@ func _open_vic_note_and_then_start_day() -> void:
 	# behind the modal.
 	_stage = STAGE_VIC_NOTE
 	_update_objective_rail()
+	_emit_session_prompt_changed()
 	var body: String = VIC_NOTE_DAY2_BODY if StoreSessionState.day == 2 else VIC_NOTE_BODY
 	_vic_note_panel.show_note(body)
 
@@ -830,10 +764,7 @@ func on_store_stockroom_pickup_interacted() -> void:
 	# can reflect customer consequences without treating overlay stock as
 	# inventory authority.
 	_emit_store_inventory_counts(
-		_shelf_stock_count,
-		_current_delivery_quantity + _real_backroom_return_count,
-		false,
-		true
+		_shelf_stock_count, _current_delivery_quantity + _real_backroom_return_count, false, true
 	)
 	# The pickup toast and the carry HUD label fire on the same call stack
 	# so the back-room item disappears, the toast slides in top-right, and
@@ -908,8 +839,7 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 		EventBus.store_carry_changed.emit("")
 		_sync_restock_placement_affordance()
 		_emit_store_inventory_counts(
-			_shelf_stock_count,
-			_real_backroom_return_count + _unplaced_delivery_count
+			_shelf_stock_count, _real_backroom_return_count + _unplaced_delivery_count
 		)
 		EventBus.toast_requested.emit(
 			"Shelf is full. Remaining delivery stays in the back room.", &"warning", 3.0
@@ -920,14 +850,16 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 	var placement_quantity: int = 1
 	if complete_delivery:
 		placement_quantity = mini(_carried_stock_remaining, available_capacity)
-	var placed_target: int = _shelf_stock_count + mini(
-		placement_quantity,
-		mini(_carried_stock_remaining, available_capacity)
+	var placed_target: int = (
+		_shelf_stock_count
+		+ mini(placement_quantity, mini(_carried_stock_remaining, available_capacity))
 	)
 	var spawned: int = _render_visible_shelf_items(placed_target)
 	var stocked_now: int = mini(maxi(spawned - previous_count, 0), _carried_stock_remaining)
 	if stocked_now <= 0:
-		EventBus.notification_requested.emit("No open shelf slot found. Check the back room delivery.")
+		EventBus.notification_requested.emit(
+			"No open shelf slot found. Check the back room delivery."
+		)
 		_sync_restock_placement_affordance()
 		return
 	_shelf_stock_count = spawned
@@ -938,13 +870,13 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 		_real_backroom_return_count + _unplaced_delivery_count + _carried_stock_remaining
 	)
 	if _carried_stock_remaining > 0 and _restock_available_capacity() > 0:
-		EventBus.store_carry_changed.emit(
-			"Starter Stock Box (%d left)" % _carried_stock_remaining
-		)
+		EventBus.store_carry_changed.emit("Starter Stock Box (%d left)" % _carried_stock_remaining)
 		_sync_restock_placement_affordance()
 		EventBus.toast_requested.emit(
-			"Placed 1 item on the starter display table. %d still in the box."
-			% _carried_stock_remaining,
+			(
+				"Placed 1 item on the starter display table. %d still in the box."
+				% _carried_stock_remaining
+			),
 			&"info",
 			2.0
 		)
@@ -957,8 +889,7 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 	EventBus.store_carry_changed.emit("")
 	_sync_restock_placement_affordance()
 	_emit_store_inventory_counts(
-		_shelf_stock_count,
-		_real_backroom_return_count + _unplaced_delivery_count
+		_shelf_stock_count, _real_backroom_return_count + _unplaced_delivery_count
 	)
 	EventBus.toast_requested.emit(
 		"Stocked %d items on the starter display table." % _shelf_stock_count, &"sale", 3.0
@@ -974,7 +905,9 @@ func on_store_day_end_requested() -> void:
 		return
 	# Keep the close-day modal owned by EventBus so cancel leaves END_DAY
 	# intact and the player can retry from the interactable.
-	EventBus.day_close_confirmation_requested.emit("Ready to close up Day %d?" % StoreSessionState.day)
+	EventBus.day_close_confirmation_requested.emit(
+		"Ready to close up Day %d?" % StoreSessionState.day
+	)
 
 
 ## Confirm-side of the close-day flow. Runs when the player presses
@@ -1188,10 +1121,7 @@ func _finish_customer_choice(effects: Dictionary) -> void:
 		var store_id: StringName = StringName(str(sale_item.get("store_id", "")))
 		EventBus.item_sold.emit(item_id, price, category)
 		EventBus.customer_purchased.emit(
-			store_id,
-			StringName(item_id),
-			price,
-			_store_customer_signal_id()
+			store_id, StringName(item_id), price, _store_customer_signal_id()
 		)
 	else:
 		_show_counter_sale_visual(false)
@@ -1270,8 +1200,7 @@ func _apply_customer_inventory_effects(choice: Dictionary, effects: Dictionary) 
 		effects.get("requires_inventory_success", choice.get("requires_inventory_success", false))
 	)
 	transaction["store_inventory_counts"] = _store_count_adapter().call(
-		"from_transaction",
-		transaction
+		"from_transaction", transaction
 	)
 	_customer_inventory_transactions.append(transaction.duplicate(true))
 	return transaction
@@ -1284,7 +1213,10 @@ func _effects_after_inventory(effects: Dictionary, inventory_transaction: Dictio
 	resolved["inventory_transaction"] = inventory_transaction.duplicate(true)
 	if bool(inventory_transaction.get("ok", false)):
 		if int(resolved.get("cash", 0)) > 0:
-			if _effects_allow_sale_signal(resolved) and not _sale_item_from_effects(resolved).is_empty():
+			if (
+				_effects_allow_sale_signal(resolved)
+				and not _sale_item_from_effects(resolved).is_empty()
+			):
 				resolved["cash_booked_by_sale_signal"] = true
 			elif bool(inventory_transaction.get("requires_inventory_success", false)):
 				resolved["cash"] = 0
@@ -1316,25 +1248,25 @@ func _effects_allow_sale_signal(effects: Dictionary) -> bool:
 
 
 func _store_count_adapter() -> RefCounted:
-	return StoreInventoryCountAdapterScript.new(
-		GameManager.get_inventory_system(),
-		&"retro_games"
-	) as RefCounted
+	return (
+		StoreInventoryCountAdapterScript.new(GameManager.get_inventory_system(), &"retro_games")
+		as RefCounted
+	)
 
 
 func _emit_store_inventory_counts(
-	shelf_count: int,
-	backroom_count: int,
-	emit_shelf: bool = true,
-	emit_backroom: bool = true
+	shelf_count: int, backroom_count: int, emit_shelf: bool = true, emit_backroom: bool = true
 ) -> Dictionary:
-	var counts: Dictionary = _store_count_adapter().call(
-		"presentation_counts",
-		shelf_count,
-		backroom_count,
-		_real_damaged_return_count,
-		_real_backroom_return_count
-	) as Dictionary
+	var counts: Dictionary = (
+		_store_count_adapter().call(
+			"presentation_counts",
+			shelf_count,
+			backroom_count,
+			_real_damaged_return_count,
+			_real_backroom_return_count
+		)
+		as Dictionary
+	)
 	if emit_shelf:
 		EventBus.store_shelf_count_changed.emit(int(counts.get("shelf", 0)))
 	if emit_backroom:
@@ -1358,16 +1290,20 @@ func _reconcile_customer_inventory_counts(effects: Dictionary) -> void:
 	)
 	_shelf_stock_count = maxi(_shelf_stock_count - shelf_delta, 0)
 	_real_backroom_return_count = maxi(
-		_real_backroom_return_count
-		+ int(counts.get("applied_backroom_created_quantity", 0))
-		+ int(counts.get("applied_moved_to_backroom_quantity", 0))
-		- int(counts.get("applied_backroom_removed_quantity", 0)),
+		(
+			_real_backroom_return_count
+			+ int(counts.get("applied_backroom_created_quantity", 0))
+			+ int(counts.get("applied_moved_to_backroom_quantity", 0))
+			- int(counts.get("applied_backroom_removed_quantity", 0))
+		),
 		0
 	)
 	_real_damaged_return_count = maxi(
-		_real_damaged_return_count
-		+ int(counts.get("applied_damaged_created_quantity", 0))
-		+ int(counts.get("applied_moved_to_damaged_quantity", 0)),
+		(
+			_real_damaged_return_count
+			+ int(counts.get("applied_damaged_created_quantity", 0))
+			+ int(counts.get("applied_moved_to_damaged_quantity", 0))
+		),
 		0
 	)
 	_render_visible_shelf_items(_shelf_stock_count)
@@ -1484,9 +1420,7 @@ func _on_summary_reinvest(option_id: StringName) -> void:
 		return
 	if _applied_reinvest_options.has(option_id):
 		if _summary_panel != null:
-			_summary_panel.mark_reinvest_applied(
-				"Order already placed for tomorrow's used games."
-			)
+			_summary_panel.mark_reinvest_applied("Order already placed for tomorrow's used games.")
 		return
 	if not _can_afford_reorder():
 		if _summary_panel != null:
@@ -1588,10 +1522,13 @@ func restock_prompt_label() -> String:
 		return "Display table stocked"
 	var total_delivery: int = maxi(_current_delivery_quantity, _carried_stock_remaining)
 	var placed_count: int = maxi(total_delivery - _carried_stock_remaining, 0)
-	return "Place item %d of %d on starter display table" % [
-		placed_count + 1,
-		total_delivery,
-	]
+	return (
+		"Place item %d of %d on starter display table"
+		% [
+			placed_count + 1,
+			total_delivery,
+		]
+	)
 
 
 func restock_disabled_reason() -> String:
@@ -1787,6 +1724,7 @@ func _start_day(day: int) -> void:
 	_advance_to_open_hour_if_early()
 	_update_objective_rail()
 	_apply_objective_gating()
+	_emit_session_prompt_changed()
 	_emit_opening_day_toast(day)
 
 
@@ -1858,7 +1796,8 @@ func _build_no_stock_customer_event(source_event: Dictionary) -> Dictionary:
 				"headline": "No Stock Available",
 				"customer_reaction": "They leave without buying anything.",
 				"store_outcome": "No sale was recorded because the shelf was empty.",
-				"manager_note": "Empty shelves close off choices. Get stock out before the next rush.",
+				"manager_note":
+				"Empty shelves close off choices. Get stock out before the next rush.",
 				"tone": "mixed",
 				"consequences":
 				[
@@ -2026,8 +1965,7 @@ func _sync_store_day(day_number: int) -> void:
 ## inventory transactions feed this cache through StoreInventoryCountAdapter.
 func _reset_store_inventory_overlay() -> void:
 	_emit_store_inventory_counts(
-		_shelf_stock_count,
-		_unplaced_delivery_count + _carried_stock_remaining
+		_shelf_stock_count, _unplaced_delivery_count + _carried_stock_remaining
 	)
 	EventBus.store_carry_changed.emit("")
 
@@ -2121,6 +2059,11 @@ func _set_customer_exit_state(new_state: StringName) -> void:
 		return
 	_customer_exit_state = new_state
 	customer_exit_state_changed.emit(_customer_exit_state)
+	_emit_session_prompt_changed()
+
+
+func _emit_session_prompt_changed() -> void:
+	session_prompt_changed.emit(get_session_progress_snapshot())
 
 
 ## Marks the current stage's objective complete, advances the in-game
@@ -2186,6 +2129,7 @@ func _advance_stage_after(completed_id: StringName) -> void:
 	_sync_customer_counter_anchor_for_stage()
 	_update_objective_rail()
 	_apply_objective_gating()
+	_emit_session_prompt_changed()
 
 
 func _grant_objective_unlocks(objective_id: StringName) -> void:
@@ -2415,20 +2359,21 @@ func get_state_snapshot() -> Dictionary:
 ## Returns scenario-facing progress without exposing controller internals.
 func get_session_progress_snapshot() -> Dictionary:
 	var current: Dictionary = _objective_for_stage(_stage)
+	var target_snapshot: Dictionary = _active_target_snapshot()
 	return {
 		"day": StoreSessionState.day,
 		"stage": String(_stage),
-		"objective": {
+		"objective":
+		{
 			"id": String(current.get("id", "")),
 			"label": String(current.get("label", "")),
 			"action": String(current.get("action", "")),
 			"target_path": active_objective_target_path(),
-			"completed": _completed_objectives.has(
-				StringName(str(current.get("id", "")))
-			),
+			"completed": _completed_objectives.has(StringName(str(current.get("id", "")))),
 			"completed_objectives": _completed_objectives.duplicate(true),
 		},
-		"customer": {
+		"customer":
+		{
 			"event_id": String(_active_event.get("id", "")),
 			"name": String(_active_event.get("customer_name", "")),
 			"event_index": _current_event_index,
@@ -2436,21 +2381,111 @@ func get_session_progress_snapshot() -> Dictionary:
 			"exit_state": String(_customer_exit_state),
 			"result_visible": _customer_result_panel != null and _customer_result_panel.visible,
 		},
-		"carry": {
+		"carry":
+		{
 			"carrying_stock": StoreSessionState.carrying_stock,
 			"has_carry": StoreSessionState.carrying_stock,
 			"remaining": _carried_stock_remaining,
 			"delivery_quantity": _current_delivery_quantity,
 			"shelf_stock_count": _shelf_stock_count,
 		},
-		"visible_prompt": {
+		"visible_prompt":
+		{
 			"label": active_objective_prompt_label(),
 			"target_path": active_objective_target_path(),
 			"highlight_visible": should_show_active_objective_highlight(),
 		},
+		"target": target_snapshot,
+		"ui": _session_ui_snapshot(),
+		"persistence":
+		{
+			"automation_root_enabled": UserDataPaths.is_automation_root_enabled(),
+			"automation_root": UserDataPaths.get_automation_root(),
+			"preopening_complete": StoreSessionState.preopening_complete,
+		},
 		"can_close_day": _all_required_objectives_completed() and _stage == STAGE_END_DAY,
 		"close_day_reason": close_day_disabled_reason() if _stage != STAGE_END_DAY else "ready",
 	}
+
+
+## Acknowledges the visible store-session modal through the owning panel.
+func acknowledge_prompt_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if (
+		_customer_result_panel != null
+		and _customer_result_panel.visible
+		and _customer_result_panel.has_method("acknowledge_for_automation")
+	):
+		return bool(_customer_result_panel.call("acknowledge_for_automation"))
+	if (
+		_summary_panel != null
+		and _summary_panel.visible
+		and _summary_panel.has_method("acknowledge_for_automation")
+	):
+		return bool(_summary_panel.call("acknowledge_for_automation"))
+	return false
+
+
+## Completes nonessential store-session animations in automation/test mode.
+func fast_forward_animations_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if _customer_exit_state == CUSTOMER_EXIT_IN_PROGRESS:
+		var store: Node = _store_root()
+		var customer: Node3D = null
+		if store != null:
+			customer = store.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+		if customer != null:
+			_finalize_customer_exit(customer)
+			return true
+	return true
+
+
+func _active_target_snapshot() -> Dictionary:
+	var path: String = active_objective_target_path()
+	var node: Node = null
+	var interactable: Interactable = null
+	var store: Node = _store_root()
+	if store != null and not path.is_empty():
+		node = store.get_node_or_null(NodePath(path))
+		interactable = node as Interactable
+	return {
+		"path": path,
+		"present": node != null,
+		"enabled": interactable != null and interactable.enabled,
+		"can_interact": interactable != null and interactable.can_interact(),
+		"prompt_label": interactable.get_prompt_label() if interactable != null else "",
+		"reachable_unblocked":
+		interactable != null and interactable.enabled and interactable.can_interact(),
+	}
+
+
+func _session_ui_snapshot() -> Dictionary:
+	var right_panel: StoreStatusPanel = StoreSessionHUD.get_right_panel()
+	return {
+		"hud_active": StoreSessionHUD.is_active(),
+		"right_panel_visible": right_panel != null and right_panel.visible,
+		"right_panel_header": right_panel.get_header_text() if right_panel != null else "",
+		"tutorial_overlay_visible": _tutorial_overlay_visible(),
+		"objective_rail_visible": ObjectiveRail != null and ObjectiveRail.visible,
+		"modal_busy": ModalQueue.is_busy(),
+		"active_modal": str(ModalQueue.get_modal_snapshot().get("active_panel", "")),
+		"input_focus": String(InputFocus.current()),
+	}
+
+
+func _tutorial_overlay_visible() -> bool:
+	if not is_inside_tree():
+		return false
+	for node: Node in get_tree().get_nodes_in_group("ui.tutorial_panel"):
+		if node.has_method("get_surface_snapshot"):
+			var snapshot: Dictionary = node.call("get_surface_snapshot")
+			if bool(snapshot.get("visible", false)):
+				return true
+		elif node is CanvasItem and (node as CanvasItem).visible:
+			return true
+	return false
 
 
 func _apply_customer_profile(event_data: Dictionary) -> void:
@@ -2669,8 +2704,9 @@ func _build_shift_note() -> String:
 	var skipped_phrases: Array[String] = []
 	if not _completed_objectives.has(&"talk_to_customer"):
 		skipped_phrases.append("helping the customer at the register")
-	if _objective_id_exists(_REPEAT_CUSTOMER_OBJECTIVE_ID) and not _completed_objectives.has(
-		_REPEAT_CUSTOMER_OBJECTIVE_ID
+	if (
+		_objective_id_exists(_REPEAT_CUSTOMER_OBJECTIVE_ID)
+		and not _completed_objectives.has(_REPEAT_CUSTOMER_OBJECTIVE_ID)
 	):
 		skipped_phrases.append("helping the next customer at the register")
 	if not _completed_objectives.has(&"back_room_inventory"):
@@ -2793,12 +2829,13 @@ func _ensure_panels() -> void:
 			cancel_button.text = "Not Yet"
 
 
+func _ensure_panels_ready() -> void:
+	_ensure_panels()
+	_connect_panel_signals()
+
+
 func _tag_semantic_target(
-	node: Node,
-	semantic_id: String,
-	kind: String,
-	groups: Array,
-	metadata: Dictionary = {}
+	node: Node, semantic_id: String, kind: String, groups: Array, metadata: Dictionary = {}
 ) -> void:
 	node.set_meta("semantic_target", semantic_id)
 	node.set_meta("scenario_target_kind", kind)
@@ -2868,7 +2905,10 @@ func _free_owned_ui_node(node: Node) -> void:
 		and InputFocus.current() == InputFocus.CTX_MODAL
 	):
 		node.call("close")
-	node.free()
+	if node.get_parent() != null:
+		node.call_deferred("queue_free")
+	elif not node.is_queued_for_deletion():
+		node.free()
 
 
 ## §EH-12 — Store session day-1 / customer-events content is shipped under
@@ -3233,9 +3273,7 @@ func _emit_customer_outcome_toast(effects: Dictionary) -> void:
 		# matches the BRAINDUMP "Sale complete: +$18" example.
 		EventBus.toast_requested.emit("Sale complete: +$%d" % cash_delta, &"sale", 3.0)
 	elif _is_refused_return_effect(effects):
-		EventBus.toast_requested.emit(
-			"No sale. The customer left upset.", &"reputation_down", 3.0
-		)
+		EventBus.toast_requested.emit("No sale. The customer left upset.", &"reputation_down", 3.0)
 	else:
 		EventBus.toast_requested.emit("She thanked you and walked off.", &"info", 3.0)
 
@@ -3246,7 +3284,10 @@ func _is_refused_return_effect(effects: Dictionary) -> bool:
 
 
 func _update_clean_exchange_room_outcome(choice_id: StringName, effects: Dictionary) -> void:
-	if choice_id != _COUNTER_STATE_CLEAN_EXCHANGE or not _clean_exchange_inventory_succeeded(effects):
+	if (
+		choice_id != _COUNTER_STATE_CLEAN_EXCHANGE
+		or not _clean_exchange_inventory_succeeded(effects)
+	):
 		_clear_clean_exchange_room_outcome()
 		return
 	_show_clean_exchange_shelf_gap()
@@ -3289,8 +3330,10 @@ func _clean_exchange_inventory_succeeded(effects: Dictionary) -> bool:
 			StoreCustomerInventoryEffectsScript.OP_CREATE_ITEM:
 				created_backroom_item = (
 					str(applied.get("definition_id", "")) == _BUNDLE_RETURN_ID
-					and str(applied.get("to_location", ""))
-					== StoreCustomerInventoryEffectsScript.LOCATION_BACKROOM
+					and (
+						str(applied.get("to_location", ""))
+						== StoreCustomerInventoryEffectsScript.LOCATION_BACKROOM
+					)
 				)
 	return removed_shelf_item and created_backroom_item
 
@@ -3320,8 +3363,10 @@ func _bundle_inventory_succeeded(effects: Dictionary) -> bool:
 			StoreCustomerInventoryEffectsScript.OP_CREATE_ITEM:
 				created_backroom_item = (
 					definition_id == _BUNDLE_RETURN_ID
-					and str(applied.get("to_location", ""))
-					== StoreCustomerInventoryEffectsScript.LOCATION_BACKROOM
+					and (
+						str(applied.get("to_location", ""))
+						== StoreCustomerInventoryEffectsScript.LOCATION_BACKROOM
+					)
 				)
 	return removed_game and removed_controller and created_backroom_item
 
@@ -3677,9 +3722,7 @@ func _restock_slot_position(index: int) -> Vector3:
 	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return Vector3.ZERO
-	var marker: Node3D = (
-		shelf.get_node_or_null("%s%d" % [_RESTOCK_SLOT_PREFIX, index]) as Node3D
-	)
+	var marker: Node3D = shelf.get_node_or_null("%s%d" % [_RESTOCK_SLOT_PREFIX, index]) as Node3D
 	if marker != null:
 		return marker.position + Vector3(0.0, 0.055, 0.0)
 	var capacity: int = maxi(_restock_slot_capacity(), 1)
@@ -3854,7 +3897,9 @@ func _set_customer_counter_anchor_state(state: StringName) -> void:
 	var item: Node3D = anchor.get_node_or_null(_CUSTOMER_COUNTER_ITEM_NAME) as Node3D
 	if item != null:
 		item.visible = state != _COUNTER_STATE_REFUSED
-	var strip: MeshInstance3D = anchor.get_node_or_null(_CUSTOMER_COUNTER_STRIP_NAME) as MeshInstance3D
+	var strip: MeshInstance3D = (
+		anchor.get_node_or_null(_CUSTOMER_COUNTER_STRIP_NAME) as MeshInstance3D
+	)
 	if strip != null:
 		strip.material_override = _customer_counter_strip_material(state)
 

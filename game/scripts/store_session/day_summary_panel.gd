@@ -373,6 +373,24 @@ func mark_reinvest_applied(message: String) -> void:
 	_reinvest_status_label.text = message
 
 
+func get_modal_snapshot() -> Dictionary:
+	var snapshot: Dictionary = super.get_modal_snapshot()
+	snapshot["title"] = _title_label.text if _title_label != null else ""
+	snapshot["continue_ready"] = visible and _continue_button != null and not _continue_button.disabled
+	snapshot["reinvest_visible"] = _reinvest_section != null and _reinvest_section.visible
+	snapshot["active_reinvest_option_id"] = String(_active_reinvest_option_id)
+	return snapshot
+
+
+func acknowledge_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if not visible or _continue_button == null or _continue_button.disabled:
+		return false
+	_on_continue_pressed()
+	return true
+
+
 func _on_reinvest_pressed() -> void:
 	if _active_reinvest_option_id.is_empty():
 		return

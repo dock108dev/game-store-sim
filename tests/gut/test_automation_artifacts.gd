@@ -74,6 +74,11 @@ func test_directory_creation_and_slug_safety() -> void:
 		"retro_games_day_one"
 	)
 	assert_eq(_AutomationArtifacts.sanitize_slug(""), "default")
+	assert_eq(
+		_AutomationArtifacts.sanitize_filename_slug("Capture 01-final.png"),
+		"capture_01_final"
+	)
+	assert_eq(_AutomationArtifacts.sanitize_filename_slug(""), "screenshot")
 
 
 func test_write_json_creates_parent_directory() -> void:

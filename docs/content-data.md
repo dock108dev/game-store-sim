@@ -81,8 +81,8 @@ directory.
 Routes fall into three buckets in `_TYPE_ROUTES`:
 
 1. **`entries:<kind>`** — parsed as a list of registered entries of `<kind>`
-   (item, store, customer, fixture, milestone, staff, upgrade, supplier,
-   unlock, market_event, random_event, ambient_moment).
+   (item, store, customer / customer_profile, fixture, milestone, staff,
+   upgrade, supplier, unlock, market_event, random_event, ambient_moment).
 2. **Singleton / specialized configs** — `economy`, `difficulty_config`,
    `ending`, `retro_games_config`, `day_beats_data`.
 3. **`ignore`** — recognized type strings whose payloads are loaded by
@@ -119,6 +119,7 @@ Scene paths registered through content are also constrained:
 
 - all scene paths must stay under `res://game/scenes/`
 - scene paths must end in `.tscn`
+- scene paths must not contain `..` segments or empty path components
 - store scene paths must stay under `res://game/scenes/stores/`
 
 Use canonical `StringName` IDs at runtime rather than display names.
@@ -176,9 +177,11 @@ Not every content file becomes a typed `Resource`. Current examples include:
   (`DataLoaderSingleton.get_retro_games_config()`)
 - store-session day files and event files, which `StoreSessionController`
   reads directly from disk
-- product/platform visual catalog data under `game/content/visuals/`, which
-  is recognized by `DataLoader` but remains visual-only data rather than a
-  typed gameplay resource
+- platform data from `game/content/platforms.json`, which is recognized by
+  `DataLoader` and consumed by `PlatformSystem`
+- product visual catalog data under `game/content/visuals/`, which is
+  recognized by `DataLoader` but remains visual-only data rather than a typed
+  gameplay resource
 - store visual layout data under `game/content/visuals/`, which is recognized
   by `DataLoader` and consumed by visual/store presentation code
 - `PerformanceReport`, which is a runtime Resource built by

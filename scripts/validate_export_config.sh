@@ -54,5 +54,13 @@ grep -q 'bash scripts/godot_exec.sh --path "$GITHUB_WORKSPACE" --headless --expo
 for preset in '"Windows Desktop"' '"macOS"' '"Linux/X11"'; do
 	grep -q "$preset" .github/workflows/export.yml || fail "Export workflow missing preset argument: $preset"
 done
+grep -q '^  workflow_dispatch:' .github/workflows/export.yml \
+	|| fail "Export workflow must support manual release-candidate builds"
+grep -q "Release Lane - Publish Version Tag" .github/workflows/export.yml \
+	|| fail "Export workflow must keep tag publishing in a clearly named release lane"
+grep -q "if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')" .github/workflows/export.yml \
+	|| fail "Release publishing must be limited to version tag pushes"
+grep -q "release-playtest-checklist.md" .github/workflows/export.yml \
+	|| fail "Export workflow must upload a release-candidate playtest checklist"
 
 echo "Export config validation: OK"

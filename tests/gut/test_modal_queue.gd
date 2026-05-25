@@ -27,6 +27,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	GameRandom.disable_test_mode()
 	if _queue != null and is_instance_valid(_queue):
 		_queue._reset_for_tests()
 	if _focus != null and is_instance_valid(_focus):
@@ -61,7 +62,12 @@ func test_active_changed_signal_exists() -> void:
 
 func test_public_methods_present() -> void:
 	for method_name: String in [
-		"request_open", "notify_closed", "cancel", "is_busy"
+		"request_open",
+		"notify_closed",
+		"cancel",
+		"is_busy",
+		"get_modal_snapshot",
+		"acknowledge_active_for_automation",
 	]:
 		assert_true(
 			_queue.has_method(method_name),
@@ -83,6 +89,33 @@ func test_request_open_dispatches_immediately_when_idle() -> void:
 		"_open_from_queue must claim CTX_MODAL")
 	assert_true(panel.visible, "_open_from_queue must show the panel")
 	panel.close()
+
+
+func test_acknowledge_active_for_automation_is_inert_in_normal_gameplay() -> void:
+	GameRandom.disable_test_mode()
+	var panel: ModalPanel = _make_panel()
+	_focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
+	_queue.request_open(panel, _queue.Priority.TOAST)
+
+	var acknowledged: bool = _queue.acknowledge_active_for_automation()
+
+	assert_false(acknowledged)
+	assert_true(_queue.is_busy())
+	assert_eq(_queue.active_panel(), panel)
+	panel.close()
+
+
+func test_acknowledge_active_for_automation_closes_when_enabled() -> void:
+	GameRandom.enable_test_mode("modal_queue_ack")
+	var panel: ModalPanel = _make_panel()
+	_focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
+	_queue.request_open(panel, _queue.Priority.TOAST)
+
+	var acknowledged: bool = _queue.acknowledge_active_for_automation()
+
+	assert_true(acknowledged)
+	assert_false(_queue.is_busy())
+	GameRandom.disable_test_mode()
 
 
 # ── Priority + FIFO ordering ──────────────────────────────────────────────────

@@ -34,6 +34,9 @@ func test_scenario_dir_and_checkpoint_names_are_stable() -> void:
 		_ScenarioScreenshotCapture.checkpoint_filename("Store UI Open", 5), "005_store_ui_open.png"
 	)
 	assert_eq(_ScenarioScreenshotCapture.checkpoint_filename("001 Main Menu"), "001_main_menu.png")
+	assert_eq(
+		_ScenarioScreenshotCapture.checkpoint_filename("01 Boot First Day"), "01_boot_first_day.png"
+	)
 	for checkpoint: String in [
 		"001_main_menu",
 		"002_new_game_loaded",

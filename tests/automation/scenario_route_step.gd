@@ -11,6 +11,7 @@ func execute(owner: Node, step_result: Dictionary, step: Dictionary) -> Dictiona
 		return _error(step_result, "SceneRouter scene signals unavailable")
 	var box: Dictionary = {"ready": false, "failed": false, "target": &"", "reason": ""}
 	var on_ready: Callable = func(target: StringName, _payload: Dictionary) -> void:
+		_apply_input_focus_context(step)
 		box["ready"] = true
 		box["target"] = target
 	var on_failed: Callable = func(target: StringName, reason: String) -> void:
@@ -25,28 +26,49 @@ func execute(owner: Node, step_result: Dictionary, step: Dictionary) -> Dictiona
 		if bool(box.get("ready", false)):
 			_disconnect(&"scene_failed", on_failed)
 			step_result["ok"] = true
-			step_result["data"] = {"scene_path": scene_path, "target": String(box.get("target", &""))}
+			step_result["data"] = {
+				"scene_path": scene_path, "target": String(box.get("target", &""))
+			}
 			return step_result
 		if bool(box.get("failed", false)):
 			_disconnect(&"scene_ready", on_ready)
 			return _error(
 				step_result,
-				"SceneRouter route failed target=%s reason=%s"
-				% [String(box.get("target", &"")), str(box.get("reason", ""))]
+				(
+					"SceneRouter route failed target=%s reason=%s"
+					% [String(box.get("target", &"")), str(box.get("reason", ""))]
+				)
 			)
 		await owner.get_tree().process_frame
 	_disconnect(&"scene_ready", on_ready)
 	_disconnect(&"scene_failed", on_failed)
 	return _error(
 		step_result,
-		"timed out after %d frames waiting for SceneRouter.scene_ready path=%s"
-		% [int(step.get("timeout_frames", DEFAULT_TIMEOUT_FRAMES)), scene_path]
+		(
+			"timed out after %d frames waiting for SceneRouter.scene_ready path=%s"
+			% [int(step.get("timeout_frames", DEFAULT_TIMEOUT_FRAMES)), scene_path]
+		)
 	)
 
 
 func _disconnect(signal_name: StringName, callable: Callable) -> void:
 	if callable.is_valid() and SceneRouter.is_connected(signal_name, callable):
 		SceneRouter.disconnect(signal_name, callable)
+
+
+func _apply_input_focus_context(step: Dictionary) -> void:
+	var requested: StringName = StringName(str(step.get("input_focus_context", "")))
+	if requested == &"" or InputFocus == null:
+		return
+	var context: StringName = requested
+	if requested == &"store_gameplay":
+		context = InputFocus.CTX_STORE_GAMEPLAY
+	elif requested == &"main_menu":
+		context = InputFocus.CTX_MAIN_MENU
+	elif requested == &"mall_hub":
+		context = InputFocus.CTX_MALL_HUB
+	if InputFocus.current() != context:
+		InputFocus.push_context(context)
 
 
 func _error(step_result: Dictionary, reason: String) -> Dictionary:

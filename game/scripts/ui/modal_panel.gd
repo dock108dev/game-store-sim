@@ -36,6 +36,11 @@ class_name ModalPanel
 extends CanvasLayer
 
 
+const AutomationModeScript: GDScript = preload(
+	"res://game/scripts/automation/automation_mode.gd"
+)
+
+
 ## True iff this panel currently owns a CTX_MODAL frame on InputFocus.
 ## Read-only outside the class except for the `_reset_for_tests` seam.
 var _focus_pushed: bool = false
@@ -152,6 +157,32 @@ func _activate_focused_modal_button() -> bool:
 
 func _modal_can_handle_input() -> bool:
 	return visible and _focus_pushed and InputFocus.current() == InputFocus.CTX_MODAL
+
+
+## Returns modal state for automation without exposing internal ownership.
+func get_modal_snapshot() -> Dictionary:
+	return {
+		"name": name,
+		"class": get_class(),
+		"visible": visible,
+		"focus_pushed": _focus_pushed,
+		"focus_current": String(InputFocus.current()),
+	}
+
+
+## Closes this modal only when deterministic automation control is enabled.
+func acknowledge_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if not visible:
+		return false
+	close()
+	return true
+
+
+## Completes nonessential modal animation only in automation/test mode.
+func fast_forward_animations_for_automation() -> bool:
+	return AutomationModeScript.is_enabled()
 
 
 func _is_modal_focus_next_event(event: InputEvent) -> bool:

@@ -497,6 +497,86 @@ func test_legacy_panel_opened_count_still_blocks() -> void:
 		focus._reset_for_tests()
 
 
+func test_blocked_interact_under_panel_surfaces_status_without_dispatch() -> void:
+	var target := _StatefulTarget.new()
+	target.prompt_text = "Use"
+	target.display_name = "Register"
+	add_child_autofree(target)
+	_ray._set_hovered_target(target)
+	_disabled_reasons.clear()
+	var focus: Node = get_tree().root.get_node_or_null("InputFocus")
+	if focus != null:
+		focus._reset_for_tests()
+		focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
+
+	EventBus.panel_opened.emit("inventory")
+	_ray._unhandled_input(_interact_event())
+
+	assert_eq(
+		_disabled_reasons,
+		[INTERACTION_RAY_SCRIPT.BLOCKED_BY_PANEL_REASON],
+		"Blocked E press should tell the player which layer owns input"
+	)
+	assert_eq(target.interact_calls, 0, "Panel-owned focus must block dispatch")
+	EventBus.panel_closed.emit("inventory")
+	if focus != null:
+		focus._reset_for_tests()
+
+
+func test_retry_after_panel_closes_dispatches_without_extra_refocus() -> void:
+	var target := _StatefulTarget.new()
+	target.prompt_text = "Use"
+	target.display_name = "Register"
+	add_child_autofree(target)
+	_ray._set_hovered_target(target)
+	var focus: Node = get_tree().root.get_node_or_null("InputFocus")
+	if focus != null:
+		focus._reset_for_tests()
+		focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
+
+	EventBus.panel_opened.emit("inventory")
+	_ray._unhandled_input(_interact_event())
+	EventBus.panel_closed.emit("inventory")
+	_ray._unhandled_input(_interact_event())
+
+	assert_eq(target.interact_calls, 1, "Same E press should work as soon as the panel closes")
+	if focus != null:
+		focus._reset_for_tests()
+
+
+func test_blocked_interact_under_modal_surfaces_focus_status_without_dispatch() -> void:
+	var target := _StatefulTarget.new()
+	target.prompt_text = "Use"
+	target.display_name = "Register"
+	add_child_autofree(target)
+	_ray._set_hovered_target(target)
+	_disabled_reasons.clear()
+	var focus: Node = get_tree().root.get_node_or_null("InputFocus")
+	if focus == null:
+		pending("InputFocus autoload required")
+		return
+	focus._reset_for_tests()
+	focus.push_context(InputFocus.CTX_STORE_GAMEPLAY)
+	focus.push_context(InputFocus.CTX_MODAL)
+
+	_ray._unhandled_input(_interact_event())
+
+	assert_eq(
+		_disabled_reasons,
+		[INTERACTION_RAY_SCRIPT.BLOCKED_BY_FOCUS_REASON],
+		"Blocked E press should surface modal/menu ownership instead of silently no-oping"
+	)
+	assert_eq(target.interact_calls, 0, "Modal-owned focus must block dispatch")
+	focus._reset_for_tests()
+
+
+func _interact_event() -> InputEventAction:
+	var event := InputEventAction.new()
+	event.action = &"interact"
+	event.pressed = true
+	return event
+
+
 func _create_target(prompt_text: String, display_name: String) -> Interactable:
 	var target := Interactable.new()
 	target.prompt_text = prompt_text
@@ -542,9 +622,14 @@ class _StatefulTarget:
 	extends Interactable
 	var can: bool = true
 	var disabled_reason: String = ""
+	var interact_calls: int = 0
 
 	func can_interact(_actor: Node = null) -> bool:
 		return can
 
 	func get_disabled_reason(_actor: Node = null) -> String:
 		return disabled_reason
+
+	func interact(by: Node = null) -> void:
+		interact_calls += 1
+		super.interact(by)

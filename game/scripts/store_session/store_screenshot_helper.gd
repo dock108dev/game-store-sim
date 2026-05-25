@@ -1,14 +1,5 @@
-## Screenshot capture for the store_session validation harness. F10 saves manual
-## captures to `user://screenshots/<timestamp>_<scene>.png`; beat-named
-## automation captures use the shared artifact root.
-##
-## Resolves the OS-specific user dir on first save:
-##   * macOS:   ~/Library/Application Support/Godot/app_userdata/<project>/screenshots/
-##   * Linux:   ~/.local/share/godot/app_userdata/<project>/screenshots/
-##   * Windows: %APPDATA%\Godot\app_userdata\<project>\screenshots\
-##
-## Reaches the path on demand via `OS.get_user_data_dir()` for reporting in
-## the on-screen toast so the player knows where the file landed.
+## Screenshot capture for the store_session validation harness. F10 saves
+## manual captures under user://; beat-named automation captures use artifacts/.
 extends CanvasLayer
 
 const StoreVisualSweepScript: GDScript = preload(
@@ -23,11 +14,7 @@ const ScenarioScreenshotCaptureScript: GDScript = preload(
 const SAVE_DIR: String = "user://screenshots"
 const AUTOMATION_SCENARIO_ID: String = "store_session"
 const TOAST_DURATION: float = 2.5
-## Cap the scene-slug component of the saved filename. Godot already strips
-## '/' and ':' from `Node.name`, but the slug still flows into a path on
-## disk; bounding it (and the allowed charset below) is defense-in-depth so
-## a future renamed scene cannot land an oversized or weirdly-glyphed
-## filename in `user://screenshots/`.
+## Keep scene-derived filenames bounded even if future scenes are renamed.
 const _SCENE_SLUG_LENGTH: int = 48
 
 var _toast: Label = null

@@ -1,4 +1,4 @@
-name: Validate
+name: PR Fast Validation
 
 on:
   push:
@@ -12,44 +12,75 @@ permissions:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   GODOT_VERSION: "4.6.2-stable"
+  MALLCORE_ARTIFACT_DIR: ${{ github.workspace }}/artifacts
 
 jobs:
-  lint-docs:
-    name: Validate Markdown & Structure
+  static-repo-guards:
+    name: Static Lane - Repo Guards
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v6
 
-      - name: Check required files exist
-        run: |
-          files=(
-            "project.godot"
-            "README.md"
-            "LICENSE"
-            "docs/architecture.md"
-          )
-          for f in "${files[@]}"; do
-            if [ ! -f "$f" ]; then
-              echo "ERROR: Required file missing: $f"
-              exit 1
-            fi
-          done
-          echo "All required files present."
+      - name: Run static repo guards
+        run: bash scripts/validate_static_repo_guards.sh
 
-      - name: Check for common issues
-        run: |
-          # No .DS_Store committed
-          if find . -name ".DS_Store" | grep -q .; then
-            echo "ERROR: .DS_Store files found in repo"
-            exit 1
-          fi
-          echo "No common issues found."
-
-  gut-tests:
-    name: GUT Unit Tests
+  gdscript-lint:
+    name: Static Lane - GDScript Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install gdtoolkit
+        run: pip install "gdtoolkit==4.*"
+
+      - name: Run gdlint
+        run: gdlint game/
+
+  resource-integrity:
+    name: Scene Lane - Resource and Autoload Integrity
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Godot import cache
+        uses: actions/cache@v5
+        with:
+          path: .godot
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
+      - name: Install Godot
+        run: bash scripts/setup_godot.sh
+
+      - name: Run resource integrity checks
+        run: bash scripts/validate_resource_integrity.sh
+
+      - name: Upload PR resource integrity artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pr-resource-integrity-artifacts-${{ github.run_number }}
+          path: |
+            artifacts/logs/static-validation/
+            artifacts/manifests/
+          if-no-files-found: warn
+
+  gut-pr-smoke:
+    name: Unit and Flow Lane - PR GUT Smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
     permissions:
       contents: read
     steps:
@@ -71,117 +102,21 @@ jobs:
 
       - name: Seed GUT editor environment
         run: |
-          # GutBottomPanel._ready() (initialised by the GUT editor plugin during
-          # --import) calls load_options() on this path and prints an ERROR: line
-          # when it does not exist. Create it before the test run so no spurious
-          # error appears in the GUT output.
           godot --path "$GITHUB_WORKSPACE" --headless \
             --script res://tests/setup_gut_env.gd 2>/dev/null || true
 
-      - name: Run GUT tests
-        run: bash scripts/run_godot_tests.sh
+      - name: Run PR smoke tests
+        run: bash tests/automation/run_pr_smoke.sh
 
-      - name: Run fresh install smoke
-        run: bash scripts/run_fresh_install_smoke.sh
-
-      - name: Upload GUT output on failure
+      - name: Upload PR smoke artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: gut-output-${{ github.run_number }}
-          path: ${{ env.GUT_OUTPUT_FILE }}
+          name: pr-smoke-artifacts-${{ github.run_number }}
+          path: |
+            artifacts/logs/gut/
+            artifacts/logs/scenario/
+            artifacts/reports/scenario/
+            artifacts/screenshots/scenario/
+            artifacts/manifests/
           if-no-files-found: warn
-
-  interaction-audit:
-    name: Interaction Audit
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Cache Godot import cache
-        uses: actions/cache@v5
-        with:
-          path: .godot
-          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
-          restore-keys: |
-            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
-
-      - name: Install Godot
-        run: bash scripts/setup_godot.sh
-
-      - name: Import project
-        run: bash scripts/godot_import.sh
-
-      - name: Run interaction audit
-        run: bash tests/audit_run.sh
-
-      - name: Upload audit table
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: interaction-audit-${{ github.run_number }}
-          path: docs/audits/
-
-  content-originality:
-    name: Content Originality Check
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Grep for banned trademarked terms
-        run: |
-          set -euo pipefail
-          BANNED=(
-            "Pokemon" "Pokémon" "Pikachu"
-            "Nintendo" "GameBoy" "GameCube" "\bWii\b" "\bNES\b" "\bSNES\b"
-            "Blockbuster"
-            "\bPSA\b"
-            "\bESPN\b"
-            "Marvel" "DC Comics"
-            "Disney"
-            "\bNBA\b" "\bNFL\b" "\bMLB\b" "\bNHL\b" "\bFIFA\b"
-            "PlayStation" "Xbox"
-            "Adidas" "\bNike\b"
-          )
-          FAILED=0
-          for term in "${BANNED[@]}"; do
-            # trademark_validator.gd is the authoritative denylist — its source
-            # *must* contain the banned terms verbatim. Exclude it from the scan.
-            matches=$(grep -rn --include="*.json" --include="*.gd" -E "$term" \
-              game/content/ game/scripts/ game/autoload/ game/scenes/ \
-              --exclude-dir=".godot" \
-              --exclude="trademark_validator.gd" 2>/dev/null || true)
-            if [ -n "$matches" ]; then
-              echo "::error::Banned term '$term' found in content or scripts:"
-              echo "$matches"
-              FAILED=1
-            fi
-          done
-          if [ "$FAILED" -eq 1 ]; then
-            echo "::error::Content originality check failed — remove all trademarked IP references."
-            exit 1
-          fi
-          echo "Content originality check passed — no banned terms found."
-
-  lint-gdscript:
-    name: GDScript Lint
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      - name: Install gdtoolkit
-        run: pip install "gdtoolkit==4.*"
-
-      - name: Run gdlint
-        run: gdlint game/

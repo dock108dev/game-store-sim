@@ -1,9 +1,14 @@
 {
 	"id": "bad_state_resistance",
-	"title": "Bad State Resistance Slot",
-	"tags": ["slot", "resistance"],
+	"title": "Bad State Resistance Flow",
+	"tags": ["automation", "ui", "flow"],
 	"timeout_frames": 1800,
 	"steps": [
-		{"id": "placeholder_finish", "type": "finish", "timeout_frames": 30}
+		{
+			"id": "run_ui_focus_conflict_flow",
+			"type": "run_bad_state_resistance",
+			"timeout_frames": 900
+		},
+		{"id": "finish", "type": "finish", "timeout_frames": 30}
 	]
 }

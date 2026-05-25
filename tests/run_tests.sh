@@ -5,6 +5,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TESTS_DIR="$ROOT/tests"
 source "$ROOT/scripts/artifact_paths.sh"
+source "$ROOT/scripts/godot_resolver.sh"
 ARTIFACT_ROOT="$(resolve_mallcore_artifact_root "$ROOT")"
 export MALLCORE_ARTIFACT_DIR="$ARTIFACT_ROOT"
 GUT_LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/gut")"
@@ -12,35 +13,44 @@ STATIC_LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/static-validatio
 mkdir -p "$GUT_LOG_DIR" "$STATIC_LOG_DIR"
 EXIT_CODE=0
 
-# Resolve Godot binary (PATH, GODOT, or GODOT_EXECUTABLE).
-_resolve_godot_bin() {
-	local configured="${GODOT:-${GODOT_EXECUTABLE:-godot}}"
-	local candidates=(
-		"$configured"
-		"/Applications/Godot.app/Contents/MacOS/Godot"
-		"$HOME/Applications/Godot.app/Contents/MacOS/Godot"
-	)
-	local candidate=""
-	for candidate in "${candidates[@]}"; do
-		if [ -x "$candidate" ]; then
-			echo "$candidate"
-			return 0
-		fi
-		if command -v "$candidate" &>/dev/null; then
-			command -v "$candidate"
-			return 0
-		fi
-	done
-	return 1
+run_static_validator() {
+    local label="$1"
+    local command_path="$2"
+    local log_name="$3"
+    echo ""
+    echo "$label"
+    local validator_log="$STATIC_LOG_DIR/$log_name.log"
+    set +e
+    bash "$command_path" 2>&1 | tee "$validator_log"
+    local status="${PIPESTATUS[0]}"
+    set -e
+    if [ "$status" -ne 0 ]; then
+        EXIT_CODE="$status"
+    fi
 }
 
+run_static_validator "Running static repo guards..." "$ROOT/scripts/validate_static_repo_guards.sh" "validate_static_repo_guards"
+if [ "$EXIT_CODE" -ne 0 ]; then
+    exit "$EXIT_CODE"
+fi
+
 # Check if Godot is available
-if GODOT_BIN="$(_resolve_godot_bin)"; then
+if GODOT_BIN="$(resolve_mallcore_godot)"; then
     LOG_FILE="$GUT_LOG_DIR/test_run.log"
     : >"$LOG_FILE"
 
     echo "Godot found — importing project assets (addons/GUT textures, etc.)..."
     "$GODOT_BIN" --path "$ROOT" --headless --import 2>/dev/null
+
+    echo "Running resource integrity checks..."
+    set +e
+    MALLCORE_SKIP_IMPORT=1 bash "$ROOT/scripts/validate_resource_integrity.sh" \
+        2>&1 | tee "$STATIC_LOG_DIR/validate_resource_integrity.log"
+    RESOURCE_STATUS="${PIPESTATUS[0]}"
+    set -e
+    if [ "$RESOURCE_STATUS" -ne 0 ]; then
+        exit "$RESOURCE_STATUS"
+    fi
 
     echo "Seeding GUT editor environment..."
     "$GODOT_BIN" --path "$ROOT" --headless \

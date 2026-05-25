@@ -1,0 +1,226 @@
+name: Nightly Full Validation
+
+on:
+  schedule:
+    - cron: "17 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  GODOT_VERSION: "4.6.2-stable"
+  MALLCORE_ARTIFACT_DIR: ${{ github.workspace }}/artifacts
+
+jobs:
+  static-repo-guards:
+    name: Static Lane - Repo Guards
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Run static repo guards
+        run: bash scripts/validate_static_repo_guards.sh
+
+  gdscript-lint:
+    name: Static Lane - GDScript Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install gdtoolkit
+        run: pip install "gdtoolkit==4.*"
+
+      - name: Run gdlint
+        run: gdlint game/
+
+  full-gut-tests:
+    name: Unit Lane - Full GUT Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Godot import cache
+        uses: actions/cache@v5
+        with:
+          path: .godot
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
+      - name: Install Godot
+        run: bash scripts/setup_godot.sh
+
+      - name: Import project
+        run: bash scripts/godot_import.sh
+
+      - name: Seed GUT editor environment
+        run: |
+          godot --path "$GITHUB_WORKSPACE" --headless \
+            --script res://tests/setup_gut_env.gd 2>/dev/null || true
+
+      - name: Run full GUT tests
+        run: bash scripts/run_godot_tests.sh
+
+      - name: Run fresh install smoke
+        run: bash scripts/run_fresh_install_smoke.sh
+
+      - name: Upload nightly GUT artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-gut-artifacts-${{ github.run_number }}
+          path: |
+            artifacts/logs/gut/
+            artifacts/logs/scenario/
+            artifacts/reports/scenario/
+            artifacts/screenshots/scenario/
+            artifacts/manifests/
+          if-no-files-found: warn
+
+  interaction-audit:
+    name: Scene and Flow Lane - Interaction Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Godot import cache
+        uses: actions/cache@v5
+        with:
+          path: .godot
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
+      - name: Install Godot
+        run: bash scripts/setup_godot.sh
+
+      - name: Import project
+        run: bash scripts/godot_import.sh
+
+      - name: Run interaction audit
+        run: bash tests/audit_run.sh
+
+      - name: Upload nightly interaction audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-interaction-audit-artifacts-${{ github.run_number }}
+          path: |
+            docs/audits/
+            artifacts/logs/scenario/
+            artifacts/reports/scenario/
+            artifacts/screenshots/scenario/
+            artifacts/manifests/
+          if-no-files-found: warn
+
+  visual-snapshot-review:
+    name: Visual Snapshot Lane - Soft Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Godot import cache
+        uses: actions/cache@v5
+        with:
+          path: .godot
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
+      - name: Install display dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb mesa-utils libgl1-mesa-dri
+
+      - name: Install Godot
+        run: bash scripts/setup_godot.sh
+
+      - name: Import project
+        run: bash scripts/godot_import.sh
+
+      - name: Install visual diff dependencies
+        run: python3 -m pip install pillow
+
+      - name: Run soft visual snapshot sweep
+        run: bash scripts/run_store_visual_sweep.sh
+
+      - name: Upload nightly visual snapshot artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-visual-snapshot-artifacts-${{ github.run_number }}
+          path: |
+            artifacts/visual_sweep/
+            artifacts/screenshots/visual_sweep/
+            artifacts/reports/visual_sweep/
+            artifacts/manifests/
+          if-no-files-found: warn
+
+  soak-review:
+    name: Soak Lane - Long Day Scenario
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Godot import cache
+        uses: actions/cache@v5
+        with:
+          path: .godot
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ hashFiles('project.godot', '**/*.import') }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
+      - name: Install Godot
+        run: bash scripts/setup_godot.sh
+
+      - name: Import project
+        run: bash scripts/godot_import.sh
+
+      - name: Run long day soak scenario
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/logs/scenario
+          bash scripts/godot_exec.sh --path "$GITHUB_WORKSPACE" --headless -- \
+            --test-mode \
+            --scenario=long_day_soak \
+            --seed=nightly_long_day_soak \
+            --fresh-save=nightly_long_day_soak \
+            --exit-on-complete \
+            --speed=6x \
+            2>&1 | tee artifacts/logs/scenario/nightly-long-day-soak.log
+
+      - name: Upload nightly soak artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: nightly-soak-artifacts-${{ github.run_number }}
+          path: |
+            artifacts/logs/scenario/
+            artifacts/reports/scenario/
+            artifacts/screenshots/scenario/
+            artifacts/manifests/
+          if-no-files-found: warn

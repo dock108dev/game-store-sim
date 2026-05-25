@@ -113,6 +113,23 @@ func _choice_acknowledgement(logged_choice: String) -> String:
 	return "Choice logged."
 
 
+func get_modal_snapshot() -> Dictionary:
+	var snapshot: Dictionary = super.get_modal_snapshot()
+	snapshot["event_id"] = String(_event_id)
+	snapshot["choice_id"] = String(_choice_id)
+	snapshot["acknowledgement_ready"] = visible and _continue_button != null
+	return snapshot
+
+
+func acknowledge_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if not visible:
+		return false
+	_on_continue_pressed()
+	return true
+
+
 func _make_body_label(parent: Container, color: Color) -> Label:
 	var label := Label.new()
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

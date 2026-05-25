@@ -5,11 +5,20 @@ extends RefCounted
 const AutomationArtifactsScript: GDScript = preload(
 	"res://game/scripts/core/automation_artifacts.gd"
 )
+const StoreVisualScopeProfileScript: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_scope_profile.gd"
+)
 const ARTIFACT_SUITE: String = "retro_games_day_one"
 const ARTIFACT_DIR: String = "screenshots/visual_sweep/retro_games_day_one"
+const ACCEPTANCE_ARTIFACT_DIR: String = "visual_sweep/retro_games_day_one"
+const ACCEPTANCE_CURRENT_DIR: String = "visual_sweep/retro_games_day_one/current"
+const ACCEPTANCE_DIFF_DIR: String = "visual_sweep/retro_games_day_one/diff"
 const REVIEW_MANIFEST_DIR: String = "reports/visual_sweep/retro_games_day_one"
 const REVIEW_MANIFEST_FILENAME: String = "review_manifest.json"
 const VIEWPORT_MARGIN_PX: float = 8.0
+const CAPTURE_RESOLUTION: Vector2i = Vector2i(1280, 720)
+const CAPTURE_CAMERA_FOV: float = 70.0
+const CAPTURE_RANDOM_SEED: int = 1801
 const ACCEPTANCE_TARGET: String = "first_ten_seconds_route_views"
 const HUD_CONTEXT_LABEL: String = "First Day — 8:00 AM"
 const _MAX_SLUG_LENGTH: int = 64
@@ -42,6 +51,8 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_destination": "manager and checkout register",
 			"local_action": "take in the store identity and walk to the counter",
 			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -64,6 +75,8 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_destination": "checkout counter",
 			"local_action": "talk to the manager/register area",
 			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -85,6 +98,8 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_destination": "starter display table",
 			"local_action": "read the empty table target before starter stock appears",
 			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -107,6 +122,8 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_destination": "stockroom pickup",
 			"local_action": "walk to the stock box and pickup work area",
 			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -138,6 +155,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "InteriorSignage/StoreNameBanner",
 			"anchors": ["Storefront", "EntranceInterior", "ReadabilityProps/FloorDisplayIsland"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 		{
@@ -149,6 +167,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "Checkout/Register/CheckoutSign",
 			"anchors": ["Checkout", "StoreSessionDayEndTrigger", "ReadabilityProps/CheckoutCounterDressing"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 		{
@@ -160,6 +179,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "ZoneLabels/ShelvesLabel",
 			"anchors": ["StoreSessionRestockShelf", "ReadabilityProps/ShelfSpineRuns", "AccessoriesBin"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 		{
@@ -171,6 +191,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "StoreSessionBackroomPickup/StockBoxLabel",
 			"anchors": ["back_room", "StoreSessionBackroomPickup", "ReadabilityProps/BackroomDressing"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 		{
@@ -182,6 +203,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "ZoneLabels/StaffPicksLabel",
 			"anchors": ["Checkout", "staff_picks_table", "ReadabilityProps/FloorDisplayIsland"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 		{
@@ -193,6 +215,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "EntranceInterior",
 			"anchors": ["back_room", "Checkout", "ReadabilityProps/DayOneRouteMarkers"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 		{
@@ -204,6 +227,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "crt_demo_area/ComingSoonLabel",
 			"anchors": ["crt_demo_area", "crt_demo_area/SetupBarrierRail"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 		{
@@ -215,6 +239,7 @@ static func full_store_rows() -> Array[Dictionary]:
 			"focus": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
 			"anchors": ["ZoneLabels", "ReadabilityProps/ZoneLighting", "ReadabilityProps/ZoneIdentity"],
 			"scope": "full_store",
+			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": "full_store_context",
 		},
 	]
@@ -349,7 +374,8 @@ static func ensure_artifact_dir(dir_path: String) -> Dictionary:
 ## Writes a JSON review manifest next to the PNG artifacts.
 static func write_review_manifest(
 	dir_path: String,
-	rows_to_write: Array[Dictionary]
+	rows_to_write: Array[Dictionary],
+	captures: Array[Dictionary] = []
 ) -> Dictionary:
 	var dir_result: Dictionary = ensure_artifact_dir(dir_path)
 	if not bool(dir_result.get("ok", false)):
@@ -364,8 +390,13 @@ static func write_review_manifest(
 		"design_failure_criteria": design_failure_criteria(),
 		"first_run_flow_steps": first_run_flow_steps(),
 		"full_store_review_context": full_store_review_context(),
+		"visual_scope_profile": StoreVisualScopeProfileScript.scope_manifest(),
+		"capture_policy": capture_policy(),
+		"baseline_review_rules": baseline_review_rules(),
+		"diff_review_policy": diff_review_policy(),
 		"manual_review_template": _manual_review_template(rows_to_write),
 		"beats": _serializable_rows(rows_to_write),
+		"captures": captures,
 	}
 	var write_result: Dictionary = AutomationArtifactsScript.write_recorded_json(
 		path,
@@ -387,21 +418,7 @@ static func write_review_manifest(
 
 ## Sanitizes a human label into a bounded filename slug.
 static func sanitize_slug(raw: String, max_length: int = _MAX_SLUG_LENGTH) -> String:
-	var lowered: String = raw.get_basename().to_lower()
-	var sanitized: String = ""
-	for i: int in range(lowered.length()):
-		var codepoint: int = lowered.unicode_at(i)
-		if (codepoint >= 0x30 and codepoint <= 0x39) \
-				or (codepoint >= 0x61 and codepoint <= 0x7A) \
-				or codepoint == 0x5F:
-			sanitized += char(codepoint)
-		elif codepoint == 0x20 or codepoint == 0x2D:
-			sanitized += "_"
-	if sanitized.is_empty():
-		sanitized = "screenshot"
-	if max_length > 0 and sanitized.length() > max_length:
-		sanitized = sanitized.substr(0, max_length)
-	return sanitized
+	return AutomationArtifactsScript.sanitize_filename_slug(raw, max_length)
 
 
 ## Returns the resolved screenshot directory for the store-session visual sweep.
@@ -409,9 +426,74 @@ static func visual_sweep_dir() -> String:
 	return AutomationArtifactsScript.visual_sweep_screenshot_dir(ARTIFACT_SUITE)
 
 
+## Returns the artifact directory for acceptance captures consumed by diffing.
+static func acceptance_current_dir() -> String:
+	return AutomationArtifactsScript.artifact_path(ACCEPTANCE_CURRENT_DIR)
+
+
+## Returns the artifact directory for visual diff heatmaps and metadata.
+static func acceptance_diff_dir() -> String:
+	return AutomationArtifactsScript.artifact_path(ACCEPTANCE_DIFF_DIR)
+
+
+## Returns the artifact directory for the acceptance manifest and current captures.
+static func acceptance_manifest_dir() -> String:
+	return AutomationArtifactsScript.artifact_path(ACCEPTANCE_ARTIFACT_DIR)
+
+
 ## Returns the resolved review-manifest directory for the visual sweep.
 static func review_manifest_dir() -> String:
 	return AutomationArtifactsScript.report_dir("visual_sweep", ARTIFACT_SUITE)
+
+
+## Returns the deterministic capture contract used by CI and baseline promotion.
+static func capture_policy() -> Dictionary:
+	return {
+		"display_mode": "display_backed_required",
+		"headless_allowed": false,
+		"placeholder_allowed": false,
+		"resolution": [CAPTURE_RESOLUTION.x, CAPTURE_RESOLUTION.y],
+		"camera_fov": CAPTURE_CAMERA_FOV,
+		"random_seed": CAPTURE_RANDOM_SEED,
+		"renderer": "gl_compatibility",
+		"hud_context_required": HUD_CONTEXT_LABEL,
+		"acceptance_target": ACCEPTANCE_TARGET,
+		"scope_modes": [
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
+		],
+	}
+
+
+## Returns manual baseline acceptance checks preserved in review manifests.
+static func baseline_review_rules() -> Array[String]:
+	return [
+		"capture must be generated by the Linux display-backed visual sweep",
+		"filename must match the canonical first-ten-seconds row",
+		"placeholder must be false",
+		"dimensions must match the pinned capture resolution",
+		"debug and editor UI must be absent",
+		"HUD context First Day — 8:00 AM must be visible",
+		"route anchor must not be visually drowned by decorative props",
+		"placeholder geometry and unintentional clutter are rejection reasons",
+	]
+
+
+## Returns the automated diff intent and threshold names for review tooling.
+static func diff_review_policy() -> Dictionary:
+	return {
+		"noise_classification": "small renderer/font noise is tracked separately from meaningful hierarchy, framing, and composition changes",
+		"metrics": [
+			"dimensions",
+			"noise_filtered_changed_pixels",
+			"mean_absolute_error",
+			"max_delta",
+		],
+		"outputs": [
+			"diff_manifest.json",
+			"heatmap_png",
+		],
+	}
 
 
 static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictionary]:
@@ -430,6 +512,7 @@ static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictio
 			"next_destination": str(row.get("next_destination", "")),
 			"local_action": str(row.get("local_action", "")),
 			"scope": str(row.get("scope", "")),
+			"visual_scope_mode": str(row.get("visual_scope_mode", "")),
 			"review_target": str(row.get("review_target", "")),
 			"hud_context_required": str(row.get("hud_context_required", "")),
 		})

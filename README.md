@@ -30,9 +30,12 @@ See [Testing](docs/testing.md) for the full local and CI test gates.
 - `macOS` -> `exports/macos/MallcoreSim.zip`
 - `Linux/X11` -> `exports/linux/MallcoreSim.x86_64`
 
-Pushes of `v*` tags run the export workflow, which validates the export
-configuration, exports Windows, macOS, and Linux builds, uploads short-retention
-build artifacts, and creates a GitHub release.
+Pushes of version tags matching `v*` run the export workflow, which validates
+the release ref and export configuration, runs the release gates, exports
+Windows, macOS, and Linux builds, uploads short-retention build artifacts, and
+creates a GitHub release. Manual dispatch of the same workflow uploads
+release-candidate artifacts and the playtest checklist without publishing a
+release.
 
 ## Documentation
 

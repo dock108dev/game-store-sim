@@ -69,18 +69,35 @@ The checked-in integrations documented in this repository are:
 
 - Godot editor/runtime through `project.godot`
 - GUT through `addons/gut/` and `.gutconfig.json`
-- helper scripts in `scripts/`: `godot_import.sh`, `godot_exec.sh`, the SSOT
-  tripwires invoked by `tests/run_tests.sh` (`validate_translations.sh`,
-  `validate_single_store_ui.sh`, `validate_tutorial_single_source.sh`),
-  `validate_export_config.sh` (a local mirror of the export workflow's
-  `validate-export-config` job, run independently from `tests/run_tests.sh`),
-  `run_godot_tests.sh` (CI GUT wrapper), `run_fresh_install_smoke.sh`
-  (headless automation smoke), `render_nightly_videos.sh` (Movie Maker
-  scenario videos), and `validate_originality.sh` (string-level trademark
-  denylist over `game/content/`, `game/scenes/`, and `game/scripts/stores/`)
-- GitHub Actions workflows for validation, tagged exports, and nightly
-  scenario-video rendering
+- helper scripts in `scripts/` for Godot resolution/import/execution
+  (`godot_resolver.sh`, `godot_import.sh`, `godot_exec.sh`,
+  `setup_godot.sh`), artifact path resolution (`artifact_paths.sh`),
+  test/export validation (`run_godot_tests.sh`,
+  `run_fresh_install_smoke.sh`, `validate_resource_integrity.sh`,
+  `validate_static_repo_guards.sh`, `validate_export_config.sh`), SSOT
+  tripwires (`validate_translations.sh`, `validate_single_store_ui.sh`,
+  `validate_tutorial_single_source.sh`), originality checks
+  (`validate_originality.sh`), visual/video review
+  (`run_store_visual_sweep.sh`, `render_nightly_videos.sh`), audit report
+  generation (`generate_audit_scenario_report.py`,
+  `audit_report_writers.py`), and advisory review report generation
+  (`generate_advisory_review_report.gd`)
+- GitHub Actions workflows for PR validation, nightly full validation,
+  nightly scenario-video rendering, release-candidate exports, and tagged
+  release publishing
 - `gdtoolkit` linting in CI
+
+## Environment variables
+
+| Name | Used by | Effect |
+| --- | --- | --- |
+| `GODOT` / `GODOT_EXECUTABLE` | local scripts and test runners | Selects the Godot editor binary before falling back to `godot` on `PATH` and common macOS install paths. |
+| `GODOT_VERSION` | CI setup and visual sweep | Pins the Linux Godot install in validation/nightly workflows and names the default visual-baseline bucket. |
+| `VALIDATION_GODOT_VERSION` | export workflow | Pins the Godot build used by release validation before export jobs run. |
+| `MALLCORE_ARTIFACT_DIR` | automation, tests, CI uploads | Overrides the repo-local `artifacts/` root. |
+| `MALLCORE_SKIP_IMPORT` | resource/GUT wrappers | Skips duplicate import work after assets have already been imported. |
+| `MALLCORE_VISUAL_BASELINE_DIR` | `scripts/run_store_visual_sweep.sh` | Overrides the default reviewed-PNG baseline directory. |
+| `FPS` / `SCENARIO` | `scripts/render_nightly_videos.sh` | Sets Movie Maker FPS and optionally limits rendering to one scenario. |
 
 ## Export presets
 
@@ -116,20 +133,21 @@ Then use Godot's `--export-release` with the preset name.
 
 ## GitHub Actions workflows
 
-### Validation workflow
+### PR validation workflow
 
-`.github/workflows/validate.yml` runs on pushes and pull requests to `main`
-and currently includes:
+`.github/workflows/validate.yml` is the fast PR gate for pushes and pull
+requests to `main`. It runs four jobs: static repo guards, GDScript linting,
+Godot resource/autoload integrity, and the explicit PR GUT smoke set from
+`.gutconfig.pr-smoke.json`. Failure uploads use the repo-local artifact tree
+where those runners produce logs, reports, screenshots, and manifests.
 
-1. `lint-docs` - required-file checks (`project.godot`, `README.md`, `LICENSE`,
-   `docs/architecture.md`) and repository-shape checks (no committed
-   `.DS_Store`).
-2. `gut-tests` - Godot install, import, and headless GUT execution.
-   `scripts/run_fresh_install_smoke.sh` runs after GUT in the same job.
-3. `interaction-audit` - headless audit run that writes scenario logs/reports
-   under the artifact tree and uploads `docs/audits/`.
-4. `content-originality` - banned-term check for real brands and trademarks.
-5. `lint-gdscript` - `gdlint` via `gdtoolkit`.
+### Nightly full-validation workflow
+
+`.github/workflows/nightly.yml` is scheduled at `17 8 * * *` UTC and can be
+dispatched manually. It runs the full GUT suite, fresh-install smoke,
+interaction audit, soft visual snapshot review, and the long-day soak lane.
+The visual snapshot lane is `continue-on-error` so it remains advisory until
+baseline policy is deliberately promoted.
 
 ### Nightly video workflow
 
@@ -140,18 +158,31 @@ scenario videos plus logs with 14-day retention.
 
 ### Export workflow
 
-`.github/workflows/export.yml` runs on tags matching `v*` and currently:
+`.github/workflows/export.yml` runs on version tags matching `v*` and by manual
+dispatch for release-candidate artifacts. Manual dispatch exports and uploads
+candidate builds plus the playtest checklist but does not publish a GitHub
+release. Tag pushes publish only after the validation, audit, export, and
+playtest-manifest jobs pass.
 
-1. validates `export_presets.cfg` (preset names, Windows/macOS icon paths,
+The workflow currently:
+
+1. validates the trigger and `export_presets.cfg` (version tag shape,
+   preset names,
+   Windows/macOS icon paths,
    x86_64 Windows, disabled built-in code signing, no absolute export paths,
    no local macOS paths, no hardcoded code-signing identity/password, no
    obvious secrets, ETC2 ASTC import support in `project.godot`)
-2. installs Godot plus export templates via `chickensoft-games/setup-godot@v2`
-3. imports project assets
-4. exports Windows, macOS, and Linux release artifacts in parallel jobs
-5. uploads short-retention build artifacts
+2. runs static repo guards, GDScript lint, full GUT, fresh-install smoke, and
+   interaction audit
+3. installs Godot plus export templates via `chickensoft-games/setup-godot@v2`
+4. imports project assets
+5. exports Windows, macOS, and Linux release artifacts in parallel jobs
+6. uploads release-candidate build artifacts and the generated playtest
+   checklist
    (`mallcore-sim-{windows,macos,linux}.{zip,zip,tar.gz}`)
-6. creates a GitHub release from those tagged artifacts
+7. creates a GitHub release from tagged artifacts only on version tag pushes;
+   manual workflow dispatch stops at uploaded release-candidate artifacts plus
+   the playtest manifest
 
 ## Godot version
 

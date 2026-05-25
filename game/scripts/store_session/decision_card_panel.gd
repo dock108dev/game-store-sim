@@ -97,10 +97,12 @@ func _on_queued_open(payload: Dictionary) -> void:
 		button.custom_minimum_size = Vector2(0, 56)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		StoreModalTheme.apply_button_theme(button)
-		button.pressed.connect(_on_choice_pressed.bind(
-			StringName(str(choice.get("id", "choice"))),
-			(choice.get("effects", {}) as Dictionary)
-		))
+		button.set_meta("choice_id", StringName(str(choice.get("id", "choice"))))
+		button.pressed.connect(
+			_on_choice_pressed.bind(
+				StringName(str(choice.get("id", "choice"))), choice.get("effects", {}) as Dictionary
+			)
+		)
 		_choices_box.add_child(button)
 		_choice_buttons.append(button)
 	_register_modal_focusables(_choice_buttons)
@@ -166,3 +168,33 @@ func _numeric_choice_index(event: InputEventKey) -> int:
 	if event.unicode >= 49 and event.unicode <= 57:
 		return event.unicode - 49
 	return -1
+
+
+## Selects the requested authored choice while deterministic automation is armed.
+func choose_for_automation(choice_id: StringName = &"") -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if not visible or _selection_locked:
+		return false
+	if _choice_buttons.is_empty():
+		return false
+	if choice_id.is_empty():
+		_press_choice_index(0)
+		return true
+	return _choose_by_button_meta(choice_id)
+
+
+## Chooses the focused/default decision in generic modal automation.
+func acknowledge_for_automation() -> bool:
+	return choose_for_automation()
+
+
+func _choose_by_button_meta(choice_id: StringName) -> bool:
+	for button: Button in _choice_buttons:
+		if StringName(str(button.get_meta("choice_id", ""))) != choice_id:
+			continue
+		if button.disabled or not button.visible:
+			return false
+		button.pressed.emit()
+		return true
+	return false

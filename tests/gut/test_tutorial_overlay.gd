@@ -13,6 +13,7 @@ var _saved_game_state: GameManager.State
 
 
 func before_each() -> void:
+	GameRandom.disable_test_mode()
 	_saved_tutorial_active = GameManager.is_tutorial_active
 	_saved_game_state = GameManager.current_state
 	# Reset both InputFocus and ModalQueue so `_can_show_tutorial` reads a
@@ -27,6 +28,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	GameRandom.disable_test_mode()
 	GameManager.is_tutorial_active = _saved_tutorial_active
 	GameManager.current_state = _saved_game_state
 	GameState.flags.clear()
@@ -191,3 +193,17 @@ func test_overlay_does_not_show_step_arriving_during_modal() -> void:
 	blocker.close()
 	assert_true(bar.visible,
 		"deferred step must surface once the modal queue drains")
+
+
+func test_automation_tutorial_acknowledge_is_gated() -> void:
+	GameManager.current_state = GameManager.State.STORE_VIEW
+	_tutorial.initialize(true)
+	_tutorial._welcome_timer = TutorialSystem.WELCOME_DURATION
+	_tutorial._process(0.01)
+	var bar: PanelContainer = _overlay.get_node("BottomBar")
+	assert_true(bar.visible)
+
+	assert_false(_overlay.acknowledge_for_automation())
+	GameRandom.enable_test_mode("tutorial_overlay_ack")
+	assert_true(_overlay.fast_forward_animations_for_automation())
+	assert_true(_overlay.acknowledge_for_automation())

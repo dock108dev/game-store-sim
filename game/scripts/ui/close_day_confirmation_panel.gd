@@ -20,12 +20,8 @@ var _answered: bool = false
 @onready var _overlay: ColorRect = $Root/Overlay
 @onready var _panel: PanelContainer = $Root/Panel
 @onready var _reason_label: Label = $Root/Panel/Margin/VBox/ReasonLabel
-@onready var _cancel_button: Button = (
-	$Root/Panel/Margin/VBox/ButtonRow/CancelButton
-)
-@onready var _confirm_button: Button = (
-	$Root/Panel/Margin/VBox/ButtonRow/ConfirmButton
-)
+@onready var _cancel_button: Button = $Root/Panel/Margin/VBox/ButtonRow/CancelButton
+@onready var _confirm_button: Button = $Root/Panel/Margin/VBox/ButtonRow/ConfirmButton
 
 
 func _ready() -> void:
@@ -33,21 +29,13 @@ func _ready() -> void:
 	_apply_modal_style()
 	_cancel_button.pressed.connect(_on_cancel_pressed)
 	_confirm_button.pressed.connect(_on_confirm_pressed)
-	if not EventBus.day_close_confirmation_requested.is_connected(
-		_on_close_confirmation_requested
-	):
-		EventBus.day_close_confirmation_requested.connect(
-			_on_close_confirmation_requested
-		)
+	if not EventBus.day_close_confirmation_requested.is_connected(_on_close_confirmation_requested):
+		EventBus.day_close_confirmation_requested.connect(_on_close_confirmation_requested)
 
 
 func _exit_tree() -> void:
-	if EventBus.day_close_confirmation_requested.is_connected(
-		_on_close_confirmation_requested
-	):
-		EventBus.day_close_confirmation_requested.disconnect(
-			_on_close_confirmation_requested
-		)
+	if EventBus.day_close_confirmation_requested.is_connected(_on_close_confirmation_requested):
+		EventBus.day_close_confirmation_requested.disconnect(_on_close_confirmation_requested)
 	super._exit_tree()
 
 
@@ -89,9 +77,7 @@ func _apply_modal_style() -> void:
 	_panel.offset_right = PANEL_SIZE.x * 0.5
 	_panel.offset_bottom = PANEL_SIZE.y * 0.5
 	_panel.add_theme_stylebox_override("panel", StoreModalTheme.make_panel_style())
-	_reason_label.add_theme_color_override(
-		"font_color", StoreModalTheme.COLOR_TEXT_PRIMARY
-	)
+	_reason_label.add_theme_color_override("font_color", StoreModalTheme.COLOR_TEXT_PRIMARY)
 	StoreModalTheme.apply_button_theme(_cancel_button)
 	StoreModalTheme.apply_button_theme(_confirm_button)
 
@@ -109,6 +95,16 @@ func _on_confirm_pressed() -> void:
 	_answered = true
 	close()
 	EventBus.day_close_confirmed.emit()
+
+
+## Confirms the close request through the same path as the visible button.
+func acknowledge_for_automation() -> bool:
+	if not AutomationModeScript.is_enabled():
+		return false
+	if not visible:
+		return false
+	_on_confirm_pressed()
+	return true
 
 
 func _unhandled_input(event: InputEvent) -> void:

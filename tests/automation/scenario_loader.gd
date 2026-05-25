@@ -6,6 +6,13 @@ const SCENARIO_DIR: String = "res://tests/automation/scenarios"
 const VALID_COMMANDS: Array[String] = [
 	"wait_audit",
 	"wait_bus",
+	"wait_modal",
+	"acknowledge_modal",
+	"wait_input_focus",
+	"wait_store_session_prompt",
+	"acknowledge_prompt",
+	"wait_customer_exit",
+	"fast_forward_animations",
 	"emit_bus",
 	"enter_store",
 	"route_scene",
@@ -23,7 +30,9 @@ const VALID_COMMANDS: Array[String] = [
 	"screenshot",
 	"run_economy_loop",
 	"run_save_reload_smoke",
+	"run_bad_state_resistance",
 	"run_long_day_soak",
+	"run_store_session_tutorial_full",
 	"finish",
 ]
 const CAPTURE_MODES: Array[String] = ["state", "screenshot"]
@@ -114,6 +123,19 @@ func _validate_step(step: Dictionary, index: int) -> Array[String]:
 		"wait_bus", "emit_bus":
 			if str(step.get("signal", "")).is_empty():
 				errors.append("%s missing signal" % prefix)
+		"wait_modal":
+			var state: String = str(step.get("state", "ready"))
+			if state != "ready" and state != "closed":
+				errors.append("%s modal state must be ready or closed" % prefix)
+		"wait_input_focus":
+			if step.has("match") and not (step["match"] is Dictionary):
+				errors.append("%s match must be an object" % prefix)
+		"wait_store_session_prompt", "wait_customer_exit":
+			if step.has("match") and not (step["match"] is Dictionary):
+				errors.append("%s match must be an object" % prefix)
+		"acknowledge_prompt", "fast_forward_animations":
+			if step.has("target") and str(step.get("target", "")).strip_edges().is_empty():
+				errors.append("%s target must not be empty" % prefix)
 		"enter_store":
 			if str(step.get("store_id", "")).is_empty():
 				errors.append("%s missing store_id" % prefix)

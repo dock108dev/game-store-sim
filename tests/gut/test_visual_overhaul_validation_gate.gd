@@ -3,6 +3,9 @@ extends GutTest
 const _StoreVisualSweep: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
+const StoreVisualScopeProfileScript: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_scope_profile.gd"
+)
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const REFERENCE_REVIEW_MODE_SETTING: String = "mallcore/test/reference_corner_review_mode"
 const LOCKED_FEATURE_ROOTS: Array[String] = [
@@ -79,6 +82,13 @@ func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 		seen_beats.append(str(row.get("name", "")))
 		_assert_sweep_row_frames_focus(row)
 		assert_eq(str(row.get("scope", "")), "first_ten_seconds")
+		assert_true(
+			[
+				StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
+				StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
+			].has(str(row.get("visual_scope_mode", ""))),
+			"%s sweep must declare a runtime or reference-visible visual scope" % row["name"]
+		)
 		assert_eq(
 			str(row.get("review_target", "")),
 			_StoreVisualSweep.ACCEPTANCE_TARGET,
@@ -186,13 +196,105 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 		)
 		var full_store_beats: Array = full_store_context.get("beats", []) as Array
 		assert_eq(full_store_beats.size(), 8, "Full-store context must keep eight legacy beats")
+		for beat: Dictionary in full_store_beats:
+			assert_eq(
+				str(beat.get("visual_scope_mode", "")),
+				StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
+				"Full-store context must use the authored-full visual scope"
+			)
+		var profile: Dictionary = payload.get("visual_scope_profile", {}) as Dictionary
+		var modes: Array = profile.get("modes", []) as Array
+		assert_true(
+			modes.has(StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL),
+			"Manifest must document the authored-full profile"
+		)
+		assert_true(
+			modes.has(StoreVisualScopeProfileScript.MODE_SUPPRESSION_DIFF_LABEL),
+			"Manifest must document the suppression-diff profile"
+		)
+		var capture_policy: Dictionary = payload.get("capture_policy", {}) as Dictionary
+		var resolution: Array = capture_policy.get("resolution", []) as Array
+		assert_eq(resolution.size(), 2)
+		if resolution.size() == 2:
+			assert_eq(int(resolution[0]), 1280)
+			assert_eq(int(resolution[1]), 720)
+		assert_eq(str(capture_policy.get("renderer", "")), "gl_compatibility")
+		assert_false(
+			bool(capture_policy.get("headless_allowed", true)),
+			"Acceptance captures must reject headless display mode"
+		)
+		assert_false(
+			bool(capture_policy.get("placeholder_allowed", true)),
+			"Acceptance captures must reject placeholder images"
+		)
+		assert_true(
+			(payload.get("baseline_review_rules", []) as Array).has(
+				"route anchor must not be visually drowned by decorative props"
+			),
+			"Manifest must preserve route-anchor review rejection criteria"
+		)
+		var diff_policy: Dictionary = payload.get("diff_review_policy", {}) as Dictionary
+		var metrics: Array = diff_policy.get("metrics", []) as Array
+		assert_true(metrics.has("noise_filtered_changed_pixels"))
+		assert_true(metrics.has("mean_absolute_error"))
+		assert_true(metrics.has("max_delta"))
 		for beat: Dictionary in beats:
 			assert_eq(str(beat.get("review_target", "")), _StoreVisualSweep.ACCEPTANCE_TARGET)
 			assert_eq(
 				str(beat.get("hud_context_required", "")),
 				_StoreVisualSweep.HUD_CONTEXT_LABEL,
 				"Manifest beat must preserve the first-day HUD requirement"
-			)
+		)
+
+
+func test_acceptance_visual_sweep_runner_uses_display_backed_capture_contract() -> void:
+	var source: String = _read_text("res://tests/visual/capture_store_visual_sweep.gd")
+	for filename: String in [
+		"01_spawn_first_look.png",
+		"02_checkout_manager_counter.png",
+		"03_shelf_wall_product_focus.png",
+		"04_stockroom_path_work_area.png",
+	]:
+		assert_true(
+			_has_sweep_filename(filename),
+			"Acceptance filename must remain canonical: %s" % filename
+		)
+	assert_string_contains(source, "DisplayServer.get_name() == \"headless\"")
+	assert_string_contains(source, "requires a display-backed viewport")
+	assert_string_contains(source, "placeholder")
+	assert_string_contains(source, "CAPTURE_RESOLUTION")
+	assert_string_contains(source, "CAPTURE_RANDOM_SEED")
+	assert_string_contains(source, "apply_mode_to_tree")
+	assert_string_contains(source, "acceptance_current_dir")
+	assert_string_contains(source, "write_review_manifest")
+
+
+func test_visual_sweep_diff_script_declares_soft_baseline_and_threshold_contract() -> void:
+	var source: String = _read_text("res://tests/visual/diff_screenshots.py")
+	assert_string_contains(source, "REQUIRED_FILENAMES")
+	assert_string_contains(source, "baseline_missing")
+	assert_string_contains(source, "NOISE_FLOOR = 3")
+	assert_string_contains(source, "CHANGED_RATIO_WARN = 0.0025")
+	assert_string_contains(source, "CHANGED_RATIO_FAIL = 0.01")
+	assert_string_contains(source, "MAE_WARN = 0.75")
+	assert_string_contains(source, "MAE_FAIL = 2.0")
+	assert_string_contains(source, "MAX_DELTA_FAIL = 96")
+	assert_string_contains(source, "luminance_stddev")
+	assert_string_contains(source, "json.dump(payload")
+
+
+func test_visual_sweep_shell_runner_uses_xvfb_and_compatibility_rendering() -> void:
+	var source: String = _read_text("res://scripts/run_store_visual_sweep.sh")
+	assert_string_contains(source, "xvfb-run")
+	assert_string_contains(source, "--rendering-method gl_compatibility")
+	assert_false(source.contains("--headless"), "Visual sweep runner must not use headless Godot")
+	assert_string_contains(
+		source,
+		"tests/visual/baselines/retro_games_day_one/$GODOT_VERSION_BUCKET/linux"
+	)
+	assert_string_contains(source, "tests/visual/capture_store_visual_sweep.gd")
+	assert_string_contains(source, "tests/visual/diff_screenshots.py")
+	assert_string_contains(source, "--allow-missing-baseline")
 
 
 func test_screenshot_sweep_documents_human_review_criteria() -> void:
@@ -378,6 +480,13 @@ func _sweep_rows() -> Array[Dictionary]:
 	return _StoreVisualSweep.rows()
 
 
+func _has_sweep_filename(filename: String) -> bool:
+	for row: Dictionary in _sweep_rows():
+		if str(row.get("filename", "")) == filename:
+			return true
+	return false
+
+
 func _runtime_state_snapshot(controller: Node) -> Dictionary:
 	var completed: Dictionary = (
 		controller.get("_completed_objectives") as Dictionary
@@ -501,6 +610,16 @@ func _read_json_file(path: String) -> Dictionary:
 	if not (parsed is Dictionary):
 		return {}
 	return parsed as Dictionary
+
+
+func _read_text(path: String) -> String:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	assert_not_null(file, "Source text must be readable: %s" % path)
+	if file == null:
+		return ""
+	var text: String = file.get_as_text()
+	file.close()
+	return text
 
 
 func _failure_criteria_contains(criteria: Array[String], phrase: String) -> bool:
