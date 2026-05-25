@@ -21,6 +21,8 @@ var _active_store_id: StringName = &""
 var _active_store_scene: Node3D = null
 var _active_npc_container: Node3D = null
 var _signals_connected: bool = false
+var _prewarmed_instances: int = 0
+var _dynamic_instantiates: int = 0
 
 
 func initialize(inventory_system: InventorySystem = null) -> void:
@@ -58,15 +60,18 @@ func spawn_npc(archetype_id: StringName, entry_position: Vector3) -> Node:
 	_refresh_store_bindings()
 	if _active_npc_container == null:
 		push_warning("NPCSpawnerSystem: no active npc_container for store spawn")
+		_emit_pool_changed("spawn_failed_no_container")
 		return null
 	if _active_npcs.size() >= _get_store_capacity():
 		push_warning(
 			"NPCSpawnerSystem: store '%s' is at NPC capacity" % _active_store_id
 		)
+		_emit_capacity_violation(archetype_id)
 		return null
 	var npc: ShopperAI = _acquire_npc()
 	if npc == null:
 		push_error("NPCSpawnerSystem: failed to acquire ShopperAI")
+		_emit_pool_changed("spawn_failed_acquire")
 		return null
 	var personality: PersonalityData = _build_personality(archetype_id)
 	npc.configure_for_store_spawn(entry_position, archetype_id, personality)
@@ -75,6 +80,7 @@ func spawn_npc(archetype_id: StringName, entry_position: Vector3) -> Node:
 			npc.get_parent().remove_child(npc)
 		_active_npc_container.add_child(npc)
 	_active_npcs.append(npc)
+	_emit_pool_changed("spawn_success", npc)
 	return npc
 
 
@@ -93,6 +99,7 @@ func despawn_npc(npc: Node) -> void:
 	add_child(shopper)
 	_pool.append(shopper)
 	EventBus.npc_despawned.emit(StringName(str(shopper.get_instance_id())))
+	_emit_pool_changed("despawn", shopper)
 
 
 func _on_spawn_npc_requested(
@@ -133,6 +140,8 @@ func _prewarm_pool() -> void:
 			return
 		shopper.reset_for_pool()
 		_pool.append(shopper)
+		_prewarmed_instances += 1
+		_emit_pool_changed("prewarm", shopper)
 
 
 func _instantiate_npc() -> ShopperAI:
@@ -150,8 +159,14 @@ func _instantiate_npc() -> ShopperAI:
 
 func _acquire_npc() -> ShopperAI:
 	if not _pool.is_empty():
-		return _pool.pop_back()
-	return _instantiate_npc()
+		var pooled: ShopperAI = _pool.pop_back()
+		_emit_pool_changed("acquire_from_pool", pooled)
+		return pooled
+	var dynamic: ShopperAI = _instantiate_npc()
+	if dynamic != null:
+		_dynamic_instantiates += 1
+		_emit_pool_changed("instantiate_dynamic", dynamic)
+	return dynamic
 
 
 func _build_personality(archetype_id: StringName) -> PersonalityData:
@@ -249,3 +264,27 @@ func _default_npc_factory() -> ShopperAI:
 func _safe_connect(signal_ref: Signal, callable: Callable) -> void:
 	if not signal_ref.is_connected(callable):
 		signal_ref.connect(callable)
+
+
+func _emit_capacity_violation(archetype_id: StringName) -> void:
+	var payload: Dictionary = _pool_payload("capacity_violation")
+	payload["archetype_id"] = String(archetype_id)
+	EventBus.npc_capacity_violation.emit(payload)
+	EventBus.npc_pool_changed.emit(payload)
+
+
+func _emit_pool_changed(reason: String, npc: ShopperAI = null) -> void:
+	EventBus.npc_pool_changed.emit(_pool_payload(reason, npc))
+
+
+func _pool_payload(reason: String, npc: ShopperAI = null) -> Dictionary:
+	return {
+		"reason": reason,
+		"npc_id": StringName(str(npc.get_instance_id())) if npc != null else &"",
+		"active_count": _active_npcs.size(),
+		"pooled_count": _pool.size(),
+		"pool_size": pool_size,
+		"capacity": _get_store_capacity(),
+		"prewarmed_instances": _prewarmed_instances,
+		"dynamic_instantiates": _dynamic_instantiates,
+	}

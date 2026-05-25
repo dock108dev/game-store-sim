@@ -14,6 +14,8 @@ var _data_loader: DataLoader
 
 
 func before_each() -> void:
+	var path_err: Error = UserDataPaths.configure_test_run("unit_save_manager", true)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 	ContentRegistry.clear_for_testing()
 	_save_manager = SaveManager.new()
 	add_child_autofree(_save_manager)
@@ -49,9 +51,11 @@ func before_each() -> void:
 func after_each() -> void:
 	for slot: int in range(0, 4):
 		_save_manager.delete_save(slot)
-	if FileAccess.file_exists(SaveManager.SLOT_INDEX_PATH):
-		DirAccess.remove_absolute(SaveManager.SLOT_INDEX_PATH)
+	if FileAccess.file_exists(UserDataPaths.slot_index_path()):
+		DirAccess.remove_absolute(UserDataPaths.slot_index_path())
 	ContentRegistry.clear_for_testing()
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 # --- Slot path generation ---
@@ -60,25 +64,25 @@ func after_each() -> void:
 func test_get_save_slot_path_returns_correct_path() -> void:
 	var path_0: String = _save_manager._get_slot_path(0)
 	assert_eq(
-		path_0, SaveManager.SAVE_DIR + "save_slot_0.json",
+		path_0, UserDataPaths.save_slot_path(0),
 		"Slot 0 (auto-save) should return save_slot_0.json path"
 	)
 
 	var path_1: String = _save_manager._get_slot_path(1)
 	assert_eq(
-		path_1, SaveManager.SAVE_DIR + "save_slot_1.json",
+		path_1, UserDataPaths.save_slot_path(1),
 		"Slot 1 should return save_slot_1.json path"
 	)
 
 	var path_2: String = _save_manager._get_slot_path(2)
 	assert_eq(
-		path_2, SaveManager.SAVE_DIR + "save_slot_2.json",
+		path_2, UserDataPaths.save_slot_path(2),
 		"Slot 2 should return save_slot_2.json path"
 	)
 
 	var path_3: String = _save_manager._get_slot_path(3)
 	assert_eq(
-		path_3, SaveManager.SAVE_DIR + "save_slot_3.json",
+		path_3, UserDataPaths.save_slot_path(3),
 		"Slot 3 should return save_slot_3.json path"
 	)
 
@@ -139,6 +143,32 @@ func test_save_and_load_round_trip_preserves_dictionary() -> void:
 	assert_eq(
 		_time_system.current_day, 12,
 		"Day should survive round-trip"
+	)
+
+
+func test_save_and_load_emit_clear_feedback_notifications() -> void:
+	_economy._current_cash = 999.99
+	_time_system.current_day = 12
+	_store_state_manager.register_slot_ownership(0, &"sports")
+	_store_state_manager.set_active_store(&"sports", false)
+	var notifications: Array[String] = []
+	var handler: Callable = func(message: String) -> void:
+		notifications.append(message)
+	EventBus.notification_requested.connect(handler)
+
+	var saved: bool = _save_manager.save_game(1)
+	var loaded: bool = _save_manager.load_game(1)
+	var missing: bool = _save_manager.load_game(2)
+
+	EventBus.notification_requested.disconnect(handler)
+	assert_true(saved, "Save should succeed")
+	assert_true(loaded, "Load should succeed")
+	assert_false(missing, "Missing slot should fail")
+	assert_true(notifications.has("Game saved."))
+	assert_true(notifications.has("Game loaded."))
+	assert_true(
+		_notification_prefix_exists(notifications, "Load failed: No save file"),
+		"Missing load should emit player-visible failure feedback"
 	)
 
 
@@ -241,6 +271,40 @@ func test_save_file_contains_top_level_save_metadata() -> void:
 	)
 
 
+func test_collect_save_data_for_tests_returns_schema_copy() -> void:
+	_economy._current_cash = 640.0
+	_time_system.current_day = 8
+	_store_state_manager.register_slot_ownership(0, &"sports")
+	_store_state_manager.set_active_store(&"sports", false)
+	StoreSessionState.flags[&"choice_clean_exchange"] = true
+
+	var data: Dictionary = _save_manager.collect_save_data_for_tests()
+	assert_eq(int(data.get(SaveManager.SCHEMA_VERSION_KEY, -1)), SaveManager.CURRENT_SAVE_VERSION)
+	assert_eq(
+		int(data.get(SaveManager.LEGACY_SCHEMA_VERSION_KEY, -1)),
+		SaveManager.CURRENT_SAVE_VERSION
+	)
+	assert_has(data, "save_metadata")
+	assert_has(data, "owned_slots")
+	assert_has(data, "store_session_state")
+	var metadata: Dictionary = data.get("save_metadata", {}) as Dictionary
+	assert_eq(int(metadata.get("day", 0)), 8)
+	assert_almost_eq(float(metadata.get("cash", 0.0)), 640.0, 0.01)
+	assert_eq(str(metadata.get("active_store_id", "")), "sports")
+
+	metadata["day"] = 99
+	var session_data: Dictionary = data.get("store_session_state", {}) as Dictionary
+	var session_flags: Dictionary = session_data.get("flags", {}) as Dictionary
+	session_flags[&"choice_clean_exchange"] = false
+
+	var fresh: Dictionary = _save_manager.collect_save_data_for_tests()
+	var fresh_metadata: Dictionary = fresh.get("save_metadata", {}) as Dictionary
+	assert_eq(int(fresh_metadata.get("day", 0)), 8)
+	var fresh_session: Dictionary = fresh.get("store_session_state", {}) as Dictionary
+	var fresh_flags: Dictionary = fresh_session.get("flags", {}) as Dictionary
+	assert_true(bool(fresh_flags.get(&"choice_clean_exchange", false)))
+
+
 func test_get_slot_metadata_ignores_stale_slot_index() -> void:
 	_economy._current_cash = 250.0
 	_time_system.current_day = 5
@@ -250,11 +314,11 @@ func test_get_slot_metadata_ignores_stale_slot_index() -> void:
 	assert_true(_save_manager.save_game(1), "Save should succeed")
 
 	var config := ConfigFile.new()
-	config.load(SaveManager.SLOT_INDEX_PATH)
+	config.load(UserDataPaths.slot_index_path())
 	config.set_value("slot_1", "day", 99)
 	config.set_value("slot_1", "cash", 1.0)
 	config.set_value("slot_1", "owned_stores", [])
-	config.save(SaveManager.SLOT_INDEX_PATH)
+	config.save(UserDataPaths.slot_index_path())
 
 	var metadata: Dictionary = _save_manager.get_slot_metadata(1)
 	assert_eq(
@@ -388,6 +452,13 @@ func _assert_dict_match(
 				str(actual[key]), str(expected[key]),
 				"%s.%s mismatch" % [label, key]
 			)
+
+
+func _notification_prefix_exists(notifications: Array[String], prefix: String) -> bool:
+	for message: String in notifications:
+		if message.begins_with(prefix):
+			return true
+	return false
 
 
 func _register_store_catalog() -> void:

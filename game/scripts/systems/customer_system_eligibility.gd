@@ -118,13 +118,12 @@ func pick_spawn_profile(
 		total += weight
 	if candidates.is_empty() or total <= 0.0:
 		return null
-	var roll: float = randf() * total
-	var running: float = 0.0
-	for index: int in range(candidates.size()):
-		running += weights[index]
-		if roll <= running:
-			return candidates[index]
-	return candidates[candidates.size() - 1]
+	var index: int = GameRandom.weighted_index(
+		RandomStreamIds.CUSTOMER_SPAWN, weights
+	)
+	if index < 0:
+		return null
+	return candidates[index]
 
 
 func record_archetype_spawn(profile: CustomerTypeDefinition) -> void:

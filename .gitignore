@@ -8,6 +8,7 @@
 # Godot exports and build output
 export_presets.cfg
 /build/
+/artifacts/
 /export/
 /exports/
 *.pck

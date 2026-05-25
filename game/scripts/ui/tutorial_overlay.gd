@@ -9,9 +9,9 @@ const SLIDE_OFFSET: float = 100.0
 
 ## Game states each tutorial step requires before its prompt may appear.
 ## Steps absent from this map have no state restriction.
-## ISSUE-016: every employee on-the-job beat happens inside the store, so each
-## step is gated to STORE_VIEW. MALL_OVERVIEW is otherwise permissive for the
-## overlay, but FP step prompts must not bleed across that transition.
+## Every employee on-the-job beat happens inside the store, so each step is
+## gated to STORE_VIEW. MALL_OVERVIEW is otherwise permissive for the overlay,
+## but FP step prompts must not bleed across that transition.
 const _STEP_REQUIRED_STATES: Dictionary = {
 	"welcome": GameManager.State.STORE_VIEW,
 	"platform_match": GameManager.State.STORE_VIEW,
@@ -36,6 +36,11 @@ var _pending_step_id: String = ""
 
 
 func _ready() -> void:
+	add_to_group("ui.panel")
+	add_to_group("ui.tutorial_panel")
+	set_meta("semantic_target", "tutorial.panel")
+	set_meta("scenario_target_kind", "ui_panel")
+	set_meta("ui_layer", "tutorial")
 	_bottom_bar.visible = false
 	_rest_offset_top = _bottom_bar.offset_top
 	_skip_button.pressed.connect(_on_skip_pressed)
@@ -140,6 +145,8 @@ func _on_game_state_changed(_old_state: int, _new_state: int) -> void:
 
 
 func _on_input_focus_changed(_new_ctx: StringName, _old_ctx: StringName) -> void:
+	if not is_inside_tree():
+		return
 	_reevaluate_visibility()
 
 
@@ -205,6 +212,8 @@ func _kill_tween() -> void:
 
 
 func _store_session_mode_active() -> bool:
+	if not is_inside_tree():
+		return false
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false

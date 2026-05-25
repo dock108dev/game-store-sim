@@ -53,7 +53,7 @@ func fail_check(checkpoint: StringName, reason: String) -> void:
 
 ## Test-only seam — populates the ring buffer without printing the AUDIT
 ## line. Lets UI/coloring tests assert that the overlay renders FAIL/PASS
-## rows correctly without polluting `tests/audit.log` (which is parsed by
+## rows correctly without polluting the artifact audit log (which is parsed by
 ## tests/audit_run.sh and would treat the demo entry as a real failure).
 func record_pass_for_test(checkpoint: StringName, detail: String = "") -> void:
 	assert(checkpoint != &"", "AuditLog.record_pass_for_test: empty checkpoint")

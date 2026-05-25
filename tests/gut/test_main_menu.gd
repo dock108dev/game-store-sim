@@ -2,45 +2,15 @@
 extends GutTest
 
 
-const _SLOT_PATHS: Array[String] = [
-	"user://save_slot_0.json",
-	"user://save_slot_1.json",
-	"user://save_slot_2.json",
-	"user://save_slot_3.json",
-]
+const _TEST_RUN_ID: String = "main_menu_paths"
 
 var _menu: Control
-var _backup_paths: Dictionary = {}
-
-
-func before_all() -> void:
-	# Preserve any real saves so save-state tests don't clobber
-	# a developer's local progress.
-	for slot: int in range(_SLOT_PATHS.size()):
-		var slot_path: String = _SLOT_PATHS[slot]
-		var backup_path: String = "user://save_slot_%d.test_backup.json" % slot
-		if FileAccess.file_exists(slot_path):
-			DirAccess.copy_absolute(slot_path, backup_path)
-			DirAccess.remove_absolute(slot_path)
-			_backup_paths[slot_path] = backup_path
-
-
-func after_all() -> void:
-	for slot_path: String in _SLOT_PATHS:
-		if FileAccess.file_exists(slot_path):
-			DirAccess.remove_absolute(slot_path)
-		if _backup_paths.has(slot_path):
-			var backup_path: String = str(_backup_paths[slot_path])
-			if FileAccess.file_exists(backup_path):
-				DirAccess.copy_absolute(backup_path, slot_path)
-				DirAccess.remove_absolute(backup_path)
 
 
 func before_each() -> void:
+	var err: Error = UserDataPaths.configure_test_run(_TEST_RUN_ID, true)
+	assert_eq(err, OK, "test setup must isolate menu save paths")
 	InputFocus._reset_for_tests()
-	for slot_path: String in _SLOT_PATHS:
-		if FileAccess.file_exists(slot_path):
-			DirAccess.remove_absolute(slot_path)
 	_menu = load(
 		"res://game/scenes/ui/main_menu.gd"
 	).new()
@@ -50,6 +20,8 @@ func after_each() -> void:
 	if is_instance_valid(_menu):
 		_menu.free()
 	InputFocus._reset_for_tests()
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 func test_menu_scene_smoke_shows_front_door_state() -> void:
@@ -190,7 +162,7 @@ func test_format_slot_info_falls_back_to_legacy_current_cash() -> void:
 
 
 func test_slot_zero_save_exists_returns_false_when_absent() -> void:
-	var slot_zero_path: String = _menu.SLOT_PATHS.get(0, "")
+	var slot_zero_path: String = _menu._slot_path(0)
 	if FileAccess.file_exists(slot_zero_path):
 		var err: Error = DirAccess.remove_absolute(slot_zero_path)
 		assert_eq(err, OK, "test setup must remove pre-existing slot 0 file")
@@ -198,7 +170,7 @@ func test_slot_zero_save_exists_returns_false_when_absent() -> void:
 
 
 func test_refresh_load_button_state_disables_when_no_save() -> void:
-	var slot_zero_path: String = _menu.SLOT_PATHS.get(0, "")
+	var slot_zero_path: String = _menu._slot_path(0)
 	if FileAccess.file_exists(slot_zero_path):
 		var err: Error = DirAccess.remove_absolute(slot_zero_path)
 		assert_eq(err, OK, "test setup must remove pre-existing slot 0 file")
@@ -215,7 +187,7 @@ func test_refresh_load_button_state_disables_when_no_save() -> void:
 
 
 func test_refresh_load_button_state_disables_load_when_save_present() -> void:
-	var slot_zero_path: String = _menu.SLOT_PATHS.get(0, "")
+	var slot_zero_path: String = _menu._slot_path(0)
 	var pre_existing: bool = FileAccess.file_exists(slot_zero_path)
 	if not pre_existing:
 		var file: FileAccess = FileAccess.open(slot_zero_path, FileAccess.WRITE)
@@ -242,20 +214,26 @@ func test_refresh_load_button_state_disables_load_when_save_present() -> void:
 
 
 func test_on_load_pressed_no_op_when_no_save() -> void:
-	var slot_zero_path: String = _menu.SLOT_PATHS.get(0, "")
+	var slot_zero_path: String = _menu._slot_path(0)
 	if FileAccess.file_exists(slot_zero_path):
 		var err: Error = DirAccess.remove_absolute(slot_zero_path)
 		assert_eq(err, OK, "test setup must remove pre-existing slot 0 file")
+	watch_signals(EventBus)
 	_menu._load_panel_visible = false
 	_menu._on_load_pressed()
 	assert_false(
 		_menu._load_panel_visible,
 		"load panel must not open when no save exists"
 	)
+	assert_signal_emitted(
+		EventBus,
+		"notification_requested",
+		"disabled load action should explain that loading is coming soon"
+	)
 
 
 func test_on_load_pressed_no_op_when_store_session_load_is_unavailable() -> void:
-	var slot_zero_path: String = _menu.SLOT_PATHS.get(0, "")
+	var slot_zero_path: String = _menu._slot_path(0)
 	var pre_existing: bool = FileAccess.file_exists(slot_zero_path)
 	if not pre_existing:
 		var file: FileAccess = FileAccess.open(slot_zero_path, FileAccess.WRITE)
@@ -264,11 +242,17 @@ func test_on_load_pressed_no_op_when_store_session_load_is_unavailable() -> void
 		file.flush()
 		file.close()
 
+	watch_signals(EventBus)
 	_menu._load_panel_visible = false
 	_menu._on_load_pressed()
 	assert_false(
 		_menu._load_panel_visible,
 		"load panel must not open while store_session load is unavailable"
+	)
+	assert_signal_emitted(
+		EventBus,
+		"notification_requested",
+		"save-present disabled load action should explain that loading is coming soon"
 	)
 
 	if not pre_existing and FileAccess.file_exists(slot_zero_path):

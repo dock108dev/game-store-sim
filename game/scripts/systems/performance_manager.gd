@@ -12,6 +12,9 @@ const WARNING_THRESHOLD_FPS: float = 55.0
 const SAMPLE_WINDOW: int = 120
 const WARNING_COOLDOWN: float = 10.0
 const CACHE_TTL_MINUTES: int = 5
+const SOAK_OBSERVER_SCRIPT: GDScript = preload(
+	"res://game/scripts/systems/performance_soak_observer.gd"
+)
 
 ## NPC profiling: rolling window of per-frame NPC subsystem costs in ms.
 const NPC_SAMPLE_WINDOW: int = 60
@@ -33,6 +36,9 @@ var _warning_timer: float = 0.0
 var _economy_system: EconomySystem = null
 var _current_day: int = 0
 var _current_minute: int = 0
+var _performance_warning_count: int = 0
+var _soak_observer: RefCounted = SOAK_OBSERVER_SCRIPT.new()
+var _soak_start_usec: int = 0
 
 
 func initialize(economy_system: EconomySystem = null) -> void:
@@ -222,7 +228,10 @@ func get_npc_performance_stats() -> Dictionary:
 	var total_script: float = 0.0
 	var total_nav: float = 0.0
 	var total_anim: float = 0.0
+	var total_npc_count: int = 0
 	var peak_total: float = 0.0
+	var peak_npc_count: int = 0
+	var latest_npc_count: int = 0
 	var valid_samples: int = 0
 	for i: int in range(NPC_SAMPLE_WINDOW):
 		var frame_total: float = (
@@ -232,19 +241,56 @@ func get_npc_performance_stats() -> Dictionary:
 		)
 		if _npc_count_samples[i] > 0:
 			valid_samples += 1
+			total_npc_count += _npc_count_samples[i]
 		total_script += _npc_script_times[i]
 		total_nav += _npc_navigation_times[i]
 		total_anim += _npc_animation_times[i]
 		if frame_total > peak_total:
 			peak_total = frame_total
+		if _npc_count_samples[i] > peak_npc_count:
+			peak_npc_count = _npc_count_samples[i]
+	var latest_index: int = (_npc_sample_index - 1 + NPC_SAMPLE_WINDOW) % NPC_SAMPLE_WINDOW
+	latest_npc_count = _npc_count_samples[latest_index]
 	var divisor: float = maxf(float(NPC_SAMPLE_WINDOW), 1.0)
+	var avg_total_ms: float = (total_script + total_nav + total_anim) / divisor
+	var avg_npc_count: float = (
+		0.0 if valid_samples == 0 else float(total_npc_count) / float(valid_samples)
+	)
 	return {
 		"avg_script_ms": total_script / divisor,
 		"avg_navigation_ms": total_nav / divisor,
 		"avg_animation_ms": total_anim / divisor,
-		"avg_total_ms": (total_script + total_nav + total_anim) / divisor,
+		"avg_total_ms": avg_total_ms,
 		"peak_total_ms": peak_total,
 		"sample_count": valid_samples,
+		"avg_npc_count": avg_npc_count,
+		"peak_npc_count": peak_npc_count,
+		"latest_npc_count": latest_npc_count,
+		"avg_ms_per_npc": 0.0 if avg_npc_count <= 0.0 else avg_total_ms / avg_npc_count,
+	}
+
+
+## Returns live memory and object counters from Godot's performance monitors.
+func get_memory_stats(baseline_memory_bytes: int = -1) -> Dictionary:
+	var static_bytes: int = int(Performance.get_monitor(Performance.MEMORY_STATIC))
+	var peak_static_bytes: int = int(Performance.get_monitor(Performance.MEMORY_STATIC_MAX))
+	var delta_bytes: int = 0
+	if baseline_memory_bytes >= 0:
+		delta_bytes = static_bytes - baseline_memory_bytes
+	return {
+		"static_bytes": static_bytes,
+		"static_kb": float(static_bytes) / 1024.0,
+		"static_mb": float(static_bytes) / 1048576.0,
+		"peak_static_bytes": peak_static_bytes,
+		"peak_static_kb": float(peak_static_bytes) / 1024.0,
+		"peak_static_mb": float(peak_static_bytes) / 1048576.0,
+		"delta_bytes": delta_bytes,
+		"delta_kb": float(delta_bytes) / 1024.0,
+		"delta_mb": float(delta_bytes) / 1048576.0,
+		"object_count": int(Performance.get_monitor(Performance.OBJECT_COUNT)),
+		"resource_count": int(Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT)),
+		"node_count": int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT)),
+		"orphan_node_count": int(Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT)),
 	}
 
 
@@ -252,6 +298,9 @@ func get_npc_performance_stats() -> Dictionary:
 func get_performance_stats() -> Dictionary:
 	var npc_stats: Dictionary = get_npc_performance_stats()
 	var cache_stats: Dictionary = get_cache_stats()
+	var memory_stats: Dictionary = get_memory_stats()
+	var soak_snapshot: Dictionary = get_soak_observation_snapshot()
+	var soak_memory: Dictionary = soak_snapshot.get("memory", {})
 	return {
 		"average_fps": get_average_fps(),
 		"worst_frame_ms": get_worst_frame_ms(),
@@ -263,13 +312,92 @@ func get_performance_stats() -> Dictionary:
 		"last_store_switch_ms": _last_store_switch_ms,
 		"npc_avg_total_ms": npc_stats.get("avg_total_ms", 0.0),
 		"npc_peak_total_ms": npc_stats.get("peak_total_ms", 0.0),
+		"npc_avg_count": npc_stats.get("avg_npc_count", 0.0),
+		"npc_peak_count": npc_stats.get("peak_npc_count", 0),
+		"npc_latest_count": npc_stats.get("latest_npc_count", 0),
+		"npc_avg_ms_per_npc": npc_stats.get("avg_ms_per_npc", 0.0),
+		"memory_static_bytes": memory_stats.get("static_bytes", 0),
+		"memory_static_kb": memory_stats.get("static_kb", 0.0),
+		"memory_static_mb": memory_stats.get("static_mb", 0.0),
+		"memory_peak_static_bytes": memory_stats.get("peak_static_bytes", 0),
+		"performance_warning_count": _performance_warning_count,
+		"soak_running": soak_snapshot.get("running", false),
+		"soak_sample_count": soak_snapshot.get("sample_count", 0),
+		"soak_elapsed_seconds": soak_snapshot.get("elapsed_seconds", 0.0),
+		"soak_memory_delta_bytes": soak_memory.get("delta_bytes", 0),
+		"soak_memory_growth_kb_per_min": soak_memory.get("growth_kb_per_min", 0.0),
 	}
+
+
+## Begins a deterministic soak observation window.
+func begin_soak_observation(
+	threshold_overrides: Dictionary = {},
+	baseline_memory_bytes: int = -1
+) -> Dictionary:
+	var baseline: int = baseline_memory_bytes
+	if baseline < 0:
+		baseline = int(get_memory_stats().get("static_bytes", 0))
+	_soak_start_usec = Time.get_ticks_usec()
+	return _soak_observer.begin(baseline, threshold_overrides)
+
+
+## Records one soak sample. Optional arguments make tests deterministic.
+func sample_soak_observation(
+	elapsed_seconds: float = -1.0,
+	memory_bytes: int = -1
+) -> Dictionary:
+	var memory_stats: Dictionary = get_memory_stats()
+	if memory_bytes >= 0:
+		memory_stats["static_bytes"] = memory_bytes
+		memory_stats["peak_static_bytes"] = maxi(
+			memory_bytes,
+			int(memory_stats.get("peak_static_bytes", memory_bytes))
+		)
+	var elapsed: float = elapsed_seconds
+	if elapsed < 0.0:
+		elapsed = float(Time.get_ticks_usec() - _soak_start_usec) / 1000000.0
+	return _soak_observer.sample(
+		get_performance_stats(),
+		memory_stats,
+		elapsed,
+		_performance_warning_count
+	)
+
+
+## Records a final sample and closes the current soak observation.
+func end_soak_observation(
+	elapsed_seconds: float = -1.0,
+	memory_bytes: int = -1
+) -> Dictionary:
+	if bool(get_soak_observation_snapshot().get("running", false)):
+		sample_soak_observation(elapsed_seconds, memory_bytes)
+	return _soak_observer.end()
+
+
+## Clears the current soak observation accumulator.
+func reset_soak_observation() -> void:
+	_soak_start_usec = 0
+	_soak_observer.reset()
+
+
+## Returns the current soak observation snapshot.
+func get_soak_observation_snapshot() -> Dictionary:
+	return _soak_observer.snapshot()
+
+
+## Classifies a soak observation snapshot against its thresholds.
+func classify_soak_observation(observation: Dictionary = {}) -> Dictionary:
+	var target: Dictionary = observation
+	if target.is_empty():
+		target = get_soak_observation_snapshot()
+	return _soak_observer.classify(target)
 
 
 func _check_performance() -> void:
 	var avg_fps: float = get_average_fps()
 	if avg_fps < WARNING_THRESHOLD_FPS:
 		_warning_timer = WARNING_COOLDOWN
+		_performance_warning_count += 1
 		var worst_ms: float = get_worst_frame_ms()
 		push_warning(
 			"PerformanceManager: avg FPS %.1f (worst frame %.1fms)"

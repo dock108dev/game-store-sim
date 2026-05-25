@@ -127,7 +127,7 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 		await get_tree().process_frame
 		var result: Dictionary = _StoreVisualSweep.save_viewport_png(
 			get_viewport(),
-			_StoreVisualSweep.ARTIFACT_DIR,
+			_StoreVisualSweep.visual_sweep_dir(),
 			str(row["filename"]),
 			true
 		)
@@ -159,7 +159,7 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 				)
 
 	var manifest: Dictionary = _StoreVisualSweep.write_review_manifest(
-		_StoreVisualSweep.ARTIFACT_DIR,
+		_StoreVisualSweep.review_manifest_dir(),
 		rows
 	)
 	assert_true(

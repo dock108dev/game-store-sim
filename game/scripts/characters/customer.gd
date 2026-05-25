@@ -22,6 +22,9 @@ const DISAPPOINTED_CHANCE: float = 0.05
 const NAV_RECALC_INTERVAL: float = 0.2
 ## Squared arrival radius for direct waypoint-fallback movement (≈0.6m).
 const WAYPOINT_ARRIVAL_DIST_SQ: float = 0.36
+const NAV_PROGRESS_MIN_DIST_SQ: float = 0.04
+const NAV_STALL_SECONDS: float = 8.0
+const NAV_TARGET_TIMEOUT_SECONDS: float = 45.0
 ## Day-1 patience tick scale for WAITING_IN_QUEUE customers. 0.5 doubles their
 ## effective patience while the player rings up the head-of-queue customer
 ## manually, so a slow first transaction does not collapse the queue.
@@ -75,6 +78,15 @@ var _time_paused: bool = false
 var _nav_recalc_timer: float = 0.0
 var _cached_preferred_slots: Array[Node] = []
 var _preferred_slots_dirty: bool = true
+var _nav_target_kind: StringName = &""
+var _nav_target_started_msec: int = 0
+var _nav_was_finished: bool = true
+var _last_nav_progress_position: Vector3 = Vector3.ZERO
+var _last_nav_progress_msec: int = 0
+var _nav_stall_reported: bool = false
+var _nav_timeout_reported: bool = false
+var _register_arrival_reported: bool = false
+var _despawn_metric_reported: bool = false
 ## Direct-movement fallback used when NavigationAgent3D / navmesh cannot resolve
 ## a path. Covers the BRAINDUMP Day-1 spawn → shelf → checkout → exit chain by
 ## driving move_and_slide toward the last target set by `_set_navigation_target`.
@@ -138,6 +150,7 @@ func initialize(
 	_desired_item_slot = null
 	_current_target_slot = null
 	_made_purchase = false
+	_reset_navigation_metrics()
 	_leave_reason = &"patience_expired"
 	_cache_navigation_targets()
 	_detect_navmesh_or_fallback()
@@ -169,6 +182,7 @@ func _physics_process(delta: float) -> void:
 			_process_leaving()
 	var t1: int = Time.get_ticks_usec()
 	_move_along_path(delta)
+	_update_navigation_metrics()
 	var t2: int = Time.get_ticks_usec()
 	last_script_time_ms = float(t1 - t0) / 1000.0
 	last_nav_time_ms = float(t2 - t1) / 1000.0
@@ -213,6 +227,7 @@ func get_leave_reason() -> StringName:
 func complete_purchase() -> void:
 	_awaiting_player_checkout = false
 	_made_purchase = true
+	_despawn_metric_reported = false
 	_desired_item = null
 	_desired_item_slot = null
 	_leave_reason = &"purchase_complete"
@@ -224,7 +239,8 @@ func enter_queue(queue_position: Vector3) -> void:
 	_set_state(State.WAITING_IN_QUEUE)
 	if _animator != null:
 		_animator.play_for_state(State.WAITING_IN_QUEUE)
-	_set_navigation_target(queue_position)
+	_register_arrival_reported = false
+	_set_navigation_target(queue_position, &"queue_slot")
 
 
 ## Called by RegisterQueue when this customer advances to register.
@@ -239,7 +255,8 @@ func advance_to_register() -> void:
 	_set_state(State.PURCHASING)
 	if _animator != null:
 		_animator.play_for_state(State.PURCHASING)
-	_set_navigation_target(_register_position)
+	_register_arrival_reported = false
+	_set_navigation_target(_register_position, &"register")
 	_awaiting_player_checkout = _is_first_sale_guarantee_active()
 
 
@@ -279,7 +296,9 @@ func _process_browsing(delta: float) -> void:
 		return
 	_evaluate_current_shelf()
 	_reset_browse_timer()
-	if randf() < MOVE_TO_NEXT_SHELF_CHANCE:
+	if GameRandom.chance(
+		RandomStreamIds.CUSTOMER_BROWSE, MOVE_TO_NEXT_SHELF_CHANCE
+	):
 		if _navigate_to_random_shelf():
 			return
 	if _desired_item:
@@ -301,7 +320,10 @@ func _process_deciding() -> void:
 		_leave_with(&"price_too_high")
 		return
 	if _is_first_sale_guarantee_active():
-		if randf() < Constants.DAY1_PURCHASE_PROBABILITY:
+		if GameRandom.chance(
+			RandomStreamIds.CUSTOMER_PURCHASE,
+			Constants.DAY1_PURCHASE_PROBABILITY
+		):
 			_transition_to(State.PURCHASING)
 		else:
 			_leave_with(&"no_matching_item")
@@ -309,11 +331,13 @@ func _process_deciding() -> void:
 	var match_quality: float = _calculate_match_quality(_desired_item)
 	var buy_chance: float = profile.purchase_probability_base * match_quality
 	if _desired_item.tested:
-		if randf() < DISAPPOINTED_CHANCE:
+		if GameRandom.chance(
+			RandomStreamIds.CUSTOMER_PURCHASE, DISAPPOINTED_CHANCE
+		):
 			_leave_with(&"no_matching_item")
 			return
 		buy_chance *= (1.0 + TESTED_BONUS)
-	if randf() > buy_chance:
+	if not GameRandom.chance(RandomStreamIds.CUSTOMER_PURCHASE, buy_chance):
 		_leave_with(&"no_matching_item")
 		return
 	_transition_to(State.PURCHASING)
@@ -333,6 +357,7 @@ func _is_first_sale_guarantee_active() -> bool:
 func _process_purchasing(delta: float) -> void:
 	if not _is_navigation_finished():
 		return
+	_emit_register_arrival_once()
 	# BRAINDUMP Day-1 manual checkout: while waiting on the player's E-press,
 	# patience does not tick. The gate is cleared in `complete_purchase` /
 	# `_leave_with`, so a customer who never gets rung up still leaves on the
@@ -361,6 +386,9 @@ func _process_waiting_in_queue(delta: float) -> void:
 
 func _process_leaving() -> void:
 	if _is_navigation_finished():
+		if not _despawn_metric_reported:
+			_despawn_metric_reported = true
+			EventBus.customer_despawn_requested.emit(self)
 		despawn_requested.emit(self)
 
 
@@ -406,6 +434,7 @@ func _transition_to_deciding_or_leaving() -> void:
 
 func _leave_with(reason: StringName) -> void:
 	_awaiting_player_checkout = false
+	_despawn_metric_reported = false
 	_leave_reason = reason
 	_transition_to(State.LEAVING)
 
@@ -497,6 +526,7 @@ func _detect_navmesh_or_fallback() -> void:
 			% get_instance_id()
 		)
 		enable_waypoint_fallback()
+		_emit_navigation_mode_selected(false)
 		return
 	var region: NavigationRegion3D = _find_navigation_region()
 	if region == null:
@@ -509,6 +539,7 @@ func _detect_navmesh_or_fallback() -> void:
 			% get_instance_id()
 		)
 		enable_waypoint_fallback()
+		_emit_navigation_mode_selected(false)
 		return
 	var nav_mesh: NavigationMesh = region.navigation_mesh
 	if nav_mesh == null or nav_mesh.get_polygon_count() == 0:
@@ -528,6 +559,18 @@ func _detect_navmesh_or_fallback() -> void:
 			]
 		)
 		enable_waypoint_fallback()
+		_emit_navigation_mode_selected(false)
+		return
+	_emit_navigation_mode_selected(true)
+
+
+func _emit_navigation_mode_selected(has_navigation_region: bool) -> void:
+	EventBus.customer_navigation_mode_selected.emit({
+		"customer_id": get_instance_id(),
+		"mode": "waypoint_fallback" if _use_waypoint_fallback else "navigation_agent",
+		"has_navigation_agent": _navigation_agent != null,
+		"has_navigation_region": has_navigation_region,
+	})
 
 
 func _find_navigation_region() -> NavigationRegion3D:
@@ -562,24 +605,28 @@ func _navigate_to_random_shelf() -> bool:
 	if unvisited.is_empty():
 		return false
 	var preferred: Array[Node] = _filter_preferred_slots(unvisited)
-	var target: Node = (
-		preferred.pick_random() if not preferred.is_empty()
-		else unvisited.pick_random()
+	var target_pool: Array[Node] = preferred if not preferred.is_empty() else unvisited
+	var target_index: int = GameRandom.pick_index(
+		RandomStreamIds.CUSTOMER_NAVIGATION, target_pool.size()
 	)
+	if target_index < 0:
+		return false
+	var target: Node = target_pool[target_index]
 	_current_target_slot = target
 	_visited_slots.append(target)
 	var target_3d: Node3D = target as Node3D
 	if target_3d:
-		_set_navigation_target(target_3d.global_position)
+		_set_navigation_target(target_3d.global_position, &"shelf")
 	return true
 
 
 func _navigate_to_register() -> void:
-	_set_navigation_target(_register_position)
+	_register_arrival_reported = false
+	_set_navigation_target(_register_position, &"register")
 
 
 func _navigate_to_exit() -> void:
-	_set_navigation_target(_exit_position)
+	_set_navigation_target(_exit_position, &"exit")
 
 
 func _evaluate_current_shelf() -> void:
@@ -631,7 +678,9 @@ func _is_item_desirable(item: ItemInstance) -> bool:
 	var category_match: bool = _matches_categories(item)
 	var tag_match: bool = _matches_tags(item)
 	if not category_match and not tag_match:
-		return randf() < profile.impulse_buy_chance
+		return GameRandom.chance(
+			RandomStreamIds.CUSTOMER_PURCHASE, profile.impulse_buy_chance
+		)
 	return true
 
 
@@ -745,7 +794,8 @@ func _filter_preferred_slots(slots: Array[Node]) -> Array[Node]:
 
 
 func _reset_browse_timer() -> void:
-	browse_timer = randf_range(
+	browse_timer = GameRandom.randf_range(
+		RandomStreamIds.CUSTOMER_BROWSE,
 		profile.browse_time_range[0] * _browse_min_multiplier,
 		profile.browse_time_range[1]
 	)
@@ -765,15 +815,21 @@ func _build_customer_data() -> Dictionary:
 func _randomize_body_color() -> void:
 	if not _body_mesh or not _head_mesh:
 		return
-	var base_hue: float = randf()
-	var saturation: float = randf_range(0.3, 0.7)
-	var value_v: float = randf_range(0.5, 0.9)
+	var base_hue: float = GameRandom.randf(RandomStreamIds.CUSTOMER_APPEARANCE)
+	var saturation: float = GameRandom.randf_range(
+		RandomStreamIds.CUSTOMER_APPEARANCE, 0.3, 0.7
+	)
+	var value_v: float = GameRandom.randf_range(
+		RandomStreamIds.CUSTOMER_APPEARANCE, 0.5, 0.9
+	)
 	var body_color := Color.from_hsv(base_hue, saturation, value_v)
 	var body_material := StandardMaterial3D.new()
 	body_material.albedo_color = body_color
 	_body_mesh.material_override = body_material
 	var skin_color := Color.from_hsv(
-		randf_range(0.05, 0.12), randf_range(0.2, 0.5), randf_range(0.6, 0.9)
+		GameRandom.randf_range(RandomStreamIds.CUSTOMER_APPEARANCE, 0.05, 0.12),
+		GameRandom.randf_range(RandomStreamIds.CUSTOMER_APPEARANCE, 0.2, 0.5),
+		GameRandom.randf_range(RandomStreamIds.CUSTOMER_APPEARANCE, 0.6, 0.9)
 	)
 	var skin_material := StandardMaterial3D.new()
 	skin_material.albedo_color = skin_color
@@ -811,14 +867,157 @@ func _is_navigation_finished() -> bool:
 	return _navigation_agent.is_navigation_finished()
 
 
-func _set_navigation_target(target_position: Vector3) -> void:
+func _set_navigation_target(target_position: Vector3, target_kind: StringName = &"") -> void:
 	_fallback_target = target_position
 	_fallback_arrived = global_position.distance_squared_to(
 		target_position
 	) < WAYPOINT_ARRIVAL_DIST_SQ
-	if _use_waypoint_fallback or _navigation_agent == null:
+	if not (_use_waypoint_fallback or _navigation_agent == null):
+		_navigation_agent.target_position = target_position
+	_begin_navigation_target(target_position, _resolved_target_kind(target_kind))
+
+
+func _resolved_target_kind(explicit_kind: StringName) -> StringName:
+	if not String(explicit_kind).is_empty():
+		return explicit_kind
+	match current_state:
+		State.WAITING_IN_QUEUE:
+			return &"queue_slot"
+		State.PURCHASING:
+			return &"register"
+		State.LEAVING:
+			return &"exit"
+		_:
+			return &"shelf"
+
+
+func _begin_navigation_target(target_position: Vector3, target_kind: StringName) -> void:
+	_nav_target_kind = target_kind
+	_nav_target_started_msec = Time.get_ticks_msec()
+	_nav_was_finished = _is_navigation_finished()
+	_last_nav_progress_position = global_position
+	_last_nav_progress_msec = _nav_target_started_msec
+	_nav_stall_reported = false
+	_nav_timeout_reported = false
+	EventBus.customer_navigation_target_set.emit({
+		"customer_id": get_instance_id(),
+		"state": state_name(current_state),
+		"target_kind": String(target_kind),
+		"target_position": target_position,
+		"using_waypoint_fallback": _use_waypoint_fallback,
+		"has_navigation_agent": _navigation_agent != null,
+	})
+	if _nav_was_finished:
+		_emit_navigation_completed()
+
+
+func _reset_navigation_metrics() -> void:
+	_nav_target_kind = &""
+	_nav_target_started_msec = 0
+	_nav_was_finished = true
+	_last_nav_progress_position = global_position
+	_last_nav_progress_msec = 0
+	_nav_stall_reported = false
+	_nav_timeout_reported = false
+	_register_arrival_reported = false
+	_despawn_metric_reported = false
+
+
+func _update_navigation_metrics() -> void:
+	if String(_nav_target_kind).is_empty():
 		return
-	_navigation_agent.target_position = target_position
+	var now_msec: int = Time.get_ticks_msec()
+	var finished: bool = _is_navigation_finished()
+	if global_position.distance_squared_to(_last_nav_progress_position) >= NAV_PROGRESS_MIN_DIST_SQ:
+		_last_nav_progress_position = global_position
+		_last_nav_progress_msec = now_msec
+	if finished:
+		if not _nav_was_finished:
+			_emit_navigation_completed()
+		_nav_was_finished = true
+		return
+	_nav_was_finished = false
+	var no_progress_seconds: float = float(now_msec - _last_nav_progress_msec) / 1000.0
+	var target_age_seconds: float = float(now_msec - _nav_target_started_msec) / 1000.0
+	if not _nav_stall_reported and no_progress_seconds >= NAV_STALL_SECONDS:
+		_nav_stall_reported = true
+		_emit_navigation_problem(&"stall", no_progress_seconds, target_age_seconds)
+	if not _nav_timeout_reported and target_age_seconds >= _navigation_timeout_seconds():
+		_nav_timeout_reported = true
+		_emit_navigation_problem(&"timeout", no_progress_seconds, target_age_seconds)
+
+
+func _emit_navigation_completed() -> void:
+	EventBus.customer_navigation_completed.emit({
+		"customer_id": get_instance_id(),
+		"state": state_name(current_state),
+		"target_kind": String(_nav_target_kind),
+		"elapsed_seconds": _navigation_target_age_seconds(),
+		"using_waypoint_fallback": _use_waypoint_fallback,
+		"distance_remaining": _navigation_distance_remaining(),
+	})
+
+
+func _emit_navigation_problem(
+	failure: StringName, no_progress_seconds: float, target_age_seconds: float
+) -> void:
+	if _is_expected_manual_checkout_wait():
+		return
+	EventBus.customer_navigation_stalled.emit({
+		"customer_id": get_instance_id(),
+		"state": state_name(current_state),
+		"target_kind": String(_nav_target_kind),
+		"failure": String(failure),
+		"elapsed_seconds": target_age_seconds,
+		"seconds_without_progress": no_progress_seconds,
+		"distance_to_target": _navigation_distance_remaining(),
+		"using_waypoint_fallback": _use_waypoint_fallback,
+		"position": global_position,
+		"target_position": _navigation_target_position(),
+	})
+
+
+func _emit_register_arrival_once() -> void:
+	if _register_arrival_reported:
+		return
+	_register_arrival_reported = true
+	EventBus.customer_register_arrival.emit({
+		"customer_id": get_instance_id(),
+		"awaiting_player_checkout": _awaiting_player_checkout,
+		"target": "register",
+	})
+
+
+func _navigation_timeout_seconds() -> float:
+	match _nav_target_kind:
+		&"queue_slot", &"register":
+			return 30.0
+		_:
+			return NAV_TARGET_TIMEOUT_SECONDS
+
+
+func _navigation_target_age_seconds() -> float:
+	if _nav_target_started_msec <= 0:
+		return 0.0
+	return float(Time.get_ticks_msec() - _nav_target_started_msec) / 1000.0
+
+
+func _navigation_distance_remaining() -> float:
+	return global_position.distance_to(_navigation_target_position())
+
+
+func _navigation_target_position() -> Vector3:
+	if _use_waypoint_fallback or _navigation_agent == null:
+		return _fallback_target
+	return _navigation_agent.target_position
+
+
+func _is_expected_manual_checkout_wait() -> bool:
+	return (
+		current_state == State.PURCHASING
+		and _awaiting_player_checkout
+		and _is_navigation_finished()
+	)
 
 
 func _update_animator_movement(current_velocity: Vector3) -> void:

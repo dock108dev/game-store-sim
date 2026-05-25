@@ -62,6 +62,27 @@ func test_set_flag_emits_only_on_change() -> void:
 	assert_true(_state.get_flag(&"tutorial_done"))
 
 
+func test_run_state_snapshot_is_copy_safe() -> void:
+	_state.set_active_store(&"retro_games")
+	_state.day = 3
+	_state.money = 125
+	_state.employee_trust = 72.0
+	_state.manager_approval = 44.0
+	_state.set_flag(&"tutorial_done", true)
+
+	var snapshot: Dictionary = _state.get_run_state_snapshot()
+	assert_eq(snapshot.get("active_store_id", &""), &"retro_games")
+	assert_eq(int(snapshot.get("day", -1)), 3)
+	assert_eq(int(snapshot.get("money", -1)), 125)
+	assert_eq(float(snapshot.get("employee_trust", -1.0)), 72.0)
+	assert_eq(float(snapshot.get("manager_approval", -1.0)), 44.0)
+	var flags: Dictionary = snapshot.get("flags", {}) as Dictionary
+	assert_true(bool(flags.get(&"tutorial_done", false)))
+
+	flags[&"tutorial_done"] = false
+	assert_true(_state.get_flag(&"tutorial_done"))
+
+
 func test_no_scene_or_camera_or_input_calls_in_source() -> void:
 	# AC: GameState contains NO change_scene_to_*, camera, or input calls.
 	# Strip comments so the docstring may name these owners (matches the

@@ -7,7 +7,7 @@ func _ready() -> void:
 	prompt_text = "Talk to"
 	action_verb = "Talk"
 	interaction_type = InteractionType.CUSTOMER
-	interactable_id = &"customer_wrong_console_parent"
+	interactable_id = &"store_session.day_one_customer"
 	# Store session day-1 has exactly one customer at a known location, so the
 	# precision-raycast model is overkill. Opt into the proximity+facing
 	# fallback (interaction_ray.gd::_find_best_proximity_target) with a

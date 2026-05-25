@@ -1,0 +1,9 @@
+{
+	"id": "tutorial_full",
+	"title": "Tutorial Full Slot",
+	"tags": ["slot", "tutorial"],
+	"timeout_frames": 3600,
+	"steps": [
+		{"id": "placeholder_finish", "type": "finish", "timeout_frames": 30}
+	]
+}

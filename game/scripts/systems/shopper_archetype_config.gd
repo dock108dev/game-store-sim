@@ -214,7 +214,9 @@ static func weighted_random_select(
 		total += w
 	if total <= 0:
 		return PersonalityData.PersonalityType.WINDOW_BROWSER
-	var roll: int = randi_range(1, total)
+	var roll: int = GameRandom.randi_range(
+		RandomStreamIds.SHOPPER_SPAWN, 1, total
+	)
 	var cumulative: int = 0
 	for archetype: PersonalityData.PersonalityType in weights:
 		cumulative += weights[archetype] as int

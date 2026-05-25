@@ -134,4 +134,4 @@ func _roll_purchase_probability(npc: Customer) -> bool:
 		&"purchase_probability_multiplier"
 	)
 	var final_prob: float = clampf(base * modifier, 0.0, 1.0)
-	return randf() < final_prob
+	return GameRandom.chance(RandomStreamIds.CHECKOUT_PURCHASE, final_prob)

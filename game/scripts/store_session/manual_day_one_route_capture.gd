@@ -5,6 +5,9 @@ extends RefCounted
 const StoreVisualSweepScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
+const AutomationArtifactsScript: GDScript = preload(
+	"res://game/scripts/core/automation_artifacts.gd"
+)
 const StoreProofContractScript: GDScript = preload(
 	"res://game/scripts/store_session/store_code_to_screen_proof_contract.gd"
 )
@@ -370,11 +373,13 @@ static func write_route_manifest(
 			return dir_result
 
 	var manifest_path: String = "%s/%s" % [run_dir, MANIFEST_FILENAME]
-	var file: FileAccess = FileAccess.open(manifest_path, FileAccess.WRITE)
-	if file == null:
-		return _error("Cannot write route manifest: %s" % manifest_path)
-	file.store_string(JSON.stringify(manifest, "\t"))
-	file.close()
+	var manifest_result: Dictionary = AutomationArtifactsScript.write_json(
+		manifest_path,
+		manifest,
+		"Cannot write route manifest"
+	)
+	if not bool(manifest_result.get("ok", false)):
+		return manifest_result
 
 	var review_result: Dictionary = _write_manual_review(run_dir, manifest)
 	if not bool(review_result.get("ok", false)):

@@ -13,13 +13,27 @@
 #
 # Test hook: set AUDIT_SKIP_RUN=1 and AUDIT_LOG=<path> to skip the headless
 # Godot run and gate against an existing log file (used by
-# tests/validate_issue_004.sh).
+# shell validator tests).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-AUDIT_LOG="${AUDIT_LOG:-$ROOT/tests/audit.log}"
-REQUIRED_FILE="$ROOT/tests/audit_required_checkpoints.txt"
-KNOWN_FAIL_FILE="$ROOT/tests/audit_known_fail.txt"
+source "$ROOT/scripts/artifact_paths.sh"
+ARTIFACT_ROOT="$(resolve_mallcore_artifact_root "$ROOT")"
+export MALLCORE_ARTIFACT_DIR="$ARTIFACT_ROOT"
+SCENARIO_LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/scenario")"
+mkdir -p "$SCENARIO_LOG_DIR"
+AUDIT_LOG="${AUDIT_LOG:-$SCENARIO_LOG_DIR/audit.log}"
+REQUIRED_FILE="${AUDIT_REQUIRED_FILE:-$ROOT/tests/audit_required_checkpoints.txt}"
+METADATA_FILE="${AUDIT_METADATA_FILE:-$ROOT/tests/audit_checkpoint_metadata.json}"
+SCENARIO_ID="${AUDIT_SCENARIO_ID:-runtime_audit}"
+SCENARIO_SEED="${AUDIT_SCENARIO_SEED:-}"
+if [ -n "${AUDIT_KNOWN_FAIL_FILE:-}" ]; then
+	KNOWN_FAIL_FILE="$AUDIT_KNOWN_FAIL_FILE"
+elif [ -n "${AUDIT_REQUIRED_FILE:-}" ]; then
+	KNOWN_FAIL_FILE="$ROOT/tests/audit_scenarios/${SCENARIO_ID}_known_fail.txt"
+else
+	KNOWN_FAIL_FILE="$ROOT/tests/audit_known_fail.txt"
+fi
 EXIT_CODE=0
 
 # ── Resolve Godot binary ──────────────────────────────────────────────────────
@@ -122,12 +136,14 @@ if [ -f "$KNOWN_FAIL_FILE" ]; then
 fi
 
 # Orphan check: known-fail entries must reference a required checkpoint.
-for ck in "${KNOWN_FAIL_LIST[@]}"; do
-	if ! _list_contains "$ck" "${REQUIRED_LIST[@]}"; then
-		echo "AUDIT FAILED: known-fail entry '$ck' is not in required manifest." >&2
-		EXIT_CODE=1
-	fi
-done
+if [ "${#KNOWN_FAIL_LIST[@]}" -gt 0 ]; then
+	for ck in "${KNOWN_FAIL_LIST[@]}"; do
+		if ! _list_contains "$ck" "${REQUIRED_LIST[@]}"; then
+			echo "AUDIT FAILED: known-fail entry '$ck' is not in required manifest." >&2
+			EXIT_CODE=1
+		fi
+	done
+fi
 
 # ── Parse structured AUDIT: PASS|FAIL <name> lines (AuditLog) ─────────────────
 AUDIT_PASS_TEXT=""
@@ -159,7 +175,7 @@ MISSING=("")
 for ck in "${REQUIRED_LIST[@]}"; do
 	if _text_contains_line "$ck" "$AUDIT_PASS_TEXT"; then
 		N=$((N + 1))
-	elif _list_contains "$ck" "${KNOWN_FAIL_LIST[@]}"; then
+	elif [ "${#KNOWN_FAIL_LIST[@]}" -gt 0 ] && _list_contains "$ck" "${KNOWN_FAIL_LIST[@]}"; then
 		: # whitelisted — counted toward M but not toward N
 	else
 		MISSING+=("$ck")
@@ -171,7 +187,7 @@ while IFS= read -r ck; do
 	if [ -z "$ck" ]; then
 		continue
 	fi
-	if ! _list_contains "$ck" "${KNOWN_FAIL_LIST[@]}"; then
+	if [ "${#KNOWN_FAIL_LIST[@]}" -eq 0 ] || ! _list_contains "$ck" "${KNOWN_FAIL_LIST[@]}"; then
 		echo "AUDIT FAILED: AUDIT: FAIL '$ck' emitted (not whitelisted)." >&2
 		EXIT_CODE=1
 	fi
@@ -188,15 +204,34 @@ for ck in "${MISSING[@]}"; do
 done
 
 # Detect stale known-fail entries (whitelisted but actually emitted PASS).
-for ck in "${KNOWN_FAIL_LIST[@]}"; do
-	if _text_contains_line "$ck" "$AUDIT_PASS_TEXT"; then
-		echo "AUDIT FAILED: '$ck' emitted PASS but is still listed in tests/audit_known_fail.txt — remove it." >&2
-		EXIT_CODE=1
-	fi
-done
+if [ "${#KNOWN_FAIL_LIST[@]}" -gt 0 ]; then
+	for ck in "${KNOWN_FAIL_LIST[@]}"; do
+		if _text_contains_line "$ck" "$AUDIT_PASS_TEXT"; then
+			echo "AUDIT FAILED: '$ck' emitted PASS but is still listed in tests/audit_known_fail.txt — remove it." >&2
+			EXIT_CODE=1
+		fi
+	done
+fi
 
 # Single canonical summary line — parsed by CI.
 echo "AUDIT: $N/$M verified"
+
+if command -v python3 &>/dev/null; then
+	if ! python3 "$ROOT/scripts/generate_audit_scenario_report.py" \
+		--audit-log "$AUDIT_LOG" \
+		--artifact-root "$ARTIFACT_ROOT" \
+		--required-file "$REQUIRED_FILE" \
+		--known-fail-file "$KNOWN_FAIL_FILE" \
+		--metadata-file "$METADATA_FILE" \
+		--scenario-id "$SCENARIO_ID" \
+		--seed "$SCENARIO_SEED"; then
+		echo "AUDIT FAILED: scenario report generation failed." >&2
+		EXIT_CODE=1
+	fi
+else
+	echo "AUDIT FAILED: python3 is required to generate scenario reports." >&2
+	EXIT_CODE=1
+fi
 
 if [ "$EXIT_CODE" -eq 0 ]; then
 	echo "AUDIT PASSED"

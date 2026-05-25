@@ -209,6 +209,29 @@ func _ready() -> void:
 	_seed_counters_from_systems()
 	_apply_state_visibility(GameManager.current_state)
 	_refresh_zero_state_hint()
+	call_deferred("_emit_ready_checkpoint")
+
+
+func _emit_ready_checkpoint() -> void:
+	var missing: Array[String] = []
+	for path: NodePath in [
+		^"TopBar",
+		^"TopBar/CashLabel",
+		^"TopBar/TimeLabel",
+		^"TopBar/ItemsPlacedLabel",
+		^"TopBar/BackRoomLabel",
+		^"TopBar/CustomersLabel",
+		^"TopBar/SalesTodayLabel",
+	]:
+		if get_node_or_null(path) == null:
+			missing.append(str(path))
+	if not missing.is_empty():
+		if AuditLog != null:
+			AuditLog.fail_check(&"hud_ready_failed", "missing=%s" % ",".join(missing))
+		return
+	if AuditLog != null:
+		AuditLog.pass_check(&"hud_ready", "from=hud.gd")
+	EventBus.hud_ready.emit()
 
 
 ## Wires the HUD to EventBus, InputFocus, and button signals. Each connection
@@ -1182,6 +1205,8 @@ func _on_customer_left_hud(_customer_data: Dictionary) -> void:
 
 
 func _on_input_focus_changed(new_ctx: StringName, _old_ctx: StringName) -> void:
+	if not is_inside_tree():
+		return
 	_refresh_zero_state_hint()
 	_apply_modal_dim(new_ctx == InputFocus.CTX_MODAL)
 
@@ -1502,6 +1527,8 @@ func _reset_for_tests() -> void:
 
 
 func _store_session_mode_active() -> bool:
+	if not is_inside_tree():
+		return false
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return false

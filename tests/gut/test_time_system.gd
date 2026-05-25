@@ -55,6 +55,20 @@ func test_set_speed_paused() -> void:
 	assert_true(_ts.is_paused())
 
 
+func test_read_api_exposes_speed_bounds_and_pause_state() -> void:
+	_ts.set_speed(TimeSystem.SpeedTier.FAST)
+	_ts.game_time_minutes = 900.0
+	_ts._on_input_focus_changed(&"modal", &"store_gameplay")
+
+	assert_eq(_ts.get_requested_speed_tier(), TimeSystem.SpeedTier.FAST)
+	assert_almost_eq(_ts.get_effective_speed_multiplier(), 3.0, 0.01)
+	assert_almost_eq(_ts.get_day_start_minutes(), 420.0, 0.01)
+	assert_almost_eq(_ts.get_day_end_minutes(), 1020.0, 0.01)
+	assert_almost_eq(_ts.get_minutes_until_day_end(), 120.0, 0.01)
+	assert_false(_ts.is_day_ended())
+	assert_true(_ts.is_focus_paused())
+
+
 func test_toggle_pause() -> void:
 	_ts.set_speed(TimeSystem.SpeedTier.FAST)
 	_ts.toggle_pause()

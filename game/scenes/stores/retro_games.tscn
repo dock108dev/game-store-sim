@@ -1090,7 +1090,7 @@ script = ExtResource("27_retrogames")
 ; .tscn so the orbit-camera flow can still load this scene without one.
 ; ============================================================
 
-[node name="PlayerEntrySpawn" type="Marker3D" parent="."]
+[node name="PlayerEntrySpawn" type="Marker3D" parent="." groups=["spawn.player"]]
 transform = Transform3D(0.882948, 0, -0.469471, 0, 1, 0, 0.469471, 0, 0.882948, 2.2, 0, 9.15)
 metadata/bounds_min = Vector3(-7.7, 0, -9.7)
 metadata/bounds_max = Vector3(7.7, 0, 9.7)
@@ -3182,7 +3182,7 @@ shape = SubResource("entry_shape")
 ; Register checkout zone
 ; ============================================================
 
-[node name="RegisterArea" type="Area3D" parent="." groups=["register_area"]]
+[node name="RegisterArea" type="Area3D" parent="." groups=["area.register", "register_area"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 1.0, 8.45)
 collision_layer = 0
 collision_mask = 2

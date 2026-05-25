@@ -4,6 +4,12 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TESTS_DIR="$ROOT/tests"
+source "$ROOT/scripts/artifact_paths.sh"
+ARTIFACT_ROOT="$(resolve_mallcore_artifact_root "$ROOT")"
+export MALLCORE_ARTIFACT_DIR="$ARTIFACT_ROOT"
+GUT_LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/gut")"
+STATIC_LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/static-validation")"
+mkdir -p "$GUT_LOG_DIR" "$STATIC_LOG_DIR"
 EXIT_CODE=0
 
 # Resolve Godot binary (PATH, GODOT, or GODOT_EXECUTABLE).
@@ -30,7 +36,7 @@ _resolve_godot_bin() {
 
 # Check if Godot is available
 if GODOT_BIN="$(_resolve_godot_bin)"; then
-    LOG_FILE="$ROOT/tests/test_run.log"
+    LOG_FILE="$GUT_LOG_DIR/test_run.log"
     : >"$LOG_FILE"
 
     echo "Godot found — importing project assets (addons/GUT textures, etc.)..."
@@ -78,7 +84,12 @@ _should_run_default_validator() {
 for test_script in "$TESTS_DIR"/validate_*.sh; do
     if [ -f "$test_script" ] && _should_run_default_validator "$test_script"; then
         echo ""
-        bash "$test_script" || EXIT_CODE=$?
+        VALIDATOR_LOG="$STATIC_LOG_DIR/$(basename "$test_script" .sh).log"
+        set +e
+        bash "$test_script" 2>&1 | tee "$VALIDATOR_LOG"
+        STATUS="${PIPESTATUS[0]}"
+        set -e
+        [ "$STATUS" -ne 0 ] && EXIT_CODE="$STATUS"
     fi
 done
 
@@ -87,7 +98,12 @@ SCRIPTS_DIR="$ROOT/scripts"
 for tripwire in validate_translations.sh validate_single_store_ui.sh validate_tutorial_single_source.sh; do
     if [ -x "$SCRIPTS_DIR/$tripwire" ]; then
         echo ""
-        bash "$SCRIPTS_DIR/$tripwire" || EXIT_CODE=$?
+        TRIPWIRE_LOG="$STATIC_LOG_DIR/${tripwire%.sh}.log"
+        set +e
+        bash "$SCRIPTS_DIR/$tripwire" 2>&1 | tee "$TRIPWIRE_LOG"
+        STATUS="${PIPESTATUS[0]}"
+        set -e
+        [ "$STATUS" -ne 0 ] && EXIT_CODE="$STATUS"
     fi
 done
 

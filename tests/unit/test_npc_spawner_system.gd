@@ -4,10 +4,13 @@ extends GutTest
 var _system: NPCSpawnerSystem
 var _store_root: Node3D
 var _store_definition: StoreDefinition
+var _pool_events: Array[Dictionary] = []
 
 
 func before_each() -> void:
 	ContentRegistry.clear_for_testing()
+	_pool_events = []
+	EventBus.npc_pool_changed.connect(_on_npc_pool_changed)
 	_store_root = Node3D.new()
 	_store_root.name = "retro_games"
 	add_child_autofree(_store_root)
@@ -34,7 +37,13 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	if EventBus.npc_pool_changed.is_connected(_on_npc_pool_changed):
+		EventBus.npc_pool_changed.disconnect(_on_npc_pool_changed)
 	ContentRegistry.clear_for_testing()
+
+
+func _on_npc_pool_changed(data: Dictionary) -> void:
+	_pool_events.append(data)
 
 
 func test_medium_store_uses_medium_capacity_constant() -> void:
@@ -60,3 +69,17 @@ func test_missing_npc_container_is_created_on_demand() -> void:
 	assert_not_null(npc)
 	assert_not_null(container)
 	assert_eq(npc.get_parent(), container)
+
+
+func test_spawn_and_despawn_emit_pool_metrics() -> void:
+	var npc: ShopperAI = (
+		_system.spawn_npc(&"window_browser", Vector3.ZERO) as ShopperAI
+	)
+	assert_not_null(npc)
+	_system.despawn_npc(npc)
+	var reasons: Array[String] = []
+	for event: Dictionary in _pool_events:
+		reasons.append(str(event.get("reason", "")))
+	assert_true(reasons.has("spawn_success"))
+	assert_true(reasons.has("despawn"))
+	assert_eq(int(_pool_events[-1].get("active_count", -1)), 0)

@@ -153,7 +153,9 @@ func _spawn_shopper_group(
 	var size_range: Vector2i = (
 		ShopperArchetypeConfig.get_group_size_range(archetype)
 	)
-	var group_size: int = randi_range(size_range.x, size_range.y)
+	var group_size: int = GameRandom.randi_range(
+		RandomStreamIds.SHOPPER_GROUP, size_range.x, size_range.y
+	)
 	var remaining_capacity: int = (
 		_cs.max_customers_in_mall - _cs._active_mall_shopper_count
 	)
@@ -173,7 +175,9 @@ func _spawn_shopper_group(
 			ShopperArchetypeConfig.create_personality(archetype)
 		)
 		var offset: Vector3 = Vector3(
-			randf_range(-0.5, 0.5), 0.0, randf_range(-0.5, 0.5)
+			GameRandom.randf_range(RandomStreamIds.SHOPPER_GROUP, -0.5, 0.5),
+			0.0,
+			GameRandom.randf_range(RandomStreamIds.SHOPPER_GROUP, -0.5, 0.5)
 		)
 		_cs.add_child(shopper)
 		group.add_member(shopper)
@@ -195,7 +199,10 @@ func _find_exit_waypoint_position() -> Vector3:
 	if exits.is_empty():
 		push_warning("CustomerSystem: No EXIT waypoints found for spawning")
 		return Vector3.ZERO
-	return exits.pick_random().global_position
+	var index: int = GameRandom.pick_index(RandomStreamIds.SHOPPER_SPAWN, exits.size())
+	if index < 0:
+		return Vector3.ZERO
+	return exits[index].global_position
 
 
 func _get_live_mall_shopper_count() -> int:

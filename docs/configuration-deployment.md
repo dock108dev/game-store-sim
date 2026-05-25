@@ -45,8 +45,15 @@ Runtime persistence uses Godot `user://` paths:
 
 - settings: `user://settings.cfg` (owned by `Settings` autoload —
   `game/autoload/settings.gd`)
+- tutorial progress: `user://tutorial_progress.cfg`
 - save index: `user://save_index.cfg`
 - saves: `user://save_slot_<n>.json`
+- automation test runs: `user://test_runs/<run_id>/`
+
+`UserDataPaths` (`game/autoload/user_data_paths.gd`) is the path resolver for
+normal play and isolated automation runs. When an automation root is active,
+settings, tutorial progress, the save index, save slots, and backups are routed
+under `user://test_runs/<run_id>/`.
 
 `SaveManager` (`game/scripts/core/save_manager.gd`) currently:
 
@@ -67,9 +74,12 @@ The checked-in integrations documented in this repository are:
   `validate_single_store_ui.sh`, `validate_tutorial_single_source.sh`),
   `validate_export_config.sh` (a local mirror of the export workflow's
   `validate-export-config` job, run independently from `tests/run_tests.sh`),
-  and `validate_originality.sh` (string-level trademark denylist over
-  `game/content/`, `game/scenes/`, and `game/scripts/stores/`)
-- GitHub Actions workflows for validation and tagged exports
+  `run_godot_tests.sh` (CI GUT wrapper), `run_fresh_install_smoke.sh`
+  (headless automation smoke), `render_nightly_videos.sh` (Movie Maker
+  scenario videos), and `validate_originality.sh` (string-level trademark
+  denylist over `game/content/`, `game/scenes/`, and `game/scripts/stores/`)
+- GitHub Actions workflows for validation, tagged exports, and nightly
+  scenario-video rendering
 - `gdtoolkit` linting in CI
 
 ## Export presets
@@ -115,10 +125,18 @@ and currently includes:
    `docs/architecture.md`) and repository-shape checks (no committed
    `.DS_Store`).
 2. `gut-tests` - Godot install, import, and headless GUT execution.
-3. `interaction-audit` - headless audit run that regenerates the daily audit
-   summary under `docs/audits/`.
+   `scripts/run_fresh_install_smoke.sh` runs after GUT in the same job.
+3. `interaction-audit` - headless audit run that writes scenario logs/reports
+   under the artifact tree and uploads `docs/audits/`.
 4. `content-originality` - banned-term check for real brands and trademarks.
 5. `lint-gdscript` - `gdlint` via `gdtoolkit`.
+
+### Nightly video workflow
+
+`.github/workflows/nightly-videos.yml` runs on the `17 8 * * *` UTC schedule
+and by manual dispatch. It installs Godot `4.6.2-stable`, runs
+`scripts/render_nightly_videos.sh` through `xvfb-run`, and uploads generated
+scenario videos plus logs with 14-day retention.
 
 ### Export workflow
 

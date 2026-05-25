@@ -78,6 +78,30 @@ func get_save_data() -> Dictionary:
 	}
 
 
+## Returns copy-safe session state for automation and scenario assertions.
+func get_session_snapshot() -> Dictionary:
+	return {
+		"day": day,
+		"cash": cash,
+		"reputation": reputation,
+		"daily_reputation_delta": daily_reputation_delta,
+		"daily_cash_delta": daily_cash_delta,
+		"manager_trust": manager_trust,
+		"hidden_thread_score": hidden_thread_score,
+		"flags": flags.duplicate(true),
+		"completed_events": completed_events.duplicate(),
+		"daily_events_resolved": daily_events_resolved.duplicate(),
+		"hidden_thread_signals_seen": hidden_thread_signals_seen.duplicate(),
+		"input_mode": input_mode,
+		"input_mode_name": _input_mode_name(input_mode),
+		"preopening_complete": preopening_complete,
+		"carrying_stock": carrying_stock,
+		"has_carry": carrying_stock,
+		"carried_item_id": "",
+		"carried_quantity": 1 if carrying_stock else 0,
+	}
+
+
 func load_save_data(data: Dictionary) -> void:
 	day = maxi(int(data.get("day", 1)), 1)
 	cash = int(data.get("cash", 0))
@@ -105,6 +129,22 @@ func set_input_mode(mode: int) -> void:
 		return
 	input_mode = mode
 	input_mode_changed.emit(mode)
+
+
+func _input_mode_name(mode: int) -> String:
+	match mode:
+		INPUT_MODE_GAMEPLAY:
+			return "gameplay"
+		INPUT_MODE_DECISION_CARD:
+			return "decision_card"
+		INPUT_MODE_PAUSE_MENU:
+			return "pause_menu"
+		INPUT_MODE_DAY_SUMMARY:
+			return "day_summary"
+		INPUT_MODE_CUSTOMER_RESULT:
+			return "customer_result"
+		_:
+			return "unknown"
 
 
 func _string_name_array(raw: Variant) -> Array[StringName]:

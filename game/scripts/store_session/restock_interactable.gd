@@ -7,7 +7,7 @@ func _ready() -> void:
 	prompt_text = "Stock"
 	action_verb = "Stock"
 	interaction_type = InteractionType.SHELF_SLOT
-	interactable_id = &"store_stock_shelf"
+	interactable_id = &"shelf.starter_display"
 	proximity_radius = 3.25
 	proximity_facing_dot = 0.25
 	super._ready()

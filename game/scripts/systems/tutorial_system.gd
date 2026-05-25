@@ -2,6 +2,8 @@
 class_name TutorialSystem
 extends Node
 
+const UserDataPathsScript: GDScript = preload("res://game/autoload/user_data_paths.gd")
+
 enum TutorialStep {
 	WELCOME,
 	PLATFORM_MATCH,
@@ -41,7 +43,7 @@ const STEP_TEXT_KEYS: Dictionary = {
 	TutorialStep.FINISHED: "",
 }
 
-const PROGRESS_PATH: String = "user://tutorial_progress.cfg"
+const PROGRESS_PATH: String = UserDataPathsScript.DEFAULT_TUTORIAL_PROGRESS_PATH
 # Hardening: cap the size of the user-controlled progress blob so a planted
 # multi-GB file can't wedge boot. See docs/audits/security-report.md §F1.
 const MAX_PROGRESS_FILE_BYTES: int = 65536
@@ -54,6 +56,8 @@ const WELCOME_DURATION: float = 5.0
 const CONTEXTUAL_TIP_DAYS: int = 3
 const STEP_COUNT: int = TutorialStep.FINISHED
 const TUTORIAL_STORE_ID: StringName = &"retro_games"
+const TUTORIAL_SYSTEM_GROUP: StringName = &"tutorial_system"
+const STORE_SESSION_CONTROLLER_GROUP: StringName = &"store_session_controller"
 # Bumped when the TutorialStep enum ordinals change. Persisted progress with a
 # different version is treated as incompatible and reset to a fresh tutorial so
 # a player's old cfg can't replay the wrong step IDs after a re-sequence.
@@ -71,6 +75,10 @@ var current_step: TutorialStep = TutorialStep.WELCOME
 var _tips_shown: Dictionary = {}
 var _completed_steps: Dictionary = {}
 var _welcome_timer: float = 0.0
+
+
+func _ready() -> void:
+	add_to_group(TUTORIAL_SYSTEM_GROUP)
 
 
 ## Starts a new tutorial session or resumes persisted first-play progress.
@@ -168,7 +176,7 @@ func _disconnect_step_signals() -> void:
 
 
 func _process(delta: float) -> void:
-	if not tutorial_active:
+	if not _can_advance_tutorial_step(false):
 		return
 	if current_step == TutorialStep.WELCOME:
 		_welcome_timer += delta
@@ -220,9 +228,19 @@ func load_save_data(data: Dictionary) -> void:
 	_save_progress()
 
 
-func _advance_step() -> void:
-	if not tutorial_active or tutorial_completed:
-		return
+## Advances the active legacy step only when store-session onboarding owns it.
+func acknowledge_store_session_step(step_id: String) -> bool:
+	var current_step_id: String = STEP_IDS.get(current_step, "")
+	if step_id != current_step_id:
+		return false
+	if not _store_session_mode_active():
+		return false
+	return _advance_step(true)
+
+
+func _advance_step(allow_store_session: bool = false) -> bool:
+	if not _can_advance_tutorial_step(allow_store_session):
+		return false
 	var old_step_id: String = STEP_IDS.get(current_step, "unknown")
 	_completed_steps[old_step_id] = true
 	EventBus.tutorial_step_completed.emit(old_step_id)
@@ -230,11 +248,20 @@ func _advance_step() -> void:
 	var next_value: int = current_step + 1
 	if next_value >= TutorialStep.FINISHED:
 		_complete_tutorial()
-		return
+		return true
 
 	current_step = next_value as TutorialStep
 	_save_progress()
 	_emit_current_step()
+	return true
+
+
+func _can_advance_tutorial_step(allow_store_session: bool) -> bool:
+	if not tutorial_active or tutorial_completed:
+		return false
+	if allow_store_session:
+		return true
+	return not _store_session_mode_active()
 
 
 func _complete_tutorial(should_save: bool = true) -> void:
@@ -385,7 +412,8 @@ func _save_progress() -> void:
 	for key: String in _tips_shown:
 		tips_data[key] = _tips_shown[key]
 	config.set_value("tutorial", "tips_shown", tips_data)
-	var err: Error = config.save(PROGRESS_PATH)
+	var path: String = _progress_path()
+	var err: Error = config.save(path)
 	if err != OK:
 		push_error(
 			"Failed to save tutorial progress: %s" % error_string(err)
@@ -396,9 +424,10 @@ func _load_progress() -> void:
 	var config := ConfigFile.new()
 	# Pre-validate file size before handing the blob to ConfigFile so a planted
 	# oversized user:// file can't wedge boot. See security-report.md §F1.
-	if FileAccess.file_exists(PROGRESS_PATH):
+	var path: String = _progress_path()
+	if FileAccess.file_exists(path):
 		var probe: FileAccess = FileAccess.open(
-			PROGRESS_PATH, FileAccess.READ
+			path, FileAccess.READ
 		)
 		if probe and probe.get_length() > MAX_PROGRESS_FILE_BYTES:
 			probe.close()
@@ -407,7 +436,7 @@ func _load_progress() -> void:
 					"TutorialSystem: '%s' exceeds maximum supported size "
 					+ "(%d bytes) — resetting progress"
 				)
-				% [PROGRESS_PATH, MAX_PROGRESS_FILE_BYTES]
+				% [path, MAX_PROGRESS_FILE_BYTES]
 			)
 			_apply_state({
 				"tutorial_completed": false,
@@ -417,12 +446,12 @@ func _load_progress() -> void:
 			return
 		if probe:
 			probe.close()
-	var err: Error = config.load(PROGRESS_PATH)
+	var err: Error = config.load(path)
 	if err != OK:
-		if FileAccess.file_exists(PROGRESS_PATH):
+		if FileAccess.file_exists(path):
 			push_warning(
 				"TutorialSystem: failed to load '%s' — resetting progress"
-				% PROGRESS_PATH
+				% path
 			)
 		_apply_state({
 			"tutorial_completed": false,
@@ -447,7 +476,7 @@ func _load_progress() -> void:
 				"TutorialSystem: '%s' schema_version=%d != %d — "
 				+ "resetting progress"
 			)
-			% [PROGRESS_PATH, loaded_version, SCHEMA_VERSION]
+			% [path, loaded_version, SCHEMA_VERSION]
 		)
 		_apply_state({
 			"tutorial_completed": false,
@@ -474,6 +503,19 @@ func _load_progress() -> void:
 		),
 	}
 	_apply_state(data)
+
+
+func _progress_path() -> String:
+	if UserDataPaths != null:
+		return UserDataPaths.tutorial_progress_path()
+	return PROGRESS_PATH
+
+
+func _store_session_mode_active() -> bool:
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return false
+	return tree.get_first_node_in_group(STORE_SESSION_CONTROLLER_GROUP) != null
 
 
 func _apply_state(data: Dictionary) -> void:

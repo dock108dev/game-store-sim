@@ -1,0 +1,160 @@
+{
+	"id": "fresh_install_smoke",
+	"title": "Fresh Install Smoke",
+	"tags": ["smoke", "boot", "gameplay"],
+	"timeout_frames": 1800,
+	"steps": [
+		{
+			"id": "boot_scene_ready",
+			"type": "wait_audit",
+			"checkpoint": "boot_scene_ready",
+			"status": "PASS",
+			"timeout_frames": 120
+		},
+		{
+			"id": "boot_completed_state",
+			"type": "assert_node",
+			"target": "/root/GameManager",
+			"method": "is_boot_completed",
+			"assert": {"mode": "equals", "expected": true},
+			"timeout_frames": 120
+		},
+		{
+			"id": "main_menu_ready",
+			"type": "wait_audit",
+			"checkpoint": "main_menu_ready",
+			"status": "PASS",
+			"timeout_frames": 300
+		},
+		{
+			"id": "main_menu_scene_change_complete",
+			"type": "wait_audit",
+			"checkpoint": "scene_change_ok",
+			"status": "PASS",
+			"timeout_frames": 300
+		},
+		{
+			"id": "settle_main_menu_transition",
+			"type": "advance_frames",
+			"count": 40,
+			"timeout_frames": 60
+		},
+		{
+			"id": "start_new_game_from_menu",
+			"type": "call_node",
+			"target": "/root/MainMenu",
+			"method": "start_new_game_from_menu",
+			"args": [],
+			"timeout_frames": 120
+		},
+		{
+			"id": "new_game_clicked",
+			"type": "wait_audit",
+			"checkpoint": "new_game_clicked",
+			"status": "PASS",
+			"timeout_frames": 120
+		},
+		{
+			"id": "gameplay_shell_ready",
+			"type": "wait_audit",
+			"checkpoint": "gameplay_shell_ready",
+			"status": "PASS",
+			"timeout_frames": 600
+		},
+		{
+			"id": "gameplay_ready",
+			"type": "wait_audit",
+			"checkpoint": "gameplay_ready",
+			"status": "PASS",
+			"timeout_frames": 900
+		},
+		{
+			"id": "store_ready",
+			"type": "wait_audit",
+			"checkpoint": "director_state_ready",
+			"status": "PASS",
+			"timeout_frames": 900
+		},
+		{
+			"id": "day1_playable_ready",
+			"type": "wait_audit",
+			"checkpoint": "day1_playable_ready",
+			"status": "PASS",
+			"timeout_frames": 300
+		},
+		{
+			"id": "hud_ready",
+			"type": "wait_audit",
+			"checkpoint": "hud_ready",
+			"status": "PASS",
+			"timeout_frames": 300
+		},
+		{
+			"id": "settle_gameplay",
+			"type": "advance_frames",
+			"count": 2,
+			"timeout_frames": 30
+		},
+		{
+			"id": "player_exists",
+			"type": "assert_node",
+			"target": "/root/AutomationRunner",
+			"method": "is_player_present",
+			"assert": {"mode": "equals", "expected": true},
+			"timeout_frames": 120
+		},
+		{
+			"id": "camera_exists",
+			"type": "assert_node",
+			"target": "/root/AutomationRunner",
+			"method": "is_current_camera_present",
+			"assert": {"mode": "equals", "expected": true},
+			"timeout_frames": 120
+		},
+		{
+			"id": "hud_exists",
+			"type": "assert_node",
+			"target": "/root/AutomationRunner",
+			"method": "is_hud_present",
+			"assert": {"mode": "equals", "expected": true},
+			"timeout_frames": 120
+		},
+		{
+			"id": "mall_or_store_scene_exists",
+			"type": "assert_node",
+			"target": "/root/AutomationRunner",
+			"method": "is_mall_or_store_scene_present",
+			"assert": {"mode": "equals", "expected": true},
+			"timeout_frames": 120
+		},
+		{
+			"id": "no_blocking_error_or_modal",
+			"type": "assert_node",
+			"target": "/root/AutomationRunner",
+			"method": "get_blocking_error_or_modal_reason",
+			"assert": {"mode": "equals", "expected": ""},
+			"timeout_frames": 120
+		},
+		{
+			"id": "active_store_capture",
+			"type": "capture",
+			"mode": "state",
+			"label": "active_store",
+			"target": "/root/GameManager",
+			"method": "get_active_store_id",
+			"args": [],
+			"timeout_frames": 120
+		},
+		{
+			"id": "first_playable_screenshot",
+			"type": "screenshot",
+			"label": "first_playable_state",
+			"timeout_frames": 120
+		},
+		{
+			"id": "scenario_exit",
+			"type": "finish",
+			"timeout_frames": 30
+		}
+	]
+}

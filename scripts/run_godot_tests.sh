@@ -5,12 +5,21 @@
 ## upload step can grab the raw log on failure.
 set -euo pipefail
 
-: "${GITHUB_WORKSPACE:?GITHUB_WORKSPACE must be set (CI provides this; for local use, export the repo root)}"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "$ROOT/scripts/artifact_paths.sh"
+ARTIFACT_ROOT="$(resolve_mallcore_artifact_root "$ROOT")"
+export MALLCORE_ARTIFACT_DIR="$ARTIFACT_ROOT"
+GUT_LOG_DIR="$(mallcore_artifact_path "$ARTIFACT_ROOT" "logs/gut")"
+mkdir -p "$GUT_LOG_DIR"
 
-GUT_OUTPUT_FILE="$(mktemp)"
-echo "GUT_OUTPUT_FILE=$GUT_OUTPUT_FILE" >> "${GITHUB_ENV:-/dev/null}"
+GUT_OUTPUT_FILE="$GUT_LOG_DIR/gut.log"
+: >"$GUT_OUTPUT_FILE"
+if [ -n "${GITHUB_ENV:-}" ]; then
+	echo "MALLCORE_ARTIFACT_DIR=$ARTIFACT_ROOT" >> "$GITHUB_ENV"
+	echo "GUT_OUTPUT_FILE=$GUT_OUTPUT_FILE" >> "$GITHUB_ENV"
+fi
 
-"$GITHUB_WORKSPACE/tests/validate_store_session_naming.sh"
+"$ROOT/tests/validate_store_session_naming.sh"
 
 # Strip engine-shutdown noise emitted *after* GUT finishes, before it reaches
 # the log or the CI display. In headless mode the renderer-cleanup pass runs
@@ -22,10 +31,28 @@ echo "GUT_OUTPUT_FILE=$GUT_OUTPUT_FILE" >> "${GITHUB_ENV:-/dev/null}"
 # `     at: ...` continuation lines so the log shows test signal only.
 SHUTDOWN_NOISE_RE='^WARNING: [0-9]+ RIDs? of type "[^"]+" (was|were) leaked\.$|^WARNING: ObjectDB instances leaked at exit|^ERROR: [0-9]+ RID allocations of type .+ were leaked at exit\.$|^ERROR: [0-9]+ resources still in use at exit|^ERROR: Pages in use exist at exit in PagedAllocator: .+$|^ +at: _free_rids \(servers/rendering/renderer_canvas_cull|^ +at: cleanup \(core/object/object\.cpp|^ +at: clear \(core/io/resource\.cpp|^ +at: ~PagedAllocator \(\./core/templates/paged_allocator\.h'
 
-godot --path "$GITHUB_WORKSPACE" --headless \
+set +e
+godot --path "$ROOT" --headless \
 	--script res://addons/gut/gut_cmdln.gd -- \
 	-gconfig=res://.gutconfig.json -gexit \
-	2>&1 | grep -vE "$SHUTDOWN_NOISE_RE" | tee "$GUT_OUTPUT_FILE" || true
+	2>&1 | grep -vE "$SHUTDOWN_NOISE_RE" | tee "$GUT_OUTPUT_FILE"
+set -e
+
+# Scenario-owned exits are project-controlled and must survive the shutdown
+# noise filter above. Trust the final SCENARIO exit marker when present.
+SCENARIO_EXIT_LINE="$(grep "^SCENARIO: EXIT code=" "$GUT_OUTPUT_FILE" | tail -n 1 || true)"
+if [ -n "$SCENARIO_EXIT_LINE" ]; then
+	SCENARIO_CODE="$(echo "$SCENARIO_EXIT_LINE" | sed -E 's/^SCENARIO: EXIT code=([0-9]+).*/\1/')"
+	if [ "$SCENARIO_CODE" != "0" ]; then
+		echo "::error::Scenario runner exited with code $SCENARIO_CODE."
+		exit "$SCENARIO_CODE"
+	fi
+fi
+
+if grep -q "^SCENARIO: FAIL " "$GUT_OUTPUT_FILE"; then
+	echo "::error::Scenario failure lines were emitted without a non-zero exit marker."
+	exit 11
+fi
 
 # Trust GUT's own summary for pass/fail. On Linux, headless Godot exits
 # non-zero whenever autoload-held resources leak at shutdown (unavoidable

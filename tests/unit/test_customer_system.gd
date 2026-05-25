@@ -16,6 +16,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	GameRandom.disable_test_mode()
 	DifficultySystemSingleton.set_tier(_original_tier)
 
 
@@ -71,13 +72,13 @@ func test_evening_weights_normalize_to_one() -> void:
 
 
 func test_weighted_select_is_deterministic_with_fixed_seed() -> void:
-	seed(42)
+	GameRandom.enable_test_mode("shopper_weight_test")
 	var first: PersonalityData.PersonalityType = (
 		ShopperArchetypeConfig.weighted_random_select(
 			ShopperArchetypeConfig.WEIGHTS_MORNING
 		)
 	)
-	seed(42)
+	GameRandom.enable_test_mode("shopper_weight_test")
 	var second: PersonalityData.PersonalityType = (
 		ShopperArchetypeConfig.weighted_random_select(
 			ShopperArchetypeConfig.WEIGHTS_MORNING

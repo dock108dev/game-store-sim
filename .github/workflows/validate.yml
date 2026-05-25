@@ -81,6 +81,9 @@ jobs:
       - name: Run GUT tests
         run: bash scripts/run_godot_tests.sh
 
+      - name: Run fresh install smoke
+        run: bash scripts/run_fresh_install_smoke.sh
+
       - name: Upload GUT output on failure
         if: failure()
         uses: actions/upload-artifact@v7

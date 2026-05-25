@@ -14,8 +14,18 @@ var _save_manager: SaveManager
 
 
 func before_each() -> void:
+	var path_err: Error = UserDataPaths.configure_test_run(
+		"save_migration_chain",
+		true
+	)
+	assert_eq(path_err, OK, "test setup must isolate backup paths")
 	_save_manager = SaveManager.new()
 	add_child_autofree(_save_manager)
+
+
+func after_each() -> void:
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 func _load_fixture(path: String) -> Dictionary:
@@ -196,7 +206,7 @@ func test_migration_does_not_mutate_input_dictionary() -> void:
 ## ISSUE-016: migrations must copy the pre-migration file to user://backups/
 ## so operators can recover the original on-disk shape.
 func test_backup_before_migration_writes_copy_to_backup_dir() -> void:
-	var source_path: String = "user://test_issue016_source.json"
+	var source_path: String = "%stest_source.json" % UserDataPaths.save_dir()
 	var payload: String = JSON.stringify(
 		{"save_version": 1, "marker": "original_v1"}, "\t"
 	)
@@ -208,7 +218,7 @@ func test_backup_before_migration_writes_copy_to_backup_dir() -> void:
 	_save_manager._backup_before_migration(source_path, 0, 1)
 
 	var found_backup: String = ""
-	var dir: DirAccess = DirAccess.open(SaveManager.BACKUP_DIR)
+	var dir: DirAccess = DirAccess.open(UserDataPaths.backup_dir())
 	assert_not_null(
 		dir, "Backup directory must be created by _backup_before_migration"
 	)
@@ -216,7 +226,7 @@ func test_backup_before_migration_writes_copy_to_backup_dir() -> void:
 	var entry: String = dir.get_next()
 	while entry != "":
 		if entry.begins_with("save_slot_0_v1_") and entry.ends_with(".json"):
-			found_backup = SaveManager.BACKUP_DIR + entry
+			found_backup = UserDataPaths.backup_dir() + entry
 			break
 		entry = dir.get_next()
 	dir.list_dir_end()
@@ -237,7 +247,7 @@ func test_backup_before_migration_writes_copy_to_backup_dir() -> void:
 
 
 func test_backup_before_migration_is_noop_when_source_missing() -> void:
-	var missing_path: String = "user://does_not_exist_issue016.json"
+	var missing_path: String = "%smissing_source.json" % UserDataPaths.save_dir()
 	_save_manager._backup_before_migration(missing_path, 0, 1)
 	assert_false(
 		FileAccess.file_exists(missing_path),

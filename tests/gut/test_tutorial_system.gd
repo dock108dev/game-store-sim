@@ -2,22 +2,28 @@
 extends GutTest
 
 
-const _PROGRESS_PATH: String = TutorialSystem.PROGRESS_PATH
+const _TEST_RUN_ID: String = "tutorial_system_paths"
 
 var _tutorial: TutorialSystem
 var _saved_tutorial_active: bool = false
+var _saved_settings_path: String = ""
 
 
 func before_each() -> void:
-	_clear_progress_file()
+	var err: Error = UserDataPaths.configure_test_run(_TEST_RUN_ID, true)
+	assert_eq(err, OK, "test setup must isolate tutorial progress")
 	_saved_tutorial_active = GameManager.is_tutorial_active
+	_saved_settings_path = Settings.settings_path
+	Settings.settings_path = UserDataPaths.settings_path()
 	_tutorial = TutorialSystem.new()
 	add_child_autofree(_tutorial)
 
 
 func after_each() -> void:
 	GameManager.is_tutorial_active = _saved_tutorial_active
-	_clear_progress_file()
+	Settings.settings_path = _saved_settings_path
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 func test_step_progression_advances_three_sequential_steps() -> void:
@@ -182,7 +188,7 @@ func test_stale_schema_version_resets_progress() -> void:
 		{"welcome": true, "open_inventory": true, "select_item": true}
 	)
 	stale.set_value("tutorial", "tips_shown", {})
-	var save_err: Error = stale.save(_PROGRESS_PATH)
+	var save_err: Error = stale.save(_progress_path())
 	assert_eq(save_err, OK, "Setup: stale cfg must be writable")
 
 	_tutorial.initialize(false)
@@ -252,13 +258,5 @@ func test_contextual_tips_emit_once_per_trigger_id() -> void:
 	EventBus.contextual_tip_requested.disconnect(on_tip)
 
 
-func _clear_progress_file() -> void:
-	if not FileAccess.file_exists(_PROGRESS_PATH):
-		return
-
-	var absolute_path: String = ProjectSettings.globalize_path(_PROGRESS_PATH)
-	var err: Error = DirAccess.remove_absolute(absolute_path)
-	if err != OK and err != ERR_DOES_NOT_EXIST:
-		push_error(
-			"Failed to remove tutorial progress file: %s" % error_string(err)
-		)
+func _progress_path() -> String:
+	return UserDataPaths.tutorial_progress_path()

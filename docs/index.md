@@ -28,13 +28,14 @@ This is the active project documentation set for the current Godot project.
 - [`docs/audits/docs-consolidation.md`](audits/docs-consolidation.md) records
   the most recent documentation review pass.
 
-`tests/audit_run.sh` can generate dated `docs/audits/YYYY-MM-DD-audit.md`
-interaction tables during local or CI audit runs. Generated audit tables are
-not part of the hand-maintained docs set.
+`tests/audit_run.sh` writes runtime audit logs and scenario reports under the
+artifact tree. Hand-maintained audit notes stay under `docs/audits/`.
 
 ## Boundary
 
 `README.md` is the only active project doc at the repository root.
 Markdown under `.github/`, `addons/`, `.aidlc/`, and similar folders is
 configuration, vendored material, generated run output, or platform tooling
-rather than the active game documentation set.
+rather than the active game documentation set. The four `tests/**/README.md`
+ownership-contract files remain because `tests/validate_gut_config_discovery.sh`
+requires them.

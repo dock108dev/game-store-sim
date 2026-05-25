@@ -53,6 +53,11 @@ const _STATE_CHECKPOINTS: Dictionary = {
 
 var state: State = State.IDLE
 var _current_store: StringName = &""
+var _last_result: Dictionary = {
+	"ok": false,
+	"store_id": &"",
+	"reason": "",
+}
 
 var _injected_router: Node = null
 var _injected_registry: Node = null
@@ -72,6 +77,7 @@ func enter_store(store_id: StringName) -> bool:
 			% [store_id, _state_name(state)]
 		)
 		_audit_fail(&"director_concurrent_enter", rejection)
+		_set_last_result(false, store_id, rejection)
 		store_failed.emit(store_id, rejection)
 		return false
 
@@ -141,6 +147,7 @@ func enter_store(store_id: StringName) -> bool:
 
 	_to(State.READY, "store_id=%s" % store_id)
 	_commit_active_store(store_id)
+	_set_last_result(true, store_id, "")
 	store_ready.emit(store_id)
 	# Reset to IDLE so subsequent enter_store calls are accepted. The READY
 	# checkpoint above is the durable "we got there" record.
@@ -163,6 +170,17 @@ func set_scene_injector(callable: Callable) -> void:
 func _reset_for_tests() -> void:
 	state = State.IDLE
 	_current_store = &""
+	_set_last_result(false, &"", "")
+
+
+## Returns true when no store transition is currently in flight.
+func is_idle() -> bool:
+	return state == State.IDLE
+
+
+## Returns the last completed or rejected transition outcome as a copy.
+func get_last_result() -> Dictionary:
+	return _last_result.duplicate(true)
 
 
 func set_router_for_tests(router: Node) -> void:
@@ -285,6 +303,7 @@ func _to(next: State, detail: String) -> void:
 
 func _fail(reason: String, failed_invariant: StringName = &"") -> bool:
 	state = State.FAILED
+	_set_last_result(false, _current_store, reason)
 	push_error("[StoreDirector] %s — %s" % [_current_store, reason])
 	_audit_fail(_STATE_CHECKPOINTS[State.FAILED], "store_id=%s reason=%s" % [_current_store, reason])
 	_raise_fail_card(_current_store, failed_invariant, reason)
@@ -299,6 +318,14 @@ func _fail(reason: String, failed_invariant: StringName = &"") -> bool:
 	# Re-record the failed id for tests that read state immediately after.
 	_current_store = failed_id
 	return false
+
+
+func _set_last_result(ok: bool, store_id: StringName, reason: String) -> void:
+	_last_result = {
+		"ok": ok,
+		"store_id": store_id,
+		"reason": reason,
+	}
 
 
 func _audit_pass(checkpoint: StringName, detail: String) -> void:

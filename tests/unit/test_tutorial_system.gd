@@ -4,16 +4,24 @@ extends GutTest
 
 var _tutorial: TutorialSystem
 var _saved_tutorial_active: bool
+var _saved_settings_path: String = ""
 
 
 func before_each() -> void:
+	var err: Error = UserDataPaths.configure_test_run("unit_tutorial_system", true)
+	assert_eq(err, OK, "test setup must isolate tutorial progress")
 	_saved_tutorial_active = GameManager.is_tutorial_active
+	_saved_settings_path = Settings.settings_path
+	Settings.settings_path = UserDataPaths.settings_path()
 	_tutorial = TutorialSystem.new()
 	add_child_autofree(_tutorial)
 
 
 func after_each() -> void:
 	GameManager.is_tutorial_active = _saved_tutorial_active
+	Settings.settings_path = _saved_settings_path
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 # --- Step progression ---
@@ -131,6 +139,80 @@ func test_get_current_step_text_returns_empty_after_completion() -> void:
 	assert_eq(
 		text, "",
 		"Step text should be empty string after tutorial is complete"
+	)
+
+
+func test_store_session_blocks_generic_event_progression() -> void:
+	_drive_to_stock_shelf()
+	var progress_before: String = _read_text(UserDataPaths.tutorial_progress_path())
+	_add_store_session_controller_stub()
+
+	EventBus.item_stocked.emit("item_1", "shelf_1")
+
+	assert_eq(
+		_tutorial.current_step,
+		TutorialSystem.TutorialStep.STOCK_SHELF,
+		"Store-session mode should pause generic tutorial event progression"
+	)
+	assert_false(
+		_tutorial._completed_steps.get("stock_shelf", false) as bool,
+		"Generic stock events must not complete hidden legacy steps"
+	)
+	assert_eq(
+		_read_text(UserDataPaths.tutorial_progress_path()),
+		progress_before,
+		"Blocked store-session events must not persist tutorial progress"
+	)
+
+
+func test_store_session_acknowledgement_advances_matching_step() -> void:
+	_drive_to_stock_shelf()
+	_add_store_session_controller_stub()
+
+	var acknowledged: bool = _tutorial.acknowledge_store_session_step("stock_shelf")
+
+	assert_true(
+		acknowledged,
+		"Explicit store-session acknowledgement should advance the matching step"
+	)
+	assert_eq(
+		_tutorial.current_step,
+		TutorialSystem.TutorialStep.CONDITION_RISK,
+		"Matching acknowledgement should advance to the next tutorial step"
+	)
+	assert_true(
+		_tutorial._completed_steps.get("stock_shelf", false) as bool,
+		"Acknowledged store-session step should be tracked as completed"
+	)
+	var config := ConfigFile.new()
+	assert_eq(config.load(UserDataPaths.tutorial_progress_path()), OK)
+	assert_eq(
+		int(config.get_value("tutorial", "current_step", -1)),
+		TutorialSystem.TutorialStep.CONDITION_RISK,
+		"Acknowledged store-session progress should persist to the active path"
+	)
+
+
+func test_store_session_acknowledgement_rejects_mismatched_step() -> void:
+	_drive_to_stock_shelf()
+	var progress_before: String = _read_text(UserDataPaths.tutorial_progress_path())
+	_add_store_session_controller_stub()
+
+	var acknowledged: bool = _tutorial.acknowledge_store_session_step("close_day")
+
+	assert_false(
+		acknowledged,
+		"Store-session acknowledgement must match the active tutorial step"
+	)
+	assert_eq(
+		_tutorial.current_step,
+		TutorialSystem.TutorialStep.STOCK_SHELF,
+		"Mismatched acknowledgement should not advance"
+	)
+	assert_eq(
+		_read_text(UserDataPaths.tutorial_progress_path()),
+		progress_before,
+		"Mismatched acknowledgement should not persist progress"
 	)
 
 
@@ -423,3 +505,20 @@ func _drive_full_sequence() -> void:
 	_drive_to_close_day()
 	EventBus.day_close_requested.emit()
 	EventBus.day_acknowledged.emit()
+
+
+func _add_store_session_controller_stub() -> Node:
+	var stub := Node.new()
+	stub.name = "StoreSessionControllerStub"
+	stub.add_to_group("store_session_controller")
+	add_child_autofree(stub)
+	return stub
+
+
+func _read_text(path: String) -> String:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return ""
+	var text: String = file.get_as_text()
+	file.close()
+	return text

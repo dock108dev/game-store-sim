@@ -84,6 +84,14 @@ const _OBJECTIVE_UNLOCK_GRANTS: Dictionary = {
 	"talk_to_customer": ["employee_register_access"],
 	"stock_shelf": ["employee_stocking_trained"],
 }
+const _TUTORIAL_STEP_BY_OBJECTIVE: Dictionary = {
+	&"talk_to_manager": "welcome",
+	&"practice_customer": "platform_match",
+	&"talk_to_customer": "platform_match",
+	&"training_stock_shelf": "stock_shelf",
+	&"stock_shelf": "stock_shelf",
+	&"close_day": "close_day",
+}
 const _DAY_ONE_CLOSE_UNLOCK_GRANT: StringName = &"employee_closing_certified"
 const _REGISTER_UNLOCK_GRANT: StringName = &"employee_register_access"
 const _CUSTOMER_COUNTER_ANCHOR_NAME: String = "StoreSessionCustomerCounterAnchor"
@@ -543,6 +551,9 @@ var _customer_exit_tween: Tween = null
 
 func _ready() -> void:
 	add_to_group("store_session_controller")
+	add_to_group("store_session.controller")
+	set_meta("semantic_target", "store_session.controller")
+	set_meta("scenario_target_kind", "controller")
 	if _store_runtime_scope_enabled():
 		_apply_store_session_strip()
 		_refresh_store_runtime_visual_scope()
@@ -961,16 +972,8 @@ func on_store_day_end_requested() -> void:
 		return
 	if _close_day_panel != null and bool(_close_day_panel.get("_focus_pushed")):
 		return
-	# BRAINDUMP "Close Day 1? Yes / Not Yet" — route through the standalone
-	# CloseDayConfirmationPanel via EventBus. The panel is instantiated in
-	# `_ensure_panels()`; on confirm it emits `day_close_confirmed`, which
-	# our listener in `_connect_panel_signals()` routes to
-	# `_on_day_close_confirmed()`. Cancel hides the panel and leaves
-	# `_stage` at END_DAY so the player can re-press E to retry.
-	#
-	# Reason copy interpolates the active day so the prompt reinforces
-	# progression ("Day 1" / "Day 2" / …) instead of reading as a generic
-	# wrap-up.
+	# Keep the close-day modal owned by EventBus so cancel leaves END_DAY
+	# intact and the player can retry from the interactable.
 	EventBus.day_close_confirmation_requested.emit("Ready to close up Day %d?" % StoreSessionState.day)
 
 
@@ -1018,6 +1021,7 @@ func _on_day_close_confirmed() -> void:
 	# the matching emit in `_complete_current_objective` for the
 	# log-vs-rail copy contract.
 	EventBus.objective_completed.emit(&"close_day", _objective_completion_label(&"close_day"))
+	_acknowledge_tutorial_objective(&"close_day")
 	# Modal lifecycle is the single authority for input focus: `show_summary`
 	# routes through `ModalPanel.open()` which pushes CTX_MODAL on `InputFocus`.
 	var summary: Dictionary = StoreSessionState.end_day()
@@ -2144,6 +2148,7 @@ func _complete_current_objective() -> void:
 	# 'Bad' example shows the rail label echoed into the log on start; the
 	# completion-only emit avoids that pattern.
 	EventBus.objective_completed.emit(objective_id, _objective_completion_label(objective_id))
+	_acknowledge_tutorial_objective(objective_id)
 	_grant_objective_unlocks(objective_id)
 	var time_cost: int = int(entry.get("time_cost_minutes", 0))
 	if time_cost > 0:
@@ -2187,6 +2192,26 @@ func _grant_objective_unlocks(objective_id: StringName) -> void:
 	var grants: Array = _OBJECTIVE_UNLOCK_GRANTS.get(String(objective_id), [])
 	for raw_id: Variant in grants:
 		_grant_unlock(StringName(str(raw_id)))
+
+
+func _acknowledge_tutorial_objective(objective_id: StringName) -> void:
+	var step_id: String = str(_TUTORIAL_STEP_BY_OBJECTIVE.get(objective_id, ""))
+	if step_id.is_empty():
+		return
+	var tutorial_system: TutorialSystem = _tutorial_system()
+	if tutorial_system == null:
+		return
+	tutorial_system.acknowledge_store_session_step(step_id)
+
+
+func _tutorial_system() -> TutorialSystem:
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return null
+	var node: Node = tree.get_first_node_in_group(TutorialSystem.TUTORIAL_SYSTEM_GROUP)
+	if node is TutorialSystem:
+		return node as TutorialSystem
+	return null
 
 
 func _grant_unlock(unlock_id: StringName) -> void:
@@ -2370,13 +2395,13 @@ func get_state_snapshot() -> Dictionary:
 		"cash": StoreSessionState.cash,
 		"carrying_stock": StoreSessionState.carrying_stock,
 		"stage": String(_stage),
-			"active_objective_id": String(current.get("id", "")),
-			"active_objective_label": String(current.get("label", "")),
-			"active_objective_action": String(current.get("action", "")),
-			"active_objective_target_path": active_objective_target_path(),
-			"active_objective_prompt_label": active_objective_prompt_label(),
-			"active_objective_highlight_visible": should_show_active_objective_highlight(),
-			"completed_objectives": _completed_objectives.duplicate(),
+		"active_objective_id": String(current.get("id", "")),
+		"active_objective_label": String(current.get("label", "")),
+		"active_objective_action": String(current.get("action", "")),
+		"active_objective_target_path": active_objective_target_path(),
+		"active_objective_prompt_label": active_objective_prompt_label(),
+		"active_objective_highlight_visible": should_show_active_objective_highlight(),
+		"completed_objectives": _completed_objectives.duplicate(),
 		"can_close_day": _all_required_objectives_completed() and _stage == STAGE_END_DAY,
 		"close_day_reason": close_day_disabled_reason() if _stage != STAGE_END_DAY else "ready",
 		"objective_target_diagnostic": _objective_target_diagnostic,
@@ -2384,6 +2409,47 @@ func get_state_snapshot() -> Dictionary:
 		"customers_helped": _customers_helped_today,
 		"sales_today": _sales_today,
 		"customer_exit_state": String(_customer_exit_state),
+	}
+
+
+## Returns scenario-facing progress without exposing controller internals.
+func get_session_progress_snapshot() -> Dictionary:
+	var current: Dictionary = _objective_for_stage(_stage)
+	return {
+		"day": StoreSessionState.day,
+		"stage": String(_stage),
+		"objective": {
+			"id": String(current.get("id", "")),
+			"label": String(current.get("label", "")),
+			"action": String(current.get("action", "")),
+			"target_path": active_objective_target_path(),
+			"completed": _completed_objectives.has(
+				StringName(str(current.get("id", "")))
+			),
+			"completed_objectives": _completed_objectives.duplicate(true),
+		},
+		"customer": {
+			"event_id": String(_active_event.get("id", "")),
+			"name": String(_active_event.get("customer_name", "")),
+			"event_index": _current_event_index,
+			"required_events": _required_customer_event_count(),
+			"exit_state": String(_customer_exit_state),
+			"result_visible": _customer_result_panel != null and _customer_result_panel.visible,
+		},
+		"carry": {
+			"carrying_stock": StoreSessionState.carrying_stock,
+			"has_carry": StoreSessionState.carrying_stock,
+			"remaining": _carried_stock_remaining,
+			"delivery_quantity": _current_delivery_quantity,
+			"shelf_stock_count": _shelf_stock_count,
+		},
+		"visible_prompt": {
+			"label": active_objective_prompt_label(),
+			"target_path": active_objective_target_path(),
+			"highlight_visible": should_show_active_objective_highlight(),
+		},
+		"can_close_day": _all_required_objectives_completed() and _stage == STAGE_END_DAY,
+		"close_day_reason": close_day_disabled_reason() if _stage != STAGE_END_DAY else "ready",
 	}
 
 
@@ -2467,6 +2533,16 @@ func _build_steps_payload() -> Array[Dictionary]:
 			)
 		)
 	return steps
+
+
+## Returns read-only copies of objective target rows for semantic automation lookup.
+func get_semantic_objective_targets() -> Array[Dictionary]:
+	var targets: Array[Dictionary] = []
+	for entry: Dictionary in _training_objectives:
+		targets.append(entry.duplicate(true))
+	for entry: Dictionary in _day_one_objectives:
+		targets.append(entry.duplicate(true))
+	return targets
 
 
 ## Disables every Interactable under the store, then re-enables the
@@ -2637,6 +2713,17 @@ func _ensure_panels() -> void:
 		_ui_root().add_child(_decision_panel)
 	if _customer_result_panel == null:
 		_customer_result_panel = CustomerResultPanelScript.new() as ModalPanel
+		_tag_semantic_target(
+			_customer_result_panel,
+			"store_session.panel.customer_result",
+			"ui_panel",
+			[
+				"ui.panel",
+				"store_session.panel",
+				"store_session.panel.customer_result",
+			],
+			{"store_session_panel": "customer_result"}
+		)
 		_ui_root().add_child(_customer_result_panel)
 	if _summary_panel == null:
 		_summary_panel = DaySummaryPanel.new()
@@ -2655,15 +2742,44 @@ func _ensure_panels() -> void:
 		_debug_overlay = CanvasLayer.new()
 		_debug_overlay.set_script(StoreDebugOverlayScript)
 		_debug_overlay.name = "StoreDebugOverlay"
+		_tag_semantic_target(
+			_debug_overlay,
+			"store_session.panel.debug_overlay",
+			"ui_panel",
+			[
+				"ui.panel",
+				"store_session.panel",
+				"store_session.panel.debug_overlay",
+			],
+			{"store_session_panel": "debug_overlay"}
+		)
 		_ui_root().add_child(_debug_overlay)
 	if _screenshot_helper == null:
 		_screenshot_helper = CanvasLayer.new()
 		_screenshot_helper.set_script(StoreScreenshotHelperScript)
 		_screenshot_helper.name = "StoreScreenshotHelper"
+		_tag_semantic_target(
+			_screenshot_helper,
+			"store_session.panel.screenshot_helper",
+			"utility_panel",
+			["store_session.utility", "store_session.screenshot_helper"],
+			{"store_session_panel": "screenshot_helper"}
+		)
 		_ui_root().add_child(_screenshot_helper)
 	if _close_day_panel == null:
 		_close_day_panel = (CloseDayConfirmationPanelScene.instantiate() as CanvasLayer)
 		_close_day_panel.name = "StoreCloseDayConfirmationPanel"
+		_tag_semantic_target(
+			_close_day_panel,
+			"store_session.panel.close_day_confirmation",
+			"ui_panel",
+			[
+				"ui.panel",
+				"store_session.panel",
+				"store_session.panel.close_day_confirmation",
+			],
+			{"store_session_panel": "close_day_confirmation"}
+		)
 		_ui_root().add_child(_close_day_panel)
 		# BRAINDUMP cancel-button copy: "Not Yet" reads softer than "Cancel"
 		# while the chain still treats cancel as a no-op (the player can re-
@@ -2675,6 +2791,21 @@ func _ensure_panels() -> void:
 		)
 		if cancel_button != null:
 			cancel_button.text = "Not Yet"
+
+
+func _tag_semantic_target(
+	node: Node,
+	semantic_id: String,
+	kind: String,
+	groups: Array,
+	metadata: Dictionary = {}
+) -> void:
+	node.set_meta("semantic_target", semantic_id)
+	node.set_meta("scenario_target_kind", kind)
+	for group: Variant in groups:
+		node.add_to_group(StringName(str(group)))
+	for key: Variant in metadata.keys():
+		node.set_meta(str(key), metadata[key])
 
 
 func _connect_panel_signals() -> void:
@@ -2951,25 +3082,8 @@ func _configure_store_customer() -> void:
 		proxy_root, _stage == STAGE_TRAINING_TALK_MANAGER
 	)
 
-	# Resize the Interactable trigger so the screen-center ray hits it from
-	# typical approach distances, not just nose-to-chest. The authored shape
-	# in the .tscn is a 1.5 m box centered on the node origin (Y=-0.75 to
-	# Y=+0.75 — floor + lower legs), which the player's eye-level ray
-	# (camera at Y=1.7) flies over until the player is right on top of the
-	# customer.
-	#
-	# The replacement capsule is intentionally LARGER than the visible
-	# proxy: ±0.55 m horizontal, Y=0–2.0, so any aim near the customer's
-	# silhouette registers a hit. The visible torso/head are still small
-	# (matches the brief's "smaller scale, stands at counter") — the trigger
-	# just doesn't have to be flattering.
-	#
-	# Deferred via `call_deferred` so it runs after `Interactable._ready`
-	# has finished reparenting the CollisionShape3D into its generated
-	# `InteractionArea` (game/scripts/components/interactable.gd:271).
-	# Without the defer, our edit would race that reparent depending on
-	# sibling tree order; deferring guarantees we touch the post-reparent
-	# node and our shape sticks.
+	# Defer until Interactable._ready has reparented the shape into its
+	# generated InteractionArea; then widen the trigger for eye-level rays.
 	call_deferred("_resize_customer_trigger", customer_node)
 
 

@@ -4,15 +4,12 @@ extends GutTest
 
 const CATALOG_PATH := "res://game/content/endings/ending_config.json"
 const SCENE_PATH := "res://game/scenes/ui/ending_screen.tscn"
-const _SAVE_PATH: String = "user://save_slot_0.json"
 
 const BANKRUPTCY_ENDING_ID: StringName = &"lights_out"
 const SURVIVAL_ENDING_ID: StringName = &"broke_even"
 
 var _screen: EndingScreen
 var _catalog_entries: Array[Dictionary] = []
-var _save_backup_exists: bool = false
-var _save_backup_text: String = ""
 
 
 func before_all() -> void:
@@ -21,14 +18,19 @@ func before_all() -> void:
 
 
 func before_each() -> void:
-	_backup_user_file(_SAVE_PATH, "_save_backup_exists", "_save_backup_text")
+	var path_err: Error = UserDataPaths.configure_test_run(
+		"ending_screen_content",
+		true
+	)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 	var packed: PackedScene = load(SCENE_PATH) as PackedScene
 	_screen = packed.instantiate() as EndingScreen
 	add_child_autofree(_screen)
 
 
 func after_each() -> void:
-	_restore_user_file(_SAVE_PATH, _save_backup_exists, _save_backup_text)
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 func test_all_endings_title_matches_catalog_title_field() -> void:
@@ -152,8 +154,11 @@ func _ensure_endings_registered() -> void:
 
 
 func _write_current_slot_metadata(used_downgrade: bool) -> void:
-	DirAccess.make_dir_recursive_absolute("user://")
-	var file: FileAccess = FileAccess.open(_SAVE_PATH, FileAccess.WRITE)
+	DirAccess.make_dir_recursive_absolute(UserDataPaths.save_dir())
+	var file: FileAccess = FileAccess.open(
+		UserDataPaths.save_slot_path(SaveManager.AUTO_SAVE_SLOT),
+		FileAccess.WRITE
+	)
 	if file:
 		file.store_string(
 			JSON.stringify(
@@ -170,27 +175,3 @@ func _write_current_slot_metadata(used_downgrade: bool) -> void:
 			)
 		)
 		file.close()
-
-
-func _backup_user_file(
-	path: String, exists_property: String, text_property: String
-) -> void:
-	set(exists_property, FileAccess.file_exists(path))
-	if not get(exists_property):
-		set(text_property, "")
-		return
-	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
-	set(text_property, file.get_as_text() if file else "")
-	if file:
-		file.close()
-
-
-func _restore_user_file(path: String, existed: bool, text: String) -> void:
-	if existed:
-		var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-		if file:
-			file.store_string(text)
-			file.close()
-		return
-	if FileAccess.file_exists(path):
-		DirAccess.remove_absolute(path)

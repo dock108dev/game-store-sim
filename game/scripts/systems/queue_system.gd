@@ -3,6 +3,7 @@ class_name QueueSystem
 extends Node
 
 const MAX_PATIENCE_MINUTES: float = 120.0
+const WAIT_SAMPLE_INTERVAL: float = 5.0
 
 var _register_queue: RegisterQueue = null
 var _processing: bool = false
@@ -10,6 +11,7 @@ var _queue_markers: Array[Marker3D] = []
 var _wait_times: Dictionary = {}
 var _patience_limits: Dictionary = {}
 var _has_queue_origin: bool = false
+var _wait_sample_elapsed: float = 0.0
 
 
 func initialize() -> void:
@@ -38,12 +40,20 @@ func get_queue_size() -> int:
 
 func enqueue_customer(customer: Node) -> bool:
 	if not customer is Customer:
+		_emit_enqueue_result(null, "invalid")
 		push_error("QueueSystem: enqueue_customer called with non-Customer node")
 		return false
 	var typed: Customer = customer as Customer
-	if not _register_queue.try_add(typed):
+	var result: String = _enqueue_rejection_reason(typed)
+	if result != "success":
+		_emit_enqueue_result(typed, result)
 		typed.reject_from_queue()
 		return false
+	if not _register_queue.try_add(typed):
+		_emit_enqueue_result(typed, "rejected")
+		typed.reject_from_queue()
+		return false
+	_emit_enqueue_result(typed, "success")
 	var cust_id: int = typed.get_instance_id()
 	_wait_times[cust_id] = 0.0
 	var patience: float = typed.profile.patience if typed.profile else 0.5
@@ -83,7 +93,12 @@ func bind_queue_markers(markers: Array[Marker3D]) -> void:
 
 func _process(delta: float) -> void:
 	if not _register_queue or _register_queue.get_size() == 0:
+		_wait_sample_elapsed = 0.0
 		return
+	_wait_sample_elapsed += delta
+	if _wait_sample_elapsed >= WAIT_SAMPLE_INTERVAL:
+		_wait_sample_elapsed = 0.0
+		_emit_queue_wait_sample()
 	var abandoned: Array[Customer] = []
 	for i: int in range(_register_queue.get_size()):
 		var customer: Customer = _register_queue.get_at(i)
@@ -198,6 +213,7 @@ func _flush_queue() -> void:
 		_register_queue.advance()
 	_wait_times.clear()
 	_patience_limits.clear()
+	_wait_sample_elapsed = 0.0
 	EventBus.queue_changed.emit(0)
 	EventBus.queue_advanced.emit(0)
 
@@ -208,3 +224,37 @@ func _clear_wait_data(customer: Customer) -> void:
 	var cust_id: int = customer.get_instance_id()
 	_wait_times.erase(cust_id)
 	_patience_limits.erase(cust_id)
+
+
+func _enqueue_rejection_reason(customer: Customer) -> String:
+	if _register_queue.has_customer(customer):
+		return "duplicate"
+	if _register_queue.get_size() >= RegisterQueue.MAX_QUEUE_SIZE:
+		return "full"
+	return "success"
+
+
+func _emit_enqueue_result(customer: Customer, result: String) -> void:
+	EventBus.queue_enqueue_result.emit({
+		"customer_id": customer.get_instance_id() if customer != null else 0,
+		"result": result,
+		"queue_size": _register_queue.get_size() if _register_queue != null else 0,
+		"max_queue_size": RegisterQueue.MAX_QUEUE_SIZE,
+	})
+
+
+func _emit_queue_wait_sample() -> void:
+	var head: Customer = _register_queue.get_first()
+	var head_id: int = head.get_instance_id() if head != null else 0
+	var head_wait: float = 0.0
+	var max_wait: float = 0.0
+	if head_id != 0:
+		head_wait = float(_wait_times.get(head_id, 0.0))
+		max_wait = float(_patience_limits.get(head_id, 0.0))
+	EventBus.queue_wait_sample.emit({
+		"queue_size": _register_queue.get_size(),
+		"head_customer_id": head_id,
+		"head_wait_seconds": head_wait,
+		"max_wait_seconds": max_wait,
+		"processing": _processing,
+	})

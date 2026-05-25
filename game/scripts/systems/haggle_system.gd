@@ -94,7 +94,9 @@ func should_haggle(
 	var sensitivity: float = customer.profile.price_sensitivity
 	var mood_mod: float = _get_mood_modifier(customer)
 	var chance: float = _calculate_haggle_chance(item, sensitivity, mood_mod)
-	var will_haggle: bool = randf() < chance
+	var will_haggle: bool = GameRandom.chance(
+		RandomStreamIds.HAGGLE_START, chance
+	)
 	if will_haggle:
 		EventBus.haggle_requested.emit(
 			String(item.instance_id),
@@ -340,7 +342,12 @@ func _pick_dialogue(table_key: String, mood: String) -> String:
 		candidates = table as Array
 	if candidates.is_empty():
 		return ""
-	return str(candidates[randi() % candidates.size()])
+	var index: int = GameRandom.pick_index(
+		RandomStreamIds.HAGGLE_DIALOGUE, candidates.size()
+	)
+	if index < 0:
+		return ""
+	return str(candidates[index])
 
 
 func _resolve_haggle_price(final_price: float) -> float:
@@ -437,7 +444,7 @@ func _evaluate_offer(player_price: float) -> bool:
 		&"haggle_success_rate_multiplier"
 	)
 	var accept_prob: float = base_rate * offer_ratio * success_rate_mult
-	return randf() < accept_prob
+	return GameRandom.chance(RandomStreamIds.HAGGLE_ACCEPTANCE, accept_prob)
 
 
 func _calculate_gap_ratio(player_price: float) -> float:
@@ -449,8 +456,10 @@ func _calculate_gap_ratio(player_price: float) -> float:
 func _calculate_customer_counter(
 	player_price: float
 ) -> float:
-	var close_rate: float = randf_range(
-		MIN_COUNTER_CLOSE_RATE, MAX_COUNTER_CLOSE_RATE
+	var close_rate: float = GameRandom.randf_range(
+		RandomStreamIds.HAGGLE_COUNTER,
+		MIN_COUNTER_CLOSE_RATE,
+		MAX_COUNTER_CLOSE_RATE
 	)
 	var remaining_gap: float = player_price - _perceived_value
 	var new_offer: float = (

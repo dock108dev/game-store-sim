@@ -449,7 +449,9 @@ func _calculate_offer(
 			"slot": "rarity", "label": "Rarity",
 			"factor": rarity, "detail": item.definition.rarity,
 		})
-	var random_mult: float = randf_range(OFFER_LOW, OFFER_HIGH)
+	var random_mult: float = GameRandom.randf_range(
+		RandomStreamIds.CHECKOUT_OFFER, OFFER_LOW, OFFER_HIGH
+	)
 	var sensitivity: float = 0.5
 	if customer.profile:
 		sensitivity = customer.profile.price_sensitivity

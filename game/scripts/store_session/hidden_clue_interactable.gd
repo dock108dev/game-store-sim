@@ -12,7 +12,7 @@ func _ready() -> void:
 	prompt_text = "Inspect"
 	action_verb = "Inspect"
 	interaction_type = InteractionType.ITEM
-	interactable_id = &"backroom_hidden_clue_01"
+	interactable_id = &"store_session.hidden_clue"
 	proximity_radius = 2.25
 	proximity_facing_dot = 0.4
 	super._ready()

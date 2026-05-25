@@ -60,7 +60,21 @@ func test_boot_script_uses_deferred_initialize() -> void:
 	)
 
 
-func test_boot_script_uses_issue_137_sequence() -> void:
+func test_boot_failures_report_scenario_exit_when_armed() -> void:
+	var script: GDScript = load("res://game/scripts/core/boot.gd")
+	var source: String = script.source_code
+
+	assert_string_contains(source, "func _fail_boot")
+	assert_string_contains(source, "ScenarioExit.BOOT_FAILURE")
+	assert_string_contains(source, "ScenarioExit.finish_and_quit()")
+	assert_gt(
+		source.count("_fail_boot("),
+		1,
+		"boot validation failures should route through the scenario exit helper"
+	)
+
+
+func test_boot_script_uses_required_startup_sequence() -> void:
 	var script: GDScript = load("res://game/scripts/core/boot.gd")
 	var source: String = script.source_code
 	assert_true(

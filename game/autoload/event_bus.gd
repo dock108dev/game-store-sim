@@ -59,6 +59,7 @@ signal game_state_changed(old_state: int, new_state: int)
 ## game_state_changed, which is the GameManager FSM transition signal.
 signal run_state_changed
 signal gameplay_ready
+signal hud_ready
 signal game_over_triggered
 signal next_day_confirmed
 signal day_acknowledged
@@ -173,9 +174,17 @@ signal customer_state_changed(customer: Node, new_state: int)
 ## desired item. Carries both the customer and the item so listeners can post
 ## browsing feedback without holding per-customer references.
 signal customer_item_spotted(customer: Customer, item: ItemInstance)
+signal customer_navigation_target_set(data: Dictionary)
+signal customer_navigation_completed(data: Dictionary)
+signal customer_navigation_stalled(data: Dictionary)
+signal customer_navigation_mode_selected(data: Dictionary)
+signal customer_register_arrival(data: Dictionary)
+signal customer_despawn_requested(customer: Node)
 signal spawn_npc_requested(archetype_id: StringName, entry_position: Vector3)
 ## Emitted by NPCSpawnerSystem when an NPC is explicitly removed from the active pool.
 signal npc_despawned(npc_id: StringName)
+signal npc_pool_changed(data: Dictionary)
+signal npc_capacity_violation(data: Dictionary)
 ## Emitted by the platform-match dialogue when the player selects a platform for
 ## a confused-parent customer. correct is true when the chosen platform_id
 ## matches the customer's referenced platform. Fires on every selection so the
@@ -187,6 +196,8 @@ signal customer_reached_checkout(customer: Node)
 signal checkout_started(items: Array, customer_node: Node)
 signal checkout_queue_ready(customer: Node)
 signal checkout_completed(customer: Node)
+signal queue_enqueue_result(data: Dictionary)
+signal queue_wait_sample(data: Dictionary)
 ## Player pressed Pass at the register before any sale fired. Distinct from
 ## `checkout_completed` (which fires for both accept and decline) so listeners
 ## can drive recovery flows — Day 1 rail rollback, forced-spawn re-arm — that

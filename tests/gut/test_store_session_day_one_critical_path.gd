@@ -1146,6 +1146,39 @@ func test_state_snapshot_mirrors_store_session_state_fields() -> void:
 	)
 
 
+func test_session_progress_snapshot_exposes_objective_customer_carry_and_prompt() -> void:
+	var controller: StoreSessionController = _store_session_controller() as StoreSessionController
+	if controller == null:
+		return
+
+	var start: Dictionary = controller.get_session_progress_snapshot()
+	assert_eq(str(start.get("stage", "")), "talk_to_customer")
+	var start_objective: Dictionary = start.get("objective", {}) as Dictionary
+	assert_eq(str(start_objective.get("id", "")), "talk_to_customer")
+	assert_eq(str(start_objective.get("target_path", "")), "StoreSessionDayOneCustomer/Interactable")
+	var start_customer: Dictionary = start.get("customer", {}) as Dictionary
+	assert_eq(str(start_customer.get("event_id", "")), "day01_wrong_console_parent")
+	assert_eq(str(start_customer.get("exit_state", "")), String(StoreSessionController.CUSTOMER_EXIT_NOT_STARTED))
+	var start_carry: Dictionary = start.get("carry", {}) as Dictionary
+	assert_false(bool(start_carry.get("carrying_stock", true)))
+	var start_prompt: Dictionary = start.get("visible_prompt", {}) as Dictionary
+	assert_eq(str(start_prompt.get("label", "")), "Talk to customer")
+
+	controller._on_choice_selected(&"clean_exchange", {})
+	await get_tree().process_frame
+	controller.on_store_stockroom_pickup_interacted()
+	await get_tree().process_frame
+
+	var carrying: Dictionary = controller.get_session_progress_snapshot()
+	assert_eq(str(carrying.get("stage", "")), "stock_shelf")
+	var carry: Dictionary = carrying.get("carry", {}) as Dictionary
+	assert_true(bool(carry.get("carrying_stock", false)))
+	assert_eq(int(carry.get("remaining", 0)), StoreSessionController._BACKROOM_DELIVERY_QUANTITY)
+	var prompt: Dictionary = carrying.get("visible_prompt", {}) as Dictionary
+	assert_eq(str(prompt.get("target_path", "")), "StoreSessionRestockShelf/Interactable")
+	assert_string_contains(str(prompt.get("label", "")), "Place item 1")
+
+
 func test_state_snapshot_is_json_serializable() -> void:
 	var controller: Node = _store_session_controller()
 	if controller == null:

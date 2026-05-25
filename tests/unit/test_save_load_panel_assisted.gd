@@ -7,14 +7,17 @@ const _SCENE: PackedScene = preload(
 )
 
 const _TEST_SLOT: int = 3
-const _SAVE_DIR: String = "user://"
 
 var _panel: SaveLoadPanel
 var _save_manager: SaveManager
 
 
 func before_each() -> void:
-	_delete_test_saves()
+	var path_err: Error = UserDataPaths.configure_test_run(
+		"save_load_panel_assisted",
+		true
+	)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 
 	_panel = _SCENE.instantiate() as SaveLoadPanel
 	add_child_autofree(_panel)
@@ -26,19 +29,8 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	_delete_test_saves()
-
-
-func _delete_test_saves() -> void:
-	for slot: int in range(
-		SaveManager.AUTO_SAVE_SLOT,
-		SaveManager.MAX_MANUAL_SLOTS + 1
-	):
-		var path: String = _SAVE_DIR + "save_slot_%d.json" % slot
-		if FileAccess.file_exists(path):
-			DirAccess.remove_absolute(path)
-	if FileAccess.file_exists(SaveManager.SLOT_INDEX_PATH):
-		DirAccess.remove_absolute(SaveManager.SLOT_INDEX_PATH)
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 func _write_mock_save(
@@ -48,8 +40,8 @@ func _write_mock_save(
 	cash: float = 3000.0,
 	owned_stores: Array[String] = ["retro_games"]
 ) -> void:
-	DirAccess.make_dir_recursive_absolute(_SAVE_DIR)
-	var path: String = _SAVE_DIR + "save_slot_%d.json" % slot
+	DirAccess.make_dir_recursive_absolute(UserDataPaths.save_dir())
+	var path: String = UserDataPaths.save_slot_path(slot)
 	var mock_data: Dictionary = {
 		"save_version": SaveManager.CURRENT_SAVE_VERSION,
 		"save_metadata": {
@@ -212,6 +204,36 @@ func test_empty_slots_are_disabled_in_load_mode() -> void:
 		disabled_empty_rows,
 		SaveManager.MAX_MANUAL_SLOTS + 1,
 		"Auto-save plus all manual empty slots should be disabled in load mode"
+	)
+
+
+func test_occupied_save_slot_requires_overwrite_confirmation() -> void:
+	_write_mock_save(false, _TEST_SLOT)
+	watch_signals(_panel)
+
+	_panel.open_save()
+	var row: Node = _find_row_with_label("Day 7 — $3000 — 1 stores")
+	assert_not_null(row, "Occupied manual slot should render in save mode")
+	if row == null:
+		return
+	var button: Button = _find_action_button_in_slot_row(row)
+	assert_not_null(button, "Occupied save row should have an action button")
+	if button == null:
+		return
+
+	button.pressed.emit()
+	assert_true(_panel._confirm_dialog.visible)
+	assert_signal_not_emitted(
+		_panel,
+		"save_requested",
+		"Occupied save slot must wait for overwrite confirmation"
+	)
+
+	_panel._confirm_yes.pressed.emit()
+	assert_signal_emitted(
+		_panel,
+		"save_requested",
+		"Overwrite confirmation should emit save_requested"
 	)
 
 

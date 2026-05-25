@@ -7,7 +7,7 @@ func _ready() -> void:
 	prompt_text = "Check"
 	action_verb = "Check"
 	interaction_type = InteractionType.BACKROOM
-	interactable_id = &"store_back_room_inventory"
+	interactable_id = &"store_session.backroom_pickup"
 	proximity_radius = 3.25
 	proximity_facing_dot = 0.25
 	super._ready()

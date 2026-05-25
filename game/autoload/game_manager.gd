@@ -236,11 +236,13 @@ func initialize_game_systems(game_world: Node) -> void:
 ## Applies pending new-game or load-game session state once GameWorld UI is ready.
 func finalize_gameplay_start(game_world: Node) -> void:
 	if not game_world.has_method("apply_pending_session_state"):
-		push_error(
-			"GameManager: game_world missing apply_pending_session_state()"
-		)
+		var msg: String = "GameManager: game_world missing apply_pending_session_state()"
+		push_error(msg)
+		_record_session_failure(&"missing_apply_pending_session_state", msg)
 		return
 	game_world.apply_pending_session_state()
+	if AuditLog != null:
+		AuditLog.pass_check(&"gameplay_ready", "from=game_manager.gd")
 	EventBus.gameplay_ready.emit()
 
 
@@ -417,17 +419,23 @@ func _initialize_game_world_tiers(game_world: Node) -> bool:
 	if game_world.has_method("initialize_systems"):
 		game_world.initialize_systems()
 		return true
-	push_error("GameManager: game_world missing tier initialization methods")
+	var msg: String = "GameManager: game_world missing tier initialization methods"
+	push_error(msg)
+	_record_session_failure(&"missing_tier_initializers", msg)
 	return false
 
 
 ## Boots a new session after GameWorld has completed tier initialization.
 func _start_new_game(game_world: Node) -> void:
 	if data_loader == null:
-		push_error("GameManager: cannot start new game without DataLoader")
+		var msg: String = "GameManager: cannot start new game without DataLoader"
+		push_error(msg)
+		_record_session_failure(&"missing_data_loader", msg)
 		return
 	if not game_world.has_method("bootstrap_new_game_state"):
-		push_error("GameManager: game_world missing bootstrap_new_game_state()")
+		var msg: String = "GameManager: game_world missing bootstrap_new_game_state()"
+		push_error(msg)
+		_record_session_failure(&"missing_bootstrap_new_game_state", msg)
 		return
 	current_store_id = &""
 	owned_stores = []
@@ -436,18 +444,40 @@ func _start_new_game(game_world: Node) -> void:
 
 func _run_data_loader() -> bool:
 	if data_loader == null:
-		push_warning("GameManager: cannot start session without DataLoader")
+		var msg: String = "GameManager: cannot start session without DataLoader"
+		push_warning(msg)
+		_record_session_failure(&"missing_data_loader", msg)
 		return false
 	_content_load_errors = []
 	data_loader.run()
 	_content_load_errors = data_loader.get_load_errors()
 	if not _content_load_errors.is_empty():
-		push_error(
+		var msg: String = (
 			"GameManager: content load failed with %d errors"
 			% _content_load_errors.size()
 		)
+		push_error(msg)
+		_record_session_failure(
+			&"content_load_failed",
+			msg,
+			{"errors": _content_load_errors.duplicate()}
+		)
 		return false
 	return true
+
+
+func _record_session_failure(
+	name: StringName,
+	message: String,
+	context: Dictionary = {}
+) -> void:
+	if ScenarioExit != null and ScenarioExit.is_armed():
+		ScenarioExit.fail(
+			ScenarioExit.SESSION_FAILURE,
+			name,
+			message,
+			context
+		)
 
 
 func _reset_session_state() -> void:

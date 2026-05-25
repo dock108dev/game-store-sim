@@ -1,0 +1,9 @@
+{
+	"id": "bad_state_resistance",
+	"title": "Bad State Resistance Slot",
+	"tags": ["slot", "resistance"],
+	"timeout_frames": 1800,
+	"steps": [
+		{"id": "placeholder_finish", "type": "finish", "timeout_frames": 30}
+	]
+}

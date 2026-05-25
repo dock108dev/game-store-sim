@@ -1,0 +1,41 @@
+{
+	"id": "layout_torture",
+	"title": "Layout Torture Flow",
+	"tags": ["automation", "layout", "visual"],
+	"timeout_frames": 2400,
+	"steps": [
+		{
+			"id": "open_layout_torture_flow",
+			"type": "route_scene",
+			"scene_path": "res://tests/visual/layout_torture_flow.tscn",
+			"timeout_frames": 300
+		},
+		{"id": "wait_for_layout_captures", "type": "advance_frames", "count": 96, "timeout_frames": 120},
+		{
+			"id": "layout_flow_complete",
+			"type": "assert_node",
+			"target": "/root/LayoutTortureFlow",
+			"method": "is_complete",
+			"assert": {"mode": "equals", "expected": true},
+			"timeout_frames": 120
+		},
+		{
+			"id": "layout_assertions_pass",
+			"type": "assert_node",
+			"target": "/root/LayoutTortureFlow",
+			"method": "get_run_ok",
+			"assert": {"mode": "equals", "expected": true},
+			"timeout_frames": 120
+		},
+		{
+			"id": "capture_layout_report",
+			"type": "capture",
+			"mode": "state",
+			"label": "layout_torture_report",
+			"target": "/root/LayoutTortureFlow",
+			"method": "get_run_result",
+			"timeout_frames": 120
+		},
+		{"id": "finish_layout_torture", "type": "finish", "timeout_frames": 30}
+	]
+}

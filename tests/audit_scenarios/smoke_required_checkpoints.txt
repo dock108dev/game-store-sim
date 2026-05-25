@@ -1,0 +1,11 @@
+# Required checkpoints for a smoke scenario audit run.
+boot_scene_ready
+main_menu_ready
+gameplay_shell_ready
+store_id_resolved
+scene_instantiated
+controller_ready
+content_instantiated
+camera_active
+player_present
+input_gameplay

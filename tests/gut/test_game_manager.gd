@@ -96,6 +96,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
+	ScenarioExit.reset()
 	GameManager.current_state = _original_state
 	GameManager.pending_load_slot = _original_pending_load_slot
 	GameManager.current_store_id = _original_current_store_id
@@ -137,6 +138,19 @@ func test_load_game_preserves_requested_slot_and_queues_gameplay_scene() -> void
 		[GameManager.GAMEPLAY_SCENE_PATH],
 		"load_game should transition to the gameplay scene"
 	)
+
+
+func test_startup_failure_records_scenario_status_when_armed() -> void:
+	GameManager.data_loader = null
+	ScenarioExit.arm({"scenario_id": "session_start", "emit_logs": false})
+
+	GameManager.start_new_game()
+
+	var failures: Array[Dictionary] = ScenarioExit.get_failures()
+	assert_eq(ScenarioExit.get_exit_code(), ScenarioExit.SESSION_FAILURE)
+	assert_eq(failures.size(), 1)
+	assert_eq(failures[0].get("name", ""), "missing_data_loader")
+	assert_true(_fake_transition.requested_paths.is_empty())
 
 
 func test_pause_and_resume_emit_state_changes() -> void:
@@ -228,6 +242,7 @@ func test_initialize_game_systems_bootstraps_new_game_before_ready_signal() -> v
 func test_finalize_gameplay_start_applies_session_state_then_emits_ready() -> void:
 	var world := FakeGameWorld.new()
 	add_child_autofree(world)
+	AuditLog.clear()
 	watch_signals(EventBus)
 
 	GameManager.finalize_gameplay_start(world)
@@ -238,6 +253,12 @@ func test_finalize_gameplay_start_applies_session_state_then_emits_ready() -> vo
 		"gameplay_ready",
 		"gameplay_ready should fire after session state is applied"
 	)
+	var saw_checkpoint: bool = false
+	for entry: Dictionary in AuditLog.recent(8):
+		if entry.get("checkpoint", &"") == &"gameplay_ready":
+			saw_checkpoint = true
+			break
+	assert_true(saw_checkpoint, "gameplay readiness should be audit-visible")
 
 
 func test_initialize_game_systems_load_path_skips_new_game_bootstrap() -> void:

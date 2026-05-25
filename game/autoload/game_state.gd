@@ -117,6 +117,18 @@ func get_flag(key: StringName) -> bool:
 	return bool(flags.get(key, false))
 
 
+## Returns a copy-safe payload for automation assertions over active run state.
+func get_run_state_snapshot() -> Dictionary:
+	return {
+		"active_store_id": active_store_id,
+		"day": day,
+		"money": money,
+		"employee_trust": employee_trust,
+		"manager_approval": manager_approval,
+		"flags": flags.duplicate(true),
+	}
+
+
 func _emit_changed() -> void:
 	if _suppress_emit:
 		return

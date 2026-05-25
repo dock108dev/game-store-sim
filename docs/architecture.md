@@ -15,7 +15,10 @@ the main menu:
 5. `Settings.load()` then `AudioManager.initialize()` runs.
 6. `GameManager.mark_boot_completed()` is called and `EventBus.boot_completed`
    is emitted.
-7. `GameManager.transition_to(GameManager.State.MAIN_MENU)` opens the menu.
+7. `AuditLog.pass_check(&"boot_scene_ready", "from=boot.gd")` is emitted.
+8. If `AutomationRunner.should_take_over_boot()` is true, automation starts
+   from the completed boot state; otherwise
+   `GameManager.transition_to(GameManager.State.MAIN_MENU)` opens the menu.
 
 If any boot step fails, an in-scene error panel is shown and the transition
 does not occur.
@@ -55,47 +58,52 @@ reference earlier ones. Five entries are scenes
 | 2 | `ContentRegistry` | `game/autoload/content_registry.gd` — typed catalogs and canonical IDs |
 | 3 | `EventBus` | `game/autoload/event_bus.gd` — cross-system signal hub |
 | 4 | `GameManager` | `game/autoload/game_manager.gd` — top-level FSM (`MAIN_MENU`, `GAMEPLAY`, `PAUSED`, `GAME_OVER`, `LOADING`, `DAY_SUMMARY`, `BUILD`, `MALL_OVERVIEW`, `STORE_VIEW`) and run-session entry points |
-| 5 | `AudioManager` | `game/autoload/audio_manager.gd` — buses, streams, SFX; instantiates `AudioEventHandler` (`game/autoload/audio_event_handler.gd`) as a child node, not a registered autoload |
-| 6 | `Settings` | `game/autoload/settings.gd` |
-| 7 | `EnvironmentManager` | `game/autoload/environment_manager.gd` |
-| 8 | `CameraManager` | `game/autoload/camera_manager.gd` — read-only viewport observer |
-| 9 | `StaffManager` | `game/autoload/staff_manager.gd` |
-| 10 | `ReputationSystemSingleton` | `game/autoload/reputation_system.gd` |
-| 11 | `DifficultySystemSingleton` | `game/autoload/difficulty_system.gd` |
-| 12 | `UnlockSystemSingleton` | `game/autoload/unlock_system.gd` |
-| 13 | `CheckoutSystem` | `game/autoload/checkout_system.gd` |
-| 14 | `OnboardingSystemSingleton` | `game/autoload/onboarding_system.gd` |
-| 15 | `TooltipManager` | `game/autoload/tooltip_manager.gd` |
-| 16 | `ObjectiveRail` | `game/scenes/ui/objective_rail.tscn` (scene) |
-| 17 | `InteractionPrompt` | `game/scenes/ui/interaction_prompt.tscn` (scene) |
-| 18 | `ObjectiveDirector` | `game/autoload/objective_director.gd` |
-| 19 | `AuditOverlay` | `game/autoload/audit_overlay.gd` |
-| 20 | `AuditLog` | `game/autoload/audit_log.gd` |
-| 21 | `LedgerSystem` | `game/autoload/ledger_system.gd` — per-transaction event log plus `day_closed` anchor records used for daily revenue reconciliation; initialized with `time_system` in Tier 5 |
-| 22 | `EventLog` | `game/autoload/event_log.gd` — structured per-event timeline (inventory mutations, customer FSM transitions, day lifecycle, money/stat changes, modal open/close, gameplay-ready, objective completions). Re-broadcasts each entry as `EventBus.event_logged(tag, message)` in every build for the player-facing on-screen log surface; the ring buffer + stdout print are debug-only |
-| 23 | `SceneRouter` | `game/autoload/scene_router.gd` — sole caller of `change_scene_to_*` |
-| 24 | `ErrorBanner` | `game/autoload/error_banner.gd` |
-| 25 | `CameraAuthority` | `game/autoload/camera_authority.gd` — single-current-camera authority |
-| 26 | `InputFocus` | `game/autoload/input_focus.gd` — modal/context stack |
-| 27 | `ModalQueue` | `game/autoload/modal_queue.gd` — priority-ordered FIFO that grants `CTX_MODAL` to one `ModalPanel` at a time; cleared by `SceneRouter` before every scene swap |
-| 28 | `ModalDimOverlay` | `game/autoload/modal_dim_overlay.gd` — full-screen dimmer placed behind any open modal panel |
-| 29 | `StoreRegistry` | `game/autoload/store_registry.gd` — runtime cache seeded from `ContentRegistry` |
-| 30 | `StoreDirector` | `game/autoload/store_director.gd` |
-| 31 | `GameState` | `game/autoload/game_state.gd` — run-state SSOT (active store, day, money) |
-| 32 | `StoreSessionState` | `game/scripts/store_session/store_session_state.gd` — store-session run-state SSOT (active day, pre-opening progress, carried stock, customer/customer-result fields, counters, and end-of-day summary payload). Old beta run-state save keys are unsupported. |
-| 33 | `StoreSessionHUD` | `game/autoload/store_session_hud.gd` — session-level owner of the store-session status and event-log panels; spawns both panels once at boot and exposes `activate(day)` / `deactivate()`. Registered after `StoreSessionState`/`EventBus`/`InputFocus` so panels can read the current store-session state and subscribe to signals in `_ready`. |
-| 34 | `EmploymentSystem` | `game/autoload/employment_system.gd` — seasonal-employee state (trust, approval, hours, status), daily wages, and end-of-season retention/firing evaluation |
-| 35 | `PlatformSystem` | `game/scripts/systems/platform_system.gd` — per-platform supply/demand/hype, daily price ticks, and platform-affinity spawn weighting |
-| 36 | `StoreCustomizationSystem` | `game/scripts/systems/store_customization_system.gd` — per-day featured-display and promotional-poster choices, spawn-weight and demand multipliers, and trust/hidden-thread linkage |
-| 37 | `ShiftSystem` | `game/scripts/systems/shift_system.gd` — daily clock-in/clock-out state, including 08:55 auto clock-in and trust penalties for late or missing punches |
-| 38 | `ManagerRelationshipManager` | `game/autoload/manager_relationship_manager.gd` — player↔manager trust scalar/tier and morning-note selection on `day_started` |
-| 39 | `MorningNotePanel` | `game/scenes/ui/morning_note_panel.tscn` (scene) — paper-memo overlay listening for `manager_note_shown` |
-| 40 | `MiddayEventSystem` | `game/scripts/systems/midday_event_system.gd` — midday decision-beat queue, pauses time on pending beat, applies resolved structured effects |
-| 41 | `MiddayEventCard` | `game/scenes/ui/midday_event_card.tscn` (scene) — modal "STORE EVENT" decision card emitted on `midday_event_fired` / `midday_event_resolved` |
-| 42 | `FailCard` | `game/scenes/ui/fail_card.tscn` (scene) |
-| 43 | `TutorialContextSystem` | `game/autoload/tutorial_context_system.gd` |
-| 44 | `Day1ReadinessAudit` | `game/autoload/day1_readiness_audit.gd` — composite Day 1 playable check that subscribes to `StoreDirector.store_ready` and emits `AuditLog.pass_check(&"day1_playable_ready", …)` / `fail_check(&"day1_playable_failed", …)` |
-| 45 | `HiddenThreadSystemSingleton` | `game/autoload/hidden_thread_system.gd` — cumulative awareness / paper-trail / scapegoat-risk stats and Tier 1/2/3 trigger evaluation across the run |
+| 5 | `RandomStreamIds` | `game/scripts/core/random_stream_ids.gd` — shared random-stream id constants |
+| 6 | `GameRandom` | `game/autoload/game_random.gd` — deterministic random stream service |
+| 7 | `UserDataPaths` | `game/autoload/user_data_paths.gd` — normal and automation-scoped `user://` persistence paths |
+| 8 | `ScenarioExit` | `game/autoload/scenario_exit.gd` — automation scenario process-status owner |
+| 9 | `AutomationRunner` | `game/autoload/automation_runner.gd` — parses `--test-mode` automation CLI flags and starts supported scenarios after boot |
+| 10 | `AudioManager` | `game/autoload/audio_manager.gd` — buses, streams, SFX; instantiates `AudioEventHandler` (`game/autoload/audio_event_handler.gd`) as a child node, not a registered autoload |
+| 11 | `Settings` | `game/autoload/settings.gd` |
+| 12 | `EnvironmentManager` | `game/autoload/environment_manager.gd` |
+| 13 | `CameraManager` | `game/autoload/camera_manager.gd` — read-only viewport observer |
+| 14 | `StaffManager` | `game/autoload/staff_manager.gd` |
+| 15 | `ReputationSystemSingleton` | `game/autoload/reputation_system.gd` |
+| 16 | `DifficultySystemSingleton` | `game/autoload/difficulty_system.gd` |
+| 17 | `UnlockSystemSingleton` | `game/autoload/unlock_system.gd` |
+| 18 | `CheckoutSystem` | `game/autoload/checkout_system.gd` |
+| 19 | `OnboardingSystemSingleton` | `game/autoload/onboarding_system.gd` |
+| 20 | `TooltipManager` | `game/autoload/tooltip_manager.gd` |
+| 21 | `ObjectiveRail` | `game/scenes/ui/objective_rail.tscn` (scene) |
+| 22 | `InteractionPrompt` | `game/scenes/ui/interaction_prompt.tscn` (scene) |
+| 23 | `ObjectiveDirector` | `game/autoload/objective_director.gd` |
+| 24 | `AuditOverlay` | `game/autoload/audit_overlay.gd` |
+| 25 | `AuditLog` | `game/autoload/audit_log.gd` |
+| 26 | `LedgerSystem` | `game/autoload/ledger_system.gd` — per-transaction event log plus `day_closed` anchor records used for daily revenue reconciliation; initialized with `time_system` in Tier 5 |
+| 27 | `EventLog` | `game/autoload/event_log.gd` — structured per-event timeline (inventory mutations, customer FSM transitions, day lifecycle, money/stat changes, modal open/close, gameplay-ready, objective completions). Re-broadcasts each entry as `EventBus.event_logged(tag, message)` in every build for the player-facing on-screen log surface; the ring buffer + stdout print are debug-only |
+| 28 | `SceneRouter` | `game/autoload/scene_router.gd` — sole caller of `change_scene_to_*` |
+| 29 | `ErrorBanner` | `game/autoload/error_banner.gd` |
+| 30 | `CameraAuthority` | `game/autoload/camera_authority.gd` — single-current-camera authority |
+| 31 | `InputFocus` | `game/autoload/input_focus.gd` — modal/context stack |
+| 32 | `ModalQueue` | `game/autoload/modal_queue.gd` — priority-ordered FIFO that grants `CTX_MODAL` to one `ModalPanel` at a time; cleared by `SceneRouter` before every scene swap |
+| 33 | `ModalDimOverlay` | `game/autoload/modal_dim_overlay.gd` — full-screen dimmer placed behind any open modal panel |
+| 34 | `StoreRegistry` | `game/autoload/store_registry.gd` — runtime cache seeded from `ContentRegistry` |
+| 35 | `StoreDirector` | `game/autoload/store_director.gd` |
+| 36 | `GameState` | `game/autoload/game_state.gd` — run-state SSOT (active store, day, money) |
+| 37 | `StoreSessionState` | `game/scripts/store_session/store_session_state.gd` — store-session run-state SSOT (active day, pre-opening progress, carried stock, customer/customer-result fields, counters, and end-of-day summary payload). Old beta run-state save keys are unsupported. |
+| 38 | `StoreSessionHUD` | `game/autoload/store_session_hud.gd` — session-level owner of the store-session status and event-log panels; spawns both panels once at boot and exposes `activate(day)` / `deactivate()`. Registered after `StoreSessionState`/`EventBus`/`InputFocus` so panels can read the current store-session state and subscribe to signals in `_ready`. |
+| 39 | `EmploymentSystem` | `game/autoload/employment_system.gd` — seasonal-employee state (trust, approval, hours, status), daily wages, and end-of-season retention/firing evaluation |
+| 40 | `PlatformSystem` | `game/scripts/systems/platform_system.gd` — per-platform supply/demand/hype, daily price ticks, and platform-affinity spawn weighting |
+| 41 | `StoreCustomizationSystem` | `game/scripts/systems/store_customization_system.gd` — per-day featured-display and promotional-poster choices, spawn-weight and demand multipliers, and trust/hidden-thread linkage |
+| 42 | `ShiftSystem` | `game/scripts/systems/shift_system.gd` — daily clock-in/clock-out state, including 08:55 auto clock-in and trust penalties for late or missing punches |
+| 43 | `ManagerRelationshipManager` | `game/autoload/manager_relationship_manager.gd` — player↔manager trust scalar/tier and morning-note selection on `day_started` |
+| 44 | `MorningNotePanel` | `game/scenes/ui/morning_note_panel.tscn` (scene) — paper-memo overlay listening for `manager_note_shown` |
+| 45 | `MiddayEventSystem` | `game/scripts/systems/midday_event_system.gd` — midday decision-beat queue, pauses time on pending beat, applies resolved structured effects |
+| 46 | `MiddayEventCard` | `game/scenes/ui/midday_event_card.tscn` (scene) — modal "STORE EVENT" decision card emitted on `midday_event_fired` / `midday_event_resolved` |
+| 47 | `FailCard` | `game/scenes/ui/fail_card.tscn` (scene) |
+| 48 | `TutorialContextSystem` | `game/autoload/tutorial_context_system.gd` |
+| 49 | `Day1ReadinessAudit` | `game/autoload/day1_readiness_audit.gd` — composite Day 1 playable check that subscribes to `StoreDirector.store_ready` and emits `AuditLog.pass_check(&"day1_playable_ready", …)` / `fail_check(&"day1_playable_failed", …)` |
+| 50 | `HiddenThreadSystemSingleton` | `game/autoload/hidden_thread_system.gd` — cumulative awareness / paper-trail / scapegoat-risk stats and Tier 1/2/3 trigger evaluation across the run |
 
 Single-owner responsibilities for the ownership-enforcing subset are tracked
 in [`docs/architecture/ownership.md`](architecture/ownership.md).

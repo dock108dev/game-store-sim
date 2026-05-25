@@ -23,7 +23,7 @@ func initialize() -> void:
 		var msg: String = "Content loading failed:\n"
 		for err: String in load_errors:
 			msg += "  - %s\n" % err
-		_show_error(msg)
+		_fail_boot(msg)
 		return
 	# Legacy full-roster validation intentionally remains disabled for the
 	# store_session's single-store content set: store_ids.size() < 5
@@ -33,7 +33,7 @@ func initialize() -> void:
 		var msg: String = "arc_unlocks.json schema errors:\n"
 		for err: String in arc_errors:
 			msg += "  - %s\n" % err
-		_show_error(msg)
+		_fail_boot(msg)
 		return
 
 	var obj_errors: Array[String] = _validate_objectives()
@@ -41,20 +41,22 @@ func initialize() -> void:
 		var msg: String = "objectives.json schema errors:\n"
 		for err: String in obj_errors:
 			msg += "  - %s\n" % err
-		_show_error(msg)
+		_fail_boot(msg)
 		return
 
 	if not ContentRegistry.is_ready():
+		var msg: String = "ContentRegistry failed to initialize — no content loaded."
 		push_error(
 			"Boot: ContentRegistry.is_ready() returned false after DataLoader load"
 		)
-		_show_error("ContentRegistry failed to initialize — no content loaded.")
+		_fail_boot(msg)
 		return
 
 	var store_ids: Array[StringName] = ContentRegistry.get_all_store_ids()
 	if store_ids.is_empty():
+		var msg: String = "No stores registered."
 		push_error("Boot: no store IDs registered")
-		_show_error("No stores registered.")
+		_fail_boot(msg)
 		return
 
 	Settings.load()
@@ -63,6 +65,9 @@ func initialize() -> void:
 	EventBus.boot_completed.emit()
 	if AuditLog != null:
 		AuditLog.pass_check(&"boot_scene_ready", "from=boot.gd")
+	if AutomationRunner != null and AutomationRunner.should_take_over_boot():
+		AutomationRunner.handle_boot_completed()
+		return
 	_transition_to_main_menu()
 
 
@@ -142,6 +147,17 @@ func _show_error(message: String) -> void:
 	# cannot be rendered as a BBCode tag — see security-report.md §1.
 	var safe_message: String = message.replace("[", "[lb]")
 	_error_label.text = "[b]Boot Error[/b]\n\n%s\n\nCheck the console for details." % safe_message
+
+
+func _fail_boot(message: String) -> void:
+	_show_error(message)
+	if ScenarioExit != null and ScenarioExit.is_armed():
+		ScenarioExit.fail(
+			ScenarioExit.BOOT_FAILURE,
+			&"boot_failed",
+			message
+		)
+		ScenarioExit.finish_and_quit()
 
 
 func _transition_to_main_menu() -> void:

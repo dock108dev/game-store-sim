@@ -24,6 +24,8 @@ var _saved_data_loader: DataLoader
 
 
 func before_each() -> void:
+	var path_err: Error = UserDataPaths.configure_test_run("save_load_parity", true)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 	ContentRegistry.clear_for_testing()
 	_saved_owned_stores = GameManager.owned_stores.duplicate()
 	_saved_store_id = GameManager.current_store_id
@@ -63,8 +65,8 @@ func before_each() -> void:
 func after_each() -> void:
 	for slot: int in range(0, 4):
 		_save_manager.delete_save(slot)
-	if FileAccess.file_exists(SaveManager.SLOT_INDEX_PATH):
-		DirAccess.remove_absolute(SaveManager.SLOT_INDEX_PATH)
+	if FileAccess.file_exists(UserDataPaths.slot_index_path()):
+		DirAccess.remove_absolute(UserDataPaths.slot_index_path())
 	GameManager.owned_stores = _saved_owned_stores
 	GameManager.current_store_id = _saved_store_id
 	if is_instance_valid(_saved_data_loader):
@@ -72,6 +74,8 @@ func after_each() -> void:
 	else:
 		GameManager.data_loader = null
 	ContentRegistry.clear_for_testing()
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 ## Returns the canonical store_id for the first available item definition.

@@ -18,6 +18,11 @@ var _saved_store_id: StringName = &""
 
 
 func before_each() -> void:
+	var path_err: Error = UserDataPaths.configure_test_run(
+		"save_manager_regression_paths",
+		true
+	)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 	ContentRegistry.clear_for_testing()
 	_save_manager = SaveManager.new()
 	add_child_autofree(_save_manager)
@@ -52,11 +57,13 @@ func before_each() -> void:
 func after_each() -> void:
 	for slot: int in range(0, 4):
 		_save_manager.delete_save(slot)
-	if FileAccess.file_exists(SaveManager.SLOT_INDEX_PATH):
-		DirAccess.remove_absolute(SaveManager.SLOT_INDEX_PATH)
+	if FileAccess.file_exists(UserDataPaths.slot_index_path()):
+		DirAccess.remove_absolute(UserDataPaths.slot_index_path())
 	ContentRegistry.clear_for_testing()
 	GameManager.owned_stores = _saved_owned_stores
 	GameManager.current_store_id = _saved_store_id
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 func test_manual_save_writes_root_level_json_and_index_metadata() -> void:

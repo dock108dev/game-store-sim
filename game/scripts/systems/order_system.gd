@@ -293,7 +293,10 @@ func _process_order_delivery(
 	var qty: int = int(order.get("quantity", 1))
 	var cost: float = float(order.get("unit_cost", 0.0))
 	var requested_delivery_qty: int = qty
-	if _force_stockout_for_test or randf() < stockout_prob:
+	if (
+		_force_stockout_for_test
+		or GameRandom.chance(RandomStreamIds.ORDER_STOCKOUT, stockout_prob)
+	):
 		var fulfilled: int = _calculate_partial_fill(qty)
 		EventBus.order_stockout.emit(StringName(iid), qty, fulfilled)
 		_issue_partial_refund(order, fulfilled)
@@ -315,7 +318,9 @@ func _process_order_delivery(
 func _calculate_partial_fill(requested: int) -> int:
 	var min_fill: int = ceili(requested * 0.40)
 	var max_fill: int = ceili(requested * 0.75)
-	return randi_range(min_fill, max_fill)
+	return GameRandom.randi_range(
+		RandomStreamIds.ORDER_PARTIAL_FILL, min_fill, max_fill
+	)
 
 
 func _issue_partial_refund(order: Dictionary, fulfilled: int) -> void:

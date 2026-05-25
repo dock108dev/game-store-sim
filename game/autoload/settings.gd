@@ -4,13 +4,15 @@ extends Node
 
 signal preference_changed(key: StringName, value: Variant)
 
+const UserDataPathsScript: GDScript = preload("res://game/autoload/user_data_paths.gd")
+
 ## Font size presets: Small, Medium, Large, Extra Large.
 enum FontSize { SMALL, MEDIUM, LARGE, EXTRA_LARGE }
 
 ## Rendering quality tiers. LOW disables the CRT overlay and other post-process effects.
 enum RenderQuality { LOW, MEDIUM, HIGH }
 
-const SETTINGS_PATH: String = "user://settings.cfg"
+const SETTINGS_PATH: String = UserDataPathsScript.DEFAULT_SETTINGS_PATH
 
 const _CRT_SHADER_PATH: String = "res://game/resources/shaders/crt_overlay.gdshader"
 
@@ -115,6 +117,8 @@ var _save_pending: bool = false
 
 
 func _ready() -> void:
+	if UserDataPaths != null and settings_path == SETTINGS_PATH:
+		settings_path = UserDataPaths.settings_path()
 	_capture_default_bindings()
 	load_settings()
 	apply_settings()
@@ -202,11 +206,12 @@ func save_settings() -> void:
 	config.set_value("display", "crt_enabled", crt_enabled)
 	config.set_value("display", "text_scale", text_scale)
 	_save_keybindings(config)
-	var save_err: Error = config.save(settings_path)
+	var path: String = _settings_path()
+	var save_err: Error = config.save(path)
 	if save_err != OK:
 		push_warning(
 			"Settings: failed to save '%s' — %s"
-			% [settings_path, error_string(save_err)]
+			% [path, error_string(save_err)]
 		)
 
 
@@ -217,26 +222,27 @@ func load() -> void:
 
 func load_settings() -> void:
 	var config := ConfigFile.new()
-	if FileAccess.file_exists(settings_path):
+	var path: String = _settings_path()
+	if FileAccess.file_exists(path):
 		var settings_file: FileAccess = FileAccess.open(
-			settings_path, FileAccess.READ
+			path, FileAccess.READ
 		)
 		if settings_file and settings_file.get_length() > MAX_SETTINGS_FILE_BYTES:
 			settings_file.close()
 			push_warning(
 				(
 					"Settings: '%s' exceeds maximum supported size (%d bytes) — using defaults"
-					% [settings_path, MAX_SETTINGS_FILE_BYTES]
+					% [path, MAX_SETTINGS_FILE_BYTES]
 				)
 			)
 			_restore_defaults_after_failed_load()
 			return
 		if settings_file:
 			settings_file.close()
-	if _safe_load_config(config, settings_path) != OK:
-		if FileAccess.file_exists(settings_path):
+	if _safe_load_config(config, path) != OK:
+		if FileAccess.file_exists(path):
 			push_warning(
-				"Settings: failed to parse '%s' — using defaults" % settings_path
+				"Settings: failed to parse '%s' — using defaults" % path
 			)
 		_restore_defaults_after_failed_load()
 		return
@@ -648,9 +654,17 @@ func _warn_invalid_config_value(
 	push_warning(
 		(
 			"Settings: invalid value for [%s] %s in '%s' — expected %s, got %s; using default"
-			% [section, key, settings_path, expected, value]
+			% [section, key, _settings_path(), expected, value]
 		)
 	)
+
+
+func _settings_path() -> String:
+	if settings_path != SETTINGS_PATH:
+		return settings_path
+	if UserDataPaths != null:
+		return UserDataPaths.settings_path()
+	return SETTINGS_PATH
 
 
 func _apply_ui_scale() -> void:

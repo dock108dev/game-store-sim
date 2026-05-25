@@ -1,5 +1,6 @@
-## Screenshot capture for the store_session validation harness. F10 saves the
-## current viewport to `user://screenshots/<timestamp>_<scene>.png`.
+## Screenshot capture for the store_session validation harness. F10 saves manual
+## captures to `user://screenshots/<timestamp>_<scene>.png`; beat-named
+## automation captures use the shared artifact root.
 ##
 ## Resolves the OS-specific user dir on first save:
 ##   * macOS:   ~/Library/Application Support/Godot/app_userdata/<project>/screenshots/
@@ -13,7 +14,14 @@ extends CanvasLayer
 const StoreVisualSweepScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
+const AutomationArtifactsScript: GDScript = preload(
+	"res://game/scripts/core/automation_artifacts.gd"
+)
+const ScenarioScreenshotCaptureScript: GDScript = preload(
+	"res://game/scripts/automation/scenario_screenshot_capture.gd"
+)
 const SAVE_DIR: String = "user://screenshots"
+const AUTOMATION_SCENARIO_ID: String = "store_session"
 const TOAST_DURATION: float = 2.5
 ## Cap the scene-slug component of the saved filename. Godot already strips
 ## '/' and ':' from `Node.name`, but the slug still flows into a path on
@@ -73,22 +81,24 @@ func _process(delta: float) -> void:
 
 
 func _capture_enabled() -> bool:
-	return OS.is_debug_build() or ProjectSettings.get_setting(
-		"debug/store_visual_capture_enabled",
-		false
+	return (
+		OS.is_debug_build()
+		or ProjectSettings.get_setting("debug/store_visual_capture_enabled", false)
 	)
 
 
-## Captures the current viewport and returns the saved PNG path details.
-func capture_current_viewport(beat_name: String = "") -> Dictionary:
+## Captures the current viewport and returns saved PNG path details.
+func capture_current_viewport(beat_name: String = "", options: Dictionary = {}) -> Dictionary:
+	if not options.is_empty():
+		return _capture_scenario_checkpoint(beat_name, options)
 	var slug: String = _scene_slug()
+	var save_dir: String = SAVE_DIR
 	if not beat_name.is_empty():
 		slug = StoreVisualSweepScript.sanitize_slug(beat_name)
+		save_dir = AutomationArtifactsScript.scenario_screenshot_dir(AUTOMATION_SCENARIO_ID)
 	var filename: String = "%s_%s.png" % [_timestamp(), slug]
 	var result: Dictionary = StoreVisualSweepScript.save_viewport_png(
-		get_viewport(),
-		SAVE_DIR,
-		filename
+		get_viewport(), save_dir, filename
 	)
 	if not bool(result.get("ok", false)):
 		_show_toast("Screenshot failed: %s" % str(result.get("error", "unknown error")))
@@ -99,20 +109,39 @@ func capture_current_viewport(beat_name: String = "") -> Dictionary:
 	return result
 
 
+func _capture_scenario_checkpoint(beat_name: String, options: Dictionary) -> Dictionary:
+	var capture_options: Dictionary = options.duplicate(true)
+	if not beat_name.is_empty() and str(capture_options.get("checkpoint", "")).is_empty():
+		capture_options["checkpoint"] = beat_name
+	if str(capture_options.get("scene", "")).is_empty():
+		capture_options["scene"] = _scene_slug()
+	var result: Dictionary = ScenarioScreenshotCaptureScript.capture_viewport(
+		get_viewport(), capture_options
+	)
+	if not bool(result.get("ok", false)):
+		_show_toast("Screenshot failed: %s" % str(result.get("error", "unknown error")))
+		return result
+	_show_toast("Saved: %s" % str(result.get("absolute_path", "")))
+	return result
+
+
 func _capture() -> void:
 	capture_current_viewport()
 
 
 func _timestamp() -> String:
 	var d: Dictionary = Time.get_datetime_dict_from_system()
-	return "%04d%02d%02d_%02d%02d%02d" % [
-		int(d.get("year", 0)),
-		int(d.get("month", 0)),
-		int(d.get("day", 0)),
-		int(d.get("hour", 0)),
-		int(d.get("minute", 0)),
-		int(d.get("second", 0)),
-	]
+	return (
+		"%04d%02d%02d_%02d%02d%02d"
+		% [
+			int(d.get("year", 0)),
+			int(d.get("month", 0)),
+			int(d.get("day", 0)),
+			int(d.get("hour", 0)),
+			int(d.get("minute", 0)),
+			int(d.get("second", 0)),
+		]
+	)
 
 
 func _scene_slug() -> String:

@@ -221,6 +221,24 @@ func test_start_game_session_negative_slot_routes_to_hub() -> void:
 	)
 
 
+func test_public_new_game_entry_uses_menu_play_path() -> void:
+	var menu: Control = load("res://game/scenes/ui/main_menu.gd").new()
+	var button := Button.new()
+	menu._load_button = button
+	menu.start_new_game_from_menu()
+	menu.free()
+	button.free()
+
+	assert_eq(
+		_fake_transition.requested_paths.size(), 1,
+		"public menu new-game entry must trigger a scene transition"
+	)
+	assert_true(
+		_fake_transition.requested_paths[0].ends_with("gameplay_shell.tscn"),
+		"public menu new-game entry must land on gameplay_shell.tscn"
+	)
+
+
 ## Main menu does not route load slots while store_session load is unavailable.
 func test_start_game_session_with_slot_does_not_route_to_hub() -> void:
 	var menu: Control = load("res://game/scenes/ui/main_menu.gd").new()

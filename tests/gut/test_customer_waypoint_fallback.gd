@@ -94,6 +94,22 @@ func test_set_navigation_target_updates_fallback_target() -> void:
 	)
 
 
+func test_set_navigation_target_emits_target_metric() -> void:
+	var customer: Customer = Customer.new()
+	add_child_autofree(customer)
+	customer.enable_waypoint_fallback()
+	var observed: Array[Dictionary] = []
+	var cb: Callable = func(data: Dictionary) -> void:
+		if int(data.get("customer_id", 0)) == customer.get_instance_id():
+			observed.append(data)
+	EventBus.customer_navigation_target_set.connect(cb)
+	customer._set_navigation_target(Vector3(3.0, 0.0, 4.0), &"exit")
+	EventBus.customer_navigation_target_set.disconnect(cb)
+	assert_eq(observed.size(), 1)
+	assert_eq(str(observed[0].get("target_kind", "")), "exit")
+	assert_true(bool(observed[0].get("using_waypoint_fallback", false)))
+
+
 func test_is_navigation_finished_reflects_fallback_state() -> void:
 	var customer: Customer = Customer.new()
 	add_child_autofree(customer)
@@ -152,6 +168,26 @@ func test_move_waypoint_fallback_marks_arrived_within_threshold() -> void:
 		customer.velocity, Vector3.ZERO,
 		"Arrival must zero velocity to stop the slide"
 	)
+
+
+func test_navigation_metrics_emit_stall_once_per_target() -> void:
+	var customer: Customer = Customer.new()
+	add_child_autofree(customer)
+	customer.enable_waypoint_fallback()
+	customer.global_position = Vector3.ZERO
+	var observed: Array[Dictionary] = []
+	var cb: Callable = func(data: Dictionary) -> void:
+		if int(data.get("customer_id", 0)) == customer.get_instance_id():
+			observed.append(data)
+	EventBus.customer_navigation_stalled.connect(cb)
+	customer._set_navigation_target(Vector3(5.0, 0.0, 0.0), &"register")
+	customer._last_nav_progress_msec = Time.get_ticks_msec() - 9000
+	customer._update_navigation_metrics()
+	customer._update_navigation_metrics()
+	EventBus.customer_navigation_stalled.disconnect(cb)
+	assert_eq(observed.size(), 1)
+	assert_eq(str(observed[0].get("failure", "")), "stall")
+	assert_eq(str(observed[0].get("target_kind", "")), "register")
 
 
 func test_set_state_emits_customer_state_changed_for_every_transition() -> void:

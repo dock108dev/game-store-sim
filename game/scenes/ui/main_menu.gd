@@ -2,14 +2,10 @@
 extends Control
 
 
-const SAVE_DIR := "user://"
+const UserDataPathsScript: GDScript = preload("res://game/autoload/user_data_paths.gd")
+const SAVE_DIR := UserDataPathsScript.DEFAULT_SAVE_DIR
 const MAX_SAVE_PREVIEW_BYTES: int = SaveManager.MAX_SAVE_FILE_BYTES
-const SLOT_PATHS: Dictionary = {
-	0: "user://save_slot_0.json",
-	1: "user://save_slot_1.json",
-	2: "user://save_slot_2.json",
-	3: "user://save_slot_3.json",
-}
+const SLOT_PATHS: Dictionary = UserDataPathsScript.DEFAULT_SLOT_PATHS
 const _SETTINGS_PANEL_SCENE: PackedScene = preload(
 	"res://game/scenes/ui/settings_panel.tscn"
 )
@@ -121,6 +117,11 @@ func _on_play_pressed() -> void:
 	_start_new_game()
 
 
+## Presses the menu's New Game path for automation after the menu is ready.
+func start_new_game_from_menu() -> void:
+	_on_play_pressed()
+
+
 func _on_new_game_confirmed() -> void:
 	_start_new_game()
 
@@ -184,7 +185,7 @@ func _refresh_load_slots() -> void:
 
 
 func _create_load_slot_row(slot: int) -> void:
-	var path: String = SLOT_PATHS.get(slot, "")
+	var path: String = _slot_path(slot)
 	var exists: bool = FileAccess.file_exists(path)
 	var save_info: Dictionary = {}
 	if exists:
@@ -252,14 +253,14 @@ func _start_game_session(slot: int) -> void:
 
 func _has_any_saves() -> bool:
 	for slot: int in [0, 1, 2, 3]:
-		var path: String = SLOT_PATHS.get(slot, "")
+		var path: String = _slot_path(slot)
 		if FileAccess.file_exists(path):
 			return true
 	return false
 
 
 func _slot_zero_save_exists() -> bool:
-	var path: String = SLOT_PATHS.get(0, "")
+	var path: String = _slot_path(0)
 	if path.is_empty():
 		return false
 	return FileAccess.file_exists(path)
@@ -293,7 +294,7 @@ func _find_most_recent_slot() -> int:
 	var best_time: String = ""
 
 	for slot: int in [0, 1, 2, 3]:
-		var path: String = SLOT_PATHS.get(slot, "")
+		var path: String = _slot_path(slot)
 		if not FileAccess.file_exists(path):
 			continue
 		var info: Dictionary = _read_slot_info(path)
@@ -339,6 +340,12 @@ func _read_slot_info(path: String) -> Dictionary:
 	if data is not Dictionary:
 		return {}
 	return data as Dictionary
+
+
+func _slot_path(slot: int) -> String:
+	if UserDataPaths != null:
+		return UserDataPaths.save_slot_path(slot)
+	return SLOT_PATHS.get(slot, "")
 
 
 func _format_slot_info(save_data: Dictionary) -> String:

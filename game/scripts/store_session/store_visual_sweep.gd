@@ -2,7 +2,12 @@
 class_name StoreVisualSweep
 extends RefCounted
 
-const ARTIFACT_DIR: String = "user://screenshots/visual_sweep/retro_games_day_one"
+const AutomationArtifactsScript: GDScript = preload(
+	"res://game/scripts/core/automation_artifacts.gd"
+)
+const ARTIFACT_SUITE: String = "retro_games_day_one"
+const ARTIFACT_DIR: String = "screenshots/visual_sweep/retro_games_day_one"
+const REVIEW_MANIFEST_DIR: String = "reports/visual_sweep/retro_games_day_one"
 const REVIEW_MANIFEST_FILENAME: String = "review_manifest.json"
 const VIEWPORT_MARGIN_PX: float = 8.0
 const ACCEPTANCE_TARGET: String = "first_ten_seconds_route_views"
@@ -306,9 +311,10 @@ static func save_viewport_png(
 	var dir_result: Dictionary = ensure_artifact_dir(dir_path)
 	if not bool(dir_result.get("ok", false)):
 		return dir_result
+	var resolved_dir: String = str(dir_result.get("path", dir_path))
 	if DisplayServer.get_name() == "headless":
 		if allow_placeholder:
-			return _save_placeholder_png(dir_path, filename)
+			return _save_placeholder_png(resolved_dir, filename)
 		return _error("Viewport image unavailable in headless display mode")
 	if viewport == null:
 		return _error("Viewport unavailable")
@@ -319,10 +325,11 @@ static func save_viewport_png(
 	if image == null or image.get_width() <= 0 or image.get_height() <= 0:
 		return _error("Viewport image unavailable")
 	var safe_filename: String = sanitize_slug(filename.get_basename()) + ".png"
-	var path: String = "%s/%s" % [dir_path, safe_filename]
+	var path: String = "%s/%s" % [resolved_dir, safe_filename]
 	var save_err: int = image.save_png(path)
 	if save_err != OK:
 		return _error("save_png err=%d" % save_err)
+	_record_artifact("screenshot", path, "viewport")
 	return {
 		"ok": true,
 		"path": path,
@@ -336,14 +343,7 @@ static func save_viewport_png(
 
 ## Ensures the screenshot artifact directory exists.
 static func ensure_artifact_dir(dir_path: String) -> Dictionary:
-	var dir_err: int = DirAccess.make_dir_recursive_absolute(dir_path)
-	if dir_err != OK and dir_err != ERR_ALREADY_EXISTS:
-		return _error("Cannot create %s (err=%d)" % [dir_path, dir_err])
-	return {
-		"ok": true,
-		"path": dir_path,
-		"absolute_path": ProjectSettings.globalize_path(dir_path),
-	}
+	return AutomationArtifactsScript.ensure_artifact_dir(dir_path)
 
 
 ## Writes a JSON review manifest next to the PNG artifacts.
@@ -354,12 +354,10 @@ static func write_review_manifest(
 	var dir_result: Dictionary = ensure_artifact_dir(dir_path)
 	if not bool(dir_result.get("ok", false)):
 		return dir_result
-	var path: String = "%s/%s" % [dir_path, REVIEW_MANIFEST_FILENAME]
-	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
-	if file == null:
-		return _error("Cannot write review manifest: %s" % path)
+	var resolved_dir: String = str(dir_result.get("path", dir_path))
+	var path: String = "%s/%s" % [resolved_dir, REVIEW_MANIFEST_FILENAME]
 	var payload: Dictionary = {
-		"artifact_dir": ProjectSettings.globalize_path(dir_path),
+		"artifact_dir": ProjectSettings.globalize_path(resolved_dir),
 		"acceptance_target": ACCEPTANCE_TARGET,
 		"review_criteria": review_criteria(),
 		"first_ten_seconds_review_criteria": first_ten_seconds_review_criteria(),
@@ -369,8 +367,17 @@ static func write_review_manifest(
 		"manual_review_template": _manual_review_template(rows_to_write),
 		"beats": _serializable_rows(rows_to_write),
 	}
-	file.store_string(JSON.stringify(payload, "\t"))
-	file.close()
+	var write_result: Dictionary = AutomationArtifactsScript.write_recorded_json(
+		path,
+		payload,
+		"report",
+		"",
+		"visual_sweep",
+		"manifest",
+		"Cannot write review manifest"
+	)
+	if not bool(write_result.get("ok", false)):
+		return write_result
 	return {
 		"ok": true,
 		"path": path,
@@ -395,6 +402,16 @@ static func sanitize_slug(raw: String, max_length: int = _MAX_SLUG_LENGTH) -> St
 	if max_length > 0 and sanitized.length() > max_length:
 		sanitized = sanitized.substr(0, max_length)
 	return sanitized
+
+
+## Returns the resolved screenshot directory for the store-session visual sweep.
+static func visual_sweep_dir() -> String:
+	return AutomationArtifactsScript.visual_sweep_screenshot_dir(ARTIFACT_SUITE)
+
+
+## Returns the resolved review-manifest directory for the visual sweep.
+static func review_manifest_dir() -> String:
+	return AutomationArtifactsScript.report_dir("visual_sweep", ARTIFACT_SUITE)
 
 
 static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictionary]:
@@ -448,6 +465,7 @@ static func _save_placeholder_png(dir_path: String, filename: String) -> Diction
 	var save_err: int = image.save_png(path)
 	if save_err != OK:
 		return _error("save_png err=%d" % save_err)
+	_record_artifact("screenshot", path, "placeholder")
 	return {
 		"ok": true,
 		"path": path,
@@ -457,6 +475,16 @@ static func _save_placeholder_png(dir_path: String, filename: String) -> Diction
 		"height": image.get_height(),
 		"placeholder": true,
 	}
+
+
+static func _record_artifact(artifact_type: String, path: String, capture_mode: String) -> void:
+	AutomationArtifactsScript.record_artifact(
+		artifact_type,
+		path,
+		ARTIFACT_SUITE,
+		"visual_sweep",
+		capture_mode
+	)
 
 
 static func _error(message: String) -> Dictionary:

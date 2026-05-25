@@ -133,21 +133,12 @@ func _target_for_path(scene_path: String) -> StringName:
 
 
 func _emit_pass(target: StringName, scene_path: String) -> void:
-	# §EH-38 (docs/audits/error-handling-report.md): AuditLog is an autoload
-	# (project.godot) and `pass_check` is its owner-declared method
-	# (audit_log.gd:21). The prior `_audit_log()` walker + has_method guard
-	# pair was the §EH-13/§EH-15 dead-guard shape; the `print()` fallback was
-	# unreachable in production and would have skipped the ring buffer
-	# scanned by headless CI on a rename.
+	# Direct autoload calls keep CI-visible audit records in the ring buffer.
 	var detail: String = "target=%s path=%s" % [target, scene_path]
 	AuditLog.pass_check(&"scene_change_ok", detail)
 
 
 func _fail(target: StringName, reason: String) -> void:
-	# §EH-38: typed autoload — see _emit_pass above. fail_check is declared at
-	# audit_log.gd:39. A rename now fails GDScript parse rather than silently
-	# emitting only the push_error line (which the CI stderr scan catches as
-	# ^ERROR, but without the structured AUDIT FAIL record).
 	push_error("SceneRouter: %s — %s" % [target, reason])
 	AuditLog.fail_check(&"scene_change_ok", "target=%s reason=%s" % [target, reason])
 	scene_failed.emit(target, reason)

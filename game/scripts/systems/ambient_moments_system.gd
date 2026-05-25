@@ -433,7 +433,9 @@ func _check_random_trigger(
 ) -> bool:
 	if not _matches_location_category(def):
 		return false
-	return randf() < float(def.trigger_value)
+	return GameRandom.chance(
+		RandomStreamIds.AMBIENT_TRIGGER, float(def.trigger_value)
+	)
 
 
 func _get_current_reputation() -> float:
@@ -452,18 +454,15 @@ func _get_current_reputation() -> float:
 func _weighted_pick(
 	candidates: Array[AmbientMomentDefinition],
 ) -> AmbientMomentDefinition:
-	var total: float = 0.0
+	var weights: Array[float] = []
 	for def: AmbientMomentDefinition in candidates:
-		total += def.scheduling_weight
-	if total <= 0.0:
+		weights.append(def.scheduling_weight)
+	var index: int = GameRandom.weighted_index(
+		RandomStreamIds.AMBIENT_PICK, weights
+	)
+	if index < 0:
 		return null
-	var roll: float = randf() * total
-	var cumulative: float = 0.0
-	for def: AmbientMomentDefinition in candidates:
-		cumulative += def.scheduling_weight
-		if roll <= cumulative:
-			return def
-	return candidates[candidates.size() - 1]
+	return candidates[index]
 
 
 func _dispatch_next() -> void:

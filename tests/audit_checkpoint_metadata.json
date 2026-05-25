@@ -1,0 +1,41 @@
+{
+  "boot_scene_ready": {
+    "title": "Boot scene ready",
+    "scenario": "smoke",
+    "severity": "critical",
+    "owner": "boot",
+    "junit_classname": "Mallcore.RuntimeAudit.Boot",
+    "source": "game/scripts/core/boot.gd",
+    "test": "tests/gut/test_boot_sequence.gd"
+  },
+  "main_menu_ready": {
+    "title": "Main menu ready",
+    "scenario": "smoke",
+    "severity": "critical",
+    "owner": "main_menu",
+    "junit_classname": "Mallcore.RuntimeAudit.Boot",
+    "source": "game/scenes/ui/main_menu.gd"
+  },
+  "gameplay_shell_ready": {
+    "title": "Gameplay shell ready",
+    "scenario": "smoke",
+    "severity": "high",
+    "owner": "gameplay_shell",
+    "junit_classname": "Mallcore.RuntimeAudit.Gameplay",
+    "source": "game/scripts/core/gameplay_shell.gd"
+  },
+  "objective_matches": {
+    "title": "Objective state matches UI",
+    "scenario": "tutorial",
+    "severity": "high",
+    "owner": "objective",
+    "junit_classname": "Mallcore.RuntimeAudit.Tutorial"
+  },
+  "interaction_fired": {
+    "title": "Tutorial interaction fired",
+    "scenario": "tutorial",
+    "severity": "high",
+    "owner": "interaction",
+    "junit_classname": "Mallcore.RuntimeAudit.Tutorial"
+  }
+}

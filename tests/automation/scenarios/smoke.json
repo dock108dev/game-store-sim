@@ -1,0 +1,9 @@
+{
+	"id": "smoke",
+	"title": "Smoke Alias",
+	"tags": ["smoke"],
+	"timeout_frames": 1800,
+	"steps": [
+		{"id": "scenario_exit", "type": "finish", "timeout_frames": 30}
+	]
+}

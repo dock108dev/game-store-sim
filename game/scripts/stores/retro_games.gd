@@ -386,15 +386,8 @@ func _connect_entrance_door() -> void:
 ## `_on_day_summary_mall_overview_requested` path in `GameWorld` so the door
 ## and the day-summary button leave the store the same way.
 ##
-## §F-71 — Defense in depth: only run the cursor unlock + state transition
-## while GameManager is in GAMEPLAY. The Interactable.interacted signal is
-## already gated upstream by InputFocus (`_gameplay_allowed()` in
-## `store_player_body.gd`) and by `interaction_ray._open_panel_count == 0`,
-## so reaching this handler outside GAMEPLAY would require a future modal
-## that bypasses both gates. Without this guard, an E-press in such a state
-## would unlock the cursor without successfully changing state (the FSM
-## would `push_warning("Invalid transition")`) — leaving the cursor visible
-## and gameplay context still claimed but pointer-less.
+## Guard against future modal/focus bypasses: store exit should only unlock
+## the cursor during gameplay.
 func _on_entrance_door_interacted() -> void:
 	if GameManager.current_state != GameManager.State.GAMEPLAY:
 		return
@@ -737,12 +730,8 @@ func _connect_artifact(path: String, callable: Callable) -> void:
 		node.interacted.connect(callable)
 
 
-## Subscribes to the platform shortage signals so the new_console_display
-## ShortageLabel reflects live VecForce HD stock state. All four signals are
-## owner-declared on the `EventBus` autoload so they connect unconditionally;
-## previous `_has_platform_system()` short-circuit was a §EH-13/§EH-15-shape
-## dead guard (PlatformSystem is autoload-registered in project.godot:78 and
-## always present at the moment any scene's `_ready()` runs). See §EH-33.
+## Subscribes to stock-state events so the new console display reflects
+## live VecForce HD availability.
 func _connect_platform_shortage_signals() -> void:
 	_connect_store_signal(EventBus.platform_shortage_started, _on_platform_shortage_changed)
 	_connect_store_signal(EventBus.platform_shortage_ended, _on_platform_shortage_changed)
@@ -767,18 +756,7 @@ func _on_platform_restock_received(_platform_id: StringName, _qty: int) -> void:
 
 
 ## Updates the in-store ShortageLabel under new_console_display so the player
-## can read VecForce HD stock state from the shop floor. Reads PlatformSystem
-## live; falls back to "IN STOCK" when the system has no definition for the
-## platform (content-authoring fallback only — the autoload itself is always
-## present because PlatformSystem is registered in project.godot:78).
-##
-## §EH-33 — replaced the `get_tree().root.get_node("PlatformSystem")` +
-## `.call("get_definition", ...)` + `.call("is_shortage", ...)` triple dead-
-## guard with direct typed autoload access. PlatformSystem is the autoload
-## identifier; `get_definition` returns the typed `PlatformDefinition` whose
-## `display_name` is a typed property. A rename of either now fails GDScript
-## parse instead of silently shipping a "VECFORCE HD — IN STOCK" label even
-## while PlatformSystem reports an active shortage.
+## can read VecForce HD stock state from the shop floor.
 func _refresh_new_console_display_label() -> void:
 	var label: Label3D = get_node_or_null(_NEW_CONSOLE_LABEL_PATH) as Label3D
 	if label == null:
@@ -808,11 +786,6 @@ func _on_delivery_manifest_examined() -> void:
 	EventBus.delivery_manifest_examined.emit(STORE_ID, day)
 
 
-## §EH-33 — StoreCustomizationSystem is the `StoreCustomizationSystem`
-## autoload (project.godot:79); `cycle_poster()`, `can_set_featured_category()`,
-## and `cycle_featured_category()` are typed methods. The prior
-## `get_node_or_null + .call("foo")` dynamic-call seam masked typos at
-## parse time. Direct access fails GDScript parse on a rename.
 func _on_poster_slot_interacted() -> void:
 	var poster_id: StringName = StoreCustomizationSystem.cycle_poster()
 	EventBus.notification_requested.emit(
@@ -849,11 +822,6 @@ func _on_back_room_inventory_shelf_interacted() -> void:
 # ── Store customization wiring ───────────────────────────────────────────────
 
 
-## §EH-33 — Connects unconditionally; StoreCustomizationSystem is an
-## owner-declared autoload and `featured_category_changed` is its
-## owner-declared signal (`store_customization_system.gd:30`). A rename of
-## either fails GDScript parse on the autoload side instead of silently
-## skipping the hidden-thread `display_exposes_weird_inventory` wiring.
 func _connect_store_customization_signals() -> void:
 	if not StoreCustomizationSystem.featured_category_changed.is_connected(
 		_on_featured_category_changed

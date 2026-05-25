@@ -134,6 +134,11 @@ func test_unknown_store_id_fails_loud() -> void:
 
 	var ok: bool = await _director.enter_store(&"unknown")
 	assert_false(ok, "enter_store(unknown) must return false")
+	assert_true(_director.is_idle(), "director must be idle after a failed transition")
+	var result: Dictionary = _director.get_last_result()
+	assert_false(bool(result.get("ok", true)))
+	assert_eq(result.get("store_id", &""), &"unknown")
+	assert_string_contains(str(result.get("reason", "")), "unknown store_id: unknown")
 	assert_eq(failures.size(), 1, "exactly one store_failed emission expected")
 	assert_eq(failures[0][0], &"unknown")
 	assert_string_contains(failures[0][1], "unknown store_id: unknown")
@@ -173,6 +178,11 @@ func test_happy_path_emits_store_ready_once() -> void:
 	)
 	assert_eq(_director.state, StoreDirectorScript.State.IDLE,
 		"director should return to IDLE after READY so subsequent calls are accepted")
+	assert_true(_director.is_idle(), "public idle handle should match the IDLE state")
+	var result: Dictionary = _director.get_last_result()
+	assert_true(bool(result.get("ok", false)))
+	assert_eq(result.get("store_id", &""), &"fixture_store")
+	assert_eq(str(result.get("reason", "unexpected")), "")
 	assert_eq(router.route_calls.size(), 1)
 	assert_eq(router.route_calls[0], "res://test/fixture_store.tscn")
 
@@ -205,6 +215,10 @@ func test_concurrent_enter_store_is_rejected() -> void:
 	# Try to start a second one while the first is still mid-flight.
 	var second_ok: bool = await _director.enter_store(&"fixture_store")
 	assert_false(second_ok, "second enter_store must be rejected")
+	var result: Dictionary = _director.get_last_result()
+	assert_false(bool(result.get("ok", true)))
+	assert_eq(result.get("store_id", &""), &"fixture_store")
+	assert_string_contains(str(result.get("reason", "")), "rejected")
 	assert_true(failures.size() >= 1, "rejected call must emit store_failed")
 	assert_string_contains(failures[0][1], "rejected")
 	# Drain the first call so the test ends in a clean state.

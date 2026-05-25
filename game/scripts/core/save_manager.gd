@@ -1,5 +1,5 @@
 # gdlint:disable=max-public-methods,max-file-lines
-## Manages saving and loading game state to JSON files in user://.
+## Manages saving and loading game state to JSON files.
 ##
 ## Save Versioning Policy
 ## ──────────────────────
@@ -33,6 +33,7 @@ class_name SaveManager
 extends Node
 
 
+const UserDataPathsScript: GDScript = preload("res://game/autoload/user_data_paths.gd")
 const CURRENT_SAVE_VERSION: int = 3
 ## Saves below this version are rejected outright; see class docstring policy.
 const MIN_SUPPORTED_SAVE_VERSION: int = 1
@@ -40,9 +41,9 @@ const MIN_SUPPORTED_SAVE_VERSION: int = 1
 ## legacy alias for compatibility with v0–v3 readers.
 const SCHEMA_VERSION_KEY: String = "schema_version"
 const LEGACY_SCHEMA_VERSION_KEY: String = "save_version"
-const SAVE_DIR := "user://"
-const BACKUP_DIR := "user://backups/"
-const SLOT_INDEX_PATH := "user://save_index.cfg"
+const SAVE_DIR := UserDataPathsScript.DEFAULT_SAVE_DIR
+const BACKUP_DIR := UserDataPathsScript.DEFAULT_BACKUP_DIR
+const SLOT_INDEX_PATH := UserDataPathsScript.DEFAULT_SLOT_INDEX_PATH
 const MAX_MANUAL_SLOTS: int = 3
 const AUTO_SAVE_SLOT: int = 0
 const MAX_SAVE_FILE_BYTES: int = 10485760
@@ -332,6 +333,7 @@ func load_game(slot: int) -> bool:
 			"Legacy path removed — use SSOT implementation"
 		)
 	_distribute_save_data(save_data)
+	EventBus.notification_requested.emit("Game loaded.")
 	return true
 
 
@@ -367,6 +369,16 @@ func delete_save(slot: int) -> bool:
 		return false
 	_remove_slot_from_index(slot)
 	return true
+
+
+## Returns the canonical save payload without writing to disk, for tests only.
+func collect_save_data_for_tests() -> Dictionary:
+	if not OS.is_debug_build():
+		push_error("SaveManager: collect_save_data_for_tests is debug-only")
+		return {}
+	if not _systems_ready():
+		return {}
+	return _collect_save_data().duplicate(true)
 
 
 func _collect_save_data() -> Dictionary:
@@ -771,7 +783,7 @@ func migrate_save_data(data: Dictionary) -> Dictionary:
 
 ## Reads the schema version from a save dictionary, preferring the canonical
 ## `schema_version` field and falling back to the legacy `save_version` alias
-## written by builds prior to ISSUE-024.
+## written by earlier builds.
 func _read_schema_version(data: Dictionary) -> int:
 	if data.has(SCHEMA_VERSION_KEY):
 		return int(data.get(SCHEMA_VERSION_KEY, 0))
@@ -966,7 +978,9 @@ func _on_day_acknowledged() -> void:
 
 
 func _get_slot_path(slot: int) -> String:
-	return SAVE_DIR + "save_slot_%d.json" % slot
+	if UserDataPaths != null:
+		return UserDataPaths.save_slot_path(slot)
+	return UserDataPathsScript.DEFAULT_SLOT_PATHS.get(slot, "")
 
 
 func _validate_slot(slot: int) -> bool:
@@ -988,13 +1002,14 @@ func _systems_ready() -> bool:
 
 
 func _fail_load(slot: int, reason: String) -> bool:
-	# §F-21: player notification travels via save_load_failed signal; push_warning is log-only.
+	# Failed loads must be visible in both automation signals and player HUD.
 	push_warning("SaveManager: %s" % reason)
 	EventBus.save_load_failed.emit(slot, reason)
+	EventBus.notification_requested.emit("Load failed: %s" % reason)
 	return false
 
 
-## Copies the source save file to user://backups/ before a destructive
+## Copies the source save file to the backup directory before a destructive
 ## migration so operators can recover the original on-disk shape.
 func _backup_before_migration(
 	source_path: String, slot: int, save_version: int
@@ -1011,7 +1026,7 @@ func _backup_before_migration(
 		"save_slot_%d_v%d_%s.json"
 		% [slot, save_version, timestamp]
 	)
-	var backup_path: String = BACKUP_DIR + backup_name
+	var backup_path: String = _backup_dir() + backup_name
 	var src: FileAccess = FileAccess.open(source_path, FileAccess.READ)
 	# §F-06: backup is best-effort before migration; missing backup does not block the migration.
 	if not src:
@@ -1035,14 +1050,15 @@ func _backup_before_migration(
 
 
 func _ensure_backup_dir() -> void:
-	if DirAccess.dir_exists_absolute(BACKUP_DIR):
+	var path: String = _backup_dir()
+	if DirAccess.dir_exists_absolute(path):
 		return
-	var err: Error = DirAccess.make_dir_recursive_absolute(BACKUP_DIR)
+	var err: Error = DirAccess.make_dir_recursive_absolute(path)
 	# §F-06: backup dir creation is best-effort; migration proceeds without backup if this fails.
 	if err != OK:
 		push_warning(
 			"SaveManager: failed to create backup dir '%s' — %s"
-			% [BACKUP_DIR, error_string(err)]
+			% [path, error_string(err)]
 		)
 
 
@@ -1065,12 +1081,13 @@ func get_all_slot_metadata() -> Dictionary:
 	if not _slot_index_size_ok():
 		return {}
 	var config := ConfigFile.new()
-	var load_err: Error = config.load(SLOT_INDEX_PATH)
+	var path: String = _slot_index_path()
+	var load_err: Error = config.load(path)
 	if load_err != OK:
-		if FileAccess.file_exists(SLOT_INDEX_PATH):
+		if FileAccess.file_exists(path):
 			push_warning(
 				"SaveManager: failed to load slot index '%s' — %s"
-				% [SLOT_INDEX_PATH, error_string(load_err)]
+				% [path, error_string(load_err)]
 			)
 		return {}
 	var result: Dictionary = {}
@@ -1093,11 +1110,12 @@ func _update_slot_index(slot: int, metadata: Dictionary) -> void:
 	if not _slot_index_size_ok():
 		return
 	var config := ConfigFile.new()
-	var load_err: Error = config.load(SLOT_INDEX_PATH)
-	if load_err != OK and FileAccess.file_exists(SLOT_INDEX_PATH):
+	var path: String = _slot_index_path()
+	var load_err: Error = config.load(path)
+	if load_err != OK and FileAccess.file_exists(path):
 		push_warning(
 			"SaveManager: failed to load slot index '%s' for update — keeping index unchanged"
-			% SLOT_INDEX_PATH
+			% path
 		)
 		return
 	var section: String = "slot_%d" % slot
@@ -1105,11 +1123,11 @@ func _update_slot_index(slot: int, metadata: Dictionary) -> void:
 		config.erase_section(section)
 	for key: String in metadata:
 		config.set_value(section, key, metadata[key])
-	var save_err: Error = config.save(SLOT_INDEX_PATH)
+	var save_err: Error = config.save(path)
 	if save_err != OK:
 		push_warning(
 			"SaveManager: failed to write slot index '%s' — %s"
-			% [SLOT_INDEX_PATH, error_string(save_err)]
+			% [path, error_string(save_err)]
 		)
 
 
@@ -1117,31 +1135,33 @@ func _remove_slot_from_index(slot: int) -> void:
 	if not _slot_index_size_ok():
 		return
 	var config := ConfigFile.new()
-	var load_err: Error = config.load(SLOT_INDEX_PATH)
+	var path: String = _slot_index_path()
+	var load_err: Error = config.load(path)
 	if load_err != OK:
-		if FileAccess.file_exists(SLOT_INDEX_PATH):
+		if FileAccess.file_exists(path):
 			push_warning(
 				"SaveManager: failed to load slot index '%s' for removal — keeping index unchanged"
-				% SLOT_INDEX_PATH
+				% path
 			)
 		return
 	var section: String = "slot_%d" % slot
 	if config.has_section(section):
 		config.erase_section(section)
-		var save_err: Error = config.save(SLOT_INDEX_PATH)
+		var save_err: Error = config.save(path)
 		if save_err != OK:
 			push_warning(
 				"SaveManager: failed to write slot index '%s' — %s"
-				% [SLOT_INDEX_PATH, error_string(save_err)]
+				% [path, error_string(save_err)]
 			)
 
 
 ## §SR-01: Returns false and warns when the slot-index file exceeds the cap.
 ## Prevents a hand-crafted oversized file from wedging ConfigFile.load().
 func _slot_index_size_ok() -> bool:
-	if not FileAccess.file_exists(SLOT_INDEX_PATH):
+	var path: String = _slot_index_path()
+	if not FileAccess.file_exists(path):
 		return true
-	var probe: FileAccess = FileAccess.open(SLOT_INDEX_PATH, FileAccess.READ)
+	var probe: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if not probe:
 		return true
 	var size: int = probe.get_length()
@@ -1149,23 +1169,42 @@ func _slot_index_size_ok() -> bool:
 	if size > MAX_SLOT_INDEX_BYTES:
 		push_warning(
 			"SaveManager: slot index '%s' exceeds %d bytes (%d) — ignoring"
-			% [SLOT_INDEX_PATH, MAX_SLOT_INDEX_BYTES, size]
+			% [path, MAX_SLOT_INDEX_BYTES, size]
 		)
 		return false
 	return true
 
 
 func _ensure_save_dir() -> void:
-	if SAVE_DIR == "user://":
+	var path: String = _save_dir()
+	if path == "user://":
 		return
-	if DirAccess.dir_exists_absolute(SAVE_DIR):
+	if DirAccess.dir_exists_absolute(path):
 		return
-	var err: Error = DirAccess.make_dir_recursive_absolute(SAVE_DIR)
+	var err: Error = DirAccess.make_dir_recursive_absolute(path)
 	if err != OK:
 		push_warning(
 			"SaveManager: failed to create '%s' — %s"
-			% [SAVE_DIR, error_string(err)]
+			% [path, error_string(err)]
 		)
+
+
+func _save_dir() -> String:
+	if UserDataPaths != null:
+		return UserDataPaths.save_dir()
+	return SAVE_DIR
+
+
+func _backup_dir() -> String:
+	if UserDataPaths != null:
+		return UserDataPaths.backup_dir()
+	return BACKUP_DIR
+
+
+func _slot_index_path() -> String:
+	if UserDataPaths != null:
+		return UserDataPaths.slot_index_path()
+	return SLOT_INDEX_PATH
 
 
 func _write_save_file_atomic(path: String, contents: String) -> Error:

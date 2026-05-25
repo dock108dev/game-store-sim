@@ -33,6 +33,11 @@ var _saved_day: int
 
 
 func before_each() -> void:
+	var path_err: Error = UserDataPaths.configure_test_run(
+		"integration_save_load_round_trip",
+		true
+	)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 	_saved_store_id = GameManager.current_store_id
 	_saved_owned_stores = GameManager.owned_stores.duplicate()
 	_saved_day = GameManager.current_day
@@ -90,7 +95,7 @@ func before_each() -> void:
 	_save_manager.set_store_state_manager(_store_state_manager)
 	_save_manager.set_milestone_system(_milestone_system)
 
-	DirAccess.make_dir_recursive_absolute(SaveManager.SAVE_DIR)
+	DirAccess.make_dir_recursive_absolute(UserDataPaths.save_dir())
 
 
 func after_each() -> void:
@@ -99,6 +104,8 @@ func after_each() -> void:
 	GameManager.owned_stores = _saved_owned_stores
 	GameManager.current_day = _saved_day
 	_unregister_store_from_content_registry()
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 ## save_game returns true for an initialized save manager on a valid slot.

@@ -18,6 +18,11 @@ var _failed_signal_payload: Dictionary = {}
 
 
 func before_each() -> void:
+	var path_err: Error = UserDataPaths.configure_test_run(
+		"save_schema_version",
+		true
+	)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 	ContentRegistry.clear_for_testing()
 	_failed_signal_payload = {}
 
@@ -59,9 +64,11 @@ func after_each() -> void:
 		EventBus.save_load_failed.disconnect(_on_save_load_failed)
 	for slot: int in range(0, 4):
 		_save_manager.delete_save(slot)
-	if FileAccess.file_exists(SaveManager.SLOT_INDEX_PATH):
-		DirAccess.remove_absolute(SaveManager.SLOT_INDEX_PATH)
+	if FileAccess.file_exists(UserDataPaths.slot_index_path()):
+		DirAccess.remove_absolute(UserDataPaths.slot_index_path())
 	ContentRegistry.clear_for_testing()
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 
 func _on_save_load_failed(slot: int, reason: String) -> void:

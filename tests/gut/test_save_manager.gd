@@ -24,6 +24,8 @@ var _saved_difficulty_downgrade_used: bool = false
 
 
 func before_each() -> void:
+	var path_err: Error = UserDataPaths.configure_test_run("save_manager_paths", true)
+	assert_eq(path_err, OK, "test setup must isolate save paths")
 	if is_instance_valid(GameManager.data_loader):
 		_saved_data_loader = GameManager.data_loader
 	else:
@@ -50,8 +52,10 @@ func after_each() -> void:
 	):
 		if _save_manager:
 			_save_manager.delete_save(slot)
-	if FileAccess.file_exists(SaveManager.SLOT_INDEX_PATH):
-		DirAccess.remove_absolute(SaveManager.SLOT_INDEX_PATH)
+	if FileAccess.file_exists(UserDataPaths.slot_index_path()):
+		DirAccess.remove_absolute(UserDataPaths.slot_index_path())
+	UserDataPaths.cleanup_active_test_run()
+	UserDataPaths.reset_for_normal_play()
 
 	ContentRegistry.clear_for_testing()
 	if is_instance_valid(_saved_data_loader):

@@ -265,7 +265,7 @@ func spawn_customer(
 				1.0 + GREETER_ENTRY_BONUS * greeter.performance_multiplier()
 			)
 		)
-		if randf() > conversion:
+		if not GameRandom.chance(RandomStreamIds.CUSTOMER_SPAWN, conversion):
 			return
 
 	var customer: Customer = _acquire_customer()

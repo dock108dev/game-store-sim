@@ -168,6 +168,46 @@ func set_speed(tier: SpeedTier) -> void:
 	_recalculate_effective_speed()
 
 
+## Returns the requested speed tier before auto-slow or focus pause is applied.
+func get_requested_speed_tier() -> SpeedTier:
+	return _requested_speed
+
+
+## Returns the effective frame-driven speed multiplier currently applied.
+func get_effective_speed_multiplier() -> float:
+	return speed_multiplier
+
+
+## Returns the in-game minute where the day starts.
+func get_day_start_minutes() -> float:
+	return _DAY_START_MINUTES
+
+
+## Returns the active in-game minute where the day ends.
+func get_day_end_minutes() -> float:
+	return _get_day_end_minutes()
+
+
+## Returns true once this day has emitted its day-ended event.
+func is_day_ended() -> bool:
+	return _day_ended_emitted
+
+
+## Returns true when input focus is currently blocking frame-driven time.
+func is_focus_paused() -> bool:
+	return _focus_paused
+
+
+## Returns remaining in-game minutes until the active day end.
+func get_minutes_until_day_end() -> float:
+	return maxf(0.0, _get_day_end_minutes() - game_time_minutes)
+
+
+## Returns true when a store-session controller owns the day-end trigger.
+func is_day_end_owned_by_store_session() -> bool:
+	return _store_session_owns_day_end()
+
+
 func get_current_phase() -> DayPhase:
 	return current_phase
 
@@ -378,7 +418,9 @@ func _get_phase_for_minutes(minutes: float) -> DayPhase:
 
 func _recalculate_effective_speed() -> void:
 	var old_speed: float = speed_multiplier
-	if not _auto_slow_stack.is_empty():
+	if _requested_speed == SpeedTier.PAUSED:
+		speed_multiplier = float(SpeedTier.PAUSED)
+	elif not _auto_slow_stack.is_empty():
 		speed_multiplier = float(SpeedTier.NORMAL)
 	else:
 		speed_multiplier = float(_requested_speed)

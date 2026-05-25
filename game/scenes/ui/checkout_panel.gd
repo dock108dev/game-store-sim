@@ -711,18 +711,8 @@ func _apply_card_style() -> void:
 
 
 func _set_reasoning_text(text: String) -> void:
-	# BBCode `[i]` produces italic when an italic font variation is wired into
-	# the theme; on the default font, the engine falls back to a synthetic
-	# slant. Either way, the hierarchy spec (italic + muted + smaller) is met.
-	#
-	# §F-129 — `_reasoning_label` has `bbcode_enabled = true`. Today's only
-	# callers feed either a constant `_ARCHETYPE_REASONING` lookup or a packed
-	# JSON string from the customer-archetype catalog (developer-controlled),
-	# so the substituted text is not user-editable. We still escape `[` →
-	# `[lb]` so a future caller that wires save-derived or runtime-typed text
-	# through this surface cannot inject BBCode tags ([url=...], [color], …)
-	# into the rendered label. Round-trip is render-equivalent for the
-	# current safe inputs (no `[` characters in any catalog string).
+	# Reasoning text is developer-authored today, but escaping keeps future
+	# runtime strings from injecting BBCode into this italic label.
 	_reasoning_label.text = "[i]%s[/i]" % text.replace("[", "[lb]")
 
 

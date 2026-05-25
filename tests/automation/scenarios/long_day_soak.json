@@ -1,0 +1,56 @@
+{
+	"id": "long_day_soak",
+	"title": "Accelerated Long Mall Day Soak",
+	"tags": ["soak", "nightly", "release"],
+	"timeout_frames": 9000,
+	"steps": [
+		{
+			"id": "main_menu_ready",
+			"type": "wait_audit",
+			"checkpoint": "main_menu_ready",
+			"status": "PASS",
+			"timeout_frames": 300
+		},
+		{
+			"id": "settle_main_menu_transition",
+			"type": "advance_frames",
+			"count": 40,
+			"timeout_frames": 60
+		},
+		{
+			"id": "start_new_game_from_menu",
+			"type": "call_node",
+			"target": "/root/MainMenu",
+			"method": "start_new_game_from_menu",
+			"args": [],
+			"timeout_frames": 120
+		},
+		{
+			"id": "gameplay_ready",
+			"type": "wait_audit",
+			"checkpoint": "gameplay_ready",
+			"status": "PASS",
+			"timeout_frames": 900
+		},
+		{
+			"id": "store_ready",
+			"type": "wait_audit",
+			"checkpoint": "director_state_ready",
+			"status": "PASS",
+			"timeout_frames": 900
+		},
+		{
+			"id": "day1_playable_ready",
+			"type": "wait_audit",
+			"checkpoint": "day1_playable_ready",
+			"status": "PASS",
+			"timeout_frames": 300
+		},
+		{
+			"id": "run_accelerated_soak",
+			"type": "run_long_day_soak",
+			"timeout_frames": 5400
+		},
+		{"id": "finish_long_day_soak", "type": "finish", "timeout_frames": 30}
+	]
+}

@@ -7,7 +7,7 @@ func _ready() -> void:
 	prompt_text = "Close"
 	action_verb = "End"
 	interaction_type = InteractionType.REGISTER
-	interactable_id = &"register_day_end"
+	interactable_id = &"store_session.day_end"
 	proximity_radius = 3.25
 	proximity_facing_dot = 0.25
 	super._ready()

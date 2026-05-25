@@ -7,11 +7,14 @@ var _queue_system: QueueSystem
 var _profile: CustomerTypeDefinition
 
 var _queue_changed_sizes: Array[int] = []
+var _enqueue_results: Array[Dictionary] = []
 
 
 func before_each() -> void:
 	_queue_changed_sizes = []
+	_enqueue_results = []
 	EventBus.queue_changed.connect(_on_queue_changed)
+	EventBus.queue_enqueue_result.connect(_on_queue_enqueue_result)
 
 	_queue_system = QueueSystem.new()
 	add_child_autofree(_queue_system)
@@ -35,10 +38,16 @@ func before_each() -> void:
 func after_each() -> void:
 	if EventBus.queue_changed.is_connected(_on_queue_changed):
 		EventBus.queue_changed.disconnect(_on_queue_changed)
+	if EventBus.queue_enqueue_result.is_connected(_on_queue_enqueue_result):
+		EventBus.queue_enqueue_result.disconnect(_on_queue_enqueue_result)
 
 
 func _on_queue_changed(queue_size: int) -> void:
 	_queue_changed_sizes.append(queue_size)
+
+
+func _on_queue_enqueue_result(data: Dictionary) -> void:
+	_enqueue_results.append(data)
 
 
 func _make_customer() -> Customer:
@@ -74,6 +83,13 @@ func test_enqueue_returns_true_on_success() -> void:
 	var customer: Customer = _make_customer()
 	var result: bool = _queue_system.enqueue_customer(customer)
 	assert_true(result, "enqueue_customer should return true on success")
+
+
+func test_enqueue_emits_success_metric() -> void:
+	var customer: Customer = _make_customer()
+	_queue_system.enqueue_customer(customer)
+	assert_eq(str(_enqueue_results[-1].get("result", "")), "success")
+	assert_eq(int(_enqueue_results[-1].get("queue_size", 0)), 1)
 
 
 func test_peek_returns_enqueued_customer() -> void:
@@ -138,6 +154,20 @@ func test_overflow_rejected_at_max_capacity() -> void:
 		_queue_system.get_queue_size(), MAX_QUEUE_SIZE,
 		"Size should remain at MAX_QUEUE_SIZE after overflow attempt"
 	)
+
+
+func test_overflow_emits_full_metric() -> void:
+	for _i: int in range(MAX_QUEUE_SIZE):
+		_queue_system.enqueue_customer(_make_customer())
+	_queue_system.enqueue_customer(_make_customer())
+	assert_eq(str(_enqueue_results[-1].get("result", "")), "full")
+
+
+func test_duplicate_enqueue_emits_duplicate_metric() -> void:
+	var customer: Customer = _make_customer()
+	_queue_system.enqueue_customer(customer)
+	_queue_system.enqueue_customer(customer)
+	assert_eq(str(_enqueue_results[-1].get("result", "")), "duplicate")
 
 
 # --- EventBus signal integration ---
