@@ -101,7 +101,10 @@ func after_each() -> void:
 	GameManager.current_state = _saved_game_state
 	GameManager.current_store_id = _saved_store_id
 	GameManager.owned_stores = _saved_owned_stores
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 
 
 func _on_fixture_placed(

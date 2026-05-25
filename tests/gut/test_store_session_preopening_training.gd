@@ -78,6 +78,7 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
+	watch_signals(EventBus)
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
@@ -96,6 +97,10 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
+	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [3])
+	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [0])
+	assert_eq(int(controller.get("_shelf_stock_count")), 3)
+	assert_eq(_spawned_shelf_item_count(), 3)
 	assert_true(StoreSessionState.preopening_complete)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_false(StoreSessionState.carrying_stock)
@@ -182,22 +187,29 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 	)
 
 
-func test_manager_proxy_uses_blocky_readable_silhouette() -> void:
+func test_manager_proxy_uses_shaped_readable_silhouette() -> void:
 	var proxy: Node = _root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
 	assert_not_null(proxy, "Training manager/customer proxy must exist")
 	if proxy == null:
 		return
-	for part_name: String in ["Body", "Head", "ArmLeft", "ArmRight"]:
-		var part: MeshInstance3D = proxy.get_node_or_null(part_name) as MeshInstance3D
-		assert_not_null(part, "Proxy must include %s for a readable silhouette" % part_name)
-		if part != null:
-			assert_true(
-				part.mesh is BoxMesh,
-				(
-					"%s must use a BoxMesh so the NPC does not read as a capsule placeholder"
-					% part_name
-				)
-			)
+	var body: MeshInstance3D = proxy.get_node_or_null("Body") as MeshInstance3D
+	var head: MeshInstance3D = proxy.get_node_or_null("Head") as MeshInstance3D
+	var arm_left: MeshInstance3D = proxy.get_node_or_null("ArmLeft") as MeshInstance3D
+	var arm_right: MeshInstance3D = proxy.get_node_or_null("ArmRight") as MeshInstance3D
+
+	assert_not_null(body, "Proxy must include Body for a readable silhouette")
+	assert_not_null(head, "Proxy must include Head for a readable silhouette")
+	assert_not_null(arm_left, "Proxy must include ArmLeft for a readable silhouette")
+	assert_not_null(arm_right, "Proxy must include ArmRight for a readable silhouette")
+	if body != null:
+		assert_true(body.mesh is CapsuleMesh, "Body must use the shaped NPC visual path")
+		assert_false(body.mesh is BoxMesh, "Body must not regress to the old box placeholder")
+	if head != null:
+		assert_true(head.mesh is SphereMesh, "Head must use a rounded NPC visual path")
+	if arm_left != null:
+		assert_true(arm_left.mesh is CapsuleMesh, "ArmLeft must use the shaped NPC visual path")
+	if arm_right != null:
+		assert_true(arm_right.mesh is CapsuleMesh, "ArmRight must use the shaped NPC visual path")
 
 
 func test_manager_proxy_has_clerk_detail_props() -> void:
@@ -239,6 +251,17 @@ func _on_objective_completed(_objective_id: StringName, label: String) -> void:
 
 func _on_toast_requested(message: String, _category: StringName, _duration: float) -> void:
 	_toast_feedback.append(message)
+
+
+func _spawned_shelf_item_count() -> int:
+	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
+	if shelf == null:
+		return 0
+	var count: int = 0
+	for child: Node in shelf.get_children():
+		if str(child.name).begins_with("StoreShelfItem"):
+			count += 1
+	return count
 
 
 func _active_targets() -> PackedStringArray:

@@ -7,7 +7,7 @@ const RegisterScreenStateScript: GDScript = preload(
 	"res://game/scripts/store_session/register_screen_state.gd"
 )
 const REQUIRED_VISIBLE_ZONE_LABELS: Array[String] = [
-	"USED GAMES SHELF",
+	"STARTER DISPLAY TABLE",
 	"BACK ROOM",
 ]
 
@@ -66,12 +66,16 @@ func test_day_one_prompts_are_visible_only_on_the_active_beat() -> void:
 
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	_assert_active_prompt("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
+	_assert_active_prompt("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
 	assert_true(StoreSessionState.carrying_stock, "Back-room pickup must set carrying state")
 
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	_assert_active_prompt("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
+	_assert_active_prompt("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+
+	controller.on_store_restock_interacted(false)
+	await get_tree().process_frame
+	_assert_active_prompt("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
 
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame

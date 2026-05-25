@@ -2,6 +2,29 @@
   "type": "fixture_definition",
   "entries": [
     {
+      "id": "display_table",
+      "display_name": "Display Table",
+      "description": "A modest secondhand table for the first few items.",
+      "cost": 25.0,
+      "slot_count": 3,
+      "footprint_cells": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "rotation_support": true,
+      "store_type_restriction": "",
+      "unlock_rep": 0,
+      "unlock_day": 0,
+      "visual_category": "display",
+      "scene_path": "res://game/scenes/stores/fixtures/fixture_display_table.tscn"
+    },
+    {
       "id": "wall_shelf",
       "display_name": "Wall Shelf",
       "description": "A simple shelf for featured items and boxed stock.",

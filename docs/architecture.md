@@ -178,6 +178,9 @@ surfaces and helpers.
 | `[E] to interact` contextual hint | `InteractionPrompt` listening to `EventBus.interactable_focused` | `game/scenes/ui/interaction_prompt.tscn` |
 | Screen-center reticle for the FP camera | `Crosshair` CanvasLayer | `game/scenes/ui/crosshair.tscn` |
 | One-unit shelf slot with empty→stocked mesh swap | `ShelfSlot` (extends `Interactable`) | `game/scripts/stores/shelf_slot.gd` |
+| Store-session NPC silhouette | `StoreSessionCharacterVisualFactory` builds the reusable manager/customer proxy; the controller supplies role/state only | `game/scripts/visuals/store_session_character_visual_factory.gd` |
+| Reusable store fixtures and props | `StoreVisualKit` resolves fixture IDs to scene assets for layouts and runtime feedback | `game/scripts/visuals/store_visual_kit.gd` |
+| Item-specific shelf/counter product art | `ProductVisualFactory` + product visual catalog build store-facing product cases from inventory item data | `game/scripts/visuals/product_visual_factory.gd`, `game/content/visuals/retro_games_product_visual_catalog.json` |
 | Day/night light interpolation | `DayPhaseLighting` tweening `DirectionalLight3D` | `game/scripts/world/day_phase_lighting.gd` |
 | CRT scanline post-process shader (2D UI) | `crt_overlay.gdshader` | `game/resources/shaders/crt_overlay.gdshader` |
 | Modal open/close tween pattern | `PanelAnimator.modal_open / slide_open / stagger_fade_in` | `game/scripts/ui/panel_animator.gd` |

@@ -15,9 +15,13 @@ const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store
 const StoreVisualLayoutScript: GDScript = preload(
 	"res://game/scripts/visuals/store_visual_layout.gd"
 )
+const ProductVisualFactoryScript: GDScript = preload(
+	"res://game/scripts/visuals/product_visual_factory.gd"
+)
 
 const _FIXTURE_TYPE_VISUALS: Dictionary = {
 	"wall_shelf": StoreVisualKitScript.WALL_SHELF,
+	"display_table": StoreVisualKitScript.DISPLAY_TABLE,
 	"counter": StoreVisualKitScript.CHECKOUT_COUNTER,
 	"register": StoreVisualKitScript.REGISTER,
 	"storage_unit": StoreVisualKitScript.STOCKROOM_TABLE,
@@ -141,6 +145,10 @@ func _render_layout_dressing() -> void:
 	for placement: Dictionary in _layout_placements():
 		if not str(placement.get("fixture_type", "")).is_empty():
 			continue
+		var product_item_id: String = str(placement.get("product_item_id", ""))
+		if not product_item_id.is_empty():
+			_render_product_dressing(placement, product_item_id)
+			continue
 		var visual_id: StringName = StringName(str(placement.get("visual_id", "")))
 		var node: Node3D = StoreVisualKitScript.instantiate(visual_id) as Node3D
 		if node == null:
@@ -150,6 +158,59 @@ func _render_layout_dressing() -> void:
 		node.set_meta("zone", str(placement.get("zone", "")))
 		_apply_layout_transform(node, placement)
 		_dressing_root.add_child(node)
+
+
+func _render_product_dressing(placement: Dictionary, product_item_id: String) -> void:
+	var item_data: Dictionary = _product_visual_data_from_item_id(product_item_id)
+	var node: Node3D = ProductVisualFactoryScript.create_visual_for_item(item_data)
+	if node == null:
+		return
+	node.name = str(placement.get("name", product_item_id))
+	node.set_meta("product_item_id", product_item_id)
+	node.set_meta("visual_source", "product_visual_factory")
+	node.set_meta("zone", str(placement.get("zone", "")))
+	node.add_to_group("product_display")
+	_apply_layout_transform(node, placement)
+	_dressing_root.add_child(node)
+
+
+func _product_visual_data_from_item_id(item_id: String) -> Dictionary:
+	var definition: ItemDefinition = null
+	if GameManager.data_loader:
+		definition = GameManager.data_loader.get_item(item_id)
+	if definition:
+		return _product_visual_data_from_definition(definition)
+	var entry: Dictionary = ContentRegistry.get_entry(StringName(item_id))
+	if entry.is_empty():
+		return {}
+	return _product_visual_data_from_entry(item_id, entry)
+
+
+func _product_visual_data_from_definition(definition: ItemDefinition) -> Dictionary:
+	var data: Dictionary = {
+		"definition_id": definition.id,
+		"display_name": definition.item_name,
+		"category": String(definition.category),
+		"platform_id": String(definition.platform_id),
+	}
+	if definition.extra is Dictionary:
+		for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+			if definition.extra.has(key):
+				data[key] = definition.extra[key]
+	return data
+
+
+func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dictionary:
+	var data: Dictionary = {
+		"definition_id": str(entry.get("id", item_id)),
+		"display_name": str(entry.get("item_name", item_id)),
+		"category": str(entry.get("category", "")),
+		"platform_id": str(entry.get("platform_id", "")),
+	}
+	for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+		if entry.has(key):
+			data[key] = entry[key]
+	return data
 
 
 func _visual_id_for_fixture(fixture_data: Dictionary, placement: Dictionary) -> StringName:

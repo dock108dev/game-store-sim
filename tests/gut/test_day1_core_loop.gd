@@ -8,19 +8,25 @@ var _day_manager: DayManager
 var _economy: EconomySystem
 
 var _saved_current_day: int
+var _saved_current_store_id: StringName
+var _saved_data_loader: DataLoader
 var _saved_day_started_connections: Array[Callable] = []
 var _saved_first_sale_connections: Array[Callable] = []
 
 
 func before_each() -> void:
 	_saved_current_day = GameManager.get_current_day()
+	_saved_current_store_id = GameManager.current_store_id
+	_saved_data_loader = GameManager.data_loader
 	GameManager.set_current_day(1)
+	GameManager.current_store_id = &"retro_games"
 
 	_saved_day_started_connections = _detach(EventBus.day_started)
 	_saved_first_sale_connections = _detach(EventBus.first_sale_completed)
 
 	_data_loader = DataLoader.new()
 	_data_loader.load_all_content()
+	GameManager.data_loader = _data_loader
 
 	_inventory = InventorySystem.new()
 	add_child_autofree(_inventory)
@@ -42,6 +48,11 @@ func after_each() -> void:
 	_reattach(EventBus.day_started, _saved_day_started_connections)
 	_reattach(EventBus.first_sale_completed, _saved_first_sale_connections)
 	GameManager.set_current_day(_saved_current_day)
+	GameManager.current_store_id = _saved_current_store_id
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 	GameState.reset_new_game()
 
 
@@ -159,6 +170,17 @@ func test_day_started_day1_seeds_inventory() -> void:
 	# Verify no crash and arc-unlock logic still runs.
 	EventBus.day_started.emit(1)
 	pass_test("day_started(1) fired without crash")
+
+
+func test_day_started_day1_does_not_top_up_sparse_starter_stock_to_seven() -> void:
+	_inventory.seed_starting_items(&"retro_games", 3)
+	EventBus.day_started.emit(1)
+	var backroom: Array[ItemInstance] = _inventory.get_backroom_items_for_store("retro_games")
+	assert_eq(
+		backroom.size(),
+		3,
+		"DayManager must use store_definitions starting_inventory size, not legacy 7"
+	)
 
 
 # ── Close-day gate (flag state) ───────────────────────────────────────────────

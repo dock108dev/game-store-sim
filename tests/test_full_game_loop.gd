@@ -121,7 +121,10 @@ func after_each() -> void:
 	GameManager.current_store_id = _saved_store_id
 	GameManager.owned_stores = _saved_owned_stores
 	GameManager.current_day = _saved_day
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 	DifficultySystemSingleton.set_tier(_saved_difficulty_tier)
 
 

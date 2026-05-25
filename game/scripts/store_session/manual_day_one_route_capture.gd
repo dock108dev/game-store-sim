@@ -89,9 +89,9 @@ static func route_beats() -> Array[Dictionary]:
 			"Check back room inventory",
 			{
 				"header": "FIRST DAY",
-				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "4"}
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "3"}
 			},
-			{"shelf": 0, "backroom": 4},
+			{"shelf": 0, "backroom": 3},
 			{"state": "pickup_enabled", "event_id": ""},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
@@ -109,12 +109,12 @@ static func route_beats() -> Array[Dictionary]:
 			"Pick up the back room stock and walk to the training shelf.",
 			"training_stock_shelf",
 			"stock_shelf",
-			"Stock used games shelf",
+			"Stock starter display table",
 			{
 				"header": "FIRST DAY",
-				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 4", "Stockroom": "4"}
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 3", "Stockroom": "3"}
 			},
-			{"shelf": 0, "backroom": 4, "carrying_stock": true},
+			{"shelf": 0, "backroom": 3, "carrying_stock": true},
 			{"state": "stocking_training_enabled", "event_id": ""},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
@@ -135,16 +135,16 @@ static func route_beats() -> Array[Dictionary]:
 			"Talk to customer",
 			{
 				"header_prefix": "DAY 1",
-				"stats": {"Customers": "0", "Sales": "0", "Shelf": "4 / 4", "Stockroom": "0"}
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "3 / 3", "Stockroom": "0"}
 			},
-			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"shelf": 3, "backroom": 0, "carrying_stock": false},
 			{"state": "waiting_for_customer_decision", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:339",
-				"tests/gut/test_store_session_day_one_critical_path.gd:342",
-				"tests/gut/test_store_session_day_one_critical_path.gd:343",
+				"tests/gut/test_store_session_day_one_critical_path.gd:345",
+				"tests/gut/test_store_session_day_one_critical_path.gd:346",
+				"tests/gut/test_store_session_day_one_critical_path.gd:350",
 			]
 		),
 		_beat(
@@ -158,16 +158,16 @@ static func route_beats() -> Array[Dictionary]:
 			"Decision card visible",
 			{
 				"modal": "customer_decision",
-				"stats": {"Customers": "0", "Sales": "0", "Shelf": "4 / 4", "Stockroom": "0"}
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "3 / 3", "Stockroom": "0"}
 			},
-			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"shelf": 3, "backroom": 0, "carrying_stock": false},
 			{"state": "choice_pending", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
 				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:345",
-					"tests/gut/test_store_session_day_one_critical_path.gd:346",
-					"tests/gut/test_store_session_day_one_critical_path.gd:350",
+					"tests/gut/test_store_session_day_one_critical_path.gd:354",
+					"tests/gut/test_store_session_day_one_critical_path.gd:358",
+					"tests/gut/test_store_session_day_one_critical_path.gd:361",
 				]
 			),
 		_beat(
@@ -181,16 +181,16 @@ static func route_beats() -> Array[Dictionary]:
 			"Result panel visible",
 			{
 				"modal": "customer_result",
-				"stats": {"Customers": "0", "Sales": "0", "Shelf": "4 / 4", "Stockroom": "0"}
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "3 / 3", "Stockroom": "0"}
 			},
-			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"shelf": 3, "backroom": 0, "carrying_stock": false},
 			{"state": "result_visible", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:359",
-					"tests/gut/test_store_session_day_one_critical_path.gd:363",
-					"tests/gut/test_store_session_day_one_critical_path.gd:366",
+					"tests/gut/test_store_session_day_one_critical_path.gd:367",
+					"tests/gut/test_store_session_day_one_critical_path.gd:374",
+					"tests/gut/test_store_session_day_one_critical_path.gd:377",
 				]
 			),
 		_beat(
@@ -203,16 +203,16 @@ static func route_beats() -> Array[Dictionary]:
 			"back_room_inventory",
 			"Check back room inventory",
 			{
-				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 4", "Stockroom": "0"}
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 3", "Stockroom": "0"}
 			},
-			{"shelf": 4, "backroom": 0, "carrying_stock": false},
+			{"shelf": 3, "backroom": 0, "carrying_stock": false},
 			{"state": "exit_in_progress", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:373",
-					"tests/gut/test_store_session_day_one_critical_path.gd:374",
-					"tests/gut/test_store_session_day_one_critical_path.gd:375",
+					"tests/gut/test_store_session_day_one_critical_path.gd:382",
+					"tests/gut/test_store_session_day_one_critical_path.gd:385",
+					"tests/gut/test_store_session_day_one_critical_path.gd:390",
 					"tests/gut/test_store_session_day_one_critical_path.gd:395",
 					"tests/gut/test_store_session_day_one_critical_path.gd:397",
 				]
@@ -227,17 +227,17 @@ static func route_beats() -> Array[Dictionary]:
 			"close_day",
 			"Close day",
 			{
-				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 4", "Stockroom": "1"}
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 5", "Stockroom": "1"}
 			},
-			{"shelf": 3, "backroom": 1, "carrying_stock": false},
+			{"shelf": 4, "backroom": 1, "carrying_stock": false},
 			{"state": "customer_served_and_shelf_stocked", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:402",
-					"tests/gut/test_store_session_day_one_critical_path.gd:406",
 					"tests/gut/test_store_session_day_one_critical_path.gd:410",
-					"tests/gut/test_store_session_day_one_critical_path.gd:416",
+					"tests/gut/test_store_session_day_one_critical_path.gd:419",
+					"tests/gut/test_store_session_day_one_critical_path.gd:422",
+					"tests/gut/test_store_session_day_one_critical_path.gd:434",
 				]
 			),
 		_beat(
@@ -250,17 +250,17 @@ static func route_beats() -> Array[Dictionary]:
 			"close_day",
 			"Close day",
 			{
-				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 4", "Stockroom": "1"}
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 5", "Stockroom": "1"}
 			},
-			{"shelf": 3, "backroom": 1, "carrying_stock": false},
+			{"shelf": 4, "backroom": 1, "carrying_stock": false},
 			{"state": "close_day_enabled", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:420",
-					"tests/gut/test_store_session_day_one_critical_path.gd:421",
-					"tests/gut/test_store_session_day_one_critical_path.gd:422",
-					"tests/gut/test_store_session_day_one_critical_path.gd:427",
+					"tests/gut/test_store_session_day_one_critical_path.gd:444",
+					"tests/gut/test_store_session_day_one_critical_path.gd:446",
+					"tests/gut/test_store_session_day_one_critical_path.gd:451",
+					"tests/gut/test_store_session_day_one_critical_path.gd:453",
 				]
 			),
 		_beat(
@@ -274,9 +274,9 @@ static func route_beats() -> Array[Dictionary]:
 			"Summary visible",
 			{
 				"modal": "day_summary",
-				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 4", "Stockroom": "1"}
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 5", "Stockroom": "1"}
 			},
-			{"shelf": 3, "backroom": 1, "carrying_stock": false},
+			{"shelf": 4, "backroom": 1, "carrying_stock": false},
 			{"state": "summary_visible", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{
@@ -286,22 +286,22 @@ static func route_beats() -> Array[Dictionary]:
 				"profit": -35,
 				"ending_cash": 515,
 				"customers_helped": 1,
-				"items_stocked": 2,
+				"items_stocked": 3,
 				"sales_completed": 1,
 				"shelf_inventory": 3,
 				"backroom_inventory": 1,
 			},
 				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:437",
-					"tests/gut/test_store_session_day_one_critical_path.gd:439",
-					"tests/gut/test_store_session_day_one_critical_path.gd:443",
-					"tests/gut/test_store_session_day_one_critical_path.gd:447",
 					"tests/gut/test_store_session_day_one_critical_path.gd:451",
-					"tests/gut/test_store_session_day_one_critical_path.gd:455",
 					"tests/gut/test_store_session_day_one_critical_path.gd:458",
-					"tests/gut/test_store_session_day_one_critical_path.gd:464",
-					"tests/gut/test_store_session_day_one_critical_path.gd:499",
-					"tests/gut/test_store_session_day_one_critical_path.gd:507",
+					"tests/gut/test_store_session_day_one_critical_path.gd:465",
+					"tests/gut/test_store_session_day_one_critical_path.gd:468",
+					"tests/gut/test_store_session_day_one_critical_path.gd:470",
+					"tests/gut/test_store_session_day_one_critical_path.gd:479",
+					"tests/gut/test_store_session_day_one_critical_path.gd:480",
+					"tests/gut/test_store_session_day_one_critical_path.gd:487",
+					"tests/gut/test_store_session_day_one_critical_path.gd:496",
+					"tests/gut/test_store_session_day_one_critical_path.gd:512",
 				]
 			),
 	]

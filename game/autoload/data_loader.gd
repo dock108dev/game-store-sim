@@ -831,32 +831,7 @@ func create_starting_inventory(store_id: String) -> Array[ItemInstance]:
 func generate_starter_inventory(store_type: String) -> Array[ItemInstance]:
 	if store_type == "sports":
 		return _generate_legacy_sports_starter_inventory()
-	if not ContentRegistry.exists(store_type):
-		return []
-	var canonical: StringName = ContentRegistry.resolve(store_type)
-	if canonical.is_empty():
-		return []
-	var common: Array[ItemDefinition] = []
-	for item_id: StringName in ContentRegistry.get_all_ids("item"):
-		var def: ItemDefinition = get_item(String(item_id))
-		if def == null:
-			continue
-		if def.rarity != "common":
-			continue
-		if not ContentRegistry.exists(def.store_type):
-			continue
-		var item_store_id: StringName = ContentRegistry.resolve(def.store_type)
-		if item_store_id != canonical:
-			continue
-		common.append(def)
-	if common.is_empty():
-		return []
-	var count: int = mini(randi_range(6, 10), common.size())
-	common.shuffle()
-	var instances: Array[ItemInstance] = []
-	for i: int in range(count):
-		instances.append(ItemInstance.create_from_definition(common[i], "good"))
-	return instances
+	return create_starting_inventory(store_type)
 
 
 func _generate_legacy_sports_starter_inventory() -> Array[ItemInstance]:

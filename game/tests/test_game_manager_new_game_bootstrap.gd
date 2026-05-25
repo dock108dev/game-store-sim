@@ -41,7 +41,10 @@ func before_each() -> void:
 func after_each() -> void:
 	GameManager.current_store_id = _saved_current_store_id
 	GameManager.owned_stores = _saved_owned_stores
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 	if is_instance_valid(_fake_data_loader):
 		_fake_data_loader.free()
 

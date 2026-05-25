@@ -4,7 +4,7 @@
 ## stock_shelf beat: the empty board must clearly say "items belong here"
 ## via 5 slot-marker outlines, the post-stock state must read as warm
 ## stocked product (warm-amber emission), and the toast notification must
-## name the same destination ("used games shelf") that the objective rail
+## name the same destination ("starter display table") that the objective rail
 ## and interaction prompt name. Each assertion below pins one of those
 ## pieces against the authored layout.
 extends GutTest
@@ -309,7 +309,7 @@ func test_restock_places_one_item_per_input_until_delivery_done() -> void:
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(_count_store_shelf_items(shelf), 1, "First placement must fill one shelf slot")
-	assert_true(StoreSessionState.carrying_stock, "Carry state must remain while one item is left")
+	assert_true(StoreSessionState.carrying_stock, "Carry state must remain while items are left")
 	assert_false(
 		bool(controller.is_objective_completed(&"stock_shelf")),
 		"Shelf objective must wait for the full placement contract"
@@ -318,6 +318,14 @@ func test_restock_places_one_item_per_input_until_delivery_done() -> void:
 		"store_shelf_count_changed",
 		1,
 		"First placement must emit a shelf count matching rendered items"
+	)
+	controller.on_store_restock_interacted(false)
+	await get_tree().process_frame
+	assert_eq(_count_store_shelf_items(shelf), 2, "Second placement must fill one more slot")
+	assert_true(StoreSessionState.carrying_stock, "Carry state must remain while one item is left")
+	assert_false(
+		bool(controller.is_objective_completed(&"stock_shelf")),
+		"Shelf objective must wait for the full placement contract"
 	)
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
@@ -369,7 +377,7 @@ func test_restock_capacity_limit_places_available_slots_and_reports_backroom_rem
 	)
 	_assert_signal_emitted_with_int(
 		"store_backroom_count_changed",
-		1,
+		2,
 		"Overflow delivery must remain visible in the back-room count"
 	)
 
@@ -517,9 +525,9 @@ func test_spawned_shelf_items_are_upright_with_wide_face_forward() -> void:
 
 # ── Notification copy names the same destination as the objective rail ─────
 
-func test_restock_toast_names_the_used_games_shelf() -> void:
-	# The stock_shelf objective rail says "used games shelf"; the
-	# interaction prompt's display_name says "used games shelf"; the
+func test_restock_toast_names_the_starter_display_table() -> void:
+	# The stock_shelf objective rail says "starter display table"; the
+	# interaction prompt's display_name says "starter display table"; the
 	# notification must name the same destination so the player closes
 	# the loop on a consistent term, not three different phrasings.
 	var controller: Node = _store_session_controller()
@@ -539,12 +547,12 @@ func test_restock_toast_names_the_used_games_shelf() -> void:
 		if params.size() < 1:
 			continue
 		var msg: String = String(params[0])
-		if msg.findn("used games shelf") >= 0:
+		if msg.findn("starter display table") >= 0:
 			emitted_any = true
 			break
 	assert_true(
 		emitted_any,
-		"Restock toast must name 'used games shelf' to match the objective "
+		"Restock toast must name 'starter display table' to match the objective "
 		+ "rail and interaction prompt copy."
 	)
 

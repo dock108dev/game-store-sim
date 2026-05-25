@@ -70,7 +70,10 @@ func after_each() -> void:
 		EventBus.difficulty_changed.disconnect(_on_difficulty_changed)
 	DifficultySystemSingleton.set_tier(_saved_tier)
 	GameManager.current_store_id = _saved_store_id
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 
 
 func _on_difficulty_changed(old_tier: int, new_tier: int) -> void:

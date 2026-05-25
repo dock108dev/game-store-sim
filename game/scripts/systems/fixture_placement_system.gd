@@ -5,6 +5,7 @@ extends Node
 
 const FIXTURE_SIZES: Dictionary = {
 	"wall_shelf": Vector2i(2, 1),
+	"display_table": Vector2i(2, 1),
 	"glass_case": Vector2i(2, 1),
 	"floor_rack": Vector2i(1, 1),
 	"counter": Vector2i(3, 1),
@@ -15,6 +16,7 @@ const FIXTURE_SIZES: Dictionary = {
 
 const FIXTURE_PRICES: Dictionary = {
 	"wall_shelf": 30.0,
+	"display_table": 25.0,
 	"glass_case": 80.0,
 	"floor_rack": 50.0,
 	"counter": 120.0,

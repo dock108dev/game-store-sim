@@ -16,14 +16,9 @@
       "backroom_capacity": 120,
       "daily_rent": 55.0,
       "starting_inventory": [
-        "retro_controller_common",
-        "retro_controller_common",
-        "loose_disc_game_common",
-        "loose_disc_game_common",
-        "strategy_guide_common",
-        "strategy_guide_common",
-        "used_cartridge_game_common",
-        "mystery_cable_bin_common"
+        "console_neo_ignite",
+        "neo_ignite_motorway_kings_loose",
+        "neo_ignite_kingdom_embers_loose"
       ],
       "allowed_categories": [
         "cartridges",

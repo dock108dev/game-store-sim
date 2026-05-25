@@ -90,7 +90,7 @@ func test_two_customer_events_resolve_in_order_before_close_day() -> void:
 	if summary_panel == null:
 		return
 	_assert_summary_label(summary_panel, "_customers_helped_label", "Customers Helped: 2")
-	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 2")
+	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 3")
 	_assert_summary_label(summary_panel, "_sales_completed_label", "Sales Completed: 0")
 
 

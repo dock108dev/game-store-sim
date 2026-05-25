@@ -81,7 +81,10 @@ func after_each() -> void:
 		EventBus.notification_requested.disconnect(_on_notification_requested)
 	if EventBus.order_failed.is_connected(_on_order_failed):
 		EventBus.order_failed.disconnect(_on_order_failed)
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 	ContentRegistry.clear_for_testing()
 	DataLoaderSingleton.load_all_content()
 	DifficultySystemSingleton._load_config()

@@ -21,25 +21,31 @@ func test_retro_games_starter_layout_stays_small_and_uses_kit_visuals() -> void:
 	var placements: Array[Dictionary] = catalog.call(
 		"get_placements", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
 	)
-	assert_between(
-		placements.size(),
-		7,
-		8,
-		"Starter layout should be sparse: couple shelves, couple games, one system, stockroom, register"
-	)
+	assert_eq(placements.size(), 5)
 
 	var visual_counts: Dictionary = {}
+	var product_item_ids: PackedStringArray = []
 	for placement: Dictionary in placements:
 		var visual_id: StringName = StringName(str(placement.get("visual_id", "")))
-		assert_true(starter_ids.has(visual_id), "%s should come from starter kit" % visual_id)
-		visual_counts[visual_id] = int(visual_counts.get(visual_id, 0)) + 1
+		var product_item_id: String = str(placement.get("product_item_id", ""))
+		if product_item_id.is_empty():
+			assert_true(starter_ids.has(visual_id), "%s should come from starter kit" % visual_id)
+			visual_counts[visual_id] = int(visual_counts.get(visual_id, 0)) + 1
+		else:
+			product_item_ids.append(product_item_id)
 
-	assert_eq(int(visual_counts.get(StoreVisualKitScript.WALL_SHELF, 0)), 2)
-	assert_eq(int(visual_counts.get(StoreVisualKitScript.GAME_CASE, 0)), 2)
-	assert_eq(int(visual_counts.get(StoreVisualKitScript.CONSOLE_BOX, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.DISPLAY_TABLE, 0)), 1)
 	assert_eq(int(visual_counts.get(StoreVisualKitScript.CHECKOUT_COUNTER, 0)), 1)
-	assert_eq(int(visual_counts.get(StoreVisualKitScript.STOCKROOM_TABLE, 0)), 1)
-	assert_eq(int(visual_counts.get(StoreVisualKitScript.STOCK_BOX, 0)), 1)
+	assert_eq(
+		product_item_ids,
+		PackedStringArray(
+			[
+				"console_neo_ignite",
+				"neo_ignite_motorway_kings_loose",
+				"neo_ignite_kingdom_embers_loose",
+			]
+		)
+	)
 
 
 func test_layout_catalog_does_not_expose_legacy_visual_apply_path() -> void:

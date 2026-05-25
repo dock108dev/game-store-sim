@@ -66,7 +66,10 @@ func after_each() -> void:
 	if EventBus.toast_requested.is_connected(_on_toast_requested):
 		EventBus.toast_requested.disconnect(_on_toast_requested)
 	GameManager.current_store_id = _saved_store_id
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 
 
 func _on_order_delivered(store_id: StringName, items: Array) -> void:

@@ -33,8 +33,8 @@ const _OBJECTIVES: Array[Dictionary] = [
 	{
 		"id": "stock_shelf",
 		"stage": "stock_shelf",
-		"label": "Day 1: Put a few items on the used games shelf.",
-		"action": "Stock used games shelf",
+		"label": "Day 1: Put a few items on the starter display table.",
+		"action": "Stock starter display table",
 		"key": "E",
 		"target_path": "StoreSessionRestockShelf/Interactable",
 		"time_cost_minutes": 60,
@@ -55,7 +55,7 @@ const _TRAINING_OBJECTIVES: Array[Dictionary] = [
 	{"id": "talk_to_manager", "action": "Talk to the manager"},
 	{"id": "check_register", "action": "Check the register"},
 	{"id": "check_back_room_inventory", "action": "Check back room"},
-	{"id": "training_stock_shelf", "action": "Stock used games shelf"},
+	{"id": "training_stock_shelf", "action": "Stock starter display table"},
 ]
 
 
@@ -242,7 +242,7 @@ func test_milestone_copy_is_compact_and_not_action_copy() -> void:
 	_assert_label_contains(panel, "Close")
 	_assert_no_label_contains(panel, "Talk to the customer")
 	_assert_no_label_contains(panel, "Check inventory")
-	_assert_no_label_contains(panel, "Stock used games shelf")
+	_assert_no_label_contains(panel, "Stock starter display table")
 
 
 func test_pending_rows_use_muted_alpha() -> void:

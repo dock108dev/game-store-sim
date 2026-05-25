@@ -101,7 +101,7 @@ func _text_for_state(state: StringName, amount: int) -> String:
 		STATE_BACKROOM:
 			text = "BACK\nROOM"
 		STATE_STOCKING:
-			text = "STOCK\nSHELF"
+			text = "STOCK\nTABLE"
 		STATE_CLOSE_READY:
 			text = "CLOSE\nDAY"
 	return text

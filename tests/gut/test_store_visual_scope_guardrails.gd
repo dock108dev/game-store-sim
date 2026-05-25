@@ -251,7 +251,8 @@ func test_objective_targets_keep_visible_context_bundles() -> void:
 		[
 			"ExpandableStoreShell/StarterBackWall",
 			"ExpandableStoreShell/GamesBayLabel",
-			"StoreSessionRestockShelf/RestockCrate",
+			"StoreSessionRestockShelf/ShelfBoard",
+			"StoreSessionRestockShelf/EmptyOverlay",
 		],
 		"StoreSessionDayEndTrigger":
 		[

@@ -57,7 +57,10 @@ func after_each() -> void:
 		EventBus.order_placed.disconnect(_on_order_placed)
 	if EventBus.order_failed.is_connected(_on_order_failed):
 		EventBus.order_failed.disconnect(_on_order_failed)
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 	GameManager.current_store_id = _saved_store_id
 
 

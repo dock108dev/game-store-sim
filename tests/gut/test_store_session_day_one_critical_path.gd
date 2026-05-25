@@ -333,13 +333,17 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 		[StoreSessionController._BACKROOM_DELIVERY_QUANTITY]
 	)
 
-	_assert_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
 	assert_eq(String(controller.current_stage()), "training_stock_shelf")
-	await _interact_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
 	assert_false(StoreSessionState.preopening_complete)
 	assert_true(StoreSessionState.carrying_stock)
-	_assert_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
-	await _interact_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+	assert_false(StoreSessionState.preopening_complete)
+	assert_true(StoreSessionState.carrying_stock)
+	_assert_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
 	assert_true(StoreSessionState.preopening_complete)
 	assert_false(StoreSessionState.carrying_stock)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
@@ -396,7 +400,7 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	assert_eq(purchased_params[1], StringName(str(sold_params[0])))
 	assert_eq(float(purchased_params[2]), 15.0)
 	assert_false(String(purchased_params[3]).is_empty())
-	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [1])
+	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [2])
 	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [1])
 	_assert_right_panel_stat("Customers", "1")
 	_assert_right_panel_stat("Sales", "1")
@@ -406,24 +410,30 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	await _interact_route_target("StoreSessionBackroomPickup", "Check back room inventory")
 	assert_true(StoreSessionState.carrying_stock)
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_STOCKING)
-	assert_eq(register_screen.display_text(), "STOCK\nSHELF")
+	assert_eq(register_screen.display_text(), "STOCK\nTABLE")
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"store_backroom_count_changed",
 		[StoreSessionController._BACKROOM_DELIVERY_QUANTITY + 1]
 	)
-	_assert_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
-	_assert_close_day_blocked(controller, "Stock the used games shelf before closing.")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
+	_assert_close_day_blocked(controller, "Stock the starter display table before closing.")
 
-	await _interact_route_target("StoreSessionRestockShelf", "Place game 1 of 2 on used games shelf")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
 	assert_true(StoreSessionState.carrying_stock)
-	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [2])
-	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [2])
-	_assert_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
+	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [3])
+	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [3])
+	_assert_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
 
-	await _interact_route_target("StoreSessionRestockShelf", "Place game 2 of 2 on used games shelf")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+	assert_true(StoreSessionState.carrying_stock)
+	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [4])
+	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [2])
+	_assert_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
+
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
 	assert_false(StoreSessionState.carrying_stock)
-	var expected_shelf_count: int = StoreSessionController._BACKROOM_DELIVERY_QUANTITY + 1
+	var expected_shelf_count: int = StoreSessionController._BACKROOM_DELIVERY_QUANTITY + 2
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"store_shelf_count_changed",
@@ -467,7 +477,7 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 		assert_string_contains(metrics.text, "Profit after rent:[/b] -$35")
 		assert_string_contains(metrics.text, "Ending Cash:[/b] $515")
 	_assert_summary_label(summary_panel, "_customers_helped_label", "Customers Helped: 1")
-	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 2")
+	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 3")
 	_assert_summary_label(summary_panel, "_sales_completed_label", "Sales Completed: 1")
 	_assert_summary_label(
 		summary_panel,
@@ -850,7 +860,7 @@ func test_store_prompt_copy_uses_plain_action_language() -> void:
 	assert_eq(
 		_interaction_label(_store_interactable("StoreSessionBackroomPickup")), "Check back room inventory"
 	)
-	assert_eq(_interaction_label(_store_interactable("StoreSessionRestockShelf")), "Stock used games shelf")
+	assert_eq(_interaction_label(_store_interactable("StoreSessionRestockShelf")), "Stock starter display table")
 	assert_eq(_interaction_label(_store_interactable("StoreSessionDayEndTrigger")), "Close day")
 
 
@@ -867,7 +877,7 @@ func test_future_stage_disabled_reasons_name_next_prerequisite() -> void:
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	assert_eq(
-		String(controller.day_end_disabled_reason()), "Stock the used games shelf before closing."
+		String(controller.day_end_disabled_reason()), "Stock the starter display table before closing."
 	)
 
 
@@ -1542,33 +1552,33 @@ func _assert_summary_label(
 	assert_eq(label.text, expected)
 
 
-# ── Stock-shelf label and carry-state contract ─────────────────────────────
-# The stock_shelf objective copy must name the specific destination ("used
-# games shelf"), not a generic plural. Generic copy ("the shelves") drove
+# ── Stocking target label and carry-state contract ─────────────────────────
+# The stock_shelf objective copy must name the specific destination ("starter
+# display table"), not a generic plural. Generic copy ("the shelves") drove
 # players toward unrelated meshes (ConsoleShelf etc.) that have no
 # interactable, where the disabled-reason then echoed the same generic
 # label and read as nonsense. The carry flag on StoreSessionState lets the rail
-# suppress its right-side chip while the player is navigating to the shelf
+# suppress its right-side chip while the player is navigating to the table
 # without an interactable in focus.
 
 
-func test_stock_shelf_label_names_the_used_games_shelf() -> void:
+func test_stock_shelf_label_names_the_starter_display_table() -> void:
 	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
 	var stock_entry: Dictionary = {}
-	for entry: Dictionary in controller.get("_OBJECTIVES"):
+	for entry: Dictionary in controller.get("_objectives"):
 		if String(entry.get("stage", "")) == "stock_shelf":
 			stock_entry = entry
 			break
-	assert_false(stock_entry.is_empty(), "stock_shelf entry must exist in _OBJECTIVES")
+	assert_false(stock_entry.is_empty(), "stock_shelf entry must exist in _objectives")
 	var label: String = String(stock_entry.get("label", ""))
 	assert_string_contains(
 		label,
-		"used games shelf",
+		"starter display table",
 		(
 			"stock_shelf label must name the specific destination "
-			+ "('used games shelf'); got: '%s'" % label
+			+ "('starter display table'); got: '%s'" % label
 		)
 	)
 	assert_false(
@@ -1679,12 +1689,12 @@ func test_carried_stock_marker_and_carry_hud_follow_pickup_restock_and_new_run_r
 	assert_true(marker.visible, "Carried stock marker must show while stock is carried")
 	assert_false(stock_box.visible, "Closed pickup box must hide while carried stock is active")
 	assert_true(open_box.visible, "Opened pickup box must show while carried stock is active")
-	var marker_label: Label3D = marker.get_node_or_null("UsedGamesBoxLabel") as Label3D
-	assert_not_null(marker_label, "Carried marker must name the same used-games box as the HUD")
+	var marker_label: Label3D = marker.get_node_or_null("StarterStockBoxLabel") as Label3D
+	assert_not_null(marker_label, "Carried marker must name the same starter stock box as the HUD")
 	if marker_label != null:
-		assert_eq(marker_label.text, "USED GAMES BOX")
+		assert_eq(marker_label.text, "STARTER STOCK BOX")
 	assert_true(carry_label.visible, "Carry HUD label must show while stock is carried")
-	assert_eq(carry_label.text, "Carrying: Used Games Box")
+	assert_eq(carry_label.text, "Carrying: Starter Stock Box")
 	assert_true(carry_icon.visible, "Carry HUD icon must show while stock is carried")
 	assert_true(
 		marker.get_parent() is Camera3D,
@@ -1702,7 +1712,7 @@ func test_carried_stock_marker_and_carry_hud_follow_pickup_restock_and_new_run_r
 	assert_false(carry_icon.visible, "Carry HUD icon must clear after shelf stocking")
 
 	StoreSessionState.carrying_stock = true
-	EventBus.store_carry_changed.emit("Used Games Box")
+	EventBus.store_carry_changed.emit("Starter Stock Box")
 	await get_tree().process_frame
 	assert_true(marker.visible, "Pre-condition: marker can show before a new-run reset")
 	assert_true(carry_label.visible, "Pre-condition: HUD can show before a new-run reset")
@@ -1774,14 +1784,21 @@ func test_store_restock_spawns_catalog_backed_product_visuals() -> void:
 		return
 	controller.call("_reset_restock_shelf_visuals")
 
-	var spawned: int = int(controller.call("_spawn_visible_shelf_items", 5))
+	var spawned: int = int(
+		controller.call("_spawn_visible_shelf_items", StoreSessionController._BACKROOM_DELIVERY_QUANTITY)
+	)
 
-	assert_eq(spawned, 5, "Store-session restock shelf must spawn the delivery count")
+	assert_eq(
+		spawned,
+		StoreSessionController._BACKROOM_DELIVERY_QUANTITY,
+		"Store-session restock display table must spawn the sparse starter count"
+	)
 	var shelf: Node = _root.get_node_or_null("StoreSessionRestockShelf")
 	assert_not_null(shelf, "StoreSessionRestockShelf must exist")
 	if shelf == null:
 		return
-	var designed_count: int = 0
+	var case_count: int = 0
+	var console_count: int = 0
 	for child: Node in shelf.get_children():
 		if not String(child.name).begins_with("StoreShelfItem"):
 			continue
@@ -1789,32 +1806,44 @@ func test_store_restock_spawns_catalog_backed_product_visuals() -> void:
 		assert_not_null(item, "StoreShelfItem must be a Node3D")
 		if item == null:
 			continue
-		if str(item.get_meta("product_visual_kind", "")) == "game_case":
-			designed_count += 1
+		var product_kind: String = str(item.get_meta("product_visual_kind", ""))
+		if product_kind == "game_case":
+			case_count += 1
 			var designed_root: Node = item.get_node_or_null("ProductVisualCaseRoot")
 			assert_not_null(
 				designed_root,
-				"Store-session restock designed item must include its case template child"
+				"Store-session restock game item must include its case template child"
 			)
 			if designed_root == null:
 				continue
 			assert_not_null(
 				designed_root.get_node_or_null("FrontPanel"),
-				"Store-session restock designed item must include a front panel"
+				"Store-session restock game item must include a front panel"
 			)
 			assert_not_null(
 				designed_root.get_node_or_null("PlatformStripe"),
-				"Store-session restock designed item must include a platform stripe"
+				"Store-session restock game item must include a platform stripe"
 			)
-			assert_gt(
-				item.position.y,
-				1.0,
-				"Store-session restock product visuals must sit on the shelf board"
+		elif product_kind == "console_box":
+			console_count += 1
+			assert_not_null(
+				item.get_node_or_null("ProductVisualConsoleBoxRoot"),
+				"Store-session restock console item must include its console-box template child"
 			)
+		assert_gt(
+			item.position.y,
+			1.0,
+			"Store-session restock product visuals must sit on the display table"
+		)
 	assert_eq(
-		designed_count,
-		5,
-		"Store-session restock should use catalog-backed game-case visuals when available"
+		console_count,
+		1,
+		"Starter display table should include exactly one catalog-backed console visual"
+	)
+	assert_eq(
+		case_count,
+		2,
+		"Starter display table should include exactly two catalog-backed game visuals"
 	)
 
 
@@ -2004,10 +2033,10 @@ func test_objective_rail_uses_specified_copy_for_each_chain_stage() -> void:
 	var expected: Dictionary = {
 		"talk_to_customer": "Talk to the customer at the register.",
 		"back_room_inventory": "Check the back room delivery.",
-			"stock_shelf": "Stock the used games shelf.",
+		"stock_shelf": "Stock the starter display table.",
 		"end_day": "Close the day at the register.",
 	}
-	for entry: Dictionary in controller.get("_OBJECTIVES"):
+	for entry: Dictionary in controller.get("_objectives"):
 		var stage_id: String = String(entry.get("stage", ""))
 		if not expected.has(stage_id):
 			continue
@@ -2619,7 +2648,7 @@ func test_refused_return_marks_loss_without_sale_or_stock_movement() -> void:
 		assert_string_contains(metrics.text, "Profit after rent:[/b] -$50")
 	_assert_summary_label(summary_panel, "_customers_helped_label", "Customers Helped: 1")
 	_assert_summary_label(summary_panel, "_sales_completed_label", "Sales Completed: 0")
-	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 2")
+	_assert_summary_label(summary_panel, "_items_stocked_label", "Items Stocked: 3")
 
 
 func test_disabled_reason_at_stock_shelf_does_not_echo_generic_shelves() -> void:
@@ -2646,7 +2675,7 @@ func test_disabled_reason_at_stock_shelf_does_not_echo_generic_shelves() -> void
 	var reason: String = String(controller.customer_disabled_reason())
 	assert_string_contains(
 		reason,
-		"used games shelf",
+		"starter display table",
 		"Disabled-reason must name the specific destination; got: '%s'" % reason
 	)
 	assert_false(
@@ -2759,7 +2788,7 @@ func test_register_status_indicator_hints_back_room_during_back_room_stage() -> 
 
 func test_register_status_indicator_hints_shelf_during_stock_stage() -> void:
 	# Acceptance: during STAGE_STOCK_SHELF, aiming at the register shows
-	# 'Stock the used games shelf before closing.'
+	# 'Stock the starter display table before closing.'
 	var controller: Node = _store_session_controller()
 	var indicator: Interactable = _register_status_indicator()
 	if controller == null or indicator == null:
@@ -2775,7 +2804,7 @@ func test_register_status_indicator_hints_shelf_during_stock_stage() -> void:
 	)
 	assert_eq(
 		indicator.get_disabled_reason(),
-		"Stock the used games shelf before closing.",
+		"Stock the starter display table before closing.",
 		"Indicator must point the player at the shelf during the stock stage"
 	)
 
@@ -2863,7 +2892,7 @@ func test_register_status_indicator_does_not_break_close_day_path() -> void:
 const _EXPECTED_STEP_LABELS: Array[String] = [
 	"Talk to the customer at the register.",
 	"Check the back room delivery.",
-	"Stock the used games shelf.",
+	"Stock the starter display table.",
 	"Close the day at the register.",
 ]
 

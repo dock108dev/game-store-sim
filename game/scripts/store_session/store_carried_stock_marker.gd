@@ -1,7 +1,7 @@
 class_name StoreCarriedStockMarker
 extends Node3D
 
-const CARRY_LABEL: String = "Used Games Box"
+const CARRY_LABEL: String = "Starter Stock Box"
 const _CAMERA_LOCAL_POSITION: Vector3 = Vector3(0.42, -0.34, -0.92)
 const _CAMERA_LOCAL_ROTATION_DEGREES: Vector3 = Vector3(-8.0, -18.0, 4.0)
 const _CAMERA_LOCAL_SCALE: Vector3 = Vector3(0.42, 0.42, 0.42)
@@ -131,7 +131,7 @@ func _build_visuals() -> void:
 	add_child(label_card)
 
 	_label = Label3D.new()
-	_label.name = "UsedGamesBoxLabel"
+	_label.name = "StarterStockBoxLabel"
 	_label.position = Vector3(0.0, 0.02, -0.172)
 	_label.rotation_degrees = Vector3(0.0, 180.0, 0.0)
 	_label.pixel_size = 0.0024

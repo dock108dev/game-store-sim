@@ -1,32 +1,34 @@
 ## Regression tests for ISSUE-003 — retro_games starter inventory on Day 1.
 ##
 ## Verifies that DataLoaderSingleton.generate_starter_inventory("retro_games")
-## (called from game_world._create_default_store_inventory during
-## bootstrap_new_game_state) yields ≥3 ItemInstances suitable for the BRAINDUMP
-## Validation Loop tutorial steps PLACE_ITEM / WAIT_FOR_CUSTOMER / COMPLETE_SALE.
+## uses store_definitions.json as the starter-stock SSOT for the sparse
+## Day-1 opening: one console and two games.
 extends GutTest
 
 const STORE_ID: String = "retro_games"
-const MIN_STARTER_ITEMS: int = 3
+const STARTER_ITEMS: PackedStringArray = [
+	"console_neo_ignite",
+	"neo_ignite_motorway_kings_loose",
+	"neo_ignite_kingdom_embers_loose",
+]
 
 
 func before_all() -> void:
 	DataLoaderSingleton.load_all_content()
 
 
-func test_generate_starter_inventory_returns_at_least_three_items() -> void:
+func test_generate_starter_inventory_returns_exact_starter_items() -> void:
 	var items: Array[ItemInstance] = (
 		DataLoaderSingleton.generate_starter_inventory(STORE_ID)
 	)
-	assert_gte(
-		items.size(),
-		MIN_STARTER_ITEMS,
-		"retro_games starter inventory must yield ≥%d items, got %d"
-			% [MIN_STARTER_ITEMS, items.size()]
-	)
+	assert_eq(items.size(), STARTER_ITEMS.size())
+	var ids: PackedStringArray = []
+	for item: ItemInstance in items:
+		ids.append(item.definition.id)
+	assert_eq(ids, STARTER_ITEMS)
 
 
-func test_starter_items_default_to_backroom_with_zero_player_price() -> void:
+func test_starter_items_default_to_backroom_with_visible_sell_price() -> void:
 	var items: Array[ItemInstance] = (
 		DataLoaderSingleton.generate_starter_inventory(STORE_ID)
 	)
@@ -38,25 +40,26 @@ func test_starter_items_default_to_backroom_with_zero_player_price() -> void:
 			"Item '%s' must land in backroom, got '%s'"
 				% [item.instance_id, item.current_location]
 		)
-		assert_eq(
+		assert_gt(
 			item.player_set_price,
 			0.0,
-			"Item '%s' must have player_set_price == 0.0 so haggle has price headroom"
-				% item.instance_id
+			"Item '%s' must show a real starter sell price" % item.instance_id
 		)
 
 
-func test_starter_items_have_positive_base_price_and_retro_games_store() -> void:
+func test_starter_items_have_sparse_category_distribution() -> void:
 	var items: Array[ItemInstance] = (
 		DataLoaderSingleton.generate_starter_inventory(STORE_ID)
 	)
 	assert_false(items.is_empty(), "Starter inventory should not be empty")
+	var category_counts: Dictionary = {}
 	for item: ItemInstance in items:
 		assert_not_null(
 			item.definition,
 			"Item '%s' must have a non-null definition" % item.instance_id
 		)
 		var def: ItemDefinition = item.definition
+		category_counts[def.category] = int(category_counts.get(def.category, 0)) + 1
 		assert_gt(
 			def.base_price,
 			0.0,
@@ -70,12 +73,8 @@ func test_starter_items_have_positive_base_price_and_retro_games_store() -> void
 			"Item '%s' must resolve to retro_games, got '%s'"
 				% [def.id, resolved]
 		)
-		assert_eq(
-			def.rarity,
-			"common",
-			"Starter items must be common rarity, got '%s' for '%s'"
-				% [def.rarity, def.id]
-		)
+	assert_eq(int(category_counts.get(&"consoles", 0)), 1)
+	assert_eq(int(category_counts.get(&"cartridges", 0)), 2)
 
 
 ## Verifies the catalog supplies at least one broadly desirable common

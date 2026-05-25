@@ -30,8 +30,8 @@
         },
         {
           "id": "stock_shelf",
-          "text": "Stock the used games shelf.",
-          "action": "Press E at the used games shelf",
+          "text": "Stock the starter display table.",
+          "action": "Press E at the starter display table",
           "key": "E"
         },
         {

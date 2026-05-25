@@ -10,6 +10,9 @@ const _ProductVisualFactory: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
 const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store_visual_kit.gd")
+const StoreSessionCharacterVisualFactoryScript: GDScript = preload(
+	"res://game/scripts/visuals/store_session_character_visual_factory.gd"
+)
 const ExpandableStoreShellRuntimeScript: GDScript = preload(
 	"res://game/scripts/visuals/expandable_store_shell_runtime.gd"
 )
@@ -25,6 +28,12 @@ const DAY_PATHS: Dictionary = {
 	1: "res://game/content/store_session/days/day_01.json",
 	2: "res://game/content/store_session/days/day_02.json",
 }
+const DEFAULT_STORE_ID: String = "retro_games"
+const STARTER_STOCK_ITEM_IDS: PackedStringArray = [
+	"console_neo_ignite",
+	"neo_ignite_motorway_kings_loose",
+	"neo_ignite_kingdom_embers_loose",
+]
 const TARGET_EVENTS_PER_DAY: int = 3
 const _MAX_STORE_CUSTOMER_EVENTS_PER_SHIFT: int = 2
 const _REPEAT_CUSTOMER_OBJECTIVE_ID: StringName = &"repeat_customer"
@@ -64,9 +73,9 @@ const CUSTOMER_EXIT_IN_PROGRESS: StringName = &"exit_in_progress"
 const CUSTOMER_EXIT_EXITED: StringName = &"exited_hidden"
 
 ## Starter back-room delivery quantity. The first store should feel small:
-## a couple of used games, one shelf, one register. Reinvesting after a shift
+## one display table, one console, and two games. Reinvesting after a shift
 ## adds a small paid extra shipment rather than filling the room by default.
-const _BACKROOM_DELIVERY_QUANTITY: int = 2
+const _BACKROOM_DELIVERY_QUANTITY: int = 3
 const _REORDER_EXTRA_QUANTITY: int = 2
 const _REORDER_EXTRA_COST: int = 20
 const _REORDER_OPTION_ID: StringName = &"order_used_games"
@@ -311,11 +320,11 @@ var _training_objectives: Array[Dictionary] = [
 	{
 		"id": "training_stock_shelf",
 		"stage": "training_stock_shelf",
-		"label": "Stock the used games shelf.",
-		"action": "Stock used games shelf",
+		"label": "Stock the starter display table.",
+		"action": "Stock starter display table",
 		"key": "E",
 		"target_path": "StoreSessionRestockShelf/Interactable",
-		"prompt_display_name": "used games shelf",
+		"prompt_display_name": "starter display table",
 		"prompt_text": "Stock",
 		"action_verb": "Stock",
 		"highlight_y_offset": 1.7,
@@ -356,11 +365,11 @@ var _day_one_objectives: Array[Dictionary] = [
 	{
 		"id": "stock_shelf",
 		"stage": "stock_shelf",
-		"label": "Stock the used games shelf.",
-		"action": "Stock used games shelf",
+		"label": "Stock the starter display table.",
+		"action": "Stock starter display table",
 		"key": "E",
 		"target_path": "StoreSessionRestockShelf/Interactable",
-		"prompt_display_name": "used games shelf",
+		"prompt_display_name": "starter display table",
 		"prompt_text": "Stock",
 		"action_verb": "Stock",
 		"highlight_y_offset": 1.7,
@@ -835,7 +844,7 @@ func on_store_stockroom_pickup_interacted() -> void:
 			2.5,
 		)
 	)
-	EventBus.store_carry_changed.emit("Used Games Box")
+	EventBus.store_carry_changed.emit("Starter Stock Box")
 	_complete_current_objective()
 	_sync_restock_placement_affordance()
 
@@ -919,11 +928,11 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 	)
 	if _carried_stock_remaining > 0 and _restock_available_capacity() > 0:
 		EventBus.store_carry_changed.emit(
-			"Used Games Box (%d left)" % _carried_stock_remaining
+			"Starter Stock Box (%d left)" % _carried_stock_remaining
 		)
 		_sync_restock_placement_affordance()
 		EventBus.toast_requested.emit(
-			"Placed 1 game on the used games shelf. %d still in the box."
+			"Placed 1 item on the starter display table. %d still in the box."
 			% _carried_stock_remaining,
 			&"info",
 			2.0
@@ -941,7 +950,7 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 		_real_backroom_return_count + _unplaced_delivery_count
 	)
 	EventBus.toast_requested.emit(
-		"Stocked %d games on the used games shelf." % _shelf_stock_count, &"sale", 3.0
+		"Stocked %d items on the starter display table." % _shelf_stock_count, &"sale", 3.0
 	)
 	_complete_current_objective()
 
@@ -1568,14 +1577,14 @@ func can_interact_restock() -> bool:
 
 func restock_prompt_label() -> String:
 	if _stage != STAGE_STOCK_SHELF and _stage != STAGE_TRAINING_STOCK_SHELF:
-		return "Stock used games shelf"
+		return "Stock starter display table"
 	if not StoreSessionState.carrying_stock:
 		return "Pick up back room delivery first"
 	if _carried_stock_remaining <= 0:
-		return "Shelf stocked"
+		return "Display table stocked"
 	var total_delivery: int = maxi(_current_delivery_quantity, _carried_stock_remaining)
 	var placed_count: int = maxi(total_delivery - _carried_stock_remaining, 0)
-	return "Place game %d of %d on used games shelf" % [
+	return "Place item %d of %d on starter display table" % [
 		placed_count + 1,
 		total_delivery,
 	]
@@ -1666,7 +1675,7 @@ func _prerequisite_reason_for(objective_id: StringName) -> String:
 		&"check_back_room_inventory":
 			return "Check the back room first."
 		&"training_stock_shelf":
-			return "Stock the used games shelf first."
+			return "Stock the starter display table first."
 		&"practice_customer":
 			return "Run the practice customer first."
 		&"open_store":
@@ -1676,7 +1685,7 @@ func _prerequisite_reason_for(objective_id: StringName) -> String:
 		&"back_room_inventory":
 			return "Check the back room first."
 		&"stock_shelf":
-			return "Stock the used games shelf before closing."
+			return "Stock the starter display table before closing."
 		&"close_day":
 			return "Close day at the register."
 		_:
@@ -2329,7 +2338,7 @@ func _objective_completion_label(objective_id: StringName) -> String:
 		&"check_back_room_inventory":
 			return "Back room inventory checked."
 		&"training_stock_shelf":
-			return "Training shelf stocked."
+			return "Starter display stocked."
 		&"practice_customer":
 			return "Practice customer complete."
 		&"open_store":
@@ -2892,11 +2901,11 @@ func _is_kept_root_node(node_name: StringName) -> bool:
 ## position are anchored at the same Node3D origin. The .tscn drives
 ## StoreSessionDayOneCustomer.position — this method does not move the node.
 ##
-## The body is a small blocky proxy under `CustomerProxy` so the silhouette
-## reads as "a person standing here" from across the store without looking
-## like placeholder collision geometry. The .tscn-authored `CustomerBody`
-## is freed on first run because a duplicate body mesh at the same anchor
-## would z-fight and double the visible footprint.
+## The body is a shaped proxy under `CustomerProxy` so the silhouette reads
+## as "a person standing here" from across the store instead of placeholder
+## collision geometry. The .tscn-authored `CustomerBody` is freed on first
+## run because a duplicate body mesh at the same anchor would z-fight and
+## double the visible footprint.
 ## See §EH-27. `_store_root() == null` is the documented test seam; a
 ## missing `StoreSessionDayOneCustomer` node is a wiring regression (the node is
 ## authored in `retro_games.tscn` for the store_session) — fail loud.
@@ -2923,9 +2932,8 @@ func _configure_store_customer() -> void:
 		_initial_customer_position_captured = true
 
 	# The .tscn ships a CustomerBody mesh next to our runtime proxy. The
-	# runtime proxy is the source of truth for the visible silhouette
-	# (human-scaled capsule, warm taupe), so drop the authored mesh to
-	# avoid a doubled footprint at the register.
+	# runtime proxy is the source of truth for the visible silhouette, so
+	# drop the authored mesh to avoid a doubled footprint at the register.
 	var legacy_body: Node = customer_node.get_node_or_null("CustomerBody")
 	if legacy_body != null:
 		legacy_body.queue_free()
@@ -2939,122 +2947,9 @@ func _configure_store_customer() -> void:
 		proxy_root.name = "CustomerProxy"
 		customer_node.add_child(proxy_root)
 
-	# Earlier proxy revisions used a capsule plus a marker. Drop obsolete
-	# parts on hot-reload so the tree converges on the blocky proxy.
-	for stale_name: String in ["Marker"]:
-		var stale: Node = proxy_root.get_node_or_null(stale_name)
-		if stale != null:
-			stale.queue_free()
-
-	var body_ref: Node = proxy_root.get_node_or_null("Body")
-	if not (body_ref is MeshInstance3D):
-		var body_mesh := MeshInstance3D.new()
-		body_mesh.name = "Body"
-		proxy_root.add_child(body_mesh)
-		body_ref = body_mesh
-	var body: MeshInstance3D = body_ref as MeshInstance3D
-	var body_shape := BoxMesh.new()
-	body_shape.size = Vector3(0.42, 0.90, 0.26)
-	body.mesh = body_shape
-	body.position = Vector3(0.0, 0.75, 0.0)
-	var body_mat := StandardMaterial3D.new()
-	# Muted clerk shirt: distinct from the warm-brown counter and the gray
-	# walls, without reading like a debug target.
-	body_mat.albedo_color = Color(0.18, 0.29, 0.42, 1.0)
-	body_mat.roughness = 0.85
-	body.material_override = body_mat
-	_configure_customer_proxy_part(
-		proxy_root,
-		"Head",
-		Vector3(0.34, 0.34, 0.30),
-		Vector3(0.0, 1.36, 0.0),
-		Color(0.70, 0.57, 0.49, 1.0),
+	StoreSessionCharacterVisualFactoryScript.configure_customer_proxy(
+		proxy_root, _stage == STAGE_TRAINING_TALK_MANAGER
 	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"HairCap",
-		Vector3(0.38, 0.12, 0.32),
-		Vector3(0.0, 1.56, -0.01),
-		Color(0.12, 0.08, 0.05, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"FaceBand",
-		Vector3(0.26, 0.08, 0.025),
-		Vector3(0.0, 1.38, 0.165),
-		Color(0.82, 0.66, 0.54, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"ArmLeft",
-		Vector3(0.13, 0.62, 0.16),
-		Vector3(-0.32, 0.76, 0.0),
-		Color(0.56, 0.45, 0.38, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"ArmRight",
-		Vector3(0.13, 0.62, 0.16),
-		Vector3(0.32, 0.76, 0.0),
-		Color(0.56, 0.45, 0.38, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"LegLeft",
-		Vector3(0.16, 0.54, 0.16),
-		Vector3(-0.11, 0.29, 0.0),
-		Color(0.10, 0.13, 0.18, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"LegRight",
-		Vector3(0.16, 0.54, 0.16),
-		Vector3(0.11, 0.29, 0.0),
-		Color(0.10, 0.13, 0.18, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"ShoeLeft",
-		Vector3(0.20, 0.08, 0.24),
-		Vector3(-0.11, 0.04, 0.04),
-		Color(0.05, 0.05, 0.05, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"ShoeRight",
-		Vector3(0.20, 0.08, 0.24),
-		Vector3(0.11, 0.04, 0.04),
-		Color(0.05, 0.05, 0.05, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"Badge",
-		Vector3(0.16, 0.10, 0.025),
-		Vector3(-0.12, 0.98, 0.145),
-		Color(0.96, 0.78, 0.30, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"NameTag",
-		Vector3(0.18, 0.08, 0.025),
-		Vector3(0.12, 1.04, 0.145),
-		Color(0.92, 0.84, 0.58, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"Lanyard",
-		Vector3(0.055, 0.34, 0.025),
-		Vector3(0.0, 0.93, 0.148),
-		Color(0.96, 0.72, 0.26, 1.0),
-	)
-	_configure_customer_proxy_part(
-		proxy_root,
-		"Clipboard",
-		Vector3(0.24, 0.34, 0.035),
-		Vector3(0.33, 0.62, 0.14),
-		Color(0.52, 0.36, 0.22, 1.0),
-	)
-	_set_customer_proxy_manager_details_visible(store, _stage == STAGE_TRAINING_TALK_MANAGER)
 
 	# Resize the Interactable trigger so the screen-center ray hits it from
 	# typical approach distances, not just nose-to-chest. The authored shape
@@ -3082,34 +2977,7 @@ func _set_customer_proxy_manager_details_visible(store: Node, is_manager_role: b
 	var proxy: Node = store.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
 	if proxy == null:
 		return
-	for part_name: String in ["Badge", "Clipboard", "NameTag", "Lanyard"]:
-		var part: Node3D = proxy.get_node_or_null(part_name) as Node3D
-		if part != null:
-			part.visible = is_manager_role
-
-
-func _configure_customer_proxy_part(
-	proxy_root: Node3D,
-	part_name: String,
-	size: Vector3,
-	position: Vector3,
-	color: Color,
-) -> void:
-	var part_ref: Node = proxy_root.get_node_or_null(part_name)
-	if not (part_ref is MeshInstance3D):
-		var mesh_instance := MeshInstance3D.new()
-		mesh_instance.name = part_name
-		proxy_root.add_child(mesh_instance)
-		part_ref = mesh_instance
-	var part: MeshInstance3D = part_ref as MeshInstance3D
-	var mesh := BoxMesh.new()
-	mesh.size = size
-	part.mesh = mesh
-	part.position = position
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = color
-	mat.roughness = 0.86
-	part.material_override = mat
+	StoreSessionCharacterVisualFactoryScript.set_manager_details_visible(proxy, is_manager_role)
 
 
 ## Deferred companion to `_configure_store_customer`. Runs after
@@ -4031,7 +3899,7 @@ func _visible_shelf_item_count() -> int:
 ## missing-`StoreSessionRestockShelf` branch is a scene-wiring regression
 ## (`retro_games.tscn` ships the node at the root of the store) — fail
 ## loud so a node rename / accidental delete is caught in CI rather than
-## shipping as "Stocked 0 games on the used games shelf." See §EH-26.
+## shipping as "Stocked 0 items on the starter display table." See §EH-26.
 func _spawn_visible_shelf_items(count: int) -> int:
 	var spawned: int = _render_visible_shelf_items(count)
 	_shelf_stock_count = spawned
@@ -4094,24 +3962,67 @@ func _render_visible_shelf_items(count: int) -> int:
 
 
 func _store_restock_visual_data(index: int) -> Dictionary:
-	const BOX_ART_KEYS: Array[String] = [
-		"motorway_kings_neo_ignite",
-		"goblin_kart_canopy_wave",
-		"marble_bash_canopy_wave",
-		"brain_drill_wave_pocket",
-		"goblin_kart_neo_ignite",
-	]
-	var box_art_key: String = BOX_ART_KEYS[index % BOX_ART_KEYS.size()]
+	var item_ids: PackedStringArray = _starter_stock_item_ids()
+	var item_id: String = item_ids[index % item_ids.size()]
+	var definition: ItemDefinition = null
+	if GameManager.data_loader:
+		definition = GameManager.data_loader.get_item(item_id)
+	if definition:
+		return _product_visual_data_from_definition(definition)
+	var entry: Dictionary = ContentRegistry.get_entry(StringName(item_id))
+	if not entry.is_empty():
+		return _product_visual_data_from_entry(item_id, entry)
 	return {
 		"instance_id": "store_restock_visual_%d" % index,
+		"definition_id": item_id,
 		"category": "cartridge",
-		"box_art_key": box_art_key,
 	}
+
+
+func _starter_stock_item_ids() -> PackedStringArray:
+	if GameManager.data_loader:
+		var store_id: String = String(GameManager.get_active_store_id())
+		if store_id.is_empty():
+			store_id = DEFAULT_STORE_ID
+		var store: StoreDefinition = GameManager.data_loader.get_store(store_id)
+		if store and not store.starting_inventory.is_empty():
+			return store.starting_inventory
+	return STARTER_STOCK_ITEM_IDS
+
+
+func _product_visual_data_from_definition(definition: ItemDefinition) -> Dictionary:
+	var data: Dictionary = {
+		"definition_id": definition.id,
+		"display_name": definition.item_name,
+		"category": String(definition.category),
+		"platform_id": String(definition.platform_id),
+	}
+	if definition.extra is Dictionary:
+		for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+			if definition.extra.has(key):
+				data[key] = definition.extra[key]
+	return data
+
+
+func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dictionary:
+	var data: Dictionary = {
+		"definition_id": str(entry.get("id", item_id)),
+		"display_name": str(entry.get("item_name", item_id)),
+		"category": str(entry.get("category", "")),
+		"platform_id": str(entry.get("platform_id", "")),
+	}
+	for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+		if entry.has(key):
+			data[key] = entry[key]
+	return data
 
 
 func _make_store_shelf_item_container(designed_visual: Node3D) -> MeshInstance3D:
 	var item: MeshInstance3D = _make_fallback_store_shelf_item()
-	item.set_meta("product_visual_kind", "game_case")
+	item.set_meta(
+		"product_visual_kind",
+		str(designed_visual.get_meta("product_visual_kind", "designed_product"))
+	)
 	designed_visual.position = Vector3(0.0, 0.0, 0.04)
 	item.add_child(designed_visual)
 	return item

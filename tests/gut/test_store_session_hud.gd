@@ -47,8 +47,8 @@ const _OBJECTIVES_DAY_1: Array[Dictionary] = [
 	{
 		"id": "stock_shelf",
 		"stage": "stock_shelf",
-		"label": "Day 1: Put a few items on the used games shelf.",
-		"action": "Stock used games shelf",
+		"label": "Day 1: Put a few items on the starter display table.",
+		"action": "Stock starter display table",
 		"key": "E",
 		"target_path": "StoreSessionRestockShelf/Interactable",
 		"time_cost_minutes": 60,

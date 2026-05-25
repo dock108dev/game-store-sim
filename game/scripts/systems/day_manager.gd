@@ -119,7 +119,15 @@ func _seed_day_one_inventory() -> void:
 	if store_id.is_empty():
 		push_warning("DayManager: no active store — skipping Day 1 inventory seed")
 		return
-	inv.seed_starting_items(store_id, 7)
+	inv.seed_starting_items(store_id, _day_one_seed_target(store_id))
+
+
+func _day_one_seed_target(store_id: StringName) -> int:
+	if GameManager.data_loader:
+		var store: StoreDefinition = GameManager.data_loader.get_store(String(store_id))
+		if store:
+			return store.starting_inventory.size()
+	return 0
 
 
 func _on_first_sale_completed(

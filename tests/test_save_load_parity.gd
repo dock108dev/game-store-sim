@@ -67,7 +67,10 @@ func after_each() -> void:
 		DirAccess.remove_absolute(SaveManager.SLOT_INDEX_PATH)
 	GameManager.owned_stores = _saved_owned_stores
 	GameManager.current_store_id = _saved_store_id
-	GameManager.data_loader = _saved_data_loader
+	if is_instance_valid(_saved_data_loader):
+		GameManager.data_loader = _saved_data_loader
+	else:
+		GameManager.data_loader = null
 	ContentRegistry.clear_for_testing()
 
 
