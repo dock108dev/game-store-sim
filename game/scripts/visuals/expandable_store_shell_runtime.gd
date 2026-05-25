@@ -8,48 +8,9 @@
 class_name ExpandableStoreShellRuntime
 extends RefCounted
 
-const ProductVisualFactoryScript: GDScript = preload(
-	"res://game/scripts/visuals/product_visual_factory.gd"
-)
 const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store_visual_kit.gd")
 
 const ROOT_NAME: StringName = &"ExpandableStoreShell"
-
-const _STARTER_PRODUCT_VISUALS: Array[Dictionary] = [
-	{
-		"definition_id": "neo_ignite_motorway_kings_loose",
-		"display_name": "Motorway Kings",
-		"category": "cartridge",
-		"platform_id": "neo_ignite",
-		"box_art_key": "motorway_kings_neo_ignite",
-	},
-	{
-		"definition_id": "canopy_wave_marble_bash_party_loose",
-		"display_name": "Marble Bash Party",
-		"category": "cartridge",
-		"platform_id": "canopy_wave",
-		"box_art_key": "marble_bash_canopy_wave",
-	},
-	{
-		"definition_id": "wave_pocket_brain_drill_loose",
-		"display_name": "Brain Drill Academy",
-		"category": "cartridge",
-		"platform_id": "wave_pocket",
-		"box_art_key": "brain_drill_wave_pocket",
-	},
-	{
-		"display_name": "Goblin Kart",
-		"category": "cartridge",
-		"platform_id": "neo_ignite",
-		"box_art_key": "goblin_kart_neo_ignite",
-	},
-	{
-		"display_name": "Goblin Kart",
-		"category": "sealed_product",
-		"platform_id": "canopy_wave",
-		"box_art_key": "goblin_kart_canopy_wave",
-	},
-]
 
 const _HIDDEN_AUTHORED_VISUAL_ROOTS: Array[String] = [
 	"Floor",
@@ -109,7 +70,6 @@ static func _move_starter_anchors(store: Node) -> void:
 	_set_position(store, "StoreSessionRestockShelf", Vector3(-1.35, 0.0, 1.35))
 	_set_rotation_degrees(store, "StoreSessionRestockShelf", Vector3(0.0, -8.0, 0.0))
 	_hide_node(store, "StoreSessionRestockShelf/RestockCrate")
-	_hide_node(store, "StoreSessionRestockShelf/MerchandisingFrame")
 	_set_position(store, "StoreSessionBackroomPickup", Vector3(3.15, 0.0, -2.15))
 	_set_position(store, "EntranceDoor", Vector3(0.0, 0.0, 7.22))
 	_hide_node(store, "EntranceDoor/DoorMesh")
@@ -284,24 +244,35 @@ static func _rebuild_shell(shell: Node3D) -> void:
 	)
 
 	_add_box(
-		shell, "StarterSignBacking", Vector3(-0.4, 2.68, -3.50), Vector3(4.1, 0.52, 0.08), sign_mat
+		shell, "StarterSignBacking", Vector3(-2.55, 2.70, -3.50), Vector3(1.85, 0.34, 0.08), sign_mat
 	)
-	_add_label(shell, "StarterSignLabel", "SHELF LIFE", Vector3(-0.4, 2.74, -3.43), 64)
-	_add_box(
-		shell, "GamesBayBacking", Vector3(-0.4, 2.18, -3.49), Vector3(1.9, 0.42, 0.08), sign_mat
-	)
-	_add_label(shell, "GamesBayLabel", "USED GAMES", Vector3(-0.4, 2.23, -3.42), 42)
+	_add_label(shell, "StarterSignLabel", "SHELF LIFE", Vector3(-2.55, 2.74, -3.43), 30)
+	_add_label(shell, "GamesBayLabel", "", Vector3(-2.55, 2.35, -3.42), 22)
 
 	_add_wall(
-		shell, "StockroomPartition", Vector3(3.05, 0.46, -1.06), Vector3(1.25, 0.92, 0.10), wall_mat
+		shell, "StockroomPartition", Vector3(3.05, 0.90, -1.06), Vector3(1.25, 1.80, 0.10), wall_mat
+	)
+	_add_wall(
+		shell, "StockroomSideReturn", Vector3(3.93, 1.55, -2.25), Vector3(0.12, 2.95, 2.55), wall_mat
+	)
+	_add_wall(
+		shell, "StockroomBackPanel", Vector3(3.20, 1.55, -3.45), Vector3(1.45, 2.95, 0.10), wall_mat
 	)
 	_add_box(
 		shell, "StockroomPost", Vector3(2.34, 0.94, -1.06), Vector3(0.12, 1.88, 0.12), dark_mat
 	)
 	_add_box(
-		shell, "StockroomHeader", Vector3(3.25, 2.18, -3.48), Vector3(1.38, 0.35, 0.08), sign_mat
+		shell, "StockroomDoorJambRight", Vector3(3.76, 1.44, -1.06), Vector3(0.12, 2.55, 0.12), dark_mat
 	)
-	_add_label(shell, "StockroomLabel", "STOCK", Vector3(3.25, 2.21, -3.41), 30)
+	_add_box(
+		shell, "StockroomDoorLintel", Vector3(3.05, 2.72, -1.06), Vector3(1.55, 0.12, 0.14), dark_mat
+	)
+	_add_box(
+		shell, "StockroomHeader", Vector3(3.18, 2.20, -1.02), Vector3(0.74, 0.08, 0.16), trim_mat
+	)
+	_add_box(
+		shell, "StockroomDoorHandle", Vector3(2.48, 1.10, -0.98), Vector3(0.08, 0.16, 0.04), gold_mat
+	)
 	_add_box(
 		shell,
 		"StockroomFloorTape",
@@ -323,7 +294,7 @@ static func _rebuild_shell(shell: Node3D) -> void:
 	_add_label(
 		shell,
 		"ExpansionLabel",
-		"EXPANSION",
+		"",
 		Vector3(-3.80, 2.96, 1.20),
 		34,
 		Vector3(0.0, -90.0, 0.0)
@@ -337,8 +308,7 @@ static func _rebuild_shell(shell: Node3D) -> void:
 		_mat(Color(0.20, 0.13, 0.10, 1.0))
 	)
 
-	# The starter footprint should read as leased and newly opened. Floor wear
-	# gives scale without implying inventory, fixtures, or stocked capacity.
+	# Floor wear gives scale without fighting the customer-facing retail fixtures.
 	for index: int in range(7):
 		var x_line: float = -3.0 + float(index) * 1.0
 		_add_box(
@@ -391,208 +361,48 @@ static func _rebuild_shell(shell: Node3D) -> void:
 		0.58,
 		2.9
 	)
+	_add_intentional_day_one_fixtures(shell, palette)
 
 
-static func _add_screen_first_rescue_dressing(shell: Node3D, palette: Dictionary) -> void:
+static func _add_intentional_day_one_fixtures(shell: Node3D, palette: Dictionary) -> void:
 	var trim_mat: StandardMaterial3D = palette["trim"] as StandardMaterial3D
-	var sign_mat: StandardMaterial3D = palette["sign"] as StandardMaterial3D
 	var dark_mat: StandardMaterial3D = palette["dark"] as StandardMaterial3D
 	var shelf_mat: StandardMaterial3D = palette["shelf"] as StandardMaterial3D
 	var table_mat: StandardMaterial3D = palette["table"] as StandardMaterial3D
 	var paper_mat: StandardMaterial3D = palette["paper"] as StandardMaterial3D
+	var paper_white_mat: StandardMaterial3D = palette["paper_white"] as StandardMaterial3D
+	var gold_mat: StandardMaterial3D = palette["gold"] as StandardMaterial3D
 	var blue_case_mat: StandardMaterial3D = palette["blue_case"] as StandardMaterial3D
 	var green_case_mat: StandardMaterial3D = palette["green_case"] as StandardMaterial3D
 	var red_case_mat: StandardMaterial3D = palette["red_case"] as StandardMaterial3D
-	var stock_box_mat: StandardMaterial3D = palette["stock_box"] as StandardMaterial3D
-	var gold_mat: StandardMaterial3D = palette["gold"] as StandardMaterial3D
-	var paper_white_mat: StandardMaterial3D = palette["paper_white"] as StandardMaterial3D
-	var purple_case_mat: StandardMaterial3D = palette["purple_case"] as StandardMaterial3D
-	var teal_case_mat: StandardMaterial3D = palette["teal_case"] as StandardMaterial3D
 	var rubber_mat: StandardMaterial3D = palette["rubber"] as StandardMaterial3D
-	var panel_mat := _mat(Color(0.30, 0.25, 0.21, 1.0))
-	var warm_panel_mat := _mat(Color(0.42, 0.27, 0.15, 1.0))
-	var peg_mat := _mat(Color(0.34, 0.23, 0.15, 1.0))
 	var graphite_mat := _mat(Color(0.10, 0.11, 0.13, 1.0))
-	var mint_mat := _mat(Color(0.12, 0.36, 0.28, 1.0), Color(0.10, 0.62, 0.40, 1.0), 0.20)
-	var amber_tag_mat := _mat(Color(0.85, 0.62, 0.22, 1.0), Color(0.9, 0.50, 0.12, 1.0), 0.22)
+	var stock_box_mat: StandardMaterial3D = palette["stock_box"] as StandardMaterial3D
 
-	# These four groups map directly to the screenshot-review pass.
-	_add_spawn_view_rescue(
-		shell, trim_mat, sign_mat, dark_mat, paper_mat, gold_mat, panel_mat, rubber_mat
-	)
-	_add_checkout_rescue(
-		shell,
-		trim_mat,
-		dark_mat,
-		table_mat,
-		paper_mat,
-		paper_white_mat,
-		gold_mat,
-		graphite_mat,
-		rubber_mat
-	)
-	_add_shelf_wall_rescue(
+	_add_checkout_core(shell, dark_mat, table_mat, paper_mat, paper_white_mat, gold_mat, graphite_mat)
+	_add_used_game_wall_shelf(
 		shell,
 		trim_mat,
 		shelf_mat,
 		paper_mat,
-		paper_white_mat,
 		blue_case_mat,
 		green_case_mat,
 		red_case_mat,
-		purple_case_mat,
-		teal_case_mat,
-		gold_mat,
-		amber_tag_mat
-	)
-	_add_stockroom_rescue(
-		shell,
-		trim_mat,
-		dark_mat,
-		stock_box_mat,
-		paper_mat,
-		paper_white_mat,
-		gold_mat,
-		peg_mat,
-		mint_mat,
-		warm_panel_mat
-	)
-
-
-static func _add_spawn_view_rescue(
-	shell: Node3D,
-	trim_mat: StandardMaterial3D,
-	sign_mat: StandardMaterial3D,
-	dark_mat: StandardMaterial3D,
-	paper_mat: StandardMaterial3D,
-	gold_mat: StandardMaterial3D,
-	panel_mat: StandardMaterial3D,
-	rubber_mat: StandardMaterial3D
-) -> void:
-	_add_box(
-		shell,
-		"SpawnSightlineLeftWallSlatA",
-		Vector3(-3.88, 1.66, 2.70),
-		Vector3(0.055, 1.35, 1.52),
-		panel_mat
-	)
-	_add_box(
-		shell,
-		"SpawnSightlineLeftWallSlatB",
-		Vector3(-3.84, 1.76, 4.55),
-		Vector3(0.055, 1.05, 1.20),
-		sign_mat
-	)
-	_add_label(
-		shell,
-		"SpawnSightlineTradeText",
-		"TRADE\nCARTS",
-		Vector3(-3.78, 1.78, 4.55),
-		20,
-		Vector3(0.0, -90.0, 0.0)
-	)
-	_add_box(
-		shell,
-		"SpawnSightlineRightServicePanel",
-		Vector3(3.88, 1.52, 5.55),
-		Vector3(0.055, 0.88, 1.25),
-		_mat(Color(0.20, 0.18, 0.17, 1.0))
-	)
-	for index: int in range(4):
-		var z: float = 5.10 + float(index) * 0.30
-		_add_box(
-			shell,
-			"SpawnSightlineServiceCard%02d" % index,
-			Vector3(3.82, 1.29 + float(index % 2) * 0.18, z),
-			Vector3(0.035, 0.26, 0.18),
-			paper_mat if index % 2 == 0 else gold_mat
-		)
-	_add_box(
-		shell,
-		"SpawnForegroundTradeBin",
-		Vector3(-3.06, 0.24, 4.72),
-		Vector3(0.82, 0.42, 0.64),
-		dark_mat
-	)
-	for index: int in range(5):
-		var offset: float = -0.26 + float(index) * 0.13
-		_add_product_box(
-			shell,
-			"SpawnForegroundTradeCase%02d" % index,
-			Vector3(-3.08 + offset, 0.50, 4.52 + float(index % 2) * 0.14),
-			Vector3(0.11, 0.22, 0.24),
-			[paper_mat, gold_mat, sign_mat, trim_mat, paper_mat][index]
-		)
-	_add_box(
-		shell,
-		"SpawnWelcomeMat",
-		Vector3(0.0, 0.082, 6.20),
-		Vector3(1.80, 0.018, 0.62),
-		rubber_mat
-	)
-	_add_box(
-		shell,
-		"SpawnWelcomeMatTradeStripe",
-		Vector3(0.0, 0.094, 6.20),
-		Vector3(1.32, 0.012, 0.10),
 		gold_mat
 	)
-	_add_label(shell, "SpawnWelcomeMatText", "BUY SELL TRADE", Vector3(0.0, 0.16, 6.03), 18)
-	_add_box(
-		shell,
-		"SpawnEntrySensorLeft",
-		Vector3(-1.06, 1.02, 6.92),
-		Vector3(0.10, 1.85, 0.10),
-		dark_mat
-	)
-	_add_box(
-		shell,
-		"SpawnEntrySensorRight",
-		Vector3(1.06, 1.02, 6.92),
-		Vector3(0.10, 1.85, 0.10),
-		dark_mat
-	)
-	_add_box(
-		shell,
-		"SpawnEntrySensorLightLeft",
-		Vector3(-1.06, 1.86, 6.84),
-		Vector3(0.06, 0.08, 0.025),
-		_mat(Color(0.10, 0.85, 0.42, 1.0), Color(0.10, 1.0, 0.45, 1.0), 0.35)
-	)
-	_add_box(
-		shell,
-		"SpawnEntrySensorLightRight",
-		Vector3(1.06, 1.86, 6.84),
-		Vector3(0.06, 0.08, 0.025),
-		_mat(Color(0.10, 0.85, 0.42, 1.0), Color(0.10, 1.0, 0.45, 1.0), 0.35)
-	)
-	_add_box(
-		shell,
-		"SpawnSideWallConsolePoster",
-		Vector3(-3.84, 2.40, 1.20),
-		Vector3(0.055, 0.72, 1.05),
-		sign_mat
-	)
-	_add_label(
-		shell,
-		"SpawnSideWallConsolePosterText",
-		"USED\nCONSOLES",
-		Vector3(-3.78, 2.41, 1.20),
-		20,
-		Vector3(0.0, -90.0, 0.0)
+	_add_stock_closet_contents(
+		shell, trim_mat, dark_mat, stock_box_mat, paper_white_mat, gold_mat, rubber_mat
 	)
 
 
-static func _add_checkout_rescue(
+static func _add_checkout_core(
 	shell: Node3D,
-	trim_mat: StandardMaterial3D,
 	dark_mat: StandardMaterial3D,
 	table_mat: StandardMaterial3D,
 	paper_mat: StandardMaterial3D,
-	_paper_white_mat: StandardMaterial3D,
+	paper_white_mat: StandardMaterial3D,
 	gold_mat: StandardMaterial3D,
-	graphite_mat: StandardMaterial3D,
-	rubber_mat: StandardMaterial3D
+	graphite_mat: StandardMaterial3D
 ) -> void:
 	_add_box(
 		shell,
@@ -610,404 +420,180 @@ static func _add_checkout_rescue(
 	)
 	_add_box(
 		shell,
-		"CheckoutImpulseRack",
-		Vector3(2.25, 0.95, 3.36),
-		Vector3(0.16, 0.72, 0.38),
-		trim_mat
-	)
-	for index: int in range(4):
-		_add_product_box(
-			shell,
-			"CheckoutImpulseFace%02d" % index,
-			Vector3(2.18, 0.78 + float(index) * 0.12, 3.31),
-			Vector3(0.035, 0.09, 0.24),
-			[paper_mat, gold_mat, graphite_mat, paper_mat][index]
-		)
-	_add_store_visual(
-		shell,
-		"CheckoutManagerClipboard",
-		StoreVisualKitScript.CLIPBOARD,
-		Vector3(3.34, 1.06, 3.52),
-		Vector3(0.68, 0.68, 0.68),
-		Vector3(0.0, 16.0, 0.0)
+		"CheckoutRegisterDrawer",
+		Vector3(2.86, 0.87, 3.28),
+		Vector3(0.52, 0.18, 0.32),
+		graphite_mat
 	)
 	_add_box(
 		shell,
-		"CheckoutCounterCable",
-		Vector3(2.96, 0.94, 3.36),
-		Vector3(0.44, 0.035, 0.04),
+		"CheckoutRegisterCashSlot",
+		Vector3(2.86, 0.96, 3.10),
+		Vector3(0.38, 0.03, 0.03),
 		dark_mat
 	)
-	_add_plane_prop(
+	_add_box(
 		shell,
-		"CheckoutServiceBeacon",
-		Vector3(2.82, 1.18, 3.12),
-		Vector2(0.30, 0.08),
-		gold_mat
-	)
-	_add_store_visual(
-		shell,
-		"CheckoutReceiptPrinterBase",
-		StoreVisualKitScript.GLTF_RECEIPT_PRINTER,
-		Vector3(3.28, 0.88, 3.22),
-		Vector3(0.20, 0.20, 0.20),
-		Vector3(0.0, 180.0, 0.0)
-	)
-	_add_store_visual(
-		shell,
-		"CheckoutReceiptPrinterPaper",
-		StoreVisualKitScript.PAPER_STACK,
-		Vector3(3.28, 1.00, 3.14),
-		Vector3(0.48, 0.48, 0.48),
-		Vector3(0.0, 8.0, 0.0)
-	)
-	_add_store_visual(
-		shell,
-		"CheckoutBarcodeScannerHandle",
-		StoreVisualKitScript.BARCODE_SCANNER,
-		Vector3(2.52, 0.92, 3.22),
-		Vector3(0.72, 0.72, 0.72),
-		Vector3(0.0, -10.0, 0.0)
-	)
-	_add_store_visual(
-		shell,
-		"CheckoutBarcodeScannerHead",
-		StoreVisualKitScript.BARCODE_SCANNER,
-		Vector3(2.50, 1.08, 3.15),
-		Vector3(0.48, 0.48, 0.48),
-		Vector3(0.0, -10.0, 0.0)
-	)
-	_add_plane_prop(
-		shell,
-		"CheckoutScannerGlow",
-		Vector3(2.50, 1.08, 3.085),
-		Vector2(0.16, 0.035),
-		_mat(Color(0.15, 0.90, 0.55, 1.0), Color(0.12, 1.0, 0.55, 1.0), 0.35)
-	)
-	for index: int in range(3):
-		_add_store_visual(
-			shell,
-			"CheckoutTradeInForm%02d" % index,
-			StoreVisualKitScript.PAPER_STACK,
-			Vector3(3.02 + float(index) * 0.12, 0.83 + float(index) * 0.014, 3.74),
-			Vector3(0.52, 0.52, 0.52),
-			Vector3(0.0, float(index) * 4.0, 0.0)
-		)
-	_add_store_visual(
-		shell,
-		"CheckoutTradeInFormClip",
-		StoreVisualKitScript.GLTF_HOLD_TAG,
-		Vector3(2.84, 0.88, 3.74),
-		Vector3(0.24, 0.24, 0.24),
-		Vector3(0.0, 14.0, 0.0)
+		"CheckoutRegisterNeck",
+		Vector3(2.86, 1.08, 3.24),
+		Vector3(0.07, 0.19, 0.07),
+		dark_mat
 	)
 	_add_box(
 		shell,
-		"CheckoutControllerCableLoopA",
-		Vector3(2.28, 0.88, 3.74),
-		Vector3(0.30, 0.022, 0.22),
-		rubber_mat
+		"CheckoutRegisterScreenBezel",
+		Vector3(2.86, 1.22, 3.115),
+		Vector3(0.46, 0.30, 0.025),
+		dark_mat
 	)
 	_add_box(
 		shell,
-		"CheckoutControllerCableLoopB",
-		Vector3(2.32, 0.90, 3.82),
-		Vector3(0.20, 0.022, 0.30),
-		rubber_mat
+		"CheckoutRegisterScreen",
+		Vector3(2.86, 1.22, 3.085),
+		Vector3(0.34, 0.20, 0.025),
+		_mat(Color(0.04, 0.17, 0.10, 1.0), Color(0.10, 0.64, 0.34, 1.0), 0.35)
 	)
-	_add_plane_prop(
+	_add_box(
+		shell,
+		"CheckoutRegisterKeypad",
+		Vector3(2.62, 0.99, 3.48),
+		Vector3(0.22, 0.04, 0.18),
+		graphite_mat
+	)
+	_add_box(
+		shell,
+		"CheckoutReceiptSlip",
+		Vector3(3.13, 0.91, 3.48),
+		Vector3(0.22, 0.025, 0.16),
+		paper_white_mat
+	)
+	_add_box(
 		shell,
 		"CheckoutManagerNamePlate",
-		Vector3(2.70, 1.05, 4.115),
-		Vector2(0.34, 0.10),
+		Vector3(2.68, 1.04, 4.115),
+		Vector3(0.32, 0.08, 0.025),
 		gold_mat
 	)
-	_add_label(shell, "CheckoutTradeInsText", "TRADE-INS", Vector3(2.68, 1.12, 4.08), 15)
+	_add_box(
+		shell,
+		"CheckoutCounterPaperStack",
+		Vector3(3.24, 0.89, 3.70),
+		Vector3(0.22, 0.05, 0.16),
+		paper_mat
+	)
+	_add_label(shell, "CheckoutTradeInsText", "", Vector3(2.68, 1.12, 4.08), 15)
 
 
-static func _add_shelf_wall_rescue(
+static func _add_used_game_wall_shelf(
 	shell: Node3D,
 	trim_mat: StandardMaterial3D,
 	shelf_mat: StandardMaterial3D,
 	paper_mat: StandardMaterial3D,
-	paper_white_mat: StandardMaterial3D,
 	blue_case_mat: StandardMaterial3D,
 	green_case_mat: StandardMaterial3D,
 	red_case_mat: StandardMaterial3D,
-	purple_case_mat: StandardMaterial3D,
-	teal_case_mat: StandardMaterial3D,
-	gold_mat: StandardMaterial3D,
-	amber_tag_mat: StandardMaterial3D
+	gold_mat: StandardMaterial3D
 ) -> void:
 	_add_box(
 		shell,
-		"ShelfHeroBacker",
-		Vector3(-0.85, 1.42, -3.515),
-		Vector3(3.95, 1.82, 0.045),
+		"StarterUsedShelfBacker",
+		Vector3(-0.80, 1.32, -3.515),
+		Vector3(2.10, 0.84, 0.045),
 		_mat(Color(0.16, 0.11, 0.08, 1.0))
 	)
-	_add_box(
-		shell,
-		"ShelfHeroHeaderRail",
-		Vector3(-0.85, 2.13, -3.08),
-		Vector3(3.82, 0.10, 0.16),
-		trim_mat
-	)
-	_add_box(
-		shell,
-		"ShelfHeroBottomRail",
-		Vector3(-0.85, 0.82, -3.08),
-		Vector3(3.82, 0.10, 0.16),
-		shelf_mat
-	)
-	for rail: int in range(4):
+	for rail: int in range(2):
 		_add_box(
 			shell,
-			"ShelfHeroShelfLip%02d" % rail,
-			Vector3(-0.85, 0.89 + float(rail) * 0.35, -2.96),
-			Vector3(3.70, 0.052, 0.07),
-			trim_mat if rail % 2 == 0 else shelf_mat
+			"StarterUsedShelfRail%02d" % rail,
+			Vector3(-0.80, 1.06 + float(rail) * 0.42, -3.03),
+			Vector3(2.00, 0.07, 0.10),
+			shelf_mat if rail == 0 else trim_mat
 		)
-	for row: int in range(4):
-		for column: int in range(12):
-			var x: float = -2.62 + float(column) * 0.31
-			var y: float = 0.98 + float(row) * 0.31
-			var case_materials: Array[StandardMaterial3D] = [
-				red_case_mat,
-				blue_case_mat,
-				green_case_mat,
-				purple_case_mat,
-				teal_case_mat,
-				paper_mat,
-			]
-			var material: StandardMaterial3D = case_materials[
-				(column + row) % case_materials.size()
-			]
-			_add_product_box(
-				shell,
-				"ShelfHeroCase%02d%02d" % [row, column],
-				Vector3(x, y, -3.03),
-				Vector3(0.16, 0.25, 0.055),
-				material
-			)
-			_add_box(
-				shell,
-				"ShelfHeroSpineStripe%02d%02d" % [row, column],
-				Vector3(x, y + 0.06, -2.995),
-				Vector3(0.11, 0.025, 0.026),
-				gold_mat if column % 2 == 0 else paper_white_mat
-			)
-			if column % 3 == 1:
-				_add_box(
-					shell,
-					"ShelfHeroPriceTag%02d%02d" % [row, column],
-					Vector3(x, y - 0.16, -2.992),
-					Vector3(0.14, 0.048, 0.025),
-					amber_tag_mat
-				)
-	_add_box(
-		shell,
-		"ShelfCategoryUsedGamesCard",
-		Vector3(-2.15, 2.03, -2.98),
-		Vector3(0.82, 0.18, 0.035),
-		gold_mat
-	)
-	_add_label(shell, "ShelfCategoryUsedGamesText", "USED", Vector3(-2.15, 2.08, -2.94), 17)
-	_add_box(
-		shell,
-		"ShelfCategoryStaffPicksCard",
-		Vector3(-0.78, 2.03, -2.98),
-		Vector3(0.96, 0.18, 0.035),
-		gold_mat
-	)
-	_add_label(shell, "ShelfCategoryStaffPicksText", "STAFF", Vector3(-0.78, 2.08, -2.94), 17)
-	_add_box(
-		shell,
-		"ShelfCategoryUnderTenCard",
-		Vector3(0.60, 2.03, -2.98),
-		Vector3(0.82, 0.18, 0.035),
-		gold_mat
-	)
-	_add_label(shell, "ShelfCategoryUnderTenText", "$10", Vector3(0.60, 2.08, -2.94), 17)
-	for index: int in range(4):
+	var case_mats: Array[StandardMaterial3D] = [
+		red_case_mat,
+		blue_case_mat,
+		green_case_mat,
+		paper_mat,
+	]
+	for index: int in range(8):
+		var row: int = index / 4
+		var column: int = index % 4
 		_add_product_box(
 			shell,
-			"ShelfEndcapFaceout%02d" % index,
-			Vector3(-2.88, 0.90 + float(index) * 0.26, -2.62),
-			Vector3(0.28, 0.20, 0.28),
-			[paper_mat, gold_mat, blue_case_mat, green_case_mat][index]
+			"StarterUsedCase%02d" % index,
+			Vector3(-1.52 + float(column) * 0.47, 1.17 + float(row) * 0.42, -3.00),
+			Vector3(0.19, 0.25, 0.055),
+			case_mats[index % case_mats.size()]
 		)
-	_add_box(
-		shell,
-		"ShelfEndcapFaceoutPriceRail",
-		Vector3(-2.89, 0.72, -2.60),
-		Vector3(0.34, 0.07, 0.42),
-		amber_tag_mat
-	)
-	_add_label(
-		shell,
-		"ShelfEndcapFaceoutText",
-		"FRESH\nTRADES",
-		Vector3(-2.89, 1.88, -2.59),
-		16
-	)
+	for index: int in range(3):
+		_add_box(
+			shell,
+			"StarterUsedPriceTag%02d" % index,
+			Vector3(-1.42 + float(index) * 0.72, 0.91, -2.99),
+			Vector3(0.16, 0.045, 0.025),
+			gold_mat
+		)
 
 
-static func _add_stockroom_rescue(
+static func _add_stock_closet_contents(
 	shell: Node3D,
 	trim_mat: StandardMaterial3D,
 	dark_mat: StandardMaterial3D,
-	_stock_box_mat: StandardMaterial3D,
-	paper_mat: StandardMaterial3D,
+	stock_box_mat: StandardMaterial3D,
 	paper_white_mat: StandardMaterial3D,
 	gold_mat: StandardMaterial3D,
-	peg_mat: StandardMaterial3D,
-	mint_mat: StandardMaterial3D,
-	warm_panel_mat: StandardMaterial3D
+	rubber_mat: StandardMaterial3D
 ) -> void:
 	_add_box(
 		shell,
-		"StockroomReceivingBacker",
-		Vector3(3.86, 1.45, -2.25),
-		Vector3(0.055, 1.45, 1.82),
-		peg_mat
+		"StockroomSupplyShelf",
+		Vector3(3.30, 0.88, -2.72),
+		Vector3(1.00, 0.10, 0.34),
+		trim_mat
 	)
-	for index: int in range(6):
-		var z: float = -2.95 + float(index) * 0.28
+	for index: int in range(3):
 		_add_box(
 			shell,
-			"StockroomPegHook%02d" % index,
-			Vector3(3.80, 1.18 + float(index % 3) * 0.17, z),
-			Vector3(0.035, 0.035, 0.16),
-			dark_mat
+			"StockroomSupplyBox%02d" % index,
+			Vector3(3.00 + float(index) * 0.28, 1.04, -2.72),
+			Vector3(0.20, 0.18, 0.22),
+			stock_box_mat
+		)
+		_add_box(
+			shell,
+			"StockroomSupplyLabel%02d" % index,
+			Vector3(3.00 + float(index) * 0.28, 1.04, -2.59),
+			Vector3(0.12, 0.045, 0.018),
+			paper_white_mat
 		)
 	_add_box(
-		shell,
-		"StockroomWorkShelf",
-		Vector3(3.27, 0.96, -2.88),
-		Vector3(1.18, 0.12, 0.32),
-		trim_mat
-	)
-	_add_box(
-		shell,
-		"StockroomWorkShelfLower",
-		Vector3(3.27, 0.52, -2.88),
-		Vector3(1.18, 0.10, 0.32),
-		trim_mat
-	)
-	for index: int in range(4):
-		_add_store_visual(
-			shell,
-			"StockroomShelfBox%02d" % index,
-			StoreVisualKitScript.STOCK_BOX,
-			Vector3(2.90 + float(index) * 0.24, 0.74 + float(index % 2) * 0.25, -2.88),
-			Vector3(0.24, 0.24, 0.24),
-			Vector3(0.0, float(index) * 8.0, 0.0)
-		)
-		_add_plane_prop(
-			shell,
-			"StockroomShelfLabel%02d" % index,
-			Vector3(2.90 + float(index) * 0.24, 0.74 + float(index % 2) * 0.25, -2.72),
-			Vector2(0.14, 0.045),
-			paper_mat
-		)
-	_add_store_visual(
 		shell,
 		"StockroomReceivingTableTop",
-		StoreVisualKitScript.STOCKROOM_TABLE,
-		Vector3(3.10, 0.84, -1.82),
-		Vector3(0.45, 0.45, 0.45),
-		Vector3(0.0, 90.0, 0.0)
-	)
-	_add_store_visual(
-		shell,
-		"StockroomReceivingScale",
-		StoreVisualKitScript.SHIPPING_SCALE,
-		Vector3(3.02, 0.94, -1.72),
-		Vector3(0.72, 0.72, 0.72),
-		Vector3(0.0, 0.0, 0.0)
-	)
-	_add_plane_prop(
-		shell,
-		"StockroomReceivingScaleScreen",
-		Vector3(3.02, 0.985, -1.59),
-		Vector2(0.16, 0.035),
-		mint_mat
-	)
-	_add_store_visual(
-		shell,
-		"StockroomReceivingChecklist",
-		StoreVisualKitScript.CLIPBOARD,
-		Vector3(3.26, 0.94, -1.88),
-		Vector3(0.58, 0.58, 0.58),
-		Vector3(0.0, 18.0, 0.0)
-	)
-	_add_store_visual(
-		shell,
-		"StockroomTapeRoll",
-		StoreVisualKitScript.TAPE_ROLL,
-		Vector3(2.80, 0.95, -1.90),
-		Vector3(0.80, 0.80, 0.80),
-		Vector3(0.0, 12.0, 0.0)
-	)
-	_add_plane_prop(
-		shell,
-		"StockroomBoxLabelFacingPlayer",
-		Vector3(3.04, 0.56, -2.00),
-		Vector2(0.24, 0.08),
-		paper_white_mat
-	)
-	_add_label(shell, "StockroomBoxLabelText", "USED\nGAMES", Vector3(3.04, 0.67, -1.98), 13)
-	_add_store_visual(
-		shell,
-		"StockroomHandTruckFrame",
-		StoreVisualKitScript.HAND_TRUCK,
-		Vector3(3.66, 0.72, -1.52),
-		Vector3(0.82, 0.82, 0.82),
-		Vector3(0.0, -90.0, 0.0)
+		Vector3(3.10, 0.78, -1.84),
+		Vector3(0.82, 0.10, 0.46),
+		dark_mat
 	)
 	_add_box(
 		shell,
-		"StockroomWallTaskCard",
-		Vector3(3.80, 1.86, -1.58),
-		Vector3(0.045, 0.38, 0.58),
-		warm_panel_mat
+		"StockroomReceivingTapeRoll",
+		Vector3(2.82, 0.86, -1.88),
+		Vector3(0.12, 0.08, 0.12),
+		gold_mat
+	)
+	_add_box(
+		shell,
+		"StockroomHandTruckHint",
+		Vector3(3.68, 0.54, -1.58),
+		Vector3(0.10, 0.72, 0.08),
+		rubber_mat
 	)
 	_add_label(
 		shell,
 		"StockroomWallTaskText",
-		"PICK\nSTOCK",
+		"",
 		Vector3(3.74, 1.87, -1.58),
 		18,
 		Vector3(0.0, -90.0, 0.0)
-	)
-	_add_box(
-		shell,
-		"StockroomScannerGlow",
-		Vector3(2.84, 0.82, -1.92),
-		Vector3(0.18, 0.08, 0.16),
-		mint_mat
-	)
-	_add_box(
-		shell,
-		"StockroomFloorArrow",
-		Vector3(2.82, 0.082, -1.66),
-		Vector3(0.50, 0.018, 0.12),
-		gold_mat
-	)
-	_add_box(
-		shell,
-		"StockroomFloorArrowHeadLeft",
-		Vector3(2.62, 0.084, -1.54),
-		Vector3(0.24, 0.018, 0.08),
-		gold_mat
-	)
-	_add_box(
-		shell,
-		"StockroomFloorArrowHeadRight",
-		Vector3(3.02, 0.084, -1.54),
-		Vector3(0.24, 0.018, 0.08),
-		gold_mat
 	)
 
 
@@ -1036,20 +622,22 @@ static func _add_box(
 
 
 static func _add_product_box(
-	parent: Node3D, name: String, position: Vector3, size: Vector3, _material: StandardMaterial3D
+	parent: Node3D, name: String, position: Vector3, size: Vector3, material: StandardMaterial3D
 ) -> Node3D:
-	var index: int = int(abs(position.x * 10.0) + abs(position.y * 10.0) + abs(position.z * 10.0))
-	var data: Dictionary = _STARTER_PRODUCT_VISUALS[index % _STARTER_PRODUCT_VISUALS.size()]
-	var visual: Node3D = ProductVisualFactoryScript.create_visual_for_item(data)
-	if visual == null:
-		push_error("ExpandableStoreShellRuntime: product visual missing for %s" % name)
-		visual = Node3D.new()
+	var visual := Node3D.new()
 	visual.name = name
 	visual.position = position
-	visual.scale = _product_scale_for_size(size)
-	visual.set_meta("visual_source", "product_visual_factory")
+	visual.set_meta("visual_source", "plain_case")
 	visual.add_to_group("product_display")
 	parent.add_child(visual)
+	_add_mesh_box(visual, "Case", Vector3.ZERO, size, material)
+	_add_mesh_box(
+		visual,
+		"SpineStripe",
+		Vector3(0.0, size.y * 0.22, size.z * 0.56),
+		Vector3(size.x * 0.70, size.y * 0.10, size.z * 0.16),
+		_mat(Color(0.92, 0.72, 0.34, 1.0))
+	)
 	return visual
 
 
@@ -1096,14 +684,6 @@ static func _add_plane_prop(
 	mesh_instance.set_meta("visual_source", "authored_surface")
 	parent.add_child(mesh_instance)
 	return mesh_instance
-
-
-static func _product_scale_for_size(size: Vector3) -> Vector3:
-	return Vector3(
-		clampf(size.x / 0.16, 0.38, 1.75),
-		clampf(size.y / 0.24, 0.38, 1.80),
-		clampf(size.z / 0.055, 0.42, 1.70)
-	)
 
 
 static func _add_mesh_box(

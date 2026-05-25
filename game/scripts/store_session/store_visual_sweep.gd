@@ -52,7 +52,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"local_action": "take in the store identity and walk to the counter",
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
-			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -61,13 +61,14 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"name": "checkout_manager_counter",
 			"label": "Checkout and manager counter",
 			"filename": "02_checkout_manager_counter.png",
-			"camera": Vector3(1.36, 1.52, 5.48),
-			"focus": "StoreSessionDayOneCustomer",
+			"camera": Vector3(1.00, 1.52, 5.42),
+			"focus": "ExpandableStoreShell/CheckoutRegisterScreen",
 			"anchors":
 			[
 				"checkout_counter",
 				"StoreSessionDayOneCustomer",
 				"StoreSessionDayEndTrigger",
+				"ExpandableStoreShell/CheckoutRegisterScreen",
 				"ExpandableStoreShell/CheckoutRegisterPractical",
 				"ExpandableStoreShell/FrontDoorPushPlate",
 			],
@@ -85,14 +86,14 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"name": "shelf_wall_product_focus",
 			"label": "Starter display table focus",
 			"filename": "03_shelf_wall_product_focus.png",
-			"camera": Vector3(-0.18, 1.58, 0.02),
-			"focus": "StoreSessionRestockShelf",
+			"camera": Vector3(-2.85, 1.55, 3.35),
+			"focus": "StoreSessionRestockShelf/EmptyOverlay",
 			"anchors":
 			[
 				"StoreSessionRestockShelf",
 				"StoreSessionRestockShelf/ShelfBoard",
 				"StoreSessionRestockShelf/EmptyOverlay",
-				"ExpandableStoreShell/GamesBayLabel",
+				"ExpandableStoreShell/StarterUsedShelfBacker",
 			],
 			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
 			"next_destination": "starter display table",
@@ -482,7 +483,10 @@ static func baseline_review_rules() -> Array[String]:
 ## Returns the automated diff intent and threshold names for review tooling.
 static func diff_review_policy() -> Dictionary:
 	return {
-		"noise_classification": "small renderer/font noise is tracked separately from meaningful hierarchy, framing, and composition changes",
+		"noise_classification": (
+			"small renderer/font noise is tracked separately from meaningful hierarchy, "
+			+ "framing, and composition changes"
+		),
 		"metrics": [
 			"dimensions",
 			"noise_filtered_changed_pixels",

@@ -41,9 +41,12 @@ func test_boot_uses_expandable_store_shell_instead_of_authored_full_room() -> vo
 		"StarterRightWall",
 		"StarterGlassDoorBlocker",
 		"StockroomPartition",
+		"StockroomSideReturn",
+		"StockroomBackPanel",
+		"StockroomDoorJambRight",
 		"ExpansionDoorPanel",
 		"StarterSignLabel",
-		"StockroomLabel",
+		"CheckoutRegisterScreen",
 		"EntryThreshold",
 	]:
 		assert_not_null(shell.get_node_or_null(required), "Shell must include %s" % required)
@@ -70,20 +73,22 @@ func test_boot_uses_expandable_store_shell_instead_of_authored_full_room() -> vo
 		assert_false(old_door_mesh.visible, "Generated shell owns the visible storefront door")
 
 
-func test_boot_shell_is_sparse_leased_room_without_dense_clutter() -> void:
+func test_boot_shell_has_curated_retail_fixtures_without_old_placeholder_roots() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the compact expandable store shell")
 	if shell == null:
 		return
+	for required: String in [
+		"CheckoutRegisterDrawer",
+		"CheckoutRegisterScreen",
+		"StarterUsedShelfBacker",
+		"StarterUsedCase00",
+		"StockroomSupplyShelf",
+		"StockroomReceivingTableTop",
+	]:
+		assert_not_null(shell.get_node_or_null(required), "Starter shell must include %s" % required)
 	for removed: String in [
 		"SpawnForegroundTradeBin",
-		"CheckoutImpulseRack",
-		"ShelfHeroBacker",
-		"ShelfHeroHeaderRail",
-		"StockroomReceivingBacker",
-		"StockroomWorkShelf",
-		"StockroomWallTaskCard",
-		"StockroomHandTruckFrame",
 		"StarterRegisterCounter",
 		"StarterRegisterScreen",
 		"BackWallLowerShelf",
@@ -92,47 +97,51 @@ func test_boot_shell_is_sparse_leased_room_without_dense_clutter() -> void:
 		"CenterDisplayGameA",
 		"CenterDisplayGameB",
 		"FeaturedBoxArtBacking00",
+		"ShelfHeroBacker",
+		"ShelfHeroCase0000",
+		"StockroomReceivingBacker",
+		"StockroomWorkShelf",
+		"CheckoutReceiptPrinterBase",
 		"StockroomBoxA",
 		"StockroomBoxB",
 	]:
 		assert_null(shell.get_node_or_null(removed), "Starter shell must not include %s" % removed)
 
 
-func test_boot_shell_dense_merchandise_count_is_capped_by_owned_inventory() -> void:
+func test_boot_shell_merchandise_density_reads_as_used_game_store() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the compact expandable store shell")
 	if shell == null:
 		return
 	var merchandise_count: int = 0
 	for prefix: String in [
-		"ShelfHeroCase",
-		"ShelfHeroSpineStripe",
-		"ShelfHeroPriceTag",
-		"SpawnForegroundTradeCase",
-		"StarterShelfCase",
-		"StarterShelfTopCase",
-		"CheckoutImpulseFace",
-		"StockroomShelfBox",
-		"FeaturedBoxArtBacking",
+		"StarterUsedCase",
+		"StarterUsedPriceTag",
+		"StockroomSupplyBox",
+		"StockroomSupplyLabel",
 	]:
 		merchandise_count += _count_children_with_prefix(shell, prefix)
-	assert_lte(merchandise_count, 3, "Boot shell must not exceed starter inventory density")
+	assert_gte(merchandise_count, 10, "Boot shell needs a small amount of visible stock")
+	assert_lte(merchandise_count, 18, "Boot shell must stay restrained and intentional")
 
 
-func test_checkout_counter_is_not_duplicated_inside_boot_shell() -> void:
+func test_checkout_counter_has_visible_register_cluster_inside_boot_shell() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the compact expandable store shell")
 	if shell == null:
 		return
-	for removed: String in [
-		"CheckoutReceiptPrinterBase",
-		"CheckoutReceiptPrinterPaper",
-		"CheckoutBarcodeScannerHandle",
-		"CheckoutBarcodeScannerHead",
-		"CheckoutTradeInForm00",
+	for required: String in [
+		"CheckoutRegisterDrawer",
+		"CheckoutRegisterCashSlot",
+		"CheckoutRegisterNeck",
+		"CheckoutRegisterScreen",
+		"CheckoutRegisterScreenBezel",
+		"CheckoutRegisterKeypad",
+		"CheckoutReceiptSlip",
+		"CheckoutCounterPaperStack",
 		"CheckoutManagerNamePlate",
 	]:
-		assert_null(shell.get_node_or_null(removed), "StoreLayoutRuntime owns %s now" % removed)
+		assert_not_null(shell.get_node_or_null(required), "Checkout register prop missing: %s" % required)
 
 
 func test_stockroom_path_keeps_marker_without_workbench_clutter() -> void:
@@ -142,9 +151,12 @@ func test_stockroom_path_keeps_marker_without_workbench_clutter() -> void:
 		return
 	for required: String in [
 		"StockroomPartition",
+		"StockroomSideReturn",
+		"StockroomBackPanel",
 		"StockroomPost",
 		"StockroomHeader",
-		"StockroomLabel",
+		"StockroomDoorJambRight",
+		"StockroomDoorLintel",
 		"StockroomFloorTape",
 	]:
 		assert_not_null(shell.get_node_or_null(required), "Stockroom marker missing: %s" % required)
@@ -157,9 +169,10 @@ func test_manager_customer_proxy_reads_as_person_silhouette() -> void:
 		return
 	for required: String in [
 		"Body",
+		"ApronPanel",
 		"Head",
 		"HairCap",
-		"FaceBand",
+		"EyeLine",
 		"ArmLeft",
 		"ArmRight",
 		"LegLeft",
@@ -194,8 +207,9 @@ func test_shell_signs_do_not_render_mirrored_from_the_back_side() -> void:
 	for label_path: String in [
 		"StarterSignLabel",
 		"GamesBayLabel",
-		"StockroomLabel",
 		"ExpansionLabel",
+		"CheckoutTradeInsText",
+		"StockroomWallTaskText",
 	]:
 		var label: Label3D = shell.get_node_or_null(label_path) as Label3D
 		assert_not_null(label, "%s must exist" % label_path)
@@ -204,24 +218,41 @@ func test_shell_signs_do_not_render_mirrored_from_the_back_side() -> void:
 		assert_false(label.double_sided, "%s must not mirror from behind" % label_path)
 
 
-func test_customer_facing_product_props_are_absent_from_shell() -> void:
+func test_customer_facing_product_props_are_present_but_curated() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the compact expandable store shell")
 	if shell == null:
 		return
-	for prop_path: String in [
+	for required: String in [
+		"StarterUsedCase00",
+		"StarterUsedCase07",
+		"StockroomSupplyBox00",
+		"StockroomSupplyBox02",
+	]:
+		assert_not_null(shell.get_node_or_null(required), "Starter shell product prop missing: %s" % required)
+	for removed: String in [
 		"StarterShelfCase00",
 		"StarterShelfTopCase00",
 		"CenterDisplayConsole",
 		"CenterDisplayGameA",
 		"FeaturedBoxArtBacking00",
 		"SpawnForegroundTradeCase00",
-		"CheckoutImpulseFace00",
-		"ShelfHeroCase0104",
 		"ShelfEndcapFaceout00",
-		"StockroomShelfBox00",
+		"CheckoutImpulseFace00",
 	]:
-		assert_null(shell.get_node_or_null(prop_path), "Starter shell must not own %s" % prop_path)
+		assert_null(shell.get_node_or_null(removed), "Starter shell must not own old prop %s" % removed)
+
+
+func test_boot_shell_avoids_product_name_spam() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the compact expandable store shell")
+	if shell == null:
+		return
+	var visible_text_count: int = 0
+	for label: Label3D in _collect_visible_labels(shell):
+		if label.text.strip_edges() != "":
+			visible_text_count += 1
+	assert_lte(visible_text_count, 2, "Generated store shell should not spam product/category labels")
 
 
 func _assert_position_near(path: String, expected: Vector3, tolerance: float) -> void:
@@ -240,3 +271,12 @@ func _count_children_with_prefix(parent: Node, prefix: String) -> int:
 		if str(child.name).begins_with(prefix):
 			total += 1
 	return total
+
+
+func _collect_visible_labels(parent: Node) -> Array[Label3D]:
+	var labels: Array[Label3D] = []
+	for child: Node in parent.get_children():
+		if child is Label3D and (child as Label3D).visible:
+			labels.append(child as Label3D)
+		labels.append_array(_collect_visible_labels(child))
+	return labels

@@ -17,51 +17,58 @@ static func configure_customer_proxy(proxy_root: Node3D, is_manager_role: bool) 
 	_configure_capsule(
 		proxy_root,
 		"Body",
-		0.22,
-		0.92,
-		Vector3(0.0, 0.78, 0.0),
+		0.20,
+		0.98,
+		Vector3(0.0, 0.80, 0.0),
 		Color(0.16, 0.29, 0.42, 1.0)
+	)
+	_configure_box(
+		proxy_root,
+		"ApronPanel",
+		Vector3(0.30, 0.42, 0.026),
+		Vector3(0.0, 0.88, 0.155),
+		Color(0.08, 0.18, 0.28, 1.0)
 	)
 	_configure_sphere(
 		proxy_root,
 		"Head",
-		0.18,
-		0.34,
-		Vector3(0.0, 1.38, 0.0),
+		0.16,
+		0.29,
+		Vector3(0.0, 1.39, 0.0),
 		Color(0.72, 0.59, 0.50, 1.0)
 	)
 	_configure_sphere(
 		proxy_root,
 		"HairCap",
-		0.19,
-		0.16,
-		Vector3(0.0, 1.53, -0.01),
-		Color(0.10, 0.07, 0.05, 1.0)
+		0.155,
+		0.075,
+		Vector3(0.0, 1.515, -0.015),
+		Color(0.075, 0.055, 0.045, 1.0)
 	)
 	_configure_box(
 		proxy_root,
-		"FaceBand",
-		Vector3(0.23, 0.055, 0.024),
-		Vector3(0.0, 1.38, 0.17),
-		Color(0.84, 0.68, 0.55, 1.0)
+		"EyeLine",
+		Vector3(0.18, 0.022, 0.018),
+		Vector3(0.0, 1.405, 0.157),
+		Color(0.07, 0.055, 0.045, 1.0)
 	)
 	_configure_capsule(
 		proxy_root,
 		"ArmLeft",
-		0.055,
-		0.62,
-		Vector3(-0.29, 0.78, 0.01),
+		0.05,
+		0.58,
+		Vector3(-0.255, 0.78, 0.015),
 		Color(0.57, 0.46, 0.38, 1.0),
-		Vector3(0.0, 0.0, -7.0)
+		Vector3(0.0, 0.0, -5.0)
 	)
 	_configure_capsule(
 		proxy_root,
 		"ArmRight",
-		0.055,
-		0.62,
-		Vector3(0.29, 0.78, 0.01),
+		0.05,
+		0.58,
+		Vector3(0.255, 0.78, 0.015),
 		Color(0.57, 0.46, 0.38, 1.0),
-		Vector3(0.0, 0.0, 7.0)
+		Vector3(0.0, 0.0, 5.0)
 	)
 	_configure_capsule(
 		proxy_root,
@@ -96,31 +103,31 @@ static func configure_customer_proxy(proxy_root: Node3D, is_manager_role: bool) 
 	_configure_box(
 		proxy_root,
 		"Badge",
-		Vector3(0.14, 0.09, 0.022),
-		Vector3(-0.115, 0.99, 0.145),
+		Vector3(0.075, 0.055, 0.018),
+		Vector3(-0.105, 1.02, 0.168),
 		Color(0.98, 0.78, 0.30, 1.0)
 	)
 	_configure_box(
 		proxy_root,
 		"NameTag",
-		Vector3(0.17, 0.07, 0.022),
-		Vector3(0.12, 1.05, 0.145),
+		Vector3(0.13, 0.045, 0.018),
+		Vector3(0.095, 1.045, 0.168),
 		Color(0.93, 0.85, 0.62, 1.0)
 	)
 	_configure_box(
 		proxy_root,
 		"Lanyard",
-		Vector3(0.05, 0.32, 0.022),
-		Vector3(0.0, 0.93, 0.148),
+		Vector3(0.032, 0.22, 0.018),
+		Vector3(0.0, 0.93, 0.169),
 		Color(0.96, 0.72, 0.26, 1.0)
 	)
 	_configure_box(
 		proxy_root,
 		"Clipboard",
-		Vector3(0.23, 0.32, 0.034),
-		Vector3(0.32, 0.62, 0.14),
+		Vector3(0.16, 0.26, 0.028),
+		Vector3(0.285, 0.58, 0.115),
 		Color(0.50, 0.35, 0.21, 1.0),
-		Vector3(0.0, 0.0, -8.0)
+		Vector3(0.0, 0.0, -12.0)
 	)
 	set_manager_details_visible(proxy_root, is_manager_role)
 
@@ -135,7 +142,7 @@ static func set_manager_details_visible(proxy_root: Node, is_manager_role: bool)
 
 
 static func _remove_stale_parts(proxy_root: Node3D) -> void:
-	for stale_name: String in ["Marker"]:
+	for stale_name: String in ["Marker", "FaceBand"]:
 		var stale: Node = proxy_root.get_node_or_null(stale_name)
 		if stale != null:
 			stale.queue_free()

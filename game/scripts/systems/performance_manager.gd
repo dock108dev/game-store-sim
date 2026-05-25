@@ -1,3 +1,4 @@
+# gdlint:disable=max-public-methods
 ## Monitors frame performance and manages caching for market value calculations.
 class_name PerformanceManager
 extends Node

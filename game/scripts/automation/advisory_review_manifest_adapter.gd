@@ -105,7 +105,9 @@ static func _normalize_sweep_beats(manifest: Dictionary, artifact_dir: String) -
 	return beats
 
 
-static func _normalize_manual_route_beats(manifest: Dictionary, artifact_dir: String) -> Array[Dictionary]:
+static func _normalize_manual_route_beats(
+	manifest: Dictionary, artifact_dir: String
+) -> Array[Dictionary]:
 	var beats: Array[Dictionary] = []
 	var capture_dir: String = str(manifest.get("capture_dir", ""))
 	if capture_dir.is_empty():
@@ -131,7 +133,9 @@ static func _normalize_manual_route_beats(manifest: Dictionary, artifact_dir: St
 	return beats
 
 
-static func _normalize_gallery_beats(manifest: Dictionary, artifact_dir: String) -> Array[Dictionary]:
+static func _normalize_gallery_beats(
+	manifest: Dictionary, artifact_dir: String
+) -> Array[Dictionary]:
 	var captures: Array = manifest.get("captures", []) as Array
 	var beats: Array[Dictionary] = []
 	for beat_variant: Variant in manifest.get("state_beats", []) as Array:
@@ -159,7 +163,9 @@ static func _normalize_gallery_beats(manifest: Dictionary, artifact_dir: String)
 	return beats
 
 
-static func _normalize_video_frames(manifest: Dictionary, artifact_dir: String) -> Array[Dictionary]:
+static func _normalize_video_frames(
+	manifest: Dictionary, artifact_dir: String
+) -> Array[Dictionary]:
 	var video_path: String = _resolve_path(
 		artifact_dir,
 		str(manifest.get("video_path", manifest.get("movie_artifact", "")))

@@ -1,3 +1,4 @@
+# gdlint:disable=class-definitions-order
 ## Persisted player settings (volume, resolution, controls).
 extends Node
 

@@ -230,34 +230,73 @@ static func _append_capture_quality_findings(findings: Array[Dictionary], beat: 
 		next_id += 1
 	if path.is_empty():
 		findings.append(
-			_schema_finding(str(beat.get("id", "")), str(beat.get("frame_reference", "")), "Artifact path is missing.", "Every reviewed beat or frame must point to an artifact path.", ACTION_INSPECT_ARTIFACT, next_id)
+			_schema_finding(
+				str(beat.get("id", "")),
+				str(beat.get("frame_reference", "")),
+				"Artifact path is missing.",
+				"Every reviewed beat or frame must point to an artifact path.",
+				ACTION_INSPECT_ARTIFACT,
+				next_id
+			)
 		)
 		return
 	if not FileAccess.file_exists(path):
-		var criterion_missing: String = "capture_quality.missing_video" if kind == "frame" else "capture_quality.missing_image"
+		var criterion_missing: String = (
+			"capture_quality.missing_video"
+			if kind == "frame"
+			else "capture_quality.missing_image"
+		)
 		findings.append(
-			_capture_finding(beat, criterion_missing, "Expected artifact is missing; no visual observation was made.", "Artifact file must exist before advisory interpretation.", ACTION_RERUN_CAPTURE, next_id)
+			_capture_finding(
+				beat,
+				criterion_missing,
+				"Expected artifact is missing; no visual observation was made.",
+				"Artifact file must exist before advisory interpretation.",
+				ACTION_RERUN_CAPTURE,
+				next_id
+			)
 		)
 		return
 	if kind == "frame":
 		var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 		if file == null or file.get_length() <= 0:
 			findings.append(
-				_capture_finding(beat, "capture_quality.unreadable_video", "Video artifact is empty or unreadable; no visual observation was made.", "Video artifact must be readable and non-empty.", ACTION_RERUN_CAPTURE, next_id)
+				_capture_finding(
+					beat,
+					"capture_quality.unreadable_video",
+					"Video artifact is empty or unreadable; no visual observation was made.",
+					"Video artifact must be readable and non-empty.",
+					ACTION_RERUN_CAPTURE,
+					next_id
+				)
 			)
 		if file != null:
 			file.close()
 		return
 	if path.to_lower().ends_with(".png") and not _has_png_signature(path):
 		findings.append(
-			_capture_finding(beat, "capture_quality.unreadable_image", "Image artifact is unreadable or corrupt; no visual observation was made.", "Image artifact must load as a readable image.", ACTION_RERUN_CAPTURE, next_id)
+			_capture_finding(
+				beat,
+				"capture_quality.unreadable_image",
+				"Image artifact is unreadable or corrupt; no visual observation was made.",
+				"Image artifact must load as a readable image.",
+				ACTION_RERUN_CAPTURE,
+				next_id
+			)
 		)
 		return
 	var image := Image.new()
 	var load_err: int = image.load(path)
 	if load_err != OK or image.get_width() <= 0 or image.get_height() <= 0:
 		findings.append(
-			_capture_finding(beat, "capture_quality.unreadable_image", "Image artifact is unreadable or corrupt; no visual observation was made.", "Image artifact must load as a readable image.", ACTION_RERUN_CAPTURE, next_id)
+			_capture_finding(
+				beat,
+				"capture_quality.unreadable_image",
+				"Image artifact is unreadable or corrupt; no visual observation was made.",
+				"Image artifact must load as a readable image.",
+				ACTION_RERUN_CAPTURE,
+				next_id
+			)
 		)
 
 
@@ -270,7 +309,9 @@ static func _finding_from_observation(
 	var beat: Dictionary = _beat_by_id(normalized_manifest.get("beats", []) as Array, beat_id)
 	var confidence: float = clampf(float(observation.get("confidence", 0.0)), 0.0, 1.0)
 	var severity: String = _valid_severity(str(observation.get("severity", SEVERITY_INFO)))
-	var needs_human: bool = confidence < 0.5 or bool(observation.get("needs_human_interpretation", false))
+	var needs_human: bool = (
+		confidence < 0.5 or bool(observation.get("needs_human_interpretation", false))
+	)
 	if needs_human:
 		severity = SEVERITY_INFO
 	var category: String = _valid_category(str(observation.get("category", "")))
@@ -286,9 +327,15 @@ static func _finding_from_observation(
 		"artifact_path": str(observation.get("artifact_path", beat.get("artifact_path", ""))),
 		"frame_reference": str(observation.get("frame_reference", beat.get("frame_reference", ""))),
 		"observation": str(observation.get("observation", "")),
-		"expected_condition": str(observation.get("expected_condition", beat.get("expected_condition", ""))),
-		"recommendation": str(observation.get("recommendation", "Inspect the artifact before making a design change.")),
-		"next_human_action": _valid_action(str(observation.get("next_human_action", ACTION_INSPECT_ARTIFACT))),
+		"expected_condition": str(
+			observation.get("expected_condition", beat.get("expected_condition", ""))
+		),
+		"recommendation": str(
+			observation.get("recommendation", "Inspect the artifact before making a design change.")
+		),
+		"next_human_action": _valid_action(
+			str(observation.get("next_human_action", ACTION_INSPECT_ARTIFACT))
+		),
 		"visual_observation": true,
 		"secondary_context": _is_secondary_context(normalized_manifest, beat, observation),
 	}

@@ -9,7 +9,8 @@ const REPORT_SCRIPT: GDScript = preload(
 )
 const COUNTER_KEYS: Array[String] = [
 	"customer_entered_total", "customer_left_total", "customer_ready_to_purchase_total",
-	"customer_register_arrival_total", "customer_reached_checkout_total", "customer_despawn_requested_total",
+	"customer_register_arrival_total", "customer_reached_checkout_total",
+	"customer_despawn_requested_total",
 	"customer_state_changed_total", "checkout_queue_ready_total", "checkout_completed_total",
 	"customer_abandoned_queue_total", "queue_changed_total", "queue_advanced_total",
 	"queue_enqueue_attempt_total", "queue_enqueue_success_total", "queue_enqueue_rejected_total",
@@ -367,7 +368,8 @@ func _poll_gauges() -> void:
 func _classify_failures() -> void:
 	var now_msec: int = Time.get_ticks_msec()
 	if int(_queue_state.get("size", 0)) > 0:
-		var idle_seconds: float = float(now_msec - int(_queue_state.get("last_progress_msec", now_msec))) / 1000.0
+		var idle_msec: int = now_msec - int(_queue_state.get("last_progress_msec", now_msec))
+		var idle_seconds: float = float(idle_msec) / 1000.0
 		if idle_seconds > QUEUE_DEADLOCK_SECONDS:
 			_inc_once("queue_deadlock_total", "queue_deadlock")
 			_report_once("queue_deadlock", "queue deadlock idle_seconds=%.1f" % idle_seconds)

@@ -1,3 +1,4 @@
+# gdlint:disable=max-returns
 ## Casts a ray from the active camera through the screen center to detect
 ## interactables.
 ##

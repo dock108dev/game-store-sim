@@ -130,7 +130,10 @@ func _run() -> Dictionary:
 	_check(_inventory.get_stock(store_id).size() >= 0, "stock must never be negative")
 	_check(cash_after >= 0.0, "cash must never be negative")
 	_check(_near(cash_after, cash_before + SALE_PRICE), "cash must increase by sale price")
-	_check(_near(float(save_data.get("daily_revenue_total", 0.0)), SALE_PRICE), "daily revenue must match sale")
+	_check(
+		_near(float(save_data.get("daily_revenue_total", 0.0)), SALE_PRICE),
+		"daily revenue must match sale"
+	)
 	_check(int(save_data.get("items_sold_today", 0)) == 1, "items sold today must be one")
 	_check(_daily_summary_matches(_economy.get_daily_summary()), "daily summary must show one sale")
 	_check(_save_transactions_match(save_data), "save transactions must show one sale")

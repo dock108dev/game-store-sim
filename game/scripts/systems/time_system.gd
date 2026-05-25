@@ -1,3 +1,4 @@
+# gdlint:disable=max-public-methods
 ## Manages in-game time progression, day phases, and speed controls.
 class_name TimeSystem
 extends Node

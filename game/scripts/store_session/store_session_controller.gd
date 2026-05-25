@@ -133,7 +133,9 @@ const STORE_SESSION_CONTEXT_ROOT_NODES: Array[StringName] = (
 const _STORE_SESSION_REFERENCE_VISIBLE_PATHS: Array[String] = (
 	StoreVisualScopeProfileScript.REFERENCE_VISIBLE_PATHS
 )
-const STORE_SESSION_KEEP_ROOT_NODES: Array[StringName] = StoreVisualScopeProfileScript.KEEP_ROOT_NODES
+const STORE_SESSION_KEEP_ROOT_NODES: Array[StringName] = (
+	StoreVisualScopeProfileScript.KEEP_ROOT_NODES
+)
 
 const StoreDebugOverlayScript: GDScript = preload(
 	"res://game/scripts/store_session/store_debug_overlay.gd"

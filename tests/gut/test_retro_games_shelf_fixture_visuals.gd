@@ -241,6 +241,51 @@ func test_store_restock_shelf_keeps_objective_target_inside_merch_fixture() -> v
 	root.free()
 
 
+func test_store_restock_shelf_table_is_grounded_with_visible_supports() -> void:
+	var root: Node3D = _instantiate_store()
+	if root == null:
+		return
+	var shelf: Node3D = root.get_node_or_null("StoreSessionRestockShelf") as Node3D
+	assert_not_null(shelf, "StoreSessionRestockShelf must exist")
+	if shelf == null:
+		root.free()
+		return
+	var board: MeshInstance3D = shelf.get_node_or_null("ShelfBoard") as MeshInstance3D
+	assert_not_null(board, "StoreSessionRestockShelf/ShelfBoard must exist")
+	if board == null:
+		root.free()
+		return
+	var board_bottom: float = _scene_position(board).y - _box_world_size(board).y * 0.5
+	var support_count: int = 0
+	for node_path: String in [
+		"TableLegFrontLeft",
+		"TableLegFrontRight",
+		"TableLegBackLeft",
+		"TableLegBackRight",
+		"TableFrontApron",
+	]:
+		var support: MeshInstance3D = shelf.get_node_or_null(node_path) as MeshInstance3D
+		assert_not_null(support, "Restock display support missing: %s" % node_path)
+		if support == null:
+			continue
+		support_count += 1
+		var support_size: Vector3 = _box_world_size(support)
+		var support_pos: Vector3 = _scene_position(support)
+		if node_path.begins_with("TableLeg"):
+			assert_lte(
+				support_pos.y - support_size.y * 0.5,
+				0.05,
+				"%s must reach the floor so the display table does not float" % node_path
+			)
+		assert_lte(
+			support_pos.y + support_size.y * 0.5,
+			board_bottom + 0.10,
+			"%s must tuck under the table surface" % node_path
+		)
+	assert_gte(support_count, 5, "Restock display must have four legs and a front apron")
+	root.free()
+
+
 func _fixture_rhythm_paths() -> Array[String]:
 	return [
 		"ReadabilityProps/ProductDisplayRows/ShelfProductLip",

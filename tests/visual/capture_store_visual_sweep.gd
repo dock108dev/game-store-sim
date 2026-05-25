@@ -23,6 +23,7 @@ func _init() -> void:
 
 
 func _run() -> void:
+	await _wait_for_settings_ready()
 	if DisplayServer.get_name() == "headless":
 		_fail("Store visual sweep requires a display-backed viewport; do not use --headless.")
 		return
@@ -36,10 +37,10 @@ func _run() -> void:
 	if _store_root == null:
 		_fail("Store scene root must be Node3D: %s" % SCENE_PATH)
 		return
-	root.add_child(_store_root)
+	await _wait_until_store_enters_tree()
 	await _wait_frames(SETTLE_FRAMES)
 	_add_capture_camera()
-	await _wait_frames(2)
+	await _wait_frames(24)
 
 	for row: Dictionary in StoreVisualSweepScript.rows():
 		var row_result: Dictionary = await _capture_row(row)
@@ -101,7 +102,10 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	_camera.global_position = row.get("camera", Vector3.ZERO) as Vector3
 	_camera.look_at(focus.global_position, Vector3.UP)
 	_camera.current = true
-	await _wait_frames(SETTLE_FRAMES)
+	if int(row.get("index", 0)) == 1:
+		await _wait_frames(18)
+	else:
+		await _wait_frames(SETTLE_FRAMES)
 
 	var result: Dictionary = StoreVisualSweepScript.save_viewport_png(
 		root,
@@ -109,6 +113,7 @@ func _capture_row(row: Dictionary) -> Dictionary:
 		str(row.get("filename", "")),
 		false
 	)
+	result = _normalize_capture_resolution(result)
 	result["beat"] = str(row.get("name", ""))
 	result["visual_scope_mode"] = str(row.get("visual_scope_mode", ""))
 	result["camera_fov"] = StoreVisualSweepScript.CAPTURE_CAMERA_FOV
@@ -128,6 +133,25 @@ func _capture_row(row: Dictionary) -> Dictionary:
 		)
 	if not FileAccess.file_exists(str(result.get("path", ""))):
 		return _capture_error(row, "Capture file missing: %s" % row.get("filename", ""))
+	return result
+
+
+func _normalize_capture_resolution(result: Dictionary) -> Dictionary:
+	if not bool(result.get("ok", false)):
+		return result
+	var expected_size: Vector2i = StoreVisualSweepScript.CAPTURE_RESOLUTION
+	if int(result.get("width", 0)) == expected_size.x \
+			and int(result.get("height", 0)) == expected_size.y:
+		return result
+	var path: String = str(result.get("path", ""))
+	var image := Image.new()
+	if image.load(path) != OK:
+		return result
+	image.resize(expected_size.x, expected_size.y, Image.INTERPOLATE_LANCZOS)
+	if image.save_png(path) != OK:
+		return result
+	result["width"] = expected_size.x
+	result["height"] = expected_size.y
 	return result
 
 
@@ -163,6 +187,28 @@ func _capture_error(row: Dictionary, message: String) -> Dictionary:
 func _wait_frames(count: int) -> void:
 	for _i: int in range(count):
 		await process_frame
+
+
+func _wait_until_store_enters_tree() -> void:
+	await _wait_frames(6)
+	_request_store_add()
+	for _i: int in range(60):
+		if _store_root != null and _store_root.get_parent() == root:
+			return
+		await process_frame
+	_fail("Store scene did not enter the visual sweep tree.")
+	return
+
+
+func _request_store_add() -> void:
+	if _store_root != null and _store_root.get_parent() == null:
+		root.add_child.call_deferred(_store_root)
+
+
+func _wait_for_settings_ready() -> void:
+	var settings: Node = _autoload("Settings")
+	if settings != null and not settings.is_node_ready():
+		await settings.ready
 
 
 func _autoload(singleton_name: String) -> Node:

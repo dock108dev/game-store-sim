@@ -1,3 +1,4 @@
+# gdlint:disable=max-file-lines
 ## 3D customer NPC that navigates the store, browses items, and makes purchases.
 class_name Customer
 extends CharacterBody3D

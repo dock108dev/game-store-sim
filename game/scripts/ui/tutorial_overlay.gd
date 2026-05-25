@@ -1,3 +1,4 @@
+# gdlint:disable=class-definitions-order
 ## Non-blocking bottom bar that shows tutorial step prompts during gameplay.
 class_name TutorialOverlay
 extends CanvasLayer

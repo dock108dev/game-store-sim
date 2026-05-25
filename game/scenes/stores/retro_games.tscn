@@ -4653,6 +4653,31 @@ transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 1.1, 0)
 mesh = SubResource("shelf_board_wide_mesh")
 surface_material_override/0 = ExtResource("10")
 
+[node name="TableLegFrontLeft" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, -1.12, 0.52, 0.24)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = ExtResource("10")
+
+[node name="TableLegFrontRight" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, 1.12, 0.52, 0.24)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = ExtResource("10")
+
+[node name="TableLegBackLeft" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, -1.12, 0.52, -0.24)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = ExtResource("10")
+
+[node name="TableLegBackRight" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, 1.12, 0.52, -0.24)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = ExtResource("10")
+
+[node name="TableFrontApron" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(2.9, 0, 0, 0, 0.55, 0, 0, 0, 0.75, 0, 0.88, 0.285)
+mesh = SubResource("retail_shelf_lip_mesh")
+surface_material_override/0 = SubResource("product_shelf_lip_mat")
+
 [node name="RestockCrate" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(0.35, 0, 0, 0, 0.28, 0, 0, 0, 0.35, 0, 0.5, 0)
 mesh = SubResource("backordered_console_box_mesh")

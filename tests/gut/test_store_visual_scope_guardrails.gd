@@ -27,7 +27,6 @@ const REQUIRED_STORE_SESSION_KEEP_ROOTS: Array[String] = [
 const REQUIRED_VISIBLE_SIGNS: Array[String] = [
 	"ExpandableStoreShell/StarterSignLabel",
 	"ExpandableStoreShell/GamesBayLabel",
-	"ExpandableStoreShell/StockroomLabel",
 	"ExpandableStoreShell/ExpansionLabel",
 ]
 
@@ -243,14 +242,15 @@ func test_objective_targets_keep_visible_context_bundles() -> void:
 		[
 			"BackroomUtilityLight",
 			"ExpandableStoreShell/StockroomPartition",
-			"ExpandableStoreShell/StockroomLabel",
+			"ExpandableStoreShell/StockroomSideReturn",
+			"ExpandableStoreShell/StockroomBackPanel",
 			"StoreSessionBackroomPickup/StockBox",
 			"StoreSessionBackroomPickup/StockBoxLabel",
 		],
 		"StoreSessionRestockShelf":
 		[
 			"ExpandableStoreShell/StarterBackWall",
-			"ExpandableStoreShell/GamesBayLabel",
+			"ExpandableStoreShell/StarterUsedShelfBacker",
 			"StoreSessionRestockShelf/ShelfBoard",
 			"StoreSessionRestockShelf/EmptyOverlay",
 		],

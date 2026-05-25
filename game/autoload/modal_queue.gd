@@ -1,3 +1,4 @@
+# gdlint:disable=class-definitions-order
 ## Priority-ordered queue for ModalPanel-derived panels.
 ##
 ## Coordinates which panel currently owns the CTX_MODAL frame on InputFocus so

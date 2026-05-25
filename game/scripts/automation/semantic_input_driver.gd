@@ -1,3 +1,4 @@
+# gdlint:disable=max-returns
 ## Drives player-like movement, aim, focus, and interaction by semantic target.
 class_name SemanticInputDriver
 extends Node
@@ -7,7 +8,9 @@ signal target_focused(target_id: StringName, target: Interactable)
 signal target_interacted(target_id: StringName, target: Interactable)
 signal target_failed(target_id: StringName, reason: String)
 
-const REGISTRY_SCRIPT: GDScript = preload("res://game/scripts/automation/semantic_target_registry.gd")
+const REGISTRY_SCRIPT: GDScript = preload(
+	"res://game/scripts/automation/semantic_target_registry.gd"
+)
 const DEFAULT_OPTIONS: Dictionary = {
 	"timeout_sec": 2.0,
 	"stand_distance": 1.6,
@@ -209,7 +212,9 @@ func _apply_aim(player: Node3D, camera: Camera3D, aim_position: Vector3) -> void
 		player.force_update_transform()
 	var horizontal_distance: float = maxf(0.001, flat.length())
 	var pitch: float = atan2(to_target.y, horizontal_distance)
-	camera.rotation.x = clampf(pitch, -StorePlayerBody.PITCH_LIMIT_RAD, StorePlayerBody.PITCH_LIMIT_RAD)
+	camera.rotation.x = clampf(
+		pitch, -StorePlayerBody.PITCH_LIMIT_RAD, StorePlayerBody.PITCH_LIMIT_RAD
+	)
 	camera.force_update_transform()
 
 

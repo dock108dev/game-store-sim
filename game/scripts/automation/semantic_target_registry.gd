@@ -184,7 +184,9 @@ func _selector_from_target(target: Variant) -> Dictionary:
 
 
 func _merge_selector_arrays(base: Dictionary, overlay: Dictionary) -> void:
-	for field: String in [FIELD_GROUPS, FIELD_FALLBACK_OBJECTIVE_IDS, FIELD_FALLBACK_NAMES, FIELD_FALLBACK_PATHS]:
+	for field: String in [
+		FIELD_GROUPS, FIELD_FALLBACK_OBJECTIVE_IDS, FIELD_FALLBACK_NAMES, FIELD_FALLBACK_PATHS
+	]:
 		var values: Array = []
 		for value: Variant in base.get(field, []):
 			if not values.has(value):
@@ -307,7 +309,9 @@ func _candidates_by_paths(selector: Dictionary, root: Node) -> Array[Dictionary]
 	return candidates
 
 
-func _resolve_candidates(selector: Dictionary, candidates: Array[Dictionary], target: Variant) -> Dictionary:
+func _resolve_candidates(
+	selector: Dictionary, candidates: Array[Dictionary], target: Variant
+) -> Dictionary:
 	var unique: Array[Dictionary] = []
 	var seen: Dictionary = {}
 	for entry: Dictionary in candidates:

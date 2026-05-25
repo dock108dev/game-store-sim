@@ -1,3 +1,4 @@
+# gdlint:disable=class-definitions-order
 ## Manages the first-play tutorial sequence and contextual tip scheduling.
 class_name TutorialSystem
 extends Node

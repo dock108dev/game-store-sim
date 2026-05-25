@@ -114,7 +114,10 @@ func _run() -> Dictionary:
 	_check(_signal_index("item_stocked") >= 0, "item_stocked must fire")
 	_check(_signal_index("item_sold") >= 0, "item_sold must fire")
 	_check(_signal_index("customer_purchased") >= 0, "customer_purchased must fire")
-	_check(_signal_index("item_sold") < _signal_index("customer_purchased"), "sale signals must be ordered")
+	_check(
+		_signal_index("item_sold") < _signal_index("customer_purchased"),
+		"sale signals must be ordered"
+	)
 	_check(_slot.remove_count == 1, "visual shelf slot must remove exactly once")
 	_check(_inventory.get_item(String(ITEM_INSTANCE_ID)) == null, "sold item must leave inventory")
 	_check(shelf_after == shelf_before - 1, "shelf stock must decrease by one")
@@ -221,8 +224,14 @@ func _verify_save_file(store_id: StringName, expected_cash: float) -> Dictionary
 		int(checks["schema_version"]) == SaveManager.CURRENT_SAVE_VERSION,
 		"save schema version must be current"
 	)
-	_check(str(metadata.get("active_store_id", "")) == String(store_id), "active store must persist in metadata")
-	_check(_near(float(metadata.get("cash", 0.0)), expected_cash), "metadata cash must match sale result")
+	_check(
+		str(metadata.get("active_store_id", "")) == String(store_id),
+		"active store must persist in metadata"
+	)
+	_check(
+		_near(float(metadata.get("cash", 0.0)), expected_cash),
+		"metadata cash must match sale result"
+	)
 	_check(int(metadata.get("day", 0)) == 1, "metadata day must persist")
 	return checks
 
@@ -271,7 +280,9 @@ func _verify_reload(store_id: StringName, expected_cash: float) -> Dictionary:
 		"sale_count_persisted": int(economy_save.get("items_sold_today", 0)) == 1,
 		"daily_revenue_persisted": _near(float(economy_save.get("daily_revenue_total", 0.0)), SALE_PRICE),
 		"tutorial_completed_persisted": fresh_tutorial.tutorial_completed,
-		"session_flags_persisted": bool((session.get("flags", {}) as Dictionary).get(&"sale_complete", false)),
+		"session_flags_persisted": bool(
+			(session.get("flags", {}) as Dictionary).get(&"sale_complete", false)
+		),
 		"preopening_persisted": bool(session.get("preopening_complete", false)),
 		"active_store_persisted": fresh_store_state.active_store_id == store_id,
 		"post_reload_basic_interaction": basic_interaction,
