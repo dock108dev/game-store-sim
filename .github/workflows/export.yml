@@ -81,7 +81,7 @@ jobs:
     permissions:
       contents: read
     env:
-      GODOT_VERSION: ${{ env.VALIDATION_GODOT_VERSION }}
+      GODOT_VERSION: "4.6.2-stable"
     steps:
       - uses: actions/checkout@v6
 
@@ -131,7 +131,7 @@ jobs:
     permissions:
       contents: read
     env:
-      GODOT_VERSION: ${{ env.VALIDATION_GODOT_VERSION }}
+      GODOT_VERSION: "4.6.2-stable"
     steps:
       - uses: actions/checkout@v6
 
