@@ -14,7 +14,7 @@ check_file() {
 check_contains() {
 	local path="$1"
 	local needle="$2"
-	if ! grep -Fq "$needle" "$ROOT/$path"; then
+	if ! grep -Fq -- "$needle" "$ROOT/$path"; then
 		echo "FAIL: $path missing '$needle'" >&2
 		exit 1
 	fi
@@ -32,7 +32,11 @@ check_contains ".github/workflows/validate.yml" "bash scripts/validate_static_re
 check_contains ".github/workflows/validate.yml" "bash scripts/validate_resource_integrity.sh"
 check_contains ".github/workflows/validate.yml" "bash scripts/run_godot_tests.sh"
 check_contains ".github/workflows/validate.yml" "bash scripts/run_fresh_install_smoke.sh"
+check_contains ".github/workflows/validate.yml" "sudo apt-get install -y xvfb mesa-utils libgl1-mesa-dri"
+check_contains ".github/workflows/export.yml" "sudo apt-get install -y xvfb mesa-utils libgl1-mesa-dri"
 check_contains ".github/workflows/export.yml" "bash scripts/validate_export_config.sh"
+check_contains "scripts/run_fresh_install_smoke.sh" "xvfb-run"
+check_contains "scripts/run_fresh_install_smoke.sh" "--rendering-method gl_compatibility"
 check_contains "tests/run_tests.sh" "scripts/validate_static_repo_guards.sh"
 check_contains "tests/run_tests.sh" "scripts/validate_resource_integrity.sh"
 check_contains "scripts/run_godot_tests.sh" "scripts/validate_resource_integrity.sh"
