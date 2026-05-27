@@ -1,4 +1,4 @@
-name: PR Fast Validation
+name: PR and Main Validation
 
 on:
   push:
@@ -77,10 +77,10 @@ jobs:
             artifacts/manifests/
           if-no-files-found: warn
 
-  gut-pr-smoke:
-    name: Unit and Flow Lane - PR GUT Smoke
+  full-gut-tests:
+    name: Unit Lane - Full GUT Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
@@ -105,14 +105,17 @@ jobs:
           godot --path "$GITHUB_WORKSPACE" --headless \
             --script res://tests/setup_gut_env.gd 2>/dev/null || true
 
-      - name: Run PR smoke tests
-        run: bash tests/automation/run_pr_smoke.sh
+      - name: Run full GUT tests
+        run: bash scripts/run_godot_tests.sh
 
-      - name: Upload PR smoke artifacts on failure
+      - name: Run fresh install smoke
+        run: bash scripts/run_fresh_install_smoke.sh
+
+      - name: Upload PR/main GUT artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: pr-smoke-artifacts-${{ github.run_number }}
+          name: pr-main-gut-artifacts-${{ github.run_number }}
           path: |
             artifacts/logs/gut/
             artifacts/logs/scenario/

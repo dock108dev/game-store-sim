@@ -187,8 +187,17 @@ static func _set_position(store: Node, path: String, position: Vector3) -> void:
 
 static func _set_global_position(store: Node, path: String, global_position: Vector3) -> void:
 	var node: Node3D = store.get_node_or_null(NodePath(path)) as Node3D
-	if node != null:
+	if node == null:
+		return
+	if node.is_inside_tree():
 		node.global_position = global_position
+		return
+	var parent_node: Node3D = node.get_parent() as Node3D
+	if parent_node == null:
+		node.position = global_position
+		return
+	var parent_transform: Transform3D = _local_global_transform(parent_node)
+	node.position = parent_transform.affine_inverse() * global_position
 
 
 static func _set_rotation_degrees(store: Node, path: String, rotation_degrees: Vector3) -> void:
@@ -225,11 +234,26 @@ static func _ensure_shell_root(store: Node) -> Node3D:
 		shell = Node3D.new()
 		shell.name = ROOT_NAME
 		store.set_meta("_expandable_store_shell_pending", shell)
-		store.add_child.call_deferred(shell)
+		if store.is_inside_tree():
+			store.add_child.call_deferred(shell)
+		else:
+			store.add_child(shell)
 	shell.visible = true
 	for child: Node in shell.get_children():
 		child.free()
 	return shell
+
+
+static func _local_global_transform(node: Node3D) -> Transform3D:
+	var chain: Array[Node3D] = []
+	var current: Node = node
+	while current is Node3D:
+		chain.push_front(current as Node3D)
+		current = current.get_parent()
+	var result := Transform3D.IDENTITY
+	for item: Node3D in chain:
+		result *= item.transform
+	return result
 
 
 static func _rebuild_shell(shell: Node3D) -> void:

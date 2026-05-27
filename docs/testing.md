@@ -162,23 +162,22 @@ an automation runner arms it. Scenario logs use stable `SCENARIO: PASS`,
 
 ## CI validation
 
-`.github/workflows/validate.yml` is the fast PR gate. It runs static repo
-guards, `gdlint`, Godot resource/autoload integrity, and the explicit
-`.gutconfig.pr-smoke.json` GUT smoke set.
+`.github/workflows/validate.yml` is the PR and `main` push gate. It runs
+static repo guards, `gdlint`, Godot resource/autoload integrity, the full GUT
+suite through `scripts/run_godot_tests.sh`, and the fresh-install smoke.
 
-`.github/workflows/nightly.yml` is the full validation gate. It runs the same
-static/lint surface plus `scripts/run_godot_tests.sh`,
-`scripts/run_fresh_install_smoke.sh`, interaction audit, the soft visual
-snapshot sweep, and the long-day soak scenario. Visual snapshot review is
-advisory until baselines are intentionally promoted.
+`.github/workflows/nightly.yml` is the weekly scenario review gate. It runs the
+interaction audit, the soft visual snapshot sweep, and the long-day soak
+scenario. Visual snapshot review is advisory until baselines are intentionally
+promoted.
 
 `scripts/run_store_visual_sweep.sh` reads reviewed PNG baselines from
 `tests/visual/baselines/retro_games_day_one/<godot-version>/linux/` by default
 or from `MALLCORE_VISUAL_BASELINE_DIR` when set. If the baseline bucket is
 absent, the diff step writes current captures and reports missing baselines
-without failing because the nightly visual lane is advisory.
+without failing because the weekly visual lane is advisory.
 
-`.github/workflows/nightly-videos.yml` is the scheduled/manual video lane. It
+`.github/workflows/nightly-videos.yml` is the weekly/manual video lane. It
 renders Movie Maker scenario videos and uploads video/log artifacts from
 `artifacts/videos/scenario/nightly/` and
 `artifacts/logs/scenario/nightly-videos/`.

@@ -119,7 +119,7 @@ func _on_play_pressed() -> void:
 
 ## Presses the menu's New Game path for automation after the menu is ready.
 func start_new_game_from_menu() -> void:
-	_on_play_pressed()
+	_start_new_game()
 
 
 func _on_new_game_confirmed() -> void:

@@ -83,8 +83,8 @@ The checked-in integrations documented in this repository are:
   generation (`generate_audit_scenario_report.py`,
   `audit_report_writers.py`), and advisory review report generation
   (`generate_advisory_review_report.gd`)
-- GitHub Actions workflows for PR validation, nightly full validation,
-  nightly scenario-video rendering, release-candidate exports, and tagged
+- GitHub Actions workflows for PR/main validation, weekly scenario review,
+  weekly scenario-video rendering, release-candidate exports, and tagged
   release publishing
 - `gdtoolkit` linting in CI
 
@@ -137,23 +137,23 @@ Then use Godot's `--export-release` with the preset name.
 
 ### PR validation workflow
 
-`.github/workflows/validate.yml` is the fast PR gate for pushes and pull
-requests to `main`. It runs four jobs: static repo guards, GDScript linting,
-Godot resource/autoload integrity, and the explicit PR GUT smoke set from
-`.gutconfig.pr-smoke.json`. Failure uploads use the repo-local artifact tree
-where those runners produce logs, reports, screenshots, and manifests.
+`.github/workflows/validate.yml` is the PR and `main` push gate. It runs static
+repo guards, GDScript linting, Godot resource/autoload integrity, the full GUT
+suite through `scripts/run_godot_tests.sh`, and the fresh-install smoke.
+Failure uploads use the repo-local artifact tree where those runners produce
+logs, reports, screenshots, and manifests.
 
-### Nightly full-validation workflow
+### Weekly scenario-review workflow
 
-`.github/workflows/nightly.yml` is scheduled at `17 8 * * *` UTC and can be
-dispatched manually. It runs the full GUT suite, fresh-install smoke,
-interaction audit, soft visual snapshot review, and the long-day soak lane.
-The visual snapshot lane is `continue-on-error` so it remains advisory until
-baseline policy is deliberately promoted.
+`.github/workflows/nightly.yml` is scheduled at `17 8 * * 1` UTC and can be
+dispatched manually. It runs the interaction audit, soft visual snapshot
+review, and the long-day soak lane. The visual snapshot lane is
+`continue-on-error` so it remains advisory until baseline policy is
+deliberately promoted.
 
-### Nightly video workflow
+### Weekly video workflow
 
-`.github/workflows/nightly-videos.yml` runs on the `17 8 * * *` UTC schedule
+`.github/workflows/nightly-videos.yml` runs on the `17 8 * * 1` UTC schedule
 and by manual dispatch. It installs Godot `4.6.2-stable`, runs
 `scripts/render_nightly_videos.sh` through `xvfb-run`, and uploads generated
 scenario videos plus logs with 14-day retention.
