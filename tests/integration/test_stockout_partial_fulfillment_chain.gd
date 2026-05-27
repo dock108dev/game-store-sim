@@ -3,6 +3,7 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 const STORE_ID: StringName = &"retro_games"
 const ITEM_ID: StringName = &"neo_ignite_motorway_kings_loose"
 const STARTING_CASH: float = 2000.0
@@ -66,12 +67,12 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.order_stockout.is_connected(_on_order_stockout):
-		EventBus.order_stockout.disconnect(_on_order_stockout)
-	if EventBus.order_delivered.is_connected(_on_order_delivered):
-		EventBus.order_delivered.disconnect(_on_order_delivered)
-	if EventBus.order_refund_issued.is_connected(_on_order_refund_issued):
-		EventBus.order_refund_issued.disconnect(_on_order_refund_issued)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.order_stockout, _on_order_stockout)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.order_delivered, _on_order_delivered)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.order_refund_issued,
+		_on_order_refund_issued
+	)
 
 	DifficultySystemSingleton.set_tier(_saved_tier)
 	GameManager.current_store_id = _saved_store_id

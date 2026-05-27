@@ -19,12 +19,16 @@ func _make_director() -> Node:
 	return director
 
 
-## Drives the production handshake: day_started fires the pre-chain gate, then
-## the player dismisses Vic's morning note to release the chain at TALK_TO_CUSTOMER.
-## Tests that exercise step-chain advancement go through this helper.
-func _start_day1_after_note_dismiss() -> void:
+## Starts Day 1 at the manager-led preopening beat.
+func _start_day1_preopening() -> void:
 	EventBus.day_started.emit(1)
-	EventBus.manager_note_dismissed.emit("")
+
+
+func _complete_preopening() -> void:
+	EventBus.store_objective_completed.emit(&"talk_to_manager")
+	EventBus.store_objective_completed.emit(&"check_register")
+	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
+	EventBus.store_objective_completed.emit(&"training_stock_shelf")
 
 
 # ── Signal connection: day_started ────────────────────────────────────────────
@@ -47,7 +51,7 @@ func test_day_started_payload_has_objective_key() -> void:
 	assert_true(received[0].has("objective"), "payload must have 'objective' key")
 
 
-func test_day_started_day1_pre_chain_surfaces_read_vic_note() -> void:
+func test_day_started_day1_pre_chain_surfaces_manager_training() -> void:
 	var director := _make_director()
 	var received: Array[Dictionary] = []
 	EventBus.objective_changed.connect(
@@ -56,23 +60,23 @@ func test_day_started_day1_pre_chain_surfaces_read_vic_note() -> void:
 	EventBus.day_started.emit(1)
 	assert_eq(
 		received[0].get("objective", ""),
-		"Read Vic's morning note",
-		"Day 1 must surface the pre-chain READ_VIC_NOTE prompt before any step"
+		"Talk to the manager at checkout.",
+		"Day 1 must surface the manager-led preopening prompt before real customer handling"
 	)
 
 
-func test_note_dismiss_advances_day1_chain_to_talk_to_customer() -> void:
+func test_preopening_completion_advances_day1_chain_to_talk_to_customer() -> void:
 	var director := _make_director()
 	var received: Array[Dictionary] = []
 	EventBus.objective_changed.connect(
 		func(p: Dictionary) -> void: received.append(p)
 	)
 	EventBus.day_started.emit(1)
-	EventBus.manager_note_dismissed.emit("")
+	_complete_preopening()
 	assert_eq(
 		received[received.size() - 1].get("objective", ""),
 		"Talk to the customer at the register.",
-		"Note dismissal must advance the rail to step 1 (talk to customer)"
+		"Completing preopening must advance the rail to real Day 1 customer handling"
 	)
 
 
@@ -94,12 +98,12 @@ func test_store_entered_emits_objective_changed() -> void:
 	EventBus.objective_changed.connect(
 		func(p: Dictionary) -> void: received.append(p)
 	)
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	EventBus.store_entered.emit(&"retro_games")
 	assert_gt(received.size(), 0, "objective_changed must fire")
 	var payload: Dictionary = received[received.size() - 1]
-	assert_eq(payload.get("objective", ""), "Talk to the customer at the register.")
-	assert_eq(payload.get("action", ""), "Press E at the counter")
+	assert_eq(payload.get("objective", ""), "Talk to the manager at checkout.")
+	assert_eq(payload.get("action", ""), "Talk to manager")
 	assert_eq(payload.get("key", ""), "E")
 
 
@@ -142,26 +146,27 @@ func test_second_item_sold_does_not_re_emit_first_sale_completed() -> void:
 
 # ── Day 1 chain: signal-driven step advancement ──────────────────────────────
 
-func test_day1_initial_step_is_talk_to_customer_after_note_dismiss() -> void:
+func test_day1_initial_step_is_talk_to_manager() -> void:
 	var director := _make_director()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
-		ObjectiveDirector.DAY1_STEP_TALK_TO_CUSTOMER,
-		"Day 1 chain must arm at step 1 (talk to customer) after note dismiss"
+		ObjectiveDirector.DAY1_STEP_TALK_TO_MANAGER,
+		"Day 1 chain must arm at the manager preopening beat"
 	)
 
 
-func test_day1_chain_is_gated_until_note_dismissed() -> void:
+func test_day1_chain_is_not_gated_by_note_dismiss() -> void:
 	var director := _make_director()
 	EventBus.day_started.emit(1)
 	assert_eq(
-		ObjectiveDirector._day1_step_index, -1,
-		"Day 1 chain must not arm until the morning note is dismissed"
+		ObjectiveDirector._day1_step_index,
+		ObjectiveDirector.DAY1_STEP_TALK_TO_MANAGER,
+		"Day 1 chain must start immediately at manager preopening"
 	)
-	assert_true(
+	assert_false(
 		ObjectiveDirector._waiting_for_note_dismiss,
-		"day_started(1) must enter the pre-chain note-wait state"
+		"day_started(1) must not enter a note-wait state"
 	)
 
 
@@ -171,22 +176,27 @@ func test_day1_chain_advances_through_each_signal_in_order() -> void:
 	EventBus.objective_changed.connect(
 		func(p: Dictionary) -> void: received.append(p)
 	)
-	_start_day1_after_note_dismiss()
-	# Step 0 → 1: player interacts with the customer at the counter.
+	_start_day1_preopening()
+	EventBus.store_objective_completed.emit(&"talk_to_manager")
+	assert_eq(received[received.size() - 1].get("text", ""), "Check the register.")
+	EventBus.store_objective_completed.emit(&"check_register")
+	assert_eq(received[received.size() - 1].get("text", ""), "Check back room inventory.")
+	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
+	assert_eq(received[received.size() - 1].get("text", ""), "Stock the starter display table.")
+	EventBus.store_objective_completed.emit(&"training_stock_shelf")
+	assert_eq(received[received.size() - 1].get("text", ""), "Talk to the customer at the register.")
 	EventBus.customer_interacted.emit(null)
 	assert_eq(received[received.size() - 1].get("text", ""),
 		"Check the back room delivery.",
-		"customer_interacted must advance to step 2 (back room inventory)")
-	# Step 1 → 2: player enters placement mode by picking up the back-room box.
+		"customer_interacted must advance to the real back-room objective")
 	EventBus.placement_mode_entered.emit()
 	assert_eq(received[received.size() - 1].get("text", ""),
 		"Stock the starter display table.",
-		"placement_mode_entered must advance to step 3 (stock shelf)")
-	# Step 2 → 3: the item lands on the restock shelf.
+		"placement_mode_entered must advance to the real stock objective")
 	EventBus.item_stocked.emit("item_001", "shelf_a")
 	assert_eq(received[received.size() - 1].get("text", ""),
 		"Close the day at the register.",
-		"item_stocked must advance to step 4 (close day)")
+		"item_stocked must advance to close day")
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
 		ObjectiveDirector.DAY1_STEP_CLOSE_DAY,
@@ -194,31 +204,32 @@ func test_day1_chain_advances_through_each_signal_in_order() -> void:
 	)
 	assert_eq(
 		received[received.size() - 1].get("key", ""),
-		"F4",
-		"Close-day step must publish the F4 hint badge"
+		"E",
+		"Close-day step must publish the register interaction key badge"
 	)
 
 
 func test_day1_chain_ignores_out_of_order_signals() -> void:
 	var director := _make_director()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	# item_stocked fired before the earlier steps must not skip ahead.
 	EventBus.item_stocked.emit("item_001", "shelf_a")
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
-		ObjectiveDirector.DAY1_STEP_TALK_TO_CUSTOMER,
-		"Out-of-order item_stocked must not skip past step 1"
+		ObjectiveDirector.DAY1_STEP_TALK_TO_MANAGER,
+		"Out-of-order item_stocked must not skip past the manager beat"
 	)
 
 
 func test_day1_chain_ignores_duplicate_triggers() -> void:
 	var director := _make_director()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
+	_complete_preopening()
 	EventBus.customer_interacted.emit(null)
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
 		ObjectiveDirector.DAY1_STEP_BACK_ROOM_INVENTORY,
-		"First customer_interacted must advance to step 2"
+		"First customer_interacted must advance to the real back-room step"
 	)
 	# A duplicate must not jump again.
 	EventBus.customer_interacted.emit(null)
@@ -338,9 +349,9 @@ func after_each() -> void:
 	ObjectiveDirector._waiting_for_note_dismiss = false
 
 
-# ── Pre-chain READ_VIC_NOTE gate ──────────────────────────────────────────────
+# ── Preopening gate ───────────────────────────────────────────────────────────
 
-func test_pre_chain_payload_carries_pre_step_action_and_key() -> void:
+func test_pre_chain_payload_carries_manager_action_and_key() -> void:
 	var director := _make_director()
 	var received: Array[Dictionary] = []
 	EventBus.objective_changed.connect(
@@ -349,12 +360,12 @@ func test_pre_chain_payload_carries_pre_step_action_and_key() -> void:
 	EventBus.day_started.emit(1)
 	var payload: Dictionary = received[received.size() - 1]
 	assert_eq(
-		payload.get("text", ""), "Read Vic's morning note",
-		"Pre-chain payload must publish the read-vic-note text"
+		payload.get("text", ""), "Talk to the manager at checkout.",
+		"Pre-chain payload must publish the manager training text"
 	)
 	assert_eq(
-		payload.get("action", ""), "Press E to dismiss the note",
-		"Pre-chain payload must publish the dismiss action prompt"
+		payload.get("action", ""), "Talk to manager",
+		"Pre-chain payload must publish the manager action prompt"
 	)
 	assert_eq(
 		payload.get("key", ""), "E",
@@ -380,11 +391,9 @@ func test_note_dismissed_on_day_2_is_a_noop() -> void:
 
 func test_duplicate_note_dismiss_is_a_noop() -> void:
 	var director := _make_director()
-	_start_day1_after_note_dismiss()
-	EventBus.customer_interacted.emit(null)
+	_start_day1_preopening()
+	EventBus.store_objective_completed.emit(&"talk_to_manager")
 	var step_after_advance: int = director._day1_step_index
-	# A second dismiss while the chain is mid-flight must not roll the chain
-	# back to TALK_TO_CUSTOMER or re-arm the gate.
 	EventBus.manager_note_dismissed.emit("")
 	assert_eq(
 		director._day1_step_index, step_after_advance,
@@ -396,7 +405,7 @@ func test_duplicate_note_dismiss_is_a_noop() -> void:
 	)
 
 
-func test_store_entered_during_pre_chain_re_emits_pre_step_payload() -> void:
+func test_store_entered_during_pre_chain_re_emits_manager_payload() -> void:
 	var director := _make_director()
 	var received: Array[Dictionary] = []
 	EventBus.objective_changed.connect(
@@ -406,8 +415,8 @@ func test_store_entered_during_pre_chain_re_emits_pre_step_payload() -> void:
 	EventBus.store_entered.emit(&"retro_games")
 	var payload: Dictionary = received[received.size() - 1]
 	assert_eq(
-		payload.get("objective", ""), "Read Vic's morning note",
-		"store_entered while waiting for note dismiss must keep the rail on the pre-step"
+		payload.get("objective", ""), "Talk to the manager at checkout.",
+		"store_entered during preopening must keep the rail on the manager beat"
 	)
 
 
@@ -429,9 +438,6 @@ func test_store_entered_does_not_re_emit_identical_pre_step_payload() -> void:
 	)
 	EventBus.day_started.emit(1)
 	var baseline: int = _count_director_emissions(received)
-	# store_entered while still on the pre-chain emits the same pre-step
-	# payload _emit_current already produced for day_started; the dedup hash
-	# must suppress it.
 	EventBus.store_entered.emit(&"retro_games")
 	assert_eq(
 		_count_director_emissions(received), baseline,
@@ -445,7 +451,8 @@ func test_store_entered_does_not_re_emit_identical_step_payload() -> void:
 	EventBus.objective_changed.connect(
 		func(p: Dictionary) -> void: received.append(p)
 	)
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
+	_complete_preopening()
 	var baseline: int = _count_director_emissions(received)
 	EventBus.store_entered.emit(&"retro_games")
 	assert_eq(
@@ -456,19 +463,19 @@ func test_store_entered_does_not_re_emit_identical_step_payload() -> void:
 
 func test_out_of_order_item_stocked_does_not_re_emit() -> void:
 	# _on_item_stocked unconditionally calls _emit_current() even when
-	# _advance_day1_step_if was a no-op. With dedup, the unchanged payload
+	# the active objective did not match. With dedup, the unchanged payload
 	# is suppressed so the rail's reveal tween does not retrigger.
 	var director := _make_director()
 	var received: Array[Dictionary] = []
 	EventBus.objective_changed.connect(
 		func(p: Dictionary) -> void: received.append(p)
 	)
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	var baseline: int = _count_director_emissions(received)
 	EventBus.item_stocked.emit("item_001", "shelf_a")
 	assert_eq(
 		_count_director_emissions(received), baseline,
-		"item_stocked at step 0 must not re-emit the identical step 0 payload"
+		"item_stocked at the manager beat must not re-emit the identical payload"
 	)
 
 
@@ -499,9 +506,9 @@ func test_chain_step_change_breaks_dedup_and_re_emits() -> void:
 	EventBus.objective_changed.connect(
 		func(p: Dictionary) -> void: received.append(p)
 	)
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	var baseline: int = _count_director_emissions(received)
-	EventBus.customer_interacted.emit(null)
+	EventBus.store_objective_completed.emit(&"talk_to_manager")
 	assert_gt(
 		_count_director_emissions(received), baseline,
 		"A real chain advance must produce a fresh emission past the dedup gate"

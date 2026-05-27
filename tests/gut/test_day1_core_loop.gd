@@ -1,5 +1,4 @@
-## Tests for ISSUE-007: Day 1 core loop gate.
-## Covers: inventory seeding, first-sale flag, and Day 1 close-day guard.
+## Covers inventory seeding, first-sale flag, and Day 1 close-day guard.
 extends GutTest
 
 var _data_loader: DataLoader
@@ -173,12 +172,15 @@ func test_day_started_day1_seeds_inventory() -> void:
 
 
 func test_day_started_day1_does_not_top_up_sparse_starter_stock_to_seven() -> void:
-	_inventory.seed_starting_items(&"retro_games", 3)
+	var store: StoreDefinition = _data_loader.get_store("retro_games")
+	assert_not_null(store, "retro_games store definition should load")
+	var expected_count: int = store.starting_inventory.size()
+	_inventory.seed_starting_items(&"retro_games", expected_count)
 	EventBus.day_started.emit(1)
 	var backroom: Array[ItemInstance] = _inventory.get_backroom_items_for_store("retro_games")
 	assert_eq(
 		backroom.size(),
-		3,
+		expected_count,
 		"DayManager must use store_definitions starting_inventory size, not legacy 7"
 	)
 

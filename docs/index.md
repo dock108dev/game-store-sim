@@ -12,8 +12,8 @@ This is the active project documentation set for the current Godot project.
   (scene transitions, store lifecycle, camera, input focus, etc.).
 - [Content and Data](content-data.md) — how JSON content is discovered, typed,
   validated, and accessed at runtime.
-- [Testing](testing.md) — local test entry points, GUT configuration, coverage
-  areas, and CI validation jobs.
+- [Testing](testing.md) — local validation entry points, GUT configuration,
+  coverage areas, automation flags, and CI validation jobs.
 - [Configuration and Deployment](configuration-deployment.md) — project
   settings, user data paths, export presets, and checked-in automation.
 
@@ -33,11 +33,13 @@ artifact tree. Hand-maintained audit notes stay under `docs/audits/`.
 
 ## Boundary
 
-`README.md` is the only active project doc at the repository root.
-Markdown under `.github/`, `addons/`, `.aidlc/`, and similar folders is
-configuration, vendored material, generated run output, or platform tooling
-rather than the active game documentation set. The four validator-required
-test ownership contracts remain at `tests/automation/README.md`,
-`tests/baselines/README.md`, `tests/flows/README.md`, and
-`tests/visual/README.md` because `tests/validate_gut_config_discovery.sh`
-requires them. Visual-baseline policy lives in [Testing](testing.md).
+`README.md` is the only maintained project doc at the repository root.
+`BRAINDUMP.md` is preserved as customer voice, not rewritten into project
+documentation. Markdown under `.github/`, `addons/`, `.aidlc`, `artifacts/`,
+and similar folders is configuration, vendored material, generated run output,
+or platform tooling rather than the active game documentation set. The four
+validator-required test ownership contracts remain at
+`tests/automation/README.md`, `tests/baselines/README.md`,
+`tests/flows/README.md`, and `tests/visual/README.md` because
+`tests/validate_gut_config_discovery.sh` requires them. Visual-baseline policy
+lives in [Testing](testing.md).

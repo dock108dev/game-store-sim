@@ -60,6 +60,43 @@ func test_pickup_bay_centers_inventory_target() -> void:
 	)
 
 
+func test_backroom_threshold_uses_floor_guides_not_route_text() -> void:
+	var threshold: Node3D = _node3d(DOOR_THRESHOLD_PATH)
+	var left_guide: Node3D = _node3d(
+		"ReadabilityProps/ZoneIdentity/BackroomThresholdLeftGuide"
+	)
+	var right_guide: Node3D = _node3d(
+		"ReadabilityProps/ZoneIdentity/BackroomThresholdRightGuide"
+	)
+	if threshold == null or left_guide == null or right_guide == null:
+		return
+	assert_lt(
+		_flat_distance(threshold, left_guide),
+		1.1,
+		"Left threshold guide must stay tied to the backroom doorway"
+	)
+	assert_lt(
+		_flat_distance(threshold, right_guide),
+		1.1,
+		"Right threshold guide must stay tied to the backroom doorway"
+	)
+	assert_lt(
+		_scene_position(left_guide).x,
+		_scene_position(threshold).x,
+		"Left guide must frame the doorway from the sales-floor side"
+	)
+	assert_gt(
+		_scene_position(right_guide).x,
+		_scene_position(threshold).x,
+		"Right guide must frame the doorway from the sales-floor side"
+	)
+	for cue: Node in [threshold, left_guide, right_guide]:
+		assert_false(
+			_has_label_descendant(cue),
+			"Backroom floor/threshold affordances must not add route text"
+		)
+
+
 func test_backroom_props_leave_pickup_and_exit_lane_clear() -> void:
 	var pickup: Node3D = _node3d(PICKUP_PATH)
 	var threshold: Node3D = _node3d(DOOR_THRESHOLD_PATH)
@@ -183,6 +220,15 @@ func _has_interaction_descendant(root: Node) -> bool:
 		return true
 	for child: Node in root.get_children():
 		if _has_interaction_descendant(child):
+			return true
+	return false
+
+
+func _has_label_descendant(root: Node) -> bool:
+	if root is Label3D:
+		return true
+	for child: Node in root.get_children():
+		if _has_label_descendant(child):
 			return true
 	return false
 

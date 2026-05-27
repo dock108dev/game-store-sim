@@ -41,7 +41,7 @@ func test_catalog_declares_visual_only_content_type() -> void:
 func test_box_templates_define_reusable_cover_metadata() -> void:
 	var templates: Array = _catalog.get("game_box_templates", [])
 	assert_between(
-		templates.size(), 4, 7, "Catalog should define a focused set of reusable box templates"
+		templates.size(), 4, 10, "Catalog should define a focused set of reusable box templates"
 	)
 
 	var template_ids: Dictionary = {}
@@ -100,8 +100,8 @@ func test_box_templates_define_reusable_cover_metadata() -> void:
 	assert_between(
 		display_titles.size(),
 		4,
-		6,
-		"Catalog should expose four to six distinct fictional product titles"
+		9,
+		"Catalog should expose a restrained set of distinct fictional product titles"
 	)
 
 
@@ -255,6 +255,23 @@ func test_product_visual_factory_builds_case_and_console_nodes() -> void:
 		if spine_platform != null:
 			assert_eq(spine_platform.text, "NEO IGNITE")
 		case_node.free()
+
+	var priced_node: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
+		{
+			"definition_id": "neo_ignite_kingdom_embers_loose",
+			"category": "cartridges",
+			"show_price_tag": true,
+			"price_cents": 1800,
+			"route_role": "starter_sale_item",
+		},
+		catalog
+	)
+	assert_not_null(priced_node, "Starter product metadata must build a priced case")
+	if priced_node != null:
+		assert_eq(str(priced_node.get_meta("definition_id", "")), "neo_ignite_kingdom_embers_loose")
+		assert_eq(str(priced_node.get_meta("route_role", "")), "starter_sale_item")
+		assert_not_null(priced_node.get_node_or_null("ProductPriceTag"))
+		priced_node.free()
 
 	var console_node: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
 		{"category": "console", "platform_visual_id": "canopy_wave_cube"}, catalog

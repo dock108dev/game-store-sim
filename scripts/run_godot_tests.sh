@@ -20,6 +20,9 @@ if [ -n "${GITHUB_ENV:-}" ]; then
 	echo "GUT_OUTPUT_FILE=$GUT_OUTPUT_FILE" >> "$GITHUB_ENV"
 fi
 
+echo "Work-surface close-out static checks required: gdlint game/; git diff --check"
+echo "Focused GUT tests are selected from the touched surface contract; full suite follows."
+
 "$ROOT/tests/validate_store_session_naming.sh"
 MALLCORE_SKIP_IMPORT=1 "$ROOT/scripts/validate_resource_integrity.sh"
 
@@ -91,7 +94,10 @@ fi
 #      test_inventory_panel_focus.gd intentionally exercise the three
 #      documented fail-loud guards: double-open, freed-while-open auto-pop,
 #      and pop-when-not-on-top sibling-frame protection.
-EXPECTED_ERROR_RE='ContentRegistry: duplicate (resource|entry) ID|ContentRegistry: alias .* maps to both|\[StoreRegistry\] (unknown store_id|empty store_id|duplicate register store_id)|\[StoreDirector\] .* — unknown store_id|\[CameraAuthority\] (invalid camera|not a Camera2D/Camera3D|expected exactly 1 current camera)|Object is locked and can.t be freed\.|Lambda capture at index 0 was freed\.|ReturnsSystem: _debit_store_account skipped|Parameter "material" is null\.|\[ModalPanel\] .* freed with unreleased InputFocus push — auto-popping|\[ModalPanel\] .*: open\(\) called twice without close\(\) — skipping push|\[ModalPanel\] .*: expected CTX_MODAL on top, got .* — leaving stack untouched'
+#   6. DataLoader.create_starting_inventory unknown-store fail-loud —
+#      test_store_setup_flow.gd intentionally exercises the empty-array
+#      recovery branch while preserving the production push_error contract.
+EXPECTED_ERROR_RE='ContentRegistry: duplicate (resource|entry) ID|ContentRegistry: alias .* maps to both|\[StoreRegistry\] (unknown store_id|empty store_id|duplicate register store_id)|\[StoreDirector\] .* — unknown store_id|\[CameraAuthority\] (invalid camera|not a Camera2D/Camera3D|expected exactly 1 current camera)|Object is locked and can.t be freed\.|Lambda capture at index 0 was freed\.|ReturnsSystem: _debit_store_account skipped|Parameter "material" is null\.|\[ModalPanel\] .* freed with unreleased InputFocus push — auto-popping|\[ModalPanel\] .*: open\(\) called twice without close\(\) — skipping push|\[ModalPanel\] .*: expected CTX_MODAL on top, got .* — leaving stack untouched|DataLoader\.create_starting_inventory: unknown store id'
 UNEXPECTED_ERRORS=$(grep "^ERROR:" "$GUT_OUTPUT_FILE" | grep -vE "$EXPECTED_ERROR_RE" || true)
 if [ -n "$UNEXPECTED_ERRORS" ]; then
 	ERROR_COUNT=$(echo "$UNEXPECTED_ERRORS" | wc -l | tr -d ' ')

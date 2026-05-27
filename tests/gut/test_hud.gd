@@ -497,6 +497,18 @@ func test_store_carry_changed_toggles_label_and_icon() -> void:
 	assert_false(icon.visible, "Carry icon must hide when stock clears")
 
 
+func test_store_carry_hud_syncs_existing_carry_on_ready() -> void:
+	StoreSessionState.carrying_stock = true
+	var fresh_hud: CanvasLayer = _HudScene.instantiate()
+	add_child_autofree(fresh_hud)
+	var label: Label = fresh_hud.get_node("CarryHUD/StoreSessionCarryLabel")
+	var icon: ColorRect = fresh_hud.get_node("CarryHUD/StoreSessionCarryIcon")
+
+	assert_true(label.visible, "Carry label must restore from StoreSessionState on ready")
+	assert_eq(label.text, "Carrying: Starter Stock Box")
+	assert_true(icon.visible, "Carry icon must restore from StoreSessionState on ready")
+
+
 # ── Defensive signal connection guards ─────────────────────────────────────
 # Each EventBus / InputFocus / button connection in _connect_signals() is
 # wrapped with is_connected so a second HUD instance entering the tree

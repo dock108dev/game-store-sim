@@ -2,6 +2,7 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 const STORE_ID: StringName = &"retro_games"
 const SLOT_INDEX: int = 1
 const SALE_PRICE: float = 75.0
@@ -105,16 +106,14 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.lease_completed.is_connected(_on_lease_completed):
-		EventBus.lease_completed.disconnect(_on_lease_completed)
-	if EventBus.store_entered.is_connected(_on_store_entered):
-		EventBus.store_entered.disconnect(_on_store_entered)
-	if EventBus.item_sold.is_connected(_on_item_sold):
-		EventBus.item_sold.disconnect(_on_item_sold)
-	if EventBus.day_ended.is_connected(_on_day_ended):
-		EventBus.day_ended.disconnect(_on_day_ended)
-	if EventBus.performance_report_ready.is_connected(_on_performance_report_ready):
-		EventBus.performance_report_ready.disconnect(_on_performance_report_ready)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.lease_completed, _on_lease_completed)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.store_entered, _on_store_entered)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.item_sold, _on_item_sold)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.day_ended, _on_day_ended)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.performance_report_ready,
+		_on_performance_report_ready
+	)
 
 	EventBus.clear_day_end_summary()
 	GameManager.current_state = _saved_state

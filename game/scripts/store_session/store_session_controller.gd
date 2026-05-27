@@ -38,6 +38,8 @@ const STARTER_STOCK_ITEM_IDS: PackedStringArray = [
 	"console_neo_ignite",
 	"neo_ignite_motorway_kings_loose",
 	"neo_ignite_kingdom_embers_loose",
+	"neo_ignite_torque_force_3_loose",
+	"neo_ignite_gridiron_2005_loose",
 ]
 const TARGET_EVENTS_PER_DAY: int = 3
 const _MAX_STORE_CUSTOMER_EVENTS_PER_SHIFT: int = 2
@@ -58,9 +60,8 @@ const MAX_JSON_FILE_BYTES: int = 1048576
 ## decides what's weird; the UI doesn't announce it. The console stack
 ## (StoreSessionHiddenClue) is retained ambient scene context, never the active
 ## objective, and never advances the chain.
-## Pre-chain note phase. Used for later-day Vic notes; Day 1 now skips this
-## gate and starts directly at STAGE_TALK_TO_CUSTOMER so the tutorial's first
-## actionable beat is visible immediately.
+## Pre-chain note phase. Used for later-day Vic notes; a fresh Day 1 starts
+## with manager-led preopening so the first actionable beat is spatial.
 const STAGE_VIC_NOTE: StringName = &"vic_note"
 const STAGE_TRAINING_TALK_MANAGER: StringName = &"training_talk_manager"
 const STAGE_TRAINING_CHECK_REGISTER: StringName = &"training_check_register"
@@ -78,8 +79,8 @@ const CUSTOMER_EXIT_IN_PROGRESS: StringName = &"exit_in_progress"
 const CUSTOMER_EXIT_EXITED: StringName = &"exited_hidden"
 
 ## Starter back-room delivery quantity. The first store should feel small:
-## one display table, one console, and two games. Reinvesting after a shift
-## adds a small paid extra shipment rather than filling the room by default.
+## one display table and five sellable starter products. Reinvesting after a
+## shift adds a small paid extra shipment rather than filling the room by default.
 const _BACKROOM_DELIVERY_QUANTITY: int = 3
 const _REORDER_EXTRA_QUANTITY: int = 2
 const _REORDER_EXTRA_COST: int = 20
@@ -506,7 +507,7 @@ func _ready() -> void:
 	_suppress_boot_interactables_until_objective_gate()
 	# Deferred so the parent StoreController._ready() runs first and connects
 	# its EventBus.objective_changed listener before the initial rail payload.
-	# Day 1 goes straight to the customer beat; later days can still use the
+	# Day 1 starts with manager-led preopening; later days can still use the
 	# Vic-note gate from `_on_summary_continue`.
 	call_deferred("_open_day")
 	_print_interactable_debug_list()
@@ -526,10 +527,9 @@ func _exit_tree() -> void:
 	_free_owned_ui_nodes()
 
 
-## Opens the current store_session day. Day 1 skips the Vic note entirely so the player
-## lands at the first actionable tutorial objective without dismissing setup
-## screens. Day 2 keeps the note beat, where the reminder has value because
-## the player is continuing an existing run.
+## Opens the current store_session day. Day 1 skips the Vic note and enters
+## manager-led preopening. Day 2 keeps the note beat, where the reminder has
+## value because the player is continuing an existing run.
 func _open_day() -> void:
 	if StoreSessionState.day == 1 and not StoreSessionState.preopening_complete:
 		_start_preopening_training()
@@ -747,8 +747,10 @@ func _open_store_after_training() -> void:
 ## console stack flavor object (StoreSessionHiddenClue) is independent — it does
 ## not satisfy this beat.
 func on_store_stockroom_pickup_interacted() -> void:
-	if _stage != STAGE_BACK_ROOM_INVENTORY and _stage != STAGE_TRAINING_BACK_ROOM:
-		EventBus.notification_requested.emit(_disabled_reason_for_stage(STAGE_BACK_ROOM_INVENTORY))
+	if not can_interact_pickup():
+		var reason: String = pickup_disabled_reason()
+		if not reason.is_empty():
+			EventBus.notification_requested.emit(reason)
 		return
 	var objective_id: StringName = StringName(str(_objective_for_stage(_stage).get("id", "")))
 	if _completed_objectives.has(objective_id):
@@ -1543,10 +1545,26 @@ func restock_disabled_reason() -> String:
 
 
 func can_interact_pickup() -> bool:
-	return _stage == STAGE_BACK_ROOM_INVENTORY or _stage == STAGE_TRAINING_BACK_ROOM
+	if StoreSessionState.carrying_stock:
+		return false
+	if _stage != STAGE_BACK_ROOM_INVENTORY and _stage != STAGE_TRAINING_BACK_ROOM:
+		return false
+	var objective_id: StringName = StringName(str(_objective_for_stage(_stage).get("id", "")))
+	if objective_id != &"" and _completed_objectives.has(objective_id):
+		return false
+	return true
 
 
 func pickup_disabled_reason() -> String:
+	if StoreSessionState.carrying_stock:
+		return "Stock already in hand. Place it on the starter display table."
+	if _stage == STAGE_STOCK_SHELF or _stage == STAGE_TRAINING_STOCK_SHELF:
+		return "Pick up the back room delivery first."
+	if _stage == STAGE_BACK_ROOM_INVENTORY or _stage == STAGE_TRAINING_BACK_ROOM:
+		var objective_id: StringName = StringName(str(_objective_for_stage(_stage).get("id", "")))
+		if objective_id != &"" and _completed_objectives.has(objective_id):
+			return "Delivery already checked."
+		return ""
 	return _disabled_reason_for_stage(STAGE_BACK_ROOM_INVENTORY)
 
 
@@ -1847,9 +1865,7 @@ func _route_to_close_day_without_customer() -> void:
 	_objectives = [_close_day_objective_entry()]
 	_stage = STAGE_END_DAY
 	_pause_time_for_end_day()
-	EventBus.notification_requested.emit(
-		"No customer event is available. Close the day at the register."
-	)
+	EventBus.notification_requested.emit("No customer event is available today.")
 
 
 func _close_transient_day_panels() -> void:
@@ -2184,15 +2200,12 @@ func _pause_time_for_end_day() -> void:
 	time_sys.set_speed(TimeSystem.SpeedTier.PAUSED)
 
 
-## Surfaces a one-shot "closing time" cue when the chain enters END_DAY.
-## Routed through `toast_requested` (auto-dismissing card, top-right) so it
-## reads as a transient alert; the persistent cue is the objective rail's
-## "Close the day at the register." which already stays visible until the
-## player closes out. `_pause_time_for_end_day` freezes the clock right
-## before this fires, so the toast lands once and the player isn't racing
-## a moving deadline.
+## Surfaces a one-shot closing-time status when the chain enters END_DAY.
+## The persistent destination cue remains in the objective rail; this toast
+## reports that closing time has arrived without repeating the register
+## instruction.
 func _start_close_time_watcher() -> void:
-	EventBus.toast_requested.emit("Closing time. Wrap up at the register.", &"info", 4.0)
+	EventBus.toast_requested.emit("Closing time reached.", &"info", 4.0)
 
 
 ## Public read-only accessor for the current stage. Used by the debug
@@ -2870,9 +2883,14 @@ func _connect_panel_signals() -> void:
 
 
 func _ui_root() -> Node:
-	var scene: Node = get_tree().current_scene
+	if not is_inside_tree():
+		return self
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return self
+	var scene: Node = tree.current_scene
 	if scene == null:
-		return get_tree().root
+		return tree.root
 	var ui_layer: Node = scene.find_child("UILayer", true, false)
 	if ui_layer != null:
 		return ui_layer

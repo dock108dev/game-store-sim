@@ -42,6 +42,15 @@ func test_advance_day_resets_daily_state_and_preserves_run_state() -> void:
 	assert_true(StoreSessionState.preopening_complete)
 
 
+func test_advance_day_clears_carried_stock_signal() -> void:
+	StoreSessionState.carrying_stock = true
+	watch_signals(EventBus)
+
+	StoreSessionState.advance_day()
+
+	assert_signal_emitted_with_parameters(EventBus, "store_carry_changed", [""])
+
+
 func test_load_save_data_preserves_preopening_migration_defaults() -> void:
 	StoreSessionState.load_save_data({"day": 1})
 	assert_false(StoreSessionState.preopening_complete)
@@ -51,6 +60,22 @@ func test_load_save_data_preserves_preopening_migration_defaults() -> void:
 
 	StoreSessionState.load_save_data({"day": 1, "preopening_complete": true})
 	assert_true(StoreSessionState.preopening_complete)
+
+
+func test_load_save_data_syncs_carried_stock_signal() -> void:
+	watch_signals(EventBus)
+
+	StoreSessionState.load_save_data({"day": 1, "carrying_stock": true})
+
+	assert_signal_emitted_with_parameters(
+		EventBus,
+		"store_carry_changed",
+		["Starter Stock Box"]
+	)
+
+	StoreSessionState.load_save_data({"day": 1, "carrying_stock": false})
+
+	assert_eq(get_signal_parameters(EventBus, "store_carry_changed", 1), [""])
 
 
 func test_session_snapshot_exposes_copy_safe_progress_state() -> void:

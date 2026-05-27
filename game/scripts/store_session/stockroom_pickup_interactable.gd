@@ -8,8 +8,8 @@ func _ready() -> void:
 	action_verb = "Check"
 	interaction_type = InteractionType.BACKROOM
 	interactable_id = &"store_session.backroom_pickup"
-	proximity_radius = 3.25
-	proximity_facing_dot = 0.25
+	proximity_radius = 1.4
+	proximity_facing_dot = 0.55
 	super._ready()
 
 

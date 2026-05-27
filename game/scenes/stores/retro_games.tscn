@@ -1128,22 +1128,22 @@ spot_angle = 36.0
 [node name="CheckoutLaneSpotlight" type="SpotLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 5.2, 3.1, 7.0)
 light_color = Color(1, 0.9, 0.75, 1)
-light_energy = 0.95
+light_energy = 0.84
 shadow_enabled = true
 spot_range = 3.6
 spot_angle = 34.0
 
 [node name="CheckoutCounterPractical" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 2.05, 7.8)
-light_color = Color(0.78, 1, 0.9, 1)
-light_energy = 0.24
-omni_range = 3.2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 1.92, 7.25)
+light_color = Color(1, 0.72, 0.45, 1)
+light_energy = 0.32
+omni_range = 2.8
 
 [node name="BackroomUtilityLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.45, 2.35, -8.55)
-light_color = Color(0.92, 0.96, 1, 1)
-light_energy = 0.18
-omni_range = 3.5
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.15, 2.35, -7.35)
+light_color = Color(0.68, 0.82, 1, 1)
+light_energy = 0.26
+omni_range = 3.2
 
 ; ============================================================
 ; Structure: Floor, Walls, Ceiling
@@ -1372,9 +1372,9 @@ collision_layer = 16
 collision_mask = 0
 script = ExtResource("3")
 interaction_type = 5
-display_name = "Glass Door"
+display_name = "Mall"
 action_verb = "Exit to Mall"
-prompt_text = "Exit to Mall"
+prompt_text = "Exit to"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EntranceDoor/Interactable"]
 shape = SubResource("entrance_door_interactable_shape")
@@ -1431,10 +1431,10 @@ mesh = SubResource("zone_label_backing_mesh")
 surface_material_override/0 = ExtResource("66_sign_backing")
 
 ; ============================================================
-; Zone Labels — Day-1 navigation markers. Checkout/register identity belongs
+; Zone Labels — authored reference markers. Checkout/register identity belongs
 ; to Checkout/Register/CheckoutSign, and entrance/exit identity belongs to
-; the Storefront plus EntranceDoor prompt. The visible ZoneLabels are only the
-; learning-route signs that point the player to objective destinations.
+; the Storefront plus EntranceDoor prompt. Store-session runtime review hides
+; the shelf/backroom route markers so physical work surfaces carry the read.
 ; ============================================================
 
 [node name="ZoneLabels" type="Node3D" parent="."]
@@ -2956,6 +2956,21 @@ shape = SubResource("register_collision")
 mesh = SubResource("register_mesh")
 surface_material_override/0 = ExtResource("14")
 
+[node name="RegisterDrawer" type="MeshInstance3D" parent="Checkout/Register"]
+transform = Transform3D(2.7, 0, 0, 0, 0.9, 0, 0, 0, 1.6, 0, -0.22, 0.02)
+mesh = SubResource("checkout_counter_clutter_mesh")
+surface_material_override/0 = ExtResource("14")
+
+[node name="RegisterDrawerSlot" type="MeshInstance3D" parent="Checkout/Register"]
+transform = Transform3D(2.25, 0, 0, 0, 0.36, 0, 0, 0, 0.24, 0, -0.19, 0.185)
+mesh = SubResource("checkout_counter_clutter_mesh")
+surface_material_override/0 = ExtResource("11")
+
+[node name="RegisterScreenBezel" type="MeshInstance3D" parent="Checkout/Register"]
+transform = Transform3D(1.18, 0, 0, 0, 1.18, 0, 0, 0, 0.8, 0, 0.05, -0.272)
+mesh = SubResource("register_screen_mesh")
+surface_material_override/0 = ExtResource("14")
+
 [node name="RegisterScreen" type="MeshInstance3D" parent="Checkout/Register"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -0.245)
 mesh = SubResource("register_screen_mesh")
@@ -2993,6 +3008,16 @@ shape = SubResource("receipt_printer_shape")
 transform = Transform3D(0.64, 0, -0.08, 0, 1, 0, 0.08, 0, 0.64, -0.54, 1.067, 0.17)
 mesh = SubResource("checkout_receipt_slip_mesh")
 surface_material_override/0 = SubResource("delivery_manifest_mat")
+
+[node name="CounterServiceNote" type="MeshInstance3D" parent="Checkout"]
+transform = Transform3D(0.72, 0, 0.1, 0, 1, 0, -0.1, 0, 0.72, 0.55, 1.071, 0.25)
+mesh = SubResource("delivery_manifest_mesh")
+surface_material_override/0 = SubResource("delivery_manifest_mat")
+
+[node name="CounterGlowStrip" type="MeshInstance3D" parent="Checkout"]
+transform = Transform3D(1.1, 0, -0.08, 0, 1, 0, 0.08, 0, 0.5, 0, 1.073, 0.31)
+mesh = SubResource("queue_direction_strip_mesh")
+surface_material_override/0 = SubResource("readability_checkout_accent_mat")
 
 [node name="CheckoutSignBacking" type="MeshInstance3D" parent="Checkout/Register"]
 transform = Transform3D(0.75, 0, 0, 0, 0.85, 0, 0, 0, 1, 0, 0.95, -0.03)
@@ -3036,17 +3061,27 @@ shaded = false
 [node name="CardTerminal" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
 transform = Transform3D(0.42, 0, -0.12, 0, 0.58, 0, 0.12, 0, 0.42, -0.34, -0.17, 0.07)
 mesh = SubResource("readability_stock_case_mesh")
-surface_material_override/0 = SubResource("product_case_edge_mat")
+surface_material_override/0 = ExtResource("14")
+
+[node name="CustomerPaymentDisplay" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
+transform = Transform3D(0.56, 0, -0.16, 0, 0.42, 0, 0.16, 0, 0.56, -0.34, -0.095, 0.135)
+mesh = SubResource("checkout_counter_card_mesh")
+surface_material_override/0 = ExtResource("14")
+
+[node name="CustomerPaymentDisplayScreen" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
+transform = Transform3D(0.36, 0, -0.12, 0, 0.36, 0, 0.12, 0, 0.36, -0.34, -0.08, 0.165)
+mesh = SubResource("product_price_tag_mesh")
+surface_material_override/0 = SubResource("register_screen_mat")
 
 [node name="Keypad" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
 transform = Transform3D(0.62, 0, 0.08, 0, 0.42, 0, -0.08, 0, 0.62, -0.1, -0.185, 0.16)
 mesh = SubResource("product_price_tag_mesh")
-surface_material_override/0 = SubResource("product_case_edge_mat")
+surface_material_override/0 = ExtResource("14")
 
 [node name="BarcodeScanner" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
 transform = Transform3D(0.32, 0, 0.22, 0, 0.34, 0, -0.22, 0, 0.32, 0.32, -0.17, 0.13)
 mesh = SubResource("readability_stock_case_mesh")
-surface_material_override/0 = SubResource("product_case_edge_mat")
+surface_material_override/0 = ExtResource("14")
 
 [node name="CardReaderCable" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
 transform = Transform3D(0.45, 0, -0.1, 0, 1, 0, 0.1, 0, 0.45, -0.28, -0.22, -0.08)
@@ -4220,6 +4255,97 @@ transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, 0.48, 2.05, -0.8
 mesh = SubResource("back_room_clutter_mesh_b")
 surface_material_override/0 = SubResource("back_room_clutter_mat")
 
+[node name="BackOfficeTerminal" type="Node3D" parent="."]
+transform = Transform3D(0.985, 0, 0.174, 0, 1, 0, -0.174, 0, 0.985, 4.72, 0, -9.05)
+
+[node name="DeskTop" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1.28, 0, 0, 0, 1, 0, 0, 0, 0.82, 0, 0.64, 0)
+mesh = SubResource("backroom_receiving_table_top_mesh")
+surface_material_override/0 = SubResource("backroom_receiving_table_mat")
+
+[node name="DeskLegFrontLeft" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1, 0, 0, 0, 0.92, 0, 0, 0, 1, -0.48, 0.29, 0.17)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = SubResource("backroom_receiving_table_mat")
+
+[node name="DeskLegFrontRight" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1, 0, 0, 0, 0.92, 0, 0, 0, 1, 0.48, 0.29, 0.17)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = SubResource("backroom_receiving_table_mat")
+
+[node name="DeskLegBackLeft" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1, 0, 0, 0, 0.92, 0, 0, 0, 1, -0.48, 0.29, -0.17)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = SubResource("backroom_receiving_table_mat")
+
+[node name="DeskLegBackRight" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1, 0, 0, 0, 0.92, 0, 0, 0, 1, 0.48, 0.29, -0.17)
+mesh = SubResource("backroom_receiving_table_leg_mesh")
+surface_material_override/0 = SubResource("backroom_receiving_table_mat")
+
+[node name="MonitorHousing" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1.25, 0, 0, 0, 1.1, 0, 0, 0, 0.72, 0, 1.04, -0.11)
+mesh = SubResource("back_room_crt_housing_mesh")
+surface_material_override/0 = SubResource("back_room_crt_housing_mat")
+
+[node name="Screen" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1.25, 0, 0, 0, 1.08, 0, 0, 0, 1, 0, 1.07, 0.025)
+mesh = SubResource("back_room_crt_screen_mesh")
+surface_material_override/0 = SubResource("back_room_crt_screen_mat")
+
+[node name="Keyboard" type="MeshInstance3D" parent="BackOfficeTerminal"]
+transform = Transform3D(1.72, 0, 0, 0, 0.58, 0, 0, 0, 0.42, 0, 0.705, 0.18)
+mesh = SubResource("backroom_clipboard_mesh")
+surface_material_override/0 = SubResource("back_room_crt_housing_mat")
+
+[node name="TerminalHeader" type="Label3D" parent="BackOfficeTerminal"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.52, 0.045)
+pixel_size = 0.003
+modulate = Color(0.72, 1, 0.76, 1)
+double_sided = false
+font_size = 20
+text = "BACK OFFICE"
+horizontal_alignment = 1
+outline_size = 5
+outline_modulate = Color(0.02, 0.04, 0.03, 1)
+shaded = false
+
+[node name="TerminalTabs" type="Label3D" parent="BackOfficeTerminal"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 1.24, 0.05)
+pixel_size = 0.0024
+modulate = Color(0.82, 1, 0.72, 1)
+double_sided = false
+font_size = 15
+text = "CALENDAR  LOCKED\nORDERS  ORDER PANEL\nBUY STOCK  LOCKED\nMESSAGES  LOCKED\nSTORE NOTES  LOCKED"
+horizontal_alignment = 1
+outline_size = 4
+outline_modulate = Color(0.02, 0.04, 0.03, 1)
+shaded = false
+
+[node name="TerminalStatus" type="Label3D" parent="BackOfficeTerminal"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.88, 0.05)
+pixel_size = 0.0026
+modulate = Color(1, 0.92, 0.55, 1)
+double_sided = false
+font_size = 15
+text = "BETA SHELL\nNO DAY 1 TASK"
+horizontal_alignment = 1
+outline_size = 4
+outline_modulate = Color(0.02, 0.04, 0.03, 1)
+shaded = false
+
+[node name="OrdersBridgeTag" type="Label3D" parent="BackOfficeTerminal"]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.66, 0.20)
+pixel_size = 0.0022
+modulate = Color(0.94, 0.86, 0.55, 1)
+double_sided = false
+font_size = 13
+text = "Orders use existing order panel"
+horizontal_alignment = 1
+outline_size = 3
+outline_modulate = Color(0.05, 0.05, 0.05, 1)
+shaded = false
+
 ; ── employee_area (logical zone around register / time clock / hold shelf) ──
 [node name="employee_area" type="Node3D" parent="." groups=["store_zone"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0, 0, 7.5)
@@ -4578,7 +4704,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 0, -8.15)
 ; now." Raised to local Y=0.5 so the box sits clearly off the floor and
 ; reads as a real container at the doorway, not a flat sticker.
 [node name="StockBox" type="MeshInstance3D" parent="StoreSessionBackroomPickup"]
-transform = Transform3D(1.4, 0, 0, 0, 1.6, 0, 0, 0, 1.4, 0, 0.5, 0)
+transform = Transform3D(1.55, 0, 0, 0, 1.75, 0, 0, 0, 1.55, 0, 0.54, 0)
 mesh = SubResource("backordered_console_box_mesh")
 surface_material_override/0 = SubResource("back_room_clutter_mat")
 
@@ -4626,12 +4752,12 @@ mesh = SubResource("stock_box_open_mesh")
 surface_material_override/0 = SubResource("back_room_clutter_mat")
 
 [node name="StockBoxLabel" type="Label3D" parent="StoreSessionBackroomPickup"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0.175)
-pixel_size = 0.0042
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04, 0.205)
+pixel_size = 0.0038
 modulate = Color(1, 0.92, 0.55, 1)
 double_sided = false
 font_size = 32
-text = "3 PICKUP"
+text = "3"
 horizontal_alignment = 1
 outline_size = 6
 outline_modulate = Color(0.05, 0.05, 0.05, 1)
@@ -4647,6 +4773,9 @@ shape = SubResource("nav_zone_shape")
 
 [node name="StoreSessionRestockShelf" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, -8.05)
+metadata/visual_layout_name = "StarterDisplayTable"
+metadata/visual_fixture_id = "starter_display_table"
+metadata/restock_interactable_id = "shelf.starter_display"
 
 [node name="ShelfBoard" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 1.1, 0)
@@ -4859,22 +4988,22 @@ shape = SubResource("nav_zone_shape")
 [node name="ZoneLighting" type="Node3D" parent="ReadabilityProps"]
 
 [node name="OldGenZoneFill" type="OmniLight3D" parent="ReadabilityProps/ZoneLighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 2.6, -8.8)
-light_color = Color(0.88, 0.9, 1, 1)
-light_energy = 0.38
-omni_range = 2.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0, 2.35, -7.35)
+light_color = Color(0.70, 0.78, 1, 1)
+light_energy = 0.44
+omni_range = 2.7
 
 [node name="MainAisleWarmFill" type="OmniLight3D" parent="ReadabilityProps/ZoneLighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 2.65, 0.6)
-light_color = Color(1, 0.74, 0.5, 1)
-light_energy = 0.60
-omni_range = 5.5
+light_color = Color(1, 0.76, 0.54, 1)
+light_energy = 0.54
+omni_range = 5.2
 
 [node name="CheckoutAmberFill" type="OmniLight3D" parent="ReadabilityProps/ZoneLighting"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.45, 2.25, 6.55)
-light_color = Color(1, 0.68, 0.42, 1)
-light_energy = 0.56
-omni_range = 4.0
+light_color = Color(1, 0.70, 0.44, 1)
+light_energy = 0.58
+omni_range = 3.6
 
 [node name="ZoneIdentity" type="Node3D" parent="ReadabilityProps"]
 
@@ -4886,6 +5015,16 @@ surface_material_override/0 = SubResource("readability_checkout_accent_mat")
 [node name="BackroomDoorThreshold" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
 transform = Transform3D(1.7, 0, 0.12, 0, 1, 0, -0.12, 0, 1.1, 6.15, 0.047, -6.72)
 mesh = SubResource("readability_zone_accent_mesh")
+surface_material_override/0 = SubResource("readability_backroom_accent_mat")
+
+[node name="BackroomThresholdLeftGuide" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
+transform = Transform3D(0.55, 0, 0.08, 0, 1, 0, -0.08, 0, 1.25, 5.38, 0.061, -7.18)
+mesh = SubResource("queue_direction_strip_mesh")
+surface_material_override/0 = SubResource("readability_backroom_accent_mat")
+
+[node name="BackroomThresholdRightGuide" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
+transform = Transform3D(0.55, 0, 0.08, 0, 1, 0, -0.08, 0, 1.25, 6.92, 0.061, -7.18)
+mesh = SubResource("queue_direction_strip_mesh")
 surface_material_override/0 = SubResource("readability_backroom_accent_mat")
 
 [node name="BackroomFloorMat" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
@@ -4916,6 +5055,21 @@ surface_material_override/0 = SubResource("checkout_counter_clutter_mat")
 [node name="ShelfStockAccent" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -4.6, 0.047, -7.35)
 mesh = SubResource("readability_zone_accent_mesh")
+surface_material_override/0 = SubResource("readability_shelf_accent_mat")
+
+[node name="StarterTableFrontFootprint" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
+transform = Transform3D(1.55, 0, 0.04, 0, 1, 0, -0.04, 0, 0.48, -4.6, 0.052, -7.53)
+mesh = SubResource("queue_floor_block_mesh")
+surface_material_override/0 = SubResource("readability_shelf_accent_mat")
+
+[node name="StarterTableLeftGuide" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
+transform = Transform3D(0.46, 0, 0.08, 0, 1, 0, -0.08, 0, 0.78, -5.82, 0.064, -7.85)
+mesh = SubResource("queue_direction_strip_mesh")
+surface_material_override/0 = SubResource("readability_shelf_accent_mat")
+
+[node name="StarterTableRightGuide" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]
+transform = Transform3D(0.46, 0, 0.08, 0, 1, 0, -0.08, 0, 0.78, -3.38, 0.064, -7.85)
+mesh = SubResource("queue_direction_strip_mesh")
 surface_material_override/0 = SubResource("readability_shelf_accent_mat")
 
 [node name="BackWallShelfWarmBand" type="MeshInstance3D" parent="ReadabilityProps/ZoneIdentity"]

@@ -223,3 +223,5 @@ config data. The current public getter surface includes:
 - `get_all_ambient_moments()`
 - `get_economy_config()`, `get_difficulty_config()`,
   `get_retro_games_config()`
+- `get_midday_events()` for the structured event beats loaded from
+  `day_beats.json`

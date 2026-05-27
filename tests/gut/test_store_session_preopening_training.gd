@@ -107,6 +107,87 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
 
 
+func test_training_register_check_ignores_stale_customer_checkout() -> void:
+	var controller: Node = _controller()
+	if controller == null:
+		return
+	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	assert_eq(String(controller.current_stage()), "training_check_register")
+	_arm_pending_checkout_customer()
+
+	var checkout: RegisterInteractable = _checkout_interactable()
+	assert_not_null(checkout)
+	if checkout == null:
+		return
+	assert_false(
+		checkout.can_interact(),
+		"Checkout counter must not become actionable during the training register check"
+	)
+	assert_eq(
+		_active_register_prompt_owners(),
+		["StoreSessionDayEndTrigger/Interactable"] as Array[String],
+		"Only the scripted register trigger may own the training register prompt"
+	)
+
+	checkout.interact()
+	await get_tree().process_frame
+	assert_eq(
+		String(controller.current_stage()),
+		"training_check_register",
+		"Using the checkout counter must not advance the training register stage"
+	)
+
+	var trigger: Interactable = _day_end_trigger()
+	assert_not_null(trigger)
+	if trigger == null:
+		return
+	trigger.interact()
+	await get_tree().process_frame
+	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
+
+
+func test_close_day_register_prompt_ignores_stale_customer_checkout() -> void:
+	var controller: Node = _controller()
+	if controller == null:
+		return
+	controller.set("_objectives", controller.get("_day_one_objectives").duplicate(true))
+	controller.set(
+		"_completed_objectives",
+		{
+			&"talk_to_customer": true,
+			&"back_room_inventory": true,
+			&"stock_shelf": true,
+		}
+	)
+	controller.set("_stage", StoreSessionController.STAGE_END_DAY)
+	controller.call("_apply_objective_gating")
+	_arm_pending_checkout_customer()
+
+	var checkout: RegisterInteractable = _checkout_interactable()
+	assert_not_null(checkout)
+	if checkout == null:
+		return
+	assert_false(
+		checkout.can_interact(),
+		"Checkout counter must not become actionable during the close-day stage"
+	)
+	assert_eq(
+		_active_register_prompt_owners(),
+		["StoreSessionDayEndTrigger/Interactable"] as Array[String],
+		"Only the day-end trigger may own the close-day register prompt"
+	)
+
+	checkout.interact()
+	await get_tree().process_frame
+	var close_day_panel: CanvasLayer = controller.get("_close_day_panel") as CanvasLayer
+	assert_true(
+		close_day_panel == null or not close_day_panel.visible,
+		"Wrong register surface must not open the close-day confirmation"
+	)
+	assert_eq(String(controller.current_stage()), "end_day")
+
+
 func test_role_prompt_copy_changes_between_training_and_customer_stages() -> void:
 	var controller: Node = _controller()
 	if controller == null:
@@ -137,6 +218,46 @@ func test_role_prompt_copy_changes_between_training_and_customer_stages() -> voi
 	assert_eq(str(customer_snapshot.get("active_objective_action", "")), "Talk to the customer")
 	assert_false(_proxy_part_visible("Badge"))
 	assert_false(_proxy_part_visible("Clipboard"))
+
+
+func test_shared_checkout_actor_keeps_position_when_role_changes() -> void:
+	var controller: Node = _controller()
+	if controller == null:
+		return
+	var actor: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var service_mat: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/StoreSessionCustomerFloorMat") as MeshInstance3D
+	)
+	var interactable: Interactable = _customer_interactable()
+	assert_not_null(actor, "Shared checkout actor must exist")
+	assert_not_null(service_mat, "Customer service floor mat must exist")
+	assert_not_null(interactable, "Shared checkout actor must keep its interactable")
+	if actor == null or service_mat == null or interactable == null:
+		return
+	var checkout_position: Vector3 = actor.global_position
+	assert_eq(interactable.display_name, "manager")
+	assert_lte(
+		_xz_distance(checkout_position, service_mat.global_position),
+		0.08,
+		"Manager beat must stand at the visible checkout service stop"
+	)
+
+	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	controller.on_store_register_interacted()
+	await get_tree().process_frame
+	controller.on_store_stockroom_pickup_interacted()
+	await get_tree().process_frame
+	controller.on_store_restock_interacted()
+	await get_tree().process_frame
+
+	assert_eq(String(controller.current_stage()), "talk_to_customer")
+	assert_eq(interactable.display_name, "customer")
+	assert_lte(
+		_xz_distance(actor.global_position, checkout_position),
+		0.01,
+		"Customer role must reuse the checkout actor position after preopening"
+	)
 
 
 func test_manager_completion_feedback_is_short() -> void:
@@ -245,6 +366,10 @@ func _proxy_part_visible(part_name: String) -> bool:
 	return part != null and part.visible
 
 
+func _xz_distance(a: Vector3, b: Vector3) -> float:
+	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))
+
+
 func _on_objective_completed(_objective_id: StringName, label: String) -> void:
 	_completed_feedback.append(label)
 
@@ -262,6 +387,74 @@ func _spawned_shelf_item_count() -> int:
 		if str(child.name).begins_with("StoreShelfItem"):
 			count += 1
 	return count
+
+
+func _checkout_interactable() -> RegisterInteractable:
+	if _root == null:
+		return null
+	return _root.get_node_or_null("checkout_counter/Interactable") as RegisterInteractable
+
+
+func _day_end_trigger() -> Interactable:
+	if _root == null:
+		return null
+	return _root.get_node_or_null("StoreSessionDayEndTrigger/Interactable") as Interactable
+
+
+func _active_register_prompt_owners() -> Array[String]:
+	var owners: Array[String] = []
+	for path: String in [
+		"Checkout/Register",
+		"checkout_counter/Interactable",
+		"checkout_counter/RegisterStatusIndicator",
+		"StoreSessionDayEndTrigger/Interactable",
+	]:
+		var interactable: Interactable = _root.get_node_or_null(path) as Interactable
+		if interactable != null and interactable.enabled and interactable.can_interact():
+			owners.append(path)
+	owners.sort()
+	return owners
+
+
+func _arm_pending_checkout_customer() -> Customer:
+	GameManager.set_current_day(1)
+	var customer: Customer = preload(
+		"res://game/scenes/characters/customer.tscn"
+	).instantiate() as Customer
+	add_child_autofree(customer)
+	customer.profile = _customer_profile()
+	customer.patience_timer = 100.0
+	customer._desired_item = _checkout_item()
+	customer._use_waypoint_fallback = true
+	customer._fallback_arrived = true
+	customer.advance_to_register()
+	EventBus.customer_ready_to_purchase.emit({
+		"customer_id": customer.get_instance_id(),
+	})
+	return customer
+
+
+func _customer_profile() -> CustomerTypeDefinition:
+	var profile: CustomerTypeDefinition = CustomerTypeDefinition.new()
+	profile.id = "register_prompt_customer"
+	profile.customer_name = "Register Prompt Customer"
+	profile.patience = 1.0
+	profile.budget_range = [0.0, 100.0]
+	profile.browse_time_range = [0.1, 0.2]
+	profile.purchase_probability_base = 1.0
+	return profile
+
+
+func _checkout_item() -> ItemInstance:
+	var item_def: ItemDefinition = ItemDefinition.new()
+	item_def.id = "register_prompt_item"
+	item_def.item_name = "Register Prompt Cartridge"
+	item_def.category = "cartridge"
+	item_def.store_type = "retro_games"
+	item_def.base_price = 25.0
+	var item: ItemInstance = ItemInstance.create(item_def, "good", 0, 25.0)
+	item.player_set_price = 30.0
+	return item
 
 
 func _active_targets() -> PackedStringArray:

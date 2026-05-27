@@ -319,7 +319,7 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	_assert_route_target("StoreSessionDayEndTrigger", "Check register")
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_READY)
-	assert_eq(register_screen.display_text(), "READY")
+	assert_eq(register_screen.display_text(), "REGISTER\nREADY")
 	await _interact_route_target("StoreSessionDayEndTrigger", "Check register")
 
 	_assert_route_target("StoreSessionBackroomPickup", "Check back room inventory")
@@ -353,7 +353,7 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	_assert_close_day_blocked(controller, "Talk to the customer first.")
 	await _open_customer_decision_from_interactable()
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
-	assert_eq(register_screen.display_text(), "SALE\nOPEN")
+	assert_eq(register_screen.display_text(), "TRANS\nREADY")
 	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
 	assert_not_null(decision, "Customer interaction must open the authored decision modal")
 	if decision == null:
@@ -446,7 +446,7 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	_assert_route_target("StoreSessionDayEndTrigger", "Close day")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_CLOSE_READY)
 	assert_eq(register_screen.display_text(), "CLOSE\nDAY")
-	assert_ne(register_screen.display_text(), "READY")
+	assert_ne(register_screen.display_text(), "REGISTER\nREADY")
 
 	await _interact_route_target("StoreSessionDayEndTrigger", "Close day")
 	var close_day_panel: CanvasLayer = controller.get("_close_day_panel") as CanvasLayer

@@ -601,6 +601,13 @@ func _navigate_to_random_shelf() -> bool:
 	var occupied: Array[Node] = _store_controller.get_occupied_slots()
 	var unvisited: Array[Node] = []
 	for slot: Node in occupied:
+		var slot_3d: Node3D = slot as Node3D
+		if slot_3d == null:
+			continue
+		if not CustomerNavConfig.is_customer_position_allowed(
+			slot_3d.global_position
+		):
+			continue
 		if slot not in _visited_slots:
 			unvisited.append(slot)
 	if unvisited.is_empty():
@@ -869,6 +876,17 @@ func _is_navigation_finished() -> bool:
 
 
 func _set_navigation_target(target_position: Vector3, target_kind: StringName = &"") -> void:
+	if (
+		CustomerNavConfig.is_position_in_staff_only_zone(target_position)
+		and CustomerNavConfig.is_customer_position_allowed(global_position)
+	):
+		push_warning(
+			"Customer: refusing staff-only navigation target for %s"
+			% _resolved_target_kind(target_kind)
+		)
+		target_position = CustomerNavConfig.sanitize_customer_target(
+			target_position, _exit_position
+		)
 	_fallback_target = target_position
 	_fallback_arrived = global_position.distance_squared_to(
 		target_position

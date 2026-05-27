@@ -2,6 +2,8 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
+
 var _system: CustomerSystem
 var _mall_root: Node3D
 var _spawned_shoppers: Array[Node] = []
@@ -19,13 +21,17 @@ func before_each() -> void:
 	_system.max_customers_in_mall = 30
 	_spawned_shoppers = []
 	_mall_root = null
-	_safe_disconnect(EventBus.customer_spawned, _on_customer_spawned)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.customer_spawned, _on_customer_spawned
+	)
 	EventBus.customer_spawned.connect(_on_customer_spawned)
 	DifficultySystemSingleton.set_tier(&"normal")
 
 
 func after_each() -> void:
-	_safe_disconnect(EventBus.customer_spawned, _on_customer_spawned)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.customer_spawned, _on_customer_spawned
+	)
 	DifficultySystemSingleton.set_tier(_original_tier)
 
 
@@ -695,8 +701,3 @@ func _setup_spawnable_mall_waypoints() -> void:
 
 func _on_customer_spawned(customer: Node) -> void:
 	_spawned_shoppers.append(customer)
-
-
-func _safe_disconnect(sig: Signal, callable: Callable) -> void:
-	if sig.is_connected(callable):
-		sig.disconnect(callable)

@@ -14,6 +14,7 @@ extends GutTest
 const _CONFIRMATION_PANEL_SCENE: PackedScene = preload(
 	"res://game/scenes/ui/close_day_confirmation_panel.tscn"
 )
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 
 
 var _time: TimeSystem
@@ -97,16 +98,13 @@ func after_each() -> void:
 	ObjectiveDirector._stocked = false
 	ObjectiveDirector._sold = false
 	ObjectiveDirector._loop_completed_today = false
-	_safe_disconnect(
+	TEST_SIGNAL_UTILS.safe_disconnect(
 		EventBus.day_close_confirmation_requested, _on_confirmation_requested
 	)
-	_safe_disconnect(EventBus.day_close_confirmed, _on_confirmed)
-	_safe_disconnect(EventBus.day_closed, _on_day_closed)
-
-
-func _safe_disconnect(sig: Signal, callable: Callable) -> void:
-	if sig.is_connected(callable):
-		sig.disconnect(callable)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.day_close_confirmed, _on_confirmed
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.day_closed, _on_day_closed)
 
 
 func _on_confirmation_requested(reason: String) -> void:

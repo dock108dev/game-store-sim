@@ -16,6 +16,7 @@ const BOUNDARY_TRIAL_COUNT: int = 20
 const RNG_SEED: int = 99371
 const MIN_DISTRIBUTION_GAP: float = 0.10
 const TEST_TIER_ID: StringName = &"diff_checkout_wiring_tier"
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 
 var _checkout: Node
 var _inventory: InventorySystem
@@ -69,16 +70,15 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	_safe_disconnect(EventBus.customer_purchased, _on_customer_purchased)
-	_safe_disconnect(EventBus.customer_left_mall, _on_customer_left_mall)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.customer_purchased, _on_customer_purchased
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.customer_left_mall, _on_customer_left_mall
+	)
 	_remove_test_tier()
 	DifficultySystemSingleton.set_tier(_saved_tier)
 	_unregister_test_store()
-
-
-func _safe_disconnect(sig: Signal, callable: Callable) -> void:
-	if sig.is_connected(callable):
-		sig.disconnect(callable)
 
 
 func _on_customer_purchased(

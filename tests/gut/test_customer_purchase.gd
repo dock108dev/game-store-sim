@@ -8,9 +8,12 @@ const CONVERSION_TOLERANCE: float = 0.04
 var _profile: CustomerTypeDefinition
 var _definition: ItemDefinition
 var _item: ItemInstance
+var _previous_first_sale_complete: bool = false
 
 
 func before_each() -> void:
+	_previous_first_sale_complete = GameState.get_flag(&"first_sale_complete")
+	GameState.set_flag(&"first_sale_complete", true)
 	_profile = CustomerTypeDefinition.new()
 	_profile.id = "test_customer"
 	_profile.customer_name = "Test Customer"
@@ -44,6 +47,7 @@ func after_each() -> void:
 	# around its 2000-iter loop. If the loop bails out before its inline
 	# restore the broadcast would stay muted into the next test.
 	EventLog.set_broadcast_enabled(true)
+	GameState.set_flag(&"first_sale_complete", _previous_first_sale_complete)
 
 
 func test_customer_with_budget_above_item_price_attempts_purchase() -> void:

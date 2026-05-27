@@ -119,7 +119,7 @@ not own those systems.
 Pattern:
 
 ```text
-emitter.gd  →  EventBus.emit_signal("signal_name", payload)  →  receiver.gd
+emitter.gd  ->  EventBus.signal_name.emit(payload)  ->  receiver.gd
 ```
 
 Signal name conventions used in `event_bus.gd`:

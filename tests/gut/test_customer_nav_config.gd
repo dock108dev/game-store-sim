@@ -32,18 +32,58 @@ func test_get_browse_positions() -> void:
 	wp1.position = Vector3(1.0, 0.0, 0.0)
 	_config.add_child(wp1)
 	var wp2 := Marker3D.new()
-	wp2.position = Vector3(2.0, 0.0, -1.0)
+	wp2.position = Vector3(-2.0, 0.0, -1.0)
 	_config.add_child(wp2)
 	_config.browse_waypoints = [wp1, wp2]
 	var positions: Array[Vector3] = _config.get_browse_positions()
 	assert_eq(positions.size(), 2)
 	assert_eq(positions[0], Vector3(1.0, 0.0, 0.0))
-	assert_eq(positions[1], Vector3(2.0, 0.0, -1.0))
+	assert_eq(positions[1], Vector3(-2.0, 0.0, -1.0))
 
 
 func test_get_browse_positions_empty() -> void:
 	var positions: Array[Vector3] = _config.get_browse_positions()
 	assert_eq(positions.size(), 0)
+
+
+func test_get_browse_positions_skips_staff_only_waypoints() -> void:
+	var sales_floor := Marker3D.new()
+	sales_floor.position = Vector3(1.0, 0.0, 0.0)
+	_config.add_child(sales_floor)
+	var stock_closet := Marker3D.new()
+	stock_closet.position = Vector3(4.80, 0.0, -6.85)
+	_config.add_child(stock_closet)
+	_config.browse_waypoints = [stock_closet, sales_floor]
+
+	var positions: Array[Vector3] = _config.get_browse_positions()
+
+	assert_eq(positions.size(), 1)
+	assert_eq(positions[0], sales_floor.global_position)
+
+
+func test_staff_only_bounds_classify_stock_closet_and_sales_floor() -> void:
+	assert_true(
+		CustomerNavConfig.is_position_in_staff_only_zone(
+			Vector3(4.80, 0.0, -6.85)
+		),
+		"Stock pickup bay must classify as staff-only"
+	)
+	assert_false(
+		CustomerNavConfig.is_position_in_staff_only_zone(
+			Vector3(3.55, 0.0, 6.65)
+		),
+		"Checkout customer side must classify as customer-allowed"
+	)
+
+
+func test_sanitize_customer_target_uses_safe_fallback_for_staff_only_target() -> void:
+	var fallback := Vector3(0.0, 0.05, 9.05)
+	assert_eq(
+		CustomerNavConfig.sanitize_customer_target(
+			Vector3(4.80, 0.0, -6.85), fallback
+		),
+		fallback
+	)
 
 
 func test_get_checkout_position() -> void:

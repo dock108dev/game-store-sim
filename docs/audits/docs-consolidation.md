@@ -1,105 +1,103 @@
-# Documentation Consolidation Pass - 2026-05-25
+# Documentation Consolidation Audit
 
 ## Changed
 
 ### `README.md`
 
-- Updated deployment basics to distinguish version-tag release publishing from
-  manual release-candidate dispatches in `.github/workflows/export.yml`.
+- Renamed the local command-line section from "test runs" to "validation" so
+  it matches `tests/run_tests.sh`, which runs static guards, optional Godot
+  resource integrity, GUT, shell validators, and SSOT tripwires.
 
 ### `docs/index.md`
 
-- Tightened the documentation boundary language around the four
-  validator-required test ownership README files.
-- Moved visual-baseline policy ownership to `docs/testing.md`.
+- Tightened the Testing entry to cover validation commands and automation
+  flags, not only test execution.
+- Made the boundary statement explicit for generated `artifacts/` markdown.
+- Clarified that `README.md` is the only maintained root project doc while
+  `BRAINDUMP.md` remains customer voice.
+- Kept the four `tests/**/README.md` ownership contracts named because
+  `tests/validate_gut_config_discovery.sh` requires those exact files.
 
 ### `docs/setup.md`
 
-- Updated the local test-runner sequence to include static repo guards,
-  resource integrity, GUT environment seeding, and the current shell-validator
-  order from `tests/run_tests.sh`.
-- Updated the test layout summary to include display-backed store visual sweep
-  baselines.
+- Renamed "Run tests" to "Run validation" for parity with
+  `tests/run_tests.sh`.
+
+### `docs/architecture.md`
+
+- Replaced the generic `EventBus.emit_signal(...)` example with the
+  code-backed typed-signal pattern used in the tree:
+  `EventBus.signal_name.emit(payload)`.
 
 ### `docs/testing.md`
 
-- Updated `tests/run_tests.sh` behavior to match the current runner:
-  static repo guards first, Godot import/resource integrity when available,
-  GUT environment seeding, GUT, optional `game/tests/run_tests.gd`, maintained
-  shell validators, and SSOT tripwires.
-- Added the full `.gutconfig.json` `post_run_script`.
-- Added current automation CLI ownership, supported scenario IDs, flags, and
-  speed-clamping behavior from `AutomationRunner`.
-- Folded the store visual sweep baseline contract into the active testing doc,
-  including the default
-  `tests/visual/baselines/retro_games_day_one/<godot-version>/linux/` path,
-  `MALLCORE_VISUAL_BASELINE_DIR`, and the missing-baseline advisory behavior.
-- Added `artifacts/visual_sweep/<suite>/` to the artifact-path table.
-- Tightened the CI validation summaries to match the current PR, nightly,
-  video, and export workflows.
+- Renamed the primary command section to "Main validation command".
+- Clarified that `tests/run_tests.sh` is the default local gate.
+- Replaced the generic "full GUT" nightly wording with the actual nightly
+  command surface: `scripts/run_godot_tests.sh` plus
+  `scripts/run_fresh_install_smoke.sh`.
 
 ### `docs/configuration-deployment.md`
 
-- Expanded the checked-in integration list to include current helper scripts:
-  Godot setup/resolution, artifact paths, static/resource/export validation,
-  fresh-install smoke, visual sweep, nightly videos, audit reports, and
-  advisory review report generation.
-- Added an environment-variable table for the active local/CI controls:
-  `GODOT`, `GODOT_EXECUTABLE`, `GODOT_VERSION`,
-  `VALIDATION_GODOT_VERSION`, `MALLCORE_ARTIFACT_DIR`,
-  `MALLCORE_SKIP_IMPORT`, `MALLCORE_VISUAL_BASELINE_DIR`, `FPS`, and
-  `SCENARIO`.
-- Updated PR/export workflow descriptions to match current job boundaries and
-  manual dispatch release-candidate behavior.
+- Added `tests/validate_store_session_naming.sh` to the checked-in validation
+  surface because `scripts/run_godot_tests.sh` invokes it before the full GUT
+  suite.
+- Removed `VALIDATION_GODOT_VERSION` from the environment table because the
+  current export workflow declares it but does not read it; release validation
+  jobs instead override `GODOT_VERSION` directly to `4.6.2-stable`.
+- Added the current `scripts/render_nightly_videos.sh` override environment
+  variables (`PROJECT_ROOT`, `OUTPUT_ROOT`, `LOG_ROOT`, `SCENARIO_RUNNER`,
+  `TIMEOUT_SECONDS`) and the current `tests/audit_run.sh` audit override
+  variables.
 
 ### `docs/content-data.md`
 
-- Added `customer_profile` to the entry-route documentation.
-- Added the current scene-path rejection for `..` segments and empty path
-  components.
-- Split platform data and product visual catalog data into separate
-  non-resource content statements.
+- Added `DataLoaderSingleton.get_midday_events()` to the runtime access list
+  because `game/autoload/data_loader.gd` exposes the structured beat pool
+  loaded from `day_beats.json`.
 
-### `tests/visual/README.md`
+### `docs/audits/docs-consolidation.md`
 
-- Kept the validator-required ownership contract, but corrected its expected
-  output statement to acknowledge that reviewed store-sweep PNG baselines live
-  under `tests/visual/baselines`.
+- Replaced the previous pass report with this pass's current change record,
+  removed-statement list, intentional gaps, validation evidence, and
+  escalation status.
 
 ## Deleted
 
-- `docs/audits/cleanup-report.md` — a transient source-refactor report with
-  code-change summaries and future split recommendations, not active project
-  documentation.
-- `tests/visual/baselines/README.md` — non-required test-tree documentation.
-  Its code-backed baseline details were folded into `docs/testing.md`.
+- `docs/audits/cleanup-report.md` was removed. It was a transient source
+  cleanup report containing code-refactor summaries, future split plans, and
+  file-size inventory; those statements are not active project documentation.
 
 ## Statements Removed As Unverifiable Or Non-Current
 
-- The old docs-consolidation report's prior-pass change summary as the current
-  record for this pass.
-- The stale implication that all test-tree README files were validator-required.
-  Only four are enforced by `tests/validate_gut_config_discovery.sh`.
-- The visual test README's statement that reusable visual expected output
-  belongs only under `tests/baselines`; the current visual sweep reads
-  reviewed PNG baselines from `tests/visual/baselines` by default.
-- The cleanup report's code-refactor summaries, large-file inventory, and
-  future split recommendations.
+- The previous docs-consolidation report's validation results and old change
+  list were removed as current-pass evidence.
+- The cleanup report's source-refactor summaries and future split plans were
+  removed from `/docs`; they were not durable, code-grounded project docs.
+- The architecture event-bus example that implied `emit_signal(...)` as the
+  current project pattern was replaced with the typed `Signal.emit(...)`
+  pattern used by the GDScript source.
+- Generic wording that described `tests/run_tests.sh` as only a test runner was
+  replaced with validation wording grounded in the script.
+- The environment row for `VALIDATION_GODOT_VERSION` was removed because it is
+  not consumed by current scripts or workflow steps.
 
 ## Intentional Gaps
 
 - `BRAINDUMP.md` remains untouched because it is customer voice.
-- Markdown under `.github/` remains because GitHub consumes the issue and
-  pull-request templates from that location.
+- Markdown under `.github/` remains in place because GitHub consumes issue and
+  pull-request templates from that directory.
 - The four `tests/**/README.md` ownership contracts remain outside `/docs`
-  because `tests/validate_gut_config_discovery.sh` requires them. Changing
-  that location would require a validator change, which is outside this
-  docs-only pass.
-- Markdown under `addons/` remains because it is vendored GUT material.
-- Markdown under `.aidlc/` remains because it is generated/tooling output
-  outside the active docs boundary.
-- Markdown under `artifacts/` remains generated runtime output, not
-  hand-maintained project documentation.
+  because `tests/validate_gut_config_discovery.sh` requires them at those
+  paths. Moving them would require a validator/code change, which this docs-only
+  pass explicitly does not perform.
+- `addons/gut/LICENSE.md` remains in place because it is vendored third-party
+  material.
+- Markdown under `.aidlc/` and generated `artifacts/` remains outside the active
+  documentation set because it is generated/tooling output, not hand-maintained
+  project documentation.
+- `artifacts/reports/scenario/runtime_audit/scenario-report.md` remains because
+  it is generated runtime output from the audit-report pipeline.
 - Existing non-doc dirty-tree changes were left untouched because this was a
   docs-only consolidation pass.
 
@@ -118,9 +116,14 @@
   `scripts/validate_static_repo_guards.sh`,
   `scripts/validate_resource_integrity.sh`,
   `scripts/validate_export_config.sh`,
-  `scripts/generate_advisory_review_report.gd`,
+  `tests/validate_ci_gate_partition.sh`,
+  `scripts/validate_originality.sh`,
+  `scripts/validate_translations.sh`,
+  `scripts/validate_single_store_ui.sh`,
+  `scripts/validate_tutorial_single_source.sh`,
+  `tests/validate_store_session_naming.sh`,
   `game/scripts/core/boot.gd`, `game/autoload/automation_runner.gd`,
-  `game/autoload/user_data_paths.gd`,
+  `game/autoload/scenario_exit.gd`, `game/autoload/user_data_paths.gd`,
   `game/scripts/core/automation_artifacts.gd`,
   `game/autoload/data_loader.gd`, `game/autoload/content_registry.gd`,
   `game/autoload/game_manager.gd`, `game/autoload/scene_router.gd`,
@@ -130,19 +133,17 @@
   `game/scripts/core/save_manager.gd`,
   `game/autoload/event_log.gd`, and
   `game/scripts/ui/ui_theme_constants.gd`.
-- Markdown inventory checked outside `addons/`, `.aidlc/`, `.git`, and
-  generated `artifacts/`; remaining hand-maintained markdown outside `/docs`
-  is limited to `README.md`, GitHub templates, `BRAINDUMP.md`, and the four
-  validator-required test ownership contracts.
-- Markdown link check over `README.md` and `docs/**/*.md`: passed
-  (`Markdown links OK`).
-- `bash scripts/validate_export_config.sh`: passed
-  (`Export config validation: OK`).
-- `bash tests/validate_gut_config_discovery.sh`: passed
-  (`GUT config discovery OK`).
-- `git diff --check -- README.md docs tests/visual/README.md`: passed.
-- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 411`,
-  `Tests 4827`, `Passing 4827`; configured shell validators and SSOT
+- Markdown inventory checked across the repository. Remaining active
+  hand-maintained docs are `README.md` and `/docs`; remaining markdown outside
+  that boundary is customer voice, GitHub templates, vendored material,
+  validator-required test ownership contracts, generated/tooling output, or
+  runtime artifacts.
+- Link validation over `README.md` and `docs/**/*.md`: passed.
+- `bash tests/validate_gut_config_discovery.sh`: passed.
+- `bash scripts/validate_export_config.sh`: passed.
+- `git diff --check -- README.md docs`: passed.
+- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 420`,
+  `Tests 4906`, `Passing 4906`; the configured shell validators and SSOT
   tripwires also passed.
 
 ## Escalations

@@ -60,11 +60,11 @@ var _modal_dim_active: bool = false
 ## caches when carry/focus state allows.
 var _cached_action: String = ""
 var _cached_key: String = ""
-## True while an interactable is currently focused by the InteractionRay
-## (active OR disabled-state). Drives right-side suppression in concert
-## with `_carry_active`. Disabled focus also counts as "no actionable
-## prompt" so this flag clears on `interactable_focused_disabled` to keep
-## the wrong-target hint from masquerading as an active affordance.
+## True while an actionable interactable is currently focused by the
+## InteractionRay. Drives right-side suppression in concert with
+## `_carry_active`. Disabled focus also counts as "no actionable prompt" so
+## this flag clears on `interactable_focused_disabled` to keep wrong-target
+## hints from masquerading as active affordances.
 var _interactable_focused_state: bool = false
 ## True while `StoreSessionState.carrying_stock` is set (mirrored via the
 ## `EventBus.store_carry_changed` payload). Outside the store_session loop the
@@ -363,7 +363,8 @@ func _on_fp_mode_changed(enabled: bool) -> void:
 ##     prompt doesn't appear over unrelated nodes during navigation to the
 ##     shelf — the focused-target highlight becomes the sole spatial cue.
 ##   * Default (cached payload render): ActionLabel + HintLabel reflect the
-##     most recent objective_changed/objective_updated payload.
+##     most recent objective_changed/objective_updated payload only while the
+##     player is not focused on an actionable interactable.
 func _apply_right_side_visibility() -> void:
 	var fp_focus_active: bool = (
 		_fp_mode_active and not _focused_action_text.is_empty()
@@ -383,7 +384,7 @@ func _apply_right_side_visibility() -> void:
 	# clear it here whenever no focused interactable drives the right side.
 	_key_badge.visible = false
 	_action_label.modulate = _ACTIVE_LABEL_MODULATE
-	var suppress: bool = _carry_active and not _interactable_focused_state
+	var suppress: bool = not _focused_action_text.is_empty() or _carry_active
 	if suppress:
 		_action_label.text = ""
 		_action_label.visible = false

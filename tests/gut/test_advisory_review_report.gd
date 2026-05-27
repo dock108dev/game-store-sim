@@ -31,7 +31,15 @@ func test_classifies_and_normalizes_supported_manifest_shapes() -> void:
 		sweep_payload
 	)
 	assert_eq(str(sweep_normalized.get("manifest_kind", "")), "store_visual_sweep")
-	assert_eq((sweep_normalized.get("beats", []) as Array).size(), 4)
+	var sweep_beats: Array = sweep_normalized.get("beats", []) as Array
+	assert_eq(sweep_beats.size(), StoreVisualSweepScript.rows().size())
+	if not sweep_beats.is_empty():
+		var sweep_beat: Dictionary = sweep_beats[0] as Dictionary
+		assert_false(str(sweep_beat.get("active_route_stage", "")).is_empty())
+		assert_false(str(sweep_beat.get("local_action", "")).is_empty())
+		assert_false(str(sweep_beat.get("next_destination", "")).is_empty())
+		assert_false(str(sweep_beat.get("visual_scope_mode", "")).is_empty())
+		assert_false(str(sweep_beat.get("primary_work_surface_target", "")).is_empty())
 
 	var route_payload: Dictionary = ManualRouteScript.build_manifest(TEST_ROOT + "/manual", "route_run")
 	var route_normalized: Dictionary = AdvisoryReviewReportScript.normalize_manifest(

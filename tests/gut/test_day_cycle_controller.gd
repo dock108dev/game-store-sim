@@ -2,6 +2,8 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
+
 var _controller: DayCycleController
 var _time: TimeSystem
 var _economy: EconomySystem
@@ -70,17 +72,12 @@ func after_each() -> void:
 	GameManager.owned_stores = _saved_owned_stores
 	GameState.set_flag(&"first_sale_complete", _saved_first_sale_flag)
 	ObjectiveDirector._loop_completed_today = false
-	_safe_disconnect(
+	TEST_SIGNAL_UTILS.safe_disconnect(
 		EventBus.bankruptcy_declared, _on_bankruptcy
 	)
-	_safe_disconnect(
+	TEST_SIGNAL_UTILS.safe_disconnect(
 		EventBus.day_started, _on_day_started
 	)
-
-
-func _safe_disconnect(sig: Signal, callable: Callable) -> void:
-	if sig.is_connected(callable):
-		sig.disconnect(callable)
 
 
 func _on_bankruptcy() -> void:

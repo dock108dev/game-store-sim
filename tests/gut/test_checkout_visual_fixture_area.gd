@@ -21,6 +21,15 @@ const CHECKOUT_FIXTURE_DETAIL_PATHS: Array[String] = [
 	"Checkout/PrintedReceiptSlip",
 	"Checkout/Register/CheckoutDetails/CardReaderCable",
 ]
+const CHECKOUT_PRIMARY_SERVICE_DETAIL_PATHS: Array[String] = [
+	"Checkout/Register/RegisterDrawer",
+	"Checkout/Register/RegisterDrawerSlot",
+	"Checkout/Register/RegisterScreenBezel",
+	"Checkout/Register/CheckoutDetails/CustomerPaymentDisplay",
+	"Checkout/Register/CheckoutDetails/CustomerPaymentDisplayScreen",
+	"Checkout/CounterServiceNote",
+	"Checkout/CounterGlowStrip",
+]
 const SIGN_FRAME_PATHS: Array[String] = [
 	"Checkout/Register/CheckoutSignBacking",
 	"Checkout/Register/CheckoutSignTopTrim",
@@ -113,15 +122,94 @@ func test_checkout_visual_composition_has_counter_register_printer_and_card_read
 	for required_path: String in [
 		"Checkout/CounterMesh",
 		"Checkout/Register/RegisterMesh",
+		"Checkout/Register/RegisterDrawer",
 		"Checkout/Register/RegisterScreen",
+		"Checkout/Register/RegisterScreenBezel",
 		"Checkout/Register/CheckoutDetails/CardTerminal",
+		"Checkout/Register/CheckoutDetails/CustomerPaymentDisplay",
+		"Checkout/Register/CheckoutDetails/CustomerPaymentDisplayScreen",
 		"Checkout/ReceiptPrinter",
 		"Checkout/PrintedReceiptSlip",
+		"Checkout/CounterServiceNote",
+		"Checkout/CounterGlowStrip",
 		"Checkout/Register/CheckoutSign",
 	]:
 		assert_not_null(
 			_root.get_node_or_null(required_path),
 			"Checkout composition missing required anchor: %s" % required_path
+		)
+
+
+func test_checkout_primary_service_details_share_device_language() -> void:
+	var register_drawer: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/Register/RegisterDrawer") as MeshInstance3D
+	)
+	var register_screen: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/Register/RegisterScreen") as MeshInstance3D
+	)
+	var payment_screen: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/Register/CheckoutDetails/CustomerPaymentDisplayScreen")
+		as MeshInstance3D
+	)
+	assert_not_null(register_drawer, "Register drawer must exist")
+	assert_not_null(register_screen, "Register screen must exist")
+	assert_not_null(payment_screen, "Customer payment display screen must exist")
+	var device_material: Material = null
+	if register_drawer != null:
+		device_material = register_drawer.get_surface_override_material(0)
+		assert_not_null(device_material, "Register drawer must carry the shared device material")
+	for node_path: String in CHECKOUT_PRIMARY_SERVICE_DETAIL_PATHS:
+		var detail: MeshInstance3D = _root.get_node_or_null(node_path) as MeshInstance3D
+		assert_not_null(detail, "Primary checkout service detail missing: %s" % node_path)
+		if detail == null:
+			continue
+		assert_not_null(detail.mesh, "%s must carry authored geometry" % node_path)
+		assert_false(
+			_has_interaction_descendant(detail),
+			"%s must remain a visual affordance, not a register prompt" % node_path
+		)
+	for device_path: String in [
+		"Checkout/Register/RegisterScreenBezel",
+		"Checkout/Register/CheckoutDetails/CardTerminal",
+		"Checkout/Register/CheckoutDetails/CustomerPaymentDisplay",
+		"Checkout/Register/CheckoutDetails/Keypad",
+		"Checkout/Register/CheckoutDetails/BarcodeScanner",
+	]:
+		var device: MeshInstance3D = _root.get_node_or_null(device_path) as MeshInstance3D
+		assert_not_null(device, "Checkout device detail missing: %s" % device_path)
+		if device != null and device_material != null:
+			assert_eq(
+				device.get_surface_override_material(0),
+				device_material,
+				"%s must use the same dark device material as the drawer" % device_path
+			)
+	if register_screen != null and payment_screen != null:
+		assert_eq(
+			payment_screen.get_surface_override_material(0),
+			register_screen.get_surface_override_material(0),
+			"Customer payment display and register screen must share screen material"
+		)
+
+
+func test_visual_checkout_nodes_do_not_own_active_interaction() -> void:
+	var visual_register: Interactable = _root.get_node_or_null("Checkout/Register") as Interactable
+	assert_not_null(visual_register, "Checkout/Register must remain present")
+	if visual_register != null:
+		assert_false(
+			visual_register.enabled,
+			"Checkout/Register must stay disabled so checkout_counter owns gameplay"
+		)
+		assert_eq(
+			visual_register.proximity_radius,
+			0.0,
+			"Checkout/Register must not opt into proximity targeting"
+		)
+	var dressing: Node = _root.get_node_or_null("ReadabilityProps/CheckoutCounterDressing")
+	assert_not_null(dressing, "Checkout counter dressing must exist")
+	if dressing != null:
+		assert_false(
+			_has_interaction_descendant(dressing),
+			"Checkout counter dressing must stay visual-only"
 		)
 
 
@@ -162,6 +250,52 @@ func test_curated_checkout_counter_dressing_is_visible_and_supported() -> void:
 			counter_position.z + counter_size.z * 0.5,
 			"%s must stay within the counter depth" % node_path
 		)
+
+
+func test_checkout_note_and_glow_rest_on_counter_without_overpowering_screen() -> void:
+	var counter_top: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/CounterTop") as MeshInstance3D
+	)
+	var screen: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/Register/RegisterScreen") as MeshInstance3D
+	)
+	var practical: OmniLight3D = _root.get_node_or_null("CheckoutCounterPractical") as OmniLight3D
+	assert_not_null(counter_top, "Checkout/CounterTop must exist")
+	assert_not_null(screen, "Register screen must exist")
+	assert_not_null(practical, "Checkout counter practical light must exist")
+	if counter_top == null:
+		return
+	var counter_top_y: float = _box_top_y(counter_top)
+	for node_path: String in ["Checkout/CounterServiceNote", "Checkout/CounterGlowStrip"]:
+		var prop: MeshInstance3D = _root.get_node_or_null(node_path) as MeshInstance3D
+		assert_not_null(prop, "Counter service prop missing: %s" % node_path)
+		if prop == null:
+			continue
+		assert_almost_eq(
+			_box_bottom_y(prop),
+			counter_top_y,
+			SUPPORT_TOLERANCE,
+			"%s must rest on the checkout counter top" % node_path
+		)
+	if screen != null:
+		var screen_mat: StandardMaterial3D = screen.get_surface_override_material(0)
+		var glow_strip: MeshInstance3D = (
+			_root.get_node_or_null("Checkout/CounterGlowStrip") as MeshInstance3D
+		)
+		var glow_mat: StandardMaterial3D = (
+			glow_strip.get_surface_override_material(0) if glow_strip != null else null
+		)
+		assert_not_null(screen_mat, "Register screen must keep its material")
+		assert_not_null(glow_mat, "Counter glow strip must keep its material")
+		if screen_mat != null and glow_mat != null:
+			assert_lte(
+				glow_mat.emission_energy_multiplier,
+				screen_mat.emission_energy_multiplier,
+				"Counter lighting must stay quieter than the register screen"
+			)
+	if practical != null:
+		assert_lte(practical.light_energy, 0.35, "Counter light must stay restrained")
+		assert_lte(practical.omni_range, 3.5, "Counter light must not wash out the queue lane")
 
 
 func test_checkout_sign_is_finished_without_mirrored_back_text() -> void:

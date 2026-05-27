@@ -2,6 +2,7 @@
 ## and a reputation decrease, with no purchase signal and no cash or stock change.
 extends GutTest
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 const CUSTOMER_SCENE: PackedScene = preload(
 	"res://game/scenes/characters/customer.tscn"
 )
@@ -54,8 +55,10 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.checkout_queue_ready.is_connected(_on_checkout_queue_ready):
-		EventBus.checkout_queue_ready.disconnect(_on_checkout_queue_ready)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.checkout_queue_ready,
+		_on_checkout_queue_ready
+	)
 	_unregister_test_store()
 	GameManager.current_store_id = &""
 

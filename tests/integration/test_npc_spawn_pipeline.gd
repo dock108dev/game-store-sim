@@ -8,6 +8,7 @@ const CUSTOMER_SCENE: PackedScene = preload(
 	"res://game/scenes/characters/customer.tscn"
 )
 const TEST_STORE_ID: StringName = &"test_npc_store"
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 
 var _npc_spawner: NPCSpawnerSystem
 var _customer_system: CustomerSystem
@@ -41,8 +42,10 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	_safe_disconnect(EventBus.customer_entered, _on_customer_entered)
-	_safe_disconnect(EventBus.queue_changed, _on_queue_changed)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.customer_entered, _on_customer_entered
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.queue_changed, _on_queue_changed)
 	if _test_store_root and is_instance_valid(_test_store_root):
 		_test_store_root.queue_free()
 		_test_store_root = null
@@ -309,8 +312,3 @@ func _on_customer_entered(_data: Dictionary) -> void:
 
 func _on_queue_changed(queue_size: int) -> void:
 	_queue_size_last = queue_size
-
-
-func _safe_disconnect(sig: Signal, handler: Callable) -> void:
-	if sig.is_connected(handler):
-		sig.disconnect(handler)

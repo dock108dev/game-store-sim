@@ -18,7 +18,9 @@
       "starting_inventory": [
         "console_neo_ignite",
         "neo_ignite_motorway_kings_loose",
-        "neo_ignite_kingdom_embers_loose"
+        "neo_ignite_kingdom_embers_loose",
+        "neo_ignite_torque_force_3_loose",
+        "neo_ignite_gridiron_2005_loose"
       ],
       "allowed_categories": [
         "cartridges",

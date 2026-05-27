@@ -318,6 +318,54 @@ func test_modal_close_reapplies_active_styling_when_target_state_changed() -> vo
 	)
 
 
+func test_modal_close_refreshes_prompt_label_when_target_copy_changed() -> void:
+	var target: _StatefulTarget = _StatefulTarget.new()
+	target.can = true
+	target.prompt_text = "Talk to"
+	target.display_name = "customer"
+	add_child_autofree(target)
+	var ray_stub: _RayStub = _RayStub.new()
+	ray_stub.target = target
+	add_child_autofree(ray_stub)
+
+	EventBus.interactable_focused.emit("Talk to customer")
+	var label: Label = _prompt.get_node("PanelContainer/HBox/Label")
+	assert_eq(label.text, "Talk to customer", "Pre-condition: initial prompt copy")
+
+	InputFocus.push_context(InputFocus.CTX_MODAL)
+	target.display_name = "register"
+	InputFocus.pop_context()
+
+	assert_eq(
+		label.text,
+		"Talk to register",
+		"Modal close must refresh focused prompt copy from the still-hovered target before the next input"
+	)
+
+
+func test_modal_close_clears_prompt_when_hover_target_left() -> void:
+	var target: _StatefulTarget = _StatefulTarget.new()
+	target.can = true
+	add_child_autofree(target)
+	var ray_stub: _RayStub = _RayStub.new()
+	ray_stub.target = target
+	add_child_autofree(ray_stub)
+
+	EventBus.interactable_focused.emit("Talk to customer")
+	var panel: PanelContainer = _prompt.get_node("PanelContainer")
+	assert_true(panel.visible, "Pre-condition: prompt visible before modal")
+
+	InputFocus.push_context(InputFocus.CTX_MODAL)
+	ray_stub.target = null
+	InputFocus.pop_context()
+	await get_tree().create_timer(0.2).timeout
+
+	assert_false(
+		panel.visible,
+		"Modal close must clear stale prompt copy when the ray no longer has a hovered target"
+	)
+
+
 func test_modal_close_without_focus_target_does_not_query_ray() -> void:
 	# Sanity: when no focus target is set, _refresh_visibility() returns
 	# early before reaching the ray lookup. Asserts the early-return path
@@ -430,12 +478,25 @@ func test_panel_anchor_does_not_move_between_states() -> void:
 class _RayStub extends Node:
 	const _GROUP: StringName = &"interaction_ray"
 	var target: Interactable = null
+	var action_label: String = ""
 
 	func _ready() -> void:
 		add_to_group(_GROUP)
 
 	func get_hovered_target() -> Interactable:
 		return target
+
+	func get_hovered_action_label() -> String:
+		return action_label
+
+	func refresh_hovered_target_state() -> void:
+		if target == null or not is_instance_valid(target):
+			action_label = ""
+			return
+		if target.can_interact():
+			action_label = target.get_prompt_label()
+		else:
+			action_label = target.get_disabled_reason()
 
 
 ## Stateful Interactable whose `can_interact()` is driven by a flag, used to

@@ -21,7 +21,9 @@ REQUIRED_FILENAMES = [
     "01_spawn_first_look.png",
     "02_checkout_manager_counter.png",
     "03_shelf_wall_product_focus.png",
-    "04_stockroom_path_work_area.png",
+    "04_stockroom_looking_in.png",
+    "05_stockroom_work_area_interior.png",
+    "06_exit_threshold_return_view.png",
 ]
 NOISE_FLOOR = 3
 CHANGED_RATIO_WARN = 0.0025
@@ -154,6 +156,9 @@ def validate_current_capture(
     manifest_capture = capture_manifest_row(review_manifest, filename)
     if manifest_capture.get("placeholder") is True:
         return failure_result(filename, f"Placeholder capture rejected: {filename}")
+    metadata_failure = validate_capture_metadata(manifest_capture, filename)
+    if metadata_failure is not None:
+        return metadata_failure
     try:
         image = Image.open(path).convert("RGB")
     except OSError as exc:
@@ -182,6 +187,37 @@ def validate_current_capture(
         "placeholder": bool(manifest_capture.get("placeholder", False)),
         "blankness": blank,
     }
+
+
+def validate_capture_metadata(
+    manifest_capture: dict[str, Any],
+    filename: str,
+) -> dict[str, Any] | None:
+    required_text_fields = [
+        "beat",
+        "active_route_stage",
+        "local_action",
+        "next_destination",
+        "visual_scope_mode",
+        "primary_work_surface_target",
+    ]
+    if not manifest_capture:
+        return failure_result(filename, "Capture missing from review manifest")
+    for field in required_text_fields:
+        if not str(manifest_capture.get(field, "")).strip():
+            return failure_result(filename, f"Capture metadata missing {field}")
+    if manifest_capture.get("non_acceptance_evidence") is True:
+        return failure_result(filename, "Capture marked as non-acceptance evidence")
+    anchor_validation = manifest_capture.get("anchor_validation", {})
+    if not isinstance(anchor_validation, dict) or anchor_validation.get("ok") is not True:
+        return failure_result(filename, "Capture did not validate intended visual anchors")
+    debug_validation = manifest_capture.get("debug_ui_validation", {})
+    if not isinstance(debug_validation, dict) or debug_validation.get("ok") is not True:
+        return failure_result(filename, "Capture did not validate editor/debug UI absence")
+    image_validation = manifest_capture.get("image_validation", {})
+    if isinstance(image_validation, dict) and image_validation.get("ok") is False:
+        return failure_result(filename, "Capture image validation failed")
+    return None
 
 
 def capture_manifest_row(review_manifest: dict[str, Any], filename: str) -> dict[str, Any]:

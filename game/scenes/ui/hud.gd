@@ -208,6 +208,7 @@ func _ready() -> void:
 	_refresh_time_display()
 	_seed_counters_from_systems()
 	_apply_state_visibility(GameManager.current_state)
+	_sync_store_carry_from_state()
 	_refresh_zero_state_hint()
 	call_deferred("_emit_ready_checkpoint")
 
@@ -1174,6 +1175,11 @@ func _on_store_carry_changed(text: String) -> void:
 	_store_carry_label.visible = true
 	if is_instance_valid(_store_carry_icon):
 		_store_carry_icon.visible = true
+
+
+func _sync_store_carry_from_state() -> void:
+	var carry_text: String = "Starter Stock Box" if StoreSessionState.carrying_stock else ""
+	_on_store_carry_changed(carry_text)
 
 
 func _on_store_shelf_count_changed(count: int) -> void:

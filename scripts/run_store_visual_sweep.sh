@@ -19,6 +19,9 @@ if ! GODOT_BIN="$(resolve_mallcore_godot)"; then
 	exit 1
 fi
 
+echo "Visual sweep validation channels: authored-full scene checks; store-session runtime checks; reference-visible visual review; manual route captures."
+echo "Fresh first-ten-seconds captures are required for geometry, camera, readability, visual-scope, and prop changes."
+
 mkdir -p "$CURRENT_DIR" "$DIFF_DIR"
 GODOT_SWEEP_ARGS=(
 	--path "$REPO_ROOT"

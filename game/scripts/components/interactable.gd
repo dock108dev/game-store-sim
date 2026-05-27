@@ -137,6 +137,8 @@ func get_prompt_label() -> String:
 	var target_name: String = display_name.strip_edges()
 	if target_name.is_empty():
 		return verb
+	if verb.ends_with(target_name):
+		return verb
 	return "%s %s" % [verb, target_name]
 
 

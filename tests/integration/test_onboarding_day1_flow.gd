@@ -2,6 +2,7 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 const EXPECTED_DAY_START_HINT_ID: StringName = &"hint_day_start"
 const EXPECTED_DAY_START_MESSAGE: String = (
 	"A new day begins — check your inventory and set your "
@@ -39,8 +40,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.onboarding_hint_shown.is_connected(_on_hint_shown):
-		EventBus.onboarding_hint_shown.disconnect(_on_hint_shown)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.onboarding_hint_shown, _on_hint_shown)
 
 
 func _on_hint_shown(

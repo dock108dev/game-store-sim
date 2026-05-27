@@ -64,6 +64,10 @@ const HIDDEN_NOISE_PATHS: Array[String] = [
 	"bargain_bin",
 	"crt_demo_area",
 	"staff_picks_table",
+	"ZoneLabels/ShelvesBacking",
+	"ZoneLabels/ShelvesLabel",
+	"ZoneLabels/BackroomBacking",
+	"ZoneLabels/BackroomLabel",
 	"ZoneLabels/UsedConsolesLabel",
 	"ZoneLabels/StaffPicksLabel",
 	"ReadabilityProps/UsedConsoleDressing",
@@ -97,6 +101,10 @@ const REFERENCE_VISIBLE_PATHS: Array[String] = [
 	"ReadabilityProps/SpawnViewFloorDressing",
 	"ReadabilityProps/DayOneRouteMarkers",
 	"ReadabilityProps/ZoneIdentity",
+	"ZoneLabels/ShelvesBacking",
+	"ZoneLabels/ShelvesLabel",
+	"ZoneLabels/BackroomBacking",
+	"ZoneLabels/BackroomLabel",
 ]
 
 const KEEP_ROOT_NODES: Array[StringName] = [
@@ -121,7 +129,19 @@ const KEEP_ROOT_NODES: Array[StringName] = [
 	&"StoreSessionRestockShelf",
 	&"StoreSessionDayEndTrigger",
 	&"StoreSessionHiddenClue",
+	&"BackOfficeTerminal",
 	&"ExpandableStoreShell",
+]
+
+const KEEP_VISIBLE_PATHS: Array[String] = [
+	"ReadabilityProps/ZoneIdentity/BackroomDoorThreshold",
+	"ReadabilityProps/ZoneIdentity/BackroomThresholdLeftGuide",
+	"ReadabilityProps/ZoneIdentity/BackroomThresholdRightGuide",
+	"ReadabilityProps/ZoneIdentity/BackroomFloorMat",
+	"ReadabilityProps/ZoneIdentity/ShelfStockAccent",
+	"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
+	"ReadabilityProps/ZoneIdentity/StarterTableLeftGuide",
+	"ReadabilityProps/ZoneIdentity/StarterTableRightGuide",
 ]
 
 const MINIMUM_TRACKED_PATHS: Array[String] = [
@@ -182,10 +202,13 @@ static func classify_path(root: Node, path: String, mode: int) -> Dictionary:
 	var hidden: bool = _matches_any_path(normalized_path, HIDDEN_NOISE_PATHS)
 	var deferred: bool = _matches_any_root(normalized_path, DEFERRED_ROOT_NODES)
 	var context: bool = _matches_any_root(normalized_path, CONTEXT_ROOT_NODES)
-	var keep: bool = _matches_any_root(normalized_path, KEEP_ROOT_NODES)
+	var keep: bool = (
+		_matches_any_root(normalized_path, KEEP_ROOT_NODES)
+		or _matches_any_path(normalized_path, KEEP_VISIBLE_PATHS)
+	)
 	var reference: bool = _matches_any_path(normalized_path, REFERENCE_VISIBLE_PATHS)
 	var conflict: bool = exists and hidden and reference
-	var runtime_visible: bool = exists and (context or keep or (not hidden and not deferred))
+	var runtime_visible: bool = exists and (context or keep)
 	var reference_visible: bool = exists and (context or keep or reference)
 	var authored_visible: bool = exists
 	var source_list: Array[String] = _source_list(
@@ -249,12 +272,13 @@ static func suppression_diff(root: Node, paths: Array[String] = []) -> Array[Dic
 ## Returns the canonical path inventory used by galleries and suppression diffs.
 static func tracked_paths() -> Array[String]:
 	var paths: Array[String] = []
-	_append_unique_strings(paths, MINIMUM_TRACKED_PATHS)
-	_append_unique_strings(paths, HIDDEN_NOISE_PATHS)
-	_append_unique_string_names(paths, DEFERRED_ROOT_NODES)
-	_append_unique_string_names(paths, CONTEXT_ROOT_NODES)
-	_append_unique_strings(paths, REFERENCE_VISIBLE_PATHS)
-	_append_unique_string_names(paths, KEEP_ROOT_NODES)
+	_append_unique_values(paths, MINIMUM_TRACKED_PATHS)
+	_append_unique_values(paths, HIDDEN_NOISE_PATHS)
+	_append_unique_values(paths, DEFERRED_ROOT_NODES)
+	_append_unique_values(paths, CONTEXT_ROOT_NODES)
+	_append_unique_values(paths, REFERENCE_VISIBLE_PATHS)
+	_append_unique_values(paths, KEEP_ROOT_NODES)
+	_append_unique_values(paths, KEEP_VISIBLE_PATHS)
 	paths.sort()
 	return paths
 
@@ -336,7 +360,7 @@ static func _runtime_decision(hidden: bool, deferred: bool, context: bool, keep:
 		return DECISION_DEFERRED_RUNTIME_ROOT
 	if hidden:
 		return DECISION_HIDDEN_RUNTIME_NOISE
-	return DECISION_VISIBLE
+	return DECISION_HIDDEN_RUNTIME_NOISE
 
 
 static func _reference_decision(
@@ -356,7 +380,7 @@ static func _reference_decision(
 		return DECISION_DEFERRED_RUNTIME_ROOT
 	if hidden:
 		return DECISION_HIDDEN_RUNTIME_NOISE
-	return DECISION_VISIBLE
+	return DECISION_HIDDEN_RUNTIME_NOISE
 
 
 static func _diff_decision(
@@ -468,15 +492,12 @@ static func _matches_any_root(path: String, roots: Array[StringName]) -> bool:
 	return false
 
 
-static func _append_unique_strings(out: Array[String], values: Array[String]) -> void:
-	for value: String in values:
-		if not out.has(value):
-			out.append(value)
-
-
-static func _append_unique_string_names(out: Array[String], values: Array[StringName]) -> void:
-	for value: StringName in values:
-		var text: String = String(value)
+static func _append_unique_values(out: Array[String], values: Variant) -> void:
+	if not (values is Array):
+		return
+	var items: Array = values as Array
+	for value: Variant in items:
+		var text: String = str(value)
 		if not out.has(text):
 			out.append(text)
 

@@ -3,6 +3,7 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 const STORE_TYPE: StringName = &"test_store_b"
 const TEST_SLOT: int = 1
 ## Matches StoreLeaseDialog.UNLOCK_REQUIREMENTS[1].cost for slot index 1.
@@ -45,10 +46,8 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.lease_requested.is_connected(_capture_lease_requested):
-		EventBus.lease_requested.disconnect(_capture_lease_requested)
-	if EventBus.lease_completed.is_connected(_capture_lease_completed):
-		EventBus.lease_completed.disconnect(_capture_lease_completed)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.lease_requested, _capture_lease_requested)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.lease_completed, _capture_lease_completed)
 	GameManager.owned_stores = _saved_owned_stores
 	ContentRegistry.clear_for_testing()
 

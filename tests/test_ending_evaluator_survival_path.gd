@@ -3,6 +3,7 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 const SUCCESS_ENDINGS: Array[StringName] = [
 	&"prestige_champion",
 	&"the_local_legend",
@@ -29,8 +30,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.ending_triggered.is_connected(_on_ending_triggered):
-		EventBus.ending_triggered.disconnect(_on_ending_triggered)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.ending_triggered, _on_ending_triggered)
 	GameManager.current_state = _saved_game_state
 	GameManager._ending_id = &""
 

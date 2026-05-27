@@ -21,7 +21,7 @@ func test_retro_games_starter_layout_stays_small_and_uses_kit_visuals() -> void:
 	var placements: Array[Dictionary] = catalog.call(
 		"get_placements", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
 	)
-	assert_eq(placements.size(), 5)
+	assert_eq(placements.size(), 7)
 
 	var visual_counts: Dictionary = {}
 	var product_item_ids: PackedStringArray = []
@@ -43,9 +43,20 @@ func test_retro_games_starter_layout_stays_small_and_uses_kit_visuals() -> void:
 				"console_neo_ignite",
 				"neo_ignite_motorway_kings_loose",
 				"neo_ignite_kingdom_embers_loose",
+				"neo_ignite_torque_force_3_loose",
+				"neo_ignite_gridiron_2005_loose",
 			]
 		)
 	)
+
+	for product_item_id: String in product_item_ids:
+		var product_placement: Dictionary = {}
+		for placement: Dictionary in placements:
+			if str(placement.get("product_item_id", "")) == product_item_id:
+				product_placement = placement
+				break
+		assert_true(bool(product_placement.get("show_price_tag", false)))
+		assert_eq(str(product_placement.get("route_role", "")), "starter_sale_item")
 
 
 func test_layout_catalog_does_not_expose_legacy_visual_apply_path() -> void:

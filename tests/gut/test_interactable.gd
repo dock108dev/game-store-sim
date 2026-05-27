@@ -105,6 +105,18 @@ func test_custom_prompt_preserved() -> void:
 	)
 
 
+func test_custom_prompt_containing_target_name_is_not_duplicated() -> void:
+	var custom: Interactable = Interactable.new()
+	custom.display_name = "Mall"
+	custom.prompt_text = "Exit to Mall"
+	add_child_autofree(custom)
+	assert_eq(
+		custom.get_prompt_label(),
+		"Exit to Mall",
+		"Full custom prompt copy should render without repeating the target name"
+	)
+
+
 func test_interaction_area_has_collision_shape() -> void:
 	var area: Area3D = _interactable.get_interaction_area()
 	var has_shape: bool = false

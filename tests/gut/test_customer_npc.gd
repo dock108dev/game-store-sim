@@ -134,6 +134,19 @@ func test_nav_config_stored_on_initialize() -> void:
 	)
 
 
+func test_begin_visit_skips_staff_only_browse_waypoint() -> void:
+	_nav_config.browse_waypoints[0].position = Vector3(4.80, 0.0, -6.85)
+	_nav_config.browse_waypoints[1].position = Vector3(2.0, 0.0, 0.0)
+	_npc.initialize({}, _nav_config)
+	_npc.begin_visit()
+	var nav_agent: NavigationAgent3D = _npc.get_node("NavigationAgent3D")
+	assert_eq(
+		nav_agent.target_position,
+		Vector3(2.0, 0.0, 0.0),
+		"Browsing must not intentionally target the stock closet"
+	)
+
+
 func test_send_to_checkout_sets_nav_target() -> void:
 	_npc.initialize({}, _nav_config)
 	_npc.send_to_checkout()

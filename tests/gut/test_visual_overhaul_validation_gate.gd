@@ -17,7 +17,9 @@ const REQUIRED_FIRST_TEN_SECONDS_BEATS: Array[String] = [
 	"spawn_first_look",
 	"checkout_manager_counter",
 	"shelf_wall_product_focus",
-	"stockroom_path_work_area",
+	"stockroom_looking_in",
+	"stockroom_work_area_interior",
+	"exit_threshold_return_view",
 ]
 
 var _root: Node3D = null
@@ -76,7 +78,7 @@ func after_each() -> void:
 
 func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 	var rows: Array[Dictionary] = _sweep_rows()
-	assert_eq(rows.size(), 4, "Validation sweep must cover four first-ten-seconds route views")
+	assert_eq(rows.size(), 6, "Validation sweep must cover six first-ten-seconds route views")
 	var seen_beats: Array[String] = []
 	for row: Dictionary in rows:
 		seen_beats.append(str(row.get("name", "")))
@@ -104,8 +106,40 @@ func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 			"%s sweep must name the destination a first-run player should infer" % row["name"]
 		)
 		assert_false(
+			str(row.get("active_route_stage", "")).is_empty(),
+			"%s sweep must identify the active route stage" % row["name"]
+		)
+		assert_false(
 			str(row.get("local_action", "")).is_empty(),
 			"%s sweep must name the local action a first-run player should infer" % row["name"]
+		)
+		assert_false(
+			str(row.get("primary_work_surface_target", "")).is_empty(),
+			"%s sweep must identify the primary work-surface target" % row["name"]
+		)
+		var work_surface_review: Dictionary = row.get("work_surface_review", {}) as Dictionary
+		assert_false(
+			work_surface_review.is_empty(),
+			"%s sweep must declare a work-surface review contract" % row["name"]
+		)
+		assert_true(
+			bool(work_surface_review.get("dominance_required", false)),
+			"%s sweep must judge primary surface dominance" % row["name"]
+		)
+		assert_true(
+			str(work_surface_review.get("primary_action_surface", "")) \
+					== str(row.get("primary_work_surface_target", "")),
+			"%s sweep primary action surface must match its target" % row["name"]
+		)
+		var design_checks: Array = row.get("design_checks", []) as Array
+		for design_check: String in _StoreVisualSweep.route_design_checks():
+			assert_true(
+				design_checks.has(design_check),
+				"%s sweep must include design check %s" % [row["name"], design_check]
+			)
+		assert_true(
+			bool(work_surface_review.get("supporting_props_should_stay_quiet", false)),
+			"%s sweep must judge supporting prop quietness" % row["name"]
 		)
 		var route_anchor: Node3D = _node3d(str(row.get("route_anchor", "")))
 		assert_not_null(
@@ -166,6 +200,14 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 					DisplayServer.get_name(),
 					"headless",
 					"Placeholder sweep images are only allowed under headless display"
+				)
+				assert_true(
+					bool(result.get("non_acceptance_evidence", false)),
+					"Placeholder sweep images must be marked non-acceptance evidence"
+				)
+				assert_false(
+					bool(result.get("acceptance_evidence", true)),
+					"Placeholder sweep images must not count as acceptance evidence"
 				)
 
 	var manifest: Dictionary = _StoreVisualSweep.write_review_manifest(
@@ -233,6 +275,18 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 			),
 			"Manifest must preserve route-anchor review rejection criteria"
 		)
+		assert_true(
+			(payload.get("baseline_review_rules", []) as Array).has(
+				"work-surface captures must show the primary action surface as dominant"
+			),
+			"Manifest must require work-surface dominance review"
+		)
+		assert_true(
+			(payload.get("baseline_review_rules", []) as Array).has(
+				"supporting props must stay quieter than the action surface"
+			),
+			"Manifest must require supporting props to stay quiet"
+		)
 		var diff_policy: Dictionary = payload.get("diff_review_policy", {}) as Dictionary
 		var metrics: Array = diff_policy.get("metrics", []) as Array
 		assert_true(metrics.has("noise_filtered_changed_pixels"))
@@ -240,11 +294,30 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 		assert_true(metrics.has("max_delta"))
 		for beat: Dictionary in beats:
 			assert_eq(str(beat.get("review_target", "")), _StoreVisualSweep.ACCEPTANCE_TARGET)
+			assert_false(
+				str(beat.get("active_route_stage", "")).is_empty(),
+				"Manifest beat must preserve route stage metadata"
+			)
+			assert_false(
+				str(beat.get("primary_work_surface_target", "")).is_empty(),
+				"Manifest beat must preserve work-surface target metadata"
+			)
+			var work_surface_review: Dictionary = beat.get("work_surface_review", {}) as Dictionary
+			assert_false(
+				work_surface_review.is_empty(),
+				"Manifest beat must preserve work-surface review metadata"
+			)
+			var design_checks: Array = beat.get("design_checks", []) as Array
+			for design_check: String in _StoreVisualSweep.route_design_checks():
+				assert_true(
+					design_checks.has(design_check),
+					"Manifest beat must preserve design check %s" % design_check
+				)
 			assert_eq(
 				str(beat.get("hud_context_required", "")),
 				_StoreVisualSweep.HUD_CONTEXT_LABEL,
 				"Manifest beat must preserve the first-day HUD requirement"
-		)
+			)
 
 
 func test_acceptance_visual_sweep_runner_uses_display_backed_capture_contract() -> void:
@@ -253,7 +326,9 @@ func test_acceptance_visual_sweep_runner_uses_display_backed_capture_contract() 
 		"01_spawn_first_look.png",
 		"02_checkout_manager_counter.png",
 		"03_shelf_wall_product_focus.png",
-		"04_stockroom_path_work_area.png",
+		"04_stockroom_looking_in.png",
+		"05_stockroom_work_area_interior.png",
+		"06_exit_threshold_return_view.png",
 	]:
 		assert_true(
 			_has_sweep_filename(filename),
@@ -265,6 +340,12 @@ func test_acceptance_visual_sweep_runner_uses_display_backed_capture_contract() 
 	assert_string_contains(source, "CAPTURE_RESOLUTION")
 	assert_string_contains(source, "CAPTURE_RANDOM_SEED")
 	assert_string_contains(source, "apply_mode_to_tree")
+	assert_string_contains(source, "active_route_stage")
+	assert_string_contains(source, "primary_work_surface_target")
+	assert_string_contains(source, "anchor_validation")
+	assert_string_contains(source, "debug_ui_validation")
+	assert_string_contains(source, "image_validation")
+	assert_string_contains(source, "non_acceptance_evidence")
 	assert_string_contains(source, "acceptance_current_dir")
 	assert_string_contains(source, "write_review_manifest")
 
@@ -280,6 +361,12 @@ func test_visual_sweep_diff_script_declares_soft_baseline_and_threshold_contract
 	assert_string_contains(source, "MAE_FAIL = 2.0")
 	assert_string_contains(source, "MAX_DELTA_FAIL = 96")
 	assert_string_contains(source, "luminance_stddev")
+	assert_string_contains(source, "validate_capture_metadata")
+	assert_string_contains(source, "\"active_route_stage\"")
+	assert_string_contains(source, "Capture metadata missing {field}")
+	assert_string_contains(source, "Capture did not validate intended visual anchors")
+	assert_string_contains(source, "Capture did not validate editor/debug UI absence")
+	assert_string_contains(source, "Capture marked as non-acceptance evidence")
 	assert_string_contains(source, "json.dump(payload")
 
 
@@ -313,6 +400,8 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 		"shelf wall reads stocked",
 		"checkout reads as a service counter",
 		"stockroom path reads as a work area",
+		"entry and exit threshold stay visible",
+		"exit threshold reads as the return path",
 		"walking paths",
 		"cramped/empty balance",
 		"backwards signs",
@@ -321,7 +410,14 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 		"first-day UI state",
 		"First Day — 8:00 AM is visible",
 		"HUD supports rather than fights the route views",
+		"HUD context supports route understanding only",
+		"3D staging communicates the route without new explanatory UI panels",
 		"camera-visible density replaces hidden prop count",
+		"primary action surface is visually dominant",
+		"supporting props stay quiet",
+		"material families stay consistent",
+		"scale is readable and believable",
+		"blank walls, oversized doors, and disconnected props do not dominate",
 	]:
 		assert_true(
 			review_criteria.has(required),
@@ -336,6 +432,10 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 		"color-strip noise dominates the composition",
 		"floating text dominates the composition",
 		"mismatched scale dominates the composition",
+		"blank wall mass dominates the composition",
+		"oversized door geometry dominates the composition",
+		"disconnected props dominate the composition",
+		"material families read as unrelated surfaces",
 	]:
 		assert_true(
 			_failure_criteria_contains(failure_criteria, required),
@@ -347,8 +447,8 @@ func test_first_run_flow_review_markers_remain_visible() -> void:
 	var steps: Array[Dictionary] = _StoreVisualSweep.first_run_flow_steps()
 	assert_eq(
 		steps.size(),
-		6,
-		"First-run flow review must cover manager, register, backroom, shelf, customer, open-store"
+		7,
+		"First-run flow review must cover manager, register, backroom, shelf, customer, open-store, exit"
 	)
 	for step: Dictionary in steps:
 		var anchor_path: String = str(step.get("anchor", ""))

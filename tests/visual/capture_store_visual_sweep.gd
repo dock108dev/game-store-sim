@@ -99,6 +99,13 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	var focus: Node3D = _store_root.get_node_or_null(NodePath(focus_path)) as Node3D
 	if focus == null:
 		return _capture_error(row, "Missing focus node: %s" % focus_path)
+	var anchor_validation: Dictionary = _validate_row_anchors(row)
+	if not bool(anchor_validation.get("ok", false)):
+		return _capture_error(
+			row,
+			"Missing or hidden visual anchor for %s" % row.get("filename", ""),
+			{"anchor_validation": anchor_validation}
+		)
 	_camera.global_position = row.get("camera", Vector3.ZERO) as Vector3
 	_camera.look_at(focus.global_position, Vector3.UP)
 	_camera.current = true
@@ -106,6 +113,13 @@ func _capture_row(row: Dictionary) -> Dictionary:
 		await _wait_frames(18)
 	else:
 		await _wait_frames(SETTLE_FRAMES)
+
+	var debug_ui_validation: Dictionary = _validate_no_editor_debug_ui()
+	if not bool(debug_ui_validation.get("ok", false)):
+		return _capture_error(row, "Debug/editor UI visible during capture", {
+			"anchor_validation": anchor_validation,
+			"debug_ui_validation": debug_ui_validation,
+		})
 
 	var result: Dictionary = StoreVisualSweepScript.save_viewport_png(
 		root,
@@ -115,7 +129,16 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	)
 	result = _normalize_capture_resolution(result)
 	result["beat"] = str(row.get("name", ""))
+	result["active_route_stage"] = str(row.get("active_route_stage", ""))
+	result["local_action"] = str(row.get("local_action", ""))
+	result["next_destination"] = str(row.get("next_destination", ""))
+	result["primary_work_surface_target"] = str(row.get("primary_work_surface_target", ""))
+	result["design_checks"] = row.get("design_checks", [])
+	result["review_target"] = str(row.get("review_target", ""))
 	result["visual_scope_mode"] = str(row.get("visual_scope_mode", ""))
+	result["visual_scope_mode_asserted"] = true
+	result["anchor_validation"] = anchor_validation
+	result["debug_ui_validation"] = debug_ui_validation
 	result["camera_fov"] = StoreVisualSweepScript.CAPTURE_CAMERA_FOV
 	result["random_seed"] = StoreVisualSweepScript.CAPTURE_RANDOM_SEED
 	result["expected_width"] = StoreVisualSweepScript.CAPTURE_RESOLUTION.x
@@ -133,6 +156,12 @@ func _capture_row(row: Dictionary) -> Dictionary:
 		)
 	if not FileAccess.file_exists(str(result.get("path", ""))):
 		return _capture_error(row, "Capture file missing: %s" % row.get("filename", ""))
+	var image_validation: Dictionary = _validate_capture_image(str(result.get("path", "")))
+	result["image_validation"] = image_validation
+	if not bool(image_validation.get("ok", false)):
+		return _capture_error(row, str(image_validation.get("error", "Capture image invalid")), result)
+	result["acceptance_evidence"] = true
+	result["non_acceptance_evidence"] = false
 	return result
 
 
@@ -175,13 +204,134 @@ func _scope_mode_from_label(label: String) -> int:
 			return StoreVisualScopeProfileScript.MODE_AUTHORED_FULL
 
 
-func _capture_error(row: Dictionary, message: String) -> Dictionary:
-	return {
+func _capture_error(row: Dictionary, message: String, extra: Dictionary = {}) -> Dictionary:
+	var result: Dictionary = {
 		"ok": false,
 		"beat": str(row.get("name", "")),
 		"filename": str(row.get("filename", "")),
+		"active_route_stage": str(row.get("active_route_stage", "")),
+		"local_action": str(row.get("local_action", "")),
+		"next_destination": str(row.get("next_destination", "")),
+		"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
+		"review_target": str(row.get("review_target", "")),
+		"visual_scope_mode": str(row.get("visual_scope_mode", "")),
+		"acceptance_evidence": false,
+		"non_acceptance_evidence": true,
 		"error": message,
 	}
+	if message.to_lower().contains("headless") or message.to_lower().contains("placeholder"):
+		result["non_acceptance_reason"] = "placeholder/headless captures cannot satisfy work-surface polish acceptance"
+	for key: Variant in extra.keys():
+		if ["ok", "error", "acceptance_evidence", "non_acceptance_evidence"].has(str(key)):
+			continue
+		result[key] = extra[key]
+	return result
+
+
+func _validate_row_anchors(row: Dictionary) -> Dictionary:
+	var missing: Array[String] = []
+	var hidden: Array[String] = []
+	var visible: Array[String] = []
+	var anchors: Array = (row.get("anchors", []) as Array).duplicate()
+	var route_anchor: String = str(row.get("route_anchor", ""))
+	for anchor_variant: Variant in anchors:
+		var anchor_path: String = str(anchor_variant)
+		var anchor: Node3D = _store_root.get_node_or_null(NodePath(anchor_path)) as Node3D
+		if anchor == null:
+			missing.append(anchor_path)
+		elif not _is_visible_through_ancestors(anchor):
+			hidden.append(anchor_path)
+		else:
+			visible.append(anchor_path)
+	return {
+		"ok": missing.is_empty() and hidden.is_empty(),
+		"visible": visible,
+		"missing": missing,
+		"hidden": hidden,
+		"route_anchor": route_anchor,
+		"route_anchor_exists": route_anchor.is_empty() \
+			or _store_root.get_node_or_null(NodePath(route_anchor)) != null,
+		"intended_anchor_count": anchors.size(),
+	}
+
+
+func _validate_no_editor_debug_ui() -> Dictionary:
+	var visible_debug_items: Array[String] = []
+	_collect_visible_debug_items(root, visible_debug_items)
+	return {
+		"ok": visible_debug_items.is_empty(),
+		"visible_debug_items": visible_debug_items,
+		"editor_debug_ui_absent": visible_debug_items.is_empty(),
+	}
+
+
+func _collect_visible_debug_items(node: Node, out: Array[String]) -> void:
+	if node is CanvasItem:
+		var item: CanvasItem = node as CanvasItem
+		var lower_name: String = item.name.to_lower()
+		if item.is_visible_in_tree() \
+				and (lower_name.contains("debug") or lower_name.contains("editor")):
+			out.append(String(item.get_path()))
+	for child: Node in node.get_children():
+		_collect_visible_debug_items(child, out)
+
+
+func _validate_capture_image(path: String) -> Dictionary:
+	var image := Image.new()
+	var load_err: int = image.load(path)
+	if load_err != OK:
+		return {"ok": false, "error": "Capture image unreadable: %s" % path}
+	if image.get_width() != StoreVisualSweepScript.CAPTURE_RESOLUTION.x \
+			or image.get_height() != StoreVisualSweepScript.CAPTURE_RESOLUTION.y:
+		return {
+			"ok": false,
+			"error": "Capture image dimensions drifted after save: %dx%d"
+			% [image.get_width(), image.get_height()],
+		}
+	var stats: Dictionary = _capture_blankness_metrics(image)
+	if float(stats.get("luminance_stddev", 0.0)) < 2.0:
+		return {"ok": false, "error": "Capture is near-blank", "blankness": stats}
+	if float(stats.get("near_black_ratio", 0.0)) > 0.98:
+		return {"ok": false, "error": "Capture is near-black", "blankness": stats}
+	if float(stats.get("near_white_ratio", 0.0)) > 0.98:
+		return {"ok": false, "error": "Capture is near-white", "blankness": stats}
+	return {"ok": true, "blankness": stats}
+
+
+func _capture_blankness_metrics(image: Image) -> Dictionary:
+	var total: int = image.get_width() * image.get_height()
+	if total <= 0:
+		return {"luminance_stddev": 0.0, "near_black_ratio": 1.0, "near_white_ratio": 0.0}
+	var sum: float = 0.0
+	var sum_sq: float = 0.0
+	var near_black: int = 0
+	var near_white: int = 0
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			var color: Color = image.get_pixel(x, y)
+			var luminance: float = (color.r * 54.213) + (color.g * 182.376) + (color.b * 18.411)
+			sum += luminance
+			sum_sq += luminance * luminance
+			if luminance <= 8.0:
+				near_black += 1
+			if luminance >= 247.0:
+				near_white += 1
+	var mean: float = sum / float(total)
+	var variance: float = maxf((sum_sq / float(total)) - (mean * mean), 0.0)
+	return {
+		"luminance_stddev": sqrt(variance),
+		"near_black_ratio": float(near_black) / float(total),
+		"near_white_ratio": float(near_white) / float(total),
+	}
+
+
+func _is_visible_through_ancestors(node: Node) -> bool:
+	var current: Node = node
+	while current != null and current != _store_root:
+		if current is Node3D and not (current as Node3D).visible:
+			return false
+		current = current.get_parent()
+	return true
 
 
 func _wait_frames(count: int) -> void:

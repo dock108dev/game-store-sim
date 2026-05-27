@@ -19,6 +19,7 @@ func before_all() -> void:
 	var scene: PackedScene = load(SCENE_PATH)
 	assert_not_null(scene, "Retro Games scene should load")
 	_root = scene.instantiate() as Node3D
+	ExpandableStoreShellRuntime.apply(_root)
 	add_child(_root)
 
 
@@ -112,8 +113,8 @@ func test_register_area_position_matches_floor_plan() -> void:
 	# Floor plan: the active customer spot is just in front of the counter.
 	# Y is irrelevant for XZ pathing but the trigger is authored at Y=1.0 to
 	# overlap the player capsule.
-	assert_almost_eq(register_area.global_position.x, 5.05, 0.5)
-	assert_almost_eq(register_area.global_position.z, 8.45, 0.5)
+	assert_almost_eq(register_area.global_position.x, 3.55, 0.5)
+	assert_almost_eq(register_area.global_position.z, 6.65, 0.5)
 
 
 func test_entry_area_is_grouped_for_collection() -> void:
@@ -216,15 +217,37 @@ func test_checkout_navigation_relationships_keep_queue_reachable() -> void:
 	)
 
 
+func test_customer_fallback_target_refuses_staff_only_stock_closet() -> void:
+	var customer_scene: PackedScene = load(CUSTOMER_SCENE_PATH)
+	assert_not_null(customer_scene, "Customer scene should load")
+	if customer_scene == null:
+		return
+	var customer: Customer = customer_scene.instantiate() as Customer
+	add_child_autofree(customer)
+	customer.global_position = Vector3(0.0, 0.0, 8.0)
+	customer._exit_position = Vector3(0.0, 0.0, 9.0)
+	customer.enable_waypoint_fallback()
+
+	customer._set_navigation_target(Vector3(4.80, 0.0, -6.85), &"shelf")
+
+	assert_true(
+		CustomerNavConfig.is_customer_position_allowed(
+			customer._fallback_target
+		),
+		"Waypoint fallback must not target the staff-only stock closet"
+	)
+	assert_eq(
+		customer._fallback_target,
+		Vector3(0.0, 0.0, 9.0),
+		"Forbidden fallback target should resolve to the customer exit side"
+	)
+
+
 # ── CustomerSystem parenting: Gate 2 holds at runtime ────────────────────────
 
 func test_customer_system_resolves_npc_container_from_store_controller() -> void:
-	var stub_store: StoreController = StoreController.new()
-	stub_store.name = "stub_store"
-	add_child_autofree(stub_store)
-	var container := Node3D.new()
-	container.name = "npc_container"
-	stub_store.add_child(container)
+	var stub_store: StoreController = _make_stub_store("stub_store")
+	var container := stub_store.get_node("npc_container")
 
 	var system := CustomerSystem.new()
 	add_child_autofree(system)
@@ -245,12 +268,8 @@ func test_customer_system_returns_null_container_without_controller() -> void:
 
 
 func test_spawned_customer_parents_under_store_npc_container() -> void:
-	var stub_store: StoreController = StoreController.new()
-	stub_store.name = "stub_store_pathing"
-	add_child_autofree(stub_store)
-	var container := Node3D.new()
-	container.name = "npc_container"
-	stub_store.add_child(container)
+	var stub_store: StoreController = _make_stub_store("stub_store_pathing")
+	var container := stub_store.get_node("npc_container")
 
 	var system := CustomerSystem.new()
 	add_child_autofree(system)
@@ -276,12 +295,7 @@ func test_spawned_customer_parents_under_store_npc_container() -> void:
 
 
 func test_released_customer_returns_to_customer_system_pool() -> void:
-	var stub_store: StoreController = StoreController.new()
-	stub_store.name = "stub_store_release"
-	add_child_autofree(stub_store)
-	var container := Node3D.new()
-	container.name = "npc_container"
-	stub_store.add_child(container)
+	var stub_store: StoreController = _make_stub_store("stub_store_release")
 
 	var system := CustomerSystem.new()
 	add_child_autofree(system)
@@ -337,3 +351,13 @@ func _make_profile() -> CustomerTypeDefinition:
 	p.impulse_buy_chance = 0.1
 	p.mood_tags = PackedStringArray([])
 	return p
+
+
+func _make_stub_store(store_name: String) -> StoreController:
+	var stub_store: StoreController = StoreController.new()
+	stub_store.name = store_name
+	add_child_autofree(stub_store)
+	var container := Node3D.new()
+	container.name = "npc_container"
+	stub_store.add_child(container)
+	return stub_store

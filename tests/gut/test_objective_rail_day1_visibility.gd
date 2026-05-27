@@ -1,13 +1,13 @@
 ## Verifies the Day 1 ObjectiveRail surfaces the first step of the chain
-## ("Talk to the customer at the register.") with a "Press E" action and an
+## ("Talk to the manager at checkout.") with a manager action and an
 ## "E" key badge, that the rail occupies a different screen zone than the
 ## InteractionPrompt, and that the Day1ReadinessAudit objective check passes
 ## once the day starts and the player enters the store.
 extends GutTest
 
 
-const _OBJECTIVE_TEXT: String = "Talk to the customer at the register."
-const _ACTION_TEXT: String = "Press E at the counter"
+const _OBJECTIVE_TEXT: String = "Talk to the manager at checkout."
+const _ACTION_TEXT: String = "Talk to manager"
 const _KEY_TEXT: String = "E"
 
 const _RAIL_SCENE: String = "res://game/scenes/ui/objective_rail.tscn"
@@ -67,11 +67,15 @@ func after_each() -> void:
 	EventBus.interactable_unfocused.emit()
 
 
-## Drives the production handshake for tests that exercise post-dismiss state:
-## day_started fires the pre-chain gate, then the player dismisses the note.
-func _start_day1_after_note_dismiss() -> void:
+func _start_day1_preopening() -> void:
 	EventBus.day_started.emit(1)
-	EventBus.manager_note_dismissed.emit("")
+
+
+func _complete_preopening() -> void:
+	EventBus.store_objective_completed.emit(&"talk_to_manager")
+	EventBus.store_objective_completed.emit(&"check_register")
+	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
+	EventBus.store_objective_completed.emit(&"training_stock_shelf")
 
 
 func _make_rail() -> CanvasLayer:
@@ -96,23 +100,23 @@ func test_rail_visible_on_day1_after_day_started_and_store_entered() -> void:
 
 func test_objective_label_shows_stock_first_item_text_on_day1() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	assert_eq(rail._objective_label.text, _OBJECTIVE_TEXT)
 
 
-func test_action_label_shows_press_i_on_day1() -> void:
+func test_action_label_shows_manager_action_on_day1() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	assert_eq(rail._action_label.text, _ACTION_TEXT)
 
 
-func test_hint_badge_shows_letter_i_on_day1() -> void:
+func test_hint_badge_shows_letter_e_on_day1() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	assert_eq(rail._hint_label.text, _KEY_TEXT)
 	assert_true(
 		rail._hint_label.visible,
-		"Day 1 key badge 'I' must be visible alongside the action hint"
+		"Day 1 key badge 'E' must be visible alongside the action hint"
 	)
 
 
@@ -229,17 +233,18 @@ func test_chain_advance_updates_rail_with_next_step_copy() -> void:
 	# dedup, identical-payload re-emissions are suppressed; the rail only
 	# refreshes when content changes.
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
-	assert_eq(rail._objective_label.text, _OBJECTIVE_TEXT)
+	_start_day1_preopening()
+	_complete_preopening()
+	assert_eq(rail._objective_label.text, "Talk to the customer at the register.")
 	EventBus.customer_interacted.emit(null)
 	assert_eq(
 		rail._objective_label.text, "Check the back room delivery.",
-		"customer_interacted at TALK_TO_CUSTOMER must re-render the rail with step 2"
+		"customer_interacted at TALK_TO_CUSTOMER must re-render the rail with back-room copy"
 	)
 	EventBus.placement_mode_entered.emit()
 	assert_eq(
 		rail._objective_label.text, "Stock the starter display table.",
-		"placement_mode_entered at BACK_ROOM_INVENTORY must re-render with step 3"
+		"placement_mode_entered at BACK_ROOM_INVENTORY must re-render with stock copy"
 	)
 	EventBus.item_stocked.emit("item_001", "shelf_a")
 	assert_eq(
@@ -252,10 +257,10 @@ func test_duplicate_emit_does_not_overwrite_rail_labels() -> void:
 	# Dedup contract: when ObjectiveDirector recomputes _emit_current() with
 	# the same text/action/key/hint as the last emission, no signal fires.
 	# Mutated labels stay mutated — the rail isn't touched. Out-of-order
-	# signals that don't advance the Day 1 chain (item_stocked while at
-	# TALK_TO_CUSTOMER) are the production path that exercises this.
+	# signals that don't advance the Day 1 chain (item_stocked while still at
+	# the manager beat) are the production path that exercises this.
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	rail._objective_label.text = ""
 	rail._action_label.text = ""
 	EventBus.item_stocked.emit("item_001", "shelf_a")
@@ -278,7 +283,7 @@ func test_duplicate_emit_does_not_overwrite_rail_labels() -> void:
 
 func test_fp_mode_focus_renders_focused_action_in_rail() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
 	EventBus.interactable_focused.emit("Talk to Customer")
 	assert_eq(
@@ -289,7 +294,7 @@ func test_fp_mode_focus_renders_focused_action_in_rail() -> void:
 
 func test_fp_mode_focus_shows_styled_keybadge() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
 	EventBus.interactable_focused.emit("Talk to Customer")
 	var badge: PanelContainer = rail._key_badge
@@ -301,7 +306,7 @@ func test_fp_mode_focus_shows_styled_keybadge() -> void:
 
 func test_fp_mode_focus_suppresses_cached_hint_chip() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
 	EventBus.interactable_focused.emit("Talk to Customer")
 	assert_false(
@@ -312,7 +317,7 @@ func test_fp_mode_focus_suppresses_cached_hint_chip() -> void:
 
 func test_fp_mode_disabled_focus_hides_keybadge_and_mutes_label() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
 	EventBus.interactable_focused_disabled.emit("No customer waiting")
 	assert_false(
@@ -331,7 +336,7 @@ func test_fp_mode_disabled_focus_hides_keybadge_and_mutes_label() -> void:
 
 func test_fp_mode_unfocus_restores_cached_payload() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
 	EventBus.interactable_focused.emit("Talk to Customer")
 	EventBus.interactable_unfocused.emit()
@@ -349,27 +354,51 @@ func test_fp_mode_unfocus_restores_cached_payload() -> void:
 	)
 
 
-func test_non_fp_mode_does_not_route_focused_text_into_rail() -> void:
-	# Regression guard: outside FP mode, the InteractionPrompt is the sole
-	# renderer of focused-interactable copy. The rail must keep showing the
-	# cached objective payload so the management/non-FP surfaces are
-	# unchanged.
+func test_non_fp_mode_suppresses_action_chip_while_prompt_owns_focus() -> void:
+	# Outside FP mode, the InteractionPrompt is the sole renderer of
+	# focused-interactable action copy. The rail keeps the objective sentence
+	# visible but drops its action/key chip while focus is active.
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	EventBus.interactable_focused.emit("Counter — Press E to use")
 	assert_eq(
-		rail._action_label.text, _ACTION_TEXT,
-		"Non-FP focus must not overwrite the cached action chip"
+		rail._action_label.text, "",
+		"Non-FP focus must suppress the cached action chip so it does not duplicate the prompt"
 	)
+	assert_false(rail._action_label.visible)
+	assert_false(rail._hint_label.visible)
 	assert_false(
 		rail._key_badge.visible,
 		"KeyBadge must stay hidden outside FP mode"
 	)
+	EventBus.interactable_unfocused.emit()
+	assert_eq(
+		rail._action_label.text,
+		_ACTION_TEXT,
+		"Unfocus must restore the cached objective action chip"
+	)
+	assert_true(rail._hint_label.visible)
+	assert_eq(rail._hint_label.text, _KEY_TEXT)
+
+
+func test_non_fp_disabled_focus_suppresses_action_chip() -> void:
+	var rail := _make_rail()
+	_start_day1_preopening()
+	EventBus.interactable_focused_disabled.emit("Pick up stock first")
+	assert_eq(
+		rail._action_label.text,
+		"",
+		"Disabled focus reason belongs to InteractionPrompt, not the rail action chip"
+	)
+	assert_false(rail._action_label.visible)
+	assert_false(rail._hint_label.visible)
+	EventBus.interactable_unfocused.emit()
+	assert_eq(rail._action_label.text, _ACTION_TEXT)
 
 
 func test_store_fp_mode_hides_objective_rail_surface() -> void:
 	var rail := _make_rail()
-	_start_day1_after_note_dismiss()
+	_start_day1_preopening()
 	assert_true(rail.visible, "Pre-condition: rail visible before store_session FP suppression")
 	var store_session_controller: Node = Node.new()
 	store_session_controller.add_to_group("store_session_controller")

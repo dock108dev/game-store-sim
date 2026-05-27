@@ -38,6 +38,9 @@
           "name": "StarterConsoleNeoIgnite",
           "product_item_id": "console_neo_ignite",
           "zone": "sales_floor",
+          "route_role": "starter_sale_item",
+          "price_source": "starter_day_offer",
+          "show_price_tag": true,
           "position": [-1.78, 0.82, 1.22],
           "rotation_degrees": [0.0, -20.0, 0.0],
           "scale": [0.78, 0.78, 0.78]
@@ -46,6 +49,9 @@
           "name": "StarterMotorwayKings",
           "product_item_id": "neo_ignite_motorway_kings_loose",
           "zone": "sales_floor",
+          "route_role": "starter_sale_item",
+          "price_source": "starter_day_offer",
+          "show_price_tag": true,
           "position": [-1.25, 0.82, 1.10],
           "rotation_degrees": [0.0, 6.0, 0.0],
           "scale": [0.72, 0.72, 0.72]
@@ -54,9 +60,34 @@
           "name": "StarterKingdomEmbers",
           "product_item_id": "neo_ignite_kingdom_embers_loose",
           "zone": "sales_floor",
+          "route_role": "starter_sale_item",
+          "price_source": "starter_day_offer",
+          "show_price_tag": true,
           "position": [-0.98, 0.82, 1.52],
           "rotation_degrees": [0.0, -9.0, 0.0],
           "scale": [0.72, 0.72, 0.72]
+        },
+        {
+          "name": "StarterTorqueForce",
+          "product_item_id": "neo_ignite_torque_force_3_loose",
+          "zone": "sales_floor",
+          "route_role": "starter_sale_item",
+          "price_source": "starter_day_offer",
+          "show_price_tag": true,
+          "position": [-0.48, 0.82, 1.12],
+          "rotation_degrees": [0.0, 14.0, 0.0],
+          "scale": [0.70, 0.70, 0.70]
+        },
+        {
+          "name": "StarterGridiron",
+          "product_item_id": "neo_ignite_gridiron_2005_loose",
+          "zone": "sales_floor",
+          "route_role": "starter_sale_item",
+          "price_source": "starter_day_offer",
+          "show_price_tag": true,
+          "position": [-0.22, 0.82, 1.50],
+          "rotation_degrees": [0.0, -15.0, 0.0],
+          "scale": [0.70, 0.70, 0.70]
         }
       ]
     },

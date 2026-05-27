@@ -14,6 +14,7 @@ extends Interactable
 
 const PROMPT_NO_CUSTOMER: String = "No customer waiting"
 const PROMPT_DEFAULT_VERB: String = "Ring up customer"
+const PROMPT_STORE_SESSION_OBJECTIVE: String = "Follow the current store task."
 
 var _pending_customer: Customer = null
 
@@ -43,6 +44,8 @@ func get_pending_customer() -> Customer:
 
 
 func can_interact(_actor: Node = null) -> bool:
+	if _store_session_objective_owns_register():
+		return false
 	var customer: Customer = get_pending_customer()
 	if customer == null:
 		return false
@@ -50,6 +53,8 @@ func can_interact(_actor: Node = null) -> bool:
 
 
 func get_disabled_reason(_actor: Node = null) -> String:
+	if _store_session_objective_owns_register():
+		return PROMPT_STORE_SESSION_OBJECTIVE
 	if get_pending_customer() == null:
 		return PROMPT_NO_CUSTOMER
 	return ""
@@ -137,3 +142,21 @@ func _on_customer_state_changed(customer: Node, new_state: int) -> void:
 		return
 	if new_state == Customer.State.LEAVING:
 		_pending_customer = null
+
+
+func _store_session_objective_owns_register() -> bool:
+	var controller: StoreSessionController = _store_session_controller()
+	if controller == null:
+		return false
+	var target_path: String = controller.active_objective_target_path()
+	return not target_path.is_empty() and target_path != "checkout_counter/Interactable"
+
+
+func _store_session_controller() -> StoreSessionController:
+	var tree: SceneTree = get_tree()
+	if tree == null:
+		return null
+	var controller: Node = tree.get_first_node_in_group("store_session_controller")
+	if controller is StoreSessionController:
+		return controller as StoreSessionController
+	return null

@@ -5,6 +5,7 @@ extends GutTest
 const CameraManagerScript: GDScript = preload("res://game/autoload/camera_manager.gd")
 
 const _STORE_ID: StringName = &"retro_games"
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 
 var _manager: Node
 var _received_cameras: Array[Camera3D] = []
@@ -24,15 +25,12 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	_safe_disconnect(EventBus.active_camera_changed, _on_camera_changed)
-	_safe_disconnect(EventBus.store_entered, _manager._on_store_entered)
-	_safe_disconnect(EventBus.store_exited, _manager._on_store_exited)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.active_camera_changed, _on_camera_changed
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.store_entered, _manager._on_store_entered)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.store_exited, _manager._on_store_exited)
 	_reconnect_autoload_store_handlers()
-
-
-func _safe_disconnect(sig: Signal, callable: Callable) -> void:
-	if sig.is_connected(callable):
-		sig.disconnect(callable)
 
 
 func _disconnect_autoload_store_handlers() -> void:
@@ -42,8 +40,12 @@ func _disconnect_autoload_store_handlers() -> void:
 	_autoload_store_exited_connected = EventBus.store_exited.is_connected(
 		CameraManager._on_store_exited
 	)
-	_safe_disconnect(EventBus.store_entered, CameraManager._on_store_entered)
-	_safe_disconnect(EventBus.store_exited, CameraManager._on_store_exited)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.store_entered, CameraManager._on_store_entered
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.store_exited, CameraManager._on_store_exited
+	)
 
 
 func _reconnect_autoload_store_handlers() -> void:

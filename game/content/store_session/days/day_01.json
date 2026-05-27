@@ -2,7 +2,7 @@
   "type": "store_session_day_data",
   "day_number": 1,
   "date_label": "First Day",
-  "store_context": "First shift on the floor at Shelf Life. One customer is already waiting at the counter.",
+  "store_context": "First shift on the floor at Shelf Life. The manager walks you through the register, back-room stock, and starter display before the first customer is handled.",
   "required_events": [
     "day01_wrong_console_parent"
   ],
@@ -15,5 +15,5 @@
   ],
   "traffic_level": "low",
   "holiday_pressure": "none",
-  "special_notes": "One customer, one decision, then close the day."
+  "special_notes": "Training first, then one customer request, one restock cycle, and close."
 }

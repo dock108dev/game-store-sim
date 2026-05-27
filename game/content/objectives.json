@@ -3,42 +3,100 @@
   "objectives": [
     {
       "day": 1,
-      "text": "Resolve a customer request and restock the floor",
-      "action": "Talk to the customer, then run one backroom restock cycle",
+      "text": "Open the store and handle the first customer",
+      "action": "Finish preopening, then resolve one customer request",
       "key": "E",
       "post_sale_text": "First sale complete. Close the day when ready.",
-      "post_sale_action": "Click Close Day in the HUD",
-      "post_sale_key": "",
-      "pre_step": {
-        "id": "read_vic_note",
-        "text": "Read Vic's morning note",
-        "action": "Press E to dismiss the note",
-        "key": "E"
-      },
+      "post_sale_action": "Close the day at the register",
+      "post_sale_key": "E",
+      "phases": [
+        {
+          "id": "preopening",
+          "header": "FIRST DAY",
+          "completion_flag": "preopening_complete",
+          "steps": [
+            {
+              "id": "talk_to_manager",
+              "text": "Talk to the manager at checkout.",
+              "action": "Talk to manager",
+              "key": "E"
+            },
+            {
+              "id": "check_register",
+              "text": "Check the register.",
+              "action": "Check register",
+              "key": "E"
+            },
+            {
+              "id": "check_back_room_inventory",
+              "text": "Check back room inventory.",
+              "action": "Check back room inventory",
+              "key": "E"
+            },
+            {
+              "id": "training_stock_shelf",
+              "text": "Stock the starter display table.",
+              "action": "Stock starter display table",
+              "key": "E"
+            }
+          ]
+        },
+        {
+          "id": "real_day",
+          "header": "DAY 1",
+          "requires_flag": "preopening_complete",
+          "steps": [
+            {
+              "id": "talk_to_customer",
+              "text": "Talk to the customer at the register.",
+              "action": "Talk to the customer",
+              "key": "E"
+            },
+            {
+              "id": "back_room_inventory",
+              "text": "Check the back room delivery.",
+              "action": "Check inventory",
+              "key": "E"
+            },
+            {
+              "id": "stock_shelf",
+              "text": "Stock the starter display table.",
+              "action": "Stock starter display table",
+              "key": "E"
+            },
+            {
+              "id": "close_day",
+              "text": "Close the day at the register.",
+              "action": "Close the day",
+              "key": "E"
+            }
+          ]
+        }
+      ],
       "steps": [
         {
           "id": "talk_to_customer",
           "text": "Talk to the customer at the register.",
-          "action": "Press E at the counter",
+          "action": "Talk to the customer",
           "key": "E"
         },
         {
           "id": "back_room_inventory",
           "text": "Check the back room delivery.",
-          "action": "Press E on a stock box to carry it out",
+          "action": "Check inventory",
           "key": "E"
         },
         {
           "id": "stock_shelf",
           "text": "Stock the starter display table.",
-          "action": "Press E at the starter display table",
+          "action": "Stock starter display table",
           "key": "E"
         },
         {
           "id": "close_day",
           "text": "Close the day at the register.",
-          "action": "Press F4 to end the day",
-          "key": "F4"
+          "action": "Close the day",
+          "key": "E"
         }
       ]
     },

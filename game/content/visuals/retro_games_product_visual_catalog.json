@@ -144,6 +144,129 @@
       "rating_badge": "TEEN"
     },
     {
+      "template_id": "kingdom_embers_neo_ignite",
+      "display_title": "Kingdom of Embers",
+      "catalog_definition_ids": ["neo_ignite_kingdom_embers_loose"],
+      "visual_family": "action_rpg",
+      "case_shape": "tall_disc_case",
+      "front_color": "#552332",
+      "title_block": {
+        "text": "KINGDOM EMBERS",
+        "fill_color": "#F1C45B",
+        "text_color": "#24120D"
+      },
+      "simple_symbol": {
+        "symbol_id": "ember_crown",
+        "shape": "ringed_star_with_tiny_can",
+        "color": "#FF7048"
+      },
+      "spine_color": "#2A141A",
+      "spine_label": {
+        "text": "KINGDOM EMBERS",
+        "text_color": "#FFE0A3",
+        "platform_text": "NEO IGNITE"
+      },
+      "platform_stripe": {
+        "platform_id": "neo_ignite",
+        "platform_visual_id": "neo_ignite_disc_tower",
+        "catalog_label": "Neo Ignite",
+        "alias_label": "",
+        "fill_color": "#101722",
+        "accent_color": "#5AD6FF",
+        "position": "top"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [1.0, 1.12, 0.12],
+        "spine_width": 0.12
+      },
+      "feature_bullets": ["Castle Road", "Friend Links", "Boss Hearts"],
+      "rating_badge": "TEEN"
+    },
+    {
+      "template_id": "torque_force_neo_ignite",
+      "display_title": "Torque Force 3",
+      "catalog_definition_ids": ["neo_ignite_torque_force_3_loose"],
+      "visual_family": "arcade_racer",
+      "case_shape": "tall_disc_case",
+      "front_color": "#24445A",
+      "title_block": {
+        "text": "TORQUE FORCE 3",
+        "fill_color": "#B7F06A",
+        "text_color": "#14210F"
+      },
+      "simple_symbol": {
+        "symbol_id": "crash_replay_wheel",
+        "shape": "tilted_wheel_with_three_sparks",
+        "color": "#FFE05A"
+      },
+      "spine_color": "#102533",
+      "spine_label": {
+        "text": "TORQUE FORCE 3",
+        "text_color": "#DDFDB1",
+        "platform_text": "NEO IGNITE"
+      },
+      "platform_stripe": {
+        "platform_id": "neo_ignite",
+        "platform_visual_id": "neo_ignite_disc_tower",
+        "catalog_label": "Neo Ignite",
+        "alias_label": "",
+        "fill_color": "#101722",
+        "accent_color": "#5AD6FF",
+        "position": "top"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [1.0, 1.12, 0.12],
+        "spine_width": 0.12
+      },
+      "feature_bullets": ["Crash Replays", "City Loop", "Boost Chain"],
+      "rating_badge": "ALL AGES"
+    },
+    {
+      "template_id": "gridiron_2005_neo_ignite",
+      "display_title": "Gridiron Season 2005",
+      "catalog_definition_ids": ["neo_ignite_gridiron_2005_loose"],
+      "visual_family": "annual_sports",
+      "case_shape": "tall_disc_case",
+      "front_color": "#25432B",
+      "title_block": {
+        "text": "GRIDIRON 2005",
+        "fill_color": "#F7F1C7",
+        "text_color": "#122016"
+      },
+      "simple_symbol": {
+        "symbol_id": "stadium_signal",
+        "shape": "signal_antenna_inside_hex_shield",
+        "color": "#7AD46E"
+      },
+      "spine_color": "#112117",
+      "spine_label": {
+        "text": "GRIDIRON 2005",
+        "text_color": "#EAF5C7",
+        "platform_text": "NEO IGNITE"
+      },
+      "platform_stripe": {
+        "platform_id": "neo_ignite",
+        "platform_visual_id": "neo_ignite_disc_tower",
+        "catalog_label": "Neo Ignite",
+        "alias_label": "",
+        "fill_color": "#101722",
+        "accent_color": "#5AD6FF",
+        "position": "top"
+      },
+      "shelf_display": {
+        "category": "cartridges",
+        "preferred_facing": "front",
+        "scale": [1.0, 1.12, 0.12],
+        "spine_width": 0.12
+      },
+      "feature_bullets": ["Roster Year", "Red Zone", "Coach Mode"],
+      "rating_badge": "ALL AGES"
+    },
+    {
       "template_id": "marble_bash_canopy_wave",
       "display_title": "Marble Bash Party",
       "catalog_definition_ids": ["canopy_wave_marble_bash_party_loose"],

@@ -10,6 +10,16 @@ const STATE_BACKROOM: StringName = &"backroom"
 const STATE_STOCKING: StringName = &"stocking"
 const STATE_CLOSE_READY: StringName = &"close_ready"
 
+const DISPLAY_FONT_SIZE: int = 44
+const DISPLAY_OUTLINE_SIZE: int = 4
+const DISPLAY_COLOR_INACTIVE: Color = Color(0.16, 0.32, 0.18, 1.0)
+const DISPLAY_COLOR_READY: Color = Color(0.54, 0.92, 0.46, 1.0)
+const DISPLAY_COLOR_TRANSACTION: Color = Color(0.42, 0.86, 0.78, 1.0)
+const DISPLAY_COLOR_SETTLED: Color = Color(1.0, 0.84, 0.38, 1.0)
+const DISPLAY_COLOR_NO_SALE: Color = Color(0.94, 0.60, 0.28, 1.0)
+const DISPLAY_COLOR_ROUTING: Color = Color(0.70, 0.68, 0.48, 1.0)
+const DISPLAY_COLOR_CLOSE_READY: Color = Color(1.0, 0.88, 0.42, 1.0)
+
 @export var screen_mesh_path: NodePath = ^"../RegisterScreen"
 @export var display_label_path: NodePath = ^"StateLabel"
 @export var receipt_slip_path: NodePath = ^"../../PrintedReceiptSlip"
@@ -32,7 +42,7 @@ func _ready() -> void:
 func set_state(state: StringName, amount: int = 0) -> void:
 	var next_state: StringName = _normalized_state(state)
 	_state = next_state
-	_amount = maxi(amount, 0)
+	_amount = _amount_for_state(_state, amount)
 	_display_text = _text_for_state(_state, _amount)
 	_apply_visual_state()
 
@@ -84,16 +94,22 @@ func _normalized_state(state: StringName) -> StringName:
 			return STATE_INACTIVE
 
 
+func _amount_for_state(state: StringName, amount: int) -> int:
+	if state == STATE_TRANSACTION or state == STATE_SETTLED:
+		return maxi(amount, 0)
+	return 0
+
+
 func _text_for_state(state: StringName, amount: int) -> String:
 	var text: String = "CLOSED"
 	match state:
 		STATE_READY:
-			text = "READY"
+			text = "REGISTER\nREADY"
 		STATE_TRANSACTION:
 			if amount > 0:
 				text = "SALE\n$%d" % amount
 			else:
-				text = "SALE\nOPEN"
+				text = "TRANS\nREADY"
 		STATE_SETTLED:
 			text = "RECEIPT\n$%d" % amount
 		STATE_NO_SALE:
@@ -109,6 +125,10 @@ func _text_for_state(state: StringName, amount: int) -> String:
 
 func _apply_visual_state() -> void:
 	if _display_label != null:
+		_display_label.font_size = DISPLAY_FONT_SIZE
+		_display_label.outline_size = DISPLAY_OUTLINE_SIZE
+		_display_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_display_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		_display_label.text = _display_text
 		_display_label.modulate = _color_for_state(_state)
 	if _screen_mesh != null:
@@ -118,20 +138,20 @@ func _apply_visual_state() -> void:
 
 
 func _color_for_state(state: StringName) -> Color:
-	var color: Color = Color(0.18, 0.36, 0.18, 1.0)
+	var color: Color = DISPLAY_COLOR_INACTIVE
 	match state:
 		STATE_READY:
-			color = Color(0.48, 0.95, 0.42, 1.0)
+			color = DISPLAY_COLOR_READY
 		STATE_TRANSACTION:
-			color = Color(0.38, 0.88, 1.0, 1.0)
+			color = DISPLAY_COLOR_TRANSACTION
 		STATE_SETTLED:
-			color = Color(1.0, 0.84, 0.38, 1.0)
+			color = DISPLAY_COLOR_SETTLED
 		STATE_NO_SALE:
-			color = Color(1.0, 0.65, 0.28, 1.0)
+			color = DISPLAY_COLOR_NO_SALE
 		STATE_BACKROOM, STATE_STOCKING:
-			color = Color(0.72, 0.70, 0.52, 1.0)
+			color = DISPLAY_COLOR_ROUTING
 		STATE_CLOSE_READY:
-			color = Color(0.98, 0.88, 0.42, 1.0)
+			color = DISPLAY_COLOR_CLOSE_READY
 	return color
 
 
@@ -141,5 +161,23 @@ func _material_for_state(state: StringName) -> StandardMaterial3D:
 	material.albedo_color = Color(color.r * 0.35, color.g * 0.35, color.b * 0.35, 1.0)
 	material.emission_enabled = true
 	material.emission = color
-	material.emission_energy_multiplier = 1.25 if state != STATE_INACTIVE else 0.25
+	material.emission_energy_multiplier = _emission_energy_for_state(state)
 	return material
+
+
+func _emission_energy_for_state(state: StringName) -> float:
+	var energy: float = 0.25
+	match state:
+		STATE_READY:
+			energy = 1.0
+		STATE_TRANSACTION:
+			energy = 1.35
+		STATE_SETTLED:
+			energy = 1.55
+		STATE_NO_SALE:
+			energy = 0.85
+		STATE_BACKROOM, STATE_STOCKING:
+			energy = 0.65
+		STATE_CLOSE_READY:
+			energy = 1.45
+	return energy

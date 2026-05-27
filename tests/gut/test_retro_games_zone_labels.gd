@@ -1,5 +1,5 @@
-## Verifies retro_games.tscn ships Day-1 navigation labels:
-##   - the visible ZoneLabels layer only names learning-route destinations
+## Verifies retro_games.tscn ships Day-1 reference labels:
+##   - the authored ZoneLabels layer only names learning-route destinations
 ##     that are not already owned by checkout/storefront signage
 ##   - labels sit above slot height (Y >= 2.0) so they do not occlude
 ##     interactable slot zones beneath them
@@ -10,9 +10,12 @@
 ##     toggle all zone markers off in one call
 extends GutTest
 
+const StoreVisualScopeProfileScript: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_scope_profile.gd"
+)
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const ZONE_GROUP: StringName = &"zone_label"
-const VISIBLE_DAY1_NAV_LABELS: Dictionary = {
+const DAY1_REFERENCE_LABELS: Dictionary = {
 	"ZoneLabels/ShelvesLabel": {
 		"normalized_text": "starter display table",
 		"objective_step": "stock_shelf",
@@ -61,19 +64,19 @@ func _zone_labels() -> Array[Label3D]:
 	return result
 
 
-func test_each_visible_day1_navigation_destination_has_a_label() -> void:
-	for path: String in VISIBLE_DAY1_NAV_LABELS.keys():
+func test_each_day1_reference_destination_has_an_authored_label() -> void:
+	for path: String in DAY1_REFERENCE_LABELS.keys():
 		var label: Label3D = _root.get_node_or_null(path) as Label3D
 		assert_not_null(label, "%s must exist" % path)
 		if label == null:
 			continue
-		assert_true(label.visible, "%s must stay visible for Day-1 navigation" % path)
+		assert_true(label.visible, "%s must stay visible in authored full-scene review" % path)
 		assert_true(
 			label.is_in_group(ZONE_GROUP),
 			"%s must stay in the zone-label group for bulk-hide support" % path,
 		)
 		var expected: String = String(
-			(VISIBLE_DAY1_NAV_LABELS[path] as Dictionary)["normalized_text"]
+			(DAY1_REFERENCE_LABELS[path] as Dictionary)["normalized_text"]
 		)
 		assert_eq(
 			_normalized_label_text(label),
@@ -102,7 +105,7 @@ func test_checkout_and_exit_are_not_duplicate_visible_zone_labels() -> void:
 	if checkout_sign != null:
 		assert_true(checkout_sign.text.to_lower().contains("checkout"))
 	if door_prompt != null:
-		assert_eq(door_prompt.prompt_text, "Exit to Mall")
+		assert_eq(door_prompt.get_prompt_label(), "Exit to Mall")
 
 
 func test_zone_labels_clear_slot_height() -> void:
@@ -120,12 +123,12 @@ func test_zone_labels_clear_slot_height() -> void:
 
 
 func test_day1_nav_labels_match_objective_wording() -> void:
-	for path: String in VISIBLE_DAY1_NAV_LABELS.keys():
+	for path: String in DAY1_REFERENCE_LABELS.keys():
 		var label: Label3D = _root.get_node_or_null(path) as Label3D
 		assert_not_null(label, "%s must exist" % path)
 		if label == null:
 			continue
-		var spec: Dictionary = VISIBLE_DAY1_NAV_LABELS[path] as Dictionary
+		var spec: Dictionary = DAY1_REFERENCE_LABELS[path] as Dictionary
 		var objective_text: String = _objective_step_text(String(spec["objective_step"]))
 		assert_true(
 			objective_text.to_lower().contains(_normalized_label_text(label)),
@@ -140,7 +143,7 @@ func test_day1_nav_labels_meet_pixel_size_floor() -> void:
 	# letter angular size below 1° at the typical 15m+ entrance-approach view,
 	# making the label illegible until the player was already next to the
 	# zone.
-	for path: String in VISIBLE_DAY1_NAV_LABELS.keys():
+	for path: String in DAY1_REFERENCE_LABELS.keys():
 		var label: Label3D = _root.get_node_or_null(path) as Label3D
 		assert_not_null(label, "%s must exist" % path)
 		if label == null:
@@ -152,6 +155,52 @@ func test_day1_nav_labels_meet_pixel_size_floor() -> void:
 				+ "on entrance approach (~17m line-of-sight)."
 			) % [path, label.pixel_size, MIN_DAY1_NAV_PIXEL_SIZE],
 		)
+
+
+func test_store_session_runtime_hides_route_labels_but_keeps_affordances() -> void:
+	var scene: PackedScene = load(SCENE_PATH)
+	assert_not_null(scene, "Retro Games scene must load")
+	if scene == null:
+		return
+	var scoped_root: Node3D = scene.instantiate() as Node3D
+	assert_not_null(scoped_root, "Retro Games scene must instantiate")
+	if scoped_root == null:
+		return
+	add_child(scoped_root)
+	StoreVisualScopeProfileScript.apply_mode_to_tree(
+		scoped_root,
+		StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME
+	)
+	for path: String in DAY1_REFERENCE_LABELS.keys():
+		var label: Node3D = scoped_root.get_node_or_null(path) as Node3D
+		assert_not_null(label, "%s must exist as a reference label" % path)
+		if label != null:
+			assert_false(
+				_is_visible_in_tree_for(scoped_root, label),
+				"%s must be hidden in store-session runtime review" % path,
+			)
+	for path: String in [
+		"StoreSessionRestockShelf",
+		"StoreSessionRestockShelf/ShelfBoard",
+		"StoreSessionRestockShelf/SlotMarker0",
+		"ReadabilityProps/ZoneIdentity/ShelfStockAccent",
+		"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
+		"ReadabilityProps/ZoneIdentity/StarterTableLeftGuide",
+		"ReadabilityProps/ZoneIdentity/StarterTableRightGuide",
+		"StoreSessionBackroomPickup",
+		"StoreSessionBackroomPickup/StockBox",
+		"ReadabilityProps/ZoneIdentity/BackroomDoorThreshold",
+		"ReadabilityProps/ZoneIdentity/BackroomThresholdLeftGuide",
+		"ReadabilityProps/ZoneIdentity/BackroomThresholdRightGuide",
+	]:
+		var node: Node3D = scoped_root.get_node_or_null(path) as Node3D
+		assert_not_null(node, "%s must exist as a non-label readability cue" % path)
+		if node != null:
+			assert_true(
+				_is_visible_in_tree_for(scoped_root, node),
+				"%s must remain visible when route labels are suppressed" % path,
+			)
+	scoped_root.free()
 
 
 func _objective_step_text(step_id: String) -> String:
@@ -207,8 +256,12 @@ func _normalized_label_text(label: Label3D) -> String:
 
 
 func _is_visible_in_tree(node: Node3D) -> bool:
+	return _is_visible_in_tree_for(_root, node)
+
+
+func _is_visible_in_tree_for(root: Node3D, node: Node3D) -> bool:
 	var cursor: Node = node
-	while cursor != null and cursor != _root:
+	while cursor != null and cursor != root:
 		if cursor is Node3D and not (cursor as Node3D).visible:
 			return false
 		cursor = cursor.get_parent()

@@ -121,11 +121,20 @@ func test_objective_state_transitions_emit_expected_payloads() -> void:
 	EventBus.day_started.emit(1)
 	assert_eq(
 		_last_objective_text(),
-		"Read Vic's morning note",
-		"Day 1 starts with the pre-chain note objective"
+		"Talk to the manager at checkout.",
+		"Day 1 starts with manager-led preopening"
 	)
 
-	EventBus.manager_note_dismissed.emit("vic_day01")
+	EventBus.store_objective_completed.emit(&"talk_to_manager")
+	assert_eq(_last_objective_text(), "Check the register.")
+
+	EventBus.store_objective_completed.emit(&"check_register")
+	assert_eq(_last_objective_text(), "Check back room inventory.")
+
+	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
+	assert_eq(_last_objective_text(), "Stock the starter display table.")
+
+	EventBus.store_objective_completed.emit(&"training_stock_shelf")
 	assert_eq(_last_objective_text(), "Talk to the customer at the register.")
 
 	EventBus.customer_interacted.emit(null)
@@ -138,8 +147,8 @@ func test_objective_state_transitions_emit_expected_payloads() -> void:
 	assert_eq(_last_objective_text(), "Close the day at the register.")
 
 	var last_update: Dictionary = _objective_updates[_objective_updates.size() - 1]
-	assert_eq(last_update.get("next_action", ""), "Press F4 to end the day")
-	assert_eq(last_update.get("input_hint", ""), "F4")
+	assert_eq(last_update.get("next_action", ""), "Close the day")
+	assert_eq(last_update.get("input_hint", ""), "E")
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
 		ObjectiveDirector.DAY1_STEP_CLOSE_DAY,

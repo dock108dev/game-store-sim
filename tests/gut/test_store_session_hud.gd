@@ -93,7 +93,7 @@ func test_autoload_is_registered_and_owns_both_panels() -> void:
 	)
 
 
-func test_panels_are_direct_children_of_betahud() -> void:
+func test_panels_are_direct_children_of_store_session_hud() -> void:
 	var right: StoreStatusPanel = StoreSessionHUD.get_right_panel()
 	var log: StoreEventLogPanel = StoreSessionHUD.get_event_log_panel()
 	assert_eq(
@@ -243,7 +243,7 @@ func test_storehud_does_not_connect_fp_mode_changed() -> void:
 		)
 
 
-func test_fp_toggle_does_not_change_betahud_active_state() -> void:
+func test_fp_toggle_does_not_change_store_session_hud_active_state() -> void:
 	_install_stub_controller()
 	StoreSessionHUD.activate(StoreSessionState.day)
 	EventBus.fp_mode_changed.emit(true)

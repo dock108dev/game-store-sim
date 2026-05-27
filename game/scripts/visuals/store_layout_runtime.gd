@@ -162,6 +162,9 @@ func _render_layout_dressing() -> void:
 
 func _render_product_dressing(placement: Dictionary, product_item_id: String) -> void:
 	var item_data: Dictionary = _product_visual_data_from_item_id(product_item_id)
+	item_data["route_role"] = str(placement.get("route_role", "starter_sale_item"))
+	item_data["stock_state"] = str(placement.get("stock_state", "available"))
+	item_data["show_price_tag"] = bool(placement.get("show_price_tag", false))
 	var node: Node3D = ProductVisualFactoryScript.create_visual_for_item(item_data)
 	if node == null:
 		return
@@ -192,6 +195,7 @@ func _product_visual_data_from_definition(definition: ItemDefinition) -> Diction
 		"display_name": definition.item_name,
 		"category": String(definition.category),
 		"platform_id": String(definition.platform_id),
+		"price_cents": int(round(definition.used_price * 100.0)),
 	}
 	if definition.extra is Dictionary:
 		for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
@@ -206,6 +210,7 @@ func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dict
 		"display_name": str(entry.get("item_name", item_id)),
 		"category": str(entry.get("category", "")),
 		"platform_id": str(entry.get("platform_id", "")),
+		"price_cents": int(round(float(entry.get("used_price", entry.get("base_price", 0.0))) * 100.0)),
 	}
 	for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
 		if entry.has(key):

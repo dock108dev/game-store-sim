@@ -14,6 +14,7 @@ const DOOR_NODE_PATH: String = "EntranceDoor"
 const DOOR_MESH_PATH: String = "EntranceDoor/DoorMesh"
 const DOOR_BODY_PATH: String = "EntranceDoor/StaticBody3D"
 const DOOR_INTERACTABLE_PATH: String = "EntranceDoor/Interactable"
+const INTERACTION_RAY_SCRIPT: GDScript = preload("res://game/scripts/player/interaction_ray.gd")
 
 const ENTRANCE_GAP_HALF_WIDTH: float = 1.5
 const NAV_BOUNDS_Z_MAX: float = 9.7
@@ -138,14 +139,20 @@ func test_entrance_door_interactable_is_storefront_with_exit_prompt() -> void:
 		interactable.enabled,
 		"Door Interactable must ship enabled so pressing E works"
 	)
-	# The HUD prompt builder lowercases the verb portion; verify the source
-	# strings carry the "Exit to Mall" wording the player will see.
-	var combined: String = "%s %s" % [
-		interactable.display_name, interactable.prompt_text,
-	]
-	assert_string_contains(
-		combined, "Exit to Mall",
-		"Door must surface 'Exit to Mall' in display_name or prompt_text"
+	assert_eq(
+		interactable.display_name,
+		"Mall",
+		"Door Interactable must keep a concise target identity"
+	)
+	assert_eq(
+		interactable.get_prompt_label(),
+		"Exit to Mall",
+		"Door prompt copy must stay short and unambiguous"
+	)
+	assert_eq(
+		interactable.proximity_radius,
+		0.0,
+		"Door prompt must be raycast-only so it does not appear from route targets"
 	)
 	# The runtime InteractionArea must land on the interactable_triggers bit
 	# so the FP InteractionRay can resolve it via reticle hit.
@@ -158,6 +165,54 @@ func test_entrance_door_interactable_is_storefront_with_exit_prompt() -> void:
 		Interactable.INTERACTABLE_LAYER,
 		"Door InteractionArea must sit on the interactable_triggers bit"
 	)
+
+
+func test_entry_camera_raycast_focuses_exit_prompt() -> void:
+	var interactable: Interactable = (
+		_root.get_node_or_null(DOOR_INTERACTABLE_PATH) as Interactable
+	)
+	assert_not_null(interactable, "EntranceDoor/Interactable must exist")
+	if interactable == null:
+		return
+	var interaction_area: Area3D = interactable.get_interaction_area()
+	assert_not_null(interaction_area, "Door Interactable must expose an InteractionArea")
+	if interaction_area == null:
+		return
+
+	var camera := Camera3D.new()
+	camera.name = "ExitPromptRaycastCamera"
+	camera.near = 0.05
+	camera.fov = 70.0
+	_root.add_child(camera)
+	camera.global_position = Vector3(
+		interaction_area.global_position.x,
+		interaction_area.global_position.y,
+		interaction_area.global_position.z - 1.35
+	)
+	camera.look_at(interaction_area.global_position, Vector3.UP)
+	camera.current = true
+
+	var ray: Node = INTERACTION_RAY_SCRIPT.new()
+	_root.add_child(ray)
+	ray.call("_apply_camera", camera)
+	watch_signals(EventBus)
+	await get_tree().physics_frame
+
+	ray.call("_update_raycast")
+
+	assert_eq(
+		ray.get_hovered_target(),
+		interactable,
+		"Entry camera raycast must focus the exit door interactable"
+	)
+	assert_eq(
+		ray.get_hovered_action_label(),
+		"Exit to Mall",
+		"Raycast focus must surface the Exit to Mall prompt"
+	)
+	assert_signal_emitted_with_parameters(EventBus, "interactable_focused", ["Exit to Mall"])
+	ray.queue_free()
+	camera.queue_free()
 
 
 func test_pressing_e_on_door_routes_to_mall_overview() -> void:

@@ -1,5 +1,5 @@
-## Verifies retro_games.tscn navigation: nav mesh covers the resized floor,
-## CustomerNavConfig markers sit at their authored positions, and each
+## Verifies retro_games.tscn navigation: nav mesh covers the expanded floor,
+## CustomerNavConfig markers sit at their runtime-reflowed positions, and each
 ## furniture fixture carries a NavigationObstacle3D so customers steer
 ## around shelves and counters instead of clipping through them.
 extends GutTest
@@ -7,13 +7,13 @@ extends GutTest
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 
 const EXPECTED_WAYPOINTS: Dictionary = {
-	"EntryPoint": Vector3(0.0, 0.05, 9.0),
-	"BrowseWaypoint01": Vector3(-4.6, 0.05, -8.55),
-	"BrowseWaypoint02": Vector3(6.25, 0.05, -4.25),
-	"BrowseWaypoint03": Vector3(0.0, 0.05, -3.7),
-	"BrowseWaypoint04": Vector3(-6.2, 0.05, -1.2),
-	"CheckoutApproach": Vector3(5.05, 0.05, 8.45),
-	"ExitPoint": Vector3(0.0, 0.05, 10.5),
+	"EntryPoint": Vector3(0.0, 0.05, 9.05),
+	"BrowseWaypoint01": Vector3(-2.65, 0.05, 1.05),
+	"BrowseWaypoint02": Vector3(-3.85, 0.05, -3.45),
+	"BrowseWaypoint03": Vector3(0.40, 0.05, -1.35),
+	"BrowseWaypoint04": Vector3(-4.45, 0.05, 2.65),
+	"CheckoutApproach": Vector3(3.55, 0.05, 6.65),
+	"ExitPoint": Vector3(0.0, 0.05, 9.05),
 }
 
 # Fixture root path -> expected NavigationObstacle3D radius. Path encodes
@@ -39,6 +39,7 @@ func before_all() -> void:
 	assert_not_null(scene, "Retro Games scene must load")
 	if scene:
 		_root = scene.instantiate() as Node3D
+		ExpandableStoreShellRuntime.apply(_root)
 		add_child(_root)
 
 
@@ -92,12 +93,16 @@ func test_navigation_mesh_is_baked_with_obstacle_cutouts() -> void:
 		max_z = maxf(max_z, v.z)
 	assert_lt(min_y, 1.0, "Nav mesh min Y must be near ground (got %f)" % min_y)
 	assert_lt(max_y, 2.0, "Nav mesh max Y must stay below ceiling (got %f)" % max_y)
-	# The bake covers the full ±7.7 × ±9.7 footprint, allowing a small inset
-	# from the agent radius (0.4m) and walkable region pull-in.
-	assert_lt(min_x, -6.5, "Nav mesh must extend toward left wall")
-	assert_gt(max_x, 6.5, "Nav mesh must extend toward right wall")
-	assert_lt(min_z, -8.5, "Nav mesh must extend toward back wall")
-	assert_gt(max_z, 8.5, "Nav mesh must extend toward front wall")
+	var bake_bounds: AABB = nav_mesh.filter_baking_aabb
+	assert_eq(
+		bake_bounds,
+		AABB(Vector3(-5.6, -1.0, -7.25), Vector3(11.2, 2.5, 16.7)),
+		"Nav mesh bake AABB must match the expanded runtime floor after agent inset"
+	)
+	assert_lt(min_x, -5.5, "Nav mesh must extend toward the expanded left aisle")
+	assert_gt(max_x, 5.5, "Nav mesh must extend toward the expanded right aisle")
+	assert_lt(min_z, -7.0, "Nav mesh must extend toward the stockroom work area")
+	assert_gt(max_z, 9.0, "Nav mesh must extend toward the expanded entry side")
 
 
 func test_navigation_mesh_is_external_resource() -> void:
@@ -115,7 +120,7 @@ func test_navigation_mesh_is_external_resource() -> void:
 
 # ── Customer waypoints ──────────────────────────────────────────────────────
 
-func test_all_seven_customer_markers_exist_with_authored_positions() -> void:
+func test_all_seven_customer_markers_exist_with_runtime_reflowed_positions() -> void:
 	var nav_config: Node = _root.get_node_or_null("CustomerNavConfig")
 	assert_not_null(nav_config, "CustomerNavConfig node must exist")
 	if nav_config == null:
@@ -146,7 +151,7 @@ func test_all_seven_customer_markers_exist_with_authored_positions() -> void:
 		)
 
 
-func test_customer_nav_config_getters_return_authored_positions() -> void:
+func test_customer_nav_config_getters_return_runtime_reflowed_positions() -> void:
 	var nav_config: CustomerNavConfig = (
 		_root.get_node_or_null("CustomerNavConfig") as CustomerNavConfig
 	)
@@ -155,20 +160,29 @@ func test_customer_nav_config_getters_return_authored_positions() -> void:
 		return
 	# Auto-discovery runs in _ready(); the scene was added to the tree in
 	# before_all, so the markers should be wired up by now.
-	assert_eq(
-		nav_config.get_entry_position(),
-		EXPECTED_WAYPOINTS["EntryPoint"],
-		"get_entry_position() must return EntryPoint world position",
+	assert_almost_eq(
+		nav_config.get_entry_position().distance_to(
+			EXPECTED_WAYPOINTS["EntryPoint"]
+		),
+		0.0,
+		0.001,
+		"get_entry_position() must return runtime EntryPoint world position",
 	)
-	assert_eq(
-		nav_config.get_checkout_position(),
-		EXPECTED_WAYPOINTS["CheckoutApproach"],
-		"get_checkout_position() must return CheckoutApproach world position",
+	assert_almost_eq(
+		nav_config.get_checkout_position().distance_to(
+			EXPECTED_WAYPOINTS["CheckoutApproach"]
+		),
+		0.0,
+		0.001,
+		"get_checkout_position() must return runtime CheckoutApproach world position",
 	)
-	assert_eq(
-		nav_config.get_exit_position(),
-		EXPECTED_WAYPOINTS["ExitPoint"],
-		"get_exit_position() must return ExitPoint world position",
+	assert_almost_eq(
+		nav_config.get_exit_position().distance_to(
+			EXPECTED_WAYPOINTS["ExitPoint"]
+		),
+		0.0,
+		0.001,
+		"get_exit_position() must return runtime ExitPoint world position",
 	)
 	var browse: Array[Vector3] = nav_config.get_browse_positions()
 	assert_eq(
@@ -180,6 +194,99 @@ func test_customer_nav_config_getters_return_authored_positions() -> void:
 			pos, Vector3.ZERO,
 			"Browse position must not fall back to ZERO (missing marker)",
 		)
+
+
+func test_all_customer_waypoints_stay_out_of_staff_only_stock_closet() -> void:
+	var nav_config: CustomerNavConfig = (
+		_root.get_node_or_null("CustomerNavConfig") as CustomerNavConfig
+	)
+	assert_not_null(nav_config, "CustomerNavConfig must resolve to script type")
+	if nav_config == null:
+		return
+	var markers: Array[Marker3D] = nav_config.get_customer_waypoint_markers()
+	assert_gt(
+		markers.size(), 0,
+		"CustomerNavConfig must expose customer waypoint markers"
+	)
+	for marker: Marker3D in markers:
+		assert_true(
+			CustomerNavConfig.is_customer_position_allowed(
+				marker.global_position
+			),
+			"%s must not route customers into the staff-only stock closet"
+			% marker.name
+		)
+
+
+func test_day_one_customer_route_targets_stay_customer_allowed() -> void:
+	var nav_config: CustomerNavConfig = (
+		_root.get_node_or_null("CustomerNavConfig") as CustomerNavConfig
+	)
+	assert_not_null(nav_config, "CustomerNavConfig must resolve to script type")
+	if nav_config == null:
+		return
+	var route_positions: Array[Vector3] = [
+		nav_config.get_entry_position(),
+		nav_config.get_checkout_position(),
+		nav_config.get_exit_position(),
+	]
+	route_positions.append_array(nav_config.get_browse_positions())
+	for position: Vector3 in route_positions:
+		assert_true(
+			CustomerNavConfig.is_customer_position_allowed(position),
+			"Day-one customer route target must stay outside staff-only bounds"
+		)
+
+
+func test_stock_closet_remains_staff_and_player_reachable() -> void:
+	var staff_backroom: Marker3D = (
+		_root.get_node_or_null("StoreStaffConfig/BackroomPoint") as Marker3D
+	)
+	var pickup: Node3D = (
+		_root.get_node_or_null("StoreSessionBackroomPickup") as Node3D
+	)
+	var pickup_interactable: Area3D = (
+		_root.get_node_or_null("StoreSessionBackroomPickup/Interactable") as Area3D
+	)
+	var threshold: Node3D = (
+		_root.get_node_or_null(
+			"ReadabilityProps/ZoneIdentity/BackroomDoorThreshold"
+		) as Node3D
+	)
+	assert_not_null(staff_backroom, "Backroom staff marker must exist")
+	assert_not_null(pickup, "Stock pickup must exist")
+	assert_not_null(pickup_interactable, "Stock pickup interactable must exist")
+	assert_not_null(threshold, "Backroom threshold affordance must exist")
+	if (
+		staff_backroom == null
+		or pickup == null
+		or pickup_interactable == null
+		or threshold == null
+	):
+		return
+	assert_true(
+		CustomerNavConfig.is_position_in_staff_only_zone(
+			staff_backroom.global_position
+		),
+		"Staff backroom point must remain inside the staff-only closet"
+	)
+	assert_true(
+		CustomerNavConfig.is_position_in_staff_only_zone(
+			pickup.global_position
+		),
+		"Stock pickup must remain inside the staff-only closet"
+	)
+	assert_false(
+		CustomerNavConfig.is_position_in_staff_only_zone(
+			threshold.global_position
+		),
+		"Door threshold should remain outside the forbidden customer area"
+	)
+	assert_lt(
+		_xz_distance(threshold.global_position, pickup.global_position),
+		2.0,
+		"Stock pickup must remain reachable from the backroom threshold"
+	)
 
 
 func test_checkout_queue_markers_share_register_flow() -> void:

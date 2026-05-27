@@ -8,6 +8,9 @@ const AutomationArtifactsScript: GDScript = preload(
 const StoreVisualScopeProfileScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_scope_profile.gd"
 )
+const WorkSurfaceValidationContractScript: GDScript = preload(
+	"res://game/scripts/store_session/work_surface_validation_contract.gd"
+)
 const ARTIFACT_SUITE: String = "retro_games_day_one"
 const ARTIFACT_DIR: String = "screenshots/visual_sweep/retro_games_day_one"
 const ACCEPTANCE_ARTIFACT_DIR: String = "visual_sweep/retro_games_day_one"
@@ -24,6 +27,17 @@ const HUD_CONTEXT_LABEL: String = "First Day — 8:00 AM"
 const _MAX_SLUG_LENGTH: int = 64
 
 
+## Returns the design-coherence checks applied to each route acceptance row.
+static func route_design_checks() -> Array[String]:
+	return [
+		"material-family consistency",
+		"readable scale",
+		"no blank-wall dominance",
+		"no oversized-door dominance",
+		"no disconnected-prop dominance",
+	]
+
+
 ## Returns the normal store_session review beats. These are the first-ten-seconds
 ## acceptance target for this phase; broader whole-room checks stay secondary.
 static func rows() -> Array[Dictionary]:
@@ -38,18 +52,28 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"name": "spawn_first_look",
 			"label": "Spawn first look",
 			"filename": "01_spawn_first_look.png",
-			"camera": Vector3(0.0, 1.70, 5.82),
-			"focus": "ExpandableStoreShell/StarterSignLabel",
+			"camera": Vector3(0.0, 1.70, 7.85),
+			"focus": "StoreSessionDayOneCustomer",
 			"anchors":
 			[
 				"ExpandableStoreShell/StarterSignLabel",
 				"ExpandableStoreShell/StarterBackWall",
 				"ExpandableStoreShell/StarterAisleMat",
 				"ExpandableStoreShell/EntryThreshold",
+				"StoreSessionDayOneCustomer",
 			],
 			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopRegister",
+			"active_route_stage": "spawn_orientation",
 			"next_destination": "manager and checkout register",
 			"local_action": "take in the store identity and walk to the counter",
+			"primary_work_surface_target": "checkout_counter",
+			"work_surface_review": {
+				"surface_role": "route_preview",
+				"primary_action_surface": "checkout_counter",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
 			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
@@ -73,8 +97,17 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"ExpandableStoreShell/FrontDoorPushPlate",
 			],
 			"route_anchor": "StoreSessionDayOneCustomer",
+			"active_route_stage": "training_talk_manager",
 			"next_destination": "checkout counter",
 			"local_action": "talk to the manager/register area",
+			"primary_work_surface_target": "checkout_counter",
+			"work_surface_review": {
+				"surface_role": "service_counter_hierarchy",
+				"primary_action_surface": "checkout_counter",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
 			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
@@ -96,8 +129,17 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"ExpandableStoreShell/StarterUsedShelfBacker",
 			],
 			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
+			"active_route_stage": "training_stock_shelf",
 			"next_destination": "starter display table",
 			"local_action": "read the empty table target before starter stock appears",
+			"primary_work_surface_target": "StoreSessionRestockShelf",
+			"work_surface_review": {
+				"surface_role": "starter_table_hierarchy",
+				"primary_action_surface": "StoreSessionRestockShelf",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
 			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
@@ -106,25 +148,101 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 		},
 		{
 			"index": 4,
-			"name": "stockroom_path_work_area",
-			"label": "Stockroom path work area",
-			"filename": "04_stockroom_path_work_area.png",
-			"camera": Vector3(1.35, 1.58, 1.56),
+			"name": "stockroom_looking_in",
+			"label": "Stockroom looking in",
+			"filename": "04_stockroom_looking_in.png",
+			"camera": Vector3(2.20, 1.58, -2.45),
+			"focus": "ExpandableStoreShell/StockroomFloorTape",
+			"anchors":
+			[
+				"StoreSessionBackroomPickup",
+				"ExpandableStoreShell/StockroomPartition",
+				"ExpandableStoreShell/StockroomLeftSideReturn",
+				"ExpandableStoreShell/StockroomFloorTape",
+				"ExpandableStoreShell/StockroomUtilityPractical",
+			],
+			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopBackroom",
+			"active_route_stage": "training_back_room_inventory",
+			"next_destination": "stockroom pickup",
+			"local_action": "recognize the open stockroom path from the sales floor",
+			"primary_work_surface_target": "ExpandableStoreShell/StockroomFloorTape",
+			"work_surface_review": {
+				"surface_role": "stockroom_entry_hierarchy",
+				"primary_action_surface": "ExpandableStoreShell/StockroomFloorTape",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
+			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
+			"review_target": ACCEPTANCE_TARGET,
+			"hud_context_required": HUD_CONTEXT_LABEL,
+		},
+		{
+			"index": 5,
+			"name": "stockroom_work_area_interior",
+			"label": "Stockroom work-area interior",
+			"filename": "05_stockroom_work_area_interior.png",
+			"camera": Vector3(2.55, 1.58, -3.15),
 			"focus": "StoreSessionBackroomPickup/StockBoxLabel",
 			"anchors":
 			[
 				"StoreSessionBackroomPickup",
 				"StoreSessionBackroomPickup/StockBox",
 				"StoreSessionBackroomPickup/StockBoxLabel",
-				"ExpandableStoreShell/StockroomPartition",
-				"ExpandableStoreShell/StockroomFloorTape",
+				"ExpandableStoreShell/StockroomLeftSideReturn",
+				"ExpandableStoreShell/StockroomUtilityPractical",
 			],
 			"route_anchor": "ReadabilityProps/DayOneRouteMarkers/TrainingStopBackroom",
+			"active_route_stage": "training_back_room_inventory",
 			"next_destination": "stockroom pickup",
-			"local_action": "walk to the stock box and pickup work area",
+			"local_action": "confirm the stock box is a usable work area, not a closet",
+			"primary_work_surface_target": "StoreSessionBackroomPickup",
+			"work_surface_review": {
+				"surface_role": "stockroom_work_area_hierarchy",
+				"primary_action_surface": "StoreSessionBackroomPickup",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
 			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
+			"review_target": ACCEPTANCE_TARGET,
+			"hud_context_required": HUD_CONTEXT_LABEL,
+		},
+		{
+			"index": 6,
+			"name": "exit_threshold_return_view",
+			"label": "Exit threshold return view",
+			"filename": "06_exit_threshold_return_view.png",
+			"camera": Vector3(1.40, 1.60, 4.85),
+			"focus": "ExpandableStoreShell/FrontDoorPushPlate",
+			"anchors":
+			[
+				"ExpandableStoreShell/FrontDoorPushPlate",
+				"ExpandableStoreShell/EntryThreshold",
+				"ExpandableStoreShell/EntryThresholdPractical",
+				"ExpandableStoreShell/StarterGlassDoorBlocker",
+				"ExpandableStoreShell/FrontDoorFrameLeft",
+				"ExpandableStoreShell/FrontDoorFrameRight",
+			],
+			"route_anchor": "ExpandableStoreShell/EntryThreshold",
+			"active_route_stage": "exit_orientation",
+			"next_destination": "front exit",
+			"local_action": "recognize the way back out through the front threshold",
+			"primary_work_surface_target": "ExpandableStoreShell/EntryThreshold",
+			"work_surface_review": {
+				"surface_role": "exit_threshold_hierarchy",
+				"primary_action_surface": "ExpandableStoreShell/EntryThreshold",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
+			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -136,10 +254,10 @@ static func full_store_review_context() -> Dictionary:
 	return {
 		"review_target": "full_store_context",
 		"acceptance_role": "secondary_context_only",
-			"notes": (
-				"Whole-room context may be reviewed separately; "
-				+ "this phase passes or fails on the first-ten-seconds route views."
-			),
+		"notes": (
+			"Whole-room context may be reviewed separately; "
+			+ "this phase passes or fails on the first-ten-seconds route views."
+		),
 		"beats": _serializable_rows(full_store_rows()),
 	}
 
@@ -267,6 +385,8 @@ static func first_ten_seconds_review_criteria() -> Array[String]:
 		"shelf wall reads stocked",
 		"checkout reads as a service counter",
 		"stockroom path reads as a work area",
+		"entry and exit threshold stay visible",
+		"exit threshold reads as the return path",
 		"walking paths",
 		"cramped/empty balance",
 		"backwards signs",
@@ -275,7 +395,14 @@ static func first_ten_seconds_review_criteria() -> Array[String]:
 		"first-day UI state",
 		"First Day — 8:00 AM is visible",
 		"HUD supports rather than fights the route views",
+		"HUD context supports route understanding only",
+		"3D staging communicates the route without new explanatory UI panels",
 		"camera-visible density replaces hidden prop count",
+		"primary action surface is visually dominant",
+		"supporting props stay quiet",
+		"material families stay consistent",
+		"scale is readable and believable",
+		"blank walls, oversized doors, and disconnected props do not dominate",
 	]
 
 
@@ -288,6 +415,10 @@ static func design_failure_criteria() -> Array[String]:
 		"color-strip noise dominates the composition",
 		"floating text dominates the composition",
 		"mismatched scale dominates the composition",
+		"blank wall mass dominates the composition",
+		"oversized door geometry dominates the composition",
+		"disconnected props dominate the composition",
+		"material families read as unrelated surfaces",
 	]
 
 
@@ -323,6 +454,11 @@ static func first_run_flow_steps() -> Array[Dictionary]:
 			"step": "open-store",
 			"destination": "open-store closeout",
 			"anchor": "StoreSessionDayEndTrigger",
+		},
+		{
+			"step": "exit",
+			"destination": "front exit",
+			"anchor": "ExpandableStoreShell/EntryThreshold",
 		},
 	]
 
@@ -364,6 +500,8 @@ static func save_viewport_png(
 		"width": image.get_width(),
 		"height": image.get_height(),
 		"placeholder": false,
+		"acceptance_evidence": true,
+		"non_acceptance_evidence": false,
 	}
 
 
@@ -395,6 +533,8 @@ static func write_review_manifest(
 		"capture_policy": capture_policy(),
 		"baseline_review_rules": baseline_review_rules(),
 		"diff_review_policy": diff_review_policy(),
+		"work_surface_closeout_contract": WorkSurfaceValidationContractScript.closure_manifest(),
+		"validation_output_channels": WorkSurfaceValidationContractScript.output_channels(),
 		"manual_review_template": _manual_review_template(rows_to_write),
 		"beats": _serializable_rows(rows_to_write),
 		"captures": captures,
@@ -477,6 +617,8 @@ static func baseline_review_rules() -> Array[String]:
 		"HUD context First Day — 8:00 AM must be visible",
 		"route anchor must not be visually drowned by decorative props",
 		"placeholder geometry and unintentional clutter are rejection reasons",
+		"work-surface captures must show the primary action surface as dominant",
+		"supporting props must stay quieter than the action surface",
 	]
 
 
@@ -513,8 +655,12 @@ static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictio
 			"focus": str(row.get("focus", "")),
 			"anchors": row.get("anchors", []),
 			"route_anchor": str(row.get("route_anchor", "")),
+			"active_route_stage": str(row.get("active_route_stage", "")),
 			"next_destination": str(row.get("next_destination", "")),
 			"local_action": str(row.get("local_action", "")),
+			"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
+			"work_surface_review": row.get("work_surface_review", {}),
+			"design_checks": row.get("design_checks", []),
 			"scope": str(row.get("scope", "")),
 			"visual_scope_mode": str(row.get("visual_scope_mode", "")),
 			"review_target": str(row.get("review_target", "")),
@@ -529,6 +675,16 @@ static func _manual_review_template(rows_to_write: Array[Dictionary]) -> Diction
 		verdicts.append({
 			"beat": str(row.get("filename", "")),
 			"status": "pass|fail|needs_changes",
+			"active_route_stage": str(row.get("active_route_stage", "")),
+			"local_action": str(row.get("local_action", "")),
+			"next_destination": str(row.get("next_destination", "")),
+			"visual_scope_mode": str(row.get("visual_scope_mode", "")),
+			"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
+			"primary_work_surface_dominant": false,
+			"supporting_props_stay_quiet": false,
+			"material_family_consistent": false,
+			"readable_scale": false,
+			"blank_wall_oversized_door_disconnected_prop_absent": false,
 			"failed_review_criteria": [],
 			"failed_design_criteria": [],
 			"notes": "",
@@ -541,7 +697,12 @@ static func _manual_review_template(rows_to_write: Array[Dictionary]) -> Diction
 static func _save_placeholder_png(dir_path: String, filename: String) -> Dictionary:
 	var safe_filename: String = sanitize_slug(filename.get_basename()) + ".png"
 	var path: String = "%s/%s" % [dir_path, safe_filename]
-	var image: Image = Image.create_empty(1280, 720, false, Image.FORMAT_RGBA8)
+	var image: Image = Image.create_empty(
+		CAPTURE_RESOLUTION.x,
+		CAPTURE_RESOLUTION.y,
+		false,
+		Image.FORMAT_RGBA8
+	)
 	var base_color: Color = Color(0.08, 0.07, 0.06, 1.0)
 	var stripe_color: Color = Color(0.91, 0.647, 0.278, 1.0)
 	image.fill(base_color)
@@ -561,6 +722,9 @@ static func _save_placeholder_png(dir_path: String, filename: String) -> Diction
 		"width": image.get_width(),
 		"height": image.get_height(),
 		"placeholder": true,
+		"acceptance_evidence": false,
+		"non_acceptance_evidence": true,
+		"non_acceptance_reason": "headless placeholder cannot satisfy work-surface polish acceptance",
 	}
 
 

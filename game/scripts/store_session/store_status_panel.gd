@@ -372,9 +372,7 @@ func _milestones_for_objectives(objectives: Array[Dictionary]) -> Array[Dictiona
 		var objective_id: String = str(entry.get("id", "")).strip_edges()
 		if objective_id.is_empty():
 			continue
-		var display_label: String = str(entry.get("action", "")).strip_edges()
-		if display_label.is_empty():
-			display_label = str(entry.get("label", "")).strip_edges()
+		var display_label: String = str(entry.get("milestone_label", "")).strip_edges()
 		if display_label.is_empty():
 			display_label = objective_id.capitalize()
 		(

@@ -52,7 +52,7 @@ If needed:
 export GODOT=/path/to/Godot
 ```
 
-## Run tests
+## Run validation
 
 ```bash
 bash tests/run_tests.sh

@@ -6,9 +6,13 @@ const EVENT_ID: String = "day01_wrong_console_parent"
 const RegisterScreenStateScript: GDScript = preload(
 	"res://game/scripts/store_session/register_screen_state.gd"
 )
-const REQUIRED_VISIBLE_ZONE_LABELS: Array[String] = [
-	"STARTER DISPLAY TABLE",
-	"BACK ROOM",
+const REQUIRED_VISIBLE_ZONE_IDENTITY_PATHS: Array[String] = [
+	"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
+	"ReadabilityProps/ZoneIdentity/StarterTableLeftGuide",
+	"ReadabilityProps/ZoneIdentity/StarterTableRightGuide",
+	"ReadabilityProps/ZoneIdentity/BackroomDoorThreshold",
+	"ReadabilityProps/ZoneIdentity/BackroomThresholdLeftGuide",
+	"ReadabilityProps/ZoneIdentity/BackroomThresholdRightGuide",
 ]
 
 var _root: Node3D = null
@@ -377,11 +381,11 @@ func test_reinvest_order_charges_once_and_delivery_consumes_once() -> void:
 
 
 func test_required_zone_labels_props_and_debug_surfaces_are_validation_ready() -> void:
-	for expected_text: String in REQUIRED_VISIBLE_ZONE_LABELS:
-		var label: Label3D = _visible_label_with_text(expected_text)
-		assert_not_null(label, "%s zone label must exist and be visible" % expected_text)
-		if label != null:
-			assert_gte(label.pixel_size, 0.007, "%s must remain readable" % expected_text)
+	for path: String in REQUIRED_VISIBLE_ZONE_IDENTITY_PATHS:
+		var zone_identity: Node3D = _root.get_node_or_null(path) as Node3D
+		assert_not_null(zone_identity, "%s must exist" % path)
+		if zone_identity != null:
+			assert_true(zone_identity.visible, "%s must be visible" % path)
 
 	var props: Node = _root.get_node_or_null("ReadabilityProps")
 	assert_not_null(props, "ReadabilityProps must ship with the Day 1 scene")
@@ -616,28 +620,6 @@ func _spawned_shelf_item_count() -> int:
 		if String(child.name).begins_with("StoreShelfItem"):
 			count += 1
 	return count
-
-
-func _visible_label_with_text(text: String) -> Label3D:
-	for label: Label3D in _gather_labels(_root):
-		var label_text: String = label.text.strip_edges()
-		var matches_text: bool = (
-			label_text == text or label_text.begins_with("%s\n" % text)
-		)
-		if label.visible and matches_text:
-			return label
-	return null
-
-
-func _gather_labels(node: Node) -> Array[Label3D]:
-	var labels: Array[Label3D] = []
-	if node == null:
-		return labels
-	if node is Label3D:
-		labels.append(node as Label3D)
-	for child: Node in node.get_children():
-		labels.append_array(_gather_labels(child))
-	return labels
 
 
 func _register_unlock_entries() -> void:

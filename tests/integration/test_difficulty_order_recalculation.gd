@@ -1,6 +1,7 @@
 ## Integration test: difficulty change mid-game → OrderSystem recalculates pending delivery times.
 extends GutTest
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 const STORE_ID: StringName = &"retro_games"
 ## Common-rarity item available at SPECIALTY tier catalog.
 const ITEM_ID: StringName = &"neo_ignite_motorway_kings_loose"
@@ -66,8 +67,7 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	if EventBus.difficulty_changed.is_connected(_on_difficulty_changed):
-		EventBus.difficulty_changed.disconnect(_on_difficulty_changed)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.difficulty_changed, _on_difficulty_changed)
 	DifficultySystemSingleton.set_tier(_saved_tier)
 	GameManager.current_store_id = _saved_store_id
 	if is_instance_valid(_saved_data_loader):

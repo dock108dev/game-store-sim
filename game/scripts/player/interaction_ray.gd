@@ -21,9 +21,14 @@ const BLOCKED_BY_FOCUS_REASON: String = "Close current menu to interact"
 @export var ray_distance: float = 2.5
 ## Collision mask for interactable detection. Scans the dedicated
 ## `interactable_triggers` layer (named layer 5 in `project.godot` -> bit
-## value 16) only, so walls and store fixtures never occlude an interactable
-## that sits behind them in depth.
+## value 16) only; obstruction checks below separately reject targets hidden
+## by world geometry or store fixtures.
 @export_flags_3d_physics var interaction_mask: int = 16
+## Collision mask for geometry that can block a prompt. Defaults to layers 1+2
+## (`world_geometry` + `store_fixtures`) so an interactable trigger behind a
+## wall, partition, counter, or shelf cannot leak through the interaction-only
+## raycast layer.
+@export_flags_3d_physics var obstruction_mask: int = 3
 
 var _camera: Camera3D = null
 var _hovered_target: Interactable = null
@@ -244,7 +249,12 @@ func _update_raycast() -> void:
 		var candidate: Interactable = _resolve_interactable(collider)
 		if candidate != null:
 			_last_raycast_resolved = String(candidate.name)
-			if candidate.enabled:
+			if (
+				candidate.enabled
+				and _interaction_path_clear(
+					space_state, ray_origin, _raycast_hit_position(result, candidate)
+				)
+			):
 				raycast_target = candidate
 
 	# Proximity fallback for opt-in interactables (proximity_radius > 0).
@@ -253,7 +263,9 @@ func _update_raycast() -> void:
 	# objects are unique and singular enough that proximity+facing is
 	# unambiguous. Shelf slots and other pixel-precision targets opt out
 	# (default proximity_radius = 0) so the raycast still wins for them.
-	var proximity_target: Interactable = _find_best_proximity_target(ray_origin, ray_dir)
+	var proximity_target: Interactable = _find_best_proximity_target(
+		space_state, ray_origin, ray_dir
+	)
 
 	var new_target: Interactable = _choose_hover_target(raycast_target, proximity_target)
 
@@ -267,6 +279,9 @@ func _choose_hover_target(
 	raycast_target: Interactable, proximity_target: Interactable
 ) -> Interactable:
 	_last_target_source = &"none"
+	if raycast_target != null and raycast_target.can_interact():
+		_last_target_source = &"raycast"
+		return raycast_target
 	if (
 		proximity_target != null
 		and proximity_target.can_interact()
@@ -292,7 +307,11 @@ func _choose_hover_target(
 ## raycast-only targets (`proximity_radius <= 0`), and targets the player
 ## isn't roughly facing. Caller decides whether to use the result (only when
 ## the precise raycast missed).
-func _find_best_proximity_target(cam_pos: Vector3, cam_forward: Vector3) -> Interactable:
+func _find_best_proximity_target(
+	space_state: PhysicsDirectSpaceState3D,
+	cam_pos: Vector3,
+	cam_forward: Vector3
+) -> Interactable:
 	_last_proximity_target_name = ""
 	_last_proximity_distance = INF
 	_last_proximity_facing_dot = 0.0
@@ -333,6 +352,8 @@ func _find_best_proximity_target(cam_pos: Vector3, cam_forward: Vector3) -> Inte
 		var facing_dot: float = cam_forward.dot(to_target / distance)
 		if facing_dot < i.proximity_facing_dot:
 			continue
+		if not _interaction_path_clear(space_state, cam_pos, target_pos):
+			continue
 		var score: float = facing_dot * 2.0 - distance * 0.25
 		if score > best_score:
 			best = i
@@ -341,6 +362,32 @@ func _find_best_proximity_target(cam_pos: Vector3, cam_forward: Vector3) -> Inte
 			_last_proximity_distance = distance
 			_last_proximity_facing_dot = facing_dot
 	return best
+
+
+func _raycast_hit_position(result: Dictionary, fallback_target: Interactable) -> Vector3:
+	var hit_pos: Variant = result.get("position", null)
+	if hit_pos is Vector3:
+		return hit_pos as Vector3
+	return fallback_target.global_position
+
+
+func _interaction_path_clear(
+	space_state: PhysicsDirectSpaceState3D,
+	from: Vector3,
+	to: Vector3
+) -> bool:
+	if obstruction_mask <= 0:
+		return true
+	if space_state == null:
+		return true
+	if from.distance_squared_to(to) <= 0.000001:
+		return true
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
+		from, to, obstruction_mask
+	)
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	return space_state.intersect_ray(query).is_empty()
 
 
 ## Public read-only accessors for the StoreDebugOverlay so it can surface

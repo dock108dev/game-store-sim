@@ -22,6 +22,7 @@ const REQUIRED_STORE_SESSION_KEEP_ROOTS: Array[String] = [
 	"StoreSessionBackroomPickup",
 	"StoreSessionRestockShelf",
 	"StoreSessionDayEndTrigger",
+	"BackOfficeTerminal",
 ]
 
 const REQUIRED_VISIBLE_SIGNS: Array[String] = [
@@ -73,17 +74,22 @@ const VISIBLE_ROOT_CLASSIFICATIONS: Dictionary = {
 	"StoreSessionRestockShelf": ["gameplay_marker", "product"],
 	"StoreSessionDayEndTrigger": ["gameplay_marker"],
 	"StoreSessionHiddenClue": ["intentional_dressing"],
+	"BackOfficeTerminal": ["fixture", "sign"],
 	"ExpandableStoreShell": ["fixture", "sign", "intentional_dressing"],
 }
 
 var _root: Node3D
 var _saved_state: GameManager.State
 var _saved_day: int
+var _blocked_surface_signal_count: int = 0
+var _blocked_surface_bus_count: int = 0
 
 
 func before_each() -> void:
 	_saved_state = GameManager.current_state
 	_saved_day = GameManager.get_current_day()
+	_blocked_surface_signal_count = 0
+	_blocked_surface_bus_count = 0
 	GameManager.current_state = GameManager.State.STORE_VIEW
 	GameManager.set_current_day(1)
 	StoreSessionState.reset_new_run()
@@ -103,6 +109,8 @@ func before_each() -> void:
 func after_each() -> void:
 	ModalQueue._reset_for_tests()
 	InputFocus._reset_for_tests()
+	if EventBus.interactable_interacted.is_connected(_on_blocked_surface_bus_interacted):
+		EventBus.interactable_interacted.disconnect(_on_blocked_surface_bus_interacted)
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
@@ -391,6 +399,29 @@ func test_training_stage_gating_enables_only_current_target_and_ambient() -> voi
 		_assert_only_expected_interactables_enabled(row["target"])
 
 
+func test_disabled_noop_and_non_current_surfaces_do_not_advance_route() -> void:
+	var controller: Node = _controller()
+	assert_not_null(controller, "StoreSessionController must exist")
+	if controller == null:
+		return
+	_set_controller_stage(
+		StoreSessionController.STAGE_TALK_TO_CUSTOMER,
+		controller.get("_day_one_objectives"),
+		{}
+	)
+	var blocked_paths: Array[String] = [
+		"Checkout/Register",
+		"checkout_counter/Interactable",
+		"checkout_counter/RegisterStatusIndicator",
+		"StoreSessionHiddenClue/Interactable",
+		"StoreSessionBackroomPickup/Interactable",
+		"StoreSessionRestockShelf/Interactable",
+		"StoreSessionDayEndTrigger/Interactable",
+	]
+	for blocked_path: String in blocked_paths:
+		_assert_surface_cannot_interact_or_advance(blocked_path, controller.current_stage())
+
+
 func _controller() -> Node:
 	if _root == null:
 		return null
@@ -419,6 +450,51 @@ func _assert_only_expected_interactables_enabled(target_path: String) -> void:
 		expected,
 		"Only the active objective target and approved ambient interactables may be enabled"
 	)
+
+
+func _assert_surface_cannot_interact_or_advance(
+	node_path: String, expected_stage: StringName
+) -> void:
+	var interactable: Interactable = _root.get_node_or_null(node_path) as Interactable
+	assert_not_null(interactable, "%s must remain authored for guardrail coverage" % node_path)
+	if interactable == null:
+		return
+	_blocked_surface_signal_count = 0
+	_blocked_surface_bus_count = 0
+	if not interactable.interacted.is_connected(_on_blocked_surface_interacted):
+		interactable.interacted.connect(_on_blocked_surface_interacted)
+	if not EventBus.interactable_interacted.is_connected(_on_blocked_surface_bus_interacted):
+		EventBus.interactable_interacted.connect(_on_blocked_surface_bus_interacted)
+
+	interactable.interact()
+
+	assert_eq(
+		_blocked_surface_signal_count,
+		0,
+		"%s must not emit its local interaction signal" % node_path
+	)
+	assert_eq(
+		_blocked_surface_bus_count,
+		0,
+		"%s must not emit the global interaction signal" % node_path
+	)
+	assert_eq(
+		_controller().current_stage(),
+		expected_stage,
+		"%s must not advance or change the store-session route" % node_path
+	)
+	if interactable.interacted.is_connected(_on_blocked_surface_interacted):
+		interactable.interacted.disconnect(_on_blocked_surface_interacted)
+	if EventBus.interactable_interacted.is_connected(_on_blocked_surface_bus_interacted):
+		EventBus.interactable_interacted.disconnect(_on_blocked_surface_bus_interacted)
+
+
+func _on_blocked_surface_interacted() -> void:
+	_blocked_surface_signal_count += 1
+
+
+func _on_blocked_surface_bus_interacted(_target: Interactable, _type: int) -> void:
+	_blocked_surface_bus_count += 1
 
 
 func _enabled_interactable_paths() -> Array[String]:

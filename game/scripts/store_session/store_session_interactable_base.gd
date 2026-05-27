@@ -5,6 +5,8 @@ extends Interactable
 ## Shared lookup for store_session Day-1 interactables. Test fixtures may omit the
 ## controller group, so callers treat null as "flow unavailable".
 func _controller() -> StoreSessionController:
+	if not is_inside_tree():
+		return null
 	var tree: SceneTree = get_tree()
 	if tree == null:
 		return null

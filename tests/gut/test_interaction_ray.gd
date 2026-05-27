@@ -395,6 +395,75 @@ func test_actionable_proximity_target_overrides_disabled_raycast_with_hint_copy(
 	assert_eq(String(_ray._last_target_source), "proximity")
 
 
+func test_active_raycast_target_beats_nearby_actionable_proximity_target() -> void:
+	var aimed_target := _StatefulTarget.new()
+	aimed_target.can = true
+	add_child_autofree(aimed_target)
+	var nearby_target := _StatefulTarget.new()
+	nearby_target.can = true
+	add_child_autofree(nearby_target)
+
+	var selected: Interactable = _ray._choose_hover_target(aimed_target, nearby_target)
+
+	assert_eq(
+		selected,
+		aimed_target,
+		"An active reticle hit must beat nearby proximity targets"
+	)
+	assert_eq(String(_ray._last_target_source), "raycast")
+
+
+func test_proximity_target_selected_when_in_range_and_unblocked() -> void:
+	var target := _StatefulTarget.new()
+	target.proximity_radius = 3.0
+	target.proximity_facing_dot = 0.5
+	target.position = Vector3(0.0, 0.0, -2.0)
+	add_child_autofree(target)
+	await get_tree().physics_frame
+
+	var selected: Interactable = _ray._find_best_proximity_target(
+		_space_state(), Vector3.ZERO, Vector3.FORWARD
+	)
+
+	assert_eq(selected, target, "Unblocked proximity target should be selected in range")
+
+
+func test_proximity_target_rejected_when_out_of_range() -> void:
+	var target := _StatefulTarget.new()
+	target.proximity_radius = 1.0
+	target.proximity_facing_dot = 0.0
+	target.position = Vector3(0.0, 0.0, -2.0)
+	add_child_autofree(target)
+	await get_tree().physics_frame
+
+	var selected: Interactable = _ray._find_best_proximity_target(
+		_space_state(), Vector3.ZERO, Vector3.FORWARD
+	)
+
+	assert_null(selected, "Proximity fallback must respect the authored range")
+
+
+func test_proximity_target_rejected_when_world_geometry_blocks_path() -> void:
+	var target := _StatefulTarget.new()
+	target.proximity_radius = 3.0
+	target.proximity_facing_dot = 0.0
+	target.position = Vector3(0.0, 0.0, -2.0)
+	add_child_autofree(target)
+	_add_blocking_wall(Vector3(0.0, 0.0, -1.0))
+	await get_tree().physics_frame
+
+	var space_state: PhysicsDirectSpaceState3D = _space_state()
+	var selected: Interactable = _ray._find_best_proximity_target(
+		space_state, Vector3.ZERO, Vector3.FORWARD
+	)
+
+	assert_false(
+		_ray._interaction_path_clear(space_state, Vector3.ZERO, target.global_position),
+		"World geometry between the camera and target must block prompts"
+	)
+	assert_null(selected, "Blocked proximity target must not leak through geometry")
+
+
 func test_get_open_panel_count_starts_at_zero() -> void:
 	assert_eq(
 		_ray.get_open_panel_count(), 0, "InteractionRay.get_open_panel_count() should start at zero"
@@ -575,6 +644,25 @@ func _interact_event() -> InputEventAction:
 	event.action = &"interact"
 	event.pressed = true
 	return event
+
+
+func _space_state() -> PhysicsDirectSpaceState3D:
+	var world: World3D = get_viewport().find_world_3d()
+	assert_not_null(world, "InteractionRay tests require a World3D")
+	return world.direct_space_state
+
+
+func _add_blocking_wall(position: Vector3) -> void:
+	var wall := StaticBody3D.new()
+	wall.collision_layer = 1
+	wall.collision_mask = 0
+	wall.position = position
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(2.0, 2.0, 0.2)
+	shape.shape = box
+	wall.add_child(shape)
+	add_child_autofree(wall)
 
 
 func _create_target(prompt_text: String, display_name: String) -> Interactable:

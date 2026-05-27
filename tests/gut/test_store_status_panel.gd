@@ -274,6 +274,30 @@ func test_objective_changed_does_not_restamp_passive_milestones() -> void:
 	assert_eq(panel.get_row_state(&"back_room_inventory"), "pending")
 
 
+func test_custom_objective_rows_do_not_fallback_to_active_copy() -> void:
+	var custom_objectives: Array[Dictionary] = [
+		{
+			"id": "inspect_counter",
+			"label": "Check the register.",
+			"action": "Check register",
+		},
+		{
+			"id": "stock_shelf",
+			"label": "Stock the starter display table.",
+			"action": "Stock starter display table",
+		},
+	]
+	var panel: StoreStatusPanel = StoreStatusPanel.new()
+	panel.set_objectives(custom_objectives)
+	add_child_autofree(panel)
+
+	_assert_label_contains(panel, "Inspect Counter")
+	_assert_label_contains(panel, "Stock Shelf")
+	_assert_no_label_contains(panel, "Check register")
+	_assert_no_label_contains(panel, "Check the register")
+	_assert_no_label_contains(panel, "Stock starter display table")
+
+
 func test_panel_does_not_connect_objective_changed() -> void:
 	var panel: StoreStatusPanel = _make_panel()
 	var connections: Array = EventBus.objective_changed.get_connections()

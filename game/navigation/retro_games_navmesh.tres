@@ -10,4 +10,4 @@ agent_height = 1.8
 agent_radius = 0.4
 agent_max_climb = 0.2
 agent_max_slope = 30.0
-filter_baking_aabb = AABB(-7.7, -1, -9.7, 15.4, 2.5, 19.4)
+filter_baking_aabb = AABB(-5.6, -1, -7.25, 11.2, 2.5, 16.7)

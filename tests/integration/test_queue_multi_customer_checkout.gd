@@ -10,6 +10,7 @@ const ITEM_PRICE_A: float = 25.0
 const ITEM_PRICE_B: float = 50.0
 const ITEM_PRICE_C: float = 75.0
 const TEST_STORE_ID: String = "test_queue_store"
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 
 var _queue: QueueSystem
 var _economy: EconomySystem
@@ -67,12 +68,12 @@ func before_each() -> void:
 
 
 func after_each() -> void:
-	_safe_disconnect(EventBus.checkout_queue_ready, _on_dispatched)
-	_safe_disconnect(EventBus.item_sold, _on_item_sold)
-	_safe_disconnect(
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.checkout_queue_ready, _on_dispatched)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.item_sold, _on_item_sold)
+	TEST_SIGNAL_UTILS.safe_disconnect(
 		EventBus.transaction_completed, _on_transaction
 	)
-	_safe_disconnect(
+	TEST_SIGNAL_UTILS.safe_disconnect(
 		EventBus.queue_advanced, _on_queue_advanced
 	)
 	_unregister_test_store()
@@ -326,11 +327,6 @@ func _on_transaction(
 
 func _on_queue_advanced(_queue_size: int) -> void:
 	_queue_advanced_count += 1
-
-
-func _safe_disconnect(sig: Signal, handler: Callable) -> void:
-	if sig.is_connected(handler):
-		sig.disconnect(handler)
 
 
 func _register_test_store() -> void:

@@ -3,13 +3,14 @@
 The project uses the checked-in GUT addon plus a set of shell validators under
 `tests/`.
 
-## Main test command
+## Main validation command
 
 ```bash
 bash tests/run_tests.sh
 ```
 
-`tests/run_tests.sh` currently does the following:
+`tests/run_tests.sh` is the default local gate. It currently does the
+following:
 
 1. Runs `scripts/validate_static_repo_guards.sh`.
 2. Resolves Godot from `GODOT`, `GODOT_EXECUTABLE`, `godot` on `PATH`, or common
@@ -166,9 +167,10 @@ guards, `gdlint`, Godot resource/autoload integrity, and the explicit
 `.gutconfig.pr-smoke.json` GUT smoke set.
 
 `.github/workflows/nightly.yml` is the full validation gate. It runs the same
-static/lint surface plus full GUT, fresh-install smoke, interaction audit, the
-soft visual snapshot sweep, and the long-day soak scenario. Visual snapshot
-review is advisory until baselines are intentionally promoted.
+static/lint surface plus `scripts/run_godot_tests.sh`,
+`scripts/run_fresh_install_smoke.sh`, interaction audit, the soft visual
+snapshot sweep, and the long-day soak scenario. Visual snapshot review is
+advisory until baselines are intentionally promoted.
 
 `scripts/run_store_visual_sweep.sh` reads reviewed PNG baselines from
 `tests/visual/baselines/retro_games_day_one/<godot-version>/linux/` by default

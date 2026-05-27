@@ -1,8 +1,6 @@
-## Regression tests for ISSUE-003 — retro_games starter inventory on Day 1.
-##
 ## Verifies that DataLoaderSingleton.generate_starter_inventory("retro_games")
 ## uses store_definitions.json as the starter-stock SSOT for the sparse
-## Day-1 opening: one console and two games.
+## Day-1 opening: one console and four games.
 extends GutTest
 
 const STORE_ID: String = "retro_games"
@@ -10,6 +8,8 @@ const STARTER_ITEMS: PackedStringArray = [
 	"console_neo_ignite",
 	"neo_ignite_motorway_kings_loose",
 	"neo_ignite_kingdom_embers_loose",
+	"neo_ignite_torque_force_3_loose",
+	"neo_ignite_gridiron_2005_loose",
 ]
 
 
@@ -74,7 +74,7 @@ func test_starter_items_have_sparse_category_distribution() -> void:
 				% [def.id, resolved]
 		)
 	assert_eq(int(category_counts.get(&"consoles", 0)), 1)
-	assert_eq(int(category_counts.get(&"cartridges", 0)), 2)
+	assert_eq(int(category_counts.get(&"cartridges", 0)), 4)
 
 
 ## Verifies the catalog supplies at least one broadly desirable common
@@ -101,8 +101,8 @@ func test_retro_games_common_pool_contains_broadly_desirable_item() -> void:
 	assert_true(
 		found,
 		(
-			"retro_games common-item pool must contain ≥1 broadly desirable "
-			+ "entry (base_price ≤ %.2f, 'good' in condition_range) so a "
+			"retro_games common-item pool must contain >=1 broadly desirable "
+			+ "entry (base_price <= %.2f, 'good' in condition_range) so a "
 			+ "Day-1 customer can match the live-buy step."
 		) % max_desirable_price
 	)

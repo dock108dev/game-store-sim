@@ -58,6 +58,7 @@ func reset_new_run() -> void:
 	preopening_complete = false
 	carrying_stock = false
 	set_input_mode(INPUT_MODE_GAMEPLAY)
+	_emit_carry_sync()
 
 
 func get_save_data() -> Dictionary:
@@ -117,6 +118,7 @@ func load_save_data(data: Dictionary) -> void:
 	preopening_complete = bool(data.get("preopening_complete", day > 1))
 	carrying_stock = bool(data.get("carrying_stock", false))
 	set_input_mode(INPUT_MODE_GAMEPLAY)
+	_emit_carry_sync()
 
 
 ## Bookkeeping label for the active modal phase. Cursor and gameplay-input
@@ -238,6 +240,12 @@ func advance_day() -> void:
 	daily_cash_delta = 0
 	carrying_stock = false
 	set_input_mode(INPUT_MODE_GAMEPLAY)
+	_emit_carry_sync()
+
+
+func _emit_carry_sync() -> void:
+	var carry_text: String = "Starter Stock Box" if carrying_stock else ""
+	EventBus.store_carry_changed.emit(carry_text)
 
 
 func _hidden_thread_note() -> String:

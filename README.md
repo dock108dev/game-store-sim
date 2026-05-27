@@ -14,7 +14,7 @@ loads from JSON under `game/content/`, and tests use the checked-in GUT addon.
 
 The configured entry scene is `res://game/scenes/bootstrap/boot.tscn`.
 
-For command-line test runs:
+For command-line validation:
 
 ```bash
 bash tests/run_tests.sh

@@ -4,6 +4,52 @@ const StoreVisualScopeProfileScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_scope_profile.gd"
 )
 
+const REQUIRED_KEEP_ROOTS: Array[StringName] = [
+	&"checkout_counter",
+	&"FrontLaneQueue",
+	&"StoreSessionBackroomPickup",
+	&"StoreSessionRestockShelf",
+	&"StoreSessionDayEndTrigger",
+	&"BackOfficeTerminal",
+	&"ExpandableStoreShell",
+]
+
+const REQUIRED_KEEP_VISIBLE_PATHS: Array[String] = [
+	"ReadabilityProps/ZoneIdentity/BackroomDoorThreshold",
+	"ReadabilityProps/ZoneIdentity/BackroomThresholdLeftGuide",
+	"ReadabilityProps/ZoneIdentity/BackroomThresholdRightGuide",
+	"ReadabilityProps/ZoneIdentity/ShelfStockAccent",
+	"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
+	"ReadabilityProps/ZoneIdentity/StarterTableLeftGuide",
+	"ReadabilityProps/ZoneIdentity/StarterTableRightGuide",
+]
+
+const REQUIRED_DEFERRED_ROOTS: Array[StringName] = [
+	&"ConsoleShelf",
+	&"GlassCase",
+	&"crt_demo_area",
+	&"staff_picks_table",
+]
+
+const REQUIRED_HIDDEN_NOISE_PATHS: Array[String] = [
+	"ConsoleShelf",
+	"GlassCase",
+	"crt_demo_area",
+	"staff_picks_table",
+	"ZoneLabels/ShelvesLabel",
+	"ZoneLabels/BackroomLabel",
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/DayOneRouteMarkers",
+]
+
+const REQUIRED_CONFLICT_PATHS: Array[String] = [
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/SpawnViewFloorDressing",
+	"ReadabilityProps/DayOneRouteMarkers",
+	"ZoneLabels/ShelvesLabel",
+	"ZoneLabels/BackroomLabel",
+]
+
 var _root: Node3D = null
 
 
@@ -16,8 +62,12 @@ func before_each() -> void:
 		"ReadabilityProps/ProductDisplayRows/ShelfProductBacker",
 		"CartRackRight/ProductStackA",
 		"StoreSessionRestockShelf/Interactable",
+		"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
+		"ZoneLabels/ShelvesLabel",
+		"ZoneLabels/BackroomLabel",
 		"ExpandableStoreShell/StarterSignLabel",
 		"Checkout/Register/RegisterScreen",
+		"LooseDecorPoster",
 	]:
 		_add_path(path)
 
@@ -38,6 +88,41 @@ func test_profile_exposes_shared_scope_modes() -> void:
 		StoreVisualScopeProfileScript.MODE_SUPPRESSION_DIFF_LABEL,
 	]:
 		assert_true(modes.has(required), "Scope manifest must expose %s" % required)
+
+
+func test_profile_lists_day_one_keep_roots() -> void:
+	for root_name: StringName in REQUIRED_KEEP_ROOTS:
+		assert_true(
+			StoreVisualScopeProfileScript.KEEP_ROOT_NODES.has(root_name),
+			"%s must stay in the Day-1 keep root list" % String(root_name)
+		)
+	for node_path: String in REQUIRED_KEEP_VISIBLE_PATHS:
+		assert_true(
+			StoreVisualScopeProfileScript.KEEP_VISIBLE_PATHS.has(node_path),
+			"%s must stay visible as a Day-1 physical affordance" % node_path
+		)
+
+
+func test_profile_lists_deferred_roots_and_runtime_hidden_noise() -> void:
+	for root_name: StringName in REQUIRED_DEFERRED_ROOTS:
+		assert_true(
+			StoreVisualScopeProfileScript.DEFERRED_ROOT_NODES.has(root_name),
+			"%s must stay deferred from Day-1 runtime" % String(root_name)
+		)
+	for node_path: String in REQUIRED_HIDDEN_NOISE_PATHS:
+		assert_true(
+			StoreVisualScopeProfileScript.HIDDEN_NOISE_PATHS.has(node_path),
+			"%s must stay runtime-hidden by the shared scope profile" % node_path
+		)
+
+
+func test_profile_documents_intentional_hidden_reference_conflicts() -> void:
+	var conflicts: Array[String] = StoreVisualScopeProfileScript.known_conflict_paths()
+	for node_path: String in REQUIRED_CONFLICT_PATHS:
+		assert_true(
+			conflicts.has(node_path),
+			"%s must remain hidden at runtime but available in reference review" % node_path
+		)
 
 
 func test_hidden_noise_decision_reports_runtime_suppression() -> void:
@@ -98,6 +183,22 @@ func test_keep_and_context_roots_remain_visible_with_distinct_reasons() -> void:
 	assert_eq(
 		int(context_decision.get("decision", -1)),
 		StoreVisualScopeProfileScript.DECISION_CONTEXT_ROOT
+	)
+
+
+func test_unclassified_authored_root_is_not_store_session_runtime_visible() -> void:
+	var decision: Dictionary = StoreVisualScopeProfileScript.classify_path(
+		_root,
+		"LooseDecorPoster",
+		StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME
+	)
+	assert_true(bool(decision.get("exists", false)))
+	assert_true(bool(decision.get("authored_visible", false)))
+	assert_false(bool(decision.get("runtime_visible", true)))
+	assert_false(bool(decision.get("visible", true)))
+	assert_eq(
+		int(decision.get("decision", -1)),
+		StoreVisualScopeProfileScript.DECISION_HIDDEN_RUNTIME_NOISE
 	)
 
 

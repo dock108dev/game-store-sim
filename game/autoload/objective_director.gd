@@ -13,12 +13,16 @@ extends Node
 
 const CONTENT_PATH := "res://game/content/objectives.json"
 
-## Day 1 step indices (must align with the order of `steps` in objectives.json).
-const DAY1_STEP_TALK_TO_CUSTOMER: int = 0
-const DAY1_STEP_BACK_ROOM_INVENTORY: int = 1
-const DAY1_STEP_STOCK_SHELF: int = 2
-const DAY1_STEP_CLOSE_DAY: int = 3
-const DAY1_STEP_COUNT: int = 4
+## Day 1 step indices (must align with flattened `phases` in objectives.json).
+const DAY1_STEP_TALK_TO_MANAGER: int = 0
+const DAY1_STEP_CHECK_REGISTER: int = 1
+const DAY1_STEP_TRAINING_BACK_ROOM: int = 2
+const DAY1_STEP_TRAINING_STOCK_SHELF: int = 3
+const DAY1_STEP_TALK_TO_CUSTOMER: int = 4
+const DAY1_STEP_BACK_ROOM_INVENTORY: int = 5
+const DAY1_STEP_STOCK_SHELF: int = 6
+const DAY1_STEP_CLOSE_DAY: int = 7
+const DAY1_STEP_COUNT: int = 8
 const _HIDDEN_PAYLOAD_HASH: String = "__hidden__"
 
 var _day_objectives: Dictionary = {}
@@ -34,12 +38,12 @@ var _loop_completed: bool = false
 ## Drives the close-day confirmation gate via `can_close_day()` so the player
 ## is prompted to confirm before closing a day with no completed loop.
 var _loop_completed_today: bool = false
-## Active Day 1 step index, or -1 when the chain is not running. Set to 0 by
-## day_started(1); incremented in lockstep with the chain's gameplay signals.
+## Active Day 1 step index, or -1 when the chain is not running. Set to the
+## preopening manager beat by day_started(1), then incremented in lockstep
+## with the chain's completion signals.
 var _day1_step_index: int = -1
-## True between day_started(1) and the first manager_note_dismissed of Day 1.
-## While true the rail surfaces the pre-chain `pre_step` payload and the step
-## chain itself is not yet armed (`_day1_step_index` stays -1).
+## Retained for older test fixtures that reset the autoload directly. Fresh
+## Day 1 no longer waits on a note gate.
 var _waiting_for_note_dismiss: bool = false
 ## Hash of the most recently emitted payload (`textactionkeyhint`,
 ## or a fixed marker for the hidden auto-hide payload). `_emit_current()`
@@ -61,6 +65,7 @@ func _ready() -> void:
 	EventBus.customer_interacted.connect(_on_customer_interacted)
 	EventBus.placement_mode_entered.connect(_on_placement_mode_entered)
 	EventBus.manager_note_dismissed.connect(_on_manager_note_dismissed)
+	EventBus.store_objective_completed.connect(_on_store_objective_completed)
 
 
 func _load_content() -> void:
@@ -81,48 +86,76 @@ func _load_content() -> void:
 		if not e.has("day"):
 			continue
 		var day_int: int = int(e["day"])
-		var steps_raw: Variant = e.get("steps", [])
 		var steps_typed: Array = []
-		if steps_raw is Array:
-			var steps_array: Array = steps_raw as Array
-			for step_entry: Variant in steps_array:
-				if step_entry is Dictionary:
-					steps_typed.append(step_entry)
+		var phases_raw: Variant = e.get("phases", [])
+		if phases_raw is Array:
+			for phase_entry: Variant in phases_raw as Array:
+				if phase_entry is Dictionary:
+					var phase_steps_raw: Variant = (phase_entry as Dictionary).get("steps", [])
+					if phase_steps_raw is Array:
+						for step_entry: Variant in phase_steps_raw as Array:
+							if step_entry is Dictionary:
+								steps_typed.append(step_entry)
+							else:
+								push_error(
+									(
+										"ObjectiveDirector: day %d phase has "
+										+ "non-Dictionary step entry (%s); skipped."
+									)
+									% [day_int, type_string(typeof(step_entry))]
+								)
+					else:
+						push_error(
+							(
+								"ObjectiveDirector: day %d phase has non-Array "
+								+ "`steps` field (%s); ignored."
+							)
+							% [day_int, type_string(typeof(phase_steps_raw))]
+						)
 				else:
-					# §F-93 / error-handling-report.md §1 — escalated from
-					# push_warning to push_error: a non-Dictionary entry in
-					# the Day-1 `steps` array is a content-authoring regression
-					# on the critical tutorial path. The CI gut-tests job
-					# scans stderr for push_error so the regression fails the
-					# build instead of being a silent run-time degradation.
 					push_error(
 						(
 							"ObjectiveDirector: day %d has non-Dictionary "
-							+ "step entry (%s); skipped."
+							+ "phase entry (%s); skipped."
 						)
-						% [day_int, type_string(typeof(step_entry))]
+						% [day_int, type_string(typeof(phase_entry))]
 					)
-		elif e.has("steps"):
-			# §F-93 / error-handling-report.md §1 — `steps` present but not
-			# an Array is the same Day-1 critical-path regression as above.
+		elif e.has("phases"):
 			push_error(
 				(
-					"ObjectiveDirector: day %d has non-Array `steps` field "
+					"ObjectiveDirector: day %d has non-Array `phases` field "
 					+ "(%s); ignored."
 				)
-				% [day_int, type_string(typeof(steps_raw))]
+				% [day_int, type_string(typeof(phases_raw))]
 			)
-		# §F-93 / error-handling-report.md §1 — Day 1 expects a steps array
-		# of exactly DAY1_STEP_COUNT entries. A short / over-long chain
-		# silently disables the tutorial; escalated to push_error so CI
-		# fails on the regression instead of shipping a broken Day-1 rail.
+		if steps_typed.is_empty():
+			var steps_raw: Variant = e.get("steps", [])
+			if steps_raw is Array:
+				var steps_array: Array = steps_raw as Array
+				for step_entry: Variant in steps_array:
+					if step_entry is Dictionary:
+						steps_typed.append(step_entry)
+					else:
+						push_error(
+							(
+								"ObjectiveDirector: day %d has non-Dictionary "
+								+ "step entry (%s); skipped."
+							)
+							% [day_int, type_string(typeof(step_entry))]
+						)
+			elif e.has("steps"):
+				push_error(
+					(
+						"ObjectiveDirector: day %d has non-Array `steps` field "
+						+ "(%s); ignored."
+					)
+					% [day_int, type_string(typeof(steps_raw))]
+				)
 		if day_int == 1 and steps_typed.size() != DAY1_STEP_COUNT:
 			push_error(
 				(
 					"ObjectiveDirector: day 1 `steps` count is %d; "
-					+ "expected %d. Day-1 step chain will be disabled "
-					+ "and the rail will fall back to pre-sale / "
-					+ "post-sale text."
+					+ "expected %d. Day-1 step chain will be disabled."
 				)
 				% [steps_typed.size(), DAY1_STEP_COUNT]
 			)
@@ -131,11 +164,6 @@ func _load_content() -> void:
 		if pre_step_raw is Dictionary:
 			pre_step_dict = pre_step_raw as Dictionary
 		elif e.has("pre_step"):
-			# §F-148 / error-handling-report.md §1 — `pre_step` is documented
-			# as optional, so an absent key is fine. But if present and not
-			# a Dictionary, Day 1 renders a blank rail between day_started
-			# and the first manager_note_dismissed. Escalated to push_error
-			# so CI catches the bad content payload at load time.
 			push_error(
 				(
 					"ObjectiveDirector: day %d has non-Dictionary `pre_step` "
@@ -176,10 +204,7 @@ func _on_day_started(day: int) -> void:
 		# trigger after Day 3 with the player's previous-run completion.
 		_loop_completed = false
 	if day == 1 and _day1_steps_available():
-		# The Day 1 step chain is held until the player dismisses Vic's
-		# morning note. _on_manager_note_dismissed advances _day1_step_index
-		# to TALK_TO_CUSTOMER when the note clears.
-		_waiting_for_note_dismiss = true
+		_day1_step_index = DAY1_STEP_TALK_TO_MANAGER
 	_emit_current()
 
 
@@ -187,8 +212,6 @@ func _on_manager_note_dismissed(_note_id: String) -> void:
 	if _current_day != 1 or not _waiting_for_note_dismiss:
 		return
 	_waiting_for_note_dismiss = false
-	if _day1_steps_available():
-		_day1_step_index = DAY1_STEP_TALK_TO_CUSTOMER
 	_emit_current()
 
 
@@ -200,7 +223,9 @@ func _on_item_stocked(_item_id: String, _shelf_id: String) -> void:
 	_stocked = true
 	if _sold:
 		_loop_completed_today = true
-	_advance_day1_step_if(DAY1_STEP_STOCK_SHELF)
+	var active_id: StringName = _active_day1_objective_id()
+	if active_id == &"training_stock_shelf" or active_id == &"stock_shelf":
+		_advance_day1_step_for_objective(active_id)
 	_emit_current()
 
 
@@ -267,11 +292,15 @@ func _on_preference_changed(key: String, _value: Variant) -> void:
 
 
 func _on_customer_interacted(_customer: Node) -> void:
-	_advance_day1_step_if(DAY1_STEP_TALK_TO_CUSTOMER)
+	_advance_day1_step_for_objective(&"talk_to_customer")
 
 
 func _on_placement_mode_entered() -> void:
-	_advance_day1_step_if(DAY1_STEP_BACK_ROOM_INVENTORY)
+	_advance_day1_step_for_objective(&"back_room_inventory")
+
+
+func _on_store_objective_completed(objective_id: StringName) -> void:
+	_advance_day1_step_for_objective(objective_id)
 
 
 ## Advances the Day 1 chain when the player is sitting on `expected_step`.
@@ -288,8 +317,29 @@ func _advance_day1_step_if(expected_step: int) -> void:
 		return
 	if not _day1_steps_available():
 		return
-	_day1_step_index = expected_step + 1
+	_day1_step_index = mini(expected_step + 1, DAY1_STEP_COUNT - 1)
 	_emit_current()
+
+
+func _advance_day1_step_for_objective(objective_id: StringName) -> void:
+	if _current_day != 1 or _day1_step_index < 0:
+		return
+	if not _day1_steps_available():
+		return
+	if _active_day1_objective_id() != objective_id:
+		return
+	_day1_step_index = mini(_day1_step_index + 1, DAY1_STEP_COUNT - 1)
+	_emit_current()
+
+
+func _active_day1_objective_id() -> StringName:
+	if not _day1_steps_available() or _day1_step_index < 0:
+		return &""
+	var steps: Array = _day_objectives.get(1, {}).get("steps", []) as Array
+	if _day1_step_index >= steps.size():
+		return &""
+	var step: Dictionary = steps[_day1_step_index] as Dictionary
+	return StringName(str(step.get("id", "")))
 
 
 func _day1_steps_available() -> bool:
@@ -327,38 +377,31 @@ func _emit_current() -> void:
 	var action_value: String = ""
 	var key_value: String = ""
 	var optional_hint: String = ""
-	if _current_day == 1 and _waiting_for_note_dismiss:
-		var pre_entry: Dictionary = _day_objectives.get(1, {})
-		var pre: Dictionary = pre_entry.get("pre_step", {}) as Dictionary
-		text_value = str(pre.get("text", ""))
-		action_value = str(pre.get("action", ""))
-		key_value = str(pre.get("key", ""))
-	else:
-		var source: Dictionary = _day_objectives.get(_current_day, _defaults)
-		text_value = str(source.get("text", ""))
-		action_value = str(source.get("action", ""))
-		key_value = str(source.get("key", ""))
-		optional_hint = str(source.get("optional_hint", ""))
-		if (
-			_current_day == 1
-			and _day1_step_index >= 0
-			and _day1_steps_available()
-		):
-			var steps: Array = source.get("steps", []) as Array
-			var step: Dictionary = steps[_day1_step_index] as Dictionary
-			text_value = str(step.get("text", text_value))
-			action_value = str(step.get("action", action_value))
-			key_value = str(step.get("key", key_value))
-		elif _sold:
-			# Once the first sale completes, advance the rail to the day's
-			# post-sale copy when the day entry authors one. Day 1 reaches its
-			# close-day prompt through the steps chain instead, so this branch
-			# only kicks in for days without a steps array.
-			var post_text: String = str(source.get("post_sale_text", ""))
-			if not post_text.is_empty():
-				text_value = post_text
-				action_value = str(source.get("post_sale_action", ""))
-				key_value = str(source.get("post_sale_key", ""))
+	var source: Dictionary = _day_objectives.get(_current_day, _defaults)
+	text_value = str(source.get("text", ""))
+	action_value = str(source.get("action", ""))
+	key_value = str(source.get("key", ""))
+	optional_hint = str(source.get("optional_hint", ""))
+	if (
+		_current_day == 1
+		and _day1_step_index >= 0
+		and _day1_steps_available()
+	):
+		var steps: Array = source.get("steps", []) as Array
+		var step: Dictionary = steps[_day1_step_index] as Dictionary
+		text_value = str(step.get("text", text_value))
+		action_value = str(step.get("action", action_value))
+		key_value = str(step.get("key", key_value))
+	elif _sold:
+		# Once the first sale completes, advance the rail to the day's
+		# post-sale copy when the day entry authors one. Day 1 reaches its
+		# close-day prompt through the steps chain instead, so this branch
+		# only kicks in for days without a steps array.
+		var post_text: String = str(source.get("post_sale_text", ""))
+		if not post_text.is_empty():
+			text_value = post_text
+			action_value = str(source.get("post_sale_action", ""))
+			key_value = str(source.get("post_sale_key", ""))
 	# Re-entering a scene or re-connecting a listener can drive _emit_current
 	# multiple times in a frame with identical content; without this gate the
 	# rail's 1-second flash tween restarts on every redundant emission. Hash

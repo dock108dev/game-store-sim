@@ -11,6 +11,8 @@ const GLOBAL_KEY_MAX_RANGE: float = 11.0
 const ZONE_LIGHT_MAX_ENERGY: float = 0.9
 const ZONE_OMNI_MAX_RANGE: float = 6.0
 const ZONE_SPOT_MAX_RANGE: float = 4.2
+const CHECKOUT_SERVICE_MAX_ENERGY: float = 0.9
+const BACKROOM_UTILITY_MIN_ENERGY: float = 0.22
 
 const REQUIRED_ZONE_LIGHTS: Array[String] = [
 	"ReadabilityProps/ZoneLighting/MainAisleWarmFill",
@@ -116,6 +118,49 @@ func test_zone_lights_stay_local_and_distinct() -> void:
 		assert_gt(backroom.light_color.b, backroom.light_color.r, "backroom light must read cool")
 	if shelf_cool != null:
 		assert_gt(shelf_cool.light_color.b, shelf_cool.light_color.r, "shelf edge light must stay cool")
+	root.free()
+
+
+func test_authored_service_practicals_keep_zone_temperatures() -> void:
+	var root: Node3D = _instantiate_store()
+	if root == null:
+		return
+	var checkout_spot: SpotLight3D = root.get_node_or_null("CheckoutLaneSpotlight") as SpotLight3D
+	var checkout_practical: OmniLight3D = (
+		root.get_node_or_null("CheckoutCounterPractical") as OmniLight3D
+	)
+	var backroom_practical: OmniLight3D = root.get_node_or_null("BackroomUtilityLight") as OmniLight3D
+	assert_not_null(checkout_spot, "CheckoutLaneSpotlight must exist")
+	assert_not_null(checkout_practical, "CheckoutCounterPractical must exist")
+	assert_not_null(backroom_practical, "BackroomUtilityLight must exist")
+	if checkout_spot != null:
+		assert_lte(
+			checkout_spot.light_energy,
+			CHECKOUT_SERVICE_MAX_ENERGY,
+			"Checkout spot must not overpower the shelf and entry practicals"
+		)
+	if checkout_practical != null:
+		assert_gt(
+			checkout_practical.light_color.r,
+			checkout_practical.light_color.b,
+			"Checkout practical must read as a warm service-zone fill"
+		)
+		assert_lte(
+			checkout_practical.omni_range,
+			3.0,
+			"Checkout practical must stay near the register screen"
+		)
+	if backroom_practical != null:
+		assert_gt(
+			backroom_practical.light_color.b,
+			backroom_practical.light_color.r,
+			"Backroom practical must stay cooler than the sales floor"
+		)
+		assert_gte(
+			backroom_practical.light_energy,
+			BACKROOM_UTILITY_MIN_ENERGY,
+			"Backroom practical must keep the stock pickup target out of silhouette"
+		)
 	root.free()
 
 

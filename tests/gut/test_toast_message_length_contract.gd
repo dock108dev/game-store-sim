@@ -25,7 +25,7 @@ func test_store_day1_toasts_fit_under_limit() -> void:
 		"First-day training ready.",
 		"Shipment checked. 2 items available in back room.",
 		"Stocked 3 items on the starter display table.",
-		"Closing time. Wrap up at the register.",
+		"Closing time reached.",
 		"Store open for customers.",
 		"Sale complete: +$18",
 		"She thanked you and walked off.",

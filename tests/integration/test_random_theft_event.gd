@@ -3,6 +3,8 @@
 extends GutTest
 
 
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
+
 var _random_event_system: RandomEventSystem
 var _inventory_system: InventorySystem
 var _economy_system: EconomySystem
@@ -101,16 +103,12 @@ func before_each() -> void:
 
 func after_each() -> void:
 	GameManager.current_store_id = _saved_store_id
-	if EventBus.inventory_item_removed.is_connected(_on_item_removed):
-		EventBus.inventory_item_removed.disconnect(_on_item_removed)
-	if EventBus.item_lost.is_connected(_on_item_lost):
-		EventBus.item_lost.disconnect(_on_item_lost)
-	if EventBus.transaction_completed.is_connected(
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.inventory_item_removed, _on_item_removed)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.item_lost, _on_item_lost)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.transaction_completed,
 		_on_transaction_completed
-	):
-		EventBus.transaction_completed.disconnect(
-			_on_transaction_completed
-		)
+	)
 
 
 func _on_item_removed(

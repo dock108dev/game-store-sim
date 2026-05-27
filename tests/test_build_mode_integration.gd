@@ -8,6 +8,7 @@ const PLACEMENT_POS: Vector2i = Vector2i(5, 5)
 const FIXTURE_TYPE: String = "floor_rack"
 const REGISTER_ID: String = "register_test_001"
 const REGISTER_POS: Vector2i = Vector2i(0, 0)
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 
 var _build_mode: BuildModeSystem
 var _placement: FixturePlacementSystem
@@ -103,19 +104,18 @@ func before_each() -> void:
 
 func after_each() -> void:
 	_save_manager.delete_save(SAVE_SLOT)
-	_safe_disconnect(EventBus.build_mode_entered, _on_build_mode_entered)
-	_safe_disconnect(EventBus.build_mode_exited, _on_build_mode_exited)
-	_safe_disconnect(EventBus.fixture_placed, _on_fixture_placed)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.build_mode_entered, _on_build_mode_entered
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.build_mode_exited, _on_build_mode_exited
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.fixture_placed, _on_fixture_placed)
 	GameManager.current_state = _saved_game_state
 	GameManager.current_store_id = _saved_store_id
 	GameManager.owned_stores = _saved_owned_stores
 	UserDataPaths.cleanup_active_test_run()
 	UserDataPaths.reset_for_normal_play()
-
-
-func _safe_disconnect(sig: Signal, callable: Callable) -> void:
-	if sig.is_connected(callable):
-		sig.disconnect(callable)
 
 
 func _on_build_mode_entered() -> void:

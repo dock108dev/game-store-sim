@@ -7,6 +7,7 @@ const STARTING_CASH: float = 50.0
 const STAFF_WAGE: float = 75.0
 const STORE_ID: String = "wage_test_store"
 const FLOAT_EPSILON: float = 0.01
+const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
 
 var _controller: DayCycleController
 var _time: TimeSystem
@@ -83,13 +84,10 @@ func after_each() -> void:
 	GameManager.current_store_id = _saved_store_id
 	GameManager.owned_stores = _saved_owned_stores
 	DifficultySystemSingleton.set_tier(_saved_difficulty)
-	_safe_disconnect(EventBus.bankruptcy_declared, _on_bankruptcy_declared)
-	_safe_disconnect(EventBus.day_started, _on_day_started)
-
-
-func _safe_disconnect(sig: Signal, callable: Callable) -> void:
-	if sig.is_connected(callable):
-		sig.disconnect(callable)
+	TEST_SIGNAL_UTILS.safe_disconnect(
+		EventBus.bankruptcy_declared, _on_bankruptcy_declared
+	)
+	TEST_SIGNAL_UTILS.safe_disconnect(EventBus.day_started, _on_day_started)
 
 
 func _on_bankruptcy_declared() -> void:

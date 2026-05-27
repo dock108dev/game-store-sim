@@ -167,6 +167,49 @@ func test_empty_overlay_visible_on_unstocked_shelf() -> void:
 	)
 
 
+func test_starter_table_has_floor_footprint_without_label_dependency() -> void:
+	var shelf: Node3D = _root.get_node_or_null("StoreSessionRestockShelf") as Node3D
+	assert_not_null(shelf, "StoreSessionRestockShelf must exist under the store root")
+	if shelf == null:
+		return
+	var footprint: Node3D = (
+		_root.get_node_or_null("ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint")
+		as Node3D
+	)
+	var left_guide: Node3D = (
+		_root.get_node_or_null("ReadabilityProps/ZoneIdentity/StarterTableLeftGuide")
+		as Node3D
+	)
+	var right_guide: Node3D = (
+		_root.get_node_or_null("ReadabilityProps/ZoneIdentity/StarterTableRightGuide")
+		as Node3D
+	)
+	for cue: Node3D in [footprint, left_guide, right_guide]:
+		assert_not_null(cue, "Starter table must use floor-tape affordance cues")
+	if footprint == null or left_guide == null or right_guide == null:
+		return
+	assert_lt(
+		_flat_distance(shelf, footprint),
+		0.9,
+		"Starter table footprint must sit directly in front of the restock surface"
+	)
+	assert_lt(
+		left_guide.global_position.x,
+		shelf.global_position.x - 0.9,
+		"Left guide must bracket the starter table footprint"
+	)
+	assert_gt(
+		right_guide.global_position.x,
+		shelf.global_position.x + 0.9,
+		"Right guide must bracket the starter table footprint"
+	)
+	for cue: Node3D in [footprint, left_guide, right_guide]:
+		assert_false(
+			_has_label_descendant(cue),
+			"Starter table floor cues must not add explanatory Label3D text"
+		)
+
+
 func test_backroom_pickup_label_names_delivery_quantity() -> void:
 	var label: Label3D = (
 		_root.get_node_or_null("StoreSessionBackroomPickup/StockBoxLabel") as Label3D
@@ -177,6 +220,15 @@ func test_backroom_pickup_label_names_delivery_quantity() -> void:
 	assert_string_contains(
 		label.text, str(StoreSessionController._BACKROOM_DELIVERY_QUANTITY),
 		"Back-room delivery label must name the available item count"
+	)
+	assert_false(
+		label.text.to_lower().contains("pickup"),
+		"Delivery quantity should stay a crate badge, not a second action prompt"
+	)
+	assert_lte(
+		float(label.font_size) * label.pixel_size,
+		0.13,
+		"Delivery badge must not overpower the physical stock box silhouette"
 	)
 
 
@@ -576,6 +628,21 @@ func _walk_to_carrying_stock(controller: Node) -> void:
 	await get_tree().process_frame
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
+
+
+func _flat_distance(a: Node3D, b: Node3D) -> float:
+	return Vector2(a.global_position.x, a.global_position.z).distance_to(
+		Vector2(b.global_position.x, b.global_position.z)
+	)
+
+
+func _has_label_descendant(root: Node) -> bool:
+	if root is Label3D:
+		return true
+	for child: Node in root.get_children():
+		if _has_label_descendant(child):
+			return true
+	return false
 
 
 func _assert_signal_emitted_with_int(

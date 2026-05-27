@@ -77,7 +77,8 @@ The checked-in integrations documented in this repository are:
   `validate_static_repo_guards.sh`, `validate_export_config.sh`), SSOT
   tripwires (`validate_translations.sh`, `validate_single_store_ui.sh`,
   `validate_tutorial_single_source.sh`), originality checks
-  (`validate_originality.sh`), visual/video review
+  (`validate_originality.sh`), store-session naming checks
+  (`tests/validate_store_session_naming.sh`), visual/video review
   (`run_store_visual_sweep.sh`, `render_nightly_videos.sh`), audit report
   generation (`generate_audit_scenario_report.py`,
   `audit_report_writers.py`), and advisory review report generation
@@ -93,11 +94,12 @@ The checked-in integrations documented in this repository are:
 | --- | --- | --- |
 | `GODOT` / `GODOT_EXECUTABLE` | local scripts and test runners | Selects the Godot editor binary before falling back to `godot` on `PATH` and common macOS install paths. |
 | `GODOT_VERSION` | CI setup and visual sweep | Pins the Linux Godot install in validation/nightly workflows and names the default visual-baseline bucket. |
-| `VALIDATION_GODOT_VERSION` | export workflow | Pins the Godot build used by release validation before export jobs run. |
 | `MALLCORE_ARTIFACT_DIR` | automation, tests, CI uploads | Overrides the repo-local `artifacts/` root. |
 | `MALLCORE_SKIP_IMPORT` | resource/GUT wrappers | Skips duplicate import work after assets have already been imported. |
 | `MALLCORE_VISUAL_BASELINE_DIR` | `scripts/run_store_visual_sweep.sh` | Overrides the default reviewed-PNG baseline directory. |
 | `FPS` / `SCENARIO` | `scripts/render_nightly_videos.sh` | Sets Movie Maker FPS and optionally limits rendering to one scenario. |
+| `PROJECT_ROOT` / `OUTPUT_ROOT` / `LOG_ROOT` / `SCENARIO_RUNNER` / `TIMEOUT_SECONDS` | `scripts/render_nightly_videos.sh` | Override the project path, output/log roots, Movie Maker runner scene, and per-scenario timeout. |
+| `AUDIT_LOG` / `AUDIT_REQUIRED_FILE` / `AUDIT_METADATA_FILE` / `AUDIT_SCENARIO_ID` / `AUDIT_SCENARIO_SEED` / `AUDIT_KNOWN_FAIL_FILE` / `AUDIT_SKIP_RUN` | `tests/audit_run.sh` | Override audit inputs, scenario metadata, known-fail file selection, or skip the Godot run when gating an existing log. |
 
 ## Export presets
 
