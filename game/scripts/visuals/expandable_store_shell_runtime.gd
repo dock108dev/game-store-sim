@@ -245,7 +245,9 @@ static func _hide_node(store: Node, path: String) -> void:
 		node.visible = false
 
 
-static func _starter_fixture_placement(layout_catalog: RefCounted, fixture_id: String) -> Dictionary:
+static func _starter_fixture_placement(
+	layout_catalog: RefCounted, fixture_id: String
+) -> Dictionary:
 	if layout_catalog == null:
 		return {}
 	return layout_catalog.call(
@@ -840,7 +842,9 @@ static func _add_intentional_day_one_fixtures(
 		layout_catalog, "starter_display_table"
 	)
 	var checkout_position: Vector3 = _placement_position(checkout_placement, _CHECKOUT_POSITION)
-	var display_position: Vector3 = _placement_position(display_table_placement, _SHELF_TARGET_POSITION)
+	var display_position: Vector3 = _placement_position(
+		display_table_placement, _SHELF_TARGET_POSITION
+	)
 
 	_add_checkout_core(
 		shell,

@@ -1,4 +1,5 @@
 # gdlint:disable=max-file-lines,max-public-methods,max-returns,load-constant-name
+# gdlint:disable=class-definitions-order
 class_name StoreSessionController
 extends Node
 
@@ -4177,10 +4178,14 @@ func _store_restock_visual_data(index: int) -> Dictionary:
 	if GameManager.data_loader:
 		definition = GameManager.data_loader.get_item(item_id)
 	if definition:
-		return _with_restock_visual_metadata(_product_visual_data_from_definition(definition), item_id, index)
+		return _with_restock_visual_metadata(
+			_product_visual_data_from_definition(definition), item_id, index
+		)
 	var entry: Dictionary = ContentRegistry.get_entry(StringName(item_id))
 	if not entry.is_empty():
-		return _with_restock_visual_metadata(_product_visual_data_from_entry(item_id, entry), item_id, index)
+		return _with_restock_visual_metadata(
+			_product_visual_data_from_entry(item_id, entry), item_id, index
+		)
 	var data: Dictionary = {
 		"instance_id": "store_restock_visual_%d" % index,
 		"definition_id": item_id,
@@ -4215,7 +4220,9 @@ static func _slice_item_ids(
 	return result
 
 
-func _with_restock_visual_metadata(data: Dictionary, item_id: String, delivery_index: int) -> Dictionary:
+func _with_restock_visual_metadata(
+	data: Dictionary, item_id: String, delivery_index: int
+) -> Dictionary:
 	data["definition_id"] = item_id
 	data["product_item_id"] = item_id
 	data["delivery_index"] = delivery_index
