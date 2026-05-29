@@ -196,6 +196,8 @@ def validate_capture_metadata(
     required_text_fields = [
         "beat",
         "active_route_stage",
+        "active_prompt",
+        "next_expected_beat",
         "local_action",
         "next_destination",
         "visual_scope_mode",

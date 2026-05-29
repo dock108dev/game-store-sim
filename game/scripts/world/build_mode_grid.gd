@@ -13,7 +13,6 @@ const GRID_DIMENSIONS: Dictionary = {
 }
 
 const GRID_LINE_COLOR: Color = Color(1.0, 1.0, 1.0, 0.3)
-const GRID_LINE_WIDTH: float = 0.005
 
 var grid_size: Vector2i = Vector2i.ZERO
 var grid_origin: Vector3 = Vector3.ZERO

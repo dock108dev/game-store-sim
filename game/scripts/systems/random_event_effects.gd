@@ -8,7 +8,6 @@ const HEALTH_INSPECTION_PASS_REP: float = 5.0
 const HEALTH_INSPECTION_FAIL_REP: float = -10.0
 const SHOPLIFTING_REPUTATION_PENALTY: float = -2.0
 const COMPETITOR_SALE_DEMAND_MODIFIER: float = -0.1
-const RAINY_DAY_TRAFFIC_MODIFIER: float = 0.7
 
 var _inventory_system: InventorySystem
 var _reputation_system: ReputationSystem

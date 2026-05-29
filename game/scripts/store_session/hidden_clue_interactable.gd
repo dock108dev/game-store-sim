@@ -1,8 +1,6 @@
 class_name HiddenClueInteractable
 extends StoreSessionInteractableBase
 
-const CLUE_ID: StringName = &"day01_backroom_modded_console_hint"
-
 
 func _ready() -> void:
 	# Grounded copy — the player decides whether the stack is interesting.

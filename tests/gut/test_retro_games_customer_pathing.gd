@@ -113,8 +113,8 @@ func test_register_area_position_matches_floor_plan() -> void:
 	# Floor plan: the active customer spot is just in front of the counter.
 	# Y is irrelevant for XZ pathing but the trigger is authored at Y=1.0 to
 	# overlap the player capsule.
-	assert_almost_eq(register_area.global_position.x, 3.55, 0.5)
-	assert_almost_eq(register_area.global_position.z, 6.65, 0.5)
+	assert_almost_eq(register_area.global_position.x, 4.85, 0.5)
+	assert_almost_eq(register_area.global_position.z, 7.25, 0.5)
 
 
 func test_entry_area_is_grouped_for_collection() -> void:
@@ -228,13 +228,13 @@ func test_customer_fallback_target_refuses_staff_only_stock_closet() -> void:
 	customer._exit_position = Vector3(0.0, 0.0, 9.0)
 	customer.enable_waypoint_fallback()
 
-	customer._set_navigation_target(Vector3(4.80, 0.0, -6.85), &"shelf")
+	customer._set_navigation_target(Vector3(4.90, 0.0, -8.70), &"shelf")
 
 	assert_true(
 		CustomerNavConfig.is_customer_position_allowed(
 			customer._fallback_target
 		),
-		"Waypoint fallback must not target the staff-only stock closet"
+		"Waypoint fallback must not target the staff-only stockroom"
 	)
 	assert_eq(
 		customer._fallback_target,

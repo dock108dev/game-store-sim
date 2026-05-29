@@ -147,6 +147,42 @@ func test_training_register_check_ignores_stale_customer_checkout() -> void:
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 
 
+func test_register_beat_clears_actor_prompt_and_keeps_one_register_owner() -> void:
+	var controller: Node = _controller()
+	if controller == null:
+		return
+	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	assert_eq(String(controller.current_stage()), "training_check_register")
+
+	var customer: Interactable = _customer_interactable()
+	var register: Interactable = _day_end_trigger()
+	var visual_register: Interactable = _root.get_node_or_null("Checkout/Register") as Interactable
+	var checkout: RegisterInteractable = _checkout_interactable()
+	assert_not_null(customer, "Shared checkout actor prompt must exist")
+	assert_not_null(register, "Register beat prompt owner must exist")
+	assert_not_null(visual_register, "Visual register fixture must remain authored")
+	assert_not_null(checkout, "Generic checkout counter prompt owner must remain authored")
+	if customer == null or register == null or visual_register == null or checkout == null:
+		return
+
+	assert_false(customer.enabled, "Actor talk prompt must not compete with the register beat")
+	assert_eq(customer.display_name, "")
+	assert_eq(customer.prompt_text, "")
+	assert_false(_any_manager_part_visible(), "Manager detail props must clear after manager beat")
+	assert_eq(register.display_name, "register")
+	assert_eq(register.prompt_text, "Check")
+	assert_eq(register.action_verb, "Check")
+	assert_eq(
+		_active_register_prompt_owners(),
+		["StoreSessionDayEndTrigger/Interactable"] as Array[String],
+		"Only the objective-owned register trigger may advertise the register prompt"
+	)
+	assert_false(visual_register.enabled, "Decorative register fixture must stay disabled")
+	assert_eq(visual_register.proximity_radius, 0.0)
+	assert_false(checkout.enabled, "Generic checkout counter must stay gated during register objective")
+
+
 func test_close_day_register_prompt_ignores_stale_customer_checkout() -> void:
 	var controller: Node = _controller()
 	if controller == null:
@@ -177,6 +213,14 @@ func test_close_day_register_prompt_ignores_stale_customer_checkout() -> void:
 		["StoreSessionDayEndTrigger/Interactable"] as Array[String],
 		"Only the day-end trigger may own the close-day register prompt"
 	)
+	var trigger: Interactable = _day_end_trigger()
+	assert_not_null(trigger)
+	if trigger == null:
+		return
+	assert_eq(trigger.display_name, "close day")
+	assert_eq(trigger.prompt_text, "Close")
+	assert_eq(trigger.action_verb, "Close")
+	assert_eq(trigger.get_prompt_label(), "Close day")
 
 	checkout.interact()
 	await get_tree().process_frame
@@ -217,6 +261,8 @@ func test_role_prompt_copy_changes_between_training_and_customer_stages() -> voi
 	)
 	assert_eq(str(customer_snapshot.get("active_objective_action", "")), "Talk to the customer")
 	assert_false(_proxy_part_visible("Badge"))
+	assert_false(_proxy_part_visible("NameTag"))
+	assert_false(_proxy_part_visible("Lanyard"))
 	assert_false(_proxy_part_visible("Clipboard"))
 
 
@@ -364,6 +410,13 @@ func _proxy_part_visible(part_name: String) -> bool:
 		_root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy/%s" % part_name) as Node3D
 	)
 	return part != null and part.visible
+
+
+func _any_manager_part_visible() -> bool:
+	for part_name: String in ["Badge", "NameTag", "Lanyard", "Clipboard"]:
+		if _proxy_part_visible(part_name):
+			return true
+	return false
 
 
 func _xz_distance(a: Vector3, b: Vector3) -> float:

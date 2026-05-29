@@ -1211,13 +1211,7 @@ func _store_interactable(parent_name: String) -> Interactable:
 func _interaction_label(target: Interactable) -> String:
 	if target == null:
 		return ""
-	var verb: String = target.prompt_text.strip_edges()
-	var target_name: String = target.display_name.strip_edges()
-	if target_name.is_empty():
-		return verb
-	if verb.is_empty():
-		return target_name
-	return "%s %s" % [verb, target_name]
+	return target.get_prompt_label()
 
 
 func _production_day_cycle_fixture() -> Dictionary:

@@ -58,8 +58,8 @@ func test_bad_state_resistance_scenario_reports_recovered_gameplay_focus() -> vo
 	assert_true(_panel_count_seen(panel_counts, "inventory", 0))
 
 	var prompts: Array = report.get("prompt_status", []) as Array
-	assert_true(prompts.has("Close open panel to interact"))
-	assert_true(prompts.has("Close current menu to interact"))
+	assert_true(prompts.has("Close the open panel to interact"))
+	assert_true(prompts.has("Close the current panel or menu to interact"))
 
 	var notification_queue: Dictionary = report.get("notification_queue", {}) as Dictionary
 	assert_eq(

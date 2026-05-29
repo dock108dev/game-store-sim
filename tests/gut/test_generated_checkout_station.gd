@@ -4,6 +4,16 @@ const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const COUNTER_TOP_Y: float = 0.83
 const SUPPORT_TOLERANCE: float = 0.035
 const SERVICE_SPOT_TOLERANCE: float = 0.08
+const CHECKOUT_KIT_PROP_PATHS: Array[String] = [
+	"CheckoutKitCounterRegister",
+	"CheckoutKitRegisterMonitor",
+	"CheckoutKitReceiptPrinter",
+	"CheckoutKitCardReader",
+	"CheckoutKitBarcodeScanner",
+	"CheckoutKitPaperStack",
+	"CheckoutKitTapeRoll",
+	"CheckoutKitManagerClipboard",
+]
 
 var _root: Node3D = null
 var _saved_state: GameManager.State
@@ -35,6 +45,11 @@ func test_generated_checkout_station_has_one_counter_supported_device_cluster() 
 	var shell: Node3D = _shell()
 	if shell == null:
 		return
+	assert_eq(
+		shell.find_children("CheckoutCounterTop", "MeshInstance3D", true, false).size(),
+		1,
+		"Generated checkout must expose one clear counter top volume"
+	)
 	for required: String in [
 		"CheckoutCounterTop",
 		"CheckoutCustomerSidePanel",
@@ -64,6 +79,25 @@ func test_generated_checkout_station_has_one_counter_supported_device_cluster() 
 				_has_interaction_descendant(node),
 				"%s must remain a visual-only station detail" % required
 			)
+
+
+func test_generated_checkout_kit_props_are_visual_only_station_details() -> void:
+	var shell: Node3D = _shell()
+	if shell == null:
+		return
+	for prop_path: String in CHECKOUT_KIT_PROP_PATHS:
+		var prop: Node3D = shell.get_node_or_null(prop_path) as Node3D
+		assert_not_null(prop, "Generated checkout kit prop missing: %s" % prop_path)
+		if prop == null:
+			continue
+		assert_true(
+			bool(prop.get_meta("checkout_station_visual_only", false)),
+			"%s must be marked as checkout visual dressing" % prop_path
+		)
+		assert_false(
+			_has_interaction_descendant(prop),
+			"%s must not add register gameplay, collision, or prompts" % prop_path
+		)
 
 
 func test_generated_checkout_device_family_keeps_register_screen_primary() -> void:
@@ -201,7 +235,7 @@ func _shell() -> Node3D:
 
 
 func _has_interaction_descendant(node: Node) -> bool:
-	if node is Area3D or node is CollisionShape3D or node is Interactable:
+	if node is Area3D or node is CollisionShape3D or node is PhysicsBody3D or node is Interactable:
 		return true
 	for child: Node in node.get_children():
 		if _has_interaction_descendant(child):

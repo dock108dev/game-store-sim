@@ -10,7 +10,6 @@ signal step_completed(index: int, result: Dictionary)
 signal step_failed(index: int, result: Dictionary)
 
 const DEFAULT_STEP_TIMEOUT_FRAMES: int = 300
-const STORE_ENTRY_TIMEOUT_FRAMES: int = 600
 const PROTECTED_OUTCOME_SIGNALS: Dictionary = {
 	&"store_ready": true,
 	&"store_failed": true,

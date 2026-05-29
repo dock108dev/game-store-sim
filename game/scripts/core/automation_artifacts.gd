@@ -7,7 +7,6 @@ const ENV_WORKSPACE: String = "GITHUB_WORKSPACE"
 const MANIFEST_RELATIVE_PATH: String = "manifests/artifact_manifest.json"
 const STATUS_GENERATED: String = "generated"
 const STATUS_MISSING: String = "missing"
-const STATUS_FAILED: String = "failed"
 const _SCHEMA_VERSION: int = 1
 const _MAX_SLUG_LENGTH: int = 64
 

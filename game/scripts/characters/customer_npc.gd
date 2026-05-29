@@ -12,7 +12,6 @@ enum CustomerVisitState {
 
 const MOVE_SPEED: float = 2.0
 const NAV_RECALC_INTERVAL: float = 0.2
-const ARRIVAL_DISTANCE_SQ: float = 0.64
 const FALLBACK_ANIMATION: StringName = &"idle_stand"
 const BROWSE_DURATION_MIN: float = 5.0
 const BROWSE_DURATION_MAX: float = 15.0

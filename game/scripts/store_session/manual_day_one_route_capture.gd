@@ -27,7 +27,7 @@ const REQUIRED_REVIEW_BEATS: Array[String] = [
 	"training_shelf_transition",
 	"before_customer",
 	"customer_decision_card",
-	"after_result_customer_exit",
+	"post_customer_recovery",
 	"stocked_shelf_stat_change",
 	"close_day_prompt",
 	"close_day_summary",
@@ -35,7 +35,7 @@ const REQUIRED_REVIEW_BEATS: Array[String] = [
 
 ## Returns the ordered manual capture beats for the continuous Day 1 route.
 static func route_beats() -> Array[Dictionary]:
-	return [
+	var beats: Array[Dictionary] = [
 		_beat(
 			1,
 			"manager_prompt",
@@ -167,12 +167,12 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "choice_pending", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:354",
-					"tests/gut/test_store_session_day_one_critical_path.gd:358",
-					"tests/gut/test_store_session_day_one_critical_path.gd:361",
-				]
-			),
+			[
+				"tests/gut/test_store_session_day_one_critical_path.gd:354",
+				"tests/gut/test_store_session_day_one_critical_path.gd:358",
+				"tests/gut/test_store_session_day_one_critical_path.gd:361",
+			]
+		),
 		_beat(
 			7,
 			"result_acknowledgement",
@@ -190,17 +190,17 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "result_visible", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:367",
-					"tests/gut/test_store_session_day_one_critical_path.gd:374",
-					"tests/gut/test_store_session_day_one_critical_path.gd:377",
-				]
-			),
+			[
+				"tests/gut/test_store_session_day_one_critical_path.gd:367",
+				"tests/gut/test_store_session_day_one_critical_path.gd:374",
+				"tests/gut/test_store_session_day_one_critical_path.gd:377",
+			]
+		),
 		_beat(
 			8,
-			"after_result_customer_exit",
-			"After result and customer exit",
-			"08_after_result_customer_exit.png",
+			"post_customer_recovery",
+			"Post-customer recovery",
+			"08_post_customer_recovery.png",
 			"Acknowledge the result and capture after the customer starts leaving.",
 			"talk_to_customer",
 			"back_room_inventory",
@@ -212,13 +212,13 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "exit_in_progress", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:382",
-					"tests/gut/test_store_session_day_one_critical_path.gd:385",
-					"tests/gut/test_store_session_day_one_critical_path.gd:390",
-					"tests/gut/test_store_session_day_one_critical_path.gd:395",
-					"tests/gut/test_store_session_day_one_critical_path.gd:397",
-				]
+			[
+				"tests/gut/test_store_session_day_one_critical_path.gd:382",
+				"tests/gut/test_store_session_day_one_critical_path.gd:385",
+				"tests/gut/test_store_session_day_one_critical_path.gd:390",
+				"tests/gut/test_store_session_day_one_critical_path.gd:395",
+				"tests/gut/test_store_session_day_one_critical_path.gd:397",
+			]
 		),
 		_beat(
 			9,
@@ -236,13 +236,13 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "customer_served_and_shelf_stocked", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:410",
-					"tests/gut/test_store_session_day_one_critical_path.gd:419",
-					"tests/gut/test_store_session_day_one_critical_path.gd:422",
-					"tests/gut/test_store_session_day_one_critical_path.gd:434",
-				]
-			),
+			[
+				"tests/gut/test_store_session_day_one_critical_path.gd:410",
+				"tests/gut/test_store_session_day_one_critical_path.gd:419",
+				"tests/gut/test_store_session_day_one_critical_path.gd:422",
+				"tests/gut/test_store_session_day_one_critical_path.gd:434",
+			]
+		),
 		_beat(
 			10,
 			"close_day_prompt",
@@ -259,13 +259,13 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "close_day_enabled", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:444",
-					"tests/gut/test_store_session_day_one_critical_path.gd:446",
-					"tests/gut/test_store_session_day_one_critical_path.gd:451",
-					"tests/gut/test_store_session_day_one_critical_path.gd:453",
-				]
-			),
+			[
+				"tests/gut/test_store_session_day_one_critical_path.gd:444",
+				"tests/gut/test_store_session_day_one_critical_path.gd:446",
+				"tests/gut/test_store_session_day_one_critical_path.gd:451",
+				"tests/gut/test_store_session_day_one_critical_path.gd:453",
+			]
+		),
 		_beat(
 			11,
 			"close_day_summary",
@@ -294,20 +294,21 @@ static func route_beats() -> Array[Dictionary]:
 				"shelf_inventory": 3,
 				"backroom_inventory": 1,
 			},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:451",
-					"tests/gut/test_store_session_day_one_critical_path.gd:458",
-					"tests/gut/test_store_session_day_one_critical_path.gd:465",
-					"tests/gut/test_store_session_day_one_critical_path.gd:468",
-					"tests/gut/test_store_session_day_one_critical_path.gd:470",
-					"tests/gut/test_store_session_day_one_critical_path.gd:479",
-					"tests/gut/test_store_session_day_one_critical_path.gd:480",
-					"tests/gut/test_store_session_day_one_critical_path.gd:487",
-					"tests/gut/test_store_session_day_one_critical_path.gd:496",
-					"tests/gut/test_store_session_day_one_critical_path.gd:512",
-				]
-			),
+			[
+				"tests/gut/test_store_session_day_one_critical_path.gd:451",
+				"tests/gut/test_store_session_day_one_critical_path.gd:458",
+				"tests/gut/test_store_session_day_one_critical_path.gd:465",
+				"tests/gut/test_store_session_day_one_critical_path.gd:468",
+				"tests/gut/test_store_session_day_one_critical_path.gd:470",
+				"tests/gut/test_store_session_day_one_critical_path.gd:479",
+				"tests/gut/test_store_session_day_one_critical_path.gd:480",
+				"tests/gut/test_store_session_day_one_critical_path.gd:487",
+				"tests/gut/test_store_session_day_one_critical_path.gd:496",
+				"tests/gut/test_store_session_day_one_critical_path.gd:512",
+			]
+		),
 	]
+	return _with_next_expected_beats(beats)
 
 ## Returns a manifest payload without touching the filesystem.
 static func build_manifest(
@@ -421,6 +422,7 @@ static func _beat(
 		"expected_objective": objective_id,
 		"expected_stage": stage,
 		"active_prompt": active_prompt,
+		"next_expected_beat": "",
 		"hud_right_panel": hud_right_panel,
 		"shelf_backroom_counts": counts,
 		"customer_state": customer_state,
@@ -430,6 +432,18 @@ static func _beat(
 	}
 	beat["code_to_screen_proof"] = StoreProofContractScript.proof_from_route_beat(beat)
 	return beat
+
+
+static func _with_next_expected_beats(beats: Array[Dictionary]) -> Array[Dictionary]:
+	for index: int in range(beats.size()):
+		var next_beat_name: String = "route_complete"
+		if index + 1 < beats.size():
+			next_beat_name = str(beats[index + 1].get("beat_name", ""))
+		beats[index]["next_expected_beat"] = next_beat_name
+		beats[index]["code_to_screen_proof"] = StoreProofContractScript.proof_from_route_beat(
+			beats[index]
+		)
+	return beats
 
 static func _beats_with_capture_results(
 	beats: Array[Dictionary],
@@ -451,6 +465,8 @@ static func _manual_review_template(beats: Array[Dictionary]) -> Dictionary:
 			"capture_beat_name": str(beat.get("capture_beat_name", "")),
 			"status": "pending",
 			"screenshot_matches_state": false,
+			"active_prompt": str(beat.get("active_prompt", "")),
+			"next_expected_beat": str(beat.get("next_expected_beat", "")),
 			"automated_assertion_checked": false,
 			"notes": "",
 		})
@@ -481,6 +497,7 @@ static func _write_manual_review(run_dir: String, manifest: Dictionary) -> Dicti
 		lines.append("  - Capture: `%s`" % str(beat.get("capture_helper_call", "")))
 		lines.append("  - Expected stage: `%s`" % str(beat.get("expected_stage", "")))
 		lines.append("  - Expected prompt: `%s`" % str(beat.get("active_prompt", "")))
+		lines.append("  - Next expected beat: `%s`" % str(beat.get("next_expected_beat", "")))
 		for field: String in StoreProofContractScript.REQUIRED_FIELDS:
 			var proof: Dictionary = beat.get("code_to_screen_proof", {}) as Dictionary
 			lines.append(

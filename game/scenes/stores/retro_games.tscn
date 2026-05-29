@@ -352,7 +352,7 @@ size = Vector3(2.8, 3.5, 0.04)
 size = Vector3(2.8, 3.5, 0.1)
 
 [sub_resource type="BoxShape3D" id="entrance_door_interactable_shape"]
-size = Vector3(2.8, 3.0, 0.8)
+size = Vector3(1.5, 1.85, 0.24)
 
 [sub_resource type="StandardMaterial3D" id="entrance_door_glass_mat"]
 resource_name = "Entrance Glass Door"
@@ -1346,8 +1346,10 @@ shaded = false
 ; The door sits at Z=10.0, just inside the front wall plane at
 ; Z=10.05; the X gap (2.9 m at X=0) is disjoint from the front wall
 ; segments at X=±4.78 so colliders never overlap geometrically.
-; The Interactable trigger volume (2.8 × 3.0 × 0.8) extends inward
-; to Z=9.6 so the prompt shows from the player's bound z<=9.7.
+; The Interactable trigger volume is intentionally narrower than the full
+; storefront gap and stays on the glass/push-plate sightline so off-axis
+; reticle rays aimed at checkout, shelves, stockroom, or blank wall surfaces
+; do not pull the exit prompt.
 ; ============================================================
 
 [node name="EntranceDoor" type="Node3D" parent="."]
@@ -1367,7 +1369,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
 shape = SubResource("entrance_door_collision_shape")
 
 [node name="Interactable" type="Area3D" parent="EntranceDoor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.32, -0.17)
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("3")
@@ -4778,32 +4780,37 @@ metadata/visual_fixture_id = "starter_display_table"
 metadata/restock_interactable_id = "shelf.starter_display"
 
 [node name="ShelfBoard" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
-transform = Transform3D(1.1, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 1.1, 0)
+transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 1.2, 0, 1.1, 0)
 mesh = SubResource("shelf_board_wide_mesh")
 surface_material_override/0 = ExtResource("10")
 
 [node name="TableLegFrontLeft" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
-transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, -1.12, 0.52, 0.24)
+transform = Transform3D(1.15, 0, 0, 0, 1.8, 0, 0, 0, 1.15, -0.82, 0.52, 0.28)
 mesh = SubResource("backroom_receiving_table_leg_mesh")
 surface_material_override/0 = ExtResource("10")
 
 [node name="TableLegFrontRight" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
-transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, 1.12, 0.52, 0.24)
+transform = Transform3D(1.15, 0, 0, 0, 1.8, 0, 0, 0, 1.15, 0.82, 0.52, 0.28)
 mesh = SubResource("backroom_receiving_table_leg_mesh")
 surface_material_override/0 = ExtResource("10")
 
 [node name="TableLegBackLeft" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
-transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, -1.12, 0.52, -0.24)
+transform = Transform3D(1.15, 0, 0, 0, 1.8, 0, 0, 0, 1.15, -0.82, 0.52, -0.28)
 mesh = SubResource("backroom_receiving_table_leg_mesh")
 surface_material_override/0 = ExtResource("10")
 
 [node name="TableLegBackRight" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
-transform = Transform3D(0.9, 0, 0, 0, 1.8, 0, 0, 0, 0.9, 1.12, 0.52, -0.24)
+transform = Transform3D(1.15, 0, 0, 0, 1.8, 0, 0, 0, 1.15, 0.82, 0.52, -0.28)
 mesh = SubResource("backroom_receiving_table_leg_mesh")
 surface_material_override/0 = ExtResource("10")
 
 [node name="TableFrontApron" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
-transform = Transform3D(2.9, 0, 0, 0, 0.55, 0, 0, 0, 0.75, 0, 0.88, 0.285)
+transform = Transform3D(2.55, 0, 0, 0, 1.9, 0, 0, 0, 0.8, 0, 0.965, 0.35)
+mesh = SubResource("retail_shelf_lip_mesh")
+surface_material_override/0 = SubResource("product_shelf_lip_mat")
+
+[node name="TableBackApron" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(2.55, 0, 0, 0, 1.55, 0, 0, 0, 0.8, 0, 0.935, -0.35)
 mesh = SubResource("retail_shelf_lip_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
@@ -4870,59 +4877,59 @@ surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat
 ; (0.7 scale) board (z = 0.55 * 0.7 / 2 ≈ 0.193) and at half the panel
 ; height above the ShelfBoard top face (1.15 + 0.14 = 1.29).
 [node name="EmptyOverlay" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.29, 0.193)
+transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.29, 0.33)
 mesh = SubResource("store_session_restock_empty_overlay_mesh")
 surface_material_override/0 = SubResource("store_session_restock_empty_overlay_mat")
 
 [node name="MerchandisingFrame" type="Node3D" parent="StoreSessionRestockShelf"]
 
 [node name="BackPanel" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(1.25, 0, 0, 0, 2.8, 0, 0, 0, 1, 0, 1.28, -0.18)
+transform = Transform3D(0.82, 0, 0, 0, 1.25, 0, 0, 0, 1, 0, 1.05, -0.39)
 mesh = SubResource("zone_label_backing_mesh")
 surface_material_override/0 = SubResource("product_shelf_backer_mat")
 
 [node name="UpperShelfBoard" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(0.86, 0, 0, 0, 0.62, 0, 0, 0, 0.58, 0, 1.56, 0.02)
+transform = Transform3D(0.57, 0, 0, 0, 0.6, 0, 0, 0, 0.4, 0, 1.25, -0.34)
 mesh = SubResource("shelf_board_wide_mesh")
 surface_material_override/0 = ExtResource("10")
 
 [node name="MiddleShelfLip" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(3.0, 0, 0, 0, 0.45, 0, 0, 0, 1, 0, 1.12, 0.305)
+transform = Transform3D(1.97, 0, 0, 0, 0.62, 0, 0, 0, 0.53, 0, 1.05, -0.21)
 mesh = SubResource("retail_shelf_lip_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
 [node name="BottomShelfLip" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(3.0, 0, 0, 0, 0.45, 0, 0, 0, 1, 0, 0.74, 0.305)
+transform = Transform3D(1.97, 0, 0, 0, 0.62, 0, 0, 0, 0.53, 0, 0.86, -0.21)
 mesh = SubResource("retail_shelf_lip_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
 [node name="LeftDivider" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(0.62, 0, 0, 0, 1.0, 0, 0, 0, 1, -0.74, 1.13, 0.305)
+transform = Transform3D(1.4, 0, 0, 0, 0.53, 0, 0, 0, 0.8, -0.50, 1.05, -0.24)
 mesh = SubResource("retail_shelf_divider_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
 [node name="RightDivider" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(0.62, 0, 0, 0, 1.0, 0, 0, 0, 1, 0.74, 1.13, 0.305)
+transform = Transform3D(1.4, 0, 0, 0, 0.53, 0, 0, 0, 0.8, 0.50, 1.05, -0.24)
 mesh = SubResource("retail_shelf_divider_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
 [node name="FeaturedRestockFaceA" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame" groups=["product_display"]]
-transform = Transform3D(0.78, 0, 0.10, 0, 0.78, 0, -0.10, 0, 0.78, -0.40, 1.71, 0.24)
+transform = Transform3D(0.82, 0, 0.05, 0, 0.82, 0, -0.05, 0, 0.82, -0.28, 1.06, -0.17)
 mesh = SubResource("product_case_cover_mesh")
 surface_material_override/0 = SubResource("product_kart_clerk_mat")
 
 [node name="FeaturedRestockFaceB" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame" groups=["product_display"]]
-transform = Transform3D(0.78, 0, -0.10, 0, 0.78, 0, 0.10, 0, 0.78, 0.08, 1.71, 0.24)
+transform = Transform3D(0.82, 0, -0.05, 0, 0.82, 0, 0.05, 0, 0.82, -0.04, 1.06, -0.17)
 mesh = SubResource("product_case_cover_mesh")
 surface_material_override/0 = SubResource("product_pixel_pets_mat")
 
 [node name="RestockEmptyGhost" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(0.88, 0, 0.02, 0, 0.72, 0, -0.02, 0, 0.88, 0.56, 1.31, 0.24)
+transform = Transform3D(1.2, 0, 0.02, 0, 1.05, 0, -0.02, 0, 0.78, 0.28, 1.02, -0.17)
 mesh = SubResource("retail_shelf_empty_slot_mesh")
 surface_material_override/0 = SubResource("product_empty_slot_mat")
 
 [node name="RestockPriceTag" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingFrame"]
-transform = Transform3D(0.76, 0, 0, 0, 0.66, 0, 0, 0, 1, -0.48, 1.12, 0.34)
+transform = Transform3D(0.72, 0, 0, 0, 0.66, 0, 0, 0, 1, 0.52, 0.89, 0.39)
 mesh = SubResource("product_price_tag_mesh")
 surface_material_override/0 = SubResource("price_tag_mat")
 

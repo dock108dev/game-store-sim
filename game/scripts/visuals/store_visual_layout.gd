@@ -8,6 +8,8 @@ const DEFAULT_PATH: String = "res://game/content/visuals/store_visual_layouts.js
 const SCRIPT_PATH: String = "res://game/scripts/visuals/store_visual_layout.gd"
 const RETRO_GAMES_STARTER_LAYOUT: StringName = &"retro_games_starter_small"
 const RETRO_GAMES_GROWTH_LAYOUT: StringName = &"retro_games_growth_unlocks"
+const STOCK_STATE_FIRST_DELIVERY: StringName = &"first_delivery_stocked"
+const STOCK_STATE_RESERVE: StringName = &"reserve"
 
 var load_error: String = ""
 
@@ -78,6 +80,42 @@ func get_placements(
 	return result
 
 
+## Returns the first fixture placement whose fixture_id matches `fixture_id`.
+func get_fixture_placement(
+	layout_id: StringName, fixture_id: String, active_unlocks: Array[StringName] = []
+) -> Dictionary:
+	for placement: Dictionary in get_placements(layout_id, active_unlocks):
+		if str(placement.get("fixture_id", "")) == fixture_id:
+			return placement
+	return {}
+
+
+## Returns product placements, optionally filtered by stock_state.
+func get_product_placements(
+	layout_id: StringName, stock_state: StringName = &"", active_unlocks: Array[StringName] = []
+) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for placement: Dictionary in get_placements(layout_id, active_unlocks):
+		if str(placement.get("product_item_id", "")).is_empty():
+			continue
+		var placement_stock_state: StringName = StringName(str(placement.get("stock_state", "")))
+		if not String(stock_state).is_empty() and placement_stock_state != stock_state:
+			continue
+		result.append(placement)
+	result.sort_custom(_sort_product_placements_by_delivery_index)
+	return result
+
+
+## Returns product ids in the same order the layout declares delivery_index.
+func get_product_item_ids(
+	layout_id: StringName, stock_state: StringName = &"", active_unlocks: Array[StringName] = []
+) -> PackedStringArray:
+	var ids: PackedStringArray = []
+	for placement: Dictionary in get_product_placements(layout_id, stock_state, active_unlocks):
+		ids.append(str(placement.get("product_item_id", "")))
+	return ids
+
+
 func count_placements(layout_id: StringName, active_unlocks: Array[StringName] = []) -> int:
 	return get_placements(layout_id, active_unlocks).size()
 
@@ -85,3 +123,7 @@ func count_placements(layout_id: StringName, active_unlocks: Array[StringName] =
 func _placement_is_unlocked(placement: Dictionary, active_unlocks: Array[StringName]) -> bool:
 	var required_unlock: StringName = StringName(str(placement.get("required_unlock", "")))
 	return String(required_unlock).is_empty() or active_unlocks.has(required_unlock)
+
+
+func _sort_product_placements_by_delivery_index(a: Dictionary, b: Dictionary) -> bool:
+	return int(a.get("delivery_index", 9999)) < int(b.get("delivery_index", 9999))

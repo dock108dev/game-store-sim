@@ -20,7 +20,7 @@ following:
 5. Seeds the GUT editor environment through `res://tests/setup_gut_env.gd`.
 6. Runs GUT with `res://addons/gut/gut_cmdln.gd`.
 7. Runs `res://game/tests/run_tests.gd` when that file exists.
-8. Writes the combined GUT output stream to
+8. Writes the combined local GUT output stream to
    `artifacts/logs/gut/test_run.log`.
 9. Runs maintained shell validators under `tests/`. Archived one-off
    acceptance scripts can still be run directly, but are not part of the
@@ -165,6 +165,12 @@ an automation runner arms it. Scenario logs use stable `SCENARIO: PASS`,
 `.github/workflows/validate.yml` is the PR and `main` push gate. It runs
 static repo guards, `gdlint`, Godot resource/autoload integrity, the full GUT
 suite through `scripts/run_godot_tests.sh`, and the fresh-install smoke.
+
+`scripts/run_godot_tests.sh` is the CI GUT gate rather than the local wrapper.
+It runs the store-session naming validator, resource integrity, then GUT with
+`.gutconfig.json`, writes the raw CI GUT log to `artifacts/logs/gut/gut.log`,
+trusts GUT's `All tests passed` summary, and fails on unexpected `ERROR:`
+lines after filtering documented headless shutdown noise.
 
 `.github/workflows/nightly.yml` is the weekly scenario review gate. It runs the
 interaction audit, the soft visual snapshot sweep, and the long-day soak

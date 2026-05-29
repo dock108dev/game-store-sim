@@ -13,9 +13,6 @@
 extends GutTest
 
 
-const _STORE_ID: StringName = &"retro_games"
-
-
 class _StubInventorySystem:
 	extends Node
 	var created_items: Array[Dictionary] = []

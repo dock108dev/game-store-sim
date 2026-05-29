@@ -126,8 +126,7 @@ func get_interaction_area() -> Area3D:
 	return _interaction_area
 
 
-## ISSUE-005: state-aware prompt label that drives the InteractionPrompt HUD
-## (the InteractionRay prepends "[E] " when emitting). Default is
+## State-aware prompt label that drives the InteractionPrompt HUD. Default is
 ## "<verb> <name>" using prompt_text and display_name. Subclasses such as
 ## ShelfSlot override this to surface placement-mode states.
 func get_prompt_label() -> String:
@@ -135,10 +134,23 @@ func get_prompt_label() -> String:
 	if verb.is_empty():
 		verb = PROMPT_VERBS.get(interaction_type, "Interact")
 	var target_name: String = display_name.strip_edges()
+	return compose_prompt_label(verb, target_name)
+
+
+## Composes prompt verb and target name while avoiding duplicate leading words.
+static func compose_prompt_label(verb: String, target_name: String) -> String:
 	if target_name.is_empty():
 		return verb
+	if verb.is_empty():
+		return target_name
 	if verb.ends_with(target_name):
 		return verb
+	var lower_verb: String = verb.to_lower()
+	var lower_target: String = target_name.to_lower()
+	if lower_target == lower_verb:
+		return verb
+	if lower_target.begins_with("%s " % lower_verb):
+		return "%s%s" % [verb, target_name.substr(verb.length())]
 	return "%s %s" % [verb, target_name]
 
 

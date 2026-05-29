@@ -5,8 +5,6 @@ extends GutTest
 
 var _system: RegularsLogSystem
 
-const _THREAD_DEFS: Array[Dictionary] = []
-
 const _FAMILIAR_FACE_DEF: Dictionary = {
 	"id": "the_familiar_face",
 	"display_name": "The Familiar Face",

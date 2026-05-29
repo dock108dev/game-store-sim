@@ -110,6 +110,18 @@ func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 			"%s sweep must identify the active route stage" % row["name"]
 		)
 		assert_false(
+			str(row.get("active_prompt", "")).is_empty(),
+			"%s sweep must record the active prompt reviewers should see" % row["name"]
+		)
+		assert_false(
+			str(row.get("next_expected_beat", "")).is_empty(),
+			"%s sweep must record the next expected route beat" % row["name"]
+		)
+		assert_false(
+			str(row.get("route_anchor", "")).contains("ReadabilityProps/DayOneRouteMarkers"),
+			"%s sweep must target generated-shell or live route landmarks" % row["name"]
+		)
+		assert_false(
 			str(row.get("local_action", "")).is_empty(),
 			"%s sweep must name the local action a first-run player should infer" % row["name"]
 		)
@@ -299,6 +311,14 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 				"Manifest beat must preserve route stage metadata"
 			)
 			assert_false(
+				str(beat.get("active_prompt", "")).is_empty(),
+				"Manifest beat must preserve active prompt metadata"
+			)
+			assert_false(
+				str(beat.get("next_expected_beat", "")).is_empty(),
+				"Manifest beat must preserve next expected beat metadata"
+			)
+			assert_false(
 				str(beat.get("primary_work_surface_target", "")).is_empty(),
 				"Manifest beat must preserve work-surface target metadata"
 			)
@@ -341,6 +361,8 @@ func test_acceptance_visual_sweep_runner_uses_display_backed_capture_contract() 
 	assert_string_contains(source, "CAPTURE_RANDOM_SEED")
 	assert_string_contains(source, "apply_mode_to_tree")
 	assert_string_contains(source, "active_route_stage")
+	assert_string_contains(source, "active_prompt")
+	assert_string_contains(source, "next_expected_beat")
 	assert_string_contains(source, "primary_work_surface_target")
 	assert_string_contains(source, "anchor_validation")
 	assert_string_contains(source, "debug_ui_validation")
@@ -363,6 +385,8 @@ func test_visual_sweep_diff_script_declares_soft_baseline_and_threshold_contract
 	assert_string_contains(source, "luminance_stddev")
 	assert_string_contains(source, "validate_capture_metadata")
 	assert_string_contains(source, "\"active_route_stage\"")
+	assert_string_contains(source, "\"active_prompt\"")
+	assert_string_contains(source, "\"next_expected_beat\"")
 	assert_string_contains(source, "Capture metadata missing {field}")
 	assert_string_contains(source, "Capture did not validate intended visual anchors")
 	assert_string_contains(source, "Capture did not validate editor/debug UI absence")
@@ -412,6 +436,7 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 		"HUD supports rather than fights the route views",
 		"HUD context supports route understanding only",
 		"3D staging communicates the route without new explanatory UI panels",
+		"generated shell landmarks identify destinations from screenshots alone",
 		"camera-visible density replaces hidden prop count",
 		"primary action surface is visually dominant",
 		"supporting props stay quiet",

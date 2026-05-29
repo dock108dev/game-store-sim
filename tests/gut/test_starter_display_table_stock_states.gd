@@ -81,13 +81,13 @@ func test_empty_carrying_partial_and_stocked_states_are_distinct() -> void:
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(_count_shelf_items(shelf), 1, "First placement creates one product")
-	_assert_item_at_slot(shelf, 0)
+	_assert_item_at_slot(shelf, 0, StoreSessionController.starter_first_delivery_item_ids()[0])
 	_assert_overlay_visible(shelf, false, "Partial table should hide EmptyOverlay")
 	_assert_affordance_at_slot(shelf, 1, true)
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(_count_shelf_items(shelf), 2, "Second placement creates a partial table")
-	_assert_item_at_slot(shelf, 1)
+	_assert_item_at_slot(shelf, 1, StoreSessionController.starter_first_delivery_item_ids()[1])
 	_assert_affordance_at_slot(shelf, 2, true)
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
@@ -96,7 +96,7 @@ func test_empty_carrying_partial_and_stocked_states_are_distinct() -> void:
 		StoreSessionController._BACKROOM_DELIVERY_QUANTITY,
 		"Final placement creates the Day 1 stocked state"
 	)
-	_assert_item_at_slot(shelf, 2)
+	_assert_item_at_slot(shelf, 2, StoreSessionController.starter_first_delivery_item_ids()[2])
 	_assert_affordance_at_slot(shelf, 2, false)
 	assert_false(StoreSessionState.carrying_stock, "Final placement clears carried stock")
 
@@ -170,12 +170,17 @@ func _assert_affordance_at_slot(shelf: Node, slot_index: int, expected_visible: 
 			assert_almost_eq(affordance.position.x, slot.position.x, 0.01)
 
 
-func _assert_item_at_slot(shelf: Node, slot_index: int) -> void:
+func _assert_item_at_slot(shelf: Node, slot_index: int, expected_item_id: String = "") -> void:
 	var item: Node3D = shelf.get_node_or_null("%s%d" % [ITEM_PREFIX, slot_index]) as Node3D
 	assert_not_null(item, "StoreShelfItem%d must exist" % slot_index)
 	var slot: Node3D = _slot_marker(shelf, slot_index)
 	if item == null or slot == null:
 		return
+	if not expected_item_id.is_empty():
+		assert_eq(str(item.get_meta("product_item_id", "")), expected_item_id)
+		assert_eq(int(item.get_meta("delivery_index", -1)), slot_index)
+		assert_eq(int(item.get_meta("starter_catalog_index", -1)), slot_index)
+		assert_eq(str(item.get_meta("stock_state", "")), "first_delivery_stocked")
 	assert_almost_eq(item.position.x, slot.position.x, 0.01)
 	assert_gt(item.position.y, slot.position.y, "Spawned product must sit above its slot marker")
 	assert_almost_eq(item.position.z, slot.position.z, 0.02)

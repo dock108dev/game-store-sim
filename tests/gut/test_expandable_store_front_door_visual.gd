@@ -52,28 +52,28 @@ func test_runtime_storefront_door_uses_lightweight_proportions() -> void:
 
 	for jamb: Node3D in [left_frame, right_frame]:
 		var jamb_size: Vector3 = _box_size(jamb)
-		assert_lte(jamb_size.x, 0.06, "Door jambs must stay visually slim")
-		assert_lte(jamb_size.z, 0.10, "Door jamb depth must not read as a wall pier")
-		assert_lte(jamb_size.y, 2.80, "Door jambs must stay below ceiling scale")
+		assert_lte(jamb_size.x, 0.045, "Door jambs must stay visually slim")
+		assert_lte(jamb_size.z, 0.07, "Door jamb depth must not read as a wall pier")
+		assert_lte(jamb_size.y, 2.55, "Door jambs must stay below ceiling scale")
 	var top_size: Vector3 = _box_size(top_frame)
-	assert_lte(top_size.y, 0.07, "Door header must be a trim rail, not a beam")
-	assert_lte(top_size.z, 0.10, "Door header depth must match the light jambs")
-	assert_lte(top_size.x, 2.24, "Door header must not over-span the storefront")
+	assert_lte(top_size.y, 0.05, "Door header must be a trim rail, not a beam")
+	assert_lte(top_size.z, 0.07, "Door header depth must match the light jambs")
+	assert_lte(top_size.x, 1.98, "Door header must not over-span the storefront")
 
 	var glass_size: Vector3 = _box_size(glass)
-	assert_lte(glass_size.x, 1.95, "Glass should cue a door without filling the whole opening")
-	assert_lte(glass_size.y, 2.20, "Glass should stay below full-wall height")
-	assert_lte(glass_size.z, 0.04, "Glass should read as a light pane")
+	assert_lte(glass_size.x, 1.70, "Glass should cue a door without filling the whole opening")
+	assert_lte(glass_size.y, 1.95, "Glass should stay below full-wall height")
+	assert_lte(glass_size.z, 0.025, "Glass should read as a light pane")
 
 	var push_plate_size: Vector3 = _box_size(push_plate)
-	assert_lte(push_plate_size.x, 0.06, "Push plate must stay subordinate to the door pane")
-	assert_lte(push_plate_size.y, 0.34, "Push plate must not become a gold sign")
-	assert_lte(push_plate_size.z, 0.04, "Push plate depth must stay trim-like")
+	assert_lte(push_plate_size.x, 0.045, "Push plate must stay subordinate to the door pane")
+	assert_lte(push_plate_size.y, 0.26, "Push plate must not become a gold sign")
+	assert_lte(push_plate_size.z, 0.025, "Push plate depth must stay trim-like")
 
 	var threshold_size: Vector3 = _box_size(threshold)
-	assert_lte(threshold_size.x, 2.12, "Threshold width must match the door system")
-	assert_lte(threshold_size.y, 0.03, "Threshold must stay flush with the floor")
-	assert_lte(threshold_size.z, 0.28, "Threshold depth must not become an entry platform")
+	assert_lte(threshold_size.x, 1.96, "Threshold width must match the door system")
+	assert_lte(threshold_size.y, 0.025, "Threshold must stay flush with the floor")
+	assert_lte(threshold_size.z, 0.20, "Threshold depth must not become an entry platform")
 
 
 func test_runtime_storefront_materials_stay_with_the_shell_palette() -> void:
@@ -97,15 +97,16 @@ func test_runtime_storefront_materials_stay_with_the_shell_palette() -> void:
 	if frame_mat == null or glass_mat == null or push_plate_mat == null or threshold_mat == null:
 		return
 
-	assert_lte(
+	assert_between(
 		_brightest_channel(frame_mat.albedo_color),
-		0.24,
-		"Frame material must stay quieter than the active checkout/register accents"
+		0.20,
+		0.28,
+		"Frame material must stay readable without becoming a dark wall outline"
 	)
 	assert_between(
 		glass_mat.albedo_color.a,
-		0.10,
-		0.18,
+		0.08,
+		0.13,
 		"Glass alpha must be readable without darkening the sales floor"
 	)
 	assert_ne(
@@ -120,7 +121,7 @@ func test_runtime_storefront_materials_stay_with_the_shell_palette() -> void:
 	)
 	assert_lte(
 		_brightest_channel(threshold_mat.albedo_color),
-		0.32,
+		0.46,
 		"Threshold material must stay subordinate to route targets"
 	)
 
@@ -175,6 +176,10 @@ func test_runtime_storefront_stays_behind_entry_and_checkout_sightlines() -> voi
 	assert_false(
 		_is_visible(_root.get_node_or_null("EntranceDoor/DoorMesh") as Node3D),
 		"Authored door mesh must stay hidden when the generated storefront is active"
+	)
+	assert_false(
+		_is_visible(_root.get_node_or_null("EntranceDoor/StaticBody3D") as Node3D),
+		"Authored door body must stay hidden when the generated storefront is active"
 	)
 	assert_eq(
 		interactable.get_prompt_label(),

@@ -59,6 +59,48 @@ func test_retro_games_starter_layout_stays_small_and_uses_kit_visuals() -> void:
 		assert_eq(str(product_placement.get("route_role", "")), "starter_sale_item")
 
 
+func test_retro_games_starter_layout_declares_sparse_first_delivery_contract() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var first_delivery_ids: PackedStringArray = catalog.call(
+		"get_product_item_ids",
+		StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+		StoreVisualLayoutScript.STOCK_STATE_FIRST_DELIVERY,
+	)
+	var reserve_ids: PackedStringArray = catalog.call(
+		"get_product_item_ids",
+		StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+		StoreVisualLayoutScript.STOCK_STATE_RESERVE,
+	)
+	assert_eq(first_delivery_ids, StoreSessionController.starter_first_delivery_item_ids())
+	assert_eq(reserve_ids, StoreSessionController.starter_reserve_item_ids())
+
+	var first_delivery: Array[Dictionary] = catalog.call(
+		"get_product_placements",
+		StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+		StoreVisualLayoutScript.STOCK_STATE_FIRST_DELIVERY,
+	)
+	for index: int in range(first_delivery.size()):
+		assert_eq(int(first_delivery[index].get("delivery_index", -1)), index)
+
+
+func test_starter_fixture_layout_matches_generated_shell_anchor_contract() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var display_table: Dictionary = catalog.call(
+		"get_fixture_placement",
+		StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+		"starter_display_table",
+	)
+	var checkout_counter: Dictionary = catalog.call(
+		"get_fixture_placement",
+		StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+		"starter_checkout_counter",
+	)
+	assert_eq(display_table.get("position"), [-4.10, 0.0, -1.20])
+	assert_eq(display_table.get("rotation_degrees"), [0.0, -8.0, 0.0])
+	assert_eq(checkout_counter.get("position"), [5.65, 0.0, 6.15])
+	assert_eq(checkout_counter.get("rotation_degrees"), [0.0, 0.0, 0.0])
+
+
 func test_layout_catalog_does_not_expose_legacy_visual_apply_path() -> void:
 	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
 	assert_false(

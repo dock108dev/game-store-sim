@@ -23,7 +23,6 @@ extends Node
 
 
 const AUTO_CLOCK_IN_MINUTE: float = 535.0  # 08:55 — 5 minutes before MALL_OPEN
-const _PRE_OPEN_PHASE: int = 0  # TimeSystem.DayPhase.PRE_OPEN ordinal
 
 const TRUST_DELTA_LATE_CLOCK_IN: float = -5.0
 const TRUST_DELTA_MISSING_CLOCK_OUT: float = -2.0
@@ -207,21 +206,8 @@ func _show_day_objective_banner() -> void:
 
 
 func _resolve_day_objective_text() -> String:
-	# §EH-35 — Returns the generic per-day banner copy. The prior `data_loader.
-	# has_method("get_day_beat") + .call("get_day_beat", day)` chain was a
-	# §EH-31-class dead-guard: `DataLoader.get_day_beat` does not exist on the
-	# autoload (the only day-keyed catalog DataLoader holds is `_midday_events`
-	# via the `day_beats_data` route at `data_loader.gd:255-258`; the per-day
-	# `day_beats` array from `day_beats.json` is dropped on load by design),
-	# and `day_beats.json` per-day entries carry `story_beat` / `forward_hook`,
-	# not an `objective` field, so the inner `dict.get("objective", "")` would
-	# have been empty even if the loader exposed an accessor. The chain
-	# silently returned the generic fallback for the entire run — confirmed by
-	# the strip-to-bones diff (DataLoader was reduced from 1080→944 LOC with
-	# `day_beats` storage explicitly removed). Returning the generic copy
-	# directly removes the dead silent-bug seam; if a future per-day objective
-	# catalog is added, route it through a typed call here and a §EH-31-style
-	# parse error will surface a rename instead of a silent regression.
+	# DataLoader does not expose a per-day objective catalog; keep this banner
+	# generic until that content has a typed runtime accessor.
 	var time_system: TimeSystem = GameManager.get_time_system()
 	var day: int = 1
 	if time_system != null:

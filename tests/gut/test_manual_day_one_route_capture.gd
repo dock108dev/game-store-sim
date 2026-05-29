@@ -18,6 +18,7 @@ const _REQUIRED_BEAT_FIELDS: Array[String] = [
 	"expected_objective",
 	"expected_stage",
 	"active_prompt",
+	"next_expected_beat",
 	"hud_right_panel",
 	"shelf_backroom_counts",
 	"customer_state",
@@ -31,7 +32,9 @@ const _MAJOR_ROUTE_BEATS: Array[String] = [
 	"register_prompt",
 	"backroom_pickup_prompt",
 	"training_shelf_transition",
+	"before_customer",
 	"customer_decision_card",
+	"post_customer_recovery",
 	"close_day_prompt",
 	"close_day_summary",
 ]
@@ -131,6 +134,7 @@ func test_route_manifest_writes_checklist_and_capture_metadata() -> void:
 	var review_text: String = _read_text_file(str(result.get("manual_review_path", "")))
 	assert_true(review_text.contains("Screen Object:"), "Checklist must include proof fields")
 	assert_true(review_text.contains("Test Capture:"), "Checklist must include capture proof")
+	assert_true(review_text.contains("Next expected beat:"), "Checklist must include route recovery cue")
 
 
 func test_route_beats_link_to_existing_automated_assertions() -> void:
@@ -189,6 +193,7 @@ func _assert_route_beat_schema(beat: Dictionary) -> void:
 	assert_false(str(beat.get("expected_stage", "")).is_empty())
 	assert_false(str(beat.get("expected_objective", "")).is_empty())
 	assert_false(str(beat.get("active_prompt", "")).is_empty())
+	assert_false(str(beat.get("next_expected_beat", "")).is_empty())
 	assert_false((beat.get("hud_right_panel", {}) as Dictionary).is_empty())
 	assert_true((beat.get("shelf_backroom_counts", {}) as Dictionary).has("shelf"))
 	assert_true((beat.get("shelf_backroom_counts", {}) as Dictionary).has("backroom"))
@@ -203,6 +208,7 @@ func _assert_code_to_screen_proof(beat: Dictionary) -> void:
 		assert_true(proof.has(field), "Proof must include %s" % field)
 		assert_false(str(proof.get(field, "")).strip_edges().is_empty())
 	assert_true(str(proof.get("screen_feedback", "")).contains(str(beat.get("filename", ""))))
+	assert_true(str(proof.get("next_beat", "")).contains(str(beat.get("next_expected_beat", ""))))
 	assert_true(str(proof.get("test_capture", "")).contains(str(beat.get("capture_helper_call", ""))))
 
 

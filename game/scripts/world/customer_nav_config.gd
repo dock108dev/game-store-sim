@@ -4,9 +4,9 @@ extends Node
 
 const STOCK_CLOSET_MIN_X: float = 3.10
 const STOCK_CLOSET_MAX_X: float = 5.95
-const STOCK_CLOSET_MIN_Z: float = -7.55
-const STOCK_CLOSET_MAX_Z: float = -4.05
-const DEFAULT_CUSTOMER_SAFE_POSITION: Vector3 = Vector3(0.0, 0.05, 9.05)
+const STOCK_CLOSET_MIN_Z: float = -9.95
+const STOCK_CLOSET_MAX_Z: float = -5.75
+const DEFAULT_CUSTOMER_SAFE_POSITION: Vector3 = Vector3(0.0, 0.05, 9.15)
 
 @export var entry_point: Marker3D
 @export var browse_waypoints: Array[Marker3D] = []
@@ -80,7 +80,7 @@ func get_customer_waypoint_markers() -> Array[Marker3D]:
 	return markers
 
 
-## Returns true when the position is inside the staff-only stock closet.
+## Returns true when the position is inside the staff-only stockroom.
 static func is_position_in_staff_only_zone(position: Vector3) -> bool:
 	return (
 		position.x >= STOCK_CLOSET_MIN_X

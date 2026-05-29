@@ -16,15 +16,6 @@ const LOOK_AROUND_SPEED: float = 2.0
 const LOOK_AROUND_ANGLE: float = 20.0
 const MESH_Y: float = 0.7
 
-const KNOWN_ANIMATIONS: Array[String] = [
-	"idle_stand",
-	"cashier_idle",
-	"cashier_scan",
-	"place_item",
-	"wave",
-	"idle_look_around",
-]
-
 var _animation_player: AnimationPlayer = null
 var _current_animation: String = ""
 var _animations_created: bool = false

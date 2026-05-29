@@ -635,6 +635,10 @@ func test_blocked_interact_under_modal_surfaces_focus_status_without_dispatch() 
 		[INTERACTION_RAY_SCRIPT.BLOCKED_BY_FOCUS_REASON],
 		"Blocked E press should surface modal/menu ownership instead of silently no-oping"
 	)
+	assert_true(
+		INTERACTION_RAY_SCRIPT.BLOCKED_BY_FOCUS_REASON.contains("panel"),
+		"Blocked focus copy must tell players to close the current panel/menu before retrying"
+	)
 	assert_eq(target.interact_calls, 0, "Modal-owned focus must block dispatch")
 	focus._reset_for_tests()
 

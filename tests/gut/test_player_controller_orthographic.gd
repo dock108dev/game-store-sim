@@ -15,8 +15,7 @@ const _RETRO_PITCH_DEG: float = 52.0
 # Inner-floor footprint exposed by retro_games store_bounds.
 const _STORE_HALF_WIDTH: float = 7.5  # X extent: ±7.5
 const _STORE_HALF_DEPTH: float = 9.5  # Z extent: ±9.5
-# Wall positions and full height (16×20 footprint outer walls).
-const _WALL_HALF_WIDTH: float = 8.05
+# Back-wall depth and full height for the 16x20 footprint.
 const _WALL_HALF_DEPTH: float = 10.05
 const _WALL_HEIGHT: float = 3.5
 # 1080p reference aspect ratio (16:9). Godot's orthogonal `size` measures the
@@ -183,5 +182,4 @@ func test_retro_games_default_view_frames_back_wall_top() -> void:
 		+ "screen_y=%.3f, half-size=%.3f"
 		% [screen_y, controller.ortho_size_default * 0.5]
 	)
-
 

@@ -240,14 +240,14 @@ func test_reference_beat_fields_present_in_content() -> void:
 		"day_beats.json must define sports_trade_in_flood beat",
 	)
 	assert_true(
-		by_id.has("launch_reservation_conflict"),
+		by_id.has(String(_LAUNCH_BEAT_ID)),
 		"day_beats.json must define launch_reservation_conflict beat",
 	)
 	var suspicious: Dictionary = by_id["suspicious_hold_slip"]
 	assert_eq(int(suspicious.get("min_day", -1)), 5)
 	var trade_in: Dictionary = by_id["sports_trade_in_flood"]
 	assert_eq(int(trade_in.get("min_day", -1)), 3)
-	var launch: Dictionary = by_id["launch_reservation_conflict"]
+	var launch: Dictionary = by_id[String(_LAUNCH_BEAT_ID)]
 	assert_eq(int(launch.get("min_day", -1)), 18)
 	assert_eq(int(launch.get("max_day", -1)), 22)
 	# At least 15 distinct beats covering Days 1–15.
@@ -265,7 +265,7 @@ func test_launch_beat_set_aside_choice_sets_hidden_thread_flag() -> void:
 	var pool: Array = loader.get_midday_events()
 	var launch: Dictionary = {}
 	for entry: Dictionary in pool:
-		if str(entry.get("id", "")) == "launch_reservation_conflict":
+		if str(entry.get("id", "")) == String(_LAUNCH_BEAT_ID):
 			launch = entry
 			break
 	assert_false(

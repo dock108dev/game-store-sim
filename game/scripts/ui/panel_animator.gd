@@ -11,8 +11,6 @@ const MODAL_SCALE_START: float = 0.85
 const FEEDBACK_FLOAT_DURATION: float = 0.8
 const FEEDBACK_PULSE_DURATION: float = 0.3
 const FEEDBACK_SHAKE_DURATION: float = 0.2
-const BANNER_SLIDE_DURATION: float = 0.3
-const BANNER_HOLD_DURATION: float = 3.0
 const BUILD_MODE_TRANSITION: float = 0.25
 
 const _ACTIVE_TWEEN_META: StringName = &"panel_animator_active_tween"

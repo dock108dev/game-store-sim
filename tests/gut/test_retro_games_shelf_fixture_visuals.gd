@@ -263,6 +263,7 @@ func test_store_restock_shelf_table_is_grounded_with_visible_supports() -> void:
 		"TableLegBackLeft",
 		"TableLegBackRight",
 		"TableFrontApron",
+		"TableBackApron",
 	]:
 		var support: MeshInstance3D = shelf.get_node_or_null(node_path) as MeshInstance3D
 		assert_not_null(support, "Restock display support missing: %s" % node_path)
@@ -282,7 +283,7 @@ func test_store_restock_shelf_table_is_grounded_with_visible_supports() -> void:
 			board_bottom + 0.10,
 			"%s must tuck under the table surface" % node_path
 		)
-	assert_gte(support_count, 5, "Restock display must have four legs and a front apron")
+	assert_gte(support_count, 6, "Restock display must have four legs and front/back aprons")
 	root.free()
 
 

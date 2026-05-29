@@ -12,8 +12,8 @@
 extends Node
 
 const INTERACTION_RAY_GROUP: StringName = &"interaction_ray"
-const BLOCKED_BY_PANEL_REASON: String = "Close open panel to interact"
-const BLOCKED_BY_FOCUS_REASON: String = "Close current menu to interact"
+const BLOCKED_BY_PANEL_REASON: String = "Close the open panel to interact"
+const BLOCKED_BY_FOCUS_REASON: String = "Close the current panel or menu to interact"
 
 ## Maximum ray distance in meters. Sized for first-person store gameplay so
 ## the player must walk up to a fixture (counter-depth ~1m, aisle reach ~2m)
@@ -523,15 +523,7 @@ func _on_hovered_target_tree_exiting() -> void:
 ## per-hover warning would flood logs while adding no signal beyond the
 ## visibly-empty prompt panel. See docs/audits/error-handling-report.md §F-53.
 func _build_action_label(target: Interactable) -> String:
-	var verb: String = target.prompt_text.strip_edges()
-	var target_name: String = target.display_name.strip_edges()
-	if verb.is_empty() and target_name.is_empty():
-		return ""
-	if target_name.is_empty():
-		return verb
-	if verb.is_empty():
-		return target_name
-	return "%s %s" % [verb, target_name]
+	return target.get_prompt_label()
 
 
 func _emit_tooltip_for_target(target: Interactable) -> void:

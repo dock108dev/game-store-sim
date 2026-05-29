@@ -130,6 +130,8 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	result = _normalize_capture_resolution(result)
 	result["beat"] = str(row.get("name", ""))
 	result["active_route_stage"] = str(row.get("active_route_stage", ""))
+	result["active_prompt"] = str(row.get("active_prompt", ""))
+	result["next_expected_beat"] = str(row.get("next_expected_beat", ""))
 	result["local_action"] = str(row.get("local_action", ""))
 	result["next_destination"] = str(row.get("next_destination", ""))
 	result["primary_work_surface_target"] = str(row.get("primary_work_surface_target", ""))
@@ -210,6 +212,8 @@ func _capture_error(row: Dictionary, message: String, extra: Dictionary = {}) ->
 		"beat": str(row.get("name", "")),
 		"filename": str(row.get("filename", "")),
 		"active_route_stage": str(row.get("active_route_stage", "")),
+		"active_prompt": str(row.get("active_prompt", "")),
+		"next_expected_beat": str(row.get("next_expected_beat", "")),
 		"local_action": str(row.get("local_action", "")),
 		"next_destination": str(row.get("next_destination", "")),
 		"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
@@ -234,6 +238,8 @@ func _validate_row_anchors(row: Dictionary) -> Dictionary:
 	var visible: Array[String] = []
 	var anchors: Array = (row.get("anchors", []) as Array).duplicate()
 	var route_anchor: String = str(row.get("route_anchor", ""))
+	if not route_anchor.is_empty() and not anchors.has(route_anchor):
+		anchors.append(route_anchor)
 	for anchor_variant: Variant in anchors:
 		var anchor_path: String = str(anchor_variant)
 		var anchor: Node3D = _store_root.get_node_or_null(NodePath(anchor_path)) as Node3D
@@ -251,6 +257,8 @@ func _validate_row_anchors(row: Dictionary) -> Dictionary:
 		"route_anchor": route_anchor,
 		"route_anchor_exists": route_anchor.is_empty() \
 			or _store_root.get_node_or_null(NodePath(route_anchor)) != null,
+		"route_anchor_visible": route_anchor.is_empty() \
+			or visible.has(route_anchor),
 		"intended_anchor_count": anchors.size(),
 	}
 

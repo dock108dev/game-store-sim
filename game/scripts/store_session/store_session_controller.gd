@@ -85,6 +85,8 @@ const _BACKROOM_DELIVERY_QUANTITY: int = 3
 const _REORDER_EXTRA_QUANTITY: int = 2
 const _REORDER_EXTRA_COST: int = 20
 const _REORDER_OPTION_ID: StringName = &"order_used_games"
+const _STOCK_STATE_FIRST_DELIVERY: String = "first_delivery_stocked"
+const _STOCK_STATE_REORDER_EXTRA: String = "reorder_extra"
 
 const _OBJECTIVE_UNLOCK_GRANTS: Dictionary = {
 	"talk_to_customer": ["employee_register_access"],
@@ -128,6 +130,20 @@ const _HIDDEN_NOISE_PATHS: Array[String] = StoreVisualScopeProfileScript.HIDDEN_
 const STORE_SESSION_DEFERRED_ROOT_NODES: Array[StringName] = (
 	StoreVisualScopeProfileScript.DEFERRED_ROOT_NODES
 )
+
+
+## Returns the starter catalog slice delivered for the free Day-1 stocking beat.
+static func starter_first_delivery_item_ids() -> PackedStringArray:
+	return _slice_item_ids(STARTER_STOCK_ITEM_IDS, 0, _BACKROOM_DELIVERY_QUANTITY)
+
+
+## Returns the starter catalog slice held back for the first paid reorder.
+static func starter_reserve_item_ids() -> PackedStringArray:
+	return _slice_item_ids(
+		STARTER_STOCK_ITEM_IDS,
+		_BACKROOM_DELIVERY_QUANTITY,
+		STARTER_STOCK_ITEM_IDS.size() - _BACKROOM_DELIVERY_QUANTITY
+	)
 const STORE_SESSION_CONTEXT_ROOT_NODES: Array[StringName] = (
 	StoreVisualScopeProfileScript.CONTEXT_ROOT_NODES
 )
@@ -327,9 +343,9 @@ var _day_one_objectives: Array[Dictionary] = [
 		"action": "Close the day",
 		"key": "E",
 		"target_path": "StoreSessionDayEndTrigger/Interactable",
-		"prompt_display_name": "day",
+		"prompt_display_name": "close day",
 		"prompt_text": "Close",
-		"action_verb": "End",
+		"action_verb": "Close",
 		"highlight_y_offset": 0.6,
 		"time_cost_minutes": 0,
 		"required": false,
@@ -2245,11 +2261,7 @@ func active_objective_prompt_label() -> String:
 	var entry: Dictionary = _objective_for_stage(_stage)
 	var prompt_text: String = str(entry.get("prompt_text", "")).strip_edges()
 	var display_name: String = str(entry.get("prompt_display_name", "")).strip_edges()
-	if display_name.is_empty():
-		return prompt_text
-	if prompt_text.is_empty():
-		return display_name
-	return "%s %s" % [prompt_text, display_name]
+	return Interactable.compose_prompt_label(prompt_text, display_name)
 
 
 ## Returns whether the world pointer should render for the active objective.
@@ -2656,18 +2668,7 @@ func _refresh_interactable_prompt_copy(store: Node) -> void:
 		target.display_name = str(entry.get("prompt_display_name", target.display_name))
 		target.prompt_text = str(entry.get("prompt_text", target.prompt_text))
 		target.action_verb = str(entry.get("action_verb", target.action_verb))
-	var customer: Interactable = (
-		store.get_node_or_null("StoreSessionDayOneCustomer/Interactable") as Interactable
-	)
-	if customer != null:
-		if _stage == STAGE_TRAINING_TALK_MANAGER:
-			customer.enabled = true
-		elif _stage == STAGE_TRAINING_PRACTICE_CUSTOMER:
-			customer.display_name = "practice customer"
-			customer.prompt_text = "Run"
-			customer.action_verb = "Practice"
-			customer.enabled = true
-	_set_customer_proxy_manager_details_visible(store, _stage == STAGE_TRAINING_TALK_MANAGER)
+	_apply_checkout_actor_prompt_state(store)
 	var register: Interactable = (
 		store.get_node_or_null("StoreSessionDayEndTrigger/Interactable") as Interactable
 	)
@@ -2680,6 +2681,33 @@ func _refresh_interactable_prompt_copy(store: Node) -> void:
 				register.prompt_text = "Open"
 				register.action_verb = "Open"
 				register.enabled = true
+
+
+func _apply_checkout_actor_prompt_state(store: Node) -> void:
+	var customer: Interactable = (
+		store.get_node_or_null("StoreSessionDayOneCustomer/Interactable") as Interactable
+	)
+	if customer != null:
+		match _stage:
+			STAGE_TRAINING_TALK_MANAGER:
+				customer.display_name = "manager"
+				customer.prompt_text = "Talk to"
+				customer.action_verb = "Talk"
+				customer.enabled = true
+			STAGE_TRAINING_PRACTICE_CUSTOMER:
+				customer.display_name = "practice customer"
+				customer.prompt_text = "Run"
+				customer.action_verb = "Practice"
+				customer.enabled = true
+			STAGE_TALK_TO_CUSTOMER:
+				customer.display_name = "customer"
+				customer.prompt_text = "Talk to"
+				customer.action_verb = "Talk"
+			_:
+				customer.display_name = ""
+				customer.prompt_text = ""
+				customer.action_verb = "Talk"
+	_set_customer_proxy_manager_details_visible(store, _stage == STAGE_TRAINING_TALK_MANAGER)
 
 
 func _target_path_is_valid(root: Node, path: String) -> bool:
@@ -4128,34 +4156,37 @@ func _render_visible_shelf_items(count: int) -> int:
 	# cartridge-blue albedo with low-energy warm-amber emission reads as a
 	# row of game cases catching a soft display light, not glowing cubes.
 	for i: int in range(clamped):
-		var designed_visual: Node3D = _ProductVisualFactory.create_visual_for_item(
-			_store_restock_visual_data(i)
-		)
+		var visual_data: Dictionary = _store_restock_visual_data(i)
+		var designed_visual: Node3D = _ProductVisualFactory.create_visual_for_item(visual_data)
 		var item: Node3D = _make_fallback_store_shelf_item()
 		if designed_visual != null:
 			item = _make_store_shelf_item_container(designed_visual)
 		item.name = "StoreShelfItem%d" % i
 		item.position = _restock_slot_position(i) + Vector3(0.0, -0.04, 0.0)
+		_apply_store_shelf_item_metadata(item, visual_data, i)
 		(shelf as Node3D).add_child(item)
 	return clamped
 
 
 func _store_restock_visual_data(index: int) -> Dictionary:
-	var item_ids: PackedStringArray = _starter_stock_item_ids()
+	var item_ids: PackedStringArray = _delivery_item_ids_for_count(_current_delivery_quantity)
+	if item_ids.is_empty():
+		item_ids = _starter_stock_item_ids()
 	var item_id: String = item_ids[index % item_ids.size()]
 	var definition: ItemDefinition = null
 	if GameManager.data_loader:
 		definition = GameManager.data_loader.get_item(item_id)
 	if definition:
-		return _product_visual_data_from_definition(definition)
+		return _with_restock_visual_metadata(_product_visual_data_from_definition(definition), item_id, index)
 	var entry: Dictionary = ContentRegistry.get_entry(StringName(item_id))
 	if not entry.is_empty():
-		return _product_visual_data_from_entry(item_id, entry)
-	return {
+		return _with_restock_visual_metadata(_product_visual_data_from_entry(item_id, entry), item_id, index)
+	var data: Dictionary = {
 		"instance_id": "store_restock_visual_%d" % index,
 		"definition_id": item_id,
 		"category": "cartridge",
 	}
+	return _with_restock_visual_metadata(data, item_id, index)
 
 
 func _starter_stock_item_ids() -> PackedStringArray:
@@ -4167,6 +4198,58 @@ func _starter_stock_item_ids() -> PackedStringArray:
 		if store and not store.starting_inventory.is_empty():
 			return store.starting_inventory
 	return STARTER_STOCK_ITEM_IDS
+
+
+func _delivery_item_ids_for_count(delivery_count: int) -> PackedStringArray:
+	return _slice_item_ids(_starter_stock_item_ids(), 0, delivery_count)
+
+
+static func _slice_item_ids(
+	item_ids: PackedStringArray, start_index: int, requested_count: int
+) -> PackedStringArray:
+	var result: PackedStringArray = []
+	var safe_start: int = clampi(start_index, 0, item_ids.size())
+	var safe_count: int = clampi(requested_count, 0, item_ids.size() - safe_start)
+	for index: int in range(safe_start, safe_start + safe_count):
+		result.append(item_ids[index])
+	return result
+
+
+func _with_restock_visual_metadata(data: Dictionary, item_id: String, delivery_index: int) -> Dictionary:
+	data["definition_id"] = item_id
+	data["product_item_id"] = item_id
+	data["delivery_index"] = delivery_index
+	data["starter_catalog_index"] = _starter_catalog_index(item_id)
+	data["route_role"] = "starter_sale_item"
+	data["stock_state"] = _stock_state_for_delivery_index(delivery_index)
+	return data
+
+
+func _starter_catalog_index(item_id: String) -> int:
+	var item_ids: PackedStringArray = _starter_stock_item_ids()
+	for index: int in range(item_ids.size()):
+		if item_ids[index] == item_id:
+			return index
+	return -1
+
+
+func _stock_state_for_delivery_index(delivery_index: int) -> String:
+	if delivery_index < _BACKROOM_DELIVERY_QUANTITY:
+		return _STOCK_STATE_FIRST_DELIVERY
+	return _STOCK_STATE_REORDER_EXTRA
+
+
+func _apply_store_shelf_item_metadata(
+	item: Node, visual_data: Dictionary, delivery_index: int
+) -> void:
+	var product_item_id: String = str(
+		visual_data.get("product_item_id", visual_data.get("definition_id", ""))
+	)
+	item.set_meta("product_item_id", product_item_id)
+	item.set_meta("delivery_index", delivery_index)
+	item.set_meta("starter_catalog_index", int(visual_data.get("starter_catalog_index", -1)))
+	item.set_meta("route_role", str(visual_data.get("route_role", "starter_sale_item")))
+	item.set_meta("stock_state", str(visual_data.get("stock_state", "")))
 
 
 func _product_visual_data_from_definition(definition: ItemDefinition) -> Dictionary:

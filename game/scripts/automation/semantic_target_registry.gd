@@ -3,7 +3,6 @@ class_name SemanticTargetRegistry
 extends RefCounted
 
 const META_SEMANTIC_TARGET: StringName = &"semantic_target"
-const META_TARGET_KIND: StringName = &"scenario_target_kind"
 const FIELD_SEMANTIC_ID: String = "semantic_id"
 const FIELD_KIND: String = "kind"
 const FIELD_INTERACTABLE_ID: String = "interactable_id"

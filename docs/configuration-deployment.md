@@ -72,7 +72,7 @@ The checked-in integrations documented in this repository are:
 - helper scripts in `scripts/` for Godot resolution/import/execution
   (`godot_resolver.sh`, `godot_import.sh`, `godot_exec.sh`,
   `setup_godot.sh`), artifact path resolution (`artifact_paths.sh`),
-  test/export validation (`run_godot_tests.sh`,
+  CI GUT/export validation (`run_godot_tests.sh`,
   `run_fresh_install_smoke.sh`, `validate_resource_integrity.sh`,
   `validate_static_repo_guards.sh`, `validate_export_config.sh`), SSOT
   tripwires (`validate_translations.sh`, `validate_single_store_ui.sh`,

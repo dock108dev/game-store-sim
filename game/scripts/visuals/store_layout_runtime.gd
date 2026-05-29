@@ -147,7 +147,8 @@ func _render_layout_dressing() -> void:
 			continue
 		var product_item_id: String = str(placement.get("product_item_id", ""))
 		if not product_item_id.is_empty():
-			_render_product_dressing(placement, product_item_id)
+			if _should_render_product_placement(placement):
+				_render_product_dressing(placement, product_item_id)
 			continue
 		var visual_id: StringName = StringName(str(placement.get("visual_id", "")))
 		var node: Node3D = StoreVisualKitScript.instantiate(visual_id) as Node3D
@@ -172,9 +173,18 @@ func _render_product_dressing(placement: Dictionary, product_item_id: String) ->
 	node.set_meta("product_item_id", product_item_id)
 	node.set_meta("visual_source", "product_visual_factory")
 	node.set_meta("zone", str(placement.get("zone", "")))
+	if placement.has("delivery_index"):
+		node.set_meta("delivery_index", int(placement.get("delivery_index", -1)))
 	node.add_to_group("product_display")
 	_apply_layout_transform(node, placement)
 	_dressing_root.add_child(node)
+
+
+func _should_render_product_placement(placement: Dictionary) -> bool:
+	var stock_state: StringName = StringName(str(placement.get("stock_state", "")))
+	if String(stock_state).is_empty():
+		return true
+	return stock_state == StoreVisualLayoutScript.STOCK_STATE_FIRST_DELIVERY
 
 
 func _product_visual_data_from_item_id(item_id: String) -> Dictionary:

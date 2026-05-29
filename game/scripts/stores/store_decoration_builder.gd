@@ -4,9 +4,6 @@ extends RefCounted
 
 const SMALL_STORE_HALF_W: float = 3.5
 const SMALL_STORE_HALF_D: float = 2.5
-const MEDIUM_STORE_HALF_W: float = 4.5
-const MEDIUM_STORE_HALF_D: float = 3.0
-const WALL_HEIGHT: float = 3.0
 
 static var _poster_red: StandardMaterial3D = preload(
 	"res://game/assets/materials/mat_poster_red.tres"

@@ -7,13 +7,13 @@ extends GutTest
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 
 const EXPECTED_WAYPOINTS: Dictionary = {
-	"EntryPoint": Vector3(0.0, 0.05, 9.05),
-	"BrowseWaypoint01": Vector3(-2.65, 0.05, 1.05),
-	"BrowseWaypoint02": Vector3(-3.85, 0.05, -3.45),
-	"BrowseWaypoint03": Vector3(0.40, 0.05, -1.35),
-	"BrowseWaypoint04": Vector3(-4.45, 0.05, 2.65),
-	"CheckoutApproach": Vector3(3.55, 0.05, 6.65),
-	"ExitPoint": Vector3(0.0, 0.05, 9.05),
+	"EntryPoint": Vector3(0.0, 0.05, 9.15),
+	"BrowseWaypoint01": Vector3(-4.10, 0.05, -1.20),
+	"BrowseWaypoint02": Vector3(-5.25, 0.05, -6.05),
+	"BrowseWaypoint03": Vector3(0.30, 0.05, -2.05),
+	"BrowseWaypoint04": Vector3(-5.65, 0.05, 2.45),
+	"CheckoutApproach": Vector3(4.85, 0.05, 7.25),
+	"ExitPoint": Vector3(0.0, 0.05, 9.15),
 }
 
 # Fixture root path -> expected NavigationObstacle3D radius. Path encodes
@@ -96,12 +96,12 @@ func test_navigation_mesh_is_baked_with_obstacle_cutouts() -> void:
 	var bake_bounds: AABB = nav_mesh.filter_baking_aabb
 	assert_eq(
 		bake_bounds,
-		AABB(Vector3(-5.6, -1.0, -7.25), Vector3(11.2, 2.5, 16.7)),
+		AABB(Vector3(-7.6, -1.0, -9.6), Vector3(15.2, 2.5, 19.2)),
 		"Nav mesh bake AABB must match the expanded runtime floor after agent inset"
 	)
-	assert_lt(min_x, -5.5, "Nav mesh must extend toward the expanded left aisle")
-	assert_gt(max_x, 5.5, "Nav mesh must extend toward the expanded right aisle")
-	assert_lt(min_z, -7.0, "Nav mesh must extend toward the stockroom work area")
+	assert_lt(min_x, -7.0, "Nav mesh must extend toward the expanded left aisle")
+	assert_gt(max_x, 7.0, "Nav mesh must extend toward the expanded right aisle")
+	assert_lt(min_z, -9.0, "Nav mesh must extend toward the stockroom work area")
 	assert_gt(max_z, 9.0, "Nav mesh must extend toward the expanded entry side")
 
 
@@ -213,7 +213,7 @@ func test_all_customer_waypoints_stay_out_of_staff_only_stock_closet() -> void:
 			CustomerNavConfig.is_customer_position_allowed(
 				marker.global_position
 			),
-			"%s must not route customers into the staff-only stock closet"
+			"%s must not route customers into the staff-only stockroom"
 			% marker.name
 		)
 
@@ -238,7 +238,7 @@ func test_day_one_customer_route_targets_stay_customer_allowed() -> void:
 		)
 
 
-func test_stock_closet_remains_staff_and_player_reachable() -> void:
+func test_stockroom_remains_staff_and_player_reachable() -> void:
 	var staff_backroom: Marker3D = (
 		_root.get_node_or_null("StoreStaffConfig/BackroomPoint") as Marker3D
 	)
@@ -268,13 +268,13 @@ func test_stock_closet_remains_staff_and_player_reachable() -> void:
 		CustomerNavConfig.is_position_in_staff_only_zone(
 			staff_backroom.global_position
 		),
-		"Staff backroom point must remain inside the staff-only closet"
+		"Staff backroom point must remain inside the staff-only stockroom"
 	)
 	assert_true(
 		CustomerNavConfig.is_position_in_staff_only_zone(
 			pickup.global_position
 		),
-		"Stock pickup must remain inside the staff-only closet"
+		"Stock pickup must remain inside the staff-only stockroom"
 	)
 	assert_false(
 		CustomerNavConfig.is_position_in_staff_only_zone(
@@ -284,9 +284,43 @@ func test_stock_closet_remains_staff_and_player_reachable() -> void:
 	)
 	assert_lt(
 		_xz_distance(threshold.global_position, pickup.global_position),
-		2.0,
+		3.15,
 		"Stock pickup must remain reachable from the backroom threshold"
 	)
+
+
+func test_active_objective_targets_stay_player_reachable() -> void:
+	var spawn: Marker3D = _root.get_node_or_null("PlayerEntrySpawn") as Marker3D
+	assert_not_null(spawn, "PlayerEntrySpawn must exist")
+	if spawn == null:
+		return
+	var bounds_min: Vector3 = spawn.get_meta("bounds_min", Vector3.ZERO) as Vector3
+	var bounds_max: Vector3 = spawn.get_meta("bounds_max", Vector3.ZERO) as Vector3
+	for target_path: String in [
+		"StoreSessionDayOneCustomer",
+		"StoreSessionDayEndTrigger",
+		"StoreSessionBackroomPickup",
+		"StoreSessionRestockShelf",
+	]:
+		var target: Node3D = _root.get_node_or_null(target_path) as Node3D
+		assert_not_null(target, "%s must exist" % target_path)
+		if target == null:
+			continue
+		_assert_point_inside_player_bounds(target_path, target.global_position, bounds_min, bounds_max)
+
+	var exit_target: Node3D = _root.get_node_or_null("EntranceDoor") as Node3D
+	assert_not_null(exit_target, "EntranceDoor must exist")
+	if exit_target != null:
+		var closest_exit_stand_point := Vector3(
+			clampf(exit_target.global_position.x, bounds_min.x, bounds_max.x),
+			exit_target.global_position.y,
+			clampf(exit_target.global_position.z, bounds_min.z, bounds_max.z)
+		)
+		assert_lte(
+			_xz_distance(closest_exit_stand_point, exit_target.global_position),
+			1.0,
+			"Exit prompt must stay reachable from the playable front bound"
+		)
 
 
 func test_checkout_queue_markers_share_register_flow() -> void:
@@ -381,3 +415,10 @@ func test_each_furniture_carries_navigation_obstacle_with_expected_radius() -> v
 
 func _xz_distance(a: Vector3, b: Vector3) -> float:
 	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))
+
+
+func _assert_point_inside_player_bounds(
+	label: String, point: Vector3, bounds_min: Vector3, bounds_max: Vector3
+) -> void:
+	assert_between(point.x, bounds_min.x, bounds_max.x, "%s X player reach" % label)
+	assert_between(point.z, bounds_min.z, bounds_max.z, "%s Z player reach" % label)

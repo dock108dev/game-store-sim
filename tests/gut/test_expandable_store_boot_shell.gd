@@ -5,6 +5,10 @@ const SHELL_PRACTICAL_MAX_ENERGY: float = 0.65
 const SHELL_PRACTICAL_MAX_RANGE: float = 3.8
 const GENERATED_REGISTER_SCREEN_MIN_EMISSION: float = 0.42
 const GENERATED_REGISTER_SCREEN_MAX_EMISSION: float = 0.60
+const ZONE_COLOR_DELTA_MIN: float = 0.05
+const StoreVisualLayoutScript: GDScript = preload(
+	"res://game/scripts/visuals/store_visual_layout.gd"
+)
 
 var _root: Node3D = null
 var _saved_state: GameManager.State
@@ -61,9 +65,9 @@ func test_boot_uses_expandable_store_shell_instead_of_authored_full_room() -> vo
 		var floor_mesh: BoxMesh = floor.mesh as BoxMesh
 		assert_not_null(floor_mesh, "StarterFloor must use a BoxMesh footprint")
 		if floor_mesh != null:
-			assert_almost_eq(floor_mesh.size.x, 12.0, 0.01, "StarterFloor width")
-			assert_almost_eq(floor_mesh.size.z, 17.5, 0.01, "StarterFloor depth")
-		assert_almost_eq(floor.position.z, 1.10, 0.01, "StarterFloor center Z")
+			assert_almost_eq(floor_mesh.size.x, 16.0, 0.01, "StarterFloor width")
+			assert_almost_eq(floor_mesh.size.z, 20.0, 0.01, "StarterFloor depth")
+		assert_almost_eq(floor.position.z, 0.0, 0.01, "StarterFloor center Z")
 
 	for old_root: String in [
 		"Floor",
@@ -96,10 +100,10 @@ func test_boot_shell_has_curated_retail_fixtures_without_old_placeholder_roots()
 		"CheckoutRegisterDrawer",
 		"CheckoutRegisterScreen",
 		"StarterUsedShelfBacker",
-		"StarterProductMotorwayKings",
+		"StarterMotorwayKings",
 		"StarterDisplayTableBacker",
 		"StarterDisplayTableTray",
-		"StarterProductConsoleNeoIgnite",
+		"StarterConsoleNeoIgnite",
 		"StockroomSupplyShelf",
 		"StockroomReceivingTableTop",
 	]:
@@ -134,17 +138,19 @@ func test_boot_shell_merchandise_density_reads_as_used_game_store() -> void:
 		return
 	var sales_floor_count: int = 0
 	for prefix: String in [
-		"StarterProduct",
+		"StarterConsole",
+		"StarterMotorway",
+		"StarterKingdom",
 		"StarterUsedEmptySlot",
 		"StarterDisplayEmptySlot",
 	]:
 		sales_floor_count += _count_children_with_prefix(shell, prefix)
-	assert_gte(sales_floor_count, 10, "Boot shell needs curated sales-floor facings")
-	assert_lte(sales_floor_count, 12, "Boot shell must separate density from SKU variety")
+	assert_gte(sales_floor_count, 8, "Boot shell needs curated sales-floor facings")
+	assert_lte(sales_floor_count, 10, "Boot shell must separate density from SKU variety")
 	assert_eq(
-		_collect_distinct_product_item_ids(shell).size(),
-		5,
-		"Boot shell must expose five distinct starter sellable product types"
+		_collect_distinct_product_item_ids(shell),
+		_expected_first_delivery_ids(),
+		"Boot shell must expose only the first-delivery starter product types"
 	)
 	var stockroom_support_count: int = 0
 	for prefix: String in [
@@ -168,10 +174,15 @@ func test_boot_shell_pairs_wall_shelf_with_starter_display_table() -> void:
 		return
 	for required: String in [
 		"StarterUsedShelfBacker",
+		"StarterUsedShelfTopLip",
+		"StarterUsedShelfMiddleLip",
 		"StarterUsedShelfBottomLip",
 		"StarterUsedShelfLeftDivider",
 		"StarterUsedShelfCenterDivider",
 		"StarterUsedShelfRightDivider",
+		"StarterUsedShelfPriceTag00",
+		"StarterUsedShelfRightEmptyBay",
+		"StarterUsedShelfRightPriceTag",
 		"StarterUsedShelfFloorFootprint",
 		"StarterDisplayTableFootprint",
 		"StarterDisplayTableBacker",
@@ -256,6 +267,63 @@ func test_boot_shell_zone_practicals_preserve_readability_hierarchy() -> void:
 		assert_gt(entry.light_color.r, entry.light_color.b, "Entry threshold practical must stay warm")
 
 
+func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	for required: String in [
+		"SalesFloorWarmBackWallPanel",
+		"ShelfWallCoolReadPanel",
+		"ShelfWallAccentTopRail",
+		"ShelfWallBlueBayPatch",
+		"ShelfWallPurpleBayPatch",
+		"CheckoutServiceWarmWallPanel",
+		"CheckoutServiceFloorPool",
+		"CheckoutCounterEdgeLine",
+		"StockroomCoolDoorRevealLeft",
+		"StockroomCoolDoorRevealRight",
+		"StockroomCoolDoorRevealHeader",
+		"StockroomUtilityFloorApron",
+		"StockroomWarmPickupSightPatch",
+		"EntryMutedFloorMat",
+		"EntryWarmSightlineStrip",
+	]:
+		assert_not_null(shell.get_node_or_null(required), "Generated zone surface missing: %s" % required)
+	var shelf_panel: StandardMaterial3D = _material_for(shell, "ShelfWallCoolReadPanel")
+	var checkout_panel: StandardMaterial3D = _material_for(shell, "CheckoutServiceWarmWallPanel")
+	var stockroom_reveal: StandardMaterial3D = _material_for(shell, "StockroomCoolDoorRevealLeft")
+	var entry_mat: StandardMaterial3D = _material_for(shell, "EntryMutedFloorMat")
+	assert_not_null(shelf_panel, "Shelf zone panel must carry material")
+	assert_not_null(checkout_panel, "Checkout zone panel must carry material")
+	assert_not_null(stockroom_reveal, "Stockroom reveal must carry material")
+	assert_not_null(entry_mat, "Entry mat must carry material")
+	if shelf_panel != null:
+		assert_gte(
+			shelf_panel.albedo_color.b - shelf_panel.albedo_color.r,
+			ZONE_COLOR_DELTA_MIN,
+			"Shelf wall panel must cool the shelf read against warm wood"
+		)
+	if checkout_panel != null:
+		assert_gte(
+			checkout_panel.albedo_color.r - checkout_panel.albedo_color.b,
+			ZONE_COLOR_DELTA_MIN,
+			"Checkout service panel must stay warm"
+		)
+	if stockroom_reveal != null:
+		assert_gte(
+			stockroom_reveal.albedo_color.b - stockroom_reveal.albedo_color.r,
+			ZONE_COLOR_DELTA_MIN,
+			"Stockroom doorway reveal must read cooler than the sales floor"
+		)
+	if entry_mat != null and checkout_panel != null:
+		assert_lt(
+			_brightest_channel(entry_mat.albedo_color),
+			_brightest_channel(checkout_panel.albedo_color),
+			"Entry mat must orient the exit without overpowering checkout"
+		)
+
+
 func test_boot_shell_register_screen_glow_stays_readable_and_restrained() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
@@ -325,8 +393,8 @@ func test_stockroom_boundary_matches_expanded_runtime_staff_corner() -> void:
 		)
 		assert_between(
 			node.position.z,
-			-7.55,
-			-4.05,
+			-9.95,
+			-5.45,
 			"%s must stay inside the expanded staff stockroom corner" % node_path
 		)
 
@@ -446,12 +514,12 @@ func test_manager_customer_proxy_reads_as_person_silhouette() -> void:
 
 
 func test_critical_day_one_anchors_move_into_the_expanded_runtime_footprint() -> void:
-	_assert_position_near("PlayerEntrySpawn", Vector3(0.0, 0.0, 7.85), 0.05)
-	_assert_position_near("EntranceDoor", Vector3(0.0, 0.0, 9.62), 0.05)
-	_assert_position_near("checkout_counter", Vector3(4.25, 0.0, 5.55), 0.05)
-	_assert_position_near("StoreSessionDayOneCustomer", Vector3(3.55, 0.0, 6.65), 0.05)
-	_assert_position_near("StoreSessionRestockShelf", Vector3(-2.65, 0.0, 1.05), 0.05)
-	_assert_position_near("StoreSessionBackroomPickup", Vector3(4.80, 0.0, -6.85), 0.05)
+	_assert_position_near("PlayerEntrySpawn", Vector3(-0.55, 0.0, 8.35), 0.05)
+	_assert_position_near("EntranceDoor", Vector3(0.0, 0.0, 9.72), 0.05)
+	_assert_position_near("checkout_counter", Vector3(5.65, 0.0, 6.15), 0.05)
+	_assert_position_near("StoreSessionDayOneCustomer", Vector3(4.85, 0.0, 7.25), 0.05)
+	_assert_position_near("StoreSessionRestockShelf", Vector3(-4.10, 0.0, -1.20), 0.05)
+	_assert_position_near("StoreSessionBackroomPickup", Vector3(4.90, 0.0, -8.70), 0.05)
 
 
 func test_player_spawn_bounds_match_expanded_runtime_shell() -> void:
@@ -459,10 +527,40 @@ func test_player_spawn_bounds_match_expanded_runtime_shell() -> void:
 	assert_not_null(spawn, "PlayerEntrySpawn must exist")
 	if spawn == null:
 		return
-	assert_eq(spawn.get_meta("bounds_min"), Vector3(-5.45, 0.0, -7.30))
-	assert_eq(spawn.get_meta("bounds_max"), Vector3(5.45, 0.0, 8.65))
-	assert_between(spawn.position.x, -5.45, 5.45, "Spawn X must be inside player bounds")
-	assert_between(spawn.position.z, -7.30, 8.65, "Spawn Z must be inside player bounds")
+	assert_eq(spawn.get_meta("bounds_min"), Vector3(-7.45, 0.0, -9.35))
+	assert_eq(spawn.get_meta("bounds_max"), Vector3(7.45, 0.0, 9.05))
+	assert_between(spawn.position.x, -7.45, 7.45, "Spawn X must be inside player bounds")
+	assert_between(spawn.position.z, -9.35, 9.05, "Spawn Z must be inside player bounds")
+
+
+func test_player_spawn_faces_inward_toward_first_route_landmarks() -> void:
+	var spawn: Marker3D = _root.get_node_or_null("PlayerEntrySpawn") as Marker3D
+	var manager: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var checkout: Node3D = _root.get_node_or_null("checkout_counter") as Node3D
+	var exit: Node3D = _root.get_node_or_null("EntranceDoor") as Node3D
+	assert_not_null(spawn, "PlayerEntrySpawn must exist")
+	assert_not_null(manager, "StoreSessionDayOneCustomer must exist")
+	assert_not_null(checkout, "checkout_counter must exist")
+	assert_not_null(exit, "EntranceDoor must exist")
+	if spawn == null or manager == null or checkout == null or exit == null:
+		return
+	var forward: Vector3 = _flat_forward(spawn)
+	assert_lt(forward.z, -0.90, "Spawn must face inward across the sales floor")
+	assert_gt(
+		forward.dot(_flat_direction(spawn.global_position, manager.global_position)),
+		0.50,
+		"First manager beat must sit inside the spawn view cone"
+	)
+	assert_gt(
+		forward.dot(_flat_direction(spawn.global_position, checkout.global_position)),
+		0.50,
+		"Checkout must sit inside the spawn view cone"
+	)
+	assert_lt(
+		forward.dot(_flat_direction(spawn.global_position, exit.global_position)),
+		0.0,
+		"Spawn must not start by facing the mall exit dead-end"
+	)
 
 
 func test_customer_browse_waypoints_stay_out_of_stockroom() -> void:
@@ -484,11 +582,11 @@ func test_customer_browse_waypoints_stay_out_of_stockroom() -> void:
 		var in_stockroom: bool = (
 			marker.position.x >= 3.10
 			and marker.position.x <= 5.95
-			and marker.position.z >= -7.55
-			and marker.position.z <= -4.05
+			and marker.position.z >= -9.95
+			and marker.position.z <= -5.75
 		)
 		assert_false(
-			in_stockroom, "%s must not route customers into the stock closet" % marker_name
+			in_stockroom, "%s must not route customers into the staff-only stockroom" % marker_name
 		)
 
 
@@ -517,16 +615,20 @@ func test_customer_facing_product_props_are_present_but_curated() -> void:
 	if shell == null:
 		return
 	for required: String in [
-		"StarterProductConsoleNeoIgnite",
-		"StarterProductMotorwayKings",
-		"StarterProductKingdomEmbers",
-		"StarterProductTorqueForce",
-		"StarterProductGridiron",
+		"StarterConsoleNeoIgnite",
+		"StarterMotorwayKings",
+		"StarterKingdomEmbers",
 		"StockroomSupplyBox00",
 		"StockroomSupplyBox02",
 	]:
 		assert_not_null(
 			shell.get_node_or_null(required), "Starter shell product prop missing: %s" % required
+		)
+	for reserve_product: String in ["StarterTorqueForce", "StarterGridiron"]:
+		assert_null(
+			shell.get_node_or_null(reserve_product),
+			"Reserve starter product must not appear in the first-delivery boot shell: %s"
+			% reserve_product
 		)
 	for removed: String in [
 		"StarterShelfCase00",
@@ -545,6 +647,7 @@ func test_customer_facing_product_props_are_present_but_curated() -> void:
 	for product: Node in _collect_product_displays(shell):
 		assert_eq(str(product.get_meta("visual_source", "")), "product_visual_factory")
 		assert_not_null(product.get_node_or_null("ProductPriceTag"))
+		assert_eq(str(product.get_meta("stock_state", "")), "first_delivery_stocked")
 
 
 func test_boot_shell_avoids_product_name_spam() -> void:
@@ -588,6 +691,15 @@ func _collect_distinct_product_item_ids(parent: Node) -> PackedStringArray:
 	return ids
 
 
+func _expected_first_delivery_ids() -> PackedStringArray:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	return catalog.call(
+		"get_product_item_ids",
+		StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+		StoreVisualLayoutScript.STOCK_STATE_FIRST_DELIVERY,
+	)
+
+
 func _collect_product_displays(parent: Node) -> Array[Node]:
 	var products: Array[Node] = []
 	for child: Node in parent.get_children():
@@ -609,6 +721,22 @@ func _box_size(node: Node3D) -> Vector3:
 	return box_mesh.size
 
 
+func _material_for(parent: Node, node_path: String) -> StandardMaterial3D:
+	var node: Node3D = parent.get_node_or_null(node_path) as Node3D
+	if node == null:
+		return null
+	var mesh_instance: MeshInstance3D = node as MeshInstance3D
+	if mesh_instance == null:
+		mesh_instance = node.get_node_or_null("Visual") as MeshInstance3D
+	if mesh_instance == null:
+		return null
+	return mesh_instance.material_override as StandardMaterial3D
+
+
+func _brightest_channel(color: Color) -> float:
+	return maxf(maxf(color.r, color.g), color.b)
+
+
 func _flat_distance_to_segment(point: Vector3, start: Vector3, end: Vector3) -> float:
 	var point_2d := Vector2(point.x, point.z)
 	var start_2d := Vector2(start.x, start.z)
@@ -619,6 +747,18 @@ func _flat_distance_to_segment(point: Vector3, start: Vector3, end: Vector3) -> 
 		return point_2d.distance_to(start_2d)
 	var t: float = clampf((point_2d - start_2d).dot(segment) / length_squared, 0.0, 1.0)
 	return point_2d.distance_to(start_2d + segment * t)
+
+
+func _flat_forward(node: Node3D) -> Vector3:
+	var forward: Vector3 = -node.global_transform.basis.z
+	forward.y = 0.0
+	return forward.normalized()
+
+
+func _flat_direction(from: Vector3, to: Vector3) -> Vector3:
+	var direction := to - from
+	direction.y = 0.0
+	return direction.normalized()
 
 
 func _collect_visible_labels(parent: Node) -> Array[Label3D]:

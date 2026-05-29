@@ -44,7 +44,6 @@ const _TIME_CLOCK_COLLISION_SIZE := Vector3(0.7, 1.0, 0.7)
 ## stock state from PlatformSystem and updates the in-store sign so the player
 ## reads "BACK ORDERED" or "IN STOCK" without opening a panel.
 const _NEW_CONSOLE_PLATFORM_ID: StringName = &"vecforce_hd"
-const _NEW_CONSOLE_DISPLAY_PATH: NodePath = ^"new_console_display"
 const _NEW_CONSOLE_LABEL_PATH: NodePath = ^"new_console_display/ShortageLabel"
 ## StoreCustomizationSystem featured-category id matched against
 ## `featured_category_changed` to decide when to emit the weird-inventory

@@ -3,9 +3,9 @@ extends StoreSessionInteractableBase
 
 
 func _ready() -> void:
-	display_name = "day"
+	display_name = "close day"
 	prompt_text = "Close"
-	action_verb = "End"
+	action_verb = "Close"
 	interaction_type = InteractionType.REGISTER
 	interactable_id = &"store_session.day_end"
 	proximity_radius = 3.25

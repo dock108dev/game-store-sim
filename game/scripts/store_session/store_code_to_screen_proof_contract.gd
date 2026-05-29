@@ -31,7 +31,7 @@ static func proof_from_route_beat(beat: Dictionary) -> Dictionary:
 		"code_owner": _code_owner(beat_name),
 		"state_mutation": _state_mutation(beat),
 		"screen_feedback": _screen_feedback(beat),
-		"next_beat": _next_beat(beat_name),
+		"next_beat": _next_beat(beat_name, beat),
 		"test_capture": "%s; capture %s" % [
 			", ".join(PackedStringArray(refs)),
 			str(beat.get("capture_helper_call", "")),
@@ -73,7 +73,7 @@ static func _screen_object(beat_name: String, beat: Dictionary) -> String:
 		"training_shelf_transition", "stocked_shelf_stat_change":
 			return "Used-games shelf display with visible shelf and stockroom counts."
 		"before_customer", "customer_decision_card", "result_acknowledgement", \
-		"after_result_customer_exit":
+		"post_customer_recovery":
 			return "Customer proxy at checkout, customer modal, and HUD stat counters."
 		"close_day_prompt":
 			return "Close-day register trigger plus completed Day 1 checklist state."
@@ -106,7 +106,7 @@ static func _code_owner(beat_name: String) -> String:
 				+ "store_session_controller.gd owns shelf progression."
 			)
 		"before_customer", "customer_decision_card", "result_acknowledgement", \
-		"after_result_customer_exit":
+		"post_customer_recovery":
 			return (
 				"first_day_customer_interactable.gd bridges input; "
 				+ "store_session_controller.gd owns customer progression."
@@ -134,7 +134,8 @@ static func _screen_feedback(beat: Dictionary) -> String:
 	]
 
 
-static func _next_beat(beat_name: String) -> String:
+static func _next_beat(beat_name: String, beat: Dictionary) -> String:
+	var next_expected: String = str(beat.get("next_expected_beat", "")).strip_edges()
 	var chain: Dictionary = {
 		"manager_prompt": "Register prompt enables after manager interaction.",
 		"register_prompt": "Back-room pickup prompt enables after register check.",
@@ -143,12 +144,17 @@ static func _next_beat(beat_name: String) -> String:
 		"before_customer": "Customer decision card opens from customer interaction.",
 		"customer_decision_card": "Result acknowledgement appears after choice selection.",
 		"result_acknowledgement": "Customer exit and post-customer stock route become visible.",
-		"after_result_customer_exit": "Post-customer shelf/stat update route becomes available.",
+		"post_customer_recovery": "Post-customer shelf/stat update route becomes available.",
 		"stocked_shelf_stat_change": "Close-day trigger enables after final shelf update.",
 		"close_day_prompt": "Close confirmation leads to day summary.",
 		"close_day_summary": "Summary review completes the route artifact.",
 	}
-	return str(chain.get(beat_name, "Next Day 1 route beat is documented in manifest order."))
+	var description: String = str(
+		chain.get(beat_name, "Next Day 1 route beat is documented in manifest order.")
+	)
+	if next_expected.is_empty():
+		return description
+	return "%s Next expected beat: `%s`." % [description, next_expected]
 
 
 static func _is_blank(value: Variant) -> bool:

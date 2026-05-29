@@ -8,7 +8,6 @@ class_name ContentSchema
 extends RefCounted
 
 const NUMERIC: Array = [TYPE_INT, TYPE_FLOAT]
-const STRING_LIKE: Array = [TYPE_STRING, TYPE_STRING_NAME]
 
 const SCHEMAS: Dictionary = {
 	"item": {

@@ -167,6 +167,37 @@ func test_entrance_door_interactable_is_storefront_with_exit_prompt() -> void:
 	)
 
 
+func test_entrance_door_interactable_hit_area_stays_tight_to_glass() -> void:
+	var interactable: Interactable = (
+		_root.get_node_or_null(DOOR_INTERACTABLE_PATH) as Interactable
+	)
+	assert_not_null(interactable, "EntranceDoor/Interactable must exist")
+	if interactable == null:
+		return
+	var shape: CollisionShape3D = (
+		interactable.find_child("CollisionShape3D", true, false) as CollisionShape3D
+	)
+	assert_not_null(shape, "Door Interactable must own a CollisionShape3D")
+	if shape == null or not (shape.shape is BoxShape3D):
+		return
+	var box := shape.shape as BoxShape3D
+	assert_lte(box.size.x, 1.55, "Exit hit area must not span the full storefront gap")
+	assert_lte(box.size.y, 1.90, "Exit hit area must stay on the readable door face")
+	assert_lte(box.size.z, 0.25, "Exit hit area must not become broad proximity-like depth")
+	assert_almost_eq(
+		interactable.global_position.x,
+		0.0,
+		0.05,
+		"Exit hit area must stay centered on the generated door"
+	)
+	assert_between(
+		interactable.global_position.y,
+		1.20,
+		1.45,
+		"Exit hit area must align with the glass/push-plate sightline"
+	)
+
+
 func test_entry_camera_raycast_focuses_exit_prompt() -> void:
 	var interactable: Interactable = (
 		_root.get_node_or_null(DOOR_INTERACTABLE_PATH) as Interactable
@@ -179,40 +210,126 @@ func test_entry_camera_raycast_focuses_exit_prompt() -> void:
 	if interaction_area == null:
 		return
 
-	var camera := Camera3D.new()
-	camera.name = "ExitPromptRaycastCamera"
-	camera.near = 0.05
-	camera.fov = 70.0
-	_root.add_child(camera)
-	camera.global_position = Vector3(
-		interaction_area.global_position.x,
-		interaction_area.global_position.y,
-		interaction_area.global_position.z - 1.35
-	)
-	camera.look_at(interaction_area.global_position, Vector3.UP)
-	camera.current = true
-
-	var ray: Node = INTERACTION_RAY_SCRIPT.new()
-	_root.add_child(ray)
-	ray.call("_apply_camera", camera)
 	watch_signals(EventBus)
-	await get_tree().physics_frame
-
-	ray.call("_update_raycast")
+	var probe := await _raycast_from_to(
+		"entry_camera",
+		Vector3(
+			interaction_area.global_position.x,
+			interaction_area.global_position.y,
+			interaction_area.global_position.z - 1.35
+		),
+		interaction_area.global_position
+	)
 
 	assert_eq(
-		ray.get_hovered_target(),
+		probe.ray.get_hovered_target(),
 		interactable,
-		"Entry camera raycast must focus the exit door interactable"
+		"Entry camera raycast must focus the exit door interactable; debug=%s"
+		% str(probe.ray.get_targeting_debug())
 	)
 	assert_eq(
-		ray.get_hovered_action_label(),
+		probe.ray.get_hovered_action_label(),
 		"Exit to Mall",
 		"Raycast focus must surface the Exit to Mall prompt"
 	)
 	assert_signal_emitted_with_parameters(EventBus, "interactable_focused", ["Exit to Mall"])
-	ray.queue_free()
-	camera.queue_free()
+	probe.ray.queue_free()
+	probe.camera.queue_free()
+
+
+func test_exit_prompt_does_not_steal_focus_from_training_route_surfaces() -> void:
+	var blocked_surfaces: Dictionary = {
+		"checkout": _root.get_node_or_null("checkout_counter"),
+		"shelf": _root.get_node_or_null("StoreSessionRestockShelf"),
+		"stockroom": _root.get_node_or_null("StoreSessionBackroomPickup"),
+	}
+	var interactable: Interactable = (
+		_root.get_node_or_null(DOOR_INTERACTABLE_PATH) as Interactable
+	)
+	assert_not_null(interactable, "EntranceDoor/Interactable must exist")
+	if interactable == null:
+		return
+	for surface_name: String in blocked_surfaces.keys():
+		var surface: Node3D = blocked_surfaces[surface_name] as Node3D
+		assert_not_null(surface, "%s target surface must exist" % surface_name)
+		if surface == null:
+			continue
+		var probe := await _raycast_from_to(
+			surface_name,
+			surface.global_position + Vector3(0.0, 1.45, -1.2),
+			surface.global_position + Vector3(0.0, 1.05, 0.0)
+		)
+		assert_ne(
+			probe.ray.get_hovered_target(),
+			interactable,
+			"Looking at %s must not surface the Exit to Mall prompt" % surface_name
+		)
+		assert_ne(
+			probe.ray.get_hovered_action_label(),
+			"Exit to Mall",
+			"Looking at %s must keep exit prompt inactive" % surface_name
+		)
+		probe.ray.queue_free()
+		probe.camera.queue_free()
+
+
+func test_exit_prompt_does_not_show_on_blank_front_wall() -> void:
+	var interactable: Interactable = (
+		_root.get_node_or_null(DOOR_INTERACTABLE_PATH) as Interactable
+	)
+	assert_not_null(interactable, "EntranceDoor/Interactable must exist")
+	if interactable == null:
+		return
+	var probe := await _raycast_from_to(
+		"blank_wall",
+		Vector3(-2.35, 1.45, 8.65),
+		Vector3(-2.35, 1.45, 9.85)
+	)
+	assert_ne(
+		probe.ray.get_hovered_target(),
+		interactable,
+		"Blank front wall focus must not resolve the exit interactable"
+	)
+	assert_ne(
+		probe.ray.get_hovered_action_label(),
+		"Exit to Mall",
+		"Blank front wall focus must not show the exit prompt"
+	)
+	probe.ray.queue_free()
+	probe.camera.queue_free()
+
+
+func test_looking_away_from_exit_clears_exit_prompt() -> void:
+	var interactable: Interactable = (
+		_root.get_node_or_null(DOOR_INTERACTABLE_PATH) as Interactable
+	)
+	assert_not_null(interactable, "EntranceDoor/Interactable must exist")
+	if interactable == null:
+		return
+	var interaction_area: Area3D = interactable.get_interaction_area()
+	assert_not_null(interaction_area, "Door Interactable must expose an InteractionArea")
+	if interaction_area == null:
+		return
+	var probe := await _raycast_from_to(
+		"exit_clear",
+		interaction_area.global_position + Vector3(0.0, 0.0, -1.35),
+		interaction_area.global_position
+	)
+	assert_eq(
+		probe.ray.get_hovered_target(),
+		interactable,
+		"Pre-condition: clear exit focus must show the exit prompt; debug=%s"
+		% str(probe.ray.get_targeting_debug())
+	)
+
+	probe.camera.look_at(interaction_area.global_position + Vector3(2.4, 0.0, 0.0), Vector3.UP)
+	await get_tree().physics_frame
+	probe.ray.call("_update_raycast")
+
+	assert_null(probe.ray.get_hovered_target(), "Looking away from the exit must clear focus")
+	assert_eq(probe.ray.get_hovered_action_label(), "", "Cleared exit focus must clear prompt copy")
+	probe.ray.queue_free()
+	probe.camera.queue_free()
 
 
 func test_pressing_e_on_door_routes_to_mall_overview() -> void:
@@ -243,3 +360,30 @@ func test_pressing_e_on_door_routes_to_mall_overview() -> void:
 		"Door interaction must release the cursor before the transition"
 	)
 	GameManager.current_state = prior_state
+
+
+func _raycast_from_to(probe_name: String, origin: Vector3, target: Vector3) -> Dictionary:
+	var viewport: Viewport = get_viewport()
+	var original_viewport_size := Vector2i.ZERO
+	if viewport != null:
+		original_viewport_size = viewport.size
+		viewport.size = Vector2i(1280, 720)
+	var camera := Camera3D.new()
+	camera.name = "%sExitPromptProbeCamera" % probe_name.capitalize()
+	camera.near = 0.05
+	camera.fov = 70.0
+	_root.add_child(camera)
+	camera.global_position = origin
+	camera.look_at(target, Vector3.UP)
+	camera.force_update_transform()
+	camera.current = true
+
+	var ray: Node = INTERACTION_RAY_SCRIPT.new()
+	_root.add_child(ray)
+	ray.call("_apply_camera", camera)
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	ray.call("_update_raycast")
+	if viewport != null:
+		viewport.size = original_viewport_size
+	return {"camera": camera, "ray": ray}

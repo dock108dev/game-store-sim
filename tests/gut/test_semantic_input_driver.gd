@@ -1,7 +1,6 @@
 extends GutTest
 
 const DRIVER_SCRIPT: GDScript = preload("res://game/scripts/automation/semantic_input_driver.gd")
-const REGISTRY_SCRIPT: GDScript = preload("res://game/scripts/automation/semantic_target_registry.gd")
 const RAY_SCRIPT: GDScript = preload("res://game/scripts/player/interaction_ray.gd")
 
 
