@@ -1,4 +1,6 @@
 ## Builds visual-only catalog product cases for the reusable display table fixture.
+## The table keeps labels and tags item-owned or shelf-owned instead of baking
+## local copies, so preview products stay routed through ProductVisualFactory.
 extends Node3D
 
 const ProductVisualCatalogScript: GDScript = preload(

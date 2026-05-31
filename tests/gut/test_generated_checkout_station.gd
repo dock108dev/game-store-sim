@@ -1,9 +1,17 @@
 extends GutTest
 
+const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store_visual_kit.gd")
+
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const COUNTER_TOP_Y: float = 0.83
 const SUPPORT_TOLERANCE: float = 0.035
 const SERVICE_SPOT_TOLERANCE: float = 0.08
+const STARTER_CHECKOUT_COMPONENT_PATHS: Dictionary = {
+	StoreVisualKitScript.STARTER_CHECKOUT_COUNTER: "CheckoutCounterTop",
+	StoreVisualKitScript.STARTER_REGISTER_TERMINAL: "CheckoutKitRegisterMonitor",
+	StoreVisualKitScript.STARTER_CARD_READER: "CheckoutKitCardReader",
+	StoreVisualKitScript.STARTER_RECEIPT_PRINTER: "CheckoutKitReceiptPrinter",
+}
 const CHECKOUT_KIT_PROP_PATHS: Array[String] = [
 	"CheckoutKitCounterRegister",
 	"CheckoutKitRegisterMonitor",
@@ -97,6 +105,40 @@ func test_generated_checkout_kit_props_are_visual_only_station_details() -> void
 		assert_false(
 			_has_interaction_descendant(prop),
 			"%s must not add register gameplay, collision, or prompts" % prop_path
+		)
+
+
+func test_generated_checkout_station_uses_named_reusable_starter_components() -> void:
+	var shell: Node3D = _shell()
+	if shell == null:
+		return
+	var components: Array[Dictionary] = StoreVisualKitScript.starter_checkout_station_components()
+	assert_eq(components.size(), STARTER_CHECKOUT_COMPONENT_PATHS.size())
+	for component: Dictionary in components:
+		var component_id: StringName = component.get("concept_id", &"") as StringName
+		var visual_id: StringName = component.get("visual_id", &"") as StringName
+		var path: String = str(STARTER_CHECKOUT_COMPONENT_PATHS.get(component_id, ""))
+		assert_false(path.is_empty(), "%s must have a generated station node" % component_id)
+		assert_true(StoreVisualKitScript.has_visual(visual_id), "%s visual must resolve" % component_id)
+		assert_true(
+			bool(component.get("day_one_default", false)),
+			"%s must stay in the Day 1 checkout kit" % component_id
+		)
+		if path.is_empty():
+			continue
+		var node: Node3D = shell.get_node_or_null(path) as Node3D
+		assert_not_null(node, "Generated checkout component missing: %s" % path)
+		if node == null:
+			continue
+		assert_eq(node.get_meta("starter_checkout_component_id", &""), component_id)
+		assert_eq(node.get_meta("starter_checkout_visual_id", &""), visual_id)
+		assert_true(
+			bool(node.get_meta("checkout_station_visual_only", false)),
+			"%s must be marked visual-only" % path
+		)
+		assert_false(
+			_has_interaction_descendant(node),
+			"%s must not own checkout gameplay surfaces" % path
 		)
 
 
@@ -202,7 +244,11 @@ func test_generated_checkout_service_stop_anchors_actor_prompt_and_queue() -> vo
 		or checkout == null
 	):
 		return
-	assert_eq(prompt_owner.get_parent(), actor, "Manager/customer prompt must stay on the shared actor")
+	assert_eq(
+		prompt_owner.get_parent(),
+		actor,
+		"Manager/customer prompt must stay on the shared actor"
+	)
 	assert_lte(
 		_xz_distance(actor.global_position, customer_mat.global_position),
 		SERVICE_SPOT_TOLERANCE,
@@ -235,7 +281,13 @@ func _shell() -> Node3D:
 
 
 func _has_interaction_descendant(node: Node) -> bool:
-	if node is Area3D or node is CollisionShape3D or node is PhysicsBody3D or node is Interactable:
+	if (
+		node is Area3D
+		or node is CollisionShape3D
+		or node is PhysicsBody3D
+		or node is NavigationObstacle3D
+		or node is Interactable
+	):
 		return true
 	for child: Node in node.get_children():
 		if _has_interaction_descendant(child):

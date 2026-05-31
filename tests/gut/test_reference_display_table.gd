@@ -2,7 +2,7 @@
 extends GutTest
 
 const ShelfSlot: GDScript = preload("res://game/scripts/stores/shelf_slot.gd")
-const _MeshBoundsUtil: GDScript = preload(
+const MeshBoundsUtil: GDScript = preload(
 	"res://game/scripts/visuals/mesh_bounds_util.gd"
 )
 
@@ -26,17 +26,17 @@ func test_fixture_display_table_uses_catalog_preview_cases() -> void:
 	var support: MeshInstance3D = root.get_node_or_null("TableMesh") as MeshInstance3D
 	assert_not_null(support, "FixtureDisplayTable must keep TableMesh as support")
 	var support_top_y: float = (
-		_MeshBoundsUtil.mesh_bounds_in_root(root, support).end.y
+		MeshBoundsUtil.mesh_bounds_in_root(root, support).end.y
 		if support != null else 0.0
 	)
 	for preview_case: Node in preview_cases:
-		var case_node := preview_case as Node3D
+		var case_node: Node3D = preview_case as Node3D
 		assert_not_null(case_node, "Preview product must be a Node3D")
 		if case_node == null:
 			continue
 		assert_eq(str(case_node.get_meta("product_visual_kind", "")), "game_case")
 		assert_not_null(case_node.get_node_or_null("SpineTitleLabel"))
-		var case_bounds: AABB = _MeshBoundsUtil.visual_bounds(root, case_node)
+		var case_bounds: AABB = MeshBoundsUtil.visual_bounds(root, case_node)
 		assert_gte(
 			case_bounds.position.y,
 			support_top_y - SUPPORT_TOLERANCE,
@@ -59,10 +59,32 @@ func test_fixture_display_table_uses_catalog_preview_cases() -> void:
 		)
 
 
+func test_fixture_display_table_has_sturdy_retail_frame() -> void:
+	var root: Node3D = load(DISPLAY_TABLE_SCENE).instantiate() as Node3D
+	add_child_autofree(root)
+
+	var tabletop: MeshInstance3D = root.get_node_or_null("TableMesh") as MeshInstance3D
+	assert_not_null(tabletop, "FixtureDisplayTable must keep a tabletop mesh")
+	if tabletop != null:
+		var tabletop_mesh: BoxMesh = tabletop.mesh as BoxMesh
+		assert_not_null(tabletop_mesh, "FixtureDisplayTable tabletop must use a BoxMesh")
+		if tabletop_mesh != null:
+			assert_gte(tabletop_mesh.size.y, 0.155, "Tabletop must have visible thickness")
+	for node_path: String in [
+		"FrontLip",
+		"BackLip",
+		"LeftLip",
+		"RightLip",
+		"UnderRailFront",
+		"UnderRailBack",
+	]:
+		var support: MeshInstance3D = root.get_node_or_null(node_path) as MeshInstance3D
+		assert_not_null(support, "FixtureDisplayTable must include %s" % node_path)
+
+
 func _collect_direct_slots(root: Node) -> Array[Node]:
 	var slots: Array[Node] = []
 	for child: Node in root.get_children():
 		if child.is_in_group("shelf_slot") or child.get("slot_id") != null:
 			slots.append(child)
 	return slots
-

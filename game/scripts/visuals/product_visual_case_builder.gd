@@ -2,8 +2,13 @@
 class_name ProductVisualCaseBuilder
 extends RefCounted
 
+const StarterDetailBuilderScript: GDScript = preload(
+	"res://game/scripts/visuals/starter_detail_builder.gd"
+)
+
 const CASE_ROOT_NAME: StringName = &"ProductVisualCaseRoot"
 const CONSOLE_ROOT_NAME: StringName = &"ProductVisualConsoleBoxRoot"
+const CARTRIDGE_ROOT_NAME: StringName = &"ProductVisualCartridgeRoot"
 
 const _FALLBACK_CASE_COLOR := Color(0.78, 0.76, 0.68, 1.0)
 const _PANEL_OFFSET: float = 0.002
@@ -86,6 +91,7 @@ static func build_case(template: Dictionary, _catalog: RefCounted) -> Node3D:
 		)
 	)
 	_add_spine_labels(root, template, title, stripe, dims)
+	_add_case_edge_details(root, dims)
 
 	_add_symbol(root, _as_dictionary(template.get("simple_symbol", {})), dims)
 	root.add_child(
@@ -166,6 +172,8 @@ static func build_console_box(identity: Dictionary) -> Node3D:
 			Vector3(-dims.x * 0.29, -dims.y * 0.25, dims.z * 0.56)
 		)
 	)
+	_add_console_box_side_details(root, identity, dims)
+	_add_console_box_accessory_silhouette(root, dims)
 	root.add_child(
 		_label(
 			"ConsolePlatformLabel",
@@ -176,6 +184,7 @@ static func build_console_box(identity: Dictionary) -> Node3D:
 			0.00125
 		)
 	)
+	_add_console_box_edge_details(root, dims)
 	if str(_as_dictionary(identity.get("silhouette", {})).get("shape", "")).contains("handle"):
 		root.add_child(
 			_box(
@@ -185,6 +194,70 @@ static func build_console_box(identity: Dictionary) -> Node3D:
 				Vector3(0.0, dims.y * 0.42, dims.z * 0.57)
 			)
 		)
+	return root
+
+
+## Builds a loose cartridge node from a platform visual identity.
+static func build_cartridge(identity: Dictionary, item: Dictionary = {}) -> Node3D:
+	var root := Node3D.new()
+	root.name = CARTRIDGE_ROOT_NAME
+	root.set_meta("product_visual_kind", "cartridge")
+	var platform_visual_id: String = str(identity.get("platform_visual_id", ""))
+	if not platform_visual_id.is_empty():
+		root.set_meta("platform_visual_id", platform_visual_id)
+
+	var dims: Vector3 = _cartridge_dimensions(identity)
+	var body_color: Color = _color(identity.get("body_color", ""), Color(0.13, 0.14, 0.13))
+	var accent_color: Color = _color(identity.get("accent_color", ""), Color(0.45, 0.75, 0.9))
+	root.add_child(_box("CartridgeShell", dims, body_color))
+	root.add_child(
+		_box(
+			"CartridgeLabel",
+			Vector3(dims.x * 0.72, dims.y * 0.44, _PANEL_OFFSET),
+			_color(identity.get("label_plate_color", ""), Color(0.86, 0.84, 0.72)),
+			Vector3(0.0, dims.y * 0.02, dims.z * 0.56)
+		)
+	)
+	root.add_child(
+		_box(
+			"CartridgeAccentStripe",
+			Vector3(dims.x * 0.72, dims.y * 0.08, _PANEL_OFFSET),
+			accent_color,
+			Vector3(0.0, dims.y * 0.27, dims.z * 0.58)
+		)
+	)
+	root.add_child(
+		_box(
+			"CartridgeContactStrip",
+			Vector3(dims.x * 0.58, dims.y * 0.08, _PANEL_OFFSET),
+			Color(0.82, 0.64, 0.30, 1.0),
+			Vector3(0.0, -dims.y * 0.42, dims.z * 0.58)
+		)
+	)
+	root.add_child(
+		_box(
+			"CartridgeTopNotch",
+			Vector3(dims.x * 0.22, dims.y * 0.055, _PANEL_OFFSET),
+			body_color.darkened(0.18),
+			Vector3(0.0, dims.y * 0.42, dims.z * 0.59)
+		)
+	)
+	var label_text: String = str(
+		item.get(
+			"display_name",
+			identity.get("shelf_label", identity.get("display_label", "LOOSE CART"))
+		)
+	).to_upper()
+	root.add_child(
+		_label(
+			"CartridgeTitleLabel",
+			label_text,
+			Color(0.08, 0.08, 0.07),
+			14,
+			Vector3(0.0, dims.y * 0.02, dims.z * 0.59),
+			0.00075
+		)
+	)
 	return root
 
 
@@ -202,6 +275,19 @@ static func _case_dimensions(template: Dictionary) -> Vector3:
 		"wide_disc_case":
 			width = minf(width * 1.12, 0.20)
 			height = minf(height, width * 1.25)
+	return Vector3(width, height, depth)
+
+
+static func _cartridge_dimensions(identity: Dictionary) -> Vector3:
+	var scale_array: Array = identity.get("prop_scale", [1.0, 0.55, 0.32])
+	var width: float = clampf(float(scale_array[0]) * 0.11, 0.09, 0.15)
+	var height: float = clampf(float(scale_array[2]) * 0.075, 0.07, 0.12)
+	var depth: float = clampf(float(scale_array[1]) * 0.035, 0.014, 0.035)
+	var profile: String = str(_as_dictionary(identity.get("silhouette", {})).get("profile", ""))
+	if profile.contains("wide"):
+		width = minf(width * 1.18, 0.16)
+	if profile.contains("small") or profile.contains("folded"):
+		height = minf(height * 0.86, 0.095)
 	return Vector3(width, height, depth)
 
 
@@ -237,6 +323,106 @@ static func _add_spine_labels(
 	)
 	platform_label.rotation.z = deg_to_rad(90.0)
 	root.add_child(platform_label)
+
+
+static func _add_case_edge_details(root: Node3D, dims: Vector3) -> void:
+	var seam_z: float = dims.z * 0.602
+	var seam_depth: float = StarterDetailBuilderScript.PRODUCT_PANEL_OFFSET
+	StarterDetailBuilderScript.add_box_detail(
+		root,
+		"CaseTopSeam",
+		Vector3(0.0, dims.y * 0.455, seam_z),
+		Vector3(dims.x * 0.84, dims.y * 0.012, seam_depth),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_SEAM
+	)
+	StarterDetailBuilderScript.add_box_detail(
+		root,
+		"CaseBottomSeam",
+		Vector3(0.0, -dims.y * 0.455, seam_z),
+		Vector3(dims.x * 0.84, dims.y * 0.012, seam_depth),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_SEAM
+	)
+	StarterDetailBuilderScript.add_box_detail(
+		root,
+		"CaseSpineFold",
+		Vector3(-dims.x * 0.405, 0.0, seam_z + 0.001),
+		Vector3(dims.x * 0.018, dims.y * 0.76, seam_depth),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_SEAM
+	)
+
+
+static func _add_console_box_edge_details(root: Node3D, dims: Vector3) -> void:
+	var seam_z: float = dims.z * 0.575
+	StarterDetailBuilderScript.add_box_detail(
+		root,
+		"ConsoleBoxTopSeam",
+		Vector3(0.0, dims.y * 0.435, seam_z),
+		Vector3(dims.x * 0.82, dims.y * 0.014, StarterDetailBuilderScript.PRODUCT_PANEL_OFFSET),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_SEAM
+	)
+	StarterDetailBuilderScript.add_box_detail(
+		root,
+		"ConsoleBoxBottomSeam",
+		Vector3(0.0, -dims.y * 0.435, seam_z),
+		Vector3(dims.x * 0.82, dims.y * 0.014, StarterDetailBuilderScript.PRODUCT_PANEL_OFFSET),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_SEAM
+	)
+	StarterDetailBuilderScript.add_box_detail(
+		root,
+		"ConsoleBoxCornerLabel",
+		Vector3(dims.x * 0.30, -dims.y * 0.31, seam_z + 0.001),
+		Vector3(dims.x * 0.18, dims.y * 0.07, StarterDetailBuilderScript.PRODUCT_PANEL_OFFSET),
+		StarterDetailBuilderScript.FAMILY_PAPER,
+		StarterDetailBuilderScript.ROLE_LABEL
+	)
+
+
+static func _add_console_box_side_details(
+	root: Node3D, identity: Dictionary, dims: Vector3
+) -> void:
+	var side_x: float = -dims.x * 0.51
+	var accent_color: Color = _color(identity.get("accent_color", ""), Color(0.45, 0.75, 0.9))
+	StarterDetailBuilderScript.add_box_detail(
+		root,
+		"ConsoleSideSpineLabel",
+		Vector3(side_x, 0.0, 0.0),
+		Vector3(StarterDetailBuilderScript.PRODUCT_PANEL_OFFSET, dims.y * 0.56, dims.z * 0.58),
+		StarterDetailBuilderScript.FAMILY_PAPER,
+		StarterDetailBuilderScript.ROLE_LABEL
+	)
+	var stripe := _box(
+		"ConsoleSideSpineStripe",
+		Vector3(StarterDetailBuilderScript.PRODUCT_PANEL_OFFSET, dims.y * 0.12, dims.z * 0.70),
+		accent_color,
+		Vector3(side_x - 0.001, dims.y * 0.32, 0.0)
+	)
+	root.add_child(stripe)
+
+
+static func _add_console_box_accessory_silhouette(root: Node3D, dims: Vector3) -> void:
+	var silhouette_color := Color(0.09, 0.095, 0.09, 1.0)
+	var front_z: float = dims.z * 0.585
+	root.add_child(
+		_box(
+			"ConsoleControllerSilhouette",
+			Vector3(dims.x * 0.30, dims.y * 0.035, _PANEL_OFFSET),
+			silhouette_color,
+			Vector3(dims.x * 0.20, -dims.y * 0.25, front_z)
+		)
+	)
+	root.add_child(
+		_box(
+			"ConsoleCableSilhouette",
+			Vector3(dims.x * 0.22, dims.y * 0.012, _PANEL_OFFSET),
+			silhouette_color,
+			Vector3(dims.x * 0.02, -dims.y * 0.24, front_z + 0.001)
+		)
+	)
 
 
 static func _add_symbol(root: Node3D, symbol: Dictionary, dims: Vector3) -> void:

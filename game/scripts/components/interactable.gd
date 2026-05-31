@@ -3,9 +3,8 @@ class_name Interactable
 extends Area3D
 
 signal interacted()
-## ISSUE-017: parameterised variant — emits the actor that triggered the
-## interaction. Kept separate from `interacted()` so existing parameterless
-## listeners (storefront door, GUT tests) keep working.
+## Emits the actor that triggered the interaction while preserving the
+## parameterless `interacted()` signal for older listeners.
 signal interacted_by(by: Node)
 signal focused()
 signal unfocused()
@@ -46,15 +45,12 @@ const _OUTLINE_MATERIAL: ShaderMaterial = preload(
 )
 
 @export var interaction_type: InteractionType = InteractionType.ITEM
-## ISSUE-003: stable identifier used as the subject of the scoped
-## `EventBus.interactable_clicked` / `_hovered` signals. When left empty the
-## node's runtime name is used so existing scene data continues to round-trip.
+## Stable subject for scoped EventBus interaction signals. Empty falls back to
+## the runtime node name so existing scene data keeps round-tripping.
 @export var interactable_id: StringName = &""
 @export var display_name: String = "Item"
-## ISSUE-017: action verb the StoreController/StoreReadyContract uses to
-## prove the HUD objective text references a real interactable in the scene
-## (e.g. objective "Interact with the shelf" requires action_verb=="Interact"
-## on an interactable whose display_name contains "shelf").
+## Verb used by store readiness checks to match objective text to real
+## interactables in the scene.
 @export var action_verb: String = "Interact"
 @export var prompt_text: String = ""
 @export var enabled: bool = true
@@ -65,6 +61,7 @@ const _OUTLINE_MATERIAL: ShaderMaterial = preload(
 ## when contrast against a specific facade requires it.
 @export var highlight_color: Color = Color(1.0, 0.95, 0.85, 0.7)
 @export_range(0.001, 0.05, 0.001) var highlight_outline_width: float = 0.012
+@export_node_path("MeshInstance3D") var highlight_mesh_path: NodePath = NodePath("")
 ## Opt-in proximity fallback. When > 0, the InteractionRay treats this
 ## interactable as eligible for forgiving proximity+facing matching: if the
 ## screen-center raycast misses but the player is within `proximity_radius`
@@ -95,6 +92,7 @@ var store_id: StringName = &""
 
 var _interaction_area: Area3D = null
 var _original_materials: Array[Material] = []
+var _highlighted_mesh_node: MeshInstance3D = null
 var _highlight_active: bool = false
 
 
@@ -109,9 +107,7 @@ func _ready() -> void:
 	monitorable = false
 	input_ray_pickable = false
 	add_to_group("interactable")
-	# ISSUE-017: StoreReadyContract enumerates this group (plural) when
-	# counting visible interactions. Kept alongside the legacy singular
-	# group so existing systems keep filtering correctly.
+	# Store readiness counts the plural group; older filters still use singular.
 	add_to_group(&"interactables")
 	_interaction_area = _ensure_interaction_area()
 	_register_interaction_area()
@@ -162,7 +158,10 @@ func highlight() -> void:
 
 	var mesh_node: MeshInstance3D = _find_mesh_instance()
 	if not mesh_node or not mesh_node.mesh:
+		_highlighted_mesh_node = null
+		_original_materials.clear()
 		return
+	_highlighted_mesh_node = mesh_node
 
 	# Iterate by the underlying Mesh's surface count, not the override count.
 	# Runtime-spawned MeshInstance3D nodes (BoxMesh shelf items, the customer
@@ -195,18 +194,23 @@ func unhighlight() -> void:
 		return
 	_highlight_active = false
 
-	var mesh_node: MeshInstance3D = _find_mesh_instance()
+	var mesh_node: MeshInstance3D = _highlighted_mesh_node
+	if not is_instance_valid(mesh_node):
+		mesh_node = _find_mesh_instance()
 	if not mesh_node:
+		_highlighted_mesh_node = null
+		_original_materials.clear()
 		return
 
 	for i: int in range(_original_materials.size()):
 		mesh_node.set_surface_override_material(i, _original_materials[i])
+	_highlighted_mesh_node = null
 	_original_materials.clear()
 
 
 ## Triggers the interaction, emitting both local and global signals.
-## `by` (ISSUE-017) identifies the actor that triggered the interaction so
-## listeners can attribute it; defaults to null for the legacy callsites.
+## `by` identifies the actor that triggered the interaction; null preserves
+## older programmatic callsites.
 ##
 ## `can_interact(by)` is checked at the source so programmatic callers
 ## (anything calling `.interact()` directly, including the InteractionRay
@@ -278,8 +282,11 @@ static func from_collider(collider: Node) -> Interactable:
 	return null
 
 
-## Finds a MeshInstance3D in descendants or siblings for visual highlighting.
+## Finds the MeshInstance3D used for visual highlighting.
 func _find_mesh_instance() -> MeshInstance3D:
+	if not highlight_mesh_path.is_empty():
+		return get_node_or_null(highlight_mesh_path) as MeshInstance3D
+
 	var result: MeshInstance3D = _find_mesh_recursive(self)
 	if result:
 		return result

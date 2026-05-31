@@ -10,6 +10,12 @@ extends RefCounted
 ## authoring typo — clamp it before the loop so a stray three-digit value
 ## cannot stall the boot path.
 const _MAX_STARTER_QUANTITY: int = 64
+const _VISUAL_EXTRA_KEYS: Array[String] = [
+	"box_art_key",
+	"platform_visual_id",
+	"visual_alias_id",
+	"visual_presentation",
+]
 
 
 ## Seeds the InventorySystem with the starter items declared in the store
@@ -144,4 +150,12 @@ static func _build_definition_from_entry(
 		def.rarity = str(data["rarity"])
 	if data.has("store_type"):
 		def.store_type = str(data["store_type"])
+	if data.has("platform_id"):
+		def.platform_id = StringName(str(data["platform_id"]))
+	var extra: Dictionary = def.extra.duplicate(true)
+	for key: String in _VISUAL_EXTRA_KEYS:
+		if data.has(key):
+			extra[key] = data[key]
+	if not extra.is_empty():
+		def.extra = extra
 	return def

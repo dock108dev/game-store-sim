@@ -141,7 +141,10 @@ func test_item_with_visual_metadata_spawns_designed_case_node() -> void:
 
 	var item_data: Dictionary = {
 		"instance_id": "inst_catalog_case",
+		"definition_id": "neo_ignite_motorway_kings_loose",
 		"category": "cartridge",
+		"platform_id": "neo_ignite",
+		"platform_visual_id": "neo_ignite_disc_tower",
 		"box_art_key": "motorway_kings_neo_ignite",
 	}
 	var placed: bool = slot.place_item_with_data(item_data)
@@ -155,6 +158,19 @@ func test_item_with_visual_metadata_spawns_designed_case_node() -> void:
 			"ProductVisualCaseRoot",
 			"Known box_art_key must render the designed case template"
 		)
+		assert_eq(
+			str(slot._item_node.get_meta("definition_id", "")),
+			"neo_ignite_motorway_kings_loose"
+		)
+		assert_eq(str(slot._item_node.get_meta("platform_id", "")), "neo_ignite")
+		assert_eq(
+			str(slot._item_node.get_meta("platform_visual_id", "")),
+			"neo_ignite_disc_tower"
+		)
+		assert_eq(
+			str(slot._item_node.get_meta("box_art_key", "")),
+			"motorway_kings_neo_ignite"
+		)
 		for child_name: String in [
 			"FrontPanel",
 			"SpinePanel",
@@ -167,6 +183,32 @@ func test_item_with_visual_metadata_spawns_designed_case_node() -> void:
 				slot._item_node.get_node_or_null(child_name),
 				"Designed shelf case missing %s" % child_name
 			)
+
+
+func test_item_with_cartridge_presentation_spawns_loose_cartridge_node() -> void:
+	var slot: ShelfSlot = _make_bare_slot()
+
+	var item_data: Dictionary = {
+		"instance_id": "inst_catalog_cartridge",
+		"definition_id": "neo_ignite_gridiron_2005_loose",
+		"category": "cartridges",
+		"platform_id": "neo_ignite",
+		"platform_visual_id": "neo_ignite_disc_tower",
+		"visual_presentation": "cartridge",
+	}
+	var placed: bool = slot.place_item_with_data(item_data)
+
+	assert_true(placed, "Cartridge presentation must keep the normal occupancy contract")
+	assert_not_null(slot._item_node, "Cartridge presentation must spawn a visual")
+	if slot._item_node != null:
+		assert_eq(
+			String(slot._item_node.name),
+			"ProductVisualCartridgeRoot",
+			"Explicit presentation must render the loose cartridge template"
+		)
+		assert_eq(str(slot._item_node.get_meta("visual_presentation", "")), "cartridge")
+		assert_not_null(slot._item_node.get_node_or_null("CartridgeShell"))
+		assert_not_null(slot._item_node.get_node_or_null("CartridgeContactStrip"))
 
 
 func test_malformed_visual_metadata_falls_back_without_breaking_slot_state() -> void:

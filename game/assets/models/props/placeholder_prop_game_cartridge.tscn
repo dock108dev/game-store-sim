@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="PackedScene" path="res://game/assets/models/props/prop_game_case.gltf" id="1"]
+[ext_resource type="PackedScene" path="res://game/assets/models/props/prop_cartridge_gb.gltf" id="1"]
 
 [node name="PlaceholderPropGameCartridge" type="Node3D"]
 

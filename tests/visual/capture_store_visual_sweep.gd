@@ -106,6 +106,16 @@ func _capture_row(row: Dictionary) -> Dictionary:
 			"Missing or hidden visual anchor for %s" % row.get("filename", ""),
 			{"anchor_validation": anchor_validation}
 		)
+	var action_context_validation: Dictionary = StoreVisualSweepScript.validate_action_context(row)
+	if not bool(action_context_validation.get("ok", false)):
+		return _capture_error(
+			row,
+			"Ambiguous or missing action context for %s" % row.get("filename", ""),
+			{
+				"anchor_validation": anchor_validation,
+				"action_context_validation": action_context_validation,
+			}
+		)
 	_camera.global_position = row.get("camera", Vector3.ZERO) as Vector3
 	_camera.look_at(focus.global_position, Vector3.UP)
 	_camera.current = true
@@ -140,11 +150,17 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	result["visual_scope_mode"] = str(row.get("visual_scope_mode", ""))
 	result["visual_scope_mode_asserted"] = true
 	result["anchor_validation"] = anchor_validation
+	result["action_context"] = row.get("action_context", {})
+	result["action_context_validation"] = action_context_validation
 	result["debug_ui_validation"] = debug_ui_validation
 	result["camera_fov"] = StoreVisualSweepScript.CAPTURE_CAMERA_FOV
 	result["random_seed"] = StoreVisualSweepScript.CAPTURE_RANDOM_SEED
 	result["expected_width"] = StoreVisualSweepScript.CAPTURE_RESOLUTION.x
 	result["expected_height"] = StoreVisualSweepScript.CAPTURE_RESOLUTION.y
+	return _validate_saved_capture(row, result)
+
+
+func _validate_saved_capture(row: Dictionary, result: Dictionary) -> Dictionary:
 	if not bool(result.get("ok", false)):
 		return result
 	if bool(result.get("placeholder", false)):
@@ -217,6 +233,8 @@ func _capture_error(row: Dictionary, message: String, extra: Dictionary = {}) ->
 		"local_action": str(row.get("local_action", "")),
 		"next_destination": str(row.get("next_destination", "")),
 		"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
+		"action_context": row.get("action_context", {}),
+		"action_context_validation": StoreVisualSweepScript.validate_action_context(row),
 		"review_target": str(row.get("review_target", "")),
 		"visual_scope_mode": str(row.get("visual_scope_mode", "")),
 		"acceptance_evidence": false,
@@ -224,7 +242,9 @@ func _capture_error(row: Dictionary, message: String, extra: Dictionary = {}) ->
 		"error": message,
 	}
 	if message.to_lower().contains("headless") or message.to_lower().contains("placeholder"):
-		result["non_acceptance_reason"] = "placeholder/headless captures cannot satisfy work-surface polish acceptance"
+		result["non_acceptance_reason"] = (
+			"placeholder/headless captures cannot satisfy work-surface polish acceptance"
+		)
 	for key: Variant in extra.keys():
 		if ["ok", "error", "acceptance_evidence", "non_acceptance_evidence"].has(str(key)):
 			continue

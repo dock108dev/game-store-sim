@@ -6,6 +6,10 @@ const StoreLayoutRuntimeScript: GDScript = preload(
 const StoreVisualLayoutScript: GDScript = preload(
 	"res://game/scripts/visuals/store_visual_layout.gd"
 )
+const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store_visual_kit.gd")
+
+const STARTER_DRESSING_COUNT := 12
+const PRODUCT_DRESSING_COUNT := 3
 
 var _parent: Node3D
 var _data_loader: DataLoader
@@ -43,7 +47,7 @@ func test_runtime_seeds_sparse_starter_fixtures_when_placement_is_empty() -> voi
 	var placed: Array[Dictionary] = _placement.get_placed_fixtures()
 	assert_eq(placed.size(), 2)
 	assert_eq(_runtime.call("get_generated_fixture_count"), 2)
-	assert_eq(_runtime.call("get_generated_dressing_count"), 3)
+	assert_eq(_runtime.call("get_generated_dressing_count"), STARTER_DRESSING_COUNT)
 	assert_true(
 		_placement.validate_register_exists().valid,
 		"Starter counter should register as the checkout-required fixture"
@@ -68,7 +72,71 @@ func test_runtime_does_not_reseed_when_saved_fixture_state_exists() -> void:
 	assert_eq(placed.size(), 1)
 	assert_eq(str(placed[0].get("fixture_id", "")), "saved_fixture")
 	assert_eq(_runtime.call("get_generated_fixture_count"), 1)
-	assert_eq(_runtime.call("get_generated_dressing_count"), 3)
+	assert_eq(_runtime.call("get_generated_dressing_count"), STARTER_DRESSING_COUNT)
+
+
+func test_runtime_renders_saved_wall_shelf_with_polished_fixture_language() -> void:
+	(
+		_placement
+		. register_existing_fixture(
+			"saved_wall_shelf",
+			"wall_shelf",
+			Vector2i(1, 1),
+			0,
+			false,
+			30.0,
+		)
+	)
+	_runtime.call("initialize", _placement, _grid)
+
+	var fixture_root: Node = _runtime.get_node("GeneratedFixtures")
+	var shelf: Node3D = fixture_root.get_node_or_null("saved_wall_shelf") as Node3D
+	assert_not_null(shelf, "Saved wall shelf fixture should render")
+	if shelf == null:
+		return
+	assert_eq(StringName(str(shelf.get_meta("visual_id", ""))), StoreVisualKitScript.WALL_SHELF)
+	for required_path: String in [
+		"ShelfMesh",
+		"ShelfBoard1",
+		"ShelfLabelBacking",
+		"MerchandisingRows",
+	]:
+		assert_not_null(
+			shelf.get_node_or_null(required_path),
+			"Runtime wall shelf must include %s" % required_path
+		)
+
+
+func test_runtime_renders_saved_floor_rack_as_gondola_fixture() -> void:
+	(
+		_placement
+		. register_existing_fixture(
+			"saved_floor_rack",
+			"floor_rack",
+			Vector2i(4, 4),
+			0,
+			false,
+			50.0,
+		)
+	)
+	_runtime.call("initialize", _placement, _grid)
+
+	var fixture_root: Node = _runtime.get_node("GeneratedFixtures")
+	var shelf: Node3D = fixture_root.get_node_or_null("saved_floor_rack") as Node3D
+	assert_not_null(shelf, "Saved floor rack fixture should render")
+	if shelf == null:
+		return
+	assert_eq(StringName(str(shelf.get_meta("visual_id", ""))), StoreVisualKitScript.FLOOR_RACK)
+	assert_eq(shelf.name, "saved_floor_rack")
+	assert_not_null(shelf.get_node_or_null("CenterSpine"))
+	assert_not_null(shelf.get_node_or_null("TopShelfFront"))
+	assert_not_null(shelf.get_node_or_null("TopShelfBack"))
+	assert_not_null(shelf.get_node_or_null("MerchandisingRows/FrontLabelRail"))
+	assert_not_null(shelf.get_node_or_null("MerchandisingRows/BackLabelRail"))
+	assert_null(
+		shelf.get_node_or_null("ShelfMesh"),
+		"Floor rack runtime visual should not use wall-shelf nodes"
+	)
 
 
 func test_runtime_rebuilds_when_fixture_state_is_loaded_after_seed() -> void:
@@ -108,7 +176,7 @@ func test_runtime_rebuilds_generated_visuals_when_fixture_is_placed() -> void:
 
 func test_growth_layout_dressing_appears_after_store_expansion_upgrade() -> void:
 	_runtime.call("initialize", _placement, _grid)
-	assert_eq(_runtime.call("get_generated_dressing_count"), 3)
+	assert_eq(_runtime.call("get_generated_dressing_count"), STARTER_DRESSING_COUNT)
 
 	(
 		EventBus
@@ -121,7 +189,7 @@ func test_growth_layout_dressing_appears_after_store_expansion_upgrade() -> void
 		)
 	)
 
-	assert_eq(_runtime.call("get_generated_dressing_count"), 4)
+	assert_eq(_runtime.call("get_generated_dressing_count"), STARTER_DRESSING_COUNT + 1)
 	assert_eq(
 		_runtime.get("layout_ids")[1],
 		StoreVisualLayoutScript.RETRO_GAMES_GROWTH_LAYOUT,
@@ -133,8 +201,9 @@ func test_starter_merchandise_is_rendered_from_product_visual_factory() -> void:
 	var dressing_root: Node = _runtime.get_node("GeneratedDressing")
 	var seen: PackedStringArray = []
 	for child: Node in dressing_root.get_children():
+		if not child.is_in_group("product_display"):
+			continue
 		assert_eq(str(child.get_meta("visual_source", "")), "product_visual_factory")
-		assert_true(child.is_in_group("product_display"))
 		seen.append(str(child.get_meta("product_item_id", "")))
 	assert_eq(
 		seen,
@@ -146,8 +215,9 @@ func test_starter_merchandise_is_rendered_from_product_visual_factory() -> void:
 			]
 		)
 	)
-	for index: int in range(dressing_root.get_child_count()):
-		var child: Node = dressing_root.get_child(index)
+	assert_eq(seen.size(), PRODUCT_DRESSING_COUNT)
+	for index: int in range(seen.size()):
+		var child: Node = _product_dressing_at(dressing_root, index)
 		assert_not_null(child.get_node_or_null("ProductPriceTag"))
 		assert_eq(str(child.get_meta("route_role", "")), "starter_sale_item")
 		assert_eq(
@@ -155,3 +225,14 @@ func test_starter_merchandise_is_rendered_from_product_visual_factory() -> void:
 			String(StoreVisualLayoutScript.STOCK_STATE_FIRST_DELIVERY)
 		)
 		assert_eq(int(child.get_meta("delivery_index", -1)), index)
+
+
+func _product_dressing_at(dressing_root: Node, product_index: int) -> Node:
+	var current_index := 0
+	for child: Node in dressing_root.get_children():
+		if not child.is_in_group("product_display"):
+			continue
+		if current_index == product_index:
+			return child
+		current_index += 1
+	return null

@@ -284,13 +284,6 @@ func _spawn_renovation_storefront() -> void:
 	reno.set_renovation()
 
 
-func _get_store_display_name(store_type: String) -> String:
-	var canonical: StringName = ContentRegistry.resolve(store_type)
-	if not canonical.is_empty():
-		return ContentRegistry.get_display_name(canonical)
-	return store_type
-
-
 func _get_rent_for_slot(slot_index: int) -> float:
 	if slot_index < 0 or slot_index >= slot_store_ids.size():
 		return DEFAULT_RENT
@@ -347,30 +340,6 @@ func _show_lease_dialog(storefront: Storefront) -> void:
 		cash,
 		reputation
 	)
-
-
-## Backward-compatible bridge for tests and older callers.
-func _on_lease_requested(
-	store_id: StringName,
-	slot_index: int,
-	store_name: String
-) -> void:
-	if (
-		_progression_system != null
-		and slot_index > 0
-		and not _progression_system.is_slot_unlocked(slot_index)
-	):
-		EventBus.lease_completed.emit(
-			store_id, false, "This storefront is not yet available."
-		)
-		return
-	if _store_state_manager == null:
-		push_error("MallHallway: missing StoreStateManager for lease flow")
-		EventBus.lease_completed.emit(
-			store_id, false, "Lease system unavailable."
-		)
-		return
-	EventBus.lease_requested.emit(store_id, slot_index, store_name)
 
 
 ## Returns the hallway geometry node for show/hide during transitions.

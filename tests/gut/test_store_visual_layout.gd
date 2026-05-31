@@ -21,7 +21,7 @@ func test_retro_games_starter_layout_stays_small_and_uses_kit_visuals() -> void:
 	var placements: Array[Dictionary] = catalog.call(
 		"get_placements", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
 	)
-	assert_eq(placements.size(), 7)
+	assert_eq(placements.size(), 16)
 
 	var visual_counts: Dictionary = {}
 	var product_item_ids: PackedStringArray = []
@@ -36,6 +36,15 @@ func test_retro_games_starter_layout_stays_small_and_uses_kit_visuals() -> void:
 
 	assert_eq(int(visual_counts.get(StoreVisualKitScript.DISPLAY_TABLE, 0)), 1)
 	assert_eq(int(visual_counts.get(StoreVisualKitScript.CHECKOUT_COUNTER, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.REGISTER, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.CARD_READER, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.RECEIPT_PRINTER, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.ACRYLIC_STAND, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.CONTROLLER_BIN_PROP, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.REPAIR_TESTING_MAT, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.CLIPBOARD, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.TAPED_BOX_LABEL, 0)), 1)
+	assert_eq(int(visual_counts.get(StoreVisualKitScript.SECURITY_TAG_BLOCK, 0)), 1)
 	assert_eq(
 		product_item_ids,
 		PackedStringArray(
@@ -99,6 +108,45 @@ func test_starter_fixture_layout_matches_generated_shell_anchor_contract() -> vo
 	assert_eq(display_table.get("rotation_degrees"), [0.0, -8.0, 0.0])
 	assert_eq(checkout_counter.get("position"), [5.65, 0.0, 6.15])
 	assert_eq(checkout_counter.get("rotation_degrees"), [0.0, 0.0, 0.0])
+
+
+func test_starter_checkout_layout_declares_named_device_pieces() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	for component: Dictionary in StoreVisualKitScript.starter_checkout_station_components():
+		var fixture_id: String = str(component.get("concept_id", ""))
+		var placement: Dictionary = catalog.call(
+			"get_fixture_placement",
+			StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+			fixture_id,
+		)
+		assert_false(placement.is_empty(), "%s must be placed in the starter layout" % fixture_id)
+		assert_eq(
+			StringName(str(placement.get("visual_id", ""))),
+			component.get("visual_id", &"") as StringName
+		)
+		assert_true(bool(placement.get("starter_owned", false)))
+		if fixture_id != "starter_checkout_counter":
+			assert_true(bool(placement.get("visual_only", false)))
+			assert_eq(str(placement.get("parent_fixture_id", "")), "starter_checkout_counter")
+
+
+func test_starter_layout_places_small_display_prop_kit() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	for component: Dictionary in StoreVisualKitScript.starter_small_display_prop_components():
+		var fixture_id: String = str(component.get("concept_id", ""))
+		var placement: Dictionary = catalog.call(
+			"get_fixture_placement",
+			StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+			fixture_id,
+		)
+		assert_false(placement.is_empty(), "%s must be placed in the starter layout" % fixture_id)
+		assert_eq(
+			StringName(str(placement.get("visual_id", ""))),
+			component.get("visual_id", &"") as StringName
+		)
+		assert_true(bool(placement.get("starter_owned", false)))
+		assert_true(bool(placement.get("visual_only", false)))
+		assert_false(str(placement.get("zone", "")).is_empty())
 
 
 func test_layout_catalog_does_not_expose_legacy_visual_apply_path() -> void:

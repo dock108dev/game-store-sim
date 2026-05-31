@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="1"]
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_wood_medium.tres" id="2"]
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_metal_brushed.tres" id="3"]
+[ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_slot_empty.tres" id="4"]
+[ext_resource type="PackedScene" path="res://game/scenes/stores/fixtures/price_tag.tscn" id="5_price_tag"]
 
 [sub_resource type="BoxMesh" id="body_mesh"]
 size = Vector3(1.6, 0.12, 1.1)
@@ -21,6 +23,36 @@ size = Vector3(1.6, 1.25, 1.1)
 
 [sub_resource type="BoxShape3D" id="slot_shape"]
 size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="BoxMesh" id="product_case_mesh"]
+size = Vector3(0.20, 0.28, 0.045)
+
+[sub_resource type="BoxMesh" id="product_spine_mesh"]
+size = Vector3(0.13, 0.22, 0.055)
+
+[sub_resource type="BoxMesh" id="product_stack_mesh"]
+size = Vector3(0.23, 0.12, 0.16)
+
+[sub_resource type="BoxMesh" id="label_rail_mesh"]
+size = Vector3(1.42, 0.045, 0.04)
+
+[sub_resource type="BoxMesh" id="front_lip_mesh"]
+size = Vector3(1.42, 0.065, 0.055)
+
+[sub_resource type="BoxMesh" id="empty_state_mesh"]
+size = Vector3(0.18, 0.16, 0.028)
+
+[sub_resource type="StandardMaterial3D" id="product_blue_mat"]
+albedo_color = Color(0.13, 0.23, 0.44, 1)
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="product_red_mat"]
+albedo_color = Color(0.58, 0.18, 0.13, 1)
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="lip_mat"]
+albedo_color = Color(0.42, 0.27, 0.15, 1)
+roughness = 0.70
 
 [node name="RetailGondolaShelf" type="Node3D" groups=["fixture"]]
 
@@ -65,6 +97,75 @@ surface_material_override/0 = ExtResource("3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, 0.67, 0)
 mesh = SubResource("end_cap_mesh")
 surface_material_override/0 = ExtResource("3")
+
+[node name="MerchandisingRows" type="Node3D" parent="."]
+
+[node name="FrontLabelRail" type="MeshInstance3D" parent="MerchandisingRows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, -0.59)
+mesh = SubResource("label_rail_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="BackLabelRail" type="MeshInstance3D" parent="MerchandisingRows"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02, 0.59)
+mesh = SubResource("label_rail_mesh")
+surface_material_override/0 = ExtResource("3")
+
+[node name="FrontShelfLip" type="MeshInstance3D" parent="MerchandisingRows"]
+transform = Transform3D(1, 0, 0, 0, 0.82, 0, 0, 0, 1, 0, 0.90, -0.60)
+mesh = SubResource("front_lip_mesh")
+surface_material_override/0 = SubResource("lip_mat")
+
+[node name="BackShelfLip" type="MeshInstance3D" parent="MerchandisingRows"]
+transform = Transform3D(1, 0, 0, 0, 0.82, 0, 0, 0, 1, 0, 0.90, 0.60)
+mesh = SubResource("front_lip_mesh")
+surface_material_override/0 = SubResource("lip_mat")
+
+[node name="FrontStockedCaseA" type="MeshInstance3D" parent="MerchandisingRows" groups=["product_display"]]
+transform = Transform3D(0.92, 0, 0.10, 0, 0.92, 0, -0.10, 0, 0.92, -0.48, 1.05, -0.60)
+mesh = SubResource("product_case_mesh")
+surface_material_override/0 = SubResource("product_blue_mat")
+
+[node name="FrontStockedCaseB" type="MeshInstance3D" parent="MerchandisingRows" groups=["product_display"]]
+transform = Transform3D(0.86, 0, -0.08, 0, 0.88, 0, 0.08, 0, 0.86, -0.08, 1.04, -0.60)
+mesh = SubResource("product_case_mesh")
+surface_material_override/0 = SubResource("product_red_mat")
+
+[node name="FrontEmptyBay" type="MeshInstance3D" parent="MerchandisingRows"]
+transform = Transform3D(0.92, 0, 0.02, 0, 0.78, 0, -0.02, 0, 0.92, 0.42, 1.03, -0.60)
+mesh = SubResource("empty_state_mesh")
+surface_material_override/0 = ExtResource("4")
+
+[node name="FrontLabelTagA" parent="MerchandisingRows" instance=ExtResource("5_price_tag")]
+transform = Transform3D(0.86, 0, 0, 0, 0.78, 0, 0, 0, 1, -0.48, 0.96, -0.63)
+
+[node name="FrontLabelTagB" parent="MerchandisingRows" instance=ExtResource("5_price_tag")]
+transform = Transform3D(0.86, 0, 0, 0, 0.78, 0, 0, 0, 1, 0.12, 0.96, -0.63)
+
+[node name="BackStockedSpineA" type="MeshInstance3D" parent="MerchandisingRows" groups=["product_display"]]
+transform = Transform3D(0.74, 0, -0.08, 0, 0.86, 0, 0.08, 0, 0.74, -0.42, 1.04, 0.60)
+mesh = SubResource("product_spine_mesh")
+surface_material_override/0 = SubResource("product_red_mat")
+
+[node name="BackStockedSpineB" type="MeshInstance3D" parent="MerchandisingRows" groups=["product_display"]]
+transform = Transform3D(0.70, 0, 0.08, 0, 0.82, 0, -0.08, 0, 0.70, -0.18, 1.04, 0.60)
+mesh = SubResource("product_spine_mesh")
+surface_material_override/0 = SubResource("product_blue_mat")
+
+[node name="BackStockStack" type="MeshInstance3D" parent="MerchandisingRows" groups=["product_display"]]
+transform = Transform3D(0.78, 0, -0.06, 0, 0.72, 0, 0.06, 0, 0.78, 0.14, 1.02, 0.58)
+mesh = SubResource("product_stack_mesh")
+surface_material_override/0 = SubResource("product_blue_mat")
+
+[node name="BackEmptyBay" type="MeshInstance3D" parent="MerchandisingRows"]
+transform = Transform3D(0.92, 0, -0.02, 0, 0.78, 0, 0.02, 0, 0.92, 0.48, 1.03, 0.60)
+mesh = SubResource("empty_state_mesh")
+surface_material_override/0 = ExtResource("4")
+
+[node name="BackLabelTagA" parent="MerchandisingRows" instance=ExtResource("5_price_tag")]
+transform = Transform3D(0.86, 0, 0, 0, 0.78, 0, 0, 0, 1, -0.34, 0.96, 0.63)
+
+[node name="BackLabelTagB" parent="MerchandisingRows" instance=ExtResource("5_price_tag")]
+transform = Transform3D(0.86, 0, 0, 0, 0.78, 0, 0, 0, 1, 0.32, 0.96, 0.63)
 
 [node name="Slot1" type="Area3D" parent="." groups=["shelf_slot"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.9, -0.62)

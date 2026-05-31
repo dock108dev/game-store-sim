@@ -136,7 +136,12 @@ func quit_staff(staff_id: String) -> void:
 	_despawn_npc_immediate(staff_id)
 	_staff_registry.erase(staff_id)
 	EventBus.staff_quit.emit(staff_id)
-	var store_name: String = _get_store_display_name(store_id)
+	var fallback_store_name: String = (
+		"Unknown Store" if store_id.is_empty() else store_id.capitalize()
+	)
+	var store_name: String = ContentRegistry.get_display_name_or(
+		StringName(store_id), fallback_store_name
+	)
 	var toast_msg: String = "%s quit! %s is now understaffed." % [
 		staff_name, store_name
 	]
@@ -490,20 +495,6 @@ func _get_store_size(store_id: String) -> String:
 	if entry.is_empty():
 		return "small"
 	return entry.get("size_category", "small") as String
-
-
-func _get_store_display_name(store_id: String) -> String:
-	if store_id.is_empty():
-		return "Unknown Store"
-	if not ContentRegistry or not ContentRegistry.exists(store_id):
-		return store_id.capitalize()
-	var canonical: StringName = ContentRegistry.resolve(store_id)
-	if canonical.is_empty():
-		return store_id.capitalize()
-	var display: String = ContentRegistry.get_display_name(canonical)
-	if display.is_empty():
-		return store_id.capitalize()
-	return display
 
 
 func _serialize_staff(staff: StaffDefinition) -> Dictionary:

@@ -2,30 +2,40 @@
 
 ## Changed
 
+### `README.md`
+
+- Re-verified the root README against `project.godot`, `export_presets.cfg`,
+  `game/content/`, `.github/workflows/export.yml`, and the checked-in GUT
+  addon. No text changes were required.
+
+### `docs/setup.md`
+
+- Removed the duplicated step-by-step summary of `tests/run_tests.sh`; the
+  current runner contract now lives only in `docs/testing.md`.
+- Kept setup focused on requirements, opening the project, command-line helper
+  use, the local validation command, and repository layout.
+
 ### `docs/testing.md`
 
-- Clarified that `tests/run_tests.sh` is the default local validation wrapper
-  and writes local GUT output to `artifacts/logs/gut/test_run.log`.
-- Added the code-backed CI GUT runner details for `scripts/run_godot_tests.sh`:
-  store-session naming validation, resource integrity, `.gutconfig.json`, the
-  raw CI log at `artifacts/logs/gut/gut.log`, the `All tests passed` summary
-  gate, and unexpected `ERROR:` detection after documented shutdown-noise
-  filtering.
+- Removed the broad "current coverage areas" feature list. The test layout,
+  `.gutconfig*.json` discovery rules, runner steps, automation flags, scenario
+  exit codes, and CI jobs remain documented from code/config.
 
-### `docs/configuration-deployment.md`
+### Re-verified docs
 
-- Tightened the helper-script inventory so `run_godot_tests.sh` is documented
-  as the CI GUT/export validation helper, matching `.github/workflows/*.yml`
-  and avoiding confusion with the local `tests/run_tests.sh` wrapper.
+- Re-verified `docs/index.md`, `docs/architecture.md`,
+  `docs/architecture/ownership.md`, `docs/content-data.md`,
+  `docs/configuration-deployment.md`, and
+  `docs/style/visual-grammar.md` against the current code/config/CI surfaces
+  listed below. No text changes were required.
 
 ### `docs/audits/docs-consolidation.md`
 
-- Replaced the stale previous consolidation report with this current pass
-  record.
+- Replaced the stale previous consolidation report with this current pass record.
 
 ## Deleted
 
-- Deleted `docs/audits/cleanup-report.md`. It was a historical source-cleanup
+- Deleted untracked `docs/audits/cleanup-report.md`. It was a historical source-cleanup
   report with code-refactor summaries and forward-looking split plans, not an
   active code-grounded project doc. Keeping it under `/docs` violated the
   current rule that every maintained doc must earn its existence from current
@@ -35,9 +45,12 @@
 
 - Removed the cleanup report's large-file split plans. They were future work
   recommendations rather than current behavior, configuration, or CI contract.
-- Removed the previous docs-consolidation report's old validation results and
-  stale change log. Validation claims belong to the pass that actually ran
-  them.
+- Removed the previous docs-consolidation report's stale validation results and
+  change log. Validation claims belong to the pass that actually ran them.
+- Removed the setup page's duplicate runner-step list; duplicated procedural
+  descriptions make the docs easier to drift from `tests/run_tests.sh`.
+- Removed the testing page's broad feature-coverage list because it summarized
+  intent across many tests instead of a compact, directly enforced contract.
 
 ## Intentional Gaps
 
@@ -49,9 +62,9 @@
   markers, not the maintained project-doc set named by `README.md` and
   `docs/index.md`.
 - Code comments that reference older design/audit documents were not edited
-  because this pass was constrained to Markdown under `README.md` and `/docs`;
-  a code-comment cleanup pass that permits non-Markdown edits would bring
-  those references in scope.
+  because this pass was constrained to Markdown documentation. A code-comment
+  cleanup pass that permits non-Markdown edits would bring those references in
+  scope.
 
 ## Source Files Inspected
 
@@ -75,17 +88,16 @@
 
 ## Validation
 
-- Markdown placement inventory: active maintained project docs are
-  `README.md` and the Markdown files under `/docs`; the repository root
-  contains only `README.md` plus preserved `BRAINDUMP.md`.
-- Stale-reference scan over `README.md` and `/docs`: no active docs reference
-  removed design docs or the deleted cleanup report, except this audit's
-  deletion record for `docs/audits/cleanup-report.md`.
+- Markdown placement inventory: maintained project docs are `README.md` plus
+  Markdown under `docs/`. The only root Markdown files are `README.md` and the
+  preserved customer-voice `BRAINDUMP.md`; the four `tests/*/README.md`
+  ownership markers remain because `tests/validate_gut_config_discovery.sh`
+  requires them.
 - `git diff --check`: passed.
 - `bash tests/validate_gut_config_discovery.sh`: passed.
 - `bash scripts/validate_export_config.sh`: passed.
-- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 421`,
-  `Tests 4925`, `Passing 4925`; the configured shell validators and SSOT
+- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 425`,
+  `Tests 4971`, `Passing 4971`; the maintained shell validators and SSOT
   tripwires also passed.
 
 ## Escalations

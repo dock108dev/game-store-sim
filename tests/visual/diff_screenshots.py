@@ -23,7 +23,9 @@ REQUIRED_FILENAMES = [
     "03_shelf_wall_product_focus.png",
     "04_stockroom_looking_in.png",
     "05_stockroom_work_area_interior.png",
-    "06_exit_threshold_return_view.png",
+    "06_product_sale_review.png",
+    "07_checkout_close_day.png",
+    "08_exit_threshold_return_view.png",
 ]
 NOISE_FLOOR = 3
 CHANGED_RATIO_WARN = 0.0025
@@ -213,6 +215,9 @@ def validate_capture_metadata(
     anchor_validation = manifest_capture.get("anchor_validation", {})
     if not isinstance(anchor_validation, dict) or anchor_validation.get("ok") is not True:
         return failure_result(filename, "Capture did not validate intended visual anchors")
+    action_context_validation = manifest_capture.get("action_context_validation", {})
+    if not isinstance(action_context_validation, dict) or action_context_validation.get("ok") is not True:
+        return failure_result(filename, "Capture did not validate unambiguous action context")
     debug_validation = manifest_capture.get("debug_ui_validation", {})
     if not isinstance(debug_validation, dict) or debug_validation.get("ok") is not True:
         return failure_result(filename, "Capture did not validate editor/debug UI absence")

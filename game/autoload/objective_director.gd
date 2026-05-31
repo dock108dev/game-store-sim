@@ -303,24 +303,6 @@ func _on_store_objective_completed(objective_id: StringName) -> void:
 	_advance_day1_step_for_objective(objective_id)
 
 
-## Advances the Day 1 chain when the player is sitting on `expected_step`.
-## Out-of-order signals (a duplicate trigger, a customer arriving before the
-## player has stocked, etc.) are no-ops by design.
-## §F-98 — The two silent returns are state-machine race-guards. Wrong-day /
-## wrong-step is the documented out-of-order contract above; the
-## `_day1_steps_available()` false-arm is a downstream consequence of the
-## §F-93 content-authoring warning that already fired at load time, so adding
-## a per-emit warning here would only echo the load-time diagnostic on every
-## signal received.
-func _advance_day1_step_if(expected_step: int) -> void:
-	if _current_day != 1 or _day1_step_index != expected_step:
-		return
-	if not _day1_steps_available():
-		return
-	_day1_step_index = mini(expected_step + 1, DAY1_STEP_COUNT - 1)
-	_emit_current()
-
-
 func _advance_day1_step_for_objective(objective_id: StringName) -> void:
 	if _current_day != 1 or _day1_step_index < 0:
 		return

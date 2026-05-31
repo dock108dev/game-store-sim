@@ -80,6 +80,124 @@ func test_retro_games_seed_starter_inventory_populates_backroom() -> void:
 	)
 
 
+func test_starter_seed_preserves_catalog_visual_metadata() -> void:
+	_seed_retro_games_inventory()
+	var item: ItemInstance = _find_backroom_item_by_definition(
+		"neo_ignite_motorway_kings_loose"
+	)
+	assert_not_null(item, "Expected Motorway Kings in starter backroom stock")
+	if item == null:
+		return
+	assert_eq(String(item.definition.platform_id), "neo_ignite")
+	assert_eq(
+		str(item.definition.extra.get("platform_visual_id", "")),
+		"neo_ignite_disc_tower"
+	)
+	assert_eq(
+		str(item.definition.extra.get("box_art_key", "")),
+		"motorway_kings_neo_ignite"
+	)
+	var visual_data: Dictionary = ProductVisualFactory.visual_data_from_item(item)
+	assert_eq(
+		visual_data.get("definition_id", ""),
+		"neo_ignite_motorway_kings_loose"
+	)
+	assert_eq(visual_data.get("platform_id", ""), "neo_ignite")
+	assert_eq(
+		visual_data.get("platform_visual_id", ""),
+		"neo_ignite_disc_tower"
+	)
+	assert_eq(visual_data.get("box_art_key", ""), "motorway_kings_neo_ignite")
+	assert_eq(visual_data.get("visual_presentation", ""), "game_case")
+
+	var cartridge_item: ItemInstance = _find_backroom_item_by_definition(
+		"neo_ignite_gridiron_2005_loose"
+	)
+	assert_not_null(cartridge_item, "Expected Gridiron in starter backroom stock")
+	if cartridge_item == null:
+		return
+	var cartridge_data: Dictionary = ProductVisualFactory.visual_data_from_item(
+		cartridge_item
+	)
+	assert_eq(cartridge_data.get("visual_presentation", ""), "cartridge")
+
+
+func test_starter_stocking_and_sale_counts_ignore_visual_metadata() -> void:
+	_seed_retro_games_inventory()
+	var item: ItemInstance = _find_backroom_item_by_definition(
+		"neo_ignite_motorway_kings_loose"
+	)
+	assert_not_null(item, "Expected metadata-rich starter item")
+	if item == null:
+		return
+	var starting_total: int = _inventory.get_items_for_store(String(STORE_ID)).size()
+	var starting_backroom: int = (
+		_inventory.get_backroom_items_for_store(String(STORE_ID)).size()
+	)
+	var slot := ShelfSlot.new()
+	slot.slot_id = "starter_visual_stocking"
+	slot.accepted_category = "cartridges"
+	add_child_autofree(slot)
+	var actions := InventoryShelfActions.new()
+	actions.inventory_system = _inventory
+	actions.enter_placement_mode(item)
+
+	var placed: bool = actions.place_item(item, slot)
+
+	assert_true(placed, "Starter item should stock into a matching shelf slot")
+	assert_eq(
+		_inventory.get_items_for_store(String(STORE_ID)).size(),
+		starting_total,
+		"Stocking must not change total inventory count"
+	)
+	assert_eq(
+		_inventory.get_backroom_items_for_store(String(STORE_ID)).size(),
+		starting_backroom - 1,
+		"Stocking must move one item out of backroom"
+	)
+	assert_eq(
+		_inventory.get_shelf_items_for_store(String(STORE_ID)).size(),
+		1,
+		"Stocking must move one item onto the shelf"
+	)
+	assert_not_null(slot._item_node, "Catalog-backed stocking should spawn a visual")
+	if slot._item_node != null:
+		assert_eq(
+			str(slot._item_node.get_meta("box_art_key", "")),
+			"motorway_kings_neo_ignite"
+		)
+	var removed_events: Array[Dictionary] = []
+	var observer: Callable = (
+		func(instance_id: String, slot_id: String) -> void:
+			removed_events.append({
+				"instance_id": instance_id,
+				"slot_id": slot_id,
+			})
+	)
+	EventBus.item_removed_from_shelf.connect(observer)
+	EventBus.customer_purchased.emit(
+		STORE_ID,
+		StringName(item.instance_id),
+		item.get_current_value(),
+		&"starter_customer"
+	)
+	EventBus.item_removed_from_shelf.disconnect(observer)
+
+	assert_eq(
+		_inventory.get_items_for_store(String(STORE_ID)).size(),
+		starting_total - 1,
+		"Sale removal must deduct exactly one stocked item"
+	)
+	assert_eq(
+		_inventory.get_shelf_items_for_store(String(STORE_ID)).size(),
+		0,
+		"Sold starter item must leave shelf inventory"
+	)
+	assert_eq(removed_events.size(), 1, "Sale must emit one shelf removal event")
+	if not removed_events.is_empty():
+		assert_eq(removed_events[0].get("slot_id", ""), slot.slot_id)
+
+
 func test_retro_games_seed_is_idempotent_when_inventory_already_populated() -> void:
 	var controller: RetroGames = RetroGames.new()
 	add_child_autofree(controller)
@@ -313,6 +431,22 @@ func test_toggle_inventory_action_opens_and_closes_panel() -> void:
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
+
+func _seed_retro_games_inventory() -> void:
+	var controller: RetroGames = RetroGames.new()
+	add_child_autofree(controller)
+	controller.set_inventory_system(_inventory)
+	controller._on_store_entered(STORE_ID)
+
+
+func _find_backroom_item_by_definition(definition_id: String) -> ItemInstance:
+	for item: ItemInstance in _inventory.get_backroom_items_for_store(String(STORE_ID)):
+		if item.definition == null:
+			continue
+		if item.definition.id == definition_id:
+			return item
+	return null
+
 
 func _first_retro_games_item() -> ItemDefinition:
 	for def: ItemDefinition in _data_loader.get_items_by_store(String(STORE_ID)):

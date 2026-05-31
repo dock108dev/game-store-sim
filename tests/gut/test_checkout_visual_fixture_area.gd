@@ -213,6 +213,81 @@ func test_visual_checkout_nodes_do_not_own_active_interaction() -> void:
 		)
 
 
+func test_active_checkout_prompt_and_highlight_target_name_register() -> void:
+	var register: RegisterInteractable = (
+		_root.get_node_or_null("checkout_counter/Interactable") as RegisterInteractable
+	)
+	var visible_mesh: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/Register/RegisterMesh") as MeshInstance3D
+	)
+	assert_not_null(register, "Live checkout register interactable must remain authored")
+	assert_not_null(visible_mesh, "Visible register mesh must remain authored")
+	if register == null or visible_mesh == null:
+		return
+
+	assert_eq(
+		register.get_prompt_label(),
+		"Ring up customer Register",
+		"Checkout prompt label must name the register while the visual target is focused"
+	)
+	assert_eq(
+		register.get_node_or_null(register.highlight_mesh_path),
+		visible_mesh,
+		"Checkout highlight target must resolve to the visible register body"
+	)
+
+	var original_material: Material = visible_mesh.get_surface_override_material(0)
+	register.highlight()
+	var highlighted_material: Material = visible_mesh.get_surface_override_material(0)
+	assert_not_null(
+		highlighted_material,
+		"Active checkout register should apply hover material to the visible register mesh"
+	)
+	if highlighted_material != null:
+		assert_not_null(
+			highlighted_material.next_pass,
+			"Visible register mesh should receive the outline pass"
+		)
+	register.unhighlight()
+	assert_same(
+		visible_mesh.get_surface_override_material(0),
+		original_material,
+		"Checkout register highlight must restore the visible register material"
+	)
+
+
+func test_missing_explicit_highlight_target_keeps_prompt_without_misleading_outline() -> void:
+	var fixture: Node3D = Node3D.new()
+	add_child_autofree(fixture)
+	var target: Interactable = Interactable.new()
+	target.prompt_text = "Use"
+	target.display_name = "Register"
+	target.highlight_mesh_path = NodePath("../MissingRegisterMesh")
+	var sibling_mesh: MeshInstance3D = MeshInstance3D.new()
+	sibling_mesh.mesh = BoxMesh.new()
+	var sibling_material: StandardMaterial3D = StandardMaterial3D.new()
+	sibling_mesh.set_surface_override_material(0, sibling_material)
+	fixture.add_child(target)
+	fixture.add_child(sibling_mesh)
+
+	assert_eq(
+		target.get_prompt_label(),
+		"Use Register",
+		"Missing explicit highlight target must not suppress the usable prompt label"
+	)
+	target.highlight()
+	assert_same(
+		sibling_mesh.get_surface_override_material(0),
+		sibling_material,
+		"Missing explicit highlight target must not fall back to a sibling mesh"
+	)
+	assert_null(
+		sibling_mesh.get_surface_override_material(0).next_pass,
+		"Missing explicit highlight target must not leave an outline on a misleading mesh"
+	)
+	target.unhighlight()
+
+
 func test_curated_checkout_counter_dressing_is_visible_and_supported() -> void:
 	var counter_top: MeshInstance3D = (
 		_root.get_node_or_null("Checkout/CounterTop") as MeshInstance3D

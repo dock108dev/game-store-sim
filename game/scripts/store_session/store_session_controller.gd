@@ -4267,7 +4267,12 @@ func _product_visual_data_from_definition(definition: ItemDefinition) -> Diction
 		"platform_id": String(definition.platform_id),
 	}
 	if definition.extra is Dictionary:
-		for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+		for key: String in [
+			"box_art_key",
+			"platform_visual_id",
+			"visual_alias_id",
+			"visual_presentation",
+		]:
 			if definition.extra.has(key):
 				data[key] = definition.extra[key]
 	return data
@@ -4280,7 +4285,12 @@ func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dict
 		"category": str(entry.get("category", "")),
 		"platform_id": str(entry.get("platform_id", "")),
 	}
-	for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+	for key: String in [
+		"box_art_key",
+		"platform_visual_id",
+		"visual_alias_id",
+		"visual_presentation",
+	]:
 		if entry.has(key):
 			data[key] = entry[key]
 	return data

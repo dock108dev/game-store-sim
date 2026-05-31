@@ -11,6 +11,17 @@ const ProductVisualCatalogScript: GDScript = preload(
 const ProductVisualCaseBuilderScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_case_builder.gd"
 )
+const StoreVisualKitScript: GDScript = preload(
+	"res://game/scripts/visuals/store_visual_kit.gd"
+)
+
+const PRESENTATION_GAME_CASE: String = "game_case"
+const PRESENTATION_CARTRIDGE: String = "cartridge"
+const _VISUAL_PRESENTATION_KEYS: Array[String] = [
+	"visual_presentation",
+	"presentation",
+	"product_visual_kind",
+]
 
 
 ## Creates a designed product visual using the default product visual catalog.
@@ -30,9 +41,13 @@ static func create_visual_for_item_with_catalog(
 		str(normalized.get("category", ""))
 	)
 	var node: Node3D = null
+	var presentation: String = _presentation_for_item(normalized)
 	if str(normalized.get("category", "")) == "console":
 		var identity: Dictionary = catalog.get_platform_identity_for_item(normalized)
 		node = ProductVisualCaseBuilderScript.build_console_box(identity)
+	elif presentation == PRESENTATION_CARTRIDGE:
+		var identity: Dictionary = catalog.get_platform_identity_for_item(normalized)
+		node = ProductVisualCaseBuilderScript.build_cartridge(identity, normalized)
 	else:
 		var template: Dictionary = catalog.find_template_for_item(normalized)
 		if not template.is_empty():
@@ -61,10 +76,26 @@ static func visual_data_from_item(item: ItemInstance) -> Dictionary:
 	data["category"] = ShelfCategoryNormalizerScript.normalize(String(definition.category))
 	data["platform_id"] = String(definition.platform_id)
 	if definition.extra is Dictionary:
-		for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+		for key: String in [
+			"box_art_key",
+			"platform_visual_id",
+			"visual_alias_id",
+			"visual_presentation",
+		]:
 			if definition.extra.has(key):
 				data[key] = definition.extra[key]
 	return data
+
+
+static func _presentation_for_item(item: Dictionary) -> String:
+	for key: String in _VISUAL_PRESENTATION_KEYS:
+		var raw: String = str(item.get(key, "")).strip_edges().to_lower()
+		match raw:
+			"loose_cartridge", "starter_cartridge", "cartridge":
+				return PRESENTATION_CARTRIDGE
+			"case", "game_case", "starter_game_case", "boxed":
+				return PRESENTATION_GAME_CASE
+	return PRESENTATION_GAME_CASE
 
 
 static func _apply_item_metadata(node: Node3D, data: Dictionary) -> void:
@@ -74,6 +105,10 @@ static func _apply_item_metadata(node: Node3D, data: Dictionary) -> void:
 		"category",
 		"platform_id",
 		"condition",
+		"box_art_key",
+		"platform_visual_id",
+		"visual_alias_id",
+		"visual_presentation",
 		"price_cents",
 		"stock_state",
 		"route_role",
@@ -84,15 +119,6 @@ static func _apply_item_metadata(node: Node3D, data: Dictionary) -> void:
 
 
 static func _add_price_tag(node: Node3D, price_cents: int) -> void:
-	var tag := MeshInstance3D.new()
-	tag.name = "ProductPriceTag"
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(0.070, 0.026, 0.006)
-	tag.mesh = mesh
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.96, 0.78, 0.32, 1.0)
-	material.roughness = 0.82
-	tag.material_override = material
-	tag.position = Vector3(0.060, -0.080, 0.036)
-	tag.set_meta("price_cents", price_cents)
-	node.add_child(tag)
+	var tag: MeshInstance3D = StoreVisualKitScript.instantiate_product_price_tag(price_cents)
+	if tag != null:
+		node.add_child(tag)

@@ -163,6 +163,20 @@ func test_cartridge_prop_has_visibility_scale() -> void:
 	)
 
 
+func test_cartridge_prop_uses_cartridge_model_not_game_case() -> void:
+	var file: FileAccess = FileAccess.open(CARTRIDGE_PROP_PATH, FileAccess.READ)
+	assert_not_null(file, "Cartridge prop scene text must be readable")
+	if file == null:
+		return
+	var scene_text: String = file.get_as_text()
+	file.close()
+	assert_string_contains(scene_text, "prop_cartridge_gb.gltf")
+	assert_false(
+		scene_text.contains("prop_game_case.gltf"),
+		"Cartridge placeholder must not instance the game-case model"
+	)
+
+
 # ── Shelf-slot info label: large enough to read at default zoom ──────────────
 
 func test_shelf_slot_info_label_is_legible() -> void:

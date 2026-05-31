@@ -1,4 +1,4 @@
-[gd_scene load_steps=194 format=3 uid="uid://retro_games_001"]
+[gd_scene load_steps=200 format=3 uid="uid://retro_games_001"]
 
 [ext_resource type="Script" path="res://game/scripts/stores/retro_games.gd" id="1"]
 [ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="2"]
@@ -313,6 +313,24 @@ size = Vector3(2.4, 0.28, 0.02)
 [sub_resource type="StandardMaterial3D" id="store_session_restock_empty_overlay_mat"]
 transparency = 1
 albedo_color = Color(0.08, 0.06, 0.05, 0.55)
+
+[sub_resource type="BoxMesh" id="store_session_display_tabletop_mesh"]
+size = Vector3(2.42, 0.18, 0.78)
+
+[sub_resource type="BoxMesh" id="store_session_display_side_apron_mesh"]
+size = Vector3(0.08, 0.16, 0.72)
+
+[sub_resource type="BoxMesh" id="store_session_display_under_rail_mesh"]
+size = Vector3(2.05, 0.08, 0.06)
+
+[sub_resource type="BoxMesh" id="store_session_display_product_tray_mesh"]
+size = Vector3(0.34, 0.035, 0.25)
+
+[sub_resource type="BoxMesh" id="store_session_display_console_riser_mesh"]
+size = Vector3(0.46, 0.11, 0.30)
+
+[sub_resource type="BoxMesh" id="store_session_display_label_plate_mesh"]
+size = Vector3(0.50, 0.06, 0.018)
 
 [sub_resource type="BoxMesh" id="nav_zone_debug_mesh"]
 size = Vector3(0.4, 0.4, 0.4)
@@ -3310,6 +3328,7 @@ script = ExtResource("34_register")
 interaction_type = 1
 display_name = "Register"
 prompt_text = "Ring up customer"
+highlight_mesh_path = NodePath("../../Checkout/Register/RegisterMesh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="checkout_counter/Interactable"]
 shape = SubResource("checkout_counter_shape")
@@ -4779,6 +4798,11 @@ metadata/visual_layout_name = "StarterDisplayTable"
 metadata/visual_fixture_id = "starter_display_table"
 metadata/restock_interactable_id = "shelf.starter_display"
 
+[node name="TableTopSlab" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.045, 0)
+mesh = SubResource("store_session_display_tabletop_mesh")
+surface_material_override/0 = ExtResource("10")
+
 [node name="ShelfBoard" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 1.2, 0, 1.1, 0)
 mesh = SubResource("shelf_board_wide_mesh")
@@ -4814,6 +4838,26 @@ transform = Transform3D(2.55, 0, 0, 0, 1.55, 0, 0, 0, 0.8, 0, 0.935, -0.35)
 mesh = SubResource("retail_shelf_lip_mesh")
 surface_material_override/0 = SubResource("product_shelf_lip_mat")
 
+[node name="TableLeftApron" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.18, 0.965, 0)
+mesh = SubResource("store_session_display_side_apron_mesh")
+surface_material_override/0 = SubResource("product_shelf_lip_mat")
+
+[node name="TableRightApron" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18, 0.965, 0)
+mesh = SubResource("store_session_display_side_apron_mesh")
+surface_material_override/0 = SubResource("product_shelf_lip_mat")
+
+[node name="TableUnderFrontRail" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0.27)
+mesh = SubResource("store_session_display_under_rail_mesh")
+surface_material_override/0 = SubResource("product_shelf_lip_mat")
+
+[node name="TableUnderBackRail" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, -0.27)
+mesh = SubResource("store_session_display_under_rail_mesh")
+surface_material_override/0 = SubResource("product_shelf_lip_mat")
+
 [node name="RestockCrate" type="MeshInstance3D" parent="StoreSessionRestockShelf"]
 transform = Transform3D(0.35, 0, 0, 0, 0.28, 0, 0, 0, 0.35, 0, 0.5, 0)
 mesh = SubResource("backordered_console_box_mesh")
@@ -4835,6 +4879,33 @@ surface_material_override/0 = SubResource("readability_stock_case_mat")
 transform = Transform3D(0.96, 0, -0.28, 0, 1, 0, 0.28, 0, 0.96, 0.11, 0.18, -0.02)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
+
+[node name="MerchandisingDeck" type="Node3D" parent="StoreSessionRestockShelf"]
+
+[node name="ProductTray0" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingDeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 1.145, -0.01)
+mesh = SubResource("store_session_display_product_tray_mesh")
+surface_material_override/0 = SubResource("product_empty_slot_mat")
+
+[node name="ProductTray1" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingDeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 1.145, -0.01)
+mesh = SubResource("store_session_display_product_tray_mesh")
+surface_material_override/0 = SubResource("product_empty_slot_mat")
+
+[node name="ProductTray2" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingDeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.145, -0.01)
+mesh = SubResource("store_session_display_product_tray_mesh")
+surface_material_override/0 = SubResource("product_empty_slot_mat")
+
+[node name="ConsoleRiser" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingDeck"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 1.17, -0.10)
+mesh = SubResource("store_session_display_console_riser_mesh")
+surface_material_override/0 = SubResource("product_shelf_lip_mat")
+
+[node name="AccessoryTray" type="MeshInstance3D" parent="StoreSessionRestockShelf/MerchandisingDeck"]
+transform = Transform3D(0.82, 0, 0, 0, 0.8, 0, 0, 0, 0.74, 0.92, 1.145, 0.12)
+mesh = SubResource("store_session_display_product_tray_mesh")
+surface_material_override/0 = SubResource("product_empty_slot_mat")
 
 ; Empty-shelf slot markers — 5 warm-tan peg-label tiles seated on the
 ; ShelfBoard top surface at the same X positions where
@@ -4880,6 +4951,23 @@ surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat
 transform = Transform3D(0.9, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.29, 0.33)
 mesh = SubResource("store_session_restock_empty_overlay_mesh")
 surface_material_override/0 = SubResource("store_session_restock_empty_overlay_mat")
+
+[node name="PriceTagRail" type="Node3D" parent="StoreSessionRestockShelf"]
+
+[node name="RestockShelfLabel" type="MeshInstance3D" parent="StoreSessionRestockShelf/PriceTagRail"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 1.07, 0.405)
+mesh = SubResource("store_session_display_label_plate_mesh")
+surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat")
+
+[node name="GamePriceTag0" type="MeshInstance3D" parent="StoreSessionRestockShelf/PriceTagRail"]
+transform = Transform3D(0.62, 0, 0, 0, 0.58, 0, 0, 0, 1, -0.10, 1.07, 0.405)
+mesh = SubResource("product_price_tag_mesh")
+surface_material_override/0 = SubResource("price_tag_mat")
+
+[node name="GamePriceTag1" type="MeshInstance3D" parent="StoreSessionRestockShelf/PriceTagRail"]
+transform = Transform3D(0.62, 0, 0, 0, 0.58, 0, 0, 0, 1, 0.28, 1.07, 0.405)
+mesh = SubResource("product_price_tag_mesh")
+surface_material_override/0 = SubResource("price_tag_mat")
 
 [node name="MerchandisingFrame" type="Node3D" parent="StoreSessionRestockShelf"]
 

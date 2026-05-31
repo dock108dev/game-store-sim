@@ -127,7 +127,7 @@ const FIXTURE_SCENES: Dictionary = {
 
 const RETRO_SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const FIXTURE_CATALOG_PATH: String = "res://game/content/fixtures.json"
-const _MeshBoundsUtil: GDScript = preload(
+const MeshBoundsUtil: GDScript = preload(
 	"res://game/scripts/visuals/mesh_bounds_util.gd"
 )
 const SIGN_BACKING_MATERIAL_PATH: String = "res://game/assets/materials/mat_sign_backing.tres"
@@ -300,7 +300,7 @@ func test_reusable_fixture_scene_heights_share_player_scale_budget() -> void:
 		).instantiate() as Node3D
 		add_child_autofree(root)
 		var height_budget: Dictionary = FIXTURE_HEIGHT_BUDGETS[scene_name]
-		var bounds: AABB = _MeshBoundsUtil.visual_bounds(root)
+		var bounds: AABB = MeshBoundsUtil.visual_bounds(root)
 		assert_gte(
 			bounds.size.y,
 			height_budget["min"],
@@ -337,7 +337,7 @@ func test_floor_fixture_slots_rest_on_declared_support_surfaces() -> void:
 		)
 		if support == null:
 			continue
-		var support_top_y: float = _MeshBoundsUtil.mesh_bounds_in_root(root, support).end.y
+		var support_top_y: float = MeshBoundsUtil.mesh_bounds_in_root(root, support).end.y
 		for slot: Node in _collect_direct_slots(root):
 			var slot_y: float = (slot as Node3D).position.y
 			assert_gte(
@@ -527,11 +527,14 @@ func test_checkout_counter_composes_visual_props_without_owning_register_contrac
 	assert_true(interactable is RegisterInteractable)
 
 
-func test_table_and_counter_tops_are_thin_with_support_structure() -> void:
+func test_table_and_counter_tops_have_appropriate_support_structure() -> void:
 	var top_expectations: Dictionary = {
 		"CheckoutCounter": "CounterTop",
 		"DisplayTable": "TableMesh",
 		"ReceivingTable": "BenchMesh",
+	}
+	var sturdy_top_minimums: Dictionary = {
+		"DisplayTable": 0.155,
 	}
 	for scene_name: String in top_expectations:
 		var root: Node3D = (
@@ -543,12 +546,33 @@ func test_table_and_counter_tops_are_thin_with_support_structure() -> void:
 		) as MeshInstance3D
 		assert_not_null(top, "%s must expose a visible top surface" % scene_name)
 		if top:
-			assert_lte(
-				_MeshBoundsUtil.mesh_bounds_in_root(root, top).size.y,
-				0.12,
-				"%s top must be a thin retail surface, not a block body"
-				% scene_name
-			)
+			var top_height: float = MeshBoundsUtil.mesh_bounds_in_root(root, top).size.y
+			if sturdy_top_minimums.has(scene_name):
+				assert_gte(
+					top_height,
+					sturdy_top_minimums[scene_name],
+					"%s top must have enough visual weight for a retail fixture"
+					% scene_name
+				)
+			else:
+				assert_lte(
+					top_height,
+					0.12,
+					"%s top must stay a thin retail surface" % scene_name
+				)
+		if scene_name == "DisplayTable":
+			for support_name: String in [
+				"FrontLip",
+				"BackLip",
+				"LeftLip",
+				"RightLip",
+				"UnderRailFront",
+				"UnderRailBack",
+			]:
+				assert_not_null(
+					root.get_node_or_null(support_name),
+					"DisplayTable must include sturdy support detail %s" % support_name
+				)
 		if scene_name != "CheckoutCounter":
 			for leg_name: String in [
 				"LegFrontLeft",
@@ -628,7 +652,7 @@ func _collect_direct_slots(root: Node) -> Array[Node]:
 
 
 func _count_mesh_descendants(root: Node) -> int:
-	return _MeshBoundsUtil.collect_mesh_descendants(root).size()
+	return MeshBoundsUtil.collect_mesh_descendants(root).size()
 
 
 func _fixture_label(scene_name: String, label_path: String) -> Label3D:

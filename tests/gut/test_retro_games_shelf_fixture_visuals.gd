@@ -229,6 +229,18 @@ func test_store_restock_shelf_keeps_objective_target_inside_merch_fixture() -> v
 			frame.get_node_or_null(node_path),
 			"StoreSessionRestockShelf/MerchandisingFrame/%s must exist" % node_path
 		)
+	for node_path: String in [
+		"MerchandisingDeck/ProductTray0",
+		"MerchandisingDeck/ProductTray1",
+		"MerchandisingDeck/ProductTray2",
+		"MerchandisingDeck/ConsoleRiser",
+		"PriceTagRail/RestockShelfLabel",
+		"PriceTagRail/GamePriceTag0",
+	]:
+		assert_not_null(
+			shelf.get_node_or_null(node_path),
+			"StoreSessionRestockShelf/%s must exist" % node_path
+		)
 	var product_facings: int = 0
 	for child: Node in frame.get_children():
 		if child.is_in_group(&"product_display"):
@@ -258,12 +270,17 @@ func test_store_restock_shelf_table_is_grounded_with_visible_supports() -> void:
 	var board_bottom: float = _scene_position(board).y - _box_world_size(board).y * 0.5
 	var support_count: int = 0
 	for node_path: String in [
+		"TableTopSlab",
 		"TableLegFrontLeft",
 		"TableLegFrontRight",
 		"TableLegBackLeft",
 		"TableLegBackRight",
 		"TableFrontApron",
 		"TableBackApron",
+		"TableLeftApron",
+		"TableRightApron",
+		"TableUnderFrontRail",
+		"TableUnderBackRail",
 	]:
 		var support: MeshInstance3D = shelf.get_node_or_null(node_path) as MeshInstance3D
 		assert_not_null(support, "Restock display support missing: %s" % node_path)
@@ -278,12 +295,17 @@ func test_store_restock_shelf_table_is_grounded_with_visible_supports() -> void:
 				0.05,
 				"%s must reach the floor so the display table does not float" % node_path
 			)
-		assert_lte(
-			support_pos.y + support_size.y * 0.5,
-			board_bottom + 0.10,
-			"%s must tuck under the table surface" % node_path
-		)
-	assert_gte(support_count, 6, "Restock display must have four legs and front/back aprons")
+		if node_path != "TableTopSlab":
+			assert_lte(
+				support_pos.y + support_size.y * 0.5,
+				board_bottom + 0.10,
+				"%s must tuck under the table surface" % node_path
+			)
+	assert_gte(
+		support_count,
+		11,
+		"Restock display must have a tabletop, legs, aprons, and underside rails"
+	)
 	root.free()
 
 

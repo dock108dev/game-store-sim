@@ -545,10 +545,6 @@ func get_blocking_error_or_modal_reason() -> String:
 	return _visible_blocker_reason(get_tree().current_scene)
 
 
-func _tree_has_visible_blocker(node: Node) -> bool:
-	return not _visible_blocker_reason(node).is_empty()
-
-
 func _visible_blocker_reason(node: Node) -> String:
 	if node == null:
 		return ""

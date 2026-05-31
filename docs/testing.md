@@ -125,21 +125,6 @@ Supported user flags:
 | `--exit-on-complete` | Quits through `ScenarioExit` after the scenario completes. |
 | `--speed=1x|2x|3x|4x|6x` | Applies an automation speed tier; `2x` clamps to `3x`, and `4x` clamps to `6x`. |
 
-## Current coverage areas
-
-The checked-in tests currently cover:
-
-- boot flow, content loading, and content registry rules
-- time, economy, difficulty, checkout, haggling, pricing, and reporting
-- inventory, ordering, suppliers, stock, and save/load behavior
-- store state, store transitions, hallway/storefront flow, and build mode
-- customer spawning, NPC systems, queueing, and purchase flow
-- milestones, unlocks, upgrades, completion, onboarding, and endings
-- retro-games store mechanics (testing station, refurbishment queue,
-  hold-shelf flow, manifest/poster/featured-display interactables) plus the
-  store-session Day 1 critical-path smoke
-- settings, audio, camera, environment, tooltips, and UI panels
-
 ## Automation scenario exit codes
 
 `ScenarioExit` owns process status for automation scenarios and is inert unless

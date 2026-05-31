@@ -289,7 +289,9 @@ func _connect_signal(signal_ref: Signal, callable: Callable) -> void:
 func _emit_tier_change_toast(
 	store_id: String, old_tier: ReputationTier, new_tier: ReputationTier
 ) -> void:
-	var store_display: String = _get_store_display_name(store_id)
+	var store_display: String = ContentRegistry.get_display_name_or(
+		StringName(store_id), store_id
+	)
 	var tier_name: String = _tier_to_name(new_tier)
 	var is_upgrade: bool = new_tier > old_tier
 	var toast_msg: String
@@ -299,15 +301,6 @@ func _emit_tier_change_toast(
 	else:
 		toast_msg = "%s reputation dropped to %s" % [store_display, tier_name]
 		EventBus.toast_requested.emit(toast_msg, &"reputation_down", 5.0)
-
-
-func _get_store_display_name(store_id: String) -> String:
-	if not ContentRegistry.exists(store_id):
-		return store_id
-	var canonical: StringName = ContentRegistry.resolve(store_id)
-	if canonical.is_empty():
-		return store_id
-	return ContentRegistry.get_display_name(canonical)
 
 
 func _tier_to_name(tier: ReputationTier) -> String:

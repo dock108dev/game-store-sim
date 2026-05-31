@@ -58,19 +58,8 @@ export GODOT=/path/to/Godot
 bash tests/run_tests.sh
 ```
 
-The runner:
-
-1. Runs `scripts/validate_static_repo_guards.sh`.
-2. Resolves a Godot binary.
-3. Imports project assets.
-4. Runs `scripts/validate_resource_integrity.sh` when Godot is available.
-5. Runs GUT through `res://addons/gut/gut_cmdln.gd`.
-6. Runs `res://game/tests/run_tests.gd` when that file exists.
-7. Writes combined output to `artifacts/logs/gut/test_run.log`.
-8. Runs maintained shell validators under `tests/`.
-9. Runs the SSOT tripwires under `scripts/`
-   (`validate_translations.sh`, `validate_single_store_ui.sh`,
-   `validate_tutorial_single_source.sh`).
+This is the default local gate. See [Testing](testing.md) for the current
+runner steps, artifact paths, automation flags, and CI jobs.
 
 ## Repository layout
 

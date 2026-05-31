@@ -8,6 +8,12 @@ const AutomationArtifactsScript: GDScript = preload(
 const StoreVisualScopeProfileScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_scope_profile.gd"
 )
+const StoreVisualActionContextScript: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_action_context.gd"
+)
+const StoreVisualFullStoreContextScript: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_full_store_context.gd"
+)
 const WorkSurfaceValidationContractScript: GDScript = preload(
 	"res://game/scripts/store_session/work_surface_validation_contract.gd"
 )
@@ -25,6 +31,9 @@ const CAPTURE_RANDOM_SEED: int = 1801
 const ACCEPTANCE_TARGET: String = "first_ten_seconds_route_views"
 const HUD_CONTEXT_LABEL: String = "First Day — 8:00 AM"
 const _MAX_SLUG_LENGTH: int = 64
+const REQUIRED_ACTION_MOMENTS: Array[String] = (
+	StoreVisualActionContextScript.REQUIRED_ACTION_MOMENTS
+)
 
 
 ## Returns the design-coherence checks applied to each route acceptance row.
@@ -36,6 +45,11 @@ static func route_design_checks() -> Array[String]:
 		"no oversized-door dominance",
 		"no disconnected-prop dominance",
 	]
+
+
+## Returns a validation result for the active action context bound to a sweep row.
+static func validate_action_context(row: Dictionary) -> Dictionary:
+	return StoreVisualActionContextScript.validate_row(row)
 
 
 ## Returns the normal store_session review beats. These are the first-ten-seconds
@@ -68,7 +82,24 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_expected_beat": "checkout_manager_counter",
 			"next_destination": "manager and checkout register",
 			"local_action": "take in the store identity and walk to the counter",
+			"route_sequence_index": 0,
 			"primary_work_surface_target": "checkout_counter",
+			"action_context": _action_context(
+				"checkout",
+				"StoreSessionDayOneCustomer/Interactable",
+				"Talk to manager",
+				"walk to the counter and talk to the manager",
+				"manager and checkout register",
+				[
+					_candidate("StoreSessionDayOneCustomer/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionDayEndTrigger/Interactable",
+						"disabled",
+						"Register is context until the manager beat resolves."
+					),
+				],
+				"spawn-to-counter approach"
+			),
 			"work_surface_review": {
 				"surface_role": "route_preview",
 				"primary_action_surface": "checkout_counter",
@@ -104,7 +135,29 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_expected_beat": "shelf_wall_product_focus",
 			"next_destination": "checkout counter",
 			"local_action": "talk to the manager/register area",
+			"route_sequence_index": 1,
 			"primary_work_surface_target": "checkout_counter",
+			"action_context": _action_context(
+				"checkout",
+				"StoreSessionDayOneCustomer/Interactable",
+				"Talk to manager",
+				"talk to the manager/register area",
+				"checkout counter",
+				[
+					_candidate("StoreSessionDayOneCustomer/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionDayEndTrigger/Interactable",
+						"disabled",
+						"Register and close-day hotspot must not compete with the manager prompt."
+					),
+					_candidate(
+						"StoreSessionBackroomPickup/Interactable",
+						"disabled",
+						"Backroom pickup comes after the checkout beat."
+					),
+				],
+				"customer-side counter approach"
+			),
 			"work_surface_review": {
 				"surface_role": "service_counter_hierarchy",
 				"primary_action_surface": "checkout_counter",
@@ -138,7 +191,29 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_expected_beat": "before_customer",
 			"next_destination": "starter display table",
 			"local_action": "read the empty table target before starter stock appears",
+			"route_sequence_index": 3,
 			"primary_work_surface_target": "StoreSessionRestockShelf",
+			"action_context": _action_context(
+				"restock_table",
+				"StoreSessionRestockShelf/Interactable",
+				"Stock starter display table",
+				"place carried stock on the starter display table",
+				"starter display table",
+				[
+					_candidate("StoreSessionRestockShelf/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionBackroomPickup/Interactable",
+						"disabled",
+						"Backroom pickup is complete while the stock is being placed."
+					),
+					_candidate(
+						"StoreSessionDayEndTrigger/Interactable",
+						"disabled",
+						"Close day unlocks after the product/sale beat."
+					),
+				],
+				"stock-carry approach to table"
+			),
 			"work_surface_review": {
 				"surface_role": "starter_table_hierarchy",
 				"primary_action_surface": "StoreSessionRestockShelf",
@@ -170,10 +245,33 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"route_anchor": "ExpandableStoreShell/StockroomFloorTape",
 			"active_route_stage": "training_back_room_inventory",
 			"active_prompt": "Check back room inventory",
+			"disabled_guidance": _stockroom_pickup_disabled_guidance(),
 			"next_expected_beat": "stockroom_work_area_interior",
 			"next_destination": "stockroom pickup",
 			"local_action": "recognize the open stockroom path from the sales floor",
+			"route_sequence_index": 2,
 			"primary_work_surface_target": "ExpandableStoreShell/StockroomFloorTape",
+			"action_context": _action_context(
+				"backroom_pickup",
+				"StoreSessionBackroomPickup/Interactable",
+				"Check back room inventory",
+				"walk through the stockroom threshold to the pickup",
+				"stockroom pickup",
+				[
+					_candidate("StoreSessionBackroomPickup/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionRestockShelf/Interactable",
+						"disabled",
+						"The display table is visible context, not active before pickup."
+					),
+					_candidate(
+						"StoreSessionDayEndTrigger/Interactable",
+						"disabled",
+						"Close day must stay quiet until store work is complete."
+					),
+				],
+				"sales-floor to stockroom threshold approach"
+			),
 			"work_surface_review": {
 				"surface_role": "stockroom_entry_hierarchy",
 				"primary_action_surface": "ExpandableStoreShell/StockroomFloorTape",
@@ -205,10 +303,28 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"route_anchor": "ExpandableStoreShell/StockroomFloorTape",
 			"active_route_stage": "training_back_room_inventory",
 			"active_prompt": "Check back room inventory",
+			"disabled_guidance": _stockroom_pickup_disabled_guidance(),
 			"next_expected_beat": "shelf_wall_product_focus",
 			"next_destination": "stockroom pickup",
 			"local_action": "confirm the stock box is a usable work area, not a closet",
+			"route_sequence_index": 2,
 			"primary_work_surface_target": "StoreSessionBackroomPickup",
+			"action_context": _action_context(
+				"backroom_pickup",
+				"StoreSessionBackroomPickup/Interactable",
+				"Check back room inventory",
+				"pick up the stockroom delivery",
+				"stockroom pickup",
+				[
+					_candidate("StoreSessionBackroomPickup/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionRestockShelf/Interactable",
+						"disabled",
+						"Restock table is the next destination after pickup."
+					),
+				],
+				"threshold-to-crate approach"
+			),
 			"work_surface_review": {
 				"surface_role": "stockroom_work_area_hierarchy",
 				"primary_action_surface": "StoreSessionBackroomPickup",
@@ -224,9 +340,123 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 		},
 		{
 			"index": 6,
+			"name": "product_sale_review",
+			"label": "Product and sale review",
+			"filename": "06_product_sale_review.png",
+			"camera": Vector3(-2.85, 1.58, 3.05),
+			"focus": "ReadabilityProps/ProductDisplayRows/DungeonDad64_ShelfA",
+			"anchors":
+			[
+				"StoreSessionRestockShelf",
+				"StoreSessionRestockShelf/PriceTagRail",
+				"ReadabilityProps/ProductDisplayRows/DungeonDad64_ShelfA",
+				"ReadabilityProps/ProductDisplayRows/DungeonDad64_PriceTag",
+				"StoreSessionDayOneCustomer",
+			],
+			"route_anchor": "StoreSessionDayOneCustomer",
+			"active_route_stage": "talk_to_customer",
+			"active_prompt": "Talk to customer",
+			"next_expected_beat": "checkout_close_day",
+			"next_destination": "customer and checkout",
+			"local_action": "inspect the stocked product read and handle the customer sale",
+			"route_sequence_index": 4,
+			"primary_work_surface_target": "StoreSessionDayOneCustomer",
+			"action_context": _action_context(
+				"product_inspection",
+				"StoreSessionDayOneCustomer/Interactable",
+				"Talk to customer",
+				"read the stocked product/sale context and return to the customer",
+				"customer and checkout",
+				[
+					_candidate("StoreSessionDayOneCustomer/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionRestockShelf/Interactable",
+						"disabled",
+						"Stocked display is review context during the sale beat."
+					),
+					_candidate(
+						"StoreSessionDayEndTrigger/Interactable",
+						"disabled",
+						"Close-day hotspot is visible but not active until the sale resolves."
+					),
+				],
+				"display-table to customer approach"
+			),
+			"work_surface_review": {
+				"surface_role": "product_sale_hierarchy",
+				"primary_action_surface": "StoreSessionDayOneCustomer",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
+			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
+			"review_target": ACCEPTANCE_TARGET,
+			"hud_context_required": HUD_CONTEXT_LABEL,
+		},
+		{
+			"index": 7,
+			"name": "checkout_close_day",
+			"label": "Checkout close-day prompt",
+			"filename": "07_checkout_close_day.png",
+			"camera": Vector3(2.10, 1.55, 5.40),
+			"focus": "StoreSessionDayEndTrigger",
+			"anchors":
+			[
+				"checkout_counter",
+				"StoreSessionDayEndTrigger",
+				"StoreSessionDayEndTrigger/Interactable",
+				"ExpandableStoreShell/CheckoutRegisterScreen",
+				"ExpandableStoreShell/CheckoutRegisterPractical",
+			],
+			"route_anchor": "StoreSessionDayEndTrigger",
+			"active_route_stage": "end_day",
+			"active_prompt": "Close day",
+			"next_expected_beat": "front_exit",
+			"next_destination": "checkout close-day hotspot",
+			"local_action": "close the day at the checkout counter",
+			"route_sequence_index": 5,
+			"primary_work_surface_target": "StoreSessionDayEndTrigger",
+			"action_context": _action_context(
+				"close_day",
+				"StoreSessionDayEndTrigger/Interactable",
+				"Close day",
+				"close the day at the checkout counter",
+				"checkout close-day hotspot",
+				[
+					_candidate("StoreSessionDayEndTrigger/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionDayOneCustomer/Interactable",
+						"disabled",
+						"Customer/sale interaction has resolved before close."
+					),
+					_candidate(
+						"StoreSessionRestockShelf/Interactable",
+						"disabled",
+						"Restock table is complete before close."
+					),
+				],
+				"sales-floor return to checkout"
+			),
+			"work_surface_review": {
+				"surface_role": "checkout_close_hierarchy",
+				"primary_action_surface": "StoreSessionDayEndTrigger",
+				"dominance_required": true,
+				"supporting_props_should_stay_quiet": true,
+			},
+			"design_checks": route_design_checks(),
+			"scope": "first_ten_seconds",
+			"visual_scope_mode":
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
+			"review_target": ACCEPTANCE_TARGET,
+			"hud_context_required": HUD_CONTEXT_LABEL,
+		},
+		{
+			"index": 8,
 			"name": "exit_threshold_return_view",
 			"label": "Exit threshold return view",
-			"filename": "06_exit_threshold_return_view.png",
+			"filename": "08_exit_threshold_return_view.png",
 			"camera": Vector3(1.60, 1.60, 5.50),
 			"focus": "ExpandableStoreShell/FrontDoorPushPlate",
 			"anchors":
@@ -244,7 +474,24 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"next_expected_beat": "front exit",
 			"next_destination": "front exit",
 			"local_action": "recognize the way back out through the front threshold",
+			"route_sequence_index": 6,
 			"primary_work_surface_target": "ExpandableStoreShell/EntryThreshold",
+			"action_context": _action_context(
+				"exit",
+				"EntranceDoor/Interactable",
+				"Exit to mall",
+				"leave through the front threshold after close",
+				"front exit",
+				[
+					_candidate("EntranceDoor/Interactable", "active", ""),
+					_candidate(
+						"StoreSessionDayEndTrigger/Interactable",
+						"disabled",
+						"Close-day interaction is complete before exit."
+					),
+				],
+				"checkout-to-front-threshold approach"
+			),
 			"work_surface_review": {
 				"surface_role": "exit_threshold_hierarchy",
 				"primary_action_surface": "ExpandableStoreShell/EntryThreshold",
@@ -261,119 +508,46 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 	]
 
 
+static func _action_context(
+	moment: String,
+	active_target: String,
+	active_prompt: String,
+	local_action: String,
+	next_destination: String,
+	actionable_candidates: Array[Dictionary],
+	approach_angle: String
+) -> Dictionary:
+	return StoreVisualActionContextScript.context(
+		moment,
+		active_target,
+		active_prompt,
+		local_action,
+		next_destination,
+		actionable_candidates,
+		approach_angle
+	)
+
+
+static func _candidate(path: String, state: String, reason: String) -> Dictionary:
+	return StoreVisualActionContextScript.candidate(path, state, reason)
+
+
+static func _stockroom_pickup_disabled_guidance() -> Dictionary:
+	return {
+		"before_active_objective": "Talk to the customer first.",
+		"while_carrying_stock": "Stock already in hand. Place it on the starter display table.",
+		"after_delivery_checked": "Delivery already checked.",
+	}
+
+
 ## Returns older broad-store review context kept out of phase acceptance.
 static func full_store_review_context() -> Dictionary:
-	return {
-		"review_target": "full_store_context",
-		"acceptance_role": "secondary_context_only",
-		"notes": (
-			"Whole-room context may be reviewed separately; "
-			+ "this phase passes or fails on the first-ten-seconds route views."
-		),
-		"beats": _serializable_rows(full_store_rows()),
-	}
+	return StoreVisualFullStoreContextScript.context(_serializable_rows(full_store_rows()))
 
 
 ## Returns the older eight-angle full-store sweep for secondary review context.
 static func full_store_rows() -> Array[Dictionary]:
-	return [
-		{
-			"index": 1,
-			"name": "entrance_looking_in",
-			"label": "Entrance looking in",
-			"filename": "01_entrance_looking_in.png",
-			"camera": Vector3(2.2, 1.7, 9.15),
-			"focus": "InteriorSignage/StoreNameBanner",
-			"anchors": ["Storefront", "EntranceInterior", "ReadabilityProps/FloorDisplayIsland"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-		{
-			"index": 2,
-			"name": "center_to_checkout",
-			"label": "Center to checkout",
-			"filename": "02_center_to_checkout.png",
-			"camera": Vector3(0.0, 1.75, 0.25),
-			"focus": "Checkout/Register/CheckoutSign",
-			"anchors": ["Checkout", "StoreSessionDayEndTrigger", "ReadabilityProps/CheckoutCounterDressing"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-		{
-			"index": 3,
-			"name": "center_to_shelves",
-			"label": "Center to shelves",
-			"filename": "03_center_to_shelves.png",
-			"camera": Vector3(0.0, 1.75, 0.25),
-			"focus": "ZoneLabels/ShelvesLabel",
-			"anchors": ["StoreSessionRestockShelf", "ReadabilityProps/ShelfSpineRuns", "AccessoriesBin"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-		{
-			"index": 4,
-			"name": "center_to_backroom",
-			"label": "Center to backroom",
-			"filename": "04_center_to_backroom.png",
-			"camera": Vector3(0.0, 1.75, 0.25),
-			"focus": "StoreSessionBackroomPickup/StockBoxLabel",
-			"anchors": ["back_room", "StoreSessionBackroomPickup", "ReadabilityProps/BackroomDressing"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-		{
-			"index": 5,
-			"name": "checkout_across_store",
-			"label": "Checkout across store",
-			"filename": "05_checkout_across_store.png",
-			"camera": Vector3(4.9, 1.75, 6.9),
-			"focus": "ZoneLabels/StaffPicksLabel",
-			"anchors": ["Checkout", "staff_picks_table", "ReadabilityProps/FloorDisplayIsland"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-		{
-			"index": 6,
-			"name": "stockroom_looking_out",
-			"label": "Stockroom looking out",
-			"filename": "06_stockroom_looking_out.png",
-			"camera": Vector3(0.0, 1.75, -8.45),
-			"focus": "EntranceInterior",
-			"anchors": ["back_room", "Checkout", "ReadabilityProps/DayOneRouteMarkers"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-		{
-			"index": 7,
-			"name": "try_it_testing_corner",
-			"label": "Try-it testing corner",
-			"filename": "07_try_it_testing_corner.png",
-			"camera": Vector3(-2.8, 1.75, -4.5),
-			"focus": "crt_demo_area/ComingSoonLabel",
-			"anchors": ["crt_demo_area", "crt_demo_area/SetupBarrierRail"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-		{
-			"index": 8,
-			"name": "opposite_corner_full_room_view",
-			"label": "Opposite-corner full-room view",
-			"filename": "08_opposite_corner_full_room_view.png",
-			"camera": Vector3(-6.4, 3.4, 8.4),
-			"focus": "ReadabilityProps/DayOneRouteMarkers/TrainingStopShelf",
-			"anchors": ["ZoneLabels", "ReadabilityProps/ZoneLighting", "ReadabilityProps/ZoneIdentity"],
-			"scope": "full_store",
-			"visual_scope_mode": StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
-			"review_target": "full_store_context",
-		},
-	]
+	return StoreVisualFullStoreContextScript.rows()
 
 
 ## Returns the human review checks that must be applied to every sweep image.
@@ -437,43 +611,12 @@ static func design_failure_criteria() -> Array[String]:
 
 ## Returns the first-run route markers that reviewers should be able to infer.
 static func first_run_flow_steps() -> Array[Dictionary]:
-	return [
-		{
-			"step": "manager",
-			"destination": "manager note",
-			"anchor": "StoreSessionDayOneCustomer",
-		},
-		{
-			"step": "register check",
-			"destination": "checkout register",
-			"anchor": "ExpandableStoreShell/CheckoutRegisterScreen",
-		},
-		{
-			"step": "backroom inventory",
-			"destination": "inventory pickup",
-			"anchor": "ExpandableStoreShell/StockroomFloorTape",
-		},
-		{
-			"step": "shelf stocking",
-			"destination": "restock shelf",
-			"anchor": "StoreSessionRestockShelf",
-		},
-		{
-			"step": "practice customer",
-			"destination": "practice customer",
-			"anchor": "StoreSessionDayOneCustomer",
-		},
-		{
-			"step": "open-store",
-			"destination": "open-store closeout",
-			"anchor": "StoreSessionDayEndTrigger",
-		},
-		{
-			"step": "exit",
-			"destination": "front exit",
-			"anchor": "ExpandableStoreShell/EntryThreshold",
-		},
-	]
+	return first_day_route_sequence()
+
+
+## Returns the route sequence reviewers use to judge the first-day screenshots.
+static func first_day_route_sequence() -> Array[Dictionary]:
+	return StoreVisualActionContextScript.route_sequence()
 
 
 ## Writes the viewport image to a stable PNG filename and returns path details.
@@ -541,6 +684,8 @@ static func write_review_manifest(
 		"first_ten_seconds_review_criteria": first_ten_seconds_review_criteria(),
 		"design_failure_criteria": design_failure_criteria(),
 		"first_run_flow_steps": first_run_flow_steps(),
+		"first_day_route_sequence": first_day_route_sequence(),
+		"required_action_moments": REQUIRED_ACTION_MOMENTS,
 		"full_store_review_context": full_store_review_context(),
 		"visual_scope_profile": StoreVisualScopeProfileScript.scope_manifest(),
 		"capture_policy": capture_policy(),
@@ -659,6 +804,9 @@ static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictio
 	var serializable: Array[Dictionary] = []
 	for row: Dictionary in rows_to_write:
 		var camera: Vector3 = row.get("camera", Vector3.ZERO) as Vector3
+		var action_context_validation: Dictionary = (
+			validate_action_context(row) if row.has("action_context") else {}
+		)
 		serializable.append({
 			"index": int(row.get("index", 0)),
 			"name": str(row.get("name", "")),
@@ -670,10 +818,14 @@ static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictio
 			"route_anchor": str(row.get("route_anchor", "")),
 			"active_route_stage": str(row.get("active_route_stage", "")),
 			"active_prompt": str(row.get("active_prompt", "")),
+			"disabled_guidance": row.get("disabled_guidance", {}),
 			"next_expected_beat": str(row.get("next_expected_beat", "")),
 			"next_destination": str(row.get("next_destination", "")),
 			"local_action": str(row.get("local_action", "")),
+			"route_sequence_index": int(row.get("route_sequence_index", -1)),
 			"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
+			"action_context": row.get("action_context", {}),
+			"action_context_validation": action_context_validation,
 			"work_surface_review": row.get("work_surface_review", {}),
 			"design_checks": row.get("design_checks", []),
 			"scope": str(row.get("scope", "")),
@@ -692,11 +844,17 @@ static func _manual_review_template(rows_to_write: Array[Dictionary]) -> Diction
 			"status": "pass|fail|needs_changes",
 			"active_route_stage": str(row.get("active_route_stage", "")),
 			"active_prompt": str(row.get("active_prompt", "")),
+			"disabled_guidance": row.get("disabled_guidance", {}),
 			"next_expected_beat": str(row.get("next_expected_beat", "")),
 			"local_action": str(row.get("local_action", "")),
 			"next_destination": str(row.get("next_destination", "")),
+			"route_sequence_index": int(row.get("route_sequence_index", -1)),
 			"visual_scope_mode": str(row.get("visual_scope_mode", "")),
 			"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
+			"action_context": row.get("action_context", {}),
+			"action_context_unambiguous": false,
+			"normal_player_approach": false,
+			"next_destination_visible": false,
 			"primary_work_surface_dominant": false,
 			"supporting_props_stay_quiet": false,
 			"material_family_consistent": false,

@@ -54,7 +54,7 @@ func test_stockroom_dressing_reads_as_working_back_room() -> void:
 		"StockroomPackingSlip00",
 		"StockroomHandTruckToe",
 	]:
-		assert_not_null(shell.get_node_or_null(required), "Stockroom dressing missing: %s" % required)
+		assert_not_null(_stockroom_node(shell, required), "Stockroom dressing missing: %s" % required)
 
 	var vertical_storage_count: int = 0
 	for prefix: String in [
@@ -154,7 +154,7 @@ func test_stockroom_dressing_remains_visual_only_and_clear_of_pickup_route() -> 
 		"StockroomPackingClipboard",
 		"StockroomHandTruckToe",
 	]:
-		var prop: Node3D = shell.get_node_or_null(prop_path) as Node3D
+		var prop: Node3D = _stockroom_node(shell, prop_path)
 		assert_not_null(prop, "Stockroom visual-only prop missing: %s" % prop_path)
 		if prop == null:
 			continue
@@ -163,7 +163,9 @@ func test_stockroom_dressing_remains_visual_only_and_clear_of_pickup_route() -> 
 			"%s must stay visual-only with no interaction or physics descendants" % prop_path
 		)
 		assert_gt(
-			_flat_distance_to_segment(prop.position, threshold.position, pickup.position),
+			_flat_distance_to_segment(
+				prop.global_position, threshold.global_position, pickup.global_position
+			),
 			0.34,
 			"%s must not sit in the threshold-to-pickup route" % prop_path
 		)
@@ -300,7 +302,15 @@ func _count_children_with_prefix(parent: Node, prefix: String) -> int:
 	for child: Node in parent.get_children():
 		if str(child.name).begins_with(prefix):
 			total += 1
+		total += _count_children_with_prefix(child, prefix)
 	return total
+
+
+func _stockroom_node(parent: Node, child_name: String) -> Node3D:
+	var direct: Node3D = parent.get_node_or_null(child_name) as Node3D
+	if direct != null:
+		return direct
+	return parent.find_child(child_name, true, false) as Node3D
 
 
 func _material_color(mesh_instance: MeshInstance3D) -> Color:

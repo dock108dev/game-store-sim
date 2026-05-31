@@ -1,6 +1,6 @@
 extends GutTest
 
-const _StoreVisualSweep: GDScript = preload(
+const StoreVisualSweepScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_sweep.gd"
 )
 const StoreVisualScopeProfileScript: GDScript = preload(
@@ -19,6 +19,8 @@ const REQUIRED_FIRST_TEN_SECONDS_BEATS: Array[String] = [
 	"shelf_wall_product_focus",
 	"stockroom_looking_in",
 	"stockroom_work_area_interior",
+	"product_sale_review",
+	"checkout_close_day",
 	"exit_threshold_return_view",
 ]
 
@@ -78,7 +80,7 @@ func after_each() -> void:
 
 func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 	var rows: Array[Dictionary] = _sweep_rows()
-	assert_eq(rows.size(), 6, "Validation sweep must cover six first-ten-seconds route views")
+	assert_eq(rows.size(), 8, "Validation sweep must cover eight first-day route views")
 	var seen_beats: Array[String] = []
 	for row: Dictionary in rows:
 		seen_beats.append(str(row.get("name", "")))
@@ -93,12 +95,12 @@ func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 		)
 		assert_eq(
 			str(row.get("review_target", "")),
-			_StoreVisualSweep.ACCEPTANCE_TARGET,
+			StoreVisualSweepScript.ACCEPTANCE_TARGET,
 			"%s sweep must target first-ten-seconds acceptance" % row["name"]
 		)
 		assert_eq(
 			str(row.get("hud_context_required", "")),
-			_StoreVisualSweep.HUD_CONTEXT_LABEL,
+			StoreVisualSweepScript.HUD_CONTEXT_LABEL,
 			"%s sweep must require first-day HUD context" % row["name"]
 		)
 		assert_false(
@@ -129,6 +131,23 @@ func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 			str(row.get("primary_work_surface_target", "")).is_empty(),
 			"%s sweep must identify the primary work-surface target" % row["name"]
 		)
+		assert_true(
+			bool(StoreVisualSweepScript.validate_action_context(row).get("ok", false)),
+			"%s sweep must declare one unambiguous active action context" % row["name"]
+		)
+		var action_context: Dictionary = row.get("action_context", {}) as Dictionary
+		assert_true(
+			bool(action_context.get("normal_player_approach", false)),
+			"%s sweep must use a normal player approach angle" % row["name"]
+		)
+		assert_false(
+			bool(action_context.get("tight_closeup", true)),
+			"%s sweep must not rely on tight object closeups" % row["name"]
+		)
+		assert_true(
+			bool(action_context.get("shows_next_destination", false)),
+			"%s sweep must include next-destination context" % row["name"]
+		)
 		var work_surface_review: Dictionary = row.get("work_surface_review", {}) as Dictionary
 		assert_false(
 			work_surface_review.is_empty(),
@@ -144,7 +163,7 @@ func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 			"%s sweep primary action surface must match its target" % row["name"]
 		)
 		var design_checks: Array = row.get("design_checks", []) as Array
-		for design_check: String in _StoreVisualSweep.route_design_checks():
+		for design_check: String in StoreVisualSweepScript.route_design_checks():
 			assert_true(
 				design_checks.has(design_check),
 				"%s sweep must include design check %s" % [row["name"], design_check]
@@ -176,14 +195,34 @@ func test_first_ten_seconds_sweep_frames_store_review_anchors() -> void:
 		)
 
 
+func test_stockroom_sweep_rows_record_pickup_prompt_and_blocked_guidance() -> void:
+	for row_name: String in ["stockroom_looking_in", "stockroom_work_area_interior"]:
+		var row: Dictionary = _sweep_row_by_name(row_name)
+		assert_false(row.is_empty(), "Missing stockroom sweep row %s" % row_name)
+		if row.is_empty():
+			continue
+		assert_eq(str(row.get("active_prompt", "")), "Check back room inventory")
+		var disabled_guidance: Dictionary = row.get("disabled_guidance", {}) as Dictionary
+		assert_eq(
+			str(disabled_guidance.get("before_active_objective", "")),
+			"Talk to the customer first.",
+			"%s must document the wrong-stage pickup prompt" % row_name
+		)
+		assert_eq(
+			str(disabled_guidance.get("while_carrying_stock", "")),
+			"Stock already in hand. Place it on the starter display table.",
+			"%s must document the already-carrying pickup prompt" % row_name
+		)
+
+
 func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 	var rows: Array[Dictionary] = _sweep_rows()
 	for row: Dictionary in rows:
 		_assert_sweep_row_frames_focus(row)
 		await get_tree().process_frame
-		var result: Dictionary = _StoreVisualSweep.save_viewport_png(
+		var result: Dictionary = StoreVisualSweepScript.save_viewport_png(
 			get_viewport(),
-			_StoreVisualSweep.visual_sweep_dir(),
+			StoreVisualSweepScript.visual_sweep_dir(),
 			str(row["filename"]),
 			true
 		)
@@ -222,8 +261,8 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 					"Placeholder sweep images must not count as acceptance evidence"
 				)
 
-	var manifest: Dictionary = _StoreVisualSweep.write_review_manifest(
-		_StoreVisualSweep.review_manifest_dir(),
+	var manifest: Dictionary = StoreVisualSweepScript.write_review_manifest(
+		StoreVisualSweepScript.review_manifest_dir(),
 		rows
 	)
 	assert_true(
@@ -236,7 +275,7 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 			"Screenshot sweep review manifest must exist on disk"
 		)
 		var payload: Dictionary = _read_json_file(str(manifest["path"]))
-		assert_eq(str(payload.get("acceptance_target", "")), _StoreVisualSweep.ACCEPTANCE_TARGET)
+		assert_eq(str(payload.get("acceptance_target", "")), StoreVisualSweepScript.ACCEPTANCE_TARGET)
 		var beats: Array = payload.get("beats", []) as Array
 		assert_eq(beats.size(), rows.size(), "Manifest must write one entry per artifact")
 		var template: Dictionary = payload.get("manual_review_template", {}) as Dictionary
@@ -305,7 +344,7 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 		assert_true(metrics.has("mean_absolute_error"))
 		assert_true(metrics.has("max_delta"))
 		for beat: Dictionary in beats:
-			assert_eq(str(beat.get("review_target", "")), _StoreVisualSweep.ACCEPTANCE_TARGET)
+			assert_eq(str(beat.get("review_target", "")), StoreVisualSweepScript.ACCEPTANCE_TARGET)
 			assert_false(
 				str(beat.get("active_route_stage", "")).is_empty(),
 				"Manifest beat must preserve route stage metadata"
@@ -314,6 +353,12 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 				str(beat.get("active_prompt", "")).is_empty(),
 				"Manifest beat must preserve active prompt metadata"
 			)
+			if str(beat.get("name", "")).begins_with("stockroom_"):
+				var disabled_guidance: Dictionary = beat.get("disabled_guidance", {}) as Dictionary
+				assert_false(
+					disabled_guidance.is_empty(),
+					"Manifest stockroom beats must preserve disabled guidance"
+				)
 			assert_false(
 				str(beat.get("next_expected_beat", "")).is_empty(),
 				"Manifest beat must preserve next expected beat metadata"
@@ -328,14 +373,14 @@ func test_screenshot_sweep_writes_named_artifacts_for_review() -> void:
 				"Manifest beat must preserve work-surface review metadata"
 			)
 			var design_checks: Array = beat.get("design_checks", []) as Array
-			for design_check: String in _StoreVisualSweep.route_design_checks():
+			for design_check: String in StoreVisualSweepScript.route_design_checks():
 				assert_true(
 					design_checks.has(design_check),
 					"Manifest beat must preserve design check %s" % design_check
 				)
 			assert_eq(
 				str(beat.get("hud_context_required", "")),
-				_StoreVisualSweep.HUD_CONTEXT_LABEL,
+				StoreVisualSweepScript.HUD_CONTEXT_LABEL,
 				"Manifest beat must preserve the first-day HUD requirement"
 			)
 
@@ -348,7 +393,9 @@ func test_acceptance_visual_sweep_runner_uses_display_backed_capture_contract() 
 		"03_shelf_wall_product_focus.png",
 		"04_stockroom_looking_in.png",
 		"05_stockroom_work_area_interior.png",
-		"06_exit_threshold_return_view.png",
+		"06_product_sale_review.png",
+		"07_checkout_close_day.png",
+		"08_exit_threshold_return_view.png",
 	]:
 		assert_true(
 			_has_sweep_filename(filename),
@@ -367,6 +414,7 @@ func test_acceptance_visual_sweep_runner_uses_display_backed_capture_contract() 
 	assert_string_contains(source, "anchor_validation")
 	assert_string_contains(source, "debug_ui_validation")
 	assert_string_contains(source, "image_validation")
+	assert_string_contains(source, "action_context_validation")
 	assert_string_contains(source, "non_acceptance_evidence")
 	assert_string_contains(source, "acceptance_current_dir")
 	assert_string_contains(source, "write_review_manifest")
@@ -389,6 +437,7 @@ func test_visual_sweep_diff_script_declares_soft_baseline_and_threshold_contract
 	assert_string_contains(source, "\"next_expected_beat\"")
 	assert_string_contains(source, "Capture metadata missing {field}")
 	assert_string_contains(source, "Capture did not validate intended visual anchors")
+	assert_string_contains(source, "Capture did not validate unambiguous action context")
 	assert_string_contains(source, "Capture did not validate editor/debug UI absence")
 	assert_string_contains(source, "Capture marked as non-acceptance evidence")
 	assert_string_contains(source, "json.dump(payload")
@@ -409,7 +458,7 @@ func test_visual_sweep_shell_runner_uses_xvfb_and_compatibility_rendering() -> v
 
 
 func test_screenshot_sweep_documents_human_review_criteria() -> void:
-	var review_criteria: Array[String] = _StoreVisualSweep.review_criteria()
+	var review_criteria: Array[String] = StoreVisualSweepScript.review_criteria()
 	for required: String in [
 		"first-look store identity",
 		"new player can infer the next destination",
@@ -449,7 +498,7 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 			"Sweep review criteria must include %s" % required
 		)
 
-	var failure_criteria: Array[String] = _StoreVisualSweep.design_failure_criteria()
+	var failure_criteria: Array[String] = StoreVisualSweepScript.design_failure_criteria()
 	for required: String in [
 		"oversized signs dominate the composition",
 		"slab shelves dominate the composition",
@@ -469,11 +518,11 @@ func test_screenshot_sweep_documents_human_review_criteria() -> void:
 
 
 func test_first_run_flow_review_markers_remain_visible() -> void:
-	var steps: Array[Dictionary] = _StoreVisualSweep.first_run_flow_steps()
+	var steps: Array[Dictionary] = StoreVisualSweepScript.first_run_flow_steps()
 	assert_eq(
 		steps.size(),
-		7,
-		"First-run flow review must cover manager, register, backroom, shelf, customer, open-store, exit"
+		5,
+		"First-run flow review must cover checkout, backroom, shelf, product/sale, and close"
 	)
 	for step: Dictionary in steps:
 		var anchor_path: String = str(step.get("anchor", ""))
@@ -490,13 +539,17 @@ func test_first_run_flow_review_markers_remain_visible() -> void:
 
 
 func test_first_ten_seconds_beats_stay_aligned_with_first_run_route() -> void:
-	var first_run_anchors: Dictionary = {}
-	for step: Dictionary in _StoreVisualSweep.first_run_flow_steps():
-		first_run_anchors[str(step.get("anchor", ""))] = true
+	var first_run_moments: Dictionary = {}
+	for step: Dictionary in StoreVisualSweepScript.first_run_flow_steps():
+		first_run_moments[str(step.get("moment", ""))] = true
 	for row: Dictionary in _sweep_rows():
+		var action_context: Dictionary = row.get("action_context", {}) as Dictionary
+		var moment: String = str(action_context.get("moment", ""))
+		if moment == "exit":
+			continue
 		assert_true(
-			first_run_anchors.has(str(row.get("route_anchor", ""))),
-			"%s route anchor must come from first-run flow steps" % row["name"]
+			first_run_moments.has(moment),
+			"%s route moment must come from first-run flow steps" % row["name"]
 		)
 
 
@@ -602,7 +655,14 @@ func _assert_sweep_row_frames_focus(row: Dictionary) -> void:
 
 
 func _sweep_rows() -> Array[Dictionary]:
-	return _StoreVisualSweep.rows()
+	return StoreVisualSweepScript.rows()
+
+
+func _sweep_row_by_name(row_name: String) -> Dictionary:
+	for row: Dictionary in _sweep_rows():
+		if str(row.get("name", "")) == row_name:
+			return row
+	return {}
 
 
 func _has_sweep_filename(filename: String) -> bool:
@@ -703,10 +763,10 @@ func _collect_interactables(node: Node, out: Array[Interactable]) -> void:
 
 
 func _point_inside_viewport(point: Vector2, viewport_size: Vector2) -> bool:
-	return point.x >= _StoreVisualSweep.VIEWPORT_MARGIN_PX \
-		and point.y >= _StoreVisualSweep.VIEWPORT_MARGIN_PX \
-		and point.x <= viewport_size.x - _StoreVisualSweep.VIEWPORT_MARGIN_PX \
-		and point.y <= viewport_size.y - _StoreVisualSweep.VIEWPORT_MARGIN_PX
+	return point.x >= StoreVisualSweepScript.VIEWPORT_MARGIN_PX \
+		and point.y >= StoreVisualSweepScript.VIEWPORT_MARGIN_PX \
+		and point.x <= viewport_size.x - StoreVisualSweepScript.VIEWPORT_MARGIN_PX \
+		and point.y <= viewport_size.y - StoreVisualSweepScript.VIEWPORT_MARGIN_PX
 
 
 func _is_visible_through_ancestors(node: Node) -> bool:

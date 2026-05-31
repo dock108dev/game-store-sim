@@ -101,6 +101,42 @@ func test_empty_carrying_partial_and_stocked_states_are_distinct() -> void:
 	assert_false(StoreSessionState.carrying_stock, "Final placement clears carried stock")
 
 
+func test_visual_layers_separate_merchandising_price_empty_and_affordance() -> void:
+	var controller: Node = _store_session_controller()
+	var shelf: Node = _restock_shelf()
+	if controller == null or shelf == null:
+		return
+	for node_path: String in [
+		"TableTopSlab",
+		"TableLeftApron",
+		"TableRightApron",
+		"TableUnderFrontRail",
+		"TableUnderBackRail",
+		"MerchandisingDeck/ProductTray0",
+		"MerchandisingDeck/ProductTray1",
+		"MerchandisingDeck/ProductTray2",
+		"MerchandisingDeck/ConsoleRiser",
+		"PriceTagRail/RestockShelfLabel",
+		"PriceTagRail/GamePriceTag0",
+		"PriceTagRail/GamePriceTag1",
+		"EmptyOverlay",
+		"Interactable",
+	]:
+		assert_not_null(
+			shelf.get_node_or_null(node_path),
+			"Starter display table must keep a separate %s layer" % node_path
+		)
+	await _walk_to_carrying_stock(controller)
+	var affordance: Node = shelf.get_node_or_null("StoreSessionRestockPlacementAffordance")
+	assert_not_null(affordance, "Placement affordance must be created while carrying stock")
+	if affordance is Node3D:
+		assert_gt(
+			(affordance as Node3D).position.y,
+			(_slot_marker(shelf, 0) as Node3D).position.y,
+			"Placement affordance must sit above the product-zone marker layer"
+		)
+
+
 func test_spawned_day_one_items_share_consistent_case_scale() -> void:
 	var controller: Node = _store_session_controller()
 	var shelf: Node = _restock_shelf()

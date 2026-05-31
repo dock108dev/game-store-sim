@@ -25,7 +25,7 @@ const _FIXTURE_TYPE_VISUALS: Dictionary = {
 	"counter": StoreVisualKitScript.CHECKOUT_COUNTER,
 	"register": StoreVisualKitScript.REGISTER,
 	"storage_unit": StoreVisualKitScript.STOCKROOM_TABLE,
-	"floor_rack": StoreVisualKitScript.WALL_SHELF,
+	"floor_rack": StoreVisualKitScript.FLOOR_RACK,
 }
 
 var store_id: StringName = DEFAULT_STORE_ID
@@ -76,6 +76,8 @@ func seed_starter_fixtures_if_empty() -> int:
 	var seeded: int = 0
 	for placement: Dictionary in _layout_placements():
 		if not bool(placement.get("starter_owned", false)):
+			continue
+		if bool(placement.get("visual_only", false)):
 			continue
 		var fixture_type: String = str(placement.get("fixture_type", ""))
 		var fixture_id: String = str(placement.get("fixture_id", ""))
@@ -143,7 +145,10 @@ func _render_placed_fixtures() -> void:
 
 func _render_layout_dressing() -> void:
 	for placement: Dictionary in _layout_placements():
-		if not str(placement.get("fixture_type", "")).is_empty():
+		if (
+			not str(placement.get("fixture_type", "")).is_empty()
+			and not bool(placement.get("visual_only", false))
+		):
 			continue
 		var product_item_id: String = str(placement.get("product_item_id", ""))
 		if not product_item_id.is_empty():
@@ -157,6 +162,11 @@ func _render_layout_dressing() -> void:
 		node.name = str(placement.get("name", String(visual_id)))
 		node.set_meta("visual_id", visual_id)
 		node.set_meta("zone", str(placement.get("zone", "")))
+		var fixture_id: String = str(placement.get("fixture_id", ""))
+		if not fixture_id.is_empty():
+			node.set_meta("fixture_id", fixture_id)
+		if bool(placement.get("visual_only", false)):
+			node.set_meta("visual_only", true)
 		_apply_layout_transform(node, placement)
 		_dressing_root.add_child(node)
 
@@ -208,7 +218,12 @@ func _product_visual_data_from_definition(definition: ItemDefinition) -> Diction
 		"price_cents": int(round(definition.used_price * 100.0)),
 	}
 	if definition.extra is Dictionary:
-		for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+		for key: String in [
+			"box_art_key",
+			"platform_visual_id",
+			"visual_alias_id",
+			"visual_presentation",
+		]:
 			if definition.extra.has(key):
 				data[key] = definition.extra[key]
 	return data
@@ -222,7 +237,12 @@ func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dict
 		"platform_id": str(entry.get("platform_id", "")),
 		"price_cents": int(round(float(entry.get("used_price", entry.get("base_price", 0.0))) * 100.0)),
 	}
-	for key: String in ["box_art_key", "platform_visual_id", "visual_alias_id"]:
+	for key: String in [
+		"box_art_key",
+		"platform_visual_id",
+		"visual_alias_id",
+		"visual_presentation",
+	]:
 		if entry.has(key):
 			data[key] = entry[key]
 	return data

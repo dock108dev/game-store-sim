@@ -104,6 +104,19 @@ func get_display_name(id: StringName) -> String:
 	return _display_names.get(canonical, String(canonical))
 
 
+## Returns a display name without logging when the caller already owns fallback UI text.
+func get_display_name_or(id: StringName, fallback: String) -> String:
+	var canonical: StringName = _resolve_internal(id)
+	if canonical.is_empty():
+		return fallback
+	var display_name: String = _display_names.get(
+		canonical, String(canonical)
+	)
+	if display_name.is_empty():
+		return fallback
+	return display_name
+
+
 ## Returns the scene path for a canonical or alias ID.
 func get_scene_path(id: StringName) -> String:
 	var canonical: StringName = _resolve_internal(id)

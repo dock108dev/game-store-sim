@@ -2,10 +2,10 @@ extends GutTest
 
 const _CATALOG_PATH := "res://game/content/visuals/retro_games_product_visual_catalog.json"
 const _EXPECTED_TYPE := "product_visual_catalog_data"
-const _ProductVisualCatalogScript: GDScript = preload(
+const ProductVisualCatalogScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_catalog.gd"
 )
-const _ProductVisualFactory: GDScript = preload(
+const ProductVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
 const _FORBIDDEN_REAL_WORLD_TERMS := [
@@ -182,7 +182,7 @@ func test_aliases_resolve_to_catalog_visuals() -> void:
 
 
 func test_runtime_lookup_resolves_known_definition_and_metadata() -> void:
-	var catalog: RefCounted = _ProductVisualCatalogScript.new()
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
 	catalog.load_from_dictionary(_catalog)
 
 	var by_definition: Dictionary = catalog.find_template_for_item(
@@ -205,7 +205,7 @@ func test_runtime_lookup_resolves_known_definition_and_metadata() -> void:
 
 
 func test_runtime_lookup_normalizes_plural_category_fallbacks() -> void:
-	var catalog: RefCounted = _ProductVisualCatalogScript.new()
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
 	catalog.load_from_dictionary(_catalog)
 
 	var by_plural_category: Dictionary = catalog.find_template_for_item(
@@ -220,15 +220,36 @@ func test_runtime_lookup_normalizes_plural_category_fallbacks() -> void:
 
 
 func test_product_visual_factory_builds_case_and_console_nodes() -> void:
-	var catalog: RefCounted = _ProductVisualCatalogScript.new()
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
 	catalog.load_from_dictionary(_catalog)
 
-	var case_node: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
-		{"box_art_key": "motorway_kings_neo_ignite", "category": "cartridge"}, catalog
+	var case_node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{
+			"definition_id": "neo_ignite_motorway_kings_loose",
+			"category": "cartridge",
+			"platform_id": "neo_ignite",
+			"platform_visual_id": "neo_ignite_disc_tower",
+			"box_art_key": "motorway_kings_neo_ignite",
+			"visual_alias_id": "starter_motorway_kings",
+		},
+		catalog
 	)
 	assert_not_null(case_node, "Known game metadata must build a case node")
 	if case_node != null:
 		assert_eq(String(case_node.name), "ProductVisualCaseRoot")
+		assert_eq(str(case_node.get_meta("platform_id", "")), "neo_ignite")
+		assert_eq(
+			str(case_node.get_meta("platform_visual_id", "")),
+			"neo_ignite_disc_tower"
+		)
+		assert_eq(
+			str(case_node.get_meta("box_art_key", "")),
+			"motorway_kings_neo_ignite"
+		)
+		assert_eq(
+			str(case_node.get_meta("visual_alias_id", "")),
+			"starter_motorway_kings"
+		)
 		for child_name: String in [
 			"CaseBody",
 			"FrontPanel",
@@ -256,7 +277,7 @@ func test_product_visual_factory_builds_case_and_console_nodes() -> void:
 			assert_eq(spine_platform.text, "NEO IGNITE")
 		case_node.free()
 
-	var priced_node: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
+	var priced_node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
 		{
 			"definition_id": "neo_ignite_kingdom_embers_loose",
 			"category": "cartridges",
@@ -273,7 +294,7 @@ func test_product_visual_factory_builds_case_and_console_nodes() -> void:
 		assert_not_null(priced_node.get_node_or_null("ProductPriceTag"))
 		priced_node.free()
 
-	var console_node: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
+	var console_node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
 		{"category": "console", "platform_visual_id": "canopy_wave_cube"}, catalog
 	)
 	assert_not_null(console_node, "Known console metadata must build a console box")
@@ -283,6 +304,9 @@ func test_product_visual_factory_builds_case_and_console_nodes() -> void:
 			"ConsoleBoxBody",
 			"ConsoleColorStripe",
 			"ConsoleIconMark",
+			"ConsoleSideSpineLabel",
+			"ConsoleControllerSilhouette",
+			"ConsoleCableSilhouette",
 			"ConsolePlatformLabel",
 		]:
 			assert_not_null(
@@ -292,14 +316,123 @@ func test_product_visual_factory_builds_case_and_console_nodes() -> void:
 		console_node.free()
 
 
-func test_case_templates_use_consistent_front_and_spine_facing() -> void:
-	var catalog: RefCounted = _ProductVisualCatalogScript.new()
+func test_starter_console_items_use_catalog_backed_console_box_visuals() -> void:
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
 	catalog.load_from_dictionary(_catalog)
 
-	var front_case: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
+	var console_node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{
+			"definition_id": "console_neo_ignite",
+			"display_name": "Neo Ignite Console (Working)",
+			"category": "consoles",
+			"platform_id": "neo_ignite",
+			"platform_visual_id": "neo_ignite_disc_tower",
+			"route_role": "starter_sale_item",
+		},
+		catalog
+	)
+	assert_not_null(console_node, "Starter console metadata must build a console box")
+	if console_node == null:
+		return
+	assert_eq(String(console_node.name), "ProductVisualConsoleBoxRoot")
+	assert_eq(str(console_node.get_meta("visual_source", "")), "product_visual_factory")
+	assert_eq(str(console_node.get_meta("definition_id", "")), "console_neo_ignite")
+	assert_eq(str(console_node.get_meta("category", "")), "console")
+	assert_eq(str(console_node.get_meta("platform_visual_id", "")), "neo_ignite_disc_tower")
+	for child_name: String in [
+		"ConsoleBoxBody",
+		"ConsoleLabelPlate",
+		"ConsoleSideSpineLabel",
+		"ConsoleSideSpineStripe",
+		"ConsoleBoxTopSeam",
+		"ConsoleBoxBottomSeam",
+		"ConsoleControllerSilhouette",
+		"ConsoleCableSilhouette",
+		"ConsolePlatformLabel",
+	]:
+		assert_not_null(
+			console_node.get_node_or_null(child_name),
+			"Starter console visual missing catalog-backed element %s" % child_name
+		)
+	console_node.free()
+
+
+func test_product_visual_factory_builds_distinct_case_and_cartridge_defaults() -> void:
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
+	catalog.load_from_dictionary(_catalog)
+
+	var case_node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{"category": "cartridge"}, catalog
+	)
+	var cartridge_node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{
+			"category": "cartridge",
+			"platform_visual_id": "neo_ignite_disc_tower",
+			"visual_presentation": "cartridge",
+			"display_name": "Loose Starter Cart",
+		},
+		catalog
+	)
+
+	assert_not_null(case_node, "Generic cartridge metadata must build a case fallback")
+	assert_not_null(
+		cartridge_node,
+		"Explicit cartridge presentation must build a loose cartridge fallback"
+	)
+	if case_node != null and cartridge_node != null:
+		assert_eq(String(case_node.name), "ProductVisualCaseRoot")
+		assert_eq(String(cartridge_node.name), "ProductVisualCartridgeRoot")
+		var case_size: Vector3 = _box_mesh_size(case_node, "CaseBody")
+		var cartridge_size: Vector3 = _box_mesh_size(cartridge_node, "CartridgeShell")
+		assert_gt(
+			case_size.y,
+			cartridge_size.y * 1.5,
+			"Case fallback must be visibly taller than loose cartridge fallback"
+		)
+		assert_gt(
+			absf(case_size.z - cartridge_size.z),
+			0.001,
+			"Case and loose cartridge fallbacks must have distinct depth"
+		)
+		assert_not_null(cartridge_node.get_node_or_null("CartridgeContactStrip"))
+		assert_not_null(cartridge_node.get_node_or_null("CartridgeTitleLabel"))
+	if case_node != null:
+		case_node.free()
+	if cartridge_node != null:
+		cartridge_node.free()
+
+
+func test_catalog_metadata_can_request_cartridge_presentation() -> void:
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
+	catalog.load_from_dictionary(_catalog)
+
+	var node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{
+			"definition_id": "neo_ignite_gridiron_2005_loose",
+			"category": "cartridges",
+			"platform_id": "neo_ignite",
+			"platform_visual_id": "neo_ignite_disc_tower",
+			"visual_presentation": "cartridge",
+		},
+		catalog
+	)
+
+	assert_not_null(node, "Catalog-backed starter item can request cartridge presentation")
+	if node != null:
+		assert_eq(String(node.name), "ProductVisualCartridgeRoot")
+		assert_eq(str(node.get_meta("visual_presentation", "")), "cartridge")
+		assert_eq(str(node.get_meta("definition_id", "")), "neo_ignite_gridiron_2005_loose")
+		node.free()
+
+
+func test_case_templates_use_consistent_front_and_spine_facing() -> void:
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
+	catalog.load_from_dictionary(_catalog)
+
+	var front_case: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
 		{"box_art_key": "star_pantry_rangers_vecforce_hd", "category": "cartridge"}, catalog
 	)
-	var spine_case: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
+	var spine_case: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
 		{"box_art_key": "signal_warden_zero_ignite_go", "category": "cartridge"}, catalog
 	)
 
@@ -332,10 +465,10 @@ func test_product_cases_spawn_from_wall_shelf_and_display_table_slots() -> void:
 
 
 func test_unknown_visual_metadata_returns_no_designed_node() -> void:
-	var catalog: RefCounted = _ProductVisualCatalogScript.new()
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
 	catalog.load_from_dictionary(_catalog)
 
-	var node: Node3D = _ProductVisualFactory.create_visual_for_item_with_catalog(
+	var node: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
 		{"box_art_key": "missing_key", "category": "guide"}, catalog
 	)
 	assert_null(node, "Unknown non-case metadata must leave fallback ownership to caller")
@@ -438,6 +571,15 @@ func _collect_ids(entries: Array, id_key: String) -> Dictionary:
 		if id != "":
 			ids[id] = true
 	return ids
+
+
+func _box_mesh_size(root: Node, child_name: String) -> Vector3:
+	var mesh_instance: MeshInstance3D = root.get_node_or_null(child_name) as MeshInstance3D
+	assert_not_null(mesh_instance, "%s must exist" % child_name)
+	if mesh_instance == null or mesh_instance.mesh is not BoxMesh:
+		return Vector3.ZERO
+	var box: BoxMesh = mesh_instance.mesh as BoxMesh
+	return box.size
 
 
 func _assert_fixture_slot_renders_case(
