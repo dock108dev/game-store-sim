@@ -123,6 +123,9 @@ func test_validation_scripts_surface_closeout_requirements() -> void:
 	assert_string_contains(godot_runner, "gdlint game/")
 	assert_string_contains(godot_runner, "git diff --check")
 	assert_string_contains(godot_runner, "Focused GUT tests")
+	assert_string_contains(godot_runner, "EXPECTED_ERROR_RE=")
+	assert_string_contains(godot_runner, "grep \"^ERROR:\"")
+	assert_string_contains(godot_runner, "grep -vE \"$EXPECTED_ERROR_RE\"")
 
 	var visual_runner: String = _read_text("res://scripts/run_store_visual_sweep.sh")
 	for required: String in [

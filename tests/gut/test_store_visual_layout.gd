@@ -15,6 +15,13 @@ func test_default_layout_catalog_loads_retro_games_starter_layout() -> void:
 	)
 
 
+func test_layout_loader_surfaces_load_error_as_warning() -> void:
+	var source: String = _read_text("res://game/scripts/visuals/store_visual_layout.gd")
+	assert_string_contains(source, "push_warning(catalog.load_error)")
+	assert_string_contains(source, "Store visual layout catalog missing")
+	assert_string_contains(source, "Store visual layout catalog did not parse")
+
+
 func test_retro_games_starter_layout_stays_small_and_uses_kit_visuals() -> void:
 	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
 	var starter_ids: Array[StringName] = StoreVisualKitScript.starter_store_ids()
@@ -173,4 +180,17 @@ func test_unlock_gated_layout_entries_apply_only_when_unlock_is_active() -> void
 		)
 	)
 	assert_eq(unlocked.size(), 1)
-	assert_eq(StringName(str(unlocked[0].get("visual_id", ""))), StoreVisualKitScript.QUEUE_LANE)
+	assert_eq(
+		StringName(str(unlocked[0].get("visual_id", ""))),
+		StoreVisualKitScript.QUEUE_LANE
+	)
+
+
+func _read_text(path: String) -> String:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	assert_not_null(file, "Source file should open: %s" % path)
+	if file == null:
+		return ""
+	var text: String = file.get_as_text()
+	file.close()
+	return text

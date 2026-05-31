@@ -1,3 +1,4 @@
+# gdlint:disable=max-public-methods
 ## Tests checkout sale processing: inventory validation, economy updates,
 ## reputation tiers, signal emission, queue advancement, and timer-based flow.
 extends GutTest
@@ -323,20 +324,39 @@ func test_initiate_sale_rejects_missing_item() -> void:
 
 
 func test_initiate_sale_rejects_null_customer() -> void:
+	watch_signals(EventBus)
 	_checkout.initiate_sale(null, _item, 100.0)
 	assert_false(
 		_checkout._is_processing,
 		"Should not start processing with null customer"
 	)
+	assert_signal_emitted_with_parameters(
+		EventBus, "checkout_failed", ["invalid_sale_subject", null]
+	)
 
 
 func test_initiate_sale_rejects_zero_price() -> void:
 	var customer: Customer = _make_customer()
+	watch_signals(EventBus)
 	_checkout.initiate_sale(customer, _item, 0.0)
 	assert_false(
 		_checkout._is_processing,
 		"Should not start processing with zero price"
 	)
+	assert_signal_emitted_with_parameters(
+		EventBus, "checkout_failed", ["invalid_sale_price", customer]
+	)
+
+
+func test_checkout_queue_ready_rejects_non_customer_payload_with_signal() -> void:
+	watch_signals(EventBus)
+	var payload := Node.new()
+	_checkout._on_checkout_queue_ready(payload)
+	assert_signal_emitted_with_parameters(
+		EventBus, "checkout_failed", ["invalid_checkout_queue_payload", null]
+	)
+	assert_signal_emitted_with_parameters(EventBus, "checkout_completed", [payload])
+	payload.free()
 
 
 # --- Double checkout of same item ---

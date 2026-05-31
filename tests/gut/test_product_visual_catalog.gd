@@ -542,6 +542,15 @@ func test_canonical_content_loader_accepts_visual_catalog_type() -> void:
 	)
 
 
+func test_catalog_loader_surfaces_load_error_as_warning() -> void:
+	var source: String = _read_source_text(
+		"res://game/scripts/visuals/product_visual_catalog.gd"
+	)
+	assert_string_contains(source, "push_warning(catalog.load_error)")
+	assert_string_contains(source, "Product visual catalog missing")
+	assert_string_contains(source, "Product visual catalog did not parse")
+
+
 func _load_catalog() -> Dictionary:
 	var text: String = _read_catalog_text()
 	var parsed: Variant = JSON.parse_string(text)
@@ -554,6 +563,16 @@ func _load_catalog() -> Dictionary:
 func _read_catalog_text() -> String:
 	var file: FileAccess = FileAccess.open(_CATALOG_PATH, FileAccess.READ)
 	assert_not_null(file, "Should open product visual catalog")
+	if file == null:
+		return ""
+	var text: String = file.get_as_text()
+	file.close()
+	return text
+
+
+func _read_source_text(path: String) -> String:
+	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
+	assert_not_null(file, "Source file should open: %s" % path)
 	if file == null:
 		return ""
 	var text: String = file.get_as_text()

@@ -44,6 +44,10 @@ if [ "${AUDIT_SKIP_RUN:-0}" != "1" ]; then
 			echo "ERROR: GODOT/GODOT_EXECUTABLE is set but no executable binary found." >&2
 			exit 1
 		fi
+		if [ "${CI:-false}" = "true" ]; then
+			echo "ERROR: Godot not found in CI; interaction audit cannot be skipped." >&2
+			exit 1
+		fi
 		echo "WARNING: Godot not found — skipping headless audit run." >&2
 		echo "Install Godot 4.6.2 and set GODOT to run the full audit." >&2
 		exit 0

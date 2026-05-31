@@ -37,6 +37,12 @@ else
 	fail "known-fail manifest missing: $KNOWN_FAIL_FILE"
 fi
 
+if grep -q 'Godot not found in CI' "$SCRIPT"; then
+	pass "audit_run hard-fails missing Godot in CI"
+else
+	fail "audit_run missing CI hard-fail for absent Godot"
+fi
+
 # Helper — run the script with a synthetic AuditLog-format log.
 # Args: <log-content> [extra known-fail entries appended to defaults] -> stdout
 _run_gate() {

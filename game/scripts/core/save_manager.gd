@@ -75,6 +75,7 @@ var _performance_report_system: PerformanceReportSystem
 var _unlock_system: UnlockSystem
 var _onboarding_system: OnboardingSystem
 var _pending_auto_save_day: int = -1
+var _warned_save_handling: Dictionary = {}
 
 
 func initialize(
@@ -520,45 +521,44 @@ func _collect_save_data() -> Dictionary:
 
 
 func _distribute_save_data(data: Dictionary) -> void:
-	var time_data: Variant = data.get("time", {})
-	if time_data is Dictionary:
-		_time_system.load_save_data(time_data as Dictionary)
+	var time_data: Dictionary = _save_section(data, "time", "TimeSystem")
+	if not time_data.is_empty():
+		_time_system.load_save_data(time_data)
 
-	var economy_data: Variant = data.get("economy", {})
-	if economy_data is Dictionary:
-		_economy_system.load_save_data(economy_data as Dictionary)
+	var economy_data: Dictionary = _save_section(data, "economy", "EconomySystem")
+	if not economy_data.is_empty():
+		_economy_system.load_save_data(economy_data)
 
-	var inventory_data: Variant = data.get("inventory", {})
-	if inventory_data is Dictionary:
-		_inventory_system.load_save_data(inventory_data as Dictionary)
+	var inventory_data: Dictionary = _save_section(data, "inventory", "InventorySystem")
+	if not inventory_data.is_empty():
+		_inventory_system.load_save_data(inventory_data)
 
-	var reputation_data: Variant = data.get("reputation", {})
-	if reputation_data is Dictionary:
-		_get_reputation_system().load_save_data(reputation_data as Dictionary)
+	var reputation_data: Dictionary = _save_section(data, "reputation", "ReputationSystem")
+	if not reputation_data.is_empty():
+		_get_reputation_system().load_save_data(reputation_data)
 
 	if _order_system:
-		var ordering_data: Variant = data.get("ordering", {})
-		if ordering_data is Dictionary:
-			_order_system.load_save_data(
-				ordering_data as Dictionary
-			)
+		var ordering_data: Dictionary = _save_section(data, "ordering", "OrderSystem")
+		if not ordering_data.is_empty():
+			_order_system.load_save_data(ordering_data)
+	else:
+		_warn_ignored_save_section(data, "ordering", "OrderSystem")
 
 	if _progression_system:
-		var prog_data: Variant = data.get("progression", {})
-		if prog_data is Dictionary:
-			_progression_system.load_save_data(
-				prog_data as Dictionary
-			)
+		var prog_data: Dictionary = _save_section(data, "progression", "ProgressionSystem")
+		if not prog_data.is_empty():
+			_progression_system.load_save_data(prog_data)
+	else:
+		_warn_ignored_save_section(data, "progression", "ProgressionSystem")
 
 	if _store_state_manager != null:
-		var store_data: Variant = data.get("store_states", {})
-		if store_data is Dictionary:
-			_store_state_manager.load_save_data(
-				store_data as Dictionary
-			)
+		var store_data: Dictionary = _save_section(data, "store_states", "StoreStateManager")
+		if not store_data.is_empty():
+			_store_state_manager.load_save_data(store_data)
 		_store_state_manager.restore_owned_slots(_extract_owned_slots(data))
 		_apply_loaded_active_store(data)
 	else:
+		_warn_ignored_save_section(data, "store_states", "StoreStateManager")
 		var owned_slots: Dictionary = _extract_owned_slots(data)
 		var owned_list: Array[StringName] = []
 		for idx_key: Variant in owned_slots.keys():
@@ -574,138 +574,146 @@ func _distribute_save_data(data: Dictionary) -> void:
 			GameManager.owned_stores = owned_list
 
 	if _milestone_system:
-		var ms_data: Variant = data.get("milestones", {})
-		if ms_data is Dictionary:
-			_milestone_system.load_state(ms_data as Dictionary)
+		var ms_data: Dictionary = _save_section(data, "milestones", "MilestoneSystem")
+		if not ms_data.is_empty():
+			_milestone_system.load_state(ms_data)
+	else:
+		_warn_ignored_save_section(data, "milestones", "MilestoneSystem")
 
 	if _refurbishment_system:
-		var refurb_data: Variant = data.get("refurbishment", {})
-		if refurb_data is Dictionary:
-			_refurbishment_system.load_save_data(
-				refurb_data as Dictionary
-			)
+		var refurb_data: Dictionary = _save_section(data, "refurbishment", "RefurbishmentSystem")
+		if not refurb_data.is_empty():
+			_refurbishment_system.load_save_data(refurb_data)
+	else:
+		_warn_ignored_save_section(data, "refurbishment", "RefurbishmentSystem")
 
 	if _trend_system:
-		var trend_data: Variant = data.get("trends", {})
-		if trend_data is Dictionary:
-			_trend_system.load_save_data(
-				trend_data as Dictionary
-			)
+		var trend_data: Dictionary = _save_section(data, "trends", "TrendSystem")
+		if not trend_data.is_empty():
+			_trend_system.load_save_data(trend_data)
+	else:
+		_warn_ignored_save_section(data, "trends", "TrendSystem")
 
 	if _market_event_system:
-		var market_event_data: Variant = data.get(
-			"market_events", {}
+		var market_event_data: Dictionary = _save_section(
+			data, "market_events", "MarketEventSystem"
 		)
-		if market_event_data is Dictionary:
-			_market_event_system.load_save_data(
-				market_event_data as Dictionary
-			)
+		if not market_event_data.is_empty():
+			_market_event_system.load_save_data(market_event_data)
+	else:
+		_warn_ignored_save_section(data, "market_events", "MarketEventSystem")
 
 	if _fixture_placement_system:
-		var fixture_data: Variant = data.get("fixtures", {})
-		if fixture_data is Dictionary:
-			_fixture_placement_system.load_save_data(
-				fixture_data as Dictionary
-			)
+		var fixture_data: Dictionary = _save_section(data, "fixtures", "FixturePlacementSystem")
+		if not fixture_data.is_empty():
+			_fixture_placement_system.load_save_data(fixture_data)
+	else:
+		_warn_ignored_save_section(data, "fixtures", "FixturePlacementSystem")
 
 	if _random_event_system:
-		var random_data: Variant = data.get(
-			"random_events", {}
+		var random_data: Dictionary = _save_section(
+			data, "random_events", "RandomEventSystem"
 		)
-		if random_data is Dictionary:
-			_random_event_system.load_save_data(
-				random_data as Dictionary
-			)
+		if not random_data.is_empty():
+			_random_event_system.load_save_data(random_data)
+	else:
+		_warn_ignored_save_section(data, "random_events", "RandomEventSystem")
 
 	if _staff_system:
-		var staff_data: Variant = data.get("staff", {})
-		if staff_data is Dictionary:
-			_staff_system.load_save_data(
-				staff_data as Dictionary
-			)
+		var staff_data: Dictionary = _save_section(data, "staff", "StaffSystem")
+		if not staff_data.is_empty():
+			_staff_system.load_save_data(staff_data)
+	else:
+		_warn_ignored_save_section(data, "staff", "StaffSystem")
 
 	if _tutorial_system:
-		var tutorial_data: Variant = data.get("tutorial", {})
-		if tutorial_data is Dictionary:
-			_tutorial_system.load_save_data(
-				tutorial_data as Dictionary
-			)
+		var tutorial_data: Dictionary = _save_section(data, "tutorial", "TutorialSystem")
+		if not tutorial_data.is_empty():
+			_tutorial_system.load_save_data(tutorial_data)
+	else:
+		_warn_ignored_save_section(data, "tutorial", "TutorialSystem")
 
 	if _ambient_moments_system:
-		var ambient_data: Variant = data.get(
-			"ambient_moments", {}
+		var ambient_data: Dictionary = _save_section(
+			data, "ambient_moments", "AmbientMomentsSystem"
 		)
-		if ambient_data is Dictionary:
-			_ambient_moments_system.load_save_data(
-				ambient_data as Dictionary
-			)
+		if not ambient_data.is_empty():
+			_ambient_moments_system.load_save_data(ambient_data)
+	else:
+		_warn_ignored_save_section(data, "ambient_moments", "AmbientMomentsSystem")
 
 	if _regulars_log_system:
-		var regulars_data: Variant = data.get("regulars_log", {})
-		if regulars_data is Dictionary:
-			_regulars_log_system.load_state(
-				regulars_data as Dictionary
-			)
+		var regulars_data: Dictionary = _save_section(
+			data, "regulars_log", "RegularsLogSystem"
+		)
+		if not regulars_data.is_empty():
+			_regulars_log_system.load_state(regulars_data)
+	else:
+		_warn_ignored_save_section(data, "regulars_log", "RegularsLogSystem")
 
 	if _ending_evaluator:
-		var ending_data: Variant = data.get("ending", {})
-		if ending_data is Dictionary:
-			_ending_evaluator.load_state(
-				ending_data as Dictionary
-			)
+		var ending_data: Dictionary = _save_section(data, "ending", "EndingEvaluatorSystem")
+		if not ending_data.is_empty():
+			_ending_evaluator.load_state(ending_data)
+	else:
+		_warn_ignored_save_section(data, "ending", "EndingEvaluatorSystem")
 
 	if _store_upgrade_system:
-		var upgrade_data: Variant = data.get(
-			"store_upgrades", {}
+		var upgrade_data: Dictionary = _save_section(
+			data, "store_upgrades", "StoreUpgradeSystem"
 		)
-		if upgrade_data is Dictionary:
-			_store_upgrade_system.load_save_data(
-				upgrade_data as Dictionary
-			)
+		if not upgrade_data.is_empty():
+			_store_upgrade_system.load_save_data(upgrade_data)
+	else:
+		_warn_ignored_save_section(data, "store_upgrades", "StoreUpgradeSystem")
 
 	if _completion_tracker:
-		var completion_data: Variant = data.get(
-			"completion", {}
+		var completion_data: Dictionary = _save_section(
+			data, "completion", "CompletionTracker"
 		)
-		if completion_data is Dictionary:
-			_completion_tracker.load_save_data(
-				completion_data as Dictionary
-			)
+		if not completion_data.is_empty():
+			_completion_tracker.load_save_data(completion_data)
+	else:
+		_warn_ignored_save_section(data, "completion", "CompletionTracker")
 
 	if _performance_report_system:
-		var perf_data: Variant = data.get(
-			"performance_reports", {}
+		var perf_data: Dictionary = _save_section(
+			data, "performance_reports", "PerformanceReportSystem"
 		)
-		if perf_data is Dictionary:
-			_performance_report_system.load_save_data(
-				perf_data as Dictionary
-			)
+		if not perf_data.is_empty():
+			_performance_report_system.load_save_data(perf_data)
+	else:
+		_warn_ignored_save_section(
+			data, "performance_reports", "PerformanceReportSystem"
+		)
 
 	if _unlock_system:
-		var unlock_data: Variant = data.get("unlocks", {})
-		if unlock_data is Dictionary:
-			_unlock_system.load_state(
-				unlock_data as Dictionary
-			)
+		var unlock_data: Dictionary = _save_section(data, "unlocks", "UnlockSystem")
+		if not unlock_data.is_empty():
+			_unlock_system.load_state(unlock_data)
+	else:
+		_warn_ignored_save_section(data, "unlocks", "UnlockSystem")
 
 	if _onboarding_system:
-		var onboarding_data: Variant = data.get(
-			"onboarding_progress", {}
+		var onboarding_data: Dictionary = _save_section(
+			data, "onboarding_progress", "OnboardingSystem"
 		)
-		if onboarding_data is Dictionary:
-			_onboarding_system.load_save_data(
-				onboarding_data as Dictionary
-			)
-
-	var store_session_data: Variant = data.get("store_session_state", null)
-	if store_session_data is Dictionary and StoreSessionState != null:
-		StoreSessionState.load_save_data(store_session_data as Dictionary)
-
-	var difficulty_data: Variant = data.get("difficulty", {})
-	if difficulty_data is Dictionary:
-		DifficultySystemSingleton.load_save_data(
-			difficulty_data as Dictionary
+		if not onboarding_data.is_empty():
+			_onboarding_system.load_save_data(onboarding_data)
+	else:
+		_warn_ignored_save_section(
+			data, "onboarding_progress", "OnboardingSystem"
 		)
+
+	var store_session_data: Dictionary = _save_section(
+		data, "store_session_state", "StoreSessionState"
+	)
+	if not store_session_data.is_empty() and StoreSessionState != null:
+		StoreSessionState.load_save_data(store_session_data)
+
+	var difficulty_data: Dictionary = _save_section(data, "difficulty", "DifficultySystem")
+	if not difficulty_data.is_empty():
+		DifficultySystemSingleton.load_save_data(difficulty_data)
 
 
 func _apply_loaded_active_store(data: Dictionary) -> void:
@@ -999,6 +1007,45 @@ func _systems_ready() -> bool:
 		and _inventory_system != null
 		and _time_system != null
 	)
+
+
+func _warn_save_handling_once(key: String, message: String) -> void:
+	if _warned_save_handling.has(key):
+		return
+	_warned_save_handling[key] = true
+	push_warning(message)
+
+
+func _warn_ignored_save_section(
+	data: Dictionary, section_key: String, system_name: String
+) -> void:
+	if not data.has(section_key):
+		return
+	_warn_save_handling_once(
+		"ignored_section:%s" % section_key,
+		(
+			"SaveManager: save contains '%s' but %s is not wired; section ignored"
+			% [section_key, system_name]
+		)
+	)
+
+
+func _save_section(
+	data: Dictionary, section_key: String, system_name: String
+) -> Dictionary:
+	if not data.has(section_key):
+		return {}
+	var section: Variant = data.get(section_key, {})
+	if section is Dictionary:
+		return section as Dictionary
+	_warn_save_handling_once(
+		"invalid_section:%s" % section_key,
+		(
+			"SaveManager: save section '%s' for %s is %s, expected Dictionary; ignoring"
+			% [section_key, system_name, type_string(typeof(section))]
+		)
+	)
+	return {}
 
 
 func _fail_load(slot: int, reason: String) -> bool:

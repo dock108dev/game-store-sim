@@ -67,6 +67,10 @@ _run_godot_movie() {
 			"$@"
 		return $?
 	fi
+	if [ "${CI:-false}" = "true" ]; then
+		echo "ERROR: timeout or gtimeout is required for nightly video rendering in CI." >&2
+		return 70
+	fi
 	bash "$PROJECT_ROOT/scripts/godot_exec.sh" \
 		--path "$PROJECT_ROOT" \
 		--write-movie "$output_file" \

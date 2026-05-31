@@ -330,6 +330,7 @@ func _wire_save_manager() -> void:
 	save_manager.set_milestone_system(milestone_system)
 	save_manager.set_trend_system(trend_system)
 	save_manager.set_market_event_system(market_event_system)
+	save_manager.set_fixture_placement_system(fixture_placement)
 	save_manager.set_random_event_system(random_event_system)
 	save_manager.set_staff_system(staff_system)
 	save_manager.set_tutorial_system(tutorial_system)
@@ -1040,7 +1041,8 @@ func bootstrap_new_game_state(store_id: StringName = GameManager.DEFAULT_STARTIN
 		return
 	store_state_manager.lease_store(slot_index, store_id, store_id)
 	EventBus.owned_slots_restored.emit(store_state_manager.owned_slots)
-	_create_default_store_inventory(store_id)
+	if not _create_default_store_inventory(store_id):
+		return
 	_validate_new_game_state(store_id)
 
 
@@ -1055,7 +1057,7 @@ func _find_store_slot_index(store_id: StringName) -> int:
 	return all_ids.find(store_id)
 
 
-func _create_default_store_inventory(store_id: StringName) -> void:
+func _create_default_store_inventory(store_id: StringName) -> bool:
 	if not GameManager.data_loader or not inventory_system:
 		push_error(
 			(
@@ -1063,7 +1065,7 @@ func _create_default_store_inventory(store_id: StringName) -> void:
 				+ "missing data_loader or inventory_system"
 			)
 		)
-		return
+		return false
 	var items: Array[ItemInstance] = GameManager.data_loader.create_starting_inventory(
 		String(store_id)
 	)
@@ -1074,14 +1076,19 @@ func _create_default_store_inventory(store_id: StringName) -> void:
 	# otherwise reach Day 1 with nothing in the backroom — i.e. the tutorial
 	# loop would have nothing to stock and silently stall.
 	if items.is_empty():
-		push_warning(
+		push_error(
 			(
-				"GameWorld: starter inventory for '%s' is empty — Day 1 backroom will be empty"
+				"GameWorld: starter inventory for '%s' is empty — aborting new-game bootstrap"
 				% store_id
 			)
 		)
+		EventBus.notification_requested.emit(
+			"New game setup failed — starter inventory is empty."
+		)
+		return false
 	for item: ItemInstance in items:
 		inventory_system.add_item(store_id, item)
+	return true
 
 
 func _get_configured_starting_cash() -> float:
@@ -1112,11 +1119,7 @@ func _validate_loaded_game_state(save_metadata: Dictionary = {}) -> void:
 	var errors: Array[String] = _collect_state_validation_errors(
 		expected_active_store, expected_cash, true, save_metadata.has("active_store_id")
 	)
-	for msg: String in errors:
-		# §F-16: push_error is intentional (state inconsistency detected), but the
-		# game continues — forcing a menu-return here would be worse than degraded
-		# gameplay. See docs/audits/error-handling-report.md §F-16.
-		push_error("Load validation failed: %s" % msg)
+	_surface_state_validation_errors("Load", errors)
 
 
 func _validate_new_game_state(store_id: StringName) -> void:
@@ -1126,9 +1129,20 @@ func _validate_new_game_state(store_id: StringName) -> void:
 	var errors: Array[String] = _collect_state_validation_errors(
 		canonical_store_id, _get_effective_starting_cash(), true, false
 	)
+	_surface_state_validation_errors("New game", errors)
+
+
+func _surface_state_validation_errors(context: String, errors: Array[String]) -> void:
+	if errors.is_empty():
+		return
 	for msg: String in errors:
-		# §F-16: same as load validation — push_error is diagnostic, non-blocking.
-		push_error("New game validation failed: %s" % msg)
+		# §F-16: push_error is intentional (state inconsistency detected), but the
+		# game continues — forcing a menu-return here would be worse than degraded
+		# gameplay. See docs/audits/error-handling-report.md §F-16.
+		push_error("%s validation failed: %s" % [context, msg])
+	EventBus.notification_requested.emit(
+		"%s validation warning — check your save if gameplay looks inconsistent." % context
+	)
 
 
 func _collect_state_validation_errors(

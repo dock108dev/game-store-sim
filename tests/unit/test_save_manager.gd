@@ -305,6 +305,42 @@ func test_collect_save_data_for_tests_returns_schema_copy() -> void:
 	assert_true(bool(fresh_flags.get(&"choice_clean_exchange", false)))
 
 
+func test_wrong_typed_save_section_records_warning_once() -> void:
+	var data: Dictionary = _save_manager.collect_save_data_for_tests()
+	data["time"] = "not a dictionary"
+	_save_manager._warned_save_handling.clear()
+
+	_save_manager._distribute_save_data(data)
+	_save_manager._distribute_save_data(data)
+
+	assert_true(
+		_save_manager._warned_save_handling.has("invalid_section:time"),
+		"Wrong-typed save sections should be recorded as warned"
+	)
+	assert_eq(
+		_save_manager._warned_save_handling.size(), 1,
+		"Repeated wrong-typed section warnings should be deduplicated"
+	)
+
+
+func test_present_unwired_optional_save_section_records_warning_once() -> void:
+	var data: Dictionary = _save_manager.collect_save_data_for_tests()
+	data["fixtures"] = {"fixture_a": {"fixture_type": "shelf"}}
+	_save_manager._warned_save_handling.clear()
+
+	_save_manager._distribute_save_data(data)
+	_save_manager._distribute_save_data(data)
+
+	assert_true(
+		_save_manager._warned_save_handling.has("ignored_section:fixtures"),
+		"Present save sections should warn when their owning system is unwired"
+	)
+	assert_eq(
+		_save_manager._warned_save_handling.size(), 1,
+		"Repeated unwired-section warnings should be deduplicated"
+	)
+
+
 func test_get_slot_metadata_ignores_stale_slot_index() -> void:
 	_economy._current_cash = 250.0
 	_time_system.current_day = 5

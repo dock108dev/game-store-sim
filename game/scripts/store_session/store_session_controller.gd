@@ -1673,10 +1673,10 @@ func _prerequisite_reason_for(objective_id: StringName) -> String:
 func _load_content() -> void:
 	for day_key: Variant in DAY_PATHS.keys():
 		var day: int = int(day_key)
-		var day_json: Variant = _load_json(str(DAY_PATHS[day_key]))
+		var day_json: Variant = _load_json(str(DAY_PATHS[day_key]), day == 1)
 		if day_json is Dictionary:
 			_day_data_by_day[day] = day_json
-	var events_json: Variant = _load_json(EVENTS_PATH)
+	var events_json: Variant = _load_json(EVENTS_PATH, true)
 	if events_json is Dictionary:
 		var events: Array = (events_json as Dictionary).get("events", []) as Array
 		for event_variant: Variant in events:
@@ -2965,16 +2965,18 @@ func _free_owned_ui_node(node: Node) -> void:
 ## means a content regression (corrupt JSON, encoding break, or a strip pass
 ## that left the file in a broken state); both surface as `push_error` so
 ## CI's stderr `^ERROR:` scan fails the build instead of letting the player
-## boot into a customerless Day 1. File-not-found is downgraded to
-## `push_warning` because future content strips may legitimately drop the
-## Day-2 placeholder ahead of authoring its real beats. The `{}` fallback is
-## preserved on every branch so the chain still flows (no events shows up
-## as an empty `_day_events` array — the player still gets a playable
-## back-room → stock → close-day loop).
+## boot into a customerless Day 1. File-not-found is escalated for required
+## files and downgraded to `push_warning` for optional future-day placeholders.
+## The `{}` fallback is preserved on every branch so the chain still flows
+## where callers intentionally tolerate missing optional events.
 ## See docs/audits/error-handling-report.md §EH-12.
-func _load_json(path: String) -> Variant:
+func _load_json(path: String, required: bool = false) -> Variant:
 	if not FileAccess.file_exists(path):
-		push_warning("StoreSessionController._load_json: missing content file %s" % path)
+		var message: String = "StoreSessionController._load_json: missing content file %s" % path
+		if required:
+			push_error(message)
+		else:
+			push_warning(message)
 		return {}
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if file == null:

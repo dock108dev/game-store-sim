@@ -68,6 +68,7 @@ func test_render_script_invokes_godot_movie_maker_and_reports_failures() -> void
 	assert_string_contains(source, "empty movie file")
 	assert_string_contains(source, "unknown scenario id")
 	assert_string_contains(source, "runner timeout")
+	assert_string_contains(source, "required for nightly video rendering in CI")
 
 
 func test_nightly_video_workflow_is_advisory_and_retains_artifacts() -> void:

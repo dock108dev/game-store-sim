@@ -134,9 +134,11 @@ func initiate_sale(
 ) -> void:
 	if not customer or not item:
 		push_warning("CheckoutSystem: null customer or item in initiate_sale")
+		EventBus.checkout_failed.emit("invalid_sale_subject", customer)
 		return
 	if agreed_price <= 0.0:
 		push_warning("CheckoutSystem: invalid agreed_price: %f" % agreed_price)
+		EventBus.checkout_failed.emit("invalid_sale_price", customer)
 		return
 	if not _inventory_system._items.has(item.instance_id):
 		EventBus.notification_requested.emit(
@@ -240,6 +242,11 @@ func _on_customer_left(customer_data: Dictionary) -> void:
 
 func _on_checkout_queue_ready(customer: Node) -> void:
 	if not customer is Customer:
+		push_warning(
+			"CheckoutSystem: checkout_queue_ready payload was %s, expected Customer"
+			% type_string(typeof(customer))
+		)
+		EventBus.checkout_failed.emit("invalid_checkout_queue_payload", null)
 		EventBus.checkout_completed.emit(customer)
 		return
 	process_transaction(customer as Customer)

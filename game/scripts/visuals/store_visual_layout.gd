@@ -26,12 +26,14 @@ static func load_from_path(path: String) -> RefCounted:
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		catalog.load_error = "Store visual layout catalog missing: %s" % path
+		push_warning(catalog.load_error)
 		return catalog
 	var text: String = file.get_as_text()
 	file.close()
 	var parsed: Variant = JSON.parse_string(text)
 	if parsed is not Dictionary:
 		catalog.load_error = "Store visual layout catalog did not parse as a Dictionary"
+		push_warning("%s: %s" % [catalog.load_error, path])
 		return catalog
 	catalog.load_from_dictionary(parsed as Dictionary)
 	return catalog

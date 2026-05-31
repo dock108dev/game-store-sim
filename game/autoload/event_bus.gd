@@ -196,6 +196,7 @@ signal customer_reached_checkout(customer: Node)
 signal checkout_started(items: Array, customer_node: Node)
 signal checkout_queue_ready(customer: Node)
 signal checkout_completed(customer: Node)
+signal checkout_failed(reason: String, customer: Node)
 signal queue_enqueue_result(data: Dictionary)
 signal queue_wait_sample(data: Dictionary)
 ## Player pressed Pass at the register before any sale fired. Distinct from
