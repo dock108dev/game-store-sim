@@ -94,6 +94,9 @@ Date: 2026-05-31
 - `bash scripts/validate_export_config.sh`: passed.
 - Active Markdown link check: passed.
 - `git diff --check`: passed.
+- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 431`,
+  `Tests 5025`, `Passing 5025`; maintained shell validators and SSOT
+  tripwires also passed.
 
 ## Escalations
 
