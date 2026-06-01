@@ -152,6 +152,18 @@
 			"timeout_frames": 120
 		},
 		{
+			"id": "first60_quality_gate",
+			"type": "run_first60_quality_gate",
+			"timeout_frames": 900
+		},
+		{
+			"id": "first60_quality_ready",
+			"type": "wait_audit",
+			"checkpoint": "first60_quality_ready",
+			"status": "PASS",
+			"timeout_frames": 120
+		},
+		{
 			"id": "scenario_exit",
 			"type": "finish",
 			"timeout_frames": 30

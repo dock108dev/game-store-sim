@@ -23,8 +23,8 @@ func get_disabled_reason(_actor: Node = null) -> String:
 		return ""
 	match controller.current_stage():
 		StoreSessionController.STAGE_BACK_ROOM_INVENTORY:
-			return "Check the back room first."
+			return "Inspect the Starter Stock Box first."
 		StoreSessionController.STAGE_STOCK_SHELF:
-			return "Stock the starter display table before closing."
+			return "Stock the Starter Display before closing."
 		_:
 			return ""

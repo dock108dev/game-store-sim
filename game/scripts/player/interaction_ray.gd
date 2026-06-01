@@ -287,8 +287,10 @@ func _choose_hover_target(
 		and proximity_target.can_interact()
 		and (
 			raycast_target == null
-			or not raycast_target.can_interact()
-			or raycast_target.get_disabled_reason().strip_edges().is_empty()
+			or (
+				not raycast_target.can_interact()
+				and raycast_target.get_disabled_reason().strip_edges().is_empty()
+			)
 		)
 	):
 		_last_target_source = &"proximity"

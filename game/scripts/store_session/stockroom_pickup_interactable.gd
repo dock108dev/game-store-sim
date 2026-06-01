@@ -3,9 +3,9 @@ extends StoreSessionInteractableBase
 
 
 func _ready() -> void:
-	display_name = "back room inventory"
-	prompt_text = "Check"
-	action_verb = "Check"
+	display_name = "Starter Stock Box"
+	prompt_text = "Inspect"
+	action_verb = "Inspect"
 	interaction_type = InteractionType.BACKROOM
 	interactable_id = &"store_session.backroom_pickup"
 	proximity_radius = 1.4

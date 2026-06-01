@@ -30,8 +30,8 @@ const _ACTIVE_LABEL_MODULATE := Color(1.0, 1.0, 1.0, 1.0)
 var _fade_tween: Tween
 var _has_focus_target: bool = false
 ## Mirrors `HUD._fp_mode` via `EventBus.fp_mode_changed`. The prompt remains
-## visible in FP mode: it is the sole bottom-right owner of current interaction
-## copy while the right panel owns objectives.
+## visible in FP mode: it owns focused interaction copy while ObjectiveRail
+## owns the active objective and the right panel stays passive.
 var _fp_mode_active: bool = false
 
 @onready var _panel: PanelContainer = $PanelContainer

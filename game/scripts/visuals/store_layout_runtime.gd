@@ -18,6 +18,10 @@ const StoreVisualLayoutScript: GDScript = preload(
 const ProductVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
+const VisualNodeUtilScript: GDScript = preload("res://game/scripts/visuals/visual_node_util.gd")
+const VisualValueUtilScript: GDScript = preload(
+	"res://game/scripts/visuals/visual_value_util.gd"
+)
 
 const _FIXTURE_TYPE_VISUALS: Dictionary = {
 	"wall_shelf": StoreVisualKitScript.WALL_SHELF,
@@ -83,7 +87,7 @@ func seed_starter_fixtures_if_empty() -> int:
 		var fixture_id: String = str(placement.get("fixture_id", ""))
 		if fixture_type.is_empty() or fixture_id.is_empty():
 			continue
-		var grid_pos: Vector2i = _vector2i_from_array(
+		var grid_pos: Vector2i = VisualValueUtilScript.vector2i_from_array(
 			placement.get("grid_position", []), Vector2i.ZERO
 		)
 		var rotation: int = int(placement.get("fixture_rotation", 0))
@@ -106,8 +110,8 @@ func seed_starter_fixtures_if_empty() -> int:
 
 func rebuild_visuals() -> void:
 	_ensure_roots()
-	_clear_children(_fixture_root)
-	_clear_children(_dressing_root)
+	VisualNodeUtilScript.clear_children(_fixture_root)
+	VisualNodeUtilScript.clear_children(_dressing_root)
 	_render_placed_fixtures()
 	_render_layout_dressing()
 
@@ -258,9 +262,15 @@ func _visual_id_for_fixture(fixture_data: Dictionary, placement: Dictionary) -> 
 
 
 func _apply_layout_transform(node: Node3D, placement: Dictionary) -> void:
-	node.position = _vector3_from_array(placement.get("position", []), Vector3.ZERO)
-	node.rotation_degrees = _vector3_from_array(placement.get("rotation_degrees", []), Vector3.ZERO)
-	node.scale = _vector3_from_array(placement.get("scale", []), Vector3.ONE)
+	node.position = VisualValueUtilScript.vector3_from_array(
+		placement.get("position", []), Vector3.ZERO
+	)
+	node.rotation_degrees = VisualValueUtilScript.vector3_from_array(
+		placement.get("rotation_degrees", []), Vector3.ZERO
+	)
+	node.scale = VisualValueUtilScript.vector3_from_array(
+		placement.get("scale", []), Vector3.ONE
+	)
 
 
 func _apply_grid_transform(node: Node3D, fixture_data: Dictionary) -> void:
@@ -348,32 +358,6 @@ func _on_store_upgrade_effect_applied(
 	if not active_unlocks.has(unlock_id):
 		active_unlocks.append(unlock_id)
 	rebuild_visuals()
-
-
-func _clear_children(parent: Node) -> void:
-	if parent == null:
-		return
-	for child: Node in parent.get_children():
-		parent.remove_child(child)
-		child.free()
-
-
-func _vector3_from_array(raw: Variant, fallback: Vector3) -> Vector3:
-	if raw is not Array:
-		return fallback
-	var values: Array = raw as Array
-	if values.size() < 3:
-		return fallback
-	return Vector3(float(values[0]), float(values[1]), float(values[2]))
-
-
-func _vector2i_from_array(raw: Variant, fallback: Vector2i) -> Vector2i:
-	if raw is not Array:
-		return fallback
-	var values: Array = raw as Array
-	if values.size() < 2:
-		return fallback
-	return Vector2i(int(values[0]), int(values[1]))
 
 
 func _default_layout_ids(p_store_id: StringName, p_layout_id: StringName) -> Array[StringName]:

@@ -1,5 +1,6 @@
 extends GutTest
 
+const StoreSessionTestHelpers := preload("res://tests/automation/store_session_test_helpers.gd")
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const RegisterScreenStateScript: GDScript = preload(
 	"res://game/scripts/store_session/register_screen_state.gd"
@@ -187,11 +188,15 @@ func test_training_register_check_sets_screen_ready_then_backroom_detour() -> vo
 
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_READY)
 	assert_eq(screen.display_text(), "REGISTER\nREADY")
 
 	controller.on_store_register_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)

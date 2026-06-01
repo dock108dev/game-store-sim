@@ -65,6 +65,7 @@ func before_each() -> void:
 
 
 func _make_panel(with_objectives: bool = true) -> StoreStatusPanel:
+	StoreSessionState.preopening_complete = true
 	var panel: StoreStatusPanel = StoreStatusPanel.new()
 	if with_objectives:
 		panel.set_objectives(_OBJECTIVES)
@@ -113,6 +114,29 @@ func test_preopening_header_stays_readable_without_truncation() -> void:
 	)
 
 
+func test_preopening_uses_training_rows_without_day_one_bleed() -> void:
+	var panel: StoreStatusPanel = StoreStatusPanel.new()
+	panel.set_objectives(_OBJECTIVES)
+	add_child_autofree(panel)
+	_assert_label_contains(panel, "Manager")
+	_assert_label_contains(panel, "Register")
+	_assert_label_contains(panel, "Back room")
+	_assert_label_contains(panel, "Shelf stock")
+	_assert_no_label_contains(panel, "First customer")
+	_assert_no_label_contains(panel, "Delivery")
+	_assert_no_label_contains(panel, "Close")
+	assert_eq(panel.get_row_state(&"talk_to_manager"), "current")
+	assert_eq(panel.get_row_state(&"check_register"), "pending")
+	var current: Label = _milestone_label(panel, &"talk_to_manager")
+	var future: Label = _milestone_label(panel, &"check_register")
+	if current != null and future != null:
+		assert_gt(
+			current.get_theme_color("font_color").a,
+			future.get_theme_color("font_color").a,
+			"Current training row must read stronger than future training rows"
+		)
+
+
 func test_run_state_changed_switches_preopening_panel_to_store_hours() -> void:
 	var panel: StoreStatusPanel = StoreStatusPanel.new()
 	panel.set_objectives(_TRAINING_OBJECTIVES)
@@ -130,6 +154,22 @@ func test_run_state_changed_switches_preopening_panel_to_store_hours() -> void:
 	_assert_no_label_contains(panel, "Register")
 	_assert_no_label_contains(panel, "Practice")
 	_assert_no_label_contains(panel, "Open store")
+	assert_eq(panel.get_row_state(&"talk_to_customer"), "current")
+	assert_eq(panel.get_row_state(&"stock_shelf"), "pending")
+
+
+func test_training_completion_does_not_complete_store_hours_row() -> void:
+	var panel: StoreStatusPanel = StoreStatusPanel.new()
+	panel.set_objectives(_TRAINING_OBJECTIVES)
+	add_child_autofree(panel)
+	EventBus.store_objective_completed.emit(&"training_stock_shelf")
+	await get_tree().process_frame
+	assert_eq(panel.get_row_state(&"training_stock_shelf"), "completed")
+	StoreSessionState.preopening_complete = true
+	EventBus.run_state_changed.emit()
+	await get_tree().process_frame
+	assert_eq(panel.get_item_glyph(&"stock_shelf"), "•")
+	assert_eq(panel.get_row_state(&"stock_shelf"), "pending")
 
 
 func test_compact_store_stat_rows_seed_at_zero() -> void:
@@ -157,6 +197,28 @@ func test_column_layout_has_store_and_today_section_labels() -> void:
 		assert_eq(store.text, "STORE")
 	if today != null:
 		assert_eq(today.text, "TODAY")
+
+
+func test_panel_uses_shared_warm_hud_chrome() -> void:
+	var panel: StoreStatusPanel = _make_panel()
+	var root_panel: PanelContainer = panel.get_node_or_null("Panel") as PanelContainer
+	assert_not_null(root_panel, "Right panel must own its PanelContainer")
+	if root_panel == null:
+		return
+	var style: StyleBoxFlat = root_panel.get_theme_stylebox("panel") as StyleBoxFlat
+	assert_not_null(style, "Right panel must use a flat panel style")
+	if style == null:
+		return
+	assert_eq(style.bg_color, Color(0.094, 0.078, 0.067, 0.82))
+	assert_eq(style.border_color, Color(0.534, 0.420, 0.260, 0.58))
+	var header: Label = panel.get_node_or_null("Panel/Column/Header") as Label
+	assert_not_null(header, "Right panel must expose a header label")
+	if header != null:
+		assert_eq(
+			header.get_theme_color("font_color"),
+			StoreModalTheme.COLOR_TEXT_PRIMARY,
+			"Right panel header must share modal text color"
+		)
 
 
 func test_column_has_no_unlock_or_recent_label() -> void:
@@ -225,13 +287,15 @@ func test_day_started_updates_header_resets_daily_values_and_milestones() -> voi
 	assert_eq(panel.get_item_glyph(&"talk_to_customer"), "•")
 
 
-func test_all_day_one_milestones_seed_as_pending() -> void:
+func test_day_one_milestones_seed_with_one_current_row() -> void:
 	var panel: StoreStatusPanel = _make_panel()
 	assert_eq(panel.get_visible_item_count(), _OBJECTIVES.size())
+	assert_eq(panel.get_row_state(&"talk_to_customer"), "current")
+	assert_eq(panel.get_row_state(&"back_room_inventory"), "pending")
+	assert_eq(panel.get_row_state(&"stock_shelf"), "pending")
+	assert_eq(panel.get_row_state(&"close_day"), "pending")
 	for entry: Dictionary in _OBJECTIVES:
-		var obj_id: StringName = StringName(str(entry.get("id", "")))
-		assert_eq(panel.get_item_glyph(obj_id), "•")
-		assert_eq(panel.get_row_state(obj_id), "pending")
+		assert_eq(panel.get_item_glyph(StringName(str(entry.get("id", "")))), "•")
 
 
 func test_milestone_copy_is_compact_and_not_action_copy() -> void:
@@ -245,13 +309,18 @@ func test_milestone_copy_is_compact_and_not_action_copy() -> void:
 	_assert_no_label_contains(panel, "Stock starter display table")
 
 
-func test_pending_rows_use_muted_alpha() -> void:
+func test_current_row_is_clearer_than_future_rows() -> void:
 	var panel: StoreStatusPanel = _make_panel()
-	var label: Label = panel.get_node_or_null("Panel/Column/Milestone_talk_to_customer") as Label
-	assert_not_null(label, "Pending milestone label must exist")
-	if label == null:
+	var current: Label = _milestone_label(panel, &"talk_to_customer")
+	var future: Label = _milestone_label(panel, &"back_room_inventory")
+	if current == null or future == null:
 		return
-	assert_almost_eq(label.get_theme_color("font_color").a, 0.5, 0.05)
+	assert_gt(
+		current.get_theme_color("font_color").a,
+		future.get_theme_color("font_color").a,
+		"Current milestone must read stronger than future pending rows"
+	)
+	assert_almost_eq(future.get_theme_color("font_color").a, 0.38, 0.05)
 
 
 func test_objective_changed_does_not_restamp_passive_milestones() -> void:
@@ -275,15 +344,16 @@ func test_objective_changed_does_not_restamp_passive_milestones() -> void:
 
 
 func test_custom_objective_rows_do_not_fallback_to_active_copy() -> void:
+	StoreSessionState.preopening_complete = true
 	var custom_objectives: Array[Dictionary] = [
 		{
 			"id": "inspect_counter",
-			"label": "Check the register.",
-			"action": "Check register",
+			"label": "Open the register and confirm the checkout lane is ready.",
+			"action": "Verify the register before customers arrive",
 		},
 		{
 			"id": "stock_shelf",
-			"label": "Stock the starter display table.",
+			"label": "Place all 3 starter items on the starter display table.",
 			"action": "Stock starter display table",
 		},
 	]
@@ -293,8 +363,8 @@ func test_custom_objective_rows_do_not_fallback_to_active_copy() -> void:
 
 	_assert_label_contains(panel, "Inspect Counter")
 	_assert_label_contains(panel, "Stock Shelf")
-	_assert_no_label_contains(panel, "Check register")
-	_assert_no_label_contains(panel, "Check the register")
+	_assert_no_label_contains(panel, "Verify the register")
+	_assert_no_label_contains(panel, "Open the register")
 	_assert_no_label_contains(panel, "Stock starter display table")
 
 
@@ -316,8 +386,24 @@ func test_completion_signal_marks_row_done_without_collapsing() -> void:
 	await get_tree().process_frame
 	assert_eq(panel.get_item_glyph(&"talk_to_customer"), "✓")
 	assert_eq(panel.get_row_state(&"talk_to_customer"), "completed")
+	assert_eq(panel.get_row_state(&"back_room_inventory"), "current")
 	await get_tree().create_timer(2.5).timeout
 	assert_eq(panel.get_visible_item_count(), _OBJECTIVES.size())
+
+
+func test_completed_row_is_quieter_than_current_row() -> void:
+	var panel: StoreStatusPanel = _make_panel()
+	EventBus.store_objective_completed.emit(&"talk_to_customer")
+	await get_tree().process_frame
+	var completed: Label = _milestone_label(panel, &"talk_to_customer")
+	var current: Label = _milestone_label(panel, &"back_room_inventory")
+	if completed == null or current == null:
+		return
+	assert_lt(
+		completed.get_theme_color("font_color").a,
+		current.get_theme_color("font_color").a,
+		"Completed milestone must stay visible but quieter than the current milestone"
+	)
 
 
 func test_completion_signal_for_unknown_id_is_a_noop() -> void:
@@ -381,6 +467,10 @@ func _assert_label_contains(root: Node, needle: String) -> void:
 	assert_true(
 		_has_label_containing(root, needle), "Expected a Label descendant containing '%s'" % needle
 	)
+
+
+func _milestone_label(panel: StoreStatusPanel, objective_id: StringName) -> Label:
+	return panel.get_node_or_null("Panel/Column/Milestone_%s" % String(objective_id)) as Label
 
 
 func _has_label_containing(root: Node, needle: String) -> bool:

@@ -64,7 +64,7 @@ func test_pickup_disabled_copy_routes_to_current_stage() -> void:
 	StoreSessionState.carrying_stock = true
 	assert_eq(
 		controller.pickup_disabled_reason(),
-		"Stock already in hand. Place it on the starter display table.",
+		"Stock already in hand. Place it on the Starter Display.",
 		"Already-carrying copy should be passive and name the active destination"
 	)
 
@@ -76,7 +76,7 @@ func test_pickup_disabled_copy_routes_to_current_stage() -> void:
 	)
 	assert_eq(
 		controller.pickup_disabled_reason(),
-		"Delivery already checked.",
+		"Stock box already inspected. Stock the Starter Display.",
 		"Completed pickup copy should not invite a second pickup"
 	)
 
@@ -150,7 +150,7 @@ func test_completed_pickup_attempt_does_not_start_carry_or_toast() -> void:
 	assert_signal_emitted(EventBus, "notification_requested")
 	assert_eq(
 		get_signal_parameters(EventBus, "notification_requested"),
-		["Delivery already checked."]
+		["Stock box already inspected. Stock the Starter Display."]
 	)
 
 

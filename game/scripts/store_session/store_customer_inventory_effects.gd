@@ -44,9 +44,11 @@ func apply(effects: Dictionary) -> Dictionary:
 		result["inventory_counts"] = _inventory_counts(store_id)
 		return result
 
+	var snapshots: Dictionary = _snapshot_planned_items(plans)
 	for plan: Dictionary in plans:
 		if not _apply_plan(plan, result):
 			result["ok"] = false
+			_rollback_applied_changes(result, snapshots)
 			break
 	result["inventory_counts"] = _inventory_counts(store_id)
 	return result
@@ -296,6 +298,78 @@ func _apply_condition(operation: Dictionary, items: Array, result: Dictionary) -
 		applied["to_condition"] = item.condition
 		result["applied"].append(applied)
 	return true
+
+
+func _snapshot_planned_items(plans: Array[Dictionary]) -> Dictionary:
+	var snapshots: Dictionary = {}
+	for plan: Dictionary in plans:
+		var operation: Dictionary = plan.get("operation", {}) as Dictionary
+		for item_variant: Variant in plan.get("items", []) as Array:
+			if item_variant is not ItemInstance:
+				continue
+			var item: ItemInstance = item_variant as ItemInstance
+			snapshots[item.instance_id] = {
+				"item": item,
+				"store_id": _store_id_for_applied(operation, item),
+				"location": item.current_location,
+				"condition": item.condition,
+			}
+	return snapshots
+
+
+func _rollback_applied_changes(result: Dictionary, snapshots: Dictionary) -> void:
+	if _inventory_system == null:
+		return
+	var applied_ops: Array = result.get("applied", []) as Array
+	if applied_ops.is_empty():
+		return
+	for index: int in range(applied_ops.size() - 1, -1, -1):
+		var applied: Dictionary = applied_ops[index] as Dictionary
+		var instance_id: String = str(applied.get("instance_id", ""))
+		if instance_id.is_empty():
+			continue
+		if str(applied.get("op", "")) == OP_CREATE_ITEM:
+			if _inventory_system.get_item(instance_id) != null:
+				_inventory_system.remove_item(instance_id)
+			continue
+		_restore_existing_item(instance_id, snapshots.get(instance_id, {}) as Dictionary)
+	result["rolled_back"] = applied_ops.duplicate(true)
+	result["applied"] = []
+
+
+func _restore_existing_item(instance_id: String, snapshot: Dictionary) -> void:
+	if snapshot.is_empty():
+		return
+	var item: ItemInstance = snapshot.get("item", null) as ItemInstance
+	if item == null:
+		return
+	var target_location: String = str(snapshot.get("location", LOCATION_BACKROOM))
+	var target_condition: String = str(snapshot.get("condition", item.condition))
+	var store_id: StringName = StringName(str(snapshot.get("store_id", "")))
+	var existing: ItemInstance = _inventory_system.get_item(instance_id)
+	if existing == null:
+		item.current_location = LOCATION_BACKROOM
+		item.condition = target_condition
+		_inventory_system.add_item(store_id, item)
+		existing = _inventory_system.get_item(instance_id)
+	else:
+		if existing.condition != target_condition:
+			_inventory_system.update_item_condition(instance_id, target_condition)
+	if existing != null and existing.current_location != target_location:
+		_inventory_system.move_item(instance_id, target_location)
+	_restore_shelf_slot(instance_id, target_location)
+
+
+func _restore_shelf_slot(instance_id: String, location: String) -> void:
+	if _shelf_root == null or not location.begins_with("shelf:"):
+		return
+	var slot_id: String = location.substr(6)
+	for node: Node in _shelf_root.find_children("*", "ShelfSlot", true, false):
+		var slot: ShelfSlot = node as ShelfSlot
+		if slot == null or slot.slot_id != slot_id:
+			continue
+		slot.assign_item(StringName(instance_id))
+		return
 
 
 func _clear_shelf_slot(instance_id: String, from_location: String) -> void:

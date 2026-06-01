@@ -45,6 +45,19 @@ func test_panel_starts_with_zero_entries() -> void:
 	)
 
 
+func test_panel_uses_shared_warm_hud_background() -> void:
+	var panel: StoreEventLogPanel = _make_panel()
+	var background: ColorRect = panel.get_node("Anchor/Background") as ColorRect
+	assert_not_null(background, "Panel must own a background rect")
+	if background != null:
+		assert_eq(
+			background.color,
+			StoreEventLogPanel._PANEL_BG,
+			"Event log background must use the shared warm HUD family"
+		)
+		assert_eq(background.color, Color(0.094, 0.078, 0.067, 0.76))
+
+
 # ── event_logged subscription ─────────────────────────────────────────────────
 
 func test_event_logged_emit_renders_row() -> void:
@@ -161,34 +174,49 @@ func test_display_text_strips_bracket_tag_prefix() -> void:
 	)
 
 
+func test_display_text_strips_redundant_message_tags() -> void:
+	var panel: StoreEventLogPanel = _make_panel()
+	EventBus.event_logged.emit("[STOCK]", "[STOCK] Stocked Crash Bandicoot 2.")
+	await get_tree().process_frame
+	var latest: String = panel.get_latest_row_text()
+	assert_eq(
+		latest, "Stocked Crash Bandicoot 2.",
+		"Visible text must strip redundant bracket tags from message copy"
+	)
+	assert_false(
+		latest.contains("["),
+		"Visible row must not expose bracket metadata"
+	)
+
+
 func test_tag_colors_match_spec() -> void:
 	# AC: TAG_COLORS covers STOCK (blue-teal), CUSTOMER (green),
 	# DAY (amber/gold), SYSTEM (medium gray), OBJECTIVE (cyan).
 	var panel: StoreEventLogPanel = _make_panel()
 	assert_eq(
 		panel.get_tag_color("STOCK"),
-		Color(0.3, 0.75, 0.85, 1.0),
-		"[STOCK] must render in blue-teal"
+		Color(0.357, 0.722, 0.910, 1.0),
+		"[STOCK] must render in soft blue"
 	)
 	assert_eq(
 		panel.get_tag_color("CUSTOMER"),
-		Color(0.3, 1.0, 0.5, 1.0),
-		"[CUSTOMER] must render in green"
+		Color(0.561, 0.878, 0.459, 1.0),
+		"[CUSTOMER] must render in soft green"
 	)
 	assert_eq(
 		panel.get_tag_color("DAY"),
-		Color(1.0, 0.78, 0.3, 1.0),
-		"[DAY] must render in amber/gold"
+		Color(0.910, 0.647, 0.278, 1.0),
+		"[DAY] must render in modal gold"
 	)
 	assert_eq(
 		panel.get_tag_color("SYSTEM"),
-		Color(0.65, 0.65, 0.65, 1.0),
-		"[SYSTEM] must render in medium gray"
+		Color(0.722, 0.660, 0.549, 1.0),
+		"[SYSTEM] must render in muted warm gray"
 	)
 	assert_eq(
 		panel.get_tag_color("OBJECTIVE"),
-		Color(0.4, 0.9, 1.0, 1.0),
-		"[OBJECTIVE] must render in cyan"
+		Color(0.957, 0.914, 0.831, 1.0),
+		"[OBJECTIVE] must render in cream"
 	)
 
 
@@ -217,6 +245,78 @@ func test_unknown_tag_falls_back_to_near_white() -> void:
 	assert_almost_eq(color.r, 0.95, 0.001, "Unknown-tag color stays near-white (R)")
 	assert_almost_eq(color.g, 0.95, 0.001, "Unknown-tag color stays near-white (G)")
 	assert_almost_eq(color.b, 0.95, 0.001, "Unknown-tag color stays near-white (B)")
+
+
+func test_debug_and_modal_tags_do_not_render_rows() -> void:
+	var panel: StoreEventLogPanel = _make_panel()
+	EventBus.event_logged.emit("[MODAL]", "Modal opened: CanvasLayer/DecisionCard.")
+	EventBus.event_logged.emit("[DEBUG]", "FSM scan complete.")
+	await get_tree().process_frame
+	assert_eq(
+		panel.get_visible_entry_count(), 0,
+		"Diagnostic tags must stay out of the player-facing event log"
+	)
+
+
+# ── first-minute readability hierarchy ───────────────────────────────────────
+
+func test_important_first_minute_tags_are_more_legible_than_passive_rows() -> void:
+	var important_events: Array[Array] = [
+		["[OBJECTIVE]", "Register ready."],
+		["[STOCK]", "Stocked Crash Bandicoot 2."],
+		["[DAY]", "First-day training started."],
+		["[SYSTEM]", "Store is in pre-opening."],
+	]
+	for event: Array in important_events:
+		var panel: StoreEventLogPanel = _make_panel()
+		EventBus.event_logged.emit("[CUSTOMER]", "Customer left (satisfied).")
+		EventBus.event_logged.emit(String(event[0]), String(event[1]))
+		await get_tree().process_frame
+		assert_gt(
+			panel.get_row_font_size_for_test(1),
+			panel.get_row_font_size_for_test(0),
+			"%s beats must be larger than passive rows" % String(event[0])
+		)
+		assert_gt(
+			panel.get_row_outline_size_for_test(1),
+			panel.get_row_outline_size_for_test(0),
+			"%s beats must have stronger outline" % String(event[0])
+		)
+
+
+func test_newest_row_keeps_readable_emphasis_after_later_passive_event() -> void:
+	var panel: StoreEventLogPanel = _make_panel()
+	EventBus.event_logged.emit("[DAY]", "First-day training started.")
+	EventBus.event_logged.emit("[OBJECTIVE]", "Shelf stocked.")
+	EventBus.event_logged.emit("[CUSTOMER]", "Customer left (satisfied).")
+	await get_tree().process_frame
+	assert_eq(
+		panel.get_latest_row_text(), "Customer left (satisfied).",
+		"Rows must stay ordered by arrival time"
+	)
+	assert_gte(
+		panel.get_row_outline_size_for_test(2),
+		StoreEventLogPanel._NEWEST_OUTLINE_SIZE,
+		"Newest row must keep a readable outline even for passive history"
+	)
+	assert_lte(
+		panel.get_visible_entry_count(),
+		StoreEventLogPanel.MAX_VISIBLE_ENTRIES,
+		"Event log must keep only the latest compact set of player-facing rows"
+	)
+
+
+func test_event_log_emphasis_stays_below_active_interaction_scale() -> void:
+	assert_lte(
+		StoreEventLogPanel._NEWEST_ENTRY_FONT_SIZE,
+		13,
+		"Recent history must stay below the active prompt/objective text scale"
+	)
+	assert_lte(
+		StoreEventLogPanel._IMPORTANT_ENTRY_FONT_SIZE,
+		StoreEventLogPanel._NEWEST_ENTRY_FONT_SIZE,
+		"Important log rows must stay readable without outranking the newest beat"
+	)
 
 
 # ── modal-dim contract ────────────────────────────────────────────────────────
@@ -381,4 +481,15 @@ func test_panel_footprint_stays_compact_for_fp_view() -> void:
 		StoreEventLogPanel._PANEL_HEIGHT,
 		90.0,
 		"Event log must stay short enough to avoid becoming a second panel"
+	)
+
+
+func test_panel_stops_above_carry_label_safe_zone() -> void:
+	var panel: StoreEventLogPanel = _make_panel()
+	await get_tree().process_frame
+	var anchor: Control = panel.get_node("Anchor") as Control
+	assert_lte(
+		anchor.offset_bottom,
+		-204.0,
+		"Event log must leave visible clearance above the carry HUD label"
 	)

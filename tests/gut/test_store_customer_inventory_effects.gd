@@ -91,6 +91,35 @@ func test_bundle_sale_removes_two_stocked_items_atomically() -> void:
 	assert_eq((result.get("applied", []) as Array).size(), 2)
 
 
+func test_late_inventory_failure_rolls_back_prior_mutations() -> void:
+	var sold: ItemInstance = _add_item(GAME_ID, "good", "shelf:slot_a")
+	var slot: ShelfSlot = _add_slot("slot_a", sold.instance_id)
+
+	var result: Dictionary = _apply_effects(
+		{
+			"inventory":
+			[
+				_remove_effect(GAME_ID, 1),
+				{
+					"op": "create_item",
+					"store_id": String(STORE_ID),
+					"definition_id": "missing_return_definition",
+					"condition": "good",
+					"location": "backroom",
+					"quantity": 1,
+				},
+			],
+		}
+	)
+
+	assert_false(bool(result.get("ok", true)))
+	assert_not_null(_inventory.get_item(sold.instance_id))
+	assert_eq(_inventory.get_item(sold.instance_id).current_location, "shelf:slot_a")
+	assert_true(slot.is_occupied(), "Rollback must restore the visible shelf slot")
+	assert_eq((result.get("applied", []) as Array).size(), 0)
+	assert_eq((result.get("rolled_back", []) as Array).size(), 1)
+
+
 func test_count_adapter_summarizes_real_sale_without_double_counting() -> void:
 	var sold: ItemInstance = _add_item(GAME_ID, "good", "shelf:slot_a")
 	_add_slot("slot_a", sold.instance_id)

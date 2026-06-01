@@ -33,6 +33,7 @@ const VALID_COMMANDS: Array[String] = [
 	"run_bad_state_resistance",
 	"run_long_day_soak",
 	"run_store_session_tutorial_full",
+	"run_first60_quality_gate",
 	"finish",
 ]
 const CAPTURE_MODES: Array[String] = ["state", "screenshot"]

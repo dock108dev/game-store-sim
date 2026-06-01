@@ -22,6 +22,20 @@ const CHECKOUT_KIT_PROP_PATHS: Array[String] = [
 	"CheckoutKitTapeRoll",
 	"CheckoutKitManagerClipboard",
 ]
+const CHECKOUT_READINESS_INDICATORS: Array[Dictionary] = [
+	{
+		"indicator": "CheckoutCashDrawerReadyLight",
+		"anchor": "CheckoutRegisterCashSlot",
+	},
+	{
+		"indicator": "CheckoutPrinterReadyLight",
+		"anchor": "CheckoutReceiptPrinterBody",
+	},
+	{
+		"indicator": "CheckoutScannerReadyLight",
+		"anchor": "CheckoutBarcodeScanner",
+	},
+]
 
 var _root: Node3D = null
 var _saved_state: GameManager.State
@@ -69,6 +83,9 @@ func test_generated_checkout_station_has_one_counter_supported_device_cluster() 
 		"CheckoutReceiptPrinterBody",
 		"CheckoutReceiptPaperRoll",
 		"CheckoutReceiptSlip",
+		"CheckoutCashDrawerReadyLight",
+		"CheckoutPrinterReadyLight",
+		"CheckoutScannerReadyLight",
 		"CheckoutCardReader",
 		"CheckoutBarcodeScanner",
 		"CheckoutCustomerPaymentDisplay",
@@ -170,6 +187,40 @@ func test_generated_checkout_device_family_keeps_register_screen_primary() -> vo
 		screen_mat,
 		"Customer display and register screen must share the restrained screen material"
 	)
+
+
+func test_generated_checkout_readiness_indicators_stay_subordinate() -> void:
+	var shell: Node3D = _shell()
+	if shell == null:
+		return
+	for cue: Dictionary in CHECKOUT_READINESS_INDICATORS:
+		var indicator_path: String = cue["indicator"] as String
+		var anchor_path: String = cue["anchor"] as String
+		var indicator: MeshInstance3D = shell.get_node_or_null(indicator_path) as MeshInstance3D
+		var anchor: Node3D = shell.get_node_or_null(anchor_path) as Node3D
+		assert_not_null(indicator, "Generated readiness indicator missing: %s" % indicator_path)
+		assert_not_null(anchor, "Generated readiness anchor missing: %s" % anchor_path)
+		if indicator == null:
+			continue
+		assert_true(
+			bool(indicator.get_meta("checkout_station_visual_only", false)),
+			"%s must be marked visual-only" % indicator_path
+		)
+		assert_false(
+			_has_interaction_descendant(indicator),
+			"%s must not add register gameplay or collision" % indicator_path
+		)
+		assert_lte(
+			maxf(_box_size(indicator).x, maxf(_box_size(indicator).y, _box_size(indicator).z)),
+			0.08,
+			"%s must remain smaller than the physical register target" % indicator_path
+		)
+		if anchor != null:
+			assert_lte(
+				_xz_distance(indicator.global_position, anchor.global_position),
+				0.22,
+				"%s must sit on its checkout device" % indicator_path
+			)
 
 
 func test_generated_checkout_props_stay_on_counter_and_define_both_sides() -> void:

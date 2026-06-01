@@ -24,7 +24,8 @@ func test_store_day1_toasts_fit_under_limit() -> void:
 	var samples: Array[String] = [
 		"First-day training ready.",
 		"Shipment checked. 2 items available in back room.",
-		"Stocked 3 items on the starter display table.",
+		"Starter display stocked. Store is ready for the first customer.",
+		"Starter display stocked.",
 		"Closing time reached.",
 		"Store open for customers.",
 		"Sale complete: +$18",

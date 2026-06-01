@@ -291,6 +291,112 @@ func test_day_one_start_emits_opening_toast() -> void:
 	)
 
 
+func test_customer_decision_display_does_not_apply_choice_effects() -> void:
+	var controller: StoreSessionController = _store_session_controller() as StoreSessionController
+	if controller == null:
+		return
+	var starting_cash: int = StoreSessionState.cash
+
+	await _open_customer_decision_from_interactable()
+
+	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
+	assert_not_null(decision, "Customer interaction must open the decision card")
+	if decision == null:
+		return
+	assert_true(decision.visible)
+	assert_eq(StoreSessionState.cash, starting_cash)
+	assert_eq(int(controller.get("_resolved_events_today")), 0)
+	assert_false(bool(controller.is_objective_completed(&"talk_to_customer")))
+
+
+func test_first_customer_locks_while_decision_and_result_are_active() -> void:
+	var controller: StoreSessionController = _store_session_controller() as StoreSessionController
+	if controller == null:
+		return
+	_seed_salable_day_one_inventory()
+	var customer: Interactable = _store_interactable("StoreSessionDayOneCustomer")
+	assert_not_null(customer, "Day 1 customer interactable must exist")
+	if customer == null:
+		return
+	assert_true(customer.enabled)
+	assert_true(customer.can_interact())
+
+	await _open_customer_decision_from_interactable()
+
+	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
+	assert_not_null(decision, "Customer interaction must open the decision card")
+	if decision == null:
+		return
+	assert_true(decision.visible)
+	assert_false(controller.can_interact_customer())
+	assert_false(customer.can_interact())
+	assert_false(customer.enabled)
+
+	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	assert_true(decision.visible, "Duplicate interaction must not replace the decision card")
+
+	_press_choice(decision, &"clean_exchange")
+	await get_tree().process_frame
+	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
+	assert_not_null(result, "Choosing a customer option must open the result panel")
+	if result == null:
+		return
+	assert_true(result.visible)
+	assert_false(controller.can_interact_customer())
+	assert_false(customer.can_interact())
+	assert_false(customer.enabled)
+
+	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	assert_true(result.visible, "Duplicate interaction must not close or replace the result panel")
+
+	_acknowledge_customer_result(result)
+	await get_tree().process_frame
+	assert_eq(String(controller.current_stage()), "back_room_inventory")
+	assert_false(customer.can_interact())
+
+
+func test_duplicate_customer_result_acknowledgement_is_idempotent() -> void:
+	var controller: StoreSessionController = _store_session_controller() as StoreSessionController
+	if controller == null:
+		return
+	var fixture: Dictionary = _seed_salable_day_one_inventory()
+	var economy: EconomySystem = fixture.get("economy", null) as EconomySystem
+	assert_not_null(economy)
+	if economy == null:
+		return
+
+	await _open_customer_decision_from_interactable()
+	var event_id: StringName = StringName(
+		str((controller.get("_active_event") as Dictionary).get("id", ""))
+	)
+	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
+	assert_not_null(decision)
+	if decision == null:
+		return
+	_press_choice(decision, &"clean_exchange")
+	await get_tree().process_frame
+	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
+	assert_not_null(result)
+	if result == null:
+		return
+	_acknowledge_customer_result(result)
+	await get_tree().process_frame
+	var cash_after_ack: float = economy.get_cash()
+	var customers_after_ack: int = int(controller.get("_customers_helped_today"))
+	var sales_after_ack: int = int(controller.get("_sales_completed_today"))
+
+	controller._on_customer_result_acknowledged(event_id, &"clean_exchange")
+	await get_tree().process_frame
+
+	assert_almost_eq(economy.get_cash(), cash_after_ack, 0.01)
+	assert_eq(int(controller.get("_customers_helped_today")), customers_after_ack)
+	assert_eq(int(controller.get("_sales_completed_today")), sales_after_ack)
+	assert_eq(int(controller.get("_resolved_events_today")), 1)
+	assert_eq(String(controller.current_stage()), "back_room_inventory")
+
+
 func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	await _reload_preopening_route_scene()
 	var controller: StoreSessionController = _store_session_controller() as StoreSessionController
@@ -312,38 +418,38 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 		return
 	assert_false(register_screen is Interactable, "Register screen must stay non-interactive")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_INACTIVE)
-	_assert_route_target("StoreSessionDayOneCustomer", "Talk to manager")
+	_assert_route_target("StoreSessionDayOneCustomer", "Talk to Manager")
 	_assert_right_panel_header("FIRST DAY")
-	await _interact_route_target("StoreSessionDayOneCustomer", "Talk to manager")
+	await _interact_route_target("StoreSessionDayOneCustomer", "Talk to Manager")
 
-	_assert_route_target("StoreSessionDayEndTrigger", "Check register")
+	_assert_route_target("StoreSessionDayEndTrigger", "Check Register")
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_READY)
 	assert_eq(register_screen.display_text(), "REGISTER\nREADY")
-	await _interact_route_target("StoreSessionDayEndTrigger", "Check register")
+	await _interact_route_target("StoreSessionDayEndTrigger", "Check Register")
 
-	_assert_route_target("StoreSessionBackroomPickup", "Check back room inventory")
+	_assert_route_target("StoreSessionBackroomPickup", "Inspect Starter Stock Box")
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)
 	assert_eq(register_screen.display_text(), "BACK\nROOM")
-	await _interact_route_target("StoreSessionBackroomPickup", "Check back room inventory")
+	await _interact_route_target("StoreSessionBackroomPickup", "Inspect Starter Stock Box")
 	assert_signal_emitted_with_parameters(
 		EventBus,
 		"store_backroom_count_changed",
 		[StoreSessionController._BACKROOM_DELIVERY_QUANTITY]
 	)
 
-	_assert_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on Starter Display")
 	assert_eq(String(controller.current_stage()), "training_stock_shelf")
-	await _interact_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on Starter Display")
 	assert_false(StoreSessionState.preopening_complete)
 	assert_true(StoreSessionState.carrying_stock)
-	_assert_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
-	await _interact_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on Starter Display")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on Starter Display")
 	assert_false(StoreSessionState.preopening_complete)
 	assert_true(StoreSessionState.carrying_stock)
-	_assert_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
-	await _interact_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on Starter Display")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on Starter Display")
 	assert_true(StoreSessionState.preopening_complete)
 	assert_false(StoreSessionState.carrying_stock)
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
@@ -404,10 +510,10 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [1])
 	_assert_right_panel_stat("Customers", "1")
 	_assert_right_panel_stat("Sales", "1")
-	_assert_route_target("StoreSessionBackroomPickup", "Check back room inventory")
-	_assert_close_day_blocked(controller, "Check the back room first.")
+	_assert_route_target("StoreSessionBackroomPickup", "Inspect Starter Stock Box")
+	_assert_close_day_blocked(controller, "Inspect the Starter Stock Box first.")
 
-	await _interact_route_target("StoreSessionBackroomPickup", "Check back room inventory")
+	await _interact_route_target("StoreSessionBackroomPickup", "Inspect Starter Stock Box")
 	assert_true(StoreSessionState.carrying_stock)
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_STOCKING)
 	assert_eq(register_screen.display_text(), "STOCK\nTABLE")
@@ -416,22 +522,22 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 		"store_backroom_count_changed",
 		[StoreSessionController._BACKROOM_DELIVERY_QUANTITY + 1]
 	)
-	_assert_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
-	_assert_close_day_blocked(controller, "Stock the starter display table before closing.")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on Starter Display")
+	_assert_close_day_blocked(controller, "Stock the Starter Display before closing.")
 
-	await _interact_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 1 of 3 on Starter Display")
 	assert_true(StoreSessionState.carrying_stock)
 	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [3])
 	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [3])
-	_assert_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on Starter Display")
 
-	await _interact_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 2 of 3 on Starter Display")
 	assert_true(StoreSessionState.carrying_stock)
 	assert_signal_emitted_with_parameters(EventBus, "store_shelf_count_changed", [4])
 	assert_signal_emitted_with_parameters(EventBus, "store_backroom_count_changed", [2])
-	_assert_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
+	_assert_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on Starter Display")
 
-	await _interact_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
+	await _interact_route_target("StoreSessionRestockShelf", "Place item 3 of 3 on Starter Display")
 	assert_false(StoreSessionState.carrying_stock)
 	var expected_shelf_count: int = StoreSessionController._BACKROOM_DELIVERY_QUANTITY + 2
 	assert_signal_emitted_with_parameters(
@@ -858,9 +964,9 @@ func test_store_prompt_copy_uses_plain_action_language() -> void:
 		return
 	assert_eq(_interaction_label(_store_interactable("StoreSessionDayOneCustomer")), "Talk to customer")
 	assert_eq(
-		_interaction_label(_store_interactable("StoreSessionBackroomPickup")), "Check back room inventory"
+		_interaction_label(_store_interactable("StoreSessionBackroomPickup")), "Inspect Starter Stock Box"
 	)
-	assert_eq(_interaction_label(_store_interactable("StoreSessionRestockShelf")), "Stock starter display table")
+	assert_eq(_interaction_label(_store_interactable("StoreSessionRestockShelf")), "Stock Starter Display")
 	assert_eq(_interaction_label(_store_interactable("StoreSessionDayEndTrigger")), "Close day")
 
 
@@ -872,12 +978,12 @@ func test_future_stage_disabled_reasons_name_next_prerequisite() -> void:
 
 	controller._on_choice_selected(&"clean_exchange", {})
 	await get_tree().process_frame
-	assert_eq(String(controller.day_end_disabled_reason()), "Check the back room first.")
+	assert_eq(String(controller.day_end_disabled_reason()), "Inspect the Starter Stock Box first.")
 
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	assert_eq(
-		String(controller.day_end_disabled_reason()), "Stock the starter display table before closing."
+		String(controller.day_end_disabled_reason()), "Stock the Starter Display before closing."
 	)
 
 
@@ -1458,6 +1564,10 @@ func _interact_route_target(parent_name: String, expected_label: String) -> void
 		return
 	interactable.interact()
 	await get_tree().process_frame
+	var controller: StoreSessionController = _store_session_controller() as StoreSessionController
+	if controller != null:
+		_ack_first_minute_detail(controller)
+		await get_tree().process_frame
 
 
 func _open_customer_decision_from_interactable() -> void:
@@ -1506,6 +1616,17 @@ func _acknowledge_customer_result(result: ModalPanel) -> void:
 	if continue_button == null:
 		return
 	continue_button.pressed.emit()
+
+
+# Kept local because manual route manifests assert line numbers in this file; see cleanup report.
+func _ack_first_minute_detail(controller: StoreSessionController) -> void:
+	var panel: ModalPanel = controller.get("_first_minute_detail_panel") as ModalPanel
+	if panel == null or not panel.visible:
+		return
+	var button: Button = panel.get("_confirm_button") as Button
+	assert_not_null(button, "First-minute detail panel must expose a confirm button")
+	if button != null:
+		button.pressed.emit()
 
 
 func _assert_close_day_blocked(controller: StoreSessionController, expected_reason: String) -> void:
@@ -2060,7 +2181,7 @@ func test_objective_rail_uses_specified_copy_for_each_chain_stage() -> void:
 	var expected: Dictionary = {
 		"talk_to_customer": "Talk to the customer at the register.",
 		"back_room_inventory": "Check the back room delivery.",
-		"stock_shelf": "Stock the starter display table.",
+		"stock_shelf": "Place all 3 starter items on the starter display table.",
 		"end_day": "Close the day at the register.",
 	}
 	for entry: Dictionary in controller.get("_objectives"):
@@ -2702,7 +2823,7 @@ func test_disabled_reason_at_stock_shelf_does_not_echo_generic_shelves() -> void
 	var reason: String = String(controller.customer_disabled_reason())
 	assert_string_contains(
 		reason,
-		"starter display table",
+		"Starter Display",
 		"Disabled-reason must name the specific destination; got: '%s'" % reason
 	)
 	assert_false(
@@ -2794,7 +2915,7 @@ func test_register_status_indicator_silent_during_talk_to_customer() -> void:
 
 func test_register_status_indicator_hints_back_room_during_back_room_stage() -> void:
 	# Acceptance: during STAGE_BACK_ROOM_INVENTORY, aiming at the register
-	# shows 'Check the back room first.'
+	# shows 'Inspect the Starter Stock Box first.'
 	var controller: Node = _store_session_controller()
 	var indicator: Interactable = _register_status_indicator()
 	if controller == null or indicator == null:
@@ -2808,14 +2929,14 @@ func test_register_status_indicator_hints_back_room_during_back_room_stage() -> 
 	)
 	assert_eq(
 		indicator.get_disabled_reason(),
-		"Check the back room first.",
+		"Inspect the Starter Stock Box first.",
 		"Indicator must point the player at the back room during the " + "back-room stage"
 	)
 
 
 func test_register_status_indicator_hints_shelf_during_stock_stage() -> void:
 	# Acceptance: during STAGE_STOCK_SHELF, aiming at the register shows
-	# 'Stock the starter display table before closing.'
+	# 'Stock the Starter Display before closing.'
 	var controller: Node = _store_session_controller()
 	var indicator: Interactable = _register_status_indicator()
 	if controller == null or indicator == null:
@@ -2831,7 +2952,7 @@ func test_register_status_indicator_hints_shelf_during_stock_stage() -> void:
 	)
 	assert_eq(
 		indicator.get_disabled_reason(),
-		"Stock the starter display table before closing.",
+		"Stock the Starter Display before closing.",
 		"Indicator must point the player at the shelf during the stock stage"
 	)
 
@@ -2919,7 +3040,7 @@ func test_register_status_indicator_does_not_break_close_day_path() -> void:
 const _EXPECTED_STEP_LABELS: Array[String] = [
 	"Talk to the customer at the register.",
 	"Check the back room delivery.",
-	"Stock the starter display table.",
+	"Place all 3 starter items on the starter display table.",
 	"Close the day at the register.",
 ]
 

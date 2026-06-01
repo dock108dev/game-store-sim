@@ -1,5 +1,6 @@
 extends GutTest
 
+const VisualGeometryTestHelpers := preload("res://tests/automation/visual_geometry_test_helpers.gd")
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const TERMINAL_PATH: String = "BackOfficeTerminal"
 const TERMINAL_TABS_PATH: String = "BackOfficeTerminal/TerminalTabs"
@@ -34,7 +35,7 @@ func test_terminal_is_authored_as_visible_back_office_surface() -> void:
 		return
 
 	assert_true(
-		_is_visible_through_ancestors(terminal),
+		VisualGeometryTestHelpers.is_visible_through_ancestors(terminal, _root),
 		"Back-office terminal must be visible in its authored scene path"
 	)
 	assert_true(
@@ -42,15 +43,15 @@ func test_terminal_is_authored_as_visible_back_office_surface() -> void:
 		"Back-office terminal must stay in the Day-1 visible root scope"
 	)
 	assert_gt(
-		_flat_distance(terminal, pickup),
+		VisualGeometryTestHelpers.flat_distance_nodes(terminal, pickup),
 		MIN_PICKUP_CLEARANCE,
 		"Terminal must not crowd the back-room inventory pickup"
 	)
 	assert_gt(
-		_flat_distance_to_segment(
-			_scene_position(terminal),
-			_scene_position(threshold),
-			_scene_position(pickup)
+		VisualGeometryTestHelpers.flat_distance_to_segment(
+			VisualGeometryTestHelpers.scene_position(terminal),
+			VisualGeometryTestHelpers.scene_position(threshold),
+			VisualGeometryTestHelpers.scene_position(pickup)
 		),
 		MIN_APPROACH_LANE_CLEARANCE,
 		"Terminal must not sit in the back-room entry or exit lane"
@@ -148,48 +149,6 @@ func _collect_forbidden_runtime_nodes(node: Node, out: Array[String]) -> void:
 		out.append(_relative_path(node))
 	for child: Node in node.get_children():
 		_collect_forbidden_runtime_nodes(child, out)
-
-
-func _is_visible_through_ancestors(node: Node) -> bool:
-	var cursor: Node = node
-	while cursor != null and cursor != _root:
-		if cursor is Node3D and not (cursor as Node3D).visible:
-			return false
-		cursor = cursor.get_parent()
-	return true
-
-
-func _flat_distance(a: Node3D, b: Node3D) -> float:
-	return _flat_distance_vec(_scene_position(a), _scene_position(b))
-
-
-func _flat_distance_vec(a: Vector3, b: Vector3) -> float:
-	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))
-
-
-func _flat_distance_to_segment(point: Vector3, start: Vector3, end: Vector3) -> float:
-	var point_2d := Vector2(point.x, point.z)
-	var start_2d := Vector2(start.x, start.z)
-	var end_2d := Vector2(end.x, end.z)
-	var segment := end_2d - start_2d
-	var length_squared: float = segment.length_squared()
-	if length_squared <= 0.0001:
-		return point_2d.distance_to(start_2d)
-	var t: float = clampf((point_2d - start_2d).dot(segment) / length_squared, 0.0, 1.0)
-	return point_2d.distance_to(start_2d + segment * t)
-
-
-func _scene_position(node: Node3D) -> Vector3:
-	return _scene_transform(node).origin
-
-
-func _scene_transform(node: Node3D) -> Transform3D:
-	var scene_transform: Transform3D = node.transform
-	var cursor: Node = node.get_parent()
-	while cursor is Node3D:
-		scene_transform = (cursor as Node3D).transform * scene_transform
-		cursor = cursor.get_parent()
-	return scene_transform
 
 
 func _relative_path(node: Node) -> String:

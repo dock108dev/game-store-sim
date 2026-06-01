@@ -201,7 +201,7 @@ func test_stockroom_sweep_rows_record_pickup_prompt_and_blocked_guidance() -> vo
 		assert_false(row.is_empty(), "Missing stockroom sweep row %s" % row_name)
 		if row.is_empty():
 			continue
-		assert_eq(str(row.get("active_prompt", "")), "Check back room inventory")
+		assert_eq(str(row.get("active_prompt", "")), "Inspect Starter Stock Box")
 		var disabled_guidance: Dictionary = row.get("disabled_guidance", {}) as Dictionary
 		assert_eq(
 			str(disabled_guidance.get("before_active_objective", "")),
@@ -210,7 +210,7 @@ func test_stockroom_sweep_rows_record_pickup_prompt_and_blocked_guidance() -> vo
 		)
 		assert_eq(
 			str(disabled_guidance.get("while_carrying_stock", "")),
-			"Stock already in hand. Place it on the starter display table.",
+			"Stock already in hand. Place it on the Starter Display.",
 			"%s must document the already-carrying pickup prompt" % row_name
 		)
 
@@ -605,7 +605,11 @@ func test_preopening_hud_prompt_and_debug_surfaces_have_single_owners() -> void:
 	assert_true(StoreSessionHUD.is_active(), "StoreSessionHUD must be active after scene ready")
 	assert_true(
 		StoreSessionHUD.get_right_panel().visible,
-		"Right panel owns checklist and stock stats during store_session play"
+		"Right panel owns passive checklist and stock stats during store_session play"
+	)
+	assert_true(
+		ObjectiveRail.visible,
+		"ObjectiveRail owns the active bottom objective during store_session play"
 	)
 	assert_true(
 		StoreSessionHUD.get_event_log_panel().visible,
@@ -627,8 +631,8 @@ func test_preopening_hud_prompt_and_debug_surfaces_have_single_owners() -> void:
 			"InteractionPrompt must not show a duplicate persistent action at rest"
 		)
 	assert_false(
-		_has_visible_objective_text_outside_right_panel(),
-		"Persistent objective text must stay in the right panel"
+		_has_duplicate_objective_text_outside_rail_and_right_panel(),
+		"Persistent objective text must stay in ObjectiveRail or the passive right panel"
 	)
 
 
@@ -715,9 +719,8 @@ func _inventory_counts_or_null() -> Variant:
 	}
 
 
-func _has_visible_objective_text_outside_right_panel() -> bool:
+func _has_duplicate_objective_text_outside_rail_and_right_panel() -> bool:
 	var forbidden_labels: Array[String] = [
-		"ObjectiveRail",
 		"TutorialOverlay",
 		"TelegraphCard",
 	]

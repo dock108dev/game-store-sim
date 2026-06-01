@@ -9,8 +9,8 @@
 ## Scope: `activate` / `deactivate` are session-level controls only. They
 ## are **not** FP-mode visibility controls — this script intentionally does
 ## not connect `EventBus.fp_mode_changed`. The right panel and event log are
-## mode-agnostic; objectives stay in the right panel, recent events stay in
-## the bottom-left log, and the interaction affordance stays bottom-right.
+## mode-agnostic; passive milestones stay in the right panel, recent events
+## stay in the bottom-left log, and the active objective stays in ObjectiveRail.
 ##
 ## Load order: must be registered after `EventBus`, `InputFocus`, and
 ## `StoreSessionState` in `project.godot` — both panels read `StoreSessionState.day`

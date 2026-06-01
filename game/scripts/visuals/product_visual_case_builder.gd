@@ -5,6 +5,9 @@ extends RefCounted
 const StarterDetailBuilderScript: GDScript = preload(
 	"res://game/scripts/visuals/starter_detail_builder.gd"
 )
+const VisualValueUtilScript: GDScript = preload(
+	"res://game/scripts/visuals/visual_value_util.gd"
+)
 
 const CASE_ROOT_NAME: StringName = &"ProductVisualCaseRoot"
 const CONSOLE_ROOT_NAME: StringName = &"ProductVisualConsoleBoxRoot"
@@ -43,7 +46,9 @@ static func build_case(template: Dictionary, _catalog: RefCounted) -> Node3D:
 		)
 	)
 
-	var stripe: Dictionary = _as_dictionary(template.get("platform_stripe", {}))
+	var stripe: Dictionary = VisualValueUtilScript.dictionary(
+		template.get("platform_stripe", {})
+	)
 	root.add_child(
 		_box(
 			"PlatformStripe",
@@ -61,7 +66,7 @@ static func build_case(template: Dictionary, _catalog: RefCounted) -> Node3D:
 		)
 	)
 
-	var title: Dictionary = _as_dictionary(template.get("title_block", {}))
+	var title: Dictionary = VisualValueUtilScript.dictionary(template.get("title_block", {}))
 	root.add_child(
 		_box(
 			"TitleBlock",
@@ -93,7 +98,7 @@ static func build_case(template: Dictionary, _catalog: RefCounted) -> Node3D:
 	_add_spine_labels(root, template, title, stripe, dims)
 	_add_case_edge_details(root, dims)
 
-	_add_symbol(root, _as_dictionary(template.get("simple_symbol", {})), dims)
+	_add_symbol(root, VisualValueUtilScript.dictionary(template.get("simple_symbol", {})), dims)
 	root.add_child(
 		_box(
 			"RatingBadge",
@@ -123,7 +128,11 @@ static func build_case(template: Dictionary, _catalog: RefCounted) -> Node3D:
 			)
 		)
 	if (
-		str(_as_dictionary(template.get("shelf_display", {})).get("preferred_facing", "front"))
+		str(
+			VisualValueUtilScript.dictionary(
+				template.get("shelf_display", {})
+			).get("preferred_facing", "front")
+		)
 		== "spine"
 	):
 		root.rotation.y = deg_to_rad(82.0)
@@ -185,7 +194,8 @@ static func build_console_box(identity: Dictionary) -> Node3D:
 		)
 	)
 	_add_console_box_edge_details(root, dims)
-	if str(_as_dictionary(identity.get("silhouette", {})).get("shape", "")).contains("handle"):
+	var silhouette: Dictionary = VisualValueUtilScript.dictionary(identity.get("silhouette", {}))
+	if str(silhouette.get("shape", "")).contains("handle"):
 		root.add_child(
 			_box(
 				"ConsoleHandleDetail",
@@ -262,7 +272,9 @@ static func build_cartridge(identity: Dictionary, item: Dictionary = {}) -> Node
 
 
 static func _case_dimensions(template: Dictionary) -> Vector3:
-	var shelf_display: Dictionary = _as_dictionary(template.get("shelf_display", {}))
+	var shelf_display: Dictionary = VisualValueUtilScript.dictionary(
+		template.get("shelf_display", {})
+	)
 	var scale_array: Array = shelf_display.get("scale", [1.0, 1.0, 0.12])
 	var width: float = clampf(float(scale_array[0]) * 0.16, 0.08, 0.20)
 	var height: float = clampf(float(scale_array[1]) * 0.22, 0.12, 0.28)
@@ -283,7 +295,9 @@ static func _cartridge_dimensions(identity: Dictionary) -> Vector3:
 	var width: float = clampf(float(scale_array[0]) * 0.11, 0.09, 0.15)
 	var height: float = clampf(float(scale_array[2]) * 0.075, 0.07, 0.12)
 	var depth: float = clampf(float(scale_array[1]) * 0.035, 0.014, 0.035)
-	var profile: String = str(_as_dictionary(identity.get("silhouette", {})).get("profile", ""))
+	var profile: String = str(
+		VisualValueUtilScript.dictionary(identity.get("silhouette", {})).get("profile", "")
+	)
 	if profile.contains("wide"):
 		width = minf(width * 1.18, 0.16)
 	if profile.contains("small") or profile.contains("folded"):
@@ -294,7 +308,9 @@ static func _cartridge_dimensions(identity: Dictionary) -> Vector3:
 static func _add_spine_labels(
 	root: Node3D, template: Dictionary, title: Dictionary, stripe: Dictionary, dims: Vector3
 ) -> void:
-	var spine_label: Dictionary = _as_dictionary(template.get("spine_label", {}))
+	var spine_label: Dictionary = VisualValueUtilScript.dictionary(
+		template.get("spine_label", {})
+	)
 	var spine_text: String = str(
 		spine_label.get("text", title.get("text", template.get("display_title", "")))
 	)
@@ -616,9 +632,3 @@ static func _color(value: Variant, fallback: Color) -> Color:
 	if text.is_valid_html_color():
 		return Color.html(text)
 	return fallback
-
-
-static func _as_dictionary(value: Variant) -> Dictionary:
-	if value is Dictionary:
-		return value as Dictionary
-	return {}

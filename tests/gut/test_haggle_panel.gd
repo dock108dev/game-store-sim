@@ -227,8 +227,7 @@ func test_counter_submits_slider_value() -> void:
 	watch_signals(_panel)
 	_panel._on_counter_pressed()
 	assert_signal_emitted_with_parameters(
-		_panel, "counter_submitted", [18.75],
-		"Counter should submit current slider value"
+		_panel, "counter_submitted", [18.75]
 	)
 
 

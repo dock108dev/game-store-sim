@@ -13,16 +13,21 @@ var _root: Node3D = null
 
 
 func before_all() -> void:
+	StoreSessionState.reset_new_run()
 	var scene: PackedScene = load(_SCENE_PATH)
 	assert_not_null(scene, "Retro Games scene should load")
 	_root = scene.instantiate() as Node3D
 	add_child(_root)
+	var controller: Node = _root.get_node_or_null("StoreSessionController")
+	if controller != null:
+		controller.remove_from_group("store_session_controller")
 
 
 func after_all() -> void:
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
+	StoreSessionState.reset_new_run()
 
 
 func test_register_node_uses_register_interactable_script() -> void:

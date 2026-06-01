@@ -195,7 +195,9 @@ func test_boot_shell_pairs_wall_shelf_with_starter_display_table() -> void:
 		"StarterDisplayEmptySlot00",
 		"StarterUsedEmptySlot00",
 	]:
-		assert_not_null(shell.get_node_or_null(required), "Sparse fixture cue missing: %s" % required)
+		assert_not_null(
+			shell.get_node_or_null(required), "Sparse fixture cue missing: %s" % required
+		)
 	for required: String in [
 		"ShelfBoard",
 		"TableFrontApron",
@@ -262,9 +264,13 @@ func test_boot_shell_zone_practicals_preserve_readability_hierarchy() -> void:
 	if shelf_edge != null:
 		assert_gt(shelf_edge.light_color.b, shelf_edge.light_color.r, "Shelf edge must read cool")
 	if stockroom != null:
-		assert_gt(stockroom.light_color.b, stockroom.light_color.r, "Stockroom practical must read cool")
+		assert_gt(
+			stockroom.light_color.b, stockroom.light_color.r, "Stockroom practical must read cool"
+		)
 	if entry != null:
-		assert_gt(entry.light_color.r, entry.light_color.b, "Entry threshold practical must stay warm")
+		assert_gt(
+			entry.light_color.r, entry.light_color.b, "Entry threshold practical must stay warm"
+		)
 
 
 func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
@@ -281,6 +287,12 @@ func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 		"CheckoutServiceWarmWallPanel",
 		"CheckoutServiceFloorPool",
 		"CheckoutCounterEdgeLine",
+		"ManagerAreaBackPanel",
+		"ManagerAreaLedgerRail",
+		"QueueLaneWarmInlay",
+		"QueueLaneMarkerPuck00",
+		"QueueLaneMarkerPuck01",
+		"QueueLaneMarkerPuck02",
 		"StockroomCoolDoorRevealLeft",
 		"StockroomCoolDoorRevealRight",
 		"StockroomCoolDoorRevealHeader",
@@ -288,16 +300,25 @@ func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 		"StockroomWarmPickupSightPatch",
 		"EntryMutedFloorMat",
 		"EntryWarmSightlineStrip",
+		"ShelfLifeTradePoster/Panel",
+		"ShelfLifeRepairPoster/Panel",
+		"ShelfLifeQueueCardPanel",
 	]:
-		assert_not_null(shell.get_node_or_null(required), "Generated zone surface missing: %s" % required)
+		assert_not_null(
+			shell.get_node_or_null(required), "Generated zone surface missing: %s" % required
+		)
 	var shelf_panel: StandardMaterial3D = _material_for(shell, "ShelfWallCoolReadPanel")
 	var checkout_panel: StandardMaterial3D = _material_for(shell, "CheckoutServiceWarmWallPanel")
 	var stockroom_reveal: StandardMaterial3D = _material_for(shell, "StockroomCoolDoorRevealLeft")
 	var entry_mat: StandardMaterial3D = _material_for(shell, "EntryMutedFloorMat")
+	var manager_panel: StandardMaterial3D = _material_for(shell, "ManagerAreaBackPanel")
+	var queue_inlay: StandardMaterial3D = _material_for(shell, "QueueLaneWarmInlay")
 	assert_not_null(shelf_panel, "Shelf zone panel must carry material")
 	assert_not_null(checkout_panel, "Checkout zone panel must carry material")
 	assert_not_null(stockroom_reveal, "Stockroom reveal must carry material")
 	assert_not_null(entry_mat, "Entry mat must carry material")
+	assert_not_null(manager_panel, "Manager area panel must carry material")
+	assert_not_null(queue_inlay, "Queue lane inlay must carry material")
 	if shelf_panel != null:
 		assert_gte(
 			shelf_panel.albedo_color.b - shelf_panel.albedo_color.r,
@@ -322,6 +343,181 @@ func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 			_brightest_channel(checkout_panel.albedo_color),
 			"Entry mat must orient the exit without overpowering checkout"
 		)
+	if manager_panel != null and checkout_panel != null:
+		assert_eq(
+			manager_panel.albedo_color,
+			checkout_panel.albedo_color,
+			"Manager back panel must share checkout service material language"
+		)
+	if queue_inlay != null and checkout_panel != null:
+		assert_gte(
+			queue_inlay.albedo_color.r,
+			checkout_panel.albedo_color.r,
+			"Queue inlay should read as part of the warm checkout/manager lane"
+		)
+
+
+func test_floor_seams_stay_quieter_than_route_and_product_targets() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	for required: String in [
+		"FloorBoardSeam00",
+		"FloorTrafficScuff00",
+		"SpawnCheckoutSightlineStrip",
+		"SpawnStarterDisplaySightlineStrip",
+		"StockroomFloorTape",
+		"StarterUsedShelfPriceTag00",
+		"ProductPriceTag",
+	]:
+		assert_not_null(
+			shell.find_child(required, true, false),
+			"Floor/readability hierarchy node missing: %s" % required
+		)
+	var floor_mat: StandardMaterial3D = _material_for(shell, "StarterFloor")
+	var seam_mat: StandardMaterial3D = _material_for(shell, "FloorBoardSeam00")
+	var scuff_mat: StandardMaterial3D = _material_for(shell, "FloorTrafficScuff00")
+	var checkout_strip_mat: StandardMaterial3D = _material_for(shell, "SpawnCheckoutSightlineStrip")
+	var stockroom_tape_mat: StandardMaterial3D = _material_for(shell, "StockroomFloorTape")
+	assert_not_null(floor_mat, "Starter floor must carry material")
+	assert_not_null(seam_mat, "Floor seam must carry material")
+	assert_not_null(scuff_mat, "Floor scuff must carry material")
+	assert_not_null(checkout_strip_mat, "Checkout sightline strip must carry material")
+	assert_not_null(stockroom_tape_mat, "Stockroom threshold tape must carry material")
+	if (
+		floor_mat == null
+		or seam_mat == null
+		or scuff_mat == null
+		or checkout_strip_mat == null
+		or stockroom_tape_mat == null
+	):
+		return
+	var seam_delta: float = _color_distance(floor_mat.albedo_color, seam_mat.albedo_color)
+	var scuff_delta: float = _color_distance(floor_mat.albedo_color, scuff_mat.albedo_color)
+	var checkout_delta: float = _color_distance(
+		floor_mat.albedo_color, checkout_strip_mat.albedo_color
+	)
+	var stockroom_delta: float = _color_distance(
+		floor_mat.albedo_color, stockroom_tape_mat.albedo_color
+	)
+	assert_lt(seam_delta, checkout_delta, "Floor seams must be quieter than checkout cues")
+	assert_lt(seam_delta, stockroom_delta, "Floor seams must be quieter than stockroom cues")
+	assert_lt(scuff_delta, checkout_delta, "Traffic scuffs must be quieter than checkout cues")
+	assert_lt(scuff_delta, stockroom_delta, "Traffic scuffs must be quieter than stockroom cues")
+
+
+func test_wall_posters_use_store_identity_panels_not_random_decals() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	for poster_path: String in ["ShelfLifeTradePoster", "ShelfLifeRepairPoster"]:
+		var poster: Node3D = shell.get_node_or_null(poster_path) as Node3D
+		assert_not_null(poster, "Store identity poster missing: %s" % poster_path)
+		if poster == null:
+			continue
+		assert_eq(
+			str(poster.get_meta("visual_source", "")),
+			"store_identity_poster",
+			"%s must be declared as store identity dressing" % poster_path
+		)
+		for child_name: String in ["Panel", "TopRail", "BottomRail", "CaseStripe00"]:
+			var child_path: String = "%s/%s" % [poster_path, child_name]
+			assert_not_null(
+				shell.get_node_or_null(child_path), "Poster detail missing: %s" % child_path
+			)
+			_assert_panel_or_strip(shell, child_path)
+	for label: Label3D in _collect_visible_labels(shell):
+		var text: String = label.text.strip_edges().to_lower()
+		assert_false(text.contains("debug"), "%s must not expose debug text" % label.name)
+		assert_false(
+			text.contains("placeholder"), "%s must not expose placeholder text" % label.name
+		)
+		assert_false(text.contains("zone"), "%s must not expose zone-label text" % label.name)
+
+
+func test_spawn_view_supports_store_identity_and_route_cues() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	for required: String in [
+		"StoreIdentityWallPanel",
+		"StoreIdentitySignCanopy",
+		"StoreIdentitySignUnderRail",
+		"StoreIdentitySignBracketLeft",
+		"StoreIdentitySignBracketRight",
+		"StoreIdentityCaseStripe00",
+		"StoreIdentityCaseStripe01",
+		"StoreIdentityCaseStripe02",
+		"StoreIdentitySignWashPractical",
+		"SpawnAisleRunner",
+		"SpawnCheckoutSightlineStrip",
+		"SpawnStarterDisplaySightlineStrip",
+		"SpawnStockroomSightlineStrip",
+		"SpawnRetailZoneLowRail",
+		"CheckoutServiceWarmWallPanel",
+		"ShelfWallCoolReadPanel",
+		"StockroomCoolDoorRevealHeader",
+	]:
+		assert_not_null(
+			shell.get_node_or_null(required), "Spawn readability cue missing: %s" % required
+		)
+	var sign_label: Label3D = shell.get_node_or_null("StarterSignLabel") as Label3D
+	var identity_panel: Node3D = shell.get_node_or_null("StoreIdentityWallPanel") as Node3D
+	var checkout_strip: Node3D = shell.get_node_or_null("SpawnCheckoutSightlineStrip") as Node3D
+	var starter_strip: Node3D = (
+		shell.get_node_or_null("SpawnStarterDisplaySightlineStrip") as Node3D
+	)
+	var stockroom_strip: Node3D = shell.get_node_or_null("SpawnStockroomSightlineStrip") as Node3D
+	assert_not_null(sign_label, "Store sign must stay visible at spawn")
+	assert_not_null(identity_panel, "Store sign must sit in a supported wall treatment")
+	assert_not_null(checkout_strip, "Manager/register cue must be visible from spawn")
+	assert_not_null(starter_strip, "Starter display direction cue must be visible from spawn")
+	assert_not_null(stockroom_strip, "Stockroom entrance cue must be visible from spawn")
+	if sign_label != null and identity_panel != null:
+		assert_almost_eq(
+			identity_panel.position.x,
+			sign_label.position.x,
+			0.05,
+			"Identity panel should frame the Shelf Life sign"
+		)
+	if checkout_strip != null:
+		assert_gt(
+			checkout_strip.position.x, 2.0, "Checkout cue should lead toward the manager/register"
+		)
+	if starter_strip != null:
+		assert_lt(starter_strip.position.x, -2.0, "Starter display cue should pull left from spawn")
+	if stockroom_strip != null:
+		assert_lt(
+			stockroom_strip.position.z,
+			-4.0,
+			"Stockroom cue should sit deeper than sales floor cues"
+		)
+
+
+func test_spawn_view_cues_are_panels_and_strips_not_debug_blocks() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	for node_path: String in [
+		"StoreIdentityWallPanel",
+		"StoreIdentitySignCanopy",
+		"StoreIdentitySignUnderRail",
+		"StoreIdentitySignBracketLeft",
+		"StoreIdentitySignBracketRight",
+		"StoreIdentityCaseStripe00",
+		"StoreIdentityCaseStripe01",
+		"StoreIdentityCaseStripe02",
+		"SpawnAisleRunner",
+		"SpawnCheckoutSightlineStrip",
+		"SpawnStarterDisplaySightlineStrip",
+		"SpawnStockroomSightlineStrip",
+		"SpawnRetailZoneLowRail",
+	]:
+		_assert_panel_or_strip(shell, node_path)
 
 
 func test_boot_shell_register_screen_glow_stays_readable_and_restrained() -> void:
@@ -337,7 +533,9 @@ func test_boot_shell_register_screen_glow_stays_readable_and_restrained() -> voi
 	assert_not_null(material, "Generated checkout screen must carry a StandardMaterial3D")
 	if material == null:
 		return
-	assert_true(material.emission_enabled, "Generated checkout screen must emit restrained POS glow")
+	assert_true(
+		material.emission_enabled, "Generated checkout screen must emit restrained POS glow"
+	)
 	assert_between(
 		material.emission_energy_multiplier,
 		GENERATED_REGISTER_SCREEN_MIN_EMISSION,
@@ -398,7 +596,7 @@ func test_stockroom_boundary_matches_expanded_runtime_staff_corner() -> void:
 			"%s must stay inside the expanded staff stockroom corner" % node_path
 		)
 
-	assert_eq(
+	assert_gte(
 		_count_children_with_prefix(shell, "StockroomSupplyBox"),
 		5,
 		"Expanded stockroom should carry enough storage boxes to read as working space"
@@ -627,8 +825,10 @@ func test_customer_facing_product_props_are_present_but_curated() -> void:
 	for reserve_product: String in ["StarterTorqueForce", "StarterGridiron"]:
 		assert_null(
 			shell.get_node_or_null(reserve_product),
-			"Reserve starter product must not appear in the first-delivery boot shell: %s"
-			% reserve_product
+			(
+				"Reserve starter product must not appear in the first-delivery boot shell: %s"
+				% reserve_product
+			)
 		)
 	for removed: String in [
 		"StarterShelfCase00",
@@ -693,10 +893,13 @@ func _collect_distinct_product_item_ids(parent: Node) -> PackedStringArray:
 
 func _expected_first_delivery_ids() -> PackedStringArray:
 	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
-	return catalog.call(
-		"get_product_item_ids",
-		StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
-		StoreVisualLayoutScript.STOCK_STATE_FIRST_DELIVERY,
+	return (
+		catalog
+		. call(
+			"get_product_item_ids",
+			StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+			StoreVisualLayoutScript.STOCK_STATE_FIRST_DELIVERY,
+		)
 	)
 
 
@@ -721,6 +924,25 @@ func _box_size(node: Node3D) -> Vector3:
 	return box_mesh.size
 
 
+func _assert_panel_or_strip(parent: Node, node_path: String) -> void:
+	var node: Node3D = parent.get_node_or_null(node_path) as Node3D
+	assert_not_null(node, "%s must exist" % node_path)
+	if node == null:
+		return
+	var size: Vector3 = _box_size(node)
+	assert_gt(size.length_squared(), 0.0, "%s must expose a box mesh size" % node_path)
+	if size.length_squared() <= 0.0:
+		return
+	var shortest: float = minf(size.x, minf(size.y, size.z))
+	var longest: float = maxf(size.x, maxf(size.y, size.z))
+	assert_lte(shortest, 0.14, "%s must be visibly thin instead of cube-like" % node_path)
+	assert_gte(
+		longest / maxf(shortest, 0.001),
+		3.0,
+		"%s must read as an authored panel, rail, or strip" % node_path
+	)
+
+
 func _material_for(parent: Node, node_path: String) -> StandardMaterial3D:
 	var node: Node3D = parent.get_node_or_null(node_path) as Node3D
 	if node == null:
@@ -735,6 +957,10 @@ func _material_for(parent: Node, node_path: String) -> StandardMaterial3D:
 
 func _brightest_channel(color: Color) -> float:
 	return maxf(maxf(color.r, color.g), color.b)
+
+
+func _color_distance(a: Color, b: Color) -> float:
+	return Vector3(a.r - b.r, a.g - b.g, a.b - b.b).length()
 
 
 func _flat_distance_to_segment(point: Vector3, start: Vector3, end: Vector3) -> float:

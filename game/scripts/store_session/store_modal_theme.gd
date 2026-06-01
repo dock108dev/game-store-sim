@@ -8,6 +8,7 @@ extends RefCounted
 const COLOR_PANEL_BG: Color = Color(0.094, 0.078, 0.067, 0.94)
 const COLOR_PANEL_BORDER: Color = Color(0.534, 0.420, 0.260, 1.0)
 const COLOR_BLOCKER: Color = Color(0.024, 0.020, 0.016, 0.56)
+const COLOR_PASSIVE_BLOCKER: Color = Color(0.024, 0.020, 0.016, 0.0)
 const COLOR_TEXT_PRIMARY: Color = Color(0.957, 0.914, 0.831, 1.0)
 const COLOR_TEXT_HEADER: Color = Color(0.910, 0.647, 0.278, 1.0)
 const COLOR_TEXT_MUTED: Color = Color(0.722, 0.660, 0.549, 1.0)
@@ -19,6 +20,13 @@ const COLOR_BUTTON_BORDER_FOCUS: Color = Color(0.910, 0.647, 0.278, 1.0)
 ## prefix, today checklist row glyph). Distinct from the warm gold used for
 ## active text so the player parses "done" vs "do this now" at a glance.
 const COLOR_ACCENT: Color = Color(0.4, 0.85, 0.55, 1.0)
+
+const DETAIL_TAG_FONT_SIZE: int = 14
+const DETAIL_TITLE_FONT_SIZE: int = 26
+const DETAIL_BODY_FONT_SIZE: int = 16
+const DETAIL_BUTTON_MIN_HEIGHT: float = 48.0
+const DETAIL_PANEL_SPACING: int = 12
+const DETAIL_PANEL_MIN_SIZE: Vector2 = Vector2(640, 420)
 
 
 ## StyleBox for the main modal panel (rounded brown frame on warm-dark fill).

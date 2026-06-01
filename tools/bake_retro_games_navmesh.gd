@@ -49,15 +49,15 @@ func _initialize() -> void:
 	nav_mesh.agent_height = 1.8
 	nav_mesh.agent_max_climb = 0.2
 	nav_mesh.agent_max_slope = 30.0
-	# PARSED_GEOMETRY_BOTH so StaticBody3D fixture colliders are cut out.
+	# Static collider parsing keeps visual-only dressing from carving walkable routes.
 	nav_mesh.geometry_parsed_geometry_type = (
-		NavigationMesh.PARSED_GEOMETRY_BOTH
+		NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 	)
 	# Constrain bake to the playable bounds (matches the prior stub's footprint
 	# in X/Z, with a Y range tight enough to exclude the ceiling slab).
 	nav_mesh.filter_baking_aabb = AABB(
-		Vector3(-7.7, -1.0, -9.7),
-		Vector3(15.4, 2.5, 19.4)
+		Vector3(-7.6, -1.0, -9.6),
+		Vector3(15.2, 2.5, 19.2)
 	)
 
 	# Drive the bake synchronously via NavigationServer3D so we can rely on
@@ -95,9 +95,8 @@ func _initialize() -> void:
 
 	# ResourceSaver omits properties that match their compile-time defaults.
 	# `cell_size` (default 0.25) and `geometry_parsed_geometry_type`
-	# (default MESH_INSTANCES) are required by the runtime rebake guard
-	# (NavMeshRebaker._has_valid_nav_region) and the SSOT tripwire that
-	# greps for them in store nav meshes. Inject them explicitly so a
+	# (default MESH_INSTANCES) are required by the runtime rebake guard and
+	# the SSOT tripwire that greps for them in store nav meshes. Inject so a
 	# fresh load preserves the bake-ready configuration.
 	_ensure_bake_ready_fields(OUTPUT_PATH)
 
@@ -123,7 +122,7 @@ func _ensure_bake_ready_fields(path: String) -> void:
 	if not injected.contains("geometry_parsed_geometry_type = "):
 		injected = injected.replace(
 			"[resource]\n",
-			"[resource]\ngeometry_parsed_geometry_type = 2\n"
+			"[resource]\ngeometry_parsed_geometry_type = 1\n"
 		)
 	if injected == text:
 		return

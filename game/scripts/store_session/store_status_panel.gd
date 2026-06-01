@@ -1,9 +1,9 @@
 ## Compact right-anchored Day panel for the store_session loop.
 ##
-## Owns quiet store status and passive Day milestone progress. The active
-## objective label, action copy, key badge, and target hint belong to
-## `ObjectiveRail` and `InteractionPrompt`, so this panel never paints an
-## active objective row or rail-style stepper.
+## Owns quiet store status and passive Day milestone progress. Active
+## objective copy, key badges, and target hints belong to `ObjectiveRail`
+## and `InteractionPrompt`, so this panel only highlights the current
+## checklist milestone by order.
 class_name StoreStatusPanel
 extends CanvasLayer
 
@@ -12,7 +12,7 @@ const LAYER_INDEX: int = 30
 ## Modal-fade contract mirrors `hud.gd._MODAL_DIM_ALPHA`.
 const _MODAL_DIM_ALPHA: float = 0.65
 
-const _PANEL_BG: Color = Color(0.08, 0.08, 0.14, 0.78)
+const _PANEL_BG: Color = Color(0.094, 0.078, 0.067, 0.82)
 const _HEADER_FONT_SIZE: int = 14
 const _SECTION_FONT_SIZE: int = 11
 const _ROW_FONT_SIZE: int = 12
@@ -23,11 +23,12 @@ const _PANEL_WIDTH: float = 300.0
 const _RIGHT_INSET: float = 20.0
 const _TOP_INSET: float = 84.0
 
-const _HEADER_COLOR: Color = Color(1.0, 1.0, 1.0, 1.0)
-const _ROW_COLOR: Color = Color(1.0, 1.0, 1.0, 0.6)
-const _SECTION_COLOR: Color = Color(1.0, 1.0, 1.0, 0.45)
-const _COMPLETED_COLOR: Color = Color(0.3, 1.0, 0.5)
-const _MILESTONE_PENDING_COLOR: Color = Color(1.0, 1.0, 1.0, 0.5)
+const _HEADER_COLOR: Color = Color(0.957, 0.914, 0.831, 1.0)
+const _ROW_COLOR: Color = Color(0.957, 0.914, 0.831, 0.64)
+const _SECTION_COLOR: Color = Color(0.722, 0.660, 0.549, 0.58)
+const _COMPLETED_COLOR: Color = Color(0.4, 0.85, 0.55, 0.64)
+const _MILESTONE_CURRENT_COLOR: Color = Color(0.910, 0.647, 0.278, 0.98)
+const _MILESTONE_PENDING_COLOR: Color = Color(0.957, 0.914, 0.831, 0.40)
 const _CHECK: String = "✓"
 const _PENDING_GLYPH: String = "•"
 
@@ -186,7 +187,7 @@ func _build_panel() -> void:
 	style.corner_radius_top_right = 4
 	style.corner_radius_bottom_right = 4
 	style.corner_radius_bottom_left = 4
-	style.border_color = Color(1.0, 0.78, 0.30, 0.34)
+	style.border_color = Color(0.534, 0.420, 0.260, 0.58)
 	style.border_width_left = 2
 	style.content_margin_left = float(_PADDING)
 	style.content_margin_top = float(_PADDING)
@@ -357,9 +358,25 @@ func _refresh_milestone_row(objective_id: StringName) -> void:
 	if _completed_objective_ids.has(objective_id):
 		label.text = "%s %s" % [_CHECK, label_text]
 		label.add_theme_color_override("font_color", _COMPLETED_COLOR)
+	elif objective_id == _current_milestone_objective_id():
+		label.text = "%s %s" % [_PENDING_GLYPH, label_text]
+		label.add_theme_color_override("font_color", _MILESTONE_CURRENT_COLOR)
 	else:
 		label.text = "%s %s" % [_PENDING_GLYPH, label_text]
 		label.add_theme_color_override("font_color", _MILESTONE_PENDING_COLOR)
+
+
+func _refresh_milestone_rows() -> void:
+	for objective_id: StringName in _milestone_labels.keys():
+		_refresh_milestone_row(objective_id)
+
+
+func _current_milestone_objective_id() -> StringName:
+	for entry: Dictionary in _milestones:
+		var objective_id: StringName = StringName(str(entry.get("objective_id", "")))
+		if not _completed_objective_ids.has(objective_id):
+			return objective_id
+	return &""
 
 
 func _milestones_for_objectives(objectives: Array[Dictionary]) -> Array[Dictionary]:
@@ -431,14 +448,22 @@ func _is_preopening_training() -> bool:
 	return (
 		_current_day == 1
 		and not StoreSessionState.preopening_complete
-		and _has_training_milestones()
+		and _has_preopening_source_milestones()
 	)
 
 
-func _has_training_milestones() -> bool:
+func _has_preopening_source_milestones() -> bool:
 	var ids: Dictionary = {}
 	for entry: Dictionary in _milestones:
 		ids[StringName(str(entry.get("objective_id", "")))] = true
+	var matches_day_one: bool = true
+	for day_one_entry: Dictionary in _DAY_ONE_MILESTONES:
+		var day_one_id: StringName = StringName(str(day_one_entry.get("objective_id", "")))
+		if not ids.has(day_one_id):
+			matches_day_one = false
+			break
+	if matches_day_one:
+		return true
 	for training_entry: Dictionary in _TRAINING_MILESTONES:
 		var objective_id: StringName = StringName(str(training_entry.get("objective_id", "")))
 		if not ids.has(objective_id):
@@ -495,7 +520,7 @@ func _on_store_objective_completed(objective_id: StringName) -> void:
 	if not _milestone_labels.has(objective_id):
 		return
 	_completed_objective_ids[objective_id] = true
-	_refresh_milestone_row(objective_id)
+	_refresh_milestone_rows()
 
 
 func _on_input_focus_changed(new_ctx: StringName, _old_ctx: StringName) -> void:
@@ -554,4 +579,8 @@ func get_item_glyph(objective_id: StringName) -> String:
 func get_row_state(objective_id: StringName) -> String:
 	if not _milestone_labels.has(objective_id):
 		return ""
-	return "completed" if _completed_objective_ids.has(objective_id) else "pending"
+	if _completed_objective_ids.has(objective_id):
+		return "completed"
+	if objective_id == _current_milestone_objective_id():
+		return "current"
+	return "pending"

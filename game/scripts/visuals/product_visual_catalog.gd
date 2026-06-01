@@ -7,6 +7,9 @@ const SCRIPT_PATH: String = "res://game/scripts/visuals/product_visual_catalog.g
 const ShelfCategoryNormalizerScript: GDScript = preload(
 	"res://game/scripts/stores/shelf_category_normalizer.gd"
 )
+const VisualValueUtilScript: GDScript = preload(
+	"res://game/scripts/visuals/visual_value_util.gd"
+)
 const CATEGORY_FALLBACKS: Dictionary = {
 	"cartridge": "motorway_kings_neo_ignite",
 	"sealed_product": "goblin_kart_canopy_wave",
@@ -71,7 +74,9 @@ func load_from_dictionary(data: Dictionary) -> void:
 			var definition_id: String = str(raw_definition_id)
 			if not definition_id.is_empty():
 				_templates_by_definition_id[definition_id] = template
-		var stripe: Dictionary = _as_dictionary(template.get("platform_stripe", {}))
+		var stripe: Dictionary = VisualValueUtilScript.dictionary(
+			template.get("platform_stripe", {})
+		)
 		var platform_id: String = str(stripe.get("platform_id", ""))
 		var visual_id: String = str(stripe.get("platform_visual_id", ""))
 		if not platform_id.is_empty() and not _templates_by_platform_id.has(platform_id):
@@ -158,9 +163,3 @@ func find_template_for_item(item: Dictionary) -> Dictionary:
 ## Returns true when item metadata can resolve to a reusable case template.
 func has_template_for_item(item: Dictionary) -> bool:
 	return not find_template_for_item(item).is_empty()
-
-
-static func _as_dictionary(value: Variant) -> Dictionary:
-	if value is Dictionary:
-		return value as Dictionary
-	return {}

@@ -351,6 +351,7 @@ func test_day_one_stage_gating_enables_only_current_target_and_ambient() -> void
 			"stage": StoreSessionController.STAGE_TALK_TO_CUSTOMER,
 			"target": "StoreSessionDayOneCustomer/Interactable",
 			"completed": {},
+			"active_event": {"id": "day01_wrong_console_parent"},
 		},
 		{
 			"stage": StoreSessionController.STAGE_BACK_ROOM_INVENTORY,
@@ -370,7 +371,10 @@ func test_day_one_stage_gating_enables_only_current_target_and_ambient() -> void
 	]
 	for row: Dictionary in stages:
 		_set_controller_stage(
-			row["stage"], _controller().get("_day_one_objectives"), row["completed"]
+			row["stage"],
+			_controller().get("_day_one_objectives"),
+			row["completed"],
+			row.get("active_event", {}) as Dictionary
 		)
 		_assert_only_expected_interactables_enabled(row["target"])
 
@@ -428,13 +432,19 @@ func _controller() -> Node:
 	return _root.get_node_or_null("StoreSessionController")
 
 
-func _set_controller_stage(stage: StringName, objectives: Array, completed: Dictionary) -> void:
+func _set_controller_stage(
+	stage: StringName,
+	objectives: Array,
+	completed: Dictionary,
+	active_event: Dictionary = {}
+) -> void:
 	var controller: Node = _controller()
 	assert_not_null(controller, "StoreSessionController must exist")
 	if controller == null:
 		return
 	controller.set("_objectives", objectives.duplicate(true))
 	controller.set("_completed_objectives", completed.duplicate(true))
+	controller.set("_active_event", active_event.duplicate(true))
 	controller.set("_stage", stage)
 	controller.call("_apply_objective_gating")
 

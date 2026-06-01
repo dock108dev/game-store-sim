@@ -453,8 +453,8 @@ func test_fp_mode_sentence_shows_store_session_objective() -> void:
 	_hud.set_fp_mode(true)
 
 	EventBus.objective_changed.emit({
-		"text": "Check the register.",
-		"action": "Check register",
+		"text": "Open the register and confirm the checkout lane is ready.",
+		"action": "Verify the register before customers arrive",
 		"key": "E",
 	})
 	await get_tree().process_frame
@@ -467,7 +467,7 @@ func test_fp_mode_sentence_shows_store_session_objective() -> void:
 		sentence.visible,
 		"Bottom-bar sentence must show the active store-session objective in FP mode"
 	)
-	assert_eq(sentence.text, "Check the register.")
+	assert_eq(sentence.text, "Open the register and confirm the checkout lane is ready.")
 
 
 func test_fp_mode_sentence_hides_hidden_store_session_objective() -> void:
@@ -477,7 +477,9 @@ func test_fp_mode_sentence_hides_hidden_store_session_objective() -> void:
 	add_child_autofree(stub)
 	_hud.set_fp_mode(true)
 
-	EventBus.objective_changed.emit({"text": "Check the register."})
+	EventBus.objective_changed.emit({
+		"text": "Open the register and confirm the checkout lane is ready."
+	})
 	EventBus.objective_changed.emit({"hidden": true})
 	await get_tree().process_frame
 

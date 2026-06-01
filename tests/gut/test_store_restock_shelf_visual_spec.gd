@@ -275,7 +275,7 @@ func test_restock_locked_when_not_carrying_stock() -> void:
 	)
 	var reason: String = String(controller.restock_disabled_reason())
 	assert_eq(
-		reason, "Pick up the back room delivery first.",
+		reason, "Inspect the Starter Stock Box first.",
 		"restock_disabled_reason must explicitly point the player back to "
 		+ "the back room when the shelf is the active stage but stock is "
 		+ "not held."
@@ -305,7 +305,7 @@ func test_restock_interaction_without_carrying_stock_is_blocked() -> void:
 	)
 	assert_eq(
 		get_signal_parameters(EventBus, "notification_requested"),
-		["Pick up the back room delivery first."],
+		["Inspect the Starter Stock Box first."],
 		"Blocked restock notification copy must name the delivery pickup"
 	)
 
@@ -361,6 +361,21 @@ func test_restock_places_one_item_per_input_until_delivery_done() -> void:
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(_count_store_shelf_items(shelf), 1, "First placement must fill one shelf slot")
+	_assert_signal_emitted_with_string(
+		"store_carry_changed",
+		"Starter Stock Box",
+		"Carry HUD state must keep the stable box name during partial stocking"
+	)
+	_assert_signal_not_emitted_with_substring(
+		"store_carry_changed",
+		"left",
+		"Remaining count belongs in placement feedback, not the carry HUD label"
+	)
+	_assert_signal_emitted_with_string(
+		"toast_requested",
+		"Placed 1 item on the starter display table. 2 still in the box.",
+		"First placement must report progressive stock-in-box feedback"
+	)
 	assert_true(StoreSessionState.carrying_stock, "Carry state must remain while items are left")
 	assert_false(
 		bool(controller.is_objective_completed(&"stock_shelf")),
@@ -374,6 +389,11 @@ func test_restock_places_one_item_per_input_until_delivery_done() -> void:
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(_count_store_shelf_items(shelf), 2, "Second placement must fill one more slot")
+	_assert_signal_emitted_with_string(
+		"toast_requested",
+		"Placed 1 item on the starter display table. 1 still in the box.",
+		"Second placement must report the final carried item still in the box"
+	)
 	assert_true(StoreSessionState.carrying_stock, "Carry state must remain while one item is left")
 	assert_false(
 		bool(controller.is_objective_completed(&"stock_shelf")),
@@ -590,7 +610,7 @@ func test_restock_toast_names_the_starter_display_table() -> void:
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
 	watch_signals(EventBus)
-	controller.on_store_restock_interacted()
+	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	var emitted_any: bool = false
 	for params: Array in get_signal_parameters_all(
@@ -656,6 +676,32 @@ func _assert_signal_emitted_with_int(
 			found = true
 			break
 	assert_true(found, message)
+
+
+func _assert_signal_emitted_with_string(
+	signal_name: String,
+	expected_value: String,
+	message: String
+) -> void:
+	var found: bool = false
+	for params: Array in get_signal_parameters_all(EventBus, signal_name):
+		if params.size() >= 1 and String(params[0]) == expected_value:
+			found = true
+			break
+	assert_true(found, message)
+
+
+func _assert_signal_not_emitted_with_substring(
+	signal_name: String,
+	blocked_value: String,
+	message: String
+) -> void:
+	var found: bool = false
+	for params: Array in get_signal_parameters_all(EventBus, signal_name):
+		if params.size() >= 1 and String(params[0]).findn(blocked_value) >= 0:
+			found = true
+			break
+	assert_false(found, message)
 
 
 ## GUT's `get_signal_parameters` returns the params of one emission and

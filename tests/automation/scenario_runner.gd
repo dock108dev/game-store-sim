@@ -49,6 +49,9 @@ const LONG_DAY_SOAK_STEP_SCRIPT: GDScript = preload(
 const STORE_SESSION_TUTORIAL_FULL_STEP_SCRIPT: GDScript = preload(
 	"res://tests/automation/store_session_tutorial_full_step.gd"
 )
+const FIRST60_QUALITY_GATE_STEP_SCRIPT: GDScript = preload(
+	"res://tests/automation/first60_quality_gate_step.gd"
+)
 const AUTOMATION_MODE_SCRIPT: GDScript = preload("res://game/scripts/automation/automation_mode.gd")
 
 var _is_running: bool = false
@@ -208,6 +211,10 @@ func _execute_step(
 			)
 		"run_store_session_tutorial_full":
 			step_result = await STORE_SESSION_TUTORIAL_FULL_STEP_SCRIPT.new().execute(
+				self, step_result, step, result, options
+			)
+		"run_first60_quality_gate":
+			step_result = await FIRST60_QUALITY_GATE_STEP_SCRIPT.new().execute(
 				self, step_result, step, result, options
 			)
 		"finish":

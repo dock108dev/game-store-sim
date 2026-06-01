@@ -10,7 +10,7 @@
 ## ring buffer is debug-only.
 ##
 ## Visual contract mirrors `StoreStatusPanel` so the two surfaces read as
-## a single design family: same `_PANEL_BG`, same 12 px padding, no border.
+## a single design family: same warm-dark `_PANEL_BG`, compact padding, no border.
 ## Width 260 px, height ~120 px, anchored bottom-left above the carry label
 ## (which sits at `offset_top = -200` from bottom — we stop at -204).
 ## Stays visible in first-person mode: this surface owns recent events only,
@@ -33,6 +33,16 @@ const MAX_VISIBLE_ENTRIES: int = 3
 ## each new entry pushes its predecessors toward transparency.
 const ALPHA_OLDEST: float = 0.35
 
+## First-minute feedback tags that should read as active player progress
+## instead of passive history. The feed still orders strictly by arrival
+## time; priority is expressed only through row styling.
+const IMPORTANT_TAGS: Dictionary = {
+	"DAY": true,
+	"OBJECTIVE": true,
+	"STOCK": true,
+	"SYSTEM": true,
+}
+
 ## CanvasLayer ordering — sits below ModalDimOverlay (49) so the day-end /
 ## decision modals dim it, and below ObjectiveRail (40) so the rail's
 ## active-step chip always wins. Layer 30 matches `StoreStatusPanel` — the
@@ -45,26 +55,36 @@ const LAYER_INDEX: int = 30
 ## so the composed visible opacity stays legible (0.65 × 0.6 ≈ 0.39).
 const _MODAL_DIM_ALPHA: float = 0.65
 
-const _PANEL_BG: Color = Color(0.08, 0.08, 0.14, 0.76)
+const _PANEL_BG: Color = Color(0.094, 0.078, 0.067, 0.76)
 const _PANEL_WIDTH: float = 248.0
 const _PANEL_HEIGHT: float = 90.0
 const _PADDING: int = 10
 ## Bottom inset chosen so the panel sits flush above `StoreSessionCarryLabel`
 ## (which lives at `offset_top = -200` on CarryHUD); 4 px clearance keeps
 ## the carry-state amber strip from kissing the panel edge.
-const _BOTTOM_INSET: float = 196.0
+const _BOTTOM_INSET: float = 204.0
 const _LEFT_INSET: float = 16.0
 const _ENTRY_FONT_SIZE: int = 12
+const _IMPORTANT_ENTRY_FONT_SIZE: int = 13
+const _NEWEST_ENTRY_FONT_SIZE: int = 13
 const _ENTRY_MIN_HEIGHT: float = 14.0
+const _ENTRY_OUTLINE_COLOR: Color = Color(0.02, 0.018, 0.015, 0.86)
+const _IMPORTANT_OUTLINE_SIZE: int = 1
+const _NEWEST_OUTLINE_SIZE: int = 2
+
+const _HIDDEN_TAGS: Dictionary = {
+	"DEBUG": true,
+	"MODAL": true,
+}
 
 ## Tag → font color. Keys are bare tag names (no brackets); the bracketed
 ## form arrives over `event_logged` and is unwrapped before lookup.
 const _TAG_COLORS: Dictionary = {
-	"STOCK": Color(0.3, 0.75, 0.85, 1.0),       # blue-teal
-	"CUSTOMER": Color(0.3, 1.0, 0.5, 1.0),       # green
-	"DAY": Color(1.0, 0.78, 0.3, 1.0),           # amber / gold
-	"SYSTEM": Color(0.65, 0.65, 0.65, 1.0),      # medium gray
-	"OBJECTIVE": Color(0.4, 0.9, 1.0, 1.0),      # cyan
+	"STOCK": Color(0.357, 0.722, 0.910, 1.0),    # soft blue
+	"CUSTOMER": Color(0.561, 0.878, 0.459, 1.0), # soft green
+	"DAY": Color(0.910, 0.647, 0.278, 1.0),      # modal gold
+	"SYSTEM": Color(0.722, 0.660, 0.549, 1.0),   # muted warm gray
+	"OBJECTIVE": Color(0.957, 0.914, 0.831, 1.0), # cream objective echo
 }
 
 ## Near-white fallback for unrecognized or missing tags. Picked over pure
@@ -152,26 +172,20 @@ func _on_event_logged(tag: String, message: String) -> void:
 		return
 	if message.is_empty():
 		return
-	# Treat "[TAG] message" as the canonical entry shape; splitting on the
-	# first "] " strips the bracket prefix for display while leaving the
-	# upstream signal payload (the stored format) untouched.
-	var raw_entry: String = "%s %s" % [tag, message]
-	var parts: PackedStringArray = raw_entry.split("] ", true, 1)
-	var display_text: String
-	var tag_key: String
-	if parts.size() > 1:
-		display_text = parts[1]
-		tag_key = parts[0].trim_prefix("[")
-	else:
-		display_text = raw_entry
-		tag_key = ""
+	var tag_key: String = _tag_key(tag)
+	if _HIDDEN_TAGS.has(tag_key):
+		return
+	var display_text: String = _strip_leading_bracket_tags(message).strip_edges()
+	if display_text.is_empty():
+		return
 
 	var row: Label = Label.new()
 	row.text = display_text
-	row.add_theme_font_size_override("font_size", _ENTRY_FONT_SIZE)
+	row.set_meta("event_log_tag", tag_key)
 	row.add_theme_color_override(
 		"font_color", _TAG_COLORS.get(tag_key, _DEFAULT_TAG_COLOR)
 	)
+	row.add_theme_color_override("font_outline_color", _ENTRY_OUTLINE_COLOR)
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.custom_minimum_size = Vector2(0.0, _ENTRY_MIN_HEIGHT)
 	_entry_container.add_child(row)
@@ -184,6 +198,7 @@ func _on_event_logged(tag: String, message: String) -> void:
 		oldest.queue_free()
 
 	_refresh_alpha()
+	_refresh_row_emphasis()
 
 
 ## Recomputes per-row `modulate.a` so the oldest row sits at `ALPHA_OLDEST`,
@@ -207,6 +222,32 @@ func _refresh_alpha() -> void:
 		var mod: Color = item.modulate
 		mod.a = alpha
 		item.modulate = mod
+
+
+func _refresh_row_emphasis() -> void:
+	if _entry_container == null:
+		return
+	var newest_index: int = _entry_container.get_child_count() - 1
+	for i: int in range(_entry_container.get_child_count()):
+		var row: Node = _entry_container.get_child(i)
+		if not (row is Label):
+			continue
+		var label: Label = row as Label
+		var tag_key: String = String(label.get_meta("event_log_tag", ""))
+		var important: bool = IMPORTANT_TAGS.has(tag_key)
+		var newest: bool = i == newest_index
+		var font_size: int = _ENTRY_FONT_SIZE
+		if important:
+			font_size = _IMPORTANT_ENTRY_FONT_SIZE
+		if newest:
+			font_size = max(font_size, _NEWEST_ENTRY_FONT_SIZE)
+		var outline_size: int = 0
+		if important:
+			outline_size = _IMPORTANT_OUTLINE_SIZE
+		if newest:
+			outline_size = max(outline_size, _NEWEST_OUTLINE_SIZE)
+		label.add_theme_font_size_override("font_size", font_size)
+		label.add_theme_constant_override("outline_size", outline_size)
 
 
 func _on_input_focus_changed(new_ctx: StringName, _old_ctx: StringName) -> void:
@@ -257,7 +298,7 @@ func get_row_text_for_test(index: int) -> String:
 ## Accepts either the bare key (`"STOCK"`) or the bracketed form
 ## (`"[STOCK]"`) so call sites can use whichever they have on hand.
 func get_tag_color(tag: String) -> Color:
-	var key: String = tag.trim_prefix("[").trim_suffix("]")
+	var key: String = _tag_key(tag)
 	return _TAG_COLORS.get(key, _DEFAULT_TAG_COLOR)
 
 
@@ -273,3 +314,44 @@ func get_row_alpha(index: int) -> float:
 	if child is CanvasItem:
 		return (child as CanvasItem).modulate.a
 	return 0.0
+
+
+## Test seam — returns the resolved row font size at `index`.
+func get_row_font_size_for_test(index: int) -> int:
+	var row: Label = _get_row_label(index)
+	if row == null:
+		return 0
+	return row.get_theme_font_size("font_size")
+
+
+## Test seam — returns the resolved row outline size at `index`.
+func get_row_outline_size_for_test(index: int) -> int:
+	var row: Label = _get_row_label(index)
+	if row == null:
+		return 0
+	return row.get_theme_constant("outline_size")
+
+
+func _get_row_label(index: int) -> Label:
+	if _entry_container == null:
+		return null
+	if index < 0 or index >= _entry_container.get_child_count():
+		return null
+	var row: Node = _entry_container.get_child(index)
+	if row is Label:
+		return row as Label
+	return null
+
+
+func _tag_key(tag: String) -> String:
+	return tag.strip_edges().trim_prefix("[").trim_suffix("]").to_upper()
+
+
+func _strip_leading_bracket_tags(text: String) -> String:
+	var remaining: String = text.strip_edges()
+	while remaining.begins_with("["):
+		var close_index: int = remaining.find("]")
+		if close_index <= 0:
+			break
+		remaining = remaining.substr(close_index + 1).strip_edges()
+	return remaining

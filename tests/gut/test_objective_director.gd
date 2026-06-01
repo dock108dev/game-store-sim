@@ -60,7 +60,7 @@ func test_day_started_day1_pre_chain_surfaces_manager_training() -> void:
 	EventBus.day_started.emit(1)
 	assert_eq(
 		received[0].get("objective", ""),
-		"Talk to the manager at checkout.",
+		"Talk to the manager at checkout for opening instructions.",
 		"Day 1 must surface the manager-led preopening prompt before real customer handling"
 	)
 
@@ -102,8 +102,11 @@ func test_store_entered_emits_objective_changed() -> void:
 	EventBus.store_entered.emit(&"retro_games")
 	assert_gt(received.size(), 0, "objective_changed must fire")
 	var payload: Dictionary = received[received.size() - 1]
-	assert_eq(payload.get("objective", ""), "Talk to the manager at checkout.")
-	assert_eq(payload.get("action", ""), "Talk to manager")
+	assert_eq(
+		payload.get("objective", ""),
+		"Talk to the manager at checkout for opening instructions."
+	)
+	assert_eq(payload.get("action", ""), "Get the opening routine from the manager")
 	assert_eq(payload.get("key", ""), "E")
 
 
@@ -178,11 +181,20 @@ func test_day1_chain_advances_through_each_signal_in_order() -> void:
 	)
 	_start_day1_preopening()
 	EventBus.store_objective_completed.emit(&"talk_to_manager")
-	assert_eq(received[received.size() - 1].get("text", ""), "Check the register.")
+	assert_eq(
+		received[received.size() - 1].get("text", ""),
+		"Open the register and confirm the checkout lane is ready."
+	)
 	EventBus.store_objective_completed.emit(&"check_register")
-	assert_eq(received[received.size() - 1].get("text", ""), "Check back room inventory.")
+	assert_eq(
+		received[received.size() - 1].get("text", ""),
+		"Check the back room inventory and pick up the starter stock box."
+	)
 	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
-	assert_eq(received[received.size() - 1].get("text", ""), "Stock the starter display table.")
+	assert_eq(
+		received[received.size() - 1].get("text", ""),
+		"Place all 3 starter items on the starter display table."
+	)
 	EventBus.store_objective_completed.emit(&"training_stock_shelf")
 	assert_eq(received[received.size() - 1].get("text", ""), "Talk to the customer at the register.")
 	EventBus.customer_interacted.emit(null)
@@ -191,7 +203,7 @@ func test_day1_chain_advances_through_each_signal_in_order() -> void:
 		"customer_interacted must advance to the real back-room objective")
 	EventBus.placement_mode_entered.emit()
 	assert_eq(received[received.size() - 1].get("text", ""),
-		"Stock the starter display table.",
+			"Place all 3 starter items on the starter display table.",
 		"placement_mode_entered must advance to the real stock objective")
 	EventBus.item_stocked.emit("item_001", "shelf_a")
 	assert_eq(received[received.size() - 1].get("text", ""),
@@ -360,11 +372,12 @@ func test_pre_chain_payload_carries_manager_action_and_key() -> void:
 	EventBus.day_started.emit(1)
 	var payload: Dictionary = received[received.size() - 1]
 	assert_eq(
-		payload.get("text", ""), "Talk to the manager at checkout.",
+		payload.get("text", ""),
+		"Talk to the manager at checkout for opening instructions.",
 		"Pre-chain payload must publish the manager training text"
 	)
 	assert_eq(
-		payload.get("action", ""), "Talk to manager",
+		payload.get("action", ""), "Get the opening routine from the manager",
 		"Pre-chain payload must publish the manager action prompt"
 	)
 	assert_eq(
@@ -415,7 +428,8 @@ func test_store_entered_during_pre_chain_re_emits_manager_payload() -> void:
 	EventBus.store_entered.emit(&"retro_games")
 	var payload: Dictionary = received[received.size() - 1]
 	assert_eq(
-		payload.get("objective", ""), "Talk to the manager at checkout.",
+		payload.get("objective", ""),
+		"Talk to the manager at checkout for opening instructions.",
 		"store_entered during preopening must keep the rail on the manager beat"
 	)
 

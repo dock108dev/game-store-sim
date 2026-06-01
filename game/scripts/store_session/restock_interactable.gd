@@ -3,7 +3,7 @@ extends StoreSessionInteractableBase
 
 
 func _ready() -> void:
-	display_name = "starter display table"
+	display_name = "Starter Display"
 	prompt_text = "Stock"
 	action_verb = "Stock"
 	interaction_type = InteractionType.SHELF_SLOT

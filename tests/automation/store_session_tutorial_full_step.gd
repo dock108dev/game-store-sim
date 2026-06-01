@@ -86,16 +86,16 @@ func _checkpoint(label: String, controller: StoreSessionController, expected: Di
 
 
 func _route_checkpoints() -> Array[Dictionary]:
-	var stock_1: String = "Place item 1 of 3 on starter display table"
-	var stock_2: String = "Place item 2 of 3 on starter display table"
-	var stock_3: String = "Place item 3 of 3 on starter display table"
+	var stock_1: String = "Place item 1 of 3 on Starter Display"
+	var stock_2: String = "Place item 2 of 3 on Starter Display"
+	var stock_3: String = "Place item 3 of 3 on Starter Display"
 	return [
 		_cp(
 			"01_boot_first_day_manager_objective",
 			{
 				"stage": "training_talk_manager",
 				"target": "StoreSessionDayOneCustomer/Interactable",
-				"prompt": "Talk to manager",
+				"prompt": "Talk to Manager",
 				"header": "FIRST DAY",
 				"preopening_complete": false
 			}
@@ -105,7 +105,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			{
 				"stage": "training_talk_manager",
 				"target": "StoreSessionDayOneCustomer/Interactable",
-				"prompt": "Talk to manager",
+				"prompt": "Talk to Manager",
 				"header": "FIRST DAY"
 			},
 			["interact"]
@@ -115,7 +115,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			{
 				"stage": "training_check_register",
 				"target": "StoreSessionDayEndTrigger/Interactable",
-				"prompt": "Check register",
+				"prompt": "Check Register",
 				"register": "READY",
 				"header": "FIRST DAY"
 			},
@@ -126,7 +126,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			{
 				"stage": "training_back_room_inventory",
 				"target": "StoreSessionBackroomPickup/Interactable",
-				"prompt": "Check back room inventory",
+				"prompt": "Inspect Starter Stock Box",
 				"register": "BACK\nROOM",
 				"header": "FIRST DAY"
 			},
@@ -203,7 +203,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 				"stage": "back_room_inventory",
 				"customer_exit": "exited_hidden",
 				"target": "StoreSessionBackroomPickup/Interactable",
-				"prompt": "Check back room inventory"
+				"prompt": "Inspect Starter Stock Box"
 			},
 			["interact"]
 		),
@@ -296,6 +296,8 @@ func _interact(controller: StoreSessionController) -> void:
 	if target is Interactable:
 		(target as Interactable).interact()
 	await _frames(2)
+	if controller.acknowledge_prompt_for_automation():
+		await _frames(1)
 
 
 func _choose_decision(controller: StoreSessionController) -> bool:

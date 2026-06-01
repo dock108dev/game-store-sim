@@ -71,14 +71,19 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"anchors":
 			[
 				"ExpandableStoreShell/StarterSignLabel",
+				"ExpandableStoreShell/StoreIdentityWallPanel",
+				"ExpandableStoreShell/StoreIdentitySignCanopy",
 				"ExpandableStoreShell/StarterBackWall",
 				"ExpandableStoreShell/StarterAisleMat",
+				"ExpandableStoreShell/SpawnCheckoutSightlineStrip",
+				"ExpandableStoreShell/SpawnStarterDisplaySightlineStrip",
+				"ExpandableStoreShell/SpawnStockroomSightlineStrip",
 				"ExpandableStoreShell/EntryThreshold",
 				"StoreSessionDayOneCustomer",
 			],
 			"route_anchor": "ExpandableStoreShell/CheckoutRegisterScreen",
 			"active_route_stage": "spawn_orientation",
-			"active_prompt": "Talk to manager",
+			"active_prompt": "Talk to Manager",
 			"next_expected_beat": "checkout_manager_counter",
 			"next_destination": "manager and checkout register",
 			"local_action": "take in the store identity and walk to the counter",
@@ -87,7 +92,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"action_context": _action_context(
 				"checkout",
 				"StoreSessionDayOneCustomer/Interactable",
-				"Talk to manager",
+				"Talk to Manager",
 				"walk to the counter and talk to the manager",
 				"manager and checkout register",
 				[
@@ -131,7 +136,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			],
 			"route_anchor": "StoreSessionDayOneCustomer",
 			"active_route_stage": "training_talk_manager",
-			"active_prompt": "Talk to manager",
+			"active_prompt": "Talk to Manager",
 			"next_expected_beat": "shelf_wall_product_focus",
 			"next_destination": "checkout counter",
 			"local_action": "talk to the manager/register area",
@@ -140,7 +145,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"action_context": _action_context(
 				"checkout",
 				"StoreSessionDayOneCustomer/Interactable",
-				"Talk to manager",
+				"Talk to Manager",
 				"talk to the manager/register area",
 				"checkout counter",
 				[
@@ -187,7 +192,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			],
 			"route_anchor": "StoreSessionRestockShelf",
 			"active_route_stage": "training_stock_shelf",
-			"active_prompt": "Stock starter display table",
+			"active_prompt": "Stock Starter Display",
 			"next_expected_beat": "before_customer",
 			"next_destination": "starter display table",
 			"local_action": "read the empty table target before starter stock appears",
@@ -196,7 +201,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"action_context": _action_context(
 				"restock_table",
 				"StoreSessionRestockShelf/Interactable",
-				"Stock starter display table",
+				"Stock Starter Display",
 				"place carried stock on the starter display table",
 				"starter display table",
 				[
@@ -244,7 +249,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			],
 			"route_anchor": "ExpandableStoreShell/StockroomFloorTape",
 			"active_route_stage": "training_back_room_inventory",
-			"active_prompt": "Check back room inventory",
+			"active_prompt": "Inspect Starter Stock Box",
 			"disabled_guidance": _stockroom_pickup_disabled_guidance(),
 			"next_expected_beat": "stockroom_work_area_interior",
 			"next_destination": "stockroom pickup",
@@ -254,7 +259,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"action_context": _action_context(
 				"backroom_pickup",
 				"StoreSessionBackroomPickup/Interactable",
-				"Check back room inventory",
+				"Inspect Starter Stock Box",
 				"walk through the stockroom threshold to the pickup",
 				"stockroom pickup",
 				[
@@ -302,7 +307,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			],
 			"route_anchor": "ExpandableStoreShell/StockroomFloorTape",
 			"active_route_stage": "training_back_room_inventory",
-			"active_prompt": "Check back room inventory",
+			"active_prompt": "Inspect Starter Stock Box",
 			"disabled_guidance": _stockroom_pickup_disabled_guidance(),
 			"next_expected_beat": "shelf_wall_product_focus",
 			"next_destination": "stockroom pickup",
@@ -312,7 +317,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"action_context": _action_context(
 				"backroom_pickup",
 				"StoreSessionBackroomPickup/Interactable",
-				"Check back room inventory",
+				"Inspect Starter Stock Box",
 				"pick up the stockroom delivery",
 				"stockroom pickup",
 				[
@@ -391,7 +396,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
-			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},
@@ -535,8 +540,8 @@ static func _candidate(path: String, state: String, reason: String) -> Dictionar
 static func _stockroom_pickup_disabled_guidance() -> Dictionary:
 	return {
 		"before_active_objective": "Talk to the customer first.",
-		"while_carrying_stock": "Stock already in hand. Place it on the starter display table.",
-		"after_delivery_checked": "Delivery already checked.",
+		"while_carrying_stock": "Stock already in hand. Place it on the Starter Display.",
+		"after_delivery_checked": "Stock box already inspected. Stock the Starter Display.",
 	}
 
 

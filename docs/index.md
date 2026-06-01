@@ -13,7 +13,7 @@ This is the active project documentation set for the current Godot project.
 - [Content and Data](content-data.md) — how JSON content is discovered, typed,
   validated, and accessed at runtime.
 - [Testing](testing.md) — local validation entry points, GUT configuration,
-  coverage areas, automation flags, and CI validation jobs.
+  test layout, automation flags, and CI validation jobs.
 - [Configuration and Deployment](configuration-deployment.md) — project
   settings, user data paths, export presets, and checked-in automation.
 
@@ -25,6 +25,8 @@ This is the active project documentation set for the current Godot project.
 
 ## Audit notes
 
+- [Abend Handling Audit](audits/abend-handling-audit.md) — current
+  fail-loud, warning, fallback, and soft-gate contracts.
 - [`docs/audits/docs-consolidation.md`](audits/docs-consolidation.md) records
   the most recent documentation review pass.
 

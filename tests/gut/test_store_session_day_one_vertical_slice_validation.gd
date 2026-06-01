@@ -63,23 +63,23 @@ func test_day_one_prompts_are_visible_only_on_the_active_beat() -> void:
 
 	await _choose_customer_option(&"refuse_return")
 	await _acknowledge_customer_result()
-	_assert_active_prompt("StoreSessionBackroomPickup", "Check back room inventory")
+	_assert_active_prompt("StoreSessionBackroomPickup", "Inspect Starter Stock Box")
 	_assert_inactive("StoreSessionDayOneCustomer")
 	_assert_inactive("StoreSessionRestockShelf")
 	_assert_inactive("StoreSessionDayEndTrigger")
 
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	_assert_active_prompt("StoreSessionRestockShelf", "Place item 1 of 3 on starter display table")
+	_assert_active_prompt("StoreSessionRestockShelf", "Place item 1 of 3 on Starter Display")
 	assert_true(StoreSessionState.carrying_stock, "Back-room pickup must set carrying state")
 
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	_assert_active_prompt("StoreSessionRestockShelf", "Place item 2 of 3 on starter display table")
+	_assert_active_prompt("StoreSessionRestockShelf", "Place item 2 of 3 on Starter Display")
 
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	_assert_active_prompt("StoreSessionRestockShelf", "Place item 3 of 3 on starter display table")
+	_assert_active_prompt("StoreSessionRestockShelf", "Place item 3 of 3 on Starter Display")
 
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
@@ -189,7 +189,7 @@ func test_customer_exit_state_tracks_acknowledged_walk_hidden_and_reset() -> voi
 		StoreSessionController.CUSTOMER_EXIT_IN_PROGRESS,
 		"Exit walk state must be inspectable without waiting on tween duration"
 	)
-	_assert_active_prompt("StoreSessionBackroomPickup", "Check back room inventory")
+	_assert_active_prompt("StoreSessionBackroomPickup", "Inspect Starter Stock Box")
 	_assert_inactive("StoreSessionDayOneCustomer")
 
 	controller.call("_finalize_customer_exit", customer)
@@ -471,7 +471,7 @@ func _assert_choice_result_flow(choice_id: StringName, expected_headline: String
 	assert_eq(StoreSessionState.input_mode, StoreSessionState.INPUT_MODE_GAMEPLAY)
 	assert_ne(InputFocus.current(), InputFocus.CTX_MODAL)
 	assert_eq(controller.current_stage(), StoreSessionController.STAGE_BACK_ROOM_INVENTORY)
-	_assert_active_prompt("StoreSessionBackroomPickup", "Check back room inventory")
+	_assert_active_prompt("StoreSessionBackroomPickup", "Inspect Starter Stock Box")
 
 
 func _choose_customer_option(choice_id: StringName) -> void:

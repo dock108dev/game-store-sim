@@ -1,13 +1,15 @@
 ## Verifies the Day 1 ObjectiveRail surfaces the first step of the chain
-## ("Talk to the manager at checkout.") with a manager action and an
-## "E" key badge, that the rail occupies a different screen zone than the
-## InteractionPrompt, and that the Day1ReadinessAudit objective check passes
+## ("Talk to the manager at checkout for opening instructions.") with a
+## manager action and an "E" key badge, that the rail occupies a different
+## screen zone than the InteractionPrompt, and that the readiness audit passes
 ## once the day starts and the player enters the store.
 extends GutTest
 
 
-const _OBJECTIVE_TEXT: String = "Talk to the manager at checkout."
-const _ACTION_TEXT: String = "Talk to manager"
+const _OBJECTIVE_TEXT: String = (
+	"Talk to the manager at checkout for opening instructions."
+)
+const _ACTION_TEXT: String = "Get the opening routine from the manager"
 const _KEY_TEXT: String = "E"
 
 const _RAIL_SCENE: String = "res://game/scenes/ui/objective_rail.tscn"
@@ -243,7 +245,7 @@ func test_chain_advance_updates_rail_with_next_step_copy() -> void:
 	)
 	EventBus.placement_mode_entered.emit()
 	assert_eq(
-		rail._objective_label.text, "Stock the starter display table.",
+		rail._objective_label.text, "Place all 3 starter items on the starter display table.",
 		"placement_mode_entered at BACK_ROOM_INVENTORY must re-render with stock copy"
 	)
 	EventBus.item_stocked.emit("item_001", "shelf_a")
@@ -396,19 +398,19 @@ func test_non_fp_disabled_focus_suppresses_action_chip() -> void:
 	assert_eq(rail._action_label.text, _ACTION_TEXT)
 
 
-func test_store_fp_mode_hides_objective_rail_surface() -> void:
+func test_store_fp_mode_keeps_objective_rail_surface_visible() -> void:
 	var rail := _make_rail()
 	_start_day1_preopening()
-	assert_true(rail.visible, "Pre-condition: rail visible before store_session FP suppression")
+	assert_true(rail.visible, "Pre-condition: rail visible before store_session FP mode")
 	var store_session_controller: Node = Node.new()
 	store_session_controller.add_to_group("store_session_controller")
 	add_child_autofree(store_session_controller)
 
 	EventBus.fp_mode_changed.emit(true)
 
-	assert_false(
+	assert_true(
 		rail.visible,
-		"Store-session FP mode must hide ObjectiveRail so the right panel is the only checklist"
+		"Store-session FP mode must keep ObjectiveRail visible for the active bottom objective"
 	)
 
 

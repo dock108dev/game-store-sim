@@ -90,6 +90,27 @@ func test_show_note_does_not_push_ctx_modal() -> void:
 	)
 
 
+func test_show_note_uses_passive_overlay_visual_treatment() -> void:
+	var panel: ManagerNotePanel = ManagerNotePanel.new()
+	add_child_autofree(panel)
+	panel.show_note(SAMPLE_BODY)
+	var blocker: ColorRect = panel.get("_blocker") as ColorRect
+	assert_not_null(blocker, "Manager note must own a passive blocker node")
+	if blocker == null:
+		return
+	assert_eq(
+		blocker.mouse_filter,
+		Control.MOUSE_FILTER_IGNORE,
+		"Passive manager notes must not intercept pointer interaction"
+	)
+	assert_almost_eq(
+		blocker.color.a,
+		0.0,
+		0.001,
+		"Passive manager notes must not compete with ModalDimOverlay"
+	)
+
+
 func test_dismiss_button_press_emits_note_dismissed() -> void:
 	var panel: ManagerNotePanel = ManagerNotePanel.new()
 	add_child_autofree(panel)

@@ -30,6 +30,20 @@ const CHECKOUT_PRIMARY_SERVICE_DETAIL_PATHS: Array[String] = [
 	"Checkout/CounterServiceNote",
 	"Checkout/CounterGlowStrip",
 ]
+const CHECKOUT_READINESS_INDICATORS: Array[Dictionary] = [
+	{
+		"indicator": "Checkout/Register/CheckoutDetails/CashDrawerReadyLight",
+		"anchor": "Checkout/Register/RegisterDrawerSlot",
+	},
+	{
+		"indicator": "Checkout/ReceiptPrinter/PrinterReadyLight",
+		"anchor": "Checkout/ReceiptPrinter",
+	},
+	{
+		"indicator": "Checkout/Register/CheckoutDetails/ScannerReadyLight",
+		"anchor": "Checkout/Register/CheckoutDetails/BarcodeScanner",
+	},
+]
 const SIGN_FRAME_PATHS: Array[String] = [
 	"Checkout/Register/CheckoutSignBacking",
 	"Checkout/Register/CheckoutSignTopTrim",
@@ -189,6 +203,79 @@ func test_checkout_primary_service_details_share_device_language() -> void:
 			register_screen.get_surface_override_material(0),
 			"Customer payment display and register screen must share screen material"
 		)
+
+
+func test_checkout_readiness_indicators_are_small_attached_device_cues() -> void:
+	for cue: Dictionary in CHECKOUT_READINESS_INDICATORS:
+		var indicator_path: String = cue["indicator"] as String
+		var indicator: MeshInstance3D = (
+			_root.get_node_or_null(indicator_path) as MeshInstance3D
+		)
+		var anchor_path: String = cue["anchor"] as String
+		var anchor: Node3D = _root.get_node_or_null(anchor_path) as Node3D
+		assert_not_null(indicator, "Register readiness indicator missing: %s" % indicator_path)
+		assert_not_null(anchor, "Register readiness anchor missing: %s" % anchor_path)
+		if indicator == null:
+			continue
+		assert_not_null(indicator.mesh, "%s must carry authored geometry" % indicator_path)
+		assert_not_null(
+			indicator.get_surface_override_material(0),
+			"%s must carry a finished material" % indicator_path
+		)
+		assert_false(
+			_has_interaction_descendant(indicator),
+			"%s must stay visual-only and never become the register target" % indicator_path
+		)
+		var indicator_size: Vector3 = _mesh_world_size(indicator)
+		assert_lte(
+			maxf(indicator_size.x, maxf(indicator_size.y, indicator_size.z)),
+			0.08,
+			"%s must stay a small readiness cue" % indicator_path
+		)
+		if anchor != null:
+			assert_lte(
+				indicator.global_position.distance_to(anchor.global_position),
+				0.45,
+				"%s must read as attached to its checkout device" % indicator_path
+			)
+
+
+func test_checkout_sides_have_distinct_staff_and_customer_cues() -> void:
+	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
+	var staff_toe: Node3D = _root.get_node_or_null("Checkout/StaffToeRecess") as Node3D
+	var customer_panel: Node3D = (
+		_root.get_node_or_null("Checkout/CounterCustomerServicePanel") as Node3D
+	)
+	var register_screen: Node3D = (
+		_root.get_node_or_null("Checkout/Register/RegisterScreen") as Node3D
+	)
+	var payment_screen: Node3D = (
+		_root.get_node_or_null(
+			"Checkout/Register/CheckoutDetails/CustomerPaymentDisplayScreen"
+		) as Node3D
+	)
+	var service_spot: Node3D = (
+		_root.get_node_or_null("ReadabilityProps/CheckoutCounterDressing/CustomerServiceSpotMat")
+		as Node3D
+	)
+	assert_not_null(checkout, "Checkout must exist")
+	assert_not_null(staff_toe, "Staff-side toe recess must exist")
+	assert_not_null(customer_panel, "Customer-side service panel must exist")
+	assert_not_null(register_screen, "Staff-facing register screen must exist")
+	assert_not_null(payment_screen, "Customer-facing payment screen must exist")
+	assert_not_null(service_spot, "Customer service floor spot must exist")
+	if checkout == null:
+		return
+	if staff_toe != null:
+		assert_lt(staff_toe.global_position.z, checkout.global_position.z)
+	if customer_panel != null:
+		assert_gt(customer_panel.global_position.z, checkout.global_position.z)
+	if register_screen != null:
+		assert_lt(register_screen.global_position.z, checkout.global_position.z)
+	if payment_screen != null:
+		assert_gt(payment_screen.global_position.z, checkout.global_position.z)
+	if service_spot != null:
+		assert_gt(service_spot.global_position.z, checkout.global_position.z)
 
 
 func test_visual_checkout_nodes_do_not_own_active_interaction() -> void:

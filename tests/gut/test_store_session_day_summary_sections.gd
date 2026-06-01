@@ -272,9 +272,9 @@ func test_reinvest_option_emits_selected_option_id() -> void:
 
 	reinvest_button.pressed.emit()
 
-	assert_signal_emitted_with_parameters(
-		_panel,
-		"reinvest_pressed",
+	assert_signal_emitted(_panel, "reinvest_pressed")
+	assert_eq(
+		get_signal_parameters(_panel, "reinvest_pressed", 0),
 		[&"order_used_games"],
 		"Reinvest button must emit the concrete option id"
 	)

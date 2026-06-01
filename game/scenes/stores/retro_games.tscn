@@ -1,4 +1,4 @@
-[gd_scene load_steps=200 format=3 uid="uid://retro_games_001"]
+[gd_scene load_steps=204 format=3 uid="uid://retro_games_001"]
 
 [ext_resource type="Script" path="res://game/scripts/stores/retro_games.gd" id="1"]
 [ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="2"]
@@ -141,6 +141,16 @@ size = Vector3(0.15, 0.006, 0.27)
 
 [sub_resource type="BoxMesh" id="checkout_card_reader_cable_mesh"]
 size = Vector3(0.035, 0.012, 0.36)
+
+[sub_resource type="BoxMesh" id="checkout_readiness_indicator_mesh"]
+size = Vector3(0.055, 0.012, 0.055)
+
+[sub_resource type="StandardMaterial3D" id="checkout_readiness_indicator_mat"]
+albedo_color = Color(0.14, 0.48, 0.28, 1)
+emission_enabled = true
+emission = Color(0.22, 0.78, 0.40, 1)
+emission_energy_multiplier = 0.42
+roughness = 0.78
 
 [sub_resource type="StandardMaterial3D" id="register_screen_mat"]
 resource_name = "Register Screen"
@@ -316,6 +326,9 @@ albedo_color = Color(0.08, 0.06, 0.05, 0.55)
 
 [sub_resource type="BoxMesh" id="store_session_display_tabletop_mesh"]
 size = Vector3(2.42, 0.18, 0.78)
+
+[sub_resource type="BoxShape3D" id="store_session_display_table_collision_shape"]
+size = Vector3(2.42, 1.18, 0.78)
 
 [sub_resource type="BoxMesh" id="store_session_display_side_apron_mesh"]
 size = Vector3(0.08, 0.16, 0.72)
@@ -627,6 +640,9 @@ roughness = 0.7
 
 [sub_resource type="BoxMesh" id="backordered_console_box_mesh"]
 size = Vector3(0.42, 0.18, 0.30)
+
+[sub_resource type="BoxShape3D" id="store_session_stock_box_collision_shape"]
+size = Vector3(0.70, 0.32, 0.55)
 
 ; Open-cardboard stand-in for the post-pickup state. A flat slab sized to the
 ; closed box footprint with reduced height so it reads as the box's open base
@@ -3021,6 +3037,11 @@ collision_mask = 0
 
 [node name="PrinterModel" parent="Checkout/ReceiptPrinter" instance=ExtResource("32")]
 
+[node name="PrinterReadyLight" type="MeshInstance3D" parent="Checkout/ReceiptPrinter"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13, 0.07, 0.08)
+mesh = SubResource("checkout_readiness_indicator_mesh")
+surface_material_override/0 = SubResource("checkout_readiness_indicator_mat")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Checkout/ReceiptPrinter"]
 shape = SubResource("receipt_printer_shape")
 
@@ -3102,6 +3123,16 @@ surface_material_override/0 = ExtResource("14")
 transform = Transform3D(0.32, 0, 0.22, 0, 0.34, 0, -0.22, 0, 0.32, 0.32, -0.17, 0.13)
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = ExtResource("14")
+
+[node name="CashDrawerReadyLight" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, -0.155, 0.19)
+mesh = SubResource("checkout_readiness_indicator_mesh")
+surface_material_override/0 = SubResource("checkout_readiness_indicator_mat")
+
+[node name="ScannerReadyLight" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.39, -0.115, 0.165)
+mesh = SubResource("checkout_readiness_indicator_mesh")
+surface_material_override/0 = SubResource("checkout_readiness_indicator_mat")
 
 [node name="CardReaderCable" type="MeshInstance3D" parent="Checkout/Register/CheckoutDetails"]
 transform = Transform3D(0.45, 0, -0.1, 0, 1, 0, 0.1, 0, 0.45, -0.28, -0.22, -0.08)
@@ -4761,6 +4792,14 @@ transform = Transform3D(0.92, 0, -0.39, 0, 1, 0, 0.39, 0, 0.92, 0.18, 0.17, -0.0
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("readability_stock_case_mat")
 
+[node name="StockBoxStaticBody" type="StaticBody3D" parent="StoreSessionBackroomPickup"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionBackroomPickup/StockBoxStaticBody"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, 0)
+shape = SubResource("store_session_stock_box_collision_shape")
+
 ; Post-pickup open-state sibling. Hidden until the player presses E on
 ; StoreSessionBackroomPickup; the controller flips StockBox.visible = false and
 ; StockBoxOpen.visible = true so the floor reads as "the box was opened
@@ -4939,6 +4978,14 @@ surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 1.165, 0)
 mesh = SubResource("store_session_restock_slot_marker_mesh")
 surface_material_override/0 = SubResource("store_session_restock_slot_marker_mat")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="StoreSessionRestockShelf"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionRestockShelf/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.59, 0)
+shape = SubResource("store_session_display_table_collision_shape")
 
 ; Empty-state overlay — a translucent dark panel flush against the
 ; ShelfBoard front face that paints the empty shelf so it reads as

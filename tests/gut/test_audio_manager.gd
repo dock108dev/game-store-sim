@@ -245,8 +245,7 @@ func test_audio_played_emitted_on_play_sfx() -> void:
 	watch_signals(_manager)
 	_manager.play_sfx("purchase_chime")
 	assert_signal_emitted_with_parameters(
-		_manager, "audio_played", ["purchase_chime"],
-		"play_sfx should emit audio_played with the registry key"
+		_manager, "audio_played", ["purchase_chime"]
 	)
 
 
@@ -254,8 +253,7 @@ func test_audio_played_emitted_on_play_bgm() -> void:
 	watch_signals(_manager)
 	_manager.play_bgm("menu_music")
 	assert_signal_emitted_with_parameters(
-		_manager, "audio_played", ["menu_music"],
-		"play_bgm should emit audio_played with the track key"
+		_manager, "audio_played", ["menu_music"]
 	)
 
 

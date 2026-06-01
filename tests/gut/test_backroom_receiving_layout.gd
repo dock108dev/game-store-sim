@@ -1,5 +1,6 @@
 extends GutTest
 
+const VisualGeometryTestHelpers := preload("res://tests/automation/visual_geometry_test_helpers.gd")
 const RETRO_GAMES_SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const PICKUP_PATH: String = "StoreSessionBackroomPickup"
 const PICKUP_INTERACTABLE_PATH: String = "StoreSessionBackroomPickup/Interactable"
@@ -38,24 +39,24 @@ func test_pickup_bay_centers_inventory_target() -> void:
 		return
 
 	assert_lt(
-		_flat_distance(pickup, interactable),
+		VisualGeometryTestHelpers.flat_distance_nodes(pickup, interactable),
 		0.05,
 		"Backroom pickup trigger must remain aligned with its root"
 	)
 	assert_lt(
-		_flat_distance(pickup, loading_mat),
+		VisualGeometryTestHelpers.flat_distance_nodes(pickup, loading_mat),
 		0.28,
 		"LoadingZoneMat must stay centered on the inventory pickup"
 	)
 	assert_between(
-		_flat_distance(pickup, table),
+		VisualGeometryTestHelpers.flat_distance_nodes(pickup, table),
 		0.65,
 		1.15,
 		"Receiving table must sit beside the pickup bay without occupying it"
 	)
 	assert_gt(
-		_scene_position(table).x,
-		_scene_position(pickup).x + 0.55,
+		VisualGeometryTestHelpers.scene_position(table).x,
+		VisualGeometryTestHelpers.scene_position(pickup).x + 0.55,
 		"Receiving table must read as the side work surface, not the pickup target"
 	)
 
@@ -71,23 +72,23 @@ func test_backroom_threshold_uses_floor_guides_not_route_text() -> void:
 	if threshold == null or left_guide == null or right_guide == null:
 		return
 	assert_lt(
-		_flat_distance(threshold, left_guide),
+		VisualGeometryTestHelpers.flat_distance_nodes(threshold, left_guide),
 		1.1,
 		"Left threshold guide must stay tied to the backroom doorway"
 	)
 	assert_lt(
-		_flat_distance(threshold, right_guide),
+		VisualGeometryTestHelpers.flat_distance_nodes(threshold, right_guide),
 		1.1,
 		"Right threshold guide must stay tied to the backroom doorway"
 	)
 	assert_lt(
-		_scene_position(left_guide).x,
-		_scene_position(threshold).x,
+		VisualGeometryTestHelpers.scene_position(left_guide).x,
+		VisualGeometryTestHelpers.scene_position(threshold).x,
 		"Left guide must frame the doorway from the sales-floor side"
 	)
 	assert_gt(
-		_scene_position(right_guide).x,
-		_scene_position(threshold).x,
+		VisualGeometryTestHelpers.scene_position(right_guide).x,
+		VisualGeometryTestHelpers.scene_position(threshold).x,
 		"Right guide must frame the doorway from the sales-floor side"
 	)
 	for cue: Node in [threshold, left_guide, right_guide]:
@@ -117,15 +118,15 @@ func test_backroom_props_leave_pickup_and_exit_lane_clear() -> void:
 		if prop == null:
 			continue
 		assert_gt(
-			_flat_distance(pickup, prop),
+			VisualGeometryTestHelpers.flat_distance_nodes(pickup, prop),
 			MIN_PICKUP_CLEARANCE,
 			"%s must not crowd the inventory pickup" % prop_path
 		)
 		assert_gt(
-			_flat_distance_to_segment(
-				_scene_position(prop),
-				_scene_position(threshold),
-				_scene_position(pickup)
+			VisualGeometryTestHelpers.flat_distance_to_segment(
+				VisualGeometryTestHelpers.scene_position(prop),
+				VisualGeometryTestHelpers.scene_position(threshold),
+				VisualGeometryTestHelpers.scene_position(pickup)
 			),
 			MIN_APPROACH_LANE_CLEARANCE,
 			"%s must not sit in the backroom entry/exit lane" % prop_path
@@ -150,8 +151,8 @@ func test_storage_run_and_receiving_paperwork_are_authored() -> void:
 	var shelf: Node3D = _node3d("ReadabilityProps/BackroomDressing/StorageRunShelfLower")
 	if pickup != null and shelf != null:
 		assert_lt(
-			_scene_position(shelf).z,
-			_scene_position(pickup).z - 0.75,
+			VisualGeometryTestHelpers.scene_position(shelf).z,
+			VisualGeometryTestHelpers.scene_position(pickup).z - 0.75,
 			"Storage run must read along the back wall behind the pickup bay"
 		)
 
@@ -169,12 +170,12 @@ func test_hidden_clue_stays_accessible_flavor_not_objective_clutter() -> void:
 		"Hidden clue must keep its hidden-thread interactable script"
 	)
 	assert_lte(
-		_flat_distance(pickup, clue),
+		VisualGeometryTestHelpers.flat_distance_nodes(pickup, clue),
 		2.25,
 		"Hidden clue should remain discoverable inside the backroom"
 	)
 	assert_gt(
-		_flat_distance(pickup, clue),
+		VisualGeometryTestHelpers.flat_distance_nodes(pickup, clue),
 		0.9,
 		"Hidden clue must not compete with the inventory pickup hotspot"
 	)
@@ -231,36 +232,3 @@ func _has_label_descendant(root: Node) -> bool:
 		if _has_label_descendant(child):
 			return true
 	return false
-
-
-func _flat_distance(a: Node3D, b: Node3D) -> float:
-	return _flat_distance_vec(_scene_position(a), _scene_position(b))
-
-
-func _flat_distance_vec(a: Vector3, b: Vector3) -> float:
-	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))
-
-
-func _flat_distance_to_segment(point: Vector3, start: Vector3, end: Vector3) -> float:
-	var point_2d := Vector2(point.x, point.z)
-	var start_2d := Vector2(start.x, start.z)
-	var end_2d := Vector2(end.x, end.z)
-	var segment := end_2d - start_2d
-	var length_squared: float = segment.length_squared()
-	if length_squared <= 0.0001:
-		return point_2d.distance_to(start_2d)
-	var t: float = clampf((point_2d - start_2d).dot(segment) / length_squared, 0.0, 1.0)
-	return point_2d.distance_to(start_2d + segment * t)
-
-
-func _scene_position(node: Node3D) -> Vector3:
-	return _scene_transform(node).origin
-
-
-func _scene_transform(node: Node3D) -> Transform3D:
-	var scene_transform: Transform3D = node.transform
-	var cursor: Node = node.get_parent()
-	while cursor is Node3D:
-		scene_transform = (cursor as Node3D).transform * scene_transform
-		cursor = cursor.get_parent()
-	return scene_transform

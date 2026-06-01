@@ -19,6 +19,7 @@ signal note_dismissed()
 var _body_label: RichTextLabel
 var _dismiss_button: Button
 var _showing: bool = false
+var _blocker: ColorRect
 
 
 func _ready() -> void:
@@ -28,12 +29,15 @@ func _ready() -> void:
 	layer = 79
 	visible = false
 
-	var blocker := ColorRect.new()
-	blocker.color = StoreModalTheme.COLOR_BLOCKER
-	blocker.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(blocker)
+	_blocker = ColorRect.new()
+	_blocker.name = "Blocker"
+	_blocker.color = StoreModalTheme.COLOR_PASSIVE_BLOCKER
+	_blocker.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_blocker.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_blocker)
 
 	var panel := PanelContainer.new()
+	panel.name = "Panel"
 	panel.custom_minimum_size = Vector2(560, 320)
 	panel.anchor_left = 0.5
 	panel.anchor_top = 0.5
@@ -44,10 +48,11 @@ func _ready() -> void:
 	panel.offset_right = 280
 	panel.offset_bottom = 160
 	panel.add_theme_stylebox_override("panel", StoreModalTheme.make_panel_style())
-	blocker.add_child(panel)
+	_blocker.add_child(panel)
 
 	var v := VBoxContainer.new()
-	v.add_theme_constant_override("separation", 14)
+	v.name = "Content"
+	v.add_theme_constant_override("separation", StoreModalTheme.DETAIL_PANEL_SPACING)
 	panel.add_child(v)
 
 	_body_label = RichTextLabel.new()
@@ -55,6 +60,9 @@ func _ready() -> void:
 	_body_label.fit_content = true
 	_body_label.scroll_active = false
 	_body_label.custom_minimum_size = Vector2(0, 220)
+	_body_label.add_theme_font_size_override(
+		"normal_font_size", StoreModalTheme.DETAIL_BODY_FONT_SIZE
+	)
 	_body_label.add_theme_color_override(
 		"default_color", StoreModalTheme.COLOR_TEXT_PRIMARY
 	)
@@ -62,7 +70,7 @@ func _ready() -> void:
 
 	_dismiss_button = Button.new()
 	_dismiss_button.text = "Got it"
-	_dismiss_button.custom_minimum_size = Vector2(0, 48)
+	_dismiss_button.custom_minimum_size = Vector2(0, StoreModalTheme.DETAIL_BUTTON_MIN_HEIGHT)
 	StoreModalTheme.apply_button_theme(_dismiss_button)
 	_dismiss_button.pressed.connect(_on_dismiss_pressed)
 	v.add_child(_dismiss_button)

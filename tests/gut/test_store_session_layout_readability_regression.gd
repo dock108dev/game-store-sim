@@ -1,5 +1,6 @@
 extends GutTest
 
+const StoreSessionTestHelpers := preload("res://tests/automation/store_session_test_helpers.gd")
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const ROUTE_NODE_PATHS: Array[String] = [
 	"StoreSessionDayOneCustomer",
@@ -12,6 +13,10 @@ const ROUTE_INTERACTABLE_PATHS: Array[String] = [
 	"StoreSessionDayEndTrigger/Interactable",
 	"StoreSessionBackroomPickup/Interactable",
 	"StoreSessionRestockShelf/Interactable",
+]
+const EXIT_INTERACTABLE_PATH: String = "EntranceDoor/Interactable"
+const PASSIVE_HINT_INTERACTABLE_PATHS: Array[String] = [
+	"checkout_counter/RegisterStatusIndicator",
 ]
 
 var _root: Node3D = null
@@ -79,7 +84,7 @@ func test_first_day_training_route_completes_through_reachable_interactables() -
 			return
 		assert_eq(
 			shelf.get_prompt_label(),
-			"Place item %d of %d on starter display table"
+			"Place item %d of %d on Starter Display"
 			% [index + 1, StoreSessionController._BACKROOM_DELIVERY_QUANTITY]
 		)
 		await _interact("StoreSessionRestockShelf/Interactable")
@@ -87,11 +92,14 @@ func test_first_day_training_route_completes_through_reachable_interactables() -
 	assert_eq(controller.current_stage(), StoreSessionController.STAGE_TALK_TO_CUSTOMER)
 	assert_true(StoreSessionState.preopening_complete)
 	assert_false(StoreSessionState.carrying_stock)
-	assert_eq(int(controller.get("_shelf_stock_count")), StoreSessionController._BACKROOM_DELIVERY_QUANTITY)
+	assert_eq(
+		int(controller.get("_shelf_stock_count")),
+		StoreSessionController._BACKROOM_DELIVERY_QUANTITY
+	)
 	assert_eq(int(controller.get("_carried_stock_remaining")), 0)
 	_assert_only_route_target_enabled("StoreSessionDayOneCustomer/Interactable")
 
-	var exit_target: Interactable = _interactable("EntranceDoor/Interactable")
+	var exit_target: Interactable = _interactable(EXIT_INTERACTABLE_PATH)
 	assert_not_null(exit_target, "Exit interactable must exist")
 	if exit_target == null:
 		return
@@ -119,16 +127,24 @@ func test_stockroom_batch_edges_do_not_mutate_out_of_order() -> void:
 	var before_pickup_notifications: int = get_signal_emit_count(EventBus, "notification_requested")
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.acknowledge_first_minute_detail(controller)
+	await get_tree().process_frame
 	assert_true(StoreSessionState.carrying_stock)
 	assert_eq(
 		int(controller.get("_carried_stock_remaining")),
 		StoreSessionController._BACKROOM_DELIVERY_QUANTITY
 	)
-	assert_eq(int(controller.get("_current_delivery_quantity")), StoreSessionController._BACKROOM_DELIVERY_QUANTITY)
+	assert_eq(
+		int(controller.get("_current_delivery_quantity")),
+		StoreSessionController._BACKROOM_DELIVERY_QUANTITY
+	)
 
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
-	assert_true(StoreSessionState.carrying_stock, "Duplicate pickup while carrying must preserve carry state")
+	assert_true(
+		StoreSessionState.carrying_stock,
+		"Duplicate pickup while carrying must preserve carry state"
+	)
 	assert_eq(
 		int(controller.get("_carried_stock_remaining")),
 		StoreSessionController._BACKROOM_DELIVERY_QUANTITY
@@ -146,12 +162,19 @@ func test_stockroom_batch_edges_do_not_mutate_out_of_order() -> void:
 	assert_false(StoreSessionState.carrying_stock, "Final placement must clear carrying state")
 	assert_eq(int(controller.get("_carried_stock_remaining")), 0)
 	assert_eq(int(controller.get("_unplaced_delivery_count")), 0)
-	assert_eq(int(controller.get("_shelf_stock_count")), StoreSessionController._BACKROOM_DELIVERY_QUANTITY)
+	assert_eq(
+		int(controller.get("_shelf_stock_count")),
+		StoreSessionController._BACKROOM_DELIVERY_QUANTITY
+	)
 
 	var shelf_count: int = int(controller.get("_shelf_stock_count"))
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
-	assert_eq(int(controller.get("_shelf_stock_count")), shelf_count, "Exhausted delivery must not add stock")
+	assert_eq(
+		int(controller.get("_shelf_stock_count")),
+		shelf_count,
+		"Exhausted delivery must not add stock"
+	)
 	assert_false(StoreSessionState.carrying_stock)
 
 
@@ -247,12 +270,20 @@ func _interact(path: String) -> void:
 	assert_true(target.can_interact(), "%s must be actionable before interaction" % path)
 	target.interact()
 	await get_tree().process_frame
+	var controller: StoreSessionController = _controller()
+	if controller != null:
+		StoreSessionTestHelpers.acknowledge_first_minute_detail(controller)
+		await get_tree().process_frame
 
 
 func _advance_to_training_backroom(controller: StoreSessionController) -> void:
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.acknowledge_first_minute_detail(controller)
+	await get_tree().process_frame
 	controller.on_store_register_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.acknowledge_first_minute_detail(controller)
 	await get_tree().process_frame
 	assert_eq(controller.current_stage(), StoreSessionController.STAGE_TRAINING_BACK_ROOM)
 
@@ -264,10 +295,36 @@ func _assert_only_route_target_enabled(active_path: String) -> void:
 		if target == null:
 			continue
 		assert_eq(target.enabled, path == active_path, "%s active-state mismatch" % path)
-	var exit_target: Interactable = _interactable("EntranceDoor/Interactable")
+	var exit_target: Interactable = _interactable(EXIT_INTERACTABLE_PATH)
 	assert_not_null(exit_target, "Exit interactable must exist")
 	if exit_target != null:
 		assert_true(exit_target.enabled, "Exit remains available without owning objective progress")
+	var expected_actionable: Array[String] = [active_path, EXIT_INTERACTABLE_PATH]
+	expected_actionable.sort()
+	var actionable: Array[String] = _actionable_enabled_interactable_paths()
+	actionable.sort()
+	assert_eq(
+		actionable,
+		expected_actionable,
+		"Only the current route target and bounded exit may accept player interaction"
+	)
+	for passive_path: String in PASSIVE_HINT_INTERACTABLE_PATHS:
+		var passive: Interactable = _interactable(passive_path)
+		assert_not_null(passive, "%s must exist as passive hint coverage" % passive_path)
+		if passive != null:
+			assert_true(passive.enabled, "%s may stay raycast-visible for hint copy" % passive_path)
+			assert_false(passive.can_interact(), "%s must not accept E-presses" % passive_path)
+
+
+func _actionable_enabled_interactable_paths() -> Array[String]:
+	var paths: Array[String] = []
+	for node: Node in _walk(_root):
+		if not (node is Interactable):
+			continue
+		var interactable: Interactable = node as Interactable
+		if interactable.enabled and interactable.can_interact():
+			paths.append(str(_root.get_path_to(interactable)))
+	return paths
 
 
 func _assert_target_reachable(node_path: String) -> void:
@@ -276,8 +333,18 @@ func _assert_target_reachable(node_path: String) -> void:
 	if target == null:
 		return
 	var bounds: Dictionary = _player_bounds()
-	assert_between(target.global_position.x, bounds["min"].x, bounds["max"].x, "%s reachable X" % node_path)
-	assert_between(target.global_position.z, bounds["min"].z, bounds["max"].z, "%s reachable Z" % node_path)
+	assert_between(
+		target.global_position.x,
+		bounds["min"].x,
+		bounds["max"].x,
+		"%s reachable X" % node_path
+	)
+	assert_between(
+		target.global_position.z,
+		bounds["min"].z,
+		bounds["max"].z,
+		"%s reachable Z" % node_path
+	)
 
 
 func _assert_exit_reachable_from_player_bounds() -> void:

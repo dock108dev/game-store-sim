@@ -12,6 +12,7 @@ const ProductVisualFactoryScript: GDScript = preload(
 const MeshBoundsUtilScript: GDScript = preload(
 	"res://game/scripts/visuals/mesh_bounds_util.gd"
 )
+const VisualNodeUtilScript: GDScript = preload("res://game/scripts/visuals/visual_node_util.gd")
 
 const _PREVIEW_LAYER_NAME: String = "PreviewProductCases"
 const _SURFACE_CLEARANCE: float = 0.012
@@ -45,7 +46,7 @@ func _ready() -> void:
 ## Rebuilds the table's decorative product cases without occupying ShelfSlot state.
 func rebuild_preview_products() -> void:
 	var preview_layer: Node3D = _ensure_preview_layer()
-	_clear_children(preview_layer)
+	VisualNodeUtilScript.clear_children(preview_layer)
 
 	var catalog: RefCounted = ProductVisualCatalogScript.load_default()
 	if catalog == null or not str(catalog.get("load_error")).is_empty():
@@ -64,12 +65,6 @@ func _ensure_preview_layer() -> Node3D:
 	layer.name = _PREVIEW_LAYER_NAME
 	add_child(layer)
 	return layer
-
-
-func _clear_children(parent: Node) -> void:
-	for child: Node in parent.get_children():
-		parent.remove_child(child)
-		child.free()
 
 
 func _add_preview_case(

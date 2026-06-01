@@ -1,6 +1,10 @@
 extends GutTest
 
+const StoreSessionTestHelpers := preload("res://tests/automation/store_session_test_helpers.gd")
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
+const MANAGER_COMPLETE_MESSAGE: String = (
+	"Manager walkthrough complete. Register access unlocked."
+)
 
 var _root: Node3D
 var _completed_feedback: Array[String] = []
@@ -61,15 +65,25 @@ func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
 	if customer == null:
 		return
 
-	assert_eq(customer.display_name, "manager")
+	assert_eq(customer.display_name, "Manager")
 	assert_eq(customer.prompt_text, "Talk to")
 	assert_eq(customer.action_verb, "Talk")
 	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
 
 	var snapshot: Dictionary = controller.get_state_snapshot()
 	assert_eq(str(snapshot.get("active_objective_id", "")), "talk_to_manager")
-	assert_eq(str(snapshot.get("active_objective_label", "")), "Talk to the manager at checkout.")
-	assert_eq(str(snapshot.get("active_objective_action", "")), "Talk to manager")
+	assert_eq(
+		str(snapshot.get("active_objective_label", "")),
+		"Talk to the manager at checkout for opening instructions."
+	)
+	assert_eq(
+		str(snapshot.get("active_objective_action", "")),
+		"Get the opening routine from the manager"
+	)
+	assert_eq(
+		str(snapshot.get("active_objective_result_summary", "")),
+		MANAGER_COMPLETE_MESSAGE
+	)
 	assert_true(_proxy_part_visible("Badge"))
 	assert_true(_proxy_part_visible("Clipboard"))
 
@@ -78,21 +92,33 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
+	EventBus.toast_requested.connect(_on_toast_requested)
 	watch_signals(EventBus)
 	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	assert_eq(Array(_active_targets()), ["StoreSessionDayEndTrigger"])
 
 	controller.on_store_register_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 	assert_eq(Array(_active_targets()), ["StoreSessionBackroomPickup"])
 
 	controller.on_store_stockroom_pickup_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_stock_shelf")
 	assert_true(StoreSessionState.carrying_stock)
+	var carrying_snapshot: Dictionary = controller.get_state_snapshot()
+	assert_eq(
+		str(carrying_snapshot.get("active_objective_label", "")),
+			"Place all 3 starter items on the starter display table."
+	)
 	assert_eq(Array(_active_targets()), ["StoreSessionRestockShelf"])
 
 	controller.on_store_restock_interacted()
@@ -105,6 +131,10 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
 	assert_false(StoreSessionState.carrying_stock)
 	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
+	assert_true(
+		_toast_feedback.has("Starter display stocked. Store is ready for the first customer."),
+		"Stocking completion must queue the first-customer-ready message"
+	)
 
 
 func test_training_register_check_ignores_stale_customer_checkout() -> void:
@@ -112,6 +142,8 @@ func test_training_register_check_ignores_stale_customer_checkout() -> void:
 	if controller == null:
 		return
 	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
 	_arm_pending_checkout_customer()
@@ -144,6 +176,8 @@ func test_training_register_check_ignores_stale_customer_checkout() -> void:
 		return
 	trigger.interact()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_back_room_inventory")
 
 
@@ -152,6 +186,8 @@ func test_register_beat_clears_actor_prompt_and_keeps_one_register_owner() -> vo
 	if controller == null:
 		return
 	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
 
@@ -170,7 +206,7 @@ func test_register_beat_clears_actor_prompt_and_keeps_one_register_owner() -> vo
 	assert_eq(customer.display_name, "")
 	assert_eq(customer.prompt_text, "")
 	assert_false(_any_manager_part_visible(), "Manager detail props must clear after manager beat")
-	assert_eq(register.display_name, "register")
+	assert_eq(register.display_name, "Register")
 	assert_eq(register.prompt_text, "Check")
 	assert_eq(register.action_verb, "Check")
 	assert_eq(
@@ -180,7 +216,10 @@ func test_register_beat_clears_actor_prompt_and_keeps_one_register_owner() -> vo
 	)
 	assert_false(visual_register.enabled, "Decorative register fixture must stay disabled")
 	assert_eq(visual_register.proximity_radius, 0.0)
-	assert_false(checkout.enabled, "Generic checkout counter must stay gated during register objective")
+	assert_false(
+		checkout.enabled,
+		"Generic checkout counter must stay gated during register objective"
+	)
 
 
 func test_close_day_register_prompt_ignores_stale_customer_checkout() -> void:
@@ -238,9 +277,15 @@ func test_role_prompt_copy_changes_between_training_and_customer_stages() -> voi
 		return
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	controller.on_store_register_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	controller.on_store_stockroom_pickup_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
@@ -281,7 +326,7 @@ func test_shared_checkout_actor_keeps_position_when_role_changes() -> void:
 	if actor == null or service_mat == null or interactable == null:
 		return
 	var checkout_position: Vector3 = actor.global_position
-	assert_eq(interactable.display_name, "manager")
+	assert_eq(interactable.display_name, "Manager")
 	assert_lte(
 		_xz_distance(checkout_position, service_mat.global_position),
 		0.08,
@@ -290,9 +335,15 @@ func test_shared_checkout_actor_keeps_position_when_role_changes() -> void:
 
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	controller.on_store_register_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	controller.on_store_stockroom_pickup_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame
@@ -315,9 +366,11 @@ func test_manager_completion_feedback_is_short() -> void:
 
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 
-	assert_true(_completed_feedback.has("Manager walkthrough complete."))
-	assert_true(_toast_feedback.has("Manager walkthrough complete."))
+	assert_true(_completed_feedback.has(MANAGER_COMPLETE_MESSAGE))
+	assert_true(_toast_feedback.has(MANAGER_COMPLETE_MESSAGE))
 	assert_false(
 		_toast_feedback.has(
 			"Morning. Before we unlock the doors, I need to show you how this place works."
@@ -333,9 +386,15 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 
 	controller.on_store_customer_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	controller.on_store_register_interacted()
 	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
+	await get_tree().process_frame
 	controller.on_store_stockroom_pickup_interacted()
+	await get_tree().process_frame
+	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	controller.on_store_restock_interacted()
 	await get_tree().process_frame

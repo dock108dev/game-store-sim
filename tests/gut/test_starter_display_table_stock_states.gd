@@ -160,6 +160,69 @@ func test_spawned_day_one_items_share_consistent_case_scale() -> void:
 		assert_almost_eq(mesh.size.z, 0.06, 0.01, "Case depth must stay consistent")
 
 
+func test_stocked_items_use_shared_product_packaging_language() -> void:
+	var controller: Node = _store_session_controller()
+	var shelf: Node = _restock_shelf()
+	if controller == null or shelf == null:
+		return
+	await _walk_to_carrying_stock(controller)
+	for _index: int in range(StoreSessionController._BACKROOM_DELIVERY_QUANTITY):
+		controller.on_store_restock_interacted(false)
+		await get_tree().process_frame
+	for index: int in range(StoreSessionController._BACKROOM_DELIVERY_QUANTITY):
+		var item: Node = shelf.get_node_or_null("%s%d" % [ITEM_PREFIX, index])
+		assert_not_null(item, "StoreShelfItem%d must exist" % index)
+		if item == null:
+			continue
+		assert_not_null(
+			_first_named_descendant(
+				item,
+				[
+					"ProductVisualConsoleBoxRoot",
+					"ProductVisualCaseRoot",
+					"ProductVisualCartridgeRoot",
+					"FallbackFrontPanel",
+				]
+			),
+			"StoreShelfItem%d must expose a product package silhouette" % index
+		)
+		var price_tag: Node = _first_named_descendant(
+			item, ["ProductPriceTag", "FallbackPriceTag"]
+		)
+		assert_not_null(price_tag, "StoreShelfItem%d must include a product price tag" % index)
+		if price_tag != null and price_tag.has_meta("price_cents"):
+			assert_gt(
+				int(price_tag.get_meta("price_cents", -1)),
+				0,
+				"StoreShelfItem%d price tag must carry item pricing" % index
+			)
+		var product_kind: String = str(item.get_meta("product_visual_kind", ""))
+		match product_kind:
+			"console_box":
+				assert_not_null(
+					_first_named_descendant(item, ["ConsoleLabelPlate", "ConsoleColorStripe"]),
+					"Console stock must keep label and accent panels"
+				)
+			"game_case":
+				assert_not_null(
+					_first_named_descendant(item, ["FrontPanel", "PlatformStripe", "TitleBlock"]),
+					"Game stock must keep case cover panels"
+				)
+			"cartridge":
+				assert_not_null(
+					_first_named_descendant(item, ["CartridgeLabel", "CartridgeAccentStripe"]),
+					"Cartridge stock must keep label and accent panels"
+				)
+			_:
+				assert_not_null(
+					_first_named_descendant(
+						item,
+						["FallbackFrontPanel", "FallbackPlatformStripe", "FallbackTitleBlock"]
+					),
+					"Fallback stock must still read as packaged merchandise"
+				)
+
+
 func _store_session_controller() -> Node:
 	return get_tree().get_first_node_in_group("store_session_controller")
 
@@ -226,6 +289,19 @@ func _slot_marker(shelf: Node, slot_index: int) -> Node3D:
 	var slot: Node3D = shelf.get_node_or_null("%s%d" % [SLOT_PREFIX, slot_index]) as Node3D
 	assert_not_null(slot, "SlotMarker%d must exist" % slot_index)
 	return slot
+
+
+func _first_named_descendant(root: Node, names: Array[String]) -> Node:
+	if root == null:
+		return null
+	for name: String in names:
+		if String(root.name) == name:
+			return root
+	for child: Node in root.get_children():
+		var found: Node = _first_named_descendant(child, names)
+		if found != null:
+			return found
+	return null
 
 
 func _visual_layout_contains_starter_display_table() -> bool:

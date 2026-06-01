@@ -390,8 +390,8 @@ func test_modal_close_without_focus_target_does_not_query_ray() -> void:
 
 # ── FP-mode ownership ───────────────────────────────────────────────────────
 #
-# In first-person mode the right panel owns objectives and the standalone
-# prompt owns the current interaction affordance.
+# In first-person mode ObjectiveRail owns the active objective and the
+# standalone prompt owns the current interaction affordance.
 
 func test_stays_visible_when_fp_mode_enabled_during_active_focus() -> void:
 	EventBus.interactable_focused.emit("Counter — Press E to use")

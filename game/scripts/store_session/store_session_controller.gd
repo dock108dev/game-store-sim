@@ -27,6 +27,9 @@ const RegisterScreenStateScript: GDScript = preload(
 const StoreCarriedStockMarkerScript: GDScript = preload(
 	"res://game/scripts/store_session/store_carried_stock_marker.gd"
 )
+const FirstMinuteDetailPanelScript: GDScript = preload(
+	"res://game/scripts/store_session/first_minute_detail_panel.gd"
+)
 const AutomationModeScript: GDScript = preload("res://game/scripts/automation/automation_mode.gd")
 
 const EVENTS_PATH: String = "res://game/content/store_session/events/customer_events.json"
@@ -103,6 +106,9 @@ const _TUTORIAL_STEP_BY_OBJECTIVE: Dictionary = {
 }
 const _DAY_ONE_CLOSE_UNLOCK_GRANT: StringName = &"employee_closing_certified"
 const _REGISTER_UNLOCK_GRANT: StringName = &"employee_register_access"
+const _DETAIL_MANAGER_BRIEFING: StringName = &"manager_briefing"
+const _DETAIL_REGISTER_CHECK: StringName = &"register_check"
+const _DETAIL_BACKROOM_INVENTORY: StringName = &"backroom_inventory"
 const _CUSTOMER_COUNTER_ANCHOR_NAME: String = "StoreSessionCustomerCounterAnchor"
 const _CUSTOMER_COUNTER_RECEIPT_NAME: String = "SharedReceiptSlip"
 const _CUSTOMER_COUNTER_ITEM_NAME: String = "SharedCustomerItem"
@@ -204,6 +210,31 @@ const VIC_NOTE_DAY2_BODY: String = (
 	+ "— V"
 )
 
+const _FIRST_MINUTE_MANAGER_BODY: String = (
+	"Today you’ll learn the opening routine: check the register, verify back room "
+	+ "stock, stock the starter display, then handle your first customer."
+)
+const _FIRST_MINUTE_REGISTER_BODY: String = (
+	"Cash drawer: Ready\n\n"
+	+ "Scanner: Ready\n\n"
+	+ "Receipt printer: Ready\n\n"
+	+ "Checkout lane: Ready"
+)
+const _FIRST_MINUTE_BACKROOM_BODY: String = (
+	"Starter Stock Box found.\n\n"
+	+ "Contains %d starter display items."
+)
+const _FIRST_MINUTE_BACKROOM_COMPLETE_MESSAGE: String = (
+	"Back room inventory checked. Pick up the starter stock box."
+)
+const _STARTER_STOCK_CARRY_LABEL: String = "Starter Stock Box"
+const _STARTER_STOCK_CARRY_OBJECTIVE_LABEL: String = (
+	"Place all 3 starter items on the starter display table."
+)
+const _STARTER_DISPLAY_READY_MESSAGE: String = (
+	"Starter display stocked. Store is ready for the first customer."
+)
+
 ## Customer-exit walk targets and timings. Tween coordinates are in world
 ## space and target the +Z entrance door (front wall sits at Z≈10.05; door
 ## pivot at Z=10). The customer parks at world (5.35, 0, 8.5), and `look_at`
@@ -239,13 +270,17 @@ var _training_objectives: Array[Dictionary] = [
 	{
 		"id": "talk_to_manager",
 		"stage": "training_talk_manager",
-		"label": "Talk to the manager at checkout.",
-		"action": "Talk to manager",
+		"label": "Talk to the manager at checkout for opening instructions.",
+		"action": "Get the opening routine from the manager",
+		"explanation": (
+			"Start at checkout so the register, stockroom, and display steps are clear."
+		),
 		"key": "E",
 		"target_path": "StoreSessionDayOneCustomer/Interactable",
-		"prompt_display_name": "manager",
+		"prompt_display_name": "Manager",
 		"prompt_text": "Talk to",
 		"action_verb": "Talk",
+		"result_summary": "Manager walkthrough complete. Register access unlocked.",
 		"highlight_y_offset": 1.9,
 		"time_cost_minutes": 0,
 		"required": true,
@@ -253,13 +288,15 @@ var _training_objectives: Array[Dictionary] = [
 	{
 		"id": "check_register",
 		"stage": "training_check_register",
-		"label": "Check the register.",
-		"action": "Check register",
+		"label": "Open the register and confirm the checkout lane is ready.",
+		"action": "Verify the register before customers arrive",
+		"explanation": "Use the register by the checkout lane and confirm every readiness line.",
 		"key": "E",
 		"target_path": "StoreSessionDayEndTrigger/Interactable",
-		"prompt_display_name": "register",
+		"prompt_display_name": "Register",
 		"prompt_text": "Check",
 		"action_verb": "Check",
+		"result_summary": "Register ready. Customers can be handled from the checkout lane.",
 		"highlight_y_offset": 0.6,
 		"time_cost_minutes": 0,
 		"required": true,
@@ -267,13 +304,15 @@ var _training_objectives: Array[Dictionary] = [
 	{
 		"id": "check_back_room_inventory",
 		"stage": "training_back_room_inventory",
-		"label": "Check back room inventory.",
-		"action": "Check back room inventory",
+		"label": "Check the back room inventory and pick up the starter stock box.",
+		"action": "Find the starter stock box in the back room",
+		"explanation": "The display cannot be stocked until you confirm and carry the starter box.",
 		"key": "E",
 		"target_path": "StoreSessionBackroomPickup/Interactable",
-		"prompt_display_name": "back room inventory",
-		"prompt_text": "Check",
-		"action_verb": "Check",
+		"prompt_display_name": "Starter Stock Box",
+		"prompt_text": "Inspect",
+		"action_verb": "Inspect",
+		"result_summary": _FIRST_MINUTE_BACKROOM_COMPLETE_MESSAGE,
 		"highlight_y_offset": 1.3,
 		"time_cost_minutes": 0,
 		"required": true,
@@ -281,13 +320,15 @@ var _training_objectives: Array[Dictionary] = [
 	{
 		"id": "training_stock_shelf",
 		"stage": "training_stock_shelf",
-		"label": "Stock the starter display table.",
-		"action": "Stock starter display table",
+		"label": "Place all 3 starter items on the starter display table.",
+		"action": "Stock the display with the starter box",
+		"explanation": "Carry the box to the starter display table and place each item.",
 		"key": "E",
 		"target_path": "StoreSessionRestockShelf/Interactable",
-		"prompt_display_name": "starter display table",
+		"prompt_display_name": "Starter Display",
 		"prompt_text": "Stock",
 		"action_verb": "Stock",
+		"result_summary": "Starter display stocked. Store is ready for the first customer.",
 		"highlight_y_offset": 1.7,
 		"time_cost_minutes": 0,
 		"required": true,
@@ -316,9 +357,9 @@ var _day_one_objectives: Array[Dictionary] = [
 		"action": "Check inventory",
 		"key": "E",
 		"target_path": "StoreSessionBackroomPickup/Interactable",
-		"prompt_display_name": "back room inventory",
-		"prompt_text": "Check",
-		"action_verb": "Check",
+		"prompt_display_name": "Starter Stock Box",
+		"prompt_text": "Inspect",
+		"action_verb": "Inspect",
 		"highlight_y_offset": 1.3,
 		"time_cost_minutes": 30,
 		"required": true,
@@ -326,11 +367,11 @@ var _day_one_objectives: Array[Dictionary] = [
 	{
 		"id": "stock_shelf",
 		"stage": "stock_shelf",
-		"label": "Stock the starter display table.",
+		"label": "Place all 3 starter items on the starter display table.",
 		"action": "Stock starter display table",
 		"key": "E",
 		"target_path": "StoreSessionRestockShelf/Interactable",
-		"prompt_display_name": "starter display table",
+		"prompt_display_name": "Starter Display",
 		"prompt_text": "Stock",
 		"action_verb": "Stock",
 		"highlight_y_offset": 1.7,
@@ -438,6 +479,7 @@ var _decision_panel: DecisionCardPanel
 var _customer_result_panel: ModalPanel
 var _summary_panel: DaySummaryPanel
 var _vic_note_panel: ManagerNotePanel
+var _first_minute_detail_panel: ModalPanel
 var _objective_target_highlight: StoreObjectiveTargetHighlight
 var _debug_overlay: CanvasLayer
 var _screenshot_helper: CanvasLayer
@@ -448,9 +490,11 @@ var _day_events: Array[Dictionary] = []
 var _current_event_index: int = 0
 var _resolved_events_today: int = 0
 var _resolved_event_ids: Dictionary = {}
+var _acknowledged_result_event_ids: Dictionary = {}
 var _stage: StringName = STAGE_VIC_NOTE
 var _active_event: Dictionary = {}
 var _pending_result_effects: Dictionary = {}
+var _pending_result_event_id: StringName = &""
 ## Track per-objective completion (one-shot guard). An objective fires
 ## `_advance_stage` exactly once even if its interactable's interact() is
 ## called twice (e.g. mid-fade scene churn) — the entry stays in this set
@@ -490,6 +534,8 @@ var _carried_stock_marker: Node3D = null
 ## instance, but the controller's accompanying state mutations (end_day,
 ## clock pause) are not idempotent. Reset to false on `day_started`.
 var _summary_spawned: bool = false
+var _pending_first_minute_detail_id: StringName = &""
+var _pending_first_minute_objective_id: StringName = &""
 var _objective_target_diagnostic: String = ""
 var _reported_invalid_target_paths: Dictionary = {}
 var _training_gating_refresh_frames: int = 0
@@ -560,7 +606,11 @@ func _start_preopening_training() -> void:
 	_stage = STAGE_TRAINING_TALK_MANAGER
 	_completed_objectives.clear()
 	_summary_spawned = false
+	_pending_first_minute_detail_id = &""
+	_pending_first_minute_objective_id = &""
 	_pending_result_effects.clear()
+	_pending_result_event_id = &""
+	_acknowledged_result_event_ids.clear()
 	_active_event = {}
 	StoreSessionState.carrying_stock = false
 	_carried_stock_remaining = 0
@@ -680,16 +730,7 @@ func _on_vic_note_dismissed() -> void:
 
 func on_store_customer_interacted() -> void:
 	if _stage == STAGE_TRAINING_TALK_MANAGER:
-		(
-			EventBus
-			. toast_requested
-			. emit(
-				"Manager walkthrough complete.",
-				&"info",
-				3.0,
-			)
-		)
-		_complete_current_objective()
+		_open_first_minute_detail(_DETAIL_MANAGER_BRIEFING)
 		return
 	if _stage == STAGE_TRAINING_PRACTICE_CUSTOMER:
 		_active_event = _training_event.duplicate(true)
@@ -700,28 +741,22 @@ func on_store_customer_interacted() -> void:
 	if _stage != STAGE_TALK_TO_CUSTOMER:
 		EventBus.notification_requested.emit("Follow the current objective first.")
 		return
+	if not can_interact_customer():
+		EventBus.notification_requested.emit(customer_disabled_reason())
+		return
 	if _active_event.is_empty():
 		EventBus.notification_requested.emit("No customer event is available right now.")
 		return
 	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DECISION_CARD)
 	_sync_customer_counter_anchor_for_stage()
 	_begin_register_transaction()
+	_apply_objective_gating()
 	_decision_panel.show_event(_active_event)
 
 
 func on_store_register_interacted() -> void:
 	if _stage == STAGE_TRAINING_CHECK_REGISTER:
-		_grant_unlock(_REGISTER_UNLOCK_GRANT)
-		(
-			EventBus
-			. toast_requested
-			. emit(
-				"Register ready. Customers get handled from the checkout lane.",
-				&"sale",
-				3.0,
-			)
-		)
-		_complete_current_objective()
+		_open_first_minute_detail(_DETAIL_REGISTER_CHECK)
 		return
 	if _stage == STAGE_TRAINING_OPEN_STORE:
 		_complete_open_store_training_objective()
@@ -772,6 +807,13 @@ func on_store_stockroom_pickup_interacted() -> void:
 	var objective_id: StringName = StringName(str(_objective_for_stage(_stage).get("id", "")))
 	if _completed_objectives.has(objective_id):
 		return
+	if _stage == STAGE_TRAINING_BACK_ROOM:
+		_open_first_minute_detail(_DETAIL_BACKROOM_INVENTORY)
+		return
+	_complete_stockroom_pickup_objective()
+
+
+func _complete_stockroom_pickup_objective() -> void:
 	# §F-L1 — visible feedback: the closed box swaps to its open-base sibling
 	# so the floor reads as "the player opened it here." The carry HUD then
 	# shows what they're holding.
@@ -794,22 +836,126 @@ func on_store_stockroom_pickup_interacted() -> void:
 	# pickup is a transient *event* confirmation, so it routes through
 	# `toast_requested` (auto-dismissing card on layer 45). The persistent
 	# carry *state* lives separately on `store_carry_changed` (layer 41).
-	# Toast copy interpolates the delivery quantity from the same const that
-	# drives `store_backroom_count_changed`, so the back-room HUD readout and
-	# the toast can never disagree about how many items the player just
-	# uncovered.
+	# Toast copy is stage-aware: preopening confirms the detail-panel beat,
+	# while later store-hours pickup still names the delivery quantity.
+	var pickup_message: String = _stockroom_pickup_message()
 	(
 		EventBus
 		. toast_requested
 		. emit(
-			"Shipment checked. %d items available in back room." % _current_delivery_quantity,
+			pickup_message,
 			&"info",
 			2.5,
 		)
 	)
-	EventBus.store_carry_changed.emit("Starter Stock Box")
+	EventBus.store_carry_changed.emit(_STARTER_STOCK_CARRY_LABEL)
 	_complete_current_objective()
 	_sync_restock_placement_affordance()
+
+
+func _stockroom_pickup_message() -> String:
+	if _stage == STAGE_TRAINING_BACK_ROOM:
+		return _FIRST_MINUTE_BACKROOM_COMPLETE_MESSAGE
+	return "Shipment checked. %d items available in back room." % _current_delivery_quantity
+
+
+func _open_first_minute_detail(detail_id: StringName) -> void:
+	if _first_minute_detail_panel == null:
+		_ensure_panels_ready()
+	if _first_minute_detail_panel == null:
+		return
+	if (
+		_first_minute_detail_panel != null
+		and bool(_first_minute_detail_panel.call("is_showing_detail"))
+	):
+		return
+	var entry: Dictionary = _objective_for_stage(_stage)
+	var objective_id: StringName = StringName(str(entry.get("id", "")))
+	if objective_id == &"" or _completed_objectives.has(objective_id):
+		return
+	if not _detail_matches_stage(detail_id, _stage):
+		return
+	_pending_first_minute_detail_id = detail_id
+	_pending_first_minute_objective_id = objective_id
+	var opened: bool = bool(_first_minute_detail_panel.call(
+		"show_detail",
+		detail_id, _first_minute_detail_payload(detail_id)
+	))
+	if not opened:
+		_pending_first_minute_detail_id = &""
+		_pending_first_minute_objective_id = &""
+
+
+func _on_first_minute_detail_acknowledged(detail_id: StringName) -> void:
+	if detail_id != _pending_first_minute_detail_id:
+		return
+	var objective_id: StringName = _pending_first_minute_objective_id
+	_pending_first_minute_detail_id = &""
+	_pending_first_minute_objective_id = &""
+	if objective_id == &"" or _completed_objectives.has(objective_id):
+		return
+	if not _detail_matches_stage(detail_id, _stage):
+		return
+	match detail_id:
+		_DETAIL_MANAGER_BRIEFING:
+			_complete_current_objective()
+			_emit_first_minute_completion_message(detail_id)
+		_DETAIL_REGISTER_CHECK:
+			_grant_unlock(_REGISTER_UNLOCK_GRANT)
+			_complete_current_objective()
+			_emit_first_minute_completion_message(detail_id)
+		_DETAIL_BACKROOM_INVENTORY:
+			_complete_stockroom_pickup_objective()
+
+
+func _detail_matches_stage(detail_id: StringName, stage: StringName) -> bool:
+	match detail_id:
+		_DETAIL_MANAGER_BRIEFING:
+			return stage == STAGE_TRAINING_TALK_MANAGER
+		_DETAIL_REGISTER_CHECK:
+			return stage == STAGE_TRAINING_CHECK_REGISTER
+		_DETAIL_BACKROOM_INVENTORY:
+			return stage == STAGE_TRAINING_BACK_ROOM
+		_:
+			return false
+
+
+func _first_minute_detail_payload(detail_id: StringName) -> Dictionary:
+	match detail_id:
+		_DETAIL_MANAGER_BRIEFING:
+			return {
+				"tag": "PREOPENING",
+				"title": "Manager Briefing",
+				"body": _FIRST_MINUTE_MANAGER_BODY,
+				"confirm_label": "Continue",
+			}
+		_DETAIL_REGISTER_CHECK:
+			return {
+				"tag": "REGISTER CHECK",
+				"title": "Register Check",
+				"body": _FIRST_MINUTE_REGISTER_BODY,
+				"confirm_label": "Register ready",
+			}
+		_DETAIL_BACKROOM_INVENTORY:
+			return {
+				"tag": "BACK ROOM",
+				"title": "Back Room Inventory",
+				"body": _FIRST_MINUTE_BACKROOM_BODY % _current_delivery_quantity,
+				"confirm_label": "Pick up box",
+			}
+	return {}
+
+
+func _emit_first_minute_completion_message(detail_id: StringName) -> void:
+	match detail_id:
+		_DETAIL_MANAGER_BRIEFING:
+			EventBus.toast_requested.emit(
+				"Manager walkthrough complete. Register access unlocked.", &"info", 3.0
+			)
+		_DETAIL_REGISTER_CHECK:
+			EventBus.toast_requested.emit(
+				"Register ready. Customers can be handled from the checkout lane.", &"info", 3.0
+			)
 
 
 ## Optional ambient flavor — the console stack is interactable any time
@@ -891,7 +1037,7 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 		_real_backroom_return_count + _unplaced_delivery_count + _carried_stock_remaining
 	)
 	if _carried_stock_remaining > 0 and _restock_available_capacity() > 0:
-		EventBus.store_carry_changed.emit("Starter Stock Box (%d left)" % _carried_stock_remaining)
+		EventBus.store_carry_changed.emit(_STARTER_STOCK_CARRY_LABEL)
 		_sync_restock_placement_affordance()
 		EventBus.toast_requested.emit(
 			(
@@ -912,9 +1058,7 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 	_emit_store_inventory_counts(
 		_shelf_stock_count, _real_backroom_return_count + _unplaced_delivery_count
 	)
-	EventBus.toast_requested.emit(
-		"Stocked %d items on the starter display table." % _shelf_stock_count, &"sale", 3.0
-	)
+	EventBus.toast_requested.emit(_starter_display_stocked_message(), &"sale", 3.0)
 	_complete_current_objective()
 
 
@@ -1025,6 +1169,7 @@ func _on_choice_selected(choice_id: StringName, effects: Dictionary) -> void:
 	if _active_event.is_empty():
 		StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 		_pending_result_effects.clear()
+		_pending_result_event_id = &""
 		return
 	if _stage == STAGE_TRAINING_PRACTICE_CUSTOMER:
 		var training_choice: Dictionary = _choice_for_id(choice_id)
@@ -1044,7 +1189,6 @@ func _on_choice_selected(choice_id: StringName, effects: Dictionary) -> void:
 		StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 		return
 	if _resolved_event_ids.has(event_id):
-		StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 		return
 	var choice: Dictionary = _choice_for_id(choice_id)
 	var inventory_transaction: Dictionary = _apply_customer_inventory_effects(choice, effects)
@@ -1062,6 +1206,8 @@ func _on_choice_selected(choice_id: StringName, effects: Dictionary) -> void:
 	if _should_show_customer_result(choice_id):
 		StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_CUSTOMER_RESULT)
 		_pending_result_effects = resolved_effects.duplicate(true)
+		_pending_result_event_id = event_id
+		_apply_objective_gating()
 		_customer_result_panel.call(
 			"show_result", _build_customer_result_payload(choice_id, resolved_effects)
 		)
@@ -1074,13 +1220,21 @@ func _on_customer_result_acknowledged(event_id: StringName, _choice_id: StringNa
 	if _active_event.is_empty():
 		StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 		_pending_result_effects.clear()
+		_pending_result_event_id = &""
 		return
 	if event_id != StringName(str(_active_event.get("id", ""))):
 		StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 		_pending_result_effects.clear()
+		_pending_result_event_id = &""
 		return
+	if _acknowledged_result_event_ids.has(event_id):
+		return
+	if not _pending_result_event_id.is_empty() and event_id != _pending_result_event_id:
+		return
+	_acknowledged_result_event_ids[event_id] = true
 	var effects: Dictionary = _pending_result_effects.duplicate(true)
 	_pending_result_effects.clear()
+	_pending_result_event_id = &""
 	StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_GAMEPLAY)
 	if _stage == STAGE_TRAINING_PRACTICE_CUSTOMER:
 		_finish_training_customer_choice()
@@ -1515,11 +1669,39 @@ func can_interact_customer() -> bool:
 		return true
 	if _stage == STAGE_TRAINING_PRACTICE_CUSTOMER:
 		return true
-	return _stage == STAGE_TALK_TO_CUSTOMER and not _active_event.is_empty()
+	return _customer_interaction_available()
 
 
 func customer_disabled_reason() -> String:
+	if _stage == STAGE_TALK_TO_CUSTOMER and _customer_interaction_busy():
+		return "Customer interaction already in progress."
 	return _disabled_reason_for_stage(STAGE_TALK_TO_CUSTOMER)
+
+
+func _customer_interaction_available() -> bool:
+	if _stage != STAGE_TALK_TO_CUSTOMER:
+		return false
+	if _active_event.is_empty():
+		return false
+	if _customer_exit_state != CUSTOMER_EXIT_NOT_STARTED:
+		return false
+	return not _customer_interaction_busy()
+
+
+func _customer_interaction_busy() -> bool:
+	var event_id: StringName = StringName(str(_active_event.get("id", "")))
+	if not event_id.is_empty() and _resolved_event_ids.has(event_id):
+		return true
+	if not _pending_result_event_id.is_empty():
+		return true
+	if _decision_panel != null and _decision_panel.visible:
+		return true
+	if _customer_result_panel != null and _customer_result_panel.visible:
+		return true
+	return StoreSessionState.input_mode in [
+		StoreSessionState.INPUT_MODE_DECISION_CARD,
+		StoreSessionState.INPUT_MODE_CUSTOMER_RESULT,
+	]
 
 
 func can_interact_restock() -> bool:
@@ -1536,15 +1718,15 @@ func can_interact_restock() -> bool:
 
 func restock_prompt_label() -> String:
 	if _stage != STAGE_STOCK_SHELF and _stage != STAGE_TRAINING_STOCK_SHELF:
-		return "Stock starter display table"
+		return "Stock Starter Display"
 	if not StoreSessionState.carrying_stock:
-		return "Pick up back room delivery first"
+		return "Inspect Starter Stock Box first"
 	if _carried_stock_remaining <= 0:
-		return "Display table stocked"
+		return "Starter Display stocked"
 	var total_delivery: int = maxi(_current_delivery_quantity, _carried_stock_remaining)
 	var placed_count: int = maxi(total_delivery - _carried_stock_remaining, 0)
 	return (
-		"Place item %d of %d on starter display table"
+		"Place item %d of %d on Starter Display"
 		% [
 			placed_count + 1,
 			total_delivery,
@@ -1557,7 +1739,7 @@ func restock_disabled_reason() -> String:
 		(_stage == STAGE_STOCK_SHELF or _stage == STAGE_TRAINING_STOCK_SHELF)
 		and not StoreSessionState.carrying_stock
 	):
-		return "Pick up the back room delivery first."
+		return "Inspect the Starter Stock Box first."
 	return _disabled_reason_for_stage(STAGE_STOCK_SHELF)
 
 
@@ -1574,13 +1756,13 @@ func can_interact_pickup() -> bool:
 
 func pickup_disabled_reason() -> String:
 	if StoreSessionState.carrying_stock:
-		return "Stock already in hand. Place it on the starter display table."
+		return "Stock already in hand. Place it on the Starter Display."
 	if _stage == STAGE_STOCK_SHELF or _stage == STAGE_TRAINING_STOCK_SHELF:
-		return "Pick up the back room delivery first."
+		return "Inspect the Starter Stock Box first."
 	if _stage == STAGE_BACK_ROOM_INVENTORY or _stage == STAGE_TRAINING_BACK_ROOM:
 		var objective_id: StringName = StringName(str(_objective_for_stage(_stage).get("id", "")))
 		if objective_id != &"" and _completed_objectives.has(objective_id):
-			return "Delivery already checked."
+			return "Stock box already inspected. Stock the Starter Display."
 		return ""
 	return _disabled_reason_for_stage(STAGE_BACK_ROOM_INVENTORY)
 
@@ -1647,13 +1829,13 @@ func _disabled_reason_for_stage(target_stage: StringName) -> String:
 func _prerequisite_reason_for(objective_id: StringName) -> String:
 	match objective_id:
 		&"talk_to_manager":
-			return "Talk to the manager first."
+			return "Talk to the Manager first."
 		&"check_register":
-			return "Check the register first."
+			return "Check the Register first."
 		&"check_back_room_inventory":
-			return "Check the back room first."
+			return "Inspect the Starter Stock Box first."
 		&"training_stock_shelf":
-			return "Stock the starter display table first."
+			return "Stock the Starter Display first."
 		&"practice_customer":
 			return "Run the practice customer first."
 		&"open_store":
@@ -1661,9 +1843,9 @@ func _prerequisite_reason_for(objective_id: StringName) -> String:
 		&"talk_to_customer":
 			return "Talk to the customer first."
 		&"back_room_inventory":
-			return "Check the back room first."
+			return "Inspect the Starter Stock Box first."
 		&"stock_shelf":
-			return "Stock the starter display table before closing."
+			return "Stock the Starter Display before closing."
 		&"close_day":
 			return "Close day at the register."
 		_:
@@ -1733,6 +1915,7 @@ func _start_day(day: int) -> void:
 	_current_event_index = 0
 	_resolved_events_today = 0
 	_resolved_event_ids.clear()
+	_acknowledged_result_event_ids.clear()
 	_customers_helped_today = 0
 	_items_stocked_today = 0
 	_sales_today = 0
@@ -1740,8 +1923,11 @@ func _start_day(day: int) -> void:
 	_customer_inventory_transactions.clear()
 	_applied_reinvest_options.clear()
 	_summary_spawned = false
+	_pending_first_minute_detail_id = &""
+	_pending_first_minute_objective_id = &""
 	_completed_objectives.clear()
 	_pending_result_effects.clear()
+	_pending_result_event_id = &""
 	StoreSessionState.carrying_stock = false
 	_sync_restock_placement_affordance()
 	_reset_store_inventory_overlay()
@@ -1892,6 +2078,10 @@ func _close_transient_day_panels() -> void:
 		_customer_result_panel.close()
 	if _close_day_panel != null:
 		_close_day_panel.close()
+	if _first_minute_detail_panel != null:
+		_first_minute_detail_panel.close()
+	_pending_first_minute_detail_id = &""
+	_pending_first_minute_objective_id = &""
 
 
 func _build_repeatable_shift_customer_event(day_number: int) -> Dictionary:
@@ -2234,7 +2424,10 @@ func current_stage() -> StringName:
 
 ## Returns a copy of the currently active objective row.
 func active_objective_entry() -> Dictionary:
-	return _objective_for_stage(_stage).duplicate(true)
+	var entry: Dictionary = _objective_for_stage(_stage).duplicate(true)
+	if not entry.is_empty():
+		entry["label"] = _active_objective_label(entry)
+	return entry
 
 
 ## Returns the active objective's scene-relative Interactable path.
@@ -2327,15 +2520,10 @@ func is_customer_exit_complete() -> bool:
 ## completion would echo the active-objective text and reproduce the
 ## BRAINDUMP 'Bad' pattern. Unknown ids return a generic past-tense fallback.
 func _objective_completion_label(objective_id: StringName) -> String:
+	var summary: String = _objective_result_summary_for_id(objective_id)
+	if not summary.is_empty():
+		return summary
 	match objective_id:
-		&"talk_to_manager":
-			return "Manager walkthrough complete."
-		&"check_register":
-			return "Register checked."
-		&"check_back_room_inventory":
-			return "Back room inventory checked."
-		&"training_stock_shelf":
-			return "Starter display stocked."
 		&"practice_customer":
 			return "Practice customer complete."
 		&"open_store":
@@ -2368,8 +2556,10 @@ func get_state_snapshot() -> Dictionary:
 		"carrying_stock": StoreSessionState.carrying_stock,
 		"stage": String(_stage),
 		"active_objective_id": String(current.get("id", "")),
-		"active_objective_label": String(current.get("label", "")),
+		"active_objective_label": _active_objective_label(current),
 		"active_objective_action": String(current.get("action", "")),
+		"active_objective_explanation": String(current.get("explanation", "")),
+		"active_objective_result_summary": _objective_result_summary(current),
 		"active_objective_target_path": active_objective_target_path(),
 		"active_objective_prompt_label": active_objective_prompt_label(),
 		"active_objective_highlight_visible": should_show_active_objective_highlight(),
@@ -2394,8 +2584,11 @@ func get_session_progress_snapshot() -> Dictionary:
 		"objective":
 		{
 			"id": String(current.get("id", "")),
-			"label": String(current.get("label", "")),
+			"label": _active_objective_label(current),
 			"action": String(current.get("action", "")),
+			"explanation": String(current.get("explanation", "")),
+			"prompt_label": active_objective_prompt_label(),
+			"result_summary": _objective_result_summary(current),
 			"target_path": active_objective_target_path(),
 			"completed": _completed_objectives.has(StringName(str(current.get("id", "")))),
 			"completed_objectives": _completed_objectives.duplicate(true),
@@ -2440,6 +2633,12 @@ func get_session_progress_snapshot() -> Dictionary:
 func acknowledge_prompt_for_automation() -> bool:
 	if not AutomationModeScript.is_enabled():
 		return false
+	if (
+		_first_minute_detail_panel != null
+		and _first_minute_detail_panel.visible
+		and _first_minute_detail_panel.has_method("acknowledge_for_automation")
+	):
+		return bool(_first_minute_detail_panel.call("acknowledge_for_automation"))
 	if (
 		_customer_result_panel != null
 		and _customer_result_panel.visible
@@ -2557,13 +2756,48 @@ func _update_objective_rail() -> void:
 		. objective_changed
 		. emit(
 			{
-				"text": str(entry.get("label", "")),
+				"text": _active_objective_label(entry),
 				"action": str(entry.get("action", "")),
 				"key": str(entry.get("key", "E")),
+				"optional_hint": str(entry.get("explanation", "")),
+				"target_path": active_objective_target_path(),
+				"prompt_label": active_objective_prompt_label(),
+				"result_summary": _objective_result_summary(entry),
 				"steps": _build_steps_payload(),
 			}
 		)
 	)
+
+
+func _active_objective_label(entry: Dictionary) -> String:
+	var stage_name: StringName = StringName(str(entry.get("stage", "")))
+	if (
+		(stage_name == STAGE_STOCK_SHELF or stage_name == STAGE_TRAINING_STOCK_SHELF)
+		and StoreSessionState.carrying_stock
+		and _carried_stock_remaining > 0
+	):
+		return _STARTER_STOCK_CARRY_OBJECTIVE_LABEL
+	return str(entry.get("label", ""))
+
+
+func _objective_result_summary(entry: Dictionary) -> String:
+	return str(entry.get("result_summary", "")).strip_edges()
+
+
+func _objective_result_summary_for_id(objective_id: StringName) -> String:
+	for entry: Dictionary in _training_objectives:
+		if StringName(str(entry.get("id", ""))) == objective_id:
+			return _objective_result_summary(entry)
+	for entry: Dictionary in _day_one_objectives:
+		if StringName(str(entry.get("id", ""))) == objective_id:
+			return _objective_result_summary(entry)
+	return ""
+
+
+func _starter_display_stocked_message() -> String:
+	if _stage == STAGE_TRAINING_STOCK_SHELF:
+		return _STARTER_DISPLAY_READY_MESSAGE
+	return "Starter display stocked."
 
 
 ## Builds the multi-step progress payload for the rail. Each `_objectives`
@@ -2572,9 +2806,10 @@ func _update_objective_rail() -> void:
 ## `_stage`, or "future" otherwise. During STAGE_VIC_NOTE every entry is
 ## "future" (nothing complete, no chain row active yet).
 ##
-## The `id` field lets consumers (`StoreStatusPanel`) resolve the source
-## objective without reverse-matching on `text`. ObjectiveRail reads `text`
-## + `state` only and ignores extra keys, so adding `id` is non-breaking.
+## `id` lets consumers (`StoreStatusPanel`) resolve the source objective
+## without reverse-matching on `text`. The copy fields mirror the active
+## entry so automation can verify the label, prompt target, and completion
+## summary come from the same row.
 func _build_steps_payload() -> Array[Dictionary]:
 	var steps: Array[Dictionary] = []
 	for entry: Dictionary in _objectives:
@@ -2591,6 +2826,14 @@ func _build_steps_payload() -> Array[Dictionary]:
 				{
 					"id": String(entry_id),
 					"text": str(entry.get("label", "")),
+					"action": str(entry.get("action", "")),
+					"explanation": str(entry.get("explanation", "")),
+					"target_path": str(entry.get("target_path", "")),
+					"prompt_label": Interactable.compose_prompt_label(
+						str(entry.get("prompt_text", "")).strip_edges(),
+						str(entry.get("prompt_display_name", "")).strip_edges()
+					),
+					"result_summary": _objective_result_summary(entry),
 					"state": state,
 				}
 			)
@@ -2646,6 +2889,8 @@ func _apply_objective_gating() -> void:
 		var is_active: bool = entry_stage == _stage
 		if entry_stage == STAGE_END_DAY:
 			is_active = is_active and _all_required_objectives_completed()
+		elif entry_stage == STAGE_TALK_TO_CUSTOMER:
+			is_active = is_active and can_interact_customer()
 		_set_interactable_enabled(store, path, is_active)
 	_refresh_interactable_prompt_copy(store)
 	# Console stack — ambient context, never an active Day-1 prompt.
@@ -2691,7 +2936,7 @@ func _apply_checkout_actor_prompt_state(store: Node) -> void:
 	if customer != null:
 		match _stage:
 			STAGE_TRAINING_TALK_MANAGER:
-				customer.display_name = "manager"
+				customer.display_name = "Manager"
 				customer.prompt_text = "Talk to"
 				customer.action_verb = "Talk"
 				customer.enabled = true
@@ -2811,6 +3056,16 @@ func _ensure_panels() -> void:
 	if _vic_note_panel == null:
 		_vic_note_panel = ManagerNotePanel.new()
 		_ui_root().add_child(_vic_note_panel)
+	if _first_minute_detail_panel == null:
+		_first_minute_detail_panel = FirstMinuteDetailPanelScript.new() as ModalPanel
+		_tag_semantic_target(
+			_first_minute_detail_panel,
+			"store_session.panel.first_minute_detail",
+			"ui_panel",
+			["ui.panel", "store_session.panel", "store_session.panel.first_minute_detail"],
+			{"store_session_panel": "first_minute_detail"}
+		)
+		_ui_root().add_child(_first_minute_detail_panel)
 	# `StoreStatusPanel` and `StoreEventLogPanel` are owned by the `StoreSessionHUD`
 	# autoload — see the `StoreSessionHUD.activate(day)` call in `_ready`. They are
 	# spawned once at boot and persist across day-controller teardown.
@@ -2905,6 +3160,9 @@ func _connect_panel_signals() -> void:
 		_summary_panel.reinvest_pressed.connect(_on_summary_reinvest)
 	if not _vic_note_panel.note_dismissed.is_connected(_on_vic_note_dismissed):
 		_vic_note_panel.note_dismissed.connect(_on_vic_note_dismissed)
+	var detail_ack_callback := Callable(self, "_on_first_minute_detail_acknowledged")
+	if not _first_minute_detail_panel.is_connected(&"detail_acknowledged", detail_ack_callback):
+		_first_minute_detail_panel.connect(&"detail_acknowledged", detail_ack_callback)
 	# Permanent (not ONE_SHOT) — the player may cancel the modal and re-
 	# request close-day, so the listener has to survive every cycle.
 	if not EventBus.day_close_confirmed.is_connected(_on_day_close_confirmed):
@@ -2935,6 +3193,8 @@ func _free_owned_ui_nodes() -> void:
 	_summary_panel = null
 	_free_owned_ui_node(_vic_note_panel)
 	_vic_note_panel = null
+	_free_owned_ui_node(_first_minute_detail_panel)
+	_first_minute_detail_panel = null
 	_free_owned_ui_node(_objective_target_highlight)
 	_objective_target_highlight = null
 	_free_owned_ui_node(_debug_overlay)
@@ -4231,6 +4491,9 @@ func _with_restock_visual_metadata(
 	data["starter_catalog_index"] = _starter_catalog_index(item_id)
 	data["route_role"] = "starter_sale_item"
 	data["stock_state"] = _stock_state_for_delivery_index(delivery_index)
+	data["show_price_tag"] = true
+	if not data.has("price_cents"):
+		data["price_cents"] = -1
 	return data
 
 
@@ -4262,11 +4525,15 @@ func _apply_store_shelf_item_metadata(
 
 
 func _product_visual_data_from_definition(definition: ItemDefinition) -> Dictionary:
+	var display_price: float = (
+		definition.used_price if definition.used_price > 0.0 else definition.base_price
+	)
 	var data: Dictionary = {
 		"definition_id": definition.id,
 		"display_name": definition.item_name,
 		"category": String(definition.category),
 		"platform_id": String(definition.platform_id),
+		"price_cents": int(round(display_price * 100.0)),
 	}
 	if definition.extra is Dictionary:
 		for key: String in [
@@ -4286,6 +4553,9 @@ func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dict
 		"display_name": str(entry.get("item_name", item_id)),
 		"category": str(entry.get("category", "")),
 		"platform_id": str(entry.get("platform_id", "")),
+		"price_cents": int(
+			round(float(entry.get("used_price", entry.get("base_price", 0.0))) * 100.0)
+		),
 	}
 	for key: String in [
 		"box_art_key",
@@ -4320,4 +4590,54 @@ func _make_fallback_store_shelf_item() -> MeshInstance3D:
 	mat.emission = Color(0.6, 0.42, 0.18, 1.0)
 	mat.emission_energy_multiplier = 0.2
 	item.material_override = mat
+	item.set_meta("product_visual_kind", "fallback_game_case")
+	item.set_meta("visual_source", "starter_display_fallback")
+	item.add_child(
+		_make_fallback_product_detail(
+			"FallbackFrontPanel",
+			Vector3(0.148, 0.154, 0.004),
+			Vector3(0.0, 0.010, 0.033),
+			Color(0.88, 0.68, 0.28, 1.0)
+		)
+	)
+	item.add_child(
+		_make_fallback_product_detail(
+			"FallbackPlatformStripe",
+			Vector3(0.148, 0.022, 0.005),
+			Vector3(0.0, 0.073, 0.036),
+			Color(0.12, 0.13, 0.14, 1.0)
+		)
+	)
+	item.add_child(
+		_make_fallback_product_detail(
+			"FallbackTitleBlock",
+			Vector3(0.104, 0.034, 0.005),
+			Vector3(0.0, 0.020, 0.038),
+			Color(0.96, 0.88, 0.48, 1.0)
+		)
+	)
+	item.add_child(
+		_make_fallback_product_detail(
+			"FallbackPriceTag",
+			Vector3(0.070, 0.026, 0.006),
+			Vector3(0.060, -0.080, 0.040),
+			Color(0.96, 0.78, 0.38, 1.0)
+		)
+	)
 	return item
+
+
+func _make_fallback_product_detail(
+	name: String, size: Vector3, position: Vector3, color: Color
+) -> MeshInstance3D:
+	var detail := MeshInstance3D.new()
+	detail.name = name
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	detail.mesh = mesh
+	detail.position = position
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = 0.72
+	detail.material_override = material
+	return detail

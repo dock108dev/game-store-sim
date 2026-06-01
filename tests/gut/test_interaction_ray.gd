@@ -376,10 +376,10 @@ func test_actionable_proximity_target_overrides_empty_disabled_raycast_hit() -> 
 	)
 
 
-func test_actionable_proximity_target_overrides_disabled_raycast_with_hint_copy() -> void:
+func test_disabled_raycast_with_hint_copy_beats_actionable_proximity_target() -> void:
 	var disabled_with_reason := _StatefulTarget.new()
 	disabled_with_reason.can = false
-	disabled_with_reason.disabled_reason = "Check the back room first."
+	disabled_with_reason.disabled_reason = "Inspect the Starter Stock Box first."
 	add_child_autofree(disabled_with_reason)
 	var active_far_context := _StatefulTarget.new()
 	active_far_context.can = true
@@ -389,10 +389,10 @@ func test_actionable_proximity_target_overrides_disabled_raycast_with_hint_copy(
 
 	assert_eq(
 		selected,
-		active_far_context,
-		"An active nearby objective must beat disabled raycast hint copy"
+		disabled_with_reason,
+		"A useful disabled raycast reason must beat unrelated nearby actions"
 	)
-	assert_eq(String(_ray._last_target_source), "proximity")
+	assert_eq(String(_ray._last_target_source), "raycast")
 
 
 func test_active_raycast_target_beats_nearby_actionable_proximity_target() -> void:

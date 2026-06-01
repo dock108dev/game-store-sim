@@ -121,18 +121,27 @@ func test_objective_state_transitions_emit_expected_payloads() -> void:
 	EventBus.day_started.emit(1)
 	assert_eq(
 		_last_objective_text(),
-		"Talk to the manager at checkout.",
+		"Talk to the manager at checkout for opening instructions.",
 		"Day 1 starts with manager-led preopening"
 	)
 
 	EventBus.store_objective_completed.emit(&"talk_to_manager")
-	assert_eq(_last_objective_text(), "Check the register.")
+	assert_eq(
+		_last_objective_text(),
+		"Open the register and confirm the checkout lane is ready."
+	)
 
 	EventBus.store_objective_completed.emit(&"check_register")
-	assert_eq(_last_objective_text(), "Check back room inventory.")
+	assert_eq(
+		_last_objective_text(),
+		"Check the back room inventory and pick up the starter stock box."
+	)
 
 	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
-	assert_eq(_last_objective_text(), "Stock the starter display table.")
+	assert_eq(
+		_last_objective_text(),
+		"Place all 3 starter items on the starter display table."
+	)
 
 	EventBus.store_objective_completed.emit(&"training_stock_shelf")
 	assert_eq(_last_objective_text(), "Talk to the customer at the register.")
@@ -141,7 +150,10 @@ func test_objective_state_transitions_emit_expected_payloads() -> void:
 	assert_eq(_last_objective_text(), "Check the back room delivery.")
 
 	EventBus.placement_mode_entered.emit()
-	assert_eq(_last_objective_text(), "Stock the starter display table.")
+	assert_eq(
+		_last_objective_text(),
+		"Place all 3 starter items on the starter display table."
+	)
 
 	EventBus.item_stocked.emit("starter_item", "front_slot")
 	assert_eq(_last_objective_text(), "Close the day at the register.")

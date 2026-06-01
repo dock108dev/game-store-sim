@@ -17,26 +17,26 @@
           "steps": [
             {
               "id": "talk_to_manager",
-              "text": "Talk to the manager at checkout.",
-              "action": "Talk to manager",
+              "text": "Talk to the manager at checkout for opening instructions.",
+              "action": "Get the opening routine from the manager",
               "key": "E"
             },
             {
               "id": "check_register",
-              "text": "Check the register.",
-              "action": "Check register",
+              "text": "Open the register and confirm the checkout lane is ready.",
+              "action": "Verify the register before customers arrive",
               "key": "E"
             },
             {
               "id": "check_back_room_inventory",
-              "text": "Check back room inventory.",
-              "action": "Check back room inventory",
+              "text": "Check the back room inventory and pick up the starter stock box.",
+              "action": "Find the starter stock box in the back room",
               "key": "E"
             },
             {
               "id": "training_stock_shelf",
-              "text": "Stock the starter display table.",
-              "action": "Stock starter display table",
+              "text": "Place all 3 starter items on the starter display table.",
+              "action": "Stock the display with the starter box",
               "key": "E"
             }
           ]
@@ -60,7 +60,7 @@
             },
             {
               "id": "stock_shelf",
-              "text": "Stock the starter display table.",
+              "text": "Place all 3 starter items on the starter display table.",
               "action": "Stock starter display table",
               "key": "E"
             },
@@ -88,7 +88,7 @@
         },
         {
           "id": "stock_shelf",
-          "text": "Stock the starter display table.",
+          "text": "Place all 3 starter items on the starter display table.",
           "action": "Stock starter display table",
           "key": "E"
         },
