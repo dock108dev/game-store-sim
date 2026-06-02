@@ -1,5 +1,6 @@
+# gdlint:disable=max-file-lines
 ## Handles customer checkout transactions at the register.
-## See cleanup-report: queue, payment, and transaction view-model adapters need extraction.
+## See cleanup-report.md "Files still >500 LOC": checkout adapters need extraction.
 class_name PlayerCheckout
 extends Node
 

@@ -1,7 +1,8 @@
+# gdlint:disable=max-file-lines
 ## Registry for reusable store fixture/prop scenes used by store layouts and
 ## runtime feedback. This is visual-only: inventory, unlocks, and economy stay
 ## in the game systems that decide when these assets appear.
-## See cleanup-report: material, mesh, and decoration factories need separate helpers.
+## See cleanup-report.md "Files still >500 LOC": factories need separate helpers.
 class_name StoreVisualKit
 extends RefCounted
 

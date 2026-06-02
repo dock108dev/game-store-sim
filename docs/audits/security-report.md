@@ -3,9 +3,33 @@
 Date: 2026-06-02
 
 This report documents the current hardening contracts cited by code comments
-and tests. It is limited to verifiable safeguards present in the current tree.
+and tests. It is limited to safeguards present in the current tree.
 
-## Findings
+## §1 Boot Error Text Escaping
+
+| ID | Current safeguard | Code basis |
+| --- | --- | --- |
+| `§1` | Boot failure text written into a BBCode-enabled label replaces literal `[` with `[lb]` before rendering, so content-loader or JSON-parser messages cannot be interpreted as BBCode tags. | `game/scripts/core/boot.gd` |
+
+## §2 Persisted Identifier Bounds
+
+| ID | Current safeguard | Code basis |
+| --- | --- | --- |
+| `§2` | Employment save loading caps persisted `employment_status` and `employer_store_id` strings at `MAX_PERSISTED_ID_LENGTH = 64` before constructing `StringName` values. Trust, approval, wage, and season fields are clamped or defaulted while loading. | `game/resources/employment_state.gd` |
+
+## §3 Cumulative Save Collection Bounds
+
+| ID | Current safeguard | Code basis |
+| --- | --- | --- |
+| `§3` | Hidden-thread save loading caps the run day range at `MAX_RUN_DAY = 30`, discovered artifacts at `MAX_DISCOVERED_ARTIFACTS = 32`, and persisted artifact ids at `MAX_PERSISTED_ID_LENGTH = 64`. Out-of-range artifact-day keys and overlong artifact ids are dropped. | `game/autoload/hidden_thread_system.gd` |
+
+## §4 Settings Numeric Bounds
+
+| ID | Current safeguard | Code basis |
+| --- | --- | --- |
+| `§4` | Settings load paths clamp display, preference, volume, keycode, text-scale, locale, and enum-shaped fields to bounded ranges. The settings file read is capped at `MAX_SETTINGS_FILE_BYTES = 262144`. | `game/autoload/settings.gd`, `tests/unit/test_settings_autoload.gd` |
+
+## Finding IDs
 
 | ID | Current safeguard | Code basis |
 | --- | --- | --- |

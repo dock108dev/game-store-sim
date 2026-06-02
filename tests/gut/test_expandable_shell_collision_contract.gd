@@ -14,6 +14,7 @@ const ALLOWED_HIDDEN_AUTHORED_PLAYER_BLOCKERS: PackedStringArray = [
 ]
 
 const BLOCKING_BODIES: Array[Dictionary] = [
+	{"path": "ExpandableStoreShell/StarterFloor/StaticBody3D", "layer": WORLD_LAYER},
 	{"path": "ExpandableStoreShell/StarterBackWall", "layer": WORLD_LAYER},
 	{"path": "ExpandableStoreShell/StarterLeftWall", "layer": WORLD_LAYER},
 	{"path": "ExpandableStoreShell/StarterRightWall", "layer": WORLD_LAYER},
@@ -35,6 +36,10 @@ const BLOCKING_BODIES: Array[Dictionary] = [
 ]
 
 const PLAYER_PROBES: Array[Dictionary] = [
+	{
+		"label": "starter floor",
+		"path": "ExpandableStoreShell/StarterFloor/StaticBody3D",
+	},
 	{"label": "back wall", "path": "ExpandableStoreShell/StarterBackWall"},
 	{"label": "left wall", "path": "ExpandableStoreShell/StarterLeftWall"},
 	{"label": "right wall", "path": "ExpandableStoreShell/StarterRightWall"},
@@ -46,7 +51,10 @@ const PLAYER_PROBES: Array[Dictionary] = [
 	{"label": "queue rope", "path": "FrontLaneQueue/LaneFixture/LeftGuideRopeBody"},
 	{"label": "queue entry post", "path": "FrontLaneQueue/LaneFixture/BackLeftPost/StaticBody3D"},
 	{"label": "queue middle post", "path": "FrontLaneQueue/LaneFixture/MiddleLeftPost/StaticBody3D"},
-	{"label": "queue register post", "path": "FrontLaneQueue/LaneFixture/RegisterLeftPost/StaticBody3D"},
+	{
+		"label": "queue register post",
+		"path": "FrontLaneQueue/LaneFixture/RegisterLeftPost/StaticBody3D",
+	},
 ]
 
 const VISUAL_ONLY_SURFACES: PackedStringArray = [

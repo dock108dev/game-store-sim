@@ -4,7 +4,7 @@ class_name StoreSessionController
 extends Node
 
 ## File-size note: Day-1 orchestration stays in one owner until the presenter
-## slices named in docs/audits/cleanup-report.md can be extracted together.
+## slices named in cleanup-report.md "Files still >500 LOC" can be extracted.
 signal customer_exit_state_changed(state: StringName)
 signal session_prompt_changed(snapshot: Dictionary)
 
@@ -4310,7 +4310,11 @@ func _show_starter_slot_gap(
 		if existing_named != null:
 			existing_named.queue_free()
 	var gap := Node3D.new()
-	gap.name = marker_name if not marker_name.is_empty() else "%s%d" % [_RESTOCK_GAP_PREFIX, slot_index]
+	gap.name = (
+		marker_name
+		if not marker_name.is_empty()
+		else "%s%d" % [_RESTOCK_GAP_PREFIX, slot_index]
+	)
 	gap.position = _restock_slot_position(slot_index)
 	gap.set_meta("slot_index", slot_index)
 	gap.set_meta("slot_state", slot_state)

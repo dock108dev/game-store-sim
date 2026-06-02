@@ -6,61 +6,39 @@ Date: 2026-06-02
 
 ### `docs/audits/cleanup-report.md`
 
-- Rewrote the source-cleanup changelog into a current-state cleanup reference.
-- Removed broad future extraction plans and old validation result claims.
-- Kept only the current large-file and broad-suite justifications that are
-  cited by file-level code comments.
-
-### `docs/audits/error-handling-report.md`
-
-- Added the missing audit reference file for current code comments that cite
-  `EH-AS-1`, `EH-*`, `F-*`, and `J*` handled-error contracts.
-- Grounded every row in the current code location that implements or tests the
-  behavior.
+- Rewrote the file from a source-cleanup pass changelog into a durable
+  current-state reference.
+- Kept only code-backed justifications for the large source files and broad
+  visual suites currently cited by source comments.
+- Added current LOC evidence for the grouped production files.
+- Removed prior-pass validation claims from this file; validation for this
+  documentation pass is recorded below instead.
 
 ### `docs/audits/security-report.md`
 
-- Added the missing hardening reference file for current comments/tests that
-  cite tutorial progress bounds, save numeric hardening, and ambient-moment
-  dedupe bounds.
+- Added the missing section targets currently cited by code comments:
+  `§1`, `§2`, `§3`, and `§4`.
+- Kept the existing finding IDs `F1`, `F2`, `F-09`, and `F-87`, with each row
+  grounded in current code and tests.
+- Clarified the current bounds for boot-error BBCode escaping, employment
+  persisted ids, hidden-thread save collections, settings numeric values,
+  tutorial progress data, save numeric hardening, and ambient-moment dedupe.
 
-### `docs/audits/phase0-ui-integrity.md`
+### `docs/audits/error-handling-report.md`
 
-- Added the missing UI SSOT reference file for objective/tutorial copy
-  separation, the local SSOT tripwires, and the modal canvas-layer contract.
+- Added the missing section and finding targets currently cited by code
+  comments: `§2`, `§3`, `§4`, `F2`, `F-56`, and `F-97`.
+- Reorganized the report by current code surface: runtime assertions, content
+  and world metadata, UI invariants, checkout/register, typed autoload access,
+  and early-boot/test seams.
+- Preserved existing code-backed IDs (`EH-*`, `F-*`, and `J*`) while removing
+  no-longer-helpful prose around them.
 
-### `docs/audit/pass-fail-matrix.md`
+### `docs/audits/docs-consolidation.md`
 
-- Added the missing runtime-audit matrix referenced by `tests/audit_run.sh` and
-  `tests/audit_required_checkpoints.txt`.
-- Documented the executable checkpoint manifest and gate behavior instead of
-  inventing a second source of truth.
-
-### `docs/research/canvas-layer-z-order-conflicts.md`
-
-- Added the missing CanvasLayer band table referenced by `UILayers`, the CRT
-  overlay, and canvas-layer GUT coverage.
-
-### `docs/research/store-ready-contract-examples.md`
-
-- Added the missing store-ready invariant reference cited by
-  `StoreReadyContract`.
-
-### `docs/decisions/0007-remove-sneaker-citadel.md`
-
-- Added the missing decision note cited by StoreRegistry tests and validators.
-- Documented the current data-driven store roster and residue guard.
-
-### `docs/roadmap.md`
-
-- Added a narrow maintenance roadmap because `tests/validate_issue_032.sh`
-  validates that the custom shader item is marked complete.
-- Limited the file to the completed, code-backed shader acceptance item.
-
-### `docs/index.md`
-
-- Updated the index to include the new audit, decision, research, and
-  maintenance reference docs.
+- Replaced the previous consolidation record with this pass record.
+- Recorded the actual Markdown edits, statements removed, intentional gaps,
+  and validation results for this pass.
 
 ## Re-Verified Without Text Changes
 
@@ -90,20 +68,35 @@ Date: 2026-06-02
 - `docs/style/visual-grammar.md` against
   `game/scripts/ui/ui_theme_constants.gd`, `project.godot`, and the checked-in
   theme resources.
+- `docs/index.md` against the maintained Markdown set.
+- `docs/audit/pass-fail-matrix.md` against
+  `tests/audit_required_checkpoints.txt` and `tests/audit_run.sh`.
+- `docs/research/canvas-layer-z-order-conflicts.md` against
+  `game/scripts/ui/ui_layers.gd` and
+  `tests/gut/test_canvas_layer_bands_issue_007.gd`.
+- `docs/research/store-ready-contract-examples.md` against
+  `game/scripts/stores/store_ready_contract.gd`.
+- `docs/decisions/0007-remove-sneaker-citadel.md` against
+  `game/autoload/store_registry.gd`,
+  `game/content/stores/store_definitions.json`, and
+  `tests/validate_issue_019_store_registry.sh`.
+- `docs/roadmap.md` against `tests/validate_issue_032.sh`,
+  `game/assets/shaders/outline_highlight.gdshader`,
+  `game/assets/shaders/mat_outline_highlight.tres`, and
+  `game/scripts/components/interactable.gd`.
 - `tests/automation/README.md`, `tests/baselines/README.md`,
   `tests/flows/README.md`, and `tests/visual/README.md` against
   `tests/validate_gut_config_discovery.sh`.
 
 ## Statements Removed As Unverifiable Or Non-Current
 
-- Removed the cleanup report's broad future split inventory. Those entries were
-  not required to explain a current ownership contract and read like a backlog.
-- Removed old validation claims from `docs/audits/cleanup-report.md`; this
-  documentation pass re-runs its own validation instead of preserving previous
-  pass results as current truth.
-- Replaced the old docs-consolidation claim that
-  `docs/audits/cleanup-report.md` was deleted. The file exists in the current
-  working tree and current code comments cite it.
+- Removed the cleanup report's code-pass changelog as active documentation.
+  The deleted-test and lint-fix claims belong to a source-cleanup pass, not a
+  durable docs reference.
+- Removed stale validation result claims from
+  `docs/audits/cleanup-report.md`. This pass records its own validation below.
+- Removed vague split recommendations from the cleanup report where they were
+  phrased as future work instead of current ownership rationale.
 
 ## Intentional Gaps
 
@@ -115,22 +108,24 @@ Date: 2026-06-02
 - Markdown under `addons/`, `.aidlc`, `artifacts/`, and `inspiration/` was not
   rewritten because those trees are vendored material, generated/tool output,
   or customer/reference material rather than active maintained project docs.
-- Existing non-markdown code comments that reference audit section ids were
-  left in place; this pass added the missing markdown targets instead of
-  changing code.
+- Non-Markdown source comments that reference historical design material such
+  as `DESIGN.md`, `BRAINDUMP`, or old research names were not edited because
+  this pass is Markdown-only. A source-comment cleanup pass would bring those
+  comments into scope.
 
 ## Validation
 
-- Maintained markdown inventory checked: active project docs are `README.md`
-  plus `docs/**/*.md`; root markdown remains `README.md` and preserved
+- Maintained Markdown inventory checked: active project docs are `README.md`
+  plus `docs/**/*.md`; root Markdown remains `README.md` and preserved
   `BRAINDUMP.md`; validator-required test README files remain in `tests/`.
-- Active markdown link check: passed.
-- Code-comment doc target check: passed for referenced `docs/**/*.md` paths.
+- Active Markdown link check: passed.
+- Code-comment doc target check: passed for cited `docs/**/*.md` files and
+  section IDs covered by this pass.
 - `bash tests/validate_gut_config_discovery.sh`: passed.
 - `bash scripts/validate_export_config.sh`: passed.
 - `git diff --check`: passed.
-- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 446`,
-  `Tests 5191`, `Passing 5191`; maintained shell validators and SSOT
+- `bash tests/run_tests.sh`: passed. GUT reported `Scripts 445`,
+  `Tests 5183`, `Passing 5183`; maintained shell validators and SSOT
   tripwires also passed.
 
 ## Escalations

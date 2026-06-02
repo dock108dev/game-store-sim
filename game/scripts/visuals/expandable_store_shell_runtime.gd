@@ -778,13 +778,15 @@ static func _rebuild_shell(store: Node, shell: Node3D, layout_catalog: RefCounte
 	var stockroom_front_left_width: float = stockroom_opening_min_x - stockroom_min.x
 	var stockroom_front_right_width: float = stockroom_max.x - stockroom_opening_max_x
 
-	_add_box(
+	var starter_floor_size := Vector3(shell_size.x, 0.05, shell_size.z)
+	var starter_floor: MeshInstance3D = _add_box(
 		shell,
 		"StarterFloor",
 		Vector3(shell_center.x, 0.025, shell_center.z),
-		Vector3(shell_size.x, 0.05, shell_size.z),
+		starter_floor_size,
 		floor_mat
 	)
+	_add_world_collision_box(starter_floor, "StaticBody3D", Vector3.ZERO, starter_floor_size)
 	_add_box(
 		shell,
 		"StarterCeiling",
@@ -2834,6 +2836,24 @@ static func _add_wall(
 	shape.size = size
 	collision.shape = shape
 	body.add_child(collision)
+
+
+static func _add_world_collision_box(
+	parent: Node3D, name: String, position: Vector3, size: Vector3
+) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.name = name
+	body.collision_layer = 1
+	body.collision_mask = 0
+	body.position = position
+	parent.add_child(body)
+	var collision := CollisionShape3D.new()
+	collision.name = "CollisionShape3D"
+	var shape := BoxShape3D.new()
+	shape.size = size
+	collision.shape = shape
+	body.add_child(collision)
+	return body
 
 
 static func _add_box(

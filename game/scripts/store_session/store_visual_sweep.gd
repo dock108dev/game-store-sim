@@ -1,5 +1,6 @@
+# gdlint:disable=max-file-lines
 ## Shared manifest and PNG writer for the store_session store visual review sweep.
-## See cleanup-report: capture policy and manifest assembly need extraction before this can shrink.
+## See cleanup-report.md "Files still >500 LOC": capture assembly needs extraction.
 class_name StoreVisualSweep
 extends RefCounted
 
