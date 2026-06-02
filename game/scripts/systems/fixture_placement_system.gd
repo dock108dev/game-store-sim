@@ -3,6 +3,8 @@
 class_name FixturePlacementSystem
 extends Node
 
+const PlacementPreviewFeedbackScript = preload("res://game/resources/placement_preview_feedback.gd")
+
 const FIXTURE_SIZES: Dictionary = {
 	"wall_shelf": Vector2i(2, 1),
 	"display_table": Vector2i(2, 1),
@@ -26,6 +28,7 @@ const FIXTURE_PRICES: Dictionary = {
 }
 
 const SELLBACK_RATE: float = 0.5
+const ROTATION_FACING: Array[Vector2i] = [Vector2i(0, 1), Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0)]
 var needs_nav_rebake: bool = false
 
 var _grid: BuildModeGrid = null
@@ -198,18 +201,40 @@ func get_current_rotation() -> int:
 
 ## Updates the placement preview overlay at the hovered cell.
 func update_preview(hovered_cell: Variant) -> void:
-	if _selected_fixture_type.is_empty():
+	var feedback = get_preview_feedback(hovered_cell)
+	if feedback.footprint_cells.is_empty():
 		_overlay.clear()
 		return
+	_overlay.show_cells(feedback.footprint_cells, feedback.valid)
 
-	if hovered_cell == null:
-		_overlay.clear()
-		return
 
-	var cell: Vector2i = hovered_cell as Vector2i
-	var cells: Array[Vector2i] = _get_fixture_cells(_selected_fixture_type, cell, _current_rotation)
-	var result: PlacementResult = validate_placement(cells, _selected_fixture_type)
-	_overlay.show_cells(cells, result.valid)
+## Returns rich preview feedback for the current selection and hover cell.
+func get_preview_feedback(hovered_cell: Variant):
+	if _selected_fixture_type.is_empty() or hovered_cell == null:
+		return PlacementPreviewFeedbackScript.new()
+	return get_preview_feedback_for(
+		hovered_cell as Vector2i, _selected_fixture_type, _current_rotation
+	)
+
+
+## Returns rich preview feedback for a fixture pose without mutating state.
+func get_preview_feedback_for(
+	grid_pos: Vector2i, fixture_type: String, fixture_rotation: int
+):
+	var cells: Array[Vector2i] = _get_fixture_cells(fixture_type, grid_pos, fixture_rotation)
+	var feedback = _validator.get_placement_feedback(
+		cells,
+		_occupied_cells,
+		_register_cells,
+		get_fixture_count(),
+		is_wall_required(fixture_type),
+		_get_facing_direction(fixture_rotation)
+	)
+	var price: float = get_fixture_price(fixture_type)
+	if price > 0.0 and _economy_system and _economy_system.get_cash() < price:
+		feedback.add_reason("insufficient_funds", cells)
+	feedback.finalize()
+	return feedback
 
 
 ## Validates placement of cells for a given fixture type, returning a PlacementResult.
@@ -242,19 +267,17 @@ func try_place(grid_pos: Vector2i) -> bool:
 			push_error("Unknown fixture type: %s" % _selected_fixture_type)
 			return false
 
-	var cells: Array[Vector2i] = _get_fixture_cells(
-		_selected_fixture_type, grid_pos, _current_rotation
+	var feedback = get_preview_feedback_for(
+		grid_pos, _selected_fixture_type, _current_rotation
 	)
-
-	var result: PlacementResult = validate_placement(cells, _selected_fixture_type)
-	if not result.valid:
-		EventBus.fixture_placement_invalid.emit(result.reason)
+	if not feedback.valid:
+		EventBus.fixture_placement_invalid.emit(feedback.primary_reason)
 		return false
 
 	var price: float = get_fixture_price(_selected_fixture_type)
 	if price > 0.0 and _economy_system:
 		if not _economy_system.deduct_cash(price, "Fixture purchase: %s" % _selected_fixture_type):
-			EventBus.fixture_placement_invalid.emit("Insufficient funds")
+			EventBus.fixture_placement_invalid.emit("insufficient_funds")
 			return false
 
 	var fixture_id: String = _generate_fixture_id()
@@ -275,7 +298,7 @@ func try_remove(grid_pos: Vector2i) -> bool:
 
 	var fixture_id: String = _occupied_cells[grid_pos] as String
 	if fixture_id == _register_fixture_id:
-		EventBus.fixture_placement_invalid.emit("Cannot remove the register")
+		EventBus.fixture_placement_invalid.emit("cannot_remove_register")
 		EventBus.notification_requested.emit("Cannot remove the register fixture")
 		return false
 
@@ -290,7 +313,7 @@ func try_remove(grid_pos: Vector2i) -> bool:
 		test_occupied.erase(cell)
 
 	if not _validator.is_layout_connected(test_occupied, _register_cells):
-		EventBus.fixture_placement_invalid.emit("Removal would break connectivity")
+		EventBus.fixture_placement_invalid.emit("removal_breaks_connectivity")
 		return false
 
 	_move_fixture_items_to_backroom(fixture_id)
@@ -311,9 +334,7 @@ func try_remove(grid_pos: Vector2i) -> bool:
 
 ## Returns the fixture ID at a grid cell, or empty string.
 func get_fixture_at(grid_pos: Vector2i) -> String:
-	if _occupied_cells.has(grid_pos):
-		return _occupied_cells[grid_pos] as String
-	return ""
+	return _occupied_cells[grid_pos] as String if _occupied_cells.has(grid_pos) else ""
 
 
 ## Returns data about a placed fixture, or empty dict.
@@ -339,51 +360,37 @@ func get_placed_fixtures() -> Array[Dictionary]:
 
 ## Returns the current tier of a placed fixture.
 func get_fixture_tier(fixture_id: String) -> int:
-	if _upgrade_handler:
-		return _upgrade_handler.get_fixture_tier(fixture_id)
-	return FixtureDefinition.TierLevel.BASIC
+	return _upgrade_handler.get_fixture_tier(fixture_id) if _upgrade_handler else FixtureDefinition.TierLevel.BASIC
 
 
 ## Returns whether a fixture can be upgraded.
 func can_upgrade(fixture_id: String) -> bool:
-	if _upgrade_handler:
-		return _upgrade_handler.can_upgrade(fixture_id)
-	return false
+	return _upgrade_handler.can_upgrade(fixture_id) if _upgrade_handler else false
 
 
 ## Returns the cost to upgrade a fixture to the next tier.
 func get_upgrade_cost(fixture_id: String) -> float:
-	if _upgrade_handler:
-		return _upgrade_handler.get_upgrade_cost(fixture_id)
-	return 0.0
+	return _upgrade_handler.get_upgrade_cost(fixture_id) if _upgrade_handler else 0.0
 
 
 ## Returns the reason a fixture cannot be upgraded.
 func get_upgrade_block_reason(fixture_id: String) -> String:
-	if _upgrade_handler:
-		return _upgrade_handler.get_upgrade_block_reason(fixture_id)
-	return "Upgrade system not initialized"
+	return _upgrade_handler.get_upgrade_block_reason(fixture_id) if _upgrade_handler else "Upgrade system not initialized"
 
 
 ## Attempts to upgrade a placed fixture to the next tier.
 func try_upgrade(fixture_id: String) -> bool:
-	if _upgrade_handler:
-		return _upgrade_handler.try_upgrade(fixture_id)
-	return false
+	return _upgrade_handler.try_upgrade(fixture_id) if _upgrade_handler else false
 
 
 ## Returns the effective slot count (base + tier bonus).
 func get_effective_slot_count(fixture_id: String) -> int:
-	if _upgrade_handler:
-		return _upgrade_handler.get_effective_slot_count(fixture_id)
-	return 0
+	return _upgrade_handler.get_effective_slot_count(fixture_id) if _upgrade_handler else 0
 
 
 ## Returns the purchase probability bonus for a fixture.
 func get_fixture_prob_bonus(fixture_id: String) -> float:
-	if _upgrade_handler:
-		return _upgrade_handler.get_fixture_prob_bonus(fixture_id)
-	return 0.0
+	return _upgrade_handler.get_fixture_prob_bonus(fixture_id) if _upgrade_handler else 0.0
 
 
 # -- Save / Load --
@@ -395,21 +402,16 @@ func get_save_data() -> Dictionary:
 	for fixture_id: String in _placed_fixtures:
 		var data: Dictionary = _placed_fixtures[fixture_id]
 		var pos: Vector2i = data.get("grid_position", Vector2i.ZERO) as Vector2i
-		(
-			fixtures_data
-			. append(
-				{
-					"fixture_id": fixture_id,
-					"fixture_type": data.get("fixture_type", ""),
-					"grid_position": [pos.x, pos.y],
-					"rotation": data.get("rotation", 0),
-					"is_register": data.get("is_register", false),
-					"purchase_price": data.get("purchase_price", 0.0),
-					"tier": data.get("tier", FixtureDefinition.TierLevel.BASIC),
-					"total_spent": data.get("total_spent", 0.0),
-				}
-			)
-		)
+		fixtures_data.append({
+			"fixture_id": fixture_id,
+			"fixture_type": data.get("fixture_type", ""),
+			"grid_position": [pos.x, pos.y],
+			"rotation": data.get("rotation", 0),
+			"is_register": data.get("is_register", false),
+			"purchase_price": data.get("purchase_price", 0.0),
+			"tier": data.get("tier", FixtureDefinition.TierLevel.BASIC),
+			"total_spent": data.get("total_spent", 0.0),
+		})
 	return {"placed_fixtures": fixtures_data}
 
 
@@ -462,6 +464,10 @@ func _get_fixture_cells(fixture_type: String, grid_pos: Vector2i, rotation: int)
 		for dy: int in range(size.y):
 			cells.append(Vector2i(grid_pos.x + dx, grid_pos.y + dy))
 	return cells
+
+
+func _get_facing_direction(rotation: int) -> Vector2i:
+	return ROTATION_FACING[clampi(rotation, 0, ROTATION_FACING.size() - 1)]
 
 
 func _move_fixture_items_to_backroom(fixture_id: String) -> void:

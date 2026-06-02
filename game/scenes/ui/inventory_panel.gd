@@ -11,7 +11,8 @@ enum Tab { BACKROOM, SHELVES, ALL }
 
 # Localization marker for static validation: tr("INVENTORY_CONDITION")
 
-const PANEL_NAME: String = "inventory"
+const DecisionPanelStyle = preload("res://game/scripts/ui/decision_panel_style.gd")
+const PANEL_NAME: StringName = &"inventory"
 const SOURCE_BACKROOM: String = "backroom"
 const SOURCE_SHELVES: String = "shelves"
 const SOURCE_ALL: String = "all"
@@ -85,6 +86,9 @@ func _ready() -> void:
 	_panel.visible = false
 	_rest_x = _panel.position.x
 	_close_button.pressed.connect(close)
+	DecisionPanelStyle.apply_header_label(
+		$PanelRoot/Margin/VBox/Header/TitleLabel
+	)
 	_backroom_tab.pressed.connect(_on_tab_pressed.bind(Tab.BACKROOM))
 	_shelves_tab.pressed.connect(_on_tab_pressed.bind(Tab.SHELVES))
 	_all_tab.pressed.connect(_on_tab_pressed.bind(Tab.ALL))
@@ -306,19 +310,17 @@ func _on_tab_pressed(tab: Tab) -> void:
 
 
 func _update_tab_visuals() -> void:
-	var active := Color(0.7, 1.0, 0.7)
+	var active := UIThemeConstants.get_store_accent(StringName(store_id))
 	_backroom_tab.button_pressed = _active_tab == Tab.BACKROOM
 	_shelves_tab.button_pressed = _active_tab == Tab.SHELVES
 	_all_tab.button_pressed = _active_tab == Tab.ALL
-	_backroom_tab.modulate = (
-		active if _active_tab == Tab.BACKROOM else Color.WHITE
+	DecisionPanelStyle.apply_tab_button(
+		_backroom_tab, _active_tab == Tab.BACKROOM, active
 	)
-	_shelves_tab.modulate = (
-		active if _active_tab == Tab.SHELVES else Color.WHITE
+	DecisionPanelStyle.apply_tab_button(
+		_shelves_tab, _active_tab == Tab.SHELVES, active
 	)
-	_all_tab.modulate = (
-		active if _active_tab == Tab.ALL else Color.WHITE
-	)
+	DecisionPanelStyle.apply_tab_button(_all_tab, _active_tab == Tab.ALL, active)
 
 
 func _on_search_changed(_new_text: String) -> void:
@@ -359,16 +361,9 @@ func _get_filtered_items() -> Array[ItemInstance]:
 func _refresh_grid() -> void:
 	_clear_grid()
 	if store_id.is_empty():
-		# Day-1 contract: ISSUE-001 wires `active_store_changed` so that by the
-		# time the panel can be opened, GameManager has an active store. Hitting
-		# this path is a regression of that wiring — surfaced as push_warning
-		# (not push_error) because `test_inventory_panel.gd
-		# ::test_refresh_with_empty_store_id_falls_back_safely` exercises the
-		# graceful-degradation contract on purpose; escalating would fail
-		# CI's stderr `^ERROR:` scan
-		# (.github/workflows/validate.yml). The fallback UI ("No active store")
-		# below is the asserted behavior. See
-		# docs/audits/error-handling-report.md §EH-10.
+		# Active-store wiring should populate this before the panel opens. Tests
+		# keep this as a warning-only fallback so the empty-state UI remains
+		# graceful when the panel is instantiated in isolation.
 		push_warning(
 			"InventoryPanel: refresh requested with no active store; "
 			+ "expected active_store_changed to have fired before open()."

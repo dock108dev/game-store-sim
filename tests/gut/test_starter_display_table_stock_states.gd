@@ -2,6 +2,9 @@ extends GutTest
 
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const VISUAL_LAYOUT_PATH: String = "res://game/content/visuals/store_visual_layouts.json"
+const StoreMerchandisingLabelsScript: GDScript = preload(
+	"res://game/scripts/store_session/store_merchandising_labels.gd"
+)
 const SLOT_PREFIX: String = "SlotMarker"
 const ITEM_PREFIX: String = "StoreShelfItem"
 
@@ -68,6 +71,129 @@ func test_scene_restock_target_declares_starter_display_table_identity() -> void
 	)
 
 
+func test_required_shelf_labels_resolve_from_store_merchandising_data() -> void:
+	var required: Array[Dictionary] = [
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "starter",
+				"surface": "starter_display",
+				"role": "feature_header",
+				"fixture_id": "starter_display_table",
+				"category_id": "cartridges",
+			},
+			"text": "Fresh Trade Display",
+		},
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "any",
+				"surface": "shelf",
+				"role": "category",
+				"fixture_id": "cart_wall_rack",
+				"category_id": "cartridges",
+			},
+			"text": "Used Games",
+		},
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "any",
+				"surface": "shelf",
+				"role": "category",
+				"fixture_id": "console_shelf",
+				"category_id": "consoles",
+			},
+			"text": "Consoles",
+		},
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "any",
+				"surface": "bin",
+				"role": "category",
+				"fixture_id": "accessories_bin",
+				"category_id": "accessories",
+			},
+			"text": "Accessories",
+		},
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "any",
+				"surface": "shelf",
+				"role": "category",
+				"fixture_id": "glass_showcase",
+				"category_id": "guides",
+			},
+			"text": "Guides",
+		},
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "any",
+				"surface": "service_counter",
+				"role": "service",
+				"fixture_id": "checkout_counter",
+				"service_id": "trade_ins",
+			},
+			"text": "Trade-Ins",
+		},
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "any",
+				"surface": "stockroom_pickup",
+				"role": "service",
+				"fixture_id": "checkout_counter",
+				"service_id": "holds",
+			},
+			"text": "Holds",
+		},
+		{
+			"context": {
+				"store_id": "retro_games",
+				"phase": "any",
+				"surface": "display_table",
+				"role": "collection",
+				"fixture_id": "glass_showcase",
+				"collection_id": "staff_picks",
+			},
+			"text": "Staff Picks\nCurated Soon",
+		},
+	]
+	for spec: Dictionary in required:
+		var resolved: Dictionary = StoreMerchandisingLabelsScript.resolve(spec["context"] as Dictionary)
+		assert_false(resolved.is_empty(), "Merchandising label must resolve: %s" % spec)
+		assert_eq(
+			StoreMerchandisingLabelsScript.display_text(resolved),
+			str(spec["text"]),
+			"Resolved label text must come from store merchandising data"
+		)
+		assert_eq(
+			str(resolved.get("source", "")),
+			"store_config.merchandising_labels",
+			"Resolved label must expose its store/content data source"
+		)
+
+
+func test_starter_display_runtime_label_uses_merchandising_data() -> void:
+	var shelf: Node = _restock_shelf()
+	if shelf == null:
+		return
+	var label: Label3D = (
+		shelf.get_node_or_null("PriceTagRail/StarterDisplayMerchandisingLabelText") as Label3D
+	)
+	assert_not_null(label, "Starter display must add a readable merchandising label")
+	if label == null:
+		return
+	assert_eq(label.text, "FRESH TRADE DISPLAY")
+	assert_eq(
+		str(label.get_meta("merchandising_label_source", "")),
+		"store_config.merchandising_labels"
+	)
+
+
 func test_empty_carrying_partial_and_stocked_states_are_distinct() -> void:
 	var controller: Node = _store_session_controller()
 	var shelf: Node = _restock_shelf()
@@ -75,13 +201,16 @@ func test_empty_carrying_partial_and_stocked_states_are_distinct() -> void:
 		return
 	_assert_overlay_visible(shelf, true, "Empty table should show EmptyOverlay")
 	assert_eq(_count_shelf_items(shelf), 0, "Empty table starts with no spawned stock")
+	_assert_slot_state(controller, 0, StoreSessionController.SLOT_STATE_EMPTY)
 	await _walk_to_carrying_stock(controller)
 	_assert_overlay_visible(shelf, true, "Carrying before placement is still an empty table")
 	_assert_affordance_at_slot(shelf, 0, true)
+	_assert_slot_state(controller, 0, StoreSessionController.SLOT_STATE_EMPTY)
 	controller.on_store_restock_interacted(false)
 	await get_tree().process_frame
 	assert_eq(_count_shelf_items(shelf), 1, "First placement creates one product")
 	_assert_item_at_slot(shelf, 0, StoreSessionController.starter_first_delivery_item_ids()[0])
+	_assert_slot_state(controller, 0, StoreSessionController.SLOT_STATE_STOCKED)
 	_assert_overlay_visible(shelf, false, "Partial table should hide EmptyOverlay")
 	_assert_affordance_at_slot(shelf, 1, true)
 	controller.on_store_restock_interacted(false)
@@ -97,8 +226,48 @@ func test_empty_carrying_partial_and_stocked_states_are_distinct() -> void:
 		"Final placement creates the Day 1 stocked state"
 	)
 	_assert_item_at_slot(shelf, 2, StoreSessionController.starter_first_delivery_item_ids()[2])
+	_assert_slot_state(controller, 2, StoreSessionController.SLOT_STATE_STOCKED)
 	_assert_affordance_at_slot(shelf, 2, false)
 	assert_false(StoreSessionState.carrying_stock, "Final placement clears carried stock")
+
+
+func test_gap_markers_expose_state_shape_and_physical_cues() -> void:
+	var controller: Node = _store_session_controller()
+	var shelf: Node = _restock_shelf()
+	if controller == null or shelf == null:
+		return
+	var states: Array[String] = [
+		StoreSessionController.SLOT_STATE_SOLD,
+		StoreSessionController.SLOT_STATE_HELD,
+		StoreSessionController.SLOT_STATE_MISSING,
+		StoreSessionController.SLOT_STATE_REFUSED,
+		StoreSessionController.SLOT_STATE_BUNDLE_REMOVED,
+		StoreSessionController.SLOT_STATE_EXCHANGE_RETURNED,
+	]
+	for index: int in range(states.size()):
+		controller.call(
+			"_show_starter_slot_gap",
+			index,
+			states[index],
+			"test_product_%d" % index,
+			"test_outcome",
+			{}
+		)
+		var gap: Node3D = shelf.get_node_or_null("StarterDisplaySlotGap%d" % index) as Node3D
+		assert_not_null(gap, "Gap marker must exist for %s" % states[index])
+		if gap == null:
+			continue
+		assert_eq(str(gap.get_meta("slot_state", "")), states[index])
+		assert_not_null(gap.get_node_or_null("GapTrayShadow"))
+		var tag: Node = gap.get_node_or_null("GapStateTag")
+		assert_not_null(tag, "Gap marker must include a non-color tag shape")
+		if tag != null:
+			assert_ne(str(tag.get_meta("tag_shape", "")), "")
+		if states[index] == StoreSessionController.SLOT_STATE_HELD:
+			assert_not_null(
+				gap.get_node_or_null("GapProtectiveSleeve"),
+				"Held state must use a physical sleeve cue"
+			)
 
 
 func test_visual_layers_separate_merchandising_price_empty_and_affordance() -> void:
@@ -280,6 +449,8 @@ func _assert_item_at_slot(shelf: Node, slot_index: int, expected_item_id: String
 		assert_eq(int(item.get_meta("delivery_index", -1)), slot_index)
 		assert_eq(int(item.get_meta("starter_catalog_index", -1)), slot_index)
 		assert_eq(str(item.get_meta("stock_state", "")), "first_delivery_stocked")
+		assert_eq(str(item.get_meta("stock_source", "")), "first_delivery")
+		assert_eq(str(item.get_meta("slot_state", "")), StoreSessionController.SLOT_STATE_STOCKED)
 	assert_almost_eq(item.position.x, slot.position.x, 0.01)
 	assert_gt(item.position.y, slot.position.y, "Spawned product must sit above its slot marker")
 	assert_almost_eq(item.position.z, slot.position.z, 0.02)
@@ -289,6 +460,15 @@ func _slot_marker(shelf: Node, slot_index: int) -> Node3D:
 	var slot: Node3D = shelf.get_node_or_null("%s%d" % [SLOT_PREFIX, slot_index]) as Node3D
 	assert_not_null(slot, "SlotMarker%d must exist" % slot_index)
 	return slot
+
+
+func _assert_slot_state(controller: Node, slot_index: int, expected: String) -> void:
+	var states: Dictionary = controller.call("starter_display_slot_states") as Dictionary
+	assert_true(states.has(slot_index), "Slot state map must include slot %d" % slot_index)
+	if not states.has(slot_index):
+		return
+	var entry: Dictionary = states[slot_index] as Dictionary
+	assert_eq(str(entry.get("slot_state", "")), expected)
 
 
 func _first_named_descendant(root: Node, names: Array[String]) -> Node:

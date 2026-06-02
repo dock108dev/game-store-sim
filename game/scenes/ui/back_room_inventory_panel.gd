@@ -8,12 +8,14 @@
 class_name BackRoomInventoryPanel
 extends CanvasLayer
 
-const PANEL_NAME: String = "back_room_inventory"
+const DecisionPanelStyle = preload("res://game/scripts/ui/decision_panel_style.gd")
+const PANEL_NAME: StringName = &"back_room_inventory"
 
 var _controller: Object = null
 var _is_open: bool = false
 
 @onready var _panel: PanelContainer = $PanelRoot
+@onready var _title_label: Label = $PanelRoot/Margin/VBox/Title
 @onready var _grid: GridContainer = $PanelRoot/Margin/VBox/Grid
 @onready var _close_button: Button = $PanelRoot/Margin/VBox/CloseButton
 @onready var _empty_label: Label = $PanelRoot/Margin/VBox/EmptyLabel
@@ -23,6 +25,10 @@ func _ready() -> void:
 	_panel.visible = true
 	_is_open = true
 	_close_button.pressed.connect(_on_close)
+	DecisionPanelStyle.apply_panel_style(_panel)
+	DecisionPanelStyle.apply_header_label(_title_label)
+	DecisionPanelStyle.apply_secondary_label(_empty_label)
+	DecisionPanelStyle.apply_action_button(_close_button)
 	EventBus.panel_opened.emit(PANEL_NAME)
 	_refresh()
 
@@ -84,16 +90,21 @@ func _add_header() -> void:
 func _add_row(row: Dictionary) -> void:
 	var name_label := Label.new()
 	name_label.text = String(row.get("item_name", row.get("item_id", "")))
+	DecisionPanelStyle.apply_body_label(name_label)
 	_grid.add_child(name_label)
 
 	var expected_label := Label.new()
 	expected_label.text = str(int(row.get("expected", 0)))
 	expected_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	DecisionPanelStyle.apply_secondary_label(expected_label)
 	_grid.add_child(expected_label)
 
 	var actual_label := Label.new()
 	actual_label.text = str(int(row.get("actual", 0)))
 	actual_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	DecisionPanelStyle.apply_status_label(
+		actual_label, &"mismatch" if bool(row.get("mismatched", false)) else &"ok"
+	)
 	_grid.add_child(actual_label)
 
 	var mismatched: bool = bool(row.get("mismatched", false))
@@ -102,6 +113,7 @@ func _add_row(row: Dictionary) -> void:
 		var flag_button := Button.new()
 		flag_button.text = "Flagged" if flagged else "Flag Discrepancy"
 		flag_button.disabled = flagged
+		DecisionPanelStyle.apply_action_button(flag_button)
 		var item_id: StringName = StringName(str(row.get("item_id", "")))
 		var expected: int = int(row.get("expected", 0))
 		var actual: int = int(row.get("actual", 0))
@@ -112,12 +124,14 @@ func _add_row(row: Dictionary) -> void:
 	else:
 		var ok_label := Label.new()
 		ok_label.text = "OK"
+		DecisionPanelStyle.apply_status_label(ok_label, &"ok")
 		_grid.add_child(ok_label)
 
 
 func _make_header_label(text: String) -> Label:
 	var label := Label.new()
 	label.text = text
+	DecisionPanelStyle.apply_table_header(label)
 	return label
 
 

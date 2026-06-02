@@ -9,6 +9,9 @@ const PLAYER_LAYER: int = 4
 const PLAYER_COLLISION_MASK: int = WORLD_LAYER | FIXTURE_LAYER
 const PLAYER_RADIUS: float = 0.35
 const PLAYER_HEIGHT: float = 1.8
+const ALLOWED_HIDDEN_AUTHORED_PLAYER_BLOCKERS: PackedStringArray = [
+	"Checkout/StaticBody3D",
+]
 
 const BLOCKING_BODIES: Array[Dictionary] = [
 	{"path": "ExpandableStoreShell/StarterBackWall", "layer": WORLD_LAYER},
@@ -26,8 +29,9 @@ const BLOCKING_BODIES: Array[Dictionary] = [
 	{"path": "EntranceDoor/StaticBody3D", "layer": FIXTURE_LAYER},
 	{"path": "FrontLaneQueue/LaneFixture/LeftGuideRopeBody", "layer": FIXTURE_LAYER},
 	{"path": "FrontLaneQueue/LaneFixture/RightGuideRopeBody", "layer": FIXTURE_LAYER},
+	{"path": "FrontLaneQueue/LaneFixture/BackLeftPost/StaticBody3D", "layer": FIXTURE_LAYER},
+	{"path": "FrontLaneQueue/LaneFixture/MiddleLeftPost/StaticBody3D", "layer": FIXTURE_LAYER},
 	{"path": "FrontLaneQueue/LaneFixture/RegisterLeftPost/StaticBody3D", "layer": FIXTURE_LAYER},
-	{"path": "FrontLaneQueue/LaneFixture/RegisterRightPost/StaticBody3D", "layer": FIXTURE_LAYER},
 ]
 
 const PLAYER_PROBES: Array[Dictionary] = [
@@ -40,7 +44,9 @@ const PLAYER_PROBES: Array[Dictionary] = [
 	{"label": "display table", "path": "StoreSessionRestockShelf/StaticBody3D"},
 	{"label": "stock box", "path": "StoreSessionBackroomPickup/StockBoxStaticBody"},
 	{"label": "queue rope", "path": "FrontLaneQueue/LaneFixture/LeftGuideRopeBody"},
-	{"label": "queue post", "path": "FrontLaneQueue/LaneFixture/RegisterLeftPost/StaticBody3D"},
+	{"label": "queue entry post", "path": "FrontLaneQueue/LaneFixture/BackLeftPost/StaticBody3D"},
+	{"label": "queue middle post", "path": "FrontLaneQueue/LaneFixture/MiddleLeftPost/StaticBody3D"},
+	{"label": "queue register post", "path": "FrontLaneQueue/LaneFixture/RegisterLeftPost/StaticBody3D"},
 ]
 
 const VISUAL_ONLY_SURFACES: PackedStringArray = [
@@ -54,14 +60,15 @@ const VISUAL_ONLY_SURFACES: PackedStringArray = [
 ]
 const FIRST_MINUTE_ROUTE_ANCHORS: PackedStringArray = [
 	"PlayerEntrySpawn",
+	"StoreSessionManager",
 	"StoreStaffConfig/RegisterPoint",
-	"CustomerNavConfig/CheckoutApproach",
-	"StoreSessionDayOneCustomer",
-	"CustomerNavConfig/BrowseWaypoint01",
+	"StoreSessionDayEndTrigger",
 	"StoreSessionBackroomPickup",
 	"StoreSessionRestockShelf",
+	"CustomerNavConfig/BrowseWaypoint01",
+	"CustomerNavConfig/CheckoutApproach",
+	"StoreSessionDayOneCustomer",
 	"CustomerNavConfig/BrowseWaypoint02",
-	"StoreSessionDayEndTrigger",
 ]
 const FIRST_MINUTE_REPLAY_OFFSETS: Array[Vector3] = [
 	Vector3.ZERO,
@@ -71,6 +78,7 @@ const FIRST_MINUTE_REPLAY_OFFSETS: Array[Vector3] = [
 	Vector3(0.0, 0.0, -0.16),
 ]
 const OBJECTIVE_TARGET_PATHS: PackedStringArray = [
+	"StoreSessionManager/Interactable",
 	"StoreSessionDayOneCustomer/Interactable",
 	"StoreSessionDayEndTrigger/Interactable",
 	"StoreSessionBackroomPickup/Interactable",
@@ -165,9 +173,35 @@ func test_generated_details_are_visual_only_and_not_physics_decoys() -> void:
 		if node == null:
 			continue
 		assert_false(
-			_has_collision_descendant(node),
-			"%s must not add a second physics surface over the real blocker" % path
+			_has_forbidden_visual_descendant(node),
+			"%s must not add gameplay, scripted, or physics descendants" % path
 		)
+
+
+func test_hidden_authored_roots_do_not_reintroduce_player_blockers() -> void:
+	for root_path: String in [
+		"Checkout",
+		"back_room",
+		"StoreSessionBackroomWallSide",
+		"StoreSessionBackroomWallFrontLeft",
+		"StoreSessionBackroomWallFrontRight",
+	]:
+		var root: Node = _node(root_path)
+		assert_not_null(root, "%s must remain authored for hidden-root coverage" % root_path)
+		if root == null:
+			continue
+		if root is Node3D:
+			assert_false(
+				(root as Node3D).visible,
+				"%s must stay hidden in Day-1 boot scope" % root_path
+			)
+		var active_blockers: Array[String] = []
+		_collect_player_blockers(root, active_blockers)
+		for blocker_path: String in active_blockers:
+			assert_true(
+				ALLOWED_HIDDEN_AUTHORED_PLAYER_BLOCKERS.has(blocker_path),
+				"%s must not be an active hidden authored player blocker" % blocker_path
+			)
 
 
 func test_first_minute_route_replays_do_not_clip_or_hide_objective_targets() -> void:
@@ -229,7 +263,10 @@ func _intersect_player_capsule(position: Vector3) -> Array[Dictionary]:
 	shape.height = PLAYER_HEIGHT
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
-	query.transform = Transform3D(Basis.IDENTITY, Vector3(position.x, PLAYER_HEIGHT * 0.5, position.z))
+	query.transform = Transform3D(
+		Basis.IDENTITY,
+		Vector3(position.x, PLAYER_HEIGHT * 0.5, position.z)
+	)
 	query.collision_mask = PLAYER_COLLISION_MASK
 	query.collide_with_bodies = true
 	query.collide_with_areas = false
@@ -283,13 +320,36 @@ func _is_visible_through_ancestors(node: Node) -> bool:
 	return true
 
 
-func _has_collision_descendant(node: Node) -> bool:
-	if node is CollisionObject3D or node is CollisionShape3D:
+func _has_forbidden_visual_descendant(node: Node) -> bool:
+	if (
+		node is Interactable
+		or node is Area3D
+		or node is PhysicsBody3D
+		or node is CollisionObject3D
+		or node is CollisionShape3D
+		or node is NavigationObstacle3D
+		or node.get_script() != null
+	):
 		return true
 	for child: Node in node.get_children():
-		if _has_collision_descendant(child):
+		if _has_forbidden_visual_descendant(child):
 			return true
 	return false
+
+
+func _collect_player_blockers(node: Node, out: Array[String]) -> void:
+	if node is CollisionObject3D:
+		var collision_object: CollisionObject3D = node as CollisionObject3D
+		if (collision_object.collision_layer & PLAYER_COLLISION_MASK) != 0:
+			out.append(_relative_path(collision_object))
+	for child: Node in node.get_children():
+		_collect_player_blockers(child, out)
+
+
+func _relative_path(node: Node) -> String:
+	if _root == null or node == null:
+		return ""
+	return String(_root.get_path_to(node))
 
 
 func _node(path: String) -> Node:

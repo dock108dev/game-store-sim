@@ -64,7 +64,7 @@ func _run_route(controller: StoreSessionController) -> bool:
 		"spawn_start",
 		{
 			"stage": "training_talk_manager",
-			"target": "StoreSessionDayOneCustomer/Interactable",
+			"target": "StoreSessionManager/Interactable",
 			"prompt": "Talk to Manager",
 			"header": "FIRST DAY",
 			"preopening_complete": false,
@@ -76,7 +76,7 @@ func _run_route(controller: StoreSessionController) -> bool:
 		controller, "manager_wrong_register", "StoreSessionDayEndTrigger/Interactable"
 	):
 		return false
-	if not await _active_detail_interaction(controller, "StoreSessionDayOneCustomer/Interactable"):
+	if not await _active_detail_interaction(controller, "StoreSessionManager/Interactable"):
 		return false
 	if not await _acknowledge_recovery(
 		controller,
@@ -91,7 +91,7 @@ func _run_route(controller: StoreSessionController) -> bool:
 		return false
 
 	if not await _wrong_target_does_not_advance(
-		controller, "register_wrong_manager", "StoreSessionDayOneCustomer/Interactable"
+		controller, "register_wrong_customer", "StoreSessionDayOneCustomer/Interactable"
 	):
 		return false
 	if not await _active_detail_interaction(controller, "StoreSessionDayEndTrigger/Interactable"):

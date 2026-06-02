@@ -38,6 +38,18 @@ func test_first_minute_artifact_covers_required_beats_without_close_day() -> voi
 		"sixty_second_state",
 	]
 	assert_eq(_beat_ids(beats), expected)
+	assert_eq(
+		_interaction_target_for(beats, "spawn_start"),
+		"StoreSessionManager/Interactable"
+	)
+	assert_eq(
+		_interaction_target_for(beats, "register_prompt"),
+		"StoreSessionDayEndTrigger/Interactable"
+	)
+	assert_eq(
+		_interaction_target_for(beats, "before_customer_state"),
+		"StoreSessionDayOneCustomer/Interactable"
+	)
 	assert_eq(_beat_by_id(beats, "sixty_second_state").get("target_timestamp_sec", 0), 60)
 	assert_false(
 		_beat_ids(beats).has("close_day_summary"),
@@ -182,6 +194,12 @@ func _beat_by_id(beats: Array, beat_id: String) -> Dictionary:
 		if str(beat.get("beat_id", "")) == beat_id:
 			return beat
 	return {}
+
+
+func _interaction_target_for(beats: Array, beat_id: String) -> String:
+	var beat: Dictionary = _beat_by_id(beats, beat_id)
+	var interaction_target: Dictionary = beat.get("interaction_target", {}) as Dictionary
+	return str(interaction_target.get("target", ""))
 
 
 func _read_json_file(path: String) -> Dictionary:

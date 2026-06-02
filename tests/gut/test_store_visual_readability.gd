@@ -1073,10 +1073,10 @@ func test_checkout_queue_reads_as_open_transaction_lane() -> void:
 			"Queue lane must have a clear entry-to-register direction"
 		)
 	var post_count: int = _count_named_descendants(lane, "Post")
-	assert_gte(
+	assert_eq(
 		post_count,
-		4,
-		"FrontLaneQueue must use visible stanchions to frame the customer line"
+		3,
+		"FrontLaneQueue must use a short three-post guide for the customer line"
 	)
 	assert_null(
 		root.get_node_or_null("FrontLaneQueue/QueuePrompt"),

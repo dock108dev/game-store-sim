@@ -6,6 +6,9 @@ extends RefCounted
 
 const DEFAULT_PATH: String = "res://game/content/visuals/store_visual_layouts.json"
 const SCRIPT_PATH: String = "res://game/scripts/visuals/store_visual_layout.gd"
+const PhysicalContractValidatorScript: GDScript = preload(
+	"res://game/scripts/visuals/store_physical_contract_validator.gd"
+)
 const RETRO_GAMES_STARTER_LAYOUT: StringName = &"retro_games_starter_small"
 const RETRO_GAMES_GROWTH_LAYOUT: StringName = &"retro_games_growth_unlocks"
 const STOCK_STATE_FIRST_DELIVERY: StringName = &"first_delivery_stocked"
@@ -68,6 +71,105 @@ func get_layout(layout_id: StringName) -> Dictionary:
 	return (_layouts_by_id.get(layout_id, {}) as Dictionary).duplicate(true)
 
 
+## Returns the optional authored physical contract for a layout.
+func get_physical_contract(layout_id: StringName) -> Dictionary:
+	var layout: Dictionary = get_layout(layout_id)
+	return (layout.get("physical_contract", {}) as Dictionary).duplicate(true)
+
+
+## Returns named physical zones keyed by zone_id.
+func get_named_zones(layout_id: StringName) -> Dictionary:
+	var zones: Dictionary = {}
+	for raw_zone: Variant in get_physical_contract(layout_id).get("zones", []):
+		if raw_zone is not Dictionary:
+			continue
+		var zone: Dictionary = raw_zone as Dictionary
+		var zone_id: String = str(zone.get("zone_id", ""))
+		if not zone_id.is_empty():
+			zones[zone_id] = zone.duplicate(true)
+	return zones
+
+
+## Returns canonical facing definitions declared by the physical contract.
+func get_facing_definitions(layout_id: StringName) -> Dictionary:
+	return (
+		(get_physical_contract(layout_id).get("facing_directions", {}) as Dictionary)
+		.duplicate(true)
+	)
+
+
+## Returns placement contracts, filtered by required_unlock when present.
+func get_placement_contracts(
+	layout_id: StringName, active_unlocks: Array[StringName] = []
+) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for raw_contract: Variant in get_physical_contract(layout_id).get("placement_contracts", []):
+		if raw_contract is not Dictionary:
+			continue
+		var contract: Dictionary = (raw_contract as Dictionary).duplicate(true)
+		if _entry_is_unlocked(contract, active_unlocks):
+			result.append(contract)
+	return result
+
+
+## Returns no-overlap validation rules declared by the physical contract.
+func get_no_overlap_rules(layout_id: StringName) -> Array[Dictionary]:
+	return _duplicate_dictionary_array(get_physical_contract(layout_id).get("no_overlap", []))
+
+
+## Returns room-level physical contracts declared by the layout.
+func get_room_contracts(layout_id: StringName) -> Array[Dictionary]:
+	return _duplicate_dictionary_array(get_physical_contract(layout_id).get("room_contracts", []))
+
+
+## Returns the room-level contract with the requested room_id.
+func get_room_contract(layout_id: StringName, room_id: String) -> Dictionary:
+	for room: Dictionary in get_room_contracts(layout_id):
+		if str(room.get("room_id", "")) == room_id:
+			return room
+	return {}
+
+
+## Returns clearance validation rules declared by the physical contract.
+func get_clearance_rules(layout_id: StringName) -> Array[Dictionary]:
+	return _duplicate_dictionary_array(get_physical_contract(layout_id).get("clearance_rules", []))
+
+
+## Returns validation metadata declared by the physical contract.
+func get_validation_metadata(layout_id: StringName) -> Dictionary:
+	return (get_physical_contract(layout_id).get("validation", {}) as Dictionary).duplicate(true)
+
+
+## Returns placement contracts whose selector matches the supplied placement.
+func get_matching_placement_contracts(
+	layout_id: StringName, placement: Dictionary, active_unlocks: Array[StringName] = []
+) -> Array[Dictionary]:
+	var matches: Array[Dictionary] = []
+	for contract: Dictionary in get_placement_contracts(layout_id, active_unlocks):
+		if _selector_matches_placement(contract.get("selector", {}) as Dictionary, placement):
+			matches.append(contract)
+	return matches
+
+
+## Returns placements that match a supplied placement contract selector.
+func get_placements_matching_contract(
+	layout_id: StringName, contract: Dictionary, active_unlocks: Array[StringName] = []
+) -> Array[Dictionary]:
+	var matches: Array[Dictionary] = []
+	var selector: Dictionary = contract.get("selector", {}) as Dictionary
+	for placement: Dictionary in get_placements(layout_id, active_unlocks):
+		if _selector_matches_placement(selector, placement):
+			matches.append(placement)
+	return matches
+
+
+## Validates data-level physical contract references, bounds, and facing metadata.
+func validate_physical_contract(
+	layout_id: StringName, active_unlocks: Array[StringName] = []
+) -> PackedStringArray:
+	return PhysicalContractValidatorScript.validate_layout(self, layout_id, active_unlocks)
+
+
 func get_placements(
 	layout_id: StringName, active_unlocks: Array[StringName] = []
 ) -> Array[Dictionary]:
@@ -118,14 +220,62 @@ func get_product_item_ids(
 	return ids
 
 
-func count_placements(layout_id: StringName, active_unlocks: Array[StringName] = []) -> int:
-	return get_placements(layout_id, active_unlocks).size()
-
-
 func _placement_is_unlocked(placement: Dictionary, active_unlocks: Array[StringName]) -> bool:
-	var required_unlock: StringName = StringName(str(placement.get("required_unlock", "")))
+	return _entry_is_unlocked(placement, active_unlocks)
+
+
+func _entry_is_unlocked(entry: Dictionary, active_unlocks: Array[StringName]) -> bool:
+	var required_unlock: StringName = StringName(str(entry.get("required_unlock", "")))
 	return String(required_unlock).is_empty() or active_unlocks.has(required_unlock)
 
 
 func _sort_product_placements_by_delivery_index(a: Dictionary, b: Dictionary) -> bool:
 	return int(a.get("delivery_index", 9999)) < int(b.get("delivery_index", 9999))
+
+
+func _duplicate_dictionary_array(raw_items: Variant) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for raw_item: Variant in raw_items:
+		if raw_item is Dictionary:
+			result.append((raw_item as Dictionary).duplicate(true))
+	return result
+
+
+func _selector_matches_placement(selector: Dictionary, placement: Dictionary) -> bool:
+	var matched_selector: bool = false
+	var matches: bool = true
+	if selector.is_empty():
+		return false
+	if (
+		selector.has("fixture_id")
+		and str(placement.get("fixture_id", "")) != str(selector["fixture_id"])
+	):
+		matches = false
+	matched_selector = matched_selector or selector.has("fixture_id")
+	if selector.has("fixture_ids"):
+		var fixture_ids: Array = selector.get("fixture_ids", []) as Array
+		if not fixture_ids.has(str(placement.get("fixture_id", ""))):
+			matches = false
+		matched_selector = true
+	if selector.has("parent_fixture_id") and (
+		str(placement.get("parent_fixture_id", "")) != str(selector["parent_fixture_id"])
+	):
+		matches = false
+	matched_selector = matched_selector or selector.has("parent_fixture_id")
+	if selector.has("name") and str(placement.get("name", "")) != str(selector["name"]):
+		matches = false
+	matched_selector = matched_selector or selector.has("name")
+	if selector.has("product_item_id"):
+		var product_selector: String = str(selector["product_item_id"])
+		var product_id: String = str(placement.get("product_item_id", ""))
+		var product_matches: bool = (
+			(product_selector == "*" and not product_id.is_empty())
+			or product_id == product_selector
+		)
+		if not product_matches:
+			matches = false
+		matched_selector = true
+	if selector.has("zone_id") and str(placement.get("zone", "")) != str(selector["zone_id"]):
+		matches = false
+	matched_selector = matched_selector or selector.has("zone_id")
+	return matches and matched_selector

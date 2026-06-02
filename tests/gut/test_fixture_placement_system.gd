@@ -103,6 +103,7 @@ func test_can_place_returns_false_when_cell_occupied() -> void:
 		result.valid,
 		"Placement overlapping occupied cell should fail"
 	)
+	assert_eq(result.reason, "occupied_collision")
 
 
 func test_can_place_returns_false_out_of_bounds() -> void:
@@ -302,6 +303,68 @@ func test_placement_result_failure() -> void:
 	assert_false(result.valid)
 	assert_eq(result.reason, "test_reason")
 	assert_eq(result.blocking_cells[0], Vector2i(1, 2))
+
+
+func test_preview_feedback_exposes_facing_and_actionable_reason() -> void:
+	var feedback = _system.get_preview_feedback_for(
+		Vector2i(0, 5), "wall_shelf", 0
+	)
+
+	assert_false(feedback.valid)
+	assert_eq(feedback.primary_reason, "wrong_facing")
+	assert_true(feedback.reasons.has("wrong_facing"))
+	assert_eq(feedback.display_message, "Rotate to face the aisle")
+	assert_eq(feedback.footprint_cells.size(), 2)
+	assert_eq(feedback.facing_direction, Vector2i(0, 1))
+	assert_gt(feedback.front_edge_cells.size(), 0)
+	assert_gt(feedback.wall_candidate_cells.size(), 0)
+	assert_gt(feedback.invalid_cells.size(), 0)
+
+
+func test_preview_feedback_splits_collision_from_aisle_blockers() -> void:
+	_system.register_existing_fixture(
+		"existing_collision", "floor_rack", Vector2i(4, 3),
+		0, false, 50.0
+	)
+	var collision = _system.get_preview_feedback_for(
+		Vector2i(3, 3), "glass_case", 0
+	)
+
+	assert_false(collision.valid)
+	assert_eq(collision.primary_reason, "occupied_collision")
+	assert_eq(collision.collision_cells, [Vector2i(4, 3)])
+
+	var occupied: Dictionary = {Vector2i(5, 7): "existing"}
+	var aisle = _validator.get_placement_feedback(
+		[Vector2i(5, 5)], occupied, [], 0, false
+	)
+	assert_false(aisle.valid)
+	assert_eq(aisle.primary_reason, "aisle_too_narrow")
+	assert_eq(aisle.nearby_blocker_cells, [Vector2i(5, 7)])
+
+
+func test_insufficient_cash_feedback_blocks_preview_and_click() -> void:
+	var economy := EconomySystem.new()
+	add_child_autofree(economy)
+	economy.initialize(10.0)
+	var priced_system := FixturePlacementSystem.new()
+	add_child_autofree(priced_system)
+	priced_system.initialize(
+		_grid, null, economy, _entry_edge_y,
+		BuildModeGrid.StoreSize.SMALL
+	)
+	priced_system.select_fixture("glass_case")
+
+	var feedback = priced_system.get_preview_feedback_for(
+		Vector2i(5, 5), "glass_case", 0
+	)
+	var placed: bool = priced_system.try_place(Vector2i(5, 5))
+
+	assert_false(feedback.valid)
+	assert_eq(feedback.primary_reason, "insufficient_funds")
+	assert_eq(feedback.display_message, "Not enough cash")
+	assert_false(placed)
+	assert_eq(economy.get_cash(), 10.0)
 
 
 func test_entry_zone_blocked() -> void:

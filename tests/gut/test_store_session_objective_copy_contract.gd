@@ -70,7 +70,7 @@ func test_active_training_payload_matches_current_required_action() -> void:
 		return
 	_assert_active_payload(controller, _expected_rows()["talk_to_manager"] as Dictionary)
 
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	_ack_detail(controller)
 	await get_tree().process_frame
@@ -106,7 +106,7 @@ func test_first_person_objective_rail_tracks_training_stage_copy() -> void:
 		"manager beat"
 	)
 
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -231,8 +231,8 @@ func _expected_rows() -> Dictionary:
 			"stage": "training_talk_manager",
 			"label": "Talk to the manager at checkout for opening instructions.",
 			"action": "Get the opening routine from the manager",
-			"target_path": "StoreSessionDayOneCustomer/Interactable",
-			"target_owner": "StoreSessionDayOneCustomer",
+			"target_path": "StoreSessionManager/Interactable",
+			"target_owner": "StoreSessionManager",
 			"row_prompt_label": "Talk to Manager",
 			"active_prompt_label": "Talk to Manager",
 			"result_summary": MANAGER_COMPLETE_MESSAGE,
@@ -315,6 +315,7 @@ func _ack_detail(controller: StoreSessionController) -> void:
 func _active_targets() -> PackedStringArray:
 	var active: PackedStringArray = []
 	for path: String in [
+		"StoreSessionManager/Interactable",
 		"StoreSessionDayOneCustomer/Interactable",
 		"StoreSessionDayEndTrigger/Interactable",
 		"StoreSessionBackroomPickup/Interactable",

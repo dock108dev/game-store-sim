@@ -31,14 +31,4 @@ func get_disabled_reason(_actor: Node = null) -> String:
 
 
 func interact(by: Node = null) -> void:
-	if not can_interact(by):
-		return
-	super.interact(by)
-	# Route through the controller so the hidden-thread signal, the
-	# notification, and the stage advance all live in one place. The
-	# previous `StoreSessionState.mark_hidden_thread_signal` direct call is
-	# kept inside the controller's handler so the consequence pipeline
-	# still sees the signal exactly once per day.
-	get_tree().call_group(
-		"store_session_controller", "on_store_hidden_clue_interacted"
-	)
+	_interact_and_call_controller(by, &"on_store_hidden_clue_interacted")

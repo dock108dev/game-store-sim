@@ -251,3 +251,60 @@ func test_advance_to_register_routes_through_set_state() -> void:
 	)
 	assert_eq(observed.size(), 1)
 	assert_eq(observed[0], Customer.State.PURCHASING)
+
+
+func test_customer_state_cue_distinguishes_browse_queue_register_and_exit() -> void:
+	var customer: Customer = preload(
+		"res://game/scenes/characters/customer.tscn"
+	).instantiate() as Customer
+	add_child_autofree(customer)
+	var cue: MeshInstance3D = customer.get_node_or_null("BodyMesh/StateCue") as MeshInstance3D
+	assert_not_null(cue, "Customer scene must expose a non-text state cue")
+	if cue == null:
+		return
+	customer._set_state(Customer.State.BROWSING)
+	var browse_color: Color = _cue_color(cue)
+	customer.enter_queue(Vector3(2.0, 0.0, 0.0))
+	var queue_color: Color = _cue_color(cue)
+	customer.advance_to_register()
+	var register_color: Color = _cue_color(cue)
+	customer._set_state(Customer.State.LEAVING)
+	var leaving_color: Color = _cue_color(cue)
+	assert_gt(_color_distance(browse_color, queue_color), 0.2)
+	assert_gt(_color_distance(queue_color, register_color), 0.2)
+	assert_gt(_color_distance(register_color, leaving_color), 0.2)
+
+
+func test_customer_state_cue_is_visual_only() -> void:
+	var customer: Customer = preload(
+		"res://game/scenes/characters/customer.tscn"
+	).instantiate() as Customer
+	add_child_autofree(customer)
+	var cue: Node = customer.get_node_or_null("BodyMesh/StateCue")
+	assert_not_null(cue, "Customer state cue must exist")
+	if cue == null:
+		return
+	assert_true(cue is MeshInstance3D, "Customer state cue must be a mesh")
+	for child: Node in _collect_descendants(cue):
+		assert_false(child is Area3D)
+		assert_false(child is CollisionShape3D)
+		assert_false(child is PhysicsBody3D)
+
+
+func _cue_color(cue: MeshInstance3D) -> Color:
+	var material: StandardMaterial3D = cue.material_override as StandardMaterial3D
+	if material == null:
+		return Color.BLACK
+	return material.albedo_color
+
+
+func _color_distance(a: Color, b: Color) -> float:
+	return Vector3(a.r - b.r, a.g - b.g, a.b - b.b).length()
+
+
+func _collect_descendants(root: Node) -> Array[Node]:
+	var nodes: Array[Node] = []
+	for child: Node in root.get_children():
+		nodes.append(child)
+		nodes.append_array(_collect_descendants(child))
+	return nodes

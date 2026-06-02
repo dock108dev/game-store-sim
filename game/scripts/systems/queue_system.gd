@@ -120,6 +120,7 @@ func _remove_abandoned(customer: Customer) -> void:
 	var was_processing: bool = _processing
 	_clear_wait_data(customer)
 	EventBus.customer_abandoned_queue.emit(customer)
+	customer.abandon_queue()
 	EventBus.queue_changed.emit(_register_queue.get_size())
 	EventBus.queue_advanced.emit(_register_queue.get_size())
 	if was_processing:
@@ -206,6 +207,7 @@ func _flush_queue() -> void:
 	for i: int in range(queue_size):
 		var customer: Customer = _register_queue.get_first()
 		if customer and is_instance_valid(customer):
+			customer.abandon_queue()
 			var data: Dictionary = {
 				"customer_id": customer.get_instance_id(),
 			}

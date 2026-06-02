@@ -194,6 +194,7 @@ signal customer_platform_identified(customer_id: StringName, platform_id: String
 # ── Checkout ──────────────────────────────────────────────────────────────────
 signal customer_reached_checkout(customer: Node)
 signal checkout_started(items: Array, customer_node: Node)
+signal register_transaction_view_changed(view_model: Dictionary)
 signal checkout_queue_ready(customer: Node)
 signal checkout_completed(customer: Node)
 signal checkout_failed(reason: String, customer: Node)
@@ -269,6 +270,7 @@ signal fixture_selected(fixture_id: String)
 signal fixture_upgraded(fixture_id: String, new_tier: int)
 signal fixture_state_loaded
 signal fixture_placement_invalid(reason: String)
+signal store_design_changed(store_id: StringName, design_payload: Dictionary)
 signal placement_mode_entered
 signal placement_mode_exited
 ## Emitted alongside `placement_mode_entered` when a specific item is being

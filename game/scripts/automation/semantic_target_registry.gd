@@ -92,8 +92,15 @@ const CANONICAL_TARGETS: Dictionary = {
 		FIELD_KIND: "interactable_actor",
 		FIELD_INTERACTABLE_ID: "store_session.day_one_customer",
 		FIELD_GROUPS: ["interactable", "interactables"],
-		FIELD_FALLBACK_OBJECTIVE_IDS: ["talk_to_manager", "talk_to_customer"],
+		FIELD_FALLBACK_OBJECTIVE_IDS: ["talk_to_customer"],
 		FIELD_FALLBACK_PATHS: ["StoreSessionDayOneCustomer/Interactable"],
+	},
+	&"store_session.manager": {
+		FIELD_KIND: "interactable_actor",
+		FIELD_INTERACTABLE_ID: "store_session.manager",
+		FIELD_GROUPS: ["interactable", "interactables"],
+		FIELD_FALLBACK_OBJECTIVE_IDS: ["talk_to_manager"],
+		FIELD_FALLBACK_PATHS: ["StoreSessionManager/Interactable"],
 	},
 	&"store_session.day_end": {
 		FIELD_KIND: "interactable",

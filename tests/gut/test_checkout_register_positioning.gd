@@ -5,7 +5,7 @@ const CUSTOMER_SIDE_MARGIN: float = 0.08
 const SERVICE_SPOT_TOLERANCE: float = 0.08
 const QUEUE_MAT_TOLERANCE: float = 0.12
 const REGISTER_SCREEN_TRIGGER_MAX_XZ: float = 0.35
-const CUSTOMER_REGISTER_MAX_XZ: float = 1.25
+const CUSTOMER_REGISTER_MAX_XZ: float = 1.75
 
 var _root: Node3D = null
 

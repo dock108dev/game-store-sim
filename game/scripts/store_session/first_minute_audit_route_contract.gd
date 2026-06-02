@@ -16,7 +16,7 @@ static func beat_specs() -> Array[Dictionary]:
 			"spawn_orientation",
 			"route_start",
 			"Talk to Manager",
-			"StoreSessionDayOneCustomer/Interactable",
+			"StoreSessionManager/Interactable",
 			"store_session",
 			"high",
 			"store_session",

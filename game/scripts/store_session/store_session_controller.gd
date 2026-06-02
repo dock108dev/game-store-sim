@@ -12,8 +12,17 @@ const _ProductVisualFactory: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
 const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store_visual_kit.gd")
+const RetailDetailBuilderScript: GDScript = preload(
+	"res://game/scripts/visuals/retail_detail_builder.gd"
+)
+const StarterProductVisualResolverScript: GDScript = preload(
+	"res://game/scripts/visuals/starter_product_visual_resolver.gd"
+)
 const StoreSessionCharacterVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/store_session_character_visual_factory.gd"
+)
+const CustomerVisualProfileScript: GDScript = preload(
+	"res://game/scripts/characters/customer_visual_profile.gd"
 )
 const ExpandableStoreShellRuntimeScript: GDScript = preload(
 	"res://game/scripts/visuals/expandable_store_shell_runtime.gd"
@@ -23,6 +32,9 @@ const StoreVisualScopeProfileScript: GDScript = preload(
 )
 const RegisterScreenStateScript: GDScript = preload(
 	"res://game/scripts/store_session/register_screen_state.gd"
+)
+const RegisterTransactionViewModelScript: GDScript = preload(
+	"res://game/scripts/store_session/register_transaction_view_model.gd"
 )
 const StoreCarriedStockMarkerScript: GDScript = preload(
 	"res://game/scripts/store_session/store_carried_stock_marker.gd"
@@ -91,6 +103,16 @@ const _REORDER_EXTRA_COST: int = 20
 const _REORDER_OPTION_ID: StringName = &"order_used_games"
 const _STOCK_STATE_FIRST_DELIVERY: String = "first_delivery_stocked"
 const _STOCK_STATE_REORDER_EXTRA: String = "reorder_extra"
+const SLOT_STATE_EMPTY: String = "empty"
+const SLOT_STATE_STOCKED: String = "stocked"
+const SLOT_STATE_SOLD: String = "sold"
+const SLOT_STATE_HELD: String = "held"
+const SLOT_STATE_MISSING: String = "missing"
+const SLOT_STATE_REFUSED: String = "refused"
+const SLOT_STATE_BUNDLE_REMOVED: String = "bundle_removed"
+const SLOT_STATE_EXCHANGE_RETURNED: String = "exchange_returned"
+const _RESTOCK_GAP_PREFIX: String = "StarterDisplaySlotGap"
+const _STARTER_DISPLAY_LABEL_TEXT_NAME: String = "StarterDisplayMerchandisingLabelText"
 
 const _OBJECTIVE_UNLOCK_GRANTS: Dictionary = {
 	"talk_to_customer": ["employee_register_access"],
@@ -113,12 +135,28 @@ const _CUSTOMER_COUNTER_ANCHOR_NAME: String = "StoreSessionCustomerCounterAnchor
 const _CUSTOMER_COUNTER_RECEIPT_NAME: String = "SharedReceiptSlip"
 const _CUSTOMER_COUNTER_ITEM_NAME: String = "SharedCustomerItem"
 const _CUSTOMER_COUNTER_STRIP_NAME: String = "OutcomeStrip"
+const _CUSTOMER_COUNTER_TRAY_NAME: String = "CounterItemTray"
+const _CUSTOMER_COUNTER_PAD_NAME: String = "CustomerSidePad"
+const _CUSTOMER_COUNTER_CABLE_NAME: String = "CounterCableLoop"
+const _CUSTOMER_HELD_PROP_NAME: String = "StoreSessionCustomerHeldProp"
+const _CUSTOMER_REACTION_CUE_NAME: String = "StoreSessionCustomerReactionCue"
 const _RESTOCK_PLACEMENT_AFFORDANCE_NAME: String = "StoreSessionRestockPlacementAffordance"
 const _RESTOCK_SLOT_PREFIX: String = "SlotMarker"
 const _COUNTER_STATE_PENDING: StringName = &"pending"
+const _COUNTER_STATE_SALE: StringName = &"sale"
 const _COUNTER_STATE_CLEAN_EXCHANGE: StringName = &"clean_exchange"
 const _COUNTER_STATE_BUNDLE: StringName = &"bundle"
+const _COUNTER_STATE_TRADE_IN: StringName = &"trade_in"
+const _COUNTER_STATE_PAYOUT: StringName = &"payout"
+const _COUNTER_STATE_NO_SALE: StringName = &"no_sale"
 const _COUNTER_STATE_REFUSED: StringName = &"refused"
+const _HELD_STATE_NONE: StringName = &"none"
+const _HELD_STATE_SELECTED_ABANDONED: StringName = &"selected_abandoned"
+const _HELD_STATE_RETURNED_PRESENTED: StringName = &"returned_presented"
+const _HELD_STATE_RETURNED_ACCEPTED: StringName = &"returned_accepted"
+const _HELD_STATE_RETURNED_REFUSED: StringName = &"returned_refused"
+const _HELD_STATE_TRADE_IN_PRESENTED: StringName = &"trade_in_presented"
+const _HELD_STATE_PAYOUT_RETURNED: StringName = &"payout_returned"
 const _CLEAN_EXCHANGE_SHELF_GAP_NAME: String = "CleanExchangeShelfGap"
 const _CLEAN_EXCHANGE_RETURNED_COPY_NAME: String = "CleanExchangeReturnedCopy"
 const _CLEAN_EXCHANGE_REACTION_NAME: String = "CleanExchangeReliefCue"
@@ -175,6 +213,9 @@ const StoreCustomerInventoryEffectsScript: GDScript = preload(
 )
 const StoreInventoryCountAdapterScript: GDScript = preload(
 	"res://game/scripts/store_session/store_inventory_count_adapter.gd"
+)
+const StoreMerchandisingLabelsScript: GDScript = preload(
+	"res://game/scripts/store_session/store_merchandising_labels.gd"
 )
 const CloseDayConfirmationPanelScene: PackedScene = preload(
 	"res://game/scenes/ui/close_day_confirmation_panel.tscn"
@@ -276,7 +317,7 @@ var _training_objectives: Array[Dictionary] = [
 			"Start at checkout so the register, stockroom, and display steps are clear."
 		),
 		"key": "E",
-		"target_path": "StoreSessionDayOneCustomer/Interactable",
+		"target_path": "StoreSessionManager/Interactable",
 		"prompt_display_name": "Manager",
 		"prompt_text": "Talk to",
 		"action_verb": "Talk",
@@ -520,10 +561,12 @@ var _applied_reinvest_options: Dictionary = {}
 var _carried_stock_remaining: int = 0
 var _unplaced_delivery_count: int = 0
 var _shelf_stock_count: int = 0
+var _starter_display_slot_states: Dictionary = {}
 var _real_backroom_return_count: int = 0
 var _real_damaged_return_count: int = 0
 var _register_screen_state: RegisterScreenState = null
 var _customer_counter_anchor: Node3D = null
+var _current_transaction_view_model: Dictionary = {}
 var _register_flash: MeshInstance3D = null
 var _carried_stock_marker: Node3D = null
 ## One-shot guard against double-spawning the day-summary modal. The
@@ -557,8 +600,11 @@ func _ready() -> void:
 		_apply_store_session_strip()
 		_refresh_store_runtime_visual_scope()
 		call_deferred("_refresh_store_runtime_visual_scope")
+	_configure_store_manager()
 	_configure_store_customer()
 	_ensure_carried_stock_marker()
+	_ensure_starter_display_merchandising_label()
+	_reset_starter_display_slot_states()
 	_suppress_moments_tray()
 	_load_content()
 	call_deferred("_ensure_panels_ready")
@@ -729,9 +775,6 @@ func _on_vic_note_dismissed() -> void:
 
 
 func on_store_customer_interacted() -> void:
-	if _stage == STAGE_TRAINING_TALK_MANAGER:
-		_open_first_minute_detail(_DETAIL_MANAGER_BRIEFING)
-		return
 	if _stage == STAGE_TRAINING_PRACTICE_CUSTOMER:
 		_active_event = _training_event.duplicate(true)
 		StoreSessionState.set_input_mode(StoreSessionState.INPUT_MODE_DECISION_CARD)
@@ -752,6 +795,13 @@ func on_store_customer_interacted() -> void:
 	_begin_register_transaction()
 	_apply_objective_gating()
 	_decision_panel.show_event(_active_event)
+
+
+func on_store_manager_interacted() -> void:
+	if _stage != STAGE_TRAINING_TALK_MANAGER:
+		EventBus.notification_requested.emit("Follow the current objective first.")
+		return
+	_open_first_minute_detail(_DETAIL_MANAGER_BRIEFING)
 
 
 func on_store_register_interacted() -> void:
@@ -1193,10 +1243,11 @@ func _on_choice_selected(choice_id: StringName, effects: Dictionary) -> void:
 	var choice: Dictionary = _choice_for_id(choice_id)
 	var inventory_transaction: Dictionary = _apply_customer_inventory_effects(choice, effects)
 	var resolved_effects: Dictionary = _effects_after_inventory(effects, inventory_transaction)
-	_show_register_transaction_from_effects(resolved_effects)
+	_show_register_transaction_from_choice(choice, resolved_effects)
 	_update_customer_counter_anchor_for_choice(choice_id, resolved_effects)
 	_update_clean_exchange_room_outcome(choice_id, resolved_effects)
 	_update_bundle_room_outcome(choice_id, resolved_effects)
+	_update_refused_return_room_outcome(choice_id, resolved_effects)
 	StoreSessionState.apply_decision_effect(event_id, choice_id, resolved_effects)
 	EventBus.run_state_changed.emit()
 	_resolved_event_ids[event_id] = true
@@ -1458,6 +1509,7 @@ func _reconcile_customer_inventory_counts(effects: Dictionary) -> void:
 		counts = _store_count_adapter().call("from_transaction", transaction) as Dictionary
 	if not bool(counts.get("ok", false)):
 		return
+	var previous_shelf_count: int = _shelf_stock_count
 	var shelf_delta: int = (
 		int(counts.get("applied_shelf_removed_quantity", 0))
 		+ int(counts.get("applied_moved_from_shelf_quantity", 0))
@@ -1482,7 +1534,34 @@ func _reconcile_customer_inventory_counts(effects: Dictionary) -> void:
 		0
 	)
 	_render_visible_shelf_items(_shelf_stock_count)
+	_show_sold_gaps_from_transaction(transaction, previous_shelf_count)
 	_emit_store_inventory_counts(_shelf_stock_count, _real_backroom_return_count)
+
+
+func _show_sold_gaps_from_transaction(transaction: Dictionary, previous_shelf_count: int) -> void:
+	var sold_entries: Array[Dictionary] = []
+	for applied_variant: Variant in transaction.get("applied", []) as Array:
+		if applied_variant is not Dictionary:
+			continue
+		var applied: Dictionary = applied_variant as Dictionary
+		if str(applied.get("op", "")) != StoreCustomerInventoryEffectsScript.OP_REMOVE_STOCK:
+			continue
+		if not str(applied.get("from_location", "")).begins_with("shelf:"):
+			continue
+		var reason: String = str(applied.get("reason", ""))
+		if ["customer_exchange_out", "customer_bundle_game", "customer_bundle_controller"].has(reason):
+			continue
+		sold_entries.append(applied)
+	for index: int in range(sold_entries.size()):
+		var applied_entry: Dictionary = sold_entries[index]
+		var slot_index: int = maxi(previous_shelf_count - sold_entries.size() + index, 0)
+		_show_starter_slot_gap(
+			slot_index,
+			SLOT_STATE_SOLD,
+			str(applied_entry.get("definition_id", "")),
+			"sale",
+			{"reason": str(applied_entry.get("reason", ""))}
+		)
 
 
 func _sale_item_from_effects(effects: Dictionary) -> Dictionary:
@@ -1665,8 +1744,6 @@ func _on_summary_main_menu() -> void:
 
 
 func can_interact_customer() -> bool:
-	if _stage == STAGE_TRAINING_TALK_MANAGER:
-		return true
 	if _stage == STAGE_TRAINING_PRACTICE_CUSTOMER:
 		return true
 	return _customer_interaction_available()
@@ -1676,6 +1753,14 @@ func customer_disabled_reason() -> String:
 	if _stage == STAGE_TALK_TO_CUSTOMER and _customer_interaction_busy():
 		return "Customer interaction already in progress."
 	return _disabled_reason_for_stage(STAGE_TALK_TO_CUSTOMER)
+
+
+func can_interact_manager() -> bool:
+	return _stage == STAGE_TRAINING_TALK_MANAGER
+
+
+func manager_disabled_reason() -> String:
+	return _disabled_reason_for_stage(STAGE_TRAINING_TALK_MANAGER)
 
 
 func _customer_interaction_available() -> bool:
@@ -2574,6 +2659,11 @@ func get_state_snapshot() -> Dictionary:
 	}
 
 
+## Returns the latest normalized register transaction display model.
+func get_current_transaction_view_model() -> Dictionary:
+	return _current_transaction_view_model.duplicate(true)
+
+
 ## Returns scenario-facing progress without exposing controller internals.
 func get_session_progress_snapshot() -> Dictionary:
 	var current: Dictionary = _objective_for_stage(_stage)
@@ -2930,16 +3020,24 @@ func _refresh_interactable_prompt_copy(store: Node) -> void:
 
 
 func _apply_checkout_actor_prompt_state(store: Node) -> void:
+	var manager: Interactable = (
+		store.get_node_or_null("StoreSessionManager/Interactable") as Interactable
+	)
+	if manager != null:
+		if _stage == STAGE_TRAINING_TALK_MANAGER:
+			manager.display_name = "Manager"
+			manager.prompt_text = "Talk to"
+			manager.action_verb = "Talk"
+			manager.enabled = true
+		else:
+			manager.display_name = ""
+			manager.prompt_text = ""
+			manager.action_verb = "Talk"
 	var customer: Interactable = (
 		store.get_node_or_null("StoreSessionDayOneCustomer/Interactable") as Interactable
 	)
 	if customer != null:
 		match _stage:
-			STAGE_TRAINING_TALK_MANAGER:
-				customer.display_name = "Manager"
-				customer.prompt_text = "Talk to"
-				customer.action_verb = "Talk"
-				customer.enabled = true
 			STAGE_TRAINING_PRACTICE_CUSTOMER:
 				customer.display_name = "practice customer"
 				customer.prompt_text = "Run"
@@ -2953,7 +3051,6 @@ func _apply_checkout_actor_prompt_state(store: Node) -> void:
 				customer.display_name = ""
 				customer.prompt_text = ""
 				customer.action_verb = "Talk"
-	_set_customer_proxy_manager_details_visible(store, _stage == STAGE_TRAINING_TALK_MANAGER)
 
 
 func _target_path_is_valid(root: Node, path: String) -> bool:
@@ -3430,7 +3527,10 @@ func _configure_store_customer() -> void:
 		customer_node.add_child(proxy_root)
 
 	StoreSessionCharacterVisualFactoryScript.configure_customer_proxy(
-		proxy_root, _stage == STAGE_TRAINING_TALK_MANAGER
+		proxy_root,
+		false,
+		"",
+		_active_customer_archetype_id()
 	)
 
 	# Defer until Interactable._ready has reparented the shape into its
@@ -3438,11 +3538,35 @@ func _configure_store_customer() -> void:
 	call_deferred("_resize_customer_trigger", customer_node)
 
 
-func _set_customer_proxy_manager_details_visible(store: Node, is_manager_role: bool) -> void:
-	var proxy: Node = store.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
-	if proxy == null:
+func _configure_store_manager() -> void:
+	var store: Node = _store_root()
+	if store == null:
 		return
-	StoreSessionCharacterVisualFactoryScript.set_manager_details_visible(proxy, is_manager_role)
+	var manager_node_ref: Node = store.get_node_or_null("StoreSessionManager")
+	if not (manager_node_ref is Node3D):
+		push_error(
+			(
+				"StoreSessionController: `StoreSessionManager` Node3D missing under store "
+				+ "root '%s'; manager setup skipped." % store.name
+			)
+		)
+		return
+	var manager_node: Node3D = manager_node_ref as Node3D
+	var legacy_body: Node = manager_node.get_node_or_null("ManagerBody")
+	if legacy_body != null:
+		legacy_body.queue_free()
+
+	var proxy_root_ref: Node = manager_node.get_node_or_null("ManagerProxy")
+	var proxy_root: Node3D
+	if proxy_root_ref is Node3D:
+		proxy_root = proxy_root_ref as Node3D
+	else:
+		proxy_root = Node3D.new()
+		proxy_root.name = "ManagerProxy"
+		manager_node.add_child(proxy_root)
+
+	StoreSessionCharacterVisualFactoryScript.configure_customer_proxy(proxy_root, true)
+	call_deferred("_resize_manager_trigger", manager_node)
 
 
 ## Deferred companion to `_configure_store_customer`. Runs after
@@ -3475,6 +3599,36 @@ func _resize_customer_trigger(customer_node: Node3D) -> void:
 		push_error(
 			(
 				"StoreSessionController: StoreSessionDayOneCustomer/Interactable has no "
+				+ "CollisionShape3D descendant; trigger resize skipped."
+			)
+		)
+		return
+	var capsule := CapsuleShape3D.new()
+	capsule.radius = 0.55
+	capsule.height = 2.0
+	collision.shape = capsule
+	collision.position = Vector3(0.0, 1.0, 0.0)
+
+
+func _resize_manager_trigger(manager_node: Node3D) -> void:
+	if not is_instance_valid(manager_node):
+		return
+	var interactable_node: Node = manager_node.get_node_or_null("Interactable")
+	if interactable_node == null:
+		push_error(
+			(
+				"StoreSessionController: StoreSessionManager is missing its "
+				+ "`Interactable` child; manager cannot be aimed at."
+			)
+		)
+		return
+	var collision: CollisionShape3D = (
+		interactable_node.find_child("CollisionShape3D", true, false) as CollisionShape3D
+	)
+	if collision == null:
+		push_error(
+			(
+				"StoreSessionController: StoreSessionManager/Interactable has no "
 				+ "CollisionShape3D descendant; trigger resize skipped."
 			)
 		)
@@ -3530,31 +3684,88 @@ func _sync_register_screen_for_stage() -> void:
 
 
 func _begin_register_transaction() -> void:
+	var model: Dictionary = RegisterTransactionViewModelScript.make_snapshot(
+		RegisterTransactionViewModelScript.STATE_PENDING,
+		RegisterTransactionViewModelScript.SOURCE_STORE_SESSION,
+		RegisterTransactionViewModelScript.KIND_SALE,
+		{
+			"transaction_id": str(_active_event.get("id", "")),
+			"customer_name": str(_active_event.get("customer_name", "Customer")),
+			"customer_archetype": str(_active_event.get("customer_archetype", "")),
+			"receipt_title": str(_active_event.get("title", "Customer")),
+			"receipt_body": "Customer decision pending.",
+			"metadata": {"stage": String(_stage)},
+		}
+	)
+	_publish_register_transaction_view(model)
+	_set_customer_counter_anchor_state(
+		_counter_state_for_transaction_model(model),
+		_presented_held_state_for_active_event()
+	)
 	var screen = _register_screen()
 	if screen == null:
 		return
 	screen.set_state(RegisterScreenStateScript.STATE_TRANSACTION)
 
 
-func _show_register_transaction_from_effects(effects: Dictionary) -> void:
+func _show_register_transaction_from_choice(choice: Dictionary, effects: Dictionary) -> void:
+	var model: Dictionary = RegisterTransactionViewModelScript.from_store_session_choice(
+		_active_event,
+		choice,
+		effects,
+	)
+	_publish_register_transaction_view(model)
 	var screen = _register_screen()
 	if screen == null:
 		return
-	screen.show_transaction(int(effects.get("cash", 0)))
+	_apply_register_model_to_screen(screen, model, false)
 
 
 func _settle_register_transaction(cash_delta: int) -> void:
 	var screen = _register_screen()
 	if screen == null:
 		return
-	screen.settle(cash_delta)
+	var model: Dictionary = _current_transaction_view_model
+	if model.is_empty():
+		screen.settle(cash_delta)
+		return
+	_apply_register_model_to_screen(screen, model, false)
 
 
 func _clear_register_screen() -> void:
+	_current_transaction_view_model = {}
+	_sync_checkout_device_state(&"")
 	var screen = _register_screen()
 	if screen == null:
 		return
 	screen.set_state(RegisterScreenStateScript.STATE_INACTIVE)
+
+
+func _publish_register_transaction_view(model: Dictionary) -> void:
+	_current_transaction_view_model = model.duplicate(true)
+	if is_instance_valid(_customer_counter_anchor):
+		_customer_counter_anchor.set_meta("transaction_view_model", model.duplicate(true))
+	EventBus.register_transaction_view_changed.emit(model)
+
+
+func _apply_register_model_to_screen(
+	screen: RegisterScreenState, model: Dictionary, in_progress: bool
+) -> void:
+	var state: StringName = StringName(str(model.get("state", "")))
+	var amount: int = int(round(absf(float(model.get("cash_delta", 0.0)))))
+	if state == RegisterTransactionViewModelScript.STATE_NO_SALE:
+		screen.set_state(RegisterScreenStateScript.STATE_NO_SALE)
+		return
+	if state == RegisterTransactionViewModelScript.STATE_REFUSED:
+		screen.set_state(RegisterScreenStateScript.STATE_NO_SALE)
+		return
+	if in_progress:
+		if amount > 0:
+			screen.set_state(RegisterScreenStateScript.STATE_TRANSACTION, amount)
+		else:
+			screen.set_state(RegisterScreenStateScript.STATE_TRANSACTION)
+		return
+	screen.set_state(RegisterScreenStateScript.STATE_SETTLED, amount)
 
 
 func _is_descendant_of(node: Node, ancestor: Node) -> bool:
@@ -3623,6 +3834,18 @@ func _update_bundle_room_outcome(choice_id: StringName, effects: Dictionary) -> 
 		_customer_counter_anchor.set_meta("sale_side_stock_removed", 2)
 
 
+func _update_refused_return_room_outcome(choice_id: StringName, effects: Dictionary) -> void:
+	if choice_id != &"refuse_return" or not _is_refused_return_effect(effects):
+		return
+	_show_starter_slot_gap(
+		0,
+		SLOT_STATE_REFUSED,
+		"",
+		"refused_return",
+		{"physical_cue": "upright_policy_tab"}
+	)
+
+
 func _clean_exchange_inventory_succeeded(effects: Dictionary) -> bool:
 	if int(effects.get("cash", 0)) != _CLEAN_EXCHANGE_AMOUNT:
 		return false
@@ -3683,30 +3906,15 @@ func _bundle_inventory_succeeded(effects: Dictionary) -> bool:
 
 
 func _show_clean_exchange_shelf_gap() -> void:
-	var store: Node = _store_root()
-	if store == null:
-		return
-	var shelf: Node3D = store.get_node_or_null("StoreSessionRestockShelf") as Node3D
-	if shelf == null:
-		return
-	var existing: Node = shelf.get_node_or_null(_CLEAN_EXCHANGE_SHELF_GAP_NAME)
-	if existing != null:
-		existing.queue_free()
-	var gap := MeshInstance3D.new()
-	gap.name = _CLEAN_EXCHANGE_SHELF_GAP_NAME
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(0.28, 0.025, 0.15)
-	gap.mesh = mesh
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.12, 0.22, 0.12, 0.74)
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.emission_enabled = true
-	material.emission = Color(0.28, 0.78, 0.24, 1.0)
-	material.emission_energy_multiplier = 0.22
-	gap.material_override = material
-	gap.position = _restock_slot_position(maxi(_visible_shelf_item_count() - 1, 0))
-	gap.set_meta("outcome", "clean_exchange")
-	shelf.add_child(gap)
+	var slot_index: int = maxi(_visible_shelf_item_count() - 1, 0)
+	_show_starter_slot_gap(
+		slot_index,
+		SLOT_STATE_EXCHANGE_RETURNED,
+		_BUNDLE_GAME_ID,
+		"clean_exchange",
+		{"physical_cue": "returned_copy_in_backroom"},
+		_CLEAN_EXCHANGE_SHELF_GAP_NAME
+	)
 
 
 func _show_bundle_shelf_gaps() -> void:
@@ -3715,31 +3923,15 @@ func _show_bundle_shelf_gaps() -> void:
 
 
 func _show_bundle_shelf_gap(gap_name: String, slot_index: int, item_role: String) -> void:
-	var store: Node = _store_root()
-	if store == null:
-		return
-	var shelf: Node3D = store.get_node_or_null("StoreSessionRestockShelf") as Node3D
-	if shelf == null:
-		return
-	var existing: Node = shelf.get_node_or_null(gap_name)
-	if existing != null:
-		existing.queue_free()
-	var gap := MeshInstance3D.new()
-	gap.name = gap_name
-	var mesh := BoxMesh.new()
-	mesh.size = Vector3(0.28, 0.026, 0.15)
-	gap.mesh = mesh
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.22, 0.16, 0.08, 0.76)
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.emission_enabled = true
-	material.emission = Color(0.98, 0.68, 0.18, 1.0)
-	material.emission_energy_multiplier = 0.28
-	gap.material_override = material
-	gap.position = _restock_slot_position(slot_index)
-	gap.set_meta("outcome", "bundle")
-	gap.set_meta("item_role", item_role)
-	shelf.add_child(gap)
+	var product_item_id: String = _BUNDLE_GAME_ID if item_role == "game" else _BUNDLE_CONTROLLER_ID
+	_show_starter_slot_gap(
+		slot_index,
+		SLOT_STATE_BUNDLE_REMOVED,
+		product_item_id,
+		"bundle",
+		{"item_role": item_role},
+		gap_name
+	)
 
 
 func _show_clean_exchange_returned_copy() -> void:
@@ -3815,6 +4007,7 @@ func _show_clean_exchange_customer_reaction() -> void:
 	var customer: Node3D = store.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
 	if customer == null:
 		return
+	_set_store_customer_reaction(CustomerVisualProfileScript.INTENT_CLEAN_EXCHANGE)
 	var existing: Node = customer.get_node_or_null(_CLEAN_EXCHANGE_REACTION_NAME)
 	if existing != null:
 		existing.queue_free()
@@ -3841,6 +4034,7 @@ func _show_bundle_customer_reaction() -> void:
 	var customer: Node3D = store.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
 	if customer == null:
 		return
+	_set_store_customer_reaction(CustomerVisualProfileScript.INTENT_BUNDLE_ACCEPTED)
 	var existing: Node = customer.get_node_or_null(_BUNDLE_REACTION_NAME)
 	if existing != null:
 		existing.queue_free()
@@ -3904,6 +4098,7 @@ func _clear_clean_exchange_room_outcome() -> void:
 		"StoreSessionRestockShelf/%s" % _CLEAN_EXCHANGE_SHELF_GAP_NAME,
 		"StoreSessionBackroomPickup/%s" % _CLEAN_EXCHANGE_RETURNED_COPY_NAME,
 		"StoreSessionDayOneCustomer/%s" % _CLEAN_EXCHANGE_REACTION_NAME,
+		"StoreSessionDayOneCustomer/%s" % _CUSTOMER_REACTION_CUE_NAME,
 	]
 	for path: String in removals:
 		var node: Node = store.get_node_or_null(path)
@@ -3923,6 +4118,7 @@ func _clear_bundle_room_outcome() -> void:
 		"StoreSessionRestockShelf/%s" % _BUNDLE_CONTROLLER_SHELF_GAP_NAME,
 		"StoreSessionBackroomPickup/%s" % _BUNDLE_RETURNED_COPY_NAME,
 		"StoreSessionDayOneCustomer/%s" % _BUNDLE_REACTION_NAME,
+		"StoreSessionDayOneCustomer/%s" % _CUSTOMER_REACTION_CUE_NAME,
 	]
 	for path: String in removals:
 		var node: Node = store.get_node_or_null(path)
@@ -4008,6 +4204,235 @@ func _ensure_restock_placement_affordance() -> MeshInstance3D:
 	return affordance
 
 
+func _ensure_starter_display_merchandising_label() -> Label3D:
+	var store: Node = _store_root()
+	if store == null:
+		return null
+	var shelf: Node3D = store.get_node_or_null("StoreSessionRestockShelf") as Node3D
+	if shelf == null:
+		return null
+	var existing: Label3D = (
+		shelf.get_node_or_null(
+			"PriceTagRail/%s" % _STARTER_DISPLAY_LABEL_TEXT_NAME
+		) as Label3D
+	)
+	if existing != null:
+		return existing
+	var rail: Node3D = shelf.get_node_or_null("PriceTagRail") as Node3D
+	if rail == null:
+		return null
+	var label := Label3D.new()
+	label.name = _STARTER_DISPLAY_LABEL_TEXT_NAME
+	label.position = Vector3(-0.62, 1.082, 0.392)
+	label.rotation_degrees = Vector3(-68.0, 0.0, 0.0)
+	label.pixel_size = 0.0024
+	label.font_size = 22
+	label.modulate = Color(1.0, 0.92, 0.55, 1.0)
+	label.outline_size = 4
+	label.outline_modulate = Color(0.05, 0.04, 0.03, 1.0)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.shaded = false
+	var resolved: Dictionary = StoreMerchandisingLabelsScript.resolve(
+		{
+			"store_id": DEFAULT_STORE_ID,
+			"phase": "starter",
+			"surface": "starter_display",
+			"role": "feature_header",
+			"fixture_id": "starter_display_table",
+			"category_id": "cartridges",
+		}
+	)
+	var text: String = StoreMerchandisingLabelsScript.display_text(resolved)
+	label.text = text.to_upper() if not text.is_empty() else "STARTER DISPLAY"
+	label.set_meta("merchandising_label_id", str(resolved.get("label_id", "")))
+	label.set_meta("merchandising_label_source", str(resolved.get("source", "")))
+	rail.add_child(label)
+	return label
+
+
+func _reset_starter_display_slot_states() -> void:
+	_starter_display_slot_states.clear()
+	var capacity: int = maxi(_restock_slot_capacity(), STARTER_STOCK_ITEM_IDS.size())
+	for index: int in range(capacity):
+		_set_starter_slot_state(index, SLOT_STATE_EMPTY, {})
+
+
+## Returns a copy of the starter display slot-state map for tests and debug views.
+func starter_display_slot_states() -> Dictionary:
+	return _starter_display_slot_states.duplicate(true)
+
+
+func _set_starter_slot_state(slot_index: int, slot_state: String, metadata: Dictionary) -> void:
+	var entry: Dictionary = {
+		"slot_index": slot_index,
+		"slot_state": slot_state,
+	}
+	for key: String in metadata.keys():
+		entry[key] = metadata[key]
+	_starter_display_slot_states[slot_index] = entry
+	_sync_starter_display_slot_state_meta()
+
+
+func _sync_starter_display_slot_state_meta() -> void:
+	var store: Node = _store_root()
+	if store == null:
+		return
+	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
+	if shelf == null:
+		return
+	shelf.set_meta("starter_display_slot_states", _starter_display_slot_states.duplicate(true))
+
+
+func _clear_starter_slot_gap(slot_index: int) -> void:
+	var shelf: Node = _restock_shelf_node()
+	if shelf == null:
+		return
+	var gap: Node = shelf.get_node_or_null("%s%d" % [_RESTOCK_GAP_PREFIX, slot_index])
+	if gap != null:
+		gap.queue_free()
+
+
+func _show_starter_slot_gap(
+	slot_index: int,
+	slot_state: String,
+	product_item_id: String,
+	outcome: String,
+	extra_metadata: Dictionary = {},
+	marker_name: String = ""
+) -> Node3D:
+	var shelf: Node3D = _restock_shelf_node() as Node3D
+	if shelf == null:
+		return null
+	_clear_starter_slot_gap(slot_index)
+	if not marker_name.is_empty():
+		var existing_named: Node = shelf.get_node_or_null(marker_name)
+		if existing_named != null:
+			existing_named.queue_free()
+	var gap := Node3D.new()
+	gap.name = marker_name if not marker_name.is_empty() else "%s%d" % [_RESTOCK_GAP_PREFIX, slot_index]
+	gap.position = _restock_slot_position(slot_index)
+	gap.set_meta("slot_index", slot_index)
+	gap.set_meta("slot_state", slot_state)
+	gap.set_meta("product_item_id", product_item_id)
+	gap.set_meta("outcome", outcome)
+	for key: String in extra_metadata.keys():
+		gap.set_meta(key, extra_metadata[key])
+	gap.add_child(_make_gap_shadow(slot_state))
+	gap.add_child(_make_gap_tag(slot_state))
+	if slot_state == SLOT_STATE_HELD:
+		gap.add_child(_make_gap_sleeve(slot_state))
+	_set_starter_slot_state(
+		slot_index,
+		slot_state,
+		{
+			"product_item_id": product_item_id,
+			"outcome": outcome,
+			"marker_name": String(gap.name),
+		}.merged(extra_metadata, true)
+	)
+	shelf.add_child(gap)
+	return gap
+
+
+func _make_gap_shadow(slot_state: String) -> MeshInstance3D:
+	var shadow := MeshInstance3D.new()
+	shadow.name = "GapTrayShadow"
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(0.28, 0.024, 0.15)
+	shadow.mesh = mesh
+	shadow.material_override = _gap_material(slot_state)
+	return shadow
+
+
+func _make_gap_tag(slot_state: String) -> MeshInstance3D:
+	var tag := MeshInstance3D.new()
+	tag.name = "GapStateTag"
+	var mesh := BoxMesh.new()
+	mesh.size = _gap_tag_size(slot_state)
+	tag.mesh = mesh
+	tag.position = Vector3(0.09, 0.022, 0.074)
+	tag.material_override = _gap_tag_material(slot_state)
+	tag.set_meta("tag_shape", _gap_tag_shape(slot_state))
+	return tag
+
+
+func _make_gap_sleeve(slot_state: String) -> MeshInstance3D:
+	var sleeve := MeshInstance3D.new()
+	sleeve.name = "GapProtectiveSleeve"
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(0.18, 0.018, 0.11)
+	sleeve.mesh = mesh
+	sleeve.position = Vector3(-0.03, 0.026, -0.01)
+	sleeve.material_override = _gap_material(slot_state)
+	sleeve.set_meta("physical_cue", "sleeve")
+	return sleeve
+
+
+func _gap_material(slot_state: String) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = _gap_color(slot_state, 0.72)
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.emission_enabled = true
+	material.emission = _gap_color(slot_state, 1.0)
+	material.emission_energy_multiplier = 0.22
+	return material
+
+
+func _gap_tag_material(slot_state: String) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = _gap_color(slot_state, 1.0)
+	material.roughness = 0.76
+	return material
+
+
+func _gap_color(slot_state: String, alpha: float) -> Color:
+	match slot_state:
+		SLOT_STATE_SOLD:
+			return Color(0.28, 0.78, 0.24, alpha)
+		SLOT_STATE_HELD:
+			return Color(0.55, 0.60, 0.92, alpha)
+		SLOT_STATE_MISSING:
+			return Color(0.88, 0.38, 0.24, alpha)
+		SLOT_STATE_REFUSED:
+			return Color(0.82, 0.52, 0.26, alpha)
+		SLOT_STATE_BUNDLE_REMOVED:
+			return Color(0.98, 0.68, 0.18, alpha)
+		SLOT_STATE_EXCHANGE_RETURNED:
+			return Color(0.44, 0.86, 0.48, alpha)
+		_:
+			return Color(0.42, 0.36, 0.30, alpha)
+
+
+func _gap_tag_size(slot_state: String) -> Vector3:
+	match slot_state:
+		SLOT_STATE_BUNDLE_REMOVED:
+			return Vector3(0.10, 0.032, 0.022)
+		SLOT_STATE_REFUSED:
+			return Vector3(0.082, 0.040, 0.022)
+		_:
+			return Vector3(0.074, 0.026, 0.022)
+
+
+func _gap_tag_shape(slot_state: String) -> String:
+	match slot_state:
+		SLOT_STATE_BUNDLE_REMOVED:
+			return "wide_bundle_tab"
+		SLOT_STATE_REFUSED:
+			return "upright_policy_tab"
+		SLOT_STATE_HELD:
+			return "sleeved_hold_tab"
+		_:
+			return "rail_sticker"
+
+
+func _restock_shelf_node() -> Node:
+	var store: Node = _store_root()
+	if store == null:
+		return null
+	return store.get_node_or_null("StoreSessionRestockShelf")
+
+
 func _restock_slot_capacity() -> int:
 	var store: Node = _store_root()
 	if store == null:
@@ -4057,7 +4482,13 @@ func _reset_restock_shelf_visuals() -> void:
 	if shelf == null:
 		return
 	for child: Node in shelf.get_children():
-		if String(child.name).begins_with("StoreShelfItem"):
+		if (
+			String(child.name).begins_with("StoreShelfItem")
+			or String(child.name).begins_with(_RESTOCK_GAP_PREFIX)
+			or String(child.name) == _CLEAN_EXCHANGE_SHELF_GAP_NAME
+			or String(child.name) == _BUNDLE_GAME_SHELF_GAP_NAME
+			or String(child.name) == _BUNDLE_CONTROLLER_SHELF_GAP_NAME
+		):
 			shelf.remove_child(child)
 			child.free()
 	var overlay: Node = shelf.get_node_or_null("EmptyOverlay")
@@ -4067,6 +4498,7 @@ func _reset_restock_shelf_visuals() -> void:
 	if affordance is Node3D:
 		(affordance as Node3D).visible = false
 	_shelf_stock_count = 0
+	_reset_starter_display_slot_states()
 
 
 ## Walks StoreSessionDayOneCustomer from the register out through the entrance
@@ -4162,6 +4594,7 @@ func _finalize_customer_exit(customer_3d: Node3D, completed_tween: Tween = null)
 		_customer_exit_tween = null
 	if not is_instance_valid(customer_3d):
 		return
+	_clear_store_customer_held_prop(customer_3d)
 	customer_3d.hide()
 	if completed_tween != null and _customer_exit_tween == completed_tween:
 		_customer_exit_tween = null
@@ -4175,44 +4608,82 @@ func _sync_customer_counter_anchor_for_stage() -> void:
 		and not _active_event.is_empty()
 	)
 	if has_day_one_customer:
-		_set_customer_counter_anchor_state(_COUNTER_STATE_PENDING)
+		_sync_store_customer_accent()
+		var held_state: StringName = _presented_held_state_for_active_event()
+		_set_store_customer_held_prop_state(held_state)
+		_set_customer_counter_anchor_state(_COUNTER_STATE_PENDING, held_state)
 	else:
+		_clear_store_customer_held_prop()
 		_clear_customer_counter_anchor()
 
 
 func _update_customer_counter_anchor_for_choice(
-	choice_id: StringName, _effects: Dictionary
+	choice_id: StringName, effects: Dictionary
 ) -> void:
 	if not is_instance_valid(_customer_counter_anchor):
 		return
-	var state: StringName = _COUNTER_STATE_CLEAN_EXCHANGE
-	if choice_id == &"upsell_bundle":
-		state = _COUNTER_STATE_BUNDLE
-	elif choice_id == &"refuse_return":
-		state = _COUNTER_STATE_REFUSED
-	_set_customer_counter_anchor_state(state)
+	var state: StringName = _counter_state_for_transaction_model(_current_transaction_view_model)
+	var held_state: StringName = _held_state_for_choice(choice_id, effects)
+	_set_customer_counter_anchor_state(state, held_state)
+	_set_store_customer_held_prop_state(held_state)
+	_set_store_customer_reaction(
+		_reaction_intent_for_transaction_choice(state, held_state, choice_id, effects)
+	)
 
 
-func _set_customer_counter_anchor_state(state: StringName) -> void:
+func _set_customer_counter_anchor_state(
+	state: StringName, held_state: StringName = _HELD_STATE_NONE
+) -> void:
 	var anchor: Node3D = _ensure_customer_counter_anchor()
 	if anchor == null:
 		return
 	anchor.visible = true
+	var visual_props: Dictionary = _counter_visual_props(state)
 	anchor.set_meta("counter_state", String(state))
+	anchor.set_meta("register_state", String(visual_props.get("register_state", &"")))
+	anchor.set_meta("counter_amount", int(visual_props.get("amount", 0)))
+	anchor.set_meta("outcome_label", str(visual_props.get("strip_label", "")))
+	if held_state != _HELD_STATE_NONE:
+		anchor.set_meta("held_prop_state", String(held_state))
+	if not _current_transaction_view_model.is_empty():
+		anchor.set_meta(
+			"transaction_view_model",
+			_current_transaction_view_model.duplicate(true)
+		)
 	var receipt: MeshInstance3D = (
 		anchor.get_node_or_null(_CUSTOMER_COUNTER_RECEIPT_NAME) as MeshInstance3D
 	)
 	if receipt != null:
-		receipt.visible = true
+		receipt.visible = bool(visual_props.get("receipt_visible", false))
 		receipt.material_override = _customer_counter_material(state)
+		_update_counter_receipt_detail(receipt, state)
 	var item: Node3D = anchor.get_node_or_null(_CUSTOMER_COUNTER_ITEM_NAME) as Node3D
 	if item != null:
-		item.visible = state != _COUNTER_STATE_REFUSED
+		item.visible = bool(visual_props.get("item_visible", false))
+		if held_state != _HELD_STATE_NONE:
+			item.set_meta("held_prop_state", String(held_state))
+		_update_customer_counter_item(item, held_state)
 	var strip: MeshInstance3D = (
 		anchor.get_node_or_null(_CUSTOMER_COUNTER_STRIP_NAME) as MeshInstance3D
 	)
 	if strip != null:
+		strip.visible = bool(visual_props.get("strip_visible", true))
 		strip.material_override = _customer_counter_strip_material(state)
+		_update_counter_strip_label(strip, str(visual_props.get("strip_label", "")))
+	var tray: MeshInstance3D = (
+		anchor.get_node_or_null(_CUSTOMER_COUNTER_TRAY_NAME) as MeshInstance3D
+	)
+	if tray != null:
+		tray.material_override = _customer_counter_tray_material(state)
+	var pad: Node3D = anchor.get_node_or_null(_CUSTOMER_COUNTER_PAD_NAME) as Node3D
+	if pad != null:
+		pad.visible = bool(visual_props.get("pad_visible", true))
+		pad.set_meta("counter_state", String(state))
+	var cable: Node3D = anchor.get_node_or_null(_CUSTOMER_COUNTER_CABLE_NAME) as Node3D
+	if cable != null:
+		cable.visible = bool(visual_props.get("cable_visible", true))
+		cable.set_meta("counter_state", String(state))
+	_sync_checkout_device_state(state)
 
 
 func _ensure_customer_counter_anchor() -> Node3D:
@@ -4232,9 +4703,12 @@ func _ensure_customer_counter_anchor() -> Node3D:
 	_customer_counter_anchor.position = Vector3(0.02, 1.195, 0.22)
 	_customer_counter_anchor.rotation_degrees = Vector3(-4.0, 8.0, 0.0)
 	checkout.add_child(_customer_counter_anchor)
+	_customer_counter_anchor.add_child(_make_customer_counter_item_tray())
 	_customer_counter_anchor.add_child(_make_customer_counter_receipt())
 	_customer_counter_anchor.add_child(_make_customer_counter_item())
 	_customer_counter_anchor.add_child(_make_customer_counter_strip())
+	_customer_counter_anchor.add_child(_make_customer_counter_customer_pad())
+	_customer_counter_anchor.add_child(_make_customer_counter_cable())
 	return _customer_counter_anchor
 
 
@@ -4245,23 +4719,289 @@ func _make_customer_counter_receipt() -> MeshInstance3D:
 	mesh.size = Vector3(0.44, 0.012, 0.24)
 	receipt.mesh = mesh
 	receipt.position = Vector3(-0.12, 0.0, 0.02)
+	var detail: Node3D = RetailDetailBuilderScript.receipt_slip(["PENDING"])
+	detail.name = "ReceiptDetail"
+	detail.position = Vector3(0.0, 0.018, 0.0)
+	detail.rotation_degrees = Vector3(0.0, 0.0, 0.0)
+	detail.scale = Vector3(0.72, 0.72, 0.72)
+	receipt.add_child(detail)
 	return receipt
 
 
 func _make_customer_counter_item() -> Node3D:
 	var item := Node3D.new()
 	item.name = _CUSTOMER_COUNTER_ITEM_NAME
-	var visual: Node3D = _ProductVisualFactory.create_visual_for_item(_store_restock_visual_data(0))
-	if visual == null:
-		visual = StoreVisualKitScript.instantiate(StoreVisualKitScript.GAME_CASE) as Node3D
-	if visual == null:
-		visual = _make_fallback_store_shelf_item()
+	var visual: Node3D = _make_customer_counter_item_visual(_HELD_STATE_NONE)
 	if visual != null:
 		visual.scale = Vector3(0.62, 0.62, 0.62)
 		item.add_child(visual)
 	item.position = Vector3(0.15, 0.035, -0.02)
 	item.rotation_degrees = Vector3(-4.0, 14.0, 0.0)
 	return item
+
+
+func _make_customer_counter_item_tray() -> MeshInstance3D:
+	var tray := MeshInstance3D.new()
+	tray.name = _CUSTOMER_COUNTER_TRAY_NAME
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(0.46, 0.026, 0.32)
+	tray.mesh = mesh
+	tray.position = Vector3(0.15, -0.014, -0.02)
+	tray.material_override = _customer_counter_tray_material(_COUNTER_STATE_PENDING)
+	tray.set_meta("work_surface_role", "item_tray")
+	return tray
+
+
+func _make_customer_counter_customer_pad() -> Node3D:
+	var pad: Node3D = RetailDetailBuilderScript.floor_mat("PAY")
+	pad.name = _CUSTOMER_COUNTER_PAD_NAME
+	pad.position = Vector3(-0.36, -0.016, 0.12)
+	pad.rotation_degrees = Vector3(0.0, -8.0, 0.0)
+	pad.scale = Vector3(0.34, 0.34, 0.34)
+	pad.set_meta("work_surface_role", "customer_side_pad")
+	return pad
+
+
+func _make_customer_counter_cable() -> Node3D:
+	var cable: Node3D = RetailDetailBuilderScript.cable_hook()
+	cable.name = _CUSTOMER_COUNTER_CABLE_NAME
+	cable.position = Vector3(-0.34, -0.012, -0.18)
+	cable.rotation_degrees = Vector3(0.0, 82.0, 0.0)
+	cable.scale = Vector3(0.34, 0.34, 0.34)
+	cable.set_meta("work_surface_role", "card_reader_cable")
+	return cable
+
+
+func _presented_held_state_for_active_event() -> StringName:
+	var event_id: String = str(_active_event.get("id", ""))
+	if event_id.contains("trade_in"):
+		return _HELD_STATE_TRADE_IN_PRESENTED
+	return _HELD_STATE_RETURNED_PRESENTED
+
+
+func _held_state_for_choice(choice_id: StringName, effects: Dictionary) -> StringName:
+	if choice_id == &"refuse_return":
+		return _HELD_STATE_RETURNED_REFUSED
+	if choice_id == &"clean_exchange" or choice_id == &"upsell_bundle":
+		return _HELD_STATE_RETURNED_ACCEPTED
+	var model: Dictionary = _current_transaction_view_model
+	var kind: StringName = StringName(str(model.get("kind", "")))
+	if kind == RegisterTransactionViewModelScript.KIND_PAYOUT:
+		return _HELD_STATE_PAYOUT_RETURNED
+	if kind == RegisterTransactionViewModelScript.KIND_TRADE_IN:
+		return _HELD_STATE_TRADE_IN_PRESENTED
+	if int(effects.get("cash", 0)) == 0:
+		return _HELD_STATE_SELECTED_ABANDONED
+	return _HELD_STATE_NONE
+
+
+func _reaction_intent_for_transaction_choice(
+	state: StringName,
+	held_state: StringName,
+	choice_id: StringName,
+	effects: Dictionary
+) -> StringName:
+	if choice_id == &"upsell_bundle":
+		return CustomerVisualProfileScript.INTENT_BUNDLE_ACCEPTED
+	if state == _COUNTER_STATE_BUNDLE:
+		return CustomerVisualProfileScript.INTENT_BUNDLE_REJECTED
+	if choice_id == &"clean_exchange" or state == _COUNTER_STATE_CLEAN_EXCHANGE:
+		return CustomerVisualProfileScript.INTENT_CLEAN_EXCHANGE
+	if choice_id == &"refuse_return" or state == _COUNTER_STATE_REFUSED:
+		return CustomerVisualProfileScript.INTENT_REFUSED_RETURN
+	if held_state == _HELD_STATE_PAYOUT_RETURNED or state == _COUNTER_STATE_PAYOUT:
+		return CustomerVisualProfileScript.INTENT_PAYOUT_TRADE_IN
+	if held_state == _HELD_STATE_TRADE_IN_PRESENTED or state == _COUNTER_STATE_TRADE_IN:
+		return CustomerVisualProfileScript.INTENT_ACCEPTED_TRADE_IN
+	if state == _COUNTER_STATE_SALE:
+		return CustomerVisualProfileScript.INTENT_SALE
+	if state == _COUNTER_STATE_NO_SALE or int(effects.get("cash", 0)) == 0:
+		return CustomerVisualProfileScript.INTENT_NO_SALE
+	return &""
+
+
+func _set_store_customer_reaction(reaction_intent: StringName) -> void:
+	var customer: Node3D = _store_session_customer_node()
+	if customer == null:
+		return
+	if reaction_intent == &"":
+		var stale: Node = customer.get_node_or_null(_CUSTOMER_REACTION_CUE_NAME)
+		if stale != null:
+			stale.queue_free()
+		customer.set_meta("reaction_intent", "")
+		return
+	var cue: MeshInstance3D = (
+		customer.get_node_or_null(_CUSTOMER_REACTION_CUE_NAME) as MeshInstance3D
+	)
+	if cue == null:
+		cue = MeshInstance3D.new()
+		cue.name = _CUSTOMER_REACTION_CUE_NAME
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(0.24, 0.045, 0.065)
+		cue.mesh = mesh
+		customer.add_child(cue)
+	var material: StandardMaterial3D = cue.material_override as StandardMaterial3D
+	if material == null:
+		material = StandardMaterial3D.new()
+		cue.material_override = material
+	material.albedo_color = _reaction_color_for_intent(reaction_intent)
+	material.emission_enabled = true
+	material.emission = material.albedo_color
+	material.emission_energy_multiplier = 0.55
+	material.roughness = 0.68
+	cue.position = Vector3(0.0, 1.62, 0.0)
+	cue.rotation_degrees = _reaction_rotation_for_intent(reaction_intent)
+	cue.set_meta("reaction_intent", String(reaction_intent))
+	cue.visible = true
+	customer.set_meta("reaction_intent", String(reaction_intent))
+	customer.set_meta("exit_reaction", String(reaction_intent))
+
+
+func _reaction_color_for_intent(reaction_intent: StringName) -> Color:
+	match reaction_intent:
+		CustomerVisualProfileScript.INTENT_SALE, CustomerVisualProfileScript.INTENT_CLEAN_EXCHANGE:
+			return Color(0.46, 0.92, 0.38, 1.0)
+		CustomerVisualProfileScript.INTENT_BUNDLE_ACCEPTED:
+			return Color(0.98, 0.72, 0.22, 1.0)
+		CustomerVisualProfileScript.INTENT_TRADE_IN, CustomerVisualProfileScript.INTENT_ACCEPTED_TRADE_IN:
+			return Color(0.38, 0.62, 0.90, 1.0)
+		CustomerVisualProfileScript.INTENT_PAYOUT_TRADE_IN:
+			return Color(0.66, 0.52, 0.96, 1.0)
+		CustomerVisualProfileScript.INTENT_REFUSED_RETURN:
+			return Color(0.92, 0.30, 0.18, 1.0)
+		CustomerVisualProfileScript.INTENT_NO_SALE, CustomerVisualProfileScript.INTENT_BUNDLE_REJECTED:
+			return Color(0.90, 0.58, 0.24, 1.0)
+	return Color(0.90, 0.46, 0.24, 1.0)
+
+
+func _reaction_rotation_for_intent(reaction_intent: StringName) -> Vector3:
+	match reaction_intent:
+		CustomerVisualProfileScript.INTENT_REFUSED_RETURN:
+			return Vector3(0.0, 0.0, -16.0)
+		CustomerVisualProfileScript.INTENT_NO_SALE, CustomerVisualProfileScript.INTENT_BUNDLE_REJECTED:
+			return Vector3(0.0, 0.0, 12.0)
+	return Vector3.ZERO
+
+
+func _set_store_customer_held_prop_state(state: StringName) -> void:
+	var customer: Node3D = _store_session_customer_node()
+	if customer == null:
+		return
+	if state == _HELD_STATE_NONE:
+		_clear_store_customer_held_prop(customer)
+		return
+	customer.set_meta("held_prop_state", String(state))
+	customer.set_meta("last_held_prop_state", String(state))
+	if state in [
+		_HELD_STATE_RETURNED_ACCEPTED,
+		_HELD_STATE_PAYOUT_RETURNED,
+		_HELD_STATE_SELECTED_ABANDONED,
+	]:
+		_clear_store_customer_held_prop(customer)
+		return
+	var prop: Node3D = _ensure_store_customer_held_prop(customer, state)
+	if prop == null:
+		return
+	prop.visible = true
+	prop.set_meta("held_prop_state", String(state))
+	if state == _HELD_STATE_RETURNED_REFUSED:
+		prop.position = Vector3(0.34, 1.02, -0.16)
+		prop.rotation_degrees = Vector3(-8.0, -18.0, 0.0)
+	elif state == _HELD_STATE_TRADE_IN_PRESENTED:
+		prop.position = Vector3(0.08, 1.02, -0.34)
+		prop.rotation_degrees = Vector3(-12.0, 4.0, 0.0)
+	else:
+		prop.position = Vector3(0.02, 1.02, -0.3)
+		prop.rotation_degrees = Vector3(-10.0, 0.0, 0.0)
+
+
+func _ensure_store_customer_held_prop(
+	customer: Node3D, state: StringName
+) -> Node3D:
+	var existing: Node3D = customer.get_node_or_null(_CUSTOMER_HELD_PROP_NAME) as Node3D
+	if existing != null:
+		return existing
+	var prop := Node3D.new()
+	prop.name = _CUSTOMER_HELD_PROP_NAME
+	prop.set_meta("definition_id", _held_prop_definition_id_for_state(state))
+	var visual_data: Dictionary = {
+		"definition_id": str(prop.get_meta("definition_id", "")),
+		"display_name": ContentRegistry.get_display_name_or(
+			StringName(str(prop.get_meta("definition_id", ""))),
+			"Register item",
+		),
+		"category": "games",
+		"condition": "used",
+		"visual_presentation": "game_case",
+	}
+	var visual: Node3D = _ProductVisualFactory.create_visual_for_item(visual_data)
+	if visual == null:
+		visual = StoreVisualKitScript.instantiate(StoreVisualKitScript.GAME_CASE) as Node3D
+	if visual == null:
+		visual = _make_fallback_store_shelf_item()
+	if visual != null:
+		visual.scale = Vector3(0.36, 0.36, 0.36)
+		prop.add_child(visual)
+	customer.add_child(prop)
+	return prop
+
+
+func _held_prop_definition_id_for_state(state: StringName) -> String:
+	if state == _HELD_STATE_TRADE_IN_PRESENTED or state == _HELD_STATE_PAYOUT_RETURNED:
+		var lines: Array = _current_transaction_view_model.get("item_lines", []) as Array
+		for line_variant: Variant in lines:
+			if line_variant is not Dictionary:
+				continue
+			var line: Dictionary = line_variant as Dictionary
+			var role: StringName = StringName(str(line.get("role", "")))
+			if role == RegisterTransactionViewModelScript.ROLE_TRADE_IN:
+				return str(line.get("item_id", ""))
+	return _BUNDLE_RETURN_ID
+
+
+func _clear_store_customer_held_prop(customer: Node3D = null) -> void:
+	var target: Node3D = customer
+	if target == null:
+		target = _store_session_customer_node()
+	if target == null:
+		return
+	var existing: Node = target.get_node_or_null(_CUSTOMER_HELD_PROP_NAME)
+	if existing != null:
+		target.remove_child(existing)
+		existing.free()
+	target.set_meta("held_prop_state", String(_HELD_STATE_NONE))
+
+
+func _store_session_customer_node() -> Node3D:
+	var store: Node = _store_root()
+	if store == null:
+		return null
+	return store.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+
+
+func _active_customer_archetype_id() -> StringName:
+	var archetype: String = str(_active_event.get("customer_archetype", "")).strip_edges()
+	if archetype.is_empty():
+		return &"casual_shopper"
+	if archetype == "casual_browser":
+		return &"casual_shopper"
+	if archetype == "parent":
+		return &"confused_parent"
+	return StringName(archetype)
+
+
+func _sync_store_customer_accent() -> void:
+	var customer: Node3D = _store_session_customer_node()
+	if customer == null:
+		return
+	var proxy: Node3D = customer.get_node_or_null("CustomerProxy") as Node3D
+	if proxy == null:
+		return
+	StoreSessionCharacterVisualFactoryScript.configure_customer_accent(
+		proxy,
+		"",
+		_active_customer_archetype_id()
+	)
 
 
 func _make_customer_counter_strip() -> MeshInstance3D:
@@ -4271,7 +5011,235 @@ func _make_customer_counter_strip() -> MeshInstance3D:
 	mesh.size = Vector3(0.34, 0.018, 0.035)
 	strip.mesh = mesh
 	strip.position = Vector3(-0.12, 0.012, -0.12)
+	var label := Label3D.new()
+	label.name = "OutcomeText"
+	label.pixel_size = 0.0019
+	label.font_size = 32
+	label.text = "PENDING"
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.position = Vector3(0.0, 0.018, -0.002)
+	label.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+	label.set_meta("semantic_outcome_label", true)
+	strip.add_child(label)
+	var notch := MeshInstance3D.new()
+	notch.name = "OutcomeShapeKey"
+	var notch_mesh := BoxMesh.new()
+	notch_mesh.size = Vector3(0.055, 0.012, 0.046)
+	notch.mesh = notch_mesh
+	notch.position = Vector3(-0.19, 0.016, 0.0)
+	strip.add_child(notch)
 	return strip
+
+
+func _counter_state_for_transaction_model(model: Dictionary) -> StringName:
+	var state: StringName = StringName(str(model.get("state", "")))
+	if state == RegisterTransactionViewModelScript.STATE_PENDING:
+		return _COUNTER_STATE_PENDING
+	if state == RegisterTransactionViewModelScript.STATE_DECISION:
+		return _COUNTER_STATE_PENDING
+	if state == RegisterTransactionViewModelScript.STATE_PROCESSING:
+		return _COUNTER_STATE_PENDING
+	var kind: StringName = StringName(str(model.get("kind", "")))
+	match kind:
+		RegisterTransactionViewModelScript.KIND_BUNDLE:
+			return _COUNTER_STATE_BUNDLE
+		RegisterTransactionViewModelScript.KIND_CLEAN_EXCHANGE:
+			return _COUNTER_STATE_CLEAN_EXCHANGE
+		RegisterTransactionViewModelScript.KIND_TRADE_IN:
+			return _COUNTER_STATE_TRADE_IN
+		RegisterTransactionViewModelScript.KIND_PAYOUT:
+			return _COUNTER_STATE_PAYOUT
+		RegisterTransactionViewModelScript.KIND_NO_SALE:
+			return _COUNTER_STATE_NO_SALE
+		RegisterTransactionViewModelScript.KIND_REFUSED:
+			return _COUNTER_STATE_REFUSED
+		RegisterTransactionViewModelScript.KIND_SALE:
+			return _COUNTER_STATE_SALE
+	return _COUNTER_STATE_PENDING
+
+
+func _counter_visual_props(state: StringName) -> Dictionary:
+	var cash_delta: float = float(_current_transaction_view_model.get("cash_delta", 0.0))
+	var amount: int = int(round(absf(cash_delta)))
+	match state:
+		_COUNTER_STATE_PENDING:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_TRANSACTION, 0, true, true, "PENDING"
+			)
+		_COUNTER_STATE_BUNDLE:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_SETTLED, amount, true, false, "BUNDLE"
+			)
+		_COUNTER_STATE_CLEAN_EXCHANGE:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_SETTLED, amount, true, true, "SALE"
+			)
+		_COUNTER_STATE_SALE:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_SETTLED, amount, true, true, "SALE"
+			)
+		_COUNTER_STATE_TRADE_IN:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_SETTLED, amount, true, true, "TRADE"
+			)
+		_COUNTER_STATE_PAYOUT:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_SETTLED, amount, true, true, "PAYOUT"
+			)
+		_COUNTER_STATE_NO_SALE:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_NO_SALE, 0, false, false, "NO SALE"
+			)
+		_COUNTER_STATE_REFUSED:
+			return _counter_props(
+				RegisterScreenStateScript.STATE_NO_SALE, 0, false, false, "REFUSED"
+			)
+	return _counter_props(RegisterScreenStateScript.STATE_INACTIVE, 0, false, false, "")
+
+
+func _counter_props(
+	register_state: StringName,
+	amount: int,
+	receipt_visible: bool,
+	item_visible: bool,
+	strip_label: String
+) -> Dictionary:
+	return {
+		"register_state": register_state,
+		"amount": amount,
+		"receipt_visible": receipt_visible,
+		"item_visible": item_visible,
+		"strip_label": strip_label,
+		"strip_visible": not strip_label.is_empty(),
+		"pad_visible": true,
+		"cable_visible": true,
+	}
+
+
+func _update_counter_receipt_detail(receipt: MeshInstance3D, state: StringName) -> void:
+	var detail: Node3D = receipt.get_node_or_null("ReceiptDetail") as Node3D
+	if detail == null:
+		return
+	var label: Label3D = detail.get_node_or_null("LabelText") as Label3D
+	if label == null:
+		return
+	label.text = _receipt_lines_for_counter_state(state)
+	detail.set_meta("counter_state", String(state))
+
+
+func _receipt_lines_for_counter_state(state: StringName) -> String:
+	var model: Dictionary = _current_transaction_view_model
+	var title: String = str(model.get("receipt_title", "")).strip_edges()
+	var cash_delta: float = float(model.get("cash_delta", 0.0))
+	var amount_text: String = "$%d" % int(round(absf(cash_delta)))
+	if cash_delta < 0.0:
+		amount_text = "PAID " + amount_text
+	elif cash_delta > 0.0:
+		amount_text = "SALE " + amount_text
+	else:
+		amount_text = "TOTAL $0"
+	if state == _COUNTER_STATE_REFUSED or state == _COUNTER_STATE_NO_SALE:
+		amount_text = "NO SALE"
+	if title.is_empty():
+		title = str(model.get("kind", "Register")).replace("_", " ").capitalize()
+	return "%s\n%s" % [title, amount_text]
+
+
+func _update_counter_strip_label(strip: MeshInstance3D, text: String) -> void:
+	var label: Label3D = strip.get_node_or_null("OutcomeText") as Label3D
+	if label != null:
+		label.text = text
+	var notch: MeshInstance3D = strip.get_node_or_null("OutcomeShapeKey") as MeshInstance3D
+	if notch != null:
+		var notch_material := StandardMaterial3D.new()
+		notch_material.albedo_color = Color(0.08, 0.08, 0.07, 1.0)
+		notch.material_override = notch_material
+
+
+func _update_customer_counter_item(item: Node3D, held_state: StringName) -> void:
+	if item.get_child_count() > 0:
+		for child: Node in item.get_children():
+			item.remove_child(child)
+			child.free()
+	var visual: Node3D = _make_customer_counter_item_visual(held_state)
+	if visual == null:
+		return
+	visual.scale = Vector3(0.62, 0.62, 0.62)
+	item.add_child(visual)
+
+
+func _make_customer_counter_item_visual(held_state: StringName) -> Node3D:
+	var visual_data: Dictionary = _customer_counter_item_visual_data(held_state)
+	var visual: Node3D = _ProductVisualFactory.create_visual_for_item(visual_data)
+	if visual == null:
+		visual = StoreVisualKitScript.instantiate(StoreVisualKitScript.GAME_CASE) as Node3D
+	if visual == null:
+		visual = _make_fallback_store_shelf_item()
+	if visual != null:
+		visual.set_meta("definition_id", str(visual_data.get("definition_id", "")))
+		visual.set_meta("counter_item_role", str(visual_data.get("role", "")))
+	return visual
+
+
+func _customer_counter_item_visual_data(held_state: StringName) -> Dictionary:
+	var line: Dictionary = _counter_item_line_for_held_state(held_state)
+	var definition_id: String = str(line.get("item_id", ""))
+	if definition_id.is_empty():
+		definition_id = _held_prop_definition_id_for_state(held_state)
+	var display_name: String = str(line.get("display_name", ""))
+	if display_name.is_empty():
+		display_name = ContentRegistry.get_display_name_or(
+			StringName(definition_id), "Register item"
+		)
+	return {
+		"definition_id": definition_id,
+		"display_name": display_name,
+		"category": "games",
+		"condition": str(line.get("condition", "used")),
+		"visual_presentation": "game_case",
+		"role": String(line.get("role", "")),
+	}
+
+
+func _counter_item_line_for_held_state(held_state: StringName) -> Dictionary:
+	var preferred_roles: Array[StringName] = []
+	match held_state:
+		_HELD_STATE_TRADE_IN_PRESENTED, _HELD_STATE_PAYOUT_RETURNED:
+			preferred_roles = [
+				RegisterTransactionViewModelScript.ROLE_TRADE_IN,
+				RegisterTransactionViewModelScript.ROLE_DAMAGED_TRADE_IN,
+			]
+		_HELD_STATE_RETURNED_PRESENTED, _HELD_STATE_RETURNED_ACCEPTED, _HELD_STATE_RETURNED_REFUSED:
+			preferred_roles = [
+				RegisterTransactionViewModelScript.ROLE_RETURNED_ITEM,
+				RegisterTransactionViewModelScript.ROLE_REFUSED_ITEM,
+			]
+		_:
+			preferred_roles = [
+				RegisterTransactionViewModelScript.ROLE_SOLD_ITEM,
+				RegisterTransactionViewModelScript.ROLE_DISPLAY_ONLY,
+			]
+	for role: StringName in preferred_roles:
+		var line: Dictionary = _first_item_line_with_role(role)
+		if not line.is_empty():
+			return line
+	var lines: Array = _current_transaction_view_model.get("item_lines", []) as Array
+	for raw_line: Variant in lines:
+		if raw_line is Dictionary:
+			return raw_line as Dictionary
+	return {}
+
+
+func _first_item_line_with_role(role: StringName) -> Dictionary:
+	var lines: Array = _current_transaction_view_model.get("item_lines", []) as Array
+	for raw_line: Variant in lines:
+		if raw_line is not Dictionary:
+			continue
+		var line: Dictionary = raw_line as Dictionary
+		if StringName(str(line.get("role", ""))) == role:
+			return line
+	return {}
 
 
 func _customer_counter_material(state: StringName) -> StandardMaterial3D:
@@ -4279,10 +5247,16 @@ func _customer_counter_material(state: StringName) -> StandardMaterial3D:
 	match state:
 		_COUNTER_STATE_REFUSED:
 			material.albedo_color = Color(0.92, 0.72, 0.48, 1.0)
+		_COUNTER_STATE_NO_SALE:
+			material.albedo_color = Color(0.90, 0.78, 0.58, 1.0)
 		_COUNTER_STATE_BUNDLE:
 			material.albedo_color = Color(0.98, 0.86, 0.52, 1.0)
+		_COUNTER_STATE_TRADE_IN, _COUNTER_STATE_PAYOUT:
+			material.albedo_color = Color(0.78, 0.86, 0.96, 1.0)
 		_COUNTER_STATE_CLEAN_EXCHANGE:
 			material.albedo_color = Color(0.88, 0.96, 0.74, 1.0)
+		_COUNTER_STATE_SALE:
+			material.albedo_color = Color(0.86, 0.96, 0.78, 1.0)
 		_:
 			material.albedo_color = Color(0.96, 0.92, 0.78, 1.0)
 	material.roughness = 0.72
@@ -4294,10 +5268,18 @@ func _customer_counter_strip_material(state: StringName) -> StandardMaterial3D:
 	match state:
 		_COUNTER_STATE_REFUSED:
 			material.albedo_color = Color(0.88, 0.34, 0.22, 1.0)
+		_COUNTER_STATE_NO_SALE:
+			material.albedo_color = Color(0.88, 0.56, 0.24, 1.0)
 		_COUNTER_STATE_BUNDLE:
 			material.albedo_color = Color(0.95, 0.72, 0.18, 1.0)
+		_COUNTER_STATE_TRADE_IN:
+			material.albedo_color = Color(0.36, 0.58, 0.88, 1.0)
+		_COUNTER_STATE_PAYOUT:
+			material.albedo_color = Color(0.60, 0.48, 0.92, 1.0)
 		_COUNTER_STATE_CLEAN_EXCHANGE:
 			material.albedo_color = Color(0.36, 0.78, 0.34, 1.0)
+		_COUNTER_STATE_SALE:
+			material.albedo_color = Color(0.42, 0.82, 0.38, 1.0)
 		_:
 			material.albedo_color = Color(0.34, 0.58, 0.88, 1.0)
 	material.emission_enabled = true
@@ -4306,10 +5288,87 @@ func _customer_counter_strip_material(state: StringName) -> StandardMaterial3D:
 	return material
 
 
+func _customer_counter_tray_material(state: StringName) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.12, 0.105, 0.09, 1.0)
+	if state == _COUNTER_STATE_REFUSED or state == _COUNTER_STATE_NO_SALE:
+		material.albedo_color = Color(0.17, 0.11, 0.08, 1.0)
+	elif state == _COUNTER_STATE_TRADE_IN or state == _COUNTER_STATE_PAYOUT:
+		material.albedo_color = Color(0.10, 0.12, 0.15, 1.0)
+	material.roughness = 0.82
+	return material
+
+
+func _sync_checkout_device_state(state: StringName) -> void:
+	var store: Node = _store_root()
+	if store == null:
+		return
+	var details: Node = store.get_node_or_null("Checkout/Register/CheckoutDetails")
+	if details == null:
+		return
+	_apply_checkout_device_material(
+		details.get_node_or_null("ScannerReadyLight") as MeshInstance3D,
+		state,
+		"scanner_indicator"
+	)
+	_apply_checkout_device_material(
+		details.get_node_or_null("CustomerPaymentDisplayScreen") as MeshInstance3D,
+		state,
+		"card_reader_glow"
+	)
+	_apply_checkout_device_material(
+		details.get_node_or_null("CardReaderCable") as MeshInstance3D,
+		state,
+		"card_reader_cable"
+	)
+
+
+func _apply_checkout_device_material(
+	node: MeshInstance3D, state: StringName, role: String
+) -> void:
+	if node == null:
+		return
+	node.set_meta("counter_state", String(state))
+	node.set_meta("work_surface_role", role)
+	node.material_override = _checkout_device_material(state, role)
+
+
+func _checkout_device_material(state: StringName, role: String) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	var color: Color = Color(0.16, 0.30, 0.22, 1.0)
+	match state:
+		_COUNTER_STATE_PENDING:
+			color = Color(0.24, 0.66, 0.92, 1.0)
+		_COUNTER_STATE_REFUSED, _COUNTER_STATE_NO_SALE:
+			color = Color(0.90, 0.46, 0.24, 1.0)
+		_COUNTER_STATE_BUNDLE:
+			color = Color(0.95, 0.74, 0.24, 1.0)
+		_COUNTER_STATE_TRADE_IN:
+			color = Color(0.38, 0.62, 0.90, 1.0)
+		_COUNTER_STATE_PAYOUT:
+			color = Color(0.68, 0.54, 0.96, 1.0)
+		_COUNTER_STATE_CLEAN_EXCHANGE, _COUNTER_STATE_SALE:
+			color = Color(0.42, 0.86, 0.42, 1.0)
+	if String(state).is_empty():
+		color = Color(0.10, 0.12, 0.10, 1.0)
+	if role == "card_reader_cable":
+		color = Color(color.r * 0.35, color.g * 0.35, color.b * 0.35, 1.0)
+	material.albedo_color = color
+	material.emission_enabled = role != "card_reader_cable"
+	material.emission = color
+	material.emission_energy_multiplier = 0.65
+	material.roughness = 0.76
+	return material
+
+
 func _clear_customer_counter_anchor() -> void:
 	if is_instance_valid(_customer_counter_anchor):
-		_customer_counter_anchor.queue_free()
+		var parent: Node = _customer_counter_anchor.get_parent()
+		if parent != null:
+			parent.remove_child(_customer_counter_anchor)
+		_customer_counter_anchor.free()
 	_customer_counter_anchor = null
+	_sync_checkout_device_state(&"")
 
 
 func _show_counter_sale_visual(was_sale: bool) -> void:
@@ -4317,6 +5376,11 @@ func _show_counter_sale_visual(was_sale: bool) -> void:
 	if store == null:
 		return
 	_clear_counter_sale_visual()
+	_set_store_customer_reaction(
+		CustomerVisualProfileScript.INTENT_SALE
+		if was_sale
+		else CustomerVisualProfileScript.INTENT_NO_SALE
+	)
 	var checkout: Node = store.get_node_or_null("checkout_counter")
 	if not (checkout is Node3D):
 		return
@@ -4419,6 +5483,7 @@ func _render_visible_shelf_items(count: int) -> int:
 	# cartridge-blue albedo with low-energy warm-amber emission reads as a
 	# row of game cases catching a soft display light, not glowing cubes.
 	for i: int in range(clamped):
+		_clear_starter_slot_gap(i)
 		var visual_data: Dictionary = _store_restock_visual_data(i)
 		var designed_visual: Node3D = _ProductVisualFactory.create_visual_for_item(visual_data)
 		var item: Node3D = _make_fallback_store_shelf_item()
@@ -4428,6 +5493,16 @@ func _render_visible_shelf_items(count: int) -> int:
 		item.position = _restock_slot_position(i) + Vector3(0.0, -0.04, 0.0)
 		_apply_store_shelf_item_metadata(item, visual_data, i)
 		(shelf as Node3D).add_child(item)
+		_set_starter_slot_state(
+			i,
+			SLOT_STATE_STOCKED,
+			{
+				"product_item_id": str(visual_data.get("product_item_id", "")),
+				"delivery_index": i,
+				"starter_catalog_index": int(visual_data.get("starter_catalog_index", -1)),
+				"stock_source": str(visual_data.get("stock_source", "")),
+			}
+		)
 	return clamped
 
 
@@ -4448,6 +5523,9 @@ func _store_restock_visual_data(index: int) -> Dictionary:
 		return _with_restock_visual_metadata(
 			_product_visual_data_from_entry(item_id, entry), item_id, index
 		)
+	var starter_data: Dictionary = StarterProductVisualResolverScript.visual_data_for_item_id(item_id)
+	if not starter_data.is_empty():
+		return _with_restock_visual_metadata(starter_data, item_id, index)
 	var data: Dictionary = {
 		"instance_id": "store_restock_visual_%d" % index,
 		"definition_id": item_id,
@@ -4491,6 +5569,8 @@ func _with_restock_visual_metadata(
 	data["starter_catalog_index"] = _starter_catalog_index(item_id)
 	data["route_role"] = "starter_sale_item"
 	data["stock_state"] = _stock_state_for_delivery_index(delivery_index)
+	data["stock_source"] = _stock_source_for_delivery_index(delivery_index)
+	data["slot_state"] = SLOT_STATE_STOCKED
 	data["show_price_tag"] = true
 	if not data.has("price_cents"):
 		data["price_cents"] = -1
@@ -4511,6 +5591,12 @@ func _stock_state_for_delivery_index(delivery_index: int) -> String:
 	return _STOCK_STATE_REORDER_EXTRA
 
 
+func _stock_source_for_delivery_index(delivery_index: int) -> String:
+	if delivery_index < _BACKROOM_DELIVERY_QUANTITY:
+		return "first_delivery"
+	return "reorder_extra"
+
+
 func _apply_store_shelf_item_metadata(
 	item: Node, visual_data: Dictionary, delivery_index: int
 ) -> void:
@@ -4522,6 +5608,8 @@ func _apply_store_shelf_item_metadata(
 	item.set_meta("starter_catalog_index", int(visual_data.get("starter_catalog_index", -1)))
 	item.set_meta("route_role", str(visual_data.get("route_role", "starter_sale_item")))
 	item.set_meta("stock_state", str(visual_data.get("stock_state", "")))
+	item.set_meta("stock_source", str(visual_data.get("stock_source", "")))
+	item.set_meta("slot_state", str(visual_data.get("slot_state", SLOT_STATE_STOCKED)))
 
 
 func _product_visual_data_from_definition(definition: ItemDefinition) -> Dictionary:

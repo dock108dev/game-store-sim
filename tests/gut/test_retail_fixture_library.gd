@@ -438,9 +438,8 @@ func test_queue_lane_fixture_is_open_directional_retail_flow() -> void:
 		"LeftGuideRope",
 		"RightGuideRope",
 		"BackLeftPost",
-		"BackRightPost",
+		"MiddleLeftPost",
 		"RegisterLeftPost",
-		"RegisterRightPost",
 	]:
 		assert_not_null(
 			root.get_node_or_null(required_path),
@@ -472,15 +471,20 @@ func test_queue_lane_fixture_is_open_directional_retail_flow() -> void:
 		)
 	if left_rope != null and right_rope != null:
 		assert_gt(
-			absf(left_rope.position.z - right_rope.position.z),
+			right_rope.position.x - left_rope.position.x,
 			0.8,
-			"Queue ropes must frame the sides instead of closing the lane ends"
+			"Queue ropes must form two short runs along the customer path"
 		)
 		assert_lte(
-			absf(left_rope.position.x - right_rope.position.x),
+			absf(left_rope.position.z - right_rope.position.z),
 			0.05,
-			"Queue side ropes must run parallel along the customer path"
+			"Queue rope runs must share the same quiet guide edge"
 		)
+	assert_eq(
+		_count_named_descendants(root, "Post"),
+		3,
+		"FixtureQueueLane must keep the short three-post queue contract"
+	)
 	for child: Node in _collect_descendants(root):
 		assert_false(
 			child is Area3D,
@@ -653,6 +657,15 @@ func _collect_direct_slots(root: Node) -> Array[Node]:
 
 func _count_mesh_descendants(root: Node) -> int:
 	return MeshBoundsUtil.collect_mesh_descendants(root).size()
+
+
+func _count_named_descendants(root: Node, suffix: String) -> int:
+	var count: int = 0
+	for child: Node in root.get_children():
+		if String(child.name).ends_with(suffix):
+			count += 1
+		count += _count_named_descendants(child, suffix)
+	return count
 
 
 func _fixture_label(scene_name: String, label_path: String) -> Label3D:

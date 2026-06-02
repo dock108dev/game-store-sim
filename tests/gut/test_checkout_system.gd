@@ -5,6 +5,9 @@ extends GutTest
 
 
 const TEST_SIGNAL_UTILS: GDScript = preload("res://game/tests/signal_utils.gd")
+const RegisterTransactionViewModelScript: GDScript = preload(
+	"res://game/scripts/store_session/register_transaction_view_model.gd"
+)
 
 var _checkout: PlayerCheckout
 var _economy: EconomySystem
@@ -231,6 +234,26 @@ func test_successful_sale_emits_sold_toast() -> void:
 	)
 
 
+func test_successful_sale_populates_receipt_transaction_view_model() -> void:
+	var customer: Customer = _make_customer()
+	_checkout.initiate_sale(customer, _item, 80.0)
+	_force_complete_checkout()
+
+	var model: Dictionary = _checkout.get_current_transaction_view_model()
+	assert_eq(model.get("source"), RegisterTransactionViewModelScript.SOURCE_CHECKOUT)
+	assert_eq(model.get("state"), RegisterTransactionViewModelScript.STATE_RECEIPT)
+	assert_eq(model.get("kind"), RegisterTransactionViewModelScript.KIND_SALE)
+	assert_eq(model.get("customer_name"), "Test Buyer")
+	assert_almost_eq(float(model.get("cash_delta")), 80.0, 0.01)
+	assert_almost_eq(float(model.get("total")), 80.0, 0.01)
+	var lines: Array = model.get("item_lines") as Array
+	assert_eq(lines.size(), 1)
+	var line: Dictionary = lines[0] as Dictionary
+	assert_eq(line.get("role"), RegisterTransactionViewModelScript.ROLE_SOLD_ITEM)
+	assert_eq(line.get("item_id"), "test_item")
+	assert_eq(line.get("display_name"), "Test Item")
+
+
 func test_sale_toast_skipped_when_item_name_blank() -> void:
 	# Defensive: an ItemDefinition that ships without item_name is a content
 	# authoring hole. We skip the toast rather than emit "Sold  for $X.XX".
@@ -308,6 +331,25 @@ func test_declined_sale_emits_checkout_declined_signal() -> void:
 		declined_count[0], 1,
 		"_on_sale_declined must emit checkout_declined exactly once"
 	)
+
+
+func test_declined_sale_populates_no_sale_transaction_view_model() -> void:
+	var customer: Customer = _make_customer()
+	_checkout._active_customer = customer
+	_checkout._active_item = _item
+	_checkout._active_offer = 999.0
+	_checkout._on_sale_declined()
+
+	var model: Dictionary = _checkout.get_current_transaction_view_model()
+	assert_eq(model.get("state"), RegisterTransactionViewModelScript.STATE_NO_SALE)
+	assert_eq(model.get("kind"), RegisterTransactionViewModelScript.KIND_NO_SALE)
+	assert_eq(model.get("refusal_reason"), "Sale declined")
+	assert_almost_eq(float(model.get("cash_delta")), 0.0, 0.01)
+	var lines: Array = model.get("item_lines") as Array
+	assert_eq(lines.size(), 1)
+	var line: Dictionary = lines[0] as Dictionary
+	assert_eq(line.get("role"), RegisterTransactionViewModelScript.ROLE_REFUSED_ITEM)
+	assert_eq(line.get("display_name"), "Test Item")
 
 
 # --- Race condition guards ---

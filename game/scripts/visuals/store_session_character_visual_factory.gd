@@ -7,10 +7,33 @@ extends RefCounted
 ## stage, trigger sizing, and movement. This factory owns the silhouette so
 ## first-person NPCs do not regress to block placeholders.
 
-const MANAGER_DETAIL_PARTS: Array[String] = ["Badge", "NameTag", "Lanyard", "Clipboard"]
+const CustomerVisualProfileScript: GDScript = preload(
+	"res://game/scripts/characters/customer_visual_profile.gd"
+)
+
+const MANAGER_DETAIL_PARTS: Array[String] = [
+	"ApronPanel",
+	"Badge",
+	"NameTag",
+	"Lanyard",
+	"KeyRing",
+	"KeyA",
+	"KeyB",
+	"Clipboard",
+	"ClipboardPaper",
+]
+const CUSTOMER_ACCENT_PARTS: Array[String] = [
+	"ArchetypeAccentPrimary",
+	"ArchetypeAccentSecondary",
+]
 
 
-static func configure_customer_proxy(proxy_root: Node3D, is_manager_role: bool) -> void:
+static func configure_customer_proxy(
+	proxy_root: Node3D,
+	is_manager_role: bool,
+	profile_id: String = "",
+	archetype_id: StringName = &""
+) -> void:
 	if proxy_root == null:
 		return
 	_remove_stale_parts(proxy_root)
@@ -25,9 +48,9 @@ static func configure_customer_proxy(proxy_root: Node3D, is_manager_role: bool) 
 	_configure_box(
 		proxy_root,
 		"ApronPanel",
-		Vector3(0.30, 0.42, 0.026),
-		Vector3(0.0, 0.88, 0.155),
-		Color(0.08, 0.18, 0.28, 1.0)
+		Vector3(0.34, 0.52, 0.028),
+		Vector3(0.0, 0.88, 0.164),
+		Color(0.08, 0.16, 0.14, 1.0)
 	)
 	_configure_sphere(
 		proxy_root,
@@ -104,32 +127,86 @@ static func configure_customer_proxy(proxy_root: Node3D, is_manager_role: bool) 
 		proxy_root,
 		"Badge",
 		Vector3(0.075, 0.055, 0.018),
-		Vector3(-0.105, 1.02, 0.168),
-		Color(0.98, 0.78, 0.30, 1.0)
+		Vector3(-0.115, 1.035, 0.181),
+		Color(0.86, 0.78, 0.48, 1.0),
+		Vector3.ZERO,
+		0.15,
+		0.42
 	)
 	_configure_box(
 		proxy_root,
 		"NameTag",
 		Vector3(0.13, 0.045, 0.018),
-		Vector3(0.095, 1.045, 0.168),
-		Color(0.93, 0.85, 0.62, 1.0)
+		Vector3(0.095, 1.055, 0.181),
+		Color(0.93, 0.85, 0.62, 1.0),
+		Vector3.ZERO,
+		0.0,
+		0.48
 	)
 	_configure_box(
 		proxy_root,
 		"Lanyard",
 		Vector3(0.032, 0.22, 0.018),
-		Vector3(0.0, 0.93, 0.169),
-		Color(0.96, 0.72, 0.26, 1.0)
+		Vector3(0.0, 0.93, 0.181),
+		Color(0.72, 0.62, 0.36, 1.0),
+		Vector3.ZERO,
+		0.25,
+		0.56
+	)
+	_configure_box(
+		proxy_root,
+		"KeyRing",
+		Vector3(0.065, 0.065, 0.014),
+		Vector3(-0.215, 0.73, 0.174),
+		Color(0.72, 0.62, 0.36, 1.0),
+		Vector3(0.0, 0.0, 45.0),
+		0.35,
+		0.54
+	)
+	_configure_box(
+		proxy_root,
+		"KeyA",
+		Vector3(0.024, 0.115, 0.012),
+		Vector3(-0.225, 0.645, 0.174),
+		Color(0.72, 0.62, 0.36, 1.0),
+		Vector3(0.0, 0.0, -8.0),
+		0.45,
+		0.5
+	)
+	_configure_box(
+		proxy_root,
+		"KeyB",
+		Vector3(0.022, 0.095, 0.012),
+		Vector3(-0.175, 0.65, 0.174),
+		Color(0.72, 0.62, 0.36, 1.0),
+		Vector3(0.0, 0.0, 16.0),
+		0.45,
+		0.5
 	)
 	_configure_box(
 		proxy_root,
 		"Clipboard",
 		Vector3(0.16, 0.26, 0.028),
-		Vector3(0.285, 0.58, 0.115),
+		Vector3(0.285, 0.61, 0.145),
 		Color(0.50, 0.35, 0.21, 1.0),
-		Vector3(0.0, 0.0, -12.0)
+		Vector3(0.0, 0.0, -12.0),
+		0.0,
+		0.75
+	)
+	_configure_box(
+		proxy_root,
+		"ClipboardPaper",
+		Vector3(0.125, 0.205, 0.01),
+		Vector3(0.285, 0.61, 0.164),
+		Color(0.88, 0.84, 0.74, 1.0),
+		Vector3(0.0, 0.0, -12.0),
+		0.0,
+		0.68
 	)
 	set_manager_details_visible(proxy_root, is_manager_role)
+	set_customer_accent_visible(proxy_root, not is_manager_role)
+	if not is_manager_role:
+		configure_customer_accent(proxy_root, profile_id, archetype_id)
 
 
 static func set_manager_details_visible(proxy_root: Node, is_manager_role: bool) -> void:
@@ -139,6 +216,30 @@ static func set_manager_details_visible(proxy_root: Node, is_manager_role: bool)
 		var part: Node3D = proxy_root.get_node_or_null(part_name) as Node3D
 		if part != null:
 			part.visible = is_manager_role
+
+
+static func set_customer_accent_visible(proxy_root: Node, visible: bool) -> void:
+	if proxy_root == null:
+		return
+	for part_name: String in CUSTOMER_ACCENT_PARTS:
+		var part: Node3D = proxy_root.get_node_or_null(part_name) as Node3D
+		if part != null:
+			part.visible = visible
+
+
+static func configure_customer_accent(
+	proxy_root: Node3D,
+	profile_id: String = "",
+	archetype_id: StringName = &""
+) -> void:
+	if proxy_root == null:
+		return
+	var accent: Dictionary = CustomerVisualProfileScript.accent_for(
+		profile_id,
+		archetype_id
+	)
+	_configure_accent_box(proxy_root, "ArchetypeAccentPrimary", accent, true)
+	_configure_accent_box(proxy_root, "ArchetypeAccentSecondary", accent, false)
 
 
 static func _remove_stale_parts(proxy_root: Node3D) -> void:
@@ -193,14 +294,43 @@ static func _configure_box(
 	size: Vector3,
 	position: Vector3,
 	color: Color,
-	rotation_degrees: Vector3 = Vector3.ZERO
+	rotation_degrees: Vector3 = Vector3.ZERO,
+	metallic: float = 0.0,
+	roughness: float = 0.86
 ) -> void:
 	var part: MeshInstance3D = _mesh_part(proxy_root, part_name)
 	var mesh := BoxMesh.new()
 	mesh.size = size
 	part.mesh = mesh
 	_apply_part_transform(part, position, rotation_degrees)
-	part.material_override = _material(color)
+	part.material_override = _material(color, metallic, roughness)
+
+
+static func _configure_accent_box(
+	proxy_root: Node3D,
+	part_name: String,
+	accent: Dictionary,
+	primary: bool
+) -> void:
+	var shape: StringName = StringName(str(accent.get("shape", &"soft_pin")))
+	var color_value: Variant = accent.get("primary_color", Color.WHITE)
+	if not primary:
+		color_value = accent.get("secondary_color", Color.WHITE)
+	_configure_box(
+		proxy_root,
+		part_name,
+		_accent_size(shape, primary),
+		_accent_position(shape, primary),
+		color_value as Color,
+		_accent_rotation(shape, primary),
+		0.0,
+		0.70
+	)
+	var part: MeshInstance3D = proxy_root.get_node_or_null(part_name) as MeshInstance3D
+	if part != null:
+		part.set_meta("accent_key", String(accent.get("key", &"casual_shopper")))
+		part.set_meta("accent_shape", String(shape))
+		part.visible = true
 
 
 static func _mesh_part(proxy_root: Node3D, part_name: String) -> MeshInstance3D:
@@ -216,6 +346,52 @@ static func _mesh_part(proxy_root: Node3D, part_name: String) -> MeshInstance3D:
 	return part
 
 
+static func _accent_size(shape: StringName, primary: bool) -> Vector3:
+	match shape:
+		&"catalog_card":
+			return Vector3(0.13, 0.09, 0.024) if primary else Vector3(0.06, 0.09, 0.026)
+		&"question_tab":
+			return Vector3(0.12, 0.12, 0.025) if primary else Vector3(0.04, 0.16, 0.026)
+		&"coupon_strip":
+			return Vector3(0.18, 0.042, 0.024) if primary else Vector3(0.045, 0.11, 0.026)
+		&"neon_cap":
+			return Vector3(0.19, 0.036, 0.028) if primary else Vector3(0.08, 0.05, 0.03)
+		&"pennant":
+			return Vector3(0.16, 0.055, 0.024) if primary else Vector3(0.055, 0.14, 0.026)
+		&"price_tag":
+			return Vector3(0.11, 0.14, 0.024) if primary else Vector3(0.08, 0.035, 0.026)
+		&"return_slash":
+			return Vector3(0.16, 0.045, 0.024) if primary else Vector3(0.04, 0.15, 0.026)
+		&"low_badge":
+			return Vector3(0.09, 0.08, 0.024) if primary else Vector3(0.13, 0.032, 0.026)
+		&"gold_lapel":
+			return Vector3(0.10, 0.12, 0.024) if primary else Vector3(0.07, 0.07, 0.026)
+	return Vector3(0.11, 0.065, 0.024) if primary else Vector3(0.055, 0.055, 0.026)
+
+
+static func _accent_position(shape: StringName, primary: bool) -> Vector3:
+	if shape == &"neon_cap":
+		return Vector3(0.0, 1.60, 0.17) if primary else Vector3(0.11, 1.52, 0.17)
+	if shape == &"low_badge":
+		return Vector3(-0.13, 0.68, 0.182) if primary else Vector3(0.12, 0.66, 0.182)
+	return Vector3(-0.105, 1.01, 0.183) if primary else Vector3(0.115, 0.99, 0.184)
+
+
+static func _accent_rotation(shape: StringName, primary: bool) -> Vector3:
+	match shape:
+		&"coupon_strip":
+			return Vector3(0.0, 0.0, -8.0 if primary else 8.0)
+		&"pennant":
+			return Vector3(0.0, 0.0, 12.0 if primary else -12.0)
+		&"price_tag":
+			return Vector3(0.0, 0.0, -10.0 if primary else 0.0)
+		&"return_slash":
+			return Vector3(0.0, 0.0, -28.0 if primary else 28.0)
+		&"gold_lapel":
+			return Vector3(0.0, 0.0, 18.0 if primary else -18.0)
+	return Vector3.ZERO
+
+
 static func _apply_part_transform(
 	part: MeshInstance3D, position: Vector3, rotation_degrees: Vector3
 ) -> void:
@@ -224,8 +400,11 @@ static func _apply_part_transform(
 	part.scale = Vector3.ONE
 
 
-static func _material(color: Color) -> StandardMaterial3D:
+static func _material(
+	color: Color, metallic: float = 0.0, roughness: float = 0.86
+) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = color
-	material.roughness = 0.86
+	material.metallic = metallic
+	material.roughness = roughness
 	return material

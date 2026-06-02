@@ -17,7 +17,7 @@ except ImportError as exc:
     raise SystemExit("Pillow is required: python3 -m pip install pillow") from exc
 
 
-REQUIRED_FILENAMES = [
+REQUIRED_FIRST_TEN_SECONDS_FILENAMES = [
     "01_spawn_first_look.png",
     "02_checkout_manager_counter.png",
     "03_shelf_wall_product_focus.png",
@@ -27,6 +27,20 @@ REQUIRED_FILENAMES = [
     "07_checkout_close_day.png",
     "08_exit_threshold_return_view.png",
 ]
+REQUIRED_OVERHAUL_ACCEPTANCE_FILENAMES = [
+    "09_build_design_tool.png",
+    "10_stocked_shelf_state.png",
+    "11_shelf_after_sale_gap.png",
+    "12_checkout_transaction_active.png",
+    "13_register_trade_in_no_sale.png",
+    "14_customer_queue_state.png",
+    "15_customization_featured_display.png",
+    "16_stockroom_inventory_state.png",
+    "17_growth_expansion_preview.png",
+    "18_lighting_balance_review.png",
+    "19_decision_panels_work_surface_balance.png",
+]
+REQUIRED_FILENAMES = REQUIRED_FIRST_TEN_SECONDS_FILENAMES
 NOISE_FLOOR = 3
 CHANGED_RATIO_WARN = 0.0025
 CHANGED_RATIO_FAIL = 0.01
@@ -56,9 +70,10 @@ def main() -> int:
     diff_dir.mkdir(parents=True, exist_ok=True)
     thresholds = Thresholds()
     review_manifest = load_json(args.review_manifest)
+    required_filenames = required_filenames_for_suite(args.suite)
     results: list[dict[str, Any]] = []
 
-    for filename in REQUIRED_FILENAMES:
+    for filename in required_filenames:
         current_path = current_dir / filename
         validation = validate_current_capture(
             current_path,
@@ -79,13 +94,21 @@ def main() -> int:
     if not baselines_present:
         if not args.allow_missing_baseline:
             results.append(failure_result("baseline_dir", f"Missing baseline directory: {baseline_dir}"))
-        write_manifest(args.manifest, mode, args, thresholds, results, missing_baselines)
+        write_manifest(
+            args.manifest,
+            mode,
+            args,
+            thresholds,
+            results,
+            missing_baselines,
+            required_filenames,
+        )
         if current_ok and args.allow_missing_baseline:
             print(f"Store visual baselines missing; current captures are ready for review: {current_dir}")
             return 0
         return 1
 
-    for filename in REQUIRED_FILENAMES:
+    for filename in required_filenames:
         baseline_path = baseline_dir / filename
         current_path = current_dir / filename
         if not baseline_path.exists():
@@ -97,10 +120,10 @@ def main() -> int:
         results.append(compare_images(baseline_path, current_path, diff_dir / f"{filename}.diff.png", thresholds))
 
     extra_current = sorted(
-        path.name for path in current_dir.glob("*.png") if path.name not in REQUIRED_FILENAMES
+        path.name for path in current_dir.glob("*.png") if path.name not in required_filenames
     )
     extra_baseline = sorted(
-        path.name for path in baseline_dir.glob("*.png") if path.name not in REQUIRED_FILENAMES
+        path.name for path in baseline_dir.glob("*.png") if path.name not in required_filenames
     )
     manifest = write_manifest(
         args.manifest,
@@ -109,6 +132,7 @@ def main() -> int:
         thresholds,
         results,
         missing_baselines,
+        required_filenames,
         extra_current,
         extra_baseline,
     )
@@ -128,11 +152,22 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--review-manifest", type=Path)
     parser.add_argument("--width", type=int, default=1280)
     parser.add_argument("--height", type=int, default=720)
+    parser.add_argument(
+        "--suite",
+        choices=["first-ten-seconds", "overhaul-acceptance"],
+        default="first-ten-seconds",
+    )
     parser.add_argument("--allow-missing-baseline", action="store_true")
     args = parser.parse_args()
     if args.review_manifest is None:
         args.review_manifest = args.current.parent / "review_manifest.json"
     return args
+
+
+def required_filenames_for_suite(suite: str) -> list[str]:
+    if suite == "overhaul-acceptance":
+        return REQUIRED_OVERHAUL_ACCEPTANCE_FILENAMES
+    return REQUIRED_FIRST_TEN_SECONDS_FILENAMES
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -212,6 +247,12 @@ def validate_capture_metadata(
             return failure_result(filename, f"Capture metadata missing {field}")
     if manifest_capture.get("non_acceptance_evidence") is True:
         return failure_result(filename, "Capture marked as non-acceptance evidence")
+    contract_failure = validate_review_manifest_contract(manifest_capture, filename)
+    if contract_failure is not None:
+        return contract_failure
+    closeout_failure = validate_inspiration_closeout(manifest_capture, filename)
+    if closeout_failure is not None:
+        return closeout_failure
     anchor_validation = manifest_capture.get("anchor_validation", {})
     if not isinstance(anchor_validation, dict) or anchor_validation.get("ok") is not True:
         return failure_result(filename, "Capture did not validate intended visual anchors")
@@ -224,6 +265,73 @@ def validate_capture_metadata(
     image_validation = manifest_capture.get("image_validation", {})
     if isinstance(image_validation, dict) and image_validation.get("ok") is False:
         return failure_result(filename, "Capture image validation failed")
+    return None
+
+
+def validate_review_manifest_contract(
+    manifest_capture: dict[str, Any],
+    filename: str,
+) -> dict[str, Any] | None:
+    contract = manifest_capture.get("review_manifest_contract", {})
+    if not isinstance(contract, dict) or not contract:
+        return failure_result(filename, "Capture metadata missing review_manifest_contract")
+    required_fields = [
+        "route_target",
+        "anchors",
+        "visual_scope_mode",
+        "inspiration_cluster",
+        "baseline_policy",
+        "blank_wall_dominance",
+        "work_surface_dominance",
+        "disconnected_prop_dominance",
+        "route_obstruction",
+        "ui_clipping",
+        "originality_notes",
+        "capture_resolution_validity",
+    ]
+    for field in required_fields:
+        value = contract.get(field)
+        if value is None or value == "" or value == []:
+            return failure_result(filename, f"Capture review manifest contract missing {field}")
+    if contract.get("anchors") != manifest_capture.get("anchor_validation", {}).get("visible"):
+        visible = manifest_capture.get("anchor_validation", {}).get("visible", [])
+        declared = contract.get("anchors", [])
+        if not isinstance(visible, list) or not set(declared).issubset(set(visible)):
+            return failure_result(filename, "Capture review manifest anchors do not match validation")
+    if str(contract.get("capture_resolution_validity", "")) != "must_match_1280x720":
+        return failure_result(filename, "Capture review manifest has invalid resolution policy")
+    return None
+
+
+def validate_inspiration_closeout(
+    manifest_capture: dict[str, Any],
+    filename: str,
+) -> dict[str, Any] | None:
+    closeout = manifest_capture.get("inspiration_closeout", {})
+    if not isinstance(closeout, dict) or not closeout:
+        return failure_result(filename, "Capture metadata missing inspiration_closeout")
+    clusters = closeout.get("reference_clusters", [])
+    if not isinstance(clusters, list) or not clusters:
+        return failure_result(filename, "Capture metadata missing reference cluster")
+    for cluster in clusters:
+        if not isinstance(cluster, dict):
+            return failure_result(filename, "Capture reference cluster must be an object")
+        if not str(cluster.get("id", "")).strip() or not str(cluster.get("label", "")).strip():
+            return failure_result(filename, "Capture reference cluster missing id or label")
+    if not str(closeout.get("mallcore_original_adaptation", "")).strip():
+        return failure_result(filename, "Capture metadata missing original adaptation")
+    if not str(closeout.get("intended_pattern_validation", "")).strip():
+        return failure_result(filename, "Capture metadata missing pattern validation intent")
+    required_commands = closeout.get("required_originality_commands", [])
+    for command in [
+        "bash scripts/validate_originality.sh",
+        "bash tests/validate_original_content.sh",
+    ]:
+        if command not in required_commands:
+            return failure_result(filename, f"Capture metadata missing originality command: {command}")
+    policy = closeout.get("source_policy", {})
+    if not isinstance(policy, dict) or policy.get("allowed_use") != "pattern_reference_only":
+        return failure_result(filename, "Capture metadata missing pattern-reference source policy")
     return None
 
 
@@ -357,6 +465,7 @@ def write_manifest(
     thresholds: Thresholds,
     results: list[dict[str, Any]],
     missing_baselines: list[str],
+    required_filenames: list[str],
     extra_current: list[str] | None = None,
     extra_baseline: list[str] | None = None,
 ) -> dict[str, Any]:
@@ -364,10 +473,11 @@ def write_manifest(
     payload: dict[str, Any] = {
         "ok": ok,
         "mode": mode,
+        "suite": args.suite,
         "baseline_dir": str(args.baseline),
         "current_dir": str(args.current),
         "diff_dir": str(args.diff),
-        "required_filenames": REQUIRED_FILENAMES,
+        "required_filenames": required_filenames,
         "thresholds": asdict(thresholds),
         "missing_baselines": missing_baselines,
         "extra_current": extra_current or [],

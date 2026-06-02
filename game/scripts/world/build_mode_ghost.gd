@@ -2,8 +2,14 @@
 class_name BuildModeGhost
 extends Node3D
 
+const PlacementPreviewFeedbackScript = preload("res://game/resources/placement_preview_feedback.gd")
+
 const VALID_COLOR: Color = Color(0.2, 0.8, 0.2, 0.4)
 const INVALID_COLOR: Color = Color(0.8, 0.2, 0.2, 0.4)
+const BLOCKER_COLOR: Color = Color(1.0, 0.62, 0.16, 0.45)
+const ENTRY_COLOR: Color = Color(1.0, 0.82, 0.1, 0.48)
+const FRONT_EDGE_COLOR: Color = Color(0.2, 0.65, 1.0, 0.52)
+const WALL_EDGE_COLOR: Color = Color(0.55, 0.72, 1.0, 0.42)
 const Y_OFFSET: float = 0.03
 
 const PULSE_SPEED: float = 4.0
@@ -20,6 +26,7 @@ var is_valid: bool = false
 
 var _meshes: Array[MeshInstance3D] = []
 var _material: StandardMaterial3D = null
+var _materials: Dictionary = {}
 var _pulse_time: float = 0.0
 var _is_pulsing: bool = false
 var _grid: BuildModeGrid = null
@@ -30,6 +37,14 @@ var _scale_tween: Tween = null
 func _ready() -> void:
 	visible = false
 	_material = _create_material(VALID_COLOR)
+	_materials = {
+		"valid": _material,
+		"invalid": _create_material(INVALID_COLOR),
+		"blocker": _create_material(BLOCKER_COLOR),
+		"entry": _create_material(ENTRY_COLOR),
+		"front": _create_material(FRONT_EDGE_COLOR),
+		"wall": _create_material(WALL_EDGE_COLOR),
+	}
 
 
 ## Stores grid reference for coordinate conversion.
@@ -52,12 +67,23 @@ func _process(delta: float) -> void:
 func show_at_cells(
 	cells: Array[Vector2i], valid: bool
 ) -> void:
+	var feedback = PlacementPreviewFeedbackScript.new()
+	feedback.footprint_cells = cells
+	feedback.valid = valid
+	if not valid:
+		feedback.invalid_cells = cells
+	show_feedback(feedback)
+
+
+## Shows ghost feedback with reason-specific cells and facing/front-edge hints.
+func show_feedback(feedback) -> void:
+	var cells: Array[Vector2i] = _get_feedback_cells(feedback)
 	if cells.is_empty():
 		hide_ghost()
 		return
-	is_valid = valid
-	_update_color(valid)
-	_rebuild_meshes(cells)
+	is_valid = feedback.valid
+	_update_color(feedback.valid)
+	_rebuild_meshes(feedback, cells)
 	visible = true
 
 
@@ -132,7 +158,9 @@ func _update_color(valid: bool) -> void:
 		_is_pulsing = true
 
 
-func _rebuild_meshes(cells: Array[Vector2i]) -> void:
+func _rebuild_meshes(
+	feedback, cells: Array[Vector2i]
+) -> void:
 	for mesh: MeshInstance3D in _meshes:
 		if is_instance_valid(mesh):
 			remove_child(mesh)
@@ -143,12 +171,15 @@ func _rebuild_meshes(cells: Array[Vector2i]) -> void:
 	position = anchor
 
 	for cell: Vector2i in cells:
-		var inst: MeshInstance3D = _create_cell_quad(cell, anchor)
+		var mat: StandardMaterial3D = _get_cell_material(cell, feedback)
+		var inst: MeshInstance3D = _create_cell_quad(cell, anchor, mat)
 		add_child(inst)
 		_meshes.append(inst)
 
 
-func _create_cell_quad(cell: Vector2i, anchor: Vector3) -> MeshInstance3D:
+func _create_cell_quad(
+	cell: Vector2i, anchor: Vector3, material: StandardMaterial3D
+) -> MeshInstance3D:
 	var quad: PlaneMesh = PlaneMesh.new()
 	quad.size = Vector2(
 		BuildModeGrid.CELL_SIZE * 0.95,
@@ -157,7 +188,7 @@ func _create_cell_quad(cell: Vector2i, anchor: Vector3) -> MeshInstance3D:
 
 	var inst: MeshInstance3D = MeshInstance3D.new()
 	inst.mesh = quad
-	inst.set_surface_override_material(0, _material)
+	inst.set_surface_override_material(0, material)
 	var world_pos := Vector3(
 		_grid.grid_origin.x + (cell.x + 0.5) * BuildModeGrid.CELL_SIZE,
 		_grid.grid_origin.y + Y_OFFSET,
@@ -165,6 +196,37 @@ func _create_cell_quad(cell: Vector2i, anchor: Vector3) -> MeshInstance3D:
 	)
 	inst.position = world_pos - anchor
 	return inst
+
+
+func _get_feedback_cells(feedback) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for group: Array[Vector2i] in [
+		feedback.footprint_cells,
+		feedback.nearby_blocker_cells,
+		feedback.wall_candidate_cells,
+	]:
+		for cell: Vector2i in group:
+			if cell not in cells:
+				cells.append(cell)
+	return cells
+
+
+func _get_cell_material(
+	cell: Vector2i, feedback
+) -> StandardMaterial3D:
+	if feedback.collision_cells.has(cell) or feedback.out_of_bounds_cells.has(cell):
+		return _materials["invalid"] as StandardMaterial3D
+	if feedback.entry_zone_cells.has(cell):
+		return _materials["entry"] as StandardMaterial3D
+	if feedback.nearby_blocker_cells.has(cell):
+		return _materials["blocker"] as StandardMaterial3D
+	if feedback.front_edge_cells.has(cell):
+		return _materials["front"] as StandardMaterial3D
+	if feedback.wall_candidate_cells.has(cell):
+		return _materials["wall"] as StandardMaterial3D
+	if not feedback.valid and feedback.invalid_cells.has(cell):
+		return _materials["invalid"] as StandardMaterial3D
+	return _material
 
 
 func _create_material(color: Color) -> StandardMaterial3D:

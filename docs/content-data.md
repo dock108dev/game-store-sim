@@ -46,7 +46,7 @@ The checked-in content tree under `game/content/`:
 | `staff/` | `staff_definitions.json`. |
 | `suppliers/` | `supplier_catalog.json`. |
 | `unlocks/` | `unlocks.json`. |
-| `visuals/` | `retro_games_product_visual_catalog.json` and `store_visual_layouts.json` — visual-only presentation/layout data. |
+| `visuals/` | `retro_games_product_visual_catalog.json` for product presentation metadata, plus `store_visual_layouts.json` for generated store fixture/product placement and authored physical layout contracts. |
 | `store_session/days/` | `day_01.json`, `day_02.json` — loaded directly by `StoreSessionController`, routed to `ignore` in the loader table. |
 | `store_session/events/` | `customer_events.json`, `hidden_thread_events.json` — same path as above. |
 
@@ -183,7 +183,10 @@ Not every content file becomes a typed `Resource`. Current examples include:
   recognized by `DataLoader` but remains visual-only data rather than a typed
   gameplay resource
 - store visual layout data under `game/content/visuals/`, which is recognized
-  by `DataLoader` and consumed by visual/store presentation code
+  by `DataLoader` and consumed by `StoreVisualLayout`, `StoreLayoutRuntime`,
+  and `ExpandableStoreShellRuntime`; its `physical_contract` sections define
+  store bounds, zones, placement contracts, room contracts, no-overlap rules,
+  and clearance rules for the generated starter shell
 - `PerformanceReport`, which is a runtime Resource built by
   `PerformanceReportSystem`, not a JSON-loaded content resource
 
@@ -201,7 +204,10 @@ Not every content file becomes a typed `Resource`. Current examples include:
 
 Additional GUT and integration tests also validate the boot content set, store
 scene references, event data, catalog completeness, and related content
-contracts.
+contracts. Store visual layout physical contracts are validated through
+`StoreVisualLayout.validate_physical_contract()`,
+`StorePhysicalContractValidator`, `StoreRoomContractValidator`, and the
+`tests/gut/test_store_visual_layout_contract_validation.gd` coverage.
 
 ## Runtime access
 

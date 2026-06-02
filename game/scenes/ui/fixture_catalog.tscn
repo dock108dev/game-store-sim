@@ -44,43 +44,44 @@ layout_mode = 2
 custom_minimum_size = Vector2(30, 0)
 text = "X"
 
-[node name="UniversalSection" type="VBoxContainer" parent="PanelRoot/Margin/VBox"]
+[node name="CategoryTabs" type="HBoxContainer" parent="PanelRoot/Margin/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="UniversalLabel" type="Label" parent="PanelRoot/Margin/VBox/UniversalSection"]
-layout_mode = 2
-theme_type_variation = &"HeaderLabel"
-text = "Universal Fixtures"
-
-[node name="UniversalScroll" type="ScrollContainer" parent="PanelRoot/Margin/VBox/UniversalSection"]
+[node name="CatalogScroll" type="ScrollContainer" parent="PanelRoot/Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
-custom_minimum_size = Vector2(0, 160)
+custom_minimum_size = Vector2(0, 330)
 
-[node name="UniversalGrid" type="GridContainer" parent="PanelRoot/Margin/VBox/UniversalSection/UniversalScroll"]
+[node name="CatalogGrid" type="GridContainer" parent="PanelRoot/Margin/VBox/CatalogScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 1
 
-[node name="SpecificSection" type="VBoxContainer" parent="PanelRoot/Margin/VBox"]
+[node name="ActionControls" type="HBoxContainer" parent="PanelRoot/Margin/VBox"]
 layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="SpecificLabel" type="Label" parent="PanelRoot/Margin/VBox/SpecificSection"]
+[node name="PlaceButton" type="Button" parent="PanelRoot/Margin/VBox/ActionControls"]
 layout_mode = 2
-theme_type_variation = &"HeaderLabel"
-text = "Store-Specific Fixtures"
+text = "Place"
 
-[node name="SpecificScroll" type="ScrollContainer" parent="PanelRoot/Margin/VBox/SpecificSection"]
+[node name="MoveButton" type="Button" parent="PanelRoot/Margin/VBox/ActionControls"]
 layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(0, 160)
+text = "Move"
 
-[node name="SpecificGrid" type="GridContainer" parent="PanelRoot/Margin/VBox/SpecificSection/SpecificScroll"]
+[node name="RotateButton" type="Button" parent="PanelRoot/Margin/VBox/ActionControls"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 1
+text = "Rotate"
+
+[node name="SellButton" type="Button" parent="PanelRoot/Margin/VBox/ActionControls"]
+layout_mode = 2
+text = "Sell"
+
+[node name="BackButton" type="Button" parent="PanelRoot/Margin/VBox/ActionControls"]
+layout_mode = 2
+text = "Back"
 
 [node name="InfoLabel" type="Label" parent="PanelRoot/Margin/VBox"]
 layout_mode = 2

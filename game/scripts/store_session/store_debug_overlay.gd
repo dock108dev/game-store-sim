@@ -347,6 +347,8 @@ func _store_session_controller() -> Node:
 func _objective_anchor_for_stage(stage: Variant) -> String:
 	var stage_name: String = str(stage)
 	match stage_name:
+		"training_talk_manager":
+			return "StoreSessionManager"
 		"talk_to_customer":
 			return "StoreSessionDayOneCustomer"
 		"back_room_inventory":

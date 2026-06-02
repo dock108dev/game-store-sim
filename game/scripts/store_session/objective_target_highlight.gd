@@ -40,7 +40,7 @@ const _CHIP_BG: Color = Color(0.05, 0.07, 0.05, 0.85)
 ## objective table. Production target paths and offsets come from
 ## `StoreSessionController.active_objective_*`.
 const STAGE_TARGETS: Dictionary = {
-	&"training_talk_manager": ["StoreSessionDayOneCustomer", 1.9],
+	&"training_talk_manager": ["StoreSessionManager", 1.9],
 	&"training_check_register": ["StoreSessionDayEndTrigger", 0.6],
 	&"training_back_room_inventory": ["StoreSessionBackroomPickup", 1.3],
 	&"training_stock_shelf": ["StoreSessionRestockShelf", 1.7],

@@ -226,6 +226,7 @@ func test_day_end_trigger_sits_on_the_register_counter() -> void:
 
 func test_store_interactables_have_aligned_trigger_volumes() -> void:
 	for parent_name: String in [
+		"StoreSessionManager",
 		"StoreSessionDayOneCustomer",
 		"StoreSessionBackroomPickup",
 		"StoreSessionRestockShelf",
@@ -418,9 +419,9 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 		return
 	assert_false(register_screen is Interactable, "Register screen must stay non-interactive")
 	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_INACTIVE)
-	_assert_route_target("StoreSessionDayOneCustomer", "Talk to Manager")
+	_assert_route_target("StoreSessionManager", "Talk to Manager")
 	_assert_right_panel_header("FIRST DAY")
-	await _interact_route_target("StoreSessionDayOneCustomer", "Talk to Manager")
+	await _interact_route_target("StoreSessionManager", "Talk to Manager")
 
 	_assert_route_target("StoreSessionDayEndTrigger", "Check Register")
 	assert_eq(String(controller.current_stage()), "training_check_register")
@@ -472,9 +473,9 @@ func test_full_day_one_route_reaches_summary_and_day_two() -> void:
 	)
 	_press_choice(decision, &"clean_exchange")
 	await get_tree().process_frame
-	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(register_screen.current_state(), RegisterScreenStateScript.STATE_SETTLED)
 	assert_eq(register_screen.current_amount(), 15)
-	assert_eq(register_screen.display_text(), "SALE\n$15")
+	assert_eq(register_screen.display_text(), "RECEIPT\n$15")
 
 	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
 	assert_not_null(result, "Choosing an authored option must open the result modal")
@@ -1133,7 +1134,7 @@ func test_hidden_clue_does_not_expose_active_prompt_during_chain() -> void:
 	assert_false(clue.enabled, "Hidden clue must not compete with close-day")
 
 
-func test_invalid_objective_target_path_fails_closed_with_diagnostic() -> void:
+func test_invalid_customer_objective_target_path_fails_closed_with_diagnostic() -> void:
 	var controller: Node = _store_session_controller()
 	if controller == null:
 		return
@@ -1159,6 +1160,30 @@ func test_invalid_objective_target_path_fails_closed_with_diagnostic() -> void:
 	var snap: Dictionary = controller.get_state_snapshot()
 	assert_string_contains(
 		String(snap.get("objective_target_diagnostic", "")), "MissingObjectiveTarget/Interactable"
+	)
+
+
+func test_invalid_manager_objective_target_path_fails_closed_with_diagnostic() -> void:
+	await _reload_preopening_route_scene()
+	var controller: Node = _store_session_controller()
+	if controller == null:
+		return
+	var objectives: Array = controller.get("_objectives") as Array
+	assert_false(objectives.is_empty(), "Pre-condition: objective table exists")
+	if objectives.is_empty():
+		return
+	objectives[0]["target_path"] = "MissingManagerTarget/Interactable"
+	controller.set("_stage", StoreSessionController.STAGE_TRAINING_TALK_MANAGER)
+	controller._apply_objective_gating()
+
+	assert_eq(
+		Array(_enabled_store_critical_path_targets()),
+		[],
+		"Invalid manager target path must leave store_session critical-path targets disabled"
+	)
+	var snap: Dictionary = controller.get_state_snapshot()
+	assert_string_contains(
+		String(snap.get("objective_target_diagnostic", "")), "MissingManagerTarget/Interactable"
 	)
 
 
@@ -1387,6 +1412,7 @@ func _signal_first_arg_seen(emissions: Array, expected_id: StringName) -> bool:
 func _enabled_store_critical_path_targets() -> PackedStringArray:
 	var out: PackedStringArray = []
 	for parent_name: String in [
+		"StoreSessionManager",
 		"StoreSessionDayOneCustomer",
 		"StoreSessionHiddenClue",
 		"StoreSessionBackroomPickup",
@@ -2449,9 +2475,9 @@ func test_clean_exchange_presents_room_outcome_before_summary() -> void:
 	assert_eq(StoreSessionState.cash, 15)
 	assert_eq(StoreSessionState.reputation, 2)
 	assert_eq(StoreSessionState.manager_trust, 2)
-	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_SETTLED)
 	assert_eq(screen.current_amount(), 15)
-	assert_eq(screen.display_text(), "SALE\n$15")
+	assert_eq(screen.display_text(), "RECEIPT\n$15")
 
 	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
 	assert_gt(transactions.size(), 0, "Clean exchange must record the stock movement")
@@ -2481,6 +2507,11 @@ func test_clean_exchange_presents_room_outcome_before_summary() -> void:
 	if shelf_gap != null:
 		assert_true(shelf_gap.visible)
 		assert_eq(str(shelf_gap.get_meta("outcome", "")), "clean_exchange")
+		assert_eq(
+			str(shelf_gap.get_meta("slot_state", "")),
+			StoreSessionController.SLOT_STATE_EXCHANGE_RETURNED
+		)
+		assert_not_null(shelf_gap.get_node_or_null("GapStateTag"))
 
 	var returned_copy: Node3D = (
 		_root.get_node_or_null("StoreSessionBackroomPickup/CleanExchangeReturnedCopy") as Node3D
@@ -2572,9 +2603,9 @@ func test_bundle_sale_presents_distinct_room_outcome_before_summary() -> void:
 	assert_eq(StoreSessionState.cash, 18)
 	assert_eq(StoreSessionState.reputation, 1)
 	assert_eq(StoreSessionState.manager_trust, 0)
-	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_SETTLED)
 	assert_eq(screen.current_amount(), 18)
-	assert_eq(screen.display_text(), "SALE\n$18")
+	assert_eq(screen.display_text(), "RECEIPT\n$18")
 
 	var transactions: Array = controller.get("_customer_inventory_transactions") as Array
 	assert_gt(transactions.size(), 0, "Bundle sale must record the stock movement")
@@ -2614,9 +2645,19 @@ func test_bundle_sale_presents_distinct_room_outcome_before_summary() -> void:
 	if game_gap != null:
 		assert_eq(str(game_gap.get_meta("outcome", "")), "bundle")
 		assert_eq(str(game_gap.get_meta("item_role", "")), "game")
+		assert_eq(
+			str(game_gap.get_meta("slot_state", "")),
+			StoreSessionController.SLOT_STATE_BUNDLE_REMOVED
+		)
+		assert_not_null(game_gap.get_node_or_null("GapStateTag"))
 	if controller_gap != null:
 		assert_eq(str(controller_gap.get_meta("outcome", "")), "bundle")
 		assert_eq(str(controller_gap.get_meta("item_role", "")), "controller")
+		assert_eq(
+			str(controller_gap.get_meta("slot_state", "")),
+			StoreSessionController.SLOT_STATE_BUNDLE_REMOVED
+		)
+		assert_not_null(controller_gap.get_node_or_null("GapStateTag"))
 	assert_null(_root.get_node_or_null("StoreSessionRestockShelf/CleanExchangeShelfGap"))
 
 	var returned_copy: Node3D = _root.get_node_or_null("StoreSessionBackroomPickup/BundleReturnedCopy") as Node3D
@@ -2741,6 +2782,16 @@ func test_refused_return_marks_loss_without_sale_or_stock_movement() -> void:
 	assert_signal_not_emitted(EventBus, "store_shelf_count_changed")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_NO_SALE)
 	assert_eq(screen.display_text(), "NO SALE")
+	var refused_gap: Node3D = (
+		_root.get_node_or_null("StoreSessionRestockShelf/StarterDisplaySlotGap0") as Node3D
+	)
+	assert_not_null(refused_gap, "Refused no-sale must leave a durable shelf outcome marker")
+	if refused_gap != null:
+		assert_eq(
+			str(refused_gap.get_meta("slot_state", "")),
+			StoreSessionController.SLOT_STATE_REFUSED
+		)
+		assert_not_null(refused_gap.get_node_or_null("GapStateTag"))
 	_assert_right_panel_stat("Sales", "0")
 	_assert_right_panel_stat("Customers", "0")
 	_assert_right_panel_stat("Reputation", "-3")

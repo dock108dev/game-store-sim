@@ -30,11 +30,20 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="TitleLabel" type="Label" parent="PanelRoot/Margin/VBox"]
+[node name="Header" type="HBoxContainer" parent="PanelRoot/Margin/VBox"]
 layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelRoot/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
 text = "Set Price"
 horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="PanelRoot/Margin/VBox/Header"]
+layout_mode = 2
+custom_minimum_size = Vector2(30, 0)
+text = "X"
 
 [node name="HSeparator1" type="HSeparator" parent="PanelRoot/Margin/VBox"]
 layout_mode = 2

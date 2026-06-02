@@ -30,10 +30,29 @@ const ARM_PATHS: Array = [
 	"BodyMesh/LeftArm/LeftHand",
 	"BodyMesh/RightArm/RightHand",
 ]
+const INTENT_ANIMATION_ALIASES: Dictionary = {
+	&"browse_scan": "browse",
+	&"compare_think": "idle",
+	&"queue_wait": "idle",
+	&"counter_ready": "purchase",
+	&"leave_satisfied": "leaving_happy",
+	&"leave_frustrated": "leaving_upset",
+	&"react_price_shock": "leaving_upset",
+	&"react_trade_in": "purchase",
+	&"react_sale": "leaving_happy",
+	&"react_no_sale": "leaving_upset",
+	&"react_bundle_accepted": "purchase",
+	&"react_bundle_rejected": "leaving_upset",
+	&"react_clean_exchange": "leaving_happy",
+	&"react_refused_return": "leaving_upset",
+	&"react_accepted_trade_in": "purchase",
+	&"react_payout_trade_in": "purchase",
+}
 
 var _animation_player: AnimationPlayer = null
 var _current_animation: String = ""
 var _current_state: Customer.State = Customer.State.ENTERING
+var _current_intent: StringName = &""
 var _is_moving: bool = false
 var _is_satisfied: bool = false
 
@@ -55,8 +74,34 @@ func play_for_state(state: Customer.State) -> void:
 	if not _animation_player:
 		return
 	_current_state = state
+	_current_intent = &""
 	var anim_name: String = _get_animation_for_state(state)
 	_play_animation(anim_name)
+
+
+## Plays a production visual intent without mutating the customer FSM.
+func play_intent(intent: StringName) -> void:
+	if not _animation_player:
+		return
+	if not supports_intent(intent):
+		return
+	_current_intent = intent
+	_play_animation(String(intent))
+
+
+## Plays the intent carried by Customer.get_visual_snapshot().
+func play_for_visual_snapshot(snapshot: Dictionary) -> void:
+	play_intent(StringName(str(snapshot.get("animator_intent", ""))))
+
+
+## Returns true when the animator has a named intent alias.
+func supports_intent(intent: StringName) -> bool:
+	return INTENT_ANIMATION_ALIASES.has(intent)
+
+
+## Returns the last explicit visual intent requested.
+func get_current_intent() -> StringName:
+	return _current_intent
 
 
 ## Updates animation based on movement velocity each frame.
@@ -110,6 +155,8 @@ func _get_animation_for_state(state: Customer.State) -> String:
 ## Returns the animation to play when the customer is stationary.
 # gdlint:enable=max-returns
 func _get_stationary_animation(state: Customer.State) -> String:
+	if _current_intent != &"":
+		return String(_current_intent)
 	match state:
 		Customer.State.BROWSING:
 			return "browse"
@@ -129,6 +176,7 @@ func _create_animations() -> void:
 	_create_purchase_animation()
 	_create_leaving_happy_animation()
 	_create_leaving_upset_animation()
+	_create_intent_animation_aliases()
 
 
 func _create_walk_animation() -> void:
@@ -466,6 +514,19 @@ func _create_leaving_upset_animation() -> void:
 	var lib: AnimationLibrary = _get_or_create_library()
 	_set_library_animation(lib, "leaving_upset", anim)
 	_set_library_animation(lib, "leave_upset", anim.duplicate())
+
+
+func _create_intent_animation_aliases() -> void:
+	var lib: AnimationLibrary = _get_or_create_library()
+	for intent: StringName in INTENT_ANIMATION_ALIASES.keys():
+		var source_name: String = str(INTENT_ANIMATION_ALIASES[intent])
+		if not lib.has_animation(source_name):
+			continue
+		_set_library_animation(
+			lib,
+			String(intent),
+			lib.get_animation(source_name).duplicate()
+		)
 
 
 ## Adds alternating arm rotation keyframes to an animation track.

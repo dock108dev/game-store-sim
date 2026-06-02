@@ -1,4 +1,5 @@
 ## Shared manifest and PNG writer for the store_session store visual review sweep.
+## See cleanup-report: capture policy and manifest assembly need extraction before this can shrink.
 class_name StoreVisualSweep
 extends RefCounted
 
@@ -17,18 +18,33 @@ const StoreVisualFullStoreContextScript: GDScript = preload(
 const WorkSurfaceValidationContractScript: GDScript = preload(
 	"res://game/scripts/store_session/work_surface_validation_contract.gd"
 )
+const InspirationCloseoutContractScript: GDScript = preload(
+	"res://game/scripts/store_session/inspiration_closeout_contract.gd"
+)
+const StoreVisualOverhaulRowsScript: GDScript = preload(
+	"res://game/scripts/store_session/store_visual_overhaul_rows.gd"
+)
 const ARTIFACT_SUITE: String = "retro_games_day_one"
+const OVERHAUL_ARTIFACT_SUITE: String = "retro_games_overhaul_acceptance"
 const ARTIFACT_DIR: String = "screenshots/visual_sweep/retro_games_day_one"
 const ACCEPTANCE_ARTIFACT_DIR: String = "visual_sweep/retro_games_day_one"
 const ACCEPTANCE_CURRENT_DIR: String = "visual_sweep/retro_games_day_one/current"
 const ACCEPTANCE_DIFF_DIR: String = "visual_sweep/retro_games_day_one/diff"
+const OVERHAUL_ACCEPTANCE_ARTIFACT_DIR: String = "visual_sweep/retro_games_overhaul_acceptance"
+const OVERHAUL_ACCEPTANCE_CURRENT_DIR: String = (
+	"visual_sweep/retro_games_overhaul_acceptance/current"
+)
+const OVERHAUL_ACCEPTANCE_DIFF_DIR: String = "visual_sweep/retro_games_overhaul_acceptance/diff"
 const REVIEW_MANIFEST_DIR: String = "reports/visual_sweep/retro_games_day_one"
 const REVIEW_MANIFEST_FILENAME: String = "review_manifest.json"
 const VIEWPORT_MARGIN_PX: float = 8.0
 const CAPTURE_RESOLUTION: Vector2i = Vector2i(1280, 720)
 const CAPTURE_CAMERA_FOV: float = 70.0
 const CAPTURE_RANDOM_SEED: int = 1801
+const FIRST_TEN_SECONDS_TARGET_MODE: String = "first_ten_seconds"
+const OVERHAUL_TARGET_MODE: String = "overhaul_acceptance"
 const ACCEPTANCE_TARGET: String = "first_ten_seconds_route_views"
+const OVERHAUL_ACCEPTANCE_TARGET: String = "overhaul_acceptance_views"
 const HUD_CONTEXT_LABEL: String = "First Day — 8:00 AM"
 const _MAX_SLUG_LENGTH: int = 64
 const REQUIRED_ACTION_MOMENTS: Array[String] = (
@@ -44,6 +60,103 @@ static func route_design_checks() -> Array[String]:
 		"no blank-wall dominance",
 		"no oversized-door dominance",
 		"no disconnected-prop dominance",
+		"storefront threshold identity",
+		"threshold does not compete with route target",
+	]
+
+
+## Returns the spawn screenshot checklist preserved in manifests for review.
+static func spawn_acceptance_review() -> Dictionary:
+	return {
+		"source_checklist": "BRAINDUMP spawn screenshot checklist",
+		"evidence_artifact": "01_spawn_first_look.png",
+		"capture_workflow": "scripts/run_store_visual_sweep.sh",
+		"capture_policy": "display-backed 1280x720 gl_compatibility",
+		"must_show": [
+			"enclosed stockroom",
+			"readable checkout",
+			"manager talk target",
+			"queue inside store",
+			"starter display visible",
+			"readable storefront threshold identity",
+			"open sales floor",
+			"no unintended exterior objects",
+		],
+		"must_read_without_ui_labels": [
+			"fresh player can identify the first action",
+			"fresh player can identify the manager target",
+			"fresh player can identify the next store destinations",
+			"fresh player can tell they are inside a specific storefront",
+			"fresh player can distinguish the mall threshold from the sales floor",
+		],
+		"route_metadata_fields": [
+			"active_prompt",
+			"next_destination",
+			"local_action",
+			"next_expected_beat",
+			"primary_work_surface_target",
+		],
+		"reject_if": [
+			"required spawn-readability anchor is missing",
+			"required spawn-readability anchor is hidden by ancestors",
+			"required spawn-readability anchor is outside its physical zone",
+			"required spawn-readability anchor overlaps a forbidden zone",
+			"required spawn-readability anchor is outside the first-ten-seconds acceptance target",
+			"the image reads as an empty room",
+			"the checkout/register is not findable from the screenshot",
+			"the route target is hidden by props or UI",
+			"storefront identity is missing from the spawn first-look composition",
+			"storefront identity reads as the active route target instead of background context",
+			"mall-side threshold details imply a reachable exterior route",
+			"blank wall or door shape dominates the composition",
+			"decorative props overpower the action surface",
+			"HUD or prompt is missing, clipped, or unreadable",
+			"capture is headless placeholder evidence",
+		],
+	}
+
+
+## Returns physical anchors required for the spawn first-look evidence row.
+static func spawn_readability_anchor_contract() -> Array[Dictionary]:
+	return [
+		_spawn_anchor(
+			"readable_checkout",
+			"checkout_counter",
+			"checkout",
+			["entrance", "stockroom", "starter_display"]
+		),
+		_spawn_anchor(
+			"manager_talk_target",
+			"StoreSessionManager",
+			"checkout",
+			["entrance", "stockroom", "starter_display"]
+		),
+		_spawn_anchor(
+			"starter_display_visible",
+			"StoreSessionRestockShelf",
+			"starter_display",
+			["checkout", "queue_lane", "stockroom", "entrance"]
+		),
+		_spawn_anchor(
+			"enclosed_stockroom",
+			"ExpandableStoreShell/StockroomFloorTape",
+			"stockroom",
+			["checkout", "queue_lane", "starter_display", "entrance"]
+		),
+		_spawn_anchor(
+			"queue_inside_store",
+			"FrontLaneQueue",
+			"queue_lane",
+			["entrance", "stockroom", "starter_display"]
+		),
+		_spawn_anchor("store_bounds_context", "ExpandableStoreShell/StarterFloor", "store_bounds", []),
+		_spawn_anchor("entrance_context", "PlayerEntrySpawn", "entrance", ["checkout", "stockroom"]),
+		_spawn_anchor(
+			"route_sightline_context",
+			"ExpandableStoreShell/SpawnCheckoutSightlineStrip",
+			"spawn_sightline_core",
+			["stockroom", "starter_display", "entrance"]
+		),
 	]
 
 
@@ -58,6 +171,23 @@ static func rows() -> Array[Dictionary]:
 	return first_ten_seconds_rows()
 
 
+## Returns the row set for the requested visual acceptance target mode.
+static func rows_for_target(target_mode: String) -> Array[Dictionary]:
+	if target_mode == OVERHAUL_TARGET_MODE:
+		return overhaul_acceptance_rows()
+	return first_ten_seconds_rows()
+
+
+## Returns stateful, non-first-ten-seconds review captures for overhaul acceptance.
+static func overhaul_acceptance_rows() -> Array[Dictionary]:
+	return StoreVisualOverhaulRowsScript.rows(
+		OVERHAUL_ACCEPTANCE_TARGET,
+		HUD_CONTEXT_LABEL,
+		CAPTURE_CAMERA_FOV,
+		route_design_checks()
+	)
+
+
 ## Returns phase-specific first-run captures for the route views players see first.
 static func first_ten_seconds_rows() -> Array[Dictionary]:
 	return [
@@ -66,20 +196,39 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"name": "spawn_first_look",
 			"label": "Spawn first look",
 			"filename": "01_spawn_first_look.png",
-			"camera": Vector3(-0.55, 1.70, 8.35),
-			"focus": "StoreSessionDayOneCustomer",
+			"camera": Vector3(-0.55, 1.70, 9.0),
+			"camera_rotation_degrees": Vector3(0.0, -25.0, 0.0),
+			"camera_fov": CAPTURE_CAMERA_FOV,
+			"focus": "StoreSessionManager",
 			"anchors":
 			[
+				"checkout_counter",
+				"ExpandableStoreShell/CheckoutRegisterScreen",
 				"ExpandableStoreShell/StarterSignLabel",
 				"ExpandableStoreShell/StoreIdentityWallPanel",
 				"ExpandableStoreShell/StoreIdentitySignCanopy",
+				"ExpandableStoreShell/StorefrontCanopyLabel",
+				"ExpandableStoreShell/FrontGlassLeftLite",
+				"ExpandableStoreShell/FrontGlassRightLite",
+				"ExpandableStoreShell/MallSideTransomGlow",
+				"ExpandableStoreShell/StoreHoursPlaque",
+				"ExpandableStoreShell/FrontWindowDecalLeft",
 				"ExpandableStoreShell/StarterBackWall",
 				"ExpandableStoreShell/StarterAisleMat",
+				"StoreSessionRestockShelf",
 				"ExpandableStoreShell/SpawnCheckoutSightlineStrip",
 				"ExpandableStoreShell/SpawnStarterDisplaySightlineStrip",
 				"ExpandableStoreShell/SpawnStockroomSightlineStrip",
+				"ExpandableStoreShell/StockroomFloorTape",
+				"ExpandableStoreShell/StockroomCoolDoorRevealHeader",
+				"ExpandableStoreShell/StarterFloor",
 				"ExpandableStoreShell/EntryThreshold",
-				"StoreSessionDayOneCustomer",
+				"ExpandableStoreShell/ThresholdFloorInlay",
+				"ExpandableStoreShell/WelcomeMatInset",
+				"ExpandableStoreShell/WindowDisplayCartridgeStack",
+				"FrontLaneQueue",
+				"PlayerEntrySpawn",
+				"StoreSessionManager",
 			],
 			"route_anchor": "ExpandableStoreShell/CheckoutRegisterScreen",
 			"active_route_stage": "spawn_orientation",
@@ -91,12 +240,12 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"primary_work_surface_target": "checkout_counter",
 			"action_context": _action_context(
 				"checkout",
-				"StoreSessionDayOneCustomer/Interactable",
+				"StoreSessionManager/Interactable",
 				"Talk to Manager",
 				"walk to the counter and talk to the manager",
 				"manager and checkout register",
 				[
-					_candidate("StoreSessionDayOneCustomer/Interactable", "active", ""),
+					_candidate("StoreSessionManager/Interactable", "active", ""),
 					_candidate(
 						"StoreSessionDayEndTrigger/Interactable",
 						"disabled",
@@ -111,6 +260,21 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				[
+					"storefront_and_mall_identity",
+					"checkout_and_transaction_work",
+					"customers_and_queue",
+					"shelf_economics_and_product_readability",
+				],
+				(
+					"Original Retro Rewind entry, checkout, queue, manager, and starter display "
+					+ "composition built from Mallcore props and labels."
+				),
+				"01_spawn_first_look.png validates first-view identity and route readability."
+			),
+			"spawn_acceptance_review": spawn_acceptance_review(),
+			"spawn_readability_anchors": spawn_readability_anchor_contract(),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -128,13 +292,13 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"anchors":
 			[
 				"checkout_counter",
-				"StoreSessionDayOneCustomer",
+				"StoreSessionManager",
 				"StoreSessionDayEndTrigger",
 				"ExpandableStoreShell/CheckoutRegisterScreen",
 				"ExpandableStoreShell/CheckoutRegisterPractical",
 				"ExpandableStoreShell/FrontDoorPushPlate",
 			],
-			"route_anchor": "StoreSessionDayOneCustomer",
+			"route_anchor": "StoreSessionManager",
 			"active_route_stage": "training_talk_manager",
 			"active_prompt": "Talk to Manager",
 			"next_expected_beat": "shelf_wall_product_focus",
@@ -144,12 +308,12 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"primary_work_surface_target": "checkout_counter",
 			"action_context": _action_context(
 				"checkout",
-				"StoreSessionDayOneCustomer/Interactable",
+				"StoreSessionManager/Interactable",
 				"Talk to Manager",
 				"talk to the manager/register area",
 				"checkout counter",
 				[
-					_candidate("StoreSessionDayOneCustomer/Interactable", "active", ""),
+					_candidate("StoreSessionManager/Interactable", "active", ""),
 					_candidate(
 						"StoreSessionDayEndTrigger/Interactable",
 						"disabled",
@@ -169,6 +333,14 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				["checkout_and_transaction_work", "customers_and_queue"],
+				(
+					"Original manager, register, close-day hotspot, and counter props stage a "
+					+ "Mallcore service-counter beat without copied terminal UI."
+				),
+				"02_checkout_manager_counter.png validates counter hierarchy and prompt ownership."
+			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -225,6 +397,14 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				["shelf_economics_and_product_readability"],
+				(
+					"Original starter display table, empty overlay, price rail, and used-game "
+					+ "fixture language show stock work without real packaging."
+				),
+				"03_shelf_wall_product_focus.png validates starter display readability."
+			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -283,6 +463,17 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				[
+					"shelf_economics_and_product_readability",
+					"store_construction_and_expansion",
+				],
+				(
+					"Original stockroom threshold, floor tape, partition, and utility props make "
+					+ "restock capacity readable as a Mallcore work area."
+				),
+				"04_stockroom_looking_in.png validates stockroom path and capacity cues."
+			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -336,6 +527,17 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				[
+					"shelf_economics_and_product_readability",
+					"store_construction_and_expansion",
+				],
+				(
+					"Original stock box, label, partition returns, and utility practicals present "
+					+ "stockroom work without copied warehouse or store designs."
+				),
+				"05_stockroom_work_area_interior.png validates backroom work-surface clarity."
+			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -393,6 +595,18 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				[
+					"shelf_economics_and_product_readability",
+					"customers_and_queue",
+					"checkout_and_transaction_work",
+				],
+				(
+					"Original fictional product cases, price tags, customer prop staging, and sale "
+					+ "route cues communicate value and transaction state."
+				),
+				"06_product_sale_review.png validates stocked display and customer-sale context."
+			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -450,6 +664,14 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				["checkout_and_transaction_work", "ui_and_sim_feedback"],
+				(
+					"Original close-day hotspot, register props, and compact HUD state keep the "
+					+ "transaction surface readable without borrowed UI styling."
+				),
+				"07_checkout_close_day.png validates close-day checkout hierarchy."
+			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -503,6 +725,14 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
+			"inspiration_closeout": _inspiration_closeout(
+				["storefront_and_mall_identity"],
+				(
+					"Original front threshold, push plate, glass blocker, and door-frame geometry "
+					+ "make the mall exit legible without copying a storefront."
+				),
+				"08_exit_threshold_return_view.png validates return-path threshold readability."
+			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
@@ -545,6 +775,18 @@ static func _stockroom_pickup_disabled_guidance() -> Dictionary:
 	}
 
 
+static func _inspiration_closeout(
+	cluster_ids: Array[String],
+	mallcore_original_adaptation: String,
+	intended_pattern_validation: String
+) -> Dictionary:
+	return InspirationCloseoutContractScript.closeout_for(
+		cluster_ids,
+		mallcore_original_adaptation,
+		intended_pattern_validation
+	)
+
+
 ## Returns older broad-store review context kept out of phase acceptance.
 static func full_store_review_context() -> Dictionary:
 	return StoreVisualFullStoreContextScript.context(_serializable_rows(full_store_rows()))
@@ -558,6 +800,29 @@ static func full_store_rows() -> Array[Dictionary]:
 ## Returns the human review checks that must be applied to every sweep image.
 static func review_criteria() -> Array[String]:
 	return first_ten_seconds_review_criteria()
+
+
+## Returns the review-manifest fields expected by the diff and human-review gates.
+static func review_manifest_required_fields() -> Array[String]:
+	return [
+		"route_target",
+		"anchors",
+		"visual_scope_mode",
+		"inspiration_cluster",
+		"baseline_policy",
+		"blank_wall_dominance",
+		"work_surface_dominance",
+		"disconnected_prop_dominance",
+		"route_obstruction",
+		"ui_clipping",
+		"originality_notes",
+		"capture_resolution_validity",
+	]
+
+
+## Returns target-specific review metadata that must survive into manifests.
+static func review_manifest_contract(row: Dictionary) -> Dictionary:
+	return _review_manifest_contract(row)
 
 
 ## Returns first-ten-seconds checks reviewers apply to the phase artifacts.
@@ -590,6 +855,10 @@ static func first_ten_seconds_review_criteria() -> Array[String]:
 		"3D staging communicates the route without new explanatory UI panels",
 		"generated shell landmarks identify destinations from screenshots alone",
 		"camera-visible density replaces hidden prop count",
+			(
+				"fresh player can identify first action, manager target, "
+				+ "and next store destinations without UI labels"
+			),
 		"primary action surface is visually dominant",
 		"supporting props stay quiet",
 		"material families stay consistent",
@@ -682,9 +951,12 @@ static func write_review_manifest(
 		return dir_result
 	var resolved_dir: String = str(dir_result.get("path", dir_path))
 	var path: String = "%s/%s" % [resolved_dir, REVIEW_MANIFEST_FILENAME]
+	var target: String = ACCEPTANCE_TARGET
+	if not rows_to_write.is_empty():
+		target = str(rows_to_write[0].get("review_target", ACCEPTANCE_TARGET))
 	var payload: Dictionary = {
 		"artifact_dir": ProjectSettings.globalize_path(resolved_dir),
-		"acceptance_target": ACCEPTANCE_TARGET,
+		"acceptance_target": target,
 		"review_criteria": review_criteria(),
 		"first_ten_seconds_review_criteria": first_ten_seconds_review_criteria(),
 		"design_failure_criteria": design_failure_criteria(),
@@ -697,7 +969,12 @@ static func write_review_manifest(
 		"baseline_review_rules": baseline_review_rules(),
 		"diff_review_policy": diff_review_policy(),
 		"work_surface_closeout_contract": WorkSurfaceValidationContractScript.closure_manifest(),
+		"inspiration_reference_policy": InspirationCloseoutContractScript.source_policy(),
+		"inspiration_reference_clusters": InspirationCloseoutContractScript.cluster_catalog(),
+		"required_originality_commands":
+		InspirationCloseoutContractScript.required_originality_commands(),
 		"validation_output_channels": WorkSurfaceValidationContractScript.output_channels(),
+		"review_manifest_required_fields": review_manifest_required_fields(),
 		"manual_review_template": _manual_review_template(rows_to_write),
 		"beats": _serializable_rows(rows_to_write),
 		"captures": captures,
@@ -735,14 +1012,35 @@ static func acceptance_current_dir() -> String:
 	return AutomationArtifactsScript.artifact_path(ACCEPTANCE_CURRENT_DIR)
 
 
+## Returns the artifact directory for target-specific captures consumed by diffing.
+static func acceptance_current_dir_for_target(target_mode: String) -> String:
+	if target_mode == OVERHAUL_TARGET_MODE:
+		return AutomationArtifactsScript.artifact_path(OVERHAUL_ACCEPTANCE_CURRENT_DIR)
+	return acceptance_current_dir()
+
+
 ## Returns the artifact directory for visual diff heatmaps and metadata.
 static func acceptance_diff_dir() -> String:
 	return AutomationArtifactsScript.artifact_path(ACCEPTANCE_DIFF_DIR)
 
 
+## Returns the artifact directory for target-specific visual diff heatmaps.
+static func acceptance_diff_dir_for_target(target_mode: String) -> String:
+	if target_mode == OVERHAUL_TARGET_MODE:
+		return AutomationArtifactsScript.artifact_path(OVERHAUL_ACCEPTANCE_DIFF_DIR)
+	return acceptance_diff_dir()
+
+
 ## Returns the artifact directory for the acceptance manifest and current captures.
 static func acceptance_manifest_dir() -> String:
 	return AutomationArtifactsScript.artifact_path(ACCEPTANCE_ARTIFACT_DIR)
+
+
+## Returns the artifact directory for the target-specific manifest and captures.
+static func acceptance_manifest_dir_for_target(target_mode: String) -> String:
+	if target_mode == OVERHAUL_TARGET_MODE:
+		return AutomationArtifactsScript.artifact_path(OVERHAUL_ACCEPTANCE_ARTIFACT_DIR)
+	return acceptance_manifest_dir()
 
 
 ## Returns the resolved review-manifest directory for the visual sweep.
@@ -763,6 +1061,7 @@ static func capture_policy() -> Dictionary:
 		"hud_context_required": HUD_CONTEXT_LABEL,
 		"acceptance_target": ACCEPTANCE_TARGET,
 		"scope_modes": [
+			StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
 			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
 		],
@@ -782,6 +1081,9 @@ static func baseline_review_rules() -> Array[String]:
 		"placeholder geometry and unintentional clutter are rejection reasons",
 		"work-surface captures must show the primary action surface as dominant",
 		"supporting props must stay quieter than the action surface",
+		"inspiration closeout must name the reference cluster and original Mallcore adaptation",
+		"visual copy and labels must be original Mallcore text or already present in repo content",
+		"01_spawn_first_look.png must be a display-backed 1280x720 gl_compatibility capture",
 	]
 
 
@@ -812,12 +1114,13 @@ static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictio
 		var action_context_validation: Dictionary = (
 			validate_action_context(row) if row.has("action_context") else {}
 		)
-		serializable.append({
+		var payload: Dictionary = {
 			"index": int(row.get("index", 0)),
 			"name": str(row.get("name", "")),
 			"label": str(row.get("label", "")),
 			"filename": str(row.get("filename", "")),
 			"camera": [camera.x, camera.y, camera.z],
+			"camera_fov": float(row.get("camera_fov", CAPTURE_CAMERA_FOV)),
 			"focus": str(row.get("focus", "")),
 			"anchors": row.get("anchors", []),
 			"route_anchor": str(row.get("route_anchor", "")),
@@ -832,12 +1135,25 @@ static func _serializable_rows(rows_to_write: Array[Dictionary]) -> Array[Dictio
 			"action_context": row.get("action_context", {}),
 			"action_context_validation": action_context_validation,
 			"work_surface_review": row.get("work_surface_review", {}),
+			"inspiration_closeout": row.get("inspiration_closeout", {}),
+			"spawn_acceptance_review": row.get("spawn_acceptance_review", {}),
+			"spawn_readability_anchors": row.get("spawn_readability_anchors", []),
 			"design_checks": row.get("design_checks", []),
+			"review_manifest_contract": _review_manifest_contract(row),
+			"setup_state": str(row.get("setup_state", "")),
 			"scope": str(row.get("scope", "")),
 			"visual_scope_mode": str(row.get("visual_scope_mode", "")),
 			"review_target": str(row.get("review_target", "")),
 			"hud_context_required": str(row.get("hud_context_required", "")),
-		})
+		}
+		if row.has("camera_rotation_degrees"):
+			var camera_rotation: Vector3 = row.get("camera_rotation_degrees", Vector3.ZERO) as Vector3
+			payload["camera_rotation_degrees"] = [
+				camera_rotation.x,
+				camera_rotation.y,
+				camera_rotation.z,
+			]
+		serializable.append(payload)
 	return serializable
 
 
@@ -857,11 +1173,22 @@ static func _manual_review_template(rows_to_write: Array[Dictionary]) -> Diction
 			"visual_scope_mode": str(row.get("visual_scope_mode", "")),
 			"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
 			"action_context": row.get("action_context", {}),
+			"inspiration_closeout": row.get("inspiration_closeout", {}),
+			"spawn_acceptance_review": row.get("spawn_acceptance_review", {}),
+			"spawn_readability_anchors": row.get("spawn_readability_anchors", []),
+			"review_manifest_contract": _review_manifest_contract(row),
+			"fresh_player_identifies_first_action_without_ui_labels": false,
+			"fresh_player_identifies_manager_target_without_ui_labels": false,
+			"fresh_player_identifies_next_store_destinations_without_ui_labels": false,
 			"action_context_unambiguous": false,
 			"normal_player_approach": false,
 			"next_destination_visible": false,
 			"primary_work_surface_dominant": false,
 			"supporting_props_stay_quiet": false,
+			"reference_cluster_pattern_validated": false,
+			"mallcore_original_adaptation_confirmed": false,
+			"no_import_trace_clone_or_logo_copy": false,
+			"new_text_original_or_repo_existing": false,
 			"material_family_consistent": false,
 			"readable_scale": false,
 			"blank_wall_oversized_door_disconnected_prop_absent": false,
@@ -871,6 +1198,40 @@ static func _manual_review_template(rows_to_write: Array[Dictionary]) -> Diction
 		})
 	return {
 		"verdicts": verdicts,
+	}
+
+
+static func _review_manifest_contract(row: Dictionary) -> Dictionary:
+	var closeout: Dictionary = row.get("inspiration_closeout", {}) as Dictionary
+	var cluster_ids: Array[String] = []
+	for cluster_variant: Variant in closeout.get("reference_clusters", []) as Array:
+		if cluster_variant is Dictionary:
+			cluster_ids.append(str((cluster_variant as Dictionary).get("id", "")))
+	return {
+		"route_target": str(row.get("review_target", "")),
+		"anchors": row.get("anchors", []),
+		"visual_scope_mode": str(row.get("visual_scope_mode", "")),
+		"inspiration_cluster": cluster_ids,
+		"baseline_policy": "fresh_display_backed_capture_with_soft_intentional_baseline",
+		"blank_wall_dominance": "reject",
+		"work_surface_dominance": "primary_action_surface_must_dominate",
+		"disconnected_prop_dominance": "reject",
+		"route_obstruction": "reject_if_primary_route_or_action_anchor_is_blocked",
+		"ui_clipping": "reject",
+		"originality_notes": str(closeout.get("mallcore_original_adaptation", "")),
+		"capture_resolution_validity": "must_match_1280x720",
+	}
+
+
+static func _spawn_anchor(
+	landmark: String, path: String, physical_zone: String, forbidden_zones: Array[String]
+) -> Dictionary:
+	return {
+		"landmark": landmark,
+		"path": path,
+		"physical_zone": physical_zone,
+		"forbidden_zones": forbidden_zones,
+		"first_ten_seconds_acceptance_target": ACCEPTANCE_TARGET,
 	}
 
 

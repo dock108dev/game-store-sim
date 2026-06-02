@@ -29,6 +29,15 @@ extends Node
 
 signal featured_category_changed(category: StringName)
 signal poster_changed(poster_id: StringName)
+signal design_selection_changed(selection_key: StringName, option_id: StringName)
+
+
+const StoreDesignCatalogScript: GDScript = preload(
+	"res://game/scripts/systems/store_design_catalog.gd"
+)
+const StoreDesignPayloadScript: GDScript = preload(
+	"res://game/scripts/systems/store_design_payload.gd"
+)
 
 
 # ── Featured category catalog ────────────────────────────────────────────────
@@ -107,12 +116,16 @@ const _NOTE_CATEGORY_HINT: Dictionary = {
 const TRUST_DELTA_HINT_MATCH: float = 0.03
 const REASON_HINT_MATCH: String = "featured_display_matches_hint"
 const FEATURED_UNLOCK_ID: StringName = &"employee_display_authority"
+const DEFAULT_STORE_ID: StringName = &"retro_games"
+const DESIGN_SCHEMA_VERSION: int = 1
 
 
 # ── Public state ─────────────────────────────────────────────────────────────
 
 var current_featured_category: StringName = FEATURED_CATEGORY_NONE
 var current_poster_id: StringName = POSTER_NONE
+var current_design_selections: Dictionary = {}
+var _store_design_payloads: Dictionary = {}
 
 
 # ── Internal state (per-day) ─────────────────────────────────────────────────
@@ -181,6 +194,71 @@ func get_morning_note_hint() -> StringName:
 	return _morning_note_hint
 
 
+## Returns design catalog options with status resolved for the given day.
+func get_design_options_for_day(
+	day: int, category: StringName = &""
+) -> Array[Dictionary]:
+	var source: Array[Dictionary] = (
+		StoreDesignCatalogScript.options_for_category(category)
+		if not category.is_empty()
+		else StoreDesignCatalogScript.all_options()
+	)
+	var options: Array[Dictionary] = []
+	for option: Dictionary in source:
+		var resolved: Dictionary = option.duplicate(true)
+		resolved["status"] = get_design_option_status(str(option.get("id", "")), day)
+		resolved["unlock"] = get_design_unlock_text(str(option.get("id", "")))
+		options.append(resolved)
+	return options
+
+
+## Returns one design catalog option by id.
+func get_design_option(option_id: String) -> Dictionary:
+	return StoreDesignCatalogScript.get_option(option_id)
+
+
+## Returns the option id selected for a surface/design selection key.
+func get_design_selection(
+	selection_key: StringName, store_id: StringName = &""
+) -> StringName:
+	var selections: Dictionary = _effective_selections_for_store(store_id)
+	return selections.get(selection_key, &"") as StringName
+
+
+## Returns the persisted store-design payload for one store.
+func get_store_design_payload(store_id: StringName = &"") -> Dictionary:
+	var resolved_store_id: StringName = _resolve_store_id(store_id)
+	_ensure_store_payload(resolved_store_id)
+	return (_store_design_payloads[String(resolved_store_id)] as Dictionary).duplicate(true)
+
+
+## Returns ready, selected, or locked for a design catalog option.
+func get_design_option_status(option_id: String, day: int) -> String:
+	var option: Dictionary = get_design_option(option_id)
+	if option.is_empty():
+		return "locked"
+	if day < int(option.get("unlock_day", 1)):
+		return "locked"
+	var selection_key: StringName = StringName(str(option.get("selection_key", "")))
+	var selected: StringName = get_design_selection(selection_key)
+	if selected == StringName(option_id):
+		return "selected"
+	if selected.is_empty() and bool(option.get("default_selected", false)):
+		return "selected"
+	return "ready"
+
+
+## Returns player-facing unlock text for a design option.
+func get_design_unlock_text(option_id: String) -> String:
+	var option: Dictionary = get_design_option(option_id)
+	if option.is_empty():
+		return "Unavailable"
+	var unlock_day: int = int(option.get("unlock_day", 1))
+	if unlock_day > 1:
+		return "Day %d required" % unlock_day
+	return ""
+
+
 # ── Public mutation API ──────────────────────────────────────────────────────
 
 ## Cycles through FEATURED_CATEGORY_ORDER, advancing one step from the current
@@ -242,6 +320,104 @@ func set_poster(poster_id: StringName) -> void:
 	poster_changed.emit(poster_id)
 
 
+## Applies a persistent store-design option selection.
+func apply_design_option(
+	option_id: StringName, day: int = 1, store_id: StringName = &""
+) -> bool:
+	var option: Dictionary = get_design_option(String(option_id))
+	if option.is_empty():
+		push_warning("StoreCustomizationSystem: unknown design option '%s'" % option_id)
+		return false
+	if get_design_option_status(String(option_id), day) == "locked":
+		push_warning("StoreCustomizationSystem: design option '%s' is locked" % option_id)
+		return false
+	var selection_key: StringName = StringName(str(option.get("selection_key", "")))
+	if selection_key.is_empty():
+		push_warning("StoreCustomizationSystem: design option '%s' has no selection key" % option_id)
+		return false
+	var resolved_store_id: StringName = _resolve_store_id(store_id)
+	_ensure_store_payload(resolved_store_id)
+	StoreDesignPayloadScript.apply_option_to_payload(
+		_store_design_payloads[String(resolved_store_id)], option
+	)
+	var payload: Dictionary = _store_design_payloads[String(resolved_store_id)]
+	current_design_selections = payload.get("selections", {}) as Dictionary
+	design_selection_changed.emit(selection_key, option_id)
+	EventBus.store_design_changed.emit(
+		resolved_store_id,
+		get_store_design_payload(resolved_store_id),
+	)
+	return true
+
+
+## Serializes persistent store-design selections.
+func get_save_data() -> Dictionary:
+	_ensure_store_payload(_resolve_store_id(&""))
+	var stores: Dictionary = {}
+	for store_id: Variant in _store_design_payloads:
+		stores[String(store_id)] = (
+			_store_design_payloads[store_id] as Dictionary
+		).duplicate(true)
+	return {"stores": stores}
+
+
+## Restores persistent store-design selections, ignoring unknown option ids.
+func load_save_data(data: Dictionary) -> void:
+	current_design_selections.clear()
+	_store_design_payloads.clear()
+	var stores: Variant = data.get("stores", {})
+	if stores is Dictionary:
+		for store_id: Variant in stores:
+			var raw_payload: Variant = (stores as Dictionary)[store_id]
+			if raw_payload is Dictionary:
+				var normalized: Dictionary = StoreDesignPayloadScript.normalize_store_payload(
+					raw_payload as Dictionary,
+					DESIGN_SCHEMA_VERSION,
+				)
+				_store_design_payloads[String(store_id)] = normalized
+	elif data.get("design_selections", {}) is Dictionary:
+		var legacy_payload: Dictionary = StoreDesignPayloadScript.payload_from_selections(
+			data.get("design_selections", {}) as Dictionary,
+			DESIGN_SCHEMA_VERSION,
+		)
+		_store_design_payloads[String(_resolve_store_id(&""))] = legacy_payload
+	_ensure_store_payload(_resolve_store_id(&""))
+	var active_payload: Dictionary = _store_design_payloads[String(_resolve_store_id(&""))]
+	current_design_selections = active_payload.get("selections", {}) as Dictionary
+	EventBus.store_design_changed.emit(
+		_resolve_store_id(&""),
+		get_store_design_payload(_resolve_store_id(&"")),
+	)
+
+
+func _resolve_store_id(store_id: StringName) -> StringName:
+	if not store_id.is_empty():
+		return store_id
+	var active_store_id: StringName = GameManager.get_active_store_id()
+	if not active_store_id.is_empty():
+		return active_store_id
+	return DEFAULT_STORE_ID
+
+
+func _ensure_store_payload(store_id: StringName) -> void:
+	var key: String = String(store_id)
+	if _store_design_payloads.has(key):
+		return
+	var payload: Dictionary = StoreDesignPayloadScript.payload_with_defaults(
+		DESIGN_SCHEMA_VERSION
+	)
+	_store_design_payloads[key] = payload
+	if store_id == _resolve_store_id(&""):
+		current_design_selections = payload.get("selections", {}) as Dictionary
+
+
+func _effective_selections_for_store(store_id: StringName) -> Dictionary:
+	var resolved_store_id: StringName = _resolve_store_id(store_id)
+	_ensure_store_payload(resolved_store_id)
+	var payload: Dictionary = _store_design_payloads[String(resolved_store_id)]
+	return payload.get("selections", {}) as Dictionary
+
+
 # ── Test seams ───────────────────────────────────────────────────────────────
 
 ## Resets all per-day state. Used by tests to start each case from a clean
@@ -249,6 +425,8 @@ func set_poster(poster_id: StringName) -> void:
 func reset_for_testing() -> void:
 	current_featured_category = FEATURED_CATEGORY_NONE
 	current_poster_id = POSTER_NONE
+	current_design_selections.clear()
+	_store_design_payloads.clear()
 	_morning_note_hint = &""
 	_hint_match_applied_this_day = false
 

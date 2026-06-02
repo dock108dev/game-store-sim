@@ -22,7 +22,20 @@
       "unlock_rep": 0,
       "unlock_day": 0,
       "visual_category": "display",
-      "scene_path": "res://game/scenes/stores/fixtures/fixture_display_table.tscn"
+      "scene_path": "res://game/scenes/stores/fixtures/fixture_display_table.tscn",
+      "catalog_category": "fixtures",
+      "catalog_sort": 10,
+      "silhouette": "table_2x1",
+      "capacity_label": "3 item slots",
+      "effect_summary": "Starter display capacity",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+3 item slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "wall_shelf",
@@ -46,7 +59,20 @@
       "unlock_day": 0,
       "requires_wall": true,
       "visual_category": "shelf",
-      "scene_path": "res://game/scenes/stores/fixtures/retail_wall_shelf.tscn"
+      "scene_path": "res://game/scenes/stores/fixtures/retail_wall_shelf.tscn",
+      "catalog_category": "shelves",
+      "catalog_sort": 20,
+      "silhouette": "wall_shelf_2x1",
+      "capacity_label": "4 item slots",
+      "effect_summary": "Wall display capacity",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+4 item slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "glass_case",
@@ -68,7 +94,20 @@
       "store_type_restriction": "",
       "unlock_rep": 0,
       "unlock_day": 0,
-      "visual_category": "case"
+      "visual_category": "case",
+      "catalog_category": "fixtures",
+      "catalog_sort": 30,
+      "silhouette": "case_2x1",
+      "capacity_label": "3 secure slots",
+      "effect_summary": "Secure high-value display",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+3 secure slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "floor_rack",
@@ -87,7 +126,20 @@
       "unlock_rep": 0,
       "unlock_day": 0,
       "visual_category": "rack",
-      "scene_path": "res://game/scenes/stores/fixtures/retail_gondola_shelf.tscn"
+      "scene_path": "res://game/scenes/stores/fixtures/retail_gondola_shelf.tscn",
+      "catalog_category": "fixtures",
+      "catalog_sort": 40,
+      "silhouette": "rack_1x1",
+      "capacity_label": "6 item slots",
+      "effect_summary": "Compact display capacity",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+6 item slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "counter",
@@ -114,7 +166,20 @@
       "unlock_rep": 0,
       "unlock_day": 0,
       "visual_category": "counter",
-      "scene_path": "res://game/scenes/stores/fixtures/checkout_counter.tscn"
+      "scene_path": "res://game/scenes/stores/fixtures/checkout_counter.tscn",
+      "catalog_category": "counters",
+      "catalog_sort": 50,
+      "silhouette": "counter_3x1",
+      "capacity_label": "2 service slots",
+      "effect_summary": "Checkout service surface",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+2 service slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "register",
@@ -132,7 +197,20 @@
       "store_type_restriction": "",
       "unlock_rep": 0,
       "unlock_day": 0,
-      "visual_category": "counter"
+      "visual_category": "counter",
+      "catalog_category": "counters",
+      "catalog_sort": 60,
+      "silhouette": "register_1x1",
+      "capacity_label": "Checkout required",
+      "effect_summary": "Required sales register",
+      "effects": [
+        {
+          "type": "service",
+          "source": "register_required",
+          "label": "Enables checkout"
+        }
+      ],
+      "owned_limit": 1
     },
     {
       "id": "endcap",
@@ -154,7 +232,20 @@
       "store_type_restriction": "",
       "unlock_rep": 10,
       "unlock_day": 0,
-      "visual_category": "display"
+      "visual_category": "display",
+      "catalog_category": "fixtures",
+      "catalog_sort": 70,
+      "silhouette": "endcap_1x2",
+      "capacity_label": "4 feature slots",
+      "effect_summary": "Featured aisle display",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+4 feature slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "storage_unit",
@@ -176,7 +267,20 @@
       "store_type_restriction": "",
       "unlock_rep": 0,
       "unlock_day": 0,
-      "visual_category": "shelf"
+      "visual_category": "shelf",
+      "catalog_category": "stockroom",
+      "catalog_sort": 80,
+      "silhouette": "storage_1x2",
+      "capacity_label": "8 reserve slots",
+      "effect_summary": "Back-room reserve capacity",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+8 reserve slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "testing_station",
@@ -207,7 +311,20 @@
       "unlock_rep": 0,
       "unlock_day": 0,
       "visual_category": "display",
-      "scene_path": "res://game/scenes/stores/fixtures/receiving_table.tscn"
+      "scene_path": "res://game/scenes/stores/fixtures/receiving_table.tscn",
+      "catalog_category": "fixtures",
+      "catalog_sort": 90,
+      "silhouette": "bench_2x2",
+      "capacity_label": "2 testing slots",
+      "effect_summary": "Retro demo and testing surface",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+2 testing slots"
+        }
+      ],
+      "owned_limit": 0
     },
     {
       "id": "import_wall_fixture",
@@ -234,7 +351,20 @@
       "unlock_rep": 0,
       "unlock_day": 0,
       "requires_wall": true,
-      "visual_category": "shelf"
+      "visual_category": "shelf",
+      "catalog_category": "shelves",
+      "catalog_sort": 100,
+      "silhouette": "wall_display_3x1",
+      "capacity_label": "3 import slots",
+      "effect_summary": "Store-specific rare-find display",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+3 import slots"
+        }
+      ],
+      "owned_limit": 1
     },
     {
       "id": "repair_workbench",
@@ -261,7 +391,20 @@
       "unlock_rep": 15,
       "unlock_day": 3,
       "visual_category": "case",
-      "scene_path": "res://game/scenes/stores/fixtures/repair_workbench.tscn"
+      "scene_path": "res://game/scenes/stores/fixtures/repair_workbench.tscn",
+      "catalog_category": "stockroom",
+      "catalog_sort": 110,
+      "silhouette": "bench_3x1",
+      "capacity_label": "2 repair slots",
+      "effect_summary": "Repair prep workspace",
+      "effects": [
+        {
+          "type": "capacity",
+          "source": "slot_count",
+          "label": "+2 repair slots"
+        }
+      ],
+      "owned_limit": 1
     }
   ]
 }

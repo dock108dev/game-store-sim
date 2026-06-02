@@ -2,6 +2,9 @@
 class_name WorkSurfaceValidationContract
 extends RefCounted
 
+const InspirationCloseoutContractScript: GDScript = preload(
+	"res://game/scripts/store_session/inspiration_closeout_contract.gd"
+)
 const REQUIRED_STATIC_COMMANDS: Array[String] = [
 	"gdlint game/",
 	"git diff --check",
@@ -55,6 +58,7 @@ const _VISUAL_SWEEP_REQUIRED_CHANGE_TYPES: Array[String] = [
 	"readability",
 	"visual_scope",
 	"prop",
+	"visual_art",
 ]
 const _MANUAL_ROUTE_CAPTURE_REQUIRED_CHANGE_TYPES: Array[String] = [
 	"prompt_ownership",
@@ -106,6 +110,10 @@ static func closure_manifest() -> Dictionary:
 		"visual_sweep_required_change_types": visual_sweep_required_change_types(),
 		"manual_route_capture_required_change_types":
 		manual_route_capture_required_change_types(),
+		"originality_required_change_types": originality_required_change_types(),
+		"required_originality_commands":
+		InspirationCloseoutContractScript.required_originality_commands(),
+		"originality_source_policy": InspirationCloseoutContractScript.source_policy(),
 		"focused_tests_by_surface": focused_tests_by_surface(),
 		"validation_output_channels": output_channels(),
 		"blocking_failures": blocking_failures(),
@@ -124,6 +132,10 @@ static func manual_route_capture_required_change_types() -> Array[String]:
 	return _MANUAL_ROUTE_CAPTURE_REQUIRED_CHANGE_TYPES.duplicate()
 
 
+static func originality_required_change_types() -> Array[String]:
+	return InspirationCloseoutContractScript.originality_required_change_types()
+
+
 static func output_channels() -> Array[Dictionary]:
 	return _OUTPUT_CHANNELS.duplicate(true)
 
@@ -138,3 +150,7 @@ static func requires_visual_sweep(change_type: String) -> bool:
 
 static func requires_manual_route_capture(change_type: String) -> bool:
 	return _MANUAL_ROUTE_CAPTURE_REQUIRED_CHANGE_TYPES.has(change_type)
+
+
+static func requires_originality_validation(change_type: String) -> bool:
+	return originality_required_change_types().has(change_type)

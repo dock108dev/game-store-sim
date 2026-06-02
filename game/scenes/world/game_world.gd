@@ -331,6 +331,7 @@ func _wire_save_manager() -> void:
 	save_manager.set_trend_system(trend_system)
 	save_manager.set_market_event_system(market_event_system)
 	save_manager.set_fixture_placement_system(fixture_placement)
+	save_manager.set_store_customization_system(StoreCustomizationSystem)
 	save_manager.set_random_event_system(random_event_system)
 	save_manager.set_staff_system(staff_system)
 	save_manager.set_tutorial_system(tutorial_system)
@@ -439,6 +440,8 @@ func _setup_deferred_panels() -> void:
 	_fixture_catalog = (_FIXTURE_CATALOG_SCENE.instantiate())
 	_fixture_catalog.data_loader = GameManager.data_loader
 	_fixture_catalog.economy_system = economy_system
+	_fixture_catalog.placement_system = fixture_placement
+	_fixture_catalog.build_mode_system = build_mode
 	_fixture_catalog.store_type = GameManager.DEFAULT_STARTING_STORE
 	_ui_layer.add_child(_fixture_catalog)
 
@@ -570,14 +573,11 @@ func _initialize_store_layout_runtime() -> void:
 	_store_layout_runtime = _STORE_LAYOUT_RUNTIME_SCRIPT.new()
 	_store_layout_runtime.name = "StoreLayoutRuntime"
 	store_ctrl.add_child(_store_layout_runtime)
-	(
-		_store_layout_runtime
-		. call(
-			"initialize",
-			fixture_placement,
-			build_mode.get_grid(),
-			StringName(store_ctrl.store_type),
-		)
+	_store_layout_runtime.call(
+		"initialize",
+		fixture_placement,
+		build_mode.get_grid(),
+		StringName(store_ctrl.store_type),
 	)
 
 
@@ -853,9 +853,8 @@ func _find_first_camera(node: Node) -> Camera3D:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# ISSUE-011: ESC globally skips an active tutorial before the existing
-	# exit/cancel chain. Runs ahead of the hub-mode early returns so the skip
-	# works in both Main Menu→Overview transition steps and in-store steps.
+	# Tutorial skip runs ahead of the hub-mode early returns so it works in both
+	# Main Menu→Overview transition steps and in-store steps.
 	if event.is_action_pressed("ui_cancel") and _try_skip_active_tutorial():
 		get_viewport().set_input_as_handled()
 		return
@@ -868,9 +867,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-# ISSUE-011: returns true (and emits skip_tutorial_requested) when a tutorial
-# step is mid-flight. Callers must consume the input event when this returns
-# true so exit/cancel handlers downstream do not also fire.
+# Returns true (and emits skip_tutorial_requested) when a tutorial step is
+# mid-flight. Callers must consume the input event when this returns true so
+# exit/cancel handlers downstream do not also fire.
 func _try_skip_active_tutorial() -> bool:
 	if not GameManager.is_tutorial_active:
 		return false

@@ -5,16 +5,16 @@
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_slot_marker.tres" id="3"]
 
 [sub_resource type="BoxMesh" id="runner_mesh"]
-size = Vector3(2.7, 0.028, 0.82)
+size = Vector3(2.05, 0.024, 0.78)
 
 [sub_resource type="BoxMesh" id="queue_slot_mesh"]
 size = Vector3(0.48, 0.018, 0.42)
 
 [sub_resource type="BoxMesh" id="guide_rope_mesh"]
-size = Vector3(2.35, 0.05, 0.05)
+size = Vector3(0.95, 0.045, 0.045)
 
 [sub_resource type="BoxShape3D" id="guide_rope_shape"]
-size = Vector3(2.35, 0.08, 0.08)
+size = Vector3(0.95, 0.075, 0.075)
 
 [sub_resource type="BoxMesh" id="arrow_shaft_mesh"]
 size = Vector3(0.74, 0.014, 0.08)
@@ -30,7 +30,7 @@ mesh = SubResource("runner_mesh")
 surface_material_override/0 = ExtResource("3")
 
 [node name="QueueMat01" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.985, 0, -0.174, 0, 1, 0, 0.174, 0, 0.985, 0.99, 0.032, -0.22)
+transform = Transform3D(0.985, 0, -0.174, 0, 1, 0, 0.174, 0, 0.985, 0.95, 0.032, -0.25)
 mesh = SubResource("queue_slot_mesh")
 surface_material_override/0 = ExtResource("3")
 
@@ -40,37 +40,37 @@ mesh = SubResource("queue_slot_mesh")
 surface_material_override/0 = ExtResource("3")
 
 [node name="QueueMat03" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.996, 0, 0.087, 0, 1, 0, -0.087, 0, 0.996, -0.99, 0.032, 0.22)
+transform = Transform3D(0.996, 0, 0.087, 0, 1, 0, -0.087, 0, 0.996, -0.95, 0.032, 0.25)
 mesh = SubResource("queue_slot_mesh")
 surface_material_override/0 = ExtResource("3")
 
 [node name="DirectionArrowShaft" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44, 0.046, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.046, 0)
 mesh = SubResource("arrow_shaft_mesh")
 surface_material_override/0 = ExtResource("2")
 
 [node name="DirectionArrowHeadLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.707, 0, -0.707, 0, 1, 0, 0.707, 0, 0.707, 0.86, 0.047, -0.15)
+transform = Transform3D(0.707, 0, -0.707, 0, 1, 0, 0.707, 0, 0.707, 0.78, 0.047, -0.13)
 mesh = SubResource("arrow_head_mesh")
 surface_material_override/0 = ExtResource("2")
 
 [node name="DirectionArrowHeadRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.707, 0, 0.707, 0, 1, 0, -0.707, 0, 0.707, 0.86, 0.047, 0.15)
+transform = Transform3D(0.707, 0, 0.707, 0, 1, 0, -0.707, 0, 0.707, 0.78, 0.047, 0.13)
 mesh = SubResource("arrow_head_mesh")
 surface_material_override/0 = ExtResource("2")
 
 [node name="LeftGuideRope" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0.82, -0.42)
 mesh = SubResource("guide_rope_mesh")
 surface_material_override/0 = ExtResource("2")
 
 [node name="RightGuideRope" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0.82, -0.42)
 mesh = SubResource("guide_rope_mesh")
 surface_material_override/0 = ExtResource("2")
 
 [node name="LeftGuideRopeBody" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475, 0.82, -0.42)
 collision_layer = 2
 collision_mask = 0
 
@@ -78,7 +78,7 @@ collision_mask = 0
 shape = SubResource("guide_rope_shape")
 
 [node name="RightGuideRopeBody" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475, 0.82, -0.42)
 collision_layer = 2
 collision_mask = 0
 
@@ -86,19 +86,10 @@ collision_mask = 0
 shape = SubResource("guide_rope_shape")
 
 [node name="BackLeftPost" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.18, 0, -0.5)
+transform = Transform3D(0.88, 0, 0, 0, 1, 0, 0, 0, 0.88, -0.95, 0, -0.42)
 
 [node name="MiddleLeftPost" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+transform = Transform3D(0.88, 0, 0, 0, 1, 0, 0, 0, 0.88, 0, 0, -0.42)
 
 [node name="RegisterLeftPost" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18, 0, -0.5)
-
-[node name="BackRightPost" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.18, 0, 0.5)
-
-[node name="MiddleRightPost" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
-
-[node name="RegisterRightPost" parent="." instance=ExtResource("1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18, 0, 0.5)
+transform = Transform3D(0.88, 0, 0, 0, 1, 0, 0, 0, 0.88, 0.95, 0, -0.42)

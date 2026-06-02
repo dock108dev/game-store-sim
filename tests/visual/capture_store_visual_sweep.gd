@@ -7,6 +7,9 @@ const StoreVisualSweepScript: GDScript = preload(
 const StoreVisualScopeProfileScript: GDScript = preload(
 	"res://game/scripts/store_session/store_visual_scope_profile.gd"
 )
+const VisualSweepOverhaulFixturesScript: GDScript = preload(
+	"res://tests/visual/visual_sweep_overhaul_fixtures.gd"
+)
 
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const SCREENSHOT_MODE_SETTING: String = "mallcore/test/screenshot_mode"
@@ -16,6 +19,7 @@ const SETTLE_FRAMES: int = 5
 var _store_root: Node3D = null
 var _camera: Camera3D = null
 var _captures: Array[Dictionary] = []
+var _target_mode: String = StoreVisualSweepScript.FIRST_TEN_SECONDS_TARGET_MODE
 
 
 func _init() -> void:
@@ -23,6 +27,7 @@ func _init() -> void:
 
 
 func _run() -> void:
+	_target_mode = _resolve_target_mode()
 	await _wait_for_settings_ready()
 	if DisplayServer.get_name() == "headless":
 		_fail("Store visual sweep requires a display-backed viewport; do not use --headless.")
@@ -42,7 +47,7 @@ func _run() -> void:
 	_add_capture_camera()
 	await _wait_frames(24)
 
-	for row: Dictionary in StoreVisualSweepScript.rows():
+	for row: Dictionary in StoreVisualSweepScript.rows_for_target(_target_mode):
 		var row_result: Dictionary = await _capture_row(row)
 		_captures.append(row_result)
 		if not bool(row_result.get("ok", false)):
@@ -56,7 +61,7 @@ func _run() -> void:
 		return
 	print("Store visual sweep captured %d views: %s" % [
 		_captures.size(),
-		StoreVisualSweepScript.acceptance_current_dir(),
+		StoreVisualSweepScript.acceptance_current_dir_for_target(_target_mode),
 	])
 	quit(0)
 
@@ -91,6 +96,9 @@ func _add_capture_camera() -> void:
 
 
 func _capture_row(row: Dictionary) -> Dictionary:
+	var setup_result: Dictionary = _apply_row_setup(row)
+	if not bool(setup_result.get("ok", false)):
+		return _capture_error(row, str(setup_result.get("error", "row setup failed")))
 	var mode: int = _scope_mode_from_label(str(row.get("visual_scope_mode", "")))
 	StoreVisualScopeProfileScript.apply_mode_to_tree(_store_root, mode)
 	await _wait_frames(2)
@@ -117,7 +125,10 @@ func _capture_row(row: Dictionary) -> Dictionary:
 			}
 		)
 	_camera.global_position = row.get("camera", Vector3.ZERO) as Vector3
-	_camera.look_at(focus.global_position, Vector3.UP)
+	if row.has("camera_rotation_degrees"):
+		_camera.rotation_degrees = row.get("camera_rotation_degrees", Vector3.ZERO) as Vector3
+	else:
+		_camera.look_at(focus.global_position, Vector3.UP)
 	_camera.current = true
 	if int(row.get("index", 0)) == 1:
 		await _wait_frames(18)
@@ -133,7 +144,7 @@ func _capture_row(row: Dictionary) -> Dictionary:
 
 	var result: Dictionary = StoreVisualSweepScript.save_viewport_png(
 		root,
-		StoreVisualSweepScript.acceptance_current_dir(),
+		StoreVisualSweepScript.acceptance_current_dir_for_target(_target_mode),
 		str(row.get("filename", "")),
 		false
 	)
@@ -146,6 +157,12 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	result["next_destination"] = str(row.get("next_destination", ""))
 	result["primary_work_surface_target"] = str(row.get("primary_work_surface_target", ""))
 	result["design_checks"] = row.get("design_checks", [])
+	result["inspiration_closeout"] = row.get("inspiration_closeout", {})
+	result["spawn_acceptance_review"] = row.get("spawn_acceptance_review", {})
+	result["spawn_readability_anchors"] = row.get("spawn_readability_anchors", [])
+	result["setup_state"] = str(row.get("setup_state", ""))
+	result["setup_result"] = setup_result
+	result["review_manifest_contract"] = StoreVisualSweepScript.review_manifest_contract(row)
 	result["review_target"] = str(row.get("review_target", ""))
 	result["visual_scope_mode"] = str(row.get("visual_scope_mode", ""))
 	result["visual_scope_mode_asserted"] = true
@@ -154,6 +171,13 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	result["action_context_validation"] = action_context_validation
 	result["debug_ui_validation"] = debug_ui_validation
 	result["camera_fov"] = StoreVisualSweepScript.CAPTURE_CAMERA_FOV
+	if row.has("camera_rotation_degrees"):
+		var camera_rotation: Vector3 = row.get("camera_rotation_degrees", Vector3.ZERO) as Vector3
+		result["camera_rotation_degrees"] = [
+			camera_rotation.x,
+			camera_rotation.y,
+			camera_rotation.z,
+		]
 	result["random_seed"] = StoreVisualSweepScript.CAPTURE_RANDOM_SEED
 	result["expected_width"] = StoreVisualSweepScript.CAPTURE_RESOLUTION.x
 	result["expected_height"] = StoreVisualSweepScript.CAPTURE_RESOLUTION.y
@@ -204,8 +228,8 @@ func _normalize_capture_resolution(result: Dictionary) -> Dictionary:
 
 func _write_manifest() -> Dictionary:
 	return StoreVisualSweepScript.write_review_manifest(
-		StoreVisualSweepScript.acceptance_manifest_dir(),
-		StoreVisualSweepScript.rows(),
+		StoreVisualSweepScript.acceptance_manifest_dir_for_target(_target_mode),
+		StoreVisualSweepScript.rows_for_target(_target_mode),
 		_captures
 	)
 
@@ -218,8 +242,39 @@ func _scope_mode_from_label(label: String) -> int:
 			return StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE
 		StoreVisualScopeProfileScript.MODE_SUPPRESSION_DIFF_LABEL:
 			return StoreVisualScopeProfileScript.MODE_SUPPRESSION_DIFF
+		StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL:
+			return StoreVisualScopeProfileScript.MODE_AUTHORED_FULL
 		_:
 			return StoreVisualScopeProfileScript.MODE_AUTHORED_FULL
+
+
+func _resolve_target_mode() -> String:
+	var env_target: String = OS.get_environment("MALLCORE_VISUAL_SWEEP_TARGET")
+	if not env_target.is_empty():
+		return _normalize_target_mode(env_target)
+	var args: PackedStringArray = OS.get_cmdline_user_args()
+	for index: int in range(args.size()):
+		var arg: String = args[index]
+		if arg.begins_with("--target="):
+			return _normalize_target_mode(arg.get_slice("=", 1))
+		if arg == "--target" and index + 1 < args.size():
+			return _normalize_target_mode(args[index + 1])
+	return StoreVisualSweepScript.FIRST_TEN_SECONDS_TARGET_MODE
+
+
+func _normalize_target_mode(raw: String) -> String:
+	var normalized: String = raw.strip_edges().replace("-", "_")
+	match normalized:
+		"overhaul", StoreVisualSweepScript.OVERHAUL_TARGET_MODE:
+			return StoreVisualSweepScript.OVERHAUL_TARGET_MODE
+		"first", "first_ten", StoreVisualSweepScript.FIRST_TEN_SECONDS_TARGET_MODE:
+			return StoreVisualSweepScript.FIRST_TEN_SECONDS_TARGET_MODE
+		_:
+			return StoreVisualSweepScript.FIRST_TEN_SECONDS_TARGET_MODE
+
+
+func _apply_row_setup(row: Dictionary) -> Dictionary:
+	return VisualSweepOverhaulFixturesScript.apply(_store_root, row)
 
 
 func _capture_error(row: Dictionary, message: String, extra: Dictionary = {}) -> Dictionary:
@@ -235,6 +290,11 @@ func _capture_error(row: Dictionary, message: String, extra: Dictionary = {}) ->
 		"primary_work_surface_target": str(row.get("primary_work_surface_target", "")),
 		"action_context": row.get("action_context", {}),
 		"action_context_validation": StoreVisualSweepScript.validate_action_context(row),
+		"inspiration_closeout": row.get("inspiration_closeout", {}),
+		"spawn_acceptance_review": row.get("spawn_acceptance_review", {}),
+		"spawn_readability_anchors": row.get("spawn_readability_anchors", []),
+		"setup_state": str(row.get("setup_state", "")),
+		"review_manifest_contract": StoreVisualSweepScript.review_manifest_contract(row),
 		"review_target": str(row.get("review_target", "")),
 		"visual_scope_mode": str(row.get("visual_scope_mode", "")),
 		"acceptance_evidence": false,

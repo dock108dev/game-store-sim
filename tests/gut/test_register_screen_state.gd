@@ -186,7 +186,7 @@ func test_training_register_check_sets_screen_ready_then_backroom_detour() -> vo
 	assert_eq(String(controller.current_stage()), "training_talk_manager")
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_INACTIVE)
 
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -218,15 +218,17 @@ func test_customer_sale_sets_transaction_then_receipt_state() -> void:
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
 	assert_eq(screen.current_amount(), 0)
 	assert_eq(screen.display_text(), "TRANS\nREADY")
+	_assert_counter_state("pending", "PENDING", true, true, 0)
 	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
 	assert_not_null(decision, "Customer interaction must open a decision card")
 	if decision == null:
 		return
 	decision._on_choice_pressed(&"clean_exchange", {"cash": 15})
 	await get_tree().process_frame
-	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_TRANSACTION)
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_SETTLED)
 	assert_eq(screen.current_amount(), 15)
-	assert_eq(screen.display_text(), "SALE\n$15")
+	assert_eq(screen.display_text(), "RECEIPT\n$15")
+	_assert_counter_state("clean_exchange", "SALE", true, true, 15)
 
 	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
 	assert_not_null(result, "Customer sale must show a result before settling")
@@ -243,6 +245,8 @@ func test_customer_sale_sets_transaction_then_receipt_state() -> void:
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)
 	assert_eq(screen.current_amount(), 0)
 	assert_eq(screen.display_text(), "BACK\nROOM")
+	assert_null(_counter_anchor())
+	_assert_device_state("")
 
 
 func test_customer_no_sale_sets_non_sale_state() -> void:
@@ -263,6 +267,7 @@ func test_customer_no_sale_sets_non_sale_state() -> void:
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_NO_SALE)
 	assert_eq(screen.current_amount(), 0)
 	assert_eq(screen.display_text(), "NO SALE")
+	_assert_counter_state("refused", "REFUSED", false, false, 0)
 	var result: ModalPanel = controller.get("_customer_result_panel") as ModalPanel
 	if result == null:
 		return
@@ -282,6 +287,47 @@ func test_customer_no_sale_sets_non_sale_state() -> void:
 	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_BACKROOM)
 	assert_eq(screen.current_amount(), 0)
 	assert_eq(screen.display_text(), "BACK\nROOM")
+	assert_null(_counter_anchor())
+	_assert_device_state("")
+
+
+func test_bundle_and_payout_states_drive_counter_surface() -> void:
+	await _load_store(true)
+	var controller: StoreSessionController = _controller()
+	var screen = _screen()
+	if controller == null or screen == null:
+		return
+
+	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	var decision: DecisionCardPanel = controller.get("_decision_panel") as DecisionCardPanel
+	assert_not_null(decision, "Customer interaction must open a decision card")
+	if decision == null:
+		return
+	decision._on_choice_pressed(&"upsell_bundle", {"cash": 18})
+	await get_tree().process_frame
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_SETTLED)
+	assert_eq(screen.current_amount(), 18)
+	_assert_counter_state("bundle", "BUNDLE", true, false, 18)
+
+	await _load_store(true)
+	controller = _controller()
+	screen = _screen()
+	if controller == null or screen == null:
+		return
+	controller.call("_start_day", 2)
+	await get_tree().process_frame
+	controller.on_store_customer_interacted()
+	await get_tree().process_frame
+	decision = controller.get("_decision_panel") as DecisionCardPanel
+	assert_not_null(decision, "Day 2 customer interaction must open a decision card")
+	if decision == null:
+		return
+	decision._on_choice_pressed(&"accept_full_value", {"cash": -8})
+	await get_tree().process_frame
+	assert_eq(screen.current_state(), RegisterScreenStateScript.STATE_SETTLED)
+	assert_eq(screen.current_amount(), 8)
+	_assert_counter_state("payout", "PAYOUT", true, true, 8)
 
 
 func _register_screen_fixture() -> Dictionary:
@@ -384,3 +430,60 @@ func _controller() -> StoreSessionController:
 	if _root == null:
 		return null
 	return _root.get_node_or_null("StoreSessionController") as StoreSessionController
+
+
+func _counter_anchor() -> Node3D:
+	if _root == null:
+		return null
+	return _root.get_node_or_null("checkout_counter/StoreSessionCustomerCounterAnchor") as Node3D
+
+
+func _assert_counter_state(
+	expected_state: String,
+	expected_label: String,
+	expected_receipt_visible: bool,
+	expected_item_visible: bool,
+	expected_amount: int
+) -> void:
+	var anchor: Node3D = _counter_anchor()
+	assert_not_null(anchor, "Counter surface must exist for active customer state")
+	if anchor == null:
+		return
+	assert_eq(str(anchor.get_meta("counter_state", "")), expected_state)
+	assert_eq(str(anchor.get_meta("outcome_label", "")), expected_label)
+	assert_eq(int(anchor.get_meta("counter_amount", -1)), expected_amount)
+	assert_not_null(anchor.get_node_or_null("CounterItemTray"))
+	assert_not_null(anchor.get_node_or_null("CustomerSidePad"))
+	assert_not_null(anchor.get_node_or_null("CounterCableLoop"))
+	var receipt: MeshInstance3D = anchor.get_node_or_null("SharedReceiptSlip") as MeshInstance3D
+	var item: Node3D = anchor.get_node_or_null("SharedCustomerItem") as Node3D
+	var strip: MeshInstance3D = anchor.get_node_or_null("OutcomeStrip") as MeshInstance3D
+	assert_not_null(receipt)
+	assert_not_null(item)
+	assert_not_null(strip)
+	if receipt != null:
+		assert_eq(receipt.visible, expected_receipt_visible)
+		assert_not_null(receipt.get_node_or_null("ReceiptDetail"))
+	if item != null:
+		assert_eq(item.visible, expected_item_visible)
+	if strip != null:
+		var label: Label3D = strip.get_node_or_null("OutcomeText") as Label3D
+		assert_not_null(label)
+		if label != null:
+			assert_eq(label.text, expected_label)
+		assert_not_null(strip.get_node_or_null("OutcomeShapeKey"))
+	_assert_device_state(expected_state)
+
+
+func _assert_device_state(expected_state: String) -> void:
+	if _root == null:
+		return
+	for path: String in [
+		"Checkout/Register/CheckoutDetails/ScannerReadyLight",
+		"Checkout/Register/CheckoutDetails/CustomerPaymentDisplayScreen",
+		"Checkout/Register/CheckoutDetails/CardReaderCable",
+	]:
+		var node: MeshInstance3D = _root.get_node_or_null(path) as MeshInstance3D
+		assert_not_null(node, "Checkout device missing: %s" % path)
+		if node != null:
+			assert_eq(str(node.get_meta("counter_state", "")), expected_state)

@@ -2,6 +2,10 @@
 class_name FixtureDefinition
 extends Resource
 
+const CatalogEffectMetadataScript: GDScript = preload(
+	"res://game/resources/catalog_effect_metadata.gd"
+)
+
 enum TierLevel { BASIC = 1, IMPROVED = 2, PREMIUM = 3 }
 
 const TIER_NAMES: Dictionary = {
@@ -54,6 +58,42 @@ const SELLBACK_RATE: float = 0.5
 @export var visual_category: String = ""
 @export var scene_path: String = ""
 @export var tier_data: Dictionary = {}
+@export var catalog_category: String = ""
+@export var catalog_sort: int = 0
+@export var silhouette: String = ""
+@export var capacity_label: String = ""
+@export var effect_summary: String = ""
+@export var effects: Array[Dictionary] = []
+@export var owned_limit: int = 0
+
+
+## Returns normalized catalog effect metadata for UI and runtime readers.
+func get_catalog_effects() -> Array[Dictionary]:
+	return CatalogEffectMetadataScript.normalize_effects(effects)
+
+
+## Returns the catalog-facing effect summary without deriving mechanics.
+func get_effect_summary_text() -> String:
+	if not effect_summary.is_empty():
+		return effect_summary
+	var labels: PackedStringArray = (
+		CatalogEffectMetadataScript.labels_for_effects(get_catalog_effects())
+	)
+	return ", ".join(labels)
+
+
+## Returns the catalog-facing capacity label backed by fixture slot data.
+func get_capacity_label_text() -> String:
+	if not capacity_label.is_empty():
+		return capacity_label
+	return "%d slots" % slot_count
+
+
+## Returns effect metadata validation errors for this fixture.
+func validate_catalog_effect_metadata() -> Array[String]:
+	return CatalogEffectMetadataScript.validate_advertised_effects(
+		effect_summary, get_catalog_effects(), id
+	)
 
 
 ## Returns the sell-back value (50% of purchase cost).

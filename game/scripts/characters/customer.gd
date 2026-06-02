@@ -30,6 +30,13 @@ const NAV_TARGET_TIMEOUT_SECONDS: float = 45.0
 ## effective patience while the player rings up the head-of-queue customer
 ## manually, so a slow first transaction does not collapse the queue.
 const DAY1_QUEUE_PATIENCE_TICK_SCALE: float = 0.5
+const STATE_CUE_NAME: StringName = &"StateCue"
+const STATE_CUE_SIZE: Vector3 = Vector3(0.18, 0.035, 0.018)
+const STATE_CUE_BROWSE: Color = Color(0.357, 0.722, 0.910, 1.0)
+const STATE_CUE_QUEUE: Color = Color(0.949, 0.722, 0.110, 1.0)
+const STATE_CUE_REGISTER: Color = Color(0.427, 0.812, 0.353, 1.0)
+const STATE_CUE_LEAVING: Color = Color(0.898, 0.243, 0.169, 1.0)
+const STATE_CUE_NEUTRAL: Color = Color(0.957, 0.914, 0.831, 1.0)
 const CONDITION_RANKS: Dictionary = {
 	"poor": 0,
 	"fair": 1,
@@ -37,6 +44,34 @@ const CONDITION_RANKS: Dictionary = {
 	"near_mint": 3,
 	"mint": 4,
 }
+const ProductVisualFactoryScript: GDScript = preload(
+	"res://game/scripts/visuals/product_visual_factory.gd"
+)
+const StoreVisualKitScript: GDScript = preload(
+	"res://game/scripts/visuals/store_visual_kit.gd"
+)
+const CustomerVisualProfileScript: GDScript = preload(
+	"res://game/scripts/characters/customer_visual_profile.gd"
+)
+
+const HELD_ITEM_STATE_NONE: StringName = &"none"
+const HELD_ITEM_STATE_SELECTED_CARRIED: StringName = &"selected_carried"
+const HELD_ITEM_STATE_SELECTED_QUEUE: StringName = &"selected_queue"
+const HELD_ITEM_STATE_SELECTED_CHECKOUT: StringName = &"selected_checkout"
+const HELD_ITEM_STATE_SELECTED_SOLD: StringName = &"selected_sold"
+const HELD_ITEM_STATE_SELECTED_ABANDONED: StringName = &"selected_abandoned"
+const HELD_ITEM_STATE_RETURNED_CARRIED: StringName = &"returned_carried"
+const HELD_ITEM_STATE_RETURNED_PRESENTED: StringName = &"returned_presented"
+const HELD_ITEM_STATE_RETURNED_ACCEPTED: StringName = &"returned_accepted"
+const HELD_ITEM_STATE_RETURNED_REFUSED: StringName = &"returned_refused"
+const HELD_ITEM_STATE_TRADE_IN_PRESENTED: StringName = &"trade_in_presented"
+const HELD_ITEM_STATE_PAYOUT_RETURNED: StringName = &"payout_returned"
+const _HELD_ITEM_KIND_NONE: StringName = &"none"
+const _HELD_ITEM_KIND_SELECTED: StringName = &"selected"
+const _HELD_ITEM_KIND_RETURNED: StringName = &"returned"
+const _HELD_ITEM_KIND_TRADE_IN: StringName = &"trade_in"
+const _HELD_ITEM_PROP_NAME: StringName = &"HeldItemProp"
+const _HELD_ITEM_PROP_SCALE: Vector3 = Vector3(0.36, 0.36, 0.36)
 
 ## Sequential debug counter so the head-of-customer indicator can show a short
 ## "#3" instead of the 18-digit `get_instance_id()`. Reset by tests via
@@ -59,6 +94,7 @@ var _store_controller: StoreController = null
 var _inventory_system: InventorySystem = null
 var _budget_multiplier: float = 1.0
 var _browse_min_multiplier: float = 1.0
+var _initial_patience_seconds: float = 0.0
 var _visited_slots: Array[Node] = []
 var _desired_item: ItemInstance = null
 var _desired_item_slot: Node = null
@@ -94,6 +130,19 @@ var _despawn_metric_reported: bool = false
 var _use_waypoint_fallback: bool = false
 var _fallback_target: Vector3 = Vector3.ZERO
 var _fallback_arrived: bool = true
+var _state_cue: MeshInstance3D = null
+var _patience_cue: MeshInstance3D = null
+var _reaction_cue: MeshInstance3D = null
+var _accent_primary: MeshInstance3D = null
+var _accent_secondary: MeshInstance3D = null
+var _held_item_state: StringName = HELD_ITEM_STATE_NONE
+var _held_item_last_terminal_state: StringName = HELD_ITEM_STATE_NONE
+var _held_item_kind: StringName = _HELD_ITEM_KIND_NONE
+var _held_item_instance_id: String = ""
+var _held_item_definition_id: String = ""
+var _held_item_condition: String = ""
+var _held_item_checkout_pose: bool = false
+var _held_item_prop: Node3D = null
 
 @onready var _navigation_agent: NavigationAgent3D = (
 	get_node_or_null("NavigationAgent3D") as NavigationAgent3D
@@ -116,6 +165,8 @@ var _fallback_arrived: bool = true
 
 
 func _ready() -> void:
+	_ensure_state_cue()
+	refresh_visual_cues(false)
 	_randomize_body_color()
 	EventBus.speed_changed.connect(_on_speed_changed)
 	if _navigation_agent != null:
@@ -140,7 +191,8 @@ func initialize(
 	if debug_id < 0:
 		debug_id = _next_debug_id
 		_next_debug_id += 1
-	patience_timer = p_profile.patience * 120.0
+	_initial_patience_seconds = p_profile.patience * 120.0
+	patience_timer = _initial_patience_seconds
 	_reset_browse_timer()
 	_set_state(State.ENTERING)
 	_nav_recalc_timer = stagger_offset * NAV_RECALC_INTERVAL
@@ -151,6 +203,7 @@ func initialize(
 	_desired_item_slot = null
 	_current_target_slot = null
 	_made_purchase = false
+	clear_held_item_prop(&"initialize")
 	_reset_navigation_metrics()
 	_leave_reason = &"patience_expired"
 	_cache_navigation_targets()
@@ -159,6 +212,7 @@ func initialize(
 	if _animator != null:
 		_animator.initialize(_animation_player)
 		_animator.play_for_state(State.ENTERING)
+	refresh_visual_cues(true)
 	if _state_indicator:
 		_state_indicator.initialize(self)
 	_initialized = true
@@ -209,6 +263,73 @@ static func state_name(state: int) -> String:
 	return ""
 
 
+## Returns the in-world non-text cue color for a customer FSM state.
+static func state_cue_color(state: int) -> Color:
+	match state:
+		State.BROWSING:
+			return STATE_CUE_BROWSE
+		State.WAITING_IN_QUEUE:
+			return STATE_CUE_QUEUE
+		State.PURCHASING:
+			return STATE_CUE_REGISTER
+		State.LEAVING:
+			return STATE_CUE_LEAVING
+	return STATE_CUE_NEUTRAL
+
+
+## Returns the production visual state, profile, patience, and reaction cues.
+func get_visual_snapshot() -> Dictionary:
+	var profile_id: String = CustomerVisualProfileScript.profile_id(profile)
+	var archetype_id: StringName = CustomerVisualProfileScript.archetype_id(profile)
+	var accent: Dictionary = CustomerVisualProfileScript.accent_for(profile_id, archetype_id)
+	var held_snapshot: Dictionary = get_held_item_snapshot()
+	var reaction_intent: StringName = CustomerVisualProfileScript.reaction_intent_for(
+		_leave_reason,
+		_held_item_state,
+		StringName(str(held_snapshot.get("last_terminal_state", HELD_ITEM_STATE_NONE)))
+	)
+	var visual_state: StringName = _visual_state_for_current_customer(reaction_intent)
+	return {
+		"fsm_state": current_state,
+		"fsm_state_name": state_name(current_state),
+		"visual_state": visual_state,
+		"visual_flags": _visual_flags_for_current_customer(visual_state),
+		"profile_id": profile_id,
+		"profile_name": profile.name if profile != null else "",
+		"archetype_id": archetype_id,
+		"accent_key": accent.get("key", &"casual_shopper"),
+		"accent_shape": accent.get("shape", &"soft_pin"),
+		"desired_item_present": _desired_item != null,
+		"desired_item_instance_id": _desired_item.instance_id if _desired_item != null else "",
+		"desired_item_definition_id": _desired_item_definition_id(),
+		"queue_ready": current_state == State.WAITING_IN_QUEUE,
+		"counter_ready": _awaiting_player_checkout or is_at_register(),
+		"awaiting_player_checkout": _awaiting_player_checkout,
+		"at_register": is_at_register(),
+		"patience_remaining": maxf(patience_timer, 0.0),
+		"patience_ratio": _patience_ratio(),
+		"leave_reason": _leave_reason,
+		"held_item_state": _held_item_state,
+		"held_item_last_terminal_state": held_snapshot.get("last_terminal_state", HELD_ITEM_STATE_NONE),
+		"reaction_intent": reaction_intent,
+		"animator_intent": CustomerVisualProfileScript.intent_for_visual_state(
+			visual_state,
+			reaction_intent
+		),
+	}
+
+
+## Refreshes non-debug in-world meshes and optional animator intent playback.
+func refresh_visual_cues(update_animator: bool = true) -> void:
+	var snapshot: Dictionary = get_visual_snapshot()
+	_update_visual_state_cue(snapshot)
+	_update_patience_cue(snapshot)
+	_update_archetype_accent(snapshot)
+	_update_reaction_cue(snapshot)
+	if update_animator and _animator != null:
+		_animator.play_for_visual_snapshot(snapshot)
+
+
 ## Returns the item the customer wants to buy, or null.
 func get_desired_item() -> ItemInstance:
 	return _desired_item
@@ -225,21 +346,28 @@ func get_leave_reason() -> StringName:
 
 
 ## Called by CheckoutSystem when checkout completes (accept or decline).
-func complete_purchase() -> void:
+func complete_purchase(sold: bool = true) -> void:
 	_awaiting_player_checkout = false
-	_made_purchase = true
+	_made_purchase = sold
 	_despawn_metric_reported = false
+	if sold:
+		_finish_held_item_prop(HELD_ITEM_STATE_SELECTED_SOLD)
+	else:
+		_finish_held_item_prop(HELD_ITEM_STATE_SELECTED_ABANDONED)
 	_desired_item = null
 	_desired_item_slot = null
-	_leave_reason = &"purchase_complete"
+	_leave_reason = &"purchase_complete" if sold else &"sale_declined"
+	refresh_visual_cues(false)
 	_transition_to(State.LEAVING)
 
 
 ## Called by RegisterQueue to place this customer in a queue position.
 func enter_queue(queue_position: Vector3) -> void:
 	_set_state(State.WAITING_IN_QUEUE)
+	set_held_item_checkout_pose(false)
 	if _animator != null:
 		_animator.play_for_state(State.WAITING_IN_QUEUE)
+	refresh_visual_cues(true)
 	_register_arrival_reported = false
 	_set_navigation_target(queue_position, &"queue_slot")
 
@@ -254,8 +382,10 @@ func enter_queue(queue_position: Vector3) -> void:
 ## register without the gate engaged.
 func advance_to_register() -> void:
 	_set_state(State.PURCHASING)
+	set_held_item_checkout_pose(true)
 	if _animator != null:
 		_animator.play_for_state(State.PURCHASING)
+	refresh_visual_cues(true)
 	_register_arrival_reported = false
 	_set_navigation_target(_register_position, &"register")
 	_awaiting_player_checkout = _is_first_sale_guarantee_active()
@@ -278,6 +408,120 @@ func is_at_register() -> bool:
 ## Called by CheckoutSystem when the queue is full.
 func reject_from_queue() -> void:
 	_leave_with(&"patience_expired")
+
+
+## Called by QueueSystem when queued patience expires.
+func abandon_queue() -> void:
+	_leave_with(&"queue_abandoned")
+
+
+## Attaches or updates the selected item prop owned by this customer.
+func set_held_selected_item(
+	item: ItemInstance, source_slot: Node = null
+) -> void:
+	if item == null or item.definition == null:
+		clear_held_item_prop(&"missing_selected_item")
+		return
+	_desired_item = item
+	if source_slot != null:
+		_desired_item_slot = source_slot
+	var visual_data: Dictionary = ProductVisualFactoryScript.visual_data_from_item(item)
+	_set_held_item_prop(
+		_HELD_ITEM_KIND_SELECTED,
+		String(item.instance_id),
+		String(item.definition.id),
+		item.condition,
+		visual_data,
+	)
+	_refresh_held_item_state_for_pose()
+
+
+## Attaches a scripted returned item prop to the customer.
+func set_held_returned_item(item_id: String, condition: StringName = &"used") -> void:
+	if item_id.strip_edges().is_empty():
+		clear_held_item_prop(&"missing_returned_item")
+		return
+	_set_held_item_prop(
+		_HELD_ITEM_KIND_RETURNED,
+		"",
+		item_id,
+		String(condition),
+		_visual_data_for_definition_id(item_id, condition),
+	)
+	_held_item_checkout_pose = false
+	_set_held_item_state(HELD_ITEM_STATE_RETURNED_CARRIED)
+
+
+## Attaches a scripted trade-in prop in its counter presentation pose.
+func set_held_trade_in_item(item_id: String, condition: StringName = &"used") -> void:
+	if item_id.strip_edges().is_empty():
+		clear_held_item_prop(&"missing_trade_in_item")
+		return
+	_set_held_item_prop(
+		_HELD_ITEM_KIND_TRADE_IN,
+		"",
+		item_id,
+		String(condition),
+		_visual_data_for_definition_id(item_id, condition),
+	)
+	_held_item_checkout_pose = true
+	_set_held_item_state(HELD_ITEM_STATE_TRADE_IN_PRESENTED)
+
+
+## Changes the carried item's queue/checkout pose without replacing the item.
+func set_held_item_checkout_pose(enabled: bool) -> void:
+	_held_item_checkout_pose = enabled
+	_refresh_held_item_state_for_pose()
+
+
+## Keeps a refused return visible until the customer despawns.
+func mark_held_return_refused() -> void:
+	if _held_item_kind != _HELD_ITEM_KIND_RETURNED:
+		return
+	_set_held_item_state(HELD_ITEM_STATE_RETURNED_REFUSED)
+	_apply_held_item_transform()
+	refresh_visual_cues(true)
+
+
+## Clears the held prop and records the terminal state for tests/debug displays.
+func clear_held_item_prop(reason: StringName = &"") -> void:
+	if (
+		_held_item_kind == _HELD_ITEM_KIND_SELECTED
+		and _held_item_state != HELD_ITEM_STATE_NONE
+		and reason != &"initialize"
+	):
+		_held_item_last_terminal_state = HELD_ITEM_STATE_SELECTED_ABANDONED
+	_remove_held_item_prop()
+	_held_item_state = HELD_ITEM_STATE_NONE
+	_held_item_kind = _HELD_ITEM_KIND_NONE
+	_held_item_instance_id = ""
+	_held_item_definition_id = ""
+	_held_item_condition = ""
+	_held_item_checkout_pose = false
+
+
+## Returns the active held-prop state.
+func get_held_item_state() -> StringName:
+	return _held_item_state
+
+
+## Returns the selected inventory instance id currently represented by the prop.
+func get_held_item_instance_id() -> String:
+	return _held_item_instance_id
+
+
+## Returns a debug/test snapshot of the held-item visual state.
+func get_held_item_snapshot() -> Dictionary:
+	return {
+		"state": _held_item_state,
+		"last_terminal_state": _held_item_last_terminal_state,
+		"kind": _held_item_kind,
+		"instance_id": _held_item_instance_id,
+		"definition_id": _held_item_definition_id,
+		"condition": _held_item_condition,
+		"has_prop": _held_item_prop != null and is_instance_valid(_held_item_prop),
+		"checkout_pose": _held_item_checkout_pose,
+	}
 
 
 func _process_entering() -> void:
@@ -387,6 +631,11 @@ func _process_waiting_in_queue(delta: float) -> void:
 
 func _process_leaving() -> void:
 	if _is_navigation_finished():
+		if _held_item_state == HELD_ITEM_STATE_RETURNED_REFUSED:
+			_held_item_last_terminal_state = HELD_ITEM_STATE_RETURNED_REFUSED
+		_remove_held_item_prop()
+		_held_item_state = HELD_ITEM_STATE_NONE
+		_held_item_kind = _HELD_ITEM_KIND_NONE
 		if not _despawn_metric_reported:
 			_despawn_metric_reported = true
 			EventBus.customer_despawn_requested.emit(self)
@@ -399,8 +648,11 @@ func _transition_to(new_state: State) -> void:
 		_animator.set_satisfied(_made_purchase)
 	if _animator != null:
 		_animator.play_for_state(new_state)
+	refresh_visual_cues(true)
 	match new_state:
 		State.PURCHASING:
+			if _desired_item != null:
+				set_held_selected_item(_desired_item, _desired_item_slot)
 			_navigate_to_register()
 			var data: Dictionary = _build_customer_data()
 			EventBus.customer_ready_to_purchase.emit(data)
@@ -417,6 +669,8 @@ func _transition_to(new_state: State) -> void:
 func _set_state(new_state: State) -> void:
 	var old_state: State = current_state
 	current_state = new_state
+	_update_state_cue(new_state)
+	refresh_visual_cues(false)
 	if OS.is_debug_build():
 		print("[Customer %d] %s → %s" % [
 			get_instance_id(),
@@ -424,6 +678,395 @@ func _set_state(new_state: State) -> void:
 			State.keys()[new_state],
 		])
 	EventBus.customer_state_changed.emit(self, new_state)
+
+
+func _ensure_state_cue() -> MeshInstance3D:
+	if _state_cue != null and is_instance_valid(_state_cue):
+		return _state_cue
+	if _body_mesh == null:
+		_body_mesh = get_node_or_null("BodyMesh") as MeshInstance3D
+	if _body_mesh == null:
+		return null
+	var existing: MeshInstance3D = (
+		_body_mesh.get_node_or_null(NodePath(STATE_CUE_NAME)) as MeshInstance3D
+	)
+	if existing != null:
+		_state_cue = existing
+	else:
+		_state_cue = MeshInstance3D.new()
+		_state_cue.name = STATE_CUE_NAME
+		var mesh := BoxMesh.new()
+		mesh.size = STATE_CUE_SIZE
+		_state_cue.mesh = mesh
+		_body_mesh.add_child(_state_cue)
+	_state_cue.position = Vector3(0.0, 0.24, 0.135)
+	_state_cue.rotation_degrees = Vector3.ZERO
+	return _state_cue
+
+
+func _update_state_cue(state: State) -> void:
+	var cue: MeshInstance3D = _ensure_state_cue()
+	if cue == null:
+		return
+	var material := _cue_material(cue)
+	material.albedo_color = state_cue_color(state)
+	material.roughness = 0.72
+	cue.visible = true
+
+
+func _update_visual_state_cue(snapshot: Dictionary) -> void:
+	var cue: MeshInstance3D = _ensure_state_cue()
+	if cue == null:
+		return
+	var visual_state: StringName = StringName(str(snapshot.get("visual_state", "")))
+	var material := _cue_material(cue)
+	material.albedo_color = state_cue_color(current_state)
+	material.emission_enabled = true
+	material.emission = _visual_state_color(visual_state)
+	material.emission_energy_multiplier = 0.24
+	material.roughness = 0.72
+	cue.position = _visual_state_cue_position(visual_state)
+	cue.scale = _visual_state_cue_scale(visual_state)
+	cue.set_meta("visual_state", String(visual_state))
+	cue.visible = true
+
+
+func _ensure_patience_cue() -> MeshInstance3D:
+	if _patience_cue != null and is_instance_valid(_patience_cue):
+		return _patience_cue
+	if _body_mesh == null:
+		_body_mesh = get_node_or_null("BodyMesh") as MeshInstance3D
+	if _body_mesh == null:
+		return null
+	var existing: MeshInstance3D = (
+		_body_mesh.get_node_or_null("PatienceCue") as MeshInstance3D
+	)
+	if existing != null:
+		_patience_cue = existing
+	else:
+		_patience_cue = MeshInstance3D.new()
+		_patience_cue.name = "PatienceCue"
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(0.20, 0.024, 0.018)
+		_patience_cue.mesh = mesh
+		_body_mesh.add_child(_patience_cue)
+	_patience_cue.position = Vector3(0.0, 0.30, 0.135)
+	return _patience_cue
+
+
+func _update_patience_cue(snapshot: Dictionary) -> void:
+	var cue: MeshInstance3D = _ensure_patience_cue()
+	if cue == null:
+		return
+	var ratio: float = float(snapshot.get("patience_ratio", 0.0))
+	cue.scale = Vector3(maxf(ratio, 0.08), 1.0, 1.0)
+	var material := _cue_material(cue)
+	if ratio < 0.25:
+		var angry_accent: Dictionary = CustomerVisualProfileScript.ACCENTS.get(
+			&"angry_return_customer",
+			CustomerVisualProfileScript.ACCENT_DEFAULT
+		) as Dictionary
+		material.albedo_color = angry_accent.get("primary_color", STATE_CUE_LEAVING) as Color
+	elif ratio < 0.55:
+		material.albedo_color = STATE_CUE_QUEUE
+	else:
+		material.albedo_color = STATE_CUE_REGISTER
+	material.emission_enabled = ratio < 0.25
+	material.emission = material.albedo_color
+	material.emission_energy_multiplier = 0.35
+	material.roughness = 0.74
+	cue.set_meta("patience_ratio", ratio)
+	cue.visible = true
+
+
+func _ensure_reaction_cue() -> MeshInstance3D:
+	if _reaction_cue != null and is_instance_valid(_reaction_cue):
+		return _reaction_cue
+	if _head_mesh == null:
+		_head_mesh = get_node_or_null("HeadMesh") as MeshInstance3D
+	if _head_mesh == null:
+		return null
+	var existing: MeshInstance3D = (
+		_head_mesh.get_node_or_null("ReactionCue") as MeshInstance3D
+	)
+	if existing != null:
+		_reaction_cue = existing
+	else:
+		_reaction_cue = MeshInstance3D.new()
+		_reaction_cue.name = "ReactionCue"
+		var mesh := BoxMesh.new()
+		mesh.size = Vector3(0.16, 0.035, 0.06)
+		_reaction_cue.mesh = mesh
+		_head_mesh.add_child(_reaction_cue)
+	_reaction_cue.position = Vector3(0.0, 0.29, 0.04)
+	return _reaction_cue
+
+
+func _update_reaction_cue(snapshot: Dictionary) -> void:
+	var cue: MeshInstance3D = _ensure_reaction_cue()
+	if cue == null:
+		return
+	var reaction_intent: StringName = StringName(str(snapshot.get("reaction_intent", "")))
+	if reaction_intent == &"":
+		cue.visible = false
+		return
+	var material := _cue_material(cue)
+	material.albedo_color = _reaction_color(reaction_intent)
+	material.emission_enabled = true
+	material.emission = material.albedo_color
+	material.emission_energy_multiplier = 0.45
+	material.roughness = 0.66
+	cue.rotation_degrees = _reaction_rotation(reaction_intent)
+	cue.set_meta("reaction_intent", String(reaction_intent))
+	cue.visible = true
+
+
+func _ensure_accent_part(part_name: String, parent: Node3D) -> MeshInstance3D:
+	var existing: MeshInstance3D = parent.get_node_or_null(part_name) as MeshInstance3D
+	if existing != null:
+		return existing
+	var part := MeshInstance3D.new()
+	part.name = part_name
+	var mesh := BoxMesh.new()
+	part.mesh = mesh
+	parent.add_child(part)
+	return part
+
+
+func _update_archetype_accent(snapshot: Dictionary) -> void:
+	if _body_mesh == null:
+		_body_mesh = get_node_or_null("BodyMesh") as MeshInstance3D
+	if _body_mesh == null:
+		return
+	_accent_primary = _ensure_accent_part("ArchetypeAccentPrimary", _body_mesh)
+	_accent_secondary = _ensure_accent_part("ArchetypeAccentSecondary", _body_mesh)
+	var accent: Dictionary = CustomerVisualProfileScript.accent_for(
+		str(snapshot.get("profile_id", "")),
+		StringName(str(snapshot.get("archetype_id", "")))
+	)
+	_configure_accent_mesh(_accent_primary, accent, true)
+	_configure_accent_mesh(_accent_secondary, accent, false)
+
+
+func _configure_accent_mesh(
+	part: MeshInstance3D, accent: Dictionary, primary: bool
+) -> void:
+	var shape: StringName = StringName(str(accent.get("shape", &"soft_pin")))
+	var mesh := _box_mesh(part)
+	mesh.size = _accent_size(shape, primary)
+	part.position = _accent_position(shape, primary)
+	part.rotation_degrees = _accent_rotation(shape, primary)
+	var material := _cue_material(part)
+	var color_value: Variant = accent.get("primary_color", STATE_CUE_BROWSE)
+	if not primary:
+		color_value = accent.get("secondary_color", STATE_CUE_NEUTRAL)
+	material.albedo_color = color_value as Color
+	material.emission_enabled = shape == &"neon_cap" or shape == &"gold_lapel"
+	material.emission = material.albedo_color
+	material.emission_energy_multiplier = 0.28
+	material.roughness = 0.70
+	part.set_meta("accent_key", String(accent.get("key", &"casual_shopper")))
+	part.set_meta("accent_shape", String(shape))
+	part.visible = true
+
+
+func _box_mesh(part: MeshInstance3D) -> BoxMesh:
+	var mesh: BoxMesh = part.mesh as BoxMesh
+	if mesh == null:
+		mesh = BoxMesh.new()
+		part.mesh = mesh
+	return mesh
+
+
+func _cue_material(part: MeshInstance3D) -> StandardMaterial3D:
+	var material: StandardMaterial3D = part.material_override as StandardMaterial3D
+	if material == null:
+		material = StandardMaterial3D.new()
+		part.material_override = material
+	return material
+
+
+func _visual_state_for_current_customer(reaction_intent: StringName) -> StringName:
+	if current_state == State.LEAVING:
+		if (
+			reaction_intent == CustomerVisualProfileScript.INTENT_SALE
+			or reaction_intent == CustomerVisualProfileScript.INTENT_CLEAN_EXCHANGE
+			or reaction_intent == CustomerVisualProfileScript.INTENT_PAYOUT_TRADE_IN
+			or reaction_intent == CustomerVisualProfileScript.INTENT_ACCEPTED_TRADE_IN
+		):
+			return CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY
+		return CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET
+	if _patience_ratio() < 0.22 and current_state in [
+		State.BROWSING,
+		State.WAITING_IN_QUEUE,
+		State.PURCHASING,
+	]:
+		return CustomerVisualProfileScript.VISUAL_STATE_ANNOYED
+	match current_state:
+		State.BROWSING:
+			if _desired_item != null:
+				return CustomerVisualProfileScript.VISUAL_STATE_NEEDS_HELP
+			return CustomerVisualProfileScript.VISUAL_STATE_BROWSING
+		State.DECIDING:
+			return CustomerVisualProfileScript.VISUAL_STATE_CONSIDERING
+		State.WAITING_IN_QUEUE:
+			return CustomerVisualProfileScript.VISUAL_STATE_QUEUED
+		State.PURCHASING:
+			if _awaiting_player_checkout or is_at_register():
+				return CustomerVisualProfileScript.VISUAL_STATE_COUNTER
+			return CustomerVisualProfileScript.VISUAL_STATE_READY_TO_BUY
+	return CustomerVisualProfileScript.VISUAL_STATE_BROWSING
+
+
+func _visual_flags_for_current_customer(visual_state: StringName) -> Dictionary:
+	return {
+		"browsing": visual_state == CustomerVisualProfileScript.VISUAL_STATE_BROWSING,
+		"needs_help": visual_state == CustomerVisualProfileScript.VISUAL_STATE_NEEDS_HELP,
+		"queued": current_state == State.WAITING_IN_QUEUE,
+		"considering": current_state == State.DECIDING,
+		"annoyed": visual_state == CustomerVisualProfileScript.VISUAL_STATE_ANNOYED,
+		"ready_to_buy": (
+			current_state == State.PURCHASING
+			and visual_state != CustomerVisualProfileScript.VISUAL_STATE_COUNTER
+		),
+		"counter": visual_state == CustomerVisualProfileScript.VISUAL_STATE_COUNTER,
+		"leaving_happy": visual_state == CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY,
+		"leaving_upset": visual_state == CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET,
+	}
+
+
+func _patience_ratio() -> float:
+	var max_patience: float = _initial_patience_seconds
+	if max_patience <= 0.0 and profile != null:
+		max_patience = profile.patience * 120.0
+	if max_patience <= 0.0:
+		return 0.0
+	return clampf(patience_timer / max_patience, 0.0, 1.0)
+
+
+func _desired_item_definition_id() -> String:
+	if _desired_item == null or _desired_item.definition == null:
+		return ""
+	return String(_desired_item.definition.id)
+
+
+func _visual_state_color(visual_state: StringName) -> Color:
+	match visual_state:
+		CustomerVisualProfileScript.VISUAL_STATE_NEEDS_HELP:
+			return Color(0.62, 0.82, 1.0, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_QUEUED:
+			return STATE_CUE_QUEUE
+		CustomerVisualProfileScript.VISUAL_STATE_CONSIDERING:
+			return Color(0.82, 0.62, 0.95, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_ANNOYED:
+			return STATE_CUE_LEAVING
+		CustomerVisualProfileScript.VISUAL_STATE_READY_TO_BUY:
+			return Color(0.56, 0.88, 0.46, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_COUNTER:
+			return STATE_CUE_REGISTER
+		CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY:
+			return Color(0.50, 0.90, 0.40, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET:
+			return STATE_CUE_LEAVING
+	return STATE_CUE_BROWSE
+
+
+func _visual_state_cue_position(visual_state: StringName) -> Vector3:
+	match visual_state:
+		CustomerVisualProfileScript.VISUAL_STATE_COUNTER:
+			return Vector3(0.0, 0.33, 0.145)
+		CustomerVisualProfileScript.VISUAL_STATE_ANNOYED:
+			return Vector3(0.0, 0.26, 0.145)
+		CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY, CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET:
+			return Vector3(0.0, 0.22, 0.145)
+	return Vector3(0.0, 0.24, 0.135)
+
+
+func _visual_state_cue_scale(visual_state: StringName) -> Vector3:
+	match visual_state:
+		CustomerVisualProfileScript.VISUAL_STATE_NEEDS_HELP:
+			return Vector3(0.72, 1.35, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_CONSIDERING:
+			return Vector3(1.15, 0.85, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_READY_TO_BUY:
+			return Vector3(1.25, 1.0, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_COUNTER:
+			return Vector3(1.35, 1.2, 1.0)
+		CustomerVisualProfileScript.VISUAL_STATE_ANNOYED:
+			return Vector3(0.95, 1.45, 1.0)
+	return Vector3.ONE
+
+
+func _reaction_color(reaction_intent: StringName) -> Color:
+	match reaction_intent:
+		CustomerVisualProfileScript.INTENT_SALE, CustomerVisualProfileScript.INTENT_CLEAN_EXCHANGE:
+			return Color(0.46, 0.92, 0.38, 1.0)
+		CustomerVisualProfileScript.INTENT_BUNDLE_ACCEPTED:
+			return Color(0.98, 0.72, 0.22, 1.0)
+		CustomerVisualProfileScript.INTENT_TRADE_IN, CustomerVisualProfileScript.INTENT_ACCEPTED_TRADE_IN:
+			return Color(0.38, 0.62, 0.90, 1.0)
+		CustomerVisualProfileScript.INTENT_PAYOUT_TRADE_IN:
+			return Color(0.66, 0.52, 0.96, 1.0)
+		CustomerVisualProfileScript.INTENT_PRICE_SHOCK, CustomerVisualProfileScript.INTENT_REFUSED_RETURN:
+			return Color(0.92, 0.30, 0.18, 1.0)
+		CustomerVisualProfileScript.INTENT_NO_SALE, CustomerVisualProfileScript.INTENT_BUNDLE_REJECTED:
+			return Color(0.90, 0.58, 0.24, 1.0)
+	return STATE_CUE_LEAVING
+
+
+func _reaction_rotation(reaction_intent: StringName) -> Vector3:
+	match reaction_intent:
+		CustomerVisualProfileScript.INTENT_PRICE_SHOCK, CustomerVisualProfileScript.INTENT_REFUSED_RETURN:
+			return Vector3(0.0, 0.0, -16.0)
+		CustomerVisualProfileScript.INTENT_NO_SALE, CustomerVisualProfileScript.INTENT_BUNDLE_REJECTED:
+			return Vector3(0.0, 0.0, 12.0)
+	return Vector3.ZERO
+
+
+func _accent_size(shape: StringName, primary: bool) -> Vector3:
+	match shape:
+		&"catalog_card":
+			return Vector3(0.13, 0.09, 0.024) if primary else Vector3(0.06, 0.09, 0.026)
+		&"question_tab":
+			return Vector3(0.12, 0.12, 0.025) if primary else Vector3(0.04, 0.16, 0.026)
+		&"coupon_strip":
+			return Vector3(0.18, 0.042, 0.024) if primary else Vector3(0.045, 0.11, 0.026)
+		&"neon_cap":
+			return Vector3(0.19, 0.036, 0.028) if primary else Vector3(0.08, 0.05, 0.03)
+		&"pennant":
+			return Vector3(0.16, 0.055, 0.024) if primary else Vector3(0.055, 0.14, 0.026)
+		&"price_tag":
+			return Vector3(0.11, 0.14, 0.024) if primary else Vector3(0.08, 0.035, 0.026)
+		&"return_slash":
+			return Vector3(0.16, 0.045, 0.024) if primary else Vector3(0.04, 0.15, 0.026)
+		&"low_badge":
+			return Vector3(0.09, 0.08, 0.024) if primary else Vector3(0.13, 0.032, 0.026)
+		&"gold_lapel":
+			return Vector3(0.10, 0.12, 0.024) if primary else Vector3(0.07, 0.07, 0.026)
+	return Vector3(0.11, 0.065, 0.024) if primary else Vector3(0.055, 0.055, 0.026)
+
+
+func _accent_position(shape: StringName, primary: bool) -> Vector3:
+	if shape == &"neon_cap":
+		return Vector3(0.0, 0.58, 0.135) if primary else Vector3(0.11, 0.50, 0.14)
+	if shape == &"low_badge":
+		return Vector3(-0.13, -0.08, 0.145) if primary else Vector3(0.12, -0.10, 0.145)
+	return Vector3(-0.105, 0.12, 0.145) if primary else Vector3(0.115, 0.10, 0.146)
+
+
+func _accent_rotation(shape: StringName, primary: bool) -> Vector3:
+	match shape:
+		&"coupon_strip":
+			return Vector3(0.0, 0.0, -8.0 if primary else 8.0)
+		&"pennant":
+			return Vector3(0.0, 0.0, 12.0 if primary else -12.0)
+		&"price_tag":
+			return Vector3(0.0, 0.0, -10.0 if primary else 0.0)
+		&"return_slash":
+			return Vector3(0.0, 0.0, -28.0 if primary else 28.0)
+		&"gold_lapel":
+			return Vector3(0.0, 0.0, 18.0 if primary else -18.0)
+	return Vector3.ZERO
 
 
 func _transition_to_deciding_or_leaving() -> void:
@@ -436,8 +1079,159 @@ func _transition_to_deciding_or_leaving() -> void:
 func _leave_with(reason: StringName) -> void:
 	_awaiting_player_checkout = false
 	_despawn_metric_reported = false
+	if _held_item_state != HELD_ITEM_STATE_RETURNED_REFUSED:
+		_finish_held_item_prop(HELD_ITEM_STATE_SELECTED_ABANDONED)
 	_leave_reason = reason
+	refresh_visual_cues(false)
 	_transition_to(State.LEAVING)
+
+
+func _set_held_item_prop(
+	kind: StringName,
+	instance_id: String,
+	definition_id: String,
+	condition: String,
+	visual_data: Dictionary
+) -> void:
+	var same_prop: bool = (
+		_held_item_prop != null
+		and is_instance_valid(_held_item_prop)
+		and _held_item_kind == kind
+		and _held_item_instance_id == instance_id
+		and _held_item_definition_id == definition_id
+	)
+	_held_item_kind = kind
+	_held_item_instance_id = instance_id
+	_held_item_definition_id = definition_id
+	_held_item_condition = condition
+	if same_prop:
+		_apply_held_item_transform()
+		return
+	_remove_held_item_prop()
+	_held_item_prop = Node3D.new()
+	_held_item_prop.name = _HELD_ITEM_PROP_NAME
+	_held_item_prop.set_meta("kind", kind)
+	_held_item_prop.set_meta("instance_id", instance_id)
+	_held_item_prop.set_meta("definition_id", definition_id)
+	_held_item_prop.set_meta("condition", condition)
+	var visual: Node3D = ProductVisualFactoryScript.create_visual_for_item(visual_data)
+	if visual == null:
+		visual = StoreVisualKitScript.instantiate(StoreVisualKitScript.GAME_CASE) as Node3D
+	if visual == null:
+		visual = _make_held_item_fallback_visual()
+	if visual != null:
+		visual.scale = _HELD_ITEM_PROP_SCALE
+		_held_item_prop.add_child(visual)
+	add_child(_held_item_prop)
+	_apply_held_item_transform()
+
+
+func _set_held_item_state(state: StringName) -> void:
+	_held_item_state = state
+	if _is_terminal_held_item_state(state):
+		_held_item_last_terminal_state = state
+	if _held_item_prop != null and is_instance_valid(_held_item_prop):
+		_held_item_prop.set_meta("held_item_state", state)
+	refresh_visual_cues(false)
+
+
+func _refresh_held_item_state_for_pose() -> void:
+	match _held_item_kind:
+		_HELD_ITEM_KIND_SELECTED:
+			if _held_item_checkout_pose:
+				_set_held_item_state(HELD_ITEM_STATE_SELECTED_CHECKOUT)
+			elif current_state == State.WAITING_IN_QUEUE:
+				_set_held_item_state(HELD_ITEM_STATE_SELECTED_QUEUE)
+			else:
+				_set_held_item_state(HELD_ITEM_STATE_SELECTED_CARRIED)
+		_HELD_ITEM_KIND_RETURNED:
+			_set_held_item_state(
+				HELD_ITEM_STATE_RETURNED_PRESENTED
+				if _held_item_checkout_pose
+				else HELD_ITEM_STATE_RETURNED_CARRIED
+			)
+		_HELD_ITEM_KIND_TRADE_IN:
+			_set_held_item_state(HELD_ITEM_STATE_TRADE_IN_PRESENTED)
+	_apply_held_item_transform()
+
+
+func _finish_held_item_prop(terminal_state: StringName) -> void:
+	if _held_item_kind == _HELD_ITEM_KIND_NONE:
+		return
+	if terminal_state == HELD_ITEM_STATE_RETURNED_REFUSED:
+		mark_held_return_refused()
+		return
+	_set_held_item_state(terminal_state)
+	_remove_held_item_prop()
+	_held_item_state = HELD_ITEM_STATE_NONE
+	_held_item_kind = _HELD_ITEM_KIND_NONE
+	_held_item_instance_id = ""
+	_held_item_definition_id = ""
+	_held_item_condition = ""
+	_held_item_checkout_pose = false
+
+
+func _remove_held_item_prop() -> void:
+	if _held_item_prop != null and is_instance_valid(_held_item_prop):
+		if _held_item_prop.get_parent() != null:
+			_held_item_prop.get_parent().remove_child(_held_item_prop)
+		_held_item_prop.free()
+	_held_item_prop = null
+	var existing: Node = get_node_or_null(NodePath(String(_HELD_ITEM_PROP_NAME)))
+	if existing != null:
+		remove_child(existing)
+		existing.free()
+
+
+func _apply_held_item_transform() -> void:
+	if _held_item_prop == null or not is_instance_valid(_held_item_prop):
+		return
+	if _held_item_state == HELD_ITEM_STATE_RETURNED_REFUSED:
+		_held_item_prop.position = Vector3(0.24, 0.92, -0.12)
+		_held_item_prop.rotation_degrees = Vector3(-10.0, -18.0, 2.0)
+	elif _held_item_checkout_pose:
+		_held_item_prop.position = Vector3(0.0, 0.94, -0.28)
+		_held_item_prop.rotation_degrees = Vector3(-12.0, 0.0, 0.0)
+	else:
+		_held_item_prop.position = Vector3(0.28, 0.88, 0.05)
+		_held_item_prop.rotation_degrees = Vector3(-8.0, -20.0, 5.0)
+
+
+func _visual_data_for_definition_id(
+	definition_id: String, condition: StringName
+) -> Dictionary:
+	return {
+		"definition_id": definition_id,
+		"display_name": ContentRegistry.get_display_name_or(
+			StringName(definition_id),
+			definition_id.capitalize(),
+		),
+		"category": "games",
+		"condition": String(condition),
+		"visual_presentation": "game_case",
+	}
+
+
+func _make_held_item_fallback_visual() -> MeshInstance3D:
+	var mesh_instance := MeshInstance3D.new()
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(0.22, 0.032, 0.32)
+	mesh_instance.mesh = mesh
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.84, 0.76, 0.58, 1.0)
+	material.roughness = 0.75
+	mesh_instance.material_override = material
+	return mesh_instance
+
+
+func _is_terminal_held_item_state(state: StringName) -> bool:
+	return state in [
+		HELD_ITEM_STATE_SELECTED_SOLD,
+		HELD_ITEM_STATE_SELECTED_ABANDONED,
+		HELD_ITEM_STATE_RETURNED_ACCEPTED,
+		HELD_ITEM_STATE_RETURNED_REFUSED,
+		HELD_ITEM_STATE_PAYOUT_RETURNED,
+	]
 
 
 func _move_along_path(delta: float) -> void:

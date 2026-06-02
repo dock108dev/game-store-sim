@@ -2,13 +2,17 @@
 class_name BuildModeVisuals
 extends Node3D
 
+const PlacementReasonTextScript = preload("res://game/resources/placement_reason_text.gd")
+
 const SCALE_PUNCH_PEAK: float = 1.08
 const SCALE_PUNCH_DURATION: float = 0.2
+const REASON_LABEL_OFFSET: Vector3 = Vector3(0.0, 0.55, 0.0)
 
 var _grid: BuildModeGrid = null
 var _placement_system: FixturePlacementSystem = null
 var _ghost: BuildModeGhost = null
 var _cell_overlay: BuildModeCellOverlay = null
+var _reason_label: Label3D = null
 
 
 ## Initializes visuals with required references.
@@ -24,6 +28,14 @@ func initialize(
 	_ghost.name = "GhostPreview"
 	add_child(_ghost)
 	_ghost.setup(grid)
+
+	_reason_label = Label3D.new()
+	_reason_label.name = "PlacementReasonLabel"
+	_reason_label.visible = false
+	_reason_label.font_size = 22
+	_reason_label.modulate = Color(1.0, 0.91, 0.72, 1.0)
+	_reason_label.outline_modulate = Color(0.08, 0.05, 0.03, 1.0)
+	add_child(_reason_label)
 
 	_cell_overlay = BuildModeCellOverlay.new()
 	_cell_overlay.name = "CellOverlay"
@@ -47,23 +59,22 @@ func update_ghost(
 ) -> void:
 	if grid_pos == null or fixture_type.is_empty():
 		_ghost.hide_ghost()
+		_hide_reason_label()
 		return
 
 	var cell: Vector2i = grid_pos as Vector2i
-	var cells: Array[Vector2i] = _get_fixture_cells(
-		fixture_type, cell, fixture_rotation
+	var feedback = _placement_system.get_preview_feedback_for(
+		cell, fixture_type, fixture_rotation
 	)
 
-	var result: PlacementResult = _placement_system.validate_placement(
-		cells, fixture_type
-	)
-
-	_ghost.show_at_cells(cells, result.valid)
+	_ghost.show_feedback(feedback)
+	_show_reason_label(feedback)
 
 
 ## Hides the ghost preview.
 func hide_ghost() -> void:
 	_ghost.hide_ghost()
+	_hide_reason_label()
 
 
 ## Updates the fixture highlight based on hovered cell.
@@ -78,6 +89,7 @@ func _on_build_mode_entered() -> void:
 
 func _on_build_mode_exited() -> void:
 	_ghost.hide_ghost()
+	_hide_reason_label()
 	_cell_overlay.clear_selection()
 	_cell_overlay.fade(false)
 
@@ -89,8 +101,12 @@ func _on_fixture_placed(
 	_cell_overlay.build_overlay()
 
 
-func _on_fixture_placement_invalid(_reason: String) -> void:
+func _on_fixture_placement_invalid(reason: String) -> void:
 	_ghost.play_shake()
+	if reason.is_empty():
+		return
+	_reason_label.text = PlacementReasonTextScript.get_text(reason)
+	_reason_label.visible = true
 
 
 func _on_fixture_selected(fixture_id: String) -> void:
@@ -123,6 +139,22 @@ func _play_scale_punch(
 		SCALE_PUNCH_DURATION * 0.5
 	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_callback(punch_node.queue_free)
+
+
+func _show_reason_label(feedback) -> void:
+	if not _reason_label:
+		return
+	if feedback.valid or feedback.display_message.is_empty():
+		_hide_reason_label()
+		return
+	_reason_label.text = feedback.display_message
+	_reason_label.position = _ghost.position + REASON_LABEL_OFFSET
+	_reason_label.visible = true
+
+
+func _hide_reason_label() -> void:
+	if _reason_label:
+		_reason_label.visible = false
 
 
 func _get_placed_fixture_cells(

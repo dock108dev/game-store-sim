@@ -68,7 +68,7 @@ static func route_sequence() -> Array[Dictionary]:
 		{
 			"step": "checkout",
 			"destination": "manager and checkout register",
-			"anchor": "StoreSessionDayOneCustomer",
+			"anchor": "StoreSessionManager",
 			"moment": "checkout",
 		},
 		{

@@ -1,4 +1,5 @@
 ## Handles customer checkout transactions at the register.
+## See cleanup-report: queue, payment, and transaction view-model adapters need extraction.
 class_name PlayerCheckout
 extends Node
 
@@ -18,6 +19,9 @@ const ACCESSORY_CATEGORY: String = "accessories"
 ## condition arms the angry-return spawn gate via
 ## EventBus.defective_sale_occurred.
 const DEFECTIVE_CONDITIONS: Array[String] = ["poor", "damaged"]
+const RegisterTransactionViewModelScript: GDScript = preload(
+	"res://game/scripts/store_session/register_transaction_view_model.gd"
+)
 
 var _economy_system: EconomySystem = null
 var _inventory_system: InventorySystem = null
@@ -32,10 +36,14 @@ var _market_value_system: MarketValueSystem = null
 var _active_customer: Customer = null
 var _active_item: ItemInstance = null
 var _active_offer: float = 0.0
+var _active_primary_offer: float = 0.0
+var _active_bundle_item: ItemInstance = null
+var _active_bundle_price: float = 0.0
 var _is_haggling: bool = false
 var _is_processing: bool = false
 var _checkout_timer: Timer = null
 var _cashier: StaffDefinition = null
+var _current_transaction_view_model: Dictionary = {}
 
 
 func initialize(
@@ -85,6 +93,11 @@ func set_checkout_panel(panel: CheckoutPanel) -> void:
 
 func set_market_value_system(system: MarketValueSystem) -> void:
 	_market_value_system = system
+
+
+## Returns the latest normalized register transaction display model.
+func get_current_transaction_view_model() -> Dictionary:
+	return _current_transaction_view_model.duplicate(true)
 
 
 func set_haggle_system(system: HaggleSystem) -> void:
@@ -144,14 +157,26 @@ func initiate_sale(
 		EventBus.notification_requested.emit(
 			"Item no longer available"
 		)
-		customer.complete_purchase()
+		customer.complete_purchase(false)
 		_register_queue.remove(customer)
 		EventBus.queue_advanced.emit(_register_queue.get_size())
 		return
 	_active_customer = customer
 	_active_item = item
 	_active_offer = agreed_price
+	_active_primary_offer = _primary_offer_for_agreed_price(agreed_price)
 	_is_processing = true
+	_publish_checkout_transaction_view(
+		RegisterTransactionViewModelScript.STATE_PROCESSING,
+		RegisterTransactionViewModelScript.KIND_BUNDLE
+		if _active_bundle_item != null
+		else RegisterTransactionViewModelScript.KIND_SALE,
+		{
+			"receipt_title": "Processing Sale",
+			"metadata": {"phase": "timer_started"},
+			"tone": &"neutral",
+		}
+	)
 	_checkout_timer.wait_time = _get_checkout_duration()
 	_checkout_timer.start()
 
@@ -273,11 +298,13 @@ func _begin_checkout(customer: Customer) -> void:
 	_active_customer = customer
 	_active_item = customer.get_desired_item()
 	if not _active_item:
+		customer.clear_held_item_prop(&"checkout_missing_item")
 		EventBus.notification_requested.emit(
 			"No customer waiting"
 		)
 		return
 	if not _inventory_system._items.has(_active_item.instance_id):
+		customer.clear_held_item_prop(&"checkout_missing_inventory")
 		EventBus.notification_requested.emit(
 			"Item no longer available"
 		)
@@ -286,11 +313,15 @@ func _begin_checkout(customer: Customer) -> void:
 	if _haggle_system and _haggle_system.should_haggle(
 		customer, _active_item
 	):
+		customer.set_held_selected_item(_active_item, customer.get_desired_item_slot())
+		customer.set_held_item_checkout_pose(true)
 		_is_haggling = true
 		_haggle_system.begin_negotiation(
 			customer, _active_item, _get_haggle_queue_count()
 		)
 		return
+	customer.set_held_selected_item(_active_item, customer.get_desired_item_slot())
+	customer.set_held_item_checkout_pose(true)
 	_active_offer = _calculate_offer(
 		_active_item, customer
 	)
@@ -331,6 +362,17 @@ func _show_checkout_panel() -> void:
 	}]
 	EventBus.checkout_started.emit(
 		items as Array, _active_customer
+	)
+	_active_primary_offer = _active_offer
+	_active_bundle_item = null
+	_active_bundle_price = 0.0
+	_publish_checkout_transaction_view(
+		RegisterTransactionViewModelScript.STATE_DECISION,
+		RegisterTransactionViewModelScript.KIND_SALE,
+		{
+			"receipt_title": "Checkout Pending",
+			"metadata": {"phase": "decision"},
+		}
 	)
 	_populate_checkout_card(item_name)
 
@@ -499,7 +541,22 @@ func _on_sale_declined() -> void:
 	if not _active_customer:
 		return
 	var declined_customer: Customer = _active_customer
-	_complete_checkout()
+	if is_zero_approx(_active_primary_offer):
+		_active_primary_offer = _active_offer
+	_publish_checkout_transaction_view(
+		RegisterTransactionViewModelScript.STATE_NO_SALE,
+		RegisterTransactionViewModelScript.KIND_NO_SALE,
+		{
+			"total": 0.0,
+			"cash_delta": 0.0,
+			"receipt_title": "No Sale",
+			"receipt_body": "Customer left without completing the purchase.",
+			"refusal_reason": "Sale declined",
+			"tone": &"negative",
+			"force_line_role": RegisterTransactionViewModelScript.ROLE_REFUSED_ITEM,
+		}
+	)
+	_complete_checkout(false)
 	EventBus.checkout_declined.emit(declined_customer)
 
 
@@ -517,9 +574,12 @@ func _on_bundle_suggested() -> void:
 	var bundle_price: float = float(bundle.get("price", 0.0))
 	if bundle_id.is_empty() or bundle_price <= 0.0:
 		return
+	_active_bundle_item = null
 	if _inventory_system != null and _inventory_system._items.has(bundle_id):
+		_active_bundle_item = _inventory_system._items.get(bundle_id) as ItemInstance
 		_inventory_system.remove_item(bundle_id)
 	_active_offer += bundle_price
+	_active_bundle_price = bundle_price
 	initiate_sale(_active_customer, _active_item, _active_offer)
 
 
@@ -651,7 +711,7 @@ func _finish_haggle() -> void:
 			)
 		else:
 			_haggle_panel.show_outcome(false)
-	_complete_checkout()
+	_complete_checkout(false)
 
 
 func _execute_sale() -> void:
@@ -669,6 +729,24 @@ func _execute_sale() -> void:
 	_apply_sale_reputation(market_value)
 	EventBus.item_sold.emit(item_id, _active_offer, category)
 	EventBus.transaction_completed.emit(_active_offer, true, "")
+	_publish_checkout_transaction_view(
+		RegisterTransactionViewModelScript.STATE_RECEIPT,
+		RegisterTransactionViewModelScript.KIND_BUNDLE
+		if _active_bundle_item != null
+		else RegisterTransactionViewModelScript.KIND_SALE,
+		{
+			"receipt_title": "Sale Complete",
+			"receipt_body": "Receipt printed.",
+			"receipt_lines": [
+				"%d item%s sold." % [
+					_checkout_line_count(),
+					"" if _checkout_line_count() == 1 else "s",
+				],
+				"+$%.2f at the register." % _active_offer,
+			],
+			"tone": &"positive",
+		}
+	)
 	var store_id: StringName = &""
 	if _active_item.definition:
 		store_id = ContentRegistry.resolve(
@@ -723,14 +801,17 @@ func _apply_sale_reputation(market_value: float) -> void:
 	_reputation_system.add_reputation("", rep_delta)
 
 
-func _complete_checkout() -> void:
+func _complete_checkout(sold: bool = true) -> void:
 	var completed_customer: Customer = _active_customer
 	if _active_customer and is_instance_valid(_active_customer):
 		_register_queue.remove(_active_customer)
-		_active_customer.complete_purchase()
+		_active_customer.complete_purchase(sold)
 	_active_customer = null
 	_active_item = null
 	_active_offer = 0.0
+	_active_primary_offer = 0.0
+	_active_bundle_item = null
+	_active_bundle_price = 0.0
 	_is_processing = false
 	if (
 		_checkout_panel
@@ -754,12 +835,28 @@ func _complete_checkout() -> void:
 
 func _finalize_checkout_no_sale() -> void:
 	var completed_customer: Customer = _active_customer
+	_publish_checkout_transaction_view(
+		RegisterTransactionViewModelScript.STATE_NO_SALE,
+		RegisterTransactionViewModelScript.KIND_NO_SALE,
+		{
+			"total": 0.0,
+			"cash_delta": 0.0,
+			"receipt_title": "No Sale",
+			"receipt_body": "Checkout could not complete.",
+			"refusal_reason": "Checkout could not complete",
+			"tone": &"negative",
+			"force_line_role": RegisterTransactionViewModelScript.ROLE_DISPLAY_ONLY,
+		}
+	)
 	if _active_customer and is_instance_valid(_active_customer):
 		_register_queue.remove(_active_customer)
-		_active_customer.complete_purchase()
+		_active_customer.complete_purchase(false)
 	_active_customer = null
 	_active_item = null
 	_active_offer = 0.0
+	_active_primary_offer = 0.0
+	_active_bundle_item = null
+	_active_bundle_price = 0.0
 	_is_processing = false
 	EventBus.queue_advanced.emit(_register_queue.get_size())
 	if completed_customer:
@@ -867,7 +964,53 @@ func _cancel_active_checkout() -> void:
 	_active_customer = null
 	_active_item = null
 	_active_offer = 0.0
+	_active_primary_offer = 0.0
+	_active_bundle_item = null
+	_active_bundle_price = 0.0
 	_is_processing = false
 	if _checkout_panel and _checkout_panel.is_open():
 		_checkout_panel.hide_checkout()
 		EventBus.panel_closed.emit("checkout")
+
+
+func _publish_checkout_transaction_view(
+	state: StringName, kind: StringName, fields: Dictionary = {}
+) -> void:
+	var model: Dictionary = RegisterTransactionViewModelScript.from_checkout(
+		state,
+		_active_customer,
+		_checkout_item_lines(fields),
+		float(fields.get("cash_delta", _active_offer)),
+		kind,
+		fields,
+	)
+	_current_transaction_view_model = model.duplicate(true)
+	EventBus.register_transaction_view_changed.emit(model)
+
+
+func _checkout_item_lines(fields: Dictionary = {}) -> Array[Dictionary]:
+	var lines: Array[Dictionary] = []
+	var primary_role: StringName = StringName(
+		str(fields.get("force_line_role", RegisterTransactionViewModelScript.ROLE_SOLD_ITEM))
+	)
+	if _active_item != null:
+		lines.append(RegisterTransactionViewModelScript.line_from_item_instance(
+			_active_item, primary_role, _active_primary_offer
+		))
+	if _active_bundle_item != null:
+		lines.append(RegisterTransactionViewModelScript.line_from_item_instance(
+			_active_bundle_item,
+			RegisterTransactionViewModelScript.ROLE_BUNDLE_ITEM,
+			_active_bundle_price,
+		))
+	return lines
+
+
+func _primary_offer_for_agreed_price(agreed_price: float) -> float:
+	if _active_bundle_item == null:
+		return agreed_price
+	return maxf(agreed_price - _active_bundle_price, 0.0)
+
+
+func _checkout_line_count() -> int:
+	return 1 + (1 if _active_bundle_item != null else 0)

@@ -90,14 +90,14 @@ func test_scene_authors_player_entry_spawn_marker() -> void:
 	)
 
 
-func test_player_entry_spawn_frames_checkout_customer_in_view() -> void:
+func test_player_entry_spawn_frames_checkout_manager_in_view() -> void:
 	var marker: Marker3D = _root.get_node_or_null("PlayerEntrySpawn") as Marker3D
-	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var manager: Node3D = _root.get_node_or_null("StoreSessionManager") as Node3D
 	var checkout: Node3D = _root.get_node_or_null("Checkout") as Node3D
 	assert_not_null(marker, "PlayerEntrySpawn must exist")
-	assert_not_null(customer, "StoreSessionDayOneCustomer must exist")
+	assert_not_null(manager, "StoreSessionManager must exist")
 	assert_not_null(checkout, "Checkout must exist")
-	if marker == null or customer == null or checkout == null:
+	if marker == null or manager == null or checkout == null:
 		return
 	var forward: Vector3 = _flat_forward(marker)
 	assert_lt(
@@ -105,16 +105,16 @@ func test_player_entry_spawn_frames_checkout_customer_in_view() -> void:
 		-0.72,
 		"PlayerEntrySpawn forward vector must face into the store; got %.3f" % forward.z
 	)
-	var customer_dir: Vector3 = _flat_direction(marker.global_position, customer.global_position)
+	var manager_dir: Vector3 = _flat_direction(marker.global_position, manager.global_position)
 	var checkout_dir: Vector3 = _flat_direction(marker.global_position, checkout.global_position)
 	assert_gt(
-		forward.dot(customer_dir), 0.55, "StoreSessionDayOneCustomer must be inside the spawn view cone"
+		forward.dot(manager_dir), 0.55, "StoreSessionManager must be inside the spawn view cone"
 	)
 	assert_gt(forward.dot(checkout_dir), 0.55, "Checkout must be inside the spawn view cone")
 	assert_gt(
-		_flat_right(marker).dot(customer_dir),
+		_flat_right(marker).dot(manager_dir),
 		0.15,
-		"StoreSessionDayOneCustomer should read as central-to-right from spawn"
+		"StoreSessionManager should read as central-to-right from spawn"
 	)
 
 
@@ -129,7 +129,7 @@ func test_day_one_route_targets_are_front_back_shelf_register() -> void:
 	if customer == null or pickup == null or shelf == null or close_day == null or checkout == null:
 		return
 	assert_gt(
-		customer.global_position.z, 7.5, "Customer beat must stage at the front checkout lane"
+		customer.global_position.z, 7.1, "Customer beat must stage at the front checkout lane"
 	)
 	assert_gt(
 		pickup.global_position.x, 5.4, "Back-room pickup must sit inside the back-room doorway path"

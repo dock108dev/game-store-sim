@@ -20,6 +20,13 @@ const GENERATED_VISUAL_ONLY_SURFACES: Array[String] = [
 	"ExpandableStoreShell/StockroomExpandedBoxWall00",
 	"ExpandableStoreShell/StockroomExpandedRollingLadderFrame",
 ]
+const HIDDEN_AUTHORED_BOOT_ROOTS: Array[String] = [
+	"Checkout",
+	"back_room",
+	"StoreSessionBackroomWallSide",
+	"StoreSessionBackroomWallFrontLeft",
+	"StoreSessionBackroomWallFrontRight",
+]
 
 var _root: Node3D
 var _saved_state: GameManager.State
@@ -164,6 +171,33 @@ func test_shell_hidden_reference_props_stay_tool_visible_only() -> void:
 			)
 
 
+func test_hidden_authored_boot_roots_stay_out_of_runtime_scope() -> void:
+	var hidden_roots: Array[String] = ExpandableStoreShellRuntimeScript.hidden_authored_visual_roots()
+	for node_path: String in HIDDEN_AUTHORED_BOOT_ROOTS:
+		assert_true(
+			hidden_roots.has(node_path),
+			"%s must stay registered as generated-shell hidden authored presentation" % node_path
+		)
+		var node: Node = _root.get_node_or_null(NodePath(node_path))
+		assert_not_null(node, "%s must remain authored for drift coverage" % node_path)
+		if node == null:
+			continue
+		var decision: Dictionary = StoreVisualScopeProfileScript.classify_path(
+			_root,
+			node_path,
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME
+		)
+		assert_false(
+			bool(decision.get("visible", true)),
+			"%s must not become visible through store-session runtime scope" % node_path
+		)
+		if node is Node3D:
+			assert_false(
+				_is_visible_through_ancestors(node),
+				"%s must stay hidden in the Day-1 generated shell" % node_path
+			)
+
+
 func test_generated_shell_visual_only_surfaces_remain_non_gameplay() -> void:
 	for node_path: String in GENERATED_VISUAL_ONLY_SURFACES:
 		var node: Node = _root.get_node_or_null(NodePath(node_path))
@@ -228,6 +262,7 @@ func _has_forbidden_visual_descendant(node: Node) -> bool:
 		node is Interactable
 		or node is ShelfSlot
 		or node is Area3D
+		or node is PhysicsBody3D
 		or node is CollisionObject3D
 		or node is CollisionShape3D
 		or node is NavigationObstacle3D

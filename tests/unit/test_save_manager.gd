@@ -46,6 +46,8 @@ func before_each() -> void:
 	_save_manager.initialize(_economy, _inventory, _time_system)
 	_save_manager.set_reputation_system(_reputation)
 	_save_manager.set_store_state_manager(_store_state_manager)
+	StoreCustomizationSystem.reset_for_testing()
+	_save_manager.set_store_customization_system(StoreCustomizationSystem)
 
 
 func after_each() -> void:
@@ -54,6 +56,7 @@ func after_each() -> void:
 	if FileAccess.file_exists(UserDataPaths.slot_index_path()):
 		DirAccess.remove_absolute(UserDataPaths.slot_index_path())
 	ContentRegistry.clear_for_testing()
+	StoreCustomizationSystem.reset_for_testing()
 	UserDataPaths.cleanup_active_test_run()
 	UserDataPaths.reset_for_normal_play()
 
@@ -303,6 +306,49 @@ func test_collect_save_data_for_tests_returns_schema_copy() -> void:
 	var fresh_session: Dictionary = fresh.get("store_session_state", {}) as Dictionary
 	var fresh_flags: Dictionary = fresh_session.get("flags", {}) as Dictionary
 	assert_true(bool(fresh_flags.get(&"choice_clean_exchange", false)))
+
+
+func test_save_and_load_preserves_fixture_placement_and_store_design() -> void:
+	_store_state_manager.register_slot_ownership(0, &"sports")
+	_store_state_manager.set_active_store(&"sports", false)
+	var grid := BuildModeGrid.new()
+	add_child_autofree(grid)
+	grid.initialize(BuildModeGrid.StoreSize.SMALL, Vector3.ZERO)
+	var placement := FixturePlacementSystem.new()
+	add_child_autofree(placement)
+	placement.initialize(grid, null, _economy, 8, BuildModeGrid.StoreSize.SMALL)
+	placement.register_existing_fixture(
+		"saved_counter", "counter", Vector2i(2, 2), 1, false, 70.0
+	)
+	_save_manager.set_fixture_placement_system(placement)
+	assert_true(
+		StoreCustomizationSystem.apply_design_option(
+			&"floor_tile_cream", 1, &"sports"
+		)
+	)
+	assert_true(
+		StoreCustomizationSystem.apply_design_option(
+			&"register_compact_ivory", 1, &"sports"
+		)
+	)
+
+	assert_true(_save_manager.save_game(1), "Save should succeed")
+	placement.load_save_data({"placed_fixtures": []})
+	StoreCustomizationSystem.reset_for_testing()
+
+	assert_true(_save_manager.load_game(1), "Load should succeed")
+
+	var placed: Array[Dictionary] = placement.get_placed_fixtures()
+	assert_eq(placed.size(), 1)
+	assert_eq(str(placed[0].get("fixture_id", "")), "saved_counter")
+	assert_eq(
+		StoreCustomizationSystem.get_design_selection(&"floor", &"sports"),
+		&"floor_tile_cream"
+	)
+	assert_eq(
+		StoreCustomizationSystem.get_design_selection(&"register", &"sports"),
+		&"register_compact_ivory"
+	)
 
 
 func test_wrong_typed_save_section_records_warning_once() -> void:

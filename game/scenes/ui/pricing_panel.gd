@@ -4,7 +4,10 @@ extends CanvasLayer
 
 # Localization marker for static validation: tr("PRICING_CONDITION")
 
-const PANEL_NAME: String = "pricing"
+const WorkSurfaceLayout = preload("res://game/scripts/ui/work_surface_layout.gd")
+const DecisionPanelStyle = preload("res://game/scripts/ui/decision_panel_style.gd")
+
+const PANEL_NAME: StringName = &"pricing"
 const MIN_MARKUP: float = 0.5
 const MAX_MARKUP: float = 3.0
 const SLIDER_STEP: float = 0.01
@@ -78,6 +81,9 @@ var _max_viable: float = MAX_MARKUP
 @onready var _apply_all_button: Button = (
 	$PanelRoot/Margin/VBox/ButtonRow/ApplyAllButton
 )
+@onready var _close_button: Button = (
+	$PanelRoot/Margin/VBox/Header/CloseButton
+)
 
 
 func _ready() -> void:
@@ -91,6 +97,12 @@ func _ready() -> void:
 	_price_spin.value_changed.connect(_on_spin_changed)
 	_apply_button.pressed.connect(_on_apply)
 	_apply_all_button.pressed.connect(_on_apply_all)
+	_close_button.pressed.connect(close)
+	DecisionPanelStyle.apply_header_label(
+		$PanelRoot/Margin/VBox/Header/TitleLabel
+	)
+	DecisionPanelStyle.apply_action_button(_apply_button, true)
+	DecisionPanelStyle.apply_action_button(_apply_all_button)
 	EventBus.panel_opened.connect(_on_panel_opened)
 	EventBus.interactable_interacted.connect(
 		_on_interactable_interacted
@@ -166,6 +178,14 @@ func close(immediate: bool = false) -> void:
 
 func is_open() -> bool:
 	return _is_open
+
+
+## Returns the first-person screen reservation used by layout tests and
+## automation snapshots.
+func get_layout_reservation_rect(viewport_size: Vector2) -> Rect2:
+	return WorkSurfaceLayout.panel_reserved_rect(
+		WorkSurfaceLayout.PANEL_PRICING, viewport_size
+	)
 
 
 func _toggle() -> void:
@@ -346,14 +366,7 @@ func _update_feedback(ratio: float) -> void:
 
 
 func _update_color_bar(ratio: float) -> void:
-	if ratio < ZONE_GREEN_MAX:
-		_color_bar.color = UIThemeConstants.get_positive_color()
-	elif ratio <= ZONE_BLUE_MAX:
-		_color_bar.color = Color(0.3, 0.5, 0.9, 1.0)
-	elif ratio <= ZONE_YELLOW_MAX:
-		_color_bar.color = UIThemeConstants.get_warning_color()
-	else:
-		_color_bar.color = UIThemeConstants.get_negative_color()
+	_color_bar.color = DecisionPanelStyle.pricing_ratio_color(ratio)
 
 
 func _on_apply() -> void:
@@ -398,21 +411,13 @@ func _on_apply_all() -> void:
 
 
 func _on_active_store_changed(store_id: StringName) -> void:
+	_load_store_markup_ranges()
 	_apply_store_accent(store_id)
 
 
 func _apply_store_accent(store_id_sn: StringName) -> void:
 	var accent: Color = UIThemeConstants.get_store_accent(store_id_sn)
-	var style := StyleBoxFlat.new()
-	style.bg_color = UIThemeConstants.DARK_PANEL_FILL
-	style.border_color = accent
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(6)
-	style.content_margin_left = 12.0
-	style.content_margin_top = 10.0
-	style.content_margin_right = 12.0
-	style.content_margin_bottom = 10.0
-	_panel.add_theme_stylebox_override(&"panel", style)
+	DecisionPanelStyle.apply_panel_style(_panel, accent)
 
 
 func _emit_item_price_set(item: ItemInstance, price: float) -> void:
@@ -459,31 +464,13 @@ func _on_interactable_interacted(
 
 
 func _on_panel_opened(panel_name: String) -> void:
-	if panel_name != PANEL_NAME and _is_open:
+	if StringName(panel_name) != PANEL_NAME and _is_open:
 		close(true)
 
 
 func _get_condition_color(cond: String) -> Color:
-	match cond:
-		"mint":
-			return UIThemeConstants.get_positive_color()
-		"near_mint":
-			return Color(0.5, 0.85, 0.45, 1.0)
-		"good":
-			return UIThemeConstants.BODY_FONT_COLOR
-		"fair":
-			return UIThemeConstants.get_warning_color()
-		"poor":
-			return UIThemeConstants.get_negative_color()
-		_:
-			return UIThemeConstants.BODY_FONT_COLOR
+	return DecisionPanelStyle.status_color(StringName(cond))
 
 
 func _get_ratio_color(ratio: float) -> Color:
-	if ratio < ZONE_GREEN_MAX:
-		return UIThemeConstants.get_positive_color()
-	if ratio <= ZONE_BLUE_MAX:
-		return Color(0.3, 0.5, 0.9, 1.0)
-	if ratio <= ZONE_YELLOW_MAX:
-		return UIThemeConstants.get_warning_color()
-	return UIThemeConstants.get_negative_color()
+	return DecisionPanelStyle.pricing_ratio_color(ratio)

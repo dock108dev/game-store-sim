@@ -18,6 +18,7 @@ const REQUIRED_STORE_SESSION_KEEP_ROOTS: Array[String] = [
 	"ExpandableStoreShell",
 	"checkout_counter",
 	"FrontLaneQueue",
+	"StoreSessionManager",
 	"StoreSessionDayOneCustomer",
 	"StoreSessionBackroomPickup",
 	"StoreSessionRestockShelf",
@@ -51,6 +52,7 @@ const APPROVED_AMBIENT_INTERACTABLES: Array[String] = [
 ]
 
 const OBJECTIVE_TARGET_PATHS: Array[String] = [
+	"StoreSessionManager/Interactable",
 	"StoreSessionDayOneCustomer/Interactable",
 	"StoreSessionBackroomPickup/Interactable",
 	"StoreSessionRestockShelf/Interactable",
@@ -69,6 +71,7 @@ const VISIBLE_ROOT_CLASSIFICATIONS: Dictionary = {
 	"EntranceDoor": ["fixture"],
 	"checkout_counter": ["fixture"],
 	"FrontLaneQueue": ["fixture", "gameplay_marker"],
+	"StoreSessionManager": ["gameplay_marker"],
 	"StoreSessionDayOneCustomer": ["gameplay_marker"],
 	"StoreSessionBackroomPickup": ["gameplay_marker", "product", "sign"],
 	"StoreSessionRestockShelf": ["gameplay_marker", "product"],
@@ -383,7 +386,7 @@ func test_training_stage_gating_enables_only_current_target_and_ambient() -> voi
 	var stages: Array[Dictionary] = [
 		{
 			"stage": StoreSessionController.STAGE_TRAINING_TALK_MANAGER,
-			"target": "StoreSessionDayOneCustomer/Interactable",
+			"target": "StoreSessionManager/Interactable",
 		},
 		{
 			"stage": StoreSessionController.STAGE_TRAINING_CHECK_REGISTER,
@@ -533,6 +536,7 @@ func _has_forbidden_visual_descendant(node: Node) -> bool:
 			child is Interactable
 			or child is ShelfSlot
 			or child is Area3D
+			or child is PhysicsBody3D
 			or child is CollisionObject3D
 			or child is CollisionShape3D
 			or child is NavigationObstacle3D

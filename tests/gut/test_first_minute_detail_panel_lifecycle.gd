@@ -43,10 +43,6 @@ func before_each() -> void:
 func after_each() -> void:
 	ModalQueue._reset_for_tests()
 	InputFocus._reset_for_tests()
-	if EventBus.objective_completed.is_connected(_on_objective_completed):
-		EventBus.objective_completed.disconnect(_on_objective_completed)
-	if EventBus.toast_requested.is_connected(_on_toast_requested):
-		EventBus.toast_requested.disconnect(_on_toast_requested)
 	if is_instance_valid(_root):
 		_root.free()
 	_root = null
@@ -145,11 +141,9 @@ func test_manager_detail_ack_completes_once_and_then_toasts() -> void:
 	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
-	EventBus.objective_completed.connect(_on_objective_completed)
-	EventBus.toast_requested.connect(_on_toast_requested)
 	watch_signals(EventBus)
 
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	var panel: ModalPanel = _detail_panel(controller)
 	assert_true(panel.visible)
@@ -180,7 +174,6 @@ func test_register_detail_blocks_focus_until_ack() -> void:
 	if controller == null:
 		return
 	await _complete_first_minute_detail(controller, DETAIL_MANAGER_BRIEFING)
-	EventBus.toast_requested.connect(_on_toast_requested)
 	watch_signals(EventBus)
 
 	controller.on_store_register_interacted()
@@ -286,7 +279,7 @@ func _complete_first_minute_detail(
 ) -> void:
 	match detail_id:
 		DETAIL_MANAGER_BRIEFING:
-			controller.on_store_customer_interacted()
+			controller.on_store_manager_interacted()
 		DETAIL_REGISTER_CHECK:
 			controller.on_store_register_interacted()
 		DETAIL_BACKROOM_INVENTORY:
@@ -374,11 +367,3 @@ func _buttons_under(root: Node) -> Array[Button]:
 			buttons.append(child as Button)
 		buttons.append_array(_buttons_under(child))
 	return buttons
-
-
-func _on_objective_completed(_objective_id: StringName, _label: String) -> void:
-	pass
-
-
-func _on_toast_requested(_message: String, _kind: StringName, _duration: float) -> void:
-	pass

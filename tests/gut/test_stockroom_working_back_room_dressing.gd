@@ -1,7 +1,15 @@
 extends GutTest
 
+# See docs/audits/cleanup-report.md: this stockroom suite stays together until
+# room-contract and dressing assertions can split without duplicating scene setup.
 const NavmeshRouteGuard := preload("res://tests/automation/navmesh_route_guard.gd")
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
+const StoreVisualLayoutScript: GDScript = preload(
+	"res://game/scripts/visuals/store_visual_layout.gd"
+)
+const VisualValueUtilScript: GDScript = preload(
+	"res://game/scripts/visuals/visual_value_util.gd"
+)
 const EXPECTED_PICKUP_POSITION: Vector3 = Vector3(4.90, 0.0, -8.70)
 const EXPECTED_BOUNDS_MIN: Vector3 = Vector3(-7.45, 0.0, -9.35)
 const EXPECTED_BOUNDS_MAX: Vector3 = Vector3(7.45, 0.0, 9.05)
@@ -57,7 +65,9 @@ func test_stockroom_dressing_reads_as_working_back_room() -> void:
 		"StockroomPackingSlip00",
 		"StockroomHandTruckToe",
 	]:
-		assert_not_null(_stockroom_node(shell, required), "Stockroom dressing missing: %s" % required)
+		assert_not_null(
+			_stockroom_node(shell, required), "Stockroom dressing missing: %s" % required
+		)
 
 	var vertical_storage_count: int = 0
 	for prefix: String in [
@@ -81,9 +91,10 @@ func test_stockroom_visual_footprint_reads_as_substantial_back_room() -> void:
 	for required: String in [
 		"StockroomExpandedCoolFloorApron",
 		"StockroomExpandedBackWallPanel",
+		"StockroomExpandedLeftWallPanel",
 		"StockroomExpandedRightWallPanel",
 		"StockroomExpandedFrontPartitionLow",
-		"StockroomExpandedCeilingPanel",
+		"StockroomFrontRightWallPanel",
 		"StockroomExpandedDeepRackShelf00",
 		"StockroomExpandedPalletStack00",
 		"StockroomExpandedBoxWall00",
@@ -103,6 +114,13 @@ func test_stockroom_visual_footprint_reads_as_substantial_back_room() -> void:
 		STOCKROOM_APPARENT_MIN_AREA,
 		STOCKROOM_APPARENT_MAX_AREA,
 		"Expanded stockroom visual footprint should target the 65-75 sq m guidance"
+	)
+	assert_null(
+		shell.get_node_or_null("StockroomExpandedCeilingPanel"),
+		(
+			"Generated stockroom must not expose a roof or canopy without "
+			+ "a complete physical ceiling contract"
+		)
 	)
 
 
@@ -136,6 +154,55 @@ func test_stockroom_dressing_uses_cooler_back_room_materials() -> void:
 		cool_panel_color.r,
 		"Back-room wall panel material should shift cooler than the sales floor"
 	)
+	for node_path: String in [
+		"StockroomBackPanel",
+		"StockroomExpandedLeftWallPanel",
+		"StockroomExpandedRightWallPanel",
+		"StockroomFloorTape",
+		"StockroomBackRackShelf00",
+		"StockroomReceivingTableTop",
+	]:
+		assert_eq(
+			_material_family_for_path(shell, node_path),
+			&"stockroom_cool_metal",
+			"%s must share the cool back-of-house material family" % node_path
+		)
+	assert_eq(
+		_material_family_for_path(shell, "StockroomClosedReserveCarton00"),
+		&"cardboard",
+		"Stockroom boxes must use the reserved stock cardboard family"
+	)
+
+
+func test_stockroom_contents_and_staff_targets_stay_inside_room_contract() -> void:
+	var shell: Node3D = _shell()
+	if shell == null:
+		return
+	var bounds: Dictionary = _stockroom_room_bounds()
+	assert_false(bounds.is_empty(), "Stockroom room bounds must be declared")
+	if bounds.is_empty():
+		return
+	var room_min: Vector3 = _vector3_from_array(bounds.get("min"))
+	var room_max: Vector3 = _vector3_from_array(bounds.get("max"))
+	for node_path: String in [
+		"StoreSessionBackroomPickup",
+		"StoreStaffConfig/BackroomPoint",
+		"ExpandableStoreShell/StockroomReceivingTableTop",
+		"ExpandableStoreShell/StockroomSupplyShelf",
+		"ExpandableStoreShell/StockroomBackRackShelf00",
+		"ExpandableStoreShell/StockroomExpandedSideRackShelf00",
+		"ExpandableStoreShell/StockroomExpandedDeepRackShelf00",
+		"ExpandableStoreShell/StockroomExpandedPalletStack00",
+		"ExpandableStoreShell/StockroomExpandedBoxWall00",
+		"ExpandableStoreShell/StockroomExpandedRollingLadderFrame",
+		"ExpandableStoreShell/StockroomOpenDeliveryCartonBase",
+		"ExpandableStoreShell/StockroomClosedReserveCarton00",
+	]:
+		var node: Node3D = _root.get_node_or_null(NodePath(node_path)) as Node3D
+		assert_not_null(node, "%s must exist for stockroom containment" % node_path)
+		if node == null:
+			continue
+		_assert_node_inside_room_bounds(node, room_min, room_max, node_path)
 
 
 func test_stockroom_storage_hierarchy_keeps_pickup_bay_dominant() -> void:
@@ -157,8 +224,7 @@ func test_stockroom_storage_hierarchy_keeps_pickup_bay_dominant() -> void:
 		"StockroomSupplyBox00",
 	]:
 		assert_not_null(
-			_stockroom_node(shell, required),
-			"Stockroom hierarchy marker missing: %s" % required
+			_stockroom_node(shell, required), "Stockroom hierarchy marker missing: %s" % required
 		)
 
 	var threshold: Node3D = shell.get_node_or_null("StockroomFloorTape") as Node3D
@@ -400,7 +466,9 @@ func test_runtime_route_anchors_are_reachable_on_baked_navmesh() -> void:
 	assert_not_null(navigation_mesh, "NavigationRegion3D must reference the baked navmesh")
 	if navigation_mesh == null:
 		return
-	assert_gt(navigation_mesh.get_polygon_count(), 1, "Baked navmesh must contain walkable polygons")
+	assert_gt(
+		navigation_mesh.get_polygon_count(), 1, "Baked navmesh must contain walkable polygons"
+	)
 	assert_eq(
 		navigation_mesh.geometry_parsed_geometry_type,
 		NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS,
@@ -418,7 +486,9 @@ func test_runtime_route_anchors_are_reachable_on_baked_navmesh() -> void:
 		"Stockroom route guard assumes at least a 0.8m full corridor",
 	)
 	var route_graph: Dictionary = NavmeshRouteGuard.build_graph(navigation_mesh)
-	assert_gt(route_graph.get("polygons", []).size(), 1, "Route graph must include walkable polygons")
+	assert_gt(
+		route_graph.get("polygons", []).size(), 1, "Route graph must include walkable polygons"
+	)
 
 	var route_anchor_paths: Array[String] = [
 		"PlayerEntrySpawn",
@@ -480,14 +550,28 @@ func _material_family(node: Node) -> StringName:
 	return node.get_meta("starter_material_family") as StringName
 
 
+func _material_family_for_path(parent: Node, node_path: String) -> StringName:
+	var node: Node = parent.get_node_or_null(NodePath(node_path))
+	if node == null:
+		return &""
+	var family: StringName = _material_family(node)
+	if not String(family).is_empty():
+		return family
+	var visual: Node = node.get_node_or_null("Visual")
+	return _material_family(visual)
+
+
 func _is_stockroom_storage_family(node: Node) -> bool:
-	return _material_family(node) in [
-		&"stockroom_cool_metal",
-		&"cardboard",
-		&"paper",
-		&"shadow_accent",
-		&"rubber",
-	]
+	return (
+		_material_family(node)
+		in [
+			&"stockroom_cool_metal",
+			&"cardboard",
+			&"paper",
+			&"shadow_accent",
+			&"rubber",
+		]
+	)
 
 
 func _box_size(node: Node3D) -> Vector3:
@@ -500,6 +584,35 @@ func _box_size(node: Node3D) -> Vector3:
 	if box_mesh == null:
 		return Vector3.ZERO
 	return box_mesh.size
+
+
+func _stockroom_room_bounds() -> Dictionary:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var room: Dictionary = catalog.call(
+		"get_room_contract", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT, "stockroom"
+	)
+	return (room.get("bounds", {}) as Dictionary).duplicate(true)
+
+
+func _vector3_from_array(raw_value: Variant) -> Vector3:
+	assert_true(
+		VisualValueUtilScript.is_vector3_array(raw_value), "Expected Vector3 array"
+	)
+	if not VisualValueUtilScript.is_vector3_array(raw_value):
+		return Vector3.ZERO
+	return VisualValueUtilScript.vector3_from_exact_array(raw_value, Vector3.ZERO)
+
+
+func _assert_node_inside_room_bounds(
+	node: Node3D, room_min: Vector3, room_max: Vector3, node_path: String
+) -> void:
+	var size: Vector3 = _box_size(node)
+	var min_position: Vector3 = node.position - size * 0.5
+	var max_position: Vector3 = node.position + size * 0.5
+	assert_gte(min_position.x, room_min.x - 0.02, "%s min x must stay inside room" % node_path)
+	assert_lte(max_position.x, room_max.x + 0.02, "%s max x must stay inside room" % node_path)
+	assert_gte(min_position.z, room_min.z - 0.02, "%s min z must stay inside room" % node_path)
+	assert_lte(max_position.z, room_max.z + 0.02, "%s max z must stay inside room" % node_path)
 
 
 func _has_interaction_descendant(root: Node) -> bool:
@@ -570,6 +683,5 @@ func _assert_navmesh_path_between(
 		NavmeshRouteGuard.MAX_SNAP_DISTANCE_DEFAULT
 	)
 	assert_true(
-		result.get("reachable", false),
-		"%s to %s must stay connected" % [start_path, end_path]
+		result.get("reachable", false), "%s to %s must stay connected" % [start_path, end_path]
 	)

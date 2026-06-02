@@ -126,6 +126,41 @@ func test_runtime_storefront_materials_stay_with_the_shell_palette() -> void:
 	)
 
 
+func test_runtime_storefront_identity_kit_stays_in_threshold_context() -> void:
+	var shell: Node3D = _shell()
+	if shell == null:
+		return
+	for node_path: String in [
+		"FrontGlassLeftLite",
+		"FrontGlassRightLite",
+		"MallSideTransomGlow",
+		"StorefrontSignCanopyFace",
+		"StorefrontCanopyLabel",
+		"StoreHoursPlaque",
+		"FrontWindowDecalLeft",
+		"FrontWindowDecalRight",
+		"ThresholdFloorInlay",
+		"WelcomeMatInset",
+		"WindowDisplayCartridgeStack",
+	]:
+		var node: Node3D = shell.get_node_or_null(node_path) as Node3D
+		assert_not_null(node, "Threshold identity node must exist: %s" % node_path)
+		if node == null:
+			continue
+		assert_between(node.position.x, -8.0, 8.0, "%s must stay within threshold width" % node_path)
+		assert_lte(node.position.z, 10.0, "%s must stay within the front threshold depth" % node_path)
+		assert_true(
+			bool(node.get_meta("storefront_threshold_identity", false)),
+			"%s must be tagged as storefront threshold identity" % node_path
+		)
+		assert_false(node is CollisionObject3D, "%s must not add storefront collision" % node_path)
+		assert_false(node is Interactable, "%s must not add a storefront prompt" % node_path)
+	var front_label: Label3D = shell.get_node_or_null("StorefrontCanopyLabel") as Label3D
+	assert_not_null(front_label, "Front canopy must carry physical store identity text")
+	if front_label != null:
+		assert_eq(front_label.text, "RETRO REWIND")
+
+
 func test_runtime_storefront_stays_behind_entry_and_checkout_sightlines() -> void:
 	var shell: Node3D = _shell()
 	if shell == null:
@@ -138,7 +173,9 @@ func test_runtime_storefront_stays_behind_entry_and_checkout_sightlines() -> voi
 	var interactable: Interactable = (
 		_root.get_node_or_null("EntranceDoor/Interactable") as Interactable
 	)
-	var interaction_area: Area3D = null if interactable == null else interactable.get_interaction_area()
+	var interaction_area: Area3D = (
+		null if interactable == null else interactable.get_interaction_area()
+	)
 	for node: Node in [threshold, glass, checkout, shelf, stockroom, interactable]:
 		assert_not_null(node, "Sightline contract node must exist")
 	if (

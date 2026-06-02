@@ -79,6 +79,27 @@ func test_wall_shelf_zone_label_visible() -> void:
 	)
 
 
+func test_runtime_zone_labels_are_bound_to_merchandising_data() -> void:
+	var expectations: Dictionary = {
+		"used_game_wall/SectionSign": "USED GAMES",
+		"ZoneLabels/UsedConsolesLabel": "CONSOLES",
+		"ZoneTransitions/AccessoriesSign": "ACCESSORIES",
+		"hold_shelf/HoldSign": "HOLDS",
+		"ZoneLabels/StaffPicksLabel": "STAFF PICKS\nCURATED SOON",
+	}
+	for path: String in expectations.keys():
+		var sign: Label3D = _root.get_node_or_null(path) as Label3D
+		assert_not_null(sign, "%s must exist" % path)
+		if sign == null:
+			continue
+		assert_eq(sign.text, str(expectations[path]))
+		assert_eq(
+			str(sign.get_meta("merchandising_label_source", "")),
+			"store_config.merchandising_labels",
+			"%s must resolve through merchandising data" % path
+		)
+
+
 func test_testing_zone_label_visible() -> void:
 	var sign: Label3D = _find_visible_label(
 		"crt_demo_area/ComingSoonLabel", "TESTING zone sign"

@@ -28,7 +28,4 @@ func get_disabled_reason(_actor: Node = null) -> String:
 
 
 func interact(by: Node = null) -> void:
-	if not can_interact(by):
-		return
-	super.interact(by)
-	get_tree().call_group("store_session_controller", "on_store_stockroom_pickup_interacted")
+	_interact_and_call_controller(by, &"on_store_stockroom_pickup_interacted")

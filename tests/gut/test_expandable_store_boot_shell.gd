@@ -1,13 +1,23 @@
 extends GutTest
 
+# See docs/audits/cleanup-report.md: this shell acceptance suite stays together
+# until bootstrap, floor-plan, and visual-role assertions can split cleanly.
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const SHELL_PRACTICAL_MAX_ENERGY: float = 0.65
 const SHELL_PRACTICAL_MAX_RANGE: float = 3.8
+const PRACTICAL_SOURCE_MAX_EMISSION: float = 0.55
 const GENERATED_REGISTER_SCREEN_MIN_EMISSION: float = 0.42
 const GENERATED_REGISTER_SCREEN_MAX_EMISSION: float = 0.60
 const ZONE_COLOR_DELTA_MIN: float = 0.05
+const STOCKROOM_CONNECTION_TOLERANCE: float = 0.12
+const ExpandableStoreShellRuntimeScript: GDScript = preload(
+	"res://game/scripts/visuals/expandable_store_shell_runtime.gd"
+)
 const StoreVisualLayoutScript: GDScript = preload(
 	"res://game/scripts/visuals/store_visual_layout.gd"
+)
+const VisualValueUtilScript: GDScript = preload(
+	"res://game/scripts/visuals/visual_value_util.gd"
 )
 
 var _root: Node3D = null
@@ -273,6 +283,140 @@ func test_boot_shell_zone_practicals_preserve_readability_hierarchy() -> void:
 		)
 
 
+func test_boot_shell_practicals_have_physical_sources_and_plane_metadata() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	var practical_sources: Dictionary = {
+		"CheckoutRegisterPracticalSource": "register",
+		"CrtSignGlowPracticalSource": "crt_sign",
+		"StockroomStripLightSource": "stockroom_strip",
+		"FeaturedDisplayAccentPracticalSource": "featured_display",
+		"StorefrontCanopyGlowSource": "storefront",
+	}
+	for node_path: String in practical_sources:
+		var source: MeshInstance3D = shell.get_node_or_null(node_path) as MeshInstance3D
+		assert_not_null(source, "Practical source mesh missing: %s" % node_path)
+		if source == null:
+			continue
+		_assert_panel_or_strip(shell, node_path)
+		assert_true(
+			bool(source.get_meta("practical_light_source", false)),
+			"%s must declare itself as a practical source" % node_path
+		)
+		assert_eq(
+			str(source.get_meta("practical_light_role", "")),
+			String(practical_sources[node_path]),
+			"%s must expose its lighting role" % node_path
+		)
+		assert_false(
+			str(source.get_meta("visual_plane", "")).is_empty(),
+			"%s must belong to a reviewable visual plane" % node_path
+		)
+		assert_eq(
+			str(source.get_meta("route_critical_shadow_policy", "")),
+			"preserve",
+			"%s must document route-anchor shadow preservation" % node_path
+		)
+		var mat: StandardMaterial3D = source.material_override as StandardMaterial3D
+		assert_not_null(mat, "%s must carry an emissive source material" % node_path)
+		if mat == null:
+			continue
+		assert_true(mat.emission_enabled, "%s must be visible as glow geometry" % node_path)
+		assert_lte(
+			mat.emission_energy_multiplier,
+			PRACTICAL_SOURCE_MAX_EMISSION,
+			"%s must stay a practical cue instead of a bloom workaround" % node_path
+		)
+
+
+func test_boot_shell_lighting_planes_separate_route_depth_without_single_hue_collapse() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	var foreground: MeshInstance3D = (
+		shell.get_node_or_null("SpawnForegroundWarmPlane") as MeshInstance3D
+	)
+	var midground: MeshInstance3D = (
+		shell.get_node_or_null("MainMidgroundWorkSurfacePlane") as MeshInstance3D
+	)
+	var background: MeshInstance3D = (
+		shell.get_node_or_null("BackWallBackgroundCoolPlane") as MeshInstance3D
+	)
+	var stockroom_background: MeshInstance3D = (
+		shell.get_node_or_null("StockroomCoolBackgroundPlane") as MeshInstance3D
+	)
+	for plane: MeshInstance3D in [foreground, midground, background, stockroom_background]:
+		assert_not_null(plane, "Lighting plane must exist")
+		if plane == null:
+			continue
+		assert_false(
+			str(plane.get_meta("visual_plane", "")).is_empty(),
+			"%s must declare foreground, midground, or background" % plane.name
+		)
+		assert_eq(
+			str(plane.get_meta("route_critical_shadow_policy", "")),
+			"preserve",
+			"%s must preserve route-critical object readability" % plane.name
+		)
+	if (
+		foreground == null
+		or midground == null
+		or background == null
+		or stockroom_background == null
+	):
+		return
+	assert_gt(
+		foreground.position.z,
+		midground.position.z,
+		"Foreground plane must sit closer to spawn than midground work surfaces"
+	)
+	assert_gt(
+		midground.position.z,
+		background.position.z,
+		"Midground work surface plane must separate from the back wall"
+	)
+	var foreground_mat: StandardMaterial3D = foreground.material_override as StandardMaterial3D
+	var midground_mat: StandardMaterial3D = midground.material_override as StandardMaterial3D
+	var background_mat: StandardMaterial3D = background.material_override as StandardMaterial3D
+	var stockroom_mat: StandardMaterial3D = (
+		stockroom_background.material_override as StandardMaterial3D
+	)
+	assert_not_null(foreground_mat, "Foreground plane must carry material")
+	assert_not_null(midground_mat, "Midground plane must carry material")
+	assert_not_null(background_mat, "Background plane must carry material")
+	assert_not_null(stockroom_mat, "Stockroom background plane must carry material")
+	if (
+		foreground_mat == null
+		or midground_mat == null
+		or background_mat == null
+		or stockroom_mat == null
+	):
+		return
+	assert_gt(
+		midground_mat.albedo_color.r,
+		midground_mat.albedo_color.b,
+		"Sales-floor work surfaces must read warmer than cool back-of-house planes"
+	)
+	assert_gt(
+		stockroom_mat.albedo_color.b,
+		stockroom_mat.albedo_color.r,
+		"Stockroom plane must read cooler than the sales floor"
+	)
+	assert_gte(
+		_color_distance(foreground_mat.albedo_color, background_mat.albedo_color),
+		ZONE_COLOR_DELTA_MIN * 2.0,
+		"Lighting planes must not collapse into a single hue"
+	)
+	assert_gte(
+		_color_distance(midground_mat.albedo_color, stockroom_mat.albedo_color),
+		ZONE_COLOR_DELTA_MIN * 2.0,
+		"Sales floor and stockroom planes must stay visually distinct"
+	)
+
+
 func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
@@ -354,6 +498,18 @@ func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 			queue_inlay.albedo_color.r,
 			checkout_panel.albedo_color.r,
 			"Queue inlay should read as part of the warm checkout/manager lane"
+		)
+	for index: int in range(3):
+		var marker: Node3D = _root.get_node_or_null("QueueMarker%d" % (index + 1)) as Node3D
+		var puck: Node3D = shell.get_node_or_null("QueueLaneMarkerPuck%02d" % index) as Node3D
+		assert_not_null(marker, "Queue marker %d must exist" % (index + 1))
+		assert_not_null(puck, "Queue lane puck %d must exist" % index)
+		if marker == null or puck == null:
+			continue
+		assert_lte(
+			_flat_xz_distance(marker.global_position, puck.global_position),
+			0.04,
+			"Generated queue puck %d must align with its marker footprint" % index
 		)
 
 
@@ -452,6 +608,15 @@ func test_spawn_view_supports_store_identity_and_route_cues() -> void:
 		"StoreIdentityCaseStripe01",
 		"StoreIdentityCaseStripe02",
 		"StoreIdentitySignWashPractical",
+		"StorefrontCanopyLabel",
+		"FrontGlassLeftLite",
+		"FrontGlassRightLite",
+		"MallSideTransomGlow",
+		"StoreHoursPlaque",
+		"FrontWindowDecalLeft",
+		"ThresholdFloorInlay",
+		"WelcomeMatInset",
+		"WindowDisplayCartridgeStack",
 		"SpawnAisleRunner",
 		"SpawnCheckoutSightlineStrip",
 		"SpawnStarterDisplaySightlineStrip",
@@ -477,11 +642,12 @@ func test_spawn_view_supports_store_identity_and_route_cues() -> void:
 	assert_not_null(starter_strip, "Starter display direction cue must be visible from spawn")
 	assert_not_null(stockroom_strip, "Stockroom entrance cue must be visible from spawn")
 	if sign_label != null and identity_panel != null:
+		assert_eq(sign_label.text, "RETRO REWIND", "Spawn sign must carry the store identity")
 		assert_almost_eq(
 			identity_panel.position.x,
 			sign_label.position.x,
 			0.05,
-			"Identity panel should frame the Shelf Life sign"
+			"Identity panel should frame the store identity sign"
 		)
 	if checkout_strip != null:
 		assert_gt(
@@ -511,6 +677,14 @@ func test_spawn_view_cues_are_panels_and_strips_not_debug_blocks() -> void:
 		"StoreIdentityCaseStripe00",
 		"StoreIdentityCaseStripe01",
 		"StoreIdentityCaseStripe02",
+		"FrontGlassLeftLite",
+		"FrontGlassRightLite",
+		"MallSideTransomGlow",
+		"StoreHoursPlaque",
+		"FrontWindowDecalLeft",
+		"ThresholdFloorInlay",
+		"WelcomeMatInset",
+		"WindowDisplayCartridgeStack",
 		"SpawnAisleRunner",
 		"SpawnCheckoutSightlineStrip",
 		"SpawnStarterDisplaySightlineStrip",
@@ -518,6 +692,45 @@ func test_spawn_view_cues_are_panels_and_strips_not_debug_blocks() -> void:
 		"SpawnRetailZoneLowRail",
 	]:
 		_assert_panel_or_strip(shell, node_path)
+
+
+func test_storefront_threshold_identity_is_visual_only_generated_shell() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	for node_path: String in [
+		"StorefrontCanopyLabel",
+		"FrontGlassLeftLite",
+		"FrontGlassRightLite",
+		"MallSideTransomGlow",
+		"StoreHoursPlaque",
+		"StoreHoursPlaqueText",
+		"FrontWindowDecalLeft",
+		"FrontWindowDecalRight",
+		"ThresholdFloorInlay",
+		"WelcomeMatInset",
+		"MallTileToStoreFloorBreak",
+		"EntryReturnLeftTrim",
+		"EntryReturnRightTrim",
+		"WindowDisplayCartridgeStack",
+	]:
+		var node: Node = shell.get_node_or_null(node_path)
+		assert_not_null(node, "Storefront threshold identity missing: %s" % node_path)
+		if node == null:
+			continue
+		assert_true(
+			bool(node.get_meta("storefront_threshold_identity", false)),
+			"%s must be declared as storefront identity" % node_path
+		)
+		assert_true(bool(node.get_meta("visual_only", false)), "%s must be visual-only" % node_path)
+		assert_false(node is CollisionObject3D, "%s must not add route collision" % node_path)
+		assert_false(node is Interactable, "%s must not add an interaction target" % node_path)
+		assert_false(node is Area3D, "%s must not add a route or trigger area" % node_path)
+	var canopy_label: Label3D = shell.get_node_or_null("StorefrontCanopyLabel") as Label3D
+	assert_not_null(canopy_label, "Front canopy must carry a physical store-name label")
+	if canopy_label != null:
+		assert_eq(canopy_label.text, "RETRO REWIND")
 
 
 func test_boot_shell_register_screen_glow_stays_readable_and_restrained() -> void:
@@ -556,6 +769,7 @@ func test_stockroom_path_keeps_marker_without_workbench_clutter() -> void:
 		"StockroomPost",
 		"StockroomHeader",
 		"StockroomDoorJambRight",
+		"StockroomFrontRightWallPanel",
 		"StockroomDoorLintel",
 		"StockroomFloorTape",
 		"StockroomEmployeeStripeLeft",
@@ -570,31 +784,124 @@ func test_stockroom_boundary_matches_expanded_runtime_staff_corner() -> void:
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
 	if shell == null:
 		return
-	for node_path: String in [
-		"StockroomPartition",
-		"StockroomLeftSideReturn",
-		"StockroomSideReturn",
-		"StockroomBackPanel",
-		"StockroomFloorTape",
-		"StockroomSupplyShelf",
-		"StockroomReceivingTableTop",
+	var room_bounds: Dictionary = _stockroom_room_bounds()
+	var doorway: Dictionary = _stockroom_doorway()
+	assert_false(room_bounds.is_empty(), "Stockroom room bounds must be declared")
+	assert_false(doorway.is_empty(), "Stockroom doorway contract must be declared")
+	if room_bounds.is_empty() or doorway.is_empty():
+		return
+	var room_min: Vector3 = _vector3_from_array(room_bounds.get("min"))
+	var room_max: Vector3 = _vector3_from_array(room_bounds.get("max"))
+	var doorway_position: Vector3 = _vector3_from_array(doorway.get("position"))
+	var opening: Dictionary = doorway.get("opening_bounds", {}) as Dictionary
+	var opening_min: Vector3 = _vector3_from_array(opening.get("min"))
+	var opening_max: Vector3 = _vector3_from_array(opening.get("max"))
+	var threshold: Node3D = shell.get_node_or_null("StockroomFloorTape") as Node3D
+	assert_not_null(threshold, "StockroomFloorTape must mark the doorway gap")
+	if threshold == null:
+		return
+
+	var left_wall: Node3D = shell.get_node_or_null("StockroomLeftSideReturn") as Node3D
+	var right_wall: Node3D = shell.get_node_or_null("StockroomSideReturn") as Node3D
+	var back_wall: Node3D = shell.get_node_or_null("StockroomBackPanel") as Node3D
+	var front_left: Node3D = shell.get_node_or_null("StockroomPartition") as Node3D
+	var front_right: Node3D = shell.get_node_or_null("StockroomFrontRightWallPanel") as Node3D
+	var left_jamb: Node3D = shell.get_node_or_null("StockroomPost") as Node3D
+	var right_jamb: Node3D = shell.get_node_or_null("StockroomDoorJambRight") as Node3D
+	for node: Node3D in [
+		left_wall,
+		right_wall,
+		back_wall,
+		front_left,
+		front_right,
+		left_jamb,
+		right_jamb,
 	]:
-		var node: Node3D = shell.get_node_or_null(node_path) as Node3D
-		assert_not_null(node, "Expanded stockroom node missing: %s" % node_path)
-		if node == null:
-			continue
-		assert_between(
-			node.position.x,
-			3.10,
-			5.95,
-			"%s must stay inside the expanded staff stockroom corner" % node_path
-		)
-		assert_between(
-			node.position.z,
-			-9.95,
-			-5.45,
-			"%s must stay inside the expanded staff stockroom corner" % node_path
-		)
+		assert_not_null(node, "Stockroom boundary node must exist")
+	if (
+		left_wall == null
+		or right_wall == null
+		or back_wall == null
+		or front_left == null
+		or front_right == null
+		or left_jamb == null
+		or right_jamb == null
+	):
+		return
+
+	var left_min: Vector3 = _node_min(left_wall)
+	var left_max: Vector3 = _node_max(left_wall)
+	var right_min: Vector3 = _node_min(right_wall)
+	var right_max: Vector3 = _node_max(right_wall)
+	var back_min: Vector3 = _node_min(back_wall)
+	var back_max: Vector3 = _node_max(back_wall)
+	assert_almost_eq(
+		left_min.x,
+		room_min.x,
+		STOCKROOM_CONNECTION_TOLERANCE,
+		"Left stockroom wall must sit on the contracted room edge"
+	)
+	assert_almost_eq(
+		right_max.x,
+		room_max.x,
+		STOCKROOM_CONNECTION_TOLERANCE,
+		"Right stockroom wall must sit on the contracted room edge"
+	)
+	assert_almost_eq(
+		back_min.z,
+		room_min.z,
+		STOCKROOM_CONNECTION_TOLERANCE,
+		"Back stockroom wall must sit on the contracted room edge"
+	)
+	assert_lte(
+		left_min.z,
+		back_max.z + STOCKROOM_CONNECTION_TOLERANCE,
+		"Left stockroom wall must visually meet the back wall"
+	)
+	assert_lte(
+		right_min.z,
+		back_max.z + STOCKROOM_CONNECTION_TOLERANCE,
+		"Right stockroom wall must visually meet the back wall"
+	)
+	assert_gte(
+		left_max.z,
+		threshold.position.z - STOCKROOM_CONNECTION_TOLERANCE,
+		"Left stockroom wall must run continuously from the doorway area"
+	)
+	assert_almost_eq(
+		left_max.z,
+		room_max.z,
+		STOCKROOM_CONNECTION_TOLERANCE,
+		"Left stockroom wall must run to the contracted front face"
+	)
+	assert_almost_eq(
+		right_max.z,
+		room_max.z,
+		STOCKROOM_CONNECTION_TOLERANCE,
+		"Right stockroom wall must run to the contracted front face"
+	)
+
+	var front_left_min: Vector3 = _node_min(front_left)
+	var front_left_max: Vector3 = _node_max(front_left)
+	var front_right_min: Vector3 = _node_min(front_right)
+	var front_right_max: Vector3 = _node_max(front_right)
+	var left_jamb_max: Vector3 = _node_max(left_jamb)
+	var right_jamb_min: Vector3 = _node_min(right_jamb)
+	assert_almost_eq(front_left_min.x, room_min.x, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(front_left_max.x, opening_min.x, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(front_right_min.x, opening_max.x, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(front_right_max.x, room_max.x, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(front_left_max.z, room_max.z, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(front_right_max.z, room_max.z, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(threshold.position.z, doorway_position.z, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(left_jamb_max.x, opening_min.x, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(right_jamb_min.x, opening_max.x, STOCKROOM_CONNECTION_TOLERANCE)
+	assert_almost_eq(
+		right_jamb_min.x - left_jamb_max.x,
+		float(doorway.get("clear_width_m", 0.0)),
+		0.04,
+		"Stockroom front must leave exactly one player-readable doorway gap"
+	)
 
 	assert_gte(
 		_count_children_with_prefix(shell, "StockroomSupplyBox"),
@@ -683,9 +990,9 @@ func test_stockroom_threshold_to_pickup_route_stays_clear() -> void:
 		)
 
 
-func test_manager_customer_proxy_reads_as_person_silhouette() -> void:
-	var proxy: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy") as Node3D
-	assert_not_null(proxy, "Customer proxy must be generated for the first route target")
+func test_manager_proxy_reads_as_person_silhouette() -> void:
+	var proxy: Node3D = _root.get_node_or_null("StoreSessionManager/ManagerProxy") as Node3D
+	assert_not_null(proxy, "Manager proxy must be generated for the first route target")
 	if proxy == null:
 		return
 	for required: String in [
@@ -712,12 +1019,157 @@ func test_manager_customer_proxy_reads_as_person_silhouette() -> void:
 
 
 func test_critical_day_one_anchors_move_into_the_expanded_runtime_footprint() -> void:
-	_assert_position_near("PlayerEntrySpawn", Vector3(-0.55, 0.0, 8.35), 0.05)
+	_assert_position_near("PlayerEntrySpawn", Vector3(-0.55, 0.0, 9.0), 0.05)
 	_assert_position_near("EntranceDoor", Vector3(0.0, 0.0, 9.72), 0.05)
 	_assert_position_near("checkout_counter", Vector3(5.65, 0.0, 6.15), 0.05)
+	_assert_position_near("StoreSessionManager", Vector3(5.85, 0.0, 5.40), 0.05)
 	_assert_position_near("StoreSessionDayOneCustomer", Vector3(4.85, 0.0, 7.25), 0.05)
 	_assert_position_near("StoreSessionRestockShelf", Vector3(-4.10, 0.0, -1.20), 0.05)
 	_assert_position_near("StoreSessionBackroomPickup", Vector3(4.90, 0.0, -8.70), 0.05)
+
+
+func test_day_one_anchor_positions_match_physical_layout_contract() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var contract: Dictionary = catalog.call(
+		"get_physical_contract", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
+	)
+	var store_bounds: Dictionary = contract.get("store_bounds", {}) as Dictionary
+	var checkout_placement: Dictionary = (
+		catalog
+		. call(
+			"get_fixture_placement",
+			StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+			"starter_checkout_counter",
+		)
+	)
+	var checkout_contract: Dictionary = _contract_for_object(contract, "starter_checkout_counter")
+	var display_placement: Dictionary = (
+		catalog
+		. call(
+			"get_fixture_placement",
+			StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+			"starter_display_table",
+		)
+	)
+
+	_assert_position_near(
+		"PlayerEntrySpawn",
+		_vector3_from_array(_contract_for_object(contract, "player_entry_spawn").get("position")),
+		0.01
+	)
+	_assert_position_near(
+		"EntranceDoor",
+		_vector3_from_array(_contract_for_object(contract, "entrance_door").get("position")),
+		0.01
+	)
+	_assert_position_near(
+		"StoreSessionBackroomPickup",
+		_vector3_from_array(_contract_for_object(contract, "stockroom_pickup").get("position")),
+		0.01
+	)
+	_assert_position_near(
+		"checkout_counter", _vector3_from_array(checkout_placement.get("position")), 0.01
+	)
+	_assert_position_near(
+		"StoreSessionRestockShelf", _vector3_from_array(display_placement.get("position")), 0.01
+	)
+
+	var checkout_position: Vector3 = _vector3_from_array(checkout_placement.get("position"))
+	var customer_spot: Dictionary = _service_point(checkout_contract, "checkout_customer_spot")
+	var service_position: Vector3 = (
+		checkout_position + _vector3_from_array(customer_spot.get("position_offset"))
+	)
+	var staff_spot: Dictionary = _service_point(checkout_contract, "checkout_staff_spot")
+	var staff_position: Vector3 = (
+		checkout_position + _vector3_from_array(staff_spot.get("position_offset"))
+	)
+	_assert_position_near("StoreSessionManager", staff_position, 0.01)
+	_assert_position_near("StoreSessionDayOneCustomer", service_position, 0.01)
+	for index: int in range(3):
+		var path := "QueueMarker%d" % (index + 1)
+		var expected: Vector3 = _vector3_from_array(
+			(_contract_for_object(contract, "queue_marker_positions").get("positions") as Array)[index]
+		)
+		_assert_position_near(path, expected, 0.01)
+
+	var spawn: Marker3D = _root.get_node_or_null("PlayerEntrySpawn") as Marker3D
+	assert_eq(
+		spawn.get_meta("bounds_min"), _vector3_from_array(store_bounds.get("player_bounds_min"))
+	)
+	assert_eq(
+		spawn.get_meta("bounds_max"), _vector3_from_array(store_bounds.get("player_bounds_max"))
+	)
+
+
+func test_malformed_optional_contract_fields_fall_back_without_dropping_authored_nodes() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var layout: Dictionary = catalog.call(
+		"get_layout", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
+	)
+	var contract: Dictionary = layout.get("physical_contract", {}) as Dictionary
+	var spawn_contract: Dictionary = _contract_for_object(contract, "player_entry_spawn")
+	var queue_contract: Dictionary = _contract_for_object(contract, "queue_marker_positions")
+	var checkout_contract: Dictionary = _contract_for_object(contract, "starter_checkout_counter")
+	var customer_spot: Dictionary = _service_point(checkout_contract, "checkout_customer_spot")
+	spawn_contract["position"] = ["bad", 0.0, 9.0]
+	queue_contract["positions"] = [["bad"]]
+	customer_spot["position_offset"] = ["bad"]
+	var broken_catalog: RefCounted = StoreVisualLayoutScript.new()
+	broken_catalog.call("load_from_dictionary", {"entries": [layout]})
+
+	ExpandableStoreShellRuntimeScript.call("_apply_with_catalog", _root, broken_catalog)
+
+	_assert_position_near("PlayerEntrySpawn", Vector3(-0.55, 0.0, 9.0), 0.01)
+	_assert_position_near("QueueMarker1", Vector3(4.85, 0.0, 7.25), 0.01)
+	_assert_position_near("QueueMarker2", Vector3(3.90, 0.0, 7.50), 0.01)
+	_assert_position_near("QueueMarker3", Vector3(2.95, 0.0, 7.75), 0.01)
+	assert_not_null(_root.get_node_or_null("StoreSessionRestockShelf/Interactable"))
+	assert_not_null(_root.get_node_or_null("StoreSessionBackroomPickup/Interactable"))
+	assert_not_null(_root.get_node_or_null("checkout_counter/Interactable"))
+	assert_true(_root.get_node("QueueMarker1").is_in_group("queue_markers"))
+
+
+func test_checkout_lane_runtime_uses_queue_slots_as_single_source() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var layout: Dictionary = (
+		catalog.call("get_layout", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT)
+		as Dictionary
+	).duplicate(true)
+	var contract: Dictionary = layout.get("physical_contract", {}) as Dictionary
+	var queue_contract: Dictionary = _contract_for_object(contract, "queue_marker_positions")
+	var front_lane_contract: Dictionary = _contract_for_object(contract, "front_lane_queue")
+	var route_zone: Dictionary = _zone_for_id(contract, "customer_route_core")
+	queue_contract["positions"] = [
+		[4.65, 0.0, 7.10],
+		[3.70, 0.0, 7.35],
+		[2.75, 0.0, 7.60],
+	]
+	front_lane_contract["position"] = [-6.0, 0.0, -6.0]
+	route_zone["points"] = [
+		[0.0, 0.0, 8.2],
+		[-4.10, 0.0, -1.20],
+		[-5.0, 0.0, -5.0],
+		[0.0, 0.0, 8.2],
+	]
+	var broken_catalog: RefCounted = StoreVisualLayoutScript.new()
+	broken_catalog.call("load_from_dictionary", {"entries": [layout]})
+
+	ExpandableStoreShellRuntimeScript.call("_apply_with_catalog", _root, broken_catalog)
+
+	_assert_position_near("QueueMarker1", Vector3(4.65, 0.0, 7.10), 0.01)
+	_assert_position_near("QueueMarker2", Vector3(3.70, 0.0, 7.35), 0.01)
+	_assert_position_near("QueueMarker3", Vector3(2.75, 0.0, 7.60), 0.01)
+	_assert_position_near("FrontLaneQueue", Vector3(3.70, 0.0, 7.35), 0.01)
+	_assert_position_near("CustomerNavConfig/CheckoutApproach", Vector3(4.65, 0.05, 7.10), 0.01)
+	_assert_position_near("RegisterArea", Vector3(4.65, 1.0, 7.10), 0.01)
+
+
+func test_invalid_contract_fallback_diagnostic_is_source_visible() -> void:
+	var source: String = FileAccess.get_file_as_string(
+		"res://game/scripts/visuals/expandable_store_shell_runtime.gd"
+	)
+	assert_string_contains(source, "invalid physical layout contract value")
+	assert_string_contains(source, "using fallback")
 
 
 func test_player_spawn_bounds_match_expanded_runtime_shell() -> void:
@@ -733,11 +1185,11 @@ func test_player_spawn_bounds_match_expanded_runtime_shell() -> void:
 
 func test_player_spawn_faces_inward_toward_first_route_landmarks() -> void:
 	var spawn: Marker3D = _root.get_node_or_null("PlayerEntrySpawn") as Marker3D
-	var manager: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var manager: Node3D = _root.get_node_or_null("StoreSessionManager") as Node3D
 	var checkout: Node3D = _root.get_node_or_null("checkout_counter") as Node3D
 	var exit: Node3D = _root.get_node_or_null("EntranceDoor") as Node3D
 	assert_not_null(spawn, "PlayerEntrySpawn must exist")
-	assert_not_null(manager, "StoreSessionDayOneCustomer must exist")
+	assert_not_null(manager, "StoreSessionManager must exist")
 	assert_not_null(checkout, "checkout_counter must exist")
 	assert_not_null(exit, "EntranceDoor must exist")
 	if spawn == null or manager == null or checkout == null or exit == null:
@@ -766,6 +1218,12 @@ func test_customer_browse_waypoints_stay_out_of_stockroom() -> void:
 	assert_not_null(nav_config, "CustomerNavConfig must exist")
 	if nav_config == null:
 		return
+	var room_bounds: Dictionary = _stockroom_room_bounds()
+	assert_false(room_bounds.is_empty(), "Stockroom room bounds must be declared")
+	if room_bounds.is_empty():
+		return
+	var room_min: Vector3 = _vector3_from_array(room_bounds.get("min"))
+	var room_max: Vector3 = _vector3_from_array(room_bounds.get("max"))
 	for marker_name: String in [
 		"BrowseWaypoint01",
 		"BrowseWaypoint02",
@@ -778,10 +1236,10 @@ func test_customer_browse_waypoints_stay_out_of_stockroom() -> void:
 		if marker == null:
 			continue
 		var in_stockroom: bool = (
-			marker.position.x >= 3.10
-			and marker.position.x <= 5.95
-			and marker.position.z >= -9.95
-			and marker.position.z <= -5.75
+			marker.position.x >= room_min.x
+			and marker.position.x <= room_max.x
+			and marker.position.z >= room_min.z
+			and marker.position.z <= room_max.z
 		)
 		assert_false(
 			in_stockroom, "%s must not route customers into the staff-only stockroom" % marker_name
@@ -856,11 +1314,21 @@ func test_boot_shell_avoids_product_name_spam() -> void:
 	if shell == null:
 		return
 	var visible_text_count: int = 0
+	var stockroom_inventory_label_count: int = 0
 	for label: Label3D in _collect_visible_labels(shell):
+		if _is_stockroom_inventory_label(label):
+			if label.text.strip_edges() != "":
+				stockroom_inventory_label_count += 1
+			continue
 		if label.text.strip_edges() != "":
 			visible_text_count += 1
 	assert_lte(
 		visible_text_count, 2, "Generated store shell should not spam product/category labels"
+	)
+	assert_lte(
+		stockroom_inventory_label_count,
+		1,
+		"Stockroom inventory projection should use one concise operational label"
 	)
 
 
@@ -975,6 +1443,10 @@ func _flat_distance_to_segment(point: Vector3, start: Vector3, end: Vector3) -> 
 	return point_2d.distance_to(start_2d + segment * t)
 
 
+func _flat_xz_distance(a: Vector3, b: Vector3) -> float:
+	return Vector2(a.x, a.z).distance_to(Vector2(b.x, b.z))
+
+
 func _flat_forward(node: Node3D) -> Vector3:
 	var forward: Vector3 = -node.global_transform.basis.z
 	forward.y = 0.0
@@ -987,6 +1459,71 @@ func _flat_direction(from: Vector3, to: Vector3) -> Vector3:
 	return direction.normalized()
 
 
+func _contract_for_object(contract: Dictionary, object_id: String) -> Dictionary:
+	for raw_contract: Variant in contract.get("placement_contracts", []):
+		if raw_contract is Dictionary:
+			var entry: Dictionary = raw_contract as Dictionary
+			if str(entry.get("object_id", "")) == object_id:
+				return entry
+	return {}
+
+
+func _zone_for_id(contract: Dictionary, zone_id: String) -> Dictionary:
+	for raw_zone: Variant in contract.get("zones", []):
+		if raw_zone is Dictionary:
+			var zone: Dictionary = raw_zone as Dictionary
+			if str(zone.get("zone_id", "")) == zone_id:
+				return zone
+	return {}
+
+
+func _service_point(contract: Dictionary, point_id: String) -> Dictionary:
+	for raw_point: Variant in contract.get("service_points", []):
+		if raw_point is Dictionary:
+			var point: Dictionary = raw_point as Dictionary
+			if str(point.get("point_id", "")) == point_id:
+				return point
+	return {}
+
+
+func _vector3_from_array(raw_value: Variant) -> Vector3:
+	assert_true(
+		VisualValueUtilScript.is_vector3_array(raw_value), "Expected Vector3 array"
+	)
+	if not VisualValueUtilScript.is_vector3_array(raw_value):
+		return Vector3.ZERO
+	return VisualValueUtilScript.vector3_from_exact_array(raw_value, Vector3.ZERO)
+
+
+func _stockroom_room_bounds() -> Dictionary:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var room: Dictionary = catalog.call(
+		"get_room_contract", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT, "stockroom"
+	)
+	return (room.get("bounds", {}) as Dictionary).duplicate(true)
+
+
+func _stockroom_doorway() -> Dictionary:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var room: Dictionary = catalog.call(
+		"get_room_contract", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT, "stockroom"
+	)
+	var doorways: Array = room.get("doorways", []) as Array
+	if doorways.size() != 1 or doorways[0] is not Dictionary:
+		return {}
+	return (doorways[0] as Dictionary).duplicate(true)
+
+
+func _node_min(node: Node3D) -> Vector3:
+	var size: Vector3 = _box_size(node)
+	return node.position - size * 0.5
+
+
+func _node_max(node: Node3D) -> Vector3:
+	var size: Vector3 = _box_size(node)
+	return node.position + size * 0.5
+
+
 func _collect_visible_labels(parent: Node) -> Array[Label3D]:
 	var labels: Array[Label3D] = []
 	for child: Node in parent.get_children():
@@ -994,3 +1531,12 @@ func _collect_visible_labels(parent: Node) -> Array[Label3D]:
 			labels.append(child as Label3D)
 		labels.append_array(_collect_visible_labels(child))
 	return labels
+
+
+func _is_stockroom_inventory_label(label: Label3D) -> bool:
+	var current: Node = label
+	while current != null:
+		if bool(current.get_meta("stockroom_inventory_projection", false)):
+			return true
+		current = current.get_parent()
+	return false

@@ -84,6 +84,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_active:
 		return
 
+	if event.is_action_pressed("ui_cancel"):
+		if _cancel_current_action():
+			get_viewport().set_input_as_handled()
+		return
+
 	if event is InputEventMouseMotion:
 		_update_hovered_cell(event as InputEventMouseMotion)
 
@@ -179,6 +184,8 @@ func _handle_mouse_button(event: InputEventMouseButton) -> void:
 		return
 
 	if _hovered_cell == null:
+		if event.button_index == MOUSE_BUTTON_RIGHT and _cancel_current_action():
+			get_viewport().set_input_as_handled()
 		return
 
 	var cell: Vector2i = _hovered_cell as Vector2i
@@ -209,6 +216,10 @@ func _handle_left_click(cell: Vector2i) -> void:
 
 func _handle_right_click(cell: Vector2i) -> void:
 	if not _placement_system:
+		return
+
+	if not _placement_system.get_selected_fixture_type().is_empty():
+		_cancel_current_action()
 		return
 
 	_placement_system.try_remove(cell)
@@ -268,3 +279,14 @@ func _update_hovered_cell(event: InputEventMouseMotion) -> void:
 		else:
 			_visuals.update_ghost(null, "", 0)
 			_visuals.update_highlight(_hovered_cell)
+
+
+func _cancel_current_action() -> bool:
+	if not _placement_system:
+		return false
+	if _placement_system.get_selected_fixture_type().is_empty():
+		return false
+	_placement_system.deselect_fixture()
+	if _visuals:
+		_visuals.update_ghost(null, "", 0)
+	return true

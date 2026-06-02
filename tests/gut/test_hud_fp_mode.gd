@@ -260,30 +260,28 @@ func test_fp_mode_creates_close_day_hint() -> void:
 	)
 
 
-func test_fp_mode_hint_anchored_bottom_right() -> void:
+func test_fp_mode_hint_anchored_top_right() -> void:
 	_hud.set_fp_mode(true)
 	var hint: Label = _hud.get_node_or_null("FpCloseDayHint") as Label
 	assert_not_null(hint)
 	if hint == null:
 		return
 	assert_eq(hint.anchor_left, 1.0, "Close-day hint anchored to right edge")
-	assert_eq(hint.anchor_top, 1.0, "Close-day hint anchored to bottom edge")
+	assert_eq(hint.anchor_top, 0.0, "Close-day hint anchored to top edge")
 
 
-## Regression guard: ObjectiveRail (autoload CanvasLayer, layer 40) draws on
-## top of the HUD (layer 30) and fills the bottom 68 px of the viewport. The
-## F4 close-day hint must offset its bottom edge to ≤ −72 so it always sits
-## above the rail's accent band, otherwise the rail buries the hint whenever
-## an objective is active.
+## ObjectiveRail (autoload CanvasLayer, layer 40) draws on top of the HUD
+## (layer 30) and fills the bottom 148 px of the viewport. The F4 close-day
+## hint must stay in the top HUD reservation so the rail never buries it.
 func test_fp_mode_close_day_hint_above_objective_rail() -> void:
 	_hud.set_fp_mode(true)
 	var hint: Label = _hud.get_node_or_null("FpCloseDayHint") as Label
 	assert_not_null(hint)
 	if hint == null:
 		return
-	assert_lt(
-		hint.offset_bottom, -68.0,
-		"Close-day hint bottom edge must sit above the ObjectiveRail's 68 px footprint"
+	assert_lte(
+		hint.offset_bottom, 64.0,
+		"Close-day hint bottom edge must stay in the top HUD reservation"
 	)
 
 

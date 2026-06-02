@@ -123,6 +123,15 @@ func test_update_ghost_marks_invalid_when_validator_rejects() -> void:
 	assert_false(ghost.is_valid)
 
 
+func test_update_ghost_shows_actionable_reason_label() -> void:
+	_placement.select_fixture("floor_rack")
+	_visuals.update_ghost(Vector2i(5, 0), "floor_rack", 0)
+	var label: Label3D = _visuals.get_node("PlacementReasonLabel")
+
+	assert_true(label.visible)
+	assert_eq(label.text, "Keep the entrance clear")
+
+
 func test_ghost_creates_mesh_children() -> void:
 	_placement.select_fixture("floor_rack")
 	_visuals.update_ghost(Vector2i(5, 5), "floor_rack", 0)

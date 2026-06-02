@@ -34,7 +34,7 @@ extends Node
 
 
 const UserDataPathsScript: GDScript = preload("res://game/autoload/user_data_paths.gd")
-const CURRENT_SAVE_VERSION: int = 3
+const CURRENT_SAVE_VERSION: int = 4
 ## Saves below this version are rejected outright; see class docstring policy.
 const MIN_SUPPORTED_SAVE_VERSION: int = 1
 ## Canonical top-level schema version key. `save_version` is preserved as a
@@ -63,6 +63,7 @@ var _refurbishment_system: RefurbishmentSystem
 var _trend_system: TrendSystem
 var _market_event_system: MarketEventSystem
 var _fixture_placement_system: FixturePlacementSystem
+var _store_customization_system: StoreCustomizationSystem
 var _random_event_system: RandomEventSystem
 var _staff_system: StaffSystem
 var _tutorial_system: TutorialSystem
@@ -141,6 +142,13 @@ func set_fixture_placement_system(
 	system: FixturePlacementSystem
 ) -> void:
 	_fixture_placement_system = system
+
+
+## Sets the StoreCustomizationSystem reference for save/load.
+func set_store_customization_system(
+	system: StoreCustomizationSystem
+) -> void:
+	_store_customization_system = system
 
 
 ## Sets the RandomEventSystem reference for save/load.
@@ -463,6 +471,9 @@ func _collect_save_data() -> Dictionary:
 	if _fixture_placement_system:
 		data["fixtures"] = _fixture_placement_system.get_save_data()
 
+	if _store_customization_system:
+		data["store_customization"] = _store_customization_system.get_save_data()
+
 	if _random_event_system:
 		data["random_events"] = (
 			_random_event_system.get_save_data()
@@ -609,6 +620,17 @@ func _distribute_save_data(data: Dictionary) -> void:
 			_fixture_placement_system.load_save_data(fixture_data)
 	else:
 		_warn_ignored_save_section(data, "fixtures", "FixturePlacementSystem")
+
+	if _store_customization_system:
+		var customization_data: Dictionary = _save_section(
+			data, "store_customization", "StoreCustomizationSystem"
+		)
+		if not customization_data.is_empty():
+			_store_customization_system.load_save_data(customization_data)
+	else:
+		_warn_ignored_save_section(
+			data, "store_customization", "StoreCustomizationSystem"
+		)
 
 	if _random_event_system:
 		var random_data: Dictionary = _save_section(
@@ -810,6 +832,8 @@ func _get_migration_step(from_version: int) -> Callable:
 			return Callable(self, "_migrate_v1_to_v2")
 		2:
 			return Callable(self, "_migrate_v2_to_v3")
+		3:
+			return Callable(self, "_migrate_v3_to_v4")
 		_:
 			return Callable()
 
@@ -915,6 +939,20 @@ func _migrate_v2_to_v3(data: Dictionary) -> Dictionary:
 	if existing_metadata is Dictionary:
 		save_metadata = (existing_metadata as Dictionary).duplicate(true)
 	save_metadata["save_version_tag"] = 3
+	data["save_metadata"] = save_metadata
+	return data
+
+
+## v3 → v4: add the per-store customization section used by build-mode design
+## choices. Empty stores keep older saves behavior-preserving.
+func _migrate_v3_to_v4(data: Dictionary) -> Dictionary:
+	if not data.has("store_customization"):
+		data["store_customization"] = {"stores": {}}
+	var save_metadata: Dictionary = {}
+	var existing_metadata: Variant = data.get("save_metadata", {})
+	if existing_metadata is Dictionary:
+		save_metadata = (existing_metadata as Dictionary).duplicate(true)
+	save_metadata["save_version_tag"] = 4
 	data["save_metadata"] = save_metadata
 	return data
 

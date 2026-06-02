@@ -31,6 +31,29 @@ The source file comments document contrast for the dark and light panel tiers.
 `STORE_ACCENTS_INACTIVE` currently contains the same key with
 `Color(0.247, 0.196, 0.133, 1.0)`.
 
+## 3D World Materials
+
+`StoreVisualStyle` owns the generated store's 3D material families and surface
+recipes. `StarterDetailBuilder` keeps its public starter constants and delegates
+material creation to this shared style registry.
+
+| Family | Current role |
+| --- | --- |
+| `mall_threshold_glass`, `mall_threshold_metal`, `mall_threshold_tile` | Storefront threshold glass, metal push plates, and entry tile. |
+| `sales_floor_warm`, `wood_laminate` | Warm sales floor, fixture panels, checkout counter laminate. |
+| `dark_device_plastic` | Register, scanner, card reader, cable, and dark device parts. |
+| `stockroom_cool_metal` | Cool stockroom panels, floor plates, shelves, and rack braces. |
+| `cardboard`, `paper`, `price_tag_warm` | Stock boxes, paper labels/slips, and warm price tags. |
+| `rubber`, `shadow_accent` | Floor mats, guide strips, seams, and quiet shadow details. |
+| `amber_signage` | In-world sign panels, trim, route accents, and store-accent bridge materials. |
+| `product_accent_blue`, `product_accent_green`, `product_accent_red`, `product_accent_purple`, `product_accent_teal` | Saturated product/category accent surfaces. |
+
+Generated visual nodes keep compatibility metadata:
+`starter_material_family`, `starter_detail_role`, and when a semantic token is
+used, `store_material_token`. Material family and detail role are independent;
+for example, `wood_laminate` can be a `panel` while `shadow_accent` can be a
+`seam`.
+
 ## Semantic Colors
 
 | Constant | Color | Icon constant |
@@ -73,6 +96,7 @@ colors with an icon, label, and hex string for descriptor-style lookups.
 ## References
 
 - Runtime constants: `game/scripts/ui/ui_theme_constants.gd`
+- World materials: `game/scripts/visuals/store_visual_style.gd`
 - Project theme: `game/themes/game_theme.tres`
 - Palette token resource: `game/themes/palette.tres`
 - Active store accent resource: `game/themes/store_accent_retro_games.tres`

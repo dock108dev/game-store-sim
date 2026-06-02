@@ -15,7 +15,7 @@ const FIXTURE_PROBES: Array[Dictionary] = [
 	{"name": "GlassCase", "from": Vector3(0.0, 0.0, -3.0), "into": Vector3(0.0, 0.0, -4.0)},
 	{"name": "CartRackLeft", "from": Vector3(-1.5, 0.0, -8.7), "into": Vector3(-1.5, 0.0, -9.7)},
 	{"name": "CartRackRight", "from": Vector3(1.5, 0.0, -8.7), "into": Vector3(1.5, 0.0, -9.7)},
-	{"name": "Checkout", "from": Vector3(5.5, 0.0, 7.0), "into": Vector3(5.5, 0.0, 8.0)},
+	{"name": "Checkout", "from": Vector3(5.5, 0.0, 7.1), "into": Vector3(5.5, 0.0, 6.25)},
 	{"name": "ConsoleShelf", "from": Vector3(6.2, 0.0, -4.29), "into": Vector3(7.2, 0.0, -4.29)},
 	{"name": "crt_demo_area", "from": Vector3(-4.8, 0.0, -1.2), "into": Vector3(-5.7, 0.0, -1.2)},
 	{"name": "AccessoriesBin", "from": Vector3(-6.5, 0.0, 1.43), "into": Vector3(-7.52, 0.0, 1.43)},

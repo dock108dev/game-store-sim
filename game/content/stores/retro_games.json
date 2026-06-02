@@ -23,6 +23,182 @@
   "new_release_premium_multiplier": 1.15,
   "max_hold_slots": 5,
   "hold_duration_days": 3,
+  "category_definitions": [
+    {
+      "category_id": "cartridges",
+      "display_name": "Used Games",
+      "short_label": "Used",
+      "shelf_label": "Used Games",
+      "plural_name": "used games"
+    },
+    {
+      "category_id": "consoles",
+      "display_name": "Consoles",
+      "short_label": "Systems",
+      "shelf_label": "Consoles",
+      "plural_name": "consoles"
+    },
+    {
+      "category_id": "accessories",
+      "display_name": "Accessories",
+      "short_label": "Gear",
+      "shelf_label": "Accessories",
+      "plural_name": "accessories"
+    },
+    {
+      "category_id": "guides",
+      "display_name": "Guides",
+      "short_label": "Guides",
+      "shelf_label": "Guides",
+      "plural_name": "guides"
+    }
+  ],
+  "merchandising_collections": [
+    {
+      "collection_id": "staff_picks",
+      "display_name": "Staff Picks",
+      "short_label": "Picks"
+    }
+  ],
+  "merchandising_labels": [
+    {
+      "label_id": "retro_games.starter.featured_starter_display",
+      "store_id": "retro_games",
+      "phase": "starter",
+      "surface": "starter_display",
+      "role": "feature_header",
+      "fixture_id": "starter_display_table",
+      "category_ids": ["cartridges"],
+      "display_text": "Fresh Trade Display",
+      "short_text": "Fresh Trades",
+      "subtitle": "Day-one opening batch",
+      "priority": 10,
+      "style_id": "starter_feature",
+      "availability_rule": {
+        "requires_any_inventory_from": "store.starting_inventory"
+      }
+    },
+    {
+      "label_id": "retro_games.category.used_games",
+      "store_id": "retro_games",
+      "phase": "any",
+      "surface": "shelf",
+      "role": "category",
+      "fixture_id": "cart_wall_rack",
+      "category_ids": ["cartridges"],
+      "display_text": "Used Games",
+      "short_text": "Used",
+      "subtitle": "Loose carts and replay-ready classics",
+      "priority": 20,
+      "style_id": "category_standard",
+      "availability_rule": {
+        "requires_allowed_category": "cartridges"
+      }
+    },
+    {
+      "label_id": "retro_games.category.consoles",
+      "store_id": "retro_games",
+      "phase": "any",
+      "surface": "shelf",
+      "role": "category",
+      "fixture_id": "console_shelf",
+      "category_ids": ["consoles"],
+      "display_text": "Consoles",
+      "short_text": "Systems",
+      "subtitle": "Tested hardware and starter setups",
+      "priority": 30,
+      "style_id": "category_standard",
+      "availability_rule": {
+        "requires_allowed_category": "consoles"
+      }
+    },
+    {
+      "label_id": "retro_games.category.accessories",
+      "store_id": "retro_games",
+      "phase": "any",
+      "surface": "bin",
+      "role": "category",
+      "fixture_id": "accessories_bin",
+      "category_ids": ["accessories"],
+      "display_text": "Accessories",
+      "short_text": "Gear",
+      "subtitle": "Controllers, cables, cards, and adapters",
+      "priority": 40,
+      "style_id": "category_bin",
+      "availability_rule": {
+        "requires_allowed_category": "accessories"
+      }
+    },
+    {
+      "label_id": "retro_games.category.guides",
+      "store_id": "retro_games",
+      "phase": "any",
+      "surface": "shelf",
+      "role": "category",
+      "fixture_id": "glass_showcase",
+      "category_ids": ["guides"],
+      "display_text": "Guides",
+      "short_text": "Guides",
+      "subtitle": "Maps, manuals, hints, and repair notes",
+      "priority": 50,
+      "style_id": "category_standard",
+      "availability_rule": {
+        "requires_allowed_category": "guides"
+      }
+    },
+    {
+      "label_id": "retro_games.service.trade_ins",
+      "store_id": "retro_games",
+      "phase": "any",
+      "surface": "service_counter",
+      "role": "service",
+      "fixture_id": "checkout_counter",
+      "service_id": "trade_ins",
+      "display_text": "Trade-Ins",
+      "short_text": "Trades",
+      "subtitle": "Bring games, systems, and gear to the counter",
+      "priority": 60,
+      "style_id": "service_counter",
+      "availability_rule": {
+        "requires_store_mechanic_any": ["testing_station", "refurbishment"]
+      }
+    },
+    {
+      "label_id": "retro_games.service.holds",
+      "store_id": "retro_games",
+      "phase": "any",
+      "surface": "stockroom_pickup",
+      "role": "service",
+      "fixture_id": "checkout_counter",
+      "service_id": "holds",
+      "display_text": "Holds",
+      "short_text": "Holds",
+      "subtitle": "Reserved pickups and customer requests",
+      "priority": 70,
+      "style_id": "service_backroom",
+      "availability_rule": {
+        "requires_system": "holds"
+      }
+    },
+    {
+      "label_id": "retro_games.collection.staff_picks",
+      "store_id": "retro_games",
+      "phase": "any",
+      "surface": "display_table",
+      "role": "collection",
+      "fixture_id": "glass_showcase",
+      "collection_id": "staff_picks",
+      "category_ids": ["cartridges", "guides", "accessories"],
+      "display_text": "Staff Picks\nCurated Soon",
+      "short_text": "Picks",
+      "subtitle": "Odd gems the crew keeps recommending",
+      "priority": 80,
+      "style_id": "collection_feature",
+      "availability_rule": {
+        "requires_collection": "staff_picks"
+      }
+    }
+  ],
   "zone_slot_ids": {
     "used_game_wall": [
       "cart_left_1", "cart_left_2", "cart_left_3", "cart_left_4", "cart_left_5",

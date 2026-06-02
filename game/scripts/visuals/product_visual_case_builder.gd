@@ -24,7 +24,9 @@ static func build_case(template: Dictionary, _catalog: RefCounted) -> Node3D:
 	var root := Node3D.new()
 	root.name = CASE_ROOT_NAME
 	root.set_meta("product_visual_kind", "game_case")
+	var case_shape: String = _case_shape(template)
 	root.set_meta("template_id", str(template.get("template_id", "")))
+	root.set_meta("case_shape", case_shape)
 
 	var dims: Vector3 = _case_dimensions(template)
 	var body := _box("CaseBody", dims, Color(0.08, 0.075, 0.07, 1.0))
@@ -118,15 +120,7 @@ static func build_case(template: Dictionary, _catalog: RefCounted) -> Node3D:
 		)
 	)
 
-	if str(template.get("case_shape", "")) == "small_handheld_clamshell":
-		root.add_child(
-			_box(
-				"HingeBand",
-				Vector3(dims.x * 0.92, dims.y * 0.035, _PANEL_OFFSET),
-				Color(0.11, 0.12, 0.13),
-				Vector3(0.0, -dims.y * 0.02, dims.z * 0.6)
-			)
-		)
+	_add_shape_case_details(root, case_shape, dims)
 	if (
 		str(
 			VisualValueUtilScript.dictionary(
@@ -147,13 +141,12 @@ static func build_console_box(identity: Dictionary) -> Node3D:
 	root.name = CONSOLE_ROOT_NAME
 	root.set_meta("product_visual_kind", "console_box")
 	root.set_meta("platform_visual_id", str(identity.get("platform_visual_id", "")))
+	var console_shape: String = str(identity.get("console_box_shape_override", ""))
+	if console_shape.is_empty():
+		console_shape = str(identity.get("console_box_shape", "tower_box"))
+	root.set_meta("console_box_shape", console_shape)
 
-	var scale_array: Array = identity.get("prop_scale", [1.0, 0.6, 0.6])
-	var dims := Vector3(
-		clampf(float(scale_array[0]) * 0.26, 0.16, 0.38),
-		clampf(float(scale_array[2]) * 0.18, 0.12, 0.32),
-		clampf(float(scale_array[1]) * 0.16, 0.08, 0.22)
-	)
+	var dims: Vector3 = _console_box_dimensions(identity, console_shape)
 	root.add_child(
 		_box("ConsoleBoxBody", dims, _color(identity.get("body_color", ""), _FALLBACK_CASE_COLOR))
 	)
@@ -204,6 +197,7 @@ static func build_console_box(identity: Dictionary) -> Node3D:
 				Vector3(0.0, dims.y * 0.42, dims.z * 0.57)
 			)
 		)
+	_add_console_shape_details(root, console_shape, dims)
 	return root
 
 
@@ -217,6 +211,11 @@ static func build_cartridge(identity: Dictionary, item: Dictionary = {}) -> Node
 		root.set_meta("platform_visual_id", platform_visual_id)
 
 	var dims: Vector3 = _cartridge_dimensions(identity)
+	var cartridge_shape: String = str(item.get("cartridge_shape_override", ""))
+	if cartridge_shape.is_empty():
+		cartridge_shape = str(identity.get("cartridge_shape", "flat_cart"))
+	root.set_meta("cartridge_shape", cartridge_shape)
+	dims = _cartridge_shape_dimensions(dims, cartridge_shape)
 	var body_color: Color = _color(identity.get("body_color", ""), Color(0.13, 0.14, 0.13))
 	var accent_color: Color = _color(identity.get("accent_color", ""), Color(0.45, 0.75, 0.9))
 	root.add_child(_box("CartridgeShell", dims, body_color))
@@ -236,22 +235,7 @@ static func build_cartridge(identity: Dictionary, item: Dictionary = {}) -> Node
 			Vector3(0.0, dims.y * 0.27, dims.z * 0.58)
 		)
 	)
-	root.add_child(
-		_box(
-			"CartridgeContactStrip",
-			Vector3(dims.x * 0.58, dims.y * 0.08, _PANEL_OFFSET),
-			Color(0.82, 0.64, 0.30, 1.0),
-			Vector3(0.0, -dims.y * 0.42, dims.z * 0.58)
-		)
-	)
-	root.add_child(
-		_box(
-			"CartridgeTopNotch",
-			Vector3(dims.x * 0.22, dims.y * 0.055, _PANEL_OFFSET),
-			body_color.darkened(0.18),
-			Vector3(0.0, dims.y * 0.42, dims.z * 0.59)
-		)
-	)
+	_add_cartridge_shape_details(root, cartridge_shape, dims, body_color, accent_color)
 	var label_text: String = str(
 		item.get(
 			"display_name",
@@ -279,7 +263,7 @@ static func _case_dimensions(template: Dictionary) -> Vector3:
 	var width: float = clampf(float(scale_array[0]) * 0.16, 0.08, 0.20)
 	var height: float = clampf(float(scale_array[1]) * 0.22, 0.12, 0.28)
 	var depth: float = clampf(float(scale_array[2]) * 0.10, 0.008, 0.035)
-	match str(template.get("case_shape", "")):
+	match _case_shape(template):
 		"compact_square_case":
 			height = minf(height, width * 1.45)
 		"small_handheld_clamshell":
@@ -287,11 +271,82 @@ static func _case_dimensions(template: Dictionary) -> Vector3:
 		"wide_disc_case":
 			width = minf(width * 1.12, 0.20)
 			height = minf(height, width * 1.25)
+		"jewel_case":
+			width = clampf(float(scale_array[0]) * 0.15, 0.12, 0.18)
+			height = clampf(float(scale_array[1]) * 0.15, 0.12, 0.18)
+			depth = clampf(float(scale_array[2]) * 0.08, 0.006, 0.018)
+		"long_cardboard_box":
+			width = clampf(float(scale_array[0]) * 0.15, 0.11, 0.18)
+			height = clampf(float(scale_array[1]) * 0.30, 0.24, 0.34)
+			depth = clampf(float(scale_array[2]) * 0.16, 0.018, 0.055)
+		"chunky_clamshell":
+			width = clampf(float(scale_array[0]) * 0.15, 0.10, 0.18)
+			height = clampf(float(scale_array[1]) * 0.18, 0.12, 0.22)
+			depth = clampf(float(scale_array[2]) * 0.18, 0.025, 0.065)
+		"slim_card_sleeve":
+			width = clampf(float(scale_array[0]) * 0.12, 0.08, 0.14)
+			height = clampf(float(scale_array[1]) * 0.18, 0.12, 0.22)
+			depth = clampf(float(scale_array[2]) * 0.04, 0.004, 0.012)
 	return Vector3(width, height, depth)
 
 
+static func _case_shape(template: Dictionary) -> String:
+	var override: String = str(template.get("case_shape_override", ""))
+	if not override.is_empty():
+		return override
+	return str(template.get("case_shape", "tall_disc_case"))
+
+
+static func _console_box_dimensions(identity: Dictionary, console_shape: String) -> Vector3:
+	var scale_array: Array = identity.get(
+		"console_box_scale", identity.get("prop_scale", [1.0, 0.6, 0.6])
+	)
+	var width: float = clampf(float(scale_array[0]) * 0.26, 0.16, 0.38)
+	var height: float = clampf(float(scale_array[2]) * 0.18, 0.12, 0.32)
+	var depth: float = clampf(float(scale_array[1]) * 0.16, 0.08, 0.22)
+	match console_shape:
+		"cube_box":
+			width = clampf(float(scale_array[0]) * 0.22, 0.16, 0.28)
+			height = clampf(float(scale_array[2]) * 0.22, 0.16, 0.28)
+			depth = clampf(float(scale_array[1]) * 0.20, 0.12, 0.24)
+		"slab_box":
+			width = clampf(float(scale_array[0]) * 0.30, 0.22, 0.42)
+			height = clampf(float(scale_array[2]) * 0.13, 0.08, 0.18)
+			depth = clampf(float(scale_array[1]) * 0.18, 0.10, 0.24)
+		"handheld_box":
+			width = clampf(float(scale_array[0]) * 0.24, 0.18, 0.34)
+			height = clampf(float(scale_array[2]) * 0.14, 0.08, 0.18)
+			depth = clampf(float(scale_array[1]) * 0.12, 0.07, 0.16)
+		"handle_cube_box":
+			width = clampf(float(scale_array[0]) * 0.23, 0.16, 0.30)
+			height = clampf(float(scale_array[2]) * 0.22, 0.16, 0.30)
+			depth = clampf(float(scale_array[1]) * 0.20, 0.12, 0.24)
+		"long_bundle_box":
+			width = clampf(float(scale_array[0]) * 0.34, 0.26, 0.46)
+			height = clampf(float(scale_array[2]) * 0.16, 0.11, 0.22)
+			depth = clampf(float(scale_array[1]) * 0.20, 0.12, 0.26)
+	return Vector3(width, height, depth)
+
+
+static func _cartridge_shape_dimensions(dims: Vector3, cartridge_shape: String) -> Vector3:
+	match cartridge_shape:
+		"wide_cart":
+			return Vector3(minf(dims.x * 1.22, 0.17), dims.y * 0.92, dims.z)
+		"mini_card":
+			return Vector3(dims.x * 0.76, minf(dims.y * 0.82, 0.085), maxf(dims.z * 0.62, 0.008))
+		"folded_card":
+			return Vector3(dims.x * 0.86, minf(dims.y * 0.88, 0.09), maxf(dims.z * 0.72, 0.010))
+		"exposed_contact_cart":
+			return Vector3(dims.x * 1.04, dims.y, dims.z)
+		"rounded_tab_cart":
+			return Vector3(dims.x, dims.y * 1.04, dims.z)
+	return dims
+
+
 static func _cartridge_dimensions(identity: Dictionary) -> Vector3:
-	var scale_array: Array = identity.get("prop_scale", [1.0, 0.55, 0.32])
+	var scale_array: Array = identity.get(
+		"cartridge_scale", identity.get("prop_scale", [1.0, 0.55, 0.32])
+	)
 	var width: float = clampf(float(scale_array[0]) * 0.11, 0.09, 0.15)
 	var height: float = clampf(float(scale_array[2]) * 0.075, 0.07, 0.12)
 	var depth: float = clampf(float(scale_array[1]) * 0.035, 0.014, 0.035)
@@ -303,6 +358,191 @@ static func _cartridge_dimensions(identity: Dictionary) -> Vector3:
 	if profile.contains("small") or profile.contains("folded"):
 		height = minf(height * 0.86, 0.095)
 	return Vector3(width, height, depth)
+
+
+static func _add_shape_case_details(root: Node3D, case_shape: String, dims: Vector3) -> void:
+	match case_shape:
+		"small_handheld_clamshell":
+			root.add_child(
+				_box(
+					"HingeBand",
+					Vector3(dims.x * 0.92, dims.y * 0.035, _PANEL_OFFSET),
+					Color(0.11, 0.12, 0.13),
+					Vector3(0.0, -dims.y * 0.02, dims.z * 0.6)
+				)
+			)
+		"jewel_case":
+			root.add_child(
+				_box(
+					"JewelHingeDots",
+					Vector3(dims.x * 0.045, dims.y * 0.74, _PANEL_OFFSET),
+					Color(0.92, 0.94, 0.95, 0.82),
+					Vector3(-dims.x * 0.38, 0.0, dims.z * 0.612)
+				)
+			)
+			root.add_child(
+				_box(
+					"JewelDiscMark",
+					Vector3(dims.x * 0.26, dims.y * 0.26, _PANEL_OFFSET),
+					Color(0.72, 0.80, 0.86, 0.72),
+					Vector3(dims.x * 0.18, -dims.y * 0.09, dims.z * 0.614)
+				)
+			)
+		"long_cardboard_box":
+			root.add_child(
+				_box(
+					"CardboardTopFlap",
+					Vector3(dims.x * 0.82, dims.y * 0.018, _PANEL_OFFSET),
+					Color(0.20, 0.13, 0.08, 1.0),
+					Vector3(0.0, dims.y * 0.43, dims.z * 0.612)
+				)
+			)
+			root.add_child(
+				_box(
+					"CardboardInfoBlock",
+					Vector3(dims.x * 0.20, dims.y * 0.38, _PANEL_OFFSET),
+					Color(0.94, 0.86, 0.68, 1.0),
+					Vector3(dims.x * 0.32, -dims.y * 0.04, dims.z * 0.614)
+				)
+			)
+		"chunky_clamshell":
+			root.add_child(
+				_box(
+					"ChunkyCenterHinge",
+					Vector3(dims.x * 0.08, dims.y * 0.78, _PANEL_OFFSET),
+					Color(0.10, 0.105, 0.11, 1.0),
+					Vector3(-dims.x * 0.39, 0.0, dims.z * 0.612)
+				)
+			)
+			for x_sign: int in [-1, 1]:
+				for y_sign: int in [-1, 1]:
+					root.add_child(
+						_box(
+							"ChunkyCornerBumper",
+							Vector3(dims.x * 0.13, dims.y * 0.08, _PANEL_OFFSET),
+							Color(0.08, 0.085, 0.08, 1.0),
+							Vector3(
+								float(x_sign) * dims.x * 0.34,
+								float(y_sign) * dims.y * 0.34,
+								dims.z * 0.616
+							)
+						)
+					)
+		"slim_card_sleeve":
+			root.add_child(
+				_box(
+					"SleeveTopNotch",
+					Vector3(dims.x * 0.24, dims.y * 0.035, _PANEL_OFFSET),
+					Color(0.08, 0.075, 0.07, 1.0),
+					Vector3(0.0, dims.y * 0.40, dims.z * 0.615)
+				)
+			)
+
+
+static func _add_console_shape_details(root: Node3D, console_shape: String, dims: Vector3) -> void:
+	match console_shape:
+		"slab_box":
+			root.add_child(
+				_box(
+					"ConsoleSlabDriveBand",
+					Vector3(dims.x * 0.70, dims.y * 0.065, _PANEL_OFFSET),
+					Color(0.06, 0.065, 0.06, 1.0),
+					Vector3(0.0, dims.y * 0.36, dims.z * 0.585)
+				)
+			)
+		"handheld_box":
+			root.add_child(
+				_box(
+					"ConsoleHandheldScreenMark",
+					Vector3(dims.x * 0.30, dims.y * 0.22, _PANEL_OFFSET),
+					Color(0.04, 0.055, 0.06, 1.0),
+					Vector3(0.0, -dims.y * 0.12, dims.z * 0.588)
+				)
+			)
+		"handle_cube_box":
+			root.add_child(
+				_box(
+					"ConsoleBoxHandle",
+					Vector3(dims.x * 0.42, dims.y * 0.035, _PANEL_OFFSET),
+					Color(0.18, 0.18, 0.16),
+					Vector3(0.0, dims.y * 0.42, dims.z * 0.59)
+				)
+			)
+		"long_bundle_box":
+			root.add_child(
+				_box(
+					"ConsoleBundleAccessoryWindow",
+					Vector3(dims.x * 0.22, dims.y * 0.30, _PANEL_OFFSET),
+					Color(0.78, 0.88, 0.92, 0.82),
+					Vector3(dims.x * 0.30, -dims.y * 0.06, dims.z * 0.588)
+				)
+			)
+
+
+static func _add_cartridge_shape_details(
+	root: Node3D,
+	cartridge_shape: String,
+	dims: Vector3,
+	body_color: Color,
+	accent_color: Color
+) -> void:
+	var contact_width: float = 0.58
+	if cartridge_shape in ["wide_cart", "exposed_contact_cart"]:
+		contact_width = 0.70
+	root.add_child(
+		_box(
+			"CartridgeContactStrip",
+			Vector3(dims.x * contact_width, dims.y * 0.08, _PANEL_OFFSET),
+			Color(0.82, 0.64, 0.30, 1.0),
+			Vector3(0.0, -dims.y * 0.42, dims.z * 0.58)
+		)
+	)
+	if cartridge_shape != "mini_card":
+		root.add_child(
+			_box(
+				"CartridgeTopNotch",
+				Vector3(dims.x * 0.22, dims.y * 0.055, _PANEL_OFFSET),
+				body_color.darkened(0.18),
+				Vector3(0.0, dims.y * 0.42, dims.z * 0.59)
+			)
+		)
+	match cartridge_shape:
+		"mini_card":
+			root.add_child(
+				_box(
+					"MiniCardTopStripe",
+					Vector3(dims.x * 0.82, dims.y * 0.045, _PANEL_OFFSET),
+					accent_color,
+					Vector3(0.0, dims.y * 0.40, dims.z * 0.59)
+				)
+			)
+		"folded_card":
+			root.add_child(
+				_box(
+					"FoldedCardCrease",
+					Vector3(dims.x * 0.045, dims.y * 0.72, _PANEL_OFFSET),
+					body_color.darkened(0.22),
+					Vector3(-dims.x * 0.28, 0.0, dims.z * 0.59)
+				)
+			)
+		"exposed_contact_cart":
+			root.add_child(
+				_box(
+					"ExposedBoardEdge",
+					Vector3(dims.x * 0.84, dims.y * 0.06, _PANEL_OFFSET),
+					Color(0.10, 0.32, 0.14, 1.0),
+					Vector3(0.0, -dims.y * 0.31, dims.z * 0.592)
+				)
+			)
+		"rounded_tab_cart":
+			root.add_child(
+				_box(
+					"RoundedTabMarker",
+					Vector3(dims.x * 0.34, dims.y * 0.08, _PANEL_OFFSET),
+					body_color.lightened(0.14),
+					Vector3(0.0, dims.y * 0.45, dims.z * 0.592)
+				)
+			)
 
 
 static func _add_spine_labels(

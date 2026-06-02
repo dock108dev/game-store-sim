@@ -52,6 +52,7 @@ func test_contract_requires_visual_sweep_and_manual_route_capture_by_change_type
 		"readability",
 		"visual_scope",
 		"prop",
+		"visual_art",
 	]:
 		assert_true(
 			WorkSurfaceValidationContractScript.requires_visual_sweep(change_type),
@@ -68,6 +69,19 @@ func test_contract_requires_visual_sweep_and_manual_route_capture_by_change_type
 			WorkSurfaceValidationContractScript.requires_manual_route_capture(change_type),
 			"%s changes must require focused tests plus manual route capture review"
 			% change_type
+		)
+
+	for change_type: String in [
+		"visual_art",
+		"store_name",
+		"product_label",
+		"poster_text",
+		"sign_text",
+		"ui_label",
+	]:
+		assert_true(
+			WorkSurfaceValidationContractScript.requires_originality_validation(change_type),
+			"%s changes must require originality validation" % change_type
 		)
 
 
@@ -114,6 +128,15 @@ func test_visual_review_manifest_includes_closeout_contract() -> void:
 		contract.get("required_static_commands", []),
 		["gdlint game/", "git diff --check"]
 	)
+	assert_eq(
+		contract.get("required_originality_commands", []),
+		["bash scripts/validate_originality.sh", "bash tests/validate_original_content.sh"]
+	)
+	assert_true(
+		(contract.get("originality_required_change_types", []) as Array).has("visual_art")
+	)
+	var source_policy: Dictionary = contract.get("originality_source_policy", {}) as Dictionary
+	assert_eq(str(source_policy.get("allowed_use", "")), "pattern_reference_only")
 	var channels: Array = payload.get("validation_output_channels", []) as Array
 	assert_eq(channels.size(), REQUIRED_CHANNELS.size())
 
@@ -136,6 +159,11 @@ func test_validation_scripts_surface_closeout_requirements() -> void:
 		"first-ten-seconds captures",
 	]:
 		assert_string_contains(visual_runner, required)
+
+	var static_guards: String = _read_text("res://scripts/validate_static_repo_guards.sh")
+	assert_string_contains(static_guards, "scripts/validate_originality.sh")
+	var originality_wrapper: String = _read_text("res://tests/validate_original_content.sh")
+	assert_string_contains(originality_wrapper, "scripts/validate_originality.sh")
 
 
 func _read_json(path: String) -> Dictionary:

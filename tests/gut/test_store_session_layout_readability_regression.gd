@@ -3,12 +3,14 @@ extends GutTest
 const StoreSessionTestHelpers := preload("res://tests/automation/store_session_test_helpers.gd")
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const ROUTE_NODE_PATHS: Array[String] = [
+	"StoreSessionManager",
 	"StoreSessionDayOneCustomer",
 	"StoreSessionDayEndTrigger",
 	"StoreSessionBackroomPickup",
 	"StoreSessionRestockShelf",
 ]
 const ROUTE_INTERACTABLE_PATHS: Array[String] = [
+	"StoreSessionManager/Interactable",
 	"StoreSessionDayOneCustomer/Interactable",
 	"StoreSessionDayEndTrigger/Interactable",
 	"StoreSessionBackroomPickup/Interactable",
@@ -59,9 +61,9 @@ func test_first_day_training_route_completes_through_reachable_interactables() -
 	if controller == null:
 		return
 
-	_assert_target_reachable("StoreSessionDayOneCustomer")
-	_assert_only_route_target_enabled("StoreSessionDayOneCustomer/Interactable")
-	await _interact("StoreSessionDayOneCustomer/Interactable")
+	_assert_target_reachable("StoreSessionManager")
+	_assert_only_route_target_enabled("StoreSessionManager/Interactable")
+	await _interact("StoreSessionManager/Interactable")
 	assert_eq(controller.current_stage(), StoreSessionController.STAGE_TRAINING_CHECK_REGISTER)
 
 	_assert_target_reachable("StoreSessionDayEndTrigger")
@@ -180,7 +182,7 @@ func test_stockroom_batch_edges_do_not_mutate_out_of_order() -> void:
 
 func test_route_prompt_contracts_match_raycast_proximity_and_blocking_rules() -> void:
 	var exit_target: Interactable = _interactable("EntranceDoor/Interactable")
-	var manager: Interactable = _interactable("StoreSessionDayOneCustomer/Interactable")
+	var manager: Interactable = _interactable("StoreSessionManager/Interactable")
 	var register: Interactable = _interactable("StoreSessionDayEndTrigger/Interactable")
 	var pickup: Interactable = _interactable("StoreSessionBackroomPickup/Interactable")
 	var shelf: Interactable = _interactable("StoreSessionRestockShelf/Interactable")
@@ -277,7 +279,7 @@ func _interact(path: String) -> void:
 
 
 func _advance_to_training_backroom(controller: StoreSessionController) -> void:
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.acknowledge_first_minute_detail(controller)
 	await get_tree().process_frame

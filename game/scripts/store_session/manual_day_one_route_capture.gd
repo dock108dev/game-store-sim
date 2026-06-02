@@ -53,9 +53,9 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "manager_role_visible", "event_id": ""},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:421",
-				"tests/gut/test_store_session_day_one_critical_path.gd:422",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:421",
+					"tests/gut/test_store_session_day_one_critical_path.gd:422",
 			]
 		),
 		_beat(
@@ -75,10 +75,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "waiting_for_register_check", "event_id": ""},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:425",
-				"tests/gut/test_store_session_day_one_critical_path.gd:426",
-				"tests/gut/test_store_session_day_one_critical_path.gd:429",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:426",
+					"tests/gut/test_store_session_day_one_critical_path.gd:427",
+					"tests/gut/test_store_session_day_one_critical_path.gd:429",
 			]
 		),
 		_beat(
@@ -98,10 +98,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "pickup_enabled", "event_id": ""},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:431",
-				"tests/gut/test_store_session_day_one_critical_path.gd:432",
-				"tests/gut/test_store_session_day_one_critical_path.gd:435",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:432",
+					"tests/gut/test_store_session_day_one_critical_path.gd:433",
+					"tests/gut/test_store_session_day_one_critical_path.gd:435",
 			]
 		),
 		_beat(
@@ -121,10 +121,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "stocking_training_enabled", "event_id": ""},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:442",
-				"tests/gut/test_store_session_day_one_critical_path.gd:443",
-				"tests/gut/test_store_session_day_one_critical_path.gd:444",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:443",
+					"tests/gut/test_store_session_day_one_critical_path.gd:444",
+					"tests/gut/test_store_session_day_one_critical_path.gd:445",
 			]
 		),
 		_beat(
@@ -144,10 +144,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "waiting_for_customer_decision", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:453",
-				"tests/gut/test_store_session_day_one_critical_path.gd:455",
-				"tests/gut/test_store_session_day_one_critical_path.gd:456",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:456",
+					"tests/gut/test_store_session_day_one_critical_path.gd:457",
+					"tests/gut/test_store_session_day_one_critical_path.gd:458",
 			]
 		),
 		_beat(
@@ -167,10 +167,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "choice_pending", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:460",
-				"tests/gut/test_store_session_day_one_critical_path.gd:464",
-				"tests/gut/test_store_session_day_one_critical_path.gd:467",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:460",
+					"tests/gut/test_store_session_day_one_critical_path.gd:461",
+					"tests/gut/test_store_session_day_one_critical_path.gd:465",
 			]
 		),
 		_beat(
@@ -190,10 +190,10 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "result_visible", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:473",
-				"tests/gut/test_store_session_day_one_critical_path.gd:480",
-				"tests/gut/test_store_session_day_one_critical_path.gd:483",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:474",
+					"tests/gut/test_store_session_day_one_critical_path.gd:481",
+					"tests/gut/test_store_session_day_one_critical_path.gd:484",
 			]
 		),
 		_beat(
@@ -212,12 +212,12 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "exit_in_progress", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:488",
-				"tests/gut/test_store_session_day_one_critical_path.gd:493",
-				"tests/gut/test_store_session_day_one_critical_path.gd:496",
-				"tests/gut/test_store_session_day_one_critical_path.gd:511",
-				"tests/gut/test_store_session_day_one_critical_path.gd:512",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:488",
+					"tests/gut/test_store_session_day_one_critical_path.gd:493",
+					"tests/gut/test_store_session_day_one_critical_path.gd:497",
+					"tests/gut/test_store_session_day_one_critical_path.gd:510",
+					"tests/gut/test_store_session_day_one_critical_path.gd:512",
 			]
 		),
 		_beat(
@@ -236,11 +236,11 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "customer_served_and_shelf_stocked", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:516",
-				"tests/gut/test_store_session_day_one_critical_path.gd:525",
-				"tests/gut/test_store_session_day_one_critical_path.gd:528",
-				"tests/gut/test_store_session_day_one_critical_path.gd:552",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:517",
+					"tests/gut/test_store_session_day_one_critical_path.gd:526",
+					"tests/gut/test_store_session_day_one_critical_path.gd:527",
+					"tests/gut/test_store_session_day_one_critical_path.gd:553",
 			]
 		),
 		_beat(
@@ -259,11 +259,11 @@ static func route_beats() -> Array[Dictionary]:
 			{"state": "close_day_enabled", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:552",
-				"tests/gut/test_store_session_day_one_critical_path.gd:553",
-				"tests/gut/test_store_session_day_one_critical_path.gd:557",
-				"tests/gut/test_store_session_day_one_critical_path.gd:562",
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:553",
+					"tests/gut/test_store_session_day_one_critical_path.gd:554",
+					"tests/gut/test_store_session_day_one_critical_path.gd:558",
+					"tests/gut/test_store_session_day_one_critical_path.gd:563",
 			]
 		),
 		_beat(
@@ -294,18 +294,17 @@ static func route_beats() -> Array[Dictionary]:
 				"shelf_inventory": 3,
 				"backroom_inventory": 1,
 			},
-			[
-				"tests/gut/test_store_session_day_one_critical_path.gd:557",
-				"tests/gut/test_store_session_day_one_critical_path.gd:571",
-				"tests/gut/test_store_session_day_one_critical_path.gd:574",
-				"tests/gut/test_store_session_day_one_critical_path.gd:585",
-				"tests/gut/test_store_session_day_one_critical_path.gd:586",
-				"tests/gut/test_store_session_day_one_critical_path.gd:587",
-				"tests/gut/test_store_session_day_one_critical_path.gd:596",
-				"tests/gut/test_store_session_day_one_critical_path.gd:618",
-				"tests/gut/test_store_session_day_one_critical_path.gd:636",
-				"tests/gut/test_store_session_day_one_critical_path.gd:645",
-			]
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:558",
+					"tests/gut/test_store_session_day_one_critical_path.gd:572",
+					"tests/gut/test_store_session_day_one_critical_path.gd:575",
+					"tests/gut/test_store_session_day_one_critical_path.gd:585",
+					"tests/gut/test_store_session_day_one_critical_path.gd:586",
+					"tests/gut/test_store_session_day_one_critical_path.gd:587",
+					"tests/gut/test_store_session_day_one_critical_path.gd:597",
+					"tests/gut/test_store_session_day_one_critical_path.gd:619",
+					"tests/gut/test_store_session_day_one_critical_path.gd:645",
+				]
 		),
 	]
 	return _with_next_expected_beats(beats)

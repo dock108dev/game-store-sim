@@ -94,7 +94,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			"01_boot_first_day_manager_objective",
 			{
 				"stage": "training_talk_manager",
-				"target": "StoreSessionDayOneCustomer/Interactable",
+				"target": "StoreSessionManager/Interactable",
 				"prompt": "Talk to Manager",
 				"header": "FIRST DAY",
 				"preopening_complete": false
@@ -104,7 +104,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			"02_training_talk_manager_prompt",
 			{
 				"stage": "training_talk_manager",
-				"target": "StoreSessionDayOneCustomer/Interactable",
+				"target": "StoreSessionManager/Interactable",
 				"prompt": "Talk to Manager",
 				"header": "FIRST DAY"
 			},

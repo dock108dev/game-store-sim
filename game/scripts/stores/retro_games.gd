@@ -27,6 +27,12 @@ const _FP_BODY_NAME: StringName = &"Player"
 const _ACTION_TOGGLE_DEBUG: StringName = &"toggle_debug"
 const _CAMERA_SOURCE_DEBUG_OVERHEAD: StringName = &"debug_overhead"
 const _CAMERA_SOURCE_PLAYER_FP: StringName = &"player_fp"
+const StoreMerchandisingLabelsScript: GDScript = preload(
+	"res://game/scripts/store_session/store_merchandising_labels.gd"
+)
+const StoreCustomizationPhysicalAdapterScript: GDScript = preload(
+	"res://game/scripts/stores/store_customization_physical_adapter.gd"
+)
 ## Path to the entrance glass-door Interactable. Pressing E on the door
 ## releases the cursor and routes the FSM to MALL_OVERVIEW so the player
 ## leaves the store interior in the same way the day-summary "Return to
@@ -92,6 +98,7 @@ var _entrance_door_interactable: Interactable = null
 ## True after we've already emitted display_exposes_weird_inventory for the
 ## current day so toggling featured back to new-console-hype doesn't double-up.
 var _weird_inventory_signal_fired_today: bool = false
+var _customization_physical_adapter: Node = null
 
 
 func _ready() -> void:
@@ -108,6 +115,7 @@ func _ready() -> void:
 	_connect_platform_shortage_signals()
 	_refresh_new_console_display_label()
 	_connect_store_customization_signals()
+	_ensure_store_customization_physical_adapter()
 
 
 ## Initializes Retro Games lifecycle state and EventBus wiring.
@@ -707,6 +715,7 @@ func _spawn_time_clock_interactable() -> void:
 ## missing node is intentional — the .tscn ships these by default, but
 ## controller-level wiring should not crash a partially-loaded scene fixture.
 func _wire_zone_artifacts() -> void:
+	_apply_merchandising_labels()
 	_connect_artifact("delivery_manifest/Interactable", _on_delivery_manifest_examined)
 	_connect_artifact("poster_slot/Interactable", _on_poster_slot_interacted)
 	_connect_artifact("featured_display/Interactable", _on_featured_display_interacted)
@@ -719,6 +728,77 @@ func _wire_zone_artifacts() -> void:
 		_on_back_room_inventory_shelf_interacted,
 	)
 	_connect_artifact("hold_shelf/Interactable", holds.on_hold_shelf_interacted)
+
+
+func _apply_merchandising_labels() -> void:
+	_apply_label3d_from_merchandising(
+		"used_game_wall/SectionSign",
+		{
+			"store_id": STORE_ID,
+			"phase": "any",
+			"surface": "shelf",
+			"role": "category",
+			"fixture_id": "cart_wall_rack",
+			"category_id": "cartridges",
+		}
+	)
+	_apply_label3d_from_merchandising(
+		"ZoneLabels/UsedConsolesLabel",
+		{
+			"store_id": STORE_ID,
+			"phase": "any",
+			"surface": "shelf",
+			"role": "category",
+			"fixture_id": "console_shelf",
+			"category_id": "consoles",
+		}
+	)
+	_apply_label3d_from_merchandising(
+		"ZoneTransitions/AccessoriesSign",
+		{
+			"store_id": STORE_ID,
+			"phase": "any",
+			"surface": "bin",
+			"role": "category",
+			"fixture_id": "accessories_bin",
+			"category_id": "accessories",
+		}
+	)
+	_apply_label3d_from_merchandising(
+		"hold_shelf/HoldSign",
+		{
+			"store_id": STORE_ID,
+			"phase": "any",
+			"surface": "stockroom_pickup",
+			"role": "service",
+			"fixture_id": "checkout_counter",
+			"service_id": "holds",
+		}
+	)
+	_apply_label3d_from_merchandising(
+		"ZoneLabels/StaffPicksLabel",
+		{
+			"store_id": STORE_ID,
+			"phase": "any",
+			"surface": "display_table",
+			"role": "collection",
+			"fixture_id": "glass_showcase",
+			"collection_id": "staff_picks",
+		}
+	)
+
+
+func _apply_label3d_from_merchandising(path: NodePath, context: Dictionary) -> void:
+	var label: Label3D = get_node_or_null(path) as Label3D
+	if label == null:
+		return
+	var resolved: Dictionary = StoreMerchandisingLabelsScript.resolve(context)
+	var text: String = StoreMerchandisingLabelsScript.display_text(resolved)
+	if text.is_empty():
+		return
+	label.text = text.to_upper()
+	label.set_meta("merchandising_label_id", str(resolved.get("label_id", "")))
+	label.set_meta("merchandising_label_source", str(resolved.get("source", "")))
 
 
 func _connect_artifact(path: String, callable: Callable) -> void:
@@ -831,6 +911,15 @@ func _connect_store_customization_signals() -> void:
 	# day_started reset is needed to clear the per-day signal latch.
 	if not EventBus.day_started.is_connected(_on_customization_day_started):
 		EventBus.day_started.connect(_on_customization_day_started)
+
+
+func _ensure_store_customization_physical_adapter() -> void:
+	if _customization_physical_adapter != null:
+		return
+	_customization_physical_adapter = StoreCustomizationPhysicalAdapterScript.new()
+	_customization_physical_adapter.name = &"StoreCustomizationPhysicalAdapter"
+	add_child(_customization_physical_adapter)
+	_customization_physical_adapter.call("configure", self)
 
 
 func _on_customization_day_started(_day: int) -> void:

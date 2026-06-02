@@ -15,8 +15,9 @@ const MeshBoundsUtilScript: GDScript = preload(
 const VisualNodeUtilScript: GDScript = preload("res://game/scripts/visuals/visual_node_util.gd")
 
 const _PREVIEW_LAYER_NAME: String = "PreviewProductCases"
-const _SURFACE_CLEARANCE: float = 0.012
+const _SURFACE_CLEARANCE: float = 0.006
 const _LAY_FLAT_DEGREES: float = -90.0
+const _PREVIEW_SCALE: float = 0.82
 const _PREVIEW_ITEMS: Array[Dictionary] = [
 	{
 		"slot_id": "display_table_1",
@@ -90,6 +91,7 @@ func _add_preview_case(
 	visual.transform.basis = (
 		Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, deg_to_rad(_LAY_FLAT_DEGREES))
 	)
+	visual.scale = Vector3.ONE * _PREVIEW_SCALE
 	preview_layer.add_child(visual)
 	_position_visual_on_slot(preview_layer, visual, slot.position)
 
@@ -106,9 +108,15 @@ func _find_slot(slot_id: String) -> Node3D:
 func _position_visual_on_slot(
 	preview_layer: Node3D, visual: Node3D, slot_position: Vector3
 ) -> void:
+	# Slot anchors carry gameplay pickup state; decorative previews rest on the tabletop.
+	var support_y: float = _preview_support_y(slot_position.y)
 	var bounds: AABB = MeshBoundsUtilScript.visual_bounds(preview_layer, visual)
 	if bounds.size == Vector3.ZERO:
-		visual.position = slot_position + Vector3(0.0, _SURFACE_CLEARANCE, 0.0)
+		visual.position = Vector3(
+			slot_position.x,
+			support_y + _SURFACE_CLEARANCE,
+			slot_position.z
+		)
 		return
 	var center := Vector3(
 		bounds.position.x + bounds.size.x * 0.5,
@@ -117,6 +125,13 @@ func _position_visual_on_slot(
 	)
 	visual.position += Vector3(
 		slot_position.x - center.x,
-		slot_position.y + _SURFACE_CLEARANCE - bounds.position.y,
+		support_y + _SURFACE_CLEARANCE - bounds.position.y,
 		slot_position.z - center.z
 	)
+
+
+func _preview_support_y(fallback_y: float) -> float:
+	var support: MeshInstance3D = get_node_or_null("TableMesh") as MeshInstance3D
+	if support == null:
+		return fallback_y
+	return MeshBoundsUtilScript.mesh_bounds_in_root(self, support).end.y

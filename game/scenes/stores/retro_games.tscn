@@ -1,4 +1,4 @@
-[gd_scene load_steps=204 format=3 uid="uid://retro_games_001"]
+[gd_scene load_steps=205 format=3 uid="uid://retro_games_001"]
 
 [ext_resource type="Script" path="res://game/scripts/stores/retro_games.gd" id="1"]
 [ext_resource type="Script" path="res://game/scripts/stores/shelf_slot.gd" id="2"]
@@ -47,6 +47,7 @@
 [ext_resource type="Script" path="res://game/scripts/store_session/restock_interactable.gd" id="51_restock"]
 [ext_resource type="Script" path="res://game/scripts/store_session/stockroom_pickup_interactable.gd" id="52_stockroom_pickup"]
 [ext_resource type="Script" path="res://game/scripts/store_session/register_status_indicator.gd" id="53_register_status"]
+[ext_resource type="Script" path="res://game/scripts/store_session/store_session_manager_interactable.gd" id="54_store_session_manager"]
 [ext_resource type="PackedScene" path="res://game/scenes/stores/fixtures/fixture_queue_lane.tscn" id="64_queue_lane"]
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_laminate_counter.tres" id="65_laminate"]
 [ext_resource type="StandardMaterial3D" path="res://game/assets/materials/mat_sign_backing.tres" id="66_sign_backing"]
@@ -2926,7 +2927,7 @@ visible = false
 ; ============================================================
 
 [node name="Checkout" type="Node3D" parent="." groups=["fixture"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 0, 7.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, 0, 6.15)
 
 [node name="CounterMesh" type="MeshInstance3D" parent="Checkout"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -3198,19 +3199,24 @@ visible = false
 [node name="CustomerWaitPosition" type="Marker3D" parent="Checkout/Register"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -1.285, 0.71)
 
-; Customer-standing-spot floor mat. World position (5.05, 0.01, 8.45)
+; Customer-standing-spot floor mat. World position (4.85, 0.01, 7.25)
 ; sits directly across the counter from the register, on the customer-facing
 ; side of the open queue lane. Lifted to Y=0.01 so it doesn't z-fight with
 ; the floor.
 [node name="StoreSessionCustomerFloorMat" type="MeshInstance3D" parent="Checkout"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.01, 0.63)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.01, 1.1)
+mesh = SubResource("store_session_customer_mat_mesh")
+surface_material_override/0 = SubResource("store_session_customer_mat_material")
+
+[node name="CheckoutManagerFloorMat" type="MeshInstance3D" parent="Checkout"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.01, -0.75)
 mesh = SubResource("store_session_customer_mat_mesh")
 surface_material_override/0 = SubResource("store_session_customer_mat_material")
 
 [node name="FrontLaneQueue" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9, 0, 7.5)
 
 [node name="LaneFixture" parent="FrontLaneQueue" instance=ExtResource("64_queue_lane")]
-transform = Transform3D(0.994, 0, -0.108, 0, 1, 0, 0.108, 0, 0.994, 4.05, 0.015, 8.56)
 
 ; ============================================================
 ; Backroom Access Point
@@ -3269,7 +3275,7 @@ shape = SubResource("entry_shape")
 ; ============================================================
 
 [node name="RegisterArea" type="Area3D" parent="." groups=["area.register", "register_area"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 1.0, 8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 1.0, 7.25)
 collision_layer = 0
 collision_mask = 2
 
@@ -3285,7 +3291,7 @@ script = ExtResource("17")
 max_staff = 2
 
 [node name="RegisterPoint" type="Marker3D" parent="StoreStaffConfig"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 0, 8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 0, 5.4)
 
 [node name="BackroomPoint" type="Marker3D" parent="StoreStaffConfig"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4, 0, -8.6)
@@ -3320,7 +3326,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, -3.7)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 0.05, -1.2)
 
 [node name="CheckoutApproach" type="Marker3D" parent="CustomerNavConfig"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 0.05, 8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 0.05, 7.25)
 
 [node name="ExitPoint" type="Marker3D" parent="CustomerNavConfig"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 10.5)
@@ -3336,20 +3342,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 10.5)
 ; ============================================================
 
 [node name="QueueMarker1" type="Marker3D" parent="." groups=["queue_markers"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 0, 8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 0, 7.25)
 
 [node name="QueueMarker2" type="Marker3D" parent="." groups=["queue_markers"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.05, 0, 8.56)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9, 0, 7.5)
 
 [node name="QueueMarker3" type="Marker3D" parent="." groups=["queue_markers"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.06, 0, 8.67)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.95, 0, 7.75)
 
 ; ============================================================
 ; Checkout Counter — primary checkout interactable
 ; ============================================================
 
 [node name="checkout_counter" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 0, 7.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, 0, 6.15)
 
 [node name="Interactable" type="Area3D" parent="checkout_counter" groups=["interactables"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
@@ -4675,8 +4681,7 @@ shaded = false
 script = ExtResource("47_store_session_controller")
 
 ; StoreSessionDayOneCustomer — parked directly across the counter from the
-; register (X aligns with Checkout center at 5.35), on the customer-facing
-; side ~0.36 m south of the counter face. Identity rotation = facing -Z
+; register, on the customer-facing service spot. Identity rotation = facing -Z
 ; (toward the counter); the player approaches from the front entrance
 ; and meets them face-to-face. The authored transform is the single
 ; source of truth (the controller does not override it at runtime).
@@ -4729,7 +4734,7 @@ collision_mask = 0
 shape = SubResource("store_session_backroom_front_wall_right_shape")
 
 [node name="StoreSessionDayOneCustomer" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.05, 0, 8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.85, 0, 7.25)
 
 ; §F-L4 — visible body proxy so the player can see who they're talking to.
 ; Capsule centered at Y=0.85 puts the bottom on the floor and the head at
@@ -4745,6 +4750,22 @@ collision_mask = 0
 script = ExtResource("48_first_day_customer")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionDayOneCustomer/Interactable"]
+shape = SubResource("nav_zone_shape")
+
+[node name="StoreSessionManager" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.85, 0, 5.4)
+
+[node name="ManagerBody" type="MeshInstance3D" parent="StoreSessionManager"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+mesh = SubResource("store_session_customer_body_mesh")
+surface_material_override/0 = SubResource("store_session_customer_body_mat")
+
+[node name="Interactable" type="Area3D" parent="StoreSessionManager"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("54_store_session_manager")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StoreSessionManager/Interactable"]
 shape = SubResource("nav_zone_shape")
 
 [node name="StoreSessionBackroomPickup" type="Node3D" parent="."]
@@ -5079,7 +5100,7 @@ shape = SubResource("nav_zone_shape")
 ; StoreSessionDayEndTrigger — sits at the register on the Checkout counter so the
 ; "close the day" affordance is tied to a visible location.
 [node name="StoreSessionDayEndTrigger" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 1.05, 7.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65, 1.05, 6.15)
 
 [node name="Interactable" type="Area3D" parent="StoreSessionDayEndTrigger" groups=["interactables"]]
 collision_layer = 16
@@ -5862,29 +5883,29 @@ surface_material_override/0 = SubResource("product_space_mall_mat")
 [node name="CheckoutCounterDressing" type="Node3D" parent="ReadabilityProps"]
 
 [node name="CounterReceiptSlipA" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.72, 0, 0.12, 0, 1, 0, -0.12, 0, 0.72, 5.06, 1.067, 8.03)
+transform = Transform3D(0.72, 0, 0.12, 0, 1, 0, -0.12, 0, 0.72, 5.06, 1.067, 6.25)
 mesh = SubResource("delivery_manifest_mesh")
 surface_material_override/0 = SubResource("delivery_manifest_mat")
 
 [node name="CounterReceiptSlipB" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.58, 0, -0.24, 0, 1, 0, 0.24, 0, 0.58, 5.55, 1.069, 8.08)
+transform = Transform3D(0.58, 0, -0.24, 0, 1, 0, 0.24, 0, 0.58, 5.55, 1.069, 6.30)
 mesh = SubResource("delivery_manifest_mesh")
 surface_material_override/0 = SubResource("delivery_manifest_mat")
 
 [node name="CounterImpulseDungeonDad" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing" groups=["product_display"]]
-transform = Transform3D(0.55, 0, 0.2, 0, 0.55, 0, -0.2, 0, 0.55, 4.82, 1.148, 7.92)
+transform = Transform3D(0.55, 0, 0.2, 0, 0.55, 0, -0.2, 0, 0.55, 4.82, 1.148, 6.14)
 visible = false
 mesh = SubResource("product_case_cover_mesh")
 surface_material_override/0 = SubResource("product_dungeon_dad_mat")
 
 [node name="CounterImpulsePixelPets" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing" groups=["product_display"]]
-transform = Transform3D(0.52, 0, -0.16, 0, 0.52, 0, 0.16, 0, 0.52, 5.86, 1.142, 7.94)
+transform = Transform3D(0.52, 0, -0.16, 0, 0.52, 0, 0.16, 0, 0.52, 5.86, 1.142, 6.16)
 visible = false
 mesh = SubResource("product_case_cover_mesh")
 surface_material_override/0 = SubResource("product_pixel_pets_mat")
 
 [node name="CounterCardStack" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.72, 0, -0.18, 0, 0.34, 0, 0.18, 0, 0.72, 5.96, 1.102, 8.1)
+transform = Transform3D(0.72, 0, -0.18, 0, 0.34, 0, 0.18, 0, 0.72, 5.96, 1.102, 6.32)
 visible = false
 mesh = SubResource("readability_stock_case_mesh")
 surface_material_override/0 = SubResource("product_case_edge_mat")
@@ -5895,27 +5916,27 @@ mesh = SubResource("queue_direction_strip_mesh")
 surface_material_override/0 = SubResource("readability_checkout_accent_mat")
 
 [node name="ServicePolicyPlaque" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.82, 0, 0.18, 0, 1, 0, -0.18, 0, 0.82, 5.16, 1.084, 8.12)
+transform = Transform3D(0.82, 0, 0.18, 0, 1, 0, -0.18, 0, 0.82, 5.46, 1.084, 6.45)
 mesh = SubResource("checkout_counter_card_mesh")
 surface_material_override/0 = SubResource("checkout_policy_card_mat")
 
 [node name="TradeCreditTicket" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.76, 0, -0.26, 0, 1, 0, 0.26, 0, 0.76, 5.55, 1.084, 8.15)
+transform = Transform3D(0.76, 0, -0.26, 0, 1, 0, 0.26, 0, 0.76, 5.85, 1.084, 6.48)
 mesh = SubResource("checkout_counter_card_mesh")
 surface_material_override/0 = SubResource("checkout_trade_flyer_mat")
 
 [node name="CoinReturnTray" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.72, 0, 0.14, 0, 0.48, 0, -0.14, 0, 0.72, 4.72, 1.093, 7.87)
+transform = Transform3D(0.72, 0, 0.14, 0, 0.48, 0, -0.14, 0, 0.72, 5.02, 1.093, 6.2)
 mesh = SubResource("checkout_counter_clutter_mesh")
 surface_material_override/0 = SubResource("checkout_counter_clutter_mat")
 
 [node name="StickerLabelRoll" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.54, 0, -0.16, 0, 0.54, 0, 0.16, 0, 0.54, 4.98, 1.096, 7.72)
+transform = Transform3D(0.54, 0, -0.16, 0, 0.54, 0, 0.16, 0, 0.54, 5.28, 1.096, 6.05)
 mesh = SubResource("checkout_counter_clutter_mesh")
 surface_material_override/0 = SubResource("checkout_trade_flyer_mat")
 
 [node name="CounterReceiptPen" type="MeshInstance3D" parent="ReadabilityProps/CheckoutCounterDressing"]
-transform = Transform3D(0.22, 0, 0.46, 0, 0.28, 0, -0.46, 0, 0.22, 5.74, 1.094, 7.76)
+transform = Transform3D(0.22, 0, 0.46, 0, 0.28, 0, -0.46, 0, 0.22, 6.04, 1.094, 6.09)
 mesh = SubResource("checkout_counter_clutter_mesh")
 surface_material_override/0 = SubResource("checkout_policy_card_mat")
 

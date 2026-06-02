@@ -148,7 +148,7 @@
       "display_title": "Kingdom of Embers",
       "catalog_definition_ids": ["neo_ignite_kingdom_embers_loose"],
       "visual_family": "action_rpg",
-      "case_shape": "tall_disc_case",
+      "case_shape": "long_cardboard_box",
       "front_color": "#552332",
       "title_block": {
         "text": "KINGDOM EMBERS",
@@ -178,7 +178,7 @@
       "shelf_display": {
         "category": "cartridges",
         "preferred_facing": "front",
-        "scale": [1.0, 1.12, 0.12],
+        "scale": [1.0, 1.05, 0.22],
         "spine_width": 0.12
       },
       "feature_bullets": ["Castle Road", "Friend Links", "Boss Hearts"],
@@ -189,7 +189,7 @@
       "display_title": "Torque Force 3",
       "catalog_definition_ids": ["neo_ignite_torque_force_3_loose"],
       "visual_family": "arcade_racer",
-      "case_shape": "tall_disc_case",
+      "case_shape": "jewel_case",
       "front_color": "#24445A",
       "title_block": {
         "text": "TORQUE FORCE 3",
@@ -230,7 +230,7 @@
       "display_title": "Gridiron Season 2005",
       "catalog_definition_ids": ["neo_ignite_gridiron_2005_loose"],
       "visual_family": "annual_sports",
-      "case_shape": "tall_disc_case",
+      "case_shape": "slim_card_sleeve",
       "front_color": "#25432B",
       "title_block": {
         "text": "GRIDIRON 2005",
@@ -438,6 +438,10 @@
       "display_label": "Neo Ignite",
       "used_console_label": "Neo Ignite Console",
       "shelf_label": "Ignite-compatible",
+      "console_box_shape": "tower_box",
+      "cartridge_shape": "flat_cart",
+      "console_box_scale": [1.0, 0.35, 1.38],
+      "cartridge_scale": [1.0, 0.28, 1.38],
       "silhouette": {
         "shape": "vertical_tower_with_offset_disc_tray",
         "profile": "tall_rectangular",
@@ -454,6 +458,10 @@
       "display_label": "Canopy Wave",
       "used_console_label": "Canopy Wave Console",
       "shelf_label": "Wave-compatible",
+      "console_box_shape": "handle_cube_box",
+      "cartridge_shape": "rounded_tab_cart",
+      "console_box_scale": [0.9, 0.9, 0.7],
+      "cartridge_scale": [0.9, 0.46, 0.62],
       "silhouette": {
         "shape": "rounded_cube_with_top_handle_groove",
         "profile": "compact_cube",
@@ -470,6 +478,10 @@
       "display_label": "VecForce HD",
       "used_console_label": "VecForce HD Console",
       "shelf_label": "HD-compatible",
+      "console_box_shape": "slab_box",
+      "cartridge_shape": "wide_cart",
+      "console_box_scale": [1.35, 0.9, 0.34],
+      "cartridge_scale": [1.25, 0.42, 0.42],
       "silhouette": {
         "shape": "wide_slab_with_inset_drive_band",
         "profile": "low_wide",
@@ -486,6 +498,10 @@
       "display_label": "Wave Pocket",
       "used_console_label": "Wave Pocket Handheld",
       "shelf_label": "Pocket-compatible",
+      "console_box_shape": "handheld_box",
+      "cartridge_shape": "folded_card",
+      "console_box_scale": [0.72, 0.48, 0.18],
+      "cartridge_scale": [0.72, 0.34, 0.18],
       "silhouette": {
         "shape": "hinged_clamshell_with_dual_screen_marks",
         "profile": "small_folded",
@@ -502,6 +518,10 @@
       "display_label": "Ignite Go",
       "used_console_label": "Ignite Go Handheld",
       "shelf_label": "Go-compatible",
+      "console_box_shape": "long_bundle_box",
+      "cartridge_shape": "mini_card",
+      "console_box_scale": [1.05, 0.46, 0.20],
+      "cartridge_scale": [0.84, 0.26, 0.14],
       "silhouette": {
         "shape": "wide_handheld_wedge_with_center_screen",
         "profile": "thin_wide",

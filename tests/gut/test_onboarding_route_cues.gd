@@ -36,21 +36,31 @@ func test_generated_route_cues_are_subtle_floor_wear_not_interactables() -> void
 	var cue_root: Node3D = _cue_root()
 	if cue_root == null:
 		return
-	assert_eq(cue_root.get_child_count(), 7, "First-run recovery cues should stay sparse")
+	assert_eq(cue_root.get_child_count(), 10, "First-run recovery cues should stay sparse")
 	for cue: Node in cue_root.get_children():
 		var mesh_instance: MeshInstance3D = cue as MeshInstance3D
 		assert_not_null(mesh_instance, "%s must be a visual floor cue" % cue.name)
 		if mesh_instance == null:
 			continue
 		assert_eq(str(mesh_instance.get_meta("route_cue_role", "")), "floor_wear")
-		assert_false(_has_interaction_descendant(mesh_instance), "%s must stay visual-only" % cue.name)
-		assert_lte(_longest_box_axis(mesh_instance), MAX_CUE_AXIS, "%s must not read as route paint" % cue.name)
-		assert_lte(_material_alpha(mesh_instance), MAX_CUE_ALPHA, "%s must stay below prompt priority" % cue.name)
+		assert_false(
+			_has_interaction_descendant(mesh_instance), "%s must stay visual-only" % cue.name
+		)
+		assert_lte(
+			_longest_box_axis(mesh_instance),
+			MAX_CUE_AXIS,
+			"%s must not read as route paint" % cue.name
+		)
+		assert_lte(
+			_material_alpha(mesh_instance),
+			MAX_CUE_ALPHA,
+			"%s must stay below prompt priority" % cue.name
+		)
 
 
 func test_checkout_stockroom_and_shelf_cues_form_recoverable_physical_route() -> void:
 	var cue_root: Node3D = _cue_root()
-	var checkout: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var checkout: Node3D = _root.get_node_or_null("StoreSessionManager") as Node3D
 	var register: Node3D = _root.get_node_or_null("StoreSessionDayEndTrigger") as Node3D
 	var stockroom: Node3D = _root.get_node_or_null("StoreSessionBackroomPickup") as Node3D
 	var shelf: Node3D = _root.get_node_or_null("StoreSessionRestockShelf") as Node3D
@@ -74,7 +84,13 @@ func test_checkout_stockroom_and_shelf_cues_form_recoverable_physical_route() ->
 		_cue(cue_root, "CheckoutBackroomFloorWear01").global_position,
 		_cue(cue_root, "CheckoutBackroomFloorWear02").global_position,
 		stockroom_threshold.global_position,
+		_cue(cue_root, "StockroomInteriorFloorWear00").global_position,
+		_cue(cue_root, "StockroomInteriorFloorWear01").global_position,
+		_cue(cue_root, "StockroomInteriorFloorWear02").global_position,
 		stockroom.global_position,
+		_cue(cue_root, "StockroomInteriorFloorWear02").global_position,
+		_cue(cue_root, "StockroomInteriorFloorWear01").global_position,
+		_cue(cue_root, "StockroomInteriorFloorWear00").global_position,
 		stockroom_threshold.global_position,
 		_cue(cue_root, "StockroomShelfFloorWear00").global_position,
 		_cue(cue_root, "StockroomShelfFloorWear01").global_position,

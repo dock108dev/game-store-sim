@@ -2,6 +2,7 @@
 ## Extracted from DaySummary to keep main class under 1000 lines.
 class_name DaySummaryDisplay
 
+const DecisionPanelStyle = preload("res://game/scripts/ui/decision_panel_style.gd")
 
 ## Sets staff wages display if wages exceed 0.
 static func set_staff_wages_display(
@@ -42,18 +43,9 @@ static func set_haggle_display(
 static func apply_profit_color(
 	profit_label: Label, net_profit: float
 ) -> void:
-	if net_profit > 0.0:
-		profit_label.add_theme_color_override(
-			"font_color", DaySummaryContent.NET_PROFIT_POSITIVE_COLOR
-		)
-	elif net_profit < 0.0:
-		profit_label.add_theme_color_override(
-			"font_color", DaySummaryContent.NET_PROFIT_NEGATIVE_COLOR
-		)
-	else:
-		profit_label.add_theme_color_override(
-			"font_color", DaySummaryContent.NET_PROFIT_ZERO_COLOR
-		)
+	profit_label.add_theme_color_override(
+		"font_color", DecisionPanelStyle.money_delta_color(net_profit)
+	)
 
 
 ## Hoists top-seller and forward-hook above detail dump for visibility.
@@ -76,6 +68,8 @@ static func apply_secondary_button_style(
 	review_inventory_button: Button, continue_button: Button
 ) -> void:
 	const SECONDARY_MODULATE := Color(1.0, 1.0, 1.0, 0.65)
+	DecisionPanelStyle.apply_action_button(review_inventory_button)
+	DecisionPanelStyle.apply_action_button(continue_button, true)
 	review_inventory_button.custom_minimum_size = Vector2(160, 36)
 	review_inventory_button.flat = true
 	review_inventory_button.modulate = SECONDARY_MODULATE
@@ -126,4 +120,3 @@ static func apply_attention_notes_display(
 	for note in notes:
 		lines.append(str(note))
 	attention_notes_label.text = "\n".join(lines)
-

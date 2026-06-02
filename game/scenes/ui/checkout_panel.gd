@@ -8,7 +8,8 @@ signal sale_accepted
 signal sale_declined
 signal bundle_suggested
 
-const PANEL_NAME: String = "checkout"
+const DecisionPanelStyle = preload("res://game/scripts/ui/decision_panel_style.gd")
+const PANEL_NAME: StringName = &"checkout"
 const RECEIPT_DISPLAY_DURATION: float = 2.0
 const RESULT_DISPLAY_DURATION: float = 3.0
 
@@ -139,6 +140,12 @@ func _ready() -> void:
 	_rest_x = _panel.position.x
 	_apply_card_style()
 	DecisionCardStyle.apply_reasoning_style(_reasoning_label)
+	DecisionPanelStyle.apply_header_label(
+		$PanelRoot/Margin/VBox/HeaderRow/TitleLabel
+	)
+	DecisionPanelStyle.apply_action_button(_confirm_button, true)
+	DecisionPanelStyle.apply_action_button(_bundle_button)
+	DecisionPanelStyle.apply_action_button(_cancel_button)
 	_confirm_button.pressed.connect(_on_confirm_pressed)
 	_cancel_button.pressed.connect(_on_cancel_pressed)
 	_bundle_button.pressed.connect(_on_bundle_pressed)
@@ -506,7 +513,7 @@ func _on_transaction_completed(
 
 
 func _on_panel_opened(panel_name: String) -> void:
-	if panel_name != PANEL_NAME and _is_open:
+	if StringName(panel_name) != PANEL_NAME and _is_open:
 		hide_checkout(true)
 		if _is_pending:
 			sale_declined.emit()
@@ -555,6 +562,10 @@ func _create_item_row(item: Dictionary) -> HBoxContainer:
 	condition_label.horizontal_alignment = (
 		HORIZONTAL_ALIGNMENT_CENTER
 	)
+	DecisionPanelStyle.apply_status_label(
+		condition_label,
+		StringName(condition_label.text.to_lower()),
+	)
 	row.add_child(condition_label)
 
 	var price_label := Label.new()
@@ -563,6 +574,9 @@ func _create_item_row(item: Dictionary) -> HBoxContainer:
 	price_label.custom_minimum_size = Vector2(70, 0)
 	price_label.horizontal_alignment = (
 		HORIZONTAL_ALIGNMENT_RIGHT
+	)
+	price_label.add_theme_color_override(
+		"font_color", UIThemeConstants.SEMANTIC_MONEY_GAIN
 	)
 	row.add_child(price_label)
 	return row

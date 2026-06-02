@@ -1,10 +1,32 @@
 extends GutTest
 
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
+const StoreVisualLayoutScript: GDScript = preload(
+	"res://game/scripts/visuals/store_visual_layout.gd"
+)
+const VisualValueUtilScript: GDScript = preload("res://game/scripts/visuals/visual_value_util.gd")
 const SUPPORT_TOLERANCE: float = 0.04
 const REGISTER_SCREEN_MIN_EMISSION: float = 1.2
 const CHECKOUT_SIGN_MAX_WIDTH: float = 1.6
 const CUSTOMER_CUE_MAX_AXIS: float = 0.72
+const QUEUE_PROP_PATHS: Array[String] = [
+	"FrontLaneQueue",
+	"FrontLaneQueue/LaneFixture",
+	"FrontLaneQueue/LaneFixture/OpenFloorGuide",
+	"FrontLaneQueue/LaneFixture/QueueMat01",
+	"FrontLaneQueue/LaneFixture/QueueMat02",
+	"FrontLaneQueue/LaneFixture/QueueMat03",
+	"FrontLaneQueue/LaneFixture/DirectionArrowShaft",
+	"FrontLaneQueue/LaneFixture/DirectionArrowHeadLeft",
+	"FrontLaneQueue/LaneFixture/DirectionArrowHeadRight",
+	"FrontLaneQueue/LaneFixture/LeftGuideRope",
+	"FrontLaneQueue/LaneFixture/RightGuideRope",
+	"FrontLaneQueue/LaneFixture/LeftGuideRopeBody",
+	"FrontLaneQueue/LaneFixture/RightGuideRopeBody",
+	"FrontLaneQueue/LaneFixture/BackLeftPost",
+	"FrontLaneQueue/LaneFixture/MiddleLeftPost",
+	"FrontLaneQueue/LaneFixture/RegisterLeftPost",
+]
 const CURATED_COUNTER_DRESSING_PATHS: Array[String] = [
 	"ReadabilityProps/CheckoutCounterDressing/ServicePolicyPlaque",
 	"ReadabilityProps/CheckoutCounterDressing/TradeCreditTicket",
@@ -121,6 +143,58 @@ func test_open_queue_lane_fixture_preserves_marker_capacity_alignment() -> void:
 			0.12,
 			"Queue mat %d must align with its queue marker" % (i + 1)
 		)
+
+
+func test_queue_lane_footprint_contains_authored_markers_and_visible_props() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var zones: Dictionary = catalog.call(
+		"get_named_zones", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
+	)
+	var queue_zone: Dictionary = zones.get("queue_lane", {}) as Dictionary
+	assert_false(queue_zone.is_empty(), "Queue lane zone must be declared")
+	if queue_zone.is_empty():
+		return
+	var store_bounds: Dictionary = (
+		(catalog.call(
+			"get_physical_contract", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
+		) as Dictionary).get("store_bounds", {}) as Dictionary
+	)
+	for index: int in range(RegisterQueue.MAX_QUEUE_SIZE):
+		var marker: Marker3D = _root.get_node_or_null("QueueMarker%d" % (index + 1))
+		assert_not_null(marker, "QueueMarker%d must exist" % (index + 1))
+		if marker == null:
+			continue
+		assert_true(marker.is_in_group("queue_markers"))
+		_assert_inside_xz(marker.global_position, queue_zone, marker.name)
+		_assert_inside_player_bounds(marker.global_position, store_bounds, marker.name)
+	for node_path: String in QUEUE_PROP_PATHS:
+		var prop: Node3D = _root.get_node_or_null(node_path) as Node3D
+		assert_not_null(prop, "Queue prop missing: %s" % node_path)
+		if prop == null:
+			continue
+		_assert_inside_xz(prop.global_position, queue_zone, node_path)
+		_assert_inside_player_bounds(prop.global_position, store_bounds, node_path)
+
+func test_queue_lane_fixture_uses_short_three_post_guide() -> void:
+	var lane: Node = _root.get_node_or_null("FrontLaneQueue/LaneFixture")
+	assert_not_null(lane, "Store must instance the reusable open queue lane fixture")
+	if lane == null:
+		return
+	assert_eq(
+		_count_named_descendants(lane, "Post"),
+		3,
+		"Queue lane must use three stanchion posts"
+	)
+	for removed_post: String in ["BackRightPost", "MiddleRightPost", "RegisterRightPost"]:
+		assert_null(
+			lane.get_node_or_null(removed_post),
+			"Queue lane must not restore the old six-post barricade"
+		)
+	for rope_body: String in ["LeftGuideRopeBody", "RightGuideRopeBody"]:
+		var body: StaticBody3D = lane.get_node_or_null(rope_body) as StaticBody3D
+		assert_not_null(body, "Queue rope body missing: %s" % rope_body)
+		if body != null:
+			assert_eq(body.collision_layer & 2, 2)
 
 
 func test_checkout_visual_composition_has_counter_register_printer_and_card_reader() -> void:
@@ -576,3 +650,36 @@ func _mesh_world_size(node: MeshInstance3D) -> Vector3:
 		var plane: PlaneMesh = node.mesh as PlaneMesh
 		return Vector3(plane.size.x * absf(scale.x), 0.0, plane.size.y * absf(scale.z))
 	return Vector3.ZERO
+
+
+func _count_named_descendants(root: Node, suffix: String) -> int:
+	var count: int = 0
+	for child: Node in root.get_children():
+		if String(child.name).ends_with(suffix):
+			count += 1
+		count += _count_named_descendants(child, suffix)
+	return count
+
+
+func _assert_inside_xz(position: Vector3, bounds: Dictionary, label: String) -> void:
+	var min_bound: Vector3 = VisualValueUtilScript.vector3_from_exact_array(
+		bounds.get("min", []), Vector3.ZERO
+	)
+	var max_bound: Vector3 = VisualValueUtilScript.vector3_from_exact_array(
+		bounds.get("max", []), Vector3.ZERO
+	)
+	assert_between(position.x, min_bound.x, max_bound.x, "%s X inside queue lane" % label)
+	assert_between(position.z, min_bound.z, max_bound.z, "%s Z inside queue lane" % label)
+
+
+func _assert_inside_player_bounds(
+	position: Vector3, store_bounds: Dictionary, label: String
+) -> void:
+	var min_bound: Vector3 = VisualValueUtilScript.vector3_from_exact_array(
+		store_bounds.get("player_bounds_min", []), Vector3.ZERO
+	)
+	var max_bound: Vector3 = VisualValueUtilScript.vector3_from_exact_array(
+		store_bounds.get("player_bounds_max", []), Vector3.ZERO
+	)
+	assert_between(position.x, min_bound.x, max_bound.x, "%s X inside player bounds" % label)
+	assert_between(position.z, min_bound.z, max_bound.z, "%s Z inside player bounds" % label)

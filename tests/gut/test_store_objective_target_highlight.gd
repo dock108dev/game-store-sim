@@ -29,6 +29,7 @@ func _make_store_root_with_stage(stage: StringName) -> Node3D:
 	var root: Node3D = Node3D.new()
 	add_child_autofree(root)
 	for child_name: String in [
+		"StoreSessionManager",
 		"StoreSessionDayOneCustomer",
 		"StoreSessionBackroomPickup",
 		"StoreSessionRestockShelf",
@@ -197,7 +198,7 @@ func test_training_stages_target_manager_register_backroom_and_shelf() -> void:
 	root.add_child(highlight)
 
 	var expected: Dictionary = {
-		&"training_talk_manager": "StoreSessionDayOneCustomer",
+		&"training_talk_manager": "StoreSessionManager",
 		&"training_check_register": "StoreSessionDayEndTrigger",
 		&"training_back_room_inventory": "StoreSessionBackroomPickup",
 		&"training_stock_shelf": "StoreSessionRestockShelf",
@@ -278,6 +279,7 @@ func test_objective_changed_signal_refreshes_target_via_group() -> void:
 	var root: Node3D = Node3D.new()
 	add_child_autofree(root)
 	for child_name: String in [
+		"StoreSessionManager",
 		"StoreSessionDayOneCustomer",
 		"StoreSessionBackroomPickup",
 		"StoreSessionRestockShelf",

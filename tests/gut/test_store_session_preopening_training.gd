@@ -52,7 +52,7 @@ func test_new_game_enters_preopening_training_before_day_one() -> void:
 		"training_talk_manager",
 		"New Game must start with the pre-opening manager beat, not real Day 1"
 	)
-	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
+	assert_eq(Array(_active_targets()), ["StoreSessionManager"])
 
 
 func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
@@ -60,15 +60,18 @@ func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
 	assert_not_null(controller)
 	if controller == null:
 		return
+	var manager: Interactable = _manager_interactable()
 	var customer: Interactable = _customer_interactable()
-	assert_not_null(customer, "Manager beat must use the reachable customer proxy")
-	if customer == null:
+	assert_not_null(manager, "Manager beat must use the reachable manager proxy")
+	assert_not_null(customer, "Customer proxy must remain authored for later customer flow")
+	if manager == null or customer == null:
 		return
 
-	assert_eq(customer.display_name, "Manager")
-	assert_eq(customer.prompt_text, "Talk to")
-	assert_eq(customer.action_verb, "Talk")
-	assert_eq(Array(_active_targets()), ["StoreSessionDayOneCustomer"])
+	assert_eq(manager.display_name, "Manager")
+	assert_eq(manager.prompt_text, "Talk to")
+	assert_eq(manager.action_verb, "Talk")
+	assert_false(customer.enabled, "Customer prompt must not own the manager beat")
+	assert_eq(Array(_active_targets()), ["StoreSessionManager"])
 
 	var snapshot: Dictionary = controller.get_state_snapshot()
 	assert_eq(str(snapshot.get("active_objective_id", "")), "talk_to_manager")
@@ -84,8 +87,8 @@ func test_manager_prompt_and_objective_identify_checkout_manager() -> void:
 		str(snapshot.get("active_objective_result_summary", "")),
 		MANAGER_COMPLETE_MESSAGE
 	)
-	assert_true(_proxy_part_visible("Badge"))
-	assert_true(_proxy_part_visible("Clipboard"))
+	assert_true(_manager_proxy_part_visible("Badge"))
+	assert_true(_manager_proxy_part_visible("Clipboard"))
 
 
 func test_training_walks_required_mechanics_then_opens_store() -> void:
@@ -94,7 +97,7 @@ func test_training_walks_required_mechanics_then_opens_store() -> void:
 		return
 	EventBus.toast_requested.connect(_on_toast_requested)
 	watch_signals(EventBus)
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -141,7 +144,7 @@ func test_training_register_check_ignores_stale_customer_checkout() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -185,27 +188,29 @@ func test_register_beat_clears_actor_prompt_and_keeps_one_register_owner() -> vo
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
 	assert_eq(String(controller.current_stage()), "training_check_register")
 
 	var customer: Interactable = _customer_interactable()
+	var manager: Interactable = _manager_interactable()
 	var register: Interactable = _day_end_trigger()
 	var visual_register: Interactable = _root.get_node_or_null("Checkout/Register") as Interactable
 	var checkout: RegisterInteractable = _checkout_interactable()
 	assert_not_null(customer, "Shared checkout actor prompt must exist")
+	assert_not_null(manager, "Manager prompt owner must exist")
 	assert_not_null(register, "Register beat prompt owner must exist")
 	assert_not_null(visual_register, "Visual register fixture must remain authored")
 	assert_not_null(checkout, "Generic checkout counter prompt owner must remain authored")
-	if customer == null or register == null or visual_register == null or checkout == null:
+	if customer == null or manager == null or register == null or visual_register == null or checkout == null:
 		return
 
 	assert_false(customer.enabled, "Actor talk prompt must not compete with the register beat")
 	assert_eq(customer.display_name, "")
 	assert_eq(customer.prompt_text, "")
-	assert_false(_any_manager_part_visible(), "Manager detail props must clear after manager beat")
+	assert_false(manager.enabled, "Manager prompt must not compete with register beat")
 	assert_eq(register.display_name, "Register")
 	assert_eq(register.prompt_text, "Check")
 	assert_eq(register.action_verb, "Check")
@@ -275,7 +280,7 @@ func test_role_prompt_copy_changes_between_training_and_customer_stages() -> voi
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -311,29 +316,40 @@ func test_role_prompt_copy_changes_between_training_and_customer_stages() -> voi
 	assert_false(_proxy_part_visible("Clipboard"))
 
 
-func test_shared_checkout_actor_keeps_position_when_role_changes() -> void:
+func test_manager_and_customer_checkout_positions_stay_split() -> void:
 	var controller: Node = _controller()
 	if controller == null:
 		return
-	var actor: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var manager: Node3D = _root.get_node_or_null("StoreSessionManager") as Node3D
+	var customer: Node3D = _root.get_node_or_null("StoreSessionDayOneCustomer") as Node3D
+	var manager_mat: MeshInstance3D = (
+		_root.get_node_or_null("Checkout/CheckoutManagerFloorMat") as MeshInstance3D
+	)
+	if manager_mat == null:
+		manager_mat = (
+			_root.get_node_or_null("ExpandableStoreShell/CheckoutManagerFloorMat") as MeshInstance3D
+		)
 	var service_mat: MeshInstance3D = (
 		_root.get_node_or_null("Checkout/StoreSessionCustomerFloorMat") as MeshInstance3D
 	)
-	var interactable: Interactable = _customer_interactable()
-	assert_not_null(actor, "Shared checkout actor must exist")
+	assert_not_null(manager, "Manager actor must exist")
+	assert_not_null(customer, "Customer actor must exist")
+	assert_not_null(manager_mat, "Manager-side floor mat must exist")
 	assert_not_null(service_mat, "Customer service floor mat must exist")
-	assert_not_null(interactable, "Shared checkout actor must keep its interactable")
-	if actor == null or service_mat == null or interactable == null:
+	if manager == null or customer == null or manager_mat == null or service_mat == null:
 		return
-	var checkout_position: Vector3 = actor.global_position
-	assert_eq(interactable.display_name, "Manager")
 	assert_lte(
-		_xz_distance(checkout_position, service_mat.global_position),
+		_xz_distance(manager.global_position, manager_mat.global_position),
 		0.08,
-		"Manager beat must stand at the visible checkout service stop"
+		"Manager beat must stand at the staff-side checkout spot"
+	)
+	assert_lte(
+		_xz_distance(customer.global_position, service_mat.global_position),
+		0.08,
+		"Customer actor must stay at the customer service stop"
 	)
 
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -349,11 +365,11 @@ func test_shared_checkout_actor_keeps_position_when_role_changes() -> void:
 	await get_tree().process_frame
 
 	assert_eq(String(controller.current_stage()), "talk_to_customer")
-	assert_eq(interactable.display_name, "customer")
+	assert_eq(_customer_interactable().display_name, "customer")
 	assert_lte(
-		_xz_distance(actor.global_position, checkout_position),
+		_xz_distance(customer.global_position, service_mat.global_position),
 		0.01,
-		"Customer role must reuse the checkout actor position after preopening"
+		"Customer actor must stay at the customer-side service stop after preopening"
 	)
 
 
@@ -364,7 +380,7 @@ func test_manager_completion_feedback_is_short() -> void:
 	EventBus.objective_completed.connect(_on_objective_completed)
 	EventBus.toast_requested.connect(_on_toast_requested)
 
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -384,7 +400,7 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 		return
 	watch_signals(EventBus)
 
-	controller.on_store_customer_interacted()
+	controller.on_store_manager_interacted()
 	await get_tree().process_frame
 	StoreSessionTestHelpers.assert_acknowledge_first_minute_detail(self, controller)
 	await get_tree().process_frame
@@ -414,8 +430,8 @@ func test_stocking_training_shelf_transitions_to_real_day_one_customer() -> void
 
 
 func test_manager_proxy_uses_shaped_readable_silhouette() -> void:
-	var proxy: Node = _root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
-	assert_not_null(proxy, "Training manager/customer proxy must exist")
+	var proxy: Node = _root.get_node_or_null("StoreSessionManager/ManagerProxy")
+	assert_not_null(proxy, "Training manager proxy must exist")
 	if proxy == null:
 		return
 	var body: MeshInstance3D = proxy.get_node_or_null("Body") as MeshInstance3D
@@ -439,8 +455,8 @@ func test_manager_proxy_uses_shaped_readable_silhouette() -> void:
 
 
 func test_manager_proxy_has_clerk_detail_props() -> void:
-	var proxy: Node = _root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy")
-	assert_not_null(proxy, "Training manager/customer proxy must exist")
+	var proxy: Node = _root.get_node_or_null("StoreSessionManager/ManagerProxy")
+	assert_not_null(proxy, "Training manager proxy must exist")
 	if proxy == null:
 		return
 	for part_name: String in ["Badge", "Clipboard"]:
@@ -464,6 +480,16 @@ func _customer_interactable() -> Interactable:
 	return store_root.get_node_or_null("StoreSessionDayOneCustomer/Interactable") as Interactable
 
 
+func _manager_interactable() -> Interactable:
+	var controller: Node = _controller()
+	var store_root: Node = _root
+	if controller != null and controller.get_parent() != null:
+		store_root = controller.get_parent()
+	if store_root == null:
+		return null
+	return store_root.get_node_or_null("StoreSessionManager/Interactable") as Interactable
+
+
 func _proxy_part_visible(part_name: String) -> bool:
 	var part: Node3D = (
 		_root.get_node_or_null("StoreSessionDayOneCustomer/CustomerProxy/%s" % part_name) as Node3D
@@ -471,9 +497,16 @@ func _proxy_part_visible(part_name: String) -> bool:
 	return part != null and part.visible
 
 
+func _manager_proxy_part_visible(part_name: String) -> bool:
+	var part: Node3D = (
+		_root.get_node_or_null("StoreSessionManager/ManagerProxy/%s" % part_name) as Node3D
+	)
+	return part != null and part.visible
+
+
 func _any_manager_part_visible() -> bool:
 	for part_name: String in ["Badge", "NameTag", "Lanyard", "Clipboard"]:
-		if _proxy_part_visible(part_name):
+		if _manager_proxy_part_visible(part_name):
 			return true
 	return false
 
@@ -577,6 +610,7 @@ func _active_targets() -> PackedStringArray:
 		store_root = controller.get_parent()
 	for node_name: String in [
 		"StoreSessionDayOneCustomer",
+		"StoreSessionManager",
 		"StoreSessionBackroomPickup",
 		"StoreSessionRestockShelf",
 		"StoreSessionDayEndTrigger",

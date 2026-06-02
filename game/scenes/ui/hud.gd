@@ -2,6 +2,8 @@
 ## In-game HUD — persistent top bar with cash, day/time, speed, and reputation.
 extends CanvasLayer
 
+const WorkSurfaceLayout = preload("res://game/scripts/ui/work_surface_layout.gd")
+
 const _PHASE_KEYS: Dictionary = {
 	TimeSystem.DayPhase.PRE_OPEN: "HUD_PHASE_PRE_OPEN",
 	TimeSystem.DayPhase.MORNING_RAMP: "HUD_PHASE_MORNING",
@@ -143,15 +145,14 @@ var _counter_color_tweens: Dictionary = {}
 # `FPCashLabel` / `FPTimeLabel` nodes anchored top-left/top-center (authored in
 # `hud.tscn`) carry the primary cash/time readout. `StoreStatusPanel` owns the
 # secondary stat block (on-shelves, back-room, customers, sold-today). A
-# bottom-right F4 key-hint label exposes the close-day affordance without
+# compact F4 key-hint label exposes the close-day affordance without
 # the TopBar button.
 var _fp_mode: bool = false
 var _fp_close_day_hint: Label
 ## FP-mode bottom-bar sentence slot. The scene-tree `_zero_state_hint` lives
 ## at top-center where it would crowd the reparented `_time_label`; in FP
 ## mode that hint is hidden and its copy is mirrored to this label at
-## bottom-center, pairing with `_fp_close_day_hint` on the same row to
-## fulfill the BRAINDUMP "bottom-bar = sentence + control hint" spec.
+## bottom-center while the close-day affordance uses a compact top-right slot.
 var _fp_sentence_label: Label
 var _fp_objective_sentence: String = ""
 ## §F-L3 — When set, overrides the InventorySystem-derived "On Shelves"
@@ -1406,7 +1407,7 @@ func _pulse_counter(label: Label, positive: bool) -> void:
 ## `FPCashLabel` / `FPTimeLabel` nodes (authored in `hud.tscn`, always
 ## visible top-right) carry the primary readouts and `StoreStatusPanel` owns
 ## the secondary stat cluster. The close-day affordance moves to a
-## bottom-right `F4 — Close Day` hint label. No node reparenting occurs.
+## compact `F4 — Close Day` hint label. No node reparenting occurs.
 ##
 ## Call from `StorePlayerBody._ready` after the body spawns so the HUD
 ## shifts into FP layout the moment the player camera is current.
@@ -1437,16 +1438,10 @@ func _exit_fp_mode() -> void:
 	_top_bar.show()
 
 
-## The FP close-day hint is the sole bottom-right "controls block" allowed by
-## the BRAINDUMP layout spec. The ObjectiveRail (autoload CanvasLayer at layer
-## 40, content strip y ∈ [H−68, H]) carries the per-step input affordance for
-## every other action — including "Press I to open the inventory panel" on
-## Day 1 — so an always-on Inventory hint here would duplicate the rail's
-## key chip. The hint's bottom edge sits at −72 to leave a 4 px gap above
-## the rail's 68 px footprint, and the right-cluster x range (W−200..W−8)
-## stays clear of the centered InteractionPrompt (W/2 ± 120) at 1280 px wide
-## and above. Close-day stays here because no rail step on days other than
-## Day 1's terminal step references F4.
+## The FP close-day hint is the only persistent controls chip outside the
+## ObjectiveRail. It sits in the top-right HUD reservation so it cannot cover
+## the lower shelf/register prompt lanes owned by ObjectiveRail,
+## InteractionPrompt, CarryHUD, and the single-sentence bottom readout.
 func _ensure_fp_close_day_hint() -> void:
 	if is_instance_valid(_fp_close_day_hint):
 		return
@@ -1456,26 +1451,30 @@ func _ensure_fp_close_day_hint() -> void:
 	_fp_close_day_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_fp_close_day_hint.anchor_left = 1.0
 	_fp_close_day_hint.anchor_right = 1.0
-	_fp_close_day_hint.anchor_top = 1.0
-	_fp_close_day_hint.anchor_bottom = 1.0
-	_fp_close_day_hint.offset_left = -200.0
-	_fp_close_day_hint.offset_top = -104.0
-	_fp_close_day_hint.offset_right = -8.0
-	_fp_close_day_hint.offset_bottom = -72.0
+	_fp_close_day_hint.anchor_top = 0.0
+	_fp_close_day_hint.anchor_bottom = 0.0
+	_fp_close_day_hint.offset_left = WorkSurfaceLayout.FP_CLOSE_DAY_RECT.position.x
+	_fp_close_day_hint.offset_top = WorkSurfaceLayout.FP_CLOSE_DAY_RECT.position.y
+	_fp_close_day_hint.offset_right = (
+		WorkSurfaceLayout.FP_CLOSE_DAY_RECT.position.x
+		+ WorkSurfaceLayout.FP_CLOSE_DAY_RECT.size.x
+	)
+	_fp_close_day_hint.offset_bottom = (
+		WorkSurfaceLayout.FP_CLOSE_DAY_RECT.position.y
+		+ WorkSurfaceLayout.FP_CLOSE_DAY_RECT.size.y
+	)
 	# clip_text guards against narrow viewports or future longer localized
 	# strings pushing the right edge off-screen past the W−8 anchor.
 	_fp_close_day_hint.clip_text = true
 	add_child(_fp_close_day_hint)
 
 
-## The FP bottom-bar sentence: pairs with `_fp_close_day_hint` on the same
-## bottom row to satisfy the BRAINDUMP `bottom-bar = sentence + control hint`
-## spec. Sits above the ObjectiveRail's AccentBand (top edge at y=-148) so
-## it does not collide with the rail content on layer 40. Center-anchored
-## with symmetric grow direction so a long localized hint stays within the
-## viewport on ultrawide aspect ratios. Modulate at 0.85 alpha keeps the
-## sentence subdued vs. primary cash/time (full white) but readable over
-## the store's brightest and darkest background zones.
+## The FP bottom-bar sentence sits above the ObjectiveRail's AccentBand (top
+## edge at y=-148) so it does not collide with rail content on layer 40.
+## Center-anchored with symmetric grow direction so a long localized hint
+## stays within the viewport on ultrawide aspect ratios. Modulate at 0.85
+## alpha keeps the sentence subdued vs. primary cash/time but readable over
+## bright and dark store background zones.
 func _ensure_fp_sentence_label() -> void:
 	if is_instance_valid(_fp_sentence_label):
 		return
@@ -1486,10 +1485,16 @@ func _ensure_fp_sentence_label() -> void:
 	_fp_sentence_label.anchor_right = 0.5
 	_fp_sentence_label.anchor_top = 1.0
 	_fp_sentence_label.anchor_bottom = 1.0
-	_fp_sentence_label.offset_left = -250.0
-	_fp_sentence_label.offset_top = -184.0
-	_fp_sentence_label.offset_right = 250.0
-	_fp_sentence_label.offset_bottom = -156.0
+	_fp_sentence_label.offset_left = WorkSurfaceLayout.FP_SENTENCE_RECT.position.x
+	_fp_sentence_label.offset_top = WorkSurfaceLayout.FP_SENTENCE_RECT.position.y
+	_fp_sentence_label.offset_right = (
+		WorkSurfaceLayout.FP_SENTENCE_RECT.position.x
+		+ WorkSurfaceLayout.FP_SENTENCE_RECT.size.x
+	)
+	_fp_sentence_label.offset_bottom = (
+		WorkSurfaceLayout.FP_SENTENCE_RECT.position.y
+		+ WorkSurfaceLayout.FP_SENTENCE_RECT.size.y
+	)
 	_fp_sentence_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_fp_sentence_label.modulate = Color(1.0, 1.0, 1.0, 0.85)
 	_fp_sentence_label.clip_text = true

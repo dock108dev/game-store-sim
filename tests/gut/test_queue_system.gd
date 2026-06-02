@@ -44,6 +44,32 @@ func test_enqueue_places_customer_at_back() -> void:
 	)
 
 
+func test_authored_slot_zero_is_service_position_not_wait_slot() -> void:
+	var service_slot: Vector3 = Vector3(4.85, 0.0, 7.25)
+	var first_wait_slot: Vector3 = Vector3(3.90, 0.0, 7.50)
+	_queue.set_authored_positions([
+		service_slot,
+		first_wait_slot,
+		Vector3(2.95, 0.0, 7.75),
+	])
+	var c1: Customer = _make_customer()
+	var c2: Customer = _make_customer()
+	_queue.try_add(c1)
+	_queue.try_add(c2)
+	assert_eq(
+		c2.current_state,
+		Customer.State.WAITING_IN_QUEUE,
+		"Second customer must use the first waiting slot"
+	)
+	assert_eq(c2._fallback_target, first_wait_slot)
+	_queue.advance()
+	assert_eq(
+		c2.current_state,
+		Customer.State.PURCHASING,
+		"Promoted head customer must use active service semantics"
+	)
+
+
 # --- Dequeue / FIFO ---
 
 

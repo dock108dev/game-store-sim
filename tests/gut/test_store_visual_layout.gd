@@ -117,6 +117,158 @@ func test_starter_fixture_layout_matches_generated_shell_anchor_contract() -> vo
 	assert_eq(checkout_counter.get("rotation_degrees"), [0.0, 0.0, 0.0])
 
 
+func test_starter_layout_preserves_physical_contract_metadata() -> void:
+	var contract: Dictionary = _starter_physical_contract()
+	assert_eq(int(contract.get("schema_version", 0)), 1)
+	assert_eq(str(contract.get("coordinate_space", "")), "godot_world_xz")
+	assert_eq(str(contract.get("units", "")), "meters")
+
+	var store_bounds: Dictionary = contract.get("store_bounds", {}) as Dictionary
+	assert_eq(store_bounds.get("min"), [-8.0, 0.0, -10.0])
+	assert_eq(store_bounds.get("max"), [8.0, 3.5, 10.0])
+	assert_eq(store_bounds.get("player_bounds_min"), [-7.45, 0.0, -9.35])
+	assert_eq(store_bounds.get("player_bounds_max"), [7.45, 0.0, 9.05])
+
+	var facings: Dictionary = contract.get("facing_directions", {}) as Dictionary
+	for direction: String in ["north", "south", "east", "west"]:
+		assert_true(facings.has(direction), "%s must be a canonical facing" % direction)
+		var facing: Dictionary = facings.get(direction, {}) as Dictionary
+		assert_eq((facing.get("vector", []) as Array).size(), 3)
+		assert_true(facing.has("yaw_degrees"))
+
+
+func test_starter_physical_contract_declares_required_day_one_zones() -> void:
+	var contract: Dictionary = _starter_physical_contract()
+	var zone_ids: PackedStringArray = _zone_ids(contract)
+	var required_zones := PackedStringArray(
+		[
+			"sales_floor",
+			"checkout",
+			"queue_lane",
+			"stockroom",
+			"starter_display",
+			"entrance",
+			"customer_route_core",
+			"staff_route_core",
+			"reserved_navigation_player_bounds",
+		]
+	)
+	for zone_id: String in required_zones:
+		assert_true(zone_ids.has(zone_id), "%s zone must be declared" % zone_id)
+
+	for raw_zone: Variant in contract.get("zones", []):
+		assert_true(raw_zone is Dictionary)
+		var zone: Dictionary = raw_zone as Dictionary
+		assert_false(str(zone.get("zone_id", "")).is_empty())
+		assert_false(str(zone.get("shape", "")).is_empty())
+		if zone.get("shape") == "box":
+			assert_eq((zone.get("position", []) as Array).size(), 3)
+			assert_eq((zone.get("size", []) as Array).size(), 3)
+			assert_eq((zone.get("min", []) as Array).size(), 3)
+			assert_eq((zone.get("max", []) as Array).size(), 3)
+
+
+func test_starter_physical_contract_covers_day_one_object_families() -> void:
+	var contract: Dictionary = _starter_physical_contract()
+	var roles: PackedStringArray = _contract_roles(contract)
+	var required_roles := PackedStringArray(
+		[
+			"checkout_station",
+			"manager_staff_spot",
+			"queue_marker",
+			"queue_prop",
+			"stockroom_wall",
+			"stockroom_doorway",
+			"stockroom_contents",
+			"starter_display",
+			"product_display",
+			"route_corridor",
+			"sightline",
+		]
+	)
+	for role: String in required_roles:
+		assert_true(roles.has(role), "%s must have a placement contract" % role)
+
+	var checkout: Dictionary = _contract_for_object(contract, "starter_checkout_counter")
+	var service_point_ids: PackedStringArray = _service_point_ids(checkout)
+	assert_true(service_point_ids.has("checkout_customer_spot"))
+	assert_true(service_point_ids.has("checkout_staff_spot"))
+
+	var no_overlap: Array = contract.get("no_overlap", [])
+	var clearance_rules: Array = contract.get("clearance_rules", [])
+	assert_gte(no_overlap.size(), 3)
+	assert_gte(clearance_rules.size(), 3)
+
+
+func test_starter_physical_placement_contracts_are_answerable() -> void:
+	var contract: Dictionary = _starter_physical_contract()
+	for raw_contract: Variant in contract.get("placement_contracts", []):
+		assert_true(raw_contract is Dictionary)
+		var entry: Dictionary = raw_contract as Dictionary
+		var object_id: String = str(entry.get("object_id", ""))
+		assert_false(object_id.is_empty())
+		assert_false((entry.get("selector", {}) as Dictionary).is_empty(), object_id)
+		assert_false(str(entry.get("zone_id", "")).is_empty(), object_id)
+		assert_false(str(entry.get("physical_role", "")).is_empty(), object_id)
+		assert_true(
+			entry.has("position") or entry.has("positions") or entry.has("position_source"),
+			"%s must declare where it is or how to read placement position" % object_id
+		)
+
+		var footprint: Dictionary = entry.get("footprint", {}) as Dictionary
+		assert_false(footprint.is_empty(), "%s must declare a footprint" % object_id)
+		assert_true(
+			footprint.has("size") or footprint.has("corridor_width"),
+			"%s must declare footprint size" % object_id
+		)
+		assert_false((entry.get("facing", {}) as Dictionary).is_empty(), object_id)
+		assert_false((entry.get("clearance", {}) as Dictionary).is_empty(), object_id)
+
+		var constraints: Dictionary = entry.get("constraints", {}) as Dictionary
+		assert_false(constraints.is_empty(), "%s must declare constraints" % object_id)
+		assert_true(
+			constraints.has("must_not_overlap_roles")
+			or constraints.has("may_overlap_roles")
+			or constraints.has("ignore_no_overlap_with_parent")
+			or constraints.has("must_remain_open"),
+			"%s must declare no-overlap behavior" % object_id
+		)
+
+
+func test_starter_placements_declare_physical_fields_and_contract_coverage() -> void:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var zones: Dictionary = catalog.call(
+		"get_named_zones", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
+	)
+	var placements: Array[Dictionary] = catalog.call(
+		"get_placements", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
+	)
+	for placement: Dictionary in placements:
+		var placement_id: String = _placement_id(placement)
+		var zone_id: String = str(placement.get("zone", ""))
+		assert_false(zone_id.is_empty(), "%s missing field: zone" % placement_id)
+		assert_true(zones.has(zone_id), "%s references unknown zone %s" % [placement_id, zone_id])
+		assert_eq(
+			(placement.get("position", []) as Array).size(),
+			3,
+			"%s missing field: position" % placement_id
+		)
+		assert_eq(
+			(placement.get("rotation_degrees", []) as Array).size(),
+			3,
+			"%s missing field: rotation_degrees" % placement_id
+		)
+		var matches: Array[Dictionary] = catalog.call(
+			"get_matching_placement_contracts",
+			StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT,
+			placement,
+		)
+		assert_true(
+			matches.size() > 0 or bool(placement.get("physical_contract_exempt", false)),
+			"%s missing contract: no matching placement_contract" % placement_id
+		)
+
+
 func test_starter_checkout_layout_declares_named_device_pieces() -> void:
 	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
 	for component: Dictionary in StoreVisualKitScript.starter_checkout_station_components():
@@ -184,6 +336,7 @@ func test_unlock_gated_layout_entries_apply_only_when_unlock_is_active() -> void
 		StringName(str(unlocked[0].get("visual_id", ""))),
 		StoreVisualKitScript.QUEUE_LANE
 	)
+	assert_eq(str(unlocked[0].get("zone", "")), "growth_queue_endcap")
 
 
 func _read_text(path: String) -> String:
@@ -194,3 +347,56 @@ func _read_text(path: String) -> String:
 	var text: String = file.get_as_text()
 	file.close()
 	return text
+
+
+func _starter_physical_contract() -> Dictionary:
+	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
+	var layout: Dictionary = catalog.call(
+		"get_layout", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT
+	)
+	assert_false(layout.is_empty(), "Starter layout must load")
+	var contract: Dictionary = layout.get("physical_contract", {}) as Dictionary
+	assert_false(contract.is_empty(), "Starter layout must preserve physical contract data")
+	return contract
+
+
+func _zone_ids(contract: Dictionary) -> PackedStringArray:
+	var ids: PackedStringArray = []
+	for raw_zone: Variant in contract.get("zones", []):
+		if raw_zone is Dictionary:
+			ids.append(str((raw_zone as Dictionary).get("zone_id", "")))
+	return ids
+
+
+func _contract_roles(contract: Dictionary) -> PackedStringArray:
+	var roles: PackedStringArray = []
+	for raw_contract: Variant in contract.get("placement_contracts", []):
+		if raw_contract is Dictionary:
+			roles.append(str((raw_contract as Dictionary).get("physical_role", "")))
+	return roles
+
+
+func _contract_for_object(contract: Dictionary, object_id: String) -> Dictionary:
+	for raw_contract: Variant in contract.get("placement_contracts", []):
+		if (
+			raw_contract is Dictionary
+			and str((raw_contract as Dictionary).get("object_id", "")) == object_id
+		):
+			return raw_contract as Dictionary
+	return {}
+
+
+func _service_point_ids(contract: Dictionary) -> PackedStringArray:
+	var ids: PackedStringArray = []
+	for raw_point: Variant in contract.get("service_points", []):
+		if raw_point is Dictionary:
+			ids.append(str((raw_point as Dictionary).get("point_id", "")))
+	return ids
+
+
+func _placement_id(placement: Dictionary) -> String:
+	for key: String in ["fixture_id", "product_item_id", "name"]:
+		var value: String = str(placement.get(key, ""))
+		if not value.is_empty():
+			return value
+	return "<unnamed>"

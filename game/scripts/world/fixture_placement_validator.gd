@@ -2,6 +2,8 @@
 class_name FixturePlacementValidator
 extends RefCounted
 
+const PlacementPreviewFeedbackScript = preload("res://game/resources/placement_preview_feedback.gd")
+
 enum CellState { EMPTY, OCCUPIED, WALL, ENTRY_ZONE }
 
 const MIN_AISLE_GAP: int = 2
@@ -43,53 +45,83 @@ func get_cell_state(
 
 
 ## Full validation returning a PlacementResult.
-# gdlint:disable=max-returns
 func validate_placement(
 	cells: Array[Vector2i],
 	occupied_cells: Dictionary,
 	register_cells: Array[Vector2i],
 	fixture_count: int,
-	requires_wall: bool
+	requires_wall: bool,
+	facing_direction: Vector2i = Vector2i.ZERO
 ) -> PlacementResult:
-	for cell: Vector2i in cells:
-		if not _is_in_bounds(cell):
-			return PlacementResult.failure(
-				"out_of_bounds", [cell]
-			)
+	return get_placement_feedback(
+		cells,
+		occupied_cells,
+		register_cells,
+		fixture_count,
+		requires_wall,
+		facing_direction
+	).to_result()
 
-	var entry_blocked: Array[Vector2i] = _get_entry_zone_conflicts(cells)
-	if not entry_blocked.is_empty():
-		return PlacementResult.failure(
-			"entry_zone_blocked", entry_blocked
-		)
+
+## Returns complete placement feedback for preview and commit validation.
+func get_placement_feedback(
+	cells: Array[Vector2i],
+	occupied_cells: Dictionary,
+	register_cells: Array[Vector2i],
+	fixture_count: int,
+	requires_wall: bool,
+	facing_direction: Vector2i = Vector2i.ZERO
+):
+	var feedback = PlacementPreviewFeedbackScript.new()
+	feedback.footprint_cells = cells.duplicate()
+	feedback.facing_direction = facing_direction
+	feedback.front_edge_cells = _get_front_edge_cells(cells, facing_direction)
+	feedback.wall_candidate_cells = _get_wall_candidate_cells(cells)
+
+	feedback.out_of_bounds_cells = _get_out_of_bounds_cells(cells)
+	if not feedback.out_of_bounds_cells.is_empty():
+		feedback.add_reason("out_of_bounds", feedback.out_of_bounds_cells)
+
+	feedback.collision_cells = _get_collision_cells(cells, occupied_cells)
+	if not feedback.collision_cells.is_empty():
+		feedback.add_reason("occupied_collision", feedback.collision_cells)
+
+	feedback.entry_zone_cells = _get_entry_zone_conflicts(cells)
+	if not feedback.entry_zone_cells.is_empty():
+		feedback.add_reason("entry_zone_blocked", feedback.entry_zone_cells)
 
 	var max_allowed: int = MAX_FIXTURES.get(_store_size, 6)
 	if fixture_count >= max_allowed:
-		return PlacementResult.failure("max_fixtures_reached", cells)
+		feedback.add_reason("max_fixtures_reached", cells)
 
-	if requires_wall and not _is_against_wall(cells):
-		return PlacementResult.failure("wall_required", cells)
+	if requires_wall:
+		if feedback.wall_candidate_cells.is_empty():
+			feedback.add_reason("wall_required", cells)
+		elif not _wall_mount_faces_aisle(cells, facing_direction):
+			feedback.add_reason("wrong_facing", feedback.front_edge_cells)
 
-	var narrow_cells: Array[Vector2i] = _get_narrow_aisle_cells(
-		cells, occupied_cells
+	var aisle_conflicts: Dictionary = _get_aisle_conflicts(cells, occupied_cells)
+	var narrow_cells: Array[Vector2i] = _typed_cells(
+		aisle_conflicts.get("invalid_cells", [])
+	)
+	feedback.nearby_blocker_cells = _typed_cells(
+		aisle_conflicts.get("blocker_cells", [])
 	)
 	if not narrow_cells.is_empty():
-		return PlacementResult.failure(
-			"aisle_too_narrow", narrow_cells
-		)
+		feedback.add_reason("aisle_too_narrow", narrow_cells)
 
-	var test_occupied: Dictionary = occupied_cells.duplicate()
-	for cell: Vector2i in cells:
-		test_occupied[cell] = "pending"
+	if _can_check_connectivity(feedback):
+		var test_occupied: Dictionary = occupied_cells.duplicate()
+		for cell: Vector2i in cells:
+			test_occupied[cell] = "pending"
+		if not _is_layout_connected(test_occupied, register_cells):
+			feedback.add_reason("not_reachable", cells)
 
-	if not _is_layout_connected(test_occupied, register_cells):
-		return PlacementResult.failure("not_reachable", cells)
-
-	return PlacementResult.success()
+	feedback.finalize()
+	return feedback
 
 
 ## Returns true if the fixture cells avoid the entry zone.
-# gdlint:enable=max-returns
 func is_outside_entry_zone(cells: Array[Vector2i]) -> bool:
 	for cell: Vector2i in cells:
 		if _is_in_entry_zone(cell):
@@ -144,27 +176,123 @@ func _get_entry_zone_conflicts(
 	return conflicts
 
 
+func _get_out_of_bounds_cells(cells: Array[Vector2i]) -> Array[Vector2i]:
+	var conflicts: Array[Vector2i] = []
+	for cell: Vector2i in cells:
+		if not _is_in_bounds(cell):
+			conflicts.append(cell)
+	return conflicts
+
+
+func _get_collision_cells(
+	new_cells: Array[Vector2i], occupied_cells: Dictionary
+) -> Array[Vector2i]:
+	var collisions: Array[Vector2i] = []
+	for cell: Vector2i in new_cells:
+		if occupied_cells.has(cell):
+			collisions.append(cell)
+	return collisions
+
+
 func _get_narrow_aisle_cells(
 	new_cells: Array[Vector2i],
 	occupied_cells: Dictionary
 ) -> Array[Vector2i]:
-	var narrow: Array[Vector2i] = []
+	return _typed_cells(
+		_get_aisle_conflicts(new_cells, occupied_cells).get("invalid_cells", [])
+	)
+
+
+func _get_aisle_conflicts(
+	new_cells: Array[Vector2i], occupied_cells: Dictionary
+) -> Dictionary:
+	var invalid_cells: Array[Vector2i] = []
+	var blocker_cells: Array[Vector2i] = []
 	for new_cell: Vector2i in new_cells:
 		for occ_key: Variant in occupied_cells:
 			var occ_cell: Vector2i = occ_key as Vector2i
 			var dx: int = absi(new_cell.x - occ_cell.x)
 			var dy: int = absi(new_cell.y - occ_cell.y)
 			if dx == 0 and dy == 0:
-				if new_cell not in narrow:
-					narrow.append(new_cell)
 				continue
 			if dx == 0 and dy > 0 and dy <= MIN_AISLE_GAP:
-				if new_cell not in narrow:
-					narrow.append(new_cell)
+				_add_aisle_conflict(invalid_cells, blocker_cells, new_cell, occ_cell)
 			elif dy == 0 and dx > 0 and dx <= MIN_AISLE_GAP:
-				if new_cell not in narrow:
-					narrow.append(new_cell)
-	return narrow
+				_add_aisle_conflict(invalid_cells, blocker_cells, new_cell, occ_cell)
+	return {"invalid_cells": invalid_cells, "blocker_cells": blocker_cells}
+
+
+func _add_aisle_conflict(
+	invalid_cells: Array[Vector2i],
+	blocker_cells: Array[Vector2i],
+	new_cell: Vector2i,
+	occ_cell: Vector2i
+) -> void:
+	if new_cell not in invalid_cells:
+		invalid_cells.append(new_cell)
+	if occ_cell not in blocker_cells:
+		blocker_cells.append(occ_cell)
+
+
+func _get_wall_candidate_cells(cells: Array[Vector2i]) -> Array[Vector2i]:
+	var candidates: Array[Vector2i] = []
+	for cell: Vector2i in cells:
+		if (
+			cell.x == 0
+			or cell.x == _grid_size.x - 1
+			or cell.y == 0
+			or cell.y == _grid_size.y - 1
+		):
+			candidates.append(cell)
+	return candidates
+
+
+func _get_front_edge_cells(
+	cells: Array[Vector2i], facing_direction: Vector2i
+) -> Array[Vector2i]:
+	if cells.is_empty() or facing_direction == Vector2i.ZERO:
+		return []
+	var max_projection: int = -2147483648
+	for cell: Vector2i in cells:
+		max_projection = maxi(max_projection, _project(cell, facing_direction))
+	var front: Array[Vector2i] = []
+	for cell: Vector2i in cells:
+		if _project(cell, facing_direction) == max_projection:
+			front.append(cell)
+	return front
+
+
+func _wall_mount_faces_aisle(
+	cells: Array[Vector2i], facing_direction: Vector2i
+) -> bool:
+	if facing_direction == Vector2i.ZERO:
+		return true
+	var back_direction: Vector2i = -facing_direction
+	for cell: Vector2i in cells:
+		var behind: Vector2i = cell + back_direction
+		if not _is_in_bounds(behind):
+			return true
+	return false
+
+
+func _project(cell: Vector2i, direction: Vector2i) -> int:
+	return cell.x * direction.x + cell.y * direction.y
+
+
+func _can_check_connectivity(feedback) -> bool:
+	return (
+		feedback.out_of_bounds_cells.is_empty()
+		and feedback.collision_cells.is_empty()
+		and feedback.entry_zone_cells.is_empty()
+	)
+
+
+func _typed_cells(value: Variant) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	if value is Array:
+		for cell: Variant in value:
+			cells.append(cell as Vector2i)
+	return cells
 
 
 func _is_layout_connected(

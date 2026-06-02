@@ -6,11 +6,12 @@
 class_name DaySummaryContent
 extends Object
 
-const NET_PROFIT_POSITIVE_COLOR := Color(0.2, 0.8, 0.2)
-const NET_PROFIT_NEGATIVE_COLOR := Color(0.9, 0.2, 0.2)
-const NET_PROFIT_ZERO_COLOR := Color(1.0, 1.0, 1.0)
-const REVENUE_DELTA_POSITIVE_COLOR := Color(0.35, 0.85, 0.35)
-const REVENUE_DELTA_NEGATIVE_COLOR := Color(0.9, 0.45, 0.45)
+const DecisionPanelStyle = preload("res://game/scripts/ui/decision_panel_style.gd")
+const NET_PROFIT_POSITIVE_COLOR := UIThemeConstants.SEMANTIC_MONEY_GAIN
+const NET_PROFIT_NEGATIVE_COLOR := UIThemeConstants.SEMANTIC_MONEY_COST
+const NET_PROFIT_ZERO_COLOR := UIThemeConstants.DARK_PANEL_TEXT
+const REVENUE_DELTA_POSITIVE_COLOR := UIThemeConstants.SEMANTIC_MONEY_GAIN
+const REVENUE_DELTA_NEGATIVE_COLOR := UIThemeConstants.SEMANTIC_MONEY_COST
 
 
 static func apply_revenue_headline(
@@ -46,17 +47,17 @@ static func set_net_profit(
 	if net_profit > 0.0:
 		profit_label.text = "NET PROFIT: +$%.2f" % net_profit
 		profit_label.add_theme_color_override(
-			"font_color", UIThemeConstants.get_positive_color()
+			"font_color", DecisionPanelStyle.money_delta_color(net_profit)
 		)
 	elif net_profit < 0.0:
 		profit_label.text = "NET LOSS: -$%.2f" % absf(net_profit)
 		profit_label.add_theme_color_override(
-			"font_color", NET_PROFIT_NEGATIVE_COLOR
+			"font_color", DecisionPanelStyle.money_delta_color(net_profit)
 		)
 	else:
 		profit_label.text = "NET PROFIT: $0.00"
 		profit_label.add_theme_color_override(
-			"font_color", NET_PROFIT_ZERO_COLOR
+			"font_color", DecisionPanelStyle.money_delta_color(net_profit)
 		)
 
 

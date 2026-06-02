@@ -211,6 +211,26 @@ func test_confirm_selected_fixture_emits_invalid_reason_for_rejected_cells() -> 
 	EventBus.fixture_placement_invalid.disconnect(handler)
 
 
+func test_cancel_current_action_escapes_submodes_without_mutation() -> void:
+	_system.initialize(null, BuildModeGrid.StoreSize.SMALL, Vector3.ZERO)
+	var placement: FixturePlacementSystem = _create_placement_system()
+	_system.set_placement_system(placement)
+	_system.enter_build_mode()
+
+	_system.select_fixture_for_placement("floor_rack")
+	assert_true(_system.cancel_current_action())
+	assert_eq(_system.get_state(), BuildModeSystem.State.IDLE)
+	assert_eq(placement.get_selected_fixture_type(), "")
+
+	placement.register_existing_fixture(
+		"selected_fixture", "floor_rack", Vector2i(5, 5), 0, false, 50.0
+	)
+	_system.current_state = BuildModeSystem.State.SELECTED
+	assert_true(_system.cancel_current_action())
+	assert_eq(_system.get_state(), BuildModeSystem.State.IDLE)
+	assert_eq(placement.get_fixture_at(Vector2i(5, 5)), "selected_fixture")
+
+
 func test_exit_build_mode_without_register_emits_no_register() -> void:
 	_system.initialize(null, BuildModeGrid.StoreSize.SMALL, Vector3.ZERO)
 	var placement: FixturePlacementSystem = _create_placement_system()

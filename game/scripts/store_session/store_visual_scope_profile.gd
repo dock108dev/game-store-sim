@@ -124,6 +124,7 @@ const KEEP_ROOT_NODES: Array[StringName] = [
 	&"checkout_counter",
 	&"FrontLaneQueue",
 	&"StoreSessionController",
+	&"StoreSessionManager",
 	&"StoreSessionDayOneCustomer",
 	&"StoreSessionBackroomPickup",
 	&"StoreSessionRestockShelf",

@@ -153,6 +153,24 @@ func deselect_fixture() -> void:
 	_update_visual_feedback()
 
 
+## Cancels the current build submode without placing, selling, or spending cash.
+func cancel_current_action() -> bool:
+	match current_state:
+		State.PLACEMENT, State.ROTATING:
+			deselect_fixture()
+			return true
+		State.MOVING:
+			_cancel_move()
+			return true
+		State.SELECTED:
+			_selected_fixture_id = ""
+			_transition_to(State.IDLE)
+			_update_visual_feedback()
+			return true
+		_:
+			return false
+
+
 ## Rotates the selected fixture clockwise and moves into ROTATING state.
 func rotate_selected_fixture() -> void:
 	_handle_rotate()
@@ -170,6 +188,15 @@ func confirm_selected_fixture(cell: Vector2i) -> bool:
 			return _try_place_moved_fixture(cell)
 		_:
 			return false
+
+
+## Applies a persistent store-design option through the customization owner.
+func apply_design_option(option_id: StringName, day: int = 1) -> bool:
+	return StoreCustomizationSystem.apply_design_option(
+		option_id,
+		day,
+		GameManager.get_active_store_id(),
+	)
 
 
 ## Zooms the active build camera in while build mode is active.
@@ -214,6 +241,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if _camera_controller and _camera_controller.is_transitioning:
+		return
+
+	if event.is_action_pressed("ui_cancel"):
+		if cancel_current_action():
+			get_viewport().set_input_as_handled()
 		return
 
 	if event is InputEventMouseMotion:
@@ -313,6 +345,8 @@ func _handle_mouse_button(event: InputEventMouseButton) -> void:
 	if not event.pressed:
 		return
 	if _hovered_cell == null:
+		if event.button_index == MOUSE_BUTTON_RIGHT and cancel_current_action():
+			get_viewport().set_input_as_handled()
 		return
 
 	var cell: Vector2i = _hovered_cell as Vector2i

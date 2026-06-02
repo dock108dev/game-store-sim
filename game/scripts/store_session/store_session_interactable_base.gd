@@ -14,3 +14,10 @@ func _controller() -> StoreSessionController:
 	if node is StoreSessionController:
 		return node as StoreSessionController
 	return null
+
+
+func _interact_and_call_controller(by: Node, method_name: StringName) -> void:
+	if not can_interact(by):
+		return
+	super.interact(by)
+	get_tree().call_group("store_session_controller", String(method_name))

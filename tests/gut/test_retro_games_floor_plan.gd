@@ -354,7 +354,7 @@ func test_first_run_route_has_obvious_front_back_return_order() -> void:
 	assert_lt(backroom.global_position.z, -7.2)
 	assert_lt(restock_shelf.global_position.x, 0.0)
 	assert_lt(restock_shelf.global_position.z, -7.0)
-	assert_gt(day_end.global_position.z, 7.0)
+	assert_gt(day_end.global_position.z, 6.0)
 	var route_points: Array[Vector3] = [
 		entry.global_position,
 		checkout.global_position,

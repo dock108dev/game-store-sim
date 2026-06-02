@@ -3,6 +3,12 @@ extends GutTest
 const SCENE_PATH: String = "res://game/scenes/stores/retro_games.tscn"
 const FIRST_EVENT_ID: String = "day01_wrong_console_parent"
 const SECOND_EVENT_ID: String = "repeat_customer_sale"
+const RegisterScreenStateScript: GDScript = preload(
+	"res://game/scripts/store_session/register_screen_state.gd"
+)
+const RegisterTransactionViewModelScript: GDScript = preload(
+	"res://game/scripts/store_session/register_transaction_view_model.gd"
+)
 
 var _root: Node3D = null
 var _saved_state: GameManager.State
@@ -125,6 +131,104 @@ func test_authored_next_shift_customer_uses_result_acknowledgement_path() -> voi
 	)
 
 
+func test_day_one_clean_exchange_populates_transaction_view_model() -> void:
+	var controller: StoreSessionController = _controller()
+	if controller == null:
+		return
+
+	await _publish_choice_transaction(controller, &"clean_exchange")
+
+	var model: Dictionary = controller.get_current_transaction_view_model()
+	assert_eq(model.get("source"), RegisterTransactionViewModelScript.SOURCE_STORE_SESSION)
+	assert_eq(model.get("state"), RegisterTransactionViewModelScript.STATE_RECEIPT)
+	assert_eq(model.get("kind"), RegisterTransactionViewModelScript.KIND_CLEAN_EXCHANGE)
+	assert_eq(model.get("customer_name"), "Stressed Parent")
+	assert_almost_eq(float(model.get("cash_delta")), 15.0, 0.01)
+	assert_true(_model_has_role(model, RegisterTransactionViewModelScript.ROLE_SOLD_ITEM))
+	assert_true(_model_has_role(model, RegisterTransactionViewModelScript.ROLE_RETURNED_ITEM))
+
+
+func test_day_one_bundle_populates_bundle_transaction_view_model() -> void:
+	var controller: StoreSessionController = _controller()
+	if controller == null:
+		return
+
+	await _publish_choice_transaction(controller, &"upsell_bundle")
+
+	var model: Dictionary = controller.get_current_transaction_view_model()
+	assert_eq(model.get("state"), RegisterTransactionViewModelScript.STATE_RECEIPT)
+	assert_eq(model.get("kind"), RegisterTransactionViewModelScript.KIND_BUNDLE)
+	assert_almost_eq(float(model.get("cash_delta")), 18.0, 0.01)
+	assert_true(_model_has_role(model, RegisterTransactionViewModelScript.ROLE_BUNDLE_ITEM))
+	assert_true(_model_has_role(model, RegisterTransactionViewModelScript.ROLE_RETURNED_ITEM))
+
+
+func test_day_one_refusal_populates_refused_transaction_view_model() -> void:
+	var controller: StoreSessionController = _controller()
+	if controller == null:
+		return
+
+	await _publish_choice_transaction(controller, &"refuse_return")
+
+	var model: Dictionary = controller.get_current_transaction_view_model()
+	assert_eq(model.get("state"), RegisterTransactionViewModelScript.STATE_REFUSED)
+	assert_eq(model.get("kind"), RegisterTransactionViewModelScript.KIND_REFUSED)
+	assert_eq(model.get("refusal_reason"), "No sale logged. The customer gathers the box to leave.")
+	assert_true(_model_has_role(model, RegisterTransactionViewModelScript.ROLE_REFUSED_ITEM))
+
+
+func test_day_two_zero_cash_trade_in_is_not_register_no_sale() -> void:
+	var controller: StoreSessionController = _controller()
+	if controller == null:
+		return
+	controller.call("_start_day", 2)
+	await get_tree().process_frame
+
+	await _publish_choice_transaction(controller, &"offer_partial")
+
+	var model: Dictionary = controller.get_current_transaction_view_model()
+	assert_eq(model.get("state"), RegisterTransactionViewModelScript.STATE_RECEIPT)
+	assert_eq(model.get("kind"), RegisterTransactionViewModelScript.KIND_TRADE_IN)
+	assert_almost_eq(float(model.get("cash_delta")), 0.0, 0.01)
+	var screen = _register_screen_state()
+	assert_not_null(screen, "Register screen must exist")
+	if screen != null:
+		assert_ne(screen.current_state(), RegisterScreenStateScript.STATE_NO_SALE)
+
+
+func test_day_two_negative_cash_payout_preserved_in_transaction_view_model() -> void:
+	var controller: StoreSessionController = _controller()
+	if controller == null:
+		return
+	controller.call("_start_day", 2)
+	await get_tree().process_frame
+
+	await _publish_choice_transaction(controller, &"accept_full_value")
+
+	var model: Dictionary = controller.get_current_transaction_view_model()
+	assert_eq(model.get("state"), RegisterTransactionViewModelScript.STATE_RECEIPT)
+	assert_eq(model.get("kind"), RegisterTransactionViewModelScript.KIND_PAYOUT)
+	assert_almost_eq(float(model.get("cash_delta")), -8.0, 0.01)
+	assert_almost_eq(float(model.get("payout")), 8.0, 0.01)
+	assert_true(_model_has_role(model, RegisterTransactionViewModelScript.ROLE_DAMAGED_TRADE_IN))
+
+
+func test_duplicate_result_acknowledgement_keeps_transaction_view_model_stable() -> void:
+	var controller: StoreSessionController = _controller()
+	if controller == null:
+		return
+	controller.call("_start_day", 2)
+	await get_tree().process_frame
+
+	await _choose_customer_option(&"offer_partial")
+	var before_ack: Dictionary = controller.get_current_transaction_view_model()
+	await _acknowledge_customer_result()
+	controller.call("_on_customer_result_acknowledged", &"day02_trade_in_dispute", &"offer_partial")
+	await get_tree().process_frame
+
+	assert_eq(controller.get_current_transaction_view_model(), before_ack)
+
+
 func test_repeat_customer_with_empty_shelf_routes_to_no_stock_result() -> void:
 	var controller: StoreSessionController = _controller()
 	if controller == null:
@@ -183,6 +287,20 @@ func _choose_customer_option(choice_id: StringName) -> void:
 	if button == null:
 		return
 	button.pressed.emit()
+	await get_tree().process_frame
+
+
+func _publish_choice_transaction(controller: StoreSessionController, choice_id: StringName) -> void:
+	var choice: Dictionary = controller.call("_choice_for_id", choice_id) as Dictionary
+	assert_false(choice.is_empty(), "Choice %s must exist" % String(choice_id))
+	if choice.is_empty():
+		return
+	controller.call("_begin_register_transaction")
+	controller.call(
+		"_show_register_transaction_from_choice",
+		choice,
+		(choice.get("effects", {}) as Dictionary).duplicate(true)
+	)
 	await get_tree().process_frame
 
 
@@ -259,6 +377,19 @@ func _interactable(parent_name: String) -> Interactable:
 
 func _controller() -> StoreSessionController:
 	return get_tree().get_first_node_in_group("store_session_controller") as StoreSessionController
+
+
+func _register_screen_state():
+	if _root == null:
+		return null
+	return _root.get_node_or_null("Checkout/Register/RegisterScreenState")
+
+
+func _model_has_role(model: Dictionary, role: StringName) -> bool:
+	for line_variant: Variant in model.get("item_lines", []) as Array:
+		if line_variant is Dictionary and (line_variant as Dictionary).get("role") == role:
+			return true
+	return false
 
 
 func _register_unlock_entries() -> void:

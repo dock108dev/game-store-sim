@@ -1,6 +1,7 @@
 ## Registry for reusable store fixture/prop scenes used by store layouts and
 ## runtime feedback. This is visual-only: inventory, unlocks, and economy stay
 ## in the game systems that decide when these assets appear.
+## See cleanup-report: material, mesh, and decoration factories need separate helpers.
 class_name StoreVisualKit
 extends RefCounted
 
@@ -52,6 +53,25 @@ const HAND_TRUCK: StringName = &"hand_truck"
 const PAPER_STACK: StringName = &"paper_stack"
 const SHIPPING_SCALE: StringName = &"shipping_scale"
 const TAPE_ROLL: StringName = &"tape_roll"
+
+const ROLE_FIXTURE: StringName = &"fixture"
+const ROLE_TOOL: StringName = &"tool"
+const ROLE_PRODUCT: StringName = &"product"
+const ROLE_SIGNAGE: StringName = &"signage"
+const ROLE_DECOR: StringName = &"decor"
+const ROLE_ROUTE_CUE: StringName = &"route_cue"
+const ROLE_STOCKROOM: StringName = &"stockroom"
+const ROLE_SERVICE: StringName = &"service"
+
+const GROUP_RETAIL_FLOOR: StringName = &"retail_floor"
+const GROUP_CHECKOUT: StringName = &"checkout"
+const GROUP_STOCKROOM: StringName = &"stockroom"
+const GROUP_PRODUCT_DISPLAY: StringName = &"product_display"
+const GROUP_PRICING: StringName = &"pricing"
+const GROUP_WAYFINDING: StringName = &"wayfinding"
+const GROUP_BACK_OF_HOUSE: StringName = &"back_of_house"
+const GROUP_STARTER_KIT: StringName = &"starter_kit"
+const GROUP_SHELL_PROP: StringName = &"shell_prop"
 
 const STARTER_CHECKOUT_COUNTER: StringName = &"starter_checkout_counter"
 const STARTER_REGISTER_TERMINAL: StringName = &"starter_register_terminal"
@@ -163,19 +183,19 @@ const _STARTER_CHECKOUT_STATION_COMPONENTS: Array[Dictionary] = [
 	{
 		"concept_id": STARTER_REGISTER_TERMINAL,
 		"visual_id": REGISTER,
-		"slot_name": &"CheckoutKitRegisterMonitor",
+		"slot_name": &"CheckoutRegisterScreen",
 		"day_one_default": true,
 	},
 	{
 		"concept_id": STARTER_CARD_READER,
 		"visual_id": CARD_READER,
-		"slot_name": &"CheckoutKitCardReader",
+		"slot_name": &"CheckoutCardReader",
 		"day_one_default": true,
 	},
 	{
 		"concept_id": STARTER_RECEIPT_PRINTER,
 		"visual_id": RECEIPT_PRINTER,
-		"slot_name": &"CheckoutKitReceiptPrinter",
+		"slot_name": &"CheckoutReceiptPrinterBody",
 		"day_one_default": true,
 	},
 ]
@@ -249,6 +269,243 @@ const _PROCEDURAL_IDS: Array[StringName] = [
 	SECURITY_TAG_BLOCK,
 ]
 
+const _VISUAL_METADATA: Dictionary = {
+	WALL_SHELF: {
+		"display_name": "wall shelf",
+		"role": ROLE_FIXTURE,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+	},
+	FLOOR_RACK: {
+		"display_name": "floor rack",
+		"role": ROLE_FIXTURE,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+	},
+	DISPLAY_TABLE: {
+		"display_name": "display table",
+		"role": ROLE_FIXTURE,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+	},
+	CHECKOUT_COUNTER: {
+		"display_name": "checkout counter",
+		"role": ROLE_FIXTURE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR],
+	},
+	STOCKROOM_TABLE: {
+		"display_name": "stockroom table",
+		"role": ROLE_FIXTURE,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE],
+	},
+	STOCKROOM_SHELF: {
+		"display_name": "stockroom shelf",
+		"role": ROLE_STOCKROOM,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE],
+		"fixture_like": true,
+		"visual_only": true,
+	},
+	STOCK_BOX: {
+		"display_name": "stock box",
+		"role": ROLE_STOCKROOM,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE],
+	},
+	GAME_CASE: {
+		"display_name": "game case",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+		"visual_only": true,
+	},
+	CONSOLE_BOX: {
+		"display_name": "console box",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+		"visual_only": true,
+	},
+	REGISTER: {
+		"display_name": "register",
+		"role": ROLE_SERVICE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR],
+	},
+	RECEIPT_PRINTER: {
+		"display_name": "receipt printer",
+		"role": ROLE_SERVICE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR],
+	},
+	CARD_READER: {
+		"display_name": "card reader",
+		"role": ROLE_SERVICE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR],
+	},
+	QUEUE_LANE: {
+		"display_name": "queue lane",
+		"role": ROLE_ROUTE_CUE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR, GROUP_WAYFINDING],
+	},
+	PRICE_TAG: {
+		"display_name": "price tag",
+		"role": ROLE_SIGNAGE,
+		"groups": [GROUP_PRICING, GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+		"visual_only": true,
+	},
+	PRODUCT_PRICE_TAG: {
+		"display_name": "product price tag",
+		"role": ROLE_SIGNAGE,
+		"groups": [GROUP_PRICING, GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+		"visual_only": true,
+	},
+	SHELF_LABEL: {
+		"display_name": "shelf label",
+		"role": ROLE_SIGNAGE,
+		"groups": [GROUP_PRICING, GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY],
+		"visual_only": true,
+	},
+	SIGN_SHELF_LABEL: {
+		"display_name": "sign shelf label",
+		"role": ROLE_SIGNAGE,
+		"groups": [GROUP_WAYFINDING, GROUP_RETAIL_FLOOR],
+		"visual_only": true,
+	},
+	ACRYLIC_STAND: {
+		"display_name": "acrylic stand",
+		"role": ROLE_DECOR,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_STARTER_KIT],
+		"visual_only": true,
+	},
+	CONTROLLER_BIN_PROP: {
+		"display_name": "controller bin",
+		"role": ROLE_DECOR,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_STARTER_KIT],
+		"visual_only": true,
+	},
+	REPAIR_TESTING_MAT: {
+		"display_name": "repair testing mat",
+		"role": ROLE_DECOR,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_STARTER_KIT],
+		"visual_only": true,
+	},
+	TAPED_BOX_LABEL: {
+		"display_name": "taped box label",
+		"role": ROLE_STOCKROOM,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE, ROLE_SIGNAGE],
+		"visual_only": true,
+	},
+	SECURITY_TAG_BLOCK: {
+		"display_name": "security tag block",
+		"role": ROLE_DECOR,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_STARTER_KIT],
+		"visual_only": true,
+	},
+	GLTF_COUNTER_REGISTER: {
+		"display_name": "counter register model",
+		"role": ROLE_SERVICE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR, GROUP_SHELL_PROP],
+	},
+	GLTF_GAME_CASE: {
+		"display_name": "game case model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CONSOLE_BOX: {
+		"display_name": "console box model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CARTRIDGE_GB: {
+		"display_name": "compact cartridge model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CARTRIDGE_N64: {
+		"display_name": "wide cartridge model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CARTRIDGE_SNES: {
+		"display_name": "flat cartridge model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CONSOLE_N64: {
+		"display_name": "rounded console model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CONSOLE_PS1: {
+		"display_name": "disc console model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CONSOLE_SNES: {
+		"display_name": "classic console model",
+		"role": ROLE_PRODUCT,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_CRT_MONITOR: {
+		"display_name": "crt monitor model",
+		"role": ROLE_DECOR,
+		"groups": [GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_HOLD_TAG: {
+		"display_name": "hold tag model",
+		"role": ROLE_SIGNAGE,
+		"groups": [GROUP_PRICING, GROUP_RETAIL_FLOOR, GROUP_PRODUCT_DISPLAY, GROUP_SHELL_PROP],
+		"visual_only": true,
+	},
+	GLTF_RECEIPT_PRINTER: {
+		"display_name": "receipt printer model",
+		"role": ROLE_SERVICE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR, GROUP_SHELL_PROP],
+	},
+	GLTF_REGISTER_MONITOR: {
+		"display_name": "register monitor model",
+		"role": ROLE_SERVICE,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR, GROUP_SHELL_PROP],
+	},
+	BARCODE_SCANNER: {
+		"display_name": "barcode scanner",
+		"role": ROLE_TOOL,
+		"groups": [GROUP_CHECKOUT, GROUP_RETAIL_FLOOR],
+		"visual_only": true,
+	},
+	CLIPBOARD: {
+		"display_name": "clipboard",
+		"role": ROLE_TOOL,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE],
+		"visual_only": true,
+	},
+	HAND_TRUCK: {
+		"display_name": "hand truck",
+		"role": ROLE_STOCKROOM,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE, ROLE_TOOL],
+		"visual_only": true,
+	},
+	PAPER_STACK: {
+		"display_name": "paper stack",
+		"role": ROLE_STOCKROOM,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE],
+		"visual_only": true,
+	},
+	SHIPPING_SCALE: {
+		"display_name": "shipping scale",
+		"role": ROLE_STOCKROOM,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE, ROLE_TOOL],
+		"visual_only": true,
+	},
+	TAPE_ROLL: {
+		"display_name": "tape roll",
+		"role": ROLE_STOCKROOM,
+		"groups": [GROUP_STOCKROOM, GROUP_BACK_OF_HOUSE, ROLE_TOOL],
+		"visual_only": true,
+	},
+}
+
 
 static func scene_path(id: StringName) -> String:
 	return str(_SCENE_PATHS.get(id, ""))
@@ -261,14 +518,14 @@ static func has_visual(id: StringName) -> bool:
 
 static func instantiate(id: StringName) -> Node:
 	if _PROCEDURAL_IDS.has(id):
-		return _instantiate_procedural(id)
+		return _apply_visual_metadata(_instantiate_procedural(id), id)
 	var path: String = scene_path(id)
 	if path.is_empty() or not ResourceLoader.exists(path):
 		return null
 	var scene: PackedScene = load(path) as PackedScene
 	if scene == null:
 		return null
-	return scene.instantiate()
+	return _apply_visual_metadata(scene.instantiate(), id)
 
 
 ## Creates a product-scale price tag and stores price ownership on the tag node.
@@ -294,6 +551,65 @@ static func apply_shelf_label_text(label_root: Node, label_text: String) -> bool
 		return false
 	label.text = label_text
 	return true
+
+
+## Returns semantic metadata for a reusable visual ID, including source details.
+static func visual_metadata(id: StringName) -> Dictionary:
+	if not _VISUAL_METADATA.has(id):
+		return {}
+	var metadata: Dictionary = (_VISUAL_METADATA.get(id, {}) as Dictionary).duplicate(true)
+	metadata["source_type"] = source_type(id)
+	var path: String = scene_path(id)
+	if not path.is_empty():
+		metadata["scene_path"] = path
+	return metadata
+
+
+## Returns the primary semantic role for a visual ID.
+static func visual_role(id: StringName) -> StringName:
+	var metadata: Dictionary = _VISUAL_METADATA.get(id, {}) as Dictionary
+	return metadata.get("role", &"") as StringName
+
+
+## Returns orthogonal context groups for a visual ID.
+static func visual_groups(id: StringName) -> Array[StringName]:
+	var metadata: Dictionary = _VISUAL_METADATA.get(id, {}) as Dictionary
+	var groups: Array[StringName] = []
+	for raw_group: Variant in metadata.get("groups", []):
+		groups.append(raw_group as StringName)
+	return groups
+
+
+## Returns all reusable visual IDs with the requested primary role.
+static func visuals_for_role(role: StringName) -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for raw_id: Variant in _VISUAL_METADATA.keys():
+		var id: StringName = raw_id as StringName
+		if visual_role(id) == role:
+			ids.append(id)
+	ids.sort()
+	return ids
+
+
+## Returns all reusable visual IDs tagged for the requested context group.
+static func visuals_in_group(group: StringName) -> Array[StringName]:
+	var ids: Array[StringName] = []
+	for raw_id: Variant in _VISUAL_METADATA.keys():
+		var id: StringName = raw_id as StringName
+		if visual_groups(id).has(group):
+			ids.append(id)
+	ids.sort()
+	return ids
+
+
+## Returns whether a visual ID has the requested primary semantic role.
+static func has_visual_role(id: StringName, role: StringName) -> bool:
+	return visual_role(id) == role
+
+
+## Returns whether a visual ID is tagged for the requested context group.
+static func has_visual_group(id: StringName, group: StringName) -> bool:
+	return visual_groups(id).has(group)
 
 
 static func required_ids() -> Array[StringName]:
@@ -328,12 +644,16 @@ static func starter_small_display_prop_components() -> Array[Dictionary]:
 
 static func validate() -> Dictionary:
 	var missing: Array[StringName] = []
+	var missing_metadata: Array[StringName] = []
 	for id: StringName in required_ids():
 		if not has_visual(id):
 			missing.append(id)
+		if not _VISUAL_METADATA.has(id):
+			missing_metadata.append(id)
 	return {
-		"ok": missing.is_empty(),
+		"ok": missing.is_empty() and missing_metadata.is_empty(),
 		"missing": missing,
+		"missing_metadata": missing_metadata,
 	}
 
 
@@ -391,13 +711,26 @@ static func _instantiate_procedural(id: StringName) -> Node3D:
 	return null
 
 
+static func _apply_visual_metadata(root: Node, id: StringName) -> Node:
+	if root == null:
+		return null
+	var metadata: Dictionary = visual_metadata(id)
+	root.set_meta("store_visual_id", id)
+	root.set_meta("store_visual_source", "store_visual_kit")
+	root.set_meta("store_visual_role", metadata.get("role", &""))
+	root.set_meta("store_visual_groups", visual_groups(id))
+	root.set_meta("store_visual_display_name", str(metadata.get("display_name", "")))
+	if metadata.has("visual_only"):
+		root.set_meta("visual_only", bool(metadata.get("visual_only", false)))
+	root.set_meta("store_visual_source_type", metadata.get("source_type", &"missing"))
+	return root
+
+
 static func _product_price_tag(price_cents: int) -> MeshInstance3D:
 	var tag: MeshInstance3D = StarterDetailBuilderScript.product_price_tag(price_cents)
 	if tag == null:
 		return null
-	tag.set_meta("store_visual_id", PRODUCT_PRICE_TAG)
-	tag.set_meta("store_visual_source", "store_visual_kit")
-	return tag
+	return _apply_visual_metadata(tag, PRODUCT_PRICE_TAG) as MeshInstance3D
 
 
 static func _root(name: String, id: StringName) -> Node3D:

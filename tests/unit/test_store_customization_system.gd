@@ -7,6 +7,9 @@
 class_name TestStoreCustomizationSystem
 extends GutTest
 
+const CatalogEffectMetadataScript: GDScript = preload(
+	"res://game/resources/catalog_effect_metadata.gd"
+)
 
 var _sys: Node
 
@@ -124,6 +127,61 @@ func test_poster_cycle_works_without_unlock() -> void:
 		assert_true(
 			seen.has(poster), "poster %s must appear in the cycle" % poster
 		)
+
+
+func test_design_options_expose_owned_cosmetic_effects() -> void:
+	var options: Array[Dictionary] = _sys.get_design_options_for_day(1)
+	assert_gt(options.size(), 0)
+	for option: Dictionary in options:
+		var effects: Array[Dictionary] = []
+		effects.assign(option.get("effects", []))
+		assert_eq(effects.size(), 1)
+		assert_eq(str(effects[0].get("type", "")), CatalogEffectMetadataScript.TYPE_COSMETIC)
+		assert_eq(str(effects[0].get("owner", "")), "StoreCustomizationSystem")
+
+
+func test_design_selection_save_load_round_trip() -> void:
+	assert_true(_sys.apply_design_option(&"floor_tile_cream", 1, &"retro_games"))
+	assert_true(_sys.apply_design_option(&"warm_panel_light", 1, &"retro_games"))
+	var saved: Dictionary = _sys.get_save_data()
+	var stores: Dictionary = saved.get("stores", {}) as Dictionary
+	var default_store: Dictionary = stores.get("retro_games", {}) as Dictionary
+	var surfaces: Dictionary = default_store.get("surfaces", {}) as Dictionary
+	var lighting: Dictionary = default_store.get("lighting", {}) as Dictionary
+	assert_eq(str(surfaces.get("floor_material_id", "")), "floor_tile_cream")
+	assert_eq(str(surfaces.get("wall_material_id", "")), "wall_warm_white")
+	assert_eq(str(lighting.get("preset_id", "")), "warm_panel_light")
+
+	_sys.reset_for_testing()
+	assert_eq(_sys.get_design_selection(&"floor", &"retro_games"), &"")
+	_sys.load_save_data(saved)
+
+	assert_eq(_sys.get_design_selection(&"floor", &"retro_games"), &"floor_tile_cream")
+	assert_eq(_sys.get_design_selection(&"lighting", &"retro_games"), &"warm_panel_light")
+
+
+func test_locked_design_selection_does_not_persist() -> void:
+	assert_false(_sys.apply_design_option(&"rubber_stockroom", 1, &"retro_games"))
+	assert_eq(_sys.get_design_selection(&"stockroom", &"retro_games"), &"")
+	assert_true(_sys.apply_design_option(&"rubber_stockroom", 3, &"retro_games"))
+	assert_eq(_sys.get_design_selection(&"stockroom", &"retro_games"), &"rubber_stockroom")
+
+
+func test_store_design_payload_declares_runtime_contract_fields() -> void:
+	assert_true(_sys.apply_design_option(&"trade_window_sign", 1, &"retro_games"))
+	assert_true(_sys.apply_design_option(&"counter_entry_mat", 1, &"retro_games"))
+	assert_true(_sys.apply_design_option(&"counter_laminate_black", 1, &"retro_games"))
+	assert_true(_sys.apply_design_option(&"shelf_oak_trim", 1, &"retro_games"))
+	assert_true(_sys.apply_design_option(&"register_compact_ivory", 1, &"retro_games"))
+	var payload: Dictionary = _sys.get_store_design_payload(&"retro_games")
+
+	for group_name: String in ["signage", "decor", "counter", "shelf", "register"]:
+		var group_payload: Dictionary = payload.get(group_name, {}) as Dictionary
+		assert_false(group_payload.is_empty(), "%s payload must exist" % group_name)
+		assert_false(str(group_payload.get("zone", "")).is_empty())
+		assert_false(str(group_payload.get("role", "")).is_empty())
+		assert_false(str(group_payload.get("facing", "")).is_empty())
+		assert_gt((group_payload.get("size", []) as Array).size(), 0)
 
 
 # ── Spawn-weight bonuses ─────────────────────────────────────────────────────

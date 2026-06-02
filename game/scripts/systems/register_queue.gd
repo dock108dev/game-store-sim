@@ -4,6 +4,8 @@ extends RefCounted
 
 const MAX_QUEUE_SIZE: int = 3
 const QUEUE_SPACING: float = 1.0
+const ACTIVE_SERVICE_SLOT_INDEX: int = 0
+const FIRST_WAITING_SLOT_INDEX: int = 1
 
 var _queue: Array[Customer] = []
 var _register_position: Vector3 = Vector3.ZERO
@@ -21,7 +23,8 @@ func initialize(register_pos: Vector3, entry_pos: Vector3) -> void:
 	_queue_direction = dir.normalized()
 
 
-## Sets explicit queue slot positions authored by the active store scene.
+## Sets explicit queue lane positions authored by the active store scene.
+## Slot 0 is the active customer service spot; waiting customers use slots 1+.
 func set_authored_positions(positions: Array[Vector3]) -> void:
 	_authored_positions.clear()
 	for position: Vector3 in positions:
@@ -39,7 +42,7 @@ func try_add(customer: Customer) -> bool:
 		return false
 	_queue.append(customer)
 	var index: int = _queue.size() - 1
-	if index > 0:
+	if index >= FIRST_WAITING_SLOT_INDEX:
 		customer.enter_queue(_get_position(index))
 	return true
 
@@ -131,7 +134,7 @@ func _reposition_queue() -> void:
 		var customer: Customer = _queue[i]
 		if not is_instance_valid(customer):
 			continue
-		if i == 0:
+		if i == ACTIVE_SERVICE_SLOT_INDEX:
 			customer.advance_to_register()
 		else:
 			customer.enter_queue(_get_position(i))

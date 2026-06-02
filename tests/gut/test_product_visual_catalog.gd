@@ -65,6 +65,7 @@ func test_box_templates_define_reusable_cover_metadata() -> void:
 		for key: String in [
 			"display_title",
 			"front_color",
+			"case_shape",
 			"title_block",
 			"simple_symbol",
 			"spine_color",
@@ -74,6 +75,10 @@ func test_box_templates_define_reusable_cover_metadata() -> void:
 			assert_true(template.has(key), "%s missing %s" % [template_id, key])
 
 		var spine_label: Dictionary = template.get("spine_label", {})
+		assert_true(
+			_allowed_case_shapes().has(str(template.get("case_shape", ""))),
+			"%s must use a supported case shape" % template_id
+		)
 		assert_ne(
 			str(spine_label.get("text", "")),
 			"",
@@ -131,6 +136,14 @@ func test_platform_identities_have_distinct_silhouettes_and_labels() -> void:
 		assert_ne(platform_id, "", "%s must map to a canonical platform_id" % visual_id)
 		assert_ne(used_console_label, "", "%s must have a Used Consoles label" % visual_id)
 		assert_ne(shelf_label, "", "%s must have a shelf label" % visual_id)
+		assert_true(
+			_allowed_console_shapes().has(str(identity.get("console_box_shape", ""))),
+			"%s must use a supported console box shape" % visual_id
+		)
+		assert_true(
+			_allowed_cartridge_shapes().has(str(identity.get("cartridge_shape", ""))),
+			"%s must use a supported cartridge shape" % visual_id
+		)
 		assert_ne(shape, "", "%s must have a silhouette shape" % visual_id)
 		assert_false(
 			silhouette_shapes.has(shape),
@@ -425,6 +438,73 @@ func test_catalog_metadata_can_request_cartridge_presentation() -> void:
 		node.free()
 
 
+func test_product_visual_factory_builds_shape_specific_case_and_cartridge_forms() -> void:
+	var catalog: RefCounted = ProductVisualCatalogScript.new()
+	catalog.load_from_dictionary(_catalog)
+
+	var long_box: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{
+			"definition_id": "neo_ignite_kingdom_embers_loose",
+			"category": "cartridges",
+			"box_art_key": "kingdom_embers_neo_ignite",
+		},
+		catalog
+	)
+	assert_not_null(long_box, "Long cardboard starter case must build")
+	if long_box != null:
+		assert_eq(str(long_box.get_meta("case_shape", "")), "long_cardboard_box")
+		assert_not_null(long_box.get_node_or_null("CardboardTopFlap"))
+		assert_not_null(long_box.get_node_or_null("CardboardInfoBlock"))
+		long_box.free()
+
+	var jewel_case: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{"category": "cartridges", "box_art_key": "torque_force_neo_ignite"},
+		catalog
+	)
+	assert_not_null(jewel_case, "Jewel case template must build")
+	if jewel_case != null:
+		assert_eq(str(jewel_case.get_meta("case_shape", "")), "jewel_case")
+		assert_not_null(jewel_case.get_node_or_null("JewelHingeDots"))
+		assert_not_null(jewel_case.get_node_or_null("JewelDiscMark"))
+		jewel_case.free()
+
+	var wide_cart: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{
+			"category": "cartridges",
+			"platform_visual_id": "neo_ignite_disc_tower",
+			"visual_presentation": "cartridge",
+			"cartridge_shape_override": "wide_cart",
+			"display_name": "Wide Cart",
+		},
+		catalog
+	)
+	var mini_card: Node3D = ProductVisualFactoryScript.create_visual_for_item_with_catalog(
+		{
+			"category": "cartridges",
+			"platform_visual_id": "neo_ignite_disc_tower",
+			"visual_presentation": "cartridge",
+			"cartridge_shape_override": "mini_card",
+			"display_name": "Mini Card",
+		},
+		catalog
+	)
+	assert_not_null(wide_cart, "Wide cartridge form must build")
+	assert_not_null(mini_card, "Mini card form must build")
+	if wide_cart != null and mini_card != null:
+		assert_eq(str(wide_cart.get_meta("cartridge_shape", "")), "wide_cart")
+		assert_eq(str(mini_card.get_meta("cartridge_shape", "")), "mini_card")
+		assert_gt(
+			_box_mesh_size(wide_cart, "CartridgeShell").x,
+			_box_mesh_size(mini_card, "CartridgeShell").x
+		)
+		assert_not_null(mini_card.get_node_or_null("MiniCardTopStripe"))
+		assert_null(mini_card.get_node_or_null("CartridgeTopNotch"))
+	if wide_cart != null:
+		wide_cart.free()
+	if mini_card != null:
+		mini_card.free()
+
+
 func test_case_templates_use_consistent_front_and_spine_facing() -> void:
 	var catalog: RefCounted = ProductVisualCatalogScript.new()
 	catalog.load_from_dictionary(_catalog)
@@ -590,6 +670,41 @@ func _collect_ids(entries: Array, id_key: String) -> Dictionary:
 		if id != "":
 			ids[id] = true
 	return ids
+
+
+func _allowed_case_shapes() -> Dictionary:
+	return {
+		"tall_disc_case": true,
+		"compact_square_case": true,
+		"small_handheld_clamshell": true,
+		"wide_disc_case": true,
+		"jewel_case": true,
+		"long_cardboard_box": true,
+		"chunky_clamshell": true,
+		"slim_card_sleeve": true,
+	}
+
+
+func _allowed_console_shapes() -> Dictionary:
+	return {
+		"tower_box": true,
+		"cube_box": true,
+		"slab_box": true,
+		"handheld_box": true,
+		"handle_cube_box": true,
+		"long_bundle_box": true,
+	}
+
+
+func _allowed_cartridge_shapes() -> Dictionary:
+	return {
+		"flat_cart": true,
+		"wide_cart": true,
+		"mini_card": true,
+		"folded_card": true,
+		"exposed_contact_cart": true,
+		"rounded_tab_cart": true,
+	}
 
 
 func _box_mesh_size(root: Node, child_name: String) -> Vector3:
