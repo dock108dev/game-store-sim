@@ -71,10 +71,9 @@ var _interactable_focused_state: bool = false
 ## carry signal is never emitted, so this stays false and the right side
 ## renders the cached action/hint as before.
 var _carry_active: bool = false
-## Mirrors `HUD._fp_mode` via `EventBus.fp_mode_changed`. The rail remains
-## visible in store-session FP mode so the active bottom objective is separate
-## from the passive right-side checklist. FP focus still routes focused
-## interactable copy through the rail's right-side chip.
+## Mirrors `HUD._fp_mode` via `EventBus.fp_mode_changed`. FP mode suppresses
+## this full-width rail so the camera view keeps one compact objective sentence
+## in HUD and leaves focused-action copy to InteractionPrompt.
 var _fp_mode_active: bool = false
 ## Action-label text from the most recent `interactable_focused*` payload.
 ## Empty when no interactable is focused. The right-side chip routes this
@@ -423,17 +422,17 @@ func has_active_objective() -> bool:
 ## at full opacity with no animation when the gating condition clears. Flashing
 ## on the hidden→visible edge preserves the "new objective" reveal beat.
 ##
-## Modals do not hide the rail: under CTX_MODAL the rail stays `visible = true`
-## and `_apply_modal_dim` fades its children to 0.3 alpha. The signal of
-## "modal owns focus" is now de-emphasis, not removal — the player still sees
-## the active objective behind the dim overlay.
+## Outside FP mode, modals do not hide the rail: under CTX_MODAL the rail stays
+## `visible = true` and `_apply_modal_dim` fades its children to 0.3 alpha.
+## FP mode remains the only presentation path that suppresses the rail entirely.
 func _refresh_visibility() -> void:
 	var should_show: bool = (
 		_show_rail
 			and not _auto_hidden
+			and not _fp_mode_active
 			and not _current_payload.is_empty()
 			and _state_allows_rail()
-		)
+	)
 	if should_show and not visible:
 		_flash()
 	visible = should_show

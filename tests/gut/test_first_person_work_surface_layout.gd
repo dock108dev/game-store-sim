@@ -40,7 +40,6 @@ func test_first_person_hud_slots_stay_outside_work_surface() -> void:
 		&"sentence",
 		&"carry",
 		&"prompt",
-		&"objective_rail",
 	]:
 		var slot_rect: Rect2 = WorkSurfaceLayout.hud_slot_rect(slot_name, _VIEWPORT_SIZE)
 		assert_false(
@@ -168,7 +167,7 @@ func test_work_panel_conflict_contract_matches_current_focus_categories() -> voi
 	)
 
 
-func test_objective_rail_keeps_prompt_priority_under_carry_and_modal() -> void:
+func test_objective_rail_hides_in_fp_while_prompt_keeps_priority() -> void:
 	var rail: CanvasLayer = _RAIL_SCENE.instantiate() as CanvasLayer
 	add_child_autofree(rail)
 
@@ -181,26 +180,22 @@ func test_objective_rail_keeps_prompt_priority_under_carry_and_modal() -> void:
 	EventBus.store_carry_changed.emit("Starter Box")
 
 	assert_false(
-		rail._action_label.visible,
-		"Carry state without focus must suppress cached objective action chips"
+		rail.visible,
+		"FP mode must hide the full-width ObjectiveRail"
 	)
 
 	EventBus.interactable_focused_disabled.emit("Shelf is full")
-	assert_true(
-		rail._action_label.visible,
-		"Disabled focused prompt must still surface in FP mode"
+	assert_false(
+		rail.visible,
+		"Disabled focused prompts belong to InteractionPrompt, not ObjectiveRail"
 	)
-	assert_eq(rail._action_label.text, "Shelf is full")
-	assert_false(rail._key_badge.visible, "Disabled focus must not show the E badge")
 
 	EventBus.interactable_focused.emit("Stock shelf")
-	assert_eq(
-		rail._action_label.text,
-		"Stock shelf",
-		"Actionable focused prompt must override carry and cached objective copy"
+	assert_false(
+		rail.visible,
+		"Actionable focused prompts must not resurface ObjectiveRail in FP mode"
 	)
-	assert_true(rail._key_badge.visible, "Actionable focus must show the E badge")
 
 	InputFocus.push_context(InputFocus.CTX_MODAL)
-	assert_true(rail.visible, "Modal dimming must not hide the objective rail")
+	assert_false(rail.visible, "Modal dimming must not resurface the hidden FP rail")
 	assert_true(rail.is_modal_dim_active(), "Rail must enter modal-dim state")

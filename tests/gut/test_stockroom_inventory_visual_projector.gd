@@ -67,12 +67,20 @@ func test_backroom_inventory_labels_group_counts_without_owning_stock() -> void:
 	assert_not_null(_projector.get_node_or_null("PickupReadyBox00"))
 	assert_not_null(_projector.get_node_or_null("BackroomInventoryBox00"))
 	var summary_text: String = _label_text("StockroomInventorySummaryLabel")
-	assert_string_contains(summary_text, "Backroom")
+	assert_string_contains(summary_text, "Stock 4 / shelf 1")
 	assert_string_contains(summary_text, "Games")
 	assert_true(
 		summary_text.contains("x2"),
 		"Summary label must expose the top grouped inventory count"
 	)
+	assert_false(
+		summary_text.contains("Unknown x"),
+		"Summary label must not expose raw unknown debug counts in the scene"
+	)
+	var summary_label: Label3D = _label("StockroomInventorySummaryLabel")
+	if summary_label != null:
+		assert_lte(summary_label.pixel_size, 0.010)
+		assert_lte(summary_label.font_size, 18)
 
 
 func test_inventory_location_transition_refreshes_physical_state_from_signal() -> void:
@@ -110,7 +118,8 @@ func test_rebuilt_shell_rehydrates_from_inventory_not_old_visual_nodes() -> void
 	assert_not_null(first_projection.get_node_or_null("PickupReadyBox00"))
 	var first_projection_id: int = first_projection.get_instance_id()
 
-	_inventory.move_item(String(_inventory.get_backroom_items_for_store(String(STORE_ID))[0].instance_id), "shelf:reload_slot")
+	var stocked_item: ItemInstance = _inventory.get_backroom_items_for_store(String(STORE_ID))[0]
+	_inventory.move_item(String(stocked_item.instance_id), "shelf:reload_slot")
 	shell.remove_child(first_projection)
 	first_projection.free()
 	ExpandableStoreShellRuntimeScript.call("_add_stockroom_inventory_projection", null, shell)
@@ -190,6 +199,16 @@ func _label_text(path: String) -> String:
 	if label == null:
 		return ""
 	return label.text
+
+
+func _label(path: String) -> Label3D:
+	var label_root: Node = _projector.get_node_or_null(path)
+	assert_not_null(label_root, "%s must exist" % path)
+	if label_root == null:
+		return null
+	var label: Label3D = label_root.get_node_or_null("LabelText") as Label3D
+	assert_not_null(label, "%s must expose LabelText" % path)
+	return label
 
 
 func _assert_visual_only_projection(root: Node) -> void:

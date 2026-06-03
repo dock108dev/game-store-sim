@@ -120,14 +120,18 @@ func _on_store_backroom_count_changed(count: int) -> void:
 	refresh()
 
 
-func _on_hold_added(store_id: StringName, _slip_id: String, _item_id: StringName, _customer_name: String) -> void:
+func _on_hold_added(
+	store_id: StringName, _slip_id: String, _item_id: StringName, _customer_name: String
+) -> void:
 	if _resolve_store_id(store_id) != _store_id:
 		return
 	_event_hold_count += 1
 	refresh()
 
 
-func _on_hold_terminal(store_id: StringName, _slip_id: String, _item_id: StringName, _reason: String) -> void:
+func _on_hold_terminal(
+	store_id: StringName, _slip_id: String, _item_id: StringName, _reason: String
+) -> void:
 	if _resolve_store_id(store_id) != _store_id:
 		return
 	_event_hold_count = maxi(_event_hold_count - 1, 0)
@@ -147,7 +151,9 @@ func _on_trade_in_initiated(_customer_id: String) -> void:
 	refresh()
 
 
-func _on_trade_in_accepted(_customer_id: String, _instance_id: String, _credit_value: float) -> void:
+func _on_trade_in_accepted(
+	_customer_id: String, _instance_id: String, _credit_value: float
+) -> void:
 	_trade_in_pending = false
 	_trade_in_recent_count += 1
 	refresh()
@@ -222,7 +228,11 @@ func _add_inventory_row(snapshot: Dictionary, entry: Dictionary) -> void:
 
 
 func _increment_backroom_group(
-	snapshot: Dictionary, definition_id: String, display_name: String, category: String, location: String
+	snapshot: Dictionary,
+	definition_id: String,
+	display_name: String,
+	category: String,
+	location: String
 ) -> void:
 	var key: String = definition_id if not definition_id.is_empty() else display_name
 	if key.is_empty():
@@ -272,8 +282,15 @@ func _render_backroom_racks(snapshot: Dictionary) -> void:
 	for index: int in range(mini(groups.size(), MAX_RACK_GROUPS)):
 		var column: int = index % 2
 		var row: int = index / 2
-		var pos := Vector3(3.86 + float(column) * 0.52, 1.18 + float(row) * 0.42, -9.20)
-		_add_status_box("BackroomInventoryBox%02d" % index, pos, Vector3(0.32, 0.22, 0.26), STATUS_BACKROOM)
+		var pos := Vector3(
+			3.86 + float(column) * 0.52, 1.18 + float(row) * 0.42, -9.20
+		)
+		_add_status_box(
+			"BackroomInventoryBox%02d" % index,
+			pos,
+			Vector3(0.32, 0.22, 0.26),
+			STATUS_BACKROOM
+		)
 
 
 func _render_reserve_stock(snapshot: Dictionary) -> void:
@@ -315,7 +332,12 @@ func _render_holds(snapshot: Dictionary) -> void:
 			STATUS_HOLD
 		)
 	if expired_count > 0:
-		_add_status_box("ExpiredHoldSlipStack", Vector3(2.38, 0.19, -7.00), Vector3(0.28, 0.035, 0.18), STATUS_USED)
+		_add_status_box(
+			"ExpiredHoldSlipStack",
+			Vector3(2.38, 0.19, -7.00),
+			Vector3(0.28, 0.035, 0.18),
+			STATUS_USED
+		)
 
 
 func _render_trade_in_intake(snapshot: Dictionary) -> void:
@@ -324,30 +346,43 @@ func _render_trade_in_intake(snapshot: Dictionary) -> void:
 	var intake_count: int = damaged_count + counter_count + int(snapshot.get("trade_in_recent", 0))
 	var pending: bool = bool(snapshot.get("trade_in_pending", false))
 	if intake_count <= 0 and not pending:
-		_add_status_box("TradeInIntakeEmptyTray", Vector3(5.62, 0.89, -7.86), Vector3(0.30, 0.025, 0.18), STATUS_EMPTY)
+		_add_status_box(
+			"TradeInIntakeEmptyTray",
+			Vector3(5.62, 0.89, -7.86),
+			Vector3(0.30, 0.025, 0.18),
+			STATUS_EMPTY
+		)
 		return
-	_add_status_box("TradeInIntakeTray", Vector3(5.62, 0.90, -7.86), Vector3(0.34, 0.045, 0.24), STATUS_TRADE_IN)
-	_add_status_box("TradeInIntakeItem", Vector3(5.62, 0.96, -7.86), Vector3(0.20, 0.10, 0.16), STATUS_TRADE_IN)
+	_add_status_box(
+		"TradeInIntakeTray",
+		Vector3(5.62, 0.90, -7.86),
+		Vector3(0.34, 0.045, 0.24),
+		STATUS_TRADE_IN
+	)
+	_add_status_box(
+		"TradeInIntakeItem",
+		Vector3(5.62, 0.96, -7.86),
+		Vector3(0.20, 0.10, 0.16),
+		STATUS_TRADE_IN
+	)
 
 
 func _render_summary_label(snapshot: Dictionary) -> void:
 	var top_group: Dictionary = _top_summary_group(snapshot)
-	var group_text: String = str(top_group.get("display_name", "No item"))
+	var group_text: String = "No stock"
 	if top_group.is_empty():
-		group_text = "No item"
+		group_text = "No stock"
 	else:
-		group_text = "%s %s x%d" % [
-			str(top_group.get("location", "backroom")).capitalize(),
+		group_text = "%s x%d" % [
 			str(top_group.get("category", "stock")).capitalize(),
 			int(top_group.get("count", 0)),
 		]
-	var text: String = "Backroom x%d shelf x%d\n%s\nUnknown x%d" % [
+	var text: String = "Stock %d / shelf %d\nTop: %s" % [
 		int(snapshot.get("backroom", 0)),
 		int(snapshot.get("shelf", 0)),
 		group_text,
-		int(snapshot.get("unknown", 0)),
 	]
-	_add_stockroom_label("StockroomInventorySummaryLabel", text, Vector3(5.78, 1.86, -6.86), snapshot)
+	_add_stockroom_label("StockroomInventorySummaryLabel", text, Vector3(5.24, 1.74, -9.72), snapshot)
 
 
 func _sorted_backroom_groups(snapshot: Dictionary) -> Array[Dictionary]:
@@ -405,7 +440,9 @@ func _hold_list() -> HoldList:
 	return holds_manager.call("get_hold_list") as HoldList
 
 
-func _add_status_box(name_base: String, position: Vector3, size: Vector3, status: StringName) -> MeshInstance3D:
+func _add_status_box(
+	name_base: String, position: Vector3, size: Vector3, status: StringName
+) -> MeshInstance3D:
 	var mesh := BoxMesh.new()
 	mesh.size = size
 	var node := MeshInstance3D.new()
@@ -416,7 +453,9 @@ func _add_status_box(name_base: String, position: Vector3, size: Vector3, status
 	node.set_meta("visual_only", true)
 	node.set_meta("stockroom_inventory_status", status)
 	node.set_meta("stockroom_inventory_projection", true)
-	StarterDetailBuilderScript.apply_visual_metadata(node, _family_for_status(status), StarterDetailBuilderScript.ROLE_PANEL)
+	StarterDetailBuilderScript.apply_visual_metadata(
+		node, _family_for_status(status), StarterDetailBuilderScript.ROLE_PANEL
+	)
 	add_child(node)
 	return node
 
@@ -430,6 +469,13 @@ func _add_stockroom_label(
 	label.rotation_degrees = Vector3(0.0, 0.0, 0.0)
 	label.set_meta("stockroom_inventory_projection", true)
 	label.set_meta("stockroom_inventory_payload", payload.duplicate(true))
+	label.scale = Vector3(0.72, 0.72, 0.72)
+	var label_text_node: Label3D = label.get_node_or_null("LabelText") as Label3D
+	if label_text_node != null:
+		label_text_node.pixel_size = 0.010
+		label_text_node.font_size = 18
+		label_text_node.modulate = Color(0.957, 0.914, 0.831, 0.74)
+		label_text_node.outline_size = 2
 	add_child(label)
 	return label
 

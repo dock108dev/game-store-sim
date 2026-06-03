@@ -124,7 +124,7 @@ func initialize() -> void:
 		return
 	store_type = String(STORE_ID)
 	_connect_lifecycle_signals()
-	_store_definition = ContentRegistry.get_entry(STORE_ID)
+	_store_definition = _registry_store_definition_or_empty()
 	_connect_store_signal(EventBus.inventory_item_added, _on_inventory_item_added)
 	_connect_store_signal(EventBus.item_stocked, _on_item_stocked)
 	_load_grades()
@@ -553,8 +553,14 @@ func _seed_starter_inventory() -> void:
 	if _inventory_system == null:
 		return
 	if _store_definition.is_empty():
-		_store_definition = ContentRegistry.get_entry(STORE_ID)
+		_store_definition = _registry_store_definition_or_empty()
 	RetroGamesStarterSeed.seed(STORE_ID, _store_definition, _inventory_system)
+
+
+func _registry_store_definition_or_empty() -> Dictionary:
+	if not ContentRegistry.exists(String(STORE_ID)):
+		return {}
+	return ContentRegistry.get_entry(STORE_ID)
 
 
 func _find_testing_station() -> void:

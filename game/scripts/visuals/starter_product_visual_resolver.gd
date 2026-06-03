@@ -95,10 +95,12 @@ static func visual_data_for_item_id(item_id: String) -> Dictionary:
 		var definition_data: Dictionary = _from_definition(definition)
 		return _merge_starter_defaults(item_id, definition_data, "data_loader")
 
-	var entry: Dictionary = ContentRegistry.get_entry(StringName(item_id))
-	if not entry.is_empty():
-		var entry_data: Dictionary = _from_entry(item_id, entry)
-		return _merge_starter_defaults(item_id, entry_data, "content_registry")
+	var item_key: StringName = StringName(item_id)
+	if ContentRegistry.exists(item_id):
+		var entry: Dictionary = ContentRegistry.get_entry(item_key)
+		if not entry.is_empty():
+			var entry_data: Dictionary = _from_entry(item_id, entry)
+			return _merge_starter_defaults(item_id, entry_data, "content_registry")
 
 	if STARTER_PRODUCT_FALLBACKS.has(item_id):
 		var fallback: Dictionary = (STARTER_PRODUCT_FALLBACKS[item_id] as Dictionary).duplicate(true)

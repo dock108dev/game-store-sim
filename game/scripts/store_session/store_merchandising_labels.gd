@@ -115,9 +115,10 @@ static func _availability_matches(label: Dictionary, context: Dictionary, config
 
 
 static func _store_definition(store_id: StringName) -> Dictionary:
-	var registry_entry: Dictionary = ContentRegistry.get_entry(store_id)
-	if not registry_entry.is_empty():
-		return registry_entry
+	if ContentRegistry.exists(String(store_id)):
+		var registry_entry: Dictionary = ContentRegistry.get_entry(store_id)
+		if not registry_entry.is_empty():
+			return registry_entry
 	var data: Variant = DataLoader.load_json(STORE_DEFINITIONS_PATH)
 	if data is not Dictionary:
 		return {}

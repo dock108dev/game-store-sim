@@ -1469,12 +1469,12 @@ func _ensure_fp_close_day_hint() -> void:
 	add_child(_fp_close_day_hint)
 
 
-## The FP bottom-bar sentence sits above the ObjectiveRail's AccentBand (top
-## edge at y=-148) so it does not collide with rail content on layer 40.
-## Center-anchored with symmetric grow direction so a long localized hint
-## stays within the viewport on ultrawide aspect ratios. Modulate at 0.85
-## alpha keeps the sentence subdued vs. primary cash/time but readable over
-## bright and dark store background zones.
+## The FP bottom-bar sentence is the only persistent active-objective surface
+## while first-person mode suppresses the full-width ObjectiveRail. Center-
+## anchored with symmetric grow direction so a long localized hint stays within
+## the viewport on ultrawide aspect ratios. Modulate at 0.85 alpha keeps the
+## sentence subdued vs. primary cash/time but readable over bright and dark
+## store background zones.
 func _ensure_fp_sentence_label() -> void:
 	if is_instance_valid(_fp_sentence_label):
 		return

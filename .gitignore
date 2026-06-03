@@ -9,6 +9,7 @@
 export_presets.cfg
 /build/
 /artifacts/
+/artifacts_phase*/
 /export/
 /exports/
 *.pck

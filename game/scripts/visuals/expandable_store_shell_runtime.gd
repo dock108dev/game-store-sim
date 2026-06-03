@@ -24,6 +24,9 @@ const OnboardingRouteCueRuntimeScript: GDScript = preload(
 const StarterDetailBuilderScript: GDScript = preload(
 	"res://game/scripts/visuals/starter_detail_builder.gd"
 )
+const RetailDensityPropBuilderScript: GDScript = preload(
+	"res://game/scripts/visuals/retail_density_prop_builder.gd"
+)
 const StoreVisualStyleScript: GDScript = preload("res://game/scripts/visuals/store_visual_style.gd")
 const VisualValueUtilScript: GDScript = preload("res://game/scripts/visuals/visual_value_util.gd")
 const StockroomInventoryVisualProjectorScript: GDScript = preload(
@@ -1123,6 +1126,14 @@ static func _rebuild_shell(store: Node, shell: Node3D, layout_catalog: RefCounte
 	)
 	_add_omni_light(
 		shell,
+		"StockroomPickupWarmPractical",
+		Vector3(4.90, 1.34, -8.58),
+		Color(1.0, 0.67, 0.36, 1.0),
+		0.30,
+		1.85
+	)
+	_add_omni_light(
+		shell,
 		"EntryThresholdPractical",
 		Vector3(0.0, 2.15, 8.95),
 		Color(1.0, 0.78, 0.55, 1.0),
@@ -1813,6 +1824,8 @@ static func _add_intentional_day_one_fixtures(
 	for placement: Dictionary in _starter_first_delivery_products(layout_catalog):
 		_add_starter_product_visual(shell, placement)
 	_add_expanded_stockroom_visual_scope(shell, palette, layout_catalog)
+	_add_phase3_retail_density(shell, palette, checkout_position, display_position)
+	_add_phase4_reference_affordances(shell, palette, checkout_position, display_position)
 	_add_stockroom_contents(
 		shell,
 		trim_mat,
@@ -2485,6 +2498,322 @@ static func _add_starter_display_table_context(
 			Vector3(0.22, 0.035, 0.030),
 			_mat(Color(0.12, 0.085, 0.055, 1.0))
 		)
+
+
+static func _add_phase3_retail_density(
+	shell: Node3D, palette: Dictionary, checkout_position: Vector3, display_position: Vector3
+) -> void:
+	var trim_mat: StandardMaterial3D = palette["trim"] as StandardMaterial3D
+	var dark_mat: StandardMaterial3D = palette["dark"] as StandardMaterial3D
+	var table_mat: StandardMaterial3D = palette["table"] as StandardMaterial3D
+	var shelf_mat: StandardMaterial3D = palette["shelf"] as StandardMaterial3D
+	var gold_mat: StandardMaterial3D = palette["gold"] as StandardMaterial3D
+	var teal_case_mat: StandardMaterial3D = palette["teal_case"] as StandardMaterial3D
+	var blue_case_mat: StandardMaterial3D = palette["blue_case"] as StandardMaterial3D
+	var purple_case_mat: StandardMaterial3D = palette["purple_case"] as StandardMaterial3D
+	var paper_white_mat: StandardMaterial3D = palette["paper_white"] as StandardMaterial3D
+	var shelf_shadow_mat := _mat(Color(0.09, 0.06, 0.045, 1.0))
+	var display_center: Vector3 = display_position + Vector3(0.0, 0.0, 0.08)
+
+	for index: int in range(10):
+		var spine_mat: StandardMaterial3D = teal_case_mat
+		if index % 3 == 1:
+			spine_mat = blue_case_mat
+		elif index % 3 == 2:
+			spine_mat = purple_case_mat
+		_add_phase3_density_box(
+			shell,
+			"Phase3ShelfSpineRun%02d" % index,
+			Vector3(-5.58 + float(index) * 0.18, 1.00 + float(index % 3) * 0.43, -9.235),
+			Vector3(0.070, 0.31, 0.040),
+			spine_mat,
+			"shelf_spine_run"
+		)
+		_add_phase3_density_box(
+			shell,
+			"Phase3ShelfSpineShadow%02d" % index,
+			Vector3(-5.58 + float(index) * 0.18, 0.84 + float(index % 3) * 0.43, -9.245),
+			Vector3(0.074, 0.035, 0.030),
+			shelf_shadow_mat,
+			"shelf_spine_shadow"
+		)
+
+	for index: int in range(4):
+		_add_phase3_density_box(
+			shell,
+			"Phase3ShelfFaceout%02d" % index,
+			Vector3(-5.22 + float(index) * 0.48, 1.50, -9.205),
+			Vector3(0.28, 0.36, 0.044),
+			paper_white_mat if index % 2 == 0 else gold_mat,
+			"shelf_faceout"
+		)
+		_add_phase3_density_box(
+			shell,
+			"Phase3ShelfFaceoutAccent%02d" % index,
+			Vector3(-5.22 + float(index) * 0.48, 1.59, -9.175),
+			Vector3(0.20, 0.036, 0.030),
+			teal_case_mat if index % 2 == 0 else purple_case_mat,
+			"shelf_faceout_accent"
+		)
+
+	for index: int in range(3):
+		_add_phase3_density_box(
+			shell,
+			"Phase3CheckoutImpulseCard%02d" % index,
+			checkout_position + Vector3(-0.36 + float(index) * 0.22, 1.13, 0.35),
+			Vector3(0.16, 0.22, 0.030),
+			teal_case_mat if index != 1 else gold_mat,
+			"checkout_impulse_card"
+		)
+		_add_phase3_density_box(
+			shell,
+			"Phase3CheckoutCounterSleeve%02d" % index,
+			checkout_position + Vector3(-0.38 + float(index) * 0.24, 0.98, 0.52),
+			Vector3(0.18, 0.040, 0.16),
+			paper_white_mat if index == 1 else dark_mat,
+			"checkout_counter_sleeve"
+		)
+
+	for index: int in range(4):
+		_add_phase3_density_box(
+			shell,
+			"Phase3StarterTableFaceout%02d" % index,
+			display_center + Vector3(-0.72 + float(index) * 0.48, 1.20, 0.34),
+			Vector3(0.30, 0.34, 0.040),
+			gold_mat if index == 0 else teal_case_mat,
+			"starter_table_faceout"
+		)
+		_add_phase3_density_box(
+			shell,
+			"Phase3StarterTableSleeveStack%02d" % index,
+			display_center + Vector3(-0.70 + float(index) * 0.44, 1.03, 0.20),
+			Vector3(0.24, 0.045, 0.18),
+			table_mat if index % 2 == 0 else shelf_mat,
+			"starter_table_sleeve_stack"
+		)
+
+	for index: int in range(3):
+		_add_phase3_density_box(
+			shell,
+			"Phase3EntryWindowGameStack%02d" % index,
+			Vector3(-2.66 + float(index) * 0.20, 1.03 + float(index) * 0.15, 8.245),
+			Vector3(0.16, 0.14, 0.034),
+			blue_case_mat if index != 1 else purple_case_mat,
+			"entry_window_stack"
+		)
+
+	for index: int in range(3):
+		_add_phase3_density_box(
+			shell,
+			"Phase3BackWallPosterStripe%02d" % index,
+			Vector3(-2.60 + float(index) * 0.36, 1.90 - float(index) * 0.18, -9.82),
+			Vector3(0.30, 0.045, 0.032),
+			gold_mat if index == 0 else trim_mat,
+			"back_wall_poster_stripe"
+		)
+
+
+static func _add_phase3_density_box(
+	parent: Node3D,
+	name: String,
+	position: Vector3,
+	size: Vector3,
+	material: StandardMaterial3D,
+	role: String
+) -> MeshInstance3D:
+	var node: MeshInstance3D = _add_box(parent, name, position, size, material)
+	node.set_meta("phase3_retail_density", true)
+	node.set_meta("phase3_density_role", role)
+	node.set_meta("visual_only", true)
+	return node
+
+
+static func _add_phase4_reference_affordances(
+	shell: Node3D, palette: Dictionary, checkout_position: Vector3, display_position: Vector3
+) -> void:
+	var materials: Dictionary = _phase4_materials(palette)
+	var display_center: Vector3 = display_position + Vector3(0.0, 0.0, 0.08)
+	for spec: Dictionary in _phase4_retail_prop_specs(checkout_position, display_center):
+		var prop: Node3D = RetailDensityPropBuilderScript.build(spec, materials)
+		if prop == null:
+			continue
+		shell.add_child(prop)
+
+
+static func _phase4_retail_prop_specs(
+	checkout_position: Vector3, display_center: Vector3
+) -> Array[Dictionary]:
+	return [
+		{
+			"name": "Phase4ShelfCartridgeRun00",
+				"kind": RetailDensityPropBuilderScript.KIND_CARTRIDGE,
+				"role": "shelf_product_variety",
+				"state_key": "shelf_density",
+				"state": "stocked",
+				"position": Vector3(-5.03, 1.06, -9.17),
+			"rotation_degrees": Vector3(0.0, 0.0, -6.0),
+			"accent_material": "gold",
+		},
+		{
+			"name": "Phase4ShelfCartridgeRun01",
+				"kind": RetailDensityPropBuilderScript.KIND_CARTRIDGE,
+				"role": "shelf_product_variety",
+				"state_key": "shelf_density",
+				"state": "stocked",
+				"position": Vector3(-4.82, 1.49, -9.17),
+			"rotation_degrees": Vector3(0.0, 0.0, 5.0),
+			"accent_material": "teal_case",
+		},
+		{
+			"name": "Phase4ShelfConsoleBox00",
+				"kind": RetailDensityPropBuilderScript.KIND_CONSOLE_BOX,
+				"role": "high_value_shelf_tell",
+				"state_key": "high_value_shelf_tell",
+				"state": "boxed_console",
+				"position": Vector3(-3.84, 1.06, -9.17),
+			"scale": Vector3(0.72, 0.72, 0.72),
+			"accent_material": "purple_case",
+		},
+		{
+			"name": "Phase4ShelfControllerLoose00",
+				"kind": RetailDensityPropBuilderScript.KIND_CONTROLLER,
+				"role": "accessory_variety",
+				"state_key": "accessory_density",
+				"state": "loose_controller",
+				"position": Vector3(-3.55, 1.70, -9.17),
+			"scale": Vector3(0.76, 0.76, 0.76),
+			"accent_material": "gold",
+		},
+		{
+			"name": "Phase4ShelfPriceRail00",
+				"kind": RetailDensityPropBuilderScript.KIND_PRICE_TAG,
+				"role": "price_rail_readability",
+				"state_key": "price_rail",
+				"state": "readable",
+				"position": Vector3(-4.88, 0.81, -9.18),
+			"accent_material": "dark",
+		},
+		{
+			"name": "Phase4DisplayLooseCart00",
+				"kind": RetailDensityPropBuilderScript.KIND_CARTRIDGE,
+				"role": "starter_table_product_variety",
+				"state_key": "starter_table_density",
+				"state": "loose_cart",
+				"position": display_center + Vector3(-0.38, 1.10, 0.48),
+			"rotation_degrees": Vector3(0.0, 0.0, 8.0),
+			"accent_material": "purple_case",
+		},
+		{
+			"name": "Phase4DisplayControllerLoose00",
+				"kind": RetailDensityPropBuilderScript.KIND_CONTROLLER,
+				"role": "starter_table_accessory_variety",
+				"state_key": "starter_table_density",
+				"state": "loose_controller",
+				"position": display_center + Vector3(0.62, 1.16, 0.34),
+			"scale": Vector3(0.76, 0.76, 0.76),
+			"accent_material": "teal_case",
+		},
+		{
+			"name": "Phase4CheckoutPendingTray",
+				"kind": RetailDensityPropBuilderScript.KIND_CHECKOUT_STATE,
+				"role": "checkout_pending_physical_state",
+				"state_key": "checkout_transaction_state",
+				"state": "pending",
+				"position": checkout_position + Vector3(-0.08, 0.90, 0.17),
+			"rotation_degrees": Vector3(0.0, -8.0, 0.0),
+		},
+		{
+			"name": "Phase4CheckoutReceiptState",
+				"kind": RetailDensityPropBuilderScript.KIND_CHECKOUT_STATE,
+				"role": "checkout_settled_physical_state",
+				"state_key": "checkout_transaction_state",
+				"state": "settled",
+				"position": checkout_position + Vector3(0.38, 0.90, -0.12),
+			"rotation_degrees": Vector3(0.0, 8.0, 0.0),
+		},
+		{
+			"name": "Phase4CheckoutNoSaleStamp",
+				"kind": RetailDensityPropBuilderScript.KIND_CHECKOUT_STATE,
+				"role": "checkout_no_sale_physical_state",
+				"state_key": "checkout_transaction_state",
+				"state": "no_sale",
+				"position": checkout_position + Vector3(-0.40, 0.91, -0.20),
+			"scale": Vector3(0.72, 0.72, 0.72),
+		},
+		{
+			"name": "Phase4QueueHeldGameCase00",
+				"kind": RetailDensityPropBuilderScript.KIND_HELD_ITEM,
+				"role": "customer_held_item",
+				"state_key": "customer_queue_state",
+				"state": "holding_item",
+				"position": Vector3(4.14, 0.93, 7.02),
+			"rotation_degrees": Vector3(0.0, -18.0, 0.0),
+			"accent_material": "teal_case",
+			"tag_material": "gold",
+		},
+		{
+			"name": "Phase4QueueIntentMarker00",
+				"kind": RetailDensityPropBuilderScript.KIND_QUEUE_MARKER,
+				"role": "queue_intent_marker",
+				"state_key": "customer_queue_state",
+				"state": "ready_to_checkout",
+				"position": Vector3(4.02, 0.095, 7.54),
+			"accent_material": "gold",
+		},
+		{
+			"name": "Phase4MallPlanter00",
+				"kind": RetailDensityPropBuilderScript.KIND_MALL_CONTEXT,
+				"role": "planter",
+				"state_key": "mall_context",
+				"state": "threshold_dressing",
+				"position": Vector3(-3.15, 0.20, 9.38),
+			"scale": Vector3(0.82, 0.82, 0.82),
+		},
+		{
+			"name": "Phase4MallBench00",
+				"kind": RetailDensityPropBuilderScript.KIND_MALL_CONTEXT,
+				"role": "bench",
+				"state_key": "mall_context",
+				"state": "threshold_dressing",
+				"position": Vector3(3.20, 0.25, 9.44),
+			"scale": Vector3(0.86, 0.86, 0.86),
+		},
+		{
+			"name": "Phase4NeighborShutterSilhouette",
+				"kind": RetailDensityPropBuilderScript.KIND_MALL_CONTEXT,
+				"role": "neighbor_shutter",
+				"state_key": "mall_context",
+				"state": "neighbor_store_closed",
+				"position": Vector3(5.35, 1.66, 9.50),
+			"scale": Vector3(1.15, 1.15, 1.15),
+			"accent_material": "backroom_panel",
+		},
+		{
+			"name": "Phase4WindowStaffPicksDecal",
+				"kind": RetailDensityPropBuilderScript.KIND_PRICE_TAG,
+				"role": "window_business_decal",
+				"state_key": "storefront_identity",
+				"state": "staff_picks",
+				"position": Vector3(-2.42, 1.58, 8.245),
+			"scale": Vector3(0.72, 0.72, 0.72),
+			"accent_material": "teal_case",
+		},
+	]
+
+
+static func _phase4_materials(palette: Dictionary) -> Dictionary:
+	return {
+		"trim": palette["trim"],
+		"dark": palette["dark"],
+		"table": palette["table"],
+		"shelf": palette["shelf"],
+		"gold": palette["gold"],
+		"teal_case": palette["teal_case"],
+		"blue_case": palette["blue_case"],
+		"purple_case": palette["purple_case"],
+		"paper_white": palette["paper_white"],
+		"backroom_panel": palette["backroom_panel"],
+	}
 
 
 static func _add_starter_product_visual(shell: Node3D, placement: Dictionary) -> void:

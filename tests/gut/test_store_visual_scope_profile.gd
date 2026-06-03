@@ -22,6 +22,12 @@ const REQUIRED_KEEP_VISIBLE_PATHS: Array[String] = [
 	"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
 	"ReadabilityProps/ZoneIdentity/StarterTableLeftGuide",
 	"ReadabilityProps/ZoneIdentity/StarterTableRightGuide",
+	"ReadabilityProps/CheckoutCounterDressing",
+	"ReadabilityProps/ShelfSpineRuns",
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/SpawnViewFloorDressing",
+	"ReadabilityProps/WallPosterRails",
+	"ReadabilityProps/BackroomDressing",
 ]
 
 const REQUIRED_DEFERRED_ROOTS: Array[StringName] = [
@@ -38,13 +44,10 @@ const REQUIRED_HIDDEN_NOISE_PATHS: Array[String] = [
 	"staff_picks_table",
 	"ZoneLabels/ShelvesLabel",
 	"ZoneLabels/BackroomLabel",
-	"ReadabilityProps/ProductDisplayRows",
 	"ReadabilityProps/DayOneRouteMarkers",
 ]
 
 const REQUIRED_CONFLICT_PATHS: Array[String] = [
-	"ReadabilityProps/ProductDisplayRows",
-	"ReadabilityProps/SpawnViewFloorDressing",
 	"ReadabilityProps/DayOneRouteMarkers",
 	"ZoneLabels/ShelvesLabel",
 	"ZoneLabels/BackroomLabel",
@@ -58,14 +61,19 @@ func before_each() -> void:
 	_root.name = "StoreRoot"
 	add_child(_root)
 	for path: String in [
-		"ReadabilityProps/UsedConsoleDressing/ConsoleTowerA",
-		"ReadabilityProps/ProductDisplayRows/ShelfProductBacker",
-		"CartRackRight/ProductStackA",
-		"StoreSessionRestockShelf/Interactable",
-		"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
-		"ZoneLabels/ShelvesLabel",
-		"ZoneLabels/BackroomLabel",
-		"ExpandableStoreShell/StarterSignLabel",
+			"ReadabilityProps/UsedConsoleDressing/ConsoleTowerA",
+			"ReadabilityProps/ProductDisplayRows/ShelfProductBacker",
+			"ReadabilityProps/DayOneRouteMarkers/FloorCueA",
+			"CartRackRight/ProductStackA",
+			"StoreSessionRestockShelf/Interactable",
+			"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
+			"ReadabilityProps/CheckoutCounterDressing/RegisterReceiptStack",
+			"ReadabilityProps/SpawnViewFloorDressing/EntryWearStrip",
+			"ReadabilityProps/WallPosterRails/PosterRailA",
+			"ReadabilityProps/BackroomDressing/ReceivingClipboard",
+			"ZoneLabels/ShelvesLabel",
+			"ZoneLabels/BackroomLabel",
+			"ExpandableStoreShell/StarterSignLabel",
 		"Checkout/Register/RegisterScreen",
 		"LooseDecorPoster",
 	]:
@@ -239,7 +247,7 @@ func test_missing_decision_reports_absent_path() -> void:
 func test_conflict_decision_reports_runtime_hidden_reference_visible_path() -> void:
 	var decision: Dictionary = StoreVisualScopeProfileScript.classify_path(
 		_root,
-		"ReadabilityProps/ProductDisplayRows/ShelfProductBacker",
+		"ReadabilityProps/DayOneRouteMarkers/FloorCueA",
 		StoreVisualScopeProfileScript.MODE_SUPPRESSION_DIFF
 	)
 	assert_true(bool(decision.get("exists", false)))
@@ -254,6 +262,34 @@ func test_conflict_decision_reports_runtime_hidden_reference_visible_path() -> v
 	var sources: Array = decision.get("source_list", []) as Array
 	assert_true(sources.has(StoreVisualScopeProfileScript.SOURCE_HIDDEN_NOISE))
 	assert_true(sources.has(StoreVisualScopeProfileScript.SOURCE_REFERENCE_VISIBLE))
+
+
+func test_day_one_retail_affordances_are_runtime_visible_keep_paths() -> void:
+	for node_path: String in [
+		"ReadabilityProps/ProductDisplayRows/ShelfProductBacker",
+		"ReadabilityProps/CheckoutCounterDressing/RegisterReceiptStack",
+		"ReadabilityProps/SpawnViewFloorDressing/EntryWearStrip",
+		"ReadabilityProps/WallPosterRails/PosterRailA",
+		"ReadabilityProps/BackroomDressing/ReceivingClipboard",
+	]:
+		var decision: Dictionary = StoreVisualScopeProfileScript.classify_path(
+			_root,
+			node_path,
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME
+		)
+		assert_true(bool(decision.get("exists", false)), "%s fixture must exist" % node_path)
+		assert_true(
+			bool(decision.get("runtime_visible", false)),
+			"%s must stay visible in Day-1 runtime scope" % node_path
+		)
+		assert_eq(
+			int(decision.get("decision", -1)),
+			StoreVisualScopeProfileScript.DECISION_KEEP_ROOT
+		)
+		assert_true(
+			(decision.get("source_list", []) as Array)
+			.has(StoreVisualScopeProfileScript.SOURCE_KEEP_ROOT)
+		)
 
 
 func test_authored_full_scope_preserves_runtime_hidden_dressing() -> void:

@@ -6,7 +6,7 @@
 ##   - compact stat labels render as Shelf / Stockroom / Customers / Sales;
 ##   - TODAY rows are passive milestones, not a second active objective rail;
 ##   - completions mark rows done without collapsing them;
-##   - the panel stays mode-agnostic and dims under modal focus.
+##   - the panel stays visible but quieter in FP mode and dims under modal focus.
 extends GutTest
 
 const _OBJECTIVES: Array[Dictionary] = [
@@ -414,22 +414,35 @@ func test_completion_signal_for_unknown_id_is_a_noop() -> void:
 	assert_eq(panel.get_visible_item_count(), before)
 
 
-func test_fp_mode_changed_does_not_hide_panel() -> void:
+func test_fp_mode_changed_keeps_panel_visible_but_quieter() -> void:
 	var panel: StoreStatusPanel = _make_panel()
+	var normal_width: float = panel.get_panel_width()
+	var normal_alpha: float = panel.get_panel_background_alpha()
 	EventBus.fp_mode_changed.emit(true)
 	await get_tree().process_frame
 	assert_true(panel.visible)
+	assert_lt(panel.get_panel_width(), normal_width)
+	assert_lt(panel.get_panel_background_alpha(), normal_alpha)
+	var root_panel: PanelContainer = panel.get_node_or_null("Panel") as PanelContainer
+	if root_panel != null:
+		assert_almost_eq(root_panel.modulate.a, 0.78, 0.001)
 	EventBus.fp_mode_changed.emit(false)
 	await get_tree().process_frame
 	assert_true(panel.visible)
+	assert_almost_eq(panel.get_panel_width(), normal_width, 0.001)
+	assert_almost_eq(panel.get_panel_background_alpha(), normal_alpha, 0.001)
 
 
-func test_panel_does_not_connect_fp_mode_changed() -> void:
+func test_panel_connects_fp_mode_changed_for_presentation_only() -> void:
 	var panel: StoreStatusPanel = _make_panel()
 	var connections: Array = EventBus.fp_mode_changed.get_connections()
+	var found_panel_connection: bool = false
 	for entry: Dictionary in connections:
 		var callable: Callable = entry.get("callable") as Callable
-		assert_ne(callable.get_object(), panel)
+		if callable.get_object() == panel:
+			found_panel_connection = true
+			assert_eq(callable.get_method(), "_on_fp_mode_changed")
+	assert_true(found_panel_connection)
 
 
 func test_panel_dims_under_modal_context() -> void:

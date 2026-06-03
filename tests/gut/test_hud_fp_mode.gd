@@ -270,9 +270,8 @@ func test_fp_mode_hint_anchored_top_right() -> void:
 	assert_eq(hint.anchor_top, 0.0, "Close-day hint anchored to top edge")
 
 
-## ObjectiveRail (autoload CanvasLayer, layer 40) draws on top of the HUD
-## (layer 30) and fills the bottom 148 px of the viewport. The F4 close-day
-## hint must stay in the top HUD reservation so the rail never buries it.
+## The F4 close-day hint stays in the compact top HUD reservation so it never
+## competes with the FP objective sentence or interaction prompt.
 func test_fp_mode_close_day_hint_above_objective_rail() -> void:
 	_hud.set_fp_mode(true)
 	var hint: Label = _hud.get_node_or_null("FpCloseDayHint") as Label
@@ -285,11 +284,9 @@ func test_fp_mode_close_day_hint_above_objective_rail() -> void:
 	)
 
 
-## Regression guard: the inventory affordance is owned by the ObjectiveRail
-## (Day 1 step 0 emits the "Press I to open the inventory panel" payload with
-## a key chip). A persistent corner hint here would render the same I-key
-## reminder twice on Day 1 — the BRAINDUMP layout spec allows only one
-## controls block per screen.
+## Regression guard: FP mode must not add a persistent corner inventory hint.
+## The active store-session objective sentence is the only persistent objective
+## surface, while focused controls belong to InteractionPrompt.
 func test_fp_mode_does_not_render_duplicate_inventory_hint() -> void:
 	_hud.set_fp_mode(true)
 	var hint: Node = _hud.get_node_or_null("FpInventoryHint")
@@ -390,19 +387,22 @@ func test_fp_mode_sentence_anchored_bottom_center() -> void:
 	)
 
 
-## Regression guard: the FP sentence must sit above the ObjectiveRail's
-## AccentBand (top edge at offset_top=-148 from bottom). If the sentence
-## offset_bottom is greater than -148 it overlaps the rail's content area
-## and competes with the per-step rail readout.
-func test_fp_mode_sentence_above_objective_rail() -> void:
+## Regression guard: with ObjectiveRail hidden in FP mode, the sentence should
+## use the freed bottom-center band instead of floating high above the scene.
+func test_fp_mode_sentence_uses_compact_bottom_band() -> void:
 	_hud.set_fp_mode(true)
 	var sentence: Label = _hud.get_node_or_null("FpSentenceLabel") as Label
 	assert_not_null(sentence)
 	if sentence == null:
 		return
+	assert_gte(
+		sentence.offset_bottom, -120.0,
+		"Sentence bottom edge must stay in the compact bottom-center band"
+	)
 	assert_lte(
-		sentence.offset_bottom, -148.0,
-		"Sentence bottom edge must sit at or above the ObjectiveRail AccentBand (-148)"
+		sentence.offset_top,
+		-72.0,
+		"Sentence top edge must not hug the viewport bottom"
 	)
 
 

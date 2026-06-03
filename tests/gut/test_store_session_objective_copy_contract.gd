@@ -92,7 +92,7 @@ func test_active_training_payload_matches_current_required_action() -> void:
 	_assert_active_payload(controller, _expected_rows()["training_stock_shelf"] as Dictionary)
 
 
-func test_first_person_objective_rail_tracks_training_stage_copy() -> void:
+func test_first_person_hidden_objective_rail_tracks_training_stage_copy() -> void:
 	var controller: StoreSessionController = _controller()
 	if controller == null:
 		return
@@ -202,7 +202,10 @@ func _assert_rail_payload(
 	context: String,
 	expect_action_chip: bool = true
 ) -> void:
-	assert_true(rail.visible, "ObjectiveRail must be visible in FP mode for %s" % context)
+	assert_false(
+		rail.visible,
+		"ObjectiveRail must stay hidden in FP mode for %s" % context
+	)
 	_assert_rail_text(rail, str(expected.get("label", "")), context)
 	if expect_action_chip:
 		assert_eq(

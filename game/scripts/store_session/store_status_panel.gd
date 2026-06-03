@@ -13,6 +13,10 @@ const LAYER_INDEX: int = 30
 const _MODAL_DIM_ALPHA: float = 0.65
 
 const _PANEL_BG: Color = Color(0.094, 0.078, 0.067, 0.82)
+const _PANEL_BORDER: Color = Color(0.534, 0.420, 0.260, 0.58)
+const _FP_PANEL_BG: Color = Color(0.094, 0.078, 0.067, 0.56)
+const _FP_PANEL_BORDER: Color = Color(0.534, 0.420, 0.260, 0.34)
+const _FP_CONTENT_ALPHA: float = 0.78
 const _HEADER_FONT_SIZE: int = 14
 const _SECTION_FONT_SIZE: int = 11
 const _ROW_FONT_SIZE: int = 12
@@ -20,6 +24,7 @@ const _ROW_MIN_HEIGHT: float = 21.0
 const _SECTION_MIN_HEIGHT: float = 16.0
 const _PADDING: int = 10
 const _PANEL_WIDTH: float = 300.0
+const _FP_PANEL_WIDTH: float = 252.0
 const _RIGHT_INSET: float = 20.0
 const _TOP_INSET: float = 84.0
 
@@ -74,6 +79,8 @@ const _PHASE_NAMES: Dictionary = {
 	TimeSystem.DayPhase.LATE_EVENING: "LATE EVENING",
 }
 
+var _panel: PanelContainer
+var _panel_style: StyleBoxFlat
 var _column: VBoxContainer
 var _header: Label
 var _on_shelves_value: Label
@@ -96,6 +103,8 @@ var _on_shelves_count: int = 0
 var _back_room_count: int = 0
 var _sold_today_count: int = 0
 var _shelf_target_count: int = 0
+var _fp_mode_active: bool = false
+var _modal_context_active: bool = false
 
 
 func _ready() -> void:
@@ -114,6 +123,7 @@ func _ready() -> void:
 	EventBus.item_sold.connect(_on_item_sold)
 	EventBus.store_objective_completed.connect(_on_store_objective_completed)
 	EventBus.run_state_changed.connect(_on_run_state_changed)
+	EventBus.fp_mode_changed.connect(_on_fp_mode_changed)
 	InputFocus.context_changed.connect(_on_input_focus_changed)
 
 
@@ -134,6 +144,8 @@ func _exit_tree() -> void:
 		EventBus.store_objective_completed.disconnect(_on_store_objective_completed)
 	if EventBus.run_state_changed.is_connected(_on_run_state_changed):
 		EventBus.run_state_changed.disconnect(_on_run_state_changed)
+	if EventBus.fp_mode_changed.is_connected(_on_fp_mode_changed):
+		EventBus.fp_mode_changed.disconnect(_on_fp_mode_changed)
 	if InputFocus.context_changed.is_connected(_on_input_focus_changed):
 		InputFocus.context_changed.disconnect(_on_input_focus_changed)
 
@@ -167,40 +179,39 @@ func seed_for_day(day: int) -> void:
 
 
 func _build_panel() -> void:
-	var panel: PanelContainer = PanelContainer.new()
-	panel.name = "Panel"
-	panel.anchor_left = 1.0
-	panel.anchor_top = 0.0
-	panel.anchor_right = 1.0
-	panel.anchor_bottom = 0.0
-	panel.offset_left = -(_PANEL_WIDTH + _RIGHT_INSET)
-	panel.offset_top = _TOP_INSET
-	panel.offset_right = -_RIGHT_INSET
-	panel.offset_bottom = _TOP_INSET
-	panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	panel.grow_vertical = Control.GROW_DIRECTION_END
-	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_panel = PanelContainer.new()
+	_panel.name = "Panel"
+	_panel.anchor_left = 1.0
+	_panel.anchor_top = 0.0
+	_panel.anchor_right = 1.0
+	_panel.anchor_bottom = 0.0
+	_panel.offset_top = _TOP_INSET
+	_panel.offset_bottom = _TOP_INSET
+	_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_panel.grow_vertical = Control.GROW_DIRECTION_END
+	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-	var style: StyleBoxFlat = StyleBoxFlat.new()
-	style.bg_color = _PANEL_BG
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_right = 4
-	style.corner_radius_bottom_left = 4
-	style.border_color = Color(0.534, 0.420, 0.260, 0.58)
-	style.border_width_left = 2
-	style.content_margin_left = float(_PADDING)
-	style.content_margin_top = float(_PADDING)
-	style.content_margin_right = float(_PADDING)
-	style.content_margin_bottom = float(_PADDING)
-	panel.add_theme_stylebox_override("panel", style)
-	add_child(panel)
+	_panel_style = StyleBoxFlat.new()
+	_panel_style.bg_color = _PANEL_BG
+	_panel_style.corner_radius_top_left = 4
+	_panel_style.corner_radius_top_right = 4
+	_panel_style.corner_radius_bottom_right = 4
+	_panel_style.corner_radius_bottom_left = 4
+	_panel_style.border_color = _PANEL_BORDER
+	_panel_style.border_width_left = 2
+	_panel_style.content_margin_left = float(_PADDING)
+	_panel_style.content_margin_top = float(_PADDING)
+	_panel_style.content_margin_right = float(_PADDING)
+	_panel_style.content_margin_bottom = float(_PADDING)
+	_panel.add_theme_stylebox_override("panel", _panel_style)
+	add_child(_panel)
 
 	_column = VBoxContainer.new()
 	_column.name = "Column"
 	_column.add_theme_constant_override("separation", 4)
 	_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_child(_column)
+	_panel.add_child(_column)
+	_apply_panel_presentation()
 
 	_header = Label.new()
 	_header.name = "Header"
@@ -524,16 +535,53 @@ func _on_store_objective_completed(objective_id: StringName) -> void:
 
 
 func _on_input_focus_changed(new_ctx: StringName, _old_ctx: StringName) -> void:
-	var target: float = _MODAL_DIM_ALPHA if new_ctx == InputFocus.CTX_MODAL else 1.0
+	_modal_context_active = new_ctx == InputFocus.CTX_MODAL
+	_apply_panel_presentation()
+
+
+func _on_fp_mode_changed(active: bool) -> void:
+	_fp_mode_active = active
+	_apply_panel_presentation()
+
+
+func _apply_panel_presentation() -> void:
+	if _panel != null:
+		var width: float = _active_panel_width()
+		_panel.offset_left = -(width + _RIGHT_INSET)
+		_panel.offset_right = -_RIGHT_INSET
+	if _panel_style != null:
+		_panel_style.bg_color = _FP_PANEL_BG if _fp_mode_active else _PANEL_BG
+		_panel_style.border_color = _FP_PANEL_BORDER if _fp_mode_active else _PANEL_BORDER
+	var target: float = 1.0
+	if _fp_mode_active:
+		target *= _FP_CONTENT_ALPHA
+	if _modal_context_active:
+		target *= _MODAL_DIM_ALPHA
 	for child: Node in get_children():
 		if child is CanvasItem:
 			(child as CanvasItem).modulate.a = target
+
+
+func _active_panel_width() -> float:
+	return _FP_PANEL_WIDTH if _fp_mode_active else _PANEL_WIDTH
 
 
 func get_header_text() -> String:
 	if _header == null:
 		return ""
 	return _header.text
+
+
+func get_panel_width() -> float:
+	if _panel == null:
+		return 0.0
+	return _panel.offset_right - _panel.offset_left
+
+
+func get_panel_background_alpha() -> float:
+	if _panel_style == null:
+		return 0.0
+	return _panel_style.bg_color.a
 
 
 func get_stat_value(stat_name: String) -> String:

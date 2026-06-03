@@ -273,86 +273,73 @@ func test_duplicate_emit_does_not_overwrite_rail_labels() -> void:
 	assert_eq(rail._action_label.text, "")
 
 
-# ── FP-mode focus chip (absorbs InteractionPrompt content) ────────────────────
+# ── FP-mode suppression ────────────────────────────────────────────────────────
 #
-# In first-person mode the ObjectiveRail takes over the inline
-# "[E] action" copy that the InteractionPrompt would otherwise render
-# bottom-center. The right-side chip swaps the cached objective action for
-# the focused interactable's action_label, the cream KeyBadge appears, and
-# the cached HintLabel suppresses for the duration of focus. Disabled
-# focus mutes the action label and hides the badge; unfocus restores the
-# cached payload.
+# In first-person mode the full-width ObjectiveRail is hidden. The active
+# objective is mirrored by HUD's compact FP sentence, and focused-interactable
+# copy belongs to InteractionPrompt.
 
-func test_fp_mode_focus_renders_focused_action_in_rail() -> void:
+func test_fp_mode_hides_objective_rail_surface() -> void:
 	var rail := _make_rail()
 	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
-	EventBus.interactable_focused.emit("Talk to Customer")
+	assert_false(
+		rail.visible,
+		"FP mode must hide the full-width ObjectiveRail surface"
+	)
+
+
+func test_fp_mode_keeps_payload_cached_while_surface_hidden() -> void:
+	var rail := _make_rail()
+	_start_day1_preopening()
+	EventBus.fp_mode_changed.emit(true)
+	assert_false(rail.visible)
 	assert_eq(
-		rail._action_label.text, "Talk to Customer",
-		"FP-mode focus must replace the cached action chip with the focused interactable's action_label"
+		rail._objective_label.text,
+		_OBJECTIVE_TEXT,
+		"Hidden FP rail must still cache active objective text for audits"
 	)
 
 
-func test_fp_mode_focus_shows_styled_keybadge() -> void:
-	var rail := _make_rail()
-	_start_day1_preopening()
-	EventBus.fp_mode_changed.emit(true)
-	EventBus.interactable_focused.emit("Talk to Customer")
-	var badge: PanelContainer = rail._key_badge
-	assert_true(
-		badge.visible,
-		"Cream KeyBadge must surface in the rail's right-side chip during FP-mode focus"
-	)
-
-
-func test_fp_mode_focus_suppresses_cached_hint_chip() -> void:
+func test_fp_mode_focus_does_not_resurface_rail() -> void:
 	var rail := _make_rail()
 	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
 	EventBus.interactable_focused.emit("Talk to Customer")
 	assert_false(
-		rail._hint_label.visible,
-		"Cached HintLabel must hide while the FP focus chip owns the right side"
+		rail.visible,
+		"Focused interactables must not resurface the hidden FP ObjectiveRail"
 	)
 
 
-func test_fp_mode_disabled_focus_hides_keybadge_and_mutes_label() -> void:
+func test_fp_mode_disabled_focus_does_not_resurface_rail() -> void:
 	var rail := _make_rail()
 	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
 	EventBus.interactable_focused_disabled.emit("No customer waiting")
 	assert_false(
-		rail._key_badge.visible,
-		"Disabled focus must hide the KeyBadge so the player sees E will not act"
-	)
-	assert_eq(
-		rail._action_label.text, "No customer waiting",
-		"Disabled focus must surface the get_disabled_reason() text in the rail's action label"
-	)
-	assert_lt(
-		rail._action_label.modulate.a, 0.85,
-		"Disabled-reason text must render with reduced alpha to match the prompt's muted treatment"
+		rail.visible,
+		"Disabled interactable focus must not resurface the hidden FP ObjectiveRail"
 	)
 
 
-func test_fp_mode_unfocus_restores_cached_payload() -> void:
+func test_exiting_fp_mode_restores_cached_objective_rail_payload() -> void:
 	var rail := _make_rail()
 	_start_day1_preopening()
 	EventBus.fp_mode_changed.emit(true)
-	EventBus.interactable_focused.emit("Talk to Customer")
-	EventBus.interactable_unfocused.emit()
+	assert_false(rail.visible)
+	EventBus.fp_mode_changed.emit(false)
 	assert_eq(
 		rail._action_label.text, _ACTION_TEXT,
-		"Unfocus must restore the cached objective action chip"
+		"Exiting FP mode must restore the cached objective action chip"
 	)
 	assert_eq(
 		rail._hint_label.text, _KEY_TEXT,
-		"Unfocus must restore the cached key chip"
+		"Exiting FP mode must restore the cached key chip"
 	)
-	assert_false(
-		rail._key_badge.visible,
-		"KeyBadge must hide once focus clears"
+	assert_true(
+		rail.visible,
+		"Exiting FP mode must restore the ObjectiveRail in non-FP store view"
 	)
 
 
@@ -398,7 +385,7 @@ func test_non_fp_disabled_focus_suppresses_action_chip() -> void:
 	assert_eq(rail._action_label.text, _ACTION_TEXT)
 
 
-func test_store_fp_mode_keeps_objective_rail_surface_visible() -> void:
+func test_store_fp_mode_hides_objective_rail_surface() -> void:
 	var rail := _make_rail()
 	_start_day1_preopening()
 	assert_true(rail.visible, "Pre-condition: rail visible before store_session FP mode")
@@ -408,9 +395,9 @@ func test_store_fp_mode_keeps_objective_rail_surface_visible() -> void:
 
 	EventBus.fp_mode_changed.emit(true)
 
-	assert_true(
+	assert_false(
 		rail.visible,
-		"Store-session FP mode must keep ObjectiveRail visible for the active bottom objective"
+		"Store-session FP mode must hide ObjectiveRail so HUD owns one compact objective sentence"
 	)
 
 

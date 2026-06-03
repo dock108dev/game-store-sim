@@ -1,3 +1,4 @@
+## gdlint:disable=max-public-methods,max-file-lines
 extends GutTest
 
 # See docs/audits/cleanup-report.md: this shell acceptance suite stays together
@@ -254,8 +255,18 @@ func test_boot_shell_zone_practicals_preserve_readability_hierarchy() -> void:
 	var shelf_edge: OmniLight3D = shell.get_node_or_null("ShelfEdgeCoolPractical") as OmniLight3D
 	var shelf_wall: OmniLight3D = shell.get_node_or_null("ShelfWallWarmPractical") as OmniLight3D
 	var stockroom: OmniLight3D = shell.get_node_or_null("StockroomUtilityPractical") as OmniLight3D
+	var stockroom_pickup: OmniLight3D = (
+		shell.get_node_or_null("StockroomPickupWarmPractical") as OmniLight3D
+	)
 	var entry: OmniLight3D = shell.get_node_or_null("EntryThresholdPractical") as OmniLight3D
-	for light: OmniLight3D in [checkout, shelf_edge, shelf_wall, stockroom, entry]:
+	for light: OmniLight3D in [
+		checkout,
+		shelf_edge,
+		shelf_wall,
+		stockroom,
+		stockroom_pickup,
+		entry,
+	]:
 		assert_not_null(light, "Generated zone practical must exist")
 		if light == null:
 			continue
@@ -731,6 +742,132 @@ func test_storefront_threshold_identity_is_visual_only_generated_shell() -> void
 	assert_not_null(canopy_label, "Front canopy must carry a physical store-name label")
 	if canopy_label != null:
 		assert_eq(canopy_label.text, "RETRO REWIND")
+
+
+func test_phase3_retail_density_is_generated_visual_only_detail() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	var required: Dictionary = {
+		"Phase3ShelfSpineRun00": "shelf_spine_run",
+		"Phase3ShelfFaceout00": "shelf_faceout",
+		"Phase3CheckoutImpulseCard00": "checkout_impulse_card",
+		"Phase3CheckoutCounterSleeve00": "checkout_counter_sleeve",
+		"Phase3StarterTableFaceout00": "starter_table_faceout",
+		"Phase3StarterTableSleeveStack00": "starter_table_sleeve_stack",
+		"Phase3EntryWindowGameStack00": "entry_window_stack",
+		"Phase3BackWallPosterStripe00": "back_wall_poster_stripe",
+	}
+	for node_path: String in required.keys():
+		var node: Node = shell.get_node_or_null(node_path)
+		assert_not_null(node, "Phase 3 retail density detail missing: %s" % node_path)
+		if node == null:
+			continue
+		assert_true(
+			bool(node.get_meta("phase3_retail_density", false)),
+			"%s must be declared as Phase 3 retail density" % node_path
+		)
+		assert_eq(str(node.get_meta("phase3_density_role", "")), str(required[node_path]))
+		assert_true(bool(node.get_meta("visual_only", false)), "%s must be visual-only" % node_path)
+		assert_false(node is CollisionObject3D, "%s must not add route collision" % node_path)
+		assert_false(node is Interactable, "%s must not add an interaction target" % node_path)
+		assert_false(node is Area3D, "%s must not add a route or trigger area" % node_path)
+		assert_gt(_box_size(node as Node3D).length_squared(), 0.0, "%s must render" % node_path)
+
+
+func test_phase3_retail_density_stays_in_customer_readable_zones() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	var shelf: Node3D = shell.get_node_or_null("Phase3ShelfSpineRun00") as Node3D
+	var checkout: Node3D = shell.get_node_or_null("Phase3CheckoutImpulseCard00") as Node3D
+	var table: Node3D = shell.get_node_or_null("Phase3StarterTableFaceout00") as Node3D
+	var entry: Node3D = shell.get_node_or_null("Phase3EntryWindowGameStack00") as Node3D
+	assert_not_null(shelf)
+	assert_not_null(checkout)
+	assert_not_null(table)
+	assert_not_null(entry)
+	if shelf != null:
+		assert_lt(shelf.position.z, -9.0, "Shelf density must stay on the back wall")
+		assert_lt(shelf.position.x, -3.0, "Shelf density must stay left of the route")
+	if checkout != null:
+		assert_gt(checkout.position.z, 5.0, "Checkout density must stay near the counter")
+		assert_gt(checkout.position.y, 0.8, "Checkout density must sit on the counter plane")
+	if table != null:
+		assert_lt(table.position.x, -3.0, "Starter table density must stay with the shelf table")
+		assert_gt(table.position.y, 1.0, "Starter table faceouts must sit above the tabletop")
+	if entry != null:
+		assert_gt(entry.position.z, 8.0, "Entry density must stay inside the storefront read")
+		assert_lt(entry.position.x, -2.0, "Entry density must stay in the window display")
+
+
+func test_phase4_reference_affordances_are_builder_owned_visual_only_props() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	var required: Dictionary = {
+		"Phase4ShelfCartridgeRun00": "shelf_product_variety",
+		"Phase4ShelfConsoleBox00": "high_value_shelf_tell",
+		"Phase4ShelfControllerLoose00": "accessory_variety",
+		"Phase4CheckoutPendingTray": "checkout_pending_physical_state",
+		"Phase4QueueHeldGameCase00": "customer_held_item",
+		"Phase4MallPlanter00": "planter",
+	}
+	for node_path: String in required.keys():
+		var node: Node = shell.get_node_or_null(node_path)
+		assert_not_null(node, "Phase 4 reference affordance missing: %s" % node_path)
+		if node == null:
+			continue
+		assert_true(bool(node.get_meta("visual_only", false)), "%s must be visual-only" % node_path)
+		assert_true(
+			bool(node.get_meta("phase4_retail_prop", false)),
+			"%s must be declared as a Phase 4 prop" % node_path
+		)
+		assert_eq(str(node.get_meta("store_visual_source", "")), "retail_density_prop_builder")
+		assert_eq(str(node.get_meta("retail_prop_role", "")), str(required[node_path]))
+		assert_false(
+			_has_interaction_descendant(node),
+			"%s must not add collision, triggers, or interactables" % node_path
+		)
+
+
+func test_phase4_checkout_queue_and_storefront_state_are_physically_represented() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	for required: String in [
+		"Phase4CheckoutPendingTray/StateItem",
+		"Phase4CheckoutReceiptState/ReceiptSlip",
+		"Phase4CheckoutNoSaleStamp/StateStrip",
+		"Phase4QueueHeldGameCase00/HoldTag",
+		"Phase4QueueIntentMarker00/IntentStripe",
+		"Phase4MallPlanter00/PlantMass",
+		"Phase4MallBench00/BenchBack",
+		"Phase4NeighborShutterSilhouette/ContextPanel",
+		"Phase4WindowStaffPicksDecal/TagPlate",
+	]:
+		assert_not_null(shell.get_node_or_null(required), "Phase 4 physical cue missing: %s" % required)
+
+
+func test_phase4_density_introduces_shape_variety_without_extra_product_displays() -> void:
+	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
+	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
+	if shell == null:
+		return
+	var kinds: Dictionary = {}
+	for prop: Node in _collect_phase4_props(shell):
+		var kind: String = str(prop.get_meta("retail_prop_kind", ""))
+		kinds[kind] = int(kinds.get(kind, 0)) + 1
+	assert_gte(kinds.size(), 7, "Phase 4 density must use varied silhouettes")
+	assert_eq(
+		_collect_distinct_product_item_ids(shell).size(),
+		3,
+		"Phase 4 visual props must not become gameplay product displays"
+	)
 
 
 func test_boot_shell_register_screen_glow_stays_readable_and_restrained() -> void:
@@ -1378,6 +1515,24 @@ func _collect_product_displays(parent: Node) -> Array[Node]:
 			products.append(child)
 		products.append_array(_collect_product_displays(child))
 	return products
+
+
+func _collect_phase4_props(parent: Node) -> Array[Node]:
+	var props: Array[Node] = []
+	for child: Node in parent.get_children():
+		if bool(child.get_meta("phase4_retail_prop", false)):
+			props.append(child)
+		props.append_array(_collect_phase4_props(child))
+	return props
+
+
+func _has_interaction_descendant(node: Node) -> bool:
+	if node is CollisionObject3D or node is Area3D or node is Interactable:
+		return true
+	for child: Node in node.get_children():
+		if _has_interaction_descendant(child):
+			return true
+	return false
 
 
 func _box_size(node: Node3D) -> Vector3:
