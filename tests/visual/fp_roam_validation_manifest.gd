@@ -115,14 +115,15 @@ static func rows() -> Array[Dictionary]:
 			"stockroom_threshold",
 			"04_stockroom_threshold.png",
 			Vector3(2.20, 1.58, -3.95),
-			"ExpandableStoreShell/StockroomFloorTape",
+			"ExpandableStoreShell/StockroomDoorStaffCard",
 			"Inspect Starter Stock Box",
 			"Threshold stop: route into stockroom should read as intentional space.",
 			["stockroom_route", "store_construction_and_expansion"],
 			[
 				"StoreSessionBackroomPickup",
 				"ExpandableStoreShell/StockroomPartition",
-				"ExpandableStoreShell/StockroomFloorTape",
+				"ExpandableStoreShell/StockroomDoorStaffCard",
+				"ExpandableStoreShell/StockroomDoorDirectionPlaque",
 				"ExpandableStoreShell/StockroomUtilityPractical",
 				"ExpandableStoreShell/StockroomPickupWarmPractical",
 			],
@@ -196,120 +197,67 @@ static func rows() -> Array[Dictionary]:
 				"ExpandableStoreShell/StorefrontCanopyLabel",
 				"ExpandableStoreShell/FrontGlassLeftLite",
 				"ExpandableStoreShell/WindowDisplayCartridgeStack",
-				"ExpandableStoreShell/Phase3EntryWindowGameStack00",
-				"ExpandableStoreShell/Phase4MallPlanter00",
-				"ExpandableStoreShell/Phase4MallBench00",
-				"ExpandableStoreShell/Phase4WindowStaffPicksDecal",
+				"ExpandableStoreShell/ReferenceWindowStaffPicksPlinth",
+				"ExpandableStoreShell/ReferenceWindowStaffPickSign",
+				"ExpandableStoreShell/ReferenceEntryPlantPot",
 			],
-			{"max_near_white_ratio": 0.18},
-				{
-					"required_phase4_roles": ["planter", "bench", "window_business_decal"],
-					"required_phase4_state_values": [
-						"mall_context:threshold_dressing",
-						"storefront_identity:staff_picks",
-					],
-				}
+			{"max_near_white_ratio": 0.18}
 		),
 		_row(
 			9,
-			"shelf_wall_density_close",
+			"shelf_wall_merchandising_close",
 			"09_shelf_wall_density_close.png",
 			Vector3(-3.80, 1.50, 0.10),
-			"ExpandableStoreShell/Phase3ShelfFaceout00",
+			"ExpandableStoreShell/ReferenceUsedGamesHeaderPanel",
 			"Stock Starter Display",
-			"Shelf-wall close read: product density should read without text spam.",
+			"Shelf-wall close read: product facings should read without text spam.",
 			["shelf_economics_and_product_readability"],
 			[
 				"ExpandableStoreShell/StarterUsedShelfBacker",
 				"ExpandableStoreShell/StarterUsedShelfRail00",
-				"ExpandableStoreShell/Phase3ShelfSpineRun00",
-				"ExpandableStoreShell/Phase3ShelfFaceout00",
-				"ExpandableStoreShell/Phase4ShelfCartridgeRun00",
-				"ExpandableStoreShell/Phase4ShelfConsoleBox00",
-				"ExpandableStoreShell/Phase4ShelfControllerLoose00",
+				"ExpandableStoreShell/ReferenceUsedGamesHeaderPanel",
+				"ExpandableStoreShell/ReferenceShelfGameFacing00",
+				"ExpandableStoreShell/ReferenceShelfGameFacing11",
 			],
-			{"max_near_white_ratio": 0.18},
-			{
-					"required_phase4_roles": [
-						"shelf_product_variety",
-						"high_value_shelf_tell",
-						"accessory_variety",
-						"price_rail_readability",
-					],
-					"required_phase4_state_values": [
-						"shelf_density:stocked",
-						"high_value_shelf_tell:boxed_console",
-						"accessory_density:loose_controller",
-						"price_rail:readable",
-					],
-				}
-			),
+			{"max_near_white_ratio": 0.18}
+		),
 		_row(
 			10,
-			"checkout_detail_density",
+			"checkout_office_detail",
 			"10_checkout_detail_density.png",
 			Vector3(3.28, 1.44, 6.85),
-			"ExpandableStoreShell/Phase3CheckoutImpulseCard00",
+			"ExpandableStoreShell/ReferenceOfficeUnlockBoard",
 			"Talk to Manager",
-			"Checkout close read: register detail should feel stocked but not obstructive.",
+			"Checkout close read: office wall and register detail should feel stocked but not obstructive.",
 			["checkout_and_transaction_work"],
 			[
 				"ExpandableStoreShell/CheckoutRegisterScreen",
 				"ExpandableStoreShell/CheckoutCardReader",
-				"ExpandableStoreShell/Phase3CheckoutImpulseCard00",
-				"ExpandableStoreShell/Phase3CheckoutCounterSleeve00",
-				"ExpandableStoreShell/Phase4CheckoutPendingTray",
-				"ExpandableStoreShell/Phase4CheckoutReceiptState",
-				"ExpandableStoreShell/Phase4CheckoutNoSaleStamp",
-				"ExpandableStoreShell/Phase4QueueHeldGameCase00",
+				"ExpandableStoreShell/ReferenceOfficeUnlockBoard",
+				"ExpandableStoreShell/ReferenceCheckoutWoodDeskReturn",
+				"ExpandableStoreShell/ReferenceCheckoutCorkNoticeBoard",
 			],
-			{"max_near_white_ratio": 0.17},
-			{
-				"required_phase4_roles": [
-					"checkout_pending_physical_state",
-						"checkout_settled_physical_state",
-						"checkout_no_sale_physical_state",
-						"customer_held_item",
-						"queue_intent_marker",
-					],
-					"required_phase4_state_values": [
-						"checkout_transaction_state:pending",
-						"checkout_transaction_state:settled",
-						"checkout_transaction_state:no_sale",
-						"customer_queue_state:holding_item",
-						"customer_queue_state:ready_to_checkout",
-					],
-				}
-			),
+			{"max_near_white_ratio": 0.17}
+		),
 		_row(
 			11,
-			"starter_table_density_close",
+			"starter_table_merch_close",
 			"11_starter_table_density_close.png",
 			Vector3(-3.85, 1.44, 1.85),
-			"ExpandableStoreShell/Phase3StarterTableFaceout00",
+			"ExpandableStoreShell/ReferenceDisplayCuttingMat",
 			"Stock Starter Display",
 			"Display-table close read: starter table should feel merchandised.",
 			["shelf_economics_and_product_readability"],
 			[
 				"StoreSessionRestockShelf",
 				"ExpandableStoreShell/StarterDisplayTableTray",
-				"ExpandableStoreShell/Phase3StarterTableFaceout00",
-				"ExpandableStoreShell/Phase3StarterTableSleeveStack00",
-				"ExpandableStoreShell/Phase4DisplayLooseCart00",
-				"ExpandableStoreShell/Phase4DisplayControllerLoose00",
+				"ExpandableStoreShell/ReferenceDisplayCuttingMat",
+				"ExpandableStoreShell/ReferenceDisplayCardPack00",
+				"ExpandableStoreShell/ReferenceDisplayLowGlassCase",
+				"ExpandableStoreShell/ReferenceDisplayStoolSeat",
 			],
-			{"max_near_white_ratio": 0.18},
-			{
-					"required_phase4_roles": [
-						"starter_table_product_variety",
-						"starter_table_accessory_variety",
-					],
-					"required_phase4_state_values": [
-						"starter_table_density:loose_cart",
-						"starter_table_density:loose_controller",
-					],
-				}
-			),
+			{"max_near_white_ratio": 0.18}
+		),
 	]
 
 
@@ -323,8 +271,7 @@ static func _row(
 	review_goal: String,
 	inspiration_tags: Array[String],
 	anchors: Array[String],
-	image_limits: Dictionary = {},
-	density_requirements: Dictionary = {}
+	image_limits: Dictionary = {}
 ) -> Dictionary:
 	return {
 		"index": index,
@@ -338,7 +285,6 @@ static func _row(
 		"inspiration_tags": inspiration_tags,
 		"anchors": anchors,
 		"image_limits": image_limits,
-		"density_requirements": density_requirements,
 		"visual_scope_mode": StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME_LABEL,
 		"checklist": review_checklist(),
 	}

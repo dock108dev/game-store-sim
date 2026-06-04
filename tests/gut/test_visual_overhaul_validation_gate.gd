@@ -1051,7 +1051,7 @@ func _assert_spawn_first_look_matches_player_spawn(row: Dictionary) -> void:
 	for landmark_path: String in [
 		"ExpandableStoreShell/CheckoutRegisterScreen",
 		"StoreSessionManager",
-		"ExpandableStoreShell/StockroomFloorTape",
+		"ExpandableStoreShell/StockroomDoorStaffCard",
 		"StoreSessionRestockShelf",
 	]:
 		_assert_node_projects_inside_spawn_view(landmark_path)

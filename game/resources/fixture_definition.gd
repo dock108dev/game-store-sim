@@ -2,11 +2,11 @@
 class_name FixtureDefinition
 extends Resource
 
+enum TierLevel { BASIC = 1, IMPROVED = 2, PREMIUM = 3 }
+
 const CatalogEffectMetadataScript: GDScript = preload(
 	"res://game/resources/catalog_effect_metadata.gd"
 )
-
-enum TierLevel { BASIC = 1, IMPROVED = 2, PREMIUM = 3 }
 
 const TIER_NAMES: Dictionary = {
 	TierLevel.BASIC: "Basic",
@@ -76,8 +76,8 @@ func get_catalog_effects() -> Array[Dictionary]:
 func get_effect_summary_text() -> String:
 	if not effect_summary.is_empty():
 		return effect_summary
-	var labels: PackedStringArray = (
-		CatalogEffectMetadataScript.labels_for_effects(get_catalog_effects())
+	var labels: PackedStringArray = CatalogEffectMetadataScript.labels_for_effects(
+		get_catalog_effects()
 	)
 	return ", ".join(labels)
 

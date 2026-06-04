@@ -28,7 +28,9 @@ const FIXTURE_PRICES: Dictionary = {
 }
 
 const SELLBACK_RATE: float = 0.5
-const ROTATION_FACING: Array[Vector2i] = [Vector2i(0, 1), Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0)]
+const ROTATION_FACING: Array[Vector2i] = [
+	Vector2i(0, 1), Vector2i(1, 0), Vector2i(0, -1), Vector2i(-1, 0)
+]
 var needs_nav_rebake: bool = false
 
 var _grid: BuildModeGrid = null
@@ -218,9 +220,7 @@ func get_preview_feedback(hovered_cell: Variant):
 
 
 ## Returns rich preview feedback for a fixture pose without mutating state.
-func get_preview_feedback_for(
-	grid_pos: Vector2i, fixture_type: String, fixture_rotation: int
-):
+func get_preview_feedback_for(grid_pos: Vector2i, fixture_type: String, fixture_rotation: int):
 	var cells: Array[Vector2i] = _get_fixture_cells(fixture_type, grid_pos, fixture_rotation)
 	var feedback = _validator.get_placement_feedback(
 		cells,
@@ -267,9 +267,7 @@ func try_place(grid_pos: Vector2i) -> bool:
 			push_error("Unknown fixture type: %s" % _selected_fixture_type)
 			return false
 
-	var feedback = get_preview_feedback_for(
-		grid_pos, _selected_fixture_type, _current_rotation
-	)
+	var feedback = get_preview_feedback_for(grid_pos, _selected_fixture_type, _current_rotation)
 	if not feedback.valid:
 		EventBus.fixture_placement_invalid.emit(feedback.primary_reason)
 		return false
@@ -360,7 +358,11 @@ func get_placed_fixtures() -> Array[Dictionary]:
 
 ## Returns the current tier of a placed fixture.
 func get_fixture_tier(fixture_id: String) -> int:
-	return _upgrade_handler.get_fixture_tier(fixture_id) if _upgrade_handler else FixtureDefinition.TierLevel.BASIC
+	return (
+		_upgrade_handler.get_fixture_tier(fixture_id)
+		if _upgrade_handler
+		else FixtureDefinition.TierLevel.BASIC
+	)
 
 
 ## Returns whether a fixture can be upgraded.
@@ -375,7 +377,11 @@ func get_upgrade_cost(fixture_id: String) -> float:
 
 ## Returns the reason a fixture cannot be upgraded.
 func get_upgrade_block_reason(fixture_id: String) -> String:
-	return _upgrade_handler.get_upgrade_block_reason(fixture_id) if _upgrade_handler else "Upgrade system not initialized"
+	return (
+		_upgrade_handler.get_upgrade_block_reason(fixture_id)
+		if _upgrade_handler
+		else "Upgrade system not initialized"
+	)
 
 
 ## Attempts to upgrade a placed fixture to the next tier.
@@ -402,16 +408,21 @@ func get_save_data() -> Dictionary:
 	for fixture_id: String in _placed_fixtures:
 		var data: Dictionary = _placed_fixtures[fixture_id]
 		var pos: Vector2i = data.get("grid_position", Vector2i.ZERO) as Vector2i
-		fixtures_data.append({
-			"fixture_id": fixture_id,
-			"fixture_type": data.get("fixture_type", ""),
-			"grid_position": [pos.x, pos.y],
-			"rotation": data.get("rotation", 0),
-			"is_register": data.get("is_register", false),
-			"purchase_price": data.get("purchase_price", 0.0),
-			"tier": data.get("tier", FixtureDefinition.TierLevel.BASIC),
-			"total_spent": data.get("total_spent", 0.0),
-		})
+		(
+			fixtures_data
+			. append(
+				{
+					"fixture_id": fixture_id,
+					"fixture_type": data.get("fixture_type", ""),
+					"grid_position": [pos.x, pos.y],
+					"rotation": data.get("rotation", 0),
+					"is_register": data.get("is_register", false),
+					"purchase_price": data.get("purchase_price", 0.0),
+					"tier": data.get("tier", FixtureDefinition.TierLevel.BASIC),
+					"total_spent": data.get("total_spent", 0.0),
+				}
+			)
+		)
 	return {"placed_fixtures": fixtures_data}
 
 

@@ -469,13 +469,13 @@ func _add_stockroom_label(
 	label.rotation_degrees = Vector3(0.0, 0.0, 0.0)
 	label.set_meta("stockroom_inventory_projection", true)
 	label.set_meta("stockroom_inventory_payload", payload.duplicate(true))
-	label.scale = Vector3(0.72, 0.72, 0.72)
+	label.scale = Vector3(0.30, 0.30, 0.30)
 	var label_text_node: Label3D = label.get_node_or_null("LabelText") as Label3D
 	if label_text_node != null:
-		label_text_node.pixel_size = 0.010
-		label_text_node.font_size = 18
-		label_text_node.modulate = Color(0.957, 0.914, 0.831, 0.74)
-		label_text_node.outline_size = 2
+		label_text_node.pixel_size = 0.0048
+		label_text_node.font_size = 14
+		label_text_node.modulate = Color(0.957, 0.914, 0.831, 0.58)
+		label_text_node.outline_size = 1
 	add_child(label)
 	return label
 

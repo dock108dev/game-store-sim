@@ -17,9 +17,7 @@ const ExpandableStoreShellRuntimeScript: GDScript = preload(
 const StoreVisualLayoutScript: GDScript = preload(
 	"res://game/scripts/visuals/store_visual_layout.gd"
 )
-const VisualValueUtilScript: GDScript = preload(
-	"res://game/scripts/visuals/visual_value_util.gd"
-)
+const VisualValueUtilScript: GDScript = preload("res://game/scripts/visuals/visual_value_util.gd")
 
 var _root: Node3D = null
 var _saved_state: GameManager.State
@@ -303,7 +301,7 @@ func test_boot_shell_practicals_have_physical_sources_and_plane_metadata() -> vo
 		"CheckoutRegisterPracticalSource": "register",
 		"CrtSignGlowPracticalSource": "crt_sign",
 		"StockroomStripLightSource": "stockroom_strip",
-		"FeaturedDisplayAccentPracticalSource": "featured_display",
+		"DisplayTableUndershelfPracticalSource": "display_table_undershelf",
 		"StorefrontCanopyGlowSource": "storefront",
 	}
 	for node_path: String in practical_sources:
@@ -342,89 +340,62 @@ func test_boot_shell_practicals_have_physical_sources_and_plane_metadata() -> vo
 		)
 
 
-func test_boot_shell_lighting_planes_separate_route_depth_without_single_hue_collapse() -> void:
+func test_boot_shell_practical_sources_separate_route_depth_without_floor_planes() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
 	if shell == null:
 		return
-	var foreground: MeshInstance3D = (
-		shell.get_node_or_null("SpawnForegroundWarmPlane") as MeshInstance3D
+	for removed: String in [
+		"SpawnForegroundWarmPlane",
+		"MainMidgroundWorkSurfacePlane",
+		"BackWallBackgroundCoolPlane",
+		"StockroomCoolBackgroundPlane",
+	]:
+		assert_null(shell.get_node_or_null(removed), "%s must not render as a helper plane" % removed)
+	var register_source: MeshInstance3D = (
+		shell.get_node_or_null("CheckoutRegisterPracticalSource") as MeshInstance3D
 	)
-	var midground: MeshInstance3D = (
-		shell.get_node_or_null("MainMidgroundWorkSurfacePlane") as MeshInstance3D
+	var display_source: MeshInstance3D = (
+		shell.get_node_or_null("DisplayTableUndershelfPracticalSource") as MeshInstance3D
 	)
-	var background: MeshInstance3D = (
-		shell.get_node_or_null("BackWallBackgroundCoolPlane") as MeshInstance3D
+	var sign_source: MeshInstance3D = (
+		shell.get_node_or_null("CrtSignGlowPracticalSource") as MeshInstance3D
 	)
-	var stockroom_background: MeshInstance3D = (
-		shell.get_node_or_null("StockroomCoolBackgroundPlane") as MeshInstance3D
+	var stockroom_source: MeshInstance3D = (
+		shell.get_node_or_null("StockroomStripLightSource") as MeshInstance3D
 	)
-	for plane: MeshInstance3D in [foreground, midground, background, stockroom_background]:
-		assert_not_null(plane, "Lighting plane must exist")
-		if plane == null:
+	for source: MeshInstance3D in [register_source, display_source, sign_source, stockroom_source]:
+		assert_not_null(source, "Practical source must exist")
+		if source == null:
 			continue
 		assert_false(
-			str(plane.get_meta("visual_plane", "")).is_empty(),
-			"%s must declare foreground, midground, or background" % plane.name
+			str(source.get_meta("visual_plane", "")).is_empty(),
+			"%s must declare its depth plane through metadata" % source.name
 		)
 		assert_eq(
-			str(plane.get_meta("route_critical_shadow_policy", "")),
+			str(source.get_meta("route_critical_shadow_policy", "")),
 			"preserve",
-			"%s must preserve route-critical object readability" % plane.name
+			"%s must preserve route-critical object readability" % source.name
 		)
 	if (
-		foreground == null
-		or midground == null
-		or background == null
-		or stockroom_background == null
+		register_source == null
+		or display_source == null
+		or sign_source == null
+		or stockroom_source == null
 	):
 		return
-	assert_gt(
-		foreground.position.z,
-		midground.position.z,
-		"Foreground plane must sit closer to spawn than midground work surfaces"
-	)
-	assert_gt(
-		midground.position.z,
-		background.position.z,
-		"Midground work surface plane must separate from the back wall"
-	)
-	var foreground_mat: StandardMaterial3D = foreground.material_override as StandardMaterial3D
-	var midground_mat: StandardMaterial3D = midground.material_override as StandardMaterial3D
-	var background_mat: StandardMaterial3D = background.material_override as StandardMaterial3D
-	var stockroom_mat: StandardMaterial3D = (
-		stockroom_background.material_override as StandardMaterial3D
-	)
-	assert_not_null(foreground_mat, "Foreground plane must carry material")
-	assert_not_null(midground_mat, "Midground plane must carry material")
-	assert_not_null(background_mat, "Background plane must carry material")
-	assert_not_null(stockroom_mat, "Stockroom background plane must carry material")
-	if (
-		foreground_mat == null
-		or midground_mat == null
-		or background_mat == null
-		or stockroom_mat == null
-	):
+	assert_gt(register_source.position.z, display_source.position.z)
+	assert_gt(display_source.position.z, sign_source.position.z)
+	var display_mat: StandardMaterial3D = display_source.material_override as StandardMaterial3D
+	var stockroom_mat: StandardMaterial3D = stockroom_source.material_override as StandardMaterial3D
+	assert_not_null(display_mat, "Display practical source must carry material")
+	assert_not_null(stockroom_mat, "Stockroom practical source must carry material")
+	if display_mat == null or stockroom_mat == null:
 		return
-	assert_gt(
-		midground_mat.albedo_color.r,
-		midground_mat.albedo_color.b,
-		"Sales-floor work surfaces must read warmer than cool back-of-house planes"
-	)
-	assert_gt(
-		stockroom_mat.albedo_color.b,
-		stockroom_mat.albedo_color.r,
-		"Stockroom plane must read cooler than the sales floor"
-	)
 	assert_gte(
-		_color_distance(foreground_mat.albedo_color, background_mat.albedo_color),
+		_color_distance(display_mat.albedo_color, stockroom_mat.albedo_color),
 		ZONE_COLOR_DELTA_MIN * 2.0,
-		"Lighting planes must not collapse into a single hue"
-	)
-	assert_gte(
-		_color_distance(midground_mat.albedo_color, stockroom_mat.albedo_color),
-		ZONE_COLOR_DELTA_MIN * 2.0,
-		"Sales floor and stockroom planes must stay visually distinct"
+		"Sales-floor and stockroom practicals must stay visually distinct"
 	)
 
 
@@ -437,24 +408,27 @@ func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 		"SalesFloorWarmBackWallPanel",
 		"ShelfWallCoolReadPanel",
 		"ShelfWallAccentTopRail",
-		"ShelfWallBlueBayPatch",
-		"ShelfWallPurpleBayPatch",
+		"ShelfWallSlatRail00",
+		"ShelfWallSlatRail01",
+		"ShelfWallSlatRail02",
+		"ShelfWallSlatRail03",
+		"ShelfWallCategoryPlaque",
+		"ShelfWallFeatureFacing",
 		"CheckoutServiceWarmWallPanel",
-		"CheckoutServiceFloorPool",
 		"CheckoutCounterEdgeLine",
-		"ManagerAreaBackPanel",
-		"ManagerAreaLedgerRail",
-		"QueueLaneWarmInlay",
-		"QueueLaneMarkerPuck00",
-		"QueueLaneMarkerPuck01",
-		"QueueLaneMarkerPuck02",
+		"CheckoutServiceMenuBoard",
+		"CheckoutServiceMenuHeader",
+		"CheckoutServiceMenuBottomRule",
+		"QueueLaneStanchionPost00",
+		"QueueLaneStanchionPost01",
+		"QueueLaneStanchionPost02",
+		"QueueLaneCounterRope",
 		"StockroomCoolDoorRevealLeft",
 		"StockroomCoolDoorRevealRight",
 		"StockroomCoolDoorRevealHeader",
-		"StockroomUtilityFloorApron",
-		"StockroomWarmPickupSightPatch",
-		"EntryMutedFloorMat",
-		"EntryWarmSightlineStrip",
+		"StockroomPickupWallTaskCard",
+		"FrontDoorLowerKickPlate",
+		"FrontDoorHorizontalPushBar",
 		"ShelfLifeTradePoster/Panel",
 		"ShelfLifeRepairPoster/Panel",
 		"ShelfLifeQueueCardPanel",
@@ -465,15 +439,15 @@ func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 	var shelf_panel: StandardMaterial3D = _material_for(shell, "ShelfWallCoolReadPanel")
 	var checkout_panel: StandardMaterial3D = _material_for(shell, "CheckoutServiceWarmWallPanel")
 	var stockroom_reveal: StandardMaterial3D = _material_for(shell, "StockroomCoolDoorRevealLeft")
-	var entry_mat: StandardMaterial3D = _material_for(shell, "EntryMutedFloorMat")
-	var manager_panel: StandardMaterial3D = _material_for(shell, "ManagerAreaBackPanel")
-	var queue_inlay: StandardMaterial3D = _material_for(shell, "QueueLaneWarmInlay")
+	var entry_plate: StandardMaterial3D = _material_for(shell, "FrontDoorLowerKickPlate")
+	var menu_board: StandardMaterial3D = _material_for(shell, "CheckoutServiceMenuBoard")
+	var queue_rope: StandardMaterial3D = _material_for(shell, "QueueLaneCounterRope")
 	assert_not_null(shelf_panel, "Shelf zone panel must carry material")
 	assert_not_null(checkout_panel, "Checkout zone panel must carry material")
 	assert_not_null(stockroom_reveal, "Stockroom reveal must carry material")
-	assert_not_null(entry_mat, "Entry mat must carry material")
-	assert_not_null(manager_panel, "Manager area panel must carry material")
-	assert_not_null(queue_inlay, "Queue lane inlay must carry material")
+	assert_not_null(entry_plate, "Entry door plate must carry material")
+	assert_not_null(menu_board, "Checkout service menu board must carry material")
+	assert_not_null(queue_rope, "Queue lane rope must carry material")
 	if shelf_panel != null:
 		assert_gte(
 			shelf_panel.albedo_color.b - shelf_panel.albedo_color.r,
@@ -492,49 +466,65 @@ func test_boot_shell_generated_zone_surfaces_keep_store_readable() -> void:
 			ZONE_COLOR_DELTA_MIN,
 			"Stockroom doorway reveal must read cooler than the sales floor"
 		)
-	if entry_mat != null and checkout_panel != null:
+	if entry_plate != null and checkout_panel != null:
 		assert_lt(
-			_brightest_channel(entry_mat.albedo_color),
+			_brightest_channel(entry_plate.albedo_color),
 			_brightest_channel(checkout_panel.albedo_color),
-			"Entry mat must orient the exit without overpowering checkout"
+			"Entry door plate must orient the exit without overpowering checkout"
 		)
-	if manager_panel != null and checkout_panel != null:
+	if menu_board != null and checkout_panel != null:
 		assert_eq(
-			manager_panel.albedo_color,
+			menu_board.albedo_color,
 			checkout_panel.albedo_color,
-			"Manager back panel must share checkout service material language"
+			"Checkout service menu board must share checkout service material language"
 		)
-	if queue_inlay != null and checkout_panel != null:
+	if queue_rope != null and checkout_panel != null:
 		assert_gte(
-			queue_inlay.albedo_color.r,
+			queue_rope.albedo_color.r,
 			checkout_panel.albedo_color.r,
-			"Queue inlay should read as part of the warm checkout/manager lane"
+			"Queue rope should read as part of the warm checkout/manager lane"
 		)
 	for index: int in range(3):
 		var marker: Node3D = _root.get_node_or_null("QueueMarker%d" % (index + 1)) as Node3D
-		var puck: Node3D = shell.get_node_or_null("QueueLaneMarkerPuck%02d" % index) as Node3D
+		var post: Node3D = shell.get_node_or_null("QueueLaneStanchionPost%02d" % index) as Node3D
 		assert_not_null(marker, "Queue marker %d must exist" % (index + 1))
-		assert_not_null(puck, "Queue lane puck %d must exist" % index)
-		if marker == null or puck == null:
+		assert_not_null(post, "Queue lane post %d must exist" % index)
+		if marker == null or post == null:
 			continue
 		assert_lte(
-			_flat_xz_distance(marker.global_position, puck.global_position),
-			0.04,
-			"Generated queue puck %d must align with its marker footprint" % index
+			_flat_xz_distance(marker.global_position, post.global_position),
+			0.80,
+			"Generated queue post %d must stay near the queue footprint" % index
 		)
 
 
-func test_floor_seams_stay_quieter_than_route_and_product_targets() -> void:
+func test_floor_treatment_does_not_expose_route_cue_geometry() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
 	if shell == null:
 		return
+	for removed: String in [
+		"FloorTrafficScuff00",
+		"CheckoutQueueFloorRail",
+		"StarterDisplayFloorRail",
+		"StockroomThresholdFloorRail",
+		"SpawnAisleRunner",
+		"StarterAisleMat",
+		"CheckoutServiceFloorPool",
+		"QueueLaneWarmInlay",
+		"QueueLaneMarkerPuck00",
+		"StockroomUtilityFloorApron",
+		"StockroomWarmPickupSightPatch",
+		"EntryMutedFloorMat",
+		"EntryWarmSightlineStrip",
+		"OnboardingRouteCues/CheckoutBackroomFloorWear00",
+	]:
+		assert_null(shell.get_node_or_null(removed), "%s must not render as floor guidance" % removed)
 	for required: String in [
 		"FloorBoardSeam00",
-		"FloorTrafficScuff00",
-		"SpawnCheckoutSightlineStrip",
-		"SpawnStarterDisplaySightlineStrip",
 		"StockroomFloorTape",
+		"CheckoutQueueRopeFront",
+		"QueueLaneCounterRope",
 		"StarterUsedShelfPriceTag00",
 		"ProductPriceTag",
 	]:
@@ -544,34 +534,28 @@ func test_floor_seams_stay_quieter_than_route_and_product_targets() -> void:
 		)
 	var floor_mat: StandardMaterial3D = _material_for(shell, "StarterFloor")
 	var seam_mat: StandardMaterial3D = _material_for(shell, "FloorBoardSeam00")
-	var scuff_mat: StandardMaterial3D = _material_for(shell, "FloorTrafficScuff00")
-	var checkout_strip_mat: StandardMaterial3D = _material_for(shell, "SpawnCheckoutSightlineStrip")
-	var stockroom_tape_mat: StandardMaterial3D = _material_for(shell, "StockroomFloorTape")
+	var checkout_rope_mat: StandardMaterial3D = _material_for(shell, "CheckoutQueueRopeFront")
+	var stockroom_sill_mat: StandardMaterial3D = _material_for(shell, "StockroomFloorTape")
 	assert_not_null(floor_mat, "Starter floor must carry material")
 	assert_not_null(seam_mat, "Floor seam must carry material")
-	assert_not_null(scuff_mat, "Floor scuff must carry material")
-	assert_not_null(checkout_strip_mat, "Checkout sightline strip must carry material")
-	assert_not_null(stockroom_tape_mat, "Stockroom threshold tape must carry material")
+	assert_not_null(checkout_rope_mat, "Checkout queue rope must carry material")
+	assert_not_null(stockroom_sill_mat, "Stockroom threshold sill must carry material")
 	if (
 		floor_mat == null
 		or seam_mat == null
-		or scuff_mat == null
-		or checkout_strip_mat == null
-		or stockroom_tape_mat == null
+		or checkout_rope_mat == null
+		or stockroom_sill_mat == null
 	):
 		return
 	var seam_delta: float = _color_distance(floor_mat.albedo_color, seam_mat.albedo_color)
-	var scuff_delta: float = _color_distance(floor_mat.albedo_color, scuff_mat.albedo_color)
 	var checkout_delta: float = _color_distance(
-		floor_mat.albedo_color, checkout_strip_mat.albedo_color
+		floor_mat.albedo_color, checkout_rope_mat.albedo_color
 	)
 	var stockroom_delta: float = _color_distance(
-		floor_mat.albedo_color, stockroom_tape_mat.albedo_color
+		floor_mat.albedo_color, stockroom_sill_mat.albedo_color
 	)
 	assert_lt(seam_delta, checkout_delta, "Floor seams must be quieter than checkout cues")
 	assert_lt(seam_delta, stockroom_delta, "Floor seams must be quieter than stockroom cues")
-	assert_lt(scuff_delta, checkout_delta, "Traffic scuffs must be quieter than checkout cues")
-	assert_lt(scuff_delta, stockroom_delta, "Traffic scuffs must be quieter than stockroom cues")
 
 
 func test_wall_posters_use_store_identity_panels_not_random_decals() -> void:
@@ -615,9 +599,10 @@ func test_spawn_view_supports_store_identity_and_route_cues() -> void:
 		"StoreIdentitySignUnderRail",
 		"StoreIdentitySignBracketLeft",
 		"StoreIdentitySignBracketRight",
-		"StoreIdentityCaseStripe00",
-		"StoreIdentityCaseStripe01",
-		"StoreIdentityCaseStripe02",
+		"StoreIdentityProductFacing00",
+		"StoreIdentityProductFacing01",
+		"StoreIdentityProductFacing02",
+		"StoreIdentityMerchShelfRail",
 		"StoreIdentitySignWashPractical",
 		"StorefrontCanopyLabel",
 		"FrontGlassLeftLite",
@@ -627,12 +612,15 @@ func test_spawn_view_supports_store_identity_and_route_cues() -> void:
 		"FrontWindowDecalLeft",
 		"ThresholdFloorInlay",
 		"WelcomeMatInset",
+		"FrontDoorLowerKickPlate",
+		"FrontDoorHorizontalPushBar",
 		"WindowDisplayCartridgeStack",
-		"SpawnAisleRunner",
-		"SpawnCheckoutSightlineStrip",
-		"SpawnStarterDisplaySightlineStrip",
-		"SpawnStockroomSightlineStrip",
-		"SpawnRetailZoneLowRail",
+		"CheckoutQueueStanchionPost00",
+		"CheckoutQueueStanchionPost01",
+		"CheckoutQueueStanchionPost02",
+		"CheckoutQueueRopeFront",
+		"StarterDisplayShelfEdgeCard",
+		"StockroomDoorDirectionPlaque",
 		"CheckoutServiceWarmWallPanel",
 		"ShelfWallCoolReadPanel",
 		"StockroomCoolDoorRevealHeader",
@@ -642,16 +630,14 @@ func test_spawn_view_supports_store_identity_and_route_cues() -> void:
 		)
 	var sign_label: Label3D = shell.get_node_or_null("StarterSignLabel") as Label3D
 	var identity_panel: Node3D = shell.get_node_or_null("StoreIdentityWallPanel") as Node3D
-	var checkout_strip: Node3D = shell.get_node_or_null("SpawnCheckoutSightlineStrip") as Node3D
-	var starter_strip: Node3D = (
-		shell.get_node_or_null("SpawnStarterDisplaySightlineStrip") as Node3D
-	)
-	var stockroom_strip: Node3D = shell.get_node_or_null("SpawnStockroomSightlineStrip") as Node3D
+	var checkout_rope: Node3D = shell.get_node_or_null("CheckoutQueueRopeFront") as Node3D
+	var starter_card: Node3D = shell.get_node_or_null("StarterDisplayShelfEdgeCard") as Node3D
+	var stockroom_plaque: Node3D = shell.get_node_or_null("StockroomDoorDirectionPlaque") as Node3D
 	assert_not_null(sign_label, "Store sign must stay visible at spawn")
 	assert_not_null(identity_panel, "Store sign must sit in a supported wall treatment")
-	assert_not_null(checkout_strip, "Manager/register cue must be visible from spawn")
-	assert_not_null(starter_strip, "Starter display direction cue must be visible from spawn")
-	assert_not_null(stockroom_strip, "Stockroom entrance cue must be visible from spawn")
+	assert_not_null(checkout_rope, "Manager/register fixture cue must be visible from spawn")
+	assert_not_null(starter_card, "Starter display fixture cue must be visible from spawn")
+	assert_not_null(stockroom_plaque, "Stockroom entrance fixture cue must be visible from spawn")
 	if sign_label != null and identity_panel != null:
 		assert_eq(sign_label.text, "RETRO REWIND", "Spawn sign must carry the store identity")
 		assert_almost_eq(
@@ -660,15 +646,15 @@ func test_spawn_view_supports_store_identity_and_route_cues() -> void:
 			0.05,
 			"Identity panel should frame the store identity sign"
 		)
-	if checkout_strip != null:
+	if checkout_rope != null:
 		assert_gt(
-			checkout_strip.position.x, 2.0, "Checkout cue should lead toward the manager/register"
+			checkout_rope.position.x, 2.0, "Checkout cue should lead toward the manager/register"
 		)
-	if starter_strip != null:
-		assert_lt(starter_strip.position.x, -2.0, "Starter display cue should pull left from spawn")
-	if stockroom_strip != null:
+	if starter_card != null:
+		assert_lt(starter_card.position.x, -2.0, "Starter display cue should pull left from spawn")
+	if stockroom_plaque != null:
 		assert_lt(
-			stockroom_strip.position.z,
+			stockroom_plaque.position.z,
 			-4.0,
 			"Stockroom cue should sit deeper than sales floor cues"
 		)
@@ -685,9 +671,10 @@ func test_spawn_view_cues_are_panels_and_strips_not_debug_blocks() -> void:
 		"StoreIdentitySignUnderRail",
 		"StoreIdentitySignBracketLeft",
 		"StoreIdentitySignBracketRight",
-		"StoreIdentityCaseStripe00",
-		"StoreIdentityCaseStripe01",
-		"StoreIdentityCaseStripe02",
+		"StoreIdentityProductFacing00",
+		"StoreIdentityProductFacing01",
+		"StoreIdentityProductFacing02",
+		"StoreIdentityMerchShelfRail",
 		"FrontGlassLeftLite",
 		"FrontGlassRightLite",
 		"MallSideTransomGlow",
@@ -695,12 +682,12 @@ func test_spawn_view_cues_are_panels_and_strips_not_debug_blocks() -> void:
 		"FrontWindowDecalLeft",
 		"ThresholdFloorInlay",
 		"WelcomeMatInset",
+		"FrontDoorLowerKickPlate",
+		"FrontDoorHorizontalPushBar",
 		"WindowDisplayCartridgeStack",
-		"SpawnAisleRunner",
-		"SpawnCheckoutSightlineStrip",
-		"SpawnStarterDisplaySightlineStrip",
-		"SpawnStockroomSightlineStrip",
-		"SpawnRetailZoneLowRail",
+		"CheckoutQueueRopeFront",
+		"StarterDisplayShelfEdgeCard",
+		"StockroomDoorDirectionPlaque",
 	]:
 		_assert_panel_or_strip(shell, node_path)
 
@@ -744,130 +731,153 @@ func test_storefront_threshold_identity_is_visual_only_generated_shell() -> void
 		assert_eq(canopy_label.text, "RETRO REWIND")
 
 
-func test_phase3_retail_density_is_generated_visual_only_detail() -> void:
+func test_failed_density_layers_are_not_part_of_boot_shell() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
 	if shell == null:
 		return
-	var required: Dictionary = {
-		"Phase3ShelfSpineRun00": "shelf_spine_run",
-		"Phase3ShelfFaceout00": "shelf_faceout",
-		"Phase3CheckoutImpulseCard00": "checkout_impulse_card",
-		"Phase3CheckoutCounterSleeve00": "checkout_counter_sleeve",
-		"Phase3StarterTableFaceout00": "starter_table_faceout",
-		"Phase3StarterTableSleeveStack00": "starter_table_sleeve_stack",
-		"Phase3EntryWindowGameStack00": "entry_window_stack",
-		"Phase3BackWallPosterStripe00": "back_wall_poster_stripe",
-	}
-	for node_path: String in required.keys():
-		var node: Node = shell.get_node_or_null(node_path)
-		assert_not_null(node, "Phase 3 retail density detail missing: %s" % node_path)
-		if node == null:
-			continue
-		assert_true(
-			bool(node.get_meta("phase3_retail_density", false)),
-			"%s must be declared as Phase 3 retail density" % node_path
-		)
-		assert_eq(str(node.get_meta("phase3_density_role", "")), str(required[node_path]))
-		assert_true(bool(node.get_meta("visual_only", false)), "%s must be visual-only" % node_path)
-		assert_false(node is CollisionObject3D, "%s must not add route collision" % node_path)
-		assert_false(node is Interactable, "%s must not add an interaction target" % node_path)
-		assert_false(node is Area3D, "%s must not add a route or trigger area" % node_path)
-		assert_gt(_box_size(node as Node3D).length_squared(), 0.0, "%s must render" % node_path)
-
-
-func test_phase3_retail_density_stays_in_customer_readable_zones() -> void:
-	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
-	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
-	if shell == null:
-		return
-	var shelf: Node3D = shell.get_node_or_null("Phase3ShelfSpineRun00") as Node3D
-	var checkout: Node3D = shell.get_node_or_null("Phase3CheckoutImpulseCard00") as Node3D
-	var table: Node3D = shell.get_node_or_null("Phase3StarterTableFaceout00") as Node3D
-	var entry: Node3D = shell.get_node_or_null("Phase3EntryWindowGameStack00") as Node3D
-	assert_not_null(shelf)
-	assert_not_null(checkout)
-	assert_not_null(table)
-	assert_not_null(entry)
-	if shelf != null:
-		assert_lt(shelf.position.z, -9.0, "Shelf density must stay on the back wall")
-		assert_lt(shelf.position.x, -3.0, "Shelf density must stay left of the route")
-	if checkout != null:
-		assert_gt(checkout.position.z, 5.0, "Checkout density must stay near the counter")
-		assert_gt(checkout.position.y, 0.8, "Checkout density must sit on the counter plane")
-	if table != null:
-		assert_lt(table.position.x, -3.0, "Starter table density must stay with the shelf table")
-		assert_gt(table.position.y, 1.0, "Starter table faceouts must sit above the tabletop")
-	if entry != null:
-		assert_gt(entry.position.z, 8.0, "Entry density must stay inside the storefront read")
-		assert_lt(entry.position.x, -2.0, "Entry density must stay in the window display")
-
-
-func test_phase4_reference_affordances_are_builder_owned_visual_only_props() -> void:
-	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
-	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
-	if shell == null:
-		return
-	var required: Dictionary = {
-		"Phase4ShelfCartridgeRun00": "shelf_product_variety",
-		"Phase4ShelfConsoleBox00": "high_value_shelf_tell",
-		"Phase4ShelfControllerLoose00": "accessory_variety",
-		"Phase4CheckoutPendingTray": "checkout_pending_physical_state",
-		"Phase4QueueHeldGameCase00": "customer_held_item",
-		"Phase4MallPlanter00": "planter",
-	}
-	for node_path: String in required.keys():
-		var node: Node = shell.get_node_or_null(node_path)
-		assert_not_null(node, "Phase 4 reference affordance missing: %s" % node_path)
-		if node == null:
-			continue
-		assert_true(bool(node.get_meta("visual_only", false)), "%s must be visual-only" % node_path)
-		assert_true(
-			bool(node.get_meta("phase4_retail_prop", false)),
-			"%s must be declared as a Phase 4 prop" % node_path
-		)
-		assert_eq(str(node.get_meta("store_visual_source", "")), "retail_density_prop_builder")
-		assert_eq(str(node.get_meta("retail_prop_role", "")), str(required[node_path]))
-		assert_false(
-			_has_interaction_descendant(node),
-			"%s must not add collision, triggers, or interactables" % node_path
+	for removed: String in [
+		"StoreArtCheckoutRetailWall",
+		"StoreArtDenseShelfWall",
+		"StoreArtDisplayTableMerch",
+		"StoreArtStockroomWorkZone",
+		"StoreArtStorefrontWindowDisplay",
+		"Phase4ShelfCartridgeRun00",
+		"Phase4ShelfConsoleBox00",
+		"Phase4ShelfControllerLoose00",
+		"Phase4CheckoutPendingTray",
+		"Phase4MallPlanter00",
+		"StockroomExpandedFrontPartitionHighA",
+		"StockroomExpandedFrontPartitionHighB",
+	]:
+		assert_null(
+			shell.get_node_or_null(removed), "Failed visual layer must stay removed: %s" % removed
 		)
 
 
-func test_phase4_checkout_queue_and_storefront_state_are_physically_represented() -> void:
+func test_reference_inspired_surfaces_replace_random_blockout_clutter() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
 	if shell == null:
 		return
 	for required: String in [
-		"Phase4CheckoutPendingTray/StateItem",
-		"Phase4CheckoutReceiptState/ReceiptSlip",
-		"Phase4CheckoutNoSaleStamp/StateStrip",
-		"Phase4QueueHeldGameCase00/HoldTag",
-		"Phase4QueueIntentMarker00/IntentStripe",
-		"Phase4MallPlanter00/PlantMass",
-		"Phase4MallBench00/BenchBack",
-		"Phase4NeighborShutterSilhouette/ContextPanel",
-		"Phase4WindowStaffPicksDecal/TagPlate",
+		"ReferenceSalesWallPaintField",
+		"ReferenceManagerOfficeWallField",
+		"ReferenceStockroomBluePaintField",
+		"ReferenceCeilingGridRunX00",
+		"ReferenceOfficeUnlockBoard",
+		"ReferenceOfficeWoodPanelStrip00",
+		"ReferenceCheckoutWoodDeskReturn",
+		"ReferenceCheckoutRedServicePanel",
+		"ReferenceDisplayCuttingMat",
+		"ReferenceDisplayLowGlassCase",
+		"ReferenceDisplayGlassCaseGame00",
+		"ReferenceDisplayOpenCartonBase",
+		"ReferenceDisplayStoolSeat",
+		"ReferenceUsedGamesHeaderPanel",
+		"ReferenceShelfGameFacing00",
+		"ReferenceShelfGameFacing11",
+		"ReferenceStockroomPegboard",
+		"ReferenceStockroomWorkOrderBoard",
+		"ReferenceStockroomDoorLabelPlate",
+		"ReferenceWindowStaffPicksPlinth",
+		"ReferenceEntryPlantPot",
+		"ReferenceEntryPlantMass",
 	]:
-		assert_not_null(shell.get_node_or_null(required), "Phase 4 physical cue missing: %s" % required)
+		assert_not_null(
+			shell.get_node_or_null(required), "Inspired fixture cue missing: %s" % required
+		)
+	assert_gte(
+		_count_children_with_prefix(shell, "ReferenceShelfGameFacing"),
+		12,
+		"Shelf wall should use many flat facings instead of a few black placeholder boxes"
+	)
+	assert_gte(
+		_count_children_with_prefix(shell, "ReferenceOfficeUnlockCard"),
+		10,
+		"Office wall should read like a real progression board"
+	)
+	assert_gte(
+		_count_children_with_prefix(shell, "ReferenceDisplayCartonGame"),
+		5,
+		"Starter display should use open-carton product silhouettes instead of solid blocks"
+	)
 
 
-func test_phase4_density_introduces_shape_variety_without_extra_product_displays() -> void:
+func test_close_read_surfaces_are_authored_fixtures_not_blank_slabs() -> void:
 	var shell: Node3D = _root.get_node_or_null("ExpandableStoreShell") as Node3D
 	assert_not_null(shell, "Boot must generate the expanded expandable store shell")
 	if shell == null:
 		return
-	var kinds: Dictionary = {}
-	for prop: Node in _collect_phase4_props(shell):
-		var kind: String = str(prop.get_meta("retail_prop_kind", ""))
-		kinds[kind] = int(kinds.get(kind, 0)) + 1
-	assert_gte(kinds.size(), 7, "Phase 4 density must use varied silhouettes")
-	assert_eq(
-		_collect_distinct_product_item_ids(shell).size(),
-		3,
-		"Phase 4 visual props must not become gameplay product displays"
+	for required: String in [
+		"ExpansionShutterSlat00",
+		"ExpansionPreviewPosterPanel",
+		"FrontDoorCenterMullion",
+		"FrontDoorLogoDecal",
+		"FrontDoorHorizontalPushBar",
+		"FrontDoorOpenHoursDecal",
+		"WelcomeMatRib00",
+		"StockroomDoorCrossbar",
+		"StockroomDoorStaffCard",
+		"ReferenceStockroomDoorLabelText",
+	]:
+		assert_not_null(
+			shell.get_node_or_null(required), "Close-read fixture cue missing: %s" % required
+		)
+	var expansion_panel: Node3D = shell.get_node_or_null("ExpansionDoorPanel") as Node3D
+	assert_not_null(expansion_panel, "Expansion door shell panel must still exist")
+	if expansion_panel != null:
+		var expansion_size: Vector3 = _box_size(expansion_panel)
+		assert_lte(
+			expansion_size.z,
+			2.65,
+			"ExpansionDoorPanel must not dominate the wall as a blank oversized slab"
+		)
+		assert_lte(
+			expansion_size.y,
+			2.15,
+			"ExpansionDoorPanel should read as a shutter panel below header height"
+		)
+	var glass_case: Node3D = shell.get_node_or_null("ReferenceDisplayLowGlassCase") as Node3D
+	assert_not_null(glass_case, "Display table must keep a glass case cue")
+	if glass_case != null:
+		var glass_case_size: Vector3 = _box_size(glass_case)
+		assert_lte(
+			glass_case_size.y,
+			0.08,
+			"Display glass must be a low cover, not a chunky block in the camera"
+		)
+	assert_gte(
+		_count_children_with_prefix(shell, "ExpansionShutterSlat"),
+		6,
+		"Expansion wall should read as shuttered retail frontage"
 	)
+	var welcome_mat: Node3D = shell.get_node_or_null("WelcomeMatInset") as Node3D
+	assert_not_null(welcome_mat, "Entry must keep a welcome mat cue")
+	if welcome_mat != null:
+		var welcome_mat_size: Vector3 = _box_size(welcome_mat)
+		assert_lte(
+			welcome_mat_size.x,
+			1.60,
+			"Welcome mat must not fill the exit threshold as a giant black plane"
+		)
+		assert_lte(welcome_mat_size.z, 0.40, "Welcome mat must stay below close-camera slab scale")
+	var threshold_inlay: Node3D = shell.get_node_or_null("ThresholdFloorInlay") as Node3D
+	assert_not_null(threshold_inlay, "Entry must keep a threshold inlay cue")
+	if threshold_inlay != null:
+		assert_lte(
+			_box_size(threshold_inlay).x,
+			0.70,
+			"Threshold inlay should be a small branded detail, not a full-width floor bar"
+		)
+	var entry_plate: Node3D = shell.get_node_or_null("FrontDoorLowerKickPlate") as Node3D
+	assert_not_null(entry_plate, "Entry orientation plate must still exist")
+	if entry_plate != null:
+		assert_lte(
+			_box_size(entry_plate).x,
+			1.25,
+			"Entry orientation plate must not compete with the authored storefront"
+		)
 
 
 func test_boot_shell_register_screen_glow_stays_readable_and_restrained() -> void:
@@ -909,8 +919,8 @@ func test_stockroom_path_keeps_marker_without_workbench_clutter() -> void:
 		"StockroomFrontRightWallPanel",
 		"StockroomDoorLintel",
 		"StockroomFloorTape",
-		"StockroomEmployeeStripeLeft",
-		"StockroomEmployeeStripeRight",
+		"StockroomEmployeeDoorStripeLeft",
+		"StockroomEmployeeDoorStripeRight",
 		"StockroomDoorStop",
 	]:
 		assert_not_null(shell.get_node_or_null(required), "Stockroom marker missing: %s" % required)
@@ -1045,17 +1055,12 @@ func test_stockroom_boundary_matches_expanded_runtime_staff_corner() -> void:
 		5,
 		"Expanded stockroom should carry enough storage boxes to read as working space"
 	)
-	for label: Label3D in _collect_visible_labels(shell):
-		var text: String = label.text.strip_edges().to_lower()
-		assert_false(
-			text.contains("stockroom"), "%s must not rely on a stockroom wall label" % label.name
-		)
-		assert_false(
-			text.contains("stock room"), "%s must not rely on a stock room wall label" % label.name
-		)
-		assert_false(
-			text.contains("back room"), "%s must not rely on a back room wall label" % label.name
-		)
+	var back_room_label: Label3D = (
+		shell.get_node_or_null("ReferenceStockroomDoorLabelText") as Label3D
+	)
+	assert_not_null(back_room_label, "Stockroom doorway should use a sparse physical door plaque")
+	if back_room_label != null:
+		assert_eq(back_room_label.text, "BACK ROOM")
 
 
 func test_stockroom_has_working_room_depth_and_pickup_clearance() -> void:
@@ -1269,9 +1274,12 @@ func test_malformed_optional_contract_fields_fall_back_without_dropping_authored
 func test_checkout_lane_runtime_uses_queue_slots_as_single_source() -> void:
 	var catalog: RefCounted = StoreVisualLayoutScript.load_default()
 	var layout: Dictionary = (
-		catalog.call("get_layout", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT)
-		as Dictionary
-	).duplicate(true)
+		(
+			catalog.call("get_layout", StoreVisualLayoutScript.RETRO_GAMES_STARTER_LAYOUT)
+			as Dictionary
+		)
+		. duplicate(true)
+	)
 	var contract: Dictionary = layout.get("physical_contract", {}) as Dictionary
 	var queue_contract: Dictionary = _contract_for_object(contract, "queue_marker_positions")
 	var front_lane_contract: Dictionary = _contract_for_object(contract, "front_lane_queue")
@@ -1457,10 +1465,12 @@ func test_boot_shell_avoids_product_name_spam() -> void:
 			if label.text.strip_edges() != "":
 				stockroom_inventory_label_count += 1
 			continue
+		if _is_functional_wayfinding_label(label):
+			continue
 		if label.text.strip_edges() != "":
 			visible_text_count += 1
 	assert_lte(
-		visible_text_count, 2, "Generated store shell should not spam product/category labels"
+		visible_text_count, 3, "Generated store shell should not spam product/category labels"
 	)
 	assert_lte(
 		stockroom_inventory_label_count,
@@ -1517,22 +1527,27 @@ func _collect_product_displays(parent: Node) -> Array[Node]:
 	return products
 
 
-func _collect_phase4_props(parent: Node) -> Array[Node]:
-	var props: Array[Node] = []
-	for child: Node in parent.get_children():
-		if bool(child.get_meta("phase4_retail_prop", false)):
-			props.append(child)
-		props.append_array(_collect_phase4_props(child))
-	return props
-
-
 func _has_interaction_descendant(node: Node) -> bool:
-	if node is CollisionObject3D or node is Area3D or node is Interactable:
+	if (
+		node is CollisionObject3D
+		or node is CollisionShape3D
+		or node is Area3D
+		or node is Interactable
+	):
 		return true
 	for child: Node in node.get_children():
 		if _has_interaction_descendant(child):
 			return true
 	return false
+
+
+func _count_mesh_descendants(node: Node) -> int:
+	var total := 0
+	if node is MeshInstance3D:
+		total += 1
+	for child: Node in node.get_children():
+		total += _count_mesh_descendants(child)
+	return total
 
 
 func _box_size(node: Node3D) -> Vector3:
@@ -1642,9 +1657,7 @@ func _service_point(contract: Dictionary, point_id: String) -> Dictionary:
 
 
 func _vector3_from_array(raw_value: Variant) -> Vector3:
-	assert_true(
-		VisualValueUtilScript.is_vector3_array(raw_value), "Expected Vector3 array"
-	)
+	assert_true(VisualValueUtilScript.is_vector3_array(raw_value), "Expected Vector3 array")
 	if not VisualValueUtilScript.is_vector3_array(raw_value):
 		return Vector3.ZERO
 	return VisualValueUtilScript.vector3_from_exact_array(raw_value, Vector3.ZERO)
@@ -1695,3 +1708,18 @@ func _is_stockroom_inventory_label(label: Label3D) -> bool:
 			return true
 		current = current.get_parent()
 	return false
+
+
+func _is_functional_wayfinding_label(label: Label3D) -> bool:
+	var text: String = label.text.strip_edges()
+	if text.is_empty():
+		return true
+	return (
+		[
+			"OPEN",
+			"STAFF",
+			"BACK ROOM",
+			"NEXT AISLE",
+		]
+		. has(text)
+	)

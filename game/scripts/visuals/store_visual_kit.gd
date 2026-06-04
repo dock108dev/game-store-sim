@@ -716,6 +716,8 @@ static func _apply_visual_metadata(root: Node, id: StringName) -> Node:
 	if root == null:
 		return null
 	var metadata: Dictionary = visual_metadata(id)
+	if bool(metadata.get("assembly", false)) and bool(metadata.get("visual_only", false)):
+		_strip_runtime_blockers(root)
 	root.set_meta("store_visual_id", id)
 	root.set_meta("store_visual_source", "store_visual_kit")
 	root.set_meta("store_visual_role", metadata.get("role", &""))
@@ -725,6 +727,18 @@ static func _apply_visual_metadata(root: Node, id: StringName) -> Node:
 		root.set_meta("visual_only", bool(metadata.get("visual_only", false)))
 	root.set_meta("store_visual_source_type", metadata.get("source_type", &"missing"))
 	return root
+
+
+static func _strip_runtime_blockers(node: Node) -> void:
+	for child: Node in node.get_children():
+		if (
+			child is CollisionObject3D
+			or child is CollisionShape3D
+			or child is NavigationObstacle3D
+		):
+			child.free()
+			continue
+		_strip_runtime_blockers(child)
 
 
 static func _product_price_tag(price_cents: int) -> MeshInstance3D:

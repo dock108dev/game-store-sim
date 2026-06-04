@@ -22,10 +22,6 @@ const REQUIRED_KEEP_VISIBLE_PATHS: Array[String] = [
 	"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
 	"ReadabilityProps/ZoneIdentity/StarterTableLeftGuide",
 	"ReadabilityProps/ZoneIdentity/StarterTableRightGuide",
-	"ReadabilityProps/CheckoutCounterDressing",
-	"ReadabilityProps/ShelfSpineRuns",
-	"ReadabilityProps/ProductDisplayRows",
-	"ReadabilityProps/SpawnViewFloorDressing",
 	"ReadabilityProps/WallPosterRails",
 	"ReadabilityProps/BackroomDressing",
 ]
@@ -44,11 +40,19 @@ const REQUIRED_HIDDEN_NOISE_PATHS: Array[String] = [
 	"staff_picks_table",
 	"ZoneLabels/ShelvesLabel",
 	"ZoneLabels/BackroomLabel",
+	"ReadabilityProps/CheckoutCounterDressing",
+	"ReadabilityProps/ShelfSpineRuns",
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/SpawnViewFloorDressing",
 	"ReadabilityProps/DayOneRouteMarkers",
 ]
 
 const REQUIRED_CONFLICT_PATHS: Array[String] = [
 	"ReadabilityProps/DayOneRouteMarkers",
+	"ReadabilityProps/CheckoutCounterDressing",
+	"ReadabilityProps/ShelfSpineRuns",
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/SpawnViewFloorDressing",
 	"ZoneLabels/ShelvesLabel",
 	"ZoneLabels/BackroomLabel",
 ]
@@ -266,9 +270,6 @@ func test_conflict_decision_reports_runtime_hidden_reference_visible_path() -> v
 
 func test_day_one_retail_affordances_are_runtime_visible_keep_paths() -> void:
 	for node_path: String in [
-		"ReadabilityProps/ProductDisplayRows/ShelfProductBacker",
-		"ReadabilityProps/CheckoutCounterDressing/RegisterReceiptStack",
-		"ReadabilityProps/SpawnViewFloorDressing/EntryWearStrip",
 		"ReadabilityProps/WallPosterRails/PosterRailA",
 		"ReadabilityProps/BackroomDressing/ReceivingClipboard",
 	]:
@@ -289,6 +290,28 @@ func test_day_one_retail_affordances_are_runtime_visible_keep_paths() -> void:
 		assert_true(
 			(decision.get("source_list", []) as Array)
 			.has(StoreVisualScopeProfileScript.SOURCE_KEEP_ROOT)
+		)
+
+
+func test_authored_reference_dressing_is_not_store_session_runtime_visible() -> void:
+	for node_path: String in [
+		"ReadabilityProps/ProductDisplayRows/ShelfProductBacker",
+		"ReadabilityProps/CheckoutCounterDressing/RegisterReceiptStack",
+		"ReadabilityProps/SpawnViewFloorDressing/EntryWearStrip",
+	]:
+		var decision: Dictionary = StoreVisualScopeProfileScript.classify_path(
+			_root,
+			node_path,
+			StoreVisualScopeProfileScript.MODE_STORE_SESSION_RUNTIME
+		)
+		assert_true(bool(decision.get("exists", false)), "%s fixture must exist" % node_path)
+		assert_false(
+			bool(decision.get("runtime_visible", true)),
+			"%s must stay authored-reference dressing, not runtime clutter" % node_path
+		)
+		assert_eq(
+			int(decision.get("decision", -1)),
+			StoreVisualScopeProfileScript.DECISION_HIDDEN_RUNTIME_NOISE
 		)
 
 

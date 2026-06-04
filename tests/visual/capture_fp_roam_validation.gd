@@ -201,13 +201,6 @@ func _capture_row(row: Dictionary) -> Dictionary:
 			"anchor_validation": anchor_validation,
 			"ui_validation": ui_validation,
 		})
-	var density_validation: Dictionary = _validate_density_requirements(row)
-	if not bool(density_validation.get("ok", false)):
-		return _capture_error(row, "Retail density contract failed", {
-			"anchor_validation": anchor_validation,
-			"ui_validation": ui_validation,
-			"density_validation": density_validation,
-		})
 	await RenderingServer.frame_post_draw
 	var result: Dictionary = StoreVisualSweepScript.save_viewport_png(
 		root,
@@ -227,7 +220,6 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	result["checklist"] = row.get("checklist", [])
 	result["anchor_validation"] = anchor_validation
 	result["ui_validation"] = ui_validation
-	result["density_validation"] = density_validation
 	result["camera_fov"] = FPRoamManifestScript.CAPTURE_CAMERA_FOV
 	result["acceptance_evidence"] = true
 	result["non_acceptance_evidence"] = false
@@ -236,73 +228,6 @@ func _capture_row(row: Dictionary) -> Dictionary:
 	if not bool(image_validation.get("ok", false)):
 		return _capture_error(row, str(image_validation.get("error", "")), result)
 	return result
-
-
-func _validate_density_requirements(row: Dictionary) -> Dictionary:
-	var requirements: Dictionary = row.get("density_requirements", {}) as Dictionary
-	var phase4_summary: Dictionary = _phase4_density_summary()
-	var failures: Array[String] = []
-	for raw_role: Variant in requirements.get("required_phase4_roles", []) as Array:
-		var role: String = str(raw_role)
-		if int((phase4_summary.get("roles", {}) as Dictionary).get(role, 0)) <= 0:
-			failures.append("Missing Phase 4 retail role: %s" % role)
-	for raw_state_key: Variant in requirements.get("required_phase4_states", []) as Array:
-		var state_key: String = str(raw_state_key)
-		if int((phase4_summary.get("states", {}) as Dictionary).get(state_key, 0)) <= 0:
-			failures.append("Missing Phase 4 retail state key: %s" % state_key)
-	for raw_pair: Variant in requirements.get("required_phase4_state_values", []) as Array:
-		var pair: String = str(raw_pair)
-		if int((phase4_summary.get("state_values", {}) as Dictionary).get(pair, 0)) <= 0:
-			failures.append("Missing Phase 4 retail state value: %s" % pair)
-	return {
-		"ok": failures.is_empty(),
-		"failures": failures,
-		"phase4": phase4_summary,
-	}
-
-
-func _phase4_density_summary() -> Dictionary:
-	var roles: Dictionary = {}
-	var kinds: Dictionary = {}
-	var states: Dictionary = {}
-	var state_values: Dictionary = {}
-	var total: int = 0
-	total = _collect_phase4_density(_store_root, roles, kinds, states, state_values, total)
-	return {
-		"total": total,
-		"roles": roles,
-		"kinds": kinds,
-		"states": states,
-		"state_values": state_values,
-	}
-
-
-func _collect_phase4_density(
-	node: Node,
-	roles: Dictionary,
-	kinds: Dictionary,
-	states: Dictionary,
-	state_values: Dictionary,
-	total: int
-) -> int:
-	if node == null:
-		return total
-	if bool(node.get_meta("phase4_retail_prop", false)):
-		total += 1
-		var role: String = str(node.get_meta("retail_prop_role", ""))
-		var kind: String = str(node.get_meta("retail_prop_kind", ""))
-		var state_key: String = str(node.get_meta("retail_state_key", ""))
-		var state_value: String = str(node.get_meta("retail_state_value", ""))
-		roles[role] = int(roles.get(role, 0)) + 1
-		kinds[kind] = int(kinds.get(kind, 0)) + 1
-		if not state_key.is_empty():
-			states[state_key] = int(states.get(state_key, 0)) + 1
-		if not state_key.is_empty() and not state_value.is_empty():
-			var pair: String = "%s:%s" % [state_key, state_value]
-			state_values[pair] = int(state_values.get(pair, 0)) + 1
-	for child: Node in node.get_children():
-		total = _collect_phase4_density(child, roles, kinds, states, state_values, total)
-	return total
 
 
 func _apply_scope(row: Dictionary) -> void:
@@ -514,7 +439,6 @@ func _write_manifest() -> Dictionary:
 				+ "for stable control/candidate screenshots; focused GUT tests cover "
 				+ "the full HUD scene FP contract."
 			),
-			"density_summary": _phase4_density_summary(),
 			"actual_hud_contract_source": [
 				"tests/gut/test_hud_fp_mode.gd",
 				"tests/gut/test_objective_rail_day1_visibility.gd",

@@ -418,6 +418,7 @@ func _has_interaction_descendant(root: Node) -> bool:
 		root is Area3D
 		or root is CollisionObject3D
 		or root is CollisionShape3D
+		or root is NavigationObstacle3D
 		or root is Interactable
 	):
 		return true

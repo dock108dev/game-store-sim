@@ -284,7 +284,7 @@ static func rows(
 				"%s/StockroomInventory/InventoryCrate" % FIXTURE_ROOT,
 				"%s/StockroomInventory/CountTags" % FIXTURE_ROOT,
 				"%s/StockroomInventory/PickList" % FIXTURE_ROOT,
-				"ExpandableStoreShell/StockroomFloorTape",
+				"ExpandableStoreShell/StockroomDoorStaffCard",
 			],
 			"Pull Restock",
 			"shelf_gap_restock_pressure",

@@ -86,7 +86,7 @@ const _MATERIAL_FAMILY_SPECS: Dictionary = {
 		"emission_energy": 0.08,
 		"roughness": 0.72,
 	},
-	FAMILY_STOCKROOM_COOL_METAL: {"color": Color(0.24, 0.28, 0.30, 1.0), "roughness": 0.88},
+	FAMILY_STOCKROOM_COOL_METAL: {"color": Color(0.33, 0.39, 0.41, 1.0), "roughness": 0.88},
 	FAMILY_RUBBER: {"color": Color(0.05, 0.055, 0.055, 1.0), "roughness": 0.94},
 	FAMILY_SHADOW_ACCENT: {"color": Color(0.17, 0.18, 0.18, 1.0), "roughness": 0.95},
 	FAMILY_MALL_THRESHOLD_GLASS:
@@ -141,11 +141,15 @@ const _MATERIAL_TOKENS: Dictionary = {
 		"color": Color(0.62, 0.42, 0.22, 1.0),
 	},
 	TOKEN_CHECKOUT_DEVICE_BODY: {"family": FAMILY_DARK_DEVICE_PLASTIC, "role": ROLE_PANEL},
-	TOKEN_STOCKROOM_METAL_PANEL: {"family": FAMILY_STOCKROOM_COOL_METAL, "role": ROLE_PANEL},
+	TOKEN_STOCKROOM_METAL_PANEL: {
+		"family": FAMILY_STOCKROOM_COOL_METAL,
+		"role": ROLE_PANEL,
+		"color": Color(0.31, 0.37, 0.39, 1.0),
+	},
 	TOKEN_STOCKROOM_METAL_FLOOR: {
 		"family": FAMILY_STOCKROOM_COOL_METAL,
 		"role": ROLE_MAT,
-		"color": Color(0.22, 0.29, 0.31, 1.0),
+		"color": Color(0.27, 0.35, 0.37, 1.0),
 	},
 	TOKEN_STOCKROOM_RACK_BRACE: {"family": FAMILY_STOCKROOM_COOL_METAL, "role": ROLE_BRACE},
 	TOKEN_SIGNAGE_AMBER_PANEL: {"family": FAMILY_AMBER_SIGNAGE, "role": ROLE_PANEL},

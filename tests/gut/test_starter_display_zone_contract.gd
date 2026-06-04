@@ -122,16 +122,14 @@ func test_scene_keeps_restock_target_and_browse_marker_on_display_anchor() -> vo
 		root.get_node_or_null("StoreSessionRestockShelf/StaticBody3D") as StaticBody3D
 	)
 	var browse: Marker3D = root.get_node_or_null("CustomerNavConfig/BrowseWaypoint01") as Marker3D
-	var cue: Node3D = (
-		root.get_node_or_null(
-			"ExpandableStoreShell/OnboardingRouteCues/StarterShelfLocalFloorWear"
-		) as Node3D
+	var shelf_card: Node3D = (
+		root.get_node_or_null("ExpandableStoreShell/StarterDisplayShelfEdgeCard") as Node3D
 	)
 	assert_not_null(shelf, "Restock shelf must remain the gameplay target")
 	assert_not_null(body, "Restock shelf collision body must remain under the target")
 	assert_not_null(browse, "Starter browse waypoint must remain authored")
-	assert_not_null(cue, "Local starter route cue must render")
-	if shelf == null or body == null or browse == null or cue == null:
+	assert_not_null(shelf_card, "Starter display fixture card must render")
+	if shelf == null or body == null or browse == null or shelf_card == null:
 		root.free()
 		StoreSessionState.reset_new_run()
 		GameManager.current_state = saved_state
@@ -141,9 +139,9 @@ func test_scene_keeps_restock_target_and_browse_marker_on_display_anchor() -> vo
 	_assert_near(body.global_position, shelf.global_position, 0.02, "restock collision")
 	_assert_near(browse.global_position, Vector3(-4.10, 0.05, -1.20), 0.02, "browse waypoint")
 	_assert_position_inside_zone(
-		cue.global_position,
+		shelf_card.global_position,
 		_zone(StoreVisualLayoutScript.load_default(), "starter_display"),
-		"route cue"
+		"starter display fixture card"
 	)
 	root.free()
 	StoreSessionState.reset_new_run()

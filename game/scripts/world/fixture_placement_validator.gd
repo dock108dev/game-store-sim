@@ -2,9 +2,9 @@
 class_name FixturePlacementValidator
 extends RefCounted
 
-const PlacementPreviewFeedbackScript = preload("res://game/resources/placement_preview_feedback.gd")
-
 enum CellState { EMPTY, OCCUPIED, WALL, ENTRY_ZONE }
+
+const PlacementPreviewFeedbackScript = preload("res://game/resources/placement_preview_feedback.gd")
 
 const MIN_AISLE_GAP: int = 2
 
@@ -32,9 +32,7 @@ func setup(
 
 
 ## Returns the CellState for a given cell position.
-func get_cell_state(
-	cell: Vector2i, occupied_cells: Dictionary
-) -> CellState:
+func get_cell_state(cell: Vector2i, occupied_cells: Dictionary) -> CellState:
 	if not _is_in_bounds(cell):
 		return CellState.WALL
 	if _is_in_entry_zone(cell):
@@ -53,14 +51,12 @@ func validate_placement(
 	requires_wall: bool,
 	facing_direction: Vector2i = Vector2i.ZERO
 ) -> PlacementResult:
-	return get_placement_feedback(
-		cells,
-		occupied_cells,
-		register_cells,
-		fixture_count,
-		requires_wall,
-		facing_direction
-	).to_result()
+	return (
+		get_placement_feedback(
+			cells, occupied_cells, register_cells, fixture_count, requires_wall, facing_direction
+		)
+		. to_result()
+	)
 
 
 ## Returns complete placement feedback for preview and commit validation.
@@ -101,12 +97,8 @@ func get_placement_feedback(
 			feedback.add_reason("wrong_facing", feedback.front_edge_cells)
 
 	var aisle_conflicts: Dictionary = _get_aisle_conflicts(cells, occupied_cells)
-	var narrow_cells: Array[Vector2i] = _typed_cells(
-		aisle_conflicts.get("invalid_cells", [])
-	)
-	feedback.nearby_blocker_cells = _typed_cells(
-		aisle_conflicts.get("blocker_cells", [])
-	)
+	var narrow_cells: Array[Vector2i] = _typed_cells(aisle_conflicts.get("invalid_cells", []))
+	feedback.nearby_blocker_cells = _typed_cells(aisle_conflicts.get("blocker_cells", []))
 	if not narrow_cells.is_empty():
 		feedback.add_reason("aisle_too_narrow", narrow_cells)
 
@@ -130,19 +122,13 @@ func is_outside_entry_zone(cells: Array[Vector2i]) -> bool:
 
 
 ## Returns true if minimum aisle width is maintained.
-func has_valid_aisles(
-	new_cells: Array[Vector2i],
-	occupied_cells: Dictionary
-) -> bool:
+func has_valid_aisles(new_cells: Array[Vector2i], occupied_cells: Dictionary) -> bool:
 	return _get_narrow_aisle_cells(new_cells, occupied_cells).is_empty()
 
 
 ## BFS from entry zone through empty cells. Returns true if every empty cell and
 ## every occupied fixture/register cell remains reachable from the entrance.
-func is_layout_connected(
-	all_occupied: Dictionary,
-	register_cells: Array[Vector2i]
-) -> bool:
+func is_layout_connected(all_occupied: Dictionary, register_cells: Array[Vector2i]) -> bool:
 	return _is_layout_connected(all_occupied, register_cells)
 
 
@@ -156,19 +142,12 @@ func has_register(register_fixture_id: String) -> PlacementResult:
 ## Returns true if any cell in the set is on the grid boundary (wall-adjacent).
 func _is_against_wall(cells: Array[Vector2i]) -> bool:
 	for cell: Vector2i in cells:
-		if (
-			cell.x == 0
-			or cell.x == _grid_size.x - 1
-			or cell.y == 0
-			or cell.y == _grid_size.y - 1
-		):
+		if cell.x == 0 or cell.x == _grid_size.x - 1 or cell.y == 0 or cell.y == _grid_size.y - 1:
 			return true
 	return false
 
 
-func _get_entry_zone_conflicts(
-	cells: Array[Vector2i]
-) -> Array[Vector2i]:
+func _get_entry_zone_conflicts(cells: Array[Vector2i]) -> Array[Vector2i]:
 	var conflicts: Array[Vector2i] = []
 	for cell: Vector2i in cells:
 		if _is_in_entry_zone(cell):
@@ -195,17 +174,12 @@ func _get_collision_cells(
 
 
 func _get_narrow_aisle_cells(
-	new_cells: Array[Vector2i],
-	occupied_cells: Dictionary
-) -> Array[Vector2i]:
-	return _typed_cells(
-		_get_aisle_conflicts(new_cells, occupied_cells).get("invalid_cells", [])
-	)
-
-
-func _get_aisle_conflicts(
 	new_cells: Array[Vector2i], occupied_cells: Dictionary
-) -> Dictionary:
+) -> Array[Vector2i]:
+	return _typed_cells(_get_aisle_conflicts(new_cells, occupied_cells).get("invalid_cells", []))
+
+
+func _get_aisle_conflicts(new_cells: Array[Vector2i], occupied_cells: Dictionary) -> Dictionary:
 	var invalid_cells: Array[Vector2i] = []
 	var blocker_cells: Array[Vector2i] = []
 	for new_cell: Vector2i in new_cells:
@@ -237,19 +211,12 @@ func _add_aisle_conflict(
 func _get_wall_candidate_cells(cells: Array[Vector2i]) -> Array[Vector2i]:
 	var candidates: Array[Vector2i] = []
 	for cell: Vector2i in cells:
-		if (
-			cell.x == 0
-			or cell.x == _grid_size.x - 1
-			or cell.y == 0
-			or cell.y == _grid_size.y - 1
-		):
+		if cell.x == 0 or cell.x == _grid_size.x - 1 or cell.y == 0 or cell.y == _grid_size.y - 1:
 			candidates.append(cell)
 	return candidates
 
 
-func _get_front_edge_cells(
-	cells: Array[Vector2i], facing_direction: Vector2i
-) -> Array[Vector2i]:
+func _get_front_edge_cells(cells: Array[Vector2i], facing_direction: Vector2i) -> Array[Vector2i]:
 	if cells.is_empty() or facing_direction == Vector2i.ZERO:
 		return []
 	var max_projection: int = -2147483648
@@ -262,9 +229,7 @@ func _get_front_edge_cells(
 	return front
 
 
-func _wall_mount_faces_aisle(
-	cells: Array[Vector2i], facing_direction: Vector2i
-) -> bool:
+func _wall_mount_faces_aisle(cells: Array[Vector2i], facing_direction: Vector2i) -> bool:
 	if facing_direction == Vector2i.ZERO:
 		return true
 	var back_direction: Vector2i = -facing_direction
@@ -295,10 +260,7 @@ func _typed_cells(value: Variant) -> Array[Vector2i]:
 	return cells
 
 
-func _is_layout_connected(
-	all_occupied: Dictionary,
-	register_cells: Array[Vector2i]
-) -> bool:
+func _is_layout_connected(all_occupied: Dictionary, register_cells: Array[Vector2i]) -> bool:
 	var entry_cells: Array[Vector2i] = _get_entry_zone_cells()
 	if entry_cells.is_empty():
 		return true
@@ -365,17 +327,10 @@ func _get_entry_zone_cells() -> Array[Vector2i]:
 
 
 func _is_in_bounds(cell: Vector2i) -> bool:
-	return (
-		cell.x >= 0
-		and cell.x < _grid_size.x
-		and cell.y >= 0
-		and cell.y < _grid_size.y
-	)
+	return cell.x >= 0 and cell.x < _grid_size.x and cell.y >= 0 and cell.y < _grid_size.y
 
 
-func _has_reachable_neighbor(
-	cell: Vector2i, reachable: Dictionary
-) -> bool:
+func _has_reachable_neighbor(cell: Vector2i, reachable: Dictionary) -> bool:
 	for offset: Vector2i in _cardinal_offsets():
 		var neighbor: Vector2i = cell + offset
 		if reachable.has(neighbor):
@@ -385,6 +340,8 @@ func _has_reachable_neighbor(
 
 func _cardinal_offsets() -> Array[Vector2i]:
 	return [
-		Vector2i(1, 0), Vector2i(-1, 0),
-		Vector2i(0, 1), Vector2i(0, -1),
+		Vector2i(1, 0),
+		Vector2i(-1, 0),
+		Vector2i(0, 1),
+		Vector2i(0, -1),
 	]

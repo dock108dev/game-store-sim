@@ -31,7 +31,9 @@ static func resolve(context: Dictionary, config_override: Dictionary = {}) -> Di
 
 
 ## Returns every configured merchandising label for a store id.
-static func labels_for_store(store_id: StringName, config_override: Dictionary = {}) -> Array[Dictionary]:
+static func labels_for_store(
+	store_id: StringName, config_override: Dictionary = {}
+) -> Array[Dictionary]:
 	var config: Dictionary = _config(config_override)
 	var result: Array[Dictionary] = []
 	for label_variant: Variant in config.get("merchandising_labels", []) as Array:
@@ -83,7 +85,9 @@ static func _matches_context(label: Dictionary, context: Dictionary) -> bool:
 	return true
 
 
-static func _availability_matches(label: Dictionary, context: Dictionary, config: Dictionary) -> bool:
+static func _availability_matches(
+	label: Dictionary, _context: Dictionary, config: Dictionary
+) -> bool:
 	var rule: Dictionary = label.get("availability_rule", {}) as Dictionary
 	if rule.is_empty():
 		return true

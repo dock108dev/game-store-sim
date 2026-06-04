@@ -172,8 +172,16 @@ func apply_poster(poster_id: StringName) -> void:
 		_poster_root.get_node_or_null("PosterAccentBottom") as MeshInstance3D,
 		visual.get("accent_color") as Color
 	)
-	_set_label(_poster_root.get_node_or_null("PosterTitleLabel") as Label3D, str(visual.get("title", "")), visible_content)
-	_set_label(_poster_root.get_node_or_null("PosterSubtitleLabel") as Label3D, str(visual.get("subtitle", "")), visible_content)
+	_set_label(
+		_poster_root.get_node_or_null("PosterTitleLabel") as Label3D,
+		str(visual.get("title", "")),
+		visible_content
+	)
+	_set_label(
+		_poster_root.get_node_or_null("PosterSubtitleLabel") as Label3D,
+		str(visual.get("subtitle", "")),
+		visible_content
+	)
 	for node_name: String in ["PosterFace", "PosterAccentTop", "PosterAccentBottom"]:
 		var node: Node3D = _poster_root.get_node_or_null(node_name) as Node3D
 		if node != null:
@@ -191,16 +199,30 @@ func apply_featured_category(category: StringName) -> void:
 	_featured_root.set_meta("active_featured_category", category)
 	_featured_root.set_meta("active_featured_kit", str(visual.get("kit_id", "")))
 	_featured_root.set_meta("morning_note_hint", hint)
-	_featured_root.set_meta("matches_morning_note_hint", hint != FEATURED_NONE and hint == category)
+	_featured_root.set_meta(
+		"matches_morning_note_hint", hint != FEATURED_NONE and hint == category
+	)
 	_set_mesh_material(
 		_featured_root.get_node_or_null("HeaderSign") as MeshInstance3D,
 		visual.get("accent_color") as Color,
 		visual.get("accent_color") as Color,
 		0.18 if visible_content else 0.0
 	)
-	_set_label(_featured_root.get_node_or_null("CategoryLabel") as Label3D, str(visual.get("header", "")), visible_content)
-	_set_label(_featured_root.get_node_or_null("SubheaderLabel") as Label3D, str(visual.get("subheader", "")), visible_content)
-	_set_label(_featured_root.get_node_or_null("ShelfLabel") as Label3D, str(visual.get("shelf_label", "")), visible_content)
+	_set_label(
+		_featured_root.get_node_or_null("CategoryLabel") as Label3D,
+		str(visual.get("header", "")),
+		visible_content
+	)
+	_set_label(
+		_featured_root.get_node_or_null("SubheaderLabel") as Label3D,
+		str(visual.get("subheader", "")),
+		visible_content
+	)
+	_set_label(
+		_featured_root.get_node_or_null("ShelfLabel") as Label3D,
+		str(visual.get("shelf_label", "")),
+		visible_content
+	)
 	_apply_featured_props(visual.get("props", []) as Array, visual.get("accent_color") as Color)
 	_update_featured_light(visual.get("accent_color") as Color, visible_content)
 
@@ -213,12 +235,18 @@ func reset_dressing() -> void:
 
 ## Returns a defensive copy of one poster visual mapping.
 func get_poster_visual(poster_id: StringName) -> Dictionary:
-	return (POSTER_VISUALS.get(poster_id, POSTER_VISUALS[POSTER_NONE]) as Dictionary).duplicate(true)
+	return (
+		(POSTER_VISUALS.get(poster_id, POSTER_VISUALS[POSTER_NONE]) as Dictionary)
+		.duplicate(true)
+	)
 
 
 ## Returns a defensive copy of one featured display visual mapping.
 func get_featured_visual(category: StringName) -> Dictionary:
-	return (FEATURED_VISUALS.get(category, FEATURED_VISUALS[FEATURED_NONE]) as Dictionary).duplicate(true)
+	return (
+		(FEATURED_VISUALS.get(category, FEATURED_VISUALS[FEATURED_NONE]) as Dictionary)
+		.duplicate(true)
+	)
 
 
 func _connect_system_signals() -> void:
@@ -263,10 +291,22 @@ func _build_poster_root() -> Node3D:
 	root.name = POSTER_ROOT_NAME
 	root.position = Vector3(-3.85, 2.25, -9.92)
 	root.set_meta("visual_only", true)
-	_add_box(root, "PosterFrame", Vector3.ZERO, Vector3(2.05, 1.32, 0.055), Color(0.08, 0.07, 0.06, 1.0))
-	_add_box(root, "PosterFace", Vector3(0.0, 0.0, 0.035), Vector3(1.88, 1.12, 0.035), Color(0.18, 0.17, 0.15, 1.0))
-	_add_box(root, "PosterAccentTop", Vector3(0.0, 0.49, 0.065), Vector3(1.88, 0.14, 0.045), Color(0.30, 0.28, 0.24, 1.0))
-	_add_box(root, "PosterAccentBottom", Vector3(0.0, -0.49, 0.065), Vector3(1.88, 0.10, 0.045), Color(0.30, 0.28, 0.24, 1.0))
+	_add_box(
+		root, "PosterFrame", Vector3.ZERO, Vector3(2.05, 1.32, 0.055),
+		Color(0.08, 0.07, 0.06, 1.0)
+	)
+	_add_box(
+		root, "PosterFace", Vector3(0.0, 0.0, 0.035),
+		Vector3(1.88, 1.12, 0.035), Color(0.18, 0.17, 0.15, 1.0)
+	)
+	_add_box(
+		root, "PosterAccentTop", Vector3(0.0, 0.49, 0.065),
+		Vector3(1.88, 0.14, 0.045), Color(0.30, 0.28, 0.24, 1.0)
+	)
+	_add_box(
+		root, "PosterAccentBottom", Vector3(0.0, -0.49, 0.065),
+		Vector3(1.88, 0.10, 0.045), Color(0.30, 0.28, 0.24, 1.0)
+	)
 	_add_label(root, "PosterTitleLabel", "", Vector3(0.0, 0.12, 0.095), 42)
 	_add_label(root, "PosterSubtitleLabel", "", Vector3(0.0, -0.25, 0.095), 20)
 	return root
@@ -278,8 +318,14 @@ func _build_featured_root() -> Node3D:
 	root.position = Vector3(-4.10, 0.80, -1.20)
 	root.rotation_degrees = Vector3(0.0, -8.0, 0.0)
 	root.set_meta("visual_only", true)
-	_add_box(root, "BaseFixture", Vector3(0.0, -0.20, 0.0), Vector3(2.55, 0.82, 0.95), Color(0.16, 0.12, 0.09, 1.0))
-	_add_box(root, "HeaderSign", Vector3(0.0, 0.95, -0.35), Vector3(2.25, 0.42, 0.08), Color(0.35, 0.32, 0.24, 1.0))
+	_add_box(
+		root, "BaseFixture", Vector3(0.0, -0.20, 0.0),
+		Vector3(2.55, 0.82, 0.95), Color(0.16, 0.12, 0.09, 1.0)
+	)
+	_add_box(
+		root, "HeaderSign", Vector3(0.0, 0.95, -0.35),
+		Vector3(2.25, 0.42, 0.08), Color(0.35, 0.32, 0.24, 1.0)
+	)
 	_add_label(root, "CategoryLabel", "", Vector3(0.0, 0.99, -0.405), 24)
 	_add_label(root, "SubheaderLabel", "", Vector3(0.0, 0.78, -0.405), 12)
 	_add_label(root, "ShelfLabel", "", Vector3(0.0, 0.22, -0.50), 14)
@@ -309,9 +355,17 @@ func _apply_featured_props(prop_labels: Array, accent_color: Color) -> void:
 		prop_root.position = Vector3(-0.62 + float(index) * 0.62, 0.05, 0.0)
 		prop_root.set_meta("prop_label", str(prop_labels[index]))
 		prop_root.set_meta("visual_only", true)
-		_add_box(prop_root, "PropBody", Vector3.ZERO, Vector3(0.42, 0.26, 0.34), accent_color.darkened(0.22))
-		_add_box(prop_root, "PropFace", Vector3(0.0, 0.02, -0.18), Vector3(0.34, 0.18, 0.035), accent_color)
-		_add_label(prop_root, "PropLabel", str(prop_labels[index]), Vector3(0.0, 0.17, -0.205), 9)
+		_add_box(
+			prop_root, "PropBody", Vector3.ZERO,
+			Vector3(0.42, 0.26, 0.34), accent_color.darkened(0.22)
+		)
+		_add_box(
+			prop_root, "PropFace", Vector3(0.0, 0.02, -0.18),
+			Vector3(0.34, 0.18, 0.035), accent_color
+		)
+		_add_label(
+			prop_root, "PropLabel", str(prop_labels[index]), Vector3(0.0, 0.17, -0.205), 9
+		)
 		_featured_stage.add_child(prop_root)
 
 
@@ -324,13 +378,17 @@ func _update_featured_light(accent_color: Color, visible_content: bool) -> void:
 	if shell == null:
 		return
 	var shell_light: MeshInstance3D = shell.get_node_or_null(
-		"FeaturedDisplayAccentPracticalSource"
+		"DisplayTableUndershelfPracticalSource"
 	) as MeshInstance3D
 	if shell_light != null:
-		_set_mesh_material(shell_light, accent_color, accent_color, 0.38 if visible_content else 0.0)
+		_set_mesh_material(
+			shell_light, accent_color, accent_color, 0.38 if visible_content else 0.0
+		)
 
 
-func _add_box(parent: Node3D, node_name: String, position: Vector3, size: Vector3, color: Color) -> MeshInstance3D:
+func _add_box(
+	parent: Node3D, node_name: String, position: Vector3, size: Vector3, color: Color
+) -> MeshInstance3D:
 	var box := BoxMesh.new()
 	box.size = size
 	var mesh := MeshInstance3D.new()
@@ -343,7 +401,9 @@ func _add_box(parent: Node3D, node_name: String, position: Vector3, size: Vector
 	return mesh
 
 
-func _add_label(parent: Node3D, node_name: String, text: String, position: Vector3, font_size: int) -> Label3D:
+func _add_label(
+	parent: Node3D, node_name: String, text: String, position: Vector3, font_size: int
+) -> Label3D:
 	var label := Label3D.new()
 	label.name = node_name
 	label.text = text

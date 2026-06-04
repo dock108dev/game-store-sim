@@ -202,13 +202,13 @@ func test_runtime_shell_material_families_stay_distinguishable() -> void:
 		"StockroomSupplyBox00": StoreVisualStyleScript.FAMILY_CARDBOARD,
 		"StockroomSupplyLabel00": StoreVisualStyleScript.FAMILY_PAPER,
 		"StarterUsedShelfPriceTag00": StoreVisualStyleScript.FAMILY_PRICE_TAG_WARM,
-			"SpawnCheckoutSightlineStrip": StoreVisualStyleScript.FAMILY_AMBER_SIGNAGE,
-			"ShelfWallCoolReadPanel": StoreVisualStyleScript.FAMILY_STOCKROOM_COOL_METAL,
-			"ShelfWallBlueBayPatch": StoreVisualStyleScript.FAMILY_PRODUCT_ACCENT_BLUE,
-			"ShelfWallPurpleBayPatch": StoreVisualStyleScript.FAMILY_PRODUCT_ACCENT_PURPLE,
-			"ShelfWallAccentTopRail": StoreVisualStyleScript.FAMILY_PRODUCT_ACCENT_TEAL,
-			"StockroomExpandedAisleShadow": StoreVisualStyleScript.FAMILY_SHADOW_ACCENT,
-		}
+		"CheckoutQueueRopeFront": StoreVisualStyleScript.FAMILY_RUBBER,
+		"ShelfWallCoolReadPanel": StoreVisualStyleScript.FAMILY_STOCKROOM_COOL_METAL,
+		"ShelfWallCategoryPlaque": StoreVisualStyleScript.FAMILY_PRODUCT_ACCENT_BLUE,
+		"ShelfWallFeatureFacing": StoreVisualStyleScript.FAMILY_PRODUCT_ACCENT_PURPLE,
+		"ShelfWallAccentTopRail": StoreVisualStyleScript.FAMILY_PRODUCT_ACCENT_TEAL,
+		"StockroomExpandedAisleShadow": StoreVisualStyleScript.FAMILY_SHADOW_ACCENT,
+	}
 	var family_counts: Dictionary = {}
 	var color_buckets: Dictionary = {}
 	for path: String in expected_families:

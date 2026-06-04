@@ -29,9 +29,7 @@ func _ready() -> void:
 	EventBus.active_camera_changed.connect(_on_active_camera_changed)
 	EventBus.build_mode_entered.connect(_on_build_mode_entered)
 	EventBus.build_mode_exited.connect(_on_build_mode_exited)
-	EventBus.fixture_catalog_requested.connect(
-		_on_fixture_catalog_requested
-	)
+	EventBus.fixture_catalog_requested.connect(_on_fixture_catalog_requested)
 	EventBus.fixture_placed.connect(_on_fixture_placed)
 	EventBus.fixture_removed.connect(_on_fixture_removed)
 	if is_instance_valid(CameraManager.active_camera):
@@ -45,9 +43,7 @@ func _ready() -> void:
 
 ## Sets up build mode with required references.
 func initialize(
-	player_node: Node,
-	store_size: BuildModeGrid.StoreSize,
-	floor_center: Vector3
+	player_node: Node, store_size: BuildModeGrid.StoreSize, floor_center: Vector3
 ) -> void:
 	_player_node = player_node
 	_hovered_cell = null
@@ -90,9 +86,8 @@ func set_placement_system(system: FixturePlacementSystem) -> void:
 		_sync_grid_state_from_placement()
 		return
 	if _placement_system:
-		_placement_system.load_save_data({
-			"placed_fixtures": _duplicate_grid_state(_grid_state)
-		})
+		_placement_system.load_save_data({"placed_fixtures": _duplicate_grid_state(_grid_state)})
+
 
 ## Returns the currently hovered grid cell, or null if none.
 func get_hovered_cell() -> Variant:
@@ -129,9 +124,7 @@ func get_grid_state() -> Array[Dictionary]:
 func load_grid_state(state: Array[Dictionary]) -> void:
 	_grid_state = _normalize_grid_state(state)
 	if _placement_system:
-		_placement_system.load_save_data({
-			"placed_fixtures": _duplicate_grid_state(_grid_state)
-		})
+		_placement_system.load_save_data({"placed_fixtures": _duplicate_grid_state(_grid_state)})
 
 
 ## Selects a fixture type for placement from the catalog.
@@ -192,10 +185,13 @@ func confirm_selected_fixture(cell: Vector2i) -> bool:
 
 ## Applies a persistent store-design option through the customization owner.
 func apply_design_option(option_id: StringName, day: int = 1) -> bool:
-	return StoreCustomizationSystem.apply_design_option(
-		option_id,
-		day,
-		GameManager.get_active_store_id(),
+	return (
+		StoreCustomizationSystem
+		. apply_design_option(
+			option_id,
+			day,
+			GameManager.get_active_store_id(),
+		)
 	)
 
 
@@ -250,27 +246,39 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion:
 		var mouse_event: InputEventMouseMotion = event as InputEventMouseMotion
-		if _is_middle_mouse_held(event):
-			_camera_controller.pan(mouse_event.relative)
-			get_viewport().set_input_as_handled()
+		if _handle_mouse_motion_input(mouse_event):
 			return
 		_update_hovered_cell(mouse_event)
 
 	if event is InputEventMouseButton:
 		var btn: InputEventMouseButton = event as InputEventMouseButton
-		if btn.button_index == MOUSE_BUTTON_WHEEL_UP and btn.pressed:
-			zoom_camera_in()
-			get_viewport().set_input_as_handled()
-			return
-		if btn.button_index == MOUSE_BUTTON_WHEEL_DOWN and btn.pressed:
-			zoom_camera_out()
-			get_viewport().set_input_as_handled()
+		if _handle_mouse_button_input(btn):
 			return
 		_handle_mouse_button(btn)
 
 	if event.is_action_pressed("rotate_fixture"):
 		_handle_rotate()
 		get_viewport().set_input_as_handled()
+
+
+func _handle_mouse_motion_input(event: InputEventMouseMotion) -> bool:
+	if not _is_middle_mouse_held(event):
+		return false
+	_camera_controller.pan(event.relative)
+	get_viewport().set_input_as_handled()
+	return true
+
+
+func _handle_mouse_button_input(event: InputEventMouseButton) -> bool:
+	if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+		zoom_camera_in()
+		get_viewport().set_input_as_handled()
+		return true
+	if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+		zoom_camera_out()
+		get_viewport().set_input_as_handled()
+		return true
+	return false
 
 
 func _toggle_build_mode() -> void:
@@ -284,10 +292,7 @@ func _toggle_build_mode() -> void:
 
 func _try_enter_build_mode() -> void:
 	var state: int = GameManager.current_state
-	var can_enter: bool = (
-		state == GameManager.State.GAMEPLAY
-		or state == GameManager.State.PAUSED
-	)
+	var can_enter: bool = state == GameManager.State.GAMEPLAY or state == GameManager.State.PAUSED
 	if not can_enter:
 		return
 	enter_build_mode()
@@ -296,9 +301,7 @@ func _try_enter_build_mode() -> void:
 func enter_build_mode() -> void:
 	if is_active:
 		return
-	var changed: bool = GameManager.change_state(
-		GameManager.State.BUILD
-	)
+	var changed: bool = GameManager.change_state(GameManager.State.BUILD)
 	if not changed:
 		push_warning("BuildModeSystem: failed to transition to BUILD state")
 		return
@@ -317,13 +320,9 @@ func exit_build_mode() -> void:
 		return
 
 	if _placement_system:
-		var reg_result: PlacementResult = (
-			_placement_system.validate_register_exists()
-		)
+		var reg_result: PlacementResult = _placement_system.validate_register_exists()
 		if not reg_result.valid:
-			EventBus.fixture_placement_invalid.emit(
-				reg_result.reason
-			)
+			EventBus.fixture_placement_invalid.emit(reg_result.reason)
 			return
 
 	is_active = false
@@ -526,9 +525,7 @@ func _find_orbit_pivot() -> Vector3:
 	return Vector3(0.0, 1.2, 0.0)
 
 
-func _on_fixture_placed(
-	_fixture_id: String, _grid_pos: Vector2i, _rotation: int
-) -> void:
+func _on_fixture_placed(_fixture_id: String, _grid_pos: Vector2i, _rotation: int) -> void:
 	_sync_grid_state_from_placement()
 
 
@@ -552,9 +549,7 @@ func _setup_visuals() -> void:
 	_visuals = BuildModeVisuals.new()
 	_visuals.name = "BuildModeVisuals"
 	add_child(_visuals)
-	_visuals.initialize(
-		_grid, _placement_system.get_validator(), _placement_system
-	)
+	_visuals.initialize(_grid, _placement_system.get_validator(), _placement_system)
 
 
 func _update_visual_feedback() -> void:
@@ -563,11 +558,7 @@ func _update_visual_feedback() -> void:
 
 	var fixture_type: String = _placement_system.get_selected_fixture_type()
 	if not fixture_type.is_empty():
-		_visuals.update_ghost(
-			_hovered_cell,
-			fixture_type,
-			_placement_system.get_current_rotation()
-		)
+		_visuals.update_ghost(_hovered_cell, fixture_type, _placement_system.get_current_rotation())
 		return
 
 	_visuals.hide_ghost()
@@ -597,9 +588,7 @@ func _normalize_grid_state(state: Array[Dictionary]) -> Array[Dictionary]:
 
 
 func _normalize_grid_entry(entry: Dictionary) -> Dictionary:
-	var grid_position: Vector2i = _coerce_grid_position(
-		entry.get("grid_position", Vector2i.ZERO)
-	)
+	var grid_position: Vector2i = _coerce_grid_position(entry.get("grid_position", Vector2i.ZERO))
 	return {
 		"fixture_id": str(entry.get("fixture_id", "")),
 		"fixture_type": str(entry.get("fixture_type", "")),

@@ -1,4 +1,4 @@
-# gdlint:disable=max-file-lines
+# gdlint:disable=max-file-lines,max-public-methods
 ## 3D customer NPC that navigates the store, browses items, and makes purchases.
 class_name Customer
 extends CharacterBody3D
@@ -47,9 +47,7 @@ const CONDITION_RANKS: Dictionary = {
 const ProductVisualFactoryScript: GDScript = preload(
 	"res://game/scripts/visuals/product_visual_factory.gd"
 )
-const StoreVisualKitScript: GDScript = preload(
-	"res://game/scripts/visuals/store_visual_kit.gd"
-)
+const StoreVisualKitScript: GDScript = preload("res://game/scripts/visuals/store_visual_kit.gd")
 const CustomerVisualProfileScript: GDScript = preload(
 	"res://game/scripts/characters/customer_visual_profile.gd"
 )
@@ -147,21 +145,12 @@ var _held_item_prop: Node3D = null
 @onready var _navigation_agent: NavigationAgent3D = (
 	get_node_or_null("NavigationAgent3D") as NavigationAgent3D
 )
-@onready var _body_mesh: MeshInstance3D = (
-	get_node_or_null("BodyMesh") as MeshInstance3D
-)
-@onready var _head_mesh: MeshInstance3D = (
-	get_node_or_null("HeadMesh") as MeshInstance3D
-)
-@onready var _animation_player: AnimationPlayer = (
-	get_node_or_null("AnimationPlayer") as AnimationPlayer
-)
-@onready var _animator: CustomerAnimator = (
-	get_node_or_null("CustomerAnimator") as CustomerAnimator
-)
-@onready var _state_indicator: Node3D = (
-	get_node_or_null("CustomerStateIndicator") as Node3D
-)
+@onready var _body_mesh: MeshInstance3D = get_node_or_null("BodyMesh") as MeshInstance3D
+@onready var _head_mesh: MeshInstance3D = get_node_or_null("HeadMesh") as MeshInstance3D
+@onready
+var _animation_player: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
+@onready var _animator: CustomerAnimator = get_node_or_null("CustomerAnimator") as CustomerAnimator
+@onready var _state_indicator: Node3D = get_node_or_null("CustomerStateIndicator") as Node3D
 
 
 func _ready() -> void:
@@ -170,9 +159,7 @@ func _ready() -> void:
 	_randomize_body_color()
 	EventBus.speed_changed.connect(_on_speed_changed)
 	if _navigation_agent != null:
-		_navigation_agent.velocity_computed.connect(
-			_on_velocity_computed
-		)
+		_navigation_agent.velocity_computed.connect(_on_velocity_computed)
 
 
 ## Sets up the customer with a profile, store, and inventory references.
@@ -310,12 +297,11 @@ func get_visual_snapshot() -> Dictionary:
 		"patience_ratio": _patience_ratio(),
 		"leave_reason": _leave_reason,
 		"held_item_state": _held_item_state,
-		"held_item_last_terminal_state": held_snapshot.get("last_terminal_state", HELD_ITEM_STATE_NONE),
+		"held_item_last_terminal_state":
+		held_snapshot.get("last_terminal_state", HELD_ITEM_STATE_NONE),
 		"reaction_intent": reaction_intent,
-		"animator_intent": CustomerVisualProfileScript.intent_for_visual_state(
-			visual_state,
-			reaction_intent
-		),
+		"animator_intent":
+		CustomerVisualProfileScript.intent_for_visual_state(visual_state, reaction_intent),
 	}
 
 
@@ -416,9 +402,7 @@ func abandon_queue() -> void:
 
 
 ## Attaches or updates the selected item prop owned by this customer.
-func set_held_selected_item(
-	item: ItemInstance, source_slot: Node = null
-) -> void:
+func set_held_selected_item(item: ItemInstance, source_slot: Node = null) -> void:
 	if item == null or item.definition == null:
 		clear_held_item_prop(&"missing_selected_item")
 		return
@@ -541,9 +525,7 @@ func _process_browsing(delta: float) -> void:
 		return
 	_evaluate_current_shelf()
 	_reset_browse_timer()
-	if GameRandom.chance(
-		RandomStreamIds.CUSTOMER_BROWSE, MOVE_TO_NEXT_SHELF_CHANCE
-	):
+	if GameRandom.chance(RandomStreamIds.CUSTOMER_BROWSE, MOVE_TO_NEXT_SHELF_CHANCE):
 		if _navigate_to_random_shelf():
 			return
 	if _desired_item:
@@ -566,8 +548,7 @@ func _process_deciding() -> void:
 		return
 	if _is_first_sale_guarantee_active():
 		if GameRandom.chance(
-			RandomStreamIds.CUSTOMER_PURCHASE,
-			Constants.DAY1_PURCHASE_PROBABILITY
+			RandomStreamIds.CUSTOMER_PURCHASE, Constants.DAY1_PURCHASE_PROBABILITY
 		):
 			_transition_to(State.PURCHASING)
 		else:
@@ -576,9 +557,7 @@ func _process_deciding() -> void:
 	var match_quality: float = _calculate_match_quality(_desired_item)
 	var buy_chance: float = profile.purchase_probability_base * match_quality
 	if _desired_item.tested:
-		if GameRandom.chance(
-			RandomStreamIds.CUSTOMER_PURCHASE, DISAPPOINTED_CHANCE
-		):
+		if GameRandom.chance(RandomStreamIds.CUSTOMER_PURCHASE, DISAPPOINTED_CHANCE):
 			_leave_with(&"no_matching_item")
 			return
 		buy_chance *= (1.0 + TESTED_BONUS)
@@ -620,9 +599,7 @@ func _process_waiting_in_queue(delta: float) -> void:
 	# patience window. Slowing the queue tick keeps the second/third customer
 	# from abandoning before the player rings up the first sale.
 	var tick_scale: float = (
-		DAY1_QUEUE_PATIENCE_TICK_SCALE
-		if _is_first_sale_guarantee_active()
-		else 1.0
+		DAY1_QUEUE_PATIENCE_TICK_SCALE if _is_first_sale_guarantee_active() else 1.0
 	)
 	patience_timer -= delta * tick_scale
 	if patience_timer <= 0.0:
@@ -672,11 +649,16 @@ func _set_state(new_state: State) -> void:
 	_update_state_cue(new_state)
 	refresh_visual_cues(false)
 	if OS.is_debug_build():
-		print("[Customer %d] %s → %s" % [
-			get_instance_id(),
-			State.keys()[old_state],
-			State.keys()[new_state],
-		])
+		print(
+			(
+				"[Customer %d] %s → %s"
+				% [
+					get_instance_id(),
+					State.keys()[old_state],
+					State.keys()[new_state],
+				]
+			)
+		)
 	EventBus.customer_state_changed.emit(self, new_state)
 
 
@@ -738,9 +720,7 @@ func _ensure_patience_cue() -> MeshInstance3D:
 		_body_mesh = get_node_or_null("BodyMesh") as MeshInstance3D
 	if _body_mesh == null:
 		return null
-	var existing: MeshInstance3D = (
-		_body_mesh.get_node_or_null("PatienceCue") as MeshInstance3D
-	)
+	var existing: MeshInstance3D = _body_mesh.get_node_or_null("PatienceCue") as MeshInstance3D
 	if existing != null:
 		_patience_cue = existing
 	else:
@@ -762,10 +742,12 @@ func _update_patience_cue(snapshot: Dictionary) -> void:
 	cue.scale = Vector3(maxf(ratio, 0.08), 1.0, 1.0)
 	var material := _cue_material(cue)
 	if ratio < 0.25:
-		var angry_accent: Dictionary = CustomerVisualProfileScript.ACCENTS.get(
-			&"angry_return_customer",
-			CustomerVisualProfileScript.ACCENT_DEFAULT
-		) as Dictionary
+		var angry_accent: Dictionary = (
+			CustomerVisualProfileScript.ACCENTS.get(
+				&"angry_return_customer", CustomerVisualProfileScript.ACCENT_DEFAULT
+			)
+			as Dictionary
+		)
 		material.albedo_color = angry_accent.get("primary_color", STATE_CUE_LEAVING) as Color
 	elif ratio < 0.55:
 		material.albedo_color = STATE_CUE_QUEUE
@@ -786,9 +768,7 @@ func _ensure_reaction_cue() -> MeshInstance3D:
 		_head_mesh = get_node_or_null("HeadMesh") as MeshInstance3D
 	if _head_mesh == null:
 		return null
-	var existing: MeshInstance3D = (
-		_head_mesh.get_node_or_null("ReactionCue") as MeshInstance3D
-	)
+	var existing: MeshInstance3D = _head_mesh.get_node_or_null("ReactionCue") as MeshInstance3D
 	if existing != null:
 		_reaction_cue = existing
 	else:
@@ -841,16 +821,13 @@ func _update_archetype_accent(snapshot: Dictionary) -> void:
 	_accent_primary = _ensure_accent_part("ArchetypeAccentPrimary", _body_mesh)
 	_accent_secondary = _ensure_accent_part("ArchetypeAccentSecondary", _body_mesh)
 	var accent: Dictionary = CustomerVisualProfileScript.accent_for(
-		str(snapshot.get("profile_id", "")),
-		StringName(str(snapshot.get("archetype_id", "")))
+		str(snapshot.get("profile_id", "")), StringName(str(snapshot.get("archetype_id", "")))
 	)
 	_configure_accent_mesh(_accent_primary, accent, true)
 	_configure_accent_mesh(_accent_secondary, accent, false)
 
 
-func _configure_accent_mesh(
-	part: MeshInstance3D, accent: Dictionary, primary: bool
-) -> void:
+func _configure_accent_mesh(part: MeshInstance3D, accent: Dictionary, primary: bool) -> void:
 	var shape: StringName = StringName(str(accent.get("shape", &"soft_pin")))
 	var mesh := _box_mesh(part)
 	mesh.size = _accent_size(shape, primary)
@@ -887,6 +864,7 @@ func _cue_material(part: MeshInstance3D) -> StandardMaterial3D:
 
 
 func _visual_state_for_current_customer(reaction_intent: StringName) -> StringName:
+	var visual_state: StringName = CustomerVisualProfileScript.VISUAL_STATE_BROWSING
 	if current_state == State.LEAVING:
 		if (
 			reaction_intent == CustomerVisualProfileScript.INTENT_SALE
@@ -894,28 +872,36 @@ func _visual_state_for_current_customer(reaction_intent: StringName) -> StringNa
 			or reaction_intent == CustomerVisualProfileScript.INTENT_PAYOUT_TRADE_IN
 			or reaction_intent == CustomerVisualProfileScript.INTENT_ACCEPTED_TRADE_IN
 		):
-			return CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY
-		return CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET
-	if _patience_ratio() < 0.22 and current_state in [
-		State.BROWSING,
-		State.WAITING_IN_QUEUE,
-		State.PURCHASING,
-	]:
-		return CustomerVisualProfileScript.VISUAL_STATE_ANNOYED
-	match current_state:
-		State.BROWSING:
-			if _desired_item != null:
-				return CustomerVisualProfileScript.VISUAL_STATE_NEEDS_HELP
-			return CustomerVisualProfileScript.VISUAL_STATE_BROWSING
-		State.DECIDING:
-			return CustomerVisualProfileScript.VISUAL_STATE_CONSIDERING
-		State.WAITING_IN_QUEUE:
-			return CustomerVisualProfileScript.VISUAL_STATE_QUEUED
-		State.PURCHASING:
-			if _awaiting_player_checkout or is_at_register():
-				return CustomerVisualProfileScript.VISUAL_STATE_COUNTER
-			return CustomerVisualProfileScript.VISUAL_STATE_READY_TO_BUY
-	return CustomerVisualProfileScript.VISUAL_STATE_BROWSING
+			visual_state = CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY
+		else:
+			visual_state = CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET
+	elif (
+		_patience_ratio() < 0.22
+		and (
+			current_state
+			in [
+				State.BROWSING,
+				State.WAITING_IN_QUEUE,
+				State.PURCHASING,
+			]
+		)
+	):
+		visual_state = CustomerVisualProfileScript.VISUAL_STATE_ANNOYED
+	else:
+		match current_state:
+			State.BROWSING:
+				if _desired_item != null:
+					visual_state = CustomerVisualProfileScript.VISUAL_STATE_NEEDS_HELP
+			State.DECIDING:
+				visual_state = CustomerVisualProfileScript.VISUAL_STATE_CONSIDERING
+			State.WAITING_IN_QUEUE:
+				visual_state = CustomerVisualProfileScript.VISUAL_STATE_QUEUED
+			State.PURCHASING:
+				if _awaiting_player_checkout or is_at_register():
+					visual_state = CustomerVisualProfileScript.VISUAL_STATE_COUNTER
+				else:
+					visual_state = CustomerVisualProfileScript.VISUAL_STATE_READY_TO_BUY
+	return visual_state
 
 
 func _visual_flags_for_current_customer(visual_state: StringName) -> Dictionary:
@@ -925,7 +911,8 @@ func _visual_flags_for_current_customer(visual_state: StringName) -> Dictionary:
 		"queued": current_state == State.WAITING_IN_QUEUE,
 		"considering": current_state == State.DECIDING,
 		"annoyed": visual_state == CustomerVisualProfileScript.VISUAL_STATE_ANNOYED,
-		"ready_to_buy": (
+		"ready_to_buy":
+		(
 			current_state == State.PURCHASING
 			and visual_state != CustomerVisualProfileScript.VISUAL_STATE_COUNTER
 		),
@@ -951,34 +938,38 @@ func _desired_item_definition_id() -> String:
 
 
 func _visual_state_color(visual_state: StringName) -> Color:
+	var color: Color = STATE_CUE_BROWSE
 	match visual_state:
 		CustomerVisualProfileScript.VISUAL_STATE_NEEDS_HELP:
-			return Color(0.62, 0.82, 1.0, 1.0)
+			color = Color(0.62, 0.82, 1.0, 1.0)
 		CustomerVisualProfileScript.VISUAL_STATE_QUEUED:
-			return STATE_CUE_QUEUE
+			color = STATE_CUE_QUEUE
 		CustomerVisualProfileScript.VISUAL_STATE_CONSIDERING:
-			return Color(0.82, 0.62, 0.95, 1.0)
+			color = Color(0.82, 0.62, 0.95, 1.0)
 		CustomerVisualProfileScript.VISUAL_STATE_ANNOYED:
-			return STATE_CUE_LEAVING
+			color = STATE_CUE_LEAVING
 		CustomerVisualProfileScript.VISUAL_STATE_READY_TO_BUY:
-			return Color(0.56, 0.88, 0.46, 1.0)
+			color = Color(0.56, 0.88, 0.46, 1.0)
 		CustomerVisualProfileScript.VISUAL_STATE_COUNTER:
-			return STATE_CUE_REGISTER
+			color = STATE_CUE_REGISTER
 		CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY:
-			return Color(0.50, 0.90, 0.40, 1.0)
+			color = Color(0.50, 0.90, 0.40, 1.0)
 		CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET:
-			return STATE_CUE_LEAVING
-	return STATE_CUE_BROWSE
+			color = STATE_CUE_LEAVING
+	return color
 
 
 func _visual_state_cue_position(visual_state: StringName) -> Vector3:
+	if (
+		visual_state == CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY
+		or visual_state == CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET
+	):
+		return Vector3(0.0, 0.22, 0.145)
 	match visual_state:
 		CustomerVisualProfileScript.VISUAL_STATE_COUNTER:
 			return Vector3(0.0, 0.33, 0.145)
 		CustomerVisualProfileScript.VISUAL_STATE_ANNOYED:
 			return Vector3(0.0, 0.26, 0.145)
-		CustomerVisualProfileScript.VISUAL_STATE_LEAVING_HAPPY, CustomerVisualProfileScript.VISUAL_STATE_LEAVING_UPSET:
-			return Vector3(0.0, 0.22, 0.145)
 	return Vector3(0.0, 0.24, 0.135)
 
 
@@ -998,20 +989,21 @@ func _visual_state_cue_scale(visual_state: StringName) -> Vector3:
 
 
 func _reaction_color(reaction_intent: StringName) -> Color:
+	var color: Color = STATE_CUE_LEAVING
 	match reaction_intent:
 		CustomerVisualProfileScript.INTENT_SALE, CustomerVisualProfileScript.INTENT_CLEAN_EXCHANGE:
-			return Color(0.46, 0.92, 0.38, 1.0)
+			color = Color(0.46, 0.92, 0.38, 1.0)
 		CustomerVisualProfileScript.INTENT_BUNDLE_ACCEPTED:
-			return Color(0.98, 0.72, 0.22, 1.0)
+			color = Color(0.98, 0.72, 0.22, 1.0)
 		CustomerVisualProfileScript.INTENT_TRADE_IN, CustomerVisualProfileScript.INTENT_ACCEPTED_TRADE_IN:
-			return Color(0.38, 0.62, 0.90, 1.0)
+			color = Color(0.38, 0.62, 0.90, 1.0)
 		CustomerVisualProfileScript.INTENT_PAYOUT_TRADE_IN:
-			return Color(0.66, 0.52, 0.96, 1.0)
+			color = Color(0.66, 0.52, 0.96, 1.0)
 		CustomerVisualProfileScript.INTENT_PRICE_SHOCK, CustomerVisualProfileScript.INTENT_REFUSED_RETURN:
-			return Color(0.92, 0.30, 0.18, 1.0)
+			color = Color(0.92, 0.30, 0.18, 1.0)
 		CustomerVisualProfileScript.INTENT_NO_SALE, CustomerVisualProfileScript.INTENT_BUNDLE_REJECTED:
-			return Color(0.90, 0.58, 0.24, 1.0)
-	return STATE_CUE_LEAVING
+			color = Color(0.90, 0.58, 0.24, 1.0)
+	return color
 
 
 func _reaction_rotation(reaction_intent: StringName) -> Vector3:
@@ -1024,26 +1016,37 @@ func _reaction_rotation(reaction_intent: StringName) -> Vector3:
 
 
 func _accent_size(shape: StringName, primary: bool) -> Vector3:
+	var size: Vector3 = Vector3(0.11, 0.065, 0.024)
+	var secondary_size: Vector3 = Vector3(0.055, 0.055, 0.026)
 	match shape:
 		&"catalog_card":
-			return Vector3(0.13, 0.09, 0.024) if primary else Vector3(0.06, 0.09, 0.026)
+			size = Vector3(0.13, 0.09, 0.024)
+			secondary_size = Vector3(0.06, 0.09, 0.026)
 		&"question_tab":
-			return Vector3(0.12, 0.12, 0.025) if primary else Vector3(0.04, 0.16, 0.026)
+			size = Vector3(0.12, 0.12, 0.025)
+			secondary_size = Vector3(0.04, 0.16, 0.026)
 		&"coupon_strip":
-			return Vector3(0.18, 0.042, 0.024) if primary else Vector3(0.045, 0.11, 0.026)
+			size = Vector3(0.18, 0.042, 0.024)
+			secondary_size = Vector3(0.045, 0.11, 0.026)
 		&"neon_cap":
-			return Vector3(0.19, 0.036, 0.028) if primary else Vector3(0.08, 0.05, 0.03)
+			size = Vector3(0.19, 0.036, 0.028)
+			secondary_size = Vector3(0.08, 0.05, 0.03)
 		&"pennant":
-			return Vector3(0.16, 0.055, 0.024) if primary else Vector3(0.055, 0.14, 0.026)
+			size = Vector3(0.16, 0.055, 0.024)
+			secondary_size = Vector3(0.055, 0.14, 0.026)
 		&"price_tag":
-			return Vector3(0.11, 0.14, 0.024) if primary else Vector3(0.08, 0.035, 0.026)
+			size = Vector3(0.11, 0.14, 0.024)
+			secondary_size = Vector3(0.08, 0.035, 0.026)
 		&"return_slash":
-			return Vector3(0.16, 0.045, 0.024) if primary else Vector3(0.04, 0.15, 0.026)
+			size = Vector3(0.16, 0.045, 0.024)
+			secondary_size = Vector3(0.04, 0.15, 0.026)
 		&"low_badge":
-			return Vector3(0.09, 0.08, 0.024) if primary else Vector3(0.13, 0.032, 0.026)
+			size = Vector3(0.09, 0.08, 0.024)
+			secondary_size = Vector3(0.13, 0.032, 0.026)
 		&"gold_lapel":
-			return Vector3(0.10, 0.12, 0.024) if primary else Vector3(0.07, 0.07, 0.026)
-	return Vector3(0.11, 0.065, 0.024) if primary else Vector3(0.055, 0.055, 0.026)
+			size = Vector3(0.10, 0.12, 0.024)
+			secondary_size = Vector3(0.07, 0.07, 0.026)
+	return size if primary else secondary_size
 
 
 func _accent_position(shape: StringName, primary: bool) -> Vector3:
@@ -1146,9 +1149,11 @@ func _refresh_held_item_state_for_pose() -> void:
 				_set_held_item_state(HELD_ITEM_STATE_SELECTED_CARRIED)
 		_HELD_ITEM_KIND_RETURNED:
 			_set_held_item_state(
-				HELD_ITEM_STATE_RETURNED_PRESENTED
-				if _held_item_checkout_pose
-				else HELD_ITEM_STATE_RETURNED_CARRIED
+				(
+					HELD_ITEM_STATE_RETURNED_PRESENTED
+					if _held_item_checkout_pose
+					else HELD_ITEM_STATE_RETURNED_CARRIED
+				)
 			)
 		_HELD_ITEM_KIND_TRADE_IN:
 			_set_held_item_state(HELD_ITEM_STATE_TRADE_IN_PRESENTED)
@@ -1197,14 +1202,16 @@ func _apply_held_item_transform() -> void:
 		_held_item_prop.rotation_degrees = Vector3(-8.0, -20.0, 5.0)
 
 
-func _visual_data_for_definition_id(
-	definition_id: String, condition: StringName
-) -> Dictionary:
+func _visual_data_for_definition_id(definition_id: String, condition: StringName) -> Dictionary:
 	return {
 		"definition_id": definition_id,
-		"display_name": ContentRegistry.get_display_name_or(
-			StringName(definition_id),
-			definition_id.capitalize(),
+		"display_name":
+		(
+			ContentRegistry
+			. get_display_name_or(
+				StringName(definition_id),
+				definition_id.capitalize(),
+			)
 		),
 		"category": "games",
 		"condition": String(condition),
@@ -1225,13 +1232,16 @@ func _make_held_item_fallback_visual() -> MeshInstance3D:
 
 
 func _is_terminal_held_item_state(state: StringName) -> bool:
-	return state in [
-		HELD_ITEM_STATE_SELECTED_SOLD,
-		HELD_ITEM_STATE_SELECTED_ABANDONED,
-		HELD_ITEM_STATE_RETURNED_ACCEPTED,
-		HELD_ITEM_STATE_RETURNED_REFUSED,
-		HELD_ITEM_STATE_PAYOUT_RETURNED,
-	]
+	return (
+		state
+		in [
+			HELD_ITEM_STATE_SELECTED_SOLD,
+			HELD_ITEM_STATE_SELECTED_ABANDONED,
+			HELD_ITEM_STATE_RETURNED_ACCEPTED,
+			HELD_ITEM_STATE_RETURNED_REFUSED,
+			HELD_ITEM_STATE_PAYOUT_RETURNED,
+		]
+	)
 
 
 func _move_along_path(delta: float) -> void:
@@ -1294,9 +1304,9 @@ func _move_waypoint_fallback() -> void:
 ## proves the bake cannot reach the gameplay-critical targets.
 func enable_waypoint_fallback() -> void:
 	_use_waypoint_fallback = true
-	_fallback_arrived = global_position.distance_squared_to(
-		_fallback_target
-	) < WAYPOINT_ARRIVAL_DIST_SQ
+	_fallback_arrived = (
+		global_position.distance_squared_to(_fallback_target) < WAYPOINT_ARRIVAL_DIST_SQ
+	)
 
 
 ## Engages waypoint fallback when no NavigationAgent3D / NavigationRegion3D with
@@ -1314,11 +1324,13 @@ func _detect_navmesh_or_fallback() -> void:
 	if _navigation_agent == null:
 		push_warning(
 			(
-				"Customer %d: NavigationAgent3D child missing; engaging "
-				+ "direct-line waypoint fallback. Scene wiring regression "
-				+ "(see §F-94)."
+				(
+					"Customer %d: NavigationAgent3D child missing; engaging "
+					+ "direct-line waypoint fallback. Scene wiring regression "
+					+ "(see §F-94)."
+				)
+				% get_instance_id()
 			)
-			% get_instance_id()
 		)
 		enable_waypoint_fallback()
 		_emit_navigation_mode_selected(false)
@@ -1327,11 +1339,13 @@ func _detect_navmesh_or_fallback() -> void:
 	if region == null:
 		push_warning(
 			(
-				"Customer %d: no NavigationRegion3D ancestor found; "
-				+ "engaging direct-line waypoint fallback. Scene wiring "
-				+ "regression (see §F-94)."
+				(
+					"Customer %d: no NavigationRegion3D ancestor found; "
+					+ "engaging direct-line waypoint fallback. Scene wiring "
+					+ "regression (see §F-94)."
+				)
+				% get_instance_id()
 			)
-			% get_instance_id()
 		)
 		enable_waypoint_fallback()
 		_emit_navigation_mode_selected(false)
@@ -1340,18 +1354,16 @@ func _detect_navmesh_or_fallback() -> void:
 	if nav_mesh == null or nav_mesh.get_polygon_count() == 0:
 		push_warning(
 			(
-				"Customer %d: NavigationRegion3D has %s; engaging "
-				+ "direct-line waypoint fallback. Re-bake the navmesh "
-				+ "(see §F-94)."
-			)
-			% [
-				get_instance_id(),
 				(
-					"no NavigationMesh resource"
-					if nav_mesh == null
-					else "navmesh with 0 polygons"
-				),
-			]
+					"Customer %d: NavigationRegion3D has %s; engaging "
+					+ "direct-line waypoint fallback. Re-bake the navmesh "
+					+ "(see §F-94)."
+				)
+				% [
+					get_instance_id(),
+					"no NavigationMesh resource" if nav_mesh == null else "navmesh with 0 polygons",
+				]
+			)
 		)
 		enable_waypoint_fallback()
 		_emit_navigation_mode_selected(false)
@@ -1360,12 +1372,18 @@ func _detect_navmesh_or_fallback() -> void:
 
 
 func _emit_navigation_mode_selected(has_navigation_region: bool) -> void:
-	EventBus.customer_navigation_mode_selected.emit({
-		"customer_id": get_instance_id(),
-		"mode": "waypoint_fallback" if _use_waypoint_fallback else "navigation_agent",
-		"has_navigation_agent": _navigation_agent != null,
-		"has_navigation_region": has_navigation_region,
-	})
+	(
+		EventBus
+		. customer_navigation_mode_selected
+		. emit(
+			{
+				"customer_id": get_instance_id(),
+				"mode": "waypoint_fallback" if _use_waypoint_fallback else "navigation_agent",
+				"has_navigation_agent": _navigation_agent != null,
+				"has_navigation_region": has_navigation_region,
+			}
+		)
+	)
 
 
 func _find_navigation_region() -> NavigationRegion3D:
@@ -1398,9 +1416,7 @@ func _navigate_to_random_shelf() -> bool:
 		var slot_3d: Node3D = slot as Node3D
 		if slot_3d == null:
 			continue
-		if not CustomerNavConfig.is_customer_position_allowed(
-			slot_3d.global_position
-		):
+		if not CustomerNavConfig.is_customer_position_allowed(slot_3d.global_position):
 			continue
 		if slot not in _visited_slots:
 			unvisited.append(slot)
@@ -1439,9 +1455,7 @@ func _evaluate_current_shelf() -> void:
 	if slot_id.is_empty():
 		return
 	var location: String = "shelf:%s" % slot_id
-	var items: Array[ItemInstance] = (
-		_inventory_system.get_items_at_location(location)
-	)
+	var items: Array[ItemInstance] = _inventory_system.get_items_at_location(location)
 	# §F-86 — Pass 12: emits are guarded upstream by `_is_item_desirable`,
 	# which rejects `item.definition == null` / null profile, so subscribers
 	# (`AmbientMomentsSystem._on_customer_item_spotted`) can rely on a
@@ -1480,9 +1494,7 @@ func _is_item_desirable(item: ItemInstance) -> bool:
 	var category_match: bool = _matches_categories(item)
 	var tag_match: bool = _matches_tags(item)
 	if not category_match and not tag_match:
-		return GameRandom.chance(
-			RandomStreamIds.CUSTOMER_PURCHASE, profile.impulse_buy_chance
-		)
+		return GameRandom.chance(RandomStreamIds.CUSTOMER_PURCHASE, profile.impulse_buy_chance)
 	return true
 
 
@@ -1530,18 +1542,12 @@ func _get_willingness_to_pay() -> float:
 func _is_bargain_only_buyer() -> bool:
 	if not profile:
 		return false
-	return (
-		"investor" in profile.id
-		or "dealer" in profile.id
-		or "reseller" in profile.id
-	)
+	return "investor" in profile.id or "dealer" in profile.id or "reseller" in profile.id
 
 
 ## Returns 0.5-1.5 based on how well item condition matches preference.
 func _get_condition_score(item_condition: String) -> float:
-	var pref_rank: int = CONDITION_RANKS.get(
-		profile.condition_preference, 2
-	)
+	var pref_rank: int = CONDITION_RANKS.get(profile.condition_preference, 2)
 	var item_rank: int = CONDITION_RANKS.get(item_condition, 2)
 	var diff: int = item_rank - pref_rank
 	if diff >= 0:
@@ -1579,9 +1585,7 @@ func _filter_preferred_slots(slots: Array[Node]) -> Array[Node]:
 		if slot_id.is_empty():
 			continue
 		var location: String = "shelf:%s" % slot_id
-		var items: Array[ItemInstance] = (
-			_inventory_system.get_items_at_location(location)
-		)
+		var items: Array[ItemInstance] = _inventory_system.get_items_at_location(location)
 		for item: ItemInstance in items:
 			if not item.definition:
 				continue
@@ -1608,9 +1612,7 @@ func _build_customer_data() -> Dictionary:
 		"customer_id": get_instance_id(),
 		"profile_id": profile.id if profile else "",
 		"profile_name": profile.customer_name if profile else "",
-		"desired_item_id": (
-			str(_desired_item.instance_id) if _desired_item else ""
-		),
+		"desired_item_id": str(_desired_item.instance_id) if _desired_item else "",
 	}
 
 
@@ -1618,12 +1620,8 @@ func _randomize_body_color() -> void:
 	if not _body_mesh or not _head_mesh:
 		return
 	var base_hue: float = GameRandom.randf(RandomStreamIds.CUSTOMER_APPEARANCE)
-	var saturation: float = GameRandom.randf_range(
-		RandomStreamIds.CUSTOMER_APPEARANCE, 0.3, 0.7
-	)
-	var value_v: float = GameRandom.randf_range(
-		RandomStreamIds.CUSTOMER_APPEARANCE, 0.5, 0.9
-	)
+	var saturation: float = GameRandom.randf_range(RandomStreamIds.CUSTOMER_APPEARANCE, 0.3, 0.7)
+	var value_v: float = GameRandom.randf_range(RandomStreamIds.CUSTOMER_APPEARANCE, 0.5, 0.9)
 	var body_color := Color.from_hsv(base_hue, saturation, value_v)
 	var body_material := StandardMaterial3D.new()
 	body_material.albedo_color = body_color
@@ -1640,9 +1638,7 @@ func _randomize_body_color() -> void:
 	_apply_limb_materials(skin_material, pants_color)
 
 
-func _apply_limb_materials(
-	skin_material: StandardMaterial3D, pants_color: Color
-) -> void:
+func _apply_limb_materials(skin_material: StandardMaterial3D, pants_color: Color) -> void:
 	if _body_mesh == null:
 		return
 	var pants_material := StandardMaterial3D.new()
@@ -1675,16 +1671,18 @@ func _set_navigation_target(target_position: Vector3, target_kind: StringName = 
 		and CustomerNavConfig.is_customer_position_allowed(global_position)
 	):
 		push_warning(
-			"Customer: refusing staff-only navigation target for %s"
-			% _resolved_target_kind(target_kind)
+			(
+				"Customer: refusing staff-only navigation target for %s"
+				% _resolved_target_kind(target_kind)
+			)
 		)
 		target_position = CustomerNavConfig.sanitize_customer_target(
 			target_position, _exit_position
 		)
 	_fallback_target = target_position
-	_fallback_arrived = global_position.distance_squared_to(
-		target_position
-	) < WAYPOINT_ARRIVAL_DIST_SQ
+	_fallback_arrived = (
+		global_position.distance_squared_to(target_position) < WAYPOINT_ARRIVAL_DIST_SQ
+	)
 	if not (_use_waypoint_fallback or _navigation_agent == null):
 		_navigation_agent.target_position = target_position
 	_begin_navigation_target(target_position, _resolved_target_kind(target_kind))
@@ -1712,14 +1710,20 @@ func _begin_navigation_target(target_position: Vector3, target_kind: StringName)
 	_last_nav_progress_msec = _nav_target_started_msec
 	_nav_stall_reported = false
 	_nav_timeout_reported = false
-	EventBus.customer_navigation_target_set.emit({
-		"customer_id": get_instance_id(),
-		"state": state_name(current_state),
-		"target_kind": String(target_kind),
-		"target_position": target_position,
-		"using_waypoint_fallback": _use_waypoint_fallback,
-		"has_navigation_agent": _navigation_agent != null,
-	})
+	(
+		EventBus
+		. customer_navigation_target_set
+		. emit(
+			{
+				"customer_id": get_instance_id(),
+				"state": state_name(current_state),
+				"target_kind": String(target_kind),
+				"target_position": target_position,
+				"using_waypoint_fallback": _use_waypoint_fallback,
+				"has_navigation_agent": _navigation_agent != null,
+			}
+		)
+	)
 	if _nav_was_finished:
 		_emit_navigation_completed()
 
@@ -1761,14 +1765,20 @@ func _update_navigation_metrics() -> void:
 
 
 func _emit_navigation_completed() -> void:
-	EventBus.customer_navigation_completed.emit({
-		"customer_id": get_instance_id(),
-		"state": state_name(current_state),
-		"target_kind": String(_nav_target_kind),
-		"elapsed_seconds": _navigation_target_age_seconds(),
-		"using_waypoint_fallback": _use_waypoint_fallback,
-		"distance_remaining": _navigation_distance_remaining(),
-	})
+	(
+		EventBus
+		. customer_navigation_completed
+		. emit(
+			{
+				"customer_id": get_instance_id(),
+				"state": state_name(current_state),
+				"target_kind": String(_nav_target_kind),
+				"elapsed_seconds": _navigation_target_age_seconds(),
+				"using_waypoint_fallback": _use_waypoint_fallback,
+				"distance_remaining": _navigation_distance_remaining(),
+			}
+		)
+	)
 
 
 func _emit_navigation_problem(
@@ -1776,29 +1786,41 @@ func _emit_navigation_problem(
 ) -> void:
 	if _is_expected_manual_checkout_wait():
 		return
-	EventBus.customer_navigation_stalled.emit({
-		"customer_id": get_instance_id(),
-		"state": state_name(current_state),
-		"target_kind": String(_nav_target_kind),
-		"failure": String(failure),
-		"elapsed_seconds": target_age_seconds,
-		"seconds_without_progress": no_progress_seconds,
-		"distance_to_target": _navigation_distance_remaining(),
-		"using_waypoint_fallback": _use_waypoint_fallback,
-		"position": global_position,
-		"target_position": _navigation_target_position(),
-	})
+	(
+		EventBus
+		. customer_navigation_stalled
+		. emit(
+			{
+				"customer_id": get_instance_id(),
+				"state": state_name(current_state),
+				"target_kind": String(_nav_target_kind),
+				"failure": String(failure),
+				"elapsed_seconds": target_age_seconds,
+				"seconds_without_progress": no_progress_seconds,
+				"distance_to_target": _navigation_distance_remaining(),
+				"using_waypoint_fallback": _use_waypoint_fallback,
+				"position": global_position,
+				"target_position": _navigation_target_position(),
+			}
+		)
+	)
 
 
 func _emit_register_arrival_once() -> void:
 	if _register_arrival_reported:
 		return
 	_register_arrival_reported = true
-	EventBus.customer_register_arrival.emit({
-		"customer_id": get_instance_id(),
-		"awaiting_player_checkout": _awaiting_player_checkout,
-		"target": "register",
-	})
+	(
+		EventBus
+		. customer_register_arrival
+		. emit(
+			{
+				"customer_id": get_instance_id(),
+				"awaiting_player_checkout": _awaiting_player_checkout,
+				"target": "register",
+			}
+		)
+	)
 
 
 func _navigation_timeout_seconds() -> float:

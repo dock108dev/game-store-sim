@@ -154,7 +154,7 @@ func _grant_display_unlock() -> void:
 
 func _add_practical_source() -> void:
 	var mesh := MeshInstance3D.new()
-	mesh.name = "FeaturedDisplayAccentPracticalSource"
+	mesh.name = "DisplayTableUndershelfPracticalSource"
 	mesh.mesh = BoxMesh.new()
 	_shell.add_child(mesh)
 

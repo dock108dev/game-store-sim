@@ -392,8 +392,8 @@ func test_expanded_stockroom_scope_is_visual_only_and_route_safe() -> void:
 		return
 	for prop_path: String in [
 		"StockroomExpandedFrontPartitionLow",
-		"StockroomExpandedFrontPartitionHighA",
-		"StockroomExpandedFrontPartitionHighB",
+		"StockroomExpandedFrontPaintBandA",
+		"StockroomExpandedFrontPaintBandB",
 		"StockroomExpandedDeepRackShelf00",
 		"StockroomExpandedDeepRackShelf03",
 		"StockroomExpandedPalletStack00",

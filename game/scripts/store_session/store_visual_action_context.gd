@@ -74,7 +74,7 @@ static func route_sequence() -> Array[Dictionary]:
 		{
 			"step": "backroom pickup",
 			"destination": "inventory pickup",
-			"anchor": "ExpandableStoreShell/StockroomFloorTape",
+			"anchor": "ExpandableStoreShell/StockroomDoorStaffCard",
 			"moment": "backroom_pickup",
 		},
 		{

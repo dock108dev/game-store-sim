@@ -143,6 +143,7 @@ func test_opening_checkout_closes_pricing_before_claiming_modal_focus() -> void:
 		InputFocus.CTX_MODAL,
 		"Checkout must claim modal focus after sibling docked panels close"
 	)
+	checkout.hide_checkout(true)
 
 
 func test_work_panel_conflict_contract_matches_current_focus_categories() -> void:

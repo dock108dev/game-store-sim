@@ -32,7 +32,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailPriceTag",
 		"display_name": "price tag",
 		"role": StoreVisualKitScript.ROLE_SIGNAGE,
-		"groups": [
+		"groups":
+		[
 			StoreVisualKitScript.GROUP_PRICING,
 			StoreVisualKitScript.GROUP_RETAIL_FLOOR,
 			StoreVisualKitScript.GROUP_PRODUCT_DISPLAY,
@@ -44,7 +45,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailSaleSticker",
 		"display_name": "sale sticker",
 		"role": StoreVisualKitScript.ROLE_SIGNAGE,
-		"groups": [
+		"groups":
+		[
 			StoreVisualKitScript.GROUP_PRICING,
 			StoreVisualKitScript.GROUP_RETAIL_FLOOR,
 			StoreVisualKitScript.GROUP_PRODUCT_DISPLAY,
@@ -56,7 +58,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailShelfTalker",
 		"display_name": "shelf talker",
 		"role": StoreVisualKitScript.ROLE_SIGNAGE,
-		"groups": [
+		"groups":
+		[
 			StoreVisualKitScript.GROUP_PRICING,
 			StoreVisualKitScript.GROUP_RETAIL_FLOOR,
 			StoreVisualKitScript.GROUP_PRODUCT_DISPLAY,
@@ -100,7 +103,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailQueueStanchionRope",
 		"display_name": "queue stanchion and rope",
 		"role": StoreVisualKitScript.ROLE_ROUTE_CUE,
-		"groups": [
+		"groups":
+		[
 			StoreVisualKitScript.GROUP_CHECKOUT,
 			StoreVisualKitScript.GROUP_RETAIL_FLOOR,
 			StoreVisualKitScript.GROUP_WAYFINDING,
@@ -128,7 +132,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailFloorMat",
 		"display_name": "floor mat",
 		"role": StoreVisualKitScript.ROLE_DECOR,
-		"groups": [
+		"groups":
+		[
 			StoreVisualKitScript.GROUP_RETAIL_FLOOR,
 			StoreVisualKitScript.GROUP_WAYFINDING,
 			GROUP_BUILD_MODE,
@@ -148,7 +153,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailConditionSticker",
 		"display_name": "condition sticker",
 		"role": StoreVisualKitScript.ROLE_SIGNAGE,
-		"groups": [
+		"groups":
+		[
 			StoreVisualKitScript.GROUP_PRICING,
 			StoreVisualKitScript.GROUP_PRODUCT_DISPLAY,
 			StoreVisualKitScript.GROUP_RETAIL_FLOOR,
@@ -160,7 +166,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailProtectiveSleeve",
 		"display_name": "protective sleeve",
 		"role": StoreVisualKitScript.ROLE_DECOR,
-		"groups": [StoreVisualKitScript.GROUP_PRODUCT_DISPLAY, StoreVisualKitScript.GROUP_RETAIL_FLOOR],
+		"groups":
+		[StoreVisualKitScript.GROUP_PRODUCT_DISPLAY, StoreVisualKitScript.GROUP_RETAIL_FLOOR],
 		"family": StarterDetailBuilderScript.FAMILY_PAPER,
 	},
 	DETAIL_DISPLAY_PLACARD:
@@ -168,7 +175,8 @@ const _DETAIL_SPECS: Dictionary = {
 		"name": "RetailDisplayPlacard",
 		"display_name": "display placard",
 		"role": StoreVisualKitScript.ROLE_SIGNAGE,
-		"groups": [
+		"groups":
+		[
 			StoreVisualKitScript.GROUP_PRODUCT_DISPLAY,
 			StoreVisualKitScript.GROUP_RETAIL_FLOOR,
 			GROUP_CUSTOMIZATION,
@@ -199,14 +207,25 @@ static func sale_sticker(label_text: String = "") -> Node3D:
 
 ## Builds a shelf talker from caller-owned text.
 static func shelf_talker(label_text: String = "") -> Node3D:
-	var root: Node3D = _flat_text_detail(DETAIL_SHELF_TALKER, label_text, Vector3(0.40, 0.030, 0.18))
-	_add_box(root, "FoldFoot", Vector3(0.0, -0.04, 0.09), Vector3(0.36, 0.030, 0.06), _family(root), StarterDetailBuilderScript.ROLE_LIP)
+	var root: Node3D = _flat_text_detail(
+		DETAIL_SHELF_TALKER, label_text, Vector3(0.40, 0.030, 0.18)
+	)
+	_add_box(
+		root,
+		"FoldFoot",
+		Vector3(0.0, -0.04, 0.09),
+		Vector3(0.36, 0.030, 0.06),
+		_family(root),
+		StarterDetailBuilderScript.ROLE_LIP
+	)
 	return root
 
 
 ## Builds a poster card from caller-owned headline and body text.
 static func poster_card(headline_text: String = "", body_text: String = "") -> Node3D:
-	var root: Node3D = _flat_text_detail(DETAIL_POSTER_CARD, headline_text, Vector3(0.50, 0.030, 0.68))
+	var root: Node3D = _flat_text_detail(
+		DETAIL_POSTER_CARD, headline_text, Vector3(0.50, 0.030, 0.68)
+	)
 	_add_label(root, "BodyText", body_text, Vector3(0.0, 0.030, 0.11), 0.016)
 	return root
 
@@ -215,22 +234,54 @@ static func poster_card(headline_text: String = "", body_text: String = "") -> N
 static func cable_hook() -> Node3D:
 	var root: Node3D = _root(DETAIL_CABLE_HOOK)
 	_add_cylinder(root, "BackPlate", 0.035, 0.34, Vector3(0.0, 0.18, 0.0), _family(root))
-	_add_cylinder(root, "HookArm", 0.018, 0.32, Vector3(0.0, 0.25, -0.12), _family(root), Vector3(90.0, 0.0, 0.0))
-	_add_cylinder(root, "CableLoop", 0.016, 0.26, Vector3(0.0, 0.16, -0.15), StarterDetailBuilderScript.FAMILY_RUBBER, Vector3(90.0, 0.0, 0.0))
+	_add_cylinder(
+		root,
+		"HookArm",
+		0.018,
+		0.32,
+		Vector3(0.0, 0.25, -0.12),
+		_family(root),
+		Vector3(90.0, 0.0, 0.0)
+	)
+	_add_cylinder(
+		root,
+		"CableLoop",
+		0.016,
+		0.26,
+		Vector3(0.0, 0.16, -0.15),
+		StarterDetailBuilderScript.FAMILY_RUBBER,
+		Vector3(90.0, 0.0, 0.0)
+	)
 	return root
 
 
 ## Builds a receipt slip from caller-owned line text.
 static func receipt_slip(lines: Array = []) -> Node3D:
-	var root: Node3D = _flat_text_detail(DETAIL_RECEIPT_SLIP, _joined_lines(lines), Vector3(0.22, 0.018, 0.46))
-	_add_box(root, "PrinterCurl", Vector3(0.0, 0.018, -0.25), Vector3(0.20, 0.022, 0.035), _family(root), StarterDetailBuilderScript.ROLE_LIP)
+	var root: Node3D = _flat_text_detail(
+		DETAIL_RECEIPT_SLIP, _joined_lines(lines), Vector3(0.22, 0.018, 0.46)
+	)
+	_add_box(
+		root,
+		"PrinterCurl",
+		Vector3(0.0, 0.018, -0.25),
+		Vector3(0.20, 0.022, 0.035),
+		_family(root),
+		StarterDetailBuilderScript.ROLE_LIP
+	)
 	return root
 
 
 ## Builds a label plate from caller-owned text.
 static func label_plate(label_text: String = "") -> Node3D:
 	var root: Node3D = _flat_text_detail(DETAIL_LABEL_PLATE, label_text, Vector3(0.36, 0.035, 0.14))
-	_add_box(root, "DarkBacker", Vector3(0.0, -0.006, 0.0), Vector3(0.40, 0.014, 0.18), StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT, StarterDetailBuilderScript.ROLE_TRIM)
+	_add_box(
+		root,
+		"DarkBacker",
+		Vector3(0.0, -0.006, 0.0),
+		Vector3(0.40, 0.014, 0.18),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_TRIM
+	)
 	return root
 
 
@@ -238,9 +289,25 @@ static func label_plate(label_text: String = "") -> Node3D:
 static func queue_stanchion_rope() -> Node3D:
 	var root: Node3D = _root(DETAIL_QUEUE_STANCHION_ROPE)
 	for x: float in [-0.34, 0.34]:
-		_add_cylinder(root, "Post%03d" % int(round((x + 0.5) * 100.0)), 0.028, 0.58, Vector3(x, 0.29, 0.0), StarterDetailBuilderScript.FAMILY_STOCKROOM_COOL_METAL)
-		_add_cylinder(root, "Base%03d" % int(round((x + 0.5) * 100.0)), 0.075, 0.030, Vector3(x, 0.015, 0.0), StarterDetailBuilderScript.FAMILY_RUBBER)
-	_add_cylinder(root, "Rope", 0.022, 0.70, Vector3(0.0, 0.50, 0.0), _family(root), Vector3(0.0, 0.0, 90.0))
+		_add_cylinder(
+			root,
+			"Post%03d" % int(round((x + 0.5) * 100.0)),
+			0.028,
+			0.58,
+			Vector3(x, 0.29, 0.0),
+			StarterDetailBuilderScript.FAMILY_STOCKROOM_COOL_METAL
+		)
+		_add_cylinder(
+			root,
+			"Base%03d" % int(round((x + 0.5) * 100.0)),
+			0.075,
+			0.030,
+			Vector3(x, 0.015, 0.0),
+			StarterDetailBuilderScript.FAMILY_RUBBER
+		)
+	_add_cylinder(
+		root, "Rope", 0.022, 0.70, Vector3(0.0, 0.50, 0.0), _family(root), Vector3(0.0, 0.0, 90.0)
+	)
 	return root
 
 
@@ -257,8 +324,22 @@ static func hours_plaque(label_text: String = "") -> Node3D:
 ## Builds a floor mat from caller-owned text.
 static func floor_mat(label_text: String = "") -> Node3D:
 	var root: Node3D = _flat_text_detail(DETAIL_FLOOR_MAT, label_text, Vector3(0.82, 0.024, 0.46))
-	_add_box(root, "InsetStripeA", Vector3(-0.24, 0.020, 0.0), Vector3(0.035, 0.012, 0.40), StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT, StarterDetailBuilderScript.ROLE_SEAM)
-	_add_box(root, "InsetStripeB", Vector3(0.24, 0.020, 0.0), Vector3(0.035, 0.012, 0.40), StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT, StarterDetailBuilderScript.ROLE_SEAM)
+	_add_box(
+		root,
+		"InsetStripeA",
+		Vector3(-0.24, 0.020, 0.0),
+		Vector3(0.035, 0.012, 0.40),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_SEAM
+	)
+	_add_box(
+		root,
+		"InsetStripeB",
+		Vector3(0.24, 0.020, 0.0),
+		Vector3(0.035, 0.012, 0.40),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_SEAM
+	)
 	return root
 
 
@@ -275,21 +356,46 @@ static func condition_sticker(label_text: String = "") -> Node3D:
 ## Builds a protective sleeve visual with no product identity baked in.
 static func protective_sleeve() -> Node3D:
 	var root: Node3D = _root(DETAIL_PROTECTIVE_SLEEVE)
-	_add_box(root, "SleeveBack", Vector3.ZERO, Vector3(0.34, 0.018, 0.48), _family(root), StarterDetailBuilderScript.ROLE_PANEL)
-	_add_box(root, "SleeveLip", Vector3(0.0, 0.020, -0.24), Vector3(0.34, 0.014, 0.030), StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT, StarterDetailBuilderScript.ROLE_LIP)
+	_add_box(
+		root,
+		"SleeveBack",
+		Vector3.ZERO,
+		Vector3(0.34, 0.018, 0.48),
+		_family(root),
+		StarterDetailBuilderScript.ROLE_PANEL
+	)
+	_add_box(
+		root,
+		"SleeveLip",
+		Vector3(0.0, 0.020, -0.24),
+		Vector3(0.34, 0.014, 0.030),
+		StarterDetailBuilderScript.FAMILY_SHADOW_ACCENT,
+		StarterDetailBuilderScript.ROLE_LIP
+	)
 	return root
 
 
 ## Builds a display placard from caller-owned text.
 static func display_placard(label_text: String = "") -> Node3D:
-	var root: Node3D = _flat_text_detail(DETAIL_DISPLAY_PLACARD, label_text, Vector3(0.34, 0.030, 0.22))
-	_add_box(root, "StandFoot", Vector3(0.0, -0.04, 0.09), Vector3(0.26, 0.030, 0.08), StarterDetailBuilderScript.FAMILY_WOOD_LAMINATE, StarterDetailBuilderScript.ROLE_BRACE)
+	var root: Node3D = _flat_text_detail(
+		DETAIL_DISPLAY_PLACARD, label_text, Vector3(0.34, 0.030, 0.22)
+	)
+	_add_box(
+		root,
+		"StandFoot",
+		Vector3(0.0, -0.04, 0.09),
+		Vector3(0.26, 0.030, 0.08),
+		StarterDetailBuilderScript.FAMILY_WOOD_LAMINATE,
+		StarterDetailBuilderScript.ROLE_BRACE
+	)
 	return root
 
 
 static func _flat_text_detail(detail_id: StringName, text: String, size: Vector3) -> Node3D:
 	var root: Node3D = _root(detail_id)
-	_add_box(root, "Panel", Vector3.ZERO, size, _family(root), StarterDetailBuilderScript.ROLE_LABEL)
+	_add_box(
+		root, "Panel", Vector3.ZERO, size, _family(root), StarterDetailBuilderScript.ROLE_LABEL
+	)
 	_add_label(root, "LabelText", text, Vector3(0.0, size.y + 0.004, 0.0), 0.018)
 	return root
 
@@ -307,7 +413,9 @@ static func _root(detail_id: StringName) -> Node3D:
 	root.set_meta("store_visual_display_name", str(spec.get("display_name", "")))
 	root.set_meta("visual_only", true)
 	StarterDetailBuilderScript.apply_visual_metadata(
-		root, spec.get("family", StarterDetailBuilderScript.FAMILY_PAPER) as StringName, StarterDetailBuilderScript.ROLE_LABEL
+		root,
+		spec.get("family", StarterDetailBuilderScript.FAMILY_PAPER) as StringName,
+		StarterDetailBuilderScript.ROLE_LABEL
 	)
 	return root
 
@@ -342,7 +450,12 @@ static func _add_label(
 
 
 static func _add_box(
-	parent: Node3D, name: String, position: Vector3, size: Vector3, family: StringName, role: StringName
+	parent: Node3D,
+	name: String,
+	position: Vector3,
+	size: Vector3,
+	family: StringName,
+	role: StringName
 ) -> MeshInstance3D:
 	var mesh := BoxMesh.new()
 	mesh.size = size
@@ -363,7 +476,15 @@ static func _add_cylinder(
 	mesh.bottom_radius = radius
 	mesh.height = height
 	mesh.radial_segments = 14
-	return _add_mesh(parent, name, mesh, position, rotation_degrees, family, StarterDetailBuilderScript.ROLE_CABLE)
+	return _add_mesh(
+		parent,
+		name,
+		mesh,
+		position,
+		rotation_degrees,
+		family,
+		StarterDetailBuilderScript.ROLE_CABLE
+	)
 
 
 static func _add_mesh(

@@ -57,16 +57,13 @@ func _process(delta: float) -> void:
 		return
 	_pulse_time += delta
 	var alpha: float = lerp(
-		PULSE_MIN_ALPHA, PULSE_MAX_ALPHA,
-		(sin(_pulse_time * PULSE_SPEED * TAU) + 1.0) * 0.5
+		PULSE_MIN_ALPHA, PULSE_MAX_ALPHA, (sin(_pulse_time * PULSE_SPEED * TAU) + 1.0) * 0.5
 	)
 	_material.albedo_color.a = alpha
 
 
 ## Shows ghost at the given cells with validity coloring.
-func show_at_cells(
-	cells: Array[Vector2i], valid: bool
-) -> void:
+func show_at_cells(cells: Array[Vector2i], valid: bool) -> void:
 	var feedback = PlacementPreviewFeedbackScript.new()
 	feedback.footprint_cells = cells
 	feedback.valid = valid
@@ -110,23 +107,17 @@ func play_shake() -> void:
 
 	for i: int in range(SHAKE_OSCILLATIONS):
 		var direction: float = 1.0 if i % 2 == 0 else -1.0
-		var offset: Vector3 = Vector3(
-			SHAKE_MAGNITUDE * direction, 0.0, 0.0
+		var offset: Vector3 = Vector3(SHAKE_MAGNITUDE * direction, 0.0, 0.0)
+		_shake_tween.tween_property(self, "position", original_pos + offset, step_time).set_trans(
+			Tween.TRANS_SINE
 		)
-		_shake_tween.tween_property(
-			self, "position",
-			original_pos + offset,
-			step_time
-		).set_trans(Tween.TRANS_SINE)
-		_shake_tween.tween_property(
-			self, "position",
-			original_pos - offset,
-			step_time
-		).set_trans(Tween.TRANS_SINE)
+		_shake_tween.tween_property(self, "position", original_pos - offset, step_time).set_trans(
+			Tween.TRANS_SINE
+		)
 
-	_shake_tween.tween_property(
-		self, "position", original_pos, step_time * 0.5
-	).set_trans(Tween.TRANS_SINE)
+	_shake_tween.tween_property(self, "position", original_pos, step_time * 0.5).set_trans(
+		Tween.TRANS_SINE
+	)
 
 
 ## Plays a quick placement confirmation scale punch on the ghost footprint.
@@ -137,15 +128,23 @@ func play_scale_punch() -> void:
 	_kill_tween(_scale_tween)
 	scale = Vector3.ONE
 	_scale_tween = create_tween()
-	_scale_tween.tween_property(
-		self,
-		"scale",
-		Vector3(SCALE_PUNCH_PEAK, SCALE_PUNCH_PEAK, SCALE_PUNCH_PEAK),
-		SCALE_PUNCH_DURATION * 0.5
-	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_scale_tween.tween_property(
-		self, "scale", Vector3.ONE, SCALE_PUNCH_DURATION * 0.5
-	).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	(
+		_scale_tween
+		. tween_property(
+			self,
+			"scale",
+			Vector3(SCALE_PUNCH_PEAK, SCALE_PUNCH_PEAK, SCALE_PUNCH_PEAK),
+			SCALE_PUNCH_DURATION * 0.5
+		)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_CUBIC)
+	)
+	(
+		_scale_tween
+		. tween_property(self, "scale", Vector3.ONE, SCALE_PUNCH_DURATION * 0.5)
+		. set_ease(Tween.EASE_IN)
+		. set_trans(Tween.TRANS_CUBIC)
+	)
 
 
 func _update_color(valid: bool) -> void:
@@ -158,9 +157,7 @@ func _update_color(valid: bool) -> void:
 		_is_pulsing = true
 
 
-func _rebuild_meshes(
-	feedback, cells: Array[Vector2i]
-) -> void:
+func _rebuild_meshes(feedback, cells: Array[Vector2i]) -> void:
 	for mesh: MeshInstance3D in _meshes:
 		if is_instance_valid(mesh):
 			remove_child(mesh)
@@ -181,10 +178,7 @@ func _create_cell_quad(
 	cell: Vector2i, anchor: Vector3, material: StandardMaterial3D
 ) -> MeshInstance3D:
 	var quad: PlaneMesh = PlaneMesh.new()
-	quad.size = Vector2(
-		BuildModeGrid.CELL_SIZE * 0.95,
-		BuildModeGrid.CELL_SIZE * 0.95
-	)
+	quad.size = Vector2(BuildModeGrid.CELL_SIZE * 0.95, BuildModeGrid.CELL_SIZE * 0.95)
 
 	var inst: MeshInstance3D = MeshInstance3D.new()
 	inst.mesh = quad
@@ -211,22 +205,21 @@ func _get_feedback_cells(feedback) -> Array[Vector2i]:
 	return cells
 
 
-func _get_cell_material(
-	cell: Vector2i, feedback
-) -> StandardMaterial3D:
+func _get_cell_material(cell: Vector2i, feedback) -> StandardMaterial3D:
+	var material: StandardMaterial3D = _material
 	if feedback.collision_cells.has(cell) or feedback.out_of_bounds_cells.has(cell):
-		return _materials["invalid"] as StandardMaterial3D
-	if feedback.entry_zone_cells.has(cell):
-		return _materials["entry"] as StandardMaterial3D
-	if feedback.nearby_blocker_cells.has(cell):
-		return _materials["blocker"] as StandardMaterial3D
-	if feedback.front_edge_cells.has(cell):
-		return _materials["front"] as StandardMaterial3D
-	if feedback.wall_candidate_cells.has(cell):
-		return _materials["wall"] as StandardMaterial3D
-	if not feedback.valid and feedback.invalid_cells.has(cell):
-		return _materials["invalid"] as StandardMaterial3D
-	return _material
+		material = _materials["invalid"] as StandardMaterial3D
+	elif feedback.entry_zone_cells.has(cell):
+		material = _materials["entry"] as StandardMaterial3D
+	elif feedback.nearby_blocker_cells.has(cell):
+		material = _materials["blocker"] as StandardMaterial3D
+	elif feedback.front_edge_cells.has(cell):
+		material = _materials["front"] as StandardMaterial3D
+	elif feedback.wall_candidate_cells.has(cell):
+		material = _materials["wall"] as StandardMaterial3D
+	elif not feedback.valid and feedback.invalid_cells.has(cell):
+		material = _materials["invalid"] as StandardMaterial3D
+	return material
 
 
 func _create_material(color: Color) -> StandardMaterial3D:

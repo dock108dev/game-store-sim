@@ -29,7 +29,16 @@ const _TAB_LABELS: Dictionary = {
 	&"lighting": "Lighting",
 	&"stockroom": "Stockroom",
 }
-const _TAB_ORDER: Array[StringName] = [&"fixtures", &"shelves", &"counters", &"signage", &"decor", &"surfaces", &"lighting", &"stockroom"]
+const _TAB_ORDER: Array[StringName] = [
+	&"fixtures",
+	&"shelves",
+	&"counters",
+	&"signage",
+	&"decor",
+	&"surfaces",
+	&"lighting",
+	&"stockroom"
+]
 var data_loader: DataLoader
 var economy_system: EconomySystem
 var placement_system: FixturePlacementSystem
@@ -58,13 +67,13 @@ var _card_status_labels: Dictionary = {}
 @onready var _sell_button: Button = $PanelRoot/Margin/VBox/ActionControls/SellButton
 @onready var _back_button: Button = $PanelRoot/Margin/VBox/ActionControls/BackButton
 @onready var _info_label: Label = $PanelRoot/Margin/VBox/InfoLabel
+
+
 func _ready() -> void:
 	_panel.visible = false
 	_rest_x = _panel.position.x
 	_close_button.pressed.connect(close)
-	DecisionPanelStyle.apply_header_label(
-		$PanelRoot/Margin/VBox/Header/TitleLabel
-	)
+	DecisionPanelStyle.apply_header_label($PanelRoot/Margin/VBox/Header/TitleLabel)
 	DecisionPanelStyle.apply_action_button(_place_button, true)
 	DecisionPanelStyle.apply_action_button(_move_button)
 	DecisionPanelStyle.apply_action_button(_rotate_button)
@@ -83,6 +92,8 @@ func _ready() -> void:
 	EventBus.active_store_changed.connect(_on_active_store_changed)
 	EventBus.reputation_changed.connect(_on_reputation_changed)
 	_update_action_controls("idle")
+
+
 ## Opens the fixture catalog and refreshes available fixtures.
 func open() -> void:
 	if _is_open:
@@ -103,6 +114,8 @@ func open() -> void:
 	PanelAnimator.kill_tween(_anim_tween)
 	_anim_tween = PanelAnimator.slide_open(_panel, _rest_x, false)
 	EventBus.panel_opened.emit(PANEL_NAME)
+
+
 ## Closes the fixture catalog.
 func close(immediate: bool = false) -> void:
 	if not _is_open:
@@ -117,9 +130,13 @@ func close(immediate: bool = false) -> void:
 		_anim_tween = PanelAnimator.slide_close(_panel, _rest_x, false)
 	EventBus.panel_closed.emit(PANEL_NAME)
 	_update_info_label()
+
+
 ## Returns true when the panel is currently open.
 func is_open() -> bool:
 	return _is_open
+
+
 func _refresh_catalog() -> void:
 	_card_buttons.clear()
 	_card_panels.clear()
@@ -131,6 +148,8 @@ func _refresh_catalog() -> void:
 	_build_category_tabs(fixtures)
 	_refresh_visible_tab()
 	_update_selection_state()
+
+
 func _build_category_tabs(fixtures: Array[FixtureDefinition]) -> void:
 	_fixtures_by_tab.clear()
 	for tab: StringName in _TAB_ORDER:
@@ -157,10 +176,14 @@ func _build_category_tabs(fixtures: Array[FixtureDefinition]) -> void:
 	if not _tab_buttons.has(_active_category_tab):
 		_active_category_tab = DEFAULT_TAB
 	_update_tab_buttons()
+
+
 func _set_active_category_tab(tab_id: StringName) -> void:
 	_active_category_tab = tab_id
 	_update_tab_buttons()
 	_refresh_visible_tab()
+
+
 func _refresh_visible_tab() -> void:
 	_clear_children(_catalog_grid)
 	var entries: Array = _fixtures_by_tab.get(_active_category_tab, [])
@@ -170,6 +193,8 @@ func _refresh_visible_tab() -> void:
 		elif entry is Dictionary:
 			_catalog_grid.add_child(_create_design_card(entry as Dictionary))
 	_update_selection_state()
+
+
 func _create_fixture_card(fixture: FixtureDefinition) -> Control:
 	var card := _new_card("%sCard" % fixture.id)
 	var body: VBoxContainer = card.get_node("Margin/Body")
@@ -183,12 +208,18 @@ func _create_fixture_card(fixture: FixtureDefinition) -> Control:
 	header.add_child(silhouette)
 	header.add_child(_build_title_block(fixture))
 	body.add_child(_build_detail_label("OwnedLabel", _owned_text(fixture)))
-	body.add_child(_build_detail_label("CapacityLabel", "Capacity: %s" % fixture.get_capacity_label_text()))
-	body.add_child(_build_detail_label("EffectLabel", "Effects: %s" % fixture.get_effect_summary_text()))
+	body.add_child(
+		_build_detail_label("CapacityLabel", "Capacity: %s" % fixture.get_capacity_label_text())
+	)
+	body.add_child(
+		_build_detail_label("EffectLabel", "Effects: %s" % fixture.get_effect_summary_text())
+	)
 	body.add_child(_build_detail_label("FootprintLabel", _footprint_text(fixture)))
 	_add_card_footer(body, card, fixture.id, state)
 	_apply_fixture_state(card, state)
 	return card
+
+
 func _create_design_card(option: Dictionary) -> Control:
 	var card := _new_card("%sCard" % str(option["id"]))
 	var body: VBoxContainer = card.get_node("Margin/Body")
@@ -212,6 +243,8 @@ func _create_design_card(option: Dictionary) -> Control:
 	_add_card_footer(body, card, str(option["id"]), state)
 	_apply_fixture_state(card, state)
 	return card
+
+
 func _new_card(card_name: String) -> PanelContainer:
 	var card := PanelContainer.new()
 	card.name = card_name
@@ -227,6 +260,8 @@ func _new_card(card_name: String) -> PanelContainer:
 	body.add_theme_constant_override("separation", 5)
 	margin.add_child(body)
 	return card
+
+
 func _build_title_block(fixture: FixtureDefinition) -> Control:
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -234,7 +269,11 @@ func _build_title_block(fixture: FixtureDefinition) -> Control:
 	column.add_child(_build_named_label("NameLabel", fixture.display_name))
 	column.add_child(_build_named_label("PriceLabel", "Price: $%.0f" % fixture.cost))
 	return column
-func _add_card_footer(body: VBoxContainer, card: PanelContainer, id: String, state: Dictionary) -> void:
+
+
+func _add_card_footer(
+	body: VBoxContainer, card: PanelContainer, id: String, state: Dictionary
+) -> void:
 	var footer := HBoxContainer.new()
 	footer.add_theme_constant_override("separation", 8)
 	body.add_child(footer)
@@ -254,44 +293,73 @@ func _add_card_footer(body: VBoxContainer, card: PanelContainer, id: String, sta
 	_card_buttons[id] = button
 	_card_panels[id] = card
 	_card_status_labels[id] = status
+
+
 func _build_named_label(label_name: String, text: String) -> Label:
 	var label := Label.new()
 	label.name = label_name
 	label.text = text
 	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	return label
+
+
 func _build_detail_label(label_name: String, text: String) -> Label:
 	var label := _build_named_label(label_name, text)
 	label.modulate = Color(0.76, 0.76, 0.76)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	return label
+
+
 func _get_fixture_catalog_state(fixture: FixtureDefinition) -> Dictionary:
 	var owned_count: int = _get_owned_count(fixture.id)
 	if _is_fixture_locked(fixture):
-		return _state("locked", "Locked · %s" % _get_unlock_tooltip(fixture), LOCKED_BUTTON_TEXT, true)
+		return _state(
+			"locked", "Locked · %s" % _get_unlock_tooltip(fixture), LOCKED_BUTTON_TEXT, true
+		)
 	if fixture.owned_limit > 0 and owned_count >= fixture.owned_limit:
 		return _state("limit", "Limit reached · %d owned" % owned_count, LIMIT_BUTTON_TEXT, true)
 	if fixture.cost > _get_current_cash():
-		return _state("unaffordable", "Need $%.0f more" % (fixture.cost - _get_current_cash()), UNAFFORDABLE_BUTTON_TEXT, true)
+		return _state(
+			"unaffordable",
+			"Need $%.0f more" % (fixture.cost - _get_current_cash()),
+			UNAFFORDABLE_BUTTON_TEXT,
+			true
+		)
 	if fixture.id == String(_selected_fixture_id):
 		return _state("selected", "Selected for placement", SELECTED_BUTTON_TEXT, false)
 	return _state("ready", "Ready to place", PLACE_BUTTON_TEXT, false)
+
+
 func _get_design_state(option: Dictionary) -> Dictionary:
 	var status: String = str(option.get("status", "ready"))
 	if status == "locked":
-		return _state("locked", "Locked · %s" % str(option.get("unlock", "Unavailable")), LOCKED_BUTTON_TEXT, true)
+		return _state(
+			"locked",
+			"Locked · %s" % str(option.get("unlock", "Unavailable")),
+			LOCKED_BUTTON_TEXT,
+			true
+		)
 	if float(option["cost"]) > _get_current_cash():
-		return _state("unaffordable", "Need $%.0f more" % (float(option["cost"]) - _get_current_cash()), UNAFFORDABLE_BUTTON_TEXT, true)
+		return _state(
+			"unaffordable",
+			"Need $%.0f more" % (float(option["cost"]) - _get_current_cash()),
+			UNAFFORDABLE_BUTTON_TEXT,
+			true
+		)
 	if status == "selected":
 		return _state("selected", "Selected finish", SELECTED_BUTTON_TEXT, true)
 	return _state("ready", "Ready to apply", APPLY_BUTTON_TEXT, false)
+
+
 func _state(id: String, text: String, button: String, disabled: bool) -> Dictionary:
 	return {"state": id, "text": text, "button": button, "disabled": disabled}
+
+
 func _apply_fixture_state(card: PanelContainer, state: Dictionary) -> void:
-	card.modulate = DecisionPanelStyle.catalog_card_modulate(
-		StringName(state["state"])
-	)
+	card.modulate = DecisionPanelStyle.catalog_card_modulate(StringName(state["state"]))
 	card.tooltip_text = state["text"]
+
+
 func _get_fixture_tab_id(fixture: FixtureDefinition) -> StringName:
 	var tab := StringName(fixture.catalog_category)
 	if tab.is_empty():
@@ -299,15 +367,21 @@ func _get_fixture_tab_id(fixture: FixtureDefinition) -> StringName:
 	if not _TAB_LABELS.has(tab):
 		return DEFAULT_TAB
 	return tab
+
+
 func _owned_text(fixture: FixtureDefinition) -> String:
 	var limit: String = "" if fixture.owned_limit <= 0 else " / %d" % fixture.owned_limit
 	return "Owned: %d%s" % [_get_owned_count(fixture.id), limit]
+
+
 func _footprint_text(fixture: FixtureDefinition) -> String:
 	var parts: PackedStringArray = ["Footprint: %d cells" % fixture.footprint_cells.size()]
 	parts.append("Wall" if fixture.requires_wall else "Floor")
 	parts.append("Rotates" if fixture.rotation_support else "Fixed")
 	parts.append("Sell-back: $%.0f" % fixture.get_sellback_price())
 	return " · ".join(parts)
+
+
 func _get_unlock_tooltip(fixture: FixtureDefinition) -> String:
 	var conditions: PackedStringArray = []
 	if fixture.unlock_rep > 0.0:
@@ -317,11 +391,15 @@ func _get_unlock_tooltip(fixture: FixtureDefinition) -> String:
 	if conditions.is_empty():
 		return "Locked"
 	return ", ".join(conditions)
+
+
 func _is_fixture_locked(fixture: FixtureDefinition) -> bool:
 	return (
 		(fixture.unlock_rep > 0.0 and _get_current_reputation() < fixture.unlock_rep)
 		or (fixture.unlock_day > 0 and _current_day_snapshot < fixture.unlock_day)
 	)
+
+
 func _on_fixture_requested(id: String) -> void:
 	var fixture: FixtureDefinition = data_loader.get_fixture(id)
 	if _card_panels.has(id) and fixture == null:
@@ -331,6 +409,8 @@ func _on_fixture_requested(id: String) -> void:
 	_update_selection_state()
 	_update_info_label()
 	EventBus.fixture_catalog_requested.emit(id)
+
+
 func _update_selection_state() -> void:
 	for id_value: Variant in _card_buttons.keys():
 		var id: String = str(id_value)
@@ -345,12 +425,12 @@ func _update_selection_state() -> void:
 			button.text = state["button"]
 		if status:
 			status.text = state["text"]
-			DecisionPanelStyle.apply_status_label(
-				status, StringName(state["state"])
-			)
+			DecisionPanelStyle.apply_status_label(status, StringName(state["state"]))
 		if card:
 			_apply_fixture_state(card, state)
 	_update_action_controls("selected" if not _selected_fixture_id.is_empty() else "idle")
+
+
 func _update_action_controls(state: String) -> void:
 	var has_selection: bool = state == "selected"
 	_place_button.disabled = not has_selection
@@ -361,14 +441,18 @@ func _update_action_controls(state: String) -> void:
 	_move_button.tooltip_text = "Select an existing fixture in the grid to move it"
 	_sell_button.tooltip_text = "Right-click a placed fixture to sell it"
 	_back_button.text = "Cancel" if has_selection else "Back"
+
+
 func _update_info_label() -> void:
 	if _selected_fixture_id.is_empty():
 		_info_label.text = "Select an item, then use place, move, rotate, sell, or back controls"
 		return
 	var fixture: FixtureDefinition = data_loader.get_fixture(String(_selected_fixture_id))
-	_info_label.text = "Placing: %s" % (
-		fixture.display_name if fixture else String(_selected_fixture_id)
+	_info_label.text = (
+		"Placing: %s" % (fixture.display_name if fixture else String(_selected_fixture_id))
 	)
+
+
 func _get_owned_count(fixture_type: String) -> int:
 	if placement_system == null:
 		return 0
@@ -377,12 +461,18 @@ func _get_owned_count(fixture_type: String) -> int:
 		if str(entry.get("fixture_type", "")) == fixture_type:
 			count += 1
 	return count
+
+
 func _get_current_cash() -> float:
 	return economy_system.get_cash() if economy_system else 0.0
+
+
 func _get_current_reputation() -> float:
 	if not is_instance_valid(ReputationSystemSingleton):
 		return ReputationSystem.DEFAULT_REPUTATION
 	return ReputationSystemSingleton.get_reputation(String(_get_active_store_id()))
+
+
 func _get_active_store_id() -> StringName:
 	var candidate: String = String(store_type)
 	if candidate.is_empty():
@@ -391,24 +481,36 @@ func _get_active_store_id() -> StringName:
 		return &""
 	var resolved: StringName = ContentRegistry.resolve(candidate)
 	return resolved if not resolved.is_empty() else StringName(candidate)
+
+
 func _sync_runtime_state() -> void:
 	var time_system: TimeSystem = GameManager.get_time_system()
 	_current_day_snapshot = time_system.current_day if time_system else 1
+
+
 func _sort_fixture_definitions(left: FixtureDefinition, right: FixtureDefinition) -> bool:
 	if left.catalog_sort != right.catalog_sort:
 		return left.catalog_sort < right.catalog_sort
 	return left.display_name.naturalnocasecmp_to(right.display_name) < 0
+
+
 func _update_cash_display() -> void:
 	_cash_label.text = "Cash: $%.0f" % _get_current_cash()
+
+
 func _update_tab_buttons() -> void:
 	var accent: Color = UIThemeConstants.get_store_accent(_get_active_store_id())
 	for tab: StringName in _tab_buttons:
 		var button := _tab_buttons[tab] as Button
 		button.button_pressed = tab == _active_category_tab
 		DecisionPanelStyle.apply_tab_button(button, button.button_pressed, accent)
+
+
 func _clear_children(node: Node) -> void:
 	for child: Node in node.get_children():
 		child.queue_free()
+
+
 func _on_place_control_pressed() -> void:
 	if not _selected_fixture_id.is_empty():
 		EventBus.fixture_catalog_requested.emit(String(_selected_fixture_id))
@@ -430,9 +532,7 @@ func _apply_design_selection(id: String) -> void:
 			return
 	var applied: bool = false
 	if build_mode_system:
-		applied = build_mode_system.apply_design_option(
-			StringName(id), _current_day_snapshot
-		)
+		applied = build_mode_system.apply_design_option(StringName(id), _current_day_snapshot)
 	else:
 		applied = StoreCustomizationSystem.apply_design_option(
 			StringName(id), _current_day_snapshot, _get_active_store_id()
@@ -449,10 +549,14 @@ func _design_effect_text(option: Dictionary) -> String:
 	if not str(option.get("effect_summary", "")).is_empty():
 		return str(option.get("effect_summary", ""))
 	return ", ".join(CatalogEffectMetadataScript.labels_for_effects(effects))
+
+
 func _on_rotate_control_pressed() -> void:
 	if build_mode_system:
 		build_mode_system.rotate_selected_fixture()
 	_info_label.text = "Rotating placement preview"
+
+
 func _on_back_control_pressed() -> void:
 	if not _selected_fixture_id.is_empty():
 		_selected_fixture_id = &""
@@ -462,16 +566,24 @@ func _on_back_control_pressed() -> void:
 		_update_info_label()
 		return
 	close()
+
+
 func _on_panel_opened(panel_name: String) -> void:
 	if panel_name != PANEL_NAME and _is_open:
 		close(true)
+
+
 func _on_money_changed(_old_amount: float, _new_amount: float) -> void:
 	if _is_open:
 		_update_cash_display()
 		_refresh_catalog()
+
+
 func _on_reputation_changed(store_id: String, _old_score: float, _new_score: float) -> void:
 	if _is_open and ContentRegistry.resolve(store_id) == _get_active_store_id():
 		_refresh_catalog()
+
+
 func _on_active_store_changed(new_store_id: StringName) -> void:
 	store_type = new_store_id
 	if not _is_open:
@@ -481,9 +593,13 @@ func _on_active_store_changed(new_store_id: StringName) -> void:
 		return
 	_refresh_catalog()
 	_update_info_label()
+
+
 func _on_build_mode_entered() -> void:
 	_sync_runtime_state()
 	open()
+
+
 func _on_build_mode_exited() -> void:
 	PanelAnimator.kill_tween(_anim_tween)
 	if _is_open:
@@ -493,6 +609,8 @@ func _on_build_mode_exited() -> void:
 	_panel.position.x = _rest_x
 	_selected_fixture_id = &""
 	_update_info_label()
+
+
 func _on_fixture_placed(_fixture_id: String, _grid_pos: Vector2i, _rotation: int) -> void:
 	if not _is_open:
 		return
@@ -502,9 +620,13 @@ func _on_fixture_placed(_fixture_id: String, _grid_pos: Vector2i, _rotation: int
 	)
 	_refresh_catalog()
 	_info_label.text = "Placed. Select, move, rotate, sell, or back out."
+
+
 func _on_fixture_removed(_fixture_id: String, _grid_pos: Vector2i) -> void:
 	if _is_open:
 		_refresh_catalog()
+
+
 func _on_fixture_placement_invalid(reason: String) -> void:
 	if not _is_open:
 		return

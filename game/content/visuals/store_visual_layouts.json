@@ -2868,16 +2868,16 @@
             "visual_dressing": false
           },
           {
-            "object_id": "starter_display_route_cue",
+            "object_id": "starter_display_fixture_card",
             "selector": {
-              "node_path": "ExpandableStoreShell/OnboardingRouteCues/StarterShelfLocalFloorWear"
+              "node_path": "ExpandableStoreShell/StarterDisplayShelfEdgeCard"
             },
             "zone_id": "starter_display",
-            "physical_role": "route_cue",
+            "physical_role": "fixture_anchor",
             "position": [
-              -3.75,
-              0.084,
-              -0.55
+              -3.95,
+              1.06,
+              -0.62
             ],
             "rotation_degrees": [
               0,
@@ -7928,16 +7928,16 @@
             "visual_dressing": false
           },
           {
-            "object_id": "starter_display_route_cue",
+            "object_id": "starter_display_fixture_card",
             "selector": {
-              "node_path": "ExpandableStoreShell/OnboardingRouteCues/StarterShelfLocalFloorWear"
+              "node_path": "ExpandableStoreShell/StarterDisplayShelfEdgeCard"
             },
             "zone_id": "starter_display",
-            "physical_role": "route_cue",
+            "physical_role": "fixture_anchor",
             "position": [
-              -3.75,
-              0.084,
-              -0.55
+              -3.95,
+              1.06,
+              -0.62
             ],
             "rotation_degrees": [
               0,

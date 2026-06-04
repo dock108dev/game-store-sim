@@ -72,6 +72,10 @@ const HIDDEN_NOISE_PATHS: Array[String] = [
 	"ZoneLabels/StaffPicksLabel",
 	"ReadabilityProps/UsedConsoleDressing",
 	"ReadabilityProps/FloorDisplayIsland",
+	"ReadabilityProps/CheckoutCounterDressing",
+	"ReadabilityProps/ShelfSpineRuns",
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/SpawnViewFloorDressing",
 	"ReadabilityProps/DayOneRouteMarkers",
 ]
 
@@ -140,10 +144,6 @@ const KEEP_VISIBLE_PATHS: Array[String] = [
 	"ReadabilityProps/ZoneIdentity/StarterTableFrontFootprint",
 	"ReadabilityProps/ZoneIdentity/StarterTableLeftGuide",
 	"ReadabilityProps/ZoneIdentity/StarterTableRightGuide",
-	"ReadabilityProps/CheckoutCounterDressing",
-	"ReadabilityProps/ShelfSpineRuns",
-	"ReadabilityProps/ProductDisplayRows",
-	"ReadabilityProps/SpawnViewFloorDressing",
 	"ReadabilityProps/WallPosterRails",
 	"ReadabilityProps/BackroomDressing",
 ]
