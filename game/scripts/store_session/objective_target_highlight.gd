@@ -41,9 +41,9 @@ const _CHIP_BG: Color = Color(0.05, 0.07, 0.05, 0.85)
 ## `StoreSessionController.active_objective_*`.
 const STAGE_TARGETS: Dictionary = {
 	&"training_talk_manager": ["StoreSessionManager", 1.9],
-	&"training_check_register": ["StoreSessionDayEndTrigger", 0.6],
 	&"training_back_room_inventory": ["StoreSessionBackroomPickup", 1.3],
 	&"training_stock_shelf": ["StoreSessionRestockShelf", 1.7],
+	&"training_open_store": ["StoreSessionDayEndTrigger", 0.9],
 	&"talk_to_customer": ["StoreSessionDayOneCustomer", 1.9],
 	&"back_room_inventory": ["StoreSessionBackroomPickup", 1.3],
 	&"stock_shelf": ["StoreSessionRestockShelf", 1.7],

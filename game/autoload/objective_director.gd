@@ -15,14 +15,12 @@ const CONTENT_PATH := "res://game/content/objectives.json"
 
 ## Day 1 step indices (must align with flattened `phases` in objectives.json).
 const DAY1_STEP_TALK_TO_MANAGER: int = 0
-const DAY1_STEP_CHECK_REGISTER: int = 1
-const DAY1_STEP_TRAINING_BACK_ROOM: int = 2
-const DAY1_STEP_TRAINING_STOCK_SHELF: int = 3
+const DAY1_STEP_TRAINING_BACK_ROOM: int = 1
+const DAY1_STEP_TRAINING_STOCK_SHELF: int = 2
+const DAY1_STEP_OPEN_STORE: int = 3
 const DAY1_STEP_TALK_TO_CUSTOMER: int = 4
-const DAY1_STEP_BACK_ROOM_INVENTORY: int = 5
-const DAY1_STEP_STOCK_SHELF: int = 6
-const DAY1_STEP_CLOSE_DAY: int = 7
-const DAY1_STEP_COUNT: int = 8
+const DAY1_STEP_CLOSE_DAY: int = 5
+const DAY1_STEP_COUNT: int = 6
 const _HIDDEN_PAYLOAD_HASH: String = "__hidden__"
 
 var _day_objectives: Dictionary = {}

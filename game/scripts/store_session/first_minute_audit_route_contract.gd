@@ -39,20 +39,20 @@ static func beat_specs() -> Array[Dictionary]:
 			"Manager prompt screenshot proves checkout guidance is active."
 		),
 		_spec(
-			"register_prompt",
-			"Register prompt",
+			"backroom_pickup_prompt",
+			"Back-room pickup prompt",
 			14,
-			"02_register_prompt.png",
-			"register_prompt",
-			"checkout_manager_counter",
+			"02_backroom_pickup_prompt.png",
+			"backroom_pickup_prompt",
+			"stockroom_looking_in",
 			"",
 			"",
 			"",
-			"StoreSessionDayEndTrigger/Interactable",
+			"StoreSessionBackroomPickup/Interactable",
 			"training",
 			"high",
 			"store_session",
-			"Register prompt is active after manager beat."
+			"Starter stock pickup prompt is active after manager beat."
 		),
 		_spec(
 			"backroom_entry_prompt",
@@ -100,13 +100,29 @@ static func beat_specs() -> Array[Dictionary]:
 			"training",
 			"high",
 			"store_session",
-			"Carry HUD and starter shelf target agree after pickup."
+			"Carry HUD and starter table/shelf target agree after pickup."
+		),
+		_spec(
+			"open_sign_prompt",
+			"Open sign prompt",
+			42,
+			"06_open_sign_prompt.png",
+			"open_sign_prompt",
+			"checkout_manager_counter",
+			"",
+			"",
+			"",
+			"StoreSessionDayEndTrigger/Interactable",
+			"training",
+			"high",
+			"store_session",
+			"Open-sign prompt is active after the starter table and shelf are stocked."
 		),
 		_spec(
 			"before_customer_state",
 			"Before-customer state",
-			45,
-			"06_before_customer_state.png",
+			48,
+			"07_before_customer_state.png",
 			"before_customer",
 			"product_sale_review",
 			"",
@@ -121,8 +137,8 @@ static func beat_specs() -> Array[Dictionary]:
 		_spec(
 			"customer_decision_card",
 			"Customer decision card",
-			50,
-			"07_customer_decision_card.png",
+			53,
+			"08_customer_decision_card.png",
 			"customer_decision_card",
 			"product_sale_review",
 			"",
@@ -137,8 +153,8 @@ static func beat_specs() -> Array[Dictionary]:
 		_spec(
 			"result_acknowledgement",
 			"Result acknowledgement",
-			55,
-			"08_result_acknowledgement.png",
+			58,
+			"09_result_acknowledgement.png",
 			"result_acknowledgement",
 			"product_sale_review",
 			"",

@@ -2,7 +2,7 @@
   "type": "store_session_day_data",
   "day_number": 1,
   "date_label": "First Day",
-  "store_context": "First shift on the floor at Shelf Life. The manager walks you through the register, back-room stock, and starter display before the first customer is handled.",
+  "store_context": "First shift on the floor at Shelf Life. Vic assigns the opening routine: stock one console on the starter table, put two used games on the shelf, flip the open sign, then run the register for the first customer.",
   "required_events": [
     "day01_wrong_console_parent"
   ],
@@ -15,5 +15,5 @@
   ],
   "traffic_level": "low",
   "holiday_pressure": "none",
-  "special_notes": "Training first, then one customer request, one restock cycle, and close."
+  "special_notes": "Starter setup first, then one customer request and close. Later systems should unlock from stable IDs, not duplicate Day 1 chores."
 }

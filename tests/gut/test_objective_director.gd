@@ -1,3 +1,4 @@
+## gdlint:disable=max-public-methods
 ## Tests for ObjectiveDirector: signal connections, payload emission, and auto-hide logic.
 extends GutTest
 
@@ -26,9 +27,9 @@ func _start_day1_preopening() -> void:
 
 func _complete_preopening() -> void:
 	EventBus.store_objective_completed.emit(&"talk_to_manager")
-	EventBus.store_objective_completed.emit(&"check_register")
 	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
 	EventBus.store_objective_completed.emit(&"training_stock_shelf")
+	EventBus.store_objective_completed.emit(&"open_store")
 
 
 # ── Signal connection: day_started ────────────────────────────────────────────
@@ -183,32 +184,24 @@ func test_day1_chain_advances_through_each_signal_in_order() -> void:
 	EventBus.store_objective_completed.emit(&"talk_to_manager")
 	assert_eq(
 		received[received.size() - 1].get("text", ""),
-		"Open the register and confirm the checkout lane is ready."
-	)
-	EventBus.store_objective_completed.emit(&"check_register")
-	assert_eq(
-		received[received.size() - 1].get("text", ""),
 		"Check the back room inventory and pick up the starter stock box."
 	)
 	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
 	assert_eq(
 		received[received.size() - 1].get("text", ""),
-		"Place all 3 starter items on the starter display table."
+		"Place the console on the starter table and 2 games on the shelf."
 	)
 	EventBus.store_objective_completed.emit(&"training_stock_shelf")
+	assert_eq(
+		received[received.size() - 1].get("text", ""),
+		"Flip the open sign and head to the register."
+	)
+	EventBus.store_objective_completed.emit(&"open_store")
 	assert_eq(received[received.size() - 1].get("text", ""), "Talk to the customer at the register.")
 	EventBus.customer_interacted.emit(null)
 	assert_eq(received[received.size() - 1].get("text", ""),
-		"Check the back room delivery.",
-		"customer_interacted must advance to the real back-room objective")
-	EventBus.placement_mode_entered.emit()
-	assert_eq(received[received.size() - 1].get("text", ""),
-			"Place all 3 starter items on the starter display table.",
-		"placement_mode_entered must advance to the real stock objective")
-	EventBus.item_stocked.emit("item_001", "shelf_a")
-	assert_eq(received[received.size() - 1].get("text", ""),
 		"Close the day at the register.",
-		"item_stocked must advance to close day")
+		"customer_interacted must advance to close day")
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
 		ObjectiveDirector.DAY1_STEP_CLOSE_DAY,
@@ -240,14 +233,14 @@ func test_day1_chain_ignores_duplicate_triggers() -> void:
 	EventBus.customer_interacted.emit(null)
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
-		ObjectiveDirector.DAY1_STEP_BACK_ROOM_INVENTORY,
-		"First customer_interacted must advance to the real back-room step"
+		ObjectiveDirector.DAY1_STEP_CLOSE_DAY,
+		"First customer_interacted must advance to the close-day step"
 	)
 	# A duplicate must not jump again.
 	EventBus.customer_interacted.emit(null)
 	assert_eq(
 		ObjectiveDirector._day1_step_index,
-		ObjectiveDirector.DAY1_STEP_BACK_ROOM_INVENTORY,
+		ObjectiveDirector.DAY1_STEP_CLOSE_DAY,
 		"Duplicate customer_interacted must not advance further"
 	)
 

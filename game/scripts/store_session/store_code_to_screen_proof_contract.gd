@@ -66,12 +66,12 @@ static func _screen_object(beat_name: String, beat: Dictionary) -> String:
 	match beat_name:
 		"manager_prompt":
 			return "Manager proxy at checkout plus right-panel opening checklist."
-		"register_prompt":
-			return "Checkout register target and register-ready prompt."
 		"backroom_pickup_prompt":
 			return "Back-room stock box pickup target and stockroom counter."
-		"training_shelf_transition", "stocked_shelf_stat_change":
-			return "Used-games shelf display with visible shelf and stockroom counts."
+		"training_shelf_transition":
+			return "Starter table/shelf fixture with the console table and two game slots."
+		"open_sign_prompt":
+			return "Open sign/register target and stocked starter fixture counts."
 		"before_customer", "customer_decision_card", "result_acknowledgement", \
 		"post_customer_recovery":
 			return "Customer proxy at checkout, customer modal, and HUD stat counters."
@@ -100,11 +100,13 @@ static func _code_owner(beat_name: String) -> String:
 				"stockroom_pickup_interactable.gd bridges input; "
 				+ "store_session_controller.gd owns progression."
 			)
-		"training_shelf_transition", "stocked_shelf_stat_change":
+		"training_shelf_transition":
 			return (
 				"restock_interactable.gd bridges input; "
 				+ "store_session_controller.gd owns shelf progression."
 			)
+		"open_sign_prompt":
+			return "store_session_controller.gd owns the open-sign objective and store opening."
 		"before_customer", "customer_decision_card", "result_acknowledgement", \
 		"post_customer_recovery":
 			return (
@@ -137,15 +139,14 @@ static func _screen_feedback(beat: Dictionary) -> String:
 static func _next_beat(beat_name: String, beat: Dictionary) -> String:
 	var next_expected: String = str(beat.get("next_expected_beat", "")).strip_edges()
 	var chain: Dictionary = {
-		"manager_prompt": "Register prompt enables after manager interaction.",
-		"register_prompt": "Back-room pickup prompt enables after register check.",
+		"manager_prompt": "Back-room pickup prompt enables after manager interaction.",
 		"backroom_pickup_prompt": "Shelf stocking prompt enables after stock pickup.",
-		"training_shelf_transition": "Customer prompt enables after shelf stocking.",
+		"training_shelf_transition": "Open-sign prompt enables after starter stock is placed.",
+		"open_sign_prompt": "Customer prompt enables after the store is opened.",
 		"before_customer": "Customer decision card opens from customer interaction.",
 		"customer_decision_card": "Result acknowledgement appears after choice selection.",
-		"result_acknowledgement": "Customer exit and post-customer stock route become visible.",
-		"post_customer_recovery": "Post-customer shelf/stat update route becomes available.",
-		"stocked_shelf_stat_change": "Close-day trigger enables after final shelf update.",
+		"result_acknowledgement": "Customer exit and close-day route become visible.",
+		"post_customer_recovery": "Close-day trigger is available after the customer leaves.",
 		"close_day_prompt": "Close confirmation leads to day summary.",
 		"close_day_summary": "Summary review completes the route artifact.",
 	}

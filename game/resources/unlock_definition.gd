@@ -11,6 +11,7 @@ const VALID_EFFECT_TYPES: PackedStringArray = [
 	"cosmetic_badge",
 	"fixture_unlock",
 	"employee_skill",
+	"system_unlock",
 ]
 
 @export var id: String = ""

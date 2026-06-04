@@ -51,7 +51,7 @@ const CANONICAL_TARGETS: Dictionary = {
 		FIELD_KIND: "interactable",
 		FIELD_INTERACTABLE_ID: "register.main",
 		FIELD_GROUPS: ["interactable", "interactables"],
-		FIELD_FALLBACK_OBJECTIVE_IDS: ["check_register", "close_day"],
+		FIELD_FALLBACK_OBJECTIVE_IDS: ["open_store", "close_day"],
 		FIELD_FALLBACK_PATHS: ["StoreSessionDayEndTrigger/Interactable"],
 	},
 	&"register.counter_area": {
@@ -106,7 +106,7 @@ const CANONICAL_TARGETS: Dictionary = {
 		FIELD_KIND: "interactable",
 		FIELD_INTERACTABLE_ID: "store_session.day_end",
 		FIELD_GROUPS: ["interactable", "interactables"],
-		FIELD_FALLBACK_OBJECTIVE_IDS: ["check_register", "close_day"],
+		FIELD_FALLBACK_OBJECTIVE_IDS: ["open_store", "close_day"],
 		FIELD_FALLBACK_PATHS: ["StoreSessionDayEndTrigger/Interactable"],
 	},
 	&"store_session.hidden_clue": {

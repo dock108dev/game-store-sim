@@ -10,6 +10,26 @@
           "noticed_backroom_console_stack": true
         }
       }
+    },
+    {
+      "id": "day01_clean_opening_routine",
+      "type": "hidden_thread_signal",
+      "effect": {
+        "hidden_thread_score": 0,
+        "flags": {
+          "completed_clean_opening_routine": true
+        }
+      }
+    },
+    {
+      "id": "future_trade_in_pattern_seed",
+      "type": "hidden_thread_signal",
+      "effect": {
+        "hidden_thread_score": 0,
+        "flags": {
+          "trade_in_pattern_seed_ready": true
+        }
+      }
     }
   ]
 }

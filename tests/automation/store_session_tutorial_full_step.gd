@@ -86,9 +86,9 @@ func _checkpoint(label: String, controller: StoreSessionController, expected: Di
 
 
 func _route_checkpoints() -> Array[Dictionary]:
-	var stock_1: String = "Place item 1 of 3 on Starter Display"
-	var stock_2: String = "Place item 2 of 3 on Starter Display"
-	var stock_3: String = "Place item 3 of 3 on Starter Display"
+	var stock_1: String = "Place item 1 of 3 on Starter Table"
+	var stock_2: String = "Place item 2 of 3 on Starter Table"
+	var stock_3: String = "Place item 3 of 3 on Starter Table"
 	return [
 		_cp(
 			"01_boot_first_day_manager_objective",
@@ -111,18 +111,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			["interact"]
 		),
 		_cp(
-			"03_training_check_register_ready",
-			{
-				"stage": "training_check_register",
-				"target": "StoreSessionDayEndTrigger/Interactable",
-				"prompt": "Check Register",
-				"register": "READY",
-				"header": "FIRST DAY"
-			},
-			["interact"]
-		),
-		_cp(
-			"04_training_backroom_inventory",
+			"03_training_backroom_inventory",
 			{
 				"stage": "training_back_room_inventory",
 				"target": "StoreSessionBackroomPickup/Interactable",
@@ -133,7 +122,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			["interact"]
 		),
 		_cp(
-			"05_training_stock_item_1",
+			"04_training_stock_item_1",
 			{
 				"stage": "training_stock_shelf",
 				"target": "StoreSessionRestockShelf/Interactable",
@@ -143,7 +132,7 @@ func _route_checkpoints() -> Array[Dictionary]:
 			["interact"]
 		),
 		_cp(
-			"06_training_stock_item_2",
+			"05_training_stock_item_2",
 			{
 				"stage": "training_stock_shelf",
 				"target": "StoreSessionRestockShelf/Interactable",
@@ -153,12 +142,23 @@ func _route_checkpoints() -> Array[Dictionary]:
 			["interact"]
 		),
 		_cp(
-			"07_training_stock_item_3",
+			"06_training_stock_item_3",
 			{
 				"stage": "training_stock_shelf",
 				"target": "StoreSessionRestockShelf/Interactable",
 				"prompt": stock_3,
 				"carrying": true
+			},
+			["interact"]
+		),
+		_cp(
+			"07_training_open_sign",
+			{
+				"stage": "training_open_store",
+				"target": "StoreSessionDayEndTrigger/Interactable",
+				"prompt": "Flip",
+				"header": "FIRST DAY",
+				"preopening_complete": false
 			},
 			["interact"]
 		),
@@ -200,51 +200,26 @@ func _route_checkpoints() -> Array[Dictionary]:
 		_cp(
 			"12_day1_customer_exit",
 			{
-				"stage": "back_room_inventory",
-				"customer_exit": "exited_hidden",
-				"target": "StoreSessionBackroomPickup/Interactable",
-				"prompt": "Inspect Starter Stock Box"
-			},
-			["interact"]
-		),
-		_cp(
-			"13_day1_backroom_delivery",
-			{
-				"stage": "stock_shelf",
-				"target": "StoreSessionRestockShelf/Interactable",
-				"prompt": stock_1
-			},
-			["interact", "interact"]
-		),
-		_cp(
-			"14_day1_stock_shelf",
-			{
-				"stage": "stock_shelf",
-				"target": "StoreSessionRestockShelf/Interactable",
-				"prompt": stock_3,
-				"carrying": true
-			},
-			["interact"]
-		),
-		_cp(
-			"15_day1_close_ready",
-			{
 				"stage": "end_day",
+				"customer_exit": "exited_hidden",
 				"target": "StoreSessionDayEndTrigger/Interactable",
 				"prompt": "Close day",
-				"register": "CLOSE\nDAY",
 				"can_close": true
 			},
 			["interact"]
 		),
-		_cp("16_day1_close_confirmation", {"stage": "end_day", "modal_busy": true}, ["ack_close"]),
 		_cp(
-			"17_day1_summary",
+			"13_day1_close_confirmation",
+			{"stage": "end_day", "modal_busy": true},
+			["ack_close"]
+		),
+		_cp(
+			"14_day1_summary",
 			{"stage": "end_day", "modal_busy": true, "summary_visible": true},
 			["ack_summary"]
 		),
 		_cp(
-			"18_day2_started",
+			"15_day2_started",
 			{
 				"stage": "talk_to_customer",
 				"day": 2,

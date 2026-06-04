@@ -3,8 +3,8 @@
   "objectives": [
     {
       "day": 1,
-      "text": "Open the store and handle the first customer",
-      "action": "Finish preopening, then resolve one customer request",
+      "text": "Set the starter floor and handle the first customer",
+      "action": "Stock the starter items, flip the open sign, then run the register",
       "key": "E",
       "post_sale_text": "First sale complete. Close the day when ready.",
       "post_sale_action": "Close the day at the register",
@@ -22,12 +22,6 @@
               "key": "E"
             },
             {
-              "id": "check_register",
-              "text": "Open the register and confirm the checkout lane is ready.",
-              "action": "Verify the register before customers arrive",
-              "key": "E"
-            },
-            {
               "id": "check_back_room_inventory",
               "text": "Check the back room inventory and pick up the starter stock box.",
               "action": "Find the starter stock box in the back room",
@@ -35,8 +29,14 @@
             },
             {
               "id": "training_stock_shelf",
-              "text": "Place all 3 starter items on the starter display table.",
-              "action": "Stock the display with the starter box",
+              "text": "Place the console on the starter table and 2 games on the shelf.",
+              "action": "Stock the starter table and shelf",
+              "key": "E"
+            },
+            {
+              "id": "open_store",
+              "text": "Flip the open sign and head to the register.",
+              "action": "Open the store for the first customer",
               "key": "E"
             }
           ]
@@ -53,18 +53,6 @@
               "key": "E"
             },
             {
-              "id": "back_room_inventory",
-              "text": "Check the back room delivery.",
-              "action": "Check inventory",
-              "key": "E"
-            },
-            {
-              "id": "stock_shelf",
-              "text": "Place all 3 starter items on the starter display table.",
-              "action": "Stock starter display table",
-              "key": "E"
-            },
-            {
               "id": "close_day",
               "text": "Close the day at the register.",
               "action": "Close the day",
@@ -78,18 +66,6 @@
           "id": "talk_to_customer",
           "text": "Talk to the customer at the register.",
           "action": "Talk to the customer",
-          "key": "E"
-        },
-        {
-          "id": "back_room_inventory",
-          "text": "Check the back room delivery.",
-          "action": "Check inventory",
-          "key": "E"
-        },
-        {
-          "id": "stock_shelf",
-          "text": "Place all 3 starter items on the starter display table.",
-          "action": "Stock starter display table",
           "key": "E"
         },
         {

@@ -128,34 +128,22 @@ func test_objective_state_transitions_emit_expected_payloads() -> void:
 	EventBus.store_objective_completed.emit(&"talk_to_manager")
 	assert_eq(
 		_last_objective_text(),
-		"Open the register and confirm the checkout lane is ready."
-	)
-
-	EventBus.store_objective_completed.emit(&"check_register")
-	assert_eq(
-		_last_objective_text(),
 		"Check the back room inventory and pick up the starter stock box."
 	)
 
 	EventBus.store_objective_completed.emit(&"check_back_room_inventory")
 	assert_eq(
 		_last_objective_text(),
-		"Place all 3 starter items on the starter display table."
+		"Place the console on the starter table and 2 games on the shelf."
 	)
 
 	EventBus.store_objective_completed.emit(&"training_stock_shelf")
+	assert_eq(_last_objective_text(), "Flip the open sign and head to the register.")
+
+	EventBus.store_objective_completed.emit(&"open_store")
 	assert_eq(_last_objective_text(), "Talk to the customer at the register.")
 
 	EventBus.customer_interacted.emit(null)
-	assert_eq(_last_objective_text(), "Check the back room delivery.")
-
-	EventBus.placement_mode_entered.emit()
-	assert_eq(
-		_last_objective_text(),
-		"Place all 3 starter items on the starter display table."
-	)
-
-	EventBus.item_stocked.emit("starter_item", "front_slot")
 	assert_eq(_last_objective_text(), "Close the day at the register.")
 
 	var last_update: Dictionary = _objective_updates[_objective_updates.size() - 1]

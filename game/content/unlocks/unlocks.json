@@ -83,6 +83,51 @@
       "unlock_message": "Stocking certification granted. Mind the planogram."
     },
     {
+      "id": "trade_in_intake",
+      "display_name": "Trade-In Intake",
+      "description": "Enables customers to bring used games, accessories, and consoles to the counter for quotes.",
+      "effect_type": "system_unlock",
+      "effect_target": "trade_in",
+      "effect_value": null,
+      "unlock_message": "Trade-in intake unlocked. Quote carefully."
+    },
+    {
+      "id": "haggling_counterplay",
+      "display_name": "Haggling",
+      "description": "Enables counter-offers during eligible trade-in and high-value customer negotiations.",
+      "effect_type": "system_unlock",
+      "effect_target": "haggling",
+      "effect_value": null,
+      "unlock_message": "Haggling unlocked. Hold your margin."
+    },
+    {
+      "id": "demo_station_events",
+      "display_name": "Demo Station Events",
+      "description": "Enables in-store demo beats that can raise confidence in used hardware and featured games.",
+      "effect_type": "system_unlock",
+      "effect_target": "demo_station",
+      "effect_value": null,
+      "unlock_message": "Demo station events unlocked."
+    },
+    {
+      "id": "store_competitions",
+      "display_name": "Store Competitions",
+      "description": "Enables small in-store competitions that draw foot traffic and build regular-customer memory.",
+      "effect_type": "system_unlock",
+      "effect_target": "competitions",
+      "effect_value": null,
+      "unlock_message": "Store competitions unlocked."
+    },
+    {
+      "id": "midnight_release_events",
+      "display_name": "Midnight Releases",
+      "description": "Enables late-night launch events with higher traffic, higher staffing pressure, and special stock rules.",
+      "effect_type": "system_unlock",
+      "effect_target": "midnight_release",
+      "effect_value": null,
+      "unlock_message": "Midnight release events unlocked."
+    },
+    {
       "id": "employee_tradein_certified",
       "display_name": "Trade-In Certification",
       "description": "You can quote and accept trade-ins without Vic countersigning every slip.",

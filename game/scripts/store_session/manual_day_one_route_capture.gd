@@ -22,13 +22,12 @@ const SCHEMA_VERSION: int = 1
 
 const REQUIRED_REVIEW_BEATS: Array[String] = [
 	"manager_prompt",
-	"register_prompt",
 	"backroom_pickup_prompt",
 	"training_shelf_transition",
+	"open_sign_prompt",
 	"before_customer",
 	"customer_decision_card",
 	"post_customer_recovery",
-	"stocked_shelf_stat_change",
 	"close_day_prompt",
 	"close_day_summary",
 ]
@@ -60,35 +59,12 @@ static func route_beats() -> Array[Dictionary]:
 		),
 		_beat(
 			2,
-			"register_prompt",
-			"Register prompt",
-			"02_register_prompt.png",
-			"Press interact on the manager prompt and walk to the register.",
-			"training_check_register",
-			"check_register",
-			"Check Register",
-			{
-				"header": "FIRST DAY",
-				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 0", "Stockroom": "0"}
-			},
-			{"shelf": 0, "backroom": 0},
-			{"state": "waiting_for_register_check", "event_id": ""},
-			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
-			{},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:426",
-					"tests/gut/test_store_session_day_one_critical_path.gd:427",
-					"tests/gut/test_store_session_day_one_critical_path.gd:429",
-			]
-		),
-		_beat(
-			3,
 			"backroom_pickup_prompt",
 			"Backroom pickup prompt",
-			"03_backroom_pickup_prompt.png",
-			"Press interact at the register and walk to the back room pickup.",
+			"02_backroom_pickup_prompt.png",
+			"Press interact on the manager prompt and walk to the back room pickup.",
 			"training_back_room_inventory",
-			"back_room_inventory",
+			"check_back_room_inventory",
 			"Inspect Starter Stock Box",
 			{
 				"header": "FIRST DAY",
@@ -105,14 +81,14 @@ static func route_beats() -> Array[Dictionary]:
 			]
 		),
 		_beat(
-			4,
+			3,
 			"training_shelf_transition",
 			"Training shelf transition",
-			"04_training_shelf_transition.png",
-			"Pick up the back room stock and walk to the training shelf.",
+			"03_training_shelf_transition.png",
+			"Pick up the starter stock and walk to the starter table.",
 			"training_stock_shelf",
-			"stock_shelf",
-			"Stock Starter Display",
+			"training_stock_shelf",
+			"Stock Starter Table",
 			{
 				"header": "FIRST DAY",
 				"stats": {"Customers": "0", "Sales": "0", "Shelf": "0 / 3", "Stockroom": "3"}
@@ -128,11 +104,34 @@ static func route_beats() -> Array[Dictionary]:
 			]
 		),
 		_beat(
+			4,
+			"open_sign_prompt",
+			"Open sign prompt",
+			"04_open_sign_prompt.png",
+			"Stock the console and two games, then walk to the open sign/register area.",
+			"training_open_store",
+			"open_store",
+			"Flip Open Sign",
+			{
+				"header": "FIRST DAY",
+				"stats": {"Customers": "0", "Sales": "0", "Shelf": "3 / 3", "Stockroom": "0"}
+			},
+			{"shelf": 3, "backroom": 0, "carrying_stock": false},
+			{"state": "open_sign_enabled", "event_id": ""},
+			{"cash_delta": 0, "reputation_delta": 0, "manager_trust_delta": 0},
+			{},
+				[
+					"tests/gut/test_store_session_day_one_critical_path.gd:448",
+					"tests/gut/test_store_session_day_one_critical_path.gd:449",
+					"tests/gut/test_store_session_day_one_critical_path.gd:450",
+			]
+		),
+		_beat(
 			5,
 			"before_customer",
 			"Before customer",
 			"05_before_customer.png",
-			"Stock the training shelf and return to the customer at checkout.",
+			"Flip the open sign and return to the customer at checkout.",
 			"talk_to_customer",
 			"talk_to_customer",
 			"Talk to customer",
@@ -202,14 +201,14 @@ static func route_beats() -> Array[Dictionary]:
 			"Post-customer recovery",
 			"08_post_customer_recovery.png",
 			"Acknowledge the result and capture after the customer starts leaving.",
-			"talk_to_customer",
-			"back_room_inventory",
-			"Inspect Starter Stock Box",
+			"end_day",
+			"close_day",
+			"Close day",
 			{
 				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 3", "Stockroom": "0"}
 			},
 			{"shelf": 3, "backroom": 0, "carrying_stock": false},
-			{"state": "exit_in_progress", "event_id": "day01_wrong_console_parent"},
+			{"state": "customer_served_close_day_enabled", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
 				[
@@ -222,40 +221,17 @@ static func route_beats() -> Array[Dictionary]:
 		),
 		_beat(
 			9,
-			"stocked_shelf_stat_change",
-			"Stocked shelf stat change",
-			"09_stocked_shelf_stat_change.png",
-			"Complete the post-customer backroom pickup and shelf restock.",
-			"end_day",
-			"close_day",
-			"Close day",
-			{
-				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 5", "Stockroom": "1"}
-			},
-			{"shelf": 4, "backroom": 1, "carrying_stock": false},
-			{"state": "customer_served_and_shelf_stocked", "event_id": "day01_wrong_console_parent"},
-			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
-			{},
-				[
-					"tests/gut/test_store_session_day_one_critical_path.gd:517",
-					"tests/gut/test_store_session_day_one_critical_path.gd:526",
-					"tests/gut/test_store_session_day_one_critical_path.gd:527",
-					"tests/gut/test_store_session_day_one_critical_path.gd:553",
-			]
-		),
-		_beat(
-			10,
 			"close_day_prompt",
 			"Close day prompt",
-			"10_close_day_prompt.png",
-			"Walk to the close-day trigger after the final shelf/stat update.",
+			"09_close_day_prompt.png",
+			"Walk to the close-day trigger after the first customer leaves.",
 			"end_day",
 			"close_day",
 			"Close day",
 			{
-				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 5", "Stockroom": "1"}
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 3", "Stockroom": "0"}
 			},
-			{"shelf": 4, "backroom": 1, "carrying_stock": false},
+			{"shelf": 3, "backroom": 0, "carrying_stock": false},
 			{"state": "close_day_enabled", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{},
@@ -267,19 +243,19 @@ static func route_beats() -> Array[Dictionary]:
 			]
 		),
 		_beat(
-			11,
+			10,
 			"close_day_summary",
 			"Close day summary",
-			"11_close_day_summary.png",
+			"10_close_day_summary.png",
 			"Confirm close day and capture the summary panel.",
 			"summary",
 			"summary",
 			"Summary visible",
 			{
 				"modal": "day_summary",
-				"stats": {"Customers": "1", "Sales": "1", "Shelf": "4 / 5", "Stockroom": "1"}
+				"stats": {"Customers": "1", "Sales": "1", "Shelf": "3 / 3", "Stockroom": "0"}
 			},
-			{"shelf": 4, "backroom": 1, "carrying_stock": false},
+			{"shelf": 3, "backroom": 0, "carrying_stock": false},
 			{"state": "summary_visible", "event_id": "day01_wrong_console_parent"},
 			{"cash_delta": 15, "reputation_delta": 2, "manager_trust_delta": 2},
 			{
@@ -292,7 +268,7 @@ static func route_beats() -> Array[Dictionary]:
 				"items_stocked": 3,
 				"sales_completed": 1,
 				"shelf_inventory": 3,
-				"backroom_inventory": 1,
+				"backroom_inventory": 0,
 			},
 				[
 					"tests/gut/test_store_session_day_one_critical_path.gd:558",

@@ -35,9 +35,9 @@ const _SPEED_CYCLE: Array[TimeSystem.SpeedTier] = [
 ]
 const _TRAINING_OBJECTIVE_IDS: Array[StringName] = [
 	&"talk_to_manager",
-	&"check_register",
 	&"check_back_room_inventory",
 	&"training_stock_shelf",
+	&"open_store",
 ]
 
 const _TIER_THRESHOLDS: Array[float] = [80.0, 50.0, 25.0, 0.0]

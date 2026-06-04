@@ -82,24 +82,6 @@ func _run_route(controller: StoreSessionController) -> bool:
 		controller,
 		"manager_prompt",
 		{
-			"stage": "training_check_register",
-			"target": "StoreSessionDayEndTrigger/Interactable",
-			"prompt": "Check Register",
-			"header": "FIRST DAY",
-		}
-	):
-		return false
-
-	if not await _wrong_target_does_not_advance(
-		controller, "register_wrong_customer", "StoreSessionDayOneCustomer/Interactable"
-	):
-		return false
-	if not await _active_detail_interaction(controller, "StoreSessionDayEndTrigger/Interactable"):
-		return false
-	if not await _acknowledge_recovery(
-		controller,
-		"register_prompt",
-		{
 			"stage": "training_back_room_inventory",
 			"target": "StoreSessionBackroomPickup/Interactable",
 			"prompt": "Inspect Starter Stock Box",
@@ -120,7 +102,7 @@ func _run_route(controller: StoreSessionController) -> bool:
 		{
 			"stage": "training_stock_shelf",
 			"target": "StoreSessionRestockShelf/Interactable",
-			"prompt": "Place item 1 of 3 on Starter Display",
+			"prompt": "Place item 1 of 3 on Starter Table",
 			"header": "FIRST DAY",
 			"carrying": true,
 		}
@@ -128,16 +110,32 @@ func _run_route(controller: StoreSessionController) -> bool:
 		return false
 
 	if not await _stock_one(
-		controller, "carrying_shelf_transition", "Place item 2 of 3 on Starter Display"
+		controller, "carrying_shelf_transition", "Place item 2 of 3 on Starter Table"
 	):
 		return false
 	if not await _stock_one(
-		controller, "stockroom_work_area", "Place item 3 of 3 on Starter Display"
+		controller, "stockroom_work_area", "Place item 3 of 3 on Starter Table"
 	):
 		return false
-	if not await _stock_one(controller, "before_customer_state", "Talk to customer"):
+	if not await _stock_one(controller, "open_sign_prompt", "Flip"):
 		return false
 	if not await _extra_stock_press_does_not_duplicate(controller):
+		return false
+
+	if not await _active_detail_interaction(controller, "StoreSessionDayEndTrigger/Interactable"):
+		return false
+	if not await _acknowledge_recovery(
+		controller,
+		"before_customer_state",
+		{
+			"stage": "talk_to_customer",
+			"expected_target": "StoreSessionDayOneCustomer/Interactable",
+			"prompt": "Talk to customer",
+			"header_prefix": "DAY 1",
+			"preopening_complete": true,
+			"requires_reachable": false,
+		}
+	):
 		return false
 
 	if not await _wrong_target_does_not_advance(
@@ -153,9 +151,9 @@ func _run_route(controller: StoreSessionController) -> bool:
 	return await _checkpoint(
 		"sixty_second_state",
 		{
-			"stage": "back_room_inventory",
-			"target": "StoreSessionBackroomPickup/Interactable",
-			"prompt": "Inspect Starter Stock Box",
+			"stage": "end_day",
+			"target": "StoreSessionDayEndTrigger/Interactable",
+			"prompt": "Close day",
 			"header_prefix": "DAY 1",
 			"preopening_complete": true,
 		}
@@ -209,21 +207,16 @@ func _stock_one(controller: StoreSessionController, beat_id: String, next_prompt
 	var expected: Dictionary = {
 		"target": "StoreSessionRestockShelf/Interactable",
 		"prompt": next_prompt,
-		"header": "FIRST DAY" if not next_prompt.begins_with("Talk to customer") else "",
+		"header": "FIRST DAY",
 	}
-	if next_prompt.begins_with("Talk to customer"):
-		expected["stage"] = "talk_to_customer"
-		expected.erase("header")
-		expected.erase("target")
-		expected["expected_target"] = "StoreSessionDayOneCustomer/Interactable"
-		expected["requires_reachable"] = false
-		expected["header_prefix"] = "DAY 1"
-		expected["preopening_complete"] = true
+	if next_prompt == "Flip":
+		expected["stage"] = "training_open_store"
+		expected["target"] = "StoreSessionDayEndTrigger/Interactable"
+		expected["carrying"] = false
 	else:
 		expected["stage"] = "training_stock_shelf"
 		expected["carrying"] = true
-	var timeout_frames: int = 300 if next_prompt.begins_with("Talk to customer") else 120
-	if not await _checkpoint(beat_id, expected, timeout_frames):
+	if not await _checkpoint(beat_id, expected):
 		return false
 	var after: Dictionary = controller.get_session_progress_snapshot()
 	return _assert_stock_progressed_once(before, after, beat_id)

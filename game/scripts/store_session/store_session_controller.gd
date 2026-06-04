@@ -80,7 +80,6 @@ const MAX_JSON_FILE_BYTES: int = 1048576
 ## with manager-led preopening so the first actionable beat is spatial.
 const STAGE_VIC_NOTE: StringName = &"vic_note"
 const STAGE_TRAINING_TALK_MANAGER: StringName = &"training_talk_manager"
-const STAGE_TRAINING_CHECK_REGISTER: StringName = &"training_check_register"
 const STAGE_TRAINING_BACK_ROOM: StringName = &"training_back_room_inventory"
 const STAGE_TRAINING_STOCK_SHELF: StringName = &"training_stock_shelf"
 const STAGE_TRAINING_PRACTICE_CUSTOMER: StringName = &"training_practice_customer"
@@ -113,9 +112,24 @@ const SLOT_STATE_BUNDLE_REMOVED: String = "bundle_removed"
 const SLOT_STATE_EXCHANGE_RETURNED: String = "exchange_returned"
 const _RESTOCK_GAP_PREFIX: String = "StarterDisplaySlotGap"
 const _STARTER_DISPLAY_LABEL_TEXT_NAME: String = "StarterDisplayMerchandisingLabelText"
+const _OPEN_SIGN_NODE_NAME: String = "StoreSessionOpenSign"
+const _OPEN_SIGN_LABEL_NAME: String = "StoreSessionOpenSignLabel"
+const _STARTER_FIXTURE_EMPTY_FACES: Array[String] = [
+	"MerchandisingFrame/FeaturedRestockFaceA",
+	"MerchandisingFrame/FeaturedRestockFaceB",
+]
+const _STARTER_FIXTURE_HIDE_EMPTY_PATHS: Array[String] = [
+	"RestockCrate",
+	"MerchandisingDeck/ProductTray0",
+	"MerchandisingDeck/ProductTray1",
+	"MerchandisingDeck/ProductTray2",
+	"MerchandisingDeck/AccessoryTray",
+	"EmptyOverlay",
+]
 
 const _OBJECTIVE_UNLOCK_GRANTS: Dictionary = {
-	"talk_to_customer": ["employee_register_access"],
+	"open_store": ["employee_register_access"],
+	"training_stock_shelf": ["employee_stocking_trained"],
 	"stock_shelf": ["employee_stocking_trained"],
 }
 const _TUTORIAL_STEP_BY_OBJECTIVE: Dictionary = {
@@ -127,9 +141,7 @@ const _TUTORIAL_STEP_BY_OBJECTIVE: Dictionary = {
 	&"close_day": "close_day",
 }
 const _DAY_ONE_CLOSE_UNLOCK_GRANT: StringName = &"employee_closing_certified"
-const _REGISTER_UNLOCK_GRANT: StringName = &"employee_register_access"
 const _DETAIL_MANAGER_BRIEFING: StringName = &"manager_briefing"
-const _DETAIL_REGISTER_CHECK: StringName = &"register_check"
 const _DETAIL_BACKROOM_INVENTORY: StringName = &"backroom_inventory"
 const _CUSTOMER_COUNTER_ANCHOR_NAME: String = "StoreSessionCustomerCounterAnchor"
 const _CUSTOMER_COUNTER_RECEIPT_NAME: String = "SharedReceiptSlip"
@@ -252,28 +264,25 @@ const VIC_NOTE_DAY2_BODY: String = (
 )
 
 const _FIRST_MINUTE_MANAGER_BODY: String = (
-	"Today you’ll learn the opening routine: check the register, verify back room "
-	+ "stock, stock the starter display, then handle your first customer."
-)
-const _FIRST_MINUTE_REGISTER_BODY: String = (
-	"Cash drawer: Ready\n\n"
-	+ "Scanner: Ready\n\n"
-	+ "Receipt printer: Ready\n\n"
-	+ "Checkout lane: Ready"
+	"Welcome to Shelf Life.\n\n"
+	+ "Your first job is simple: keep the shelf stocked and run the register. "
+	+ "Start by grabbing the starter stock box from the back room. Put the Neo "
+	+ "Ignite console on the starter table, put the two used games on the shelf, "
+	+ "flip the open sign, then head back to the register for the first customer."
 )
 const _FIRST_MINUTE_BACKROOM_BODY: String = (
 	"Starter Stock Box found.\n\n"
-	+ "Contains %d starter display items."
+	+ "Contains %d items: 1 console for the table and 2 used games for the shelf."
 )
 const _FIRST_MINUTE_BACKROOM_COMPLETE_MESSAGE: String = (
-	"Back room inventory checked. Pick up the starter stock box."
+	"Starter stock picked up. Take it to the starter table."
 )
 const _STARTER_STOCK_CARRY_LABEL: String = "Starter Stock Box"
 const _STARTER_STOCK_CARRY_OBJECTIVE_LABEL: String = (
-	"Place all 3 starter items on the starter display table."
+	"Place the console on the table and the 2 games on the shelf."
 )
 const _STARTER_DISPLAY_READY_MESSAGE: String = (
-	"Starter display stocked. Store is ready for the first customer."
+	"Starter table and shelf stocked. Flip the open sign."
 )
 
 ## Customer-exit walk targets and timings. Tween coordinates are in world
@@ -297,16 +306,10 @@ const _CUSTOMER_EXIT_FADE_SECONDS: float = 0.8
 ## `&"foo"` StringName literals inside typed Array[Dictionary] entries.
 ## `id` and `stage` are converted to StringName via `_chain_id` / `_chain_stage`
 ## helpers at lookup sites.
-## Time costs land the chain at or past 5:00 PM by completion: 9:00 +
-## 60 + 120 + 300 = 17:00 exactly. Even with TimeSystem absent (unit
-## tests) the chain still flows because the time gate falls back to "ok"
-## when there's no clock to consult.
-## §F-I1 — Day-1 chain: customer → back room → stock → close. The order is
-## doctrinal (per the latest store_session-stabilization spec): the player can't stock
-## meaningfully before knowing what's in the back room. Time costs (30/30/60)
-## sum to 120 min so the chain finishes well before 5 PM; on transition to
-## END_DAY, `_advance_to_next_stage` jumps the clock to 17:00 so the player
-## isn't forced to idle from ~11 AM until close.
+## Day 1 is intentionally small: manager briefing → starter stock pickup →
+## stock one console table and two games on the shelf → flip the open sign →
+## handle the first customer → close. The post-open day should not repeat
+## the stockroom chore the player just completed during preopening.
 var _training_objectives: Array[Dictionary] = [
 	{
 		"id": "talk_to_manager",
@@ -321,24 +324,8 @@ var _training_objectives: Array[Dictionary] = [
 		"prompt_display_name": "Manager",
 		"prompt_text": "Talk to",
 		"action_verb": "Talk",
-		"result_summary": "Manager walkthrough complete. Register access unlocked.",
+		"result_summary": "Manager walkthrough complete. Starter stock assigned.",
 		"highlight_y_offset": 1.9,
-		"time_cost_minutes": 0,
-		"required": true,
-	},
-	{
-		"id": "check_register",
-		"stage": "training_check_register",
-		"label": "Open the register and confirm the checkout lane is ready.",
-		"action": "Verify the register before customers arrive",
-		"explanation": "Use the register by the checkout lane and confirm every readiness line.",
-		"key": "E",
-		"target_path": "StoreSessionDayEndTrigger/Interactable",
-		"prompt_display_name": "Register",
-		"prompt_text": "Check",
-		"action_verb": "Check",
-		"result_summary": "Register ready. Customers can be handled from the checkout lane.",
-		"highlight_y_offset": 0.6,
 		"time_cost_minutes": 0,
 		"required": true,
 	},
@@ -361,16 +348,32 @@ var _training_objectives: Array[Dictionary] = [
 	{
 		"id": "training_stock_shelf",
 		"stage": "training_stock_shelf",
-		"label": "Place all 3 starter items on the starter display table.",
-		"action": "Stock the display with the starter box",
-		"explanation": "Carry the box to the starter display table and place each item.",
+		"label": "Place the console on the starter table and 2 games on the shelf.",
+		"action": "Stock the starter table and shelf",
+		"explanation": "Use the starter stock box to set the table and shelf before opening.",
 		"key": "E",
 		"target_path": "StoreSessionRestockShelf/Interactable",
-		"prompt_display_name": "Starter Display",
+		"prompt_display_name": "Starter Table",
 		"prompt_text": "Stock",
 		"action_verb": "Stock",
-		"result_summary": "Starter display stocked. Store is ready for the first customer.",
+		"result_summary": "Starter table and shelf stocked. Flip the open sign.",
 		"highlight_y_offset": 1.7,
+		"time_cost_minutes": 0,
+		"required": true,
+	},
+	{
+		"id": "open_store",
+		"stage": "training_open_store",
+		"label": "Flip the open sign and head to the register.",
+		"action": "Open the store for the first customer",
+		"explanation": "Use the front register area to flip the sign from closed to open.",
+		"key": "E",
+		"target_path": "StoreSessionDayEndTrigger/Interactable",
+		"prompt_display_name": "Open Sign",
+		"prompt_text": "Flip",
+		"action_verb": "Open",
+		"result_summary": "Store opened. Register access unlocked.",
+		"highlight_y_offset": 0.9,
 		"time_cost_minutes": 0,
 		"required": true,
 	},
@@ -389,34 +392,6 @@ var _day_one_objectives: Array[Dictionary] = [
 		"action_verb": "Talk",
 		"highlight_y_offset": 1.9,
 		"time_cost_minutes": 30,
-		"required": true,
-	},
-	{
-		"id": "back_room_inventory",
-		"stage": "back_room_inventory",
-		"label": "Check the back room delivery.",
-		"action": "Check inventory",
-		"key": "E",
-		"target_path": "StoreSessionBackroomPickup/Interactable",
-		"prompt_display_name": "Starter Stock Box",
-		"prompt_text": "Inspect",
-		"action_verb": "Inspect",
-		"highlight_y_offset": 1.3,
-		"time_cost_minutes": 30,
-		"required": true,
-	},
-	{
-		"id": "stock_shelf",
-		"stage": "stock_shelf",
-		"label": "Place all 3 starter items on the starter display table.",
-		"action": "Stock starter display table",
-		"key": "E",
-		"target_path": "StoreSessionRestockShelf/Interactable",
-		"prompt_display_name": "Starter Display",
-		"prompt_text": "Stock",
-		"action_verb": "Stock",
-		"highlight_y_offset": 1.7,
-		"time_cost_minutes": 60,
 		"required": true,
 	},
 	{
@@ -569,6 +544,7 @@ var _customer_counter_anchor: Node3D = null
 var _current_transaction_view_model: Dictionary = {}
 var _register_flash: MeshInstance3D = null
 var _carried_stock_marker: Node3D = null
+var _open_sign_label: Label3D = null
 ## One-shot guard against double-spawning the day-summary modal. The
 ## production `DayCycleController` and the store_session controller both listen to
 ## `EventBus.day_close_confirmed`, and any re-emit of that signal — or a
@@ -604,6 +580,8 @@ func _ready() -> void:
 	_configure_store_customer()
 	_ensure_carried_stock_marker()
 	_ensure_starter_display_merchandising_label()
+	_ensure_open_sign_visual()
+	_prepare_starter_fixture_for_day_one()
 	_reset_starter_display_slot_states()
 	_suppress_moments_tray()
 	_load_content()
@@ -662,6 +640,7 @@ func _start_preopening_training() -> void:
 	_carried_stock_remaining = 0
 	_unplaced_delivery_count = 0
 	_reset_scene_for_day(1)
+	_set_open_sign_state(false)
 	_reset_store_inventory_overlay()
 	_set_clock_to_preopening()
 	_apply_customer_profile({"customer_name": "Manager"})
@@ -805,9 +784,6 @@ func on_store_manager_interacted() -> void:
 
 
 func on_store_register_interacted() -> void:
-	if _stage == STAGE_TRAINING_CHECK_REGISTER:
-		_open_first_minute_detail(_DETAIL_REGISTER_CHECK)
-		return
 	if _stage == STAGE_TRAINING_OPEN_STORE:
 		_complete_open_store_training_objective()
 		_open_store_after_training()
@@ -819,6 +795,8 @@ func _complete_open_store_training_objective() -> void:
 	if _completed_objectives.has(&"open_store"):
 		return
 	_completed_objectives[&"open_store"] = true
+	_grant_objective_unlocks(&"open_store")
+	_set_open_sign_state(true)
 	EventBus.store_objective_completed.emit(&"open_store")
 	EventBus.objective_completed.emit(&"open_store", _objective_completion_label(&"open_store"))
 
@@ -828,6 +806,7 @@ func _open_store_after_training() -> void:
 	StoreSessionState.carrying_stock = false
 	_carried_stock_remaining = 0
 	_unplaced_delivery_count = 0
+	_shelf_stock_count = maxi(_shelf_stock_count, _BACKROOM_DELIVERY_QUANTITY)
 	_sync_restock_placement_affordance()
 	EventBus.store_carry_changed.emit("")
 	(
@@ -950,10 +929,6 @@ func _on_first_minute_detail_acknowledged(detail_id: StringName) -> void:
 		_DETAIL_MANAGER_BRIEFING:
 			_complete_current_objective()
 			_emit_first_minute_completion_message(detail_id)
-		_DETAIL_REGISTER_CHECK:
-			_grant_unlock(_REGISTER_UNLOCK_GRANT)
-			_complete_current_objective()
-			_emit_first_minute_completion_message(detail_id)
 		_DETAIL_BACKROOM_INVENTORY:
 			_complete_stockroom_pickup_objective()
 
@@ -962,8 +937,6 @@ func _detail_matches_stage(detail_id: StringName, stage: StringName) -> bool:
 	match detail_id:
 		_DETAIL_MANAGER_BRIEFING:
 			return stage == STAGE_TRAINING_TALK_MANAGER
-		_DETAIL_REGISTER_CHECK:
-			return stage == STAGE_TRAINING_CHECK_REGISTER
 		_DETAIL_BACKROOM_INVENTORY:
 			return stage == STAGE_TRAINING_BACK_ROOM
 		_:
@@ -979,13 +952,6 @@ func _first_minute_detail_payload(detail_id: StringName) -> Dictionary:
 				"body": _FIRST_MINUTE_MANAGER_BODY,
 				"confirm_label": "Continue",
 			}
-		_DETAIL_REGISTER_CHECK:
-			return {
-				"tag": "REGISTER CHECK",
-				"title": "Register Check",
-				"body": _FIRST_MINUTE_REGISTER_BODY,
-				"confirm_label": "Register ready",
-			}
 		_DETAIL_BACKROOM_INVENTORY:
 			return {
 				"tag": "BACK ROOM",
@@ -1000,11 +966,7 @@ func _emit_first_minute_completion_message(detail_id: StringName) -> void:
 	match detail_id:
 		_DETAIL_MANAGER_BRIEFING:
 			EventBus.toast_requested.emit(
-				"Manager walkthrough complete. Register access unlocked.", &"info", 3.0
-			)
-		_DETAIL_REGISTER_CHECK:
-			EventBus.toast_requested.emit(
-				"Register ready. Customers can be handled from the checkout lane.", &"info", 3.0
+				"Manager walkthrough complete. Starter stock assigned.", &"info", 3.0
 			)
 
 
@@ -1075,7 +1037,7 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 	var stocked_now: int = mini(maxi(spawned - previous_count, 0), _carried_stock_remaining)
 	if stocked_now <= 0:
 		EventBus.notification_requested.emit(
-			"No open shelf slot found. Check the back room delivery."
+			"No starter slot found. Check the back room stock box."
 		)
 		_sync_restock_placement_affordance()
 		return
@@ -1091,7 +1053,7 @@ func on_store_restock_interacted(complete_delivery: bool = true) -> void:
 		_sync_restock_placement_affordance()
 		EventBus.toast_requested.emit(
 			(
-				"Placed 1 item on the starter display table. %d still in the box."
+				"Placed 1 starter item. %d still in the box."
 				% _carried_stock_remaining
 			),
 			&"info",
@@ -1803,15 +1765,15 @@ func can_interact_restock() -> bool:
 
 func restock_prompt_label() -> String:
 	if _stage != STAGE_STOCK_SHELF and _stage != STAGE_TRAINING_STOCK_SHELF:
-		return "Stock Starter Display"
+		return "Stock Starter Table"
 	if not StoreSessionState.carrying_stock:
 		return "Inspect Starter Stock Box first"
 	if _carried_stock_remaining <= 0:
-		return "Starter Display stocked"
+		return "Starter table stocked"
 	var total_delivery: int = maxi(_current_delivery_quantity, _carried_stock_remaining)
 	var placed_count: int = maxi(total_delivery - _carried_stock_remaining, 0)
 	return (
-		"Place item %d of %d on Starter Display"
+		"Place starter item %d of %d"
 		% [
 			placed_count + 1,
 			total_delivery,
@@ -1841,13 +1803,13 @@ func can_interact_pickup() -> bool:
 
 func pickup_disabled_reason() -> String:
 	if StoreSessionState.carrying_stock:
-		return "Stock already in hand. Place it on the Starter Display."
+		return "Stock already in hand. Place it on the starter table and shelf."
 	if _stage == STAGE_STOCK_SHELF or _stage == STAGE_TRAINING_STOCK_SHELF:
 		return "Inspect the Starter Stock Box first."
 	if _stage == STAGE_BACK_ROOM_INVENTORY or _stage == STAGE_TRAINING_BACK_ROOM:
 		var objective_id: StringName = StringName(str(_objective_for_stage(_stage).get("id", "")))
 		if objective_id != &"" and _completed_objectives.has(objective_id):
-			return "Stock box already inspected. Stock the Starter Display."
+			return "Stock box already inspected. Stock the starter table and shelf."
 		return ""
 	return _disabled_reason_for_stage(STAGE_BACK_ROOM_INVENTORY)
 
@@ -1869,7 +1831,7 @@ func hidden_clue_disabled_reason() -> String:
 ## the clock the moment END_DAY is entered so the player isn't forced to
 ## race a moving 17:00 deadline while walking to the register.
 func can_interact_day_end() -> bool:
-	if _stage == STAGE_TRAINING_CHECK_REGISTER or _stage == STAGE_TRAINING_OPEN_STORE:
+	if _stage == STAGE_TRAINING_OPEN_STORE:
 		return true
 	return _stage == STAGE_END_DAY and _all_required_objectives_completed()
 
@@ -1884,8 +1846,6 @@ func day_end_disabled_reason() -> String:
 ## grounded retail-shift language — never "you can't close the day yet,
 ## the mystery isn't solved."
 func close_day_disabled_reason() -> String:
-	if _stage == STAGE_TRAINING_CHECK_REGISTER:
-		return ""
 	if _stage == STAGE_TRAINING_OPEN_STORE:
 		return ""
 	for entry: Dictionary in _objectives:
@@ -1915,12 +1875,10 @@ func _prerequisite_reason_for(objective_id: StringName) -> String:
 	match objective_id:
 		&"talk_to_manager":
 			return "Talk to the Manager first."
-		&"check_register":
-			return "Check the Register first."
 		&"check_back_room_inventory":
 			return "Inspect the Starter Stock Box first."
 		&"training_stock_shelf":
-			return "Stock the Starter Display first."
+			return "Stock the starter table and shelf first."
 		&"practice_customer":
 			return "Run the practice customer first."
 		&"open_store":
@@ -1930,7 +1888,7 @@ func _prerequisite_reason_for(objective_id: StringName) -> String:
 		&"back_room_inventory":
 			return "Inspect the Starter Stock Box first."
 		&"stock_shelf":
-			return "Stock the Starter Display before closing."
+			return "Stock the starter table and shelf before closing."
 		&"close_day":
 			return "Close day at the register."
 		_:
@@ -1982,6 +1940,7 @@ func _start_day(day: int) -> void:
 	# Must run before `_apply_objective_gating` so the active stage's target
 	# parent is visible the moment its Interactable is re-enabled.
 	_reset_scene_for_day(day)
+	_set_open_sign_state(day >= 1)
 	var all_day_events: Array = []
 	if _events_by_day.has(day):
 		all_day_events = (_events_by_day[day] as Array).duplicate()
@@ -2360,6 +2319,7 @@ func _reset_scene_for_day(_day_number: int) -> void:
 	if stock_to_render <= 0:
 		stock_to_render = _visible_shelf_item_count()
 		_shelf_stock_count = stock_to_render
+	_prepare_starter_fixture_for_day_one()
 	_render_visible_shelf_items(stock_to_render)
 	_sync_restock_placement_affordance()
 
@@ -2421,9 +2381,6 @@ func _advance_stage_after(completed_id: StringName) -> void:
 			idx = i
 			break
 	if idx == -1 or idx + 1 >= _objectives.size():
-		if completed_id == &"training_stock_shelf":
-			_open_store_after_training()
-			return
 		_stage = STAGE_END_DAY
 	else:
 		_stage = StringName(str(_objectives[idx + 1].get("stage", STAGE_END_DAY)))
@@ -2887,7 +2844,7 @@ func _objective_result_summary_for_id(objective_id: StringName) -> String:
 func _starter_display_stocked_message() -> String:
 	if _stage == STAGE_TRAINING_STOCK_SHELF:
 		return _STARTER_DISPLAY_READY_MESSAGE
-	return "Starter display stocked."
+	return "Starter table and shelf stocked."
 
 
 ## Builds the multi-step progress payload for the rail. Each `_objectives`
@@ -3010,11 +2967,9 @@ func _refresh_interactable_prompt_copy(store: Node) -> void:
 	)
 	if register != null:
 		match _stage:
-			STAGE_TRAINING_CHECK_REGISTER:
-				register.enabled = true
 			STAGE_TRAINING_OPEN_STORE:
-				register.display_name = "store"
-				register.prompt_text = "Open"
+				register.display_name = "Open Sign"
+				register.prompt_text = "Flip"
 				register.action_verb = "Open"
 				register.enabled = true
 
@@ -3669,7 +3624,7 @@ func _sync_register_screen_for_stage() -> void:
 	if screen == null:
 		return
 	match _stage:
-		STAGE_TRAINING_CHECK_REGISTER, STAGE_TRAINING_OPEN_STORE:
+		STAGE_TRAINING_OPEN_STORE:
 			screen.set_state(RegisterScreenStateScript.STATE_READY)
 		STAGE_TRAINING_PRACTICE_CUSTOMER, STAGE_TALK_TO_CUSTOMER:
 			screen.set_state(RegisterScreenStateScript.STATE_READY)
@@ -4243,12 +4198,105 @@ func _ensure_starter_display_merchandising_label() -> Label3D:
 			"category_id": "cartridges",
 		}
 	)
-	var text: String = StoreMerchandisingLabelsScript.display_text(resolved)
-	label.text = text.to_upper() if not text.is_empty() else "STARTER DISPLAY"
+	label.text = "STARTER TABLE"
 	label.set_meta("merchandising_label_id", str(resolved.get("label_id", "")))
 	label.set_meta("merchandising_label_source", str(resolved.get("source", "")))
 	rail.add_child(label)
 	return label
+
+
+func _ensure_open_sign_visual() -> Node3D:
+	var store: Node = _store_root()
+	if store == null:
+		return null
+	var door: Node3D = store.get_node_or_null("EntranceDoor") as Node3D
+	if door == null:
+		return null
+	var existing: Node3D = door.get_node_or_null(_OPEN_SIGN_NODE_NAME) as Node3D
+	if existing != null:
+		_open_sign_label = existing.get_node_or_null(_OPEN_SIGN_LABEL_NAME) as Label3D
+		return existing
+	var sign := Node3D.new()
+	sign.name = _OPEN_SIGN_NODE_NAME
+	sign.position = Vector3(0.0, 1.72, -0.08)
+	sign.rotation_degrees = Vector3(0.0, 180.0, 0.0)
+	sign.set_meta("semantic_target", "store_session.open_sign")
+	door.add_child(sign)
+	var backing := MeshInstance3D.new()
+	backing.name = "SignPanel"
+	var backing_mesh := BoxMesh.new()
+	backing_mesh.size = Vector3(0.82, 0.28, 0.035)
+	backing.mesh = backing_mesh
+	backing.material_override = _open_sign_panel_material(false)
+	sign.add_child(backing)
+	var label := Label3D.new()
+	label.name = _OPEN_SIGN_LABEL_NAME
+	label.position = Vector3(0.0, -0.012, -0.026)
+	label.pixel_size = 0.0025
+	label.font_size = 48
+	label.outline_size = 5
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.shaded = false
+	sign.add_child(label)
+	_open_sign_label = label
+	_set_open_sign_state(false)
+	return sign
+
+
+func _set_open_sign_state(is_open: bool) -> void:
+	var sign: Node3D = _ensure_open_sign_visual()
+	if sign == null:
+		return
+	var label: Label3D = _open_sign_label
+	if label == null:
+		label = sign.get_node_or_null(_OPEN_SIGN_LABEL_NAME) as Label3D
+		_open_sign_label = label
+	if label != null:
+		label.text = "OPEN" if is_open else "CLOSED"
+		label.modulate = Color(0.58, 1.0, 0.66, 1.0) if is_open else Color(1.0, 0.72, 0.34, 1.0)
+		label.outline_modulate = Color(0.02, 0.03, 0.02, 1.0)
+	var backing: MeshInstance3D = sign.get_node_or_null("SignPanel") as MeshInstance3D
+	if backing != null:
+		backing.material_override = _open_sign_panel_material(is_open)
+	sign.set_meta("store_open", is_open)
+
+
+func _open_sign_panel_material(is_open: bool) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.06, 0.14, 0.10, 0.88) if is_open else Color(0.16, 0.09, 0.05, 0.88)
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.emission_enabled = true
+	material.emission = Color(0.16, 0.95, 0.42, 1.0) if is_open else Color(0.8, 0.36, 0.12, 1.0)
+	material.emission_energy_multiplier = 0.28 if is_open else 0.18
+	return material
+
+
+func _prepare_starter_fixture_for_day_one() -> void:
+	var shelf: Node3D = _restock_shelf_node() as Node3D
+	if shelf == null:
+		return
+	for node_path: String in _STARTER_FIXTURE_EMPTY_FACES:
+		var face: Node3D = shelf.get_node_or_null(NodePath(node_path)) as Node3D
+		if face != null:
+			face.visible = false
+	for node_path: String in _STARTER_FIXTURE_HIDE_EMPTY_PATHS:
+		var empty_part: Node3D = shelf.get_node_or_null(NodePath(node_path)) as Node3D
+		if empty_part != null:
+			empty_part.visible = false
+	for index: int in range(_restock_slot_capacity()):
+		_set_starter_slot_marker_visible(index, false)
+
+
+func _set_starter_slot_marker_visible(slot_index: int, is_visible: bool) -> void:
+	var shelf: Node3D = _restock_shelf_node() as Node3D
+	if shelf == null:
+		return
+	var marker: Node3D = (
+		shelf.get_node_or_null("%s%d" % [_RESTOCK_SLOT_PREFIX, slot_index]) as Node3D
+	)
+	if marker != null:
+		marker.visible = is_visible
 
 
 func _reset_starter_display_slot_states() -> void:
@@ -4258,7 +4306,7 @@ func _reset_starter_display_slot_states() -> void:
 		_set_starter_slot_state(index, SLOT_STATE_EMPTY, {})
 
 
-## Returns a copy of the starter display slot-state map for tests and debug views.
+## Returns a copy of the starter table/shelf slot-state map for tests and debug views.
 func starter_display_slot_states() -> Dictionary:
 	return _starter_display_slot_states.duplicate(true)
 
@@ -4462,6 +4510,13 @@ func _restock_slot_position(index: int) -> Vector3:
 	var shelf: Node = store.get_node_or_null("StoreSessionRestockShelf")
 	if shelf == null:
 		return Vector3.ZERO
+	match index:
+		0:
+			return Vector3(0.58, 1.28, -0.10)
+		1:
+			return Vector3(-0.26, 1.34, -0.23)
+		2:
+			return Vector3(0.22, 1.34, -0.23)
 	var marker: Node3D = shelf.get_node_or_null("%s%d" % [_RESTOCK_SLOT_PREFIX, index]) as Node3D
 	if marker != null:
 		return marker.position + Vector3(0.0, 0.055, 0.0)
@@ -4497,7 +4552,8 @@ func _reset_restock_shelf_visuals() -> void:
 			child.free()
 	var overlay: Node = shelf.get_node_or_null("EmptyOverlay")
 	if overlay is Node3D:
-		(overlay as Node3D).visible = true
+		(overlay as Node3D).visible = false
+	_prepare_starter_fixture_for_day_one()
 	var affordance: Node = shelf.get_node_or_null(_RESTOCK_PLACEMENT_AFFORDANCE_NAME)
 	if affordance is Node3D:
 		(affordance as Node3D).visible = false
@@ -5437,7 +5493,7 @@ func _visible_shelf_item_count() -> int:
 ## missing-`StoreSessionRestockShelf` branch is a scene-wiring regression
 ## (`retro_games.tscn` ships the node at the root of the store) — fail
 ## loud so a node rename / accidental delete is caught in CI rather than
-## shipping as "Stocked 0 items on the starter display table." See §EH-26.
+## shipping as "Stocked 0 items on the starter table/shelf." See §EH-26.
 func _spawn_visible_shelf_items(count: int) -> int:
 	var spawned: int = _render_visible_shelf_items(count)
 	_shelf_stock_count = spawned
@@ -5478,7 +5534,8 @@ func _render_visible_shelf_items(count: int) -> int:
 	if clamped <= 0:
 		var empty_overlay: Node = shelf.get_node_or_null("EmptyOverlay")
 		if empty_overlay is Node3D:
-			(empty_overlay as Node3D).visible = true
+			(empty_overlay as Node3D).visible = false
+		_prepare_starter_fixture_for_day_one()
 		return 0
 	# BoxMesh size = (width_x, height_y, depth_z). With no rotation the +Z
 	# face — the one the player sees from the aisle — is 0.18 m wide ×
@@ -5495,8 +5552,10 @@ func _render_visible_shelf_items(count: int) -> int:
 			item = _make_store_shelf_item_container(designed_visual)
 		item.name = "StoreShelfItem%d" % i
 		item.position = _restock_slot_position(i) + Vector3(0.0, -0.04, 0.0)
+		_apply_starter_stock_item_transform(item, visual_data, i)
 		_apply_store_shelf_item_metadata(item, visual_data, i)
 		(shelf as Node3D).add_child(item)
+		_set_starter_slot_marker_visible(i, false)
 		_set_starter_slot_state(
 			i,
 			SLOT_STATE_STOCKED,
@@ -5616,6 +5675,21 @@ func _apply_store_shelf_item_metadata(
 	item.set_meta("slot_state", str(visual_data.get("slot_state", SLOT_STATE_STOCKED)))
 
 
+func _apply_starter_stock_item_transform(
+	item: Node3D, visual_data: Dictionary, delivery_index: int
+) -> void:
+	var category: String = str(visual_data.get("category", ""))
+	var is_console: bool = delivery_index == 0 or category == "consoles"
+	if is_console:
+		item.scale = Vector3(0.72, 0.72, 0.72)
+		item.rotation_degrees = Vector3(0.0, -10.0, 0.0)
+		item.set_meta("starter_surface", "starter_table")
+		return
+	item.scale = Vector3(0.62, 0.62, 0.62)
+	item.rotation_degrees = Vector3(0.0, 0.0, 0.0)
+	item.set_meta("starter_surface", "starter_shelf")
+
+
 func _product_visual_data_from_definition(definition: ItemDefinition) -> Dictionary:
 	var display_price: float = (
 		definition.used_price if definition.used_price > 0.0 else definition.base_price
@@ -5662,6 +5736,8 @@ func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dict
 
 func _make_store_shelf_item_container(designed_visual: Node3D) -> MeshInstance3D:
 	var item: MeshInstance3D = _make_fallback_store_shelf_item()
+	item.mesh = null
+	item.material_override = null
 	item.set_meta(
 		"product_visual_kind",
 		str(designed_visual.get_meta("product_visual_kind", "designed_product"))

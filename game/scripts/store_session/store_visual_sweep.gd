@@ -78,7 +78,7 @@ static func spawn_acceptance_review() -> Dictionary:
 			"readable checkout",
 			"manager talk target",
 			"queue inside store",
-			"starter display visible",
+			"starter table and shelf visible",
 			"readable storefront threshold identity",
 			"open sales floor",
 			"no unintended exterior objects",
@@ -269,7 +269,7 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 					"shelf_economics_and_product_readability",
 				],
 				(
-					"Original Retro Rewind entry, checkout, queue, manager, and starter display "
+					"Original Retro Rewind entry, checkout, queue, manager, and starter table/shelf "
 					+ "composition built from Mallcore props and labels."
 				),
 				"01_spawn_first_look.png validates first-view identity and route readability."
@@ -352,31 +352,31 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 		{
 			"index": 3,
 			"name": "shelf_wall_product_focus",
-			"label": "Starter display table focus",
+			"label": "Starter table and shelf focus",
 			"filename": "03_shelf_wall_product_focus.png",
 			"camera": Vector3(-3.90, 1.55, 1.65),
-			"focus": "StoreSessionRestockShelf/EmptyOverlay",
+			"focus": "StoreSessionRestockShelf/MerchandisingFrame",
 			"anchors":
 			[
 				"StoreSessionRestockShelf",
 				"StoreSessionRestockShelf/ShelfBoard",
-				"StoreSessionRestockShelf/EmptyOverlay",
+				"StoreSessionRestockShelf/MerchandisingFrame",
 				"ExpandableStoreShell/StarterUsedShelfBacker",
 			],
 			"route_anchor": "StoreSessionRestockShelf",
 			"active_route_stage": "training_stock_shelf",
-			"active_prompt": "Stock Starter Display",
-			"next_expected_beat": "before_customer",
-			"next_destination": "starter display table",
-			"local_action": "read the empty table target before starter stock appears",
+			"active_prompt": "Stock Starter Table",
+			"next_expected_beat": "open_sign_prompt",
+			"next_destination": "open sign",
+			"local_action": "read the starter table and shelf before stock appears",
 			"route_sequence_index": 3,
 			"primary_work_surface_target": "StoreSessionRestockShelf",
 			"action_context": _action_context(
 				"restock_table",
 				"StoreSessionRestockShelf/Interactable",
-				"Stock Starter Display",
-				"place carried stock on the starter display table",
-				"starter display table",
+				"Stock Starter Table",
+				"place the console on the table and two games on the shelf",
+				"starter table and shelf",
 				[
 					_candidate("StoreSessionRestockShelf/Interactable", "active", ""),
 					_candidate(
@@ -401,10 +401,10 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 			"inspiration_closeout": _inspiration_closeout(
 				["shelf_economics_and_product_readability"],
 				(
-					"Original starter display table, empty overlay, price rail, and used-game "
-					+ "fixture language show stock work without real packaging."
+					"The starter table and shelf must read as one small opening setup: "
+					+ "one console surface, two used-game slots, no generic empty markers."
 				),
-				"03_shelf_wall_product_focus.png validates starter display readability."
+				"03_shelf_wall_product_focus.png validates starter table/shelf readability."
 			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
@@ -772,8 +772,8 @@ static func _candidate(path: String, state: String, reason: String) -> Dictionar
 static func _stockroom_pickup_disabled_guidance() -> Dictionary:
 	return {
 		"before_active_objective": "Talk to the customer first.",
-		"while_carrying_stock": "Stock already in hand. Place it on the Starter Display.",
-		"after_delivery_checked": "Stock box already inspected. Stock the Starter Display.",
+		"while_carrying_stock": "Stock already in hand. Place it on the starter table and shelf.",
+		"after_delivery_checked": "Stock box already inspected. Stock the starter table and shelf.",
 	}
 
 

@@ -25,6 +25,6 @@ func get_disabled_reason(_actor: Node = null) -> String:
 		StoreSessionController.STAGE_BACK_ROOM_INVENTORY:
 			return "Inspect the Starter Stock Box first."
 		StoreSessionController.STAGE_STOCK_SHELF:
-			return "Stock the Starter Display before closing."
+			return "Stock the starter table and shelf before closing."
 		_:
 			return ""

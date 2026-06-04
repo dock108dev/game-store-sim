@@ -36,7 +36,7 @@ var hidden_thread_signals_seen: Array[StringName] = []
 var input_mode: int = INPUT_MODE_GAMEPLAY
 var preopening_complete: bool = false
 ## True while the player is holding a stock box from the back room and has
-## not yet placed it on the starter display table. Read by ObjectiveRail to
+## not yet placed it on the starter table/shelf fixture. Read by ObjectiveRail to
 ## suppress the right-side action/hint chip when the player is carrying
 ## but not aimed at the restock shelf — preventing the prompt from
 ## appearing over unrelated nodes during navigation to the shelf.

@@ -61,13 +61,13 @@ const _DAY_ONE_MILESTONES: Array[Dictionary] = [
 ]
 const _TRAINING_MILESTONES: Array[Dictionary] = [
 	{"id": "manager", "objective_id": "talk_to_manager", "label": "Manager"},
-	{"id": "register", "objective_id": "check_register", "label": "Register"},
 	{
 		"id": "backroom",
 		"objective_id": "check_back_room_inventory",
 		"label": "Back room",
 	},
 	{"id": "shelf", "objective_id": "training_stock_shelf", "label": "Shelf stock"},
+	{"id": "open", "objective_id": "open_store", "label": "Open sign"},
 ]
 
 const _PHASE_NAMES: Dictionary = {
