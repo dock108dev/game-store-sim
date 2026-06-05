@@ -1,9 +1,0 @@
-# Required checkpoints for a tutorial scenario audit run.
-boot_scene_ready
-main_menu_ready
-new_game_clicked
-gameplay_shell_ready
-objective_matches
-interaction_fired
-day_open
-day_close

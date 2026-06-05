@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="PackedScene" path="res://game/scenes/stores/fixtures/wall_sign.tscn" id="1"]
-
-[node name="SignZoneHeader" groups=["fixture"] instance=ExtResource("1")]
-
-[node name="SignText" parent="." index="3"]
-text = "ZONE"
