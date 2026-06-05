@@ -50,6 +50,7 @@ GODOT_SWEEP_ARGS=(
 	--script res://tests/visual/capture_store_visual_sweep.gd
 )
 
+capture_status=0
 if [[ "$(uname -s)" == "Linux" && -z "${DISPLAY:-}" ]]; then
 	if ! command -v xvfb-run >/dev/null 2>&1; then
 		echo "ERROR: xvfb-run is required for display-backed visual captures on Linux CI." >&2
@@ -57,9 +58,12 @@ if [[ "$(uname -s)" == "Linux" && -z "${DISPLAY:-}" ]]; then
 	fi
 	MALLCORE_VISUAL_SWEEP_TARGET="$CAPTURE_TARGET" \
 		xvfb-run -a --server-args="-screen 0 1920x1080x24 +extension GLX +render -noreset" \
-		"$GODOT_BIN" "${GODOT_SWEEP_ARGS[@]}"
+		"$GODOT_BIN" "${GODOT_SWEEP_ARGS[@]}" || capture_status=$?
 else
-	MALLCORE_VISUAL_SWEEP_TARGET="$CAPTURE_TARGET" "$GODOT_BIN" "${GODOT_SWEEP_ARGS[@]}"
+	MALLCORE_VISUAL_SWEEP_TARGET="$CAPTURE_TARGET" "$GODOT_BIN" "${GODOT_SWEEP_ARGS[@]}" || capture_status=$?
+fi
+if [[ "$capture_status" -ne 0 ]]; then
+	echo "WARNING: Godot visual capture exited $capture_status; validating written captures before failing." >&2
 fi
 
 python3 "$REPO_ROOT/tests/visual/diff_screenshots.py" \

@@ -23,7 +23,7 @@ REQUIRED_FIRST_TEN_SECONDS_FILENAMES = [
     "03_shelf_wall_product_focus.png",
     "04_stockroom_looking_in.png",
     "05_stockroom_work_area_interior.png",
-    "06_product_sale_review.png",
+    "06_starter_stocked_opening_review.png",
     "07_checkout_close_day.png",
     "08_exit_threshold_return_view.png",
 ]

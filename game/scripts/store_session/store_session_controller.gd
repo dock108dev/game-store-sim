@@ -126,6 +126,51 @@ const _STARTER_FIXTURE_HIDE_EMPTY_PATHS: Array[String] = [
 	"MerchandisingDeck/AccessoryTray",
 	"EmptyOverlay",
 ]
+const _DAY_ONE_EMPTY_STORE_HIDE_PATHS: Array[String] = [
+	"CartRackLeft",
+	"CartRackRight",
+	"GlassCase",
+	"ConsoleShelf",
+	"AccessoriesBin",
+	"staff_picks_table",
+	"used_game_wall",
+	"new_release_wall",
+	"old_gen_shelf",
+	"bargain_bin",
+	"hold_shelf",
+	"back_room",
+	"StoreSessionHiddenClue",
+	"StoreSessionBackroomWallSide",
+	"StoreSessionBackroomWallFrontLeft",
+	"StoreSessionBackroomWallFrontRight",
+	"ReadabilityProps/DayOneRouteMarkers",
+	"ReadabilityProps/FloorDisplayIsland",
+	"ReadabilityProps/SpawnViewFloorDressing",
+	"ReadabilityProps/ProductDisplayRows",
+	"ReadabilityProps/BargainBinOverflow",
+	"ReadabilityProps/CartRackProductStacks",
+	"ReadabilityProps/ShelfFaceDressing",
+	"ReadabilityProps/ShelfSpineRuns",
+	"ReadabilityProps/UsedConsoleDressing",
+	"ReadabilityProps/BackroomDressing",
+]
+const _DAY_ONE_EXPANDABLE_SHELL_HIDE_PREFIXES: Array[String] = [
+	"ReferenceDisplay",
+	"ReferenceShelf",
+	"ReferenceUsedGames",
+	"StoreIdentityProductFacing",
+	"StoreIdentityMerchShelfRail",
+	"StarterDisplayEmptySlot",
+	"StarterDisplayShelfEdgeCard",
+	"StarterUsedEmptySlot",
+	"StarterUsedShelfPriceTag",
+	"StarterUsedShelfRightEmptyBay",
+	"StarterUsedShelfRightPriceTag",
+	"WindowDisplayCartridgeStack",
+]
+const _DAY_ONE_EMPTY_STORE_SHELL_NAME: String = "DayOneEmptyStoreShell"
+const _DAY_ONE_STOCKING_ZONE_NAME: String = "StarterStockingZone"
+const _DAY_ONE_REGISTER_ZONE_NAME: String = "RegisterTrainingZone"
 
 const _OBJECTIVE_UNLOCK_GRANTS: Dictionary = {
 	"open_store": ["employee_register_access"],
@@ -582,6 +627,7 @@ func _ready() -> void:
 	_ensure_starter_display_merchandising_label()
 	_ensure_open_sign_visual()
 	_prepare_starter_fixture_for_day_one()
+	_prepare_day_one_empty_store_visuals()
 	_reset_starter_display_slot_states()
 	_suppress_moments_tray()
 	_load_content()
@@ -641,6 +687,7 @@ func _start_preopening_training() -> void:
 	_unplaced_delivery_count = 0
 	_reset_scene_for_day(1)
 	_set_open_sign_state(false)
+	_prepare_day_one_empty_store_visuals()
 	_reset_store_inventory_overlay()
 	_set_clock_to_preopening()
 	_apply_customer_profile({"customer_name": "Manager"})
@@ -2316,11 +2363,15 @@ func _reset_scene_for_day(_day_number: int) -> void:
 	_clear_clean_exchange_room_outcome()
 	_clear_bundle_room_outcome()
 	var stock_to_render: int = _shelf_stock_count
-	if stock_to_render <= 0:
+	if _day_number == 1 and not StoreSessionState.preopening_complete:
+		stock_to_render = 0
+		_shelf_stock_count = 0
+	elif stock_to_render <= 0:
 		stock_to_render = _visible_shelf_item_count()
 		_shelf_stock_count = stock_to_render
 	_prepare_starter_fixture_for_day_one()
 	_render_visible_shelf_items(stock_to_render)
+	_prepare_day_one_empty_store_visuals()
 	_sync_restock_placement_affordance()
 
 
@@ -2333,6 +2384,7 @@ func _set_customer_exit_state(new_state: StringName) -> void:
 
 
 func _emit_session_prompt_changed() -> void:
+	_sync_day_one_empty_store_stage_visuals()
 	session_prompt_changed.emit(get_session_progress_snapshot())
 
 
@@ -2394,6 +2446,7 @@ func _advance_stage_after(completed_id: StringName) -> void:
 		_start_close_time_watcher()
 	_sync_register_screen_for_stage()
 	_sync_customer_counter_anchor_for_stage()
+	_sync_day_one_empty_store_stage_visuals()
 	_update_objective_rail()
 	_apply_objective_gating()
 	_emit_session_prompt_changed()
@@ -3380,6 +3433,8 @@ func _show_store_reference_node(store: Node, node_path: String) -> void:
 func _refresh_store_runtime_visual_scope() -> void:
 	ExpandableStoreShellRuntimeScript.apply(_store_root())
 	_apply_minimal_scope()
+	if StoreSessionState.day == 1 and not StoreSessionState.preopening_complete:
+		_prepare_day_one_empty_store_visuals()
 
 
 func _reference_corner_review_mode_enabled() -> bool:
@@ -4113,6 +4168,183 @@ func _hide_stock_box_in_world() -> void:
 		(open as Node3D).visible = true
 	if label is Node3D:
 		(label as Node3D).visible = false
+
+
+func _prepare_day_one_empty_store_visuals() -> void:
+	var store: Node = _store_root()
+	if store == null:
+		return
+	for node_path: String in _DAY_ONE_EMPTY_STORE_HIDE_PATHS:
+		_set_day_one_branch_visible(store, NodePath(node_path), false)
+	_hide_day_one_expandable_shell_product_dressing(store)
+	if not store.is_node_ready():
+		call_deferred("_prepare_day_one_empty_store_visuals")
+		return
+	_ensure_day_one_empty_store_shell(store)
+	_sync_day_one_empty_store_stage_visuals()
+
+
+func _set_day_one_branch_visible(root: Node, node_path: NodePath, is_visible: bool) -> void:
+	var node: Node = root.get_node_or_null(node_path)
+	if node == null:
+		return
+	_set_branch_visibility_and_collision(node, is_visible)
+
+
+func _set_branch_visibility_and_collision(node: Node, is_visible: bool) -> void:
+	if node is Node3D:
+		(node as Node3D).visible = is_visible
+	elif node is CanvasItem:
+		(node as CanvasItem).visible = is_visible
+	if node is CollisionShape3D:
+		(node as CollisionShape3D).disabled = not is_visible
+	if node is CollisionPolygon3D:
+		(node as CollisionPolygon3D).disabled = not is_visible
+	if node is Area3D:
+		(node as Area3D).monitoring = is_visible
+		(node as Area3D).monitorable = is_visible
+	for child: Node in node.get_children():
+		_set_branch_visibility_and_collision(child, is_visible)
+
+
+func _hide_day_one_expandable_shell_product_dressing(store: Node) -> void:
+	var shell: Node = store.get_node_or_null("ExpandableStoreShell")
+	if shell == null:
+		return
+	_hide_day_one_expandable_shell_node(shell)
+
+
+func _hide_day_one_expandable_shell_node(node: Node) -> void:
+	if _day_one_expandable_shell_node_should_hide(node):
+		_set_branch_visibility_and_collision(node, false)
+		return
+	for child: Node in node.get_children():
+		_hide_day_one_expandable_shell_node(child)
+
+
+func _day_one_expandable_shell_node_should_hide(node: Node) -> bool:
+	if node.has_meta("product_item_id"):
+		return true
+	var node_name: String = String(node.name)
+	for prefix: String in _DAY_ONE_EXPANDABLE_SHELL_HIDE_PREFIXES:
+		if node_name.begins_with(prefix):
+			return true
+	return false
+
+
+func _ensure_day_one_empty_store_shell(store: Node) -> void:
+	var store_3d: Node3D = store as Node3D
+	if store_3d == null:
+		return
+	var shell: Node3D = store_3d.get_node_or_null(_DAY_ONE_EMPTY_STORE_SHELL_NAME) as Node3D
+	if shell == null:
+		shell = Node3D.new()
+		shell.name = _DAY_ONE_EMPTY_STORE_SHELL_NAME
+		store_3d.add_child(shell)
+	shell.visible = true
+	_ensure_shell_box(
+		shell,
+		"OpeningPaintBackWall",
+		Vector3(-2.0, 1.55, -9.965),
+		Vector3(4.8, 1.65, 0.035),
+		Color(0.20, 0.28, 0.24, 1.0),
+		Color(0.0, 0.0, 0.0, 1.0),
+	)
+	_ensure_shell_box(
+		shell,
+		"EmptyLeftBayPaint",
+		Vector3(-7.965, 1.45, 0.1),
+		Vector3(0.035, 1.75, 4.6),
+		Color(0.18, 0.15, 0.20, 1.0),
+		Color(0.0, 0.0, 0.0, 1.0),
+	)
+	_ensure_shell_box(
+		shell,
+		"StarterShelfLeasePad",
+		Vector3(-2.0, 0.026, -8.35),
+		Vector3(4.45, 0.018, 1.25),
+		Color(0.10, 0.08, 0.06, 0.72),
+		Color(0.0, 0.0, 0.0, 1.0),
+	)
+	_ensure_shell_box(
+		shell,
+		_DAY_ONE_REGISTER_ZONE_NAME,
+		Vector3(4.85, 0.028, 7.1),
+		Vector3(2.65, 0.018, 1.5),
+		Color(0.09, 0.07, 0.055, 0.52),
+		Color(0.0, 0.0, 0.0, 1.0),
+	)
+	_ensure_shell_box(
+		shell,
+		_DAY_ONE_STOCKING_ZONE_NAME,
+		Vector3(-2.0, 0.041, -8.35),
+		Vector3(4.7, 0.022, 1.45),
+		Color(0.94, 0.66, 0.22, 0.34),
+		Color(1.0, 0.56, 0.18, 1.0),
+	)
+
+
+func _ensure_shell_box(
+	root: Node3D,
+	node_name: String,
+	position: Vector3,
+	size: Vector3,
+	albedo: Color,
+	emission: Color
+) -> MeshInstance3D:
+	var mesh_instance: MeshInstance3D = root.get_node_or_null(node_name) as MeshInstance3D
+	if mesh_instance == null:
+		mesh_instance = MeshInstance3D.new()
+		mesh_instance.name = node_name
+		root.add_child(mesh_instance)
+	mesh_instance.position = position
+	var mesh: BoxMesh = mesh_instance.mesh as BoxMesh
+	if mesh == null:
+		mesh = BoxMesh.new()
+		mesh_instance.mesh = mesh
+	mesh.size = size
+	mesh_instance.material_override = _make_day_one_shell_material(albedo, emission)
+	return mesh_instance
+
+
+func _make_day_one_shell_material(albedo: Color, emission: Color) -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = albedo
+	if albedo.a < 0.99:
+		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	if emission.r > 0.0 or emission.g > 0.0 or emission.b > 0.0:
+		mat.emission_enabled = true
+		mat.emission = emission
+		mat.emission_energy_multiplier = 0.28
+	mat.roughness = 0.82
+	return mat
+
+
+func _sync_day_one_empty_store_stage_visuals() -> void:
+	var store: Node = _store_root()
+	if store == null:
+		return
+	var shell: Node3D = store.get_node_or_null(_DAY_ONE_EMPTY_STORE_SHELL_NAME) as Node3D
+	if shell == null:
+		return
+	var stocking_zone: Node3D = (
+		shell.get_node_or_null(_DAY_ONE_STOCKING_ZONE_NAME) as Node3D
+	)
+	if stocking_zone != null:
+		stocking_zone.visible = (
+			_stage == STAGE_TRAINING_STOCK_SHELF
+			or _stage == STAGE_STOCK_SHELF
+		)
+	var register_zone: Node3D = (
+		shell.get_node_or_null(_DAY_ONE_REGISTER_ZONE_NAME) as Node3D
+	)
+	if register_zone != null:
+		register_zone.visible = (
+			_stage == STAGE_TRAINING_OPEN_STORE
+			or _stage == STAGE_TRAINING_PRACTICE_CUSTOMER
+			or _stage == STAGE_TALK_TO_CUSTOMER
+			or _stage == STAGE_END_DAY
+		)
 
 
 func _sync_restock_placement_affordance() -> void:
@@ -5737,7 +5969,7 @@ func _product_visual_data_from_entry(item_id: String, entry: Dictionary) -> Dict
 func _make_store_shelf_item_container(designed_visual: Node3D) -> MeshInstance3D:
 	var item: MeshInstance3D = _make_fallback_store_shelf_item()
 	item.mesh = null
-	item.material_override = null
+	item.material_override = _transparent_store_shelf_container_material()
 	item.set_meta(
 		"product_visual_kind",
 		str(designed_visual.get_meta("product_visual_kind", "designed_product"))
@@ -5745,6 +5977,13 @@ func _make_store_shelf_item_container(designed_visual: Node3D) -> MeshInstance3D
 	designed_visual.position = Vector3(0.0, 0.0, 0.04)
 	item.add_child(designed_visual)
 	return item
+
+
+func _transparent_store_shelf_container_material() -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(1.0, 1.0, 1.0, 0.0)
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	return mat
 
 
 func _make_fallback_store_shelf_item() -> MeshInstance3D:

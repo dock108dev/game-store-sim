@@ -218,7 +218,8 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"ExpandableStoreShell/FrontDoorHorizontalPushBar",
 				"StoreSessionRestockShelf",
 				"ExpandableStoreShell/CheckoutQueueRopeFront",
-				"ExpandableStoreShell/StarterDisplayShelfEdgeCard",
+				"ExpandableStoreShell/StarterDisplayTableFootprint",
+				"ExpandableStoreShell/StarterUsedShelfBacker",
 				"ExpandableStoreShell/StockroomDoorDirectionPlaque",
 				"ExpandableStoreShell/StockroomDoorStaffCard",
 				"ExpandableStoreShell/StockroomCoolDoorRevealHeader",
@@ -226,7 +227,6 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 				"ExpandableStoreShell/EntryThreshold",
 				"ExpandableStoreShell/ThresholdFloorInlay",
 				"ExpandableStoreShell/WelcomeMatInset",
-				"ExpandableStoreShell/WindowDisplayCartridgeStack",
 				"FrontLaneQueue",
 				"PlayerEntrySpawn",
 				"StoreSessionManager",
@@ -549,70 +549,72 @@ static func first_ten_seconds_rows() -> Array[Dictionary]:
 		},
 		{
 			"index": 6,
-			"name": "product_sale_review",
-			"label": "Product and sale review",
-			"filename": "06_product_sale_review.png",
-			"camera": Vector3(-2.85, 1.58, 3.05),
-			"focus": "ReadabilityProps/ProductDisplayRows/DungeonDad64_ShelfA",
+			"name": "starter_stocked_opening_review",
+			"label": "Starter stocked opening review",
+			"filename": "06_starter_stocked_opening_review.png",
+			"setup_state": "stocked_shelf",
+			"camera": Vector3(-3.65, 1.58, 2.55),
+			"camera_rotation_degrees": Vector3(-4.0, 17.0, 0.0),
+			"focus": "VisualSweepOverhaulFixtures/StockedShelf/ProductFacingA",
 			"anchors":
 			[
 				"StoreSessionRestockShelf",
 				"StoreSessionRestockShelf/PriceTagRail",
-				"ReadabilityProps/ProductDisplayRows/DungeonDad64_ShelfA",
-				"ReadabilityProps/ProductDisplayRows/DungeonDad64_PriceTag",
-				"StoreSessionDayOneCustomer",
+				"VisualSweepOverhaulFixtures/StockedShelf/ProductFacingA",
+				"VisualSweepOverhaulFixtures/StockedShelf/ProductFacingB",
+				"VisualSweepOverhaulFixtures/StockedShelf/PriceRail",
+				"EntranceDoor/StoreSessionOpenSign",
 			],
-			"route_anchor": "StoreSessionDayOneCustomer",
-			"active_route_stage": "talk_to_customer",
-			"active_prompt": "Talk to customer",
+			"route_anchor": "EntranceDoor/StoreSessionOpenSign",
+			"active_route_stage": "training_open_store",
+			"active_prompt": "Flip Open Sign",
 			"next_expected_beat": "checkout_close_day",
-			"next_destination": "customer and checkout",
-			"local_action": "inspect the stocked product read and handle the customer sale",
+			"next_destination": "open sign and register",
+			"local_action": "confirm the starter stock is out, then flip the open sign",
 			"route_sequence_index": 4,
-			"primary_work_surface_target": "StoreSessionDayOneCustomer",
+			"primary_work_surface_target": "StoreSessionRestockShelf",
 			"action_context": _action_context(
-				"product_inspection",
-				"StoreSessionDayOneCustomer/Interactable",
-				"Talk to customer",
-				"read the stocked product/sale context and return to the customer",
-				"customer and checkout",
+				"starter_stock_ready",
+				"EntranceDoor/StoreSessionOpenSign",
+				"Flip Open Sign",
+				"confirm the starter stock is out, then flip the open sign",
+				"open sign and register",
 				[
-					_candidate("StoreSessionDayOneCustomer/Interactable", "active", ""),
+					_candidate("EntranceDoor/StoreSessionOpenSign", "active", ""),
 					_candidate(
 						"StoreSessionRestockShelf/Interactable",
 						"disabled",
-						"Stocked display is review context during the sale beat."
+						"Starter stock is review context after placement is complete."
 					),
 					_candidate(
 						"StoreSessionDayEndTrigger/Interactable",
 						"disabled",
-						"Close-day hotspot is visible but not active until the sale resolves."
+						"Close-day hotspot is not active before opening work resolves."
 					),
 				],
-				"display-table to customer approach"
+				"stocked table to open-sign approach"
 			),
 			"work_surface_review": {
-				"surface_role": "product_sale_hierarchy",
-				"primary_action_surface": "StoreSessionDayOneCustomer",
+				"surface_role": "starter_stocked_opening_hierarchy",
+				"primary_action_surface": "StoreSessionRestockShelf",
 				"dominance_required": true,
 				"supporting_props_should_stay_quiet": true,
 			},
 			"inspiration_closeout": _inspiration_closeout(
 				[
 					"shelf_economics_and_product_readability",
-					"customers_and_queue",
-					"checkout_and_transaction_work",
+					"storefront_and_mall_identity",
 				],
 				(
-					"Original fictional product cases, price tags, customer prop staging, and sale "
-					+ "route cues communicate value and transaction state."
+					"Original starter console/table and two-game shelf read as the first opening "
+					+ "setup before the store is flipped open."
 				),
-				"06_product_sale_review.png validates stocked display and customer-sale context."
+				"06_starter_stocked_opening_review.png validates stocked starter setup."
 			),
 			"design_checks": route_design_checks(),
 			"scope": "first_ten_seconds",
 			"visual_scope_mode":
-			StoreVisualScopeProfileScript.MODE_STORE_SESSION_REFERENCE_VISIBLE_LABEL,
+			StoreVisualScopeProfileScript.MODE_AUTHORED_FULL_LABEL,
 			"review_target": ACCEPTANCE_TARGET,
 			"hud_context_required": HUD_CONTEXT_LABEL,
 		},

@@ -79,7 +79,7 @@ func _configure_deterministic_capture() -> void:
 	var store_session_state: Node = _autoload("StoreSessionState")
 	if store_session_state != null:
 		store_session_state.call("reset_new_run")
-		store_session_state.set("preopening_complete", true)
+		store_session_state.set("preopening_complete", false)
 	for singleton_name: String in ["InputFocus", "ModalQueue", "InteractionPrompt"]:
 		var singleton: Node = _autoload(singleton_name)
 		if singleton != null and singleton.has_method("_reset_for_tests"):
