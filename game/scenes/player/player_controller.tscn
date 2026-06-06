@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cag7fgl2cb7di"]
+
+[ext_resource type="Script" path="res://scripts/player/first_person_controller.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/interaction/interaction_raycast.gd" id="2_raycast"]
+[ext_resource type="PackedScene" path="res://scenes/ui/interaction_prompt.tscn" id="3_prompt"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.35
+height = 1.8
+
+[node name="PlayerController" type="CharacterBody3D"]
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="Head" type="Node3D" parent="."]
+position = Vector3(0, 1.62, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+current = true
+
+[node name="InteractionRaycast" type="RayCast3D" parent="Head/Camera3D"]
+enabled = true
+target_position = Vector3(0, 0, -3)
+script = ExtResource("2_raycast")
+prompt_path = NodePath("../../../InteractionPrompt")
+
+[node name="InteractionPrompt" parent="." instance=ExtResource("3_prompt")]
+
