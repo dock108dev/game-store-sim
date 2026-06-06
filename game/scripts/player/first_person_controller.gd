@@ -124,3 +124,21 @@ func open_pricing_for_held_item() -> String:
 		return ""
 
 	return "This item cannot be priced."
+
+
+func get_held_item_interaction_prompt() -> String:
+	if _held_item == null:
+		return ""
+
+	var product := _held_item.get("product") as ProductDefinition
+	if product == null:
+		return ""
+
+	if not product.player_priceable:
+		return "Fixed Price Item"
+
+	return "E Price %s" % product.display_name
+
+
+func interact_with_held_item() -> String:
+	return open_pricing_for_held_item()

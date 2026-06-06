@@ -78,16 +78,8 @@ func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
 
-func test_pricing_workstation_exists() -> void:
-	assert_not_null(_store.get_node_or_null("PricingWorkstation"))
-
-
-func test_pricing_workstation_is_near_receiving_area() -> void:
-	var pricing_workstation := _store.get_node("PricingWorkstation") as Node3D
-	var receiving_box := _store.get_node("ReceivingBox") as Node3D
-
-	assert_lt(pricing_workstation.global_position.distance_to(receiving_box.global_position), 2.0)
-	assert_lt(pricing_workstation.global_position.z, 3.2)
+func test_no_standalone_pricing_workstation_exists() -> void:
+	assert_null(_store.get_node_or_null("PricingWorkstation"))
 
 
 func test_game_display_rack_exists() -> void:

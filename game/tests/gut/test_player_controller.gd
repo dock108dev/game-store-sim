@@ -118,3 +118,33 @@ func test_player_opens_pricing_for_held_item() -> void:
 	assert_true(pricing_panel.is_open())
 	assert_eq(pricing_panel.get_active_item(), item)
 	assert_true(_player.is_pricing_open())
+
+
+func test_player_held_item_prompt_prices_used_item() -> void:
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(item)
+
+	assert_true(_player.pick_up_item(item))
+	assert_eq(_player.get_held_item_interaction_prompt(), "E Price Star Trader")
+
+
+func test_player_rejects_fixed_price_held_item() -> void:
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var product := ProductDefinition.new()
+	product.product_id = "new_orbit_racer"
+	product.display_name = "New Orbit Racer"
+	product.category = "new_game"
+	product.platform = "Orbit 64"
+	product.condition = "new"
+	product.completeness = "sealed"
+	product.cost_basis_cents = 3200
+	product.market_value_cents = 5999
+	product.suggested_price_cents = 5999
+	product.player_priceable = false
+	item.set("product", product)
+	item.set("current_price_cents", 5999)
+	add_child_autofree(item)
+
+	assert_true(_player.pick_up_item(item))
+	assert_eq(_player.get_held_item_interaction_prompt(), "Fixed Price Item")
+	assert_eq(_player.open_pricing_for_held_item(), "This item cannot be priced.")

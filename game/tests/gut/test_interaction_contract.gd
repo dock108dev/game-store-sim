@@ -70,6 +70,29 @@ func test_interaction_raycast_ignores_empty_interaction_messages() -> void:
 	assert_false(prompt.visible)
 
 
+func test_interaction_raycast_uses_held_item_fallback_prompt() -> void:
+	var script: Script = load("res://scripts/interaction/interaction_raycast.gd")
+	var raycast: RayCast3D = script.new()
+	var prompt: Node = load("res://scenes/ui/interaction_prompt.tscn").instantiate()
+	var actor := _HeldItemActor.new()
+	add_child_autofree(actor)
+	actor.add_child(raycast)
+	add_child_autofree(prompt)
+
+	raycast._prompt = prompt
+	raycast._physics_process(0.016)
+
+	assert_true(prompt.visible)
+	assert_eq(prompt.label.text, "E Price Star Trader")
+
+	var event := InputEventAction.new()
+	event.action = "interact"
+	event.pressed = true
+	raycast._unhandled_input(event)
+
+	assert_eq(actor.price_count, 1)
+
+
 class _SilentInteractable:
 	extends Node
 
@@ -77,4 +100,20 @@ class _SilentInteractable:
 		return "E Silent"
 
 	func interact() -> String:
+		return ""
+
+
+class _HeldItemActor:
+	extends Node
+
+	var price_count: int = 0
+
+	func is_holding_item() -> bool:
+		return true
+
+	func get_held_item_interaction_prompt() -> String:
+		return "E Price Star Trader"
+
+	func interact_with_held_item() -> String:
+		price_count += 1
 		return ""

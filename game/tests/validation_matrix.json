@@ -264,53 +264,32 @@
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_places_held_item_in_display_slot"
     },
     {
-      "id": "pricing_workstation_exists",
-      "name": "Pricing workstation exists in the main scene",
+      "id": "no_standalone_pricing_workstation",
+      "name": "Main scene does not include a standalone pricing workstation",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_pricing_workstation_exists"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_no_standalone_pricing_workstation_exists"
     },
     {
-      "id": "pricing_workstation_near_receiving",
-      "name": "Pricing workstation is near the receiving area",
-      "status": "automated",
-      "critical": false,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_pricing_workstation_is_near_receiving_area"
-    },
-    {
-      "id": "pricing_workstation_interactable",
-      "name": "Pricing workstation is interactable",
+      "id": "held_item_pricing_prompt",
+      "name": "Held used item exposes a direct pricing prompt",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_is_interactable"
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_held_item_prompt_prices_used_item"
     },
     {
-      "id": "pricing_prompt_held_item",
-      "name": "Pricing workstation prompt names the held item",
+      "id": "held_item_pricing_fallback",
+      "name": "Interaction raycast can price a held item without a pricing terminal",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_prompt_prices_held_item"
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_interaction_raycast_uses_held_item_fallback_prompt"
     },
     {
-      "id": "pricing_prompt_empty_handed",
-      "name": "Pricing workstation prompts for a held item when empty-handed",
-      "status": "automated",
-      "critical": false,
-      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_prompts_for_item_when_empty_handed"
-    },
-    {
-      "id": "pricing_workstation_fixed_price_reject",
-      "name": "Pricing workstation rejects fixed-price held items",
+      "id": "held_item_fixed_price_reject",
+      "name": "Held fixed-price items cannot open player pricing",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_rejects_fixed_price_item"
-    },
-    {
-      "id": "pricing_workstation_distinct_shape",
-      "name": "Pricing workstation shape is distinct from the register silhouette",
-      "status": "automated",
-      "critical": false,
-      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_is_not_register_silhouette"
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_rejects_fixed_price_held_item"
     },
     {
       "id": "pricing_panel_exists",
@@ -483,7 +462,7 @@
     },
     {
       "script": "res://scripts/interaction/interaction_raycast.gd",
-      "tests": ["res://tests/gut/test_player_controller.gd"],
+      "tests": ["res://tests/gut/test_interaction_contract.gd"],
       "critical": true
     },
     {
@@ -499,11 +478,6 @@
     {
       "script": "res://scripts/player/first_person_controller.gd",
       "tests": ["res://tests/gut/test_player_controller.gd"],
-      "critical": true
-    },
-    {
-      "script": "res://scripts/store_layout/pricing_workstation.gd",
-      "tests": ["res://tests/gut/test_pricing_workstation.gd"],
       "critical": true
     },
     {

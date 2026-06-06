@@ -95,7 +95,7 @@ Technical:
 5. Add item data and item instance data. Done.
 6. Add pickup/hold/place behavior. Done.
 7. Add shelf slot component. Done.
-8. Add pricing UI. In progress: held-item pricing workstation.
+8. Add pricing UI. In progress: direct used-item pricing from the held item. No standalone pricing terminal.
 9. Add register UI.
 10. Add transaction log.
 11. Add customer spawn and simple buy goal.

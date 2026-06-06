@@ -4,6 +4,7 @@ extends RayCast3D
 
 var _current_interactable: Node = null
 var _prompt: Node = null
+var _using_actor_fallback: bool = false
 
 
 func _ready() -> void:
@@ -16,24 +17,31 @@ func _physics_process(_delta: float) -> void:
 	var collider := get_collider()
 	if collider != null and collider.has_method("get_interaction_prompt"):
 		_current_interactable = collider
+		_using_actor_fallback = false
 		if _prompt != null and _prompt.has_method("show_prompt"):
 			_prompt.show_prompt(_get_prompt_text(collider))
 		return
 
 	_current_interactable = null
+	if _show_actor_fallback_prompt():
+		return
+
 	if _prompt != null and _prompt.has_method("hide_prompt"):
 		_prompt.hide_prompt()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _current_interactable == null:
-		return
-
 	if not event.is_action_pressed("interact"):
 		return
 
 	var result := ""
-	if _current_interactable.has_method("interact_with_actor"):
+	if _using_actor_fallback:
+		var actor := _get_actor()
+		if actor != null and actor.has_method("interact_with_held_item"):
+			result = str(actor.interact_with_held_item())
+	elif _current_interactable == null:
+		return
+	elif _current_interactable.has_method("interact_with_actor"):
 		result = str(_current_interactable.interact_with_actor(_get_actor()))
 	elif _current_interactable.has_method("interact"):
 		result = str(_current_interactable.interact())
@@ -57,3 +65,21 @@ func _get_actor() -> Node:
 		node = node.get_parent()
 
 	return null
+
+
+func _show_actor_fallback_prompt() -> bool:
+	_using_actor_fallback = false
+
+	var actor := _get_actor()
+	if actor == null or not actor.has_method("get_held_item_interaction_prompt"):
+		return false
+
+	var prompt_text := str(actor.get_held_item_interaction_prompt())
+	if prompt_text.is_empty():
+		return false
+
+	_using_actor_fallback = true
+	if _prompt != null and _prompt.has_method("show_prompt"):
+		_prompt.show_prompt(prompt_text)
+
+	return true
