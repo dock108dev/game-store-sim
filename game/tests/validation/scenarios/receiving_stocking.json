@@ -106,6 +106,27 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_has_identity"
     },
     {
+      "id": "shelf_slot_category_assignment",
+      "name": "Game display slot can assign accepted category while empty",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_can_assign_category_when_empty"
+    },
+    {
+      "id": "shelf_slot_rejects_empty_category_assignment",
+      "name": "Game display slot rejects empty category assignment",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_rejects_empty_category_assignment"
+    },
+    {
+      "id": "shelf_slot_rejects_occupied_category_assignment",
+      "name": "Game display slot rejects category reassignment while occupied",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_rejects_category_assignment_when_occupied"
+    },
+    {
       "id": "shelf_slot_available",
       "name": "Game display slot starts available",
       "status": "automated",
@@ -125,6 +146,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_has_three_slots"
+    },
+    {
+      "id": "main_scene_display_slots_used_game_category",
+      "name": "Main-scene display rack slots are assigned used-game category",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_slots_are_assigned_used_game_category"
     },
     {
       "id": "slot_accepts_used_game",

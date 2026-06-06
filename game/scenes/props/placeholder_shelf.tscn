@@ -50,6 +50,7 @@ material = SubResource("StandardMaterial3D_shelf")
 [node name="ShelfSlot001" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
+accepted_category = "used_game"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot001"]
 shape = SubResource("BoxShape3D_slot")
@@ -63,6 +64,7 @@ material = SubResource("StandardMaterial3D_slot")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
 slot_id = "shelf_slot_002"
+accepted_category = "used_game"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot002"]
 shape = SubResource("BoxShape3D_slot")
@@ -76,6 +78,7 @@ material = SubResource("StandardMaterial3D_slot")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
 slot_id = "shelf_slot_003"
+accepted_category = "used_game"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot003"]
 shape = SubResource("BoxShape3D_slot")

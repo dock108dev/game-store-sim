@@ -205,11 +205,13 @@ func test_store_session_orders_fixture_and_reserves_cash() -> void:
 
 	assert_eq(order.get("fixture_id"), "fixture_game_display_rack")
 	assert_eq(order.get("status"), "pending_placement")
+	assert_eq(order.get("slot_category"), "used_game")
 	assert_eq(order.get("cost_cents"), 12500)
 	assert_eq(session.get_cash_cents(), 37500)
 	assert_eq(session.get_pending_fixture_orders().size(), 1)
 	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement:")
 	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack $125.00")
+	assert_string_contains(session.get_fixture_order_summary_text(), "slots:used_game")
 
 
 func test_store_session_rejects_fixture_order_without_cash() -> void:

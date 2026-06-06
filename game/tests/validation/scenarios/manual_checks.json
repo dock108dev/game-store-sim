@@ -57,6 +57,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "display_rack_category_readability",
+      "name": "Display rack reads as a used-game rack after category assignment changes",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that metadata changes did not make stocking behavior or visual intent confusing.",
+      "owner": "manual QA"
+    },
+    {
       "id": "pricing_panel_readability",
       "name": "Pricing panel text and controls are readable in the actual window",
       "status": "manual",

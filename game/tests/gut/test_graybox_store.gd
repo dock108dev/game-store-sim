@@ -86,6 +86,12 @@ func test_display_rack_has_three_slots() -> void:
 	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot003"))
 
 
+func test_display_rack_slots_are_assigned_used_game_category() -> void:
+	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
+		var slot := _store.get_node("GameDisplayRack/%s" % slot_name) as ShelfSlot
+		assert_eq(slot.get_accepted_category(), "used_game")
+
+
 func test_display_rack_is_wall_aligned() -> void:
 	var rack := _store.get_node("GameDisplayRack") as Node3D
 	assert_almost_eq(rack.global_position.z, 5.62, 0.01)

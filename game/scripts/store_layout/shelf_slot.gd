@@ -8,6 +8,26 @@ class_name ShelfSlot
 @export var placed_item_scale: Vector3 = Vector3(0.78, 0.78, 0.78)
 
 
+func assign_category(category: String) -> bool:
+	var normalized_category := category.strip_edges()
+	if normalized_category.is_empty():
+		return false
+
+	if not is_available():
+		return false
+
+	accepted_category = normalized_category
+	return true
+
+
+func get_accepted_category() -> String:
+	return accepted_category
+
+
+func accepts_category(category: String) -> bool:
+	return category == accepted_category
+
+
 func is_available() -> bool:
 	return occupied_item_path.is_empty()
 
@@ -43,7 +63,7 @@ func can_accept(item: Node) -> bool:
 	if product == null:
 		return false
 
-	return product.category == accepted_category
+	return accepts_category(product.category)
 
 
 func place_item(item: Node3D) -> bool:

@@ -50,6 +50,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
 - Receiving box, display rack, register, and used-game visual placement.
+- Display rack slots still behave like used-game slots after category assignment changes.
 - Held item stays visible without blocking normal navigation.
 - Stocked game is visibly upright and intentional in the rack.
 - Pricing panel text and controls are readable in the actual window.
@@ -88,14 +89,14 @@ Update `game/tests/validation/` whenever a production script or player-facing va
 Scenario files are intentionally split by slice:
 
 - `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
-- `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot, and stocking checks.
+- `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot category assignment, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
-- `scenarios/store_layout.json`: fixture catalog, fixture ordering, cash reservation, pending placement, ghost preview, valid/invalid placement state, rotate/snap controls, insufficient-cash rejection, and persistence coverage.
+- `scenarios/store_layout.json`: fixture catalog, fixture ordering, slot-category metadata, cash reservation, pending placement, ghost preview, valid/invalid placement state, rotate/snap controls, insufficient-cash rejection, and persistence coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

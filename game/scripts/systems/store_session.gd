@@ -242,6 +242,7 @@ func order_fixture(fixture_id: String) -> Dictionary:
 		"fixture_id": str(fixture.get("fixture_id")),
 		"display_name": str(fixture.get("display_name")),
 		"category": str(fixture.get("category")),
+		"slot_category": str(fixture.get("default_slot_category")),
 		"cost_cents": cost_cents,
 		"status": "pending_placement",
 	}
@@ -283,9 +284,10 @@ func get_fixture_order_summary_text() -> String:
 	else:
 		lines.append("Pending placement:")
 		for order in pending:
-			lines.append("%s %s" % [
+			lines.append("%s %s slots:%s" % [
 				str(order.get("display_name", "Fixture")),
 				format_money(int(order.get("cost_cents", 0))),
+				str(order.get("slot_category", "unassigned")),
 			])
 
 	return "\n".join(lines)

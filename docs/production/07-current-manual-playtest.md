@@ -35,6 +35,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 ## Visual Checks
 
 - Receiving box contains multiple visible used games without looking cluttered.
+- Display rack still reads as a used-game rack, and stocked used games still go into the expected slots.
 - Held item stays low/right and does not block navigation.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.

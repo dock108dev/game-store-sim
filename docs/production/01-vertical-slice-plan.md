@@ -113,6 +113,7 @@ Technical:
 21. Add first fixture ghost preview. Done as a translucent pending-rack preview after ordering; rotate, snap, validity coloring, and final placement remain later.
 22. Add first fixture placement validity state. Done as green valid and red invalid translucent ghost states with bounds validation; rotate, snap, and final placement remain later.
 23. Add first fixture rotate and snap controls. Done as manager-level fixed-step rotation and grid movement; player-facing placement confirmation remains later.
+24. Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
 
 ## Slice Review Questions
 

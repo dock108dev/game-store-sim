@@ -26,6 +26,23 @@ func test_shelf_has_three_display_slots() -> void:
 func test_shelf_slot_has_identity() -> void:
 	assert_eq(_slot.slot_id, "shelf_slot_001")
 	assert_eq(_slot.accepted_category, "used_game")
+	assert_eq(_slot.get_accepted_category(), "used_game")
+	assert_true(_slot.accepts_category("used_game"))
+	assert_false(_slot.accepts_category("hardware"))
+
+
+func test_shelf_slot_can_assign_category_when_empty() -> void:
+	assert_true(_slot.assign_category("hardware"))
+
+	assert_eq(_slot.get_accepted_category(), "hardware")
+	assert_false(_slot.can_accept(_item))
+
+
+func test_shelf_slot_rejects_empty_category_assignment() -> void:
+	assert_false(_slot.assign_category(""))
+	assert_false(_slot.assign_category("   "))
+
+	assert_eq(_slot.get_accepted_category(), "used_game")
 
 
 func test_shelf_slot_starts_available() -> void:
@@ -63,6 +80,13 @@ func test_shelf_slot_rejects_item_when_occupied() -> void:
 	assert_true(_slot.place_item(_item))
 	assert_false(_slot.can_accept(other_item))
 	assert_false(_slot.place_item(other_item))
+
+
+func test_shelf_slot_rejects_category_assignment_when_occupied() -> void:
+	assert_true(_slot.place_item(_item))
+
+	assert_false(_slot.assign_category("hardware"))
+	assert_eq(_slot.get_accepted_category(), "used_game")
 
 
 func test_shelf_slot_stock_prompt_uses_held_item_name() -> void:
