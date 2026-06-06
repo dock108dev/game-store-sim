@@ -11,6 +11,8 @@ func test_trade_in_customer_starts_with_carried_item() -> void:
 	assert_true(customer.is_waiting_for_trade_in())
 	assert_eq(item.get("location_id"), "customer:trade_seller_001")
 	assert_eq(customer.get_offer_cents(), 760)
+	assert_eq(customer.get_market_value_cents(), 1899)
+	assert_eq(customer.get_max_offer_cents(), 1899)
 	assert_string_contains(customer.get_interaction_prompt(), "Moon Escape")
 
 
@@ -61,6 +63,31 @@ func test_register_completes_trade_in_when_no_buyer_is_waiting() -> void:
 	assert_eq(session.get_cash_cents(), 49240)
 	assert_eq(receiving_box.get_child_count(), 1)
 	assert_eq(receiving_box.get_child(0).get("location_id"), "receiving_box_001")
+
+
+func test_register_accepts_adjusted_trade_in_offer() -> void:
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	var receiving_box := Node3D.new()
+	var ledger := TransactionLedger.new()
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(register)
+	add_child_autofree(customer)
+	add_child_autofree(receiving_box)
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+
+	session.ledger_path = session.get_path_to(ledger)
+	register.receiving_box_path = register.get_path_to(receiving_box)
+	register.ledger_path = register.get_path_to(ledger)
+	register.store_session_path = register.get_path_to(session)
+
+	var message := register.accept_trade_in(customer, 860)
+
+	assert_string_contains(message, "$8.60")
+	assert_eq(ledger.get_total_trade_in_cost_cents(), 860)
+	assert_eq(session.get_cash_cents(), 49140)
+	assert_eq(receiving_box.get_child(0).get("cost_basis_cents"), 860)
 
 
 func test_register_opens_trade_in_offer_for_player_actor() -> void:

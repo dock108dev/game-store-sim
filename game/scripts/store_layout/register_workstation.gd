@@ -81,7 +81,7 @@ func _complete_waiting_trade_in() -> String:
 	return accept_trade_in(customer)
 
 
-func accept_trade_in(customer: SimpleTradeInCustomer) -> String:
+func accept_trade_in(customer: SimpleTradeInCustomer, offer_cents: int = -1) -> String:
 	if customer == null or not customer.is_waiting_for_trade_in():
 		return "No trade-in waiting at the register."
 
@@ -91,12 +91,16 @@ func accept_trade_in(customer: SimpleTradeInCustomer) -> String:
 	if item == null or ledger == null or receiving_box == null:
 		return "Register is not ready to complete a trade-in."
 
-	var offer_cents := customer.get_offer_cents()
-	var transaction := ledger.record_trade_in(str(customer.get("customer_id")), item, offer_cents)
+	var final_offer_cents := offer_cents
+	if final_offer_cents < 0:
+		final_offer_cents = customer.get_offer_cents()
+	final_offer_cents = maxi(1, final_offer_cents)
+
+	var transaction := ledger.record_trade_in(str(customer.get("customer_id")), item, final_offer_cents)
 	if transaction.is_empty():
 		return "Register could not record the trade-in."
 
-	item.set("cost_basis_cents", offer_cents)
+	item.set("cost_basis_cents", final_offer_cents)
 	var acquired_item := customer.complete_trade_in(receiving_box)
 	if acquired_item == null:
 		return "Register could not receive the trade-in item."
@@ -107,7 +111,7 @@ func accept_trade_in(customer: SimpleTradeInCustomer) -> String:
 
 	return "Bought %s trade-in for $%0.2f." % [
 		str(transaction.get("display_name", "item")),
-		offer_cents / 100.0,
+		final_offer_cents / 100.0,
 	]
 
 

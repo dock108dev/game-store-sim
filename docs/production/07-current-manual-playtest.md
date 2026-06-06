@@ -19,11 +19,12 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 13. Confirm sold items are gone from the rack and no longer inspectable.
 14. Interact with the register when no buyer is queued and review the seller trade-in offer.
 15. Confirm the offer panel shows condition, demand, market value, and cash offer.
-16. Accept the trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
-17. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
-18. Open the backroom computer.
-19. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade spend, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
-20. End the day and confirm the summary changes to `Day closed`.
+16. Use `+ $1` and `- $1` in the trade-in panel and confirm the cash offer updates.
+17. Accept the adjusted trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
+18. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
+19. Open the backroom computer.
+20. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade spend, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
+21. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -35,7 +36,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Buyer queue spacing is readable and does not overlap the register.
 - Overpriced-item refusal feedback is readable and does not look like a register failure.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
-- Trade-in seller placement, carried item, offer panel, accept/decline controls, prompt, and completion message read clearly at the register.
+- Trade-in seller placement, carried item, offer panel, counteroffer controls, accept/decline controls, prompt, and completion message read clearly at the register.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.
 - Recent activity text is readable and distinguishes sales from trade-ins.

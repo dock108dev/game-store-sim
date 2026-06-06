@@ -39,8 +39,26 @@ func test_trade_in_offer_panel_opens_with_condition_market_and_offer() -> void:
 	assert_string_contains(_panel.details_label.text, "Demand: Low")
 	assert_string_contains(_panel.details_label.text, "Market: $18.99")
 	assert_eq(_panel.offer_label.text, "Cash offer: $7.60")
+	assert_eq(_panel.get_draft_offer_cents(), 760)
+	assert_false(_panel.decrease_offer_button.disabled)
+	assert_false(_panel.increase_offer_button.disabled)
 	assert_false(_panel.accept_button.disabled)
 	assert_false(_panel.decline_button.disabled)
+
+
+func test_trade_in_offer_panel_adjusts_counter_offer() -> void:
+	assert_true(_panel.open_for_trade_in(_register, _customer))
+
+	assert_true(_panel.increase_offer())
+
+	assert_eq(_panel.get_draft_offer_cents(), 860)
+	assert_eq(_panel.offer_label.text, "Cash offer: $8.60")
+	assert_string_contains(_panel.status_label.text, "Counter offer: $8.60")
+
+	assert_true(_panel.decrease_offer())
+
+	assert_eq(_panel.get_draft_offer_cents(), 760)
+	assert_eq(_panel.offer_label.text, "Cash offer: $7.60")
 
 
 func test_trade_in_offer_panel_accepts_offer() -> void:
@@ -54,6 +72,21 @@ func test_trade_in_offer_panel_accepts_offer() -> void:
 	assert_eq(_ledger.get_trade_in_count(), 1)
 	assert_eq(_session.get_cash_cents(), 49240)
 	assert_eq(_receiving_box.get_child_count(), 1)
+
+
+func test_trade_in_offer_panel_accepts_adjusted_counter_offer() -> void:
+	_panel.open_for_trade_in(_register, _customer)
+	_panel.increase_offer()
+
+	assert_true(_panel.accept_offer())
+
+	assert_string_contains(_panel.status_label.text, "Bought Moon Escape")
+	assert_string_contains(_panel.status_label.text, "$8.60")
+	assert_eq(_ledger.get_trade_in_count(), 1)
+	assert_eq(_ledger.get_total_trade_in_cost_cents(), 860)
+	assert_eq(_session.get_cash_cents(), 49140)
+	assert_true(_panel.decrease_offer_button.disabled)
+	assert_true(_panel.increase_offer_button.disabled)
 
 
 func test_trade_in_offer_panel_declines_offer() -> void:

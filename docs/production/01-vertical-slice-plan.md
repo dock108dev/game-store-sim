@@ -105,7 +105,7 @@ Technical:
 13. Add simple customer queue. Done for two in-store buyers and three display slots.
 14. Add customer movement/path validation. Done with deterministic buyer movement to stocked items, queue movement, and in-store target checks.
 15. Add optional apply-to-matching used-item pricing. Done in the direct pricing panel for active matching copies.
-16. Add first trade-in seller. Done as a register-reviewed cash trade-in with condition/market/demand details, accept/decline, and accepted item movement into receiving inventory.
+16. Add first trade-in seller. Done as a register-reviewed cash trade-in with condition/market/demand details, cash counteroffer adjustment, accept/decline, and accepted item movement into receiving inventory.
 17. Add first product catalog. Done with 12 fictional used games, three platforms, four conditions, three demand tiers, and automated catalog validation.
 18. Add first customer price sensitivity. Done with demand-based buyer refusal for overpriced matching used games.
 

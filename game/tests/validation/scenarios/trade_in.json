@@ -50,11 +50,32 @@
       "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_opens_with_condition_market_and_offer"
     },
     {
+      "id": "trade_in_offer_panel_counter_offer_controls",
+      "name": "Trade-in offer panel adjusts the cash counteroffer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_adjusts_counter_offer"
+    },
+    {
       "id": "trade_in_offer_panel_accepts",
       "name": "Trade-in offer panel accepts the cash offer",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_accepts_offer"
+    },
+    {
+      "id": "trade_in_offer_panel_accepts_counter_offer",
+      "name": "Trade-in offer panel accepts an adjusted cash counteroffer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_accepts_adjusted_counter_offer"
+    },
+    {
+      "id": "register_accepts_adjusted_trade_in_offer",
+      "name": "Register records adjusted trade-in offers in cash accounting",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_customer.gd::test_register_accepts_adjusted_trade_in_offer"
     },
     {
       "id": "trade_in_offer_panel_declines",

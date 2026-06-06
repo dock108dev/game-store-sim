@@ -59,6 +59,10 @@ func get_trade_item() -> Node3D:
 
 
 func get_offer_cents() -> int:
+	return maxi(1, int(round(get_market_value_cents() * offer_rate)))
+
+
+func get_market_value_cents() -> int:
 	var item := get_trade_item()
 	if item == null:
 		return 0
@@ -67,7 +71,11 @@ func get_offer_cents() -> int:
 	if product == null:
 		return 0
 
-	return maxi(1, int(round(product.market_value_cents * offer_rate)))
+	return product.market_value_cents
+
+
+func get_max_offer_cents() -> int:
+	return maxi(1, get_market_value_cents())
 
 
 func get_trade_in_summary() -> String:
