@@ -59,6 +59,7 @@ func test_used_game_inspect_text_is_product_backed() -> void:
 	assert_string_contains(text, "Market $24.99")
 	assert_string_contains(text, "Price $21.99")
 	assert_string_contains(text, "receiving_box_001")
+	assert_string_contains(text, "Serial untracked")
 
 
 func test_used_game_can_enter_held_state() -> void:
@@ -80,6 +81,53 @@ func test_used_game_can_enter_stocked_state() -> void:
 	assert_gt(_item.collision_layer, 0)
 	assert_gt(_item.collision_mask, 0)
 	assert_false(collision_shape.disabled)
+
+
+func test_product_item_serial_defaults_to_untracked() -> void:
+	var log := Node.new()
+	add_child_autofree(log)
+
+	assert_false(_item.has_serial_mismatch())
+	assert_eq(_item.get_serial_status_text(), "Serial untracked")
+	assert_eq(_item.flag_serial_mismatch(log), {})
+
+
+func test_product_item_detects_matching_serial() -> void:
+	_item.serial_id = "GST-001"
+	_item.expected_serial_id = "GST-001"
+
+	assert_false(_item.has_serial_mismatch())
+	assert_eq(_item.get_serial_status_text(), "Serial GST-001")
+
+
+func test_product_item_detects_mismatched_serial() -> void:
+	_item.serial_id = "GST-1047"
+	_item.expected_serial_id = "GST-003"
+
+	assert_true(_item.has_serial_mismatch())
+	assert_eq(_item.get_serial_status_text(), "Serial mismatch GST-1047 expected GST-003")
+	assert_string_contains(_item.interact(), "Serial mismatch GST-1047 expected GST-003")
+
+
+func test_product_item_flags_serial_mismatch_event() -> void:
+	var log: Node = load("res://scripts/narrative/suspicious_event_log.gd").new()
+	add_child_autofree(log)
+	_item.instance_id = "item_used_star_trader_003"
+	_item.serial_id = "GST-1047"
+	_item.expected_serial_id = "GST-003"
+	_item.suspicious_event_id = "serial_mismatch_item_used_star_trader_003"
+
+	var event: Dictionary = _item.flag_serial_mismatch(log)
+
+	assert_eq(event.get("event_id"), "serial_mismatch_item_used_star_trader_003")
+	assert_eq(event.get("title"), "Mismatched serial for Star Trader")
+	assert_eq(event.get("source"), "inventory")
+	assert_eq(event.get("severity"), "medium")
+	assert_eq(event.get("metadata").get("instance_id"), "item_used_star_trader_003")
+	assert_eq(event.get("metadata").get("product_id"), "used_star_trader")
+	assert_eq(event.get("metadata").get("serial_id"), "GST-1047")
+	assert_eq(event.get("metadata").get("expected_serial_id"), "GST-003")
+	assert_true(log.has_event("serial_mismatch_item_used_star_trader_003"))
 
 
 func test_product_definition_describes_retail_fields() -> void:

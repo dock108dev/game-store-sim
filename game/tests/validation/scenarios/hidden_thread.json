@@ -34,6 +34,27 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_suspicious_event_log.gd::test_suspicious_event_log_normalizes_invalid_input"
+    },
+    {
+      "id": "receiving_box_contains_mismatched_serial_item",
+      "name": "Receiving box contains one optional mismatched serial item",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_contains_mismatched_serial_item"
+    },
+    {
+      "id": "product_item_detects_mismatched_serial",
+      "name": "Product item detects mismatched serial metadata",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_detects_mismatched_serial"
+    },
+    {
+      "id": "product_item_flags_serial_mismatch_event",
+      "name": "Mismatched serial item can flag a hidden suspicious event",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_flags_serial_mismatch_event"
     }
   ]
 }

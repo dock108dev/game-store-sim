@@ -119,6 +119,7 @@ Technical:
 27. Add market drift. Done as deterministic day/category/tier market-value drift surfaced through the backroom computer for active inventory.
 28. Add daily report. Done as an explicit closed-day report with cash change, sales/trade-ins, revenue, cost, trade spend/credit, and gross profit.
 29. Add suspicious event flags. Done as a hidden, optional event log service with idempotent event flags and no visible normal-loop interruption.
+30. Add mismatched serial item. Done as one optional receiving-box copy with serial mismatch metadata and hidden event flag support.
 
 ## Slice Review Questions
 

@@ -247,6 +247,14 @@
       "critical": false,
       "reason": "The hidden-thread event log is intentionally infrastructure-only for now; human playtest should confirm no new visible story UI appeared.",
       "owner": "manual QA"
+    },
+    {
+      "id": "mismatched_serial_discoverability",
+      "name": "Mismatched serial item is discoverable without blocking normal inventory flow",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human confirmation that the optional suspicious copy can still be picked up, priced, stocked, sold, and inspected without feeling like a required story step.",
+      "owner": "manual QA"
     }
   ]
 }

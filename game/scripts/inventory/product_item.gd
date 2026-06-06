@@ -5,6 +5,9 @@ extends "res://scripts/interaction/interactable.gd"
 @export var current_price_cents: int = 0
 @export var cost_basis_cents: int = 0
 @export var location_id: String = "receiving_box_001"
+@export var serial_id: String = ""
+@export var expected_serial_id: String = ""
+@export var suspicious_event_id: String = ""
 
 var _default_collision_layer: int = 1
 var _default_collision_mask: int = 1
@@ -63,6 +66,63 @@ func set_sold() -> void:
 	set_collision_enabled(false)
 
 
+func has_serial_mismatch() -> bool:
+	return not serial_id.strip_edges().is_empty() \
+		and not expected_serial_id.strip_edges().is_empty() \
+		and serial_id.strip_edges() != expected_serial_id.strip_edges()
+
+
+func get_serial_status_text() -> String:
+	if serial_id.strip_edges().is_empty():
+		return "Serial untracked"
+
+	if has_serial_mismatch():
+		return "Serial mismatch %s expected %s" % [
+			serial_id.strip_edges(),
+			expected_serial_id.strip_edges(),
+		]
+
+	return "Serial %s" % serial_id.strip_edges()
+
+
+func get_suspicious_event_id() -> String:
+	if not suspicious_event_id.strip_edges().is_empty():
+		return suspicious_event_id.strip_edges()
+
+	if not instance_id.strip_edges().is_empty():
+		return "serial_mismatch_%s" % instance_id.strip_edges()
+
+	return "serial_mismatch_unknown_item"
+
+
+func flag_serial_mismatch(event_log: Node) -> Dictionary:
+	if not has_serial_mismatch():
+		return {}
+
+	if event_log == null or not event_log.has_method("flag_event"):
+		return {}
+
+	var product_id := ""
+	var product_name := display_name
+	if product != null:
+		product_id = product.product_id
+		product_name = product.display_name
+
+	return event_log.flag_event(
+		get_suspicious_event_id(),
+		"Mismatched serial for %s" % product_name,
+		"inventory",
+		"medium",
+		{
+			"instance_id": instance_id,
+			"product_id": product_id,
+			"serial_id": serial_id.strip_edges(),
+			"expected_serial_id": expected_serial_id.strip_edges(),
+			"location_id": location_id,
+		}
+	)
+
+
 func set_collision_enabled(is_enabled: bool) -> void:
 	collision_layer = _default_collision_layer if is_enabled else 0
 	collision_mask = _default_collision_mask if is_enabled else 0
@@ -83,10 +143,11 @@ func interact() -> String:
 	if product == null:
 		return super.interact()
 
-	return "%s - Price $%0.2f - Location %s" % [
+	return "%s - Price $%0.2f - Location %s - %s" % [
 		product.describe(),
 		current_price_cents / 100.0,
 		location_id,
+		get_serial_status_text(),
 	]
 
 

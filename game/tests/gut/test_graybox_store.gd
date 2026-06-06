@@ -74,6 +74,17 @@ func test_receiving_box_has_multiple_items() -> void:
 	assert_not_null(receiving_box.get_node_or_null("PlaceholderUsedGame003"))
 
 
+func test_receiving_box_contains_mismatched_serial_item() -> void:
+	var item := _store.get_node("ReceivingBox/PlaceholderUsedGame003")
+
+	assert_eq(item.get("instance_id"), "item_used_star_trader_003")
+	assert_eq(item.get("location_id"), "receiving_box_001")
+	assert_eq(item.get("serial_id"), "GST-1047")
+	assert_eq(item.get("expected_serial_id"), "GST-003")
+	assert_true(item.call("has_serial_mismatch"))
+	assert_eq(item.call("get_suspicious_event_id"), "serial_mismatch_item_used_star_trader_003")
+
+
 func test_display_rack_slot_starts_empty() -> void:
 	var slot := _store.get_node("GameDisplayRack/ShelfSlot001") as ShelfSlot
 	assert_true(slot.is_available())

@@ -63,3 +63,6 @@ location_id = "receiving_box_001"
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.32, 0.2, 0.02)
 instance_id = "item_used_star_trader_003"
 location_id = "receiving_box_001"
+serial_id = "GST-1047"
+expected_serial_id = "GST-003"
+suspicious_event_id = "serial_mismatch_item_used_star_trader_003"

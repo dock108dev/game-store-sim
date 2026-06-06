@@ -56,7 +56,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Hidden Thread Slice
 
 - Add suspicious event flags. Done as a hidden, optional event log service with idempotent event flags and no visible normal-loop interruption.
-- Add mismatched serial item.
+- Add mismatched serial item. Done as one receiving-box used-game copy with serial metadata, mismatch detection, and optional suspicious-event flagging.
 - Add supplier message artifact.
 - Add optional evidence storage.
 - Add one suspicious customer encounter.
