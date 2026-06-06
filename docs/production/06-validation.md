@@ -45,6 +45,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - WASD movement feel.
 - Mouse-look feel.
 - Escape releases mouse capture and mouse click recaptures it.
+- Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
 - Receiving box, display rack, register, and used-game visual placement.
 - Held item stays visible without blocking normal navigation.

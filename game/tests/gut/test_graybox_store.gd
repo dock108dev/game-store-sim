@@ -33,6 +33,23 @@ func test_floor_collision_is_enabled() -> void:
 	assert_true(floor.use_collision)
 
 
+func test_front_door_opening_is_blocked_for_now() -> void:
+	var blocker := _store.get_node_or_null("FrontDoorBlocker") as StaticBody3D
+	assert_not_null(blocker)
+	assert_false(blocker.visible)
+	assert_almost_eq(blocker.global_position.z, -6.0, 0.01)
+
+	var collision_shape := blocker.get_node_or_null("CollisionShape3D") as CollisionShape3D
+	assert_not_null(collision_shape)
+	assert_false(collision_shape.disabled)
+
+	var shape := collision_shape.shape as BoxShape3D
+	assert_not_null(shape)
+	assert_gte(shape.size.x, 3.5)
+	assert_gte(shape.size.y, 2.5)
+	assert_gte(shape.size.z, 0.2)
+
+
 func test_receiving_box_exists() -> void:
 	assert_not_null(_store.get_node_or_null("ReceivingBox"))
 

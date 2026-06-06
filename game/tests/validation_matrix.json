@@ -40,6 +40,13 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_floor_collision_is_enabled"
     },
     {
+      "id": "front_door_boundary",
+      "name": "Front door opening is blocked until exits are implemented",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_front_door_opening_is_blocked_for_now"
+    },
+    {
       "id": "player_collision_shape",
       "name": "Player has a collision shape",
       "status": "automated",

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=12 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -24,6 +24,9 @@ albedo_color = Color(0.18, 0.2, 0.22, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zone"]
 albedo_color = Color(0.18, 0.34, 0.28, 0.18)
 transparency = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_front_door_blocker"]
+size = Vector3(3.7, 2.7, 0.2)
 
 [node name="GrayboxStore" type="Node3D"]
 
@@ -72,6 +75,13 @@ material = SubResource("StandardMaterial3D_door")
 size = Vector3(3.5, 0.03, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -5.45)
 material = SubResource("StandardMaterial3D_door")
+
+[node name="FrontDoorBlocker" type="StaticBody3D" parent="."]
+visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FrontDoorBlocker"]
+shape = SubResource("BoxShape3D_front_door_blocker")
 
 [node name="CounterBase" type="CSGBox3D" parent="."]
 use_collision = true
