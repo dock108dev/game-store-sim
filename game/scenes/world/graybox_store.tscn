@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=11 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="3_game"]
+[ext_resource type="PackedScene" path="res://scenes/props/register_workstation.tscn" id="4_register"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.42, 0.38, 0.32, 1)
@@ -97,6 +98,10 @@ transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -3.8, 0, -
 
 [node name="PlaceholderUsedGame" parent="." instance=ExtResource("3_game")]
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -3.8, 1.1, -0.95)
+location_id = "shelf_slot_001"
+
+[node name="RegisterWorkstation" parent="." instance=ExtResource("4_register")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.2, 1.12, -2.35)
 
 [node name="PlayerController" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4.7)

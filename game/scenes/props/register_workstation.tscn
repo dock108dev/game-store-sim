@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://bgo7ij5st0lqk"]
+
+[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="1_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_register"]
+albedo_color = Color(0.08, 0.09, 0.1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_screen"]
+albedo_color = Color(0.12, 0.36, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_register"]
+material = SubResource("StandardMaterial3D_register")
+size = Vector3(0.75, 0.26, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_screen"]
+material = SubResource("StandardMaterial3D_screen")
+size = Vector3(0.55, 0.3, 0.06)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_register"]
+size = Vector3(0.8, 0.55, 0.55)
+
+[node name="RegisterWorkstation" type="StaticBody3D"]
+script = ExtResource("1_interactable")
+display_name = "Register Workstation"
+inspect_text = "Register placeholder: scan items, total carts, and complete sales will start here."
+
+[node name="BaseMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.13, 0)
+mesh = SubResource("BoxMesh_register")
+
+[node name="ScreenMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.43, -0.12)
+rotation = Vector3(-0.35, 0, 0)
+mesh = SubResource("BoxMesh_screen")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.275, 0)
+shape = SubResource("BoxShape3D_register")

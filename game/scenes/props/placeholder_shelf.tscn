@@ -1,10 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://dxowl2h2n2bti"]
+[gd_scene load_steps=6 format=3 uid="uid://dxowl2h2n2bti"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/shelf_slot.gd" id="1_shelf_slot"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shelf"]
 albedo_color = Color(0.28, 0.28, 0.3, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trim"]
 albedo_color = Color(0.08, 0.08, 0.09, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot"]
+albedo_color = Color(0.18, 0.48, 0.36, 0.45)
+transparency = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_slot"]
+size = Vector3(0.5, 0.18, 0.36)
 
 [node name="PlaceholderShelf" type="Node3D"]
 
@@ -37,3 +46,14 @@ use_collision = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
 size = Vector3(1.9, 0.08, 0.55)
 material = SubResource("StandardMaterial3D_shelf")
+
+[node name="ShelfSlot001" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14, -0.18)
+script = ExtResource("1_shelf_slot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot001"]
+shape = SubResource("BoxShape3D_slot")
+
+[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot001"]
+size = Vector3(0.5, 0.03, 0.36)
+material = SubResource("StandardMaterial3D_slot")

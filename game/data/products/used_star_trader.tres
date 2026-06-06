@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ProductDefinition" load_steps=2 format=3 uid="uid://c7sb5i8ogb4uj"]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "used_star_trader"
+display_name = "Star Trader"
+category = "used_game"
+platform = "Orbit 64"
+condition = "good"
+completeness = "complete"
+format = "cartridge"
+demand_tier = "medium"
+cost_basis_cents = 900
+market_value_cents = 2499
+suggested_price_cents = 2199
