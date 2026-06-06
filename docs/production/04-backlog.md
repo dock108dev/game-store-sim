@@ -42,7 +42,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add valid/invalid placement state. Done as green valid and red invalid translucent ghost states with bounds validation.
 - Add rotate and snap controls. Done as manager-level fixed-step rotation and grid movement.
 - Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
-- Add basic customer path validation.
+- Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.
 
 ## Economy Slice
 

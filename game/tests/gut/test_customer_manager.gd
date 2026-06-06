@@ -144,6 +144,49 @@ func test_customer_manager_validates_customer_paths_inside_store() -> void:
 	assert_true(issues.has("queue_position_0_outside_store"))
 
 
+func test_customer_manager_validates_customer_spawn_inside_store() -> void:
+	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	add_child_autofree(manager)
+	manager.add_child(customer)
+	customer.global_position = Vector3(99.0, 0.0, 0.0)
+
+	var issues: Array[String] = manager.validate_customer_paths()
+
+	assert_true(issues.has("customer_0_position_outside_store"))
+
+
+func test_customer_manager_validates_queue_spacing() -> void:
+	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()
+	var first_customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var second_customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	add_child_autofree(manager)
+	manager.add_child(first_customer)
+	manager.add_child(second_customer)
+	manager.register_queue_spacing = Vector3(0.05, 0.0, 0.0)
+
+	var issues: Array[String] = manager.validate_customer_paths()
+
+	assert_true(issues.has("queue_spacing_1_too_tight"))
+
+
+func test_customer_manager_validates_customer_approach_positions() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(manager)
+	manager.add_child(customer)
+	customer.item_approach_offset = Vector3(99.0, 0.0, 0.0)
+
+	var slot_paths: Array[NodePath] = [manager.get_path_to(rack.get_node("ShelfSlot001"))]
+	manager.display_slot_paths = slot_paths
+
+	var issues: Array[String] = manager.validate_customer_paths()
+
+	assert_true(issues.has("customer_0_approach_outside_store:%s" % str(slot_paths[0])))
+
+
 func _advance_customers(customers: Array[SimpleBuyerCustomer], seconds: float) -> void:
 	var step := 0.1
 	var steps := int(ceil(seconds / step))

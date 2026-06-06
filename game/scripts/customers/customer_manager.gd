@@ -6,6 +6,7 @@ class_name CustomerManager
 @export var register_queue_spacing: Vector3 = Vector3(-0.45, 0.0, 0.18)
 @export var playable_min: Vector3 = Vector3(-6.6, 0.0, -5.6)
 @export var playable_max: Vector3 = Vector3(6.6, 0.0, 5.7)
+@export var minimum_queue_spacing_distance: float = 0.35
 @export var display_slot_paths: Array[NodePath] = []
 
 
@@ -81,10 +82,20 @@ func is_position_inside_store(position: Vector3) -> bool:
 
 func validate_customer_paths() -> Array[String]:
 	var issues: Array[String] = []
-	for index in range(get_customers().size()):
+	var customers := get_customers()
+	for index in range(customers.size()):
+		var customer := customers[index]
+		if not is_position_inside_store(customer.global_position):
+			issues.append("customer_%d_position_outside_store" % index)
+
 		var queue_position := _queue_position_for_index(index)
 		if not is_position_inside_store(queue_position):
 			issues.append("queue_position_%d_outside_store" % index)
+
+		if index > 0:
+			var previous_queue_position := _queue_position_for_index(index - 1)
+			if previous_queue_position.distance_to(queue_position) < minimum_queue_spacing_distance:
+				issues.append("queue_spacing_%d_too_tight" % index)
 
 	for slot_path in display_slot_paths:
 		var slot := get_node_or_null(slot_path) as Node3D
@@ -94,6 +105,14 @@ func validate_customer_paths() -> Array[String]:
 
 		if not is_position_inside_store(slot.global_position):
 			issues.append("display_slot_outside_store:%s" % str(slot_path))
+
+		for index in range(customers.size()):
+			var approach_position := _approach_position_for_customer(customers[index], slot)
+			if not is_position_inside_store(approach_position):
+				issues.append("customer_%d_approach_outside_store:%s" % [
+					index,
+					str(slot_path),
+				])
 
 	return issues
 
@@ -137,6 +156,17 @@ func _compact_register_queue() -> void:
 
 func _queue_position_for_index(index: int) -> Vector3:
 	return register_queue_start + (register_queue_spacing * index)
+
+
+func _approach_position_for_customer(customer: SimpleBuyerCustomer, slot: Node3D) -> Vector3:
+	var approach_offset := Vector3(0.0, 0.0, -0.85)
+	if customer != null:
+		approach_offset = customer.item_approach_offset
+
+	var position := slot.global_position + approach_offset
+	if customer != null:
+		position.y = customer.global_position.y
+	return position
 
 
 func _is_slot_claimed(slot: Node) -> bool:

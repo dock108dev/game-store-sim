@@ -62,6 +62,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Overpricing `Star Trader` above buyer tolerance leaves it on the rack and produces readable customer feedback.
 - Stocking multiple `Star Trader` copies causes multiple buyers to queue without overlapping.
 - Buyers visibly walk from browsing to the rack and then to the register without confusing clipping.
+- Customer spawn, item approach, and queue positions read naturally in the current layout.
 - Register prompt and sale completion message are readable.
 - Trade-in seller and carried item are readable at the register.
 - Trade-in register prompt and completion message are readable.
@@ -92,7 +93,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot category assignment, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
-- `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
+- `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.

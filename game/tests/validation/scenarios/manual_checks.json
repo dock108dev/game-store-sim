@@ -121,6 +121,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_path_layout_readability",
+      "name": "Customer spawn, approach, and queue positions read naturally in the current layout",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about customer path composition beyond bounded automated path checks.",
+      "owner": "manual QA"
+    },
+    {
       "id": "register_sale_message_readability",
       "name": "Register sale completion message is readable in the actual window",
       "status": "manual",

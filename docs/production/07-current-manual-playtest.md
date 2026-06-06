@@ -41,6 +41,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Register prompt and sale messages are readable.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable and does not overlap the register.
+- Buyer spawn, rack approach, and register queue pathing read naturally in the current layout.
 - Overpriced-item refusal feedback is readable and does not look like a register failure.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
 - Trade-in seller placement, carried item, offer panel, counteroffer controls, cash accept, store-credit accept, decline controls, prompt, and completion message read clearly at the register.

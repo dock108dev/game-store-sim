@@ -114,6 +114,7 @@ Technical:
 22. Add first fixture placement validity state. Done as green valid and red invalid translucent ghost states with bounds validation; rotate, snap, and final placement remain later.
 23. Add first fixture rotate and snap controls. Done as manager-level fixed-step rotation and grid movement; player-facing placement confirmation remains later.
 24. Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
+25. Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.
 
 ## Slice Review Questions
 

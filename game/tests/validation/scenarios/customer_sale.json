@@ -85,6 +85,27 @@
       "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_validates_customer_paths_inside_store"
     },
     {
+      "id": "customer_spawn_paths_validate",
+      "name": "Customer manager validates customer spawn positions inside the store",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_validates_customer_spawn_inside_store"
+    },
+    {
+      "id": "customer_queue_spacing_validate",
+      "name": "Customer manager validates readable queue spacing",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_validates_queue_spacing"
+    },
+    {
+      "id": "customer_approach_paths_validate",
+      "name": "Customer manager validates item approach positions inside the store",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_validates_customer_approach_positions"
+    },
+    {
       "id": "main_scene_customer_paths_validate",
       "name": "Main-scene customer manager path targets validate inside the store",
       "status": "automated",
