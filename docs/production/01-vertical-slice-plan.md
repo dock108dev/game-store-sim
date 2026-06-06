@@ -118,6 +118,7 @@ Technical:
 26. Add category demand. Done as a category-level demand policy that combines with product demand tiers for buyer price tolerance and backroom demand readouts.
 27. Add market drift. Done as deterministic day/category/tier market-value drift surfaced through the backroom computer for active inventory.
 28. Add daily report. Done as an explicit closed-day report with cash change, sales/trade-ins, revenue, cost, trade spend/credit, and gross profit.
+29. Add suspicious event flags. Done as a hidden, optional event log service with idempotent event flags and no visible normal-loop interruption.
 
 ## Slice Review Questions
 

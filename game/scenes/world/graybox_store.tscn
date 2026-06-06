@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=22 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/customers/customer_manager.gd" id="9_customer_manager"]
 [ext_resource type="PackedScene" path="res://scenes/customers/simple_trade_in_customer.tscn" id="10_trade_customer"]
 [ext_resource type="Script" path="res://scripts/store_layout/fixture_placement_manager.gd" id="11_fixture_placement_manager"]
+[ext_resource type="Script" path="res://scripts/narrative/suspicious_event_log.gd" id="12_suspicious_event_log"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.42, 0.38, 0.32, 1)
@@ -192,6 +193,9 @@ script = ExtResource("8_store_session")
 ledger_path = NodePath("../TransactionLedger")
 inventory_root_path = NodePath("..")
 fixture_placement_manager_path = NodePath("../FixturePlacementManager")
+
+[node name="SuspiciousEventLog" type="Node" parent="."]
+script = ExtResource("12_suspicious_event_log")
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)

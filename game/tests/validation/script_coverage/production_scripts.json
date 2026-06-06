@@ -43,6 +43,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/narrative/suspicious_event_log.gd",
+      "tests": [
+        "res://tests/gut/test_suspicious_event_log.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/inventory/product_definition.gd",
       "tests": [
         "res://tests/gut/test_product_item.gd"

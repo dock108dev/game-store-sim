@@ -34,6 +34,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 28. Confirm the market drift readout is readable and makes sense for active inventory.
 29. End the day and confirm the summary changes to `Day closed`.
 30. Confirm the closed-day report is readable and matches the played day.
+31. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
 
 ## Visual Checks
 
@@ -61,6 +62,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
 - Green valid placement and red invalid placement are visually distinct in the actual window.
 - Rotated ghost preview is still visually aligned and readable.
+- Suspicious event flag infrastructure remains invisible during normal play.
 
 ## Automated Screenshot Artifacts
 

@@ -137,6 +137,12 @@ func test_store_session_exists() -> void:
 	assert_not_null(_store.get_node_or_null("StoreSession"))
 
 
+func test_suspicious_event_log_exists() -> void:
+	var event_log := _store.get_node_or_null("SuspiciousEventLog")
+	assert_not_null(event_log)
+	assert_eq(event_log.get_event_count(), 0)
+
+
 func test_backroom_computer_exists() -> void:
 	assert_not_null(_store.get_node_or_null("BackroomComputer"))
 

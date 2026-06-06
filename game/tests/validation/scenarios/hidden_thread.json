@@ -1,0 +1,39 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "suspicious_event_log_exists",
+      "name": "Main scene contains the hidden suspicious event log",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_suspicious_event_log_exists"
+    },
+    {
+      "id": "suspicious_event_log_starts_empty",
+      "name": "Suspicious event log starts empty",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicious_event_log.gd::test_suspicious_event_log_starts_empty"
+    },
+    {
+      "id": "suspicious_event_log_records_flags",
+      "name": "Suspicious event log records event flags",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicious_event_log.gd::test_suspicious_event_log_records_event_flags"
+    },
+    {
+      "id": "suspicious_event_log_deduplicates_ids",
+      "name": "Suspicious event log deduplicates event IDs",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicious_event_log.gd::test_suspicious_event_log_deduplicates_event_ids"
+    },
+    {
+      "id": "suspicious_event_log_normalizes_invalid_input",
+      "name": "Suspicious event log normalizes invalid input",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_suspicious_event_log.gd::test_suspicious_event_log_normalizes_invalid_input"
+    }
+  ]
+}

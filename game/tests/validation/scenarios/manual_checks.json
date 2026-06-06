@@ -239,6 +239,14 @@
       "critical": false,
       "reason": "Requires human judgment about whether fixed-step rotation and grid movement feel understandable before final placement UI exists.",
       "owner": "manual QA"
+    },
+    {
+      "id": "hidden_thread_flags_invisible",
+      "name": "Suspicious event flags do not visibly interrupt normal store progression",
+      "status": "manual",
+      "critical": false,
+      "reason": "The hidden-thread event log is intentionally infrastructure-only for now; human playtest should confirm no new visible story UI appeared.",
+      "owner": "manual QA"
     }
   ]
 }
