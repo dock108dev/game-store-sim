@@ -2,6 +2,7 @@ extends Node
 class_name StoreSession
 
 const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd")
+const DailyReportPolicy := preload("res://scripts/economy/daily_report.gd")
 const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
 
 @export var day_number: int = 1
@@ -220,6 +221,10 @@ func get_market_drift_summary_text() -> String:
 			products.append(product)
 
 	return MarketDriftPolicy.format_summary_for_products(products, day_number)
+
+
+func get_daily_report_text() -> String:
+	return DailyReportPolicy.format_report(self)
 
 
 func get_available_fixture_definitions() -> Array[Resource]:

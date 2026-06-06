@@ -28,6 +28,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.title_label.text, "Backroom Computer")
 	assert_string_contains(_panel.summary_label.text, "Cash: $500.00")
 	assert_string_contains(_panel.summary_label.text, "Sales: 0")
+	assert_eq(_panel.report_label.text, "Daily report: day still open")
 	assert_eq(_panel.last_sale_label.text, "Recent activity: none")
 	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00")
 	assert_false(_panel.order_rack_button.disabled)
@@ -148,6 +149,7 @@ func test_day_summary_panel_end_day_updates_status() -> void:
 
 	assert_true(_session.is_day_closed)
 	assert_eq(_panel.status_label.text, "Day closed")
+	assert_string_contains(_panel.report_label.text, "Daily report day 1:")
 	assert_true(_panel.order_rack_button.disabled)
 	assert_true(_panel.end_day_button.disabled)
 

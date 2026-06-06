@@ -70,6 +70,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Trade-in counteroffer `- $1` and `+ $1` controls are readable and update only the accepted cash offer amount.
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
+- Closed-day report is readable and matches the played day.
 - Backroom recent activity shows sale and trade-in entries with readable prices.
 - Backroom category demand text remains readable and does not crowd the management panel.
 - Backroom market drift text remains readable and makes clear how active inventory values are moving.
@@ -98,7 +99,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
-- `scenarios/day_summary.json`: store session cash/accounting totals, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
+- `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
 - `scenarios/store_layout.json`: fixture catalog, fixture ordering, slot-category metadata, cash reservation, pending placement, ghost preview, valid/invalid placement state, rotate/snap controls, insufficient-cash rejection, and persistence coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.

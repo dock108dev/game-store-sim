@@ -33,6 +33,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 27. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
 28. Confirm the market drift readout is readable and makes sense for active inventory.
 29. End the day and confirm the summary changes to `Day closed`.
+30. Confirm the closed-day report is readable and matches the played day.
 
 ## Visual Checks
 
@@ -49,6 +50,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Trade-in seller placement, carried item, offer panel, counteroffer controls, cash accept, store-credit accept, decline controls, prompt, and completion message read clearly at the register.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.
+- Closed-day report text is readable and understandable after ending the day.
 - Recent activity text is readable and distinguishes sales from trade-ins.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
 - Inventory summary text is readable and matches active receiving/rack items.

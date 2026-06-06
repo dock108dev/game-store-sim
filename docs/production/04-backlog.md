@@ -50,7 +50,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add price sensitivity. Done for buyer refusal of overpriced matching used games.
 - Add sales history. Done as recent sale/trade-in activity on the backroom computer.
 - Add market drift. Done as deterministic day/category/tier market-value drift on the backroom computer for active inventory.
-- Add daily report. Started as the backroom computer day summary with recent activity.
+- Add daily report. Done as an explicit closed-day report with cash change, sales/trade-ins, revenue, cost, trade spend/credit, and gross profit.
 - Add reorder suggestions. Done as simple backroom suggestions from sales versus active inventory.
 
 ## Hidden Thread Slice

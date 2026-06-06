@@ -78,6 +78,27 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_can_close_day"
     },
     {
+      "id": "daily_report_open_day_snapshot",
+      "name": "Daily report builds an open-day snapshot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_builds_open_day_snapshot"
+    },
+    {
+      "id": "daily_report_closed_day_totals",
+      "name": "Daily report formats closed-day totals",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_closed_day_totals"
+    },
+    {
+      "id": "store_session_daily_report",
+      "name": "Store session exposes a daily report after close",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_daily_report_after_close"
+    },
+    {
       "id": "backroom_computer_exists",
       "name": "Backroom computer exists in the main scene",
       "status": "automated",

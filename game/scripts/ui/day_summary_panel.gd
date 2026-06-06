@@ -3,6 +3,7 @@ class_name DaySummaryPanel
 
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
 @onready var summary_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SummaryLabel
+@onready var report_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReportLabel
 @onready var last_sale_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LastSaleLabel
 @onready var inventory_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/InventoryLabel
 @onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReorderLabel
@@ -93,6 +94,10 @@ func _update_labels() -> void:
 
 	title_label.text = "Backroom Computer"
 	summary_label.text = _session.get_summary_text()
+	if _session.has_method("get_daily_report_text"):
+		report_label.text = _session.get_daily_report_text()
+	else:
+		report_label.text = "Daily report unavailable"
 	if _session.has_method("get_recent_activity_text"):
 		last_sale_label.text = _session.get_recent_activity_text()
 	else:

@@ -191,6 +191,24 @@ func test_store_session_summarizes_market_drift_for_active_inventory() -> void:
 	assert_string_contains(summary, "+$")
 
 
+func test_store_session_formats_daily_report_after_close() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(item)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var transaction := ledger.record_sale("customer_001", item)
+	session.apply_sale(transaction)
+	session.end_day()
+
+	assert_string_contains(session.get_daily_report_text(), "Daily report day 1:")
+	assert_string_contains(session.get_daily_report_text(), "Closing cash $521.99")
+	assert_string_contains(session.get_daily_report_text(), "Gross profit $12.99")
+
+
 func test_store_session_summarizes_active_inventory_items() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	var root := Node3D.new()
