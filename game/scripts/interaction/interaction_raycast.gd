@@ -38,7 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif _current_interactable.has_method("interact"):
 		result = str(_current_interactable.interact())
 
-	if _prompt != null and _prompt.has_method("show_message"):
+	if not result.is_empty() and _prompt != null and _prompt.has_method("show_message"):
 		_prompt.show_message(result)
 
 

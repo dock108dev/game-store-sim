@@ -5,6 +5,7 @@ extends CharacterBody3D
 
 @onready var head: Node3D = $Head
 @onready var hold_anchor: Node3D = $Head/Camera3D/HoldAnchor
+@onready var pricing_panel: PricingPanel = $PricingPanel
 
 var _look_pitch: float = 0.0
 var _held_item: Node3D = null
@@ -15,6 +16,11 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_pricing_open():
+		if event.is_action_pressed("ui_cancel"):
+			pricing_panel.cancel_price()
+		return
+
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		return
@@ -29,6 +35,15 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if is_pricing_open():
+		if not is_on_floor():
+			velocity += get_gravity() * delta
+
+		velocity.x = 0.0
+		velocity.z = 0.0
+		move_and_slide()
+		return
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -92,3 +107,20 @@ func place_held_item(slot: Node) -> bool:
 		return true
 
 	return false
+
+
+func is_pricing_open() -> bool:
+	return pricing_panel != null and pricing_panel.is_open()
+
+
+func open_pricing_for_held_item() -> String:
+	if _held_item == null:
+		return "Hold an item to price it."
+
+	if pricing_panel == null:
+		return "Pricing panel unavailable."
+
+	if pricing_panel.open_for_item(_held_item):
+		return ""
+
+	return "This item cannot be priced."
