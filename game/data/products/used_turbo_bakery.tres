@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ProductDefinition" load_steps=2 format=3 uid="uid://cataturbobakery"]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "used_turbo_bakery"
+display_name = "Turbo Bakery"
+category = "used_game"
+platform = "Orbit 64"
+condition = "excellent"
+completeness = "complete"
+format = "cartridge"
+demand_tier = "high"
+cost_basis_cents = 1600
+market_value_cents = 3999
+suggested_price_cents = 3599
+player_priceable = true

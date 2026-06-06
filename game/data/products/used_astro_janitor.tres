@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ProductDefinition" load_steps=2 format=3 uid="uid://cataastrojanitor"]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "used_astro_janitor"
+display_name = "Astro Janitor"
+category = "used_game"
+platform = "Nova Cube"
+condition = "excellent"
+completeness = "complete"
+format = "disc"
+demand_tier = "medium"
+cost_basis_cents = 1100
+market_value_cents = 2799
+suggested_price_cents = 2499
+player_priceable = true

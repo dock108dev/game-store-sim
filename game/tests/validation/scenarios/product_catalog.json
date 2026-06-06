@@ -1,0 +1,25 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "product_catalog_has_twelve_used_games",
+      "name": "Product catalog contains twelve fictional used games",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_catalog.gd::test_product_catalog_contains_twelve_fictional_used_games"
+    },
+    {
+      "id": "product_catalog_unique_ids",
+      "name": "Product catalog product IDs are unique",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_catalog.gd::test_product_catalog_has_unique_ids"
+    },
+    {
+      "id": "product_catalog_variety",
+      "name": "Product catalog covers platform, condition, and demand variety",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_catalog.gd::test_product_catalog_covers_platform_condition_and_demand_variety"
+    }
+  ]
+}

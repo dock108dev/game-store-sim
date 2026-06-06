@@ -6,6 +6,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Keep validation coverage current as the sale loop changes.
+- Use the 12-item fictional product catalog when expanding inventory sources.
 
 ## First Playable Counter Loop
 
@@ -67,5 +68,5 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Keep named validation screenshots current for main scene, receiving area, register counter, customer queue, and backroom summary.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
-- Extend product data validation inside the local gate as product resources become more complex.
+- Extend product data validation inside the local gate as product resources become more complex. Started with catalog count, uniqueness, variety, pricing sanity, and fictional-name checks.
 - Add save/load smoke tests to the local gate after persistence exists.

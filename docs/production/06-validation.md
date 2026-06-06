@@ -23,6 +23,7 @@ The gate currently runs:
 - GUT tests under `game/tests/gut/`, with JUnit XML exported to `artifacts/validation/latest/gut-results.xml`.
 - UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
+- Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
 - Named validation screenshot capture at `1280x720` for main scene, receiving area, register counter, customer queue, and backroom summary.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
@@ -78,6 +79,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
+- `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, register checkout, and transaction ledger checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, register acceptance, receiving inventory, and cash accounting checks.
 - `scenarios/day_summary.json`: store session cash accounting, backroom computer, and day summary panel checks.

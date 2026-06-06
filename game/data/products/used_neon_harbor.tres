@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ProductDefinition" load_steps=2 format=3 uid="uid://cataneonharbor"]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "used_neon_harbor"
+display_name = "Neon Harbor"
+category = "used_game"
+platform = "Pocket Star"
+condition = "good"
+completeness = "complete"
+format = "cartridge"
+demand_tier = "high"
+cost_basis_cents = 1250
+market_value_cents = 3299
+suggested_price_cents = 2999
+player_priceable = true

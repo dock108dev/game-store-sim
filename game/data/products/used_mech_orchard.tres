@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ProductDefinition" load_steps=2 format=3 uid="uid://catamechorchard"]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "used_mech_orchard"
+display_name = "Mech Orchard"
+category = "used_game"
+platform = "Nova Cube"
+condition = "excellent"
+completeness = "complete"
+format = "disc"
+demand_tier = "high"
+cost_basis_cents = 1800
+market_value_cents = 4499
+suggested_price_cents = 3999
+player_priceable = true

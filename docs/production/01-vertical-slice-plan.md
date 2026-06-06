@@ -19,11 +19,11 @@ Store:
 
 Products:
 
-- 12 fictional used games.
-- 3 platforms.
-- 4 conditions.
-- 3 demand tiers.
-- No real names or real brands.
+- 12 fictional used games. Done in the data catalog.
+- 3 platforms. Done.
+- 4 conditions. Done.
+- 3 demand tiers. Done.
+- No real names or real brands. Enforced by catalog tests.
 
 Customers:
 
@@ -106,6 +106,7 @@ Technical:
 14. Add customer movement/path validation. Done with deterministic buyer movement to stocked items, queue movement, and in-store target checks.
 15. Add optional apply-to-matching used-item pricing. Done in the direct pricing panel for active matching copies.
 16. Add first trade-in seller. Done as a single register-accepted cash trade-in that moves the acquired item into receiving inventory.
+17. Add first product catalog. Done with 12 fictional used games, three platforms, four conditions, three demand tiers, and automated catalog validation.
 
 ## Slice Review Questions
 
