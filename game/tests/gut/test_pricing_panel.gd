@@ -38,6 +38,14 @@ func test_pricing_panel_rejects_non_product_item() -> void:
 	assert_false(_panel.is_open())
 
 
+func test_pricing_panel_rejects_fixed_price_product() -> void:
+	var fixed_price_item := _make_fixed_price_item()
+	add_child_autofree(fixed_price_item)
+
+	assert_false(_panel.open_for_item(fixed_price_item))
+	assert_false(_panel.is_open())
+
+
 func test_pricing_panel_increments_and_decrements_draft_price() -> void:
 	_panel.open_for_item(_item)
 
@@ -84,3 +92,21 @@ func test_pricing_panel_cancel_keeps_original_item_price() -> void:
 	assert_true(_panel.cancel_price())
 	assert_eq(_item.get("current_price_cents"), 2199)
 	assert_false(_panel.is_open())
+
+
+func _make_fixed_price_item() -> Node:
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var product := ProductDefinition.new()
+	product.product_id = "new_orbit_racer"
+	product.display_name = "New Orbit Racer"
+	product.category = "new_game"
+	product.platform = "Orbit 64"
+	product.condition = "new"
+	product.completeness = "sealed"
+	product.cost_basis_cents = 3200
+	product.market_value_cents = 5999
+	product.suggested_price_cents = 5999
+	product.player_priceable = false
+	item.set("product", product)
+	item.set("current_price_cents", 5999)
+	return item

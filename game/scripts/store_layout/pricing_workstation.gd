@@ -11,6 +11,9 @@ func get_interaction_prompt_for_actor(actor: Node) -> String:
 	if item == null:
 		return "Hold Item To Price"
 
+	if not _is_item_player_priceable(item):
+		return "Fixed Price Item"
+
 	return "E Price %s" % _get_item_display_name(item)
 
 
@@ -22,6 +25,9 @@ func interact_with_actor(actor: Node) -> String:
 	var item := _get_actor_held_item(actor)
 	if item == null:
 		return interact()
+
+	if not _is_item_player_priceable(item):
+		return "%s has a fixed price." % _get_item_display_name(item)
 
 	if actor != null and actor.has_method("open_pricing_for_held_item"):
 		return str(actor.open_pricing_for_held_item())
@@ -42,6 +48,11 @@ func _get_actor_held_item(actor: Node) -> Node:
 		return null
 
 	return item
+
+
+func _is_item_player_priceable(item: Node) -> bool:
+	var product := item.get("product") as ProductDefinition
+	return product != null and product.player_priceable
 
 
 func _get_item_display_name(item: Node) -> String:

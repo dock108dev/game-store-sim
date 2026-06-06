@@ -5,6 +5,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Now
 
 - Add held-item pricing workstation and pricing panel.
+- Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Keep validation coverage current as the pricing loop changes.
 
 ## First Playable Counter Loop
@@ -61,6 +62,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep `game/tests/validation_matrix.json` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, prompt readability, mouse capture, and rack/register/receiving-box/pricing-workstation composition after every interaction-loop change.
+- Keep pricing workstation visuals distinct from the register so the register slice remains readable.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex.
 - Add save/load smoke tests to the local gate after persistence exists.

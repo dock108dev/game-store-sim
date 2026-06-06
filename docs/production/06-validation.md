@@ -50,6 +50,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Held item stays visible without blocking normal navigation.
 - Stocked game is visibly upright and intentional in the rack.
 - Pricing panel text and controls are readable in the actual window.
+- Pricing workstation reads as a pricing/label station, not a second register.
 - Pricing panel closes back into first-person mouse capture cleanly.
 - Screenshot composition is useful, not merely nonblank.
 

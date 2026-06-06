@@ -12,6 +12,7 @@ class_name ProductDefinition
 @export var cost_basis_cents: int = 0
 @export var market_value_cents: int = 0
 @export var suggested_price_cents: int = 0
+@export var player_priceable: bool = false
 
 
 func describe() -> String:

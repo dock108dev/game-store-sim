@@ -15,6 +15,7 @@ func test_used_game_item_has_product_data() -> void:
 	assert_eq(_item.product.platform, "Orbit 64")
 	assert_eq(_item.product.condition, "good")
 	assert_eq(_item.product.market_value_cents, 2499)
+	assert_true(_item.product.player_priceable)
 
 
 func test_used_game_item_initializes_price() -> void:

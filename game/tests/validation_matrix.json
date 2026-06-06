@@ -216,7 +216,7 @@
     },
     {
       "id": "slot_places_used_game",
-      "name": "Display slot places a held used game and records occupancy",
+      "name": "Display slot places a held used game, records occupancy, and scales it for display",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_places_used_game"
@@ -299,6 +299,20 @@
       "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_prompts_for_item_when_empty_handed"
     },
     {
+      "id": "pricing_workstation_fixed_price_reject",
+      "name": "Pricing workstation rejects fixed-price held items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_rejects_fixed_price_item"
+    },
+    {
+      "id": "pricing_workstation_distinct_shape",
+      "name": "Pricing workstation shape is distinct from the register silhouette",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_is_not_register_silhouette"
+    },
+    {
       "id": "pricing_panel_exists",
       "name": "Player has a hidden pricing panel",
       "status": "automated",
@@ -311,6 +325,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_opens_with_product_fields"
+    },
+    {
+      "id": "pricing_panel_fixed_price_reject",
+      "name": "Pricing panel rejects fixed-price products",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_rejects_fixed_price_product"
     },
     {
       "id": "pricing_panel_increment_decrement",

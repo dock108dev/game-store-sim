@@ -26,6 +26,19 @@ func test_pricing_workstation_prompt_prices_held_item() -> void:
 	assert_eq(_workstation.get_interaction_prompt_for_actor(actor), "E Price Star Trader")
 
 
+func test_pricing_workstation_rejects_fixed_price_item() -> void:
+	var fixed_price_item := _make_fixed_price_item()
+	add_child_autofree(fixed_price_item)
+
+	var actor := _PricingActor.new()
+	actor.held_item = fixed_price_item
+	add_child_autofree(actor)
+
+	assert_eq(_workstation.get_interaction_prompt_for_actor(actor), "Fixed Price Item")
+	assert_string_contains(_workstation.interact_with_actor(actor), "fixed price")
+	assert_eq(actor.open_count, 0)
+
+
 func test_pricing_workstation_prompts_for_item_when_empty_handed() -> void:
 	var actor := _PricingActor.new()
 	add_child_autofree(actor)
@@ -45,16 +58,46 @@ func test_pricing_workstation_opens_actor_pricing_flow() -> void:
 
 func test_pricing_workstation_screen_has_visible_support() -> void:
 	var base_mesh := _workstation.get_node("BaseMesh") as MeshInstance3D
-	var post_mesh := _workstation.get_node("ScreenPostMesh") as MeshInstance3D
-	var screen_mesh := _workstation.get_node("ScreenMesh") as MeshInstance3D
+	var printer_mesh := _workstation.get_node("LabelPrinterMesh") as MeshInstance3D
+	var touch_pad_mesh := _workstation.get_node("TouchPadMesh") as MeshInstance3D
+	var label_mesh := _workstation.get_node("PriceLabelMesh") as MeshInstance3D
 
 	var base_top: float = base_mesh.position.y + (base_mesh.mesh.size.y / 2.0)
-	var post_bottom: float = post_mesh.position.y - (post_mesh.mesh.size.y / 2.0)
-	var post_top: float = post_mesh.position.y + (post_mesh.mesh.size.y / 2.0)
-	var screen_bottom: float = screen_mesh.position.y - (screen_mesh.mesh.size.y / 2.0)
+	var printer_bottom: float = printer_mesh.position.y - (printer_mesh.mesh.size.y / 2.0)
+	var touch_pad_bottom: float = touch_pad_mesh.position.y - (touch_pad_mesh.mesh.size.y / 2.0)
+	var label_bottom: float = label_mesh.position.y - (label_mesh.mesh.size.y / 2.0)
 
-	assert_almost_eq(post_bottom, base_top, 0.02)
-	assert_gte(post_top, screen_bottom - 0.03)
+	assert_almost_eq(printer_bottom, base_top, 0.08)
+	assert_gte(touch_pad_bottom, base_top - 0.03)
+	assert_gte(label_bottom, base_top - 0.03)
+
+
+func test_pricing_workstation_is_not_register_silhouette() -> void:
+	var base_mesh := _workstation.get_node("BaseMesh") as MeshInstance3D
+	var touch_pad_mesh := _workstation.get_node("TouchPadMesh") as MeshInstance3D
+
+	assert_gt(base_mesh.mesh.size.x, base_mesh.mesh.size.z)
+	assert_lt(touch_pad_mesh.position.y, 0.25)
+	assert_true(_workstation.get_node_or_null("ScreenPostMesh") == null)
+	assert_true(_workstation.get_node_or_null("ScreenMesh") == null)
+
+
+func _make_fixed_price_item() -> Node3D:
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var product := ProductDefinition.new()
+	product.product_id = "new_orbit_racer"
+	product.display_name = "New Orbit Racer"
+	product.category = "new_game"
+	product.platform = "Orbit 64"
+	product.condition = "new"
+	product.completeness = "sealed"
+	product.cost_basis_cents = 3200
+	product.market_value_cents = 5999
+	product.suggested_price_cents = 5999
+	product.player_priceable = false
+	item.set("product", product)
+	item.set("current_price_cents", 5999)
+	return item
 
 
 class _PricingActor:

@@ -97,7 +97,9 @@ func test_player_places_held_item_in_display_slot() -> void:
 	assert_eq(slot.get_occupied_item(), item)
 	assert_eq(item.get("location_id"), "shelf_slot_001")
 	assert_eq(item.rotation, Vector3.ZERO)
-	assert_eq(item.scale, Vector3.ONE)
+	assert_almost_eq(item.scale.x, 0.78, 0.001)
+	assert_almost_eq(item.scale.y, 0.78, 0.001)
+	assert_almost_eq(item.scale.z, 0.78, 0.001)
 	assert_false(collision_shape.disabled)
 
 

@@ -107,7 +107,7 @@ func _can_price_item(item: Node) -> bool:
 		return false
 
 	var product := item.get("product") as ProductDefinition
-	return product != null
+	return product != null and product.player_priceable
 
 
 func _update_labels() -> void:
