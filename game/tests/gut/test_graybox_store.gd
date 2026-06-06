@@ -187,6 +187,18 @@ func test_fixture_order_shows_placement_ghost() -> void:
 	assert_true(manager.is_ghost_visible())
 	assert_eq(manager.get_current_order_id(), order.get("order_id"))
 	assert_eq(manager.get_current_fixture_id(), "fixture_game_display_rack")
+	assert_eq(manager.get_placement_state(), "valid")
+
+
+func test_fixture_placement_ghost_marks_invalid_out_of_bounds_position() -> void:
+	var session := _store.get_node("StoreSession")
+	var manager := _store.get_node("FixturePlacementManager")
+	session.order_fixture("fixture_game_display_rack")
+
+	assert_false(manager.set_ghost_position(Vector3(99.0, 0.04, 2.15)))
+
+	assert_eq(manager.get_placement_state(), "invalid")
+	assert_false(manager.is_current_position_valid())
 
 
 func test_backroom_computer_is_wired_to_store_session() -> void:

@@ -14,6 +14,7 @@ SCREENSHOT_SCENARIOS=(
   trade_in_offer
   backroom_summary
   fixture_ghost
+  fixture_invalid_ghost
 )
 
 cd "$REPO_ROOT"

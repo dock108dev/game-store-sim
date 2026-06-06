@@ -50,6 +50,27 @@
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_shows_ghost_for_order"
     },
     {
+      "id": "fixture_placement_manager_valid_default",
+      "name": "Fixture placement manager marks the default ghost position valid",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_shows_ghost_for_order"
+    },
+    {
+      "id": "fixture_placement_manager_invalid_out_of_bounds",
+      "name": "Fixture placement manager marks out-of-bounds ghost positions invalid",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_marks_out_of_bounds_ghost_invalid"
+    },
+    {
+      "id": "fixture_placement_manager_material_state",
+      "name": "Fixture placement manager applies valid and invalid ghost materials",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_applies_valid_and_invalid_materials"
+    },
+    {
       "id": "main_scene_fixture_placement_manager",
       "name": "Main scene includes a hidden fixture placement ghost manager",
       "status": "automated",
@@ -62,6 +83,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_order_shows_placement_ghost"
+    },
+    {
+      "id": "main_scene_fixture_order_valid_ghost",
+      "name": "Ordering a fixture in the main scene marks the placement ghost valid",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_order_shows_placement_ghost"
+    },
+    {
+      "id": "main_scene_fixture_invalid_ghost",
+      "name": "Main scene fixture ghost can show an invalid placement state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_placement_ghost_marks_invalid_out_of_bounds_position"
     },
     {
       "id": "fixture_orders_persist_in_save_codec",

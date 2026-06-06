@@ -183,6 +183,14 @@
       "critical": false,
       "reason": "Requires human visual confirmation from normal player angles.",
       "owner": "manual QA"
+    },
+    {
+      "id": "fixture_ghost_valid_invalid_readability",
+      "name": "Fixture ghost valid and invalid states are visually readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether translucent green and red placement previews are clear in the actual window.",
+      "owner": "manual QA"
     }
   ]
 }
