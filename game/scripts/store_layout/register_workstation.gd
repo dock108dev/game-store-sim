@@ -82,6 +82,18 @@ func _complete_waiting_trade_in() -> String:
 
 
 func accept_trade_in(customer: SimpleTradeInCustomer, offer_cents: int = -1) -> String:
+	return _accept_trade_in_with_tender(customer, offer_cents, "cash")
+
+
+func accept_trade_in_store_credit(customer: SimpleTradeInCustomer, credit_cents: int = -1) -> String:
+	return _accept_trade_in_with_tender(customer, credit_cents, "store_credit")
+
+
+func _accept_trade_in_with_tender(
+	customer: SimpleTradeInCustomer,
+	offer_cents: int,
+	tender_type: String
+) -> String:
 	if customer == null or not customer.is_waiting_for_trade_in():
 		return "No trade-in waiting at the register."
 
@@ -93,10 +105,18 @@ func accept_trade_in(customer: SimpleTradeInCustomer, offer_cents: int = -1) -> 
 
 	var final_offer_cents := offer_cents
 	if final_offer_cents < 0:
-		final_offer_cents = customer.get_offer_cents()
+		if tender_type == "store_credit":
+			final_offer_cents = customer.get_store_credit_offer_cents()
+		else:
+			final_offer_cents = customer.get_offer_cents()
 	final_offer_cents = maxi(1, final_offer_cents)
 
-	var transaction := ledger.record_trade_in(str(customer.get("customer_id")), item, final_offer_cents)
+	var transaction := ledger.record_trade_in(
+		str(customer.get("customer_id")),
+		item,
+		final_offer_cents,
+		tender_type
+	)
 	if transaction.is_empty():
 		return "Register could not record the trade-in."
 
@@ -109,10 +129,14 @@ func accept_trade_in(customer: SimpleTradeInCustomer, offer_cents: int = -1) -> 
 	if store_session != null:
 		store_session.apply_trade_in(transaction)
 
-	return "Bought %s trade-in for $%0.2f." % [
-		str(transaction.get("display_name", "item")),
-		final_offer_cents / 100.0,
-	]
+	var display_name := str(transaction.get("display_name", "item"))
+	if tender_type == "store_credit":
+		return "Bought %s trade-in for $%0.2f store credit." % [
+			display_name,
+			final_offer_cents / 100.0,
+		]
+
+	return "Bought %s trade-in for $%0.2f cash." % [display_name, final_offer_cents / 100.0]
 
 
 func decline_trade_in(customer: SimpleTradeInCustomer) -> String:

@@ -57,8 +57,28 @@ func test_day_summary_panel_includes_recent_trade_in_activity() -> void:
 	assert_true(_panel.open_for_session(_session))
 
 	assert_string_contains(_panel.summary_label.text, "Trade-ins: 1")
-	assert_string_contains(_panel.summary_label.text, "Trade spend: $7.60")
+	assert_string_contains(_panel.summary_label.text, "Trade cash: $7.60")
+	assert_string_contains(_panel.summary_label.text, "Store credit: $0.00")
 	assert_string_contains(_panel.last_sale_label.text, "Trade-in Moon Escape offer $7.60")
+
+
+func test_day_summary_panel_includes_store_credit_trade_in_activity() -> void:
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(customer)
+	var transaction := _ledger.record_trade_in(
+		"trade_seller_001",
+		customer.get_trade_item(),
+		950,
+		"store_credit"
+	)
+	_session.apply_trade_in(transaction)
+
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.summary_label.text, "Trade-ins: 1")
+	assert_string_contains(_panel.summary_label.text, "Trade cash: $0.00")
+	assert_string_contains(_panel.summary_label.text, "Store credit: $9.50")
+	assert_string_contains(_panel.last_sale_label.text, "Trade-in Moon Escape credit $9.50")
 
 
 func test_day_summary_panel_includes_inventory_summary() -> void:

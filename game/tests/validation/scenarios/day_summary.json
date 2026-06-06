@@ -64,6 +64,13 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_recent_activity_history"
     },
     {
+      "id": "store_session_store_credit_activity_history",
+      "name": "Store session formats store-credit trade-in activity history",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_store_credit_recent_activity"
+    },
+    {
       "id": "store_session_end_day",
       "name": "Store session can close the current day",
       "status": "automated",
@@ -118,6 +125,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_recent_trade_in_activity"
+    },
+    {
+      "id": "day_summary_panel_store_credit_trade_in_activity",
+      "name": "Day summary panel includes store-credit trade-in activity",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_store_credit_trade_in_activity"
     },
     {
       "id": "day_summary_panel_inventory_summary",

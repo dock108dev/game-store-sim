@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(480, 420)
+custom_minimum_size = Vector2(560, 420)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
@@ -67,9 +67,14 @@ theme_override_constants/separation = 12
 alignment = 1
 
 [node name="AcceptButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(100, 44)
+custom_minimum_size = Vector2(118, 44)
 layout_mode = 2
-text = "Accept"
+text = "Accept Cash"
+
+[node name="StoreCreditButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(118, 44)
+layout_mode = 2
+text = "Store Credit"
 
 [node name="DeclineButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
 custom_minimum_size = Vector2(100, 44)

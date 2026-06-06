@@ -20,7 +20,10 @@ func apply_sale(transaction: Dictionary) -> void:
 
 
 func apply_trade_in(transaction: Dictionary) -> void:
-	cash_cents -= int(transaction.get("trade_in_cost_cents", 0))
+	cash_cents -= int(transaction.get(
+		"trade_in_cash_cents",
+		transaction.get("trade_in_cost_cents", 0)
+	))
 
 
 func end_day() -> void:
@@ -80,6 +83,14 @@ func get_total_trade_in_cost_cents() -> int:
 		return 0
 
 	return ledger.get_total_trade_in_cost_cents()
+
+
+func get_total_trade_in_credit_cents() -> int:
+	var ledger := _get_ledger()
+	if ledger == null:
+		return 0
+
+	return ledger.get_total_trade_in_credit_cents()
 
 
 func get_transactions() -> Array[Dictionary]:
@@ -196,7 +207,7 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nRevenue: %s\nCost: %s\nTrade spend: %s\nProfit: %s\n%s" % [
+	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nRevenue: %s\nCost: %s\nTrade cash: %s\nStore credit: %s\nProfit: %s\n%s" % [
 		day_number,
 		format_money(get_cash_cents()),
 		get_sale_count(),
@@ -204,6 +215,7 @@ func get_summary_text() -> String:
 		format_money(get_total_revenue_cents()),
 		format_money(get_total_cost_cents()),
 		format_money(get_total_trade_in_cost_cents()),
+		format_money(get_total_trade_in_credit_cents()),
 		format_money(get_total_profit_cents()),
 		get_status_label(),
 	]
@@ -217,9 +229,19 @@ func _format_transaction_line(transaction: Dictionary) -> String:
 	var display_name := str(transaction.get("display_name", "item"))
 	match str(transaction.get("type", "sale")):
 		"trade_in":
+			var tender_type := str(transaction.get("tender_type", "cash"))
+			if tender_type == "store_credit":
+				return "Trade-in %s credit %s" % [
+					display_name,
+					format_money(int(transaction.get("trade_in_credit_cents", 0))),
+				]
+
 			return "Trade-in %s offer %s" % [
 				display_name,
-				format_money(int(transaction.get("trade_in_cost_cents", 0))),
+				format_money(int(transaction.get(
+					"trade_in_cash_cents",
+					transaction.get("trade_in_cost_cents", 0)
+				))),
 			]
 		_:
 			return "Sale %s %s profit %s" % [

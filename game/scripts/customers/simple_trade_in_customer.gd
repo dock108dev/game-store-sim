@@ -8,6 +8,7 @@ const STATE_TRADE_DECLINED := "trade_declined"
 @export var customer_id: String = "trade_seller_001"
 @export var carried_item_path: NodePath = NodePath("TradeInItem")
 @export var offer_rate: float = 0.4
+@export var store_credit_offer_rate: float = 0.5
 @export var receiving_item_position: Vector3 = Vector3(0.0, 0.2, 0.14)
 
 var state: String = STATE_WAITING_FOR_TRADE
@@ -62,6 +63,10 @@ func get_offer_cents() -> int:
 	return maxi(1, int(round(get_market_value_cents() * offer_rate)))
 
 
+func get_store_credit_offer_cents() -> int:
+	return maxi(1, int(round(get_market_value_cents() * store_credit_offer_rate)))
+
+
 func get_market_value_cents() -> int:
 	var item := get_trade_item()
 	if item == null:
@@ -87,13 +92,14 @@ func get_trade_in_summary() -> String:
 	if product == null:
 		return "Seller has an unknown item."
 
-	return "%s - %s - %s - Demand %s - Market $%0.2f - Offer $%0.2f" % [
+	return "%s - %s - %s - Demand %s - Market $%0.2f - Cash $%0.2f - Credit $%0.2f" % [
 		product.display_name,
 		product.platform,
 		product.condition.capitalize(),
 		product.demand_tier.capitalize(),
 		product.market_value_cents / 100.0,
 		get_offer_cents() / 100.0,
+		get_store_credit_offer_cents() / 100.0,
 	]
 
 

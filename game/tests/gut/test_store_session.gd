@@ -68,9 +68,32 @@ func test_store_session_reads_trade_in_totals_without_counting_sales() -> void:
 	assert_eq(session.get_trade_in_count(), 1)
 	assert_eq(session.get_total_revenue_cents(), 0)
 	assert_eq(session.get_total_trade_in_cost_cents(), 760)
+	assert_eq(session.get_total_trade_in_credit_cents(), 0)
 	assert_eq(session.get_cash_cents(), 49240)
 	assert_string_contains(session.get_summary_text(), "Trade-ins: 1")
-	assert_string_contains(session.get_summary_text(), "Trade spend: $7.60")
+	assert_string_contains(session.get_summary_text(), "Trade cash: $7.60")
+	assert_string_contains(session.get_summary_text(), "Store credit: $0.00")
+
+
+func test_store_session_tracks_store_credit_trade_in_without_spending_cash() -> void:
+	var ledger := TransactionLedger.new()
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var item: Node = customer.get_trade_item()
+	var transaction := ledger.record_trade_in("trade_seller_001", item, 950, "store_credit")
+	session.apply_trade_in(transaction)
+
+	assert_eq(session.get_trade_in_count(), 1)
+	assert_eq(session.get_total_trade_in_cost_cents(), 0)
+	assert_eq(session.get_total_trade_in_credit_cents(), 950)
+	assert_eq(session.get_cash_cents(), 50000)
+	assert_string_contains(session.get_summary_text(), "Trade cash: $0.00")
+	assert_string_contains(session.get_summary_text(), "Store credit: $9.50")
 
 
 func test_store_session_formats_recent_activity_history() -> void:
@@ -94,6 +117,27 @@ func test_store_session_formats_recent_activity_history() -> void:
 	assert_string_contains(activity, "Sale Star Trader $21.99 profit $12.99")
 	assert_string_contains(activity, "Trade-in Moon Escape offer $7.60")
 	assert_lt(activity.find("Trade-in Moon Escape"), activity.find("Sale Star Trader"))
+
+
+func test_store_session_formats_store_credit_recent_activity() -> void:
+	var ledger := TransactionLedger.new()
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	var trade_customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(trade_customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var trade_transaction := ledger.record_trade_in(
+		"trade_seller_001",
+		trade_customer.get_trade_item(),
+		950,
+		"store_credit"
+	)
+	session.apply_trade_in(trade_transaction)
+
+	var activity: String = session.get_recent_activity_text()
+	assert_string_contains(activity, "Trade-in Moon Escape credit $9.50")
 
 
 func test_store_session_suggests_reorder_for_low_active_stock_after_sales() -> void:

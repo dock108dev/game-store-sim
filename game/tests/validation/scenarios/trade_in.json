@@ -71,11 +71,25 @@
       "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_accepts_adjusted_counter_offer"
     },
     {
+      "id": "trade_in_offer_panel_accepts_store_credit",
+      "name": "Trade-in offer panel accepts a store-credit offer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_accepts_store_credit"
+    },
+    {
       "id": "register_accepts_adjusted_trade_in_offer",
       "name": "Register records adjusted trade-in offers in cash accounting",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_trade_in_customer.gd::test_register_accepts_adjusted_trade_in_offer"
+    },
+    {
+      "id": "register_accepts_store_credit_trade_in",
+      "name": "Register accepts store-credit trade-ins without reducing cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_customer.gd::test_register_accepts_store_credit_trade_in_without_reducing_cash"
     },
     {
       "id": "trade_in_offer_panel_declines",
@@ -90,6 +104,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_reads_trade_in_totals_without_counting_sales"
+    },
+    {
+      "id": "trade_in_store_credit_accounting",
+      "name": "Store-credit trade-in records credit value without spending cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_store_credit_trade_in_without_spending_cash"
     }
   ]
 }

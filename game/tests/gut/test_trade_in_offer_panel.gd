@@ -38,11 +38,12 @@ func test_trade_in_offer_panel_opens_with_condition_market_and_offer() -> void:
 	assert_string_contains(_panel.details_label.text, "Condition: Fair")
 	assert_string_contains(_panel.details_label.text, "Demand: Low")
 	assert_string_contains(_panel.details_label.text, "Market: $18.99")
-	assert_eq(_panel.offer_label.text, "Cash offer: $7.60")
+	assert_eq(_panel.offer_label.text, "Cash offer: $7.60  |  Store credit: $9.50")
 	assert_eq(_panel.get_draft_offer_cents(), 760)
 	assert_false(_panel.decrease_offer_button.disabled)
 	assert_false(_panel.increase_offer_button.disabled)
 	assert_false(_panel.accept_button.disabled)
+	assert_false(_panel.store_credit_button.disabled)
 	assert_false(_panel.decline_button.disabled)
 
 
@@ -52,13 +53,13 @@ func test_trade_in_offer_panel_adjusts_counter_offer() -> void:
 	assert_true(_panel.increase_offer())
 
 	assert_eq(_panel.get_draft_offer_cents(), 860)
-	assert_eq(_panel.offer_label.text, "Cash offer: $8.60")
+	assert_eq(_panel.offer_label.text, "Cash offer: $8.60  |  Store credit: $9.50")
 	assert_string_contains(_panel.status_label.text, "Counter offer: $8.60")
 
 	assert_true(_panel.decrease_offer())
 
 	assert_eq(_panel.get_draft_offer_cents(), 760)
-	assert_eq(_panel.offer_label.text, "Cash offer: $7.60")
+	assert_eq(_panel.offer_label.text, "Cash offer: $7.60  |  Store credit: $9.50")
 
 
 func test_trade_in_offer_panel_accepts_offer() -> void:
@@ -68,6 +69,7 @@ func test_trade_in_offer_panel_accepts_offer() -> void:
 
 	assert_string_contains(_panel.status_label.text, "Bought Moon Escape")
 	assert_true(_panel.accept_button.disabled)
+	assert_true(_panel.store_credit_button.disabled)
 	assert_true(_panel.decline_button.disabled)
 	assert_eq(_ledger.get_trade_in_count(), 1)
 	assert_eq(_session.get_cash_cents(), 49240)
@@ -89,6 +91,23 @@ func test_trade_in_offer_panel_accepts_adjusted_counter_offer() -> void:
 	assert_true(_panel.increase_offer_button.disabled)
 
 
+func test_trade_in_offer_panel_accepts_store_credit() -> void:
+	_panel.open_for_trade_in(_register, _customer)
+
+	assert_true(_panel.accept_store_credit())
+
+	assert_string_contains(_panel.status_label.text, "Bought Moon Escape")
+	assert_string_contains(_panel.status_label.text, "$9.50 store credit")
+	assert_eq(_ledger.get_trade_in_count(), 1)
+	assert_eq(_ledger.get_total_trade_in_cost_cents(), 0)
+	assert_eq(_ledger.get_total_trade_in_credit_cents(), 950)
+	assert_eq(_session.get_cash_cents(), 50000)
+	assert_eq(_receiving_box.get_child(0).get("cost_basis_cents"), 950)
+	assert_true(_panel.accept_button.disabled)
+	assert_true(_panel.store_credit_button.disabled)
+	assert_true(_panel.decline_button.disabled)
+
+
 func test_trade_in_offer_panel_declines_offer() -> void:
 	_panel.open_for_trade_in(_register, _customer)
 
@@ -96,6 +115,7 @@ func test_trade_in_offer_panel_declines_offer() -> void:
 
 	assert_string_contains(_panel.status_label.text, "Declined Moon Escape")
 	assert_true(_panel.accept_button.disabled)
+	assert_true(_panel.store_credit_button.disabled)
 	assert_true(_panel.decline_button.disabled)
 	assert_eq(_customer.state, SimpleTradeInCustomer.STATE_TRADE_DECLINED)
 	assert_eq(_ledger.get_trade_in_count(), 0)

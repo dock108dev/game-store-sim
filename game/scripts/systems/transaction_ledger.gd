@@ -31,7 +31,7 @@ func record_sale(customer_id: String, item: Node) -> Dictionary:
 	return transaction
 
 
-func record_trade_in(customer_id: String, item: Node, offer_cents: int) -> Dictionary:
+func record_trade_in(customer_id: String, item: Node, offer_cents: int, tender_type: String = "cash") -> Dictionary:
 	if item == null:
 		return {}
 
@@ -39,6 +39,11 @@ func record_trade_in(customer_id: String, item: Node, offer_cents: int) -> Dicti
 	if product == null:
 		return {}
 
+	var normalized_tender := tender_type
+	if normalized_tender != "store_credit":
+		normalized_tender = "cash"
+	var cash_cents := offer_cents if normalized_tender == "cash" else 0
+	var credit_cents := offer_cents if normalized_tender == "store_credit" else 0
 	var transaction := {
 		"transaction_id": "trade_in_%03d" % (_transactions.size() + 1),
 		"type": "trade_in",
@@ -46,7 +51,10 @@ func record_trade_in(customer_id: String, item: Node, offer_cents: int) -> Dicti
 		"item_instance_id": str(item.get("instance_id")),
 		"product_id": product.product_id,
 		"display_name": product.display_name,
+		"tender_type": normalized_tender,
 		"trade_in_cost_cents": offer_cents,
+		"trade_in_cash_cents": cash_cents,
+		"trade_in_credit_cents": credit_cents,
 	}
 	_transactions.append(transaction)
 	return transaction
@@ -100,5 +108,16 @@ func get_total_trade_in_cost_cents() -> int:
 	var total := 0
 	for transaction in _transactions:
 		if str(transaction.get("type", "")) == "trade_in":
-			total += int(transaction.get("trade_in_cost_cents", 0))
+			total += int(transaction.get(
+				"trade_in_cash_cents",
+				transaction.get("trade_in_cost_cents", 0)
+			))
+	return total
+
+
+func get_total_trade_in_credit_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "trade_in":
+			total += int(transaction.get("trade_in_credit_cents", 0))
 	return total

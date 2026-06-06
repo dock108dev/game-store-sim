@@ -8,6 +8,7 @@ class_name TradeInOfferPanel
 @onready var decrease_offer_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OfferAdjustRow/DecreaseOfferButton
 @onready var increase_offer_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OfferAdjustRow/IncreaseOfferButton
 @onready var accept_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/AcceptButton
+@onready var store_credit_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/StoreCreditButton
 @onready var decline_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/DeclineButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CloseButton
 
@@ -23,6 +24,7 @@ func _ready() -> void:
 	decrease_offer_button.pressed.connect(decrease_offer)
 	increase_offer_button.pressed.connect(increase_offer)
 	accept_button.pressed.connect(accept_offer)
+	store_credit_button.pressed.connect(accept_store_credit)
 	decline_button.pressed.connect(decline_offer)
 	close_button.pressed.connect(close)
 
@@ -80,6 +82,18 @@ func accept_offer() -> bool:
 	return true
 
 
+func accept_store_credit() -> bool:
+	if not is_open():
+		return false
+
+	status_label.text = _register.accept_trade_in_store_credit(
+		_customer,
+		_customer.get_store_credit_offer_cents()
+	)
+	_set_offer_buttons_enabled(false)
+	return true
+
+
 func decline_offer() -> bool:
 	if not is_open():
 		return false
@@ -107,7 +121,7 @@ func _update_labels() -> void:
 
 	if product == null:
 		details_label.text = "Unknown item"
-		offer_label.text = "Cash offer unavailable"
+		offer_label.text = "Trade-in offers unavailable"
 		_update_adjust_buttons()
 		return
 
@@ -119,7 +133,10 @@ func _update_labels() -> void:
 		product.demand_tier.capitalize(),
 		product.market_value_cents / 100.0,
 	]
-	offer_label.text = "Cash offer: $%0.2f" % (_draft_offer_cents / 100.0)
+	offer_label.text = "Cash offer: $%0.2f  |  Store credit: $%0.2f" % [
+		_draft_offer_cents / 100.0,
+		_customer.get_store_credit_offer_cents() / 100.0,
+	]
 	if status_label.text.is_empty() or status_label.text == "Review the offer.":
 		status_label.text = "Review the offer."
 	_update_adjust_buttons()
@@ -141,6 +158,7 @@ func _adjust_offer(delta_cents: int) -> bool:
 
 func _set_offer_buttons_enabled(is_enabled: bool) -> void:
 	accept_button.disabled = not is_enabled
+	store_credit_button.disabled = not is_enabled
 	decline_button.disabled = not is_enabled
 	_update_adjust_buttons()
 
