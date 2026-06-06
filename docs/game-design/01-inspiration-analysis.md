@@ -17,7 +17,7 @@ The screenshots are taken from videos and streams. The following are reference n
 
 Store exterior:
 
-- Strip-mall frontage with large glass windows and readable sign.
+- Small retail frontage with large glass windows and readable sign.
 - Neon or lit signage that can be customized.
 - Sidewalk approach that makes the shop feel like a place rather than a menu.
 - Morning opening time visible in the HUD in several references.
@@ -73,7 +73,7 @@ Economy:
 - Overpricing should move slowly and reduce reputation.
 - Underpricing should clear stock quickly but create cash-flow pressure.
 
-## Specific Ideas For Mallcore Sim
+## Specific Ideas For Game Store Sim
 
 - Used game trade-ins should be the signature appraisal loop.
 - The player should inspect condition: scratched disc, cracked case, missing manual, fake cartridge, resealed box, smoke smell, water damage.
@@ -90,5 +90,5 @@ Start with stylized realism rather than hyperrealism:
 - Readable silhouettes for every product and fixture.
 - Slightly exaggerated signage and UI so price, category, and interaction state are legible.
 - Warm fluorescent retail lighting with neon accents.
-- Mall-era clutter, but not so much that shelf state becomes unreadable.
+- Period retail clutter, but not so much that shelf state becomes unreadable.
 - Fictional brand names that evoke the era without legal dependency.

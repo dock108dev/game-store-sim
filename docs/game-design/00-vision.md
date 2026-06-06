@@ -2,7 +2,7 @@
 
 ## High Concept
 
-Run a mall-era game store from the counter up. Buy used games, sell new releases, restock shelves, manage trade-ins, deal with customers, configure displays, expand the shop, decorate the space, and slowly discover that some inventory, customers, invoices, and backroom opportunities do not add up.
+Run a specialty video game store from the counter up. Buy used games, sell new releases, restock shelves, manage trade-ins, deal with customers, configure displays, expand the shop, decorate the space, and slowly discover that some inventory, customers, invoices, and backroom opportunities do not add up.
 
 The game should feel like operating an actual small specialty retailer, not like watching a tycoon dashboard. The player should physically touch the store: open boxes, scan games, price items, place cases on shelves, work the register, answer customer questions, and decide when to cut corners.
 
@@ -17,7 +17,7 @@ The game should feel like operating an actual small specialty retailer, not like
 
 ## Player Fantasy
 
-The player starts as the owner/operator of a small used game shop in a mall-adjacent retail strip. They are undercapitalized, doing everything manually, and trying to become the local place for used games, new releases, consoles, controllers, memory cards, strategy guides, repairs, launch nights, and retro collectors.
+The player starts as the owner/operator of a small used game shop in a retail strip. They are undercapitalized, doing everything manually, and trying to become the local place for used games, new releases, consoles, controllers, memory cards, strategy guides, repairs, launch nights, and retro collectors.
 
 The fantasy is not pure nostalgia. The store should feel warm and familiar, but also operationally stressful: thin margins, picky customers, bad trades, questionable suppliers, rent pressure, shrinkage, weird regulars, launch-day chaos, and the temptation to take easy money.
 

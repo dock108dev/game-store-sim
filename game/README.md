@@ -1,4 +1,4 @@
-# Mall Sim Godot Project
+# Game Store Sim Godot Project
 
 This directory is the Godot project root.
 

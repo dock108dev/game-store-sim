@@ -33,9 +33,9 @@ Follow-up risk:
 
 Decision:
 
-- Use `dock108dev/mall-sim` as the GitHub repository.
+- Use `dock108dev/game-store-sim` as the GitHub repository.
 - Use `main` as the default branch.
-- Keep this local checkout at `/Users/michaelfuscoletti/Desktop/mallcore-sim`.
+- Keep this local checkout at `/Users/michaelfuscoletti/Desktop/game-store-sim`.
 
 Reason:
 

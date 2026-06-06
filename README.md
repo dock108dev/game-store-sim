@@ -1,6 +1,6 @@
-# Mallcore Sim
+# Game Store Sim
 
-Working title for a first-person retro game retail simulator inspired by mall-era specialty stores: EB Games, FuncoLand, GameStop, local video game shops, trade-in counters, preorder desks, repair benches, and the weird service economy around used games.
+Working title for a first-person retro game retail simulator inspired by late-90s and 2000s specialty stores: EB Games, FuncoLand, GameStop, local video game shops, trade-in counters, preorder desks, repair benches, and the weird service economy around used games.
 
 This repository is in preproduction. The current goal is to plan the game like an indie production, then build it in vertical slices instead of making a disposable prototype.
 
