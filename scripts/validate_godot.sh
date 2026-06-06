@@ -13,6 +13,7 @@ SCREENSHOT_SCENARIOS=(
   customer_queue
   trade_in_offer
   backroom_summary
+  fixture_ghost
 )
 
 cd "$REPO_ROOT"

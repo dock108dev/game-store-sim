@@ -36,6 +36,34 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_orders_fixture_from_backroom_computer"
     },
     {
+      "id": "fixture_placement_manager_hidden_ghost",
+      "name": "Fixture placement manager starts with hidden ghost preview",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_starts_with_hidden_ghost"
+    },
+    {
+      "id": "fixture_placement_manager_shows_ghost",
+      "name": "Fixture placement manager shows a ghost preview for an ordered fixture",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_shows_ghost_for_order"
+    },
+    {
+      "id": "main_scene_fixture_placement_manager",
+      "name": "Main scene includes a hidden fixture placement ghost manager",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_placement_manager_exists_with_hidden_ghost"
+    },
+    {
+      "id": "main_scene_fixture_order_shows_ghost",
+      "name": "Ordering a fixture in the main scene shows the placement ghost",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_order_shows_placement_ghost"
+    },
+    {
       "id": "fixture_orders_persist_in_save_codec",
       "name": "Fixture orders are included in save codec smoke coverage",
       "status": "automated",

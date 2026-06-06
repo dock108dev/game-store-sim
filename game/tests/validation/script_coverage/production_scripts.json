@@ -85,6 +85,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/store_layout/fixture_placement_manager.gd",
+      "tests": [
+        "res://tests/gut/test_fixture_placement_manager.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/shelf_slot.gd",
       "tests": [
         "res://tests/gut/test_shelf_slot.gd"

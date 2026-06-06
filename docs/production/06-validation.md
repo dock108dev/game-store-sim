@@ -25,7 +25,7 @@ The gate currently runs:
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
-- Named validation screenshot capture at `1280x720` for main scene, receiving area, register counter, customer queue, trade-in offer, and backroom summary.
+- Named validation screenshot capture at `1280x720` for main scene, receiving area, register counter, customer queue, trade-in offer, backroom summary, and fixture ghost preview.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
 
@@ -72,6 +72,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom inventory summary is readable and matches active receiving/shelf inventory.
 - Backroom reorder suggestions are readable and reflect sales versus active inventory.
 - Backroom fixture ordering shows the game display rack option, cash reservation, and pending placement clearly.
+- Ordered fixture ghost preview is visible, translucent, and reads as a pending placement rather than a finished rack.
 - Backroom summary panel closes back into first-person mouse capture cleanly.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
 - Screenshot composition is useful, not merely nonblank.
@@ -92,7 +93,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
-- `scenarios/store_layout.json`: fixture catalog, fixture ordering, cash reservation, pending placement, insufficient-cash rejection, and persistence coverage.
+- `scenarios/store_layout.json`: fixture catalog, fixture ordering, cash reservation, pending placement, ghost preview, insufficient-cash rejection, and persistence coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

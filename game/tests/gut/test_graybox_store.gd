@@ -135,6 +135,13 @@ func test_backroom_computer_exists() -> void:
 	assert_not_null(_store.get_node_or_null("BackroomComputer"))
 
 
+func test_fixture_placement_manager_exists_with_hidden_ghost() -> void:
+	var manager := _store.get_node_or_null("FixturePlacementManager")
+	assert_not_null(manager)
+	assert_false(manager.is_ghost_visible())
+	assert_not_null(_store.get_node_or_null("FixturePlacementManager/GhostRackPreview"))
+
+
 func test_register_is_wired_to_customer_manager_ledger_and_session() -> void:
 	var register := _store.get_node("RegisterWorkstation") as RegisterWorkstation
 	var manager := register.get_node_or_null(register.customer_manager_path)
@@ -161,6 +168,25 @@ func test_store_session_is_wired_to_inventory_root() -> void:
 	var session := _store.get_node("StoreSession")
 	assert_eq(session.get_node_or_null(session.get("inventory_root_path")), _store)
 	assert_gt(session.get_active_inventory_items().size(), 0)
+
+
+func test_store_session_is_wired_to_fixture_placement_manager() -> void:
+	var session := _store.get_node("StoreSession")
+	var manager := session.get_node_or_null(session.get("fixture_placement_manager_path"))
+
+	assert_not_null(manager)
+
+
+func test_fixture_order_shows_placement_ghost() -> void:
+	var session := _store.get_node("StoreSession")
+	var manager := _store.get_node("FixturePlacementManager")
+
+	var order: Dictionary = session.order_fixture("fixture_game_display_rack")
+
+	assert_false(order.is_empty())
+	assert_true(manager.is_ghost_visible())
+	assert_eq(manager.get_current_order_id(), order.get("order_id"))
+	assert_eq(manager.get_current_fixture_id(), "fixture_game_display_rack")
 
 
 func test_backroom_computer_is_wired_to_store_session() -> void:

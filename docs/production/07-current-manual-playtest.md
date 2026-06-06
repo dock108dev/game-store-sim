@@ -27,7 +27,8 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 21. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
 22. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
 23. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
-24. End the day and confirm the summary changes to `Day closed`.
+24. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
+25. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -47,6 +48,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Inventory summary text is readable and matches active receiving/rack items.
 - Reorder suggestion text is readable and makes sense after selling stocked games.
 - Fixture order text/button are readable and clearly communicate pending placement.
+- Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
 
 ## Automated Screenshot Artifacts
 
@@ -58,3 +60,4 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `customer_queue.png`
 - `trade_in_offer.png`
 - `backroom_summary.png`
+- `fixture_ghost.png`

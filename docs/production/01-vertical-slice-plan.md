@@ -109,7 +109,8 @@ Technical:
 17. Add first product catalog. Done with 12 fictional used games, three platforms, four conditions, three demand tiers, and automated catalog validation.
 18. Add first customer price sensitivity. Done with demand-based buyer refusal for overpriced matching used games.
 19. Add first persistence smoke. Done as a codec-level save/load roundtrip for session, ledger, active item state, and pending fixture orders.
-20. Add first fixture ordering interface. Done as a backroom-computer order action for a pending game display rack; ghost placement remains later.
+20. Add first fixture ordering interface. Done as a backroom-computer order action for a pending game display rack.
+21. Add first fixture ghost preview. Done as a translucent pending-rack preview after ordering; rotate, snap, validity coloring, and final placement remain later.
 
 ## Slice Review Questions
 

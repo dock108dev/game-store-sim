@@ -5,6 +5,7 @@ class_name StoreSession
 @export var starting_cash_cents: int = 50000
 @export var ledger_path: NodePath
 @export var inventory_root_path: NodePath
+@export var fixture_placement_manager_path: NodePath
 
 const DEFAULT_FIXTURE_CATALOG_PATHS := [
 	"res://data/fixtures/game_display_rack.tres",
@@ -245,6 +246,9 @@ func order_fixture(fixture_id: String) -> Dictionary:
 		"status": "pending_placement",
 	}
 	fixture_orders.append(order)
+	var placement_manager := _get_fixture_placement_manager()
+	if placement_manager != null and placement_manager.has_method("show_ghost_for_order"):
+		placement_manager.show_ghost_for_order(order)
 	return order.duplicate(true)
 
 
@@ -351,6 +355,13 @@ func _get_inventory_root() -> Node:
 		return get_parent()
 
 	return get_node_or_null(inventory_root_path)
+
+
+func _get_fixture_placement_manager() -> Node:
+	if fixture_placement_manager_path.is_empty():
+		return null
+
+	return get_node_or_null(fixture_placement_manager_path)
 
 
 func _collect_active_inventory_items(node: Node, items: Array[Node]) -> void:
