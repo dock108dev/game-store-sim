@@ -71,6 +71,34 @@
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_applies_valid_and_invalid_materials"
     },
     {
+      "id": "fixture_placement_manager_snap_to_grid",
+      "name": "Fixture placement manager snaps ghost positions to the placement grid",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_snaps_ghost_to_grid"
+    },
+    {
+      "id": "fixture_placement_manager_grid_move",
+      "name": "Fixture placement manager moves the ghost by grid cells",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_moves_ghost_by_grid"
+    },
+    {
+      "id": "fixture_placement_manager_rotate",
+      "name": "Fixture placement manager rotates the ghost by a fixed step",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_rotates_ghost_by_fixed_step"
+    },
+    {
+      "id": "fixture_placement_manager_counter_rotate",
+      "name": "Fixture placement manager supports counter-rotation",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_counter_rotates_ghost"
+    },
+    {
       "id": "main_scene_fixture_placement_manager",
       "name": "Main scene includes a hidden fixture placement ghost manager",
       "status": "automated",
@@ -97,6 +125,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_placement_ghost_marks_invalid_out_of_bounds_position"
+    },
+    {
+      "id": "main_scene_fixture_rotate_snap",
+      "name": "Main scene fixture ghost supports rotation and grid movement",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_placement_ghost_supports_rotation_and_grid_movement"
     },
     {
       "id": "fixture_orders_persist_in_save_codec",

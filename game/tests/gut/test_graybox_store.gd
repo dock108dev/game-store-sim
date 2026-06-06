@@ -201,6 +201,18 @@ func test_fixture_placement_ghost_marks_invalid_out_of_bounds_position() -> void
 	assert_false(manager.is_current_position_valid())
 
 
+func test_fixture_placement_ghost_supports_rotation_and_grid_movement() -> void:
+	var session := _store.get_node("StoreSession")
+	var manager := _store.get_node("FixturePlacementManager")
+	session.order_fixture("fixture_game_display_rack")
+
+	assert_true(manager.rotate_ghost())
+	assert_true(manager.move_ghost_by_grid(1, 1))
+
+	assert_almost_eq(manager.get_ghost_rotation_y(), deg_to_rad(90.0), 0.001)
+	assert_eq(manager.get_placement_state(), "valid")
+
+
 func test_backroom_computer_is_wired_to_store_session() -> void:
 	var computer := _store.get_node("BackroomComputer")
 	var session := computer.get_node_or_null(computer.get("store_session_path"))

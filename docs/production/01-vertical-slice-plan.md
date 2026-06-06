@@ -112,6 +112,7 @@ Technical:
 20. Add first fixture ordering interface. Done as a backroom-computer order action for a pending game display rack.
 21. Add first fixture ghost preview. Done as a translucent pending-rack preview after ordering; rotate, snap, validity coloring, and final placement remain later.
 22. Add first fixture placement validity state. Done as green valid and red invalid translucent ghost states with bounds validation; rotate, snap, and final placement remain later.
+23. Add first fixture rotate and snap controls. Done as manager-level fixed-step rotation and grid movement; player-facing placement confirmation remains later.
 
 ## Slice Review Questions
 

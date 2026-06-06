@@ -69,6 +69,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "fixture_rotated_ghost_screenshot",
+      "name": "Rotated fixture ghost validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     }
   ]
 }

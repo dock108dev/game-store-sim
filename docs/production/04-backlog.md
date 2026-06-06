@@ -40,7 +40,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add fixture and equipment ordering interface. Done for ordering a pending game display rack from the backroom computer.
 - Add fixture ghost placement. Done as a translucent pending-rack preview after ordering.
 - Add valid/invalid placement state. Done as green valid and red invalid translucent ghost states with bounds validation.
-- Add rotate and snap controls.
+- Add rotate and snap controls. Done as manager-level fixed-step rotation and grid movement.
 - Add shelf category assignment.
 - Add basic customer path validation.
 
@@ -67,7 +67,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
-- Keep named validation screenshots current for main scene, receiving area, register counter, customer queue, trade-in offer, backroom summary, fixture ghost preview, and invalid fixture ghost preview.
+- Keep named validation screenshots current for main scene, receiving area, register counter, customer queue, trade-in offer, backroom summary, fixture ghost preview, invalid fixture ghost preview, and rotated fixture ghost preview.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex. Started with catalog count, uniqueness, variety, pricing sanity, and fictional-name checks.

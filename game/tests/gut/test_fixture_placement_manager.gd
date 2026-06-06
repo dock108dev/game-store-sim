@@ -63,6 +63,62 @@ func test_fixture_placement_manager_applies_valid_and_invalid_materials() -> voi
 	assert_eq(panel.material, invalid_material)
 
 
+func test_fixture_placement_manager_snaps_ghost_to_grid() -> void:
+	var manager := _make_manager()
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+	})
+	manager.set_ghost_position(Vector3(-0.73, 0.04, 2.13))
+
+	assert_true(manager.snap_ghost_to_grid())
+
+	var position: Vector3 = manager.get_ghost_position()
+	assert_almost_eq(position.x, -0.75, 0.001)
+	assert_almost_eq(position.z, 2.25, 0.001)
+	assert_eq(manager.get_placement_state(), "valid")
+
+
+func test_fixture_placement_manager_moves_ghost_by_grid() -> void:
+	var manager := _make_manager()
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+	})
+
+	assert_true(manager.move_ghost_by_grid(2, -1))
+
+	var position: Vector3 = manager.get_ghost_position()
+	assert_almost_eq(position.x, -0.25, 0.001)
+	assert_almost_eq(position.z, 2.0, 0.001)
+
+
+func test_fixture_placement_manager_rotates_ghost_by_fixed_step() -> void:
+	var manager := _make_manager()
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+	})
+
+	assert_true(manager.rotate_ghost())
+
+	assert_almost_eq(manager.get_ghost_rotation_y(), deg_to_rad(90.0), 0.001)
+	assert_eq(manager.get_placement_state(), "valid")
+
+
+func test_fixture_placement_manager_counter_rotates_ghost() -> void:
+	var manager := _make_manager()
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+	})
+	manager.rotate_ghost()
+
+	assert_true(manager.rotate_ghost(false))
+
+	assert_almost_eq(manager.get_ghost_rotation_y(), 0.0, 0.001)
+
+
 func test_fixture_placement_manager_hides_ghost() -> void:
 	var manager := _make_manager()
 	manager.show_ghost_for_order({

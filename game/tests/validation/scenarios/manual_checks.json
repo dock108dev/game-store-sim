@@ -191,6 +191,14 @@
       "critical": false,
       "reason": "Requires human judgment about whether translucent green and red placement previews are clear in the actual window.",
       "owner": "manual QA"
+    },
+    {
+      "id": "fixture_rotate_snap_feel",
+      "name": "Fixture rotate and snap controls feel predictable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether fixed-step rotation and grid movement feel understandable before final placement UI exists.",
+      "owner": "manual QA"
     }
   ]
 }

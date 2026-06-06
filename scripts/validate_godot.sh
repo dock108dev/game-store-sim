@@ -15,6 +15,7 @@ SCREENSHOT_SCENARIOS=(
   backroom_summary
   fixture_ghost
   fixture_invalid_ghost
+  fixture_rotated_ghost
 )
 
 cd "$REPO_ROOT"

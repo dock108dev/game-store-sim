@@ -29,7 +29,8 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 23. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
 24. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
 25. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
-26. End the day and confirm the summary changes to `Day closed`.
+26. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
+27. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -51,6 +52,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Fixture order text/button are readable and clearly communicate pending placement.
 - Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
 - Green valid placement and red invalid placement are visually distinct in the actual window.
+- Rotated ghost preview is still visually aligned and readable.
 
 ## Automated Screenshot Artifacts
 
@@ -64,3 +66,4 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `backroom_summary.png`
 - `fixture_ghost.png`
 - `fixture_invalid_ghost.png`
+- `fixture_rotated_ghost.png`
