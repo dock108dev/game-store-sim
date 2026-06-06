@@ -73,6 +73,29 @@ func test_store_session_reads_trade_in_totals_without_counting_sales() -> void:
 	assert_string_contains(session.get_summary_text(), "Trade spend: $7.60")
 
 
+func test_store_session_summarizes_active_inventory_items() -> void:
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	var root := Node3D.new()
+	var receiving_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var stocked_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var sold_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var customer_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(root)
+	add_child_autofree(session)
+	root.add_child(receiving_item)
+	root.add_child(stocked_item)
+	root.add_child(sold_item)
+	root.add_child(customer_item)
+
+	stocked_item.set("location_id", "shelf_slot_001")
+	sold_item.set("location_id", "sold")
+	customer_item.set("location_id", "customer:customer_001")
+	session.inventory_root_path = session.get_path_to(root)
+
+	assert_eq(session.get_active_inventory_items().size(), 2)
+	assert_string_contains(session.get_inventory_summary_text(), "Star Trader x2")
+
+
 func test_store_session_can_close_day() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

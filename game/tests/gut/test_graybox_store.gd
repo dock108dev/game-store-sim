@@ -157,6 +157,12 @@ func test_store_session_is_wired_to_transaction_ledger() -> void:
 	assert_not_null(ledger)
 
 
+func test_store_session_is_wired_to_inventory_root() -> void:
+	var session := _store.get_node("StoreSession")
+	assert_eq(session.get_node_or_null(session.get("inventory_root_path")), _store)
+	assert_gt(session.get_active_inventory_items().size(), 0)
+
+
 func test_backroom_computer_is_wired_to_store_session() -> void:
 	var computer := _store.get_node("BackroomComputer")
 	var session := computer.get_node_or_null(computer.get("store_session_path"))

@@ -7,6 +7,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Keep validation coverage current as the sale loop changes.
 - Use the 12-item fictional product catalog when expanding inventory sources.
+- Use the backroom computer as the home for inventory and management features.
 
 ## First Playable Counter Loop
 
@@ -23,6 +24,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Complete sale. Done.
 - Record transaction. Done.
 - Show end-of-day cash and profit summary. Done for in-memory sales via the backroom computer.
+- Show active inventory summary. Done on the backroom computer from scene item instances.
 
 ## Trade-In Slice
 

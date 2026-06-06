@@ -15,6 +15,13 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_transaction_ledger"
     },
     {
+      "id": "store_session_inventory_root_wiring",
+      "name": "Store session is wired to the scene inventory root",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_inventory_root"
+    },
+    {
       "id": "store_session_starting_cash",
       "name": "Store session starts with opening cash",
       "status": "automated",
@@ -34,6 +41,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_reads_ledger_totals"
+    },
+    {
+      "id": "store_session_inventory_summary",
+      "name": "Store session summarizes active inventory items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_active_inventory_items"
     },
     {
       "id": "store_session_end_day",
@@ -83,6 +97,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_last_sale"
+    },
+    {
+      "id": "day_summary_panel_inventory_summary",
+      "name": "Day summary panel includes the active inventory summary",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_inventory_summary"
     },
     {
       "id": "day_summary_panel_end_day",

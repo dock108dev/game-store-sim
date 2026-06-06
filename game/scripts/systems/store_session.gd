@@ -4,6 +4,7 @@ class_name StoreSession
 @export var day_number: int = 1
 @export var starting_cash_cents: int = 50000
 @export var ledger_path: NodePath
+@export var inventory_root_path: NodePath
 
 var cash_cents: int = 0
 var is_day_closed: bool = false
@@ -97,6 +98,37 @@ func get_last_transaction() -> Dictionary:
 	return transactions[transactions.size() - 1]
 
 
+func get_active_inventory_items() -> Array[Node]:
+	var items: Array[Node] = []
+	var root := _get_inventory_root()
+	if root == null:
+		return items
+
+	_collect_active_inventory_items(root, items)
+	return items
+
+
+func get_inventory_summary_text() -> String:
+	var counts := {}
+	for item in get_active_inventory_items():
+		var product := item.get("product") as ProductDefinition
+		if product == null:
+			continue
+
+		var key := product.display_name
+		counts[key] = int(counts.get(key, 0)) + 1
+
+	if counts.is_empty():
+		return "Inventory: none"
+
+	var lines: Array[String] = ["Inventory:"]
+	var names := counts.keys()
+	names.sort()
+	for name in names:
+		lines.append("%s x%d" % [name, int(counts[name])])
+	return "\n".join(lines)
+
+
 func get_status_label() -> String:
 	if is_day_closed:
 		return "Day closed"
@@ -127,3 +159,21 @@ func _get_ledger() -> TransactionLedger:
 		return null
 
 	return get_node_or_null(ledger_path) as TransactionLedger
+
+
+func _get_inventory_root() -> Node:
+	if inventory_root_path.is_empty():
+		return get_parent()
+
+	return get_node_or_null(inventory_root_path)
+
+
+func _collect_active_inventory_items(node: Node, items: Array[Node]) -> void:
+	var product := node.get("product") as ProductDefinition
+	if product != null:
+		var location_id := str(node.get("location_id"))
+		if location_id != "sold" and not location_id.begins_with("customer:"):
+			items.append(node)
+
+	for child in node.get_children():
+		_collect_active_inventory_items(child, items)

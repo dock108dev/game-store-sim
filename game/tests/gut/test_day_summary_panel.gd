@@ -47,6 +47,17 @@ func test_day_summary_panel_includes_last_sale() -> void:
 	assert_eq(_panel.last_sale_label.text, "Last sale: Star Trader for $21.99")
 
 
+func test_day_summary_panel_includes_inventory_summary() -> void:
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(item)
+	_session.inventory_root_path = _session.get_path_to(item.get_parent())
+
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.inventory_label.text, "Inventory:")
+	assert_string_contains(_panel.inventory_label.text, "Star Trader x1")
+
+
 func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_true(_panel.open_for_session(_session))
 

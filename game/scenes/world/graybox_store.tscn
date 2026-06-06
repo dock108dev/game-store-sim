@@ -153,6 +153,7 @@ script = ExtResource("6_transaction_ledger")
 [node name="StoreSession" type="Node" parent="."]
 script = ExtResource("8_store_session")
 ledger_path = NodePath("../TransactionLedger")
+inventory_root_path = NodePath("..")
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)
