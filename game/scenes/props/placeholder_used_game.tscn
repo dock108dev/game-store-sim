@@ -11,14 +11,14 @@ albedo_color = Color(0.24, 0.68, 0.55, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_case"]
 material = SubResource("StandardMaterial3D_case")
-size = Vector3(0.46, 0.05, 0.62)
+size = Vector3(0.46, 0.62, 0.06)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cover"]
 material = SubResource("StandardMaterial3D_cover")
-size = Vector3(0.34, 0.012, 0.44)
+size = Vector3(0.34, 0.46, 0.012)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_case"]
-size = Vector3(0.48, 0.06, 0.64)
+size = Vector3(0.48, 0.64, 0.08)
 
 [node name="PlaceholderUsedGame" type="StaticBody3D"]
 script = ExtResource("1_product_item")
@@ -26,13 +26,13 @@ product = ExtResource("2_product")
 instance_id = "item_used_star_trader_001"
 
 [node name="CaseMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.025, 0)
+position = Vector3(0, 0.31, 0)
 mesh = SubResource("BoxMesh_case")
 
 [node name="CoverLabelMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.057, -0.03)
+position = Vector3(0, 0.34, -0.036)
 mesh = SubResource("BoxMesh_cover")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.03, 0)
+position = Vector3(0, 0.32, 0)
 shape = SubResource("BoxShape3D_case")

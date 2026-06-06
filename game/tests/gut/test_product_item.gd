@@ -33,11 +33,18 @@ func test_used_game_mesh_sits_on_node_origin() -> void:
 	assert_almost_eq(collision_shape.position.y - (collision_shape.shape.size.y / 2.0), 0.0, 0.001)
 
 
-func test_used_game_has_readable_cover_label() -> void:
+func test_used_game_is_upright_display_case() -> void:
+	var case_mesh := _item.get_node("CaseMesh") as MeshInstance3D
+	assert_gt(case_mesh.mesh.size.y, case_mesh.mesh.size.x)
+	assert_gt(case_mesh.mesh.size.y, case_mesh.mesh.size.z * 5.0)
+
+
+func test_used_game_has_readable_front_cover_label() -> void:
 	var cover_mesh := _item.get_node_or_null("CoverLabelMesh") as MeshInstance3D
 	assert_not_null(cover_mesh)
 	assert_gt(cover_mesh.mesh.size.x, 0.3)
-	assert_gt(cover_mesh.mesh.size.z, 0.4)
+	assert_gt(cover_mesh.mesh.size.y, 0.4)
+	assert_lt(cover_mesh.mesh.size.z, 0.02)
 
 
 func test_used_game_prompt_uses_product_name() -> void:

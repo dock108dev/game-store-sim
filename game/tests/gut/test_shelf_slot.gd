@@ -23,3 +23,9 @@ func test_shelf_slot_starts_available() -> void:
 	assert_true(_slot.is_available())
 	assert_null(_slot.get_occupied_item())
 	assert_string_contains(_slot.get_slot_label(), "empty used_game slot")
+
+
+func test_shelf_slot_marker_is_upright_display_bay() -> void:
+	var marker := _slot.get_node("SlotMarker") as CSGBox3D
+	assert_gt(marker.size.y, marker.size.x)
+	assert_gt(marker.size.y, marker.size.z * 10.0)
