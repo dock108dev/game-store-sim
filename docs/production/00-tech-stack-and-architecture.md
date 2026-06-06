@@ -10,7 +10,7 @@ Why:
 - Fast iteration without licensing friction.
 - GDScript is productive for data-heavy simulation.
 - Scenes/resources map well to fixtures, products, customers, and interactions.
-- Built-in UI is good enough for catalogue, register, pricing, and management screens.
+- Built-in UI is good enough for supplier ordering, register, pricing, trade-in, and management screens.
 - Export path is straightforward for desktop-first development.
 
 Input target: keyboard/mouse only for the first playable and early production slices. Controller support is intentionally out of scope until the core retail loop is proven.

@@ -8,7 +8,7 @@ The hidden thread should sit underneath normal retail systems. The player may ne
 
 ## Core Shape
 
-The store becomes a possible node in a gray-market pipeline. The activity may involve stolen goods, counterfeit collectibles, money laundering through rare items, mod chips, warranty fraud, or inventory laundering through trade-ins and supplier shipments.
+The store becomes a possible node in a gray-market pipeline. The activity may involve stolen consoles, counterfeit cartridges, resealed "new" games, laundering money through rare retro hardware, mod chips, warranty fraud, or inventory laundering through trade-ins and supplier shipments.
 
 The player can become:
 
@@ -65,7 +65,7 @@ Computer:
 Customers:
 
 - A regular asks if "the other stock" came in.
-- A seller brings too many rare sealed items.
+- A seller brings too many rare sealed games or clean boxed consoles.
 - A collector identifies a fake.
 - A parent returns a console reported stolen.
 - A quiet buyer wants cash-only bulk purchases.
@@ -114,4 +114,3 @@ The hidden thread should be flag-driven and event-driven:
 - The player discovers content through interactable artifacts and customer dialogue, not cutscenes.
 
 This keeps the thread scalable. New suspicious items, suppliers, documents, and customer encounters can be added as data without rewriting the whole story.
-

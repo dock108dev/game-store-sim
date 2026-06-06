@@ -38,7 +38,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Store Layout Slice
 
-- Add fixture catalogue.
+- Add fixture and equipment ordering interface.
 - Add fixture ghost placement.
 - Add valid/invalid placement state.
 - Add rotate and snap controls.
@@ -69,4 +69,3 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add content validation script for product data.
 - Add save/load smoke test after persistence exists.
 - Add screenshot capture path once visual verification matters.
-

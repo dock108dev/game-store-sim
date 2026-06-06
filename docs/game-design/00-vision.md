@@ -17,7 +17,7 @@ The game should feel like operating an actual small specialty retailer, not like
 
 ## Player Fantasy
 
-The player starts as the owner/operator of a small used game shop in a mall-adjacent retail strip. They are undercapitalized, doing everything manually, and trying to become the local place for games, consoles, cards, repairs, tournaments, and collector culture.
+The player starts as the owner/operator of a small used game shop in a mall-adjacent retail strip. They are undercapitalized, doing everything manually, and trying to become the local place for used games, new releases, consoles, controllers, memory cards, strategy guides, repairs, launch nights, and retro collectors.
 
 The fantasy is not pure nostalgia. The store should feel warm and familiar, but also operationally stressful: thin margins, picky customers, bad trades, questionable suppliers, rent pressure, shrinkage, weird regulars, launch-day chaos, and the temptation to take easy money.
 
@@ -52,8 +52,7 @@ The screenshots point toward:
 
 - Physical construction and fixture placement like a shop simulator.
 - Product pricing, ordering, and shelf placement loops from small-business sims.
-- Collectible valuation and customer offer moments from card-shop sims.
+- Collectible valuation and customer offer moments, translated into used games, retro hardware, boxed editions, accessories, and sealed inventory.
 - A first-person interaction layer instead of a top-down management board.
 
 The game should not clone any one reference. The distinctive hook is the used-game retail economy: trade-ins, condition judgment, collector demand, platform cycles, preorders, used margins, suspicious inventory, and local customer reputation.
-

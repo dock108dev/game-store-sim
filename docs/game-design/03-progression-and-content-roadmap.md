@@ -82,7 +82,7 @@ Goal: turn the store into a manipulable game board.
 
 Features:
 
-- Buy fixtures from catalogue.
+- Buy fixtures from the supplier-ordering interface.
 - Place, rotate, and validate fixtures.
 - Assign shelf category or product slot.
 - Customer pathing uses layout.
@@ -118,11 +118,12 @@ Goal: broaden the store without losing the core.
 Candidate systems:
 
 - Disc resurfacing.
-- Console testing.
-- Controller repair.
+- Console testing and refurbishing.
+- Controller repair intake.
+- Cartridge cleaning and battery replacement.
+- Save-transfer help.
 - Trade nights.
 - Local tournaments.
-- Card pack sales.
 - Membership program.
 - Buyback promotions.
 
@@ -166,4 +167,3 @@ Exit criteria:
 - A player can finish a normal retail run without engaging.
 - A curious player can discover a coherent hidden story.
 - Choices remain systemic, not just dialogue menu branches.
-

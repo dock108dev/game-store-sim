@@ -27,7 +27,7 @@ Workstation mode:
 - Register checkout.
 - Trade-in appraisal.
 - Product pricing.
-- Catalogue ordering.
+- Supplier ordering.
 - Inventory search.
 - Store report.
 - Hidden records, if discovered.
@@ -48,7 +48,7 @@ Core customer types:
 - Browser: wanders, may buy based on shelf appeal.
 - Target buyer: wants a specific item or category.
 - Parent gift buyer: has vague constraints and needs recommendations.
-- Collector: cares about rarity, condition, completeness, and authenticity.
+- Retro collector: cares about rarity, condition, completeness, authenticity, platform, region, manuals, boxes, and original inserts.
 - Trade-in seller: brings items and negotiates.
 - Return customer: tests policy, mood, and reputation.
 - Regular: develops memory of past experiences.
@@ -76,7 +76,7 @@ Core decisions:
 
 ## Inventory System
 
-Inventory should be one unified model. New games, used games, consoles, cards, accessories, and suspicious goods should be different item types on top of the same base data.
+Inventory should be one unified model. New games, used games, retro games, consoles, accessories, repair parts, preorder slips, and suspicious goods should be different item types on top of the same base data.
 
 Base item fields:
 
@@ -86,6 +86,9 @@ Base item fields:
 - Platform or product family.
 - Condition.
 - Completeness.
+- Format: disc, cartridge, boxed hardware, loose accessory, sealed product, download code, service ticket.
+- Region or compatibility group.
+- Serial number or authenticity marker, where relevant.
 - Authenticity confidence.
 - Cost basis.
 - Market value.
@@ -104,6 +107,34 @@ Derived values:
 - Collector appeal.
 - Trade-in offer range.
 - Reputation impact if mispriced or misrepresented.
+
+## Video Game Retail Surfaces
+
+The game should lean into selling video games specifically, not generic products with game labels.
+
+Core selling surfaces:
+
+- New releases: allocation, preorders, launch-day demand, and reputation risk when stock runs short.
+- Used games: high-margin resale, condition grading, platform demand, and trade-in supply.
+- Retro games: rarity, authenticity checks, region compatibility, boxed-versus-loose value, and collector customers.
+- Hardware: consoles, handhelds, controllers, cables, memory cards, adapters, and testing before resale.
+- Accessories: controller add-ons, cases, chargers, batteries, screen protectors, cleaning kits, and impulse racks.
+- Services: disc resurfacing, cartridge cleaning, console testing, controller repair, and save-transfer help.
+- Events: midnight launches, trade nights, tournaments, preorder pickup windows, and local collector meetups.
+
+Condition examples:
+
+- New sealed.
+- Open box.
+- Complete in box.
+- Missing manual.
+- Loose disc or cartridge.
+- Scratched disc.
+- Damaged label.
+- Bad battery.
+- Untested hardware.
+- Refurbished.
+- Counterfeit suspected.
 
 ## Register System
 
@@ -170,7 +201,7 @@ Layout effects:
 
 The computer is the player-facing management hub:
 
-- Ordering.
+- Supplier ordering.
 - Price database.
 - Inventory search.
 - Sales reports.
@@ -179,6 +210,8 @@ The computer is the player-facing management hub:
 - Supplier messages.
 - Local forums/classifieds.
 - Repair tickets.
+- Trade-in quote history.
+- Serial and compatibility lookup.
 - Security footage.
 - Hidden ledgers or suspicious communications, if discovered.
 
@@ -197,4 +230,3 @@ Early data categories:
 - `suppliers`
 - `store_upgrades`
 - `narrative_flags`
-

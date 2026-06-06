@@ -50,4 +50,4 @@ Rejected alternatives:
 Follow-up risk:
 
 - The repository currently contains reference images before game code, so asset and Git LFS policy should be revisited before large production assets are added.
-
+- Reference screenshots should influence mechanics and layout principles only. Stream overlays, video UI, visible third-party branding, and non-video-game retail details should not become game requirements.

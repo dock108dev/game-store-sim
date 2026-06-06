@@ -79,7 +79,7 @@ Technical:
 ## Explicit Non-Goals
 
 - No employees.
-- No full decoration catalogue.
+- No full fixture or decoration ordering system.
 - No large store expansion.
 - No real save/load requirement until after the first loop works, unless implementation makes it cheap.
 - No complex hidden narrative scene.
@@ -109,4 +109,3 @@ Technical:
 - Is shelf placement smooth enough to support more fixtures later?
 - Do unique used items create better decisions than generic stacks?
 - What did the player do most often, and was that action good?
-
