@@ -38,7 +38,7 @@ text = "Day summary"
 
 [node name="LastSaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Last sale: none"
+text = "Recent activity: none"
 
 [node name="InventoryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

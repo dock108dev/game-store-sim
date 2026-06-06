@@ -66,6 +66,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Trade-in offer panel condition, demand, market, and accept/decline controls are readable.
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
+- Backroom recent activity shows sale and trade-in entries with readable prices.
 - Backroom inventory summary is readable and matches active receiving/shelf inventory.
 - Backroom summary panel closes back into first-person mouse capture cleanly.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
@@ -85,7 +86,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, accept/decline, receiving inventory, and cash accounting checks.
-- `scenarios/day_summary.json`: store session cash accounting, active inventory summary, backroom computer, and day summary panel checks.
+- `scenarios/day_summary.json`: store session cash accounting, recent activity history, active inventory summary, backroom computer, and day summary panel checks.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

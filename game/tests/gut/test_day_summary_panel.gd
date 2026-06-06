@@ -28,12 +28,12 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.title_label.text, "Backroom Computer")
 	assert_string_contains(_panel.summary_label.text, "Cash: $500.00")
 	assert_string_contains(_panel.summary_label.text, "Sales: 0")
-	assert_eq(_panel.last_sale_label.text, "Last sale: none")
+	assert_eq(_panel.last_sale_label.text, "Recent activity: none")
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
 
 
-func test_day_summary_panel_includes_last_sale() -> void:
+func test_day_summary_panel_includes_recent_sale_activity() -> void:
 	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
 	add_child_autofree(item)
 	var transaction := _ledger.record_sale("customer_001", item)
@@ -44,7 +44,21 @@ func test_day_summary_panel_includes_last_sale() -> void:
 	assert_string_contains(_panel.summary_label.text, "Cash: $521.99")
 	assert_string_contains(_panel.summary_label.text, "Revenue: $21.99")
 	assert_string_contains(_panel.summary_label.text, "Profit: $12.99")
-	assert_eq(_panel.last_sale_label.text, "Last sale: Star Trader for $21.99")
+	assert_string_contains(_panel.last_sale_label.text, "Recent activity:")
+	assert_string_contains(_panel.last_sale_label.text, "Sale Star Trader $21.99 profit $12.99")
+
+
+func test_day_summary_panel_includes_recent_trade_in_activity() -> void:
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(customer)
+	var transaction := _ledger.record_trade_in("trade_seller_001", customer.get_trade_item(), 760)
+	_session.apply_trade_in(transaction)
+
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.summary_label.text, "Trade-ins: 1")
+	assert_string_contains(_panel.summary_label.text, "Trade spend: $7.60")
+	assert_string_contains(_panel.last_sale_label.text, "Trade-in Moon Escape offer $7.60")
 
 
 func test_day_summary_panel_includes_inventory_summary() -> void:

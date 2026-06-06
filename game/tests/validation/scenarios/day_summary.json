@@ -50,6 +50,13 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_active_inventory_items"
     },
     {
+      "id": "store_session_recent_activity_history",
+      "name": "Store session formats recent sale and trade-in activity history",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_recent_activity_history"
+    },
+    {
       "id": "store_session_end_day",
       "name": "Store session can close the current day",
       "status": "automated",
@@ -92,11 +99,18 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
     },
     {
-      "id": "day_summary_panel_last_sale",
-      "name": "Day summary panel includes the last sale",
+      "id": "day_summary_panel_recent_sale_activity",
+      "name": "Day summary panel includes recent sale activity",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_last_sale"
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_recent_sale_activity"
+    },
+    {
+      "id": "day_summary_panel_recent_trade_in_activity",
+      "name": "Day summary panel includes recent trade-in activity",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_recent_trade_in_activity"
     },
     {
       "id": "day_summary_panel_inventory_summary",

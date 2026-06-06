@@ -98,6 +98,22 @@ func get_last_transaction() -> Dictionary:
 	return transactions[transactions.size() - 1]
 
 
+func get_recent_activity_text(max_entries: int = 4) -> String:
+	var transactions := get_transactions()
+	if transactions.is_empty():
+		return "Recent activity: none"
+
+	var lines: Array[String] = ["Recent activity:"]
+	var index := transactions.size() - 1
+	var remaining := max_entries
+	while index >= 0 and remaining > 0:
+		lines.append(_format_transaction_line(transactions[index]))
+		index -= 1
+		remaining -= 1
+
+	return "\n".join(lines)
+
+
 func get_active_inventory_items() -> Array[Node]:
 	var items: Array[Node] = []
 	var root := _get_inventory_root()
@@ -152,6 +168,22 @@ func get_summary_text() -> String:
 
 func format_money(cents: int) -> String:
 	return "$%0.2f" % (cents / 100.0)
+
+
+func _format_transaction_line(transaction: Dictionary) -> String:
+	var display_name := str(transaction.get("display_name", "item"))
+	match str(transaction.get("type", "sale")):
+		"trade_in":
+			return "Trade-in %s offer %s" % [
+				display_name,
+				format_money(int(transaction.get("trade_in_cost_cents", 0))),
+			]
+		_:
+			return "Sale %s %s profit %s" % [
+				display_name,
+				format_money(int(transaction.get("sale_price_cents", 0))),
+				format_money(int(transaction.get("profit_cents", 0))),
+			]
 
 
 func _get_ledger() -> TransactionLedger:

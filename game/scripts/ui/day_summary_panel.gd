@@ -71,19 +71,13 @@ func _update_labels() -> void:
 
 	title_label.text = "Backroom Computer"
 	summary_label.text = _session.get_summary_text()
+	if _session.has_method("get_recent_activity_text"):
+		last_sale_label.text = _session.get_recent_activity_text()
+	else:
+		last_sale_label.text = "Recent activity unavailable"
 	if _session.has_method("get_inventory_summary_text"):
 		inventory_label.text = _session.get_inventory_summary_text()
 	else:
 		inventory_label.text = "Inventory unavailable"
 	status_label.text = _session.get_status_label()
 	end_day_button.disabled = _session.is_day_closed
-
-	var last_transaction: Dictionary = _session.get_last_transaction()
-	if last_transaction.is_empty():
-		last_sale_label.text = "Last sale: none"
-		return
-
-	last_sale_label.text = "Last sale: %s for %s" % [
-		str(last_transaction.get("display_name", "item")),
-		_session.format_money(int(last_transaction.get("sale_price_cents", 0))),
-	]
