@@ -93,9 +93,9 @@ Technical:
 3. Add first-person controller. Done.
 4. Add interactable base class. Done.
 5. Add item data and item instance data. Done.
-6. Add pickup/hold/place behavior. In progress: receiving box to display rack stocking loop.
+6. Add pickup/hold/place behavior. Done.
 7. Add shelf slot component. Done.
-8. Add pricing UI.
+8. Add pricing UI. In progress: held-item pricing workstation.
 9. Add register UI.
 10. Add transaction log.
 11. Add customer spawn and simple buy goal.

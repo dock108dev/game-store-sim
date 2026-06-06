@@ -264,6 +264,90 @@
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_places_held_item_in_display_slot"
     },
     {
+      "id": "pricing_workstation_exists",
+      "name": "Pricing workstation exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_pricing_workstation_exists"
+    },
+    {
+      "id": "pricing_workstation_near_receiving",
+      "name": "Pricing workstation is near the receiving area",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_pricing_workstation_is_near_receiving_area"
+    },
+    {
+      "id": "pricing_workstation_interactable",
+      "name": "Pricing workstation is interactable",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_is_interactable"
+    },
+    {
+      "id": "pricing_prompt_held_item",
+      "name": "Pricing workstation prompt names the held item",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_prompt_prices_held_item"
+    },
+    {
+      "id": "pricing_prompt_empty_handed",
+      "name": "Pricing workstation prompts for a held item when empty-handed",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_pricing_workstation.gd::test_pricing_workstation_prompts_for_item_when_empty_handed"
+    },
+    {
+      "id": "pricing_panel_exists",
+      "name": "Player has a hidden pricing panel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_pricing_panel_exists"
+    },
+    {
+      "id": "pricing_panel_product_fields",
+      "name": "Pricing panel opens with product-backed fields",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_opens_with_product_fields"
+    },
+    {
+      "id": "pricing_panel_increment_decrement",
+      "name": "Pricing panel increment and decrement controls update draft price",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_increments_and_decrements_draft_price"
+    },
+    {
+      "id": "pricing_panel_clamps_price",
+      "name": "Pricing panel clamps sale price to allowed bounds",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_clamps_price"
+    },
+    {
+      "id": "pricing_panel_apply",
+      "name": "Pricing panel apply writes current price to the held item",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_updates_item_price"
+    },
+    {
+      "id": "pricing_panel_cancel",
+      "name": "Pricing panel cancel leaves current item price unchanged",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_cancel_keeps_original_item_price"
+    },
+    {
+      "id": "player_opens_pricing",
+      "name": "Player opens pricing panel for the held item",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_pricing_for_held_item"
+    },
+    {
       "id": "screenshot_captured",
       "name": "Main-scene screenshot is captured",
       "status": "automated",
@@ -341,6 +425,22 @@
       "owner": "manual QA"
     },
     {
+      "id": "pricing_panel_readability",
+      "name": "Pricing panel text and controls are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about UI readability and control clarity.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "pricing_mouse_capture_cycle",
+      "name": "Pricing panel closes back into first-person mouse capture cleanly",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires OS/window-level input judgment beyond current automated checks.",
+      "owner": "manual QA"
+    },
+    {
       "id": "screenshot_composition",
       "name": "Screenshot composition is useful, not merely nonblank",
       "status": "manual",
@@ -381,8 +481,18 @@
       "critical": true
     },
     {
+      "script": "res://scripts/store_layout/pricing_workstation.gd",
+      "tests": ["res://tests/gut/test_pricing_workstation.gd"],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/shelf_slot.gd",
       "tests": ["res://tests/gut/test_shelf_slot.gd"],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/pricing_panel.gd",
+      "tests": ["res://tests/gut/test_pricing_panel.gd"],
       "critical": true
     }
   ]

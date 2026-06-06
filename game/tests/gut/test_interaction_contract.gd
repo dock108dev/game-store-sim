@@ -48,3 +48,33 @@ func test_interaction_prompt_show_and_hide() -> void:
 
 	prompt.hide_prompt()
 	assert_false(prompt.visible)
+
+
+func test_interaction_raycast_ignores_empty_interaction_messages() -> void:
+	var script: Script = load("res://scripts/interaction/interaction_raycast.gd")
+	var raycast: RayCast3D = script.new()
+	var prompt: Node = load("res://scenes/ui/interaction_prompt.tscn").instantiate()
+	var interactable := _SilentInteractable.new()
+	add_child_autofree(raycast)
+	add_child_autofree(prompt)
+	add_child_autofree(interactable)
+
+	raycast._prompt = prompt
+	raycast._current_interactable = interactable
+
+	var event := InputEventAction.new()
+	event.action = "interact"
+	event.pressed = true
+	raycast._unhandled_input(event)
+
+	assert_false(prompt.visible)
+
+
+class _SilentInteractable:
+	extends Node
+
+	func get_interaction_prompt() -> String:
+		return "E Silent"
+
+	func interact() -> String:
+		return ""

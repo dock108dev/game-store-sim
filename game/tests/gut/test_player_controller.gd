@@ -41,6 +41,12 @@ func test_interaction_prompt_exists() -> void:
 	assert_not_null(_player.get_node_or_null("InteractionPrompt"))
 
 
+func test_pricing_panel_exists() -> void:
+	var pricing_panel := _player.get_node_or_null("PricingPanel") as PricingPanel
+	assert_not_null(pricing_panel)
+	assert_false(pricing_panel.visible)
+
+
 func test_keyboard_input_actions_exist() -> void:
 	for action in REQUIRED_ACTIONS:
 		assert_true(InputMap.has_action(action), "%s should exist" % action)
@@ -93,3 +99,20 @@ func test_player_places_held_item_in_display_slot() -> void:
 	assert_eq(item.rotation, Vector3.ZERO)
 	assert_eq(item.scale, Vector3.ONE)
 	assert_false(collision_shape.disabled)
+
+
+func test_player_requires_held_item_for_pricing() -> void:
+	assert_eq(_player.open_pricing_for_held_item(), "Hold an item to price it.")
+
+
+func test_player_opens_pricing_for_held_item() -> void:
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(item)
+
+	assert_true(_player.pick_up_item(item))
+	assert_eq(_player.open_pricing_for_held_item(), "")
+
+	var pricing_panel := _player.get_node("PricingPanel") as PricingPanel
+	assert_true(pricing_panel.is_open())
+	assert_eq(pricing_panel.get_active_item(), item)
+	assert_true(_player.is_pricing_open())
