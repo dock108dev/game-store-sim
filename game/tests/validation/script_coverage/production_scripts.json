@@ -50,6 +50,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/simple_trade_in_customer.gd",
+      "tests": [
+        "res://tests/gut/test_trade_in_customer.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/player/first_person_controller.gd",
       "tests": [
         "res://tests/gut/test_player_controller.gd"

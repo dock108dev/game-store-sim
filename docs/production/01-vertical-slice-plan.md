@@ -105,6 +105,7 @@ Technical:
 13. Add simple customer queue. Done for two in-store buyers and three display slots.
 14. Add customer movement/path validation. Done with deterministic buyer movement to stocked items, queue movement, and in-store target checks.
 15. Add optional apply-to-matching used-item pricing. Done in the direct pricing panel for active matching copies.
+16. Add first trade-in seller. Done as a single register-accepted cash trade-in that moves the acquired item into receiving inventory.
 
 ## Slice Review Questions
 

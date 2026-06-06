@@ -16,9 +16,11 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 10. Ring up the first buyer.
 11. Ring up the second buyer.
 12. Confirm sold items are gone from the rack and no longer inspectable.
-13. Open the backroom computer.
-14. Confirm cash, sales count, revenue, cost, and profit match the completed sales.
-15. End the day and confirm the summary changes to `Day closed`.
+13. Interact with the register when no buyer is queued and buy the trade-in from the seller.
+14. Confirm the acquired trade-in item appears in the receiving box and can be treated as inventory.
+15. Open the backroom computer.
+16. Confirm cash, sales count, revenue, cost, profit, trade-in count, and trade spend match the completed sales and trade-in.
+17. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -29,6 +31,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable and does not overlap the register.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
+- Trade-in seller placement, carried item, prompt, and completion message read clearly at the register.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.
 

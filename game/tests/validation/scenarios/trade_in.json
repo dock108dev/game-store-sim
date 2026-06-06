@@ -1,0 +1,46 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "trade_in_customer_exists",
+      "name": "Trade-in seller exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_trade_in_customer_exists_with_item"
+    },
+    {
+      "id": "trade_in_customer_carries_item",
+      "name": "Trade-in seller starts with a carried used item",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_customer.gd::test_trade_in_customer_starts_with_carried_item"
+    },
+    {
+      "id": "trade_in_customer_receives_inventory",
+      "name": "Accepted trade-in item moves into receiving inventory",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_customer.gd::test_trade_in_customer_completes_into_receiving_inventory"
+    },
+    {
+      "id": "register_trade_in_wiring",
+      "name": "Register is wired to the trade-in seller and receiving box",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_manager_ledger_and_session"
+    },
+    {
+      "id": "register_completes_trade_in",
+      "name": "Register completes a waiting seller trade-in when no buyer is queued",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_customer.gd::test_register_completes_trade_in_when_no_buyer_is_waiting"
+    },
+    {
+      "id": "trade_in_cash_accounting",
+      "name": "Trade-in purchase reduces store cash without counting as a sale",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_reads_trade_in_totals_without_counting_sales"
+    }
+  ]
+}

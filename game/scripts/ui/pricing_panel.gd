@@ -122,11 +122,14 @@ func _update_labels() -> void:
 		return
 
 	title_label.text = "Price %s" % product.display_name
+	var cost_basis_cents := int(_item.get("cost_basis_cents"))
+	if cost_basis_cents <= 0:
+		cost_basis_cents = product.cost_basis_cents
 	details_label.text = "Platform: %s\nCondition: %s\nCompleteness: %s\nCost: $%0.2f\nMarket: $%0.2f" % [
 		product.platform,
 		product.condition.capitalize(),
 		product.completeness.capitalize(),
-		product.cost_basis_cents / 100.0,
+		cost_basis_cents / 100.0,
 		product.market_value_cents / 100.0,
 	]
 	price_label.text = "$%0.2f" % (_draft_price_cents / 100.0)

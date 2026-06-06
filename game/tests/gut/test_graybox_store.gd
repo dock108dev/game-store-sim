@@ -117,6 +117,12 @@ func test_customer_manager_has_two_buyers() -> void:
 	assert_eq(manager.get_customers().size(), 2)
 
 
+func test_trade_in_customer_exists_with_item() -> void:
+	var customer := _store.get_node_or_null("TradeInCustomer") as SimpleTradeInCustomer
+	assert_not_null(customer)
+	assert_not_null(customer.get_trade_item())
+
+
 func test_transaction_ledger_exists() -> void:
 	assert_not_null(_store.get_node_or_null("TransactionLedger"))
 
@@ -132,10 +138,14 @@ func test_backroom_computer_exists() -> void:
 func test_register_is_wired_to_customer_manager_ledger_and_session() -> void:
 	var register := _store.get_node("RegisterWorkstation") as RegisterWorkstation
 	var manager := register.get_node_or_null(register.customer_manager_path)
+	var trade_customer := register.get_node_or_null(register.trade_in_customer_path)
+	var receiving_box := register.get_node_or_null(register.receiving_box_path)
 	var ledger := register.get_node_or_null(register.ledger_path) as TransactionLedger
 	var session := register.get_node_or_null(register.store_session_path)
 
 	assert_not_null(manager)
+	assert_not_null(trade_customer)
+	assert_not_null(receiving_box)
 	assert_not_null(ledger)
 	assert_not_null(session)
 

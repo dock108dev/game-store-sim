@@ -4,7 +4,6 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Now
 
-- Add trade-in seller slice after the multi-buyer sale loop gets manual approval.
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Keep validation coverage current as the sale loop changes.
 
@@ -26,12 +25,12 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Trade-In Slice
 
-- Add customer-carried used item.
+- Add customer-carried used item. Done for one in-store trade-in seller.
 - Add condition inspection UI.
 - Add market value and demand lookup.
-- Add cash/store-credit offer.
+- Add cash/store-credit offer. Started with a deterministic cash offer at the register.
 - Add accept/counter/decline customer response.
-- Add acquired item to inventory.
+- Add acquired item to inventory. Done for accepted trade-ins moving into the receiving box.
 
 ## Store Layout Slice
 

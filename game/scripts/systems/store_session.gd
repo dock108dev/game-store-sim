@@ -18,6 +18,10 @@ func apply_sale(transaction: Dictionary) -> void:
 	cash_cents += int(transaction.get("sale_price_cents", 0))
 
 
+func apply_trade_in(transaction: Dictionary) -> void:
+	cash_cents -= int(transaction.get("trade_in_cost_cents", 0))
+
+
 func end_day() -> void:
 	is_day_closed = true
 
@@ -48,7 +52,8 @@ func get_total_revenue_cents() -> int:
 func get_total_cost_cents() -> int:
 	var total := 0
 	for transaction in get_transactions():
-		total += int(transaction.get("cost_basis_cents", 0))
+		if str(transaction.get("type", "sale")) == "sale":
+			total += int(transaction.get("cost_basis_cents", 0))
 	return total
 
 
@@ -58,6 +63,22 @@ func get_total_profit_cents() -> int:
 		return 0
 
 	return ledger.get_total_profit_cents()
+
+
+func get_trade_in_count() -> int:
+	var ledger := _get_ledger()
+	if ledger == null:
+		return 0
+
+	return ledger.get_trade_in_count()
+
+
+func get_total_trade_in_cost_cents() -> int:
+	var ledger := _get_ledger()
+	if ledger == null:
+		return 0
+
+	return ledger.get_total_trade_in_cost_cents()
 
 
 func get_transactions() -> Array[Dictionary]:
@@ -84,12 +105,14 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d\nCash: %s\nSales: %d\nRevenue: %s\nCost: %s\nProfit: %s\n%s" % [
+	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nRevenue: %s\nCost: %s\nTrade spend: %s\nProfit: %s\n%s" % [
 		day_number,
 		format_money(get_cash_cents()),
 		get_sale_count(),
+		get_trade_in_count(),
 		format_money(get_total_revenue_cents()),
 		format_money(get_total_cost_cents()),
+		format_money(get_total_trade_in_cost_cents()),
 		format_money(get_total_profit_cents()),
 		get_status_label(),
 	]

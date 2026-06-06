@@ -121,6 +121,22 @@
       "owner": "manual QA"
     },
     {
+      "id": "trade_in_seller_visual",
+      "name": "Trade-in seller and carried game are readable at the register",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment about seller placement and carried-item readability.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "trade_in_register_message_readability",
+      "name": "Trade-in register prompt and completion message are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about prompt/message readability during the trade-in.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_computer_visual_placement",
       "name": "Backroom computer placement is readable and does not look like a second register",
       "status": "manual",

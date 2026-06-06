@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=18 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/backroom_computer.tscn" id="7_backroom_computer"]
 [ext_resource type="Script" path="res://scripts/systems/store_session.gd" id="8_store_session"]
 [ext_resource type="Script" path="res://scripts/customers/customer_manager.gd" id="9_customer_manager"]
+[ext_resource type="PackedScene" path="res://scenes/customers/simple_trade_in_customer.tscn" id="10_trade_customer"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.42, 0.38, 0.32, 1)
@@ -123,6 +124,8 @@ store_session_path = NodePath("../StoreSession")
 [node name="RegisterWorkstation" parent="." instance=ExtResource("4_register")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.2, 1.12, -2.35)
 customer_manager_path = NodePath("../CustomerManager")
+trade_in_customer_path = NodePath("../TradeInCustomer")
+receiving_box_path = NodePath("../ReceivingBox")
 ledger_path = NodePath("../TransactionLedger")
 store_session_path = NodePath("../StoreSession")
 
@@ -137,6 +140,9 @@ customer_id = "customer_001"
 [node name="BuyerCustomer002" parent="CustomerManager" instance=ExtResource("5_customer")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -2.65, 0, 3.55)
 customer_id = "customer_002"
+
+[node name="TradeInCustomer" parent="." instance=ExtResource("10_trade_customer")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.05, 0, -3.2)
 
 [node name="PlayerController" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -4.7)

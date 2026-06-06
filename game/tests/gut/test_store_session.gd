@@ -20,6 +20,15 @@ func test_store_session_applies_sale_to_cash() -> void:
 	assert_eq(session.get_cash_cents(), 52199)
 
 
+func test_store_session_applies_trade_in_to_cash() -> void:
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	session.apply_trade_in({"trade_in_cost_cents": 760})
+
+	assert_eq(session.get_cash_cents(), 49240)
+
+
 func test_store_session_reads_ledger_totals() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
@@ -38,7 +47,30 @@ func test_store_session_reads_ledger_totals() -> void:
 	assert_eq(session.get_total_profit_cents(), 1299)
 	assert_eq(session.get_last_transaction().get("display_name"), "Star Trader")
 	assert_string_contains(session.get_summary_text(), "Cash: $521.99")
+	assert_string_contains(session.get_summary_text(), "Trade-ins: 0")
 	assert_string_contains(session.get_summary_text(), "Profit: $12.99")
+
+
+func test_store_session_reads_trade_in_totals_without_counting_sales() -> void:
+	var ledger := TransactionLedger.new()
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var item: Node = customer.get_trade_item()
+	var transaction := ledger.record_trade_in("trade_seller_001", item, 760)
+	session.apply_trade_in(transaction)
+
+	assert_eq(session.get_sale_count(), 0)
+	assert_eq(session.get_trade_in_count(), 1)
+	assert_eq(session.get_total_revenue_cents(), 0)
+	assert_eq(session.get_total_trade_in_cost_cents(), 760)
+	assert_eq(session.get_cash_cents(), 49240)
+	assert_string_contains(session.get_summary_text(), "Trade-ins: 1")
+	assert_string_contains(session.get_summary_text(), "Trade spend: $7.60")
 
 
 func test_store_session_can_close_day() -> void:

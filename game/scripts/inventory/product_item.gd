@@ -3,6 +3,7 @@ extends "res://scripts/interaction/interactable.gd"
 @export var product: ProductDefinition
 @export var instance_id: String = ""
 @export var current_price_cents: int = 0
+@export var cost_basis_cents: int = 0
 @export var location_id: String = "receiving_box_001"
 
 var _default_collision_layer: int = 1
@@ -19,6 +20,8 @@ func _ready() -> void:
 	display_name = product.display_name
 	if current_price_cents <= 0:
 		current_price_cents = product.suggested_price_cents
+	if cost_basis_cents <= 0:
+		cost_basis_cents = product.cost_basis_cents
 
 
 func get_interaction_prompt() -> String:
