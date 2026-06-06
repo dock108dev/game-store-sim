@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bphm1usn5cknj"]
+[gd_scene format=3 uid="uid://bphm1usn5cknj"]
 
 [ext_resource type="Script" path="res://scripts/narrative/supplier_message.gd" id="1_supplier_message"]
 

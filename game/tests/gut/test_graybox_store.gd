@@ -163,6 +163,12 @@ func test_suspicious_event_log_exists() -> void:
 	assert_eq(event_log.get_event_count(), 0)
 
 
+func test_evidence_storage_exists() -> void:
+	var storage := _store.get_node_or_null("EvidenceStorage")
+	assert_not_null(storage)
+	assert_eq(storage.get_evidence_count(), 0)
+
+
 func test_backroom_computer_exists() -> void:
 	assert_not_null(_store.get_node_or_null("BackroomComputer"))
 

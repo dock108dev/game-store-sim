@@ -76,6 +76,34 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_supplier_message.gd::test_supplier_message_flags_hidden_event"
+    },
+    {
+      "id": "evidence_storage_exists",
+      "name": "Main scene contains hidden optional evidence storage",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_evidence_storage_exists"
+    },
+    {
+      "id": "evidence_storage_records_evidence",
+      "name": "Evidence storage records and deduplicates evidence records",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_evidence_storage.gd::test_evidence_storage_records_evidence"
+    },
+    {
+      "id": "evidence_storage_stores_mismatched_serial_item",
+      "name": "Evidence storage can store mismatched serial items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_evidence_storage.gd::test_evidence_storage_can_store_mismatched_serial_item"
+    },
+    {
+      "id": "evidence_storage_stores_supplier_message",
+      "name": "Evidence storage can store supplier message artifacts",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_evidence_storage.gd::test_evidence_storage_can_store_supplier_message"
     }
   ]
 }

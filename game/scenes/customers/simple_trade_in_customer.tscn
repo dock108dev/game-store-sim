@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bqtrade96q1p2"]
+[gd_scene format=3 uid="uid://bqtradfa6q1p2"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_trade_in_customer.gd" id="1_trade_customer"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="2_used_game"]

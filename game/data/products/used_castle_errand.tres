@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ProductDefinition" load_steps=2 format=3 uid="uid://catacastleerrand"]
+[gd_resource type="Resource" script_class="ProductDefinition" format=3 uid="uid://dqah05p25eo82"]
 
 [ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
 

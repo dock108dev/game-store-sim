@@ -121,6 +121,7 @@ Technical:
 29. Add suspicious event flags. Done as a hidden, optional event log service with idempotent event flags and no visible normal-loop interruption.
 30. Add mismatched serial item. Done as one optional receiving-box copy with serial mismatch metadata and hidden event flag support.
 31. Add supplier message artifact. Done as an optional receiving-box note with supplier metadata, inspection text, hidden event flag support, and screenshot coverage.
+32. Add optional evidence storage. Done as hidden deduped clue storage for serial mismatch and supplier message records.
 
 ## Slice Review Questions
 

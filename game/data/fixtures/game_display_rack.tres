@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="FixtureDefinition" load_steps=2 format=3 uid="uid://fixturegamedisplayrack"]
+[gd_resource type="Resource" script_class="FixtureDefinition" format=3 uid="uid://bojelwwvmi4ac"]
 
 [ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
 

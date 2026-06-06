@@ -58,7 +58,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add suspicious event flags. Done as a hidden, optional event log service with idempotent event flags and no visible normal-loop interruption.
 - Add mismatched serial item. Done as one receiving-box used-game copy with serial metadata, mismatch detection, and optional suspicious-event flagging.
 - Add supplier message artifact. Done as an optional receiving-box supplier note with metadata, inspection text, hidden-event flagging, and validation screenshot coverage.
-- Add optional evidence storage.
+- Add optional evidence storage. Done as a hidden evidence service that can store deduped clue records from mismatched serial items and supplier messages.
 - Add one suspicious customer encounter.
 - Keep all hidden-thread content optional and avoid blocking normal store progression.
 

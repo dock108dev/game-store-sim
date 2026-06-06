@@ -50,6 +50,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/narrative/evidence_storage.gd",
+      "tests": [
+        "res://tests/gut/test_evidence_storage.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/narrative/supplier_message.gd",
       "tests": [
         "res://tests/gut/test_supplier_message.gd"

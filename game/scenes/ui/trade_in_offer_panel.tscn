@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bs2tradepanel"]
+[gd_scene format=3 uid="uid://bs2tradepanel"]
 
 [ext_resource type="Script" path="res://scripts/ui/trade_in_offer_panel.gd" id="1_trade_in_offer_panel"]
 

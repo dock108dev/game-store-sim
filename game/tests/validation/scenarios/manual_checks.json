@@ -263,6 +263,14 @@
       "critical": false,
       "reason": "Requires human judgment that the receiving note placement and text read as an optional clue rather than a blocking objective.",
       "owner": "manual QA"
+    },
+    {
+      "id": "evidence_storage_invisible",
+      "name": "Evidence storage remains hidden during normal play",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human confirmation that hidden evidence infrastructure did not add a visible objective, warning, or panel before a deliberate UI slice.",
+      "owner": "manual QA"
     }
   ]
 }
