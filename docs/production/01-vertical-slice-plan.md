@@ -122,6 +122,7 @@ Technical:
 30. Add mismatched serial item. Done as one optional receiving-box copy with serial mismatch metadata and hidden event flag support.
 31. Add supplier message artifact. Done as an optional receiving-box note with supplier metadata, inspection text, hidden event flag support, and screenshot coverage.
 32. Add optional evidence storage. Done as hidden deduped clue storage for serial mismatch and supplier message records.
+33. Add one suspicious customer encounter. Done as an optional cash-buyer interaction that flags a hidden event, stores evidence, and stays out of normal sales queue progression.
 
 ## Slice Review Questions
 

@@ -61,6 +61,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"supplier_message":
 			_hide_node(scene, "PlayerController")
 			_set_camera(scene, Vector3(-3.0, 0.95, 2.85), Vector3(-3.15, 0.34, 3.45))
+		"suspicious_customer":
+			_hide_node(scene, "PlayerController")
+			_set_camera(scene, Vector3(-2.35, 1.45, -4.45), Vector3(-0.82, 0.82, -3.45))
 		"register_counter":
 			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
 		"customer_queue":

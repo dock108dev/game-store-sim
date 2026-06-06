@@ -59,15 +59,15 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add mismatched serial item. Done as one receiving-box used-game copy with serial metadata, mismatch detection, and optional suspicious-event flagging.
 - Add supplier message artifact. Done as an optional receiving-box supplier note with metadata, inspection text, hidden-event flagging, and validation screenshot coverage.
 - Add optional evidence storage. Done as a hidden evidence service that can store deduped clue records from mismatched serial items and supplier messages.
-- Add one suspicious customer encounter.
-- Keep all hidden-thread content optional and avoid blocking normal store progression.
+- Add one suspicious customer encounter. Done as an optional cash-buyer interaction near the register that records a hidden event and evidence without entering the buyer queue.
+- Keep all hidden-thread content optional and avoid blocking normal store progression. Current hidden-thread cues are passive until inspected or talked to.
 
 ## Tooling
 
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
-- Keep named validation screenshots current for main scene, receiving area, register counter, customer queue, trade-in offer, backroom summary, fixture ghost preview, invalid fixture ghost preview, and rotated fixture ghost preview.
+- Keep named validation screenshots current for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, backroom summary, fixture ghost preview, invalid fixture ghost preview, and rotated fixture ghost preview.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex. Started with catalog count, uniqueness, variety, pricing sanity, and fictional-name checks.

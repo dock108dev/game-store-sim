@@ -37,7 +37,9 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 31. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
 32. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
 33. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
-34. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
+34. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
+35. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, and day summary still work after talking to the `Cash Buyer`.
+36. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
 
 ## Visual Checks
 
@@ -69,6 +71,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Suspicious event flag infrastructure remains invisible during normal play.
 - Optional mismatched serial text is readable when inspecting that copy and does not make the normal store loop feel blocked.
 - Supplier note placement and text read as an optional receiving artifact, not a required tutorial or blocking objective.
+- Suspicious customer placement and text read as an optional hidden-thread cue, and the customer does not crowd the register queue or trade-in seller.
 - Evidence storage remains hidden infrastructure with no visible interruption.
 
 ## Automated Screenshot Artifacts
@@ -78,6 +81,7 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `main_scene.png`
 - `receiving_area.png`
 - `supplier_message.png`
+- `suspicious_customer.png`
 - `register_counter.png`
 - `customer_queue.png`
 - `trade_in_offer.png`

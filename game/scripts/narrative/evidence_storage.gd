@@ -110,8 +110,12 @@ func _metadata_for_node(node: Node) -> Dictionary:
 		"location_id",
 		"message_id",
 		"supplier_id",
+		"customer_id",
+		"encounter_id",
 		"subject",
 		"body",
+		"dialogue_text",
+		"severity",
 	]:
 		var value = node.get(property_name)
 		if value == null:

@@ -36,6 +36,13 @@
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     },
     {
+      "id": "suspicious_customer_screenshot",
+      "name": "Suspicious-customer validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
       "id": "register_counter_screenshot",
       "name": "Register-counter validation screenshot is captured and checked",
       "status": "automated",

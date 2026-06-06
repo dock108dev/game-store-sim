@@ -10,6 +10,7 @@ SCREENSHOT_SCENARIOS=(
   main_scene
   receiving_area
   supplier_message
+  suspicious_customer
   register_counter
   customer_queue
   trade_in_offer

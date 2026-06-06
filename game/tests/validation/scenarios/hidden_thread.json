@@ -104,6 +104,41 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_evidence_storage.gd::test_evidence_storage_can_store_supplier_message"
+    },
+    {
+      "id": "suspicious_customer_exists",
+      "name": "Main scene contains one optional suspicious customer encounter",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_suspicious_customer_exists_as_optional_encounter"
+    },
+    {
+      "id": "suspicious_customer_prompt",
+      "name": "Suspicious customer prompt reads as optional talk",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicious_customer.gd::test_suspicious_customer_prompt_reads_as_optional_talk"
+    },
+    {
+      "id": "suspicious_customer_text_clues",
+      "name": "Suspicious customer dialogue includes hidden-thread clues",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicious_customer.gd::test_suspicious_customer_interaction_text_contains_hidden_clues"
+    },
+    {
+      "id": "suspicious_customer_flags_event_and_evidence",
+      "name": "Suspicious customer interaction flags event and stores evidence",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicious_customer.gd::test_suspicious_customer_flags_event_and_stores_evidence"
+    },
+    {
+      "id": "suspicious_customer_does_not_join_sales_queue",
+      "name": "Suspicious customer stays out of the sales customer queue",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_suspicious_customer_does_not_join_sales_customer_queue"
     }
   ]
 }

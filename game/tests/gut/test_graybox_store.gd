@@ -143,6 +143,32 @@ func test_customer_manager_has_two_buyers() -> void:
 	assert_eq(manager.get_customers().size(), 2)
 
 
+func test_suspicious_customer_exists_as_optional_encounter() -> void:
+	var customer := _store.get_node_or_null("SuspiciousCustomer")
+	var event_log := _store.get_node("SuspiciousEventLog")
+	var storage := _store.get_node("EvidenceStorage")
+
+	assert_not_null(customer)
+	assert_string_contains(customer.get_interaction_prompt(), "Talk To")
+	assert_eq(event_log.get_event_count(), 0)
+	assert_eq(storage.get_evidence_count(), 0)
+
+	customer.interact()
+
+	assert_true(event_log.has_event("cash_buyer_bulk_request_001"))
+	assert_true(storage.has_evidence("cash_buyer_bulk_request_001"))
+	assert_eq(event_log.get_event_count(), 1)
+	assert_eq(storage.get_evidence_count(), 1)
+
+
+func test_suspicious_customer_does_not_join_sales_customer_queue() -> void:
+	var manager := _store.get_node("CustomerManager")
+	var customer := _store.get_node("SuspiciousCustomer")
+
+	assert_eq(manager.get_customers().size(), 2)
+	assert_ne(customer.get_parent(), manager)
+
+
 func test_trade_in_customer_exists_with_item() -> void:
 	var customer := _store.get_node_or_null("TradeInCustomer") as SimpleTradeInCustomer
 	assert_not_null(customer)
