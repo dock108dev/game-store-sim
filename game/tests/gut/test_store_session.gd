@@ -262,6 +262,62 @@ func test_store_session_orders_fixture_and_reserves_cash() -> void:
 	assert_string_contains(session.get_fixture_order_summary_text(), "slots:used_game")
 
 
+func test_store_session_places_pending_fixture_and_clears_pending_order() -> void:
+	var fixture_root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var manager: Node = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	fixture_root.add_child(session)
+	manager.add_child(ghost)
+	manager._ready()
+	session.fixture_placement_manager_path = session.get_path_to(manager)
+	session.inventory_root_path = session.get_path_to(fixture_root)
+	var order := session.order_fixture("fixture_game_display_rack")
+
+	var placed := session.place_pending_fixture()
+
+	assert_false(order.is_empty())
+	assert_false(placed.is_empty())
+	assert_eq(placed.get("order_id"), order.get("order_id"))
+	assert_eq(placed.get("status"), "placed")
+	assert_eq(session.get_pending_fixture_orders().size(), 0)
+	assert_eq(session.get_placed_fixture_orders().size(), 1)
+	assert_false(manager.is_ghost_visible())
+	assert_not_null(fixture_root.get_node_or_null("PlacedGameDisplayRack001"))
+	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement: none")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Placed fixtures:")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack placed")
+
+
+func test_store_session_rejects_pending_fixture_placement_when_ghost_is_invalid() -> void:
+	var fixture_root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var manager: Node = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	fixture_root.add_child(session)
+	manager.add_child(ghost)
+	manager._ready()
+	session.fixture_placement_manager_path = session.get_path_to(manager)
+	session.inventory_root_path = session.get_path_to(fixture_root)
+	session.order_fixture("fixture_game_display_rack")
+	manager.set_ghost_position(Vector3(99.0, 0.04, 2.15))
+
+	var placed := session.place_pending_fixture()
+
+	assert_true(placed.is_empty())
+	assert_false(session.can_place_pending_fixture())
+	assert_eq(session.get_pending_fixture_orders().size(), 1)
+	assert_eq(session.get_placed_fixture_orders().size(), 0)
+	assert_true(manager.is_ghost_visible())
+	assert_null(fixture_root.get_node_or_null("PlacedGameDisplayRack001"))
+
+
 func test_store_session_rejects_fixture_order_without_cash() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

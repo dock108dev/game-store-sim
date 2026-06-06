@@ -18,6 +18,7 @@ const DEFAULT_FIXTURE_CATALOG_PATHS := [
 var cash_cents: int = 0
 var is_day_closed: bool = false
 var fixture_orders: Array[Dictionary] = []
+var placed_fixtures: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -283,12 +284,72 @@ func get_pending_fixture_orders() -> Array[Dictionary]:
 	return orders
 
 
+func can_place_pending_fixture() -> bool:
+	if is_day_closed or get_pending_fixture_orders().is_empty():
+		return false
+
+	var placement_manager := _get_fixture_placement_manager()
+	return placement_manager != null \
+		and placement_manager.has_method("can_confirm_current_placement") \
+		and placement_manager.can_confirm_current_placement()
+
+
+func place_pending_fixture(parent: Node = null) -> Dictionary:
+	if not can_place_pending_fixture():
+		return {}
+
+	var placement_manager := _get_fixture_placement_manager()
+	var order_index := _find_fixture_order_index(str(placement_manager.get_current_order_id()))
+	if order_index == -1:
+		return {}
+
+	var order := fixture_orders[order_index]
+	var fixture := get_fixture_definition(str(order.get("fixture_id", "")))
+	if fixture == null:
+		return {}
+
+	var scene_path := str(fixture.get("scene_path"))
+	if scene_path.is_empty():
+		return {}
+
+	var fixture_parent := parent
+	if fixture_parent == null:
+		fixture_parent = _get_inventory_root()
+	if fixture_parent == null:
+		fixture_parent = get_parent()
+	if fixture_parent == null:
+		return {}
+
+	var placed_node := placement_manager.confirm_current_placement(fixture_parent, scene_path) as Node3D
+	if placed_node == null:
+		return {}
+
+	order["status"] = "placed"
+	order["placed_node_path"] = str(placed_node.get_path())
+	order["placed_position"] = placed_node.global_position
+	order["placed_rotation_y"] = placed_node.global_rotation.y
+	fixture_orders[order_index] = order
+	placed_fixtures.append(order.duplicate(true))
+	return order.duplicate(true)
+
+
+func get_placed_fixture_orders() -> Array[Dictionary]:
+	var orders: Array[Dictionary] = []
+	for order in fixture_orders:
+		if str(order.get("status", "")) == "placed":
+			orders.append(order.duplicate(true))
+	return orders
+
+
 func replace_fixture_orders(orders: Array) -> void:
 	fixture_orders.clear()
+	placed_fixtures.clear()
 	for order in orders:
 		if typeof(order) == TYPE_DICTIONARY:
 			var row: Dictionary = order
 			fixture_orders.append(row.duplicate(true))
+			if str(row.get("status", "")) == "placed":
+				placed_fixtures.append(row.duplicate(true))
 
 
 func get_fixture_order_summary_text() -> String:
@@ -311,6 +372,12 @@ func get_fixture_order_summary_text() -> String:
 				format_money(int(order.get("cost_cents", 0))),
 				str(order.get("slot_category", "unassigned")),
 			])
+
+	var placed := get_placed_fixture_orders()
+	if not placed.is_empty():
+		lines.append("Placed fixtures:")
+		for order in placed:
+			lines.append("%s placed" % str(order.get("display_name", "Fixture")))
 
 	return "\n".join(lines)
 
@@ -386,6 +453,16 @@ func _get_fixture_placement_manager() -> Node:
 		return null
 
 	return get_node_or_null(fixture_placement_manager_path)
+
+
+func _find_fixture_order_index(order_id: String) -> int:
+	if order_id.is_empty():
+		return -1
+
+	for index in range(fixture_orders.size()):
+		if str(fixture_orders[index].get("order_id", "")) == order_id:
+			return index
+	return -1
 
 
 func _collect_active_inventory_items(node: Node, items: Array[Node]) -> void:

@@ -8,6 +8,13 @@
       "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_contains_game_display_rack"
     },
     {
+      "id": "fixture_catalog_has_scene_path",
+      "name": "Fixture catalog maps the game display rack to its placeable scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_contains_game_display_rack"
+    },
+    {
       "id": "store_session_lists_fixture_orders",
       "name": "Store session lists available fixture orders",
       "status": "automated",
@@ -106,6 +113,20 @@
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_counter_rotates_ghost"
     },
     {
+      "id": "fixture_placement_manager_confirms_valid_placement",
+      "name": "Fixture placement manager confirms a valid ghost into a placed rack",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_confirms_valid_placement"
+    },
+    {
+      "id": "fixture_placement_manager_rejects_invalid_confirmation",
+      "name": "Fixture placement manager rejects confirmation for invalid ghost placement",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_rejects_invalid_confirmation"
+    },
+    {
       "id": "main_scene_fixture_placement_manager",
       "name": "Main scene includes a hidden fixture placement ghost manager",
       "status": "automated",
@@ -139,6 +160,41 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_placement_ghost_supports_rotation_and_grid_movement"
+    },
+    {
+      "id": "store_session_places_pending_fixture",
+      "name": "Store session places a pending fixture and clears the pending order",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_places_pending_fixture_and_clears_pending_order"
+    },
+    {
+      "id": "store_session_rejects_invalid_fixture_placement",
+      "name": "Store session keeps a pending order when the fixture ghost is invalid",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_rejects_pending_fixture_placement_when_ghost_is_invalid"
+    },
+    {
+      "id": "backroom_panel_places_pending_fixture",
+      "name": "Backroom computer panel places a pending fixture",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_places_pending_fixture_from_backroom_computer"
+    },
+    {
+      "id": "main_scene_fixture_order_places_rack",
+      "name": "Main scene fixture order can be confirmed into a placed rack",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_order_can_be_placed_in_main_scene"
+    },
+    {
+      "id": "placed_fixture_has_display_slots",
+      "name": "Confirmed game display rack includes used-game display slots",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_order_can_be_placed_in_main_scene"
     },
     {
       "id": "fixture_orders_persist_in_save_codec",

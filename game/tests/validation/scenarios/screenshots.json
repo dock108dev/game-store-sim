@@ -90,6 +90,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "fixture_placed_screenshot",
+      "name": "Placed fixture validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     }
   ]
 }

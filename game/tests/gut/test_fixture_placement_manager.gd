@@ -134,6 +134,55 @@ func test_fixture_placement_manager_hides_ghost() -> void:
 	assert_eq(manager.get_placement_state(), "hidden")
 
 
+func test_fixture_placement_manager_confirms_valid_placement() -> void:
+	var manager := _make_manager()
+	var parent := Node3D.new()
+	add_child_autofree(parent)
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+	})
+	manager.move_ghost_by_grid(1, 1)
+	manager.rotate_ghost()
+	var expected_position: Vector3 = manager.get_ghost_position()
+	var expected_rotation_y: float = manager.get_ghost_rotation_y()
+
+	var placed: Node3D = manager.confirm_current_placement(
+		parent,
+		"res://scenes/props/placeholder_shelf.tscn"
+	)
+
+	assert_not_null(placed)
+	assert_eq(placed.get_parent(), parent)
+	assert_eq(placed.name, "PlacedGameDisplayRack001")
+	assert_almost_eq(placed.global_position.x, expected_position.x, 0.001)
+	assert_almost_eq(placed.global_position.z, expected_position.z, 0.001)
+	assert_almost_eq(placed.global_rotation.y, expected_rotation_y, 0.001)
+	assert_false(manager.is_ghost_visible())
+	assert_eq(manager.get_placement_state(), "hidden")
+
+
+func test_fixture_placement_manager_rejects_invalid_confirmation() -> void:
+	var manager := _make_manager()
+	var parent := Node3D.new()
+	add_child_autofree(parent)
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+	})
+	manager.set_ghost_position(Vector3(99.0, 0.04, 2.15))
+
+	var placed: Node3D = manager.confirm_current_placement(
+		parent,
+		"res://scenes/props/placeholder_shelf.tscn"
+	)
+
+	assert_null(placed)
+	assert_true(manager.is_ghost_visible())
+	assert_eq(manager.get_placement_state(), "invalid")
+	assert_eq(parent.get_child_count(), 0)
+
+
 func _make_manager() -> Node:
 	var manager: Node = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
 	var ghost := Node3D.new()

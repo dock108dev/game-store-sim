@@ -10,4 +10,5 @@ category = "display"
 cost_cents = 12500
 footprint_size = Vector2(2.4, 0.6)
 default_slot_category = "used_game"
+scene_path = "res://scenes/props/placeholder_shelf.tscn"
 placeable = true

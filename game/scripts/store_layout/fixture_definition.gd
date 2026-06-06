@@ -7,6 +7,7 @@ class_name FixtureDefinition
 @export var cost_cents: int = 0
 @export var footprint_size: Vector2 = Vector2.ONE
 @export var default_slot_category: String = "used_game"
+@export_file("*.tscn") var scene_path: String = ""
 @export var placeable: bool = true
 
 

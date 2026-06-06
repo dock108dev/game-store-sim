@@ -277,6 +277,27 @@ func test_fixture_placement_ghost_supports_rotation_and_grid_movement() -> void:
 	assert_eq(manager.get_placement_state(), "valid")
 
 
+func test_fixture_order_can_be_placed_in_main_scene() -> void:
+	var session := _store.get_node("StoreSession")
+	var manager := _store.get_node("FixturePlacementManager")
+	var order: Dictionary = session.order_fixture("fixture_game_display_rack")
+
+	var placed_order: Dictionary = session.place_pending_fixture()
+
+	assert_false(order.is_empty())
+	assert_false(placed_order.is_empty())
+	assert_eq(placed_order.get("order_id"), order.get("order_id"))
+	assert_eq(placed_order.get("status"), "placed")
+	assert_false(manager.is_ghost_visible())
+	assert_eq(session.get_pending_fixture_orders().size(), 0)
+	assert_eq(session.get_placed_fixture_orders().size(), 1)
+	var placed_rack := _store.get_node_or_null("PlacedGameDisplayRack001") as Node3D
+	assert_not_null(placed_rack)
+	assert_not_null(placed_rack.get_node_or_null("ShelfSlot001"))
+	assert_not_null(placed_rack.get_node_or_null("ShelfSlot002"))
+	assert_not_null(placed_rack.get_node_or_null("ShelfSlot003"))
+
+
 func test_backroom_computer_is_wired_to_store_session() -> void:
 	var computer := _store.get_node("BackroomComputer")
 	var session := computer.get_node_or_null(computer.get("store_session_path"))

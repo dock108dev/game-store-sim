@@ -13,9 +13,11 @@ func test_fixture_catalog_contains_game_display_rack() -> void:
 	assert_eq(fixture.get("category"), "display")
 	assert_eq(fixture.get("default_slot_category"), "used_game")
 	assert_eq(fixture.get("cost_cents"), 12500)
+	assert_eq(fixture.get("scene_path"), "res://scenes/props/placeholder_shelf.tscn")
 	assert_true(fixture.get("placeable"))
 	assert_gt((fixture.get("footprint_size") as Vector2).x, 0.0)
 	assert_gt((fixture.get("footprint_size") as Vector2).y, 0.0)
+	assert_not_null(load(str(fixture.get("scene_path"))) as PackedScene)
 	assert_string_contains(fixture.call("describe"), "Game Display Rack")
 	assert_string_contains(fixture.call("describe"), "$125.00")
 

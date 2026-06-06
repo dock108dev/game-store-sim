@@ -32,6 +32,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.last_sale_label.text, "Recent activity: none")
 	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00")
 	assert_false(_panel.order_rack_button.disabled)
+	assert_true(_panel.place_rack_button.disabled)
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
 
@@ -140,6 +141,33 @@ func test_day_summary_panel_orders_fixture_from_backroom_computer() -> void:
 	assert_string_contains(_panel.fixture_label.text, "Pending placement:")
 	assert_string_contains(_panel.fixture_label.text, "Game Display Rack $125.00")
 	assert_eq(_panel.status_label.text, "Ordered Game Display Rack.")
+	assert_true(_panel.place_rack_button.disabled)
+
+
+func test_day_summary_panel_places_pending_fixture_from_backroom_computer() -> void:
+	var fixture_root := Node3D.new()
+	var manager: Node = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	manager.add_child(ghost)
+	manager._ready()
+	_session.fixture_placement_manager_path = _session.get_path_to(manager)
+	_session.inventory_root_path = _session.get_path_to(fixture_root)
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.order_game_display_rack())
+
+	assert_false(_panel.place_rack_button.disabled)
+	assert_true(_panel.place_pending_rack())
+
+	assert_eq(_session.get_pending_fixture_orders().size(), 0)
+	assert_eq(_session.get_placed_fixture_orders().size(), 1)
+	assert_not_null(fixture_root.get_node_or_null("PlacedGameDisplayRack001"))
+	assert_string_contains(_panel.fixture_label.text, "Pending placement: none")
+	assert_string_contains(_panel.fixture_label.text, "Placed fixtures:")
+	assert_eq(_panel.status_label.text, "Placed Game Display Rack.")
+	assert_true(_panel.place_rack_button.disabled)
 
 
 func test_day_summary_panel_end_day_updates_status() -> void:
@@ -151,6 +179,7 @@ func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_eq(_panel.status_label.text, "Day closed")
 	assert_string_contains(_panel.report_label.text, "Daily report day 1:")
 	assert_true(_panel.order_rack_button.disabled)
+	assert_true(_panel.place_rack_button.disabled)
 	assert_true(_panel.end_day_button.disabled)
 
 

@@ -84,6 +84,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"fixture_rotated_ghost":
 			_prepare_fixture_rotated_ghost(scene)
 			_set_camera(scene, Vector3(-2.55, 1.65, 2.75), Vector3(-0.55, 0.75, 2.4))
+		"fixture_placed":
+			_prepare_fixture_placed(scene)
+			_set_camera(scene, Vector3(-2.55, 1.65, 2.75), Vector3(-0.8, 0.75, 2.15))
 		_:
 			_set_camera(scene, Vector3(0.0, 2.0, -4.7), Vector3(0.0, 1.0, 1.5))
 
@@ -152,6 +155,15 @@ func _prepare_fixture_rotated_ghost(scene: Node) -> void:
 		manager.rotate_ghost()
 	if manager.has_method("move_ghost_by_grid"):
 		manager.move_ghost_by_grid(1, 1)
+
+
+func _prepare_fixture_placed(scene: Node) -> void:
+	_prepare_fixture_ghost(scene)
+	var session := scene.get_node_or_null("StoreSession")
+	if session == null or not session.has_method("place_pending_fixture"):
+		return
+
+	session.place_pending_fixture()
 
 
 func _stock_receiving_item(scene: Node, item_name: String, slot_path: String) -> void:

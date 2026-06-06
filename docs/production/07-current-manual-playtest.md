@@ -28,18 +28,20 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 22. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
 23. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
 24. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
-25. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
-26. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
-27. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
-28. Confirm the market drift readout is readable and makes sense for active inventory.
-29. End the day and confirm the summary changes to `Day closed`.
-30. Confirm the closed-day report is readable and matches the played day.
-31. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
-32. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
-33. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
-34. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
-35. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, and day summary still work after talking to the `Cash Buyer`.
-36. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
+25. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
+26. Reopen the backroom computer and confirm pending placement is cleared and the rack is listed as placed.
+27. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
+28. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
+29. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
+30. Confirm the market drift readout is readable and makes sense for active inventory.
+31. End the day and confirm the summary changes to `Day closed`.
+32. Confirm the closed-day report is readable and matches the played day.
+33. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
+34. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
+35. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
+36. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
+37. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, and day summary still work after talking to the `Cash Buyer`.
+38. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
 
 ## Visual Checks
 
@@ -66,6 +68,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Market drift text is readable and makes the active inventory value movement understandable.
 - Fixture order text/button are readable and clearly communicate pending placement.
 - Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
+- Placed rack confirmation reads as a deliberate action, and the real rack does not look like another ghost preview.
 - Green valid placement and red invalid placement are visually distinct in the actual window.
 - Rotated ghost preview is still visually aligned and readable.
 - Suspicious event flag infrastructure remains invisible during normal play.
@@ -89,3 +92,4 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `fixture_ghost.png`
 - `fixture_invalid_ghost.png`
 - `fixture_rotated_ghost.png`
+- `fixture_placed.png`

@@ -18,6 +18,7 @@ const PLACEMENT_STATE_INVALID := "invalid"
 var current_order_id: String = ""
 var current_fixture_id: String = ""
 var placement_state: String = PLACEMENT_STATE_HIDDEN
+var placed_fixture_count: int = 0
 
 
 func _ready() -> void:
@@ -125,6 +126,32 @@ func is_current_position_valid() -> bool:
 	return placement_state == PLACEMENT_STATE_VALID
 
 
+func can_confirm_current_placement() -> bool:
+	return is_ghost_visible() and is_current_position_valid() and not current_order_id.is_empty()
+
+
+func confirm_current_placement(parent: Node, fixture_scene_path: String) -> Node3D:
+	if parent == null or fixture_scene_path.is_empty() or not can_confirm_current_placement():
+		return null
+
+	var fixture_scene := load(fixture_scene_path) as PackedScene
+	if fixture_scene == null:
+		return null
+
+	var fixture := fixture_scene.instantiate() as Node3D
+	if fixture == null:
+		return null
+
+	var ghost := _get_ghost_preview()
+	var placed_transform := ghost.global_transform
+	placed_fixture_count += 1
+	fixture.name = "%s%03d" % [_fixture_node_name(current_fixture_id), placed_fixture_count]
+	parent.add_child(fixture)
+	fixture.global_transform = placed_transform
+	hide_ghost()
+	return fixture
+
+
 func get_placement_state() -> String:
 	return placement_state
 
@@ -192,3 +219,11 @@ func _snap_position(position: Vector3) -> Vector3:
 
 func _normalize_radians(value: float) -> float:
 	return fposmod(value, TAU)
+
+
+func _fixture_node_name(fixture_id: String) -> String:
+	match fixture_id:
+		"fixture_game_display_rack":
+			return "PlacedGameDisplayRack"
+		_:
+			return "PlacedFixture"

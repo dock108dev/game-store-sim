@@ -12,6 +12,7 @@ class_name DaySummaryPanel
 @onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FixtureLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var order_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/OrderRackButton
+@onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/PlaceRackButton
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/EndDayButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CloseButton
 
@@ -23,6 +24,7 @@ var _session: Node = null
 func _ready() -> void:
 	hide()
 	order_rack_button.pressed.connect(order_game_display_rack)
+	place_rack_button.pressed.connect(place_pending_rack)
 	end_day_button.pressed.connect(end_day)
 	close_button.pressed.connect(close)
 
@@ -78,6 +80,20 @@ func order_game_display_rack() -> bool:
 	return true
 
 
+func place_pending_rack() -> bool:
+	if _session == null or not _session.has_method("place_pending_fixture"):
+		return false
+
+	var placed: Dictionary = _session.place_pending_fixture()
+	_update_labels()
+	if placed.is_empty():
+		status_label.text = "Could not place rack."
+		return false
+
+	status_label.text = "Placed %s." % str(placed.get("display_name", "fixture"))
+	return true
+
+
 func close() -> bool:
 	if not is_open():
 		return false
@@ -127,4 +143,8 @@ func _update_labels() -> void:
 		order_rack_button.disabled = _session.is_day_closed or not _session.can_order_fixture(GAME_DISPLAY_RACK_ID)
 	else:
 		order_rack_button.disabled = true
+	if _session.has_method("can_place_pending_fixture"):
+		place_rack_button.disabled = _session.is_day_closed or not _session.can_place_pending_fixture()
+	else:
+		place_rack_button.disabled = true
 	end_day_button.disabled = _session.is_day_closed

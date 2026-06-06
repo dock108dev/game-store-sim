@@ -25,7 +25,7 @@ The gate currently runs:
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
-- Named validation screenshot capture at `1280x720` for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, backroom summary, fixture ghost preview, invalid fixture ghost preview, and rotated fixture ghost preview.
+- Named validation screenshot capture at `1280x720` for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, backroom summary, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
 
@@ -80,6 +80,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Ordered fixture ghost preview is visible, translucent, and reads as a pending placement rather than a finished rack.
 - Fixture ghost valid and invalid states read clearly as green allowed and red blocked placement previews.
 - Fixture ghost rotate and snap behavior feels predictable once exposed through player-facing placement controls.
+- Placing a pending rack through the backroom computer reads as a deliberate confirmation step, creates a real rack, and clears pending placement.
 - Suspicious event flags, supplier notes, and optional suspicious-customer conversations do not visibly interrupt normal store progression.
 - Backroom summary panel closes back into first-person mouse capture cleanly.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
@@ -103,7 +104,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
 - `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, and optional evidence storage checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
-- `scenarios/store_layout.json`: fixture catalog, fixture ordering, slot-category metadata, cash reservation, pending placement, ghost preview, valid/invalid placement state, rotate/snap controls, insufficient-cash rejection, and persistence coverage.
+- `scenarios/store_layout.json`: fixture catalog, fixture ordering, slot-category metadata, cash reservation, pending placement, ghost preview, valid/invalid placement state, rotate/snap controls, placement confirmation, insufficient-cash rejection, and persistence coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 
