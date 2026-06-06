@@ -184,6 +184,47 @@ func test_store_session_summarizes_active_inventory_items() -> void:
 	assert_string_contains(session.get_inventory_summary_text(), "Star Trader x2")
 
 
+func test_store_session_lists_available_fixture_orders() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var fixtures := session.get_available_fixture_definitions()
+
+	assert_eq(fixtures.size(), 1)
+	assert_eq(fixtures[0].get("fixture_id"), "fixture_game_display_rack")
+	assert_true(session.can_order_fixture("fixture_game_display_rack"))
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Game Display Rack $125.00")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement: none")
+
+
+func test_store_session_orders_fixture_and_reserves_cash() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var order := session.order_fixture("fixture_game_display_rack")
+
+	assert_eq(order.get("fixture_id"), "fixture_game_display_rack")
+	assert_eq(order.get("status"), "pending_placement")
+	assert_eq(order.get("cost_cents"), 12500)
+	assert_eq(session.get_cash_cents(), 37500)
+	assert_eq(session.get_pending_fixture_orders().size(), 1)
+	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement:")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack $125.00")
+
+
+func test_store_session_rejects_fixture_order_without_cash() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+	session.cash_cents = 1000
+
+	var order := session.order_fixture("fixture_game_display_rack")
+
+	assert_true(order.is_empty())
+	assert_false(session.can_order_fixture("fixture_game_display_rack"))
+	assert_eq(session.get_cash_cents(), 1000)
+	assert_eq(session.get_pending_fixture_orders().size(), 0)
+
+
 func test_store_session_can_close_day() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

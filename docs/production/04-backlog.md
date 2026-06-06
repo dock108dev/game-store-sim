@@ -37,7 +37,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Store Layout Slice
 
-- Add fixture and equipment ordering interface.
+- Add fixture and equipment ordering interface. Done for ordering a pending game display rack from the backroom computer.
 - Add fixture ghost placement.
 - Add valid/invalid placement state.
 - Add rotate and snap controls.

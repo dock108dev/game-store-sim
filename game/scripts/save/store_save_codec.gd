@@ -12,6 +12,7 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"cash_cents": session.get_cash_cents(),
 		"is_day_closed": session.is_day_closed,
 		"transactions": session.get_transactions(),
+		"fixture_orders": session.get_pending_fixture_orders(),
 		"inventory_items": _serialize_inventory_items(session.get_active_inventory_items()),
 	}
 	return data
@@ -53,6 +54,11 @@ func restore_into_existing_scene(
 		if typeof(items_value) == TYPE_ARRAY:
 			var items: Array = items_value
 			_restore_existing_item_state(inventory_root, items)
+
+	var fixture_orders_value: Variant = data.get("fixture_orders", [])
+	if typeof(fixture_orders_value) == TYPE_ARRAY:
+		var fixture_orders: Array = fixture_orders_value
+		session.replace_fixture_orders(fixture_orders)
 
 	return true
 

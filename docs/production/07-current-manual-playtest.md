@@ -25,7 +25,9 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 19. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
 20. Open the backroom computer.
 21. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
-22. End the day and confirm the summary changes to `Day closed`.
+22. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
+23. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
+24. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -44,6 +46,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
 - Inventory summary text is readable and matches active receiving/rack items.
 - Reorder suggestion text is readable and makes sense after selling stocked games.
+- Fixture order text/button are readable and clearly communicate pending placement.
 
 ## Automated Screenshot Artifacts
 

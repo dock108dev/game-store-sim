@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(500, 460)
+custom_minimum_size = Vector2(560, 560)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
@@ -48,6 +48,10 @@ text = "Inventory: none"
 layout_mode = 2
 text = "Reorder suggestions: none"
 
+[node name="FixtureLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Fixtures: none"
+
 [node name="StatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Day open"
@@ -57,6 +61,11 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 12
 alignment = 1
+
+[node name="OrderRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+text = "Order Rack"
 
 [node name="EndDayButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
 custom_minimum_size = Vector2(120, 44)

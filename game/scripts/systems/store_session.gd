@@ -6,8 +6,13 @@ class_name StoreSession
 @export var ledger_path: NodePath
 @export var inventory_root_path: NodePath
 
+const DEFAULT_FIXTURE_CATALOG_PATHS := [
+	"res://data/fixtures/game_display_rack.tres",
+]
+
 var cash_cents: int = 0
 var is_day_closed: bool = false
+var fixture_orders: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -195,6 +200,89 @@ func get_reorder_suggestions_text() -> String:
 
 	if lines.size() == 1:
 		return "Reorder suggestions: none"
+
+	return "\n".join(lines)
+
+
+func get_available_fixture_definitions() -> Array[Resource]:
+	var fixtures: Array[Resource] = []
+	for path in DEFAULT_FIXTURE_CATALOG_PATHS:
+		var fixture := load(path) as Resource
+		if fixture != null:
+			fixtures.append(fixture)
+	return fixtures
+
+
+func get_fixture_definition(fixture_id: String) -> Resource:
+	for fixture in get_available_fixture_definitions():
+		if str(fixture.get("fixture_id")) == fixture_id:
+			return fixture
+	return null
+
+
+func can_order_fixture(fixture_id: String) -> bool:
+	var fixture: Resource = get_fixture_definition(fixture_id)
+	return fixture != null \
+		and bool(fixture.get("placeable")) \
+		and get_cash_cents() >= int(fixture.get("cost_cents"))
+
+
+func order_fixture(fixture_id: String) -> Dictionary:
+	var fixture: Resource = get_fixture_definition(fixture_id)
+	if fixture == null or not bool(fixture.get("placeable")):
+		return {}
+	if get_cash_cents() < int(fixture.get("cost_cents")):
+		return {}
+
+	var cost_cents := int(fixture.get("cost_cents"))
+	cash_cents = get_cash_cents() - cost_cents
+	var order := {
+		"order_id": "fixture_order_%03d" % (fixture_orders.size() + 1),
+		"fixture_id": str(fixture.get("fixture_id")),
+		"display_name": str(fixture.get("display_name")),
+		"category": str(fixture.get("category")),
+		"cost_cents": cost_cents,
+		"status": "pending_placement",
+	}
+	fixture_orders.append(order)
+	return order.duplicate(true)
+
+
+func get_pending_fixture_orders() -> Array[Dictionary]:
+	var orders: Array[Dictionary] = []
+	for order in fixture_orders:
+		if str(order.get("status", "")) == "pending_placement":
+			orders.append(order.duplicate(true))
+	return orders
+
+
+func replace_fixture_orders(orders: Array) -> void:
+	fixture_orders.clear()
+	for order in orders:
+		if typeof(order) == TYPE_DICTIONARY:
+			var row: Dictionary = order
+			fixture_orders.append(row.duplicate(true))
+
+
+func get_fixture_order_summary_text() -> String:
+	var fixtures := get_available_fixture_definitions()
+	var lines: Array[String] = ["Fixtures:"]
+	for fixture in fixtures:
+		lines.append("Order %s %s" % [
+			str(fixture.get("display_name")),
+			format_money(int(fixture.get("cost_cents"))),
+		])
+
+	var pending := get_pending_fixture_orders()
+	if pending.is_empty():
+		lines.append("Pending placement: none")
+	else:
+		lines.append("Pending placement:")
+		for order in pending:
+			lines.append("%s %s" % [
+				str(order.get("display_name", "Fixture")),
+				format_money(int(order.get("cost_cents", 0))),
+			])
 
 	return "\n".join(lines)
 

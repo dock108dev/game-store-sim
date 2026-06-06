@@ -1,0 +1,46 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "fixture_catalog_contains_game_display_rack",
+      "name": "Fixture catalog contains the orderable game display rack",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_contains_game_display_rack"
+    },
+    {
+      "id": "store_session_lists_fixture_orders",
+      "name": "Store session lists available fixture orders",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_lists_available_fixture_orders"
+    },
+    {
+      "id": "store_session_orders_fixture",
+      "name": "Store session orders a fixture and reserves cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_orders_fixture_and_reserves_cash"
+    },
+    {
+      "id": "store_session_rejects_fixture_without_cash",
+      "name": "Store session rejects fixture orders without enough cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_rejects_fixture_order_without_cash"
+    },
+    {
+      "id": "backroom_panel_orders_fixture",
+      "name": "Backroom computer panel orders a display rack",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_orders_fixture_from_backroom_computer"
+    },
+    {
+      "id": "fixture_orders_persist_in_save_codec",
+      "name": "Fixture orders are included in save codec smoke coverage",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_serializes_session_transactions_and_inventory"
+    }
+  ]
+}

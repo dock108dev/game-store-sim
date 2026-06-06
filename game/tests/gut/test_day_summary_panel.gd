@@ -29,6 +29,8 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.summary_label.text, "Cash: $500.00")
 	assert_string_contains(_panel.summary_label.text, "Sales: 0")
 	assert_eq(_panel.last_sale_label.text, "Recent activity: none")
+	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00")
+	assert_false(_panel.order_rack_button.disabled)
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
 
@@ -108,6 +110,18 @@ func test_day_summary_panel_includes_reorder_suggestions() -> void:
 	assert_string_contains(_panel.reorder_label.text, "Restock Star Trader")
 
 
+func test_day_summary_panel_orders_fixture_from_backroom_computer() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.order_game_display_rack())
+
+	assert_eq(_session.get_cash_cents(), 37500)
+	assert_string_contains(_panel.summary_label.text, "Cash: $375.00")
+	assert_string_contains(_panel.fixture_label.text, "Pending placement:")
+	assert_string_contains(_panel.fixture_label.text, "Game Display Rack $125.00")
+	assert_eq(_panel.status_label.text, "Ordered Game Display Rack.")
+
+
 func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_true(_panel.open_for_session(_session))
 
@@ -115,6 +129,7 @@ func test_day_summary_panel_end_day_updates_status() -> void:
 
 	assert_true(_session.is_day_closed)
 	assert_eq(_panel.status_label.text, "Day closed")
+	assert_true(_panel.order_rack_button.disabled)
 	assert_true(_panel.end_day_button.disabled)
 
 

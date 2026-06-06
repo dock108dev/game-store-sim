@@ -108,7 +108,8 @@ Technical:
 16. Add first trade-in seller. Done as a register-reviewed trade-in with condition/market/demand details, cash counteroffer adjustment, store-credit acceptance, decline, and accepted item movement into receiving inventory.
 17. Add first product catalog. Done with 12 fictional used games, three platforms, four conditions, three demand tiers, and automated catalog validation.
 18. Add first customer price sensitivity. Done with demand-based buyer refusal for overpriced matching used games.
-19. Add first persistence smoke. Done as a codec-level save/load roundtrip for session, ledger, and active item state.
+19. Add first persistence smoke. Done as a codec-level save/load roundtrip for session, ledger, active item state, and pending fixture orders.
+20. Add first fixture ordering interface. Done as a backroom-computer order action for a pending game display rack; ghost placement remains later.
 
 ## Slice Review Questions
 

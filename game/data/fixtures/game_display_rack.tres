@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FixtureDefinition" load_steps=2 format=3 uid="uid://fixturegamedisplayrack"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
+
+[resource]
+script = ExtResource("1_fixture_definition")
+fixture_id = "fixture_game_display_rack"
+display_name = "Game Display Rack"
+category = "display"
+cost_cents = 12500
+footprint_size = Vector2(2.4, 0.6)
+default_slot_category = "used_game"
+placeable = true

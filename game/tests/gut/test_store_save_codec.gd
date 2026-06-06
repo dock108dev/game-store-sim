@@ -16,6 +16,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	session.inventory_root_path = session.get_path_to(root)
 	var transaction := ledger.record_sale("customer_001", item)
 	session.apply_sale(transaction)
+	session.order_fixture("fixture_game_display_rack")
 	item.set("current_price_cents", 2399)
 	item.set("location_id", "shelf_slot_001")
 
@@ -23,8 +24,12 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 
 	assert_eq(data.get("version"), 1)
 	assert_eq(data.get("day_number"), 1)
-	assert_eq(data.get("cash_cents"), 52199)
+	assert_eq(data.get("cash_cents"), 39699)
 	assert_eq((data.get("transactions") as Array).size(), 1)
+	var fixture_orders: Array = data.get("fixture_orders")
+	assert_eq(fixture_orders.size(), 1)
+	assert_eq(fixture_orders[0].get("fixture_id"), "fixture_game_display_rack")
+	assert_eq(fixture_orders[0].get("status"), "pending_placement")
 	var inventory_items: Array = data.get("inventory_items")
 	assert_eq(inventory_items.size(), 1)
 	assert_eq(inventory_items[0].get("instance_id"), "item_used_star_trader_001")
@@ -40,6 +45,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"cash_cents": 61234,
 		"is_day_closed": true,
 		"transactions": [{"transaction_id": "sale_001", "type": "sale"}],
+		"fixture_orders": [{"fixture_id": "fixture_game_display_rack", "status": "pending_placement"}],
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
 
@@ -51,6 +57,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq(int(decoded.get("cash_cents")), 61234)
 	assert_true(decoded.get("is_day_closed"))
 	assert_eq((decoded.get("transactions") as Array).size(), 1)
+	assert_eq((decoded.get("fixture_orders") as Array)[0].get("fixture_id"), "fixture_game_display_rack")
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
 
@@ -79,6 +86,15 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"profit_cents": 1599,
 			}
 		],
+		"fixture_orders": [
+			{
+				"order_id": "fixture_order_001",
+				"fixture_id": "fixture_game_display_rack",
+				"display_name": "Game Display Rack",
+				"cost_cents": 12500,
+				"status": "pending_placement",
+			}
+		],
 		"inventory_items": [
 			{
 				"instance_id": "item_used_star_trader_001",
@@ -96,5 +112,6 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_true(session.is_day_closed)
 	assert_eq(ledger.get_sale_count(), 1)
 	assert_eq(ledger.get_total_revenue_cents(), 2499)
+	assert_eq(session.get_pending_fixture_orders().size(), 1)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")

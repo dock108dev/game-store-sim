@@ -78,6 +78,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/store_layout/fixture_definition.gd",
+      "tests": [
+        "res://tests/gut/test_fixture_catalog.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/shelf_slot.gd",
       "tests": [
         "res://tests/gut/test_shelf_slot.gd"
