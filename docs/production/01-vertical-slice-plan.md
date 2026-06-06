@@ -124,6 +124,7 @@ Technical:
 32. Add optional evidence storage. Done as hidden deduped clue storage for serial mismatch and supplier message records.
 33. Add one suspicious customer encounter. Done as an optional cash-buyer interaction that flags a hidden event, stores evidence, and stays out of normal sales queue progression.
 34. Add first player-facing fixture placement confirmation. Done as a `Place Rack` backroom-computer action that turns the valid pending rack ghost into a real game display rack and clears pending placement.
+35. Add first supplier ordering and delivery delay. Done as a backroom `Order Games` action that reserves cash, creates a pending due-day order, and delivers used games into receiving when the next day starts.
 
 ## Slice Review Questions
 

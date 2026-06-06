@@ -30,11 +30,15 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.summary_label.text, "Sales: 0")
 	assert_eq(_panel.report_label.text, "Daily report: day still open")
 	assert_eq(_panel.last_sale_label.text, "Recent activity: none")
+	assert_string_contains(_panel.supplier_order_label.text, "Order Used Game Starter Lot $27.00")
+	assert_string_contains(_panel.supplier_order_label.text, "Pending delivery: none")
 	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00")
+	assert_false(_panel.order_games_button.disabled)
 	assert_false(_panel.order_rack_button.disabled)
 	assert_true(_panel.place_rack_button.disabled)
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
+	assert_eq(_panel.end_day_button.text, "End Day")
 
 
 func test_day_summary_panel_includes_recent_sale_activity() -> void:
@@ -144,6 +148,43 @@ func test_day_summary_panel_orders_fixture_from_backroom_computer() -> void:
 	assert_true(_panel.place_rack_button.disabled)
 
 
+func test_day_summary_panel_orders_supplier_lot_from_backroom_computer() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.order_used_game_lot())
+
+	assert_eq(_session.get_cash_cents(), 47300)
+	assert_string_contains(_panel.summary_label.text, "Cash: $473.00")
+	assert_string_contains(_panel.supplier_order_label.text, "Pending delivery:")
+	assert_string_contains(_panel.supplier_order_label.text, "Used Game Starter Lot due day 2 (3 items)")
+	assert_eq(_panel.status_label.text, "Ordered Used Game Starter Lot.")
+
+
+func test_day_summary_panel_starts_next_day_and_delivers_supplier_lot() -> void:
+	var root := Node3D.new()
+	var receiving_box: Node3D = load("res://scenes/props/receiving_box.tscn").instantiate()
+	add_child_autofree(root)
+	root.add_child(receiving_box)
+	_session.inventory_root_path = _session.get_path_to(root)
+	_session.receiving_box_path = _session.get_path_to(receiving_box)
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.order_used_game_lot())
+
+	assert_true(_panel.end_day())
+	assert_true(_session.is_day_closed)
+	assert_eq(_panel.end_day_button.text, "Start Day")
+
+	assert_true(_panel.end_day())
+
+	assert_false(_session.is_day_closed)
+	assert_eq(_session.day_number, 2)
+	assert_string_contains(_panel.status_label.text, "Started day 2. Delivered 1 order.")
+	assert_string_contains(_panel.supplier_order_label.text, "Delivered lots:")
+	assert_string_contains(_panel.inventory_label.text, "Moon Escape x1")
+	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame004"))
+	assert_eq(_panel.end_day_button.text, "End Day")
+
+
 func test_day_summary_panel_places_pending_fixture_from_backroom_computer() -> void:
 	var fixture_root := Node3D.new()
 	var manager: Node = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
@@ -180,7 +221,8 @@ func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_string_contains(_panel.report_label.text, "Daily report day 1:")
 	assert_true(_panel.order_rack_button.disabled)
 	assert_true(_panel.place_rack_button.disabled)
-	assert_true(_panel.end_day_button.disabled)
+	assert_false(_panel.end_day_button.disabled)
+	assert_eq(_panel.end_day_button.text, "Start Day")
 
 
 func test_day_summary_panel_close_hides_panel() -> void:

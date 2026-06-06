@@ -75,6 +75,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"backroom_summary":
 			_prepare_backroom_summary(scene)
 			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
+		"supplier_delivery":
+			_prepare_supplier_delivery(scene)
+			_set_camera(scene, Vector3(-3.0, 1.25, 2.65), Vector3(-3.35, 0.34, 3.45))
 		"fixture_ghost":
 			_prepare_fixture_ghost(scene)
 			_set_camera(scene, Vector3(-2.55, 1.65, 2.75), Vector3(-0.8, 0.75, 2.15))
@@ -126,6 +129,19 @@ func _prepare_trade_in_offer(scene: Node) -> void:
 
 	if player.has_method("open_trade_in_offer"):
 		player.open_trade_in_offer(register, customer)
+
+
+func _prepare_supplier_delivery(scene: Node) -> void:
+	_hide_node(scene, "PlayerController")
+	var session := scene.get_node_or_null("StoreSession")
+	if session == null:
+		return
+	if not session.has_method("order_supplier_lot") or not session.has_method("start_next_day"):
+		return
+
+	session.order_supplier_lot("supplier_lot_used_games_001")
+	session.end_day()
+	session.start_next_day()
 
 
 func _prepare_fixture_ghost(scene: Node) -> void:

@@ -234,6 +234,13 @@ func test_store_session_is_wired_to_inventory_root() -> void:
 	assert_gt(session.get_active_inventory_items().size(), 0)
 
 
+func test_store_session_is_wired_to_receiving_box() -> void:
+	var session := _store.get_node("StoreSession")
+	var receiving_box := session.get_node_or_null(session.get("receiving_box_path"))
+
+	assert_eq(receiving_box, _store.get_node("ReceivingBox"))
+
+
 func test_store_session_is_wired_to_fixture_placement_manager() -> void:
 	var session := _store.get_node("StoreSession")
 	var manager := session.get_node_or_null(session.get("fixture_placement_manager_path"))
@@ -296,6 +303,27 @@ func test_fixture_order_can_be_placed_in_main_scene() -> void:
 	assert_not_null(placed_rack.get_node_or_null("ShelfSlot001"))
 	assert_not_null(placed_rack.get_node_or_null("ShelfSlot002"))
 	assert_not_null(placed_rack.get_node_or_null("ShelfSlot003"))
+
+
+func test_supplier_order_delivers_items_to_main_scene_receiving_box() -> void:
+	var session := _store.get_node("StoreSession")
+	var receiving_box := _store.get_node("ReceivingBox")
+
+	var order: Dictionary = session.order_supplier_lot("supplier_lot_used_games_001")
+	session.end_day()
+	var started: Dictionary = session.start_next_day()
+
+	assert_false(order.is_empty())
+	assert_false(started.is_empty())
+	assert_eq(started.get("delivered_count"), 1)
+	assert_eq(session.get_pending_supplier_orders().size(), 0)
+	assert_eq(session.get_delivered_supplier_orders().size(), 1)
+	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame004"))
+	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame005"))
+	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame006"))
+	assert_string_contains(session.get_inventory_summary_text(), "Star Trader x4")
+	assert_string_contains(session.get_inventory_summary_text(), "Moon Escape x1")
+	assert_string_contains(session.get_inventory_summary_text(), "Neon Harbor x1")
 
 
 func test_backroom_computer_is_wired_to_store_session() -> void:

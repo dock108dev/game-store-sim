@@ -245,6 +245,81 @@ func test_store_session_lists_available_fixture_orders() -> void:
 	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement: none")
 
 
+func test_store_session_lists_available_supplier_lots() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var lots := session.get_available_supplier_lots()
+
+	assert_eq(lots.size(), 1)
+	assert_eq(lots[0].get("lot_id"), "supplier_lot_used_games_001")
+	assert_true(session.can_order_supplier_lot("supplier_lot_used_games_001"))
+	assert_string_contains(session.get_supplier_order_summary_text(), "Supplier orders:")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Order Used Game Starter Lot $27.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Pending delivery: none")
+
+
+func test_store_session_orders_supplier_lot_and_reserves_cash() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var order := session.order_supplier_lot("supplier_lot_used_games_001")
+
+	assert_eq(order.get("lot_id"), "supplier_lot_used_games_001")
+	assert_eq(order.get("supplier_id"), "North Dock Wholesale")
+	assert_eq(order.get("status"), "pending_delivery")
+	assert_eq(order.get("ordered_day"), 1)
+	assert_eq(order.get("due_day"), 2)
+	assert_eq(order.get("item_count"), 3)
+	assert_eq(order.get("cost_cents"), 2700)
+	assert_eq(session.get_cash_cents(), 47300)
+	assert_eq(session.get_pending_supplier_orders().size(), 1)
+	assert_string_contains(session.get_supplier_order_summary_text(), "Pending delivery:")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot due day 2 (3 items)")
+
+
+func test_store_session_rejects_supplier_order_without_cash() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+	session.cash_cents = 1000
+
+	var order := session.order_supplier_lot("supplier_lot_used_games_001")
+
+	assert_true(order.is_empty())
+	assert_false(session.can_order_supplier_lot("supplier_lot_used_games_001"))
+	assert_eq(session.get_cash_cents(), 1000)
+	assert_eq(session.get_pending_supplier_orders().size(), 0)
+
+
+func test_store_session_delivers_supplier_lot_on_next_day() -> void:
+	var root := Node3D.new()
+	var receiving_box: Node3D = load("res://scenes/props/receiving_box.tscn").instantiate()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(root)
+	root.add_child(receiving_box)
+	root.add_child(session)
+	session.inventory_root_path = session.get_path_to(root)
+	session.receiving_box_path = session.get_path_to(receiving_box)
+	session.order_supplier_lot("supplier_lot_used_games_001")
+
+	session.end_day()
+	var started := session.start_next_day()
+
+	assert_false(started.is_empty())
+	assert_eq(started.get("day_number"), 2)
+	assert_eq(started.get("delivered_count"), 1)
+	assert_false(session.is_day_closed)
+	assert_eq(session.day_number, 2)
+	assert_eq(session.get_pending_supplier_orders().size(), 0)
+	assert_eq(session.get_delivered_supplier_orders().size(), 1)
+	assert_string_contains(session.get_supplier_order_summary_text(), "Delivered lots:")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot delivered day 2")
+	assert_eq(_count_inventory_items(receiving_box), 6)
+	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame004"))
+	assert_string_contains(session.get_inventory_summary_text(), "Moon Escape x1")
+	assert_string_contains(session.get_inventory_summary_text(), "Neon Harbor x1")
+
+
 func test_store_session_orders_fixture_and_reserves_cash() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)
@@ -339,3 +414,12 @@ func test_store_session_can_close_day() -> void:
 
 	assert_true(session.is_day_closed)
 	assert_eq(session.get_status_label(), "Day closed")
+
+
+func _count_inventory_items(root: Node) -> int:
+	var count := 0
+	for child in root.get_children():
+		var product := child.get("product") as ProductDefinition
+		if product != null:
+			count += 1
+	return count

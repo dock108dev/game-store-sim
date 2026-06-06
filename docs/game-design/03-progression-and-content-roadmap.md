@@ -99,8 +99,8 @@ Goal: add planning pressure.
 
 Features:
 
-- Supplier ordering.
-- Delivery delays.
+- Supplier ordering. First pass done as a backroom `Used Game Starter Lot` order.
+- Delivery delays. First pass done as next-day receiving-box delivery.
 - New release calendar.
 - Preorder deposits.
 - Allocation limits.

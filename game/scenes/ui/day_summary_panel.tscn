@@ -60,6 +60,10 @@ text = "Category demand: none"
 layout_mode = 2
 text = "Market drift: none"
 
+[node name="SupplierOrderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Supplier orders: none"
+
 [node name="FixtureLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Fixtures: none"
@@ -71,25 +75,30 @@ horizontal_alignment = 1
 
 [node name="ActionRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 8
 alignment = 1
 
+[node name="OrderGamesButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(112, 44)
+layout_mode = 2
+text = "Order Games"
+
 [node name="OrderRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(120, 44)
+custom_minimum_size = Vector2(112, 44)
 layout_mode = 2
 text = "Order Rack"
 
 [node name="PlaceRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(120, 44)
+custom_minimum_size = Vector2(112, 44)
 layout_mode = 2
 text = "Place Rack"
 
 [node name="EndDayButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(120, 44)
+custom_minimum_size = Vector2(112, 44)
 layout_mode = 2
 text = "End Day"
 
 [node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(120, 44)
+custom_minimum_size = Vector2(112, 44)
 layout_mode = 2
 text = "Close"

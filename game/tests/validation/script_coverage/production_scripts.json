@@ -148,6 +148,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/suppliers/supplier_lot.gd",
+      "tests": [
+        "res://tests/gut/test_supplier_lot.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/systems/store_session.gd",
       "tests": [
         "res://tests/gut/test_store_session.gd"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SupplierLot" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/suppliers/supplier_lot.gd" id="1_supplier_lot"]
+
+[resource]
+script = ExtResource("1_supplier_lot")
+lot_id = "supplier_lot_used_games_001"
+supplier_id = "North Dock Wholesale"
+display_name = "Used Game Starter Lot"
+cost_cents = 2700
+delivery_days = 1
+item_scene_path = "res://scenes/props/placeholder_used_game.tscn"
+product_paths = Array[String](["res://data/products/used_star_trader.tres", "res://data/products/used_moon_escape.tres", "res://data/products/used_neon_harbor.tres"])

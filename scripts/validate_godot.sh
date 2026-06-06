@@ -15,6 +15,7 @@ SCREENSHOT_SCENARIOS=(
   customer_queue
   trade_in_offer
   backroom_summary
+  supplier_delivery
   fixture_ghost
   fixture_invalid_ghost
   fixture_rotated_ghost

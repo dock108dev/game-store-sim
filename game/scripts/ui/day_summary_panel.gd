@@ -9,20 +9,24 @@ class_name DaySummaryPanel
 @onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReorderLabel
 @onready var demand_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DemandLabel
 @onready var market_drift_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MarketDriftLabel
+@onready var supplier_order_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SupplierOrderLabel
 @onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FixtureLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
+@onready var order_games_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/OrderGamesButton
 @onready var order_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/OrderRackButton
 @onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/PlaceRackButton
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/EndDayButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CloseButton
 
 const GAME_DISPLAY_RACK_ID := "fixture_game_display_rack"
+const USED_GAME_STARTER_LOT_ID := "supplier_lot_used_games_001"
 
 var _session: Node = null
 
 
 func _ready() -> void:
 	hide()
+	order_games_button.pressed.connect(order_used_game_lot)
 	order_rack_button.pressed.connect(order_game_display_rack)
 	place_rack_button.pressed.connect(place_pending_rack)
 	end_day_button.pressed.connect(end_day)
@@ -61,8 +65,39 @@ func end_day() -> bool:
 	if _session == null:
 		return false
 
+	if _session.is_day_closed and _session.has_method("start_next_day"):
+		var started: Dictionary = _session.start_next_day()
+		_update_labels()
+		if started.is_empty():
+			status_label.text = "Could not start next day."
+			return false
+
+		var delivered_count := int(started.get("delivered_count", 0))
+		if delivered_count > 0:
+			status_label.text = "Started day %d. Delivered %d order." % [
+				int(started.get("day_number", 0)),
+				delivered_count,
+			]
+		else:
+			status_label.text = "Started day %d." % int(started.get("day_number", 0))
+		return true
+
 	_session.end_day()
 	_update_labels()
+	return true
+
+
+func order_used_game_lot() -> bool:
+	if _session == null or not _session.has_method("order_supplier_lot"):
+		return false
+
+	var order: Dictionary = _session.order_supplier_lot(USED_GAME_STARTER_LOT_ID)
+	_update_labels()
+	if order.is_empty():
+		status_label.text = "Could not order games."
+		return false
+
+	status_label.text = "Ordered %s." % str(order.get("display_name", "supplier lot"))
 	return true
 
 
@@ -134,11 +169,20 @@ func _update_labels() -> void:
 		market_drift_label.text = _session.get_market_drift_summary_text()
 	else:
 		market_drift_label.text = "Market drift unavailable"
+	if _session.has_method("get_supplier_order_summary_text"):
+		supplier_order_label.text = _session.get_supplier_order_summary_text()
+	else:
+		supplier_order_label.text = "Supplier orders unavailable"
 	if _session.has_method("get_fixture_order_summary_text"):
 		fixture_label.text = _session.get_fixture_order_summary_text()
 	else:
 		fixture_label.text = "Fixtures unavailable"
 	status_label.text = _session.get_status_label()
+	if _session.has_method("can_order_supplier_lot"):
+		order_games_button.disabled = _session.is_day_closed \
+			or not _session.can_order_supplier_lot(USED_GAME_STARTER_LOT_ID)
+	else:
+		order_games_button.disabled = true
 	if _session.has_method("can_order_fixture"):
 		order_rack_button.disabled = _session.is_day_closed or not _session.can_order_fixture(GAME_DISPLAY_RACK_ID)
 	else:
@@ -147,4 +191,5 @@ func _update_labels() -> void:
 		place_rack_button.disabled = _session.is_day_closed or not _session.can_place_pending_fixture()
 	else:
 		place_rack_button.disabled = true
-	end_day_button.disabled = _session.is_day_closed
+	end_day_button.disabled = false
+	end_day_button.text = "Start Day" if _session.is_day_closed else "End Day"

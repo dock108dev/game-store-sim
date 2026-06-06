@@ -9,16 +9,21 @@ const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
 @export var starting_cash_cents: int = 50000
 @export var ledger_path: NodePath
 @export var inventory_root_path: NodePath
+@export var receiving_box_path: NodePath
 @export var fixture_placement_manager_path: NodePath
 
 const DEFAULT_FIXTURE_CATALOG_PATHS := [
 	"res://data/fixtures/game_display_rack.tres",
+]
+const DEFAULT_SUPPLIER_LOT_PATHS := [
+	"res://data/suppliers/used_game_starter_lot.tres",
 ]
 
 var cash_cents: int = 0
 var is_day_closed: bool = false
 var fixture_orders: Array[Dictionary] = []
 var placed_fixtures: Array[Dictionary] = []
+var supplier_orders: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -39,6 +44,20 @@ func apply_trade_in(transaction: Dictionary) -> void:
 
 func end_day() -> void:
 	is_day_closed = true
+
+
+func start_next_day() -> Dictionary:
+	if not is_day_closed:
+		return {}
+
+	day_number += 1
+	is_day_closed = false
+	var delivered_orders := _deliver_due_supplier_orders()
+	return {
+		"day_number": day_number,
+		"delivered_orders": delivered_orders,
+		"delivered_count": delivered_orders.size(),
+	}
 
 
 func get_cash_cents() -> int:
@@ -235,6 +254,117 @@ func get_available_fixture_definitions() -> Array[Resource]:
 		if fixture != null:
 			fixtures.append(fixture)
 	return fixtures
+
+
+func get_available_supplier_lots() -> Array[Resource]:
+	var lots: Array[Resource] = []
+	for path in DEFAULT_SUPPLIER_LOT_PATHS:
+		var lot := load(path) as Resource
+		if lot != null:
+			lots.append(lot)
+	return lots
+
+
+func get_supplier_lot(lot_id: String) -> Resource:
+	for lot in get_available_supplier_lots():
+		if str(lot.get("lot_id")) == lot_id:
+			return lot
+	return null
+
+
+func can_order_supplier_lot(lot_id: String) -> bool:
+	var lot: Resource = get_supplier_lot(lot_id)
+	return not is_day_closed \
+		and lot != null \
+		and int(lot.get("cost_cents")) > 0 \
+		and get_cash_cents() >= int(lot.get("cost_cents"))
+
+
+func order_supplier_lot(lot_id: String) -> Dictionary:
+	var lot: Resource = get_supplier_lot(lot_id)
+	if lot == null:
+		return {}
+	if is_day_closed or get_cash_cents() < int(lot.get("cost_cents")):
+		return {}
+
+	var cost_cents := int(lot.get("cost_cents"))
+	var delivery_days := maxi(1, int(lot.get("delivery_days")))
+	cash_cents = get_cash_cents() - cost_cents
+	var product_paths: Array = lot.get("product_paths") as Array
+	var order := {
+		"order_id": "supplier_order_%03d" % (supplier_orders.size() + 1),
+		"lot_id": str(lot.get("lot_id")),
+		"supplier_id": str(lot.get("supplier_id")),
+		"display_name": str(lot.get("display_name")),
+		"cost_cents": cost_cents,
+		"ordered_day": day_number,
+		"due_day": day_number + delivery_days,
+		"item_count": product_paths.size(),
+		"status": "pending_delivery",
+	}
+	supplier_orders.append(order)
+	return order.duplicate(true)
+
+
+func get_pending_supplier_orders() -> Array[Dictionary]:
+	var orders: Array[Dictionary] = []
+	for order in supplier_orders:
+		if str(order.get("status", "")) == "pending_delivery":
+			orders.append(order.duplicate(true))
+	return orders
+
+
+func get_delivered_supplier_orders() -> Array[Dictionary]:
+	var orders: Array[Dictionary] = []
+	for order in supplier_orders:
+		if str(order.get("status", "")) == "delivered":
+			orders.append(order.duplicate(true))
+	return orders
+
+
+func replace_supplier_orders(orders: Array) -> void:
+	supplier_orders.clear()
+	for order in orders:
+		if typeof(order) == TYPE_DICTIONARY:
+			var row: Dictionary = order
+			supplier_orders.append(row.duplicate(true))
+
+
+func get_supplier_order_summary_text() -> String:
+	var lines: Array[String] = ["Supplier orders:"]
+	for lot in get_available_supplier_lots():
+		var item_count := 0
+		if lot.has_method("get_item_count"):
+			item_count = int(lot.call("get_item_count"))
+		lines.append("Order %s %s (%d items, day +%d)" % [
+			str(lot.get("display_name")),
+			format_money(int(lot.get("cost_cents"))),
+			item_count,
+			maxi(1, int(lot.get("delivery_days"))),
+		])
+
+	var pending := get_pending_supplier_orders()
+	if pending.is_empty():
+		lines.append("Pending delivery: none")
+	else:
+		lines.append("Pending delivery:")
+		for order in pending:
+			lines.append("%s due day %d (%d items)" % [
+				str(order.get("display_name", "Supplier lot")),
+				int(order.get("due_day", day_number + 1)),
+				int(order.get("item_count", 0)),
+			])
+
+	var delivered := get_delivered_supplier_orders()
+	if not delivered.is_empty():
+		lines.append("Delivered lots:")
+		for order in delivered:
+			lines.append("%s delivered day %d" % [
+				str(order.get("display_name", "Supplier lot")),
+				int(order.get("delivered_day", day_number)),
+			])
+
+	return "\n".join(lines)
 
 
 func get_fixture_definition(fixture_id: String) -> Resource:
@@ -448,6 +578,16 @@ func _get_inventory_root() -> Node:
 	return get_node_or_null(inventory_root_path)
 
 
+func _get_receiving_box() -> Node:
+	if receiving_box_path.is_empty():
+		var root := _get_inventory_root()
+		if root != null:
+			return root.get_node_or_null("ReceivingBox")
+		return null
+
+	return get_node_or_null(receiving_box_path)
+
+
 func _get_fixture_placement_manager() -> Node:
 	if fixture_placement_manager_path.is_empty():
 		return null
@@ -474,3 +614,84 @@ func _collect_active_inventory_items(node: Node, items: Array[Node]) -> void:
 
 	for child in node.get_children():
 		_collect_active_inventory_items(child, items)
+
+
+func _deliver_due_supplier_orders() -> Array[Dictionary]:
+	var delivered: Array[Dictionary] = []
+	for index in range(supplier_orders.size()):
+		var order := supplier_orders[index]
+		if str(order.get("status", "")) != "pending_delivery":
+			continue
+		if int(order.get("due_day", day_number + 1)) > day_number:
+			continue
+
+		var items := _spawn_supplier_order_items(order)
+		if items.is_empty():
+			continue
+
+		order["status"] = "delivered"
+		order["delivered_day"] = day_number
+		order["delivered_count"] = items.size()
+		supplier_orders[index] = order
+		delivered.append(order.duplicate(true))
+
+	return delivered
+
+
+func _spawn_supplier_order_items(order: Dictionary) -> Array[Node]:
+	var receiving_box := _get_receiving_box()
+	if receiving_box == null:
+		return []
+
+	var lot := get_supplier_lot(str(order.get("lot_id", "")))
+	if lot == null:
+		return []
+
+	var item_scene_path := str(lot.get("item_scene_path"))
+	var item_scene := load(item_scene_path) as PackedScene
+	if item_scene == null:
+		return []
+
+	var product_paths: Array = lot.get("product_paths") as Array
+	var spawned: Array[Node] = []
+	var existing_product_count := _count_product_children(receiving_box)
+	for product_path_value in product_paths:
+		var product_path := str(product_path_value)
+		var product := load(product_path) as ProductDefinition
+		if product == null:
+			continue
+
+		var item := item_scene.instantiate() as Node3D
+		if item == null:
+			continue
+
+		item.set("product", product)
+		item.set("instance_id", "%s_item_%03d" % [
+			str(order.get("order_id", "supplier_order")),
+			spawned.size() + 1,
+		])
+		item.set("location_id", "receiving_box_001")
+		var slot_index := existing_product_count + spawned.size()
+		item.name = "DeliveredUsedGame%03d" % (slot_index + 1)
+		receiving_box.add_child(item)
+		_position_delivered_item(item, slot_index)
+		spawned.append(item)
+
+	return spawned
+
+
+func _count_product_children(node: Node) -> int:
+	var product_count := 0
+	for child in node.get_children():
+		var product := child.get("product") as ProductDefinition
+		if product != null:
+			product_count += 1
+	return product_count
+
+
+func _position_delivered_item(item: Node3D, slot_index: int) -> void:
+	var x_positions := [-0.34, -0.11, 0.12, 0.35]
+	var column := slot_index % x_positions.size()
+	var row := int(slot_index / x_positions.size())
+	item.position = Vector3(float(x_positions[column]), 0.2, 0.12 + float(row) * 0.13)
+	item.rotation.y = deg_to_rad(-8.0 + float(column) * 5.0)

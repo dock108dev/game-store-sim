@@ -1,0 +1,74 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "supplier_lot_data",
+      "name": "Supplier lot data defines the starter used-game order",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_supplier_lot.gd::test_supplier_lot_has_orderable_used_game_products"
+    },
+    {
+      "id": "store_session_lists_supplier_lots",
+      "name": "Store session lists orderable supplier lots",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_lists_available_supplier_lots"
+    },
+    {
+      "id": "store_session_orders_supplier_lot",
+      "name": "Store session reserves cash and records a pending supplier delivery",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_orders_supplier_lot_and_reserves_cash"
+    },
+    {
+      "id": "store_session_rejects_supplier_lot_without_cash",
+      "name": "Store session rejects supplier orders without enough cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_rejects_supplier_order_without_cash"
+    },
+    {
+      "id": "store_session_delivers_supplier_lot_next_day",
+      "name": "Store session delivers due supplier orders when the next day starts",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_delivers_supplier_lot_on_next_day"
+    },
+    {
+      "id": "day_summary_panel_orders_supplier_lot",
+      "name": "Backroom computer can order a supplier lot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_orders_supplier_lot_from_backroom_computer"
+    },
+    {
+      "id": "day_summary_panel_starts_next_day_delivery",
+      "name": "Backroom computer starts the next day and shows delivered supplier stock",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_starts_next_day_and_delivers_supplier_lot"
+    },
+    {
+      "id": "main_scene_supplier_receiving_wiring",
+      "name": "Main scene wires the store session to the receiving box",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_receiving_box"
+    },
+    {
+      "id": "main_scene_supplier_delivery",
+      "name": "Main scene delivers supplier lot items into the receiving box",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_supplier_order_delivers_items_to_main_scene_receiving_box"
+    },
+    {
+      "id": "supplier_orders_persist",
+      "name": "Pending supplier orders save and restore through the save codec",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd"
+    }
+  ]
+}

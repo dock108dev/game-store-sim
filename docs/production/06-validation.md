@@ -25,7 +25,7 @@ The gate currently runs:
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
-- Named validation screenshot capture at `1280x720` for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, backroom summary, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
+- Named validation screenshot capture at `1280x720` for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, backroom summary, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
 
@@ -76,6 +76,10 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom market drift text remains readable and makes clear how active inventory values are moving.
 - Backroom inventory summary is readable and matches active receiving/shelf inventory.
 - Backroom reorder suggestions are readable and reflect sales versus active inventory.
+- Backroom `Order Games` button is readable and reserves cash clearly.
+- Pending supplier delivery shows due day and item count clearly.
+- Starting the next day delivers the used-game starter lot into the receiving box and clears pending delivery.
+- Delivered supplier games look intentionally placed and do not crowd the receiving box, display rack, trade-in seller, or customer flow.
 - Backroom fixture ordering shows the game display rack option, cash reservation, and pending placement clearly.
 - Ordered fixture ghost preview is visible, translucent, and reads as a pending placement rather than a finished rack.
 - Fixture ghost valid and invalid states read clearly as green allowed and red blocked placement previews.
@@ -102,6 +106,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
+- `scenarios/supplier_ordering.json`: supplier lot data, backroom supplier ordering, cash reservation, due-day delivery, receiving-box delivery, panel state, and persistence coverage.
 - `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, and optional evidence storage checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
 - `scenarios/store_layout.json`: fixture catalog, fixture ordering, slot-category metadata, cash reservation, pending placement, ghost preview, valid/invalid placement state, rotate/snap controls, placement confirmation, insufficient-cash rejection, and persistence coverage.
