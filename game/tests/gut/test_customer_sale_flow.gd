@@ -24,6 +24,30 @@ func test_customer_claims_matching_stocked_item_and_waits_at_register() -> void:
 	assert_almost_eq(customer.global_position.x, customer.register_queue_position.x, 0.001)
 
 
+func test_customer_moves_to_stocked_item_before_waiting_at_register() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(customer)
+
+	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
+	assert_true(slot.place_item(item))
+
+	assert_true(customer.begin_claim_from_slot(slot, Vector3(1.0, 0.0, -3.35)))
+	assert_eq(customer.state, SimpleBuyerCustomer.STATE_MOVING_TO_ITEM)
+	assert_false(slot.is_available())
+
+	_advance_customer(customer, 4.0)
+
+	assert_true(slot.is_available())
+	assert_eq(customer.state, SimpleBuyerCustomer.STATE_WAITING_FOR_REGISTER)
+	assert_true(customer.is_waiting_for_register())
+	assert_eq(customer.get_checkout_item(), item)
+	assert_eq(item.get_parent(), customer)
+	assert_almost_eq(customer.global_position.z, customer.register_queue_position.z, 0.001)
+
+
 func test_customer_ignores_unstocked_or_mismatched_items() -> void:
 	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
 	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
@@ -94,3 +118,10 @@ func test_transaction_ledger_records_sale_totals() -> void:
 	assert_eq(ledger.get_sale_count(), 1)
 	assert_eq(ledger.get_total_revenue_cents(), 2199)
 	assert_eq(ledger.get_total_profit_cents(), 1299)
+
+
+func _advance_customer(customer: SimpleBuyerCustomer, seconds: float) -> void:
+	var step := 0.1
+	var steps := int(ceil(seconds / step))
+	for _index in range(steps):
+		customer._process(step)

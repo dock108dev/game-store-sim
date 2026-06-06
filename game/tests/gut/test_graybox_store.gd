@@ -161,6 +161,11 @@ func test_customer_manager_targets_display_slots() -> void:
 		assert_not_null(slot)
 
 
+func test_customer_manager_paths_validate_inside_store() -> void:
+	var manager := _store.get_node("CustomerManager")
+	assert_eq(manager.validate_customer_paths(), [])
+
+
 func test_no_standalone_pricing_workstation_exists() -> void:
 	assert_null(_store.get_node_or_null("PricingWorkstation"))
 

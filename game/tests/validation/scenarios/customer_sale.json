@@ -64,11 +64,32 @@
       "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_claims_matching_stocked_item_and_waits_at_register"
     },
     {
+      "id": "customer_moves_to_stocked_item",
+      "name": "Buyer moves to a stocked item before waiting at the register",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_moves_to_stocked_item_before_waiting_at_register"
+    },
+    {
       "id": "customer_manager_claims_multiple_items",
       "name": "Customer manager claims multiple stocked items for multiple buyers",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_claims_stocked_items_for_multiple_customers"
+    },
+    {
+      "id": "customer_manager_paths_validate",
+      "name": "Customer manager validates customer queue and display targets inside the store",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_validates_customer_paths_inside_store"
+    },
+    {
+      "id": "main_scene_customer_paths_validate",
+      "name": "Main-scene customer manager path targets validate inside the store",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_customer_manager_paths_validate_inside_store"
     },
     {
       "id": "customer_ignores_unstocked_or_mismatched",

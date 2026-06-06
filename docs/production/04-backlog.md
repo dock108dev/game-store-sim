@@ -4,7 +4,6 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Now
 
-- Add customer movement/path validation so buyers feel less scripted.
 - Add trade-in seller slice after the multi-buyer sale loop gets manual approval.
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Add optional "apply to all matching used items" pricing once multiple instances of the same product exist.
@@ -19,6 +18,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Spawn one target buyer customer. Done.
 - Let the customer find the item and queue at the register. Done, deterministic in-store claim.
 - Support multiple waiting buyers. Done for two in-store buyers through `CustomerManager`.
+- Add customer movement/path validation so buyers feel less scripted. Done with deterministic buyer movement from rack to register and bounded target checks.
 - Ring up the item at the register. Done.
 - Complete sale. Done.
 - Record transaction. Done.

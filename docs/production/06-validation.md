@@ -56,6 +56,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Pricing panel closes back into first-person mouse capture cleanly.
 - Stocking `Star Trader` causes the buyer to wait at the register.
 - Stocking multiple `Star Trader` copies causes multiple buyers to queue without overlapping.
+- Buyers visibly walk from browsing to the rack and then to the register without confusing clipping.
 - Register prompt and sale completion message are readable.
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
@@ -74,7 +75,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, pricing panel, and fixed-price rejection checks.
-- `scenarios/customer_sale.json`: customer manager, buyer queue, register checkout, and transaction ledger checks.
+- `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, register checkout, and transaction ledger checks.
 - `scenarios/day_summary.json`: store session cash accounting, backroom computer, and day summary panel checks.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.

@@ -103,6 +103,7 @@ Technical:
 11. Add customer spawn and simple buy goal. Done for one deterministic in-store buyer.
 12. Add end-of-day summary. Done for in-memory cash, sales, revenue, cost, and profit via the backroom computer.
 13. Add simple customer queue. Done for two in-store buyers and three display slots.
+14. Add customer movement/path validation. Done with deterministic buyer movement to stocked items, queue movement, and in-store target checks.
 
 ## Slice Review Questions
 

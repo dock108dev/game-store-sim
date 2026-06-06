@@ -97,6 +97,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_movement_visual",
+      "name": "Buyers visibly walk from browsing to rack to register without clipping badly",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment about movement readability and clipping while the graybox layout is changing.",
+      "owner": "manual QA"
+    },
+    {
       "id": "register_sale_message_readability",
       "name": "Register sale completion message is readable in the actual window",
       "status": "manual",

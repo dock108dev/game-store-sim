@@ -37,6 +37,13 @@ func test_customer_manager_claims_stocked_items_for_multiple_customers() -> void
 
 	manager.process_customer_claims()
 
+	assert_eq(first_customer.state, SimpleBuyerCustomer.STATE_MOVING_TO_ITEM)
+	assert_eq(second_customer.state, SimpleBuyerCustomer.STATE_MOVING_TO_ITEM)
+	assert_false(first_slot.is_available())
+	assert_false(second_slot.is_available())
+
+	_advance_customers([first_customer, second_customer], 5.0)
+
 	assert_eq(manager.get_waiting_customers().size(), 2)
 	assert_eq(manager.get_next_waiting_customer(), first_customer)
 	assert_true(first_slot.is_available())
@@ -78,6 +85,7 @@ func test_register_completes_multiple_customer_manager_sales() -> void:
 	]
 	manager.display_slot_paths = slot_paths
 	manager.process_customer_claims()
+	_advance_customers([first_customer, second_customer], 5.0)
 
 	session.ledger_path = session.get_path_to(ledger)
 	register.customer_manager_path = register.get_path_to(manager)
@@ -94,3 +102,28 @@ func test_register_completes_multiple_customer_manager_sales() -> void:
 	assert_eq(manager.get_waiting_customers().size(), 0)
 	assert_eq(first_customer.state, SimpleBuyerCustomer.STATE_SALE_COMPLETE)
 	assert_eq(second_customer.state, SimpleBuyerCustomer.STATE_SALE_COMPLETE)
+
+
+func test_customer_manager_validates_customer_paths_inside_store() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(manager)
+	manager.add_child(customer)
+
+	var slot_paths: Array[NodePath] = [manager.get_path_to(rack.get_node("ShelfSlot001"))]
+	manager.display_slot_paths = slot_paths
+	assert_eq(manager.validate_customer_paths(), [])
+
+	manager.register_queue_start = Vector3(12.0, 0.0, 0.0)
+	var issues: Array[String] = manager.validate_customer_paths()
+	assert_true(issues.has("queue_position_0_outside_store"))
+
+
+func _advance_customers(customers: Array[SimpleBuyerCustomer], seconds: float) -> void:
+	var step := 0.1
+	var steps := int(ceil(seconds / step))
+	for _index in range(steps):
+		for customer in customers:
+			customer._process(step)

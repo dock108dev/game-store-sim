@@ -10,9 +10,9 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 4. Open pricing from the held item.
 5. Adjust the price, apply it, and confirm mouse capture returns.
 6. Stock the game in an empty display rack slot.
-7. Confirm one buyer queues at the register.
+7. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
 8. Repeat pickup, pricing, and stocking with a second `Star Trader`.
-9. Confirm a second buyer queues with readable spacing.
+9. Confirm a second buyer walks to the rack and queues with readable spacing.
 10. Ring up the first buyer.
 11. Ring up the second buyer.
 12. Confirm sold items are gone from the rack and no longer inspectable.
@@ -26,6 +26,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Held item stays low/right and does not block navigation.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
+- Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable and does not overlap the register.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.

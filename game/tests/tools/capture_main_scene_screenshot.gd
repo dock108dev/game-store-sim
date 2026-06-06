@@ -79,6 +79,7 @@ func _prepare_customer_queue(scene: Node) -> void:
 	_stock_receiving_item(scene, "PlaceholderUsedGame002", "GameDisplayRack/ShelfSlot002")
 	if manager.has_method("process_customer_claims"):
 		manager.process_customer_claims()
+	_advance_managed_customers(manager, 5.0)
 
 
 func _prepare_backroom_summary(scene: Node) -> void:
@@ -102,6 +103,17 @@ func _stock_receiving_item(scene: Node, item_name: String, slot_path: String) ->
 		return
 
 	slot.place_item(item)
+
+
+func _advance_managed_customers(manager: Node, seconds: float) -> void:
+	if not manager.has_method("get_customers"):
+		return
+
+	var step := 0.1
+	var steps := int(ceil(seconds / step))
+	for _index in range(steps):
+		for customer in manager.get_customers():
+			customer._process(step)
 
 
 func _set_camera(scene: Node, position: Vector3, target: Vector3) -> void:
