@@ -99,6 +99,33 @@ func test_customer_rejects_overpriced_matching_item() -> void:
 	assert_string_contains(customer.interact(), "too expensive")
 
 
+func test_customer_price_limit_uses_category_demand() -> void:
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(customer)
+	add_child_autofree(item)
+
+	var product := ProductDefinition.new()
+	product.product_id = "used_star_trader"
+	product.display_name = "Star Trader"
+	product.category = "new_game"
+	product.platform = "Orbit 64"
+	product.condition = "good"
+	product.completeness = "complete"
+	product.demand_tier = "high"
+	product.market_value_cents = 2000
+	product.suggested_price_cents = 2000
+	item.set("product", product)
+	item.set("current_price_cents", 2070)
+
+	assert_eq(customer.get_price_limit_cents_for_item(item), 2070)
+	assert_true(customer.would_buy_item(item))
+
+	item.set("current_price_cents", 2071)
+	assert_false(customer.would_buy_item(item))
+	assert_string_contains(customer.get_last_feedback(), "too expensive")
+
+
 func test_customer_completes_sale_and_marks_item_sold() -> void:
 	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
 	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()

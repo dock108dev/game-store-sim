@@ -110,6 +110,14 @@ func test_day_summary_panel_includes_reorder_suggestions() -> void:
 	assert_string_contains(_panel.reorder_label.text, "Restock Star Trader")
 
 
+func test_day_summary_panel_includes_category_demand() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.demand_label.text, "Category demand:")
+	assert_string_contains(_panel.demand_label.text, "Used games x1.00")
+	assert_string_contains(_panel.demand_label.text, "Hardware x0.80")
+
+
 func test_day_summary_panel_orders_fixture_from_backroom_computer() -> void:
 	assert_true(_panel.open_for_session(_session))
 

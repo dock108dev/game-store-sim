@@ -46,7 +46,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Economy Slice
 
-- Add demand per category.
+- Add demand per category. Done as category-level multipliers that feed buyer price tolerance and the backroom demand readout.
 - Add price sensitivity. Done for buyer refusal of overpriced matching used games.
 - Add sales history. Done as recent sale/trade-in activity on the backroom computer.
 - Add market drift.

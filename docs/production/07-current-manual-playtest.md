@@ -30,7 +30,8 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 24. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
 25. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
 26. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
-27. End the day and confirm the summary changes to `Day closed`.
+27. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
+28. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -51,6 +52,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
 - Inventory summary text is readable and matches active receiving/rack items.
 - Reorder suggestion text is readable and makes sense after selling stocked games.
+- Category demand text is readable and does not crowd the management panel.
 - Fixture order text/button are readable and clearly communicate pending placement.
 - Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
 - Green valid placement and red invalid placement are visually distinct in the actual window.

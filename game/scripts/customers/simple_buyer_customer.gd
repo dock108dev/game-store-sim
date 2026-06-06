@@ -1,6 +1,8 @@
 extends StaticBody3D
 class_name SimpleBuyerCustomer
 
+const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd")
+
 const STATE_BROWSING := "browsing"
 const STATE_MOVING_TO_ITEM := "moving_to_item"
 const STATE_MOVING_TO_REGISTER := "moving_to_register"
@@ -146,14 +148,7 @@ func get_price_limit_cents_for_item(item: Node) -> int:
 	if basis <= 0:
 		basis = int(item.get("current_price_cents"))
 
-	var multiplier := 1.05
-	match product.demand_tier:
-		"high":
-			multiplier = 1.15
-		"low":
-			multiplier = 0.95
-		_:
-			multiplier = 1.05
+	var multiplier := CategoryDemandPolicy.get_price_limit_multiplier(product)
 
 	return int(round(basis * multiplier))
 

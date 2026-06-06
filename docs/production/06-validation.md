@@ -71,6 +71,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
 - Backroom recent activity shows sale and trade-in entries with readable prices.
+- Backroom category demand text remains readable and does not crowd the management panel.
 - Backroom inventory summary is readable and matches active receiving/shelf inventory.
 - Backroom reorder suggestions are readable and reflect sales versus active inventory.
 - Backroom fixture ordering shows the game display rack option, cash reservation, and pending placement clearly.
@@ -94,6 +95,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
+- `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, and backroom demand readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.

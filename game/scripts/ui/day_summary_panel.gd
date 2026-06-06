@@ -6,6 +6,7 @@ class_name DaySummaryPanel
 @onready var last_sale_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LastSaleLabel
 @onready var inventory_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/InventoryLabel
 @onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReorderLabel
+@onready var demand_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DemandLabel
 @onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FixtureLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var order_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/OrderRackButton
@@ -103,6 +104,10 @@ func _update_labels() -> void:
 		reorder_label.text = _session.get_reorder_suggestions_text()
 	else:
 		reorder_label.text = "Reorder suggestions unavailable"
+	if _session.has_method("get_category_demand_summary_text"):
+		demand_label.text = _session.get_category_demand_summary_text()
+	else:
+		demand_label.text = "Category demand unavailable"
 	if _session.has_method("get_fixture_order_summary_text"):
 		fixture_label.text = _session.get_fixture_order_summary_text()
 	else:

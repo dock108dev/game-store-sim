@@ -1,0 +1,46 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "category_demand_defaults",
+      "name": "Economy has default demand multipliers per category",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_category_demand.gd::test_category_demand_has_default_category_multipliers"
+    },
+    {
+      "id": "category_demand_normalizes_names",
+      "name": "Category demand normalizes category names",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_category_demand.gd::test_category_demand_normalizes_category_names"
+    },
+    {
+      "id": "category_demand_combines_with_tier",
+      "name": "Category demand combines with product demand tier",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_category_demand.gd::test_category_demand_combines_tier_and_category"
+    },
+    {
+      "id": "buyer_price_limit_uses_category_demand",
+      "name": "Buyer price limit uses category demand",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_price_limit_uses_category_demand"
+    },
+    {
+      "id": "backroom_category_demand_summary",
+      "name": "Backroom computer can summarize category demand",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_category_demand"
+    },
+    {
+      "id": "backroom_panel_category_demand_readout",
+      "name": "Backroom panel shows category demand readout",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_category_demand"
+    }
+  ]
+}

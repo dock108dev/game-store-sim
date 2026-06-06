@@ -1,6 +1,8 @@
 extends Node
 class_name StoreSession
 
+const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd")
+
 @export var day_number: int = 1
 @export var starting_cash_cents: int = 50000
 @export var ledger_path: NodePath
@@ -203,6 +205,10 @@ func get_reorder_suggestions_text() -> String:
 		return "Reorder suggestions: none"
 
 	return "\n".join(lines)
+
+
+func get_category_demand_summary_text() -> String:
+	return CategoryDemandPolicy.get_summary_text()
 
 
 func get_available_fixture_definitions() -> Array[Resource]:

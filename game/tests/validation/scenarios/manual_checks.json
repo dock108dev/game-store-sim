@@ -177,6 +177,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "category_demand_panel_readability",
+      "name": "Backroom category demand readout is readable and does not crowd the panel",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the demand text exists; the player must judge whether the expanded backroom panel is visually comfortable.",
+      "owner": "manual QA"
+    },
+    {
       "id": "day_summary_numbers_match_sale",
       "name": "Backroom summary numbers match completed single and multiple sales",
       "status": "manual",

@@ -1,6 +1,13 @@
 {
   "script_tests": [
     {
+      "script": "res://scripts/economy/category_demand.gd",
+      "tests": [
+        "res://tests/gut/test_category_demand.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/interaction/interactable.gd",
       "tests": [
         "res://tests/gut/test_interaction_contract.gd"

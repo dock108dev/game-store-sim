@@ -161,6 +161,18 @@ func test_store_session_suggests_reorder_for_low_active_stock_after_sales() -> v
 	assert_string_contains(suggestions, "Restock Star Trader (sold 1, active 1)")
 
 
+func test_store_session_summarizes_category_demand() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var summary := session.get_category_demand_summary_text()
+
+	assert_string_contains(summary, "Category demand:")
+	assert_string_contains(summary, "Used games x1.00")
+	assert_string_contains(summary, "New games x0.90")
+	assert_string_contains(summary, "Hardware x0.80")
+
+
 func test_store_session_summarizes_active_inventory_items() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	var root := Node3D.new()
