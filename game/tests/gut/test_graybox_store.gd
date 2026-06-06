@@ -37,6 +37,11 @@ func test_used_game_exists() -> void:
 	assert_not_null(_store.get_node_or_null("PlaceholderUsedGame"))
 
 
+func test_used_game_sits_on_middle_shelf() -> void:
+	var item := _store.get_node("PlaceholderUsedGame") as Node3D
+	assert_almost_eq(item.global_position.y, 0.86, 0.01)
+
+
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgo7ij5st0lqk"]
+[gd_scene load_steps=8 format=3 uid="uid://bgo7ij5st0lqk"]
 
 [ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="1_interactable"]
 
@@ -16,6 +16,10 @@ size = Vector3(0.75, 0.26, 0.45)
 material = SubResource("StandardMaterial3D_screen")
 size = Vector3(0.55, 0.3, 0.06)
 
+[sub_resource type="BoxMesh" id="BoxMesh_screen_post"]
+material = SubResource("StandardMaterial3D_register")
+size = Vector3(0.08, 0.2, 0.08)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_register"]
 size = Vector3(0.8, 0.55, 0.55)
 
@@ -28,9 +32,13 @@ inspect_text = "Register placeholder: scan items, total carts, and complete sale
 position = Vector3(0, 0.13, 0)
 mesh = SubResource("BoxMesh_register")
 
+[node name="ScreenPostMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.36, -0.08)
+mesh = SubResource("BoxMesh_screen_post")
+
 [node name="ScreenMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.43, -0.12)
-rotation = Vector3(-0.35, 0, 0)
+position = Vector3(0, 0.47, -0.14)
+rotation = Vector3(-0.25, 0, 0)
 mesh = SubResource("BoxMesh_screen")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

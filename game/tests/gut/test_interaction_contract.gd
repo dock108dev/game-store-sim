@@ -11,6 +11,23 @@ func test_register_workstation_is_interactable() -> void:
 	assert_string_contains(register.interact(), "Register placeholder")
 
 
+func test_register_screen_has_visible_support() -> void:
+	var register: Node3D = load("res://scenes/props/register_workstation.tscn").instantiate()
+	add_child_autofree(register)
+
+	var base_mesh := register.get_node("BaseMesh") as MeshInstance3D
+	var post_mesh := register.get_node("ScreenPostMesh") as MeshInstance3D
+	var screen_mesh := register.get_node("ScreenMesh") as MeshInstance3D
+
+	var base_top: float = base_mesh.position.y + (base_mesh.mesh.size.y / 2.0)
+	var post_bottom: float = post_mesh.position.y - (post_mesh.mesh.size.y / 2.0)
+	var post_top: float = post_mesh.position.y + (post_mesh.mesh.size.y / 2.0)
+	var screen_bottom: float = screen_mesh.position.y - (screen_mesh.mesh.size.y / 2.0)
+
+	assert_almost_eq(post_bottom, base_top, 0.01)
+	assert_gte(post_top, screen_bottom - 0.03)
+
+
 func test_interactable_base_returns_prompt_and_inspect_text() -> void:
 	var interactable: Node = load("res://scripts/interaction/interactable.gd").new()
 	interactable.display_name = "Test Object"

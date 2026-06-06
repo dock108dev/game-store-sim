@@ -97,7 +97,7 @@ material = SubResource("StandardMaterial3D_zone")
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -3.8, 0, -0.4)
 
 [node name="PlaceholderUsedGame" parent="." instance=ExtResource("3_game")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -3.8, 1.1, -0.95)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -3.8, 0.86, -0.95)
 location_id = "shelf_slot_001"
 
 [node name="RegisterWorkstation" parent="." instance=ExtResource("4_register")]
