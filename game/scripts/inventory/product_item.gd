@@ -50,6 +50,16 @@ func set_stocked(slot_id: String) -> void:
 	set_collision_enabled(true)
 
 
+func set_customer_held(customer_id: String) -> void:
+	location_id = "customer:%s" % customer_id
+	set_collision_enabled(false)
+
+
+func set_sold() -> void:
+	location_id = "sold"
+	set_collision_enabled(false)
+
+
 func set_collision_enabled(is_enabled: bool) -> void:
 	collision_layer = _default_collision_layer if is_enabled else 0
 	collision_mask = _default_collision_mask if is_enabled else 0

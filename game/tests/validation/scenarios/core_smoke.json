@@ -1,0 +1,95 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "main_scene_loads",
+      "name": "Main scene loads and instantiates GrayboxStore",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_main_scene_loads_graybox_store"
+    },
+    {
+      "id": "main_scene_identity",
+      "name": "Main scene root keeps the expected store identity",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_main_scene_has_expected_root_name"
+    },
+    {
+      "id": "player_exists",
+      "name": "Player controller exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_player_controller_exists"
+    },
+    {
+      "id": "player_starts_above_floor",
+      "name": "Player starts above the floor",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_player_starts_above_floor"
+    },
+    {
+      "id": "floor_collision",
+      "name": "Floor collision is enabled",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_floor_collision_is_enabled"
+    },
+    {
+      "id": "front_door_boundary",
+      "name": "Front door opening is blocked until exits are implemented",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_front_door_opening_is_blocked_for_now"
+    },
+    {
+      "id": "player_collision_shape",
+      "name": "Player has a collision shape",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_scene_has_collision_shape"
+    },
+    {
+      "id": "player_camera",
+      "name": "Player has a current camera",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_scene_has_current_camera"
+    },
+    {
+      "id": "interaction_raycast",
+      "name": "Interaction raycast exists and is enabled",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_interaction_raycast_is_configured"
+    },
+    {
+      "id": "interaction_prompt_node",
+      "name": "Interaction prompt node exists",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_interaction_prompt_exists"
+    },
+    {
+      "id": "interaction_prompt_behavior",
+      "name": "Interaction prompt can show and hide text",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_interaction_prompt_show_and_hide"
+    },
+    {
+      "id": "input_actions_exist",
+      "name": "Keyboard input actions exist",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_keyboard_input_actions_exist"
+    },
+    {
+      "id": "input_actions_have_keys",
+      "name": "Keyboard input actions have key events",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_keyboard_input_actions_have_events"
+    }
+  ]
+}

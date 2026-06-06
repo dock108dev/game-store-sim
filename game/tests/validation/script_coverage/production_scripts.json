@@ -1,0 +1,81 @@
+{
+  "script_tests": [
+    {
+      "script": "res://scripts/interaction/interactable.gd",
+      "tests": [
+        "res://tests/gut/test_interaction_contract.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/interaction/interaction_prompt.gd",
+      "tests": [
+        "res://tests/gut/test_interaction_contract.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/interaction/interaction_raycast.gd",
+      "tests": [
+        "res://tests/gut/test_interaction_contract.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/inventory/product_definition.gd",
+      "tests": [
+        "res://tests/gut/test_product_item.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/inventory/product_item.gd",
+      "tests": [
+        "res://tests/gut/test_product_item.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/simple_buyer_customer.gd",
+      "tests": [
+        "res://tests/gut/test_customer_sale_flow.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/player/first_person_controller.gd",
+      "tests": [
+        "res://tests/gut/test_player_controller.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/store_layout/register_workstation.gd",
+      "tests": [
+        "res://tests/gut/test_interaction_contract.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/store_layout/shelf_slot.gd",
+      "tests": [
+        "res://tests/gut/test_shelf_slot.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/systems/transaction_ledger.gd",
+      "tests": [
+        "res://tests/gut/test_customer_sale_flow.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/pricing_panel.gd",
+      "tests": [
+        "res://tests/gut/test_pricing_panel.gd"
+      ],
+      "critical": true
+    }
+  ]
+}

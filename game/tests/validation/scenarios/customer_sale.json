@@ -1,0 +1,74 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "register_exists",
+      "name": "Register workstation exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_workstation_exists"
+    },
+    {
+      "id": "register_interactable",
+      "name": "Register workstation is interactable",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_workstation_is_interactable"
+    },
+    {
+      "id": "buyer_customer_exists",
+      "name": "Buyer customer exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_buyer_customer_exists"
+    },
+    {
+      "id": "transaction_ledger_exists",
+      "name": "Transaction ledger exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_transaction_ledger_exists"
+    },
+    {
+      "id": "register_customer_ledger_wiring",
+      "name": "Register is wired to the buyer customer and transaction ledger",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_and_ledger"
+    },
+    {
+      "id": "buyer_targets_display_slot",
+      "name": "Buyer customer targets the game display slot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_buyer_customer_targets_display_slot"
+    },
+    {
+      "id": "customer_claims_stocked_item",
+      "name": "Buyer claims a matching stocked item and waits at the register",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_claims_matching_stocked_item_and_waits_at_register"
+    },
+    {
+      "id": "customer_ignores_unstocked_or_mismatched",
+      "name": "Buyer ignores empty slots and non-target products",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_ignores_unstocked_or_mismatched_items"
+    },
+    {
+      "id": "register_completes_sale",
+      "name": "Register completes the waiting customer sale",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_completes_waiting_customer_sale"
+    },
+    {
+      "id": "transaction_ledger_records_sale",
+      "name": "Transaction ledger records sale revenue, cost, and profit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_transaction_ledger_records_sale_totals"
+    }
+  ]
+}

@@ -95,6 +95,30 @@ func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
 
+func test_buyer_customer_exists() -> void:
+	assert_not_null(_store.get_node_or_null("BuyerCustomer"))
+
+
+func test_transaction_ledger_exists() -> void:
+	assert_not_null(_store.get_node_or_null("TransactionLedger"))
+
+
+func test_register_is_wired_to_customer_and_ledger() -> void:
+	var register := _store.get_node("RegisterWorkstation") as RegisterWorkstation
+	var customer := register.get_node_or_null(register.customer_path) as SimpleBuyerCustomer
+	var ledger := register.get_node_or_null(register.ledger_path) as TransactionLedger
+
+	assert_not_null(customer)
+	assert_not_null(ledger)
+
+
+func test_buyer_customer_targets_display_slot() -> void:
+	var customer := _store.get_node("BuyerCustomer") as SimpleBuyerCustomer
+	var slot := customer.get_node_or_null(customer.display_slot_path) as ShelfSlot
+
+	assert_not_null(slot)
+
+
 func test_no_standalone_pricing_workstation_exists() -> void:
 	assert_null(_store.get_node_or_null("PricingWorkstation"))
 

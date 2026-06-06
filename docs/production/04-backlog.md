@@ -4,22 +4,23 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Now
 
-- Add direct held-item pricing for used inventory.
+- Add one target buyer customer, register checkout, and transaction recording.
+- Keep the first sale loop deterministic until customer movement and choice need more depth.
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Add optional "apply to all matching used items" pricing once multiple instances of the same product exist.
-- Keep validation coverage current as the pricing loop changes.
+- Keep validation coverage current as the sale loop changes.
 
 ## First Playable Counter Loop
 
 - Pick up an item from a receiving box. Done.
 - Inspect product name, platform, condition, cost, and market value.
-- Set a sale price. In progress.
+- Set a sale price. Done for used items.
 - Place the item on a shelf/display rack. Done.
-- Spawn one target buyer customer.
-- Let the customer find the item and queue at the register.
-- Scan the item.
-- Complete sale.
-- Record transaction.
+- Spawn one target buyer customer. Done.
+- Let the customer find the item and queue at the register. Done, deterministic in-store claim.
+- Ring up the item at the register. Done.
+- Complete sale. Done.
+- Record transaction. Done.
 - Show end-of-day cash and profit summary.
 
 ## Trade-In Slice
@@ -61,7 +62,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Tooling
 
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
-- Keep `game/tests/validation_matrix.json` current as UI scenarios and scripts are added.
+- Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, prompt readability, mouse capture, and rack/register/receiving-box composition after every interaction-loop change.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.

@@ -1,0 +1,25 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "screenshot_captured",
+      "name": "Main-scene screenshot is captured",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/check_png.gd"
+    },
+    {
+      "id": "screenshot_dimensions",
+      "name": "Main-scene screenshot uses fixed 1280x720 dimensions",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/check_png.gd"
+    },
+    {
+      "id": "screenshot_nonblank",
+      "name": "Main-scene screenshot is not blank",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/check_png.gd"
+    }
+  ]
+}

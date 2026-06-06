@@ -1,0 +1,108 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "wasd_feel",
+      "name": "WASD movement feel is acceptable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires player judgment about speed, acceleration, and spatial feel.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "mouse_look_feel",
+      "name": "Mouse-look feel is acceptable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires player judgment about sensitivity and comfort.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "mouse_capture_cycle",
+      "name": "Escape releases mouse capture and click recaptures it",
+      "status": "manual",
+      "critical": false,
+      "reason": "Current automated input checks do not exercise OS-level mouse capture reliably.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "prompt_readability",
+      "name": "Prompt readability is acceptable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment beyond nonblank screenshot checks.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "prop_visual_placement",
+      "name": "Receiving box, display rack, register, and used-game placement makes sense",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human composition review while graybox layout is changing.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "held_item_visibility",
+      "name": "Held item stays visible without blocking normal navigation",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment while moving and looking around the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "stocked_item_upright_visual",
+      "name": "Stocked game is visibly upright and intentional in the rack",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment from several player angles.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "pricing_panel_readability",
+      "name": "Pricing panel text and controls are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about UI readability and control clarity.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "pricing_mouse_capture_cycle",
+      "name": "Pricing panel closes back into first-person mouse capture cleanly",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires OS/window-level input judgment beyond current automated checks.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "screenshot_composition",
+      "name": "Screenshot composition is useful, not merely nonblank",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment; automated gate only checks dimensions and nonblank pixels.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "buyer_register_wait_visual",
+      "name": "Buyer visibly waits at the register after stocking Star Trader",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about buyer placement and readability in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "register_sale_message_readability",
+      "name": "Register sale completion message is readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about prompt/message readability during checkout.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "sold_item_visual_removal",
+      "name": "Sold item is no longer visually available on the rack after checkout",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual confirmation from normal player angles.",
+      "owner": "manual QA"
+    }
+  ]
+}

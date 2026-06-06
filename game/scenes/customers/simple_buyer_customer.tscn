@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://dy3tbedu3rtbe"]
+
+[ext_resource type="Script" path="res://scripts/customers/simple_buyer_customer.gd" id="1_customer"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.14, 0.18, 0.22, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_head"]
+albedo_color = Color(0.48, 0.39, 0.32, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = SubResource("StandardMaterial3D_body")
+radius = 0.18
+height = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_head"]
+material = SubResource("StandardMaterial3D_head")
+radius = 0.18
+height = 0.36
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_customer"]
+radius = 0.2
+height = 1.25
+
+[node name="BuyerCustomer" type="StaticBody3D"]
+script = ExtResource("1_customer")
+
+[node name="BodyMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.65, 0)
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="HeadMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("SphereMesh_head")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.7, 0)
+shape = SubResource("CapsuleShape3D_customer")

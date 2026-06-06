@@ -6,7 +6,10 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GAME_ROOT = REPO_ROOT / "game"
-MATRIX_PATH = GAME_ROOT / "tests" / "validation_matrix.json"
+VALIDATION_ROOT = GAME_ROOT / "tests" / "validation"
+THRESHOLDS_PATH = VALIDATION_ROOT / "thresholds.json"
+SCENARIOS_ROOT = VALIDATION_ROOT / "scenarios"
+SCRIPT_COVERAGE_ROOT = VALIDATION_ROOT / "script_coverage"
 
 
 def pct(numerator: int, denominator: int) -> float:
@@ -32,9 +35,56 @@ def collect_production_scripts() -> set[str]:
     return scripts
 
 
+def load_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text())
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"{path.relative_to(REPO_ROOT)} is invalid JSON: {exc}") from exc
+
+
+def load_validation_data() -> dict:
+    if not THRESHOLDS_PATH.exists():
+        raise ValueError(f"Missing validation thresholds file: {THRESHOLDS_PATH.relative_to(REPO_ROOT)}")
+
+    data = {
+        "thresholds": load_json(THRESHOLDS_PATH),
+        "ui_scenarios": [],
+        "script_tests": [],
+    }
+
+    scenario_files = sorted(SCENARIOS_ROOT.glob("*.json"))
+    if not scenario_files:
+        raise ValueError(f"No validation scenario files found in {SCENARIOS_ROOT.relative_to(REPO_ROOT)}")
+
+    for path in scenario_files:
+        file_data = load_json(path)
+        scenarios = file_data.get("ui_scenarios")
+        if not isinstance(scenarios, list):
+            raise ValueError(f"{path.relative_to(REPO_ROOT)} must contain ui_scenarios list")
+        data["ui_scenarios"].extend(scenarios)
+
+    script_files = sorted(SCRIPT_COVERAGE_ROOT.glob("*.json"))
+    if not script_files:
+        raise ValueError(f"No script coverage files found in {SCRIPT_COVERAGE_ROOT.relative_to(REPO_ROOT)}")
+
+    for path in script_files:
+        file_data = load_json(path)
+        script_tests = file_data.get("script_tests")
+        if not isinstance(script_tests, list):
+            raise ValueError(f"{path.relative_to(REPO_ROOT)} must contain script_tests list")
+        data["script_tests"].extend(script_tests)
+
+    return data
+
+
 def main() -> int:
     failures: list[str] = []
-    data = json.loads(MATRIX_PATH.read_text())
+    try:
+        data = load_validation_data()
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+
     thresholds = data["thresholds"]
 
     active_scenarios = [
@@ -70,8 +120,24 @@ def main() -> int:
             if not item.get("reason") or not item.get("owner"):
                 failures.append(f"manual UI scenario {item['id']} needs reason and owner")
 
+    scenario_ids = [item["id"] for item in data["ui_scenarios"]]
+    duplicate_scenario_ids = sorted({
+        scenario_id for scenario_id in scenario_ids
+        if scenario_ids.count(scenario_id) > 1
+    })
+    for scenario_id in duplicate_scenario_ids:
+        failures.append(f"duplicate UI scenario id: {scenario_id}")
+
     production_scripts = collect_production_scripts()
     mapped_scripts = {item["script"] for item in data["script_tests"]}
+    script_entries = [item["script"] for item in data["script_tests"]]
+    duplicate_script_entries = sorted({
+        script for script in script_entries
+        if script_entries.count(script) > 1
+    })
+    for script in duplicate_script_entries:
+        failures.append(f"duplicate script_tests entry: {script}")
+
     missing_entries = sorted(production_scripts - mapped_scripts)
     extra_entries = sorted(mapped_scripts - production_scripts)
     for script in missing_entries:

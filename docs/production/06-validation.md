@@ -21,8 +21,8 @@ The gate currently runs:
 - Godot runtime quit smoke in headless mode.
 - Godot main-scene boot smoke in headless mode.
 - GUT tests under `game/tests/gut/`, with JUnit XML exported to `artifacts/validation/latest/gut-results.xml`.
-- UI scenario automation coverage from `game/tests/validation_matrix.json`.
-- Production-script test mapping coverage from `game/tests/validation_matrix.json`.
+- UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
+- Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Main-scene screenshot capture at `1280x720`.
 - Screenshot dimension and nonblank pixel checks.
 - Old project-name scan outside ignored/generated paths.
@@ -54,13 +54,27 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Pricing opens from the held used item, not a standalone pricing terminal.
 - The only current visible terminal is the register; future terminal UI belongs on the backroom computer.
 - Pricing panel closes back into first-person mouse capture cleanly.
+- Stocking `Star Trader` causes the buyer to wait at the register.
+- Register prompt and sale completion message are readable.
+- After checkout, the stocked game is gone from the rack and no longer available for inspection.
 - Screenshot composition is useful, not merely nonblank.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 
 ## Maintaining The Matrix
 
-Update `game/tests/validation_matrix.json` whenever a production script or player-facing validation scenario is added.
+Update `game/tests/validation/` whenever a production script or player-facing validation scenario is added.
+
+Scenario files are intentionally split by slice:
+
+- `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
+- `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot, and stocking checks.
+- `scenarios/pricing.json`: direct held-item pricing, pricing panel, and fixed-price rejection checks.
+- `scenarios/customer_sale.json`: buyer customer, register checkout, and transaction ledger checks.
+- `scenarios/screenshots.json`: screenshot capture and image sanity checks.
+- `scenarios/manual_checks.json`: manual-only checks with owner and reason.
+
+Script test mappings live in `script_coverage/production_scripts.json`, and thresholds live in `thresholds.json`.
 
 Use these statuses:
 

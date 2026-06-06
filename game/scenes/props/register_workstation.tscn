@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://bgo7ij5st0lqk"]
 
-[ext_resource type="Script" path="res://scripts/interaction/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" path="res://scripts/store_layout/register_workstation.gd" id="1_register_workstation"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_register"]
 albedo_color = Color(0.08, 0.09, 0.1, 1)
@@ -24,9 +24,8 @@ size = Vector3(0.08, 0.2, 0.08)
 size = Vector3(0.8, 0.55, 0.55)
 
 [node name="RegisterWorkstation" type="StaticBody3D"]
-script = ExtResource("1_interactable")
+script = ExtResource("1_register_workstation")
 display_name = "Register Workstation"
-inspect_text = "Register placeholder: scan items, total carts, and complete sales will start here."
 
 [node name="BaseMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.13, 0)

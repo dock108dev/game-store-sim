@@ -66,6 +66,15 @@ func place_item(item: Node3D) -> bool:
 	return true
 
 
+func release_item() -> Node3D:
+	var item := get_occupied_item() as Node3D
+	if item == null:
+		return null
+
+	occupied_item_path = NodePath("")
+	return item
+
+
 func get_interaction_prompt() -> String:
 	if is_available():
 		return "Empty Game Display Slot"

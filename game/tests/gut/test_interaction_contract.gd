@@ -8,7 +8,7 @@ func test_register_workstation_is_interactable() -> void:
 	assert_true(register.has_method("get_interaction_prompt"))
 	assert_true(register.has_method("interact"))
 	assert_string_contains(register.get_interaction_prompt(), "Register Workstation")
-	assert_string_contains(register.interact(), "Register placeholder")
+	assert_string_contains(register.interact(), "No customer waiting")
 
 
 func test_register_screen_has_visible_support() -> void:
@@ -26,6 +26,37 @@ func test_register_screen_has_visible_support() -> void:
 
 	assert_almost_eq(post_bottom, base_top, 0.01)
 	assert_gte(post_top, screen_bottom - 0.03)
+
+
+func test_register_completes_waiting_customer_sale() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var ledger := TransactionLedger.new()
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(customer)
+	add_child_autofree(register)
+	add_child_autofree(ledger)
+
+	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
+	assert_true(slot.place_item(item))
+	assert_true(customer.claim_item_from_slot(slot))
+
+	register.customer_path = register.get_path_to(customer)
+	register.ledger_path = register.get_path_to(ledger)
+
+	assert_eq(register.get_interaction_prompt(), "E Ring Up Star Trader")
+
+	var message := register.interact()
+	assert_string_contains(message, "Sold Star Trader")
+	assert_string_contains(message, "Profit $")
+	assert_eq(ledger.get_sale_count(), 1)
+	assert_eq(ledger.get_total_revenue_cents(), 2199)
+	assert_eq(ledger.get_total_profit_cents(), 1299)
+	assert_eq(item.get("location_id"), "sold")
+	assert_false(item.visible)
+	assert_false(customer.is_waiting_for_register())
 
 
 func test_interactable_base_returns_prompt_and_inspect_text() -> void:

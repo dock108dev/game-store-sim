@@ -55,9 +55,9 @@ Functional:
 
 - Player can complete a day from open to close.
 - At least one customer buys a stocked item.
-- Cash increases after sale.
+- Transaction records sale revenue and profit.
 - Stock decreases after sale.
-- Price affects profit.
+- Price affects recorded profit.
 - Customer gives basic feedback.
 
 Usability:
@@ -96,9 +96,9 @@ Technical:
 6. Add pickup/hold/place behavior. Done.
 7. Add shelf slot component. Done.
 8. Add pricing UI. In progress: direct used-item pricing from the held item. No standalone pricing terminal.
-9. Add register UI.
-10. Add transaction log.
-11. Add customer spawn and simple buy goal.
+9. Add register UI. In progress: one-action checkout for a waiting buyer.
+10. Add transaction log. Done for in-memory sale records.
+11. Add customer spawn and simple buy goal. Done for one deterministic in-store buyer.
 12. Add end-of-day summary.
 
 ## Slice Review Questions
