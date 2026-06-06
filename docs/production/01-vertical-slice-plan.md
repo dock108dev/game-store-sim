@@ -104,6 +104,7 @@ Technical:
 12. Add end-of-day summary. Done for in-memory cash, sales, revenue, cost, and profit via the backroom computer.
 13. Add simple customer queue. Done for two in-store buyers and three display slots.
 14. Add customer movement/path validation. Done with deterministic buyer movement to stocked items, queue movement, and in-store target checks.
+15. Add optional apply-to-matching used-item pricing. Done in the direct pricing panel for active matching copies.
 
 ## Slice Review Questions
 

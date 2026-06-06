@@ -71,6 +71,20 @@
       "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_updates_item_price"
     },
     {
+      "id": "pricing_panel_apply_single_by_default",
+      "name": "Pricing panel applies to only the active item by default",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_defaults_to_single_item"
+    },
+    {
+      "id": "pricing_panel_apply_matching",
+      "name": "Pricing panel can apply a used-item price to active matching copies",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_matching_updates_active_matching_items"
+    },
+    {
       "id": "pricing_panel_cancel",
       "name": "Pricing panel cancel leaves current item price unchanged",
       "status": "automated",

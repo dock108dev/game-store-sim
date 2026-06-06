@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(420, 320)
+custom_minimum_size = Vector2(460, 360)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
@@ -56,6 +56,10 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(72, 44)
 layout_mode = 2
 text = "+ $1"
+
+[node name="ApplyMatchingCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Apply to matching used copies"
 
 [node name="ActionRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

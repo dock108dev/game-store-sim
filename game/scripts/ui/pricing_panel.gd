@@ -10,6 +10,7 @@ class_name PricingPanel
 @onready var price_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/PriceLabel
 @onready var decrement_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/DecreaseButton
 @onready var increment_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/IncreaseButton
+@onready var apply_matching_check_box: CheckBox = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ApplyMatchingCheckBox
 @onready var apply_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/ApplyButton
 @onready var cancel_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CancelButton
 
@@ -42,6 +43,7 @@ func open_for_item(item: Node) -> bool:
 	_item = item
 	_original_price_cents = int(item.get("current_price_cents"))
 	_draft_price_cents = clampi(_original_price_cents, min_price_cents, max_price_cents)
+	apply_matching_check_box.button_pressed = false
 	_update_labels()
 	show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -80,7 +82,11 @@ func apply_price() -> bool:
 	if not is_open():
 		return false
 
-	_item.set("current_price_cents", _draft_price_cents)
+	if apply_matching_check_box.button_pressed:
+		for item in get_matching_priceable_items():
+			item.set("current_price_cents", _draft_price_cents)
+	else:
+		_item.set("current_price_cents", _draft_price_cents)
 	_close()
 	return true
 
@@ -124,3 +130,44 @@ func _update_labels() -> void:
 		product.market_value_cents / 100.0,
 	]
 	price_label.text = "$%0.2f" % (_draft_price_cents / 100.0)
+	apply_matching_check_box.text = "Apply to all %s copies (%d)" % [
+		product.display_name,
+		get_matching_priceable_items().size(),
+	]
+
+
+func get_matching_priceable_items() -> Array[Node]:
+	var matches: Array[Node] = []
+	if _item == null:
+		return matches
+
+	var product := _item.get("product") as ProductDefinition
+	if product == null:
+		return matches
+
+	var root := get_tree().current_scene
+	if root == null:
+		root = get_tree().root
+
+	_collect_matching_priceable_items(root, product.product_id, matches)
+	return matches
+
+
+func _collect_matching_priceable_items(node: Node, product_id: String, matches: Array[Node]) -> void:
+	if _is_matching_priceable_item(node, product_id):
+		matches.append(node)
+
+	for child in node.get_children():
+		_collect_matching_priceable_items(child, product_id, matches)
+
+
+func _is_matching_priceable_item(node: Node, product_id: String) -> bool:
+	var product := node.get("product") as ProductDefinition
+	if product == null or product.product_id != product_id or not product.player_priceable:
+		return false
+
+	var location_id := str(node.get("location_id"))
+	if location_id == "sold" or location_id.begins_with("customer:"):
+		return false
+
+	return true

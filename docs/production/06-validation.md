@@ -52,6 +52,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Stocked game is visibly upright and intentional in the rack.
 - Pricing panel text and controls are readable in the actual window.
 - Pricing opens from the held used item, not a standalone pricing terminal.
+- Apply-to-matching pricing option is readable and understandable when pricing a used item.
 - The only current visible terminals are the register and the backroom computer.
 - Pricing panel closes back into first-person mouse capture cleanly.
 - Stocking `Star Trader` causes the buyer to wait at the register.
@@ -74,7 +75,7 @@ Scenario files are intentionally split by slice:
 
 - `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot, and stocking checks.
-- `scenarios/pricing.json`: direct held-item pricing, pricing panel, and fixed-price rejection checks.
+- `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, register checkout, and transaction ledger checks.
 - `scenarios/day_summary.json`: store session cash accounting, backroom computer, and day summary panel checks.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.

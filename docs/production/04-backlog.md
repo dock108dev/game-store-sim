@@ -6,7 +6,6 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 - Add trade-in seller slice after the multi-buyer sale loop gets manual approval.
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
-- Add optional "apply to all matching used items" pricing once multiple instances of the same product exist.
 - Keep validation coverage current as the sale loop changes.
 
 ## First Playable Counter Loop
@@ -14,6 +13,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Pick up an item from a receiving box. Done.
 - Inspect product name, platform, condition, cost, and market value.
 - Set a sale price. Done for used items.
+- Optionally apply a used-item sale price to active matching copies. Done from the direct pricing panel.
 - Place the item on a shelf/display rack. Done.
 - Spawn one target buyer customer. Done.
 - Let the customer find the item and queue at the register. Done, deterministic in-store claim.

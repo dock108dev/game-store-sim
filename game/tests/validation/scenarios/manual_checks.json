@@ -65,6 +65,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "pricing_apply_matching_readability",
+      "name": "Apply-to-matching pricing option is readable and understandable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether the batch-pricing option is clear in the actual window.",
+      "owner": "manual QA"
+    },
+    {
       "id": "pricing_mouse_capture_cycle",
       "name": "Pricing panel closes back into first-person mouse capture cleanly",
       "status": "manual",

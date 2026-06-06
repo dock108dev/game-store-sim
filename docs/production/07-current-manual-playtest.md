@@ -8,7 +8,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 2. Confirm the front door still blocks exit from the playable store.
 3. Pick up a `Star Trader` from the receiving box.
 4. Open pricing from the held item.
-5. Adjust the price, apply it, and confirm mouse capture returns.
+5. Adjust the price, optionally enable apply-to-matching, apply it, and confirm mouse capture returns.
 6. Stock the game in an empty display rack slot.
 7. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
 8. Repeat pickup, pricing, and stocking with a second `Star Trader`.
@@ -28,6 +28,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Register prompt and sale messages are readable.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable and does not overlap the register.
+- Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.
 

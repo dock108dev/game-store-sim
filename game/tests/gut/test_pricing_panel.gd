@@ -28,6 +28,8 @@ func test_pricing_panel_opens_with_product_fields() -> void:
 	assert_string_contains(_panel.details_label.text, "Cost: $9.00")
 	assert_string_contains(_panel.details_label.text, "Market: $24.99")
 	assert_eq(_panel.price_label.text, "$21.99")
+	assert_false(_panel.apply_matching_check_box.button_pressed)
+	assert_string_contains(_panel.apply_matching_check_box.text, "Star Trader")
 
 
 func test_pricing_panel_rejects_non_product_item() -> void:
@@ -82,6 +84,40 @@ func test_pricing_panel_apply_updates_item_price() -> void:
 	assert_true(_panel.apply_price())
 	assert_eq(_item.get("current_price_cents"), 2299)
 	assert_false(_panel.is_open())
+
+
+func test_pricing_panel_apply_defaults_to_single_item() -> void:
+	var matching_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(matching_item)
+
+	_panel.open_for_item(_item)
+	_panel.increase_price()
+
+	assert_true(_panel.apply_price())
+	assert_eq(_item.get("current_price_cents"), 2299)
+	assert_eq(matching_item.get("current_price_cents"), 2199)
+
+
+func test_pricing_panel_apply_matching_updates_active_matching_items() -> void:
+	var matching_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var sold_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var customer_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(matching_item)
+	add_child_autofree(sold_item)
+	add_child_autofree(customer_item)
+	sold_item.set("location_id", "sold")
+	customer_item.set("location_id", "customer:customer_001")
+
+	_panel.open_for_item(_item)
+	_panel.apply_matching_check_box.button_pressed = true
+	_panel.increase_price()
+
+	assert_eq(_panel.get_matching_priceable_items().size(), 2)
+	assert_true(_panel.apply_price())
+	assert_eq(_item.get("current_price_cents"), 2299)
+	assert_eq(matching_item.get("current_price_cents"), 2299)
+	assert_eq(sold_item.get("current_price_cents"), 2199)
+	assert_eq(customer_item.get("current_price_cents"), 2199)
 
 
 func test_pricing_panel_cancel_keeps_original_item_price() -> void:
