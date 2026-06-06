@@ -42,12 +42,12 @@ func test_evidence_storage_rejects_empty_ids() -> void:
 
 
 func test_evidence_storage_can_store_mismatched_serial_item() -> void:
-	var item := load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var item: StaticBody3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
 	add_child_autofree(item)
-	item.instance_id = "item_used_star_trader_003"
-	item.serial_id = "GST-1047"
-	item.expected_serial_id = "GST-003"
-	item.suspicious_event_id = "serial_mismatch_item_used_star_trader_003"
+	item.set("instance_id", "item_used_star_trader_003")
+	item.set("serial_id", "GST-1047")
+	item.set("expected_serial_id", "GST-003")
+	item.set("suspicious_event_id", "serial_mismatch_item_used_star_trader_003")
 
 	var evidence: Dictionary = _storage.store_from_node(item)
 
@@ -60,7 +60,7 @@ func test_evidence_storage_can_store_mismatched_serial_item() -> void:
 
 
 func test_evidence_storage_ignores_normal_product_items() -> void:
-	var item := load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var item: StaticBody3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
 	add_child_autofree(item)
 
 	assert_eq(_storage.store_from_node(item), {})
@@ -68,7 +68,7 @@ func test_evidence_storage_ignores_normal_product_items() -> void:
 
 
 func test_evidence_storage_can_store_supplier_message() -> void:
-	var message := load("res://scenes/props/supplier_message.tscn").instantiate()
+	var message: SupplierMessage = load("res://scenes/props/supplier_message.tscn").instantiate()
 	add_child_autofree(message)
 
 	var evidence: Dictionary = _storage.store_from_node(message)
