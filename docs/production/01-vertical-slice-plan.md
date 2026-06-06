@@ -116,6 +116,7 @@ Technical:
 24. Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
 25. Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.
 26. Add category demand. Done as a category-level demand policy that combines with product demand tiers for buyer price tolerance and backroom demand readouts.
+27. Add market drift. Done as deterministic day/category/tier market-value drift surfaced through the backroom computer for active inventory.
 
 ## Slice Review Questions
 

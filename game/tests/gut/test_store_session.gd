@@ -173,6 +173,24 @@ func test_store_session_summarizes_category_demand() -> void:
 	assert_string_contains(summary, "Hardware x0.80")
 
 
+func test_store_session_summarizes_market_drift_for_active_inventory() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var root := Node3D.new()
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(session)
+	add_child_autofree(root)
+	root.add_child(item)
+
+	session.day_number = 2
+	session.inventory_root_path = session.get_path_to(root)
+
+	var summary := session.get_market_drift_summary_text()
+
+	assert_string_contains(summary, "Market drift day 2:")
+	assert_string_contains(summary, "Star Trader $24.99")
+	assert_string_contains(summary, "+$")
+
+
 func test_store_session_summarizes_active_inventory_items() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	var root := Node3D.new()

@@ -185,6 +185,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "market_drift_panel_readability",
+      "name": "Backroom market drift readout is readable and understandable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify market drift text exists; the player must judge whether current and drifted market values are readable.",
+      "owner": "manual QA"
+    },
+    {
       "id": "day_summary_numbers_match_sale",
       "name": "Backroom summary numbers match completed single and multiple sales",
       "status": "manual",

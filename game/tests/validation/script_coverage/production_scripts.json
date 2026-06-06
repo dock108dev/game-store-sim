@@ -8,6 +8,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/economy/market_drift.gd",
+      "tests": [
+        "res://tests/gut/test_market_drift.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/interaction/interactable.gd",
       "tests": [
         "res://tests/gut/test_interaction_contract.gd"

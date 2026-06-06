@@ -2,6 +2,7 @@ extends Node
 class_name StoreSession
 
 const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd")
+const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
 
 @export var day_number: int = 1
 @export var starting_cash_cents: int = 50000
@@ -209,6 +210,16 @@ func get_reorder_suggestions_text() -> String:
 
 func get_category_demand_summary_text() -> String:
 	return CategoryDemandPolicy.get_summary_text()
+
+
+func get_market_drift_summary_text() -> String:
+	var products: Array[ProductDefinition] = []
+	for item in get_active_inventory_items():
+		var product := item.get("product") as ProductDefinition
+		if product != null:
+			products.append(product)
+
+	return MarketDriftPolicy.format_summary_for_products(products, day_number)
 
 
 func get_available_fixture_definitions() -> Array[Resource]:

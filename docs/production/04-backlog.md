@@ -49,7 +49,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add demand per category. Done as category-level multipliers that feed buyer price tolerance and the backroom demand readout.
 - Add price sensitivity. Done for buyer refusal of overpriced matching used games.
 - Add sales history. Done as recent sale/trade-in activity on the backroom computer.
-- Add market drift.
+- Add market drift. Done as deterministic day/category/tier market-value drift on the backroom computer for active inventory.
 - Add daily report. Started as the backroom computer day summary with recent activity.
 - Add reorder suggestions. Done as simple backroom suggestions from sales versus active inventory.
 

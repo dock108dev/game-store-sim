@@ -41,6 +41,48 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_category_demand"
+    },
+    {
+      "id": "market_drift_day_one_baseline",
+      "name": "Market drift keeps day-one catalog market value",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_market_drift.gd::test_market_drift_keeps_day_one_market_value"
+    },
+    {
+      "id": "market_drift_category_tier_rate",
+      "name": "Market drift combines category and demand tier rates",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_market_drift.gd::test_market_drift_combines_category_and_demand_tier_rates"
+    },
+    {
+      "id": "market_drift_lower_low_demand_new_games",
+      "name": "Market drift can lower low-demand new-game market values",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_market_drift.gd::test_market_drift_can_lower_low_demand_new_games"
+    },
+    {
+      "id": "market_drift_summary_deduplicates",
+      "name": "Market drift summary deduplicates active products",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_market_drift.gd::test_market_drift_summary_deduplicates_products"
+    },
+    {
+      "id": "backroom_market_drift_summary",
+      "name": "Backroom computer can summarize market drift for active inventory",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_market_drift_for_active_inventory"
+    },
+    {
+      "id": "backroom_panel_market_drift_readout",
+      "name": "Backroom panel shows market drift readout",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_market_drift"
     }
   ]
 }

@@ -118,6 +118,17 @@ func test_day_summary_panel_includes_category_demand() -> void:
 	assert_string_contains(_panel.demand_label.text, "Hardware x0.80")
 
 
+func test_day_summary_panel_includes_market_drift() -> void:
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(item)
+	_session.inventory_root_path = _session.get_path_to(item.get_parent())
+
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.market_drift_label.text, "Market drift day 1:")
+	assert_string_contains(_panel.market_drift_label.text, "Star Trader")
+
+
 func test_day_summary_panel_orders_fixture_from_backroom_computer() -> void:
 	assert_true(_panel.open_for_session(_session))
 
