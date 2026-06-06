@@ -18,6 +18,19 @@ func test_trade_in_customer_starts_with_carried_item() -> void:
 	assert_string_contains(customer.get_trade_in_summary(), "Credit $9.50")
 
 
+func test_trade_in_customer_carried_item_is_compact_and_body_anchored() -> void:
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(customer)
+
+	var item := customer.get_trade_item()
+	assert_not_null(item)
+	assert_lte(item.scale.x, 0.55)
+	assert_gte(item.position.y, 0.55)
+	assert_lte(item.position.y, 0.75)
+	assert_gt(item.position.x, 0.0)
+	assert_lt(item.position.z, 0.0)
+
+
 func test_trade_in_customer_completes_into_receiving_inventory() -> void:
 	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
 	var receiving_box := Node3D.new()

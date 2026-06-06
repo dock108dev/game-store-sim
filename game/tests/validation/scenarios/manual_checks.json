@@ -50,10 +50,10 @@
     },
     {
       "id": "stocked_item_upright_visual",
-      "name": "Stocked game is visibly upright and intentional in the rack",
+      "name": "Stocked game is compact, upright, and intentional in the rack",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment from several player angles.",
+      "reason": "Requires human visual judgment from several player angles; automated checks cover dimensions but not whether the case reads at the right scale in the actual window.",
       "owner": "manual QA"
     },
     {
@@ -138,10 +138,10 @@
     },
     {
       "id": "trade_in_seller_visual",
-      "name": "Trade-in seller and carried game are readable at the register",
+      "name": "Trade-in seller and carried game are readable at the register without obvious floating or clipping",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment about seller placement and carried-item readability.",
+      "reason": "Requires human visual judgment about seller placement, carried-item readability, and whether the game appears held instead of floating through the seller or counter.",
       "owner": "manual QA"
     },
     {

@@ -5,7 +5,7 @@ class_name ShelfSlot
 @export var accepted_category: String = "used_game"
 @export var occupied_item_path: NodePath
 @export var placed_item_position: Vector3 = Vector3(0, 0, 0.02)
-@export var placed_item_scale: Vector3 = Vector3(0.78, 0.78, 0.78)
+@export var placed_item_scale: Vector3 = Vector3(0.72, 0.72, 0.72)
 
 
 func assign_category(category: String) -> bool:

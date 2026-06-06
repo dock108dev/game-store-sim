@@ -43,6 +43,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 - Receiving box contains multiple visible used games without looking cluttered.
 - Display rack still reads as a used-game rack, and stocked used games still go into the expected slots.
+- Used-game cases look compact enough on the rack and while carried; they should not read like oversized display panels.
 - Held item stays low/right and does not block navigation.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
@@ -51,7 +52,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Buyer spawn, rack approach, and register queue pathing read naturally in the current layout.
 - Overpriced-item refusal feedback is readable and does not look like a register failure.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
-- Trade-in seller placement, carried item, offer panel, counteroffer controls, cash accept, store-credit accept, decline controls, prompt, and completion message read clearly at the register.
+- Trade-in seller placement, carried item, offer panel, counteroffer controls, cash accept, store-credit accept, decline controls, prompt, and completion message read clearly at the register; the carried item should read as held, not floating through the seller or counter.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.
 - Closed-day report text is readable and understandable after ending the day.
