@@ -16,11 +16,13 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 10. Ring up the first buyer.
 11. Ring up the second buyer.
 12. Confirm sold items are gone from the rack and no longer inspectable.
-13. Interact with the register when no buyer is queued and buy the trade-in from the seller.
-14. Confirm the acquired trade-in item appears in the receiving box and can be treated as inventory.
-15. Open the backroom computer.
-16. Confirm cash, sales count, revenue, cost, profit, trade-in count, and trade spend match the completed sales and trade-in.
-17. End the day and confirm the summary changes to `Day closed`.
+13. Interact with the register when no buyer is queued and review the seller trade-in offer.
+14. Confirm the offer panel shows condition, demand, market value, and cash offer.
+15. Accept the trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
+16. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
+17. Open the backroom computer.
+18. Confirm cash, sales count, revenue, cost, profit, trade-in count, and trade spend match the completed sales and trade-in.
+19. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -31,7 +33,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable and does not overlap the register.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
-- Trade-in seller placement, carried item, prompt, and completion message read clearly at the register.
+- Trade-in seller placement, carried item, offer panel, accept/decline controls, prompt, and completion message read clearly at the register.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.
 
@@ -43,4 +45,5 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `receiving_area.png`
 - `register_counter.png`
 - `customer_queue.png`
+- `trade_in_offer.png`
 - `backroom_summary.png`

@@ -36,6 +36,34 @@
       "evidence": "res://tests/gut/test_trade_in_customer.gd::test_register_completes_trade_in_when_no_buyer_is_waiting"
     },
     {
+      "id": "register_opens_trade_in_offer_panel",
+      "name": "Register opens trade-in offer review for the player actor",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_customer.gd::test_register_opens_trade_in_offer_for_player_actor"
+    },
+    {
+      "id": "trade_in_offer_panel_product_fields",
+      "name": "Trade-in offer panel shows condition, market, demand, and cash offer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_opens_with_condition_market_and_offer"
+    },
+    {
+      "id": "trade_in_offer_panel_accepts",
+      "name": "Trade-in offer panel accepts the cash offer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_accepts_offer"
+    },
+    {
+      "id": "trade_in_offer_panel_declines",
+      "name": "Trade-in offer panel declines the cash offer without buying inventory",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_declines_offer"
+    },
+    {
       "id": "trade_in_cash_accounting",
       "name": "Trade-in purchase reduces store cash without counting as a sale",
       "status": "automated",

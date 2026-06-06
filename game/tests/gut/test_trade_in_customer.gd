@@ -51,7 +51,7 @@ func test_register_completes_trade_in_when_no_buyer_is_waiting() -> void:
 	register.ledger_path = register.get_path_to(ledger)
 	register.store_session_path = register.get_path_to(session)
 
-	assert_eq(register.get_interaction_prompt(), "E Buy Trade-In Moon Escape")
+	assert_eq(register.get_interaction_prompt(), "E Review Trade-In Moon Escape")
 	var message := register.interact()
 
 	assert_string_contains(message, "Bought Moon Escape trade-in")
@@ -61,3 +61,40 @@ func test_register_completes_trade_in_when_no_buyer_is_waiting() -> void:
 	assert_eq(session.get_cash_cents(), 49240)
 	assert_eq(receiving_box.get_child_count(), 1)
 	assert_eq(receiving_box.get_child(0).get("location_id"), "receiving_box_001")
+
+
+func test_register_opens_trade_in_offer_for_player_actor() -> void:
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	var actor := _TradeInActor.new()
+	add_child_autofree(register)
+	add_child_autofree(customer)
+	add_child_autofree(actor)
+
+	register.trade_in_customer_path = register.get_path_to(customer)
+
+	assert_eq(register.interact_with_actor(actor), "")
+	assert_eq(actor.opened_register, register)
+	assert_eq(actor.opened_customer, customer)
+
+
+func test_trade_in_customer_can_be_declined() -> void:
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(customer)
+
+	assert_true(customer.decline_trade_in())
+	assert_eq(customer.state, SimpleTradeInCustomer.STATE_TRADE_DECLINED)
+	assert_false(customer.is_waiting_for_trade_in())
+	assert_string_contains(customer.interact(), "declined")
+
+
+class _TradeInActor:
+	extends Node
+
+	var opened_register: RegisterWorkstation = null
+	var opened_customer: SimpleTradeInCustomer = null
+
+	func open_trade_in_offer(register: RegisterWorkstation, customer: SimpleTradeInCustomer) -> String:
+		opened_register = register
+		opened_customer = customer
+		return ""

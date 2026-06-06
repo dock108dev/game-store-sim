@@ -53,6 +53,12 @@ func test_day_summary_panel_exists() -> void:
 	assert_false(day_summary_panel.visible)
 
 
+func test_trade_in_offer_panel_exists() -> void:
+	var trade_in_offer_panel := _player.get_node_or_null("TradeInOfferPanel") as TradeInOfferPanel
+	assert_not_null(trade_in_offer_panel)
+	assert_false(trade_in_offer_panel.visible)
+
+
 func test_keyboard_input_actions_exist() -> void:
 	for action in REQUIRED_ACTIONS:
 		assert_true(InputMap.has_action(action), "%s should exist" % action)
@@ -166,3 +172,17 @@ func test_player_opens_day_summary() -> void:
 	assert_true(day_summary_panel.is_open())
 	assert_eq(day_summary_panel.get_active_session(), session)
 	assert_true(_player.is_day_summary_open())
+
+
+func test_player_opens_trade_in_offer() -> void:
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
+	add_child_autofree(register)
+	add_child_autofree(customer)
+
+	assert_eq(_player.open_trade_in_offer(register, customer), "")
+
+	var trade_in_offer_panel := _player.get_node("TradeInOfferPanel") as TradeInOfferPanel
+	assert_true(trade_in_offer_panel.is_open())
+	assert_eq(trade_in_offer_panel.get_active_customer(), customer)
+	assert_true(_player.is_trade_in_offer_open())

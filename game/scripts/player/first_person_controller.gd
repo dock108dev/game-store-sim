@@ -7,6 +7,7 @@ extends CharacterBody3D
 @onready var hold_anchor: Node3D = $Head/Camera3D/HoldAnchor
 @onready var pricing_panel: PricingPanel = $PricingPanel
 @onready var day_summary_panel: Node = $DaySummaryPanel
+@onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 
 var _look_pitch: float = 0.0
 var _held_item: Node3D = null
@@ -118,6 +119,10 @@ func is_day_summary_open() -> bool:
 	return day_summary_panel != null and day_summary_panel.is_open()
 
 
+func is_trade_in_offer_open() -> bool:
+	return trade_in_offer_panel != null and trade_in_offer_panel.is_open()
+
+
 func open_pricing_for_held_item() -> String:
 	if _held_item == null:
 		return "Hold an item to price it."
@@ -141,6 +146,16 @@ func open_day_summary(store_session: Node) -> String:
 	return "Backroom summary unavailable."
 
 
+func open_trade_in_offer(register: RegisterWorkstation, customer: SimpleTradeInCustomer) -> String:
+	if trade_in_offer_panel == null:
+		return "Trade-in review unavailable."
+
+	if trade_in_offer_panel.open_for_trade_in(register, customer):
+		return ""
+
+	return "Trade-in review unavailable."
+
+
 func get_held_item_interaction_prompt() -> String:
 	if _held_item == null:
 		return ""
@@ -160,7 +175,7 @@ func interact_with_held_item() -> String:
 
 
 func _is_modal_open() -> bool:
-	return is_pricing_open() or is_day_summary_open()
+	return is_pricing_open() or is_day_summary_open() or is_trade_in_offer_open()
 
 
 func _close_active_modal() -> void:
@@ -170,3 +185,7 @@ func _close_active_modal() -> void:
 
 	if is_day_summary_open():
 		day_summary_panel.close()
+		return
+
+	if is_trade_in_offer_open():
+		trade_in_offer_panel.close()

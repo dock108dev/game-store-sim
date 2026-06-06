@@ -27,10 +27,10 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Trade-In Slice
 
 - Add customer-carried used item. Done for one in-store trade-in seller.
-- Add condition inspection UI.
-- Add market value and demand lookup.
-- Add cash/store-credit offer. Started with a deterministic cash offer at the register.
-- Add accept/counter/decline customer response.
+- Add condition inspection UI. Done in the register trade-in offer panel.
+- Add market value and demand lookup. Done in the register trade-in offer panel.
+- Add cash/store-credit offer. Cash offer done; store-credit offer remains later.
+- Add accept/counter/decline customer response. Accept/decline done; counteroffer remains later.
 - Add acquired item to inventory. Done for accepted trade-ins moving into the receiving box.
 
 ## Store Layout Slice

@@ -24,7 +24,7 @@ The gate currently runs:
 - UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
-- Named validation screenshot capture at `1280x720` for main scene, receiving area, register counter, customer queue, and backroom summary.
+- Named validation screenshot capture at `1280x720` for main scene, receiving area, register counter, customer queue, trade-in offer, and backroom summary.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
 
@@ -62,6 +62,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Register prompt and sale completion message are readable.
 - Trade-in seller and carried item are readable at the register.
 - Trade-in register prompt and completion message are readable.
+- Trade-in offer panel condition, demand, market, and accept/decline controls are readable.
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
 - Backroom summary panel closes back into first-person mouse capture cleanly.
@@ -81,7 +82,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, register checkout, and transaction ledger checks.
-- `scenarios/trade_in.json`: trade-in seller, carried item, register acceptance, receiving inventory, and cash accounting checks.
+- `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, accept/decline, receiving inventory, and cash accounting checks.
 - `scenarios/day_summary.json`: store session cash accounting, backroom computer, and day summary panel checks.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.

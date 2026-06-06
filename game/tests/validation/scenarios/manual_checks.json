@@ -137,6 +137,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "trade_in_offer_panel_readability",
+      "name": "Trade-in offer panel condition, demand, market, and accept/decline controls are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about panel readability and whether the offer review is understandable.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_computer_visual_placement",
       "name": "Backroom computer placement is readable and does not look like a second register",
       "status": "manual",

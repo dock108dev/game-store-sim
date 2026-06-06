@@ -11,6 +11,7 @@ SCREENSHOT_SCENARIOS=(
   receiving_area
   register_counter
   customer_queue
+  trade_in_offer
   backroom_summary
 )
 

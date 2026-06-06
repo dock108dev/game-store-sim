@@ -18,7 +18,7 @@ func get_interaction_prompt() -> String:
 	var trade_in_customer := _get_waiting_trade_in_customer()
 	if trade_in_customer != null:
 		var trade_item: Node = trade_in_customer.get_trade_item()
-		return "E Buy Trade-In %s" % _get_item_display_name(trade_item)
+		return "E Review Trade-In %s" % _get_item_display_name(trade_item)
 
 	return "Register Workstation"
 
@@ -32,6 +32,14 @@ func interact() -> String:
 
 
 func interact_with_actor(_actor: Node) -> String:
+	var customer := _get_waiting_customer()
+	if customer != null:
+		return _complete_waiting_sale()
+
+	var trade_in_customer := _get_waiting_trade_in_customer()
+	if trade_in_customer != null and _actor != null and _actor.has_method("open_trade_in_offer"):
+		return str(_actor.open_trade_in_offer(self, trade_in_customer))
+
 	return _complete_waiting_sale()
 
 
@@ -70,6 +78,13 @@ func _complete_waiting_trade_in() -> String:
 	if customer == null:
 		return "No customer waiting at the register."
 
+	return accept_trade_in(customer)
+
+
+func accept_trade_in(customer: SimpleTradeInCustomer) -> String:
+	if customer == null or not customer.is_waiting_for_trade_in():
+		return "No trade-in waiting at the register."
+
 	var item: Node = customer.get_trade_item()
 	var ledger := _get_ledger()
 	var receiving_box := _get_receiving_box()
@@ -94,6 +109,16 @@ func _complete_waiting_trade_in() -> String:
 		str(transaction.get("display_name", "item")),
 		offer_cents / 100.0,
 	]
+
+
+func decline_trade_in(customer: SimpleTradeInCustomer) -> String:
+	if customer == null or not customer.is_waiting_for_trade_in():
+		return "No trade-in waiting at the register."
+
+	if customer.decline_trade_in():
+		return "Declined %s trade-in." % _get_item_display_name(customer.get_trade_item())
+
+	return "Could not decline trade-in."
 
 
 func _get_waiting_customer() -> SimpleBuyerCustomer:

@@ -63,6 +63,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"customer_queue":
 			_prepare_customer_queue(scene)
 			_set_camera(scene, Vector3(0.0, 1.7, -4.05), Vector3(1.0, 0.9, -3.3))
+		"trade_in_offer":
+			_prepare_trade_in_offer(scene)
+			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
 		"backroom_summary":
 			_prepare_backroom_summary(scene)
 			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
@@ -94,6 +97,17 @@ func _prepare_backroom_summary(scene: Node) -> void:
 	session.apply_sale(transaction)
 	if player.has_method("open_day_summary"):
 		player.open_day_summary(session)
+
+
+func _prepare_trade_in_offer(scene: Node) -> void:
+	var player := scene.get_node_or_null("PlayerController")
+	var register := scene.get_node_or_null("RegisterWorkstation")
+	var customer := scene.get_node_or_null("TradeInCustomer")
+	if player == null or register == null or customer == null:
+		return
+
+	if player.has_method("open_trade_in_offer"):
+		player.open_trade_in_offer(register, customer)
 
 
 func _stock_receiving_item(scene: Node, item_name: String, slot_path: String) -> void:

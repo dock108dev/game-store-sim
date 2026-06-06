@@ -111,6 +111,13 @@
         "res://tests/gut/test_day_summary_panel.gd"
       ],
       "critical": true
+    },
+    {
+      "script": "res://scripts/ui/trade_in_offer_panel.gd",
+      "tests": [
+        "res://tests/gut/test_trade_in_offer_panel.gd"
+      ],
+      "critical": true
     }
   ]
 }

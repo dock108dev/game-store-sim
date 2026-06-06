@@ -3,6 +3,7 @@ class_name SimpleTradeInCustomer
 
 const STATE_WAITING_FOR_TRADE := "waiting_for_trade"
 const STATE_TRADE_COMPLETE := "trade_complete"
+const STATE_TRADE_DECLINED := "trade_declined"
 
 @export var customer_id: String = "trade_seller_001"
 @export var carried_item_path: NodePath = NodePath("TradeInItem")
@@ -22,6 +23,9 @@ func get_interaction_prompt() -> String:
 	if state == STATE_TRADE_COMPLETE:
 		return "Trade-In Complete"
 
+	if state == STATE_TRADE_DECLINED:
+		return "Trade-In Declined"
+
 	var item := get_trade_item()
 	if item != null:
 		return "Trade-In Seller: %s" % _get_item_display_name(item)
@@ -33,14 +37,14 @@ func interact() -> String:
 	if state == STATE_TRADE_COMPLETE:
 		return "Trade-in already completed."
 
+	if state == STATE_TRADE_DECLINED:
+		return "Trade-in declined."
+
 	var item := get_trade_item()
 	if item == null:
 		return "Seller has no trade-in item."
 
-	return "Seller wants $%0.2f for %s." % [
-		get_offer_cents() / 100.0,
-		_get_item_display_name(item),
-	]
+	return get_trade_in_summary()
 
 
 func is_waiting_for_trade_in() -> bool:
@@ -66,6 +70,25 @@ func get_offer_cents() -> int:
 	return maxi(1, int(round(product.market_value_cents * offer_rate)))
 
 
+func get_trade_in_summary() -> String:
+	var item := get_trade_item()
+	if item == null:
+		return "Seller has no trade-in item."
+
+	var product := item.get("product") as ProductDefinition
+	if product == null:
+		return "Seller has an unknown item."
+
+	return "%s - %s - %s - Demand %s - Market $%0.2f - Offer $%0.2f" % [
+		product.display_name,
+		product.platform,
+		product.condition.capitalize(),
+		product.demand_tier.capitalize(),
+		product.market_value_cents / 100.0,
+		get_offer_cents() / 100.0,
+	]
+
+
 func complete_trade_in(receiving_box: Node) -> Node3D:
 	if not is_waiting_for_trade_in() or receiving_box == null:
 		return null
@@ -87,6 +110,14 @@ func complete_trade_in(receiving_box: Node) -> Node3D:
 		item.set_collision_enabled(true)
 
 	return item
+
+
+func decline_trade_in() -> bool:
+	if state != STATE_WAITING_FOR_TRADE:
+		return false
+
+	state = STATE_TRADE_DECLINED
+	return true
 
 
 func _get_item_display_name(item: Node) -> String:
