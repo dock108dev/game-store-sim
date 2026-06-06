@@ -96,6 +96,27 @@ func test_store_session_formats_recent_activity_history() -> void:
 	assert_lt(activity.find("Trade-in Moon Escape"), activity.find("Sale Star Trader"))
 
 
+func test_store_session_suggests_reorder_for_low_active_stock_after_sales() -> void:
+	var ledger := TransactionLedger.new()
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	var root := Node3D.new()
+	var sold_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var active_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(root)
+	root.add_child(active_item)
+	add_child_autofree(sold_item)
+
+	session.ledger_path = session.get_path_to(ledger)
+	session.inventory_root_path = session.get_path_to(root)
+	ledger.record_sale("customer_001", sold_item)
+
+	var suggestions: String = session.get_reorder_suggestions_text()
+	assert_string_contains(suggestions, "Reorder suggestions:")
+	assert_string_contains(suggestions, "Restock Star Trader (sold 1, active 1)")
+
+
 func test_store_session_summarizes_active_inventory_items() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	var root := Node3D.new()

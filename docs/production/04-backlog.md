@@ -51,7 +51,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add sales history. Done as recent sale/trade-in activity on the backroom computer.
 - Add market drift.
 - Add daily report. Started as the backroom computer day summary with recent activity.
-- Add reorder suggestions.
+- Add reorder suggestions. Done as simple backroom suggestions from sales versus active inventory.
 
 ## Hidden Thread Slice
 

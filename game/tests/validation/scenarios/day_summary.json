@@ -50,6 +50,13 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_active_inventory_items"
     },
     {
+      "id": "store_session_reorder_suggestions",
+      "name": "Store session suggests reorders for low active stock after sales",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_suggests_reorder_for_low_active_stock_after_sales"
+    },
+    {
       "id": "store_session_recent_activity_history",
       "name": "Store session formats recent sale and trade-in activity history",
       "status": "automated",
@@ -118,6 +125,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_inventory_summary"
+    },
+    {
+      "id": "day_summary_panel_reorder_suggestions",
+      "name": "Day summary panel includes reorder suggestions",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_reorder_suggestions"
     },
     {
       "id": "day_summary_panel_end_day",

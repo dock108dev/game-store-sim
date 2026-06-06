@@ -72,6 +72,22 @@ func test_day_summary_panel_includes_inventory_summary() -> void:
 	assert_string_contains(_panel.inventory_label.text, "Star Trader x1")
 
 
+func test_day_summary_panel_includes_reorder_suggestions() -> void:
+	var root := Node3D.new()
+	var sold_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var active_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(root)
+	root.add_child(active_item)
+	add_child_autofree(sold_item)
+	_session.inventory_root_path = _session.get_path_to(root)
+	_ledger.record_sale("customer_001", sold_item)
+
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.reorder_label.text, "Reorder suggestions:")
+	assert_string_contains(_panel.reorder_label.text, "Restock Star Trader")
+
+
 func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_true(_panel.open_for_session(_session))
 

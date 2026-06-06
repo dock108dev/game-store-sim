@@ -145,6 +145,49 @@ func get_inventory_summary_text() -> String:
 	return "\n".join(lines)
 
 
+func get_reorder_suggestions_text() -> String:
+	var sold_counts := {}
+	var active_counts := {}
+	var display_names := {}
+
+	for transaction in get_transactions():
+		if str(transaction.get("type", "sale")) != "sale":
+			continue
+
+		var product_id := str(transaction.get("product_id", ""))
+		if product_id.is_empty():
+			continue
+
+		sold_counts[product_id] = int(sold_counts.get(product_id, 0)) + 1
+		display_names[product_id] = str(transaction.get("display_name", product_id))
+
+	for item in get_active_inventory_items():
+		var product := item.get("product") as ProductDefinition
+		if product == null or product.product_id.is_empty():
+			continue
+
+		active_counts[product.product_id] = int(active_counts.get(product.product_id, 0)) + 1
+		display_names[product.product_id] = product.display_name
+
+	var product_ids := sold_counts.keys()
+	product_ids.sort()
+	var lines: Array[String] = ["Reorder suggestions:"]
+	for product_id in product_ids:
+		var sold_count := int(sold_counts[product_id])
+		var active_count := int(active_counts.get(product_id, 0))
+		if active_count <= sold_count:
+			lines.append("Restock %s (sold %d, active %d)" % [
+				str(display_names.get(product_id, product_id)),
+				sold_count,
+				active_count,
+			])
+
+	if lines.size() == 1:
+		return "Reorder suggestions: none"
+
+	return "\n".join(lines)
+
+
 func get_status_label() -> String:
 	if is_day_closed:
 		return "Day closed"

@@ -22,7 +22,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 16. Accept the trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
 17. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
 18. Open the backroom computer.
-19. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade spend, recent activity, and active inventory summary match the completed sales/trade-in and remaining items.
+19. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade spend, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
 20. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
@@ -40,6 +40,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Summary panel text and buttons fit in the actual game window.
 - Recent activity text is readable and distinguishes sales from trade-ins.
 - Inventory summary text is readable and matches active receiving/rack items.
+- Reorder suggestion text is readable and makes sense after selling stocked games.
 
 ## Automated Screenshot Artifacts
 

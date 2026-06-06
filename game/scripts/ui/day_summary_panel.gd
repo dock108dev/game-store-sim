@@ -5,6 +5,7 @@ class_name DaySummaryPanel
 @onready var summary_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SummaryLabel
 @onready var last_sale_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LastSaleLabel
 @onready var inventory_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/InventoryLabel
+@onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReorderLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/EndDayButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CloseButton
@@ -79,5 +80,9 @@ func _update_labels() -> void:
 		inventory_label.text = _session.get_inventory_summary_text()
 	else:
 		inventory_label.text = "Inventory unavailable"
+	if _session.has_method("get_reorder_suggestions_text"):
+		reorder_label.text = _session.get_reorder_suggestions_text()
+	else:
+		reorder_label.text = "Reorder suggestions unavailable"
 	status_label.text = _session.get_status_label()
 	end_day_button.disabled = _session.is_day_closed
