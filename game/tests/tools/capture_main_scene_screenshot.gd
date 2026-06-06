@@ -58,6 +58,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 	match scenario:
 		"receiving_area":
 			_set_camera(scene, Vector3(-4.2, 1.8, 2.65), Vector3(-4.45, 0.55, 3.9))
+		"supplier_message":
+			_hide_node(scene, "PlayerController")
+			_set_camera(scene, Vector3(-3.0, 0.95, 2.85), Vector3(-3.15, 0.34, 3.45))
 		"register_counter":
 			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
 		"customer_queue":
@@ -166,6 +169,12 @@ func _advance_managed_customers(manager: Node, seconds: float) -> void:
 	for _index in range(steps):
 		for customer in manager.get_customers():
 			customer._process(step)
+
+
+func _hide_node(scene: Node, node_path: NodePath) -> void:
+	var node := scene.get_node_or_null(node_path) as Node3D
+	if node != null:
+		node.visible = false
 
 
 func _set_camera(scene: Node, position: Vector3, target: Vector3) -> void:

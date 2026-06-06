@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://bphm1usn5cknj"]
+
+[ext_resource type="Script" path="res://scripts/narrative/supplier_message.gd" id="1_supplier_message"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_paper"]
+albedo_color = Color(0.9, 0.84, 0.58, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mark"]
+albedo_color = Color(0.12, 0.11, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_note"]
+material = SubResource("StandardMaterial3D_paper")
+size = Vector3(0.62, 0.42, 0.015)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mark"]
+material = SubResource("StandardMaterial3D_mark")
+size = Vector3(0.42, 0.018, 0.018)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_note"]
+size = Vector3(0.65, 0.48, 0.06)
+
+[node name="SupplierMessage" type="StaticBody3D"]
+script = ExtResource("1_supplier_message")
+display_name = "Supplier Note"
+message_id = "msg_supplier_lot_a17"
+supplier_id = "North Dock Wholesale"
+subject = "Receiving discrepancy"
+body = "Lot A-17 lists three Orbit 64 copies, but one case serial does not match the sheet."
+severity = "medium"
+suspicious_event_id = "supplier_message_lot_a17"
+
+[node name="NoteMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.24, 0)
+mesh = SubResource("BoxMesh_note")
+
+[node name="LineMeshTop" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.32, -0.014)
+mesh = SubResource("BoxMesh_mark")
+
+[node name="LineMeshMiddle" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.24, -0.014)
+mesh = SubResource("BoxMesh_mark")
+
+[node name="LineMeshBottom" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.16, -0.014)
+mesh = SubResource("BoxMesh_mark")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.24, 0)
+shape = SubResource("BoxShape3D_note")

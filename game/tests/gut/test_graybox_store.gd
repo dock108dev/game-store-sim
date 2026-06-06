@@ -85,6 +85,15 @@ func test_receiving_box_contains_mismatched_serial_item() -> void:
 	assert_eq(item.call("get_suspicious_event_id"), "serial_mismatch_item_used_star_trader_003")
 
 
+func test_receiving_box_contains_supplier_message_artifact() -> void:
+	var message := _store.get_node_or_null("ReceivingBox/SupplierMessage001")
+
+	assert_not_null(message)
+	assert_eq(message.get("message_id"), "msg_supplier_lot_a17")
+	assert_eq(message.get("supplier_id"), "North Dock Wholesale")
+	assert_string_contains(message.call("interact"), "Receiving discrepancy")
+
+
 func test_display_rack_slot_starts_empty() -> void:
 	var slot := _store.get_node("GameDisplayRack/ShelfSlot001") as ShelfSlot
 	assert_true(slot.is_available())

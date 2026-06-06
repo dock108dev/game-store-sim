@@ -9,6 +9,7 @@ SCREENSHOT_DIR="$ARTIFACT_DIR/screenshots"
 SCREENSHOT_SCENARIOS=(
   main_scene
   receiving_area
+  supplier_message
   register_counter
   customer_queue
   trade_in_offer

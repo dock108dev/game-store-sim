@@ -255,6 +255,14 @@
       "critical": false,
       "reason": "Requires human confirmation that the optional suspicious copy can still be picked up, priced, stocked, sold, and inspected without feeling like a required story step.",
       "owner": "manual QA"
+    },
+    {
+      "id": "supplier_message_readability",
+      "name": "Supplier message artifact is readable and clearly optional",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that the receiving note placement and text read as an optional clue rather than a blocking objective.",
+      "owner": "manual QA"
     }
   ]
 }

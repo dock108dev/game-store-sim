@@ -50,6 +50,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/narrative/supplier_message.gd",
+      "tests": [
+        "res://tests/gut/test_supplier_message.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/inventory/product_definition.gd",
       "tests": [
         "res://tests/gut/test_product_item.gd"

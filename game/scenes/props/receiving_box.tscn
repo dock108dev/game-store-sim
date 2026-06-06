@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ch8di53ltfvaf"]
+[gd_scene load_steps=7 format=3 uid="uid://ch8di53ltfvaf"]
 
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="1_used_game"]
+[ext_resource type="PackedScene" path="res://scenes/props/supplier_message.tscn" id="2_supplier_message"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_box"]
 albedo_color = Color(0.32, 0.24, 0.16, 1)
@@ -66,3 +67,6 @@ location_id = "receiving_box_001"
 serial_id = "GST-1047"
 expected_serial_id = "GST-003"
 suspicious_event_id = "serial_mismatch_item_used_star_trader_003"
+
+[node name="SupplierMessage001" parent="." instance=ExtResource("2_supplier_message")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 1.55, 0.02, -0.55)

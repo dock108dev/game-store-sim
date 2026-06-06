@@ -36,6 +36,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 30. Confirm the closed-day report is readable and matches the played day.
 31. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
 32. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
+33. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
 
 ## Visual Checks
 
@@ -65,6 +66,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Rotated ghost preview is still visually aligned and readable.
 - Suspicious event flag infrastructure remains invisible during normal play.
 - Optional mismatched serial text is readable when inspecting that copy and does not make the normal store loop feel blocked.
+- Supplier note placement and text read as an optional receiving artifact, not a required tutorial or blocking objective.
 
 ## Automated Screenshot Artifacts
 
@@ -72,6 +74,7 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 
 - `main_scene.png`
 - `receiving_area.png`
+- `supplier_message.png`
 - `register_counter.png`
 - `customer_queue.png`
 - `trade_in_offer.png`

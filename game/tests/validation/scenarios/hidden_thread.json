@@ -55,6 +55,27 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_product_item.gd::test_product_item_flags_serial_mismatch_event"
+    },
+    {
+      "id": "receiving_box_contains_supplier_message_artifact",
+      "name": "Receiving box contains the optional supplier message artifact",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_contains_supplier_message_artifact"
+    },
+    {
+      "id": "supplier_message_metadata",
+      "name": "Supplier message exposes supplier, subject, body, and severity metadata",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_supplier_message.gd::test_supplier_message_has_metadata"
+    },
+    {
+      "id": "supplier_message_flags_hidden_event",
+      "name": "Supplier message can flag a hidden suspicious event",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_supplier_message.gd::test_supplier_message_flags_hidden_event"
     }
   ]
 }
