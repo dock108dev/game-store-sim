@@ -9,20 +9,21 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 3. Pick up a `Star Trader` from the receiving box.
 4. Open pricing from the held item.
 5. Adjust the price, optionally enable apply-to-matching, apply it, and confirm mouse capture returns.
-6. Stock the game in an empty display rack slot.
-7. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
-8. Repeat pickup, pricing, and stocking with a second `Star Trader`.
-9. Confirm a second buyer walks to the rack and queues with readable spacing.
-10. Ring up the first buyer.
-11. Ring up the second buyer.
-12. Confirm sold items are gone from the rack and no longer inspectable.
-13. Interact with the register when no buyer is queued and review the seller trade-in offer.
-14. Confirm the offer panel shows condition, demand, market value, and cash offer.
-15. Accept the trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
-16. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
-17. Open the backroom computer.
-18. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade spend, and active inventory summary match the completed sales/trade-in and remaining items.
-19. End the day and confirm the summary changes to `Day closed`.
+6. On a fresh run or before the sale loop, overprice one `Star Trader` above market tolerance, stock it, and confirm a buyer leaves it on the rack with readable feedback.
+7. Stock a fairly priced game in an empty display rack slot.
+8. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
+9. Repeat pickup, pricing, and stocking with a second fairly priced `Star Trader`.
+10. Confirm a second buyer walks to the rack and queues with readable spacing.
+11. Ring up the first buyer.
+12. Ring up the second buyer.
+13. Confirm sold items are gone from the rack and no longer inspectable.
+14. Interact with the register when no buyer is queued and review the seller trade-in offer.
+15. Confirm the offer panel shows condition, demand, market value, and cash offer.
+16. Accept the trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
+17. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
+18. Open the backroom computer.
+19. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade spend, and active inventory summary match the completed sales/trade-in and remaining items.
+20. End the day and confirm the summary changes to `Day closed`.
 
 ## Visual Checks
 
@@ -32,6 +33,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Register prompt and sale messages are readable.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable and does not overlap the register.
+- Overpriced-item refusal feedback is readable and does not look like a register failure.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
 - Trade-in seller placement, carried item, offer panel, accept/decline controls, prompt, and completion message read clearly at the register.
 - Backroom computer reads as the management terminal, not another register.

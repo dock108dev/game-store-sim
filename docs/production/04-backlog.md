@@ -47,7 +47,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Economy Slice
 
 - Add demand per category.
-- Add price sensitivity.
+- Add price sensitivity. Done for buyer refusal of overpriced matching used games.
 - Add sales history.
 - Add market drift.
 - Add daily report.

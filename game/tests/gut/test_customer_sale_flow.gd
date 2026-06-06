@@ -79,6 +79,26 @@ func test_customer_ignores_unstocked_or_mismatched_items() -> void:
 	assert_eq(customer.state, SimpleBuyerCustomer.STATE_BROWSING)
 
 
+func test_customer_rejects_overpriced_matching_item() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(customer)
+
+	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
+	item.set("current_price_cents", 4000)
+	assert_true(slot.place_item(item))
+
+	assert_false(customer.claim_item_from_slot(slot))
+
+	assert_false(slot.is_available())
+	assert_eq(customer.state, SimpleBuyerCustomer.STATE_BROWSING)
+	assert_null(customer.get_checkout_item())
+	assert_string_contains(customer.get_last_feedback(), "too expensive")
+	assert_string_contains(customer.interact(), "too expensive")
+
+
 func test_customer_completes_sale_and_marks_item_sold() -> void:
 	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
 	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()

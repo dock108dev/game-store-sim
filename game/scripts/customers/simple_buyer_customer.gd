@@ -18,6 +18,7 @@ const STATE_SALE_COMPLETE := "sale_complete"
 @export var carried_item_scale: Vector3 = Vector3(0.55, 0.55, 0.55)
 
 var state: String = STATE_BROWSING
+var last_feedback: String = ""
 var _checkout_item: Node3D = null
 var _move_target: Vector3 = Vector3.ZERO
 var _target_slot_path: NodePath
@@ -59,6 +60,9 @@ func get_interaction_prompt() -> String:
 	if state == STATE_SALE_COMPLETE:
 		return "Customer Checked Out"
 
+	if not last_feedback.is_empty():
+		return "Customer Feedback"
+
 	return "Customer Looking For %s" % target_product_id
 
 
@@ -74,6 +78,9 @@ func interact() -> String:
 
 	if state == STATE_SALE_COMPLETE:
 		return "Customer completed checkout."
+
+	if not last_feedback.is_empty():
+		return last_feedback
 
 	return "Customer is browsing for a matching game."
 
@@ -92,6 +99,63 @@ func is_moving_to_register() -> bool:
 
 func is_claiming_slot(slot: Node) -> bool:
 	return slot != null and not _target_slot_path.is_empty() and get_node_or_null(_target_slot_path) == slot
+
+
+func get_last_feedback() -> String:
+	return last_feedback
+
+
+func would_buy_item(item: Node) -> bool:
+	var product: ProductDefinition = null
+	if item != null:
+		product = item.get("product") as ProductDefinition
+	if product == null:
+		last_feedback = ""
+		return false
+
+	if product.product_id != target_product_id:
+		last_feedback = ""
+		return false
+
+	var current_price := int(item.get("current_price_cents"))
+	if current_price <= 0:
+		current_price = product.suggested_price_cents
+
+	var max_price := get_price_limit_cents_for_item(item)
+	if current_price > max_price:
+		last_feedback = "%s is too expensive at $%0.2f." % [
+			product.display_name,
+			current_price / 100.0,
+		]
+		return false
+
+	last_feedback = "Interested in %s." % product.display_name
+	return true
+
+
+func get_price_limit_cents_for_item(item: Node) -> int:
+	var product: ProductDefinition = null
+	if item != null:
+		product = item.get("product") as ProductDefinition
+	if product == null:
+		return 0
+
+	var basis := product.market_value_cents
+	if basis <= 0:
+		basis = product.suggested_price_cents
+	if basis <= 0:
+		basis = int(item.get("current_price_cents"))
+
+	var multiplier := 1.05
+	match product.demand_tier:
+		"high":
+			multiplier = 1.15
+		"low":
+			multiplier = 0.95
+		_:
+			multiplier = 1.05
+
+	return int(round(basis * multiplier))
 
 
 func set_queue_position(queue_position: Vector3) -> void:
@@ -165,6 +229,7 @@ func _take_item_from_slot(slot: Node) -> bool:
 	item.position = carried_item_position
 	item.rotation = Vector3.ZERO
 	item.scale = carried_item_scale
+	last_feedback = "Taking %s to the register." % _get_item_display_name(item)
 	_checkout_item = item
 	_target_slot_path = NodePath("")
 
@@ -175,11 +240,7 @@ func _take_item_from_slot(slot: Node) -> bool:
 
 
 func _wants_item(item: Node) -> bool:
-	if item == null:
-		return false
-
-	var product := item.get("product") as ProductDefinition
-	return product != null and product.product_id == target_product_id
+	return would_buy_item(item)
 
 
 func _get_item_display_name(item: Node) -> String:

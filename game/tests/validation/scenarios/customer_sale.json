@@ -99,6 +99,20 @@
       "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_ignores_unstocked_or_mismatched_items"
     },
     {
+      "id": "customer_rejects_overpriced_matching_item",
+      "name": "Buyer rejects a matching item priced above demand tolerance",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_rejects_overpriced_matching_item"
+    },
+    {
+      "id": "customer_manager_leaves_overpriced_items_stocked",
+      "name": "Customer manager leaves overpriced matching items on the display rack",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_leaves_overpriced_items_stocked"
+    },
+    {
       "id": "register_completes_sale",
       "name": "Register completes the waiting customer sale",
       "status": "automated",

@@ -59,7 +59,7 @@ Functional:
 - Transaction records sale revenue and profit.
 - Stock decreases after sale.
 - Price affects recorded profit.
-- Customer gives basic feedback.
+- Customer gives basic feedback. Done for overpriced used-item refusal and checkout messages.
 
 Usability:
 
@@ -107,6 +107,7 @@ Technical:
 15. Add optional apply-to-matching used-item pricing. Done in the direct pricing panel for active matching copies.
 16. Add first trade-in seller. Done as a register-reviewed cash trade-in with condition/market/demand details, accept/decline, and accepted item movement into receiving inventory.
 17. Add first product catalog. Done with 12 fictional used games, three platforms, four conditions, three demand tiers, and automated catalog validation.
+18. Add first customer price sensitivity. Done with demand-based buyer refusal for overpriced matching used games.
 
 ## Slice Review Questions
 
