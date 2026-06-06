@@ -259,6 +259,49 @@ func test_store_session_lists_available_supplier_lots() -> void:
 	assert_string_contains(session.get_supplier_order_summary_text(), "Pending delivery: none")
 
 
+func test_store_session_lists_release_calendar_sorted_by_launch_day() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var releases := session.get_release_calendar()
+
+	assert_eq(releases.size(), 3)
+	assert_eq(releases[0].get("product_name"), "Neon Skyline")
+	assert_eq(releases[1].get("product_name"), "Pocket Farm DX")
+	assert_eq(releases[2].get("product_name"), "Skycart Grand Prix")
+	assert_eq(releases[0].get("release_day"), 3)
+	assert_eq(releases[1].get("release_day"), 5)
+	assert_eq(releases[2].get("release_day"), 8)
+
+
+func test_store_session_formats_upcoming_release_calendar() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var summary: String = session.get_release_calendar_text()
+
+	assert_string_contains(summary, "Release calendar:")
+	assert_string_contains(summary, "Day 3 (in 2 days): Neon Skyline - Orbit 64")
+	assert_string_contains(summary, "cost $32.00")
+	assert_string_contains(summary, "MSRP $49.99")
+	assert_string_contains(summary, "allocation 4")
+	assert_string_contains(summary, "demand High")
+
+
+func test_store_session_filters_released_calendar_entries() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+	session.day_number = 4
+
+	var upcoming := session.get_upcoming_releases()
+	var summary: String = session.get_release_calendar_text()
+
+	assert_eq(upcoming.size(), 2)
+	assert_eq(upcoming[0].get("product_name"), "Pocket Farm DX")
+	assert_eq(summary.find("Neon Skyline"), -1)
+	assert_string_contains(summary, "Day 5 (tomorrow): Pocket Farm DX")
+
+
 func test_store_session_orders_supplier_lot_and_reserves_cash() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

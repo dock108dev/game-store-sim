@@ -64,6 +64,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/releases/new_release.gd",
+      "tests": [
+        "res://tests/gut/test_new_release.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/inventory/product_definition.gd",
       "tests": [
         "res://tests/gut/test_product_item.gd"

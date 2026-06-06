@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="NewRelease" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/releases/new_release.gd" id="1_new_release"]
+
+[resource]
+script = ExtResource("1_new_release")
+release_id = "release_neon_skyline"
+product_name = "Neon Skyline"
+platform = "Orbit 64"
+category = "new_game"
+release_day = 3
+wholesale_cost_cents = 3200
+suggested_price_cents = 4999
+allocation_limit = 4
+demand_tier = "high"

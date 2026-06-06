@@ -18,6 +18,11 @@ const DEFAULT_FIXTURE_CATALOG_PATHS := [
 const DEFAULT_SUPPLIER_LOT_PATHS := [
 	"res://data/suppliers/used_game_starter_lot.tres",
 ]
+const DEFAULT_RELEASE_CALENDAR_PATHS := [
+	"res://data/releases/neon_skyline_launch.tres",
+	"res://data/releases/pocket_farm_dx_launch.tres",
+	"res://data/releases/skycart_grand_prix_launch.tres",
+]
 
 var cash_cents: int = 0
 var is_day_closed: bool = false
@@ -263,6 +268,55 @@ func get_available_supplier_lots() -> Array[Resource]:
 		if lot != null:
 			lots.append(lot)
 	return lots
+
+
+func get_release_calendar() -> Array[Resource]:
+	var releases: Array[Resource] = []
+	for path in DEFAULT_RELEASE_CALENDAR_PATHS:
+		var release := load(path) as Resource
+		if release != null:
+			releases.append(release)
+
+	releases.sort_custom(func(a: Resource, b: Resource) -> bool:
+		var day_a := int(a.get("release_day"))
+		var day_b := int(b.get("release_day"))
+		if day_a == day_b:
+			return str(a.get("product_name")) < str(b.get("product_name"))
+		return day_a < day_b
+	)
+	return releases
+
+
+func get_upcoming_releases(include_released: bool = false) -> Array[Resource]:
+	var upcoming: Array[Resource] = []
+	for release in get_release_calendar():
+		if include_released or int(release.get("release_day")) >= day_number:
+			upcoming.append(release)
+	return upcoming
+
+
+func get_release_calendar_text(max_entries: int = 3) -> String:
+	var upcoming := get_upcoming_releases(false)
+	if upcoming.is_empty():
+		return "Release calendar: no upcoming launches"
+
+	var lines: Array[String] = ["Release calendar:"]
+	var remaining := max_entries
+	for release in upcoming:
+		if remaining <= 0:
+			break
+		if release.has_method("format_calendar_line"):
+			lines.append(release.call("format_calendar_line", day_number))
+		else:
+			lines.append("Day %d: %s - %s - MSRP %s" % [
+				int(release.get("release_day")),
+				str(release.get("product_name")),
+				str(release.get("platform")),
+				format_money(int(release.get("suggested_price_cents"))),
+			])
+		remaining -= 1
+
+	return "\n".join(lines)
 
 
 func get_supplier_lot(lot_id: String) -> Resource:

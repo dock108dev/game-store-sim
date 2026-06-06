@@ -9,6 +9,7 @@ class_name DaySummaryPanel
 @onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReorderLabel
 @onready var demand_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DemandLabel
 @onready var market_drift_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MarketDriftLabel
+@onready var release_calendar_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReleaseCalendarLabel
 @onready var supplier_order_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SupplierOrderLabel
 @onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FixtureLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
@@ -169,6 +170,10 @@ func _update_labels() -> void:
 		market_drift_label.text = _session.get_market_drift_summary_text()
 	else:
 		market_drift_label.text = "Market drift unavailable"
+	if _session.has_method("get_release_calendar_text"):
+		release_calendar_label.text = _session.get_release_calendar_text()
+	else:
+		release_calendar_label.text = "Release calendar unavailable"
 	if _session.has_method("get_supplier_order_summary_text"):
 		supplier_order_label.text = _session.get_supplier_order_summary_text()
 	else:

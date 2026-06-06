@@ -25,26 +25,27 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 19. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
 20. Open the backroom computer.
 21. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
-22. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
-23. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
-24. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
-25. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
-26. Reopen the backroom computer and confirm pending placement is cleared and the rack is listed as placed.
-27. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
-28. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
-29. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
-30. Confirm the market drift readout is readable and makes sense for active inventory.
-31. Use `Order Games` on the backroom computer and confirm cash drops by `$27.00`.
-32. Confirm pending delivery says `Used Game Starter Lot`, due day 2, with 3 items.
-33. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending delivery clears.
-34. End the day and confirm the summary changes to `Day closed`.
-35. Confirm the closed-day report is readable and matches the played day.
-36. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
-37. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
-38. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
-39. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
-40. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, and day summary still work after talking to the `Cash Buyer`.
-41. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
+22. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier, and does not show a preorder action yet.
+23. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
+24. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
+25. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
+26. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
+27. Reopen the backroom computer and confirm pending placement is cleared and the rack is listed as placed.
+28. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
+29. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
+30. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
+31. Confirm the market drift readout is readable and makes sense for active inventory.
+32. Use `Order Games` on the backroom computer and confirm cash drops by `$27.00`.
+33. Confirm pending delivery says `Used Game Starter Lot`, due day 2, with 3 items.
+34. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending delivery clears.
+35. End the day and confirm the summary changes to `Day closed`.
+36. Confirm the closed-day report is readable and matches the played day.
+37. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
+38. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
+39. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
+40. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
+41. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, and day summary still work after talking to the `Cash Buyer`.
+42. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
 
 ## Visual Checks
 
@@ -67,6 +68,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
 - Inventory summary text is readable and matches active receiving/rack items.
 - Reorder suggestion text is readable and makes sense after selling stocked games.
+- Release calendar text is readable, fictional, and clearly planning-only; there should be no preorder deposit, allocation commitment, or launch-day queue action yet.
 - Category demand text is readable and does not crowd the management panel.
 - Market drift text is readable and makes the active inventory value movement understandable.
 - Supplier delivery text and `Order Games` button are readable and make clear that cash is reserved before delivery.
@@ -94,6 +96,7 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `customer_queue.png`
 - `trade_in_offer.png`
 - `backroom_summary.png`
+- `release_calendar.png`
 - `supplier_delivery.png`
 - `fixture_ghost.png`
 - `fixture_invalid_ghost.png`
