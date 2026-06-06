@@ -22,7 +22,7 @@ func test_used_game_item_initializes_price() -> void:
 
 
 func test_used_game_item_has_location() -> void:
-	assert_eq(_item.location_id, "shelf_slot_001")
+	assert_eq(_item.location_id, "receiving_box_001")
 
 
 func test_used_game_mesh_sits_on_node_origin() -> void:
@@ -57,7 +57,28 @@ func test_used_game_inspect_text_is_product_backed() -> void:
 	assert_string_contains(text, "Orbit 64")
 	assert_string_contains(text, "Market $24.99")
 	assert_string_contains(text, "Price $21.99")
-	assert_string_contains(text, "shelf_slot_001")
+	assert_string_contains(text, "receiving_box_001")
+
+
+func test_used_game_can_enter_held_state() -> void:
+	_item.set_held()
+
+	var collision_shape := _item.get_node("CollisionShape3D") as CollisionShape3D
+	assert_eq(_item.location_id, "held")
+	assert_eq(_item.collision_layer, 0)
+	assert_eq(_item.collision_mask, 0)
+	assert_true(collision_shape.disabled)
+
+
+func test_used_game_can_enter_stocked_state() -> void:
+	_item.set_held()
+	_item.set_stocked("shelf_slot_001")
+
+	var collision_shape := _item.get_node("CollisionShape3D") as CollisionShape3D
+	assert_eq(_item.location_id, "shelf_slot_001")
+	assert_gt(_item.collision_layer, 0)
+	assert_gt(_item.collision_mask, 0)
+	assert_false(collision_shape.disabled)
 
 
 func test_product_definition_describes_retail_fields() -> void:

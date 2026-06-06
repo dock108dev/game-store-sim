@@ -4,8 +4,10 @@ extends CharacterBody3D
 @export var mouse_sensitivity: float = 0.0025
 
 @onready var head: Node3D = $Head
+@onready var hold_anchor: Node3D = $Head/Camera3D/HoldAnchor
 
 var _look_pitch: float = 0.0
+var _held_item: Node3D = null
 
 
 func _ready() -> void:
@@ -38,3 +40,54 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+
+func is_holding_item() -> bool:
+	return _held_item != null
+
+
+func get_held_item() -> Node3D:
+	return _held_item
+
+
+func can_pick_up_item(item: Node) -> bool:
+	return _held_item == null and item is Node3D
+
+
+func pick_up_item(item: Node3D) -> bool:
+	if not can_pick_up_item(item):
+		return false
+
+	var parent := item.get_parent()
+	if parent != null:
+		parent.remove_child(item)
+
+	hold_anchor.add_child(item)
+	item.transform = Transform3D(Basis(), Vector3.ZERO)
+	_held_item = item
+
+	if item.has_method("set_held"):
+		item.set_held()
+
+	return true
+
+
+func can_place_held_item(slot: Node) -> bool:
+	if _held_item == null:
+		return false
+
+	if slot == null or not slot.has_method("can_accept"):
+		return false
+
+	return slot.can_accept(_held_item)
+
+
+func place_held_item(slot: Node) -> bool:
+	if not can_place_held_item(slot):
+		return false
+
+	var item := _held_item
+	if slot.place_item(item):
+		_held_item = null
+		return true
+
+	return false

@@ -33,18 +33,27 @@ func test_floor_collision_is_enabled() -> void:
 	assert_true(floor.use_collision)
 
 
+func test_receiving_box_exists() -> void:
+	assert_not_null(_store.get_node_or_null("ReceivingBox"))
+
+
 func test_used_game_exists() -> void:
-	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot001/PlaceholderUsedGame"))
+	assert_not_null(_store.get_node_or_null("ReceivingBox/PlaceholderUsedGame"))
 
 
-func test_used_game_sits_in_display_rack() -> void:
-	var rack := _store.get_node("GameDisplayRack") as Node3D
-	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
-	var item := slot.get_node("PlaceholderUsedGame") as Node3D
+func test_used_game_starts_in_receiving_box() -> void:
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	var item := receiving_box.get_node("PlaceholderUsedGame") as Node3D
 
-	assert_eq(item.get_parent(), slot)
-	assert_almost_eq(item.position.y, 0.0, 0.01)
-	assert_almost_eq(item.global_position.y, 0.38, 0.01)
+	assert_eq(item.get_parent(), receiving_box)
+	assert_eq(item.get("location_id"), "receiving_box_001")
+	assert_gt(item.global_position.y, 0.15)
+
+
+func test_display_rack_slot_starts_empty() -> void:
+	var slot := _store.get_node("GameDisplayRack/ShelfSlot001") as ShelfSlot
+	assert_true(slot.is_available())
+	assert_null(slot.get_occupied_item())
 
 
 func test_display_rack_is_wall_aligned() -> void:

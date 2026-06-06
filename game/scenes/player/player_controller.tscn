@@ -21,11 +21,14 @@ position = Vector3(0, 1.62, 0)
 [node name="Camera3D" type="Camera3D" parent="Head"]
 current = true
 
+[node name="HoldAnchor" type="Node3D" parent="Head/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.34, -0.85)
+
 [node name="InteractionRaycast" type="RayCast3D" parent="Head/Camera3D"]
 enabled = true
+collide_with_areas = true
 target_position = Vector3(0, 0, -3)
 script = ExtResource("2_raycast")
 prompt_path = NodePath("../../../InteractionPrompt")
 
 [node name="InteractionPrompt" parent="." instance=ExtResource("3_prompt")]
-

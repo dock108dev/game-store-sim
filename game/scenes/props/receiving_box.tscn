@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=3 uid="uid://ch8di53ltfvaf"]
+
+[ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="1_used_game"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_box"]
+albedo_color = Color(0.32, 0.24, 0.16, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_liner"]
+albedo_color = Color(0.18, 0.16, 0.13, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_base"]
+material = SubResource("StandardMaterial3D_box")
+size = Vector3(1.1, 0.18, 0.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_box"]
+size = Vector3(1.1, 0.18, 0.7)
+
+[node name="ReceivingBox" type="Node3D"]
+
+[node name="Base" type="StaticBody3D" parent="."]
+
+[node name="BaseMesh" type="MeshInstance3D" parent="Base"]
+position = Vector3(0, 0.09, 0)
+mesh = SubResource("BoxMesh_base")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Base"]
+position = Vector3(0, 0.09, 0)
+shape = SubResource("BoxShape3D_box")
+
+[node name="BackLip" type="CSGBox3D" parent="."]
+use_collision = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31, 0.33)
+size = Vector3(1.12, 0.28, 0.08)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="LeftLip" type="CSGBox3D" parent="."]
+use_collision = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56, 0.31, 0)
+size = Vector3(0.08, 0.28, 0.7)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="RightLip" type="CSGBox3D" parent="."]
+use_collision = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.56, 0.31, 0)
+size = Vector3(0.08, 0.28, 0.7)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="InteriorPad" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, -0.03)
+size = Vector3(0.92, 0.02, 0.48)
+material = SubResource("StandardMaterial3D_liner")
+
+[node name="PlaceholderUsedGame" parent="." instance=ExtResource("1_used_game")]
+position = Vector3(-0.22, 0.2, -0.06)
+location_id = "receiving_box_001"

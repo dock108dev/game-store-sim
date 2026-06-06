@@ -4,22 +4,15 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Now
 
-- Initialize the Godot project under `game/`.
-- Pin the Godot version.
-- Create a graybox store scene.
-- Add a keyboard/mouse first-person controller.
-- Add a basic interaction raycast and prompt.
-- Add one inspectable used-game item.
-- Add initial product data shape.
-- Add one shelf slot.
-- Add one register workstation placeholder.
+- Add receiving-box to display-rack stocking behavior.
+- Keep validation coverage current as the stocking loop changes.
 
 ## First Playable Counter Loop
 
-- Pick up an item from a receiving box.
+- Pick up an item from a receiving box. In progress.
 - Inspect product name, platform, condition, cost, and market value.
 - Set a sale price.
-- Place the item on a shelf.
+- Place the item on a shelf/display rack. In progress.
 - Spawn one target buyer customer.
 - Let the customer find the item and queue at the register.
 - Scan the item.
@@ -67,6 +60,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep `game/tests/validation_matrix.json` current as UI scenarios and scripts are added.
+- Report manual QA for held-item visibility, upright stocked item placement, prompt readability, and rack/register/receiving-box composition after every stocking-loop change.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex.
 - Add save/load smoke tests to the local gate after persistence exists.

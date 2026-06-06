@@ -46,7 +46,9 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Mouse-look feel.
 - Escape releases mouse capture and mouse click recaptures it.
 - Prompt readability in the actual game window.
-- Shelf, register, and used-game visual placement.
+- Receiving box, display rack, register, and used-game visual placement.
+- Held item stays visible without blocking normal navigation.
+- Stocked game is visibly upright and intentional in the rack.
 - Screenshot composition is useful, not merely nonblank.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.

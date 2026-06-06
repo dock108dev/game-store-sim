@@ -96,6 +96,20 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_used_game_exists"
     },
     {
+      "id": "receiving_box_exists",
+      "name": "Receiving box exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_exists"
+    },
+    {
+      "id": "used_game_starts_in_receiving_box",
+      "name": "Used-game item starts in the receiving box",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_used_game_starts_in_receiving_box"
+    },
+    {
       "id": "used_game_product_data",
       "name": "Used-game item has product data",
       "status": "automated",
@@ -111,10 +125,24 @@
     },
     {
       "id": "used_game_location",
-      "name": "Used-game item reports shelf location",
+      "name": "Used-game item reports receiving-box location",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_product_item.gd::test_used_game_item_has_location"
+    },
+    {
+      "id": "used_game_held_state",
+      "name": "Used-game item can enter held state with collision disabled",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_can_enter_held_state"
+    },
+    {
+      "id": "used_game_stocked_state",
+      "name": "Used-game item can enter stocked state with collision restored",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_can_enter_stocked_state"
     },
     {
       "id": "used_game_prompt",
@@ -173,6 +201,69 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_starts_available"
     },
     {
+      "id": "main_scene_display_slot_empty",
+      "name": "Main-scene display rack slot starts empty",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_slot_starts_empty"
+    },
+    {
+      "id": "slot_accepts_used_game",
+      "name": "Display slot accepts a used game when empty",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_accepts_used_game_when_empty"
+    },
+    {
+      "id": "slot_places_used_game",
+      "name": "Display slot places a held used game and records occupancy",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_places_used_game"
+    },
+    {
+      "id": "slot_rejects_when_occupied",
+      "name": "Display slot rejects another item after stocking",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_rejects_item_when_occupied"
+    },
+    {
+      "id": "stock_prompt",
+      "name": "Display slot prompt offers stocking for held item",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_stock_prompt_uses_held_item_name"
+    },
+    {
+      "id": "occupied_slot_inspect",
+      "name": "Occupied display slot inspects the stocked item",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_inspects_occupied_item"
+    },
+    {
+      "id": "player_hold_anchor",
+      "name": "Player has a hold anchor in front of the camera",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_has_hold_anchor"
+    },
+    {
+      "id": "player_pickup",
+      "name": "Player can pick up a used game and hold it",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_can_pick_up_item"
+    },
+    {
+      "id": "player_place_held_item",
+      "name": "Player can place the held game into the display slot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_places_held_item_in_display_slot"
+    },
+    {
       "id": "screenshot_captured",
       "name": "Main-scene screenshot is captured",
       "status": "automated",
@@ -227,10 +318,26 @@
     },
     {
       "id": "prop_visual_placement",
-      "name": "Shelf, register, and used-game placement makes sense",
+      "name": "Receiving box, display rack, register, and used-game placement makes sense",
       "status": "manual",
       "critical": false,
       "reason": "Requires human composition review while graybox layout is changing.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "held_item_visibility",
+      "name": "Held item stays visible without blocking normal navigation",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment while moving and looking around the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "stocked_item_upright_visual",
+      "name": "Stocked game is visibly upright and intentional in the rack",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment from several player angles.",
       "owner": "manual QA"
     },
     {

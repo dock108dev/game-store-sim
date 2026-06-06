@@ -88,13 +88,13 @@ Technical:
 
 ## Prototype Tasks
 
-1. Initialize Godot project.
-2. Build graybox store.
-3. Add first-person controller.
-4. Add interactable base class.
-5. Add item data and item instance data.
-6. Add pickup/hold/place behavior.
-7. Add shelf slot component.
+1. Initialize Godot project. Done.
+2. Build graybox store. Done.
+3. Add first-person controller. Done.
+4. Add interactable base class. Done.
+5. Add item data and item instance data. Done.
+6. Add pickup/hold/place behavior. In progress: receiving box to display rack stocking loop.
+7. Add shelf slot component. Done.
 8. Add pricing UI.
 9. Add register UI.
 10. Add transaction log.
