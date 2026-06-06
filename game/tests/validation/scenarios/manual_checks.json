@@ -97,6 +97,30 @@
       "owner": "manual QA"
     },
     {
+      "id": "backroom_computer_visual_placement",
+      "name": "Backroom computer placement is readable and does not look like a second register",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment about prop placement and terminal identity.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "day_summary_panel_readability",
+      "name": "Day summary panel text and controls are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about summary readability and mouse capture behavior.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "day_summary_numbers_match_sale",
+      "name": "Backroom summary numbers match the completed sale",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human confirmation after playing through the full pickup, price, stock, and sale loop.",
+      "owner": "manual QA"
+    },
+    {
       "id": "sold_item_visual_removal",
       "name": "Sold item is no longer visually available on the rack after checkout",
       "status": "manual",

@@ -30,10 +30,10 @@
     },
     {
       "id": "register_customer_ledger_wiring",
-      "name": "Register is wired to the buyer customer and transaction ledger",
+      "name": "Register is wired to the buyer customer, transaction ledger, and store session",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_and_ledger"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_ledger_and_session"
     },
     {
       "id": "buyer_targets_display_slot",

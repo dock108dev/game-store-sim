@@ -1,0 +1,116 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "store_session_exists",
+      "name": "Store session exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_exists"
+    },
+    {
+      "id": "store_session_ledger_wiring",
+      "name": "Store session is wired to the transaction ledger",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_transaction_ledger"
+    },
+    {
+      "id": "store_session_starting_cash",
+      "name": "Store session starts with opening cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_starts_with_open_day_and_cash"
+    },
+    {
+      "id": "register_updates_store_cash",
+      "name": "Register sale updates store cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_completes_waiting_customer_sale"
+    },
+    {
+      "id": "store_session_reads_ledger_totals",
+      "name": "Store session reads revenue, cost, and profit from the ledger",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_reads_ledger_totals"
+    },
+    {
+      "id": "store_session_end_day",
+      "name": "Store session can close the current day",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_can_close_day"
+    },
+    {
+      "id": "backroom_computer_exists",
+      "name": "Backroom computer exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backroom_computer_exists"
+    },
+    {
+      "id": "backroom_computer_interactable",
+      "name": "Backroom computer is interactable",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_backroom_computer_is_interactable"
+    },
+    {
+      "id": "backroom_computer_session_wiring",
+      "name": "Backroom computer is wired to the store session",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backroom_computer_is_wired_to_store_session"
+    },
+    {
+      "id": "day_summary_panel_exists",
+      "name": "Player has a hidden day summary panel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_day_summary_panel_exists"
+    },
+    {
+      "id": "day_summary_panel_opens",
+      "name": "Day summary panel opens with cash and sales fields",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
+    },
+    {
+      "id": "day_summary_panel_last_sale",
+      "name": "Day summary panel includes the last sale",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_last_sale"
+    },
+    {
+      "id": "day_summary_panel_end_day",
+      "name": "Day summary panel can close the current day",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_end_day_updates_status"
+    },
+    {
+      "id": "backroom_computer_opens_summary",
+      "name": "Backroom computer opens the actor day summary panel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_backroom_computer_opens_actor_summary_panel"
+    },
+    {
+      "id": "player_opens_day_summary",
+      "name": "Player opens the day summary panel for a store session",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_day_summary"
+    },
+    {
+      "id": "no_standalone_price_register",
+      "name": "Main scene does not include a standalone price register",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_no_standalone_price_register_exists"
+    }
+  ]
+}

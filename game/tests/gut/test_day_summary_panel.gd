@@ -1,0 +1,66 @@
+extends GutTest
+
+var _panel: Node
+var _session: Node
+var _ledger: TransactionLedger
+
+
+func before_each() -> void:
+	_panel = load("res://scenes/ui/day_summary_panel.tscn").instantiate()
+	_session = load("res://scripts/systems/store_session.gd").new()
+	_ledger = TransactionLedger.new()
+	add_child_autofree(_panel)
+	add_child_autofree(_ledger)
+	add_child_autofree(_session)
+	_session.ledger_path = _session.get_path_to(_ledger)
+
+
+func test_day_summary_panel_starts_hidden() -> void:
+	assert_false(_panel.visible)
+	assert_false(_panel.is_open())
+
+
+func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.is_open())
+	assert_eq(_panel.get_active_session(), _session)
+	assert_string_contains(_panel.title_label.text, "Backroom Computer")
+	assert_string_contains(_panel.summary_label.text, "Cash: $500.00")
+	assert_string_contains(_panel.summary_label.text, "Sales: 0")
+	assert_eq(_panel.last_sale_label.text, "Last sale: none")
+	assert_eq(_panel.status_label.text, "Day open")
+	assert_false(_panel.end_day_button.disabled)
+
+
+func test_day_summary_panel_includes_last_sale() -> void:
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(item)
+	var transaction := _ledger.record_sale("customer_001", item)
+	_session.apply_sale(transaction)
+
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.summary_label.text, "Cash: $521.99")
+	assert_string_contains(_panel.summary_label.text, "Revenue: $21.99")
+	assert_string_contains(_panel.summary_label.text, "Profit: $12.99")
+	assert_eq(_panel.last_sale_label.text, "Last sale: Star Trader for $21.99")
+
+
+func test_day_summary_panel_end_day_updates_status() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.end_day())
+
+	assert_true(_session.is_day_closed)
+	assert_eq(_panel.status_label.text, "Day closed")
+	assert_true(_panel.end_day_button.disabled)
+
+
+func test_day_summary_panel_close_hides_panel() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.close())
+
+	assert_false(_panel.visible)
+	assert_false(_panel.is_open())

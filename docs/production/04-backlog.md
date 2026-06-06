@@ -4,8 +4,8 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Now
 
-- Add one target buyer customer, register checkout, and transaction recording.
-- Keep the first sale loop deterministic until customer movement and choice need more depth.
+- Add customer movement/path validation so buyers feel less scripted.
+- Expand from one deterministic target buyer to a small in-store customer queue.
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Add optional "apply to all matching used items" pricing once multiple instances of the same product exist.
 - Keep validation coverage current as the sale loop changes.
@@ -21,7 +21,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Ring up the item at the register. Done.
 - Complete sale. Done.
 - Record transaction. Done.
-- Show end-of-day cash and profit summary.
+- Show end-of-day cash and profit summary. Done for in-memory sales via the backroom computer.
 
 ## Trade-In Slice
 
@@ -63,7 +63,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
-- Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, prompt readability, mouse capture, and rack/register/receiving-box composition after every interaction-loop change.
+- Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex.

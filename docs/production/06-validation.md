@@ -52,10 +52,13 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Stocked game is visibly upright and intentional in the rack.
 - Pricing panel text and controls are readable in the actual window.
 - Pricing opens from the held used item, not a standalone pricing terminal.
-- The only current visible terminal is the register; future terminal UI belongs on the backroom computer.
+- The only current visible terminals are the register and the backroom computer.
 - Pricing panel closes back into first-person mouse capture cleanly.
 - Stocking `Star Trader` causes the buyer to wait at the register.
 - Register prompt and sale completion message are readable.
+- Backroom computer placement is readable and does not look like a second register.
+- Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
+- Backroom summary panel closes back into first-person mouse capture cleanly.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
 - Screenshot composition is useful, not merely nonblank.
 
@@ -71,6 +74,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/customer_sale.json`: buyer customer, register checkout, and transaction ledger checks.
+- `scenarios/day_summary.json`: store session cash accounting, backroom computer, and day summary panel checks.
 - `scenarios/screenshots.json`: screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

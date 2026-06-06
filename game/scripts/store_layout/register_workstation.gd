@@ -3,6 +3,7 @@ class_name RegisterWorkstation
 
 @export var customer_path: NodePath
 @export var ledger_path: NodePath
+@export var store_session_path: NodePath
 
 
 func get_interaction_prompt() -> String:
@@ -40,6 +41,10 @@ func _complete_waiting_sale() -> String:
 	if transaction.is_empty():
 		return "Register could not record the sale."
 
+	var store_session := _get_store_session()
+	if store_session != null:
+		store_session.apply_sale(transaction)
+
 	customer.complete_sale()
 	return "Sold %s for $%0.2f. Profit $%0.2f." % [
 		str(transaction.get("display_name", "item")),
@@ -64,6 +69,13 @@ func _get_ledger() -> TransactionLedger:
 		return null
 
 	return get_node_or_null(ledger_path) as TransactionLedger
+
+
+func _get_store_session() -> Node:
+	if store_session_path.is_empty():
+		return null
+
+	return get_node_or_null(store_session_path)
 
 
 func _get_item_display_name(item: Node) -> String:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=16 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" path="res://scenes/props/register_workstation.tscn" id="4_register"]
 [ext_resource type="PackedScene" path="res://scenes/customers/simple_buyer_customer.tscn" id="5_customer"]
 [ext_resource type="Script" path="res://scripts/systems/transaction_ledger.gd" id="6_transaction_ledger"]
+[ext_resource type="PackedScene" path="res://scenes/props/backroom_computer.tscn" id="7_backroom_computer"]
+[ext_resource type="Script" path="res://scripts/systems/store_session.gd" id="8_store_session"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.42, 0.38, 0.32, 1)
@@ -113,10 +115,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 0, 5.62)
 [node name="ReceivingBox" parent="." instance=ExtResource("3_receiving_box")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.65, 0, 3.85)
 
+[node name="BackroomComputer" parent="." instance=ExtResource("7_backroom_computer")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.65, 0, 4.35)
+store_session_path = NodePath("../StoreSession")
+
 [node name="RegisterWorkstation" parent="." instance=ExtResource("4_register")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.2, 1.12, -2.35)
 customer_path = NodePath("../BuyerCustomer")
 ledger_path = NodePath("../TransactionLedger")
+store_session_path = NodePath("../StoreSession")
 
 [node name="BuyerCustomer" parent="." instance=ExtResource("5_customer")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -2.15, 0, 4.25)
@@ -128,6 +135,10 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 
 
 [node name="TransactionLedger" type="Node" parent="."]
 script = ExtResource("6_transaction_ledger")
+
+[node name="StoreSession" type="Node" parent="."]
+script = ExtResource("8_store_session")
+ledger_path = NodePath("../TransactionLedger")
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)

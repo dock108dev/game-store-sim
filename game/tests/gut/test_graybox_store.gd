@@ -103,13 +103,37 @@ func test_transaction_ledger_exists() -> void:
 	assert_not_null(_store.get_node_or_null("TransactionLedger"))
 
 
-func test_register_is_wired_to_customer_and_ledger() -> void:
+func test_store_session_exists() -> void:
+	assert_not_null(_store.get_node_or_null("StoreSession"))
+
+
+func test_backroom_computer_exists() -> void:
+	assert_not_null(_store.get_node_or_null("BackroomComputer"))
+
+
+func test_register_is_wired_to_customer_ledger_and_session() -> void:
 	var register := _store.get_node("RegisterWorkstation") as RegisterWorkstation
 	var customer := register.get_node_or_null(register.customer_path) as SimpleBuyerCustomer
 	var ledger := register.get_node_or_null(register.ledger_path) as TransactionLedger
+	var session := register.get_node_or_null(register.store_session_path)
 
 	assert_not_null(customer)
 	assert_not_null(ledger)
+	assert_not_null(session)
+
+
+func test_store_session_is_wired_to_transaction_ledger() -> void:
+	var session := _store.get_node("StoreSession")
+	var ledger := session.get_node_or_null(session.get("ledger_path")) as TransactionLedger
+
+	assert_not_null(ledger)
+
+
+func test_backroom_computer_is_wired_to_store_session() -> void:
+	var computer := _store.get_node("BackroomComputer")
+	var session := computer.get_node_or_null(computer.get("store_session_path"))
+
+	assert_not_null(session)
 
 
 func test_buyer_customer_targets_display_slot() -> void:
@@ -121,6 +145,10 @@ func test_buyer_customer_targets_display_slot() -> void:
 
 func test_no_standalone_pricing_workstation_exists() -> void:
 	assert_null(_store.get_node_or_null("PricingWorkstation"))
+
+
+func test_no_standalone_price_register_exists() -> void:
+	assert_null(_store.get_node_or_null("PricingRegister"))
 
 
 func test_game_display_rack_exists() -> void:

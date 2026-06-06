@@ -47,6 +47,12 @@ func test_pricing_panel_exists() -> void:
 	assert_false(pricing_panel.visible)
 
 
+func test_day_summary_panel_exists() -> void:
+	var day_summary_panel := _player.get_node_or_null("DaySummaryPanel")
+	assert_not_null(day_summary_panel)
+	assert_false(day_summary_panel.visible)
+
+
 func test_keyboard_input_actions_exist() -> void:
 	for action in REQUIRED_ACTIONS:
 		assert_true(InputMap.has_action(action), "%s should exist" % action)
@@ -148,3 +154,15 @@ func test_player_rejects_fixed_price_held_item() -> void:
 	assert_true(_player.pick_up_item(item))
 	assert_eq(_player.get_held_item_interaction_prompt(), "Fixed Price Item")
 	assert_eq(_player.open_pricing_for_held_item(), "This item cannot be priced.")
+
+
+func test_player_opens_day_summary() -> void:
+	var session: Node = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	assert_eq(_player.open_day_summary(session), "")
+
+	var day_summary_panel := _player.get_node("DaySummaryPanel")
+	assert_true(day_summary_panel.is_open())
+	assert_eq(day_summary_panel.get_active_session(), session)
+	assert_true(_player.is_day_summary_open())

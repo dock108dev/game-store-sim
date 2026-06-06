@@ -6,6 +6,7 @@ extends CharacterBody3D
 @onready var head: Node3D = $Head
 @onready var hold_anchor: Node3D = $Head/Camera3D/HoldAnchor
 @onready var pricing_panel: PricingPanel = $PricingPanel
+@onready var day_summary_panel: Node = $DaySummaryPanel
 
 var _look_pitch: float = 0.0
 var _held_item: Node3D = null
@@ -16,9 +17,9 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_pricing_open():
+	if _is_modal_open():
 		if event.is_action_pressed("ui_cancel"):
-			pricing_panel.cancel_price()
+			_close_active_modal()
 		return
 
 	if event.is_action_pressed("ui_cancel"):
@@ -35,7 +36,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if is_pricing_open():
+	if _is_modal_open():
 		if not is_on_floor():
 			velocity += get_gravity() * delta
 
@@ -113,6 +114,10 @@ func is_pricing_open() -> bool:
 	return pricing_panel != null and pricing_panel.is_open()
 
 
+func is_day_summary_open() -> bool:
+	return day_summary_panel != null and day_summary_panel.is_open()
+
+
 func open_pricing_for_held_item() -> String:
 	if _held_item == null:
 		return "Hold an item to price it."
@@ -124,6 +129,16 @@ func open_pricing_for_held_item() -> String:
 		return ""
 
 	return "This item cannot be priced."
+
+
+func open_day_summary(store_session: Node) -> String:
+	if day_summary_panel == null:
+		return "Backroom summary unavailable."
+
+	if day_summary_panel.open_for_session(store_session):
+		return ""
+
+	return "Backroom summary unavailable."
 
 
 func get_held_item_interaction_prompt() -> String:
@@ -142,3 +157,16 @@ func get_held_item_interaction_prompt() -> String:
 
 func interact_with_held_item() -> String:
 	return open_pricing_for_held_item()
+
+
+func _is_modal_open() -> bool:
+	return is_pricing_open() or is_day_summary_open()
+
+
+func _close_active_modal() -> void:
+	if is_pricing_open():
+		pricing_panel.cancel_price()
+		return
+
+	if is_day_summary_open():
+		day_summary_panel.close()

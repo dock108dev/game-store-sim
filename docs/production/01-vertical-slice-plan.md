@@ -15,7 +15,7 @@ Store:
 - Counter/register.
 - One shelf.
 - One backroom receiving area.
-- One office computer placeholder.
+- One backroom computer for day summary and future management actions.
 
 Products:
 
@@ -34,8 +34,9 @@ Customers:
 Workstations:
 
 - Register.
-- Pricing screen.
-- Simple inventory list.
+- Direct held-item pricing for used items.
+- Backroom computer.
+- Simple inventory list later.
 
 ## Required Player Actions
 
@@ -66,6 +67,7 @@ Usability:
 - Held items do not block the whole screen.
 - Valid shelf placement is obvious.
 - Register flow can be completed without guessing.
+- Backroom summary can be opened without guessing.
 - UI text fits at common desktop resolutions.
 
 Technical:
@@ -95,11 +97,11 @@ Technical:
 5. Add item data and item instance data. Done.
 6. Add pickup/hold/place behavior. Done.
 7. Add shelf slot component. Done.
-8. Add pricing UI. In progress: direct used-item pricing from the held item. No standalone pricing terminal.
-9. Add register UI. In progress: one-action checkout for a waiting buyer.
+8. Add pricing UI. Done for direct used-item pricing from the held item. No standalone pricing terminal.
+9. Add register UI. Done as one-action checkout for a waiting buyer.
 10. Add transaction log. Done for in-memory sale records.
 11. Add customer spawn and simple buy goal. Done for one deterministic in-store buyer.
-12. Add end-of-day summary.
+12. Add end-of-day summary. Done for in-memory cash, sales, revenue, cost, and profit via the backroom computer.
 
 ## Slice Review Questions
 

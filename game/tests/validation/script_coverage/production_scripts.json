@@ -57,9 +57,23 @@
       "critical": true
     },
     {
+      "script": "res://scripts/store_layout/backroom_computer.gd",
+      "tests": [
+        "res://tests/gut/test_interaction_contract.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/shelf_slot.gd",
       "tests": [
         "res://tests/gut/test_shelf_slot.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/systems/store_session.gd",
+      "tests": [
+        "res://tests/gut/test_store_session.gd"
       ],
       "critical": true
     },
@@ -74,6 +88,13 @@
       "script": "res://scripts/ui/pricing_panel.gd",
       "tests": [
         "res://tests/gut/test_pricing_panel.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/day_summary_panel.gd",
+      "tests": [
+        "res://tests/gut/test_day_summary_panel.gd"
       ],
       "critical": true
     }
