@@ -34,17 +34,27 @@ func test_floor_collision_is_enabled() -> void:
 
 
 func test_used_game_exists() -> void:
-	assert_not_null(_store.get_node_or_null("PlaceholderUsedGame"))
+	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot001/PlaceholderUsedGame"))
 
 
 func test_used_game_sits_in_display_rack() -> void:
-	var item := _store.get_node("PlaceholderUsedGame") as Node3D
+	var rack := _store.get_node("GameDisplayRack") as Node3D
+	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
+	var item := slot.get_node("PlaceholderUsedGame") as Node3D
+
+	assert_eq(item.get_parent(), slot)
+	assert_almost_eq(item.position.y, 0.0, 0.01)
 	assert_almost_eq(item.global_position.y, 0.38, 0.01)
+
+
+func test_display_rack_is_wall_aligned() -> void:
+	var rack := _store.get_node("GameDisplayRack") as Node3D
+	assert_almost_eq(rack.global_position.z, 5.62, 0.01)
 
 
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
 
-func test_shelf_exists() -> void:
-	assert_not_null(_store.get_node_or_null("PlaceholderShelf"))
+func test_game_display_rack_exists() -> void:
+	assert_not_null(_store.get_node_or_null("GameDisplayRack"))

@@ -145,29 +145,29 @@
       "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_workstation_is_interactable"
     },
     {
-      "id": "shelf_exists",
-      "name": "Shelf exists in the main scene",
+      "id": "game_display_rack_exists",
+      "name": "Game display rack exists in the main scene",
       "status": "automated",
       "critical": false,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_shelf_exists"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_game_display_rack_exists"
     },
     {
       "id": "shelf_slot_exists",
-      "name": "Shelf slot exists on the placeholder shelf",
+      "name": "Game display slot exists on the rack",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_exists"
     },
     {
       "id": "shelf_slot_identity",
-      "name": "Shelf slot has ID and accepted category",
+      "name": "Game display slot has ID and accepted category",
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_has_identity"
     },
     {
       "id": "shelf_slot_available",
-      "name": "Shelf slot starts available",
+      "name": "Game display slot starts available",
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_starts_available"

@@ -15,7 +15,7 @@ transparency = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_slot"]
 size = Vector3(0.58, 0.72, 0.12)
 
-[node name="PlaceholderShelf" type="Node3D"]
+[node name="GameDisplayRack" type="Node3D"]
 
 [node name="LeftSide" type="CSGBox3D" parent="."]
 use_collision = true
@@ -48,7 +48,7 @@ size = Vector3(1.75, 0.08, 0.1)
 material = SubResource("StandardMaterial3D_shelf")
 
 [node name="ShelfSlot001" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -0.13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot001"]
