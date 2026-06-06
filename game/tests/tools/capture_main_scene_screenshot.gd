@@ -133,6 +133,9 @@ func _prepare_trade_in_offer(scene: Node) -> void:
 
 func _prepare_supplier_delivery(scene: Node) -> void:
 	_hide_node(scene, "PlayerController")
+	_hide_node(scene, "CustomerManager")
+	_hide_node(scene, "TradeInCustomer")
+	_hide_node(scene, "SuspiciousCustomer")
 	var session := scene.get_node_or_null("StoreSession")
 	if session == null:
 		return
