@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://efn3hmplmw4hj"]
+[gd_scene format=3 uid="uid://j87vksc2p8pr"]
 
 [ext_resource type="Script" path="res://scripts/ui/day_summary_panel.gd" id="1_day_summary_panel"]
 
