@@ -56,6 +56,14 @@ func get_transactions() -> Array[Dictionary]:
 	return _transactions.duplicate(true)
 
 
+func replace_transactions(transactions: Array) -> void:
+	_transactions.clear()
+	for transaction in transactions:
+		if typeof(transaction) == TYPE_DICTIONARY:
+			var row: Dictionary = transaction
+			_transactions.append(row.duplicate(true))
+
+
 func get_sale_count() -> int:
 	var total := 0
 	for transaction in _transactions:

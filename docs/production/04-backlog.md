@@ -71,4 +71,4 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex. Started with catalog count, uniqueness, variety, pricing sanity, and fictional-name checks.
-- Add save/load smoke tests to the local gate after persistence exists.
+- Add save/load smoke tests to the local gate after persistence exists. Done for the first codec-level session, ledger, and active-inventory roundtrip.

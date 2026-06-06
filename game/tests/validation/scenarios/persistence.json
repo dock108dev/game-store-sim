@@ -1,0 +1,25 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "save_codec_serializes_session_transactions_inventory",
+      "name": "Save codec serializes session state, transactions, and active inventory",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_serializes_session_transactions_and_inventory"
+    },
+    {
+      "id": "save_codec_json_roundtrip",
+      "name": "Save codec JSON roundtrip preserves saved data",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_json_roundtrip_preserves_data"
+    },
+    {
+      "id": "save_codec_restores_existing_scene",
+      "name": "Save codec restores session, ledger, and existing item state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    }
+  ]
+}

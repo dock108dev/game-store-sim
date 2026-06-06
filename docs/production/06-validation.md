@@ -24,6 +24,7 @@ The gate currently runs:
 - UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
+- Codec-level save/load smoke tests for session state, transactions, and active inventory.
 - Named validation screenshot capture at `1280x720` for main scene, receiving area, register counter, customer queue, trade-in offer, and backroom summary.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
@@ -89,6 +90,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, accept/decline, receiving inventory, and cash accounting checks.
 - `scenarios/day_summary.json`: store session cash accounting, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
+- `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

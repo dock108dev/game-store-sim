@@ -94,7 +94,15 @@
     {
       "script": "res://scripts/systems/transaction_ledger.gd",
       "tests": [
-        "res://tests/gut/test_customer_sale_flow.gd"
+        "res://tests/gut/test_customer_sale_flow.gd",
+        "res://tests/gut/test_store_save_codec.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/save/store_save_codec.gd",
+      "tests": [
+        "res://tests/gut/test_store_save_codec.gd"
       ],
       "critical": true
     },
