@@ -87,7 +87,11 @@ A feature is done when:
 - The player receives feedback for success and failure.
 - Important values are data-driven or explicitly accepted as code constants.
 - It works across a full in-game day if the day loop exists.
-- It has a basic regression path: manual checklist, debug test scene, or automated test.
+- `scripts/validate_godot.sh` passes locally.
+- UI validation automation coverage stays at or above 80% for active scenarios.
+- Script test mapping coverage stays at or above 80% for production GDScript files.
+- Critical smoke scenarios are automated, not manual-only.
+- Any remaining manual validation is listed with the result in the change summary.
 - It is documented if it changes the design model.
 
 ## Early Playtest Plan
@@ -114,4 +118,3 @@ Examples:
 - Add employees after player travel time becomes a real bottleneck.
 - Add preorders after ordering and shelf sales are working.
 - Add hidden-thread consequences after normal supplier and inventory flows are established.
-

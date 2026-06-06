@@ -8,6 +8,18 @@ Pinned target: Godot 4.6.3 stable.
 
 The local app detected during setup was `/Applications/Godot.app` at `4.6.2.stable.official.71f334935`. The bare project contains no 4.6.3-specific assets or scripts yet, but active development should use 4.6.3 stable so generated files and project metadata stay consistent.
 
+## Mandatory Validation
+
+Run the local gate from the repository root before finishing any implementation:
+
+```text
+scripts/validate_godot.sh
+```
+
+The script assumes Godot is available at `/Applications/Godot.app/Contents/MacOS/Godot`. Override that with `GODOT_BIN=/path/to/Godot scripts/validate_godot.sh` when needed.
+
+Validation artifacts are written to `artifacts/validation/latest/` and are intentionally untracked.
+
 ## Input Target
 
 Keyboard/mouse only for the first playable and early production slices. Controller support is intentionally out of scope until the core retail loop is proven.
@@ -18,7 +30,7 @@ Keyboard/mouse only for the first playable and early production slices. Controll
 - `scripts/`: GDScript systems grouped by interaction, inventory, economy, customers, store layout, save, and narrative.
 - `data/`: Data-driven definitions for products, fixtures, customers, dialogue, suppliers, and progression.
 - `assets/`: Game assets grouped by models, materials, textures, and audio.
-- `tests/`: Godot test scenes or automated test assets once validation exists.
+- `tests/`: GUT tests, validation manifests, and screenshot validation tools.
 
 ## First Slice
 

@@ -65,7 +65,8 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 ## Tooling
 
-- Add debug test map.
-- Add content validation script for product data.
-- Add save/load smoke test after persistence exists.
-- Add screenshot capture path once visual verification matters.
+- Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
+- Keep `game/tests/validation_matrix.json` current as UI scenarios and scripts are added.
+- Add debug test maps only when they are called by the validation gate or a documented manual checklist.
+- Extend product data validation inside the local gate as product resources become more complex.
+- Add save/load smoke tests to the local gate after persistence exists.
