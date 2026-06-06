@@ -59,6 +59,19 @@ func test_display_rack_slot_starts_empty() -> void:
 func test_display_rack_is_wall_aligned() -> void:
 	var rack := _store.get_node("GameDisplayRack") as Node3D
 	assert_almost_eq(rack.global_position.z, 5.62, 0.01)
+	assert_gt(rack.global_position.x, -3.3)
+
+
+func test_receiving_box_is_clear_of_corner() -> void:
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	assert_gt(receiving_box.global_position.x, -5.0)
+	assert_lt(receiving_box.global_position.z, 4.1)
+
+
+func test_backroom_floor_marker_stays_subtle() -> void:
+	var backroom_zone := _store.get_node("BackroomZone") as CSGBox3D
+	assert_lte(backroom_zone.size.y, 0.013)
+	assert_lte(backroom_zone.size.x, 12.4)
 
 
 func test_register_workstation_exists() -> void:

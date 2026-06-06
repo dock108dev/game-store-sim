@@ -56,6 +56,7 @@ func place_item(item: Node3D) -> bool:
 	add_child(item)
 	item.position = placed_item_position
 	item.rotation = Vector3.ZERO
+	item.scale = Vector3.ONE
 	occupied_item_path = get_path_to(item)
 
 	if item.has_method("set_stocked"):

@@ -54,8 +54,9 @@ func test_keyboard_input_actions_have_events() -> void:
 func test_player_has_hold_anchor() -> void:
 	var hold_anchor := _player.get_node_or_null("Head/Camera3D/HoldAnchor") as Node3D
 	assert_not_null(hold_anchor)
-	assert_lt(hold_anchor.position.z, 0.0)
+	assert_lte(hold_anchor.position.z, -1.0)
 	assert_gt(hold_anchor.position.x, 0.0)
+	assert_lt(hold_anchor.position.y, -0.35)
 
 
 func test_player_can_pick_up_item() -> void:
@@ -69,6 +70,8 @@ func test_player_can_pick_up_item() -> void:
 	assert_eq(_player.get_held_item(), item)
 	assert_eq(item.get_parent(), hold_anchor)
 	assert_eq(item.get("location_id"), "held")
+	assert_almost_eq(absf(item.rotation.y), PI, 0.001)
+	assert_almost_eq(item.scale.x, 0.68, 0.001)
 	assert_true(collision_shape.disabled)
 
 
@@ -87,4 +90,6 @@ func test_player_places_held_item_in_display_slot() -> void:
 	assert_null(_player.get_held_item())
 	assert_eq(slot.get_occupied_item(), item)
 	assert_eq(item.get("location_id"), "shelf_slot_001")
+	assert_eq(item.rotation, Vector3.ZERO)
+	assert_eq(item.scale, Vector3.ONE)
 	assert_false(collision_shape.disabled)

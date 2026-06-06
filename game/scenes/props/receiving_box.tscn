@@ -51,5 +51,5 @@ size = Vector3(0.92, 0.02, 0.48)
 material = SubResource("StandardMaterial3D_liner")
 
 [node name="PlaceholderUsedGame" parent="." instance=ExtResource("1_used_game")]
-position = Vector3(-0.22, 0.2, -0.06)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.18, 0.2, -0.04)
 location_id = "receiving_box_001"

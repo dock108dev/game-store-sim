@@ -22,7 +22,7 @@ position = Vector3(0, 1.62, 0)
 current = true
 
 [node name="HoldAnchor" type="Node3D" parent="Head/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38, -0.34, -0.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.46, -0.46, -1.25)
 
 [node name="InteractionRaycast" type="RayCast3D" parent="Head/Camera3D"]
 enabled = true
