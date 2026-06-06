@@ -21,6 +21,7 @@ func _capture() -> void:
 	var output := _arg_value(args, "--output", "res://../artifacts/validation/latest/screenshots/main_scene.png")
 	var width := _arg_value(args, "--width", str(DEFAULT_WIDTH)).to_int()
 	var height := _arg_value(args, "--height", str(DEFAULT_HEIGHT)).to_int()
+	var scenario := _arg_value(args, "--scenario", "main_scene")
 
 	DisplayServer.window_set_size(Vector2i(width, height))
 	root.size = Vector2i(width, height)
@@ -29,6 +30,9 @@ func _capture() -> void:
 	root.add_child(scene)
 
 	await process_frame
+	await process_frame
+	await process_frame
+	_prepare_scenario(scene, scenario)
 	await process_frame
 	await process_frame
 
@@ -48,3 +52,61 @@ func _capture() -> void:
 		return
 
 	quit(0)
+
+
+func _prepare_scenario(scene: Node, scenario: String) -> void:
+	match scenario:
+		"receiving_area":
+			_set_camera(scene, Vector3(-4.2, 1.8, 2.65), Vector3(-4.45, 0.55, 3.9))
+		"register_counter":
+			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
+		"customer_queue":
+			_prepare_customer_queue(scene)
+			_set_camera(scene, Vector3(0.0, 1.7, -4.05), Vector3(1.0, 0.9, -3.3))
+		"backroom_summary":
+			_prepare_backroom_summary(scene)
+			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
+		_:
+			_set_camera(scene, Vector3(0.0, 2.0, -4.7), Vector3(0.0, 1.0, 1.5))
+
+
+func _prepare_customer_queue(scene: Node) -> void:
+	var manager := scene.get_node_or_null("CustomerManager")
+	if manager == null:
+		return
+
+	_stock_receiving_item(scene, "PlaceholderUsedGame", "GameDisplayRack/ShelfSlot001")
+	_stock_receiving_item(scene, "PlaceholderUsedGame002", "GameDisplayRack/ShelfSlot002")
+	if manager.has_method("process_customer_claims"):
+		manager.process_customer_claims()
+
+
+func _prepare_backroom_summary(scene: Node) -> void:
+	var ledger := scene.get_node_or_null("TransactionLedger")
+	var session := scene.get_node_or_null("StoreSession")
+	var player := scene.get_node_or_null("PlayerController")
+	var item := scene.get_node_or_null("ReceivingBox/PlaceholderUsedGame")
+	if ledger == null or session == null or player == null or item == null:
+		return
+
+	var transaction: Dictionary = ledger.record_sale("customer_001", item)
+	session.apply_sale(transaction)
+	if player.has_method("open_day_summary"):
+		player.open_day_summary(session)
+
+
+func _stock_receiving_item(scene: Node, item_name: String, slot_path: String) -> void:
+	var item := scene.get_node_or_null("ReceivingBox/%s" % item_name) as Node3D
+	var slot := scene.get_node_or_null(slot_path)
+	if item == null or slot == null or not slot.has_method("place_item"):
+		return
+
+	slot.place_item(item)
+
+
+func _set_camera(scene: Node, position: Vector3, target: Vector3) -> void:
+	var active_camera := Camera3D.new()
+	scene.add_child(active_camera)
+	active_camera.global_position = position
+	active_camera.look_at(target, Vector3.UP)
+	active_camera.current = true

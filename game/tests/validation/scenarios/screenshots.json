@@ -20,6 +20,34 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/tools/check_png.gd"
+    },
+    {
+      "id": "receiving_area_screenshot",
+      "name": "Receiving-area validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "register_counter_screenshot",
+      "name": "Register-counter validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "customer_queue_screenshot",
+      "name": "Customer-queue validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "backroom_summary_screenshot",
+      "name": "Backroom-summary validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     }
   ]
 }

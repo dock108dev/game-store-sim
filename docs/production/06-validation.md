@@ -23,8 +23,8 @@ The gate currently runs:
 - GUT tests under `game/tests/gut/`, with JUnit XML exported to `artifacts/validation/latest/gut-results.xml`.
 - UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
-- Main-scene screenshot capture at `1280x720`.
-- Screenshot dimension and nonblank pixel checks.
+- Named validation screenshot capture at `1280x720` for main scene, receiving area, register counter, customer queue, and backroom summary.
+- Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
 
 ## Coverage Policy
@@ -55,6 +55,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - The only current visible terminals are the register and the backroom computer.
 - Pricing panel closes back into first-person mouse capture cleanly.
 - Stocking `Star Trader` causes the buyer to wait at the register.
+- Stocking multiple `Star Trader` copies causes multiple buyers to queue without overlapping.
 - Register prompt and sale completion message are readable.
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
@@ -73,9 +74,9 @@ Scenario files are intentionally split by slice:
 - `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, pricing panel, and fixed-price rejection checks.
-- `scenarios/customer_sale.json`: buyer customer, register checkout, and transaction ledger checks.
+- `scenarios/customer_sale.json`: customer manager, buyer queue, register checkout, and transaction ledger checks.
 - `scenarios/day_summary.json`: store session cash accounting, backroom computer, and day summary panel checks.
-- `scenarios/screenshots.json`: screenshot capture and image sanity checks.
+- `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 
 Script test mappings live in `script_coverage/production_scripts.json`, and thresholds live in `thresholds.json`.

@@ -82,10 +82,18 @@
     },
     {
       "id": "buyer_register_wait_visual",
-      "name": "Buyer visibly waits at the register after stocking Star Trader",
+      "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment about buyer placement and readability in the actual window.",
+      "reason": "Requires human judgment about queue placement and readability in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_queue_spacing_visual",
+      "name": "Multiple queued buyers have readable spacing and do not overlap the register",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment about queue composition and customer placement.",
       "owner": "manual QA"
     },
     {
@@ -114,10 +122,10 @@
     },
     {
       "id": "day_summary_numbers_match_sale",
-      "name": "Backroom summary numbers match the completed sale",
+      "name": "Backroom summary numbers match completed single and multiple sales",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human confirmation after playing through the full pickup, price, stock, and sale loop.",
+      "reason": "Requires human confirmation after playing through single-sale and multi-sale loops.",
       "owner": "manual QA"
     },
     {

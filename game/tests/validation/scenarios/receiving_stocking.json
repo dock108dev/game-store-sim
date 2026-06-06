@@ -22,6 +22,13 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_used_game_starts_in_receiving_box"
     },
     {
+      "id": "receiving_box_multiple_items",
+      "name": "Receiving box starts with multiple used-game items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_has_multiple_items"
+    },
+    {
       "id": "used_game_product_data",
       "name": "Used-game item has product data",
       "status": "automated",
@@ -85,6 +92,13 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_exists"
     },
     {
+      "id": "shelf_has_three_display_slots",
+      "name": "Game display rack has three stocked-item slots",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_three_display_slots"
+    },
+    {
       "id": "shelf_slot_identity",
       "name": "Game display slot has ID and accepted category",
       "status": "automated",
@@ -104,6 +118,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_slot_starts_empty"
+    },
+    {
+      "id": "main_scene_display_has_three_slots",
+      "name": "Main-scene display rack has three slots",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_has_three_slots"
     },
     {
       "id": "slot_accepts_used_game",

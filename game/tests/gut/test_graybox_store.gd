@@ -67,10 +67,23 @@ func test_used_game_starts_in_receiving_box() -> void:
 	assert_gt(item.global_position.y, 0.15)
 
 
+func test_receiving_box_has_multiple_items() -> void:
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	assert_not_null(receiving_box.get_node_or_null("PlaceholderUsedGame"))
+	assert_not_null(receiving_box.get_node_or_null("PlaceholderUsedGame002"))
+	assert_not_null(receiving_box.get_node_or_null("PlaceholderUsedGame003"))
+
+
 func test_display_rack_slot_starts_empty() -> void:
 	var slot := _store.get_node("GameDisplayRack/ShelfSlot001") as ShelfSlot
 	assert_true(slot.is_available())
 	assert_null(slot.get_occupied_item())
+
+
+func test_display_rack_has_three_slots() -> void:
+	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot001"))
+	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot002"))
+	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot003"))
 
 
 func test_display_rack_is_wall_aligned() -> void:
@@ -95,8 +108,13 @@ func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
 
-func test_buyer_customer_exists() -> void:
-	assert_not_null(_store.get_node_or_null("BuyerCustomer"))
+func test_customer_manager_exists() -> void:
+	assert_not_null(_store.get_node_or_null("CustomerManager"))
+
+
+func test_customer_manager_has_two_buyers() -> void:
+	var manager := _store.get_node("CustomerManager")
+	assert_eq(manager.get_customers().size(), 2)
 
 
 func test_transaction_ledger_exists() -> void:
@@ -111,13 +129,13 @@ func test_backroom_computer_exists() -> void:
 	assert_not_null(_store.get_node_or_null("BackroomComputer"))
 
 
-func test_register_is_wired_to_customer_ledger_and_session() -> void:
+func test_register_is_wired_to_customer_manager_ledger_and_session() -> void:
 	var register := _store.get_node("RegisterWorkstation") as RegisterWorkstation
-	var customer := register.get_node_or_null(register.customer_path) as SimpleBuyerCustomer
+	var manager := register.get_node_or_null(register.customer_manager_path)
 	var ledger := register.get_node_or_null(register.ledger_path) as TransactionLedger
 	var session := register.get_node_or_null(register.store_session_path)
 
-	assert_not_null(customer)
+	assert_not_null(manager)
 	assert_not_null(ledger)
 	assert_not_null(session)
 
@@ -136,11 +154,11 @@ func test_backroom_computer_is_wired_to_store_session() -> void:
 	assert_not_null(session)
 
 
-func test_buyer_customer_targets_display_slot() -> void:
-	var customer := _store.get_node("BuyerCustomer") as SimpleBuyerCustomer
-	var slot := customer.get_node_or_null(customer.display_slot_path) as ShelfSlot
-
-	assert_not_null(slot)
+func test_customer_manager_targets_display_slots() -> void:
+	var manager := _store.get_node("CustomerManager")
+	for slot_path in manager.get("display_slot_paths"):
+		var slot := manager.get_node_or_null(slot_path) as ShelfSlot
+		assert_not_null(slot)
 
 
 func test_no_standalone_pricing_workstation_exists() -> void:

@@ -48,13 +48,39 @@ size = Vector3(1.75, 0.08, 0.1)
 material = SubResource("StandardMaterial3D_shelf")
 
 [node name="ShelfSlot001" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.38, -0.13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot001"]
 shape = SubResource("BoxShape3D_slot")
 
 [node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot001"]
+position = Vector3(0, 0.36, 0.035)
+size = Vector3(0.58, 0.72, 0.03)
+material = SubResource("StandardMaterial3D_slot")
+
+[node name="ShelfSlot002" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -0.13)
+script = ExtResource("1_shelf_slot")
+slot_id = "shelf_slot_002"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot002"]
+shape = SubResource("BoxShape3D_slot")
+
+[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot002"]
+position = Vector3(0, 0.36, 0.035)
+size = Vector3(0.58, 0.72, 0.03)
+material = SubResource("StandardMaterial3D_slot")
+
+[node name="ShelfSlot003" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.38, -0.13)
+script = ExtResource("1_shelf_slot")
+slot_id = "shelf_slot_003"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot003"]
+shape = SubResource("BoxShape3D_slot")
+
+[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot003"]
 position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")

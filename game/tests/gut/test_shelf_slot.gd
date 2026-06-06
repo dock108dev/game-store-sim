@@ -17,6 +17,12 @@ func test_shelf_slot_exists() -> void:
 	assert_not_null(_slot)
 
 
+func test_shelf_has_three_display_slots() -> void:
+	assert_not_null(_shelf.get_node_or_null("ShelfSlot001"))
+	assert_not_null(_shelf.get_node_or_null("ShelfSlot002"))
+	assert_not_null(_shelf.get_node_or_null("ShelfSlot003"))
+
+
 func test_shelf_slot_has_identity() -> void:
 	assert_eq(_slot.slot_id, "shelf_slot_001")
 	assert_eq(_slot.accepted_category, "used_game")

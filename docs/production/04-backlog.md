@@ -5,7 +5,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Now
 
 - Add customer movement/path validation so buyers feel less scripted.
-- Expand from one deterministic target buyer to a small in-store customer queue.
+- Add trade-in seller slice after the multi-buyer sale loop gets manual approval.
 - Keep used-game pricing distinct from fixed-price new game/hardware rules.
 - Add optional "apply to all matching used items" pricing once multiple instances of the same product exist.
 - Keep validation coverage current as the sale loop changes.
@@ -18,6 +18,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Place the item on a shelf/display rack. Done.
 - Spawn one target buyer customer. Done.
 - Let the customer find the item and queue at the register. Done, deterministic in-store claim.
+- Support multiple waiting buyers. Done for two in-store buyers through `CustomerManager`.
 - Ring up the item at the register. Done.
 - Complete sale. Done.
 - Record transaction. Done.
@@ -64,6 +65,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
+- Keep named validation screenshots current for main scene, receiving area, register counter, customer queue, and backroom summary.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex.

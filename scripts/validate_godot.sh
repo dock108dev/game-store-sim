@@ -6,7 +6,13 @@ GAME_DIR="$REPO_ROOT/game"
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 ARTIFACT_DIR="$REPO_ROOT/artifacts/validation/latest"
 SCREENSHOT_DIR="$ARTIFACT_DIR/screenshots"
-SCREENSHOT_PATH="$SCREENSHOT_DIR/main_scene.png"
+SCREENSHOT_SCENARIOS=(
+  main_scene
+  receiving_area
+  register_counter
+  customer_queue
+  backroom_summary
+)
 
 cd "$REPO_ROOT"
 
@@ -52,17 +58,20 @@ python3 "$REPO_ROOT/scripts/check_validation_coverage.py"
 
 echo "== Screenshot capture =="
 CAPTURE_LOG="$ARTIFACT_DIR/screenshot-capture.log"
-"$GODOT_BIN" \
-  --path "$GAME_DIR" \
-  --resolution 1280x720 \
-  --fixed-fps 1 \
-  --disable-vsync \
-  --quiet \
-  --script res://tests/tools/capture_main_scene_screenshot.gd \
-  -- \
-  --output "$SCREENSHOT_PATH" \
-  --width 1280 \
-  --height 720 | tee "$CAPTURE_LOG"
+for scenario in "${SCREENSHOT_SCENARIOS[@]}"; do
+  "$GODOT_BIN" \
+    --path "$GAME_DIR" \
+    --resolution 1280x720 \
+    --fixed-fps 1 \
+    --disable-vsync \
+    --quiet \
+    --script res://tests/tools/capture_main_scene_screenshot.gd \
+    -- \
+    --output "$SCREENSHOT_DIR/$scenario.png" \
+    --width 1280 \
+    --height 720 \
+    --scenario "$scenario" | tee -a "$CAPTURE_LOG"
+done
 
 if rg -n "SCRIPT ERROR|ERROR:" "$CAPTURE_LOG"; then
   echo "Screenshot capture emitted script errors." >&2
@@ -71,16 +80,18 @@ fi
 
 echo "== Screenshot sanity check =="
 SCREENSHOT_CHECK_LOG="$ARTIFACT_DIR/screenshot-check.log"
-"$GODOT_BIN" \
-  --headless \
-  --path "$GAME_DIR" \
-  --quiet \
-  --script res://tests/tools/check_png.gd \
-  -- \
-  --image "$SCREENSHOT_PATH" \
-  --width 1280 \
-  --height 720 \
-  --min-unique-colors 8 | tee "$SCREENSHOT_CHECK_LOG"
+for scenario in "${SCREENSHOT_SCENARIOS[@]}"; do
+  "$GODOT_BIN" \
+    --headless \
+    --path "$GAME_DIR" \
+    --quiet \
+    --script res://tests/tools/check_png.gd \
+    -- \
+    --image "$SCREENSHOT_DIR/$scenario.png" \
+    --width 1280 \
+    --height 720 \
+    --min-unique-colors 8 | tee -a "$SCREENSHOT_CHECK_LOG"
+done
 
 if rg -n "SCRIPT ERROR|ERROR:" "$SCREENSHOT_CHECK_LOG"; then
   echo "Screenshot sanity check emitted script errors." >&2

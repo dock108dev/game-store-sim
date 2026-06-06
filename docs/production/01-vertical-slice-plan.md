@@ -28,7 +28,7 @@ Products:
 Customers:
 
 - 1 browser.
-- 1 target buyer.
+- 2 target buyers for the current queue smoke.
 - 1 trade-in seller, if trade-ins are included in the first slice.
 
 Workstations:
@@ -102,6 +102,7 @@ Technical:
 10. Add transaction log. Done for in-memory sale records.
 11. Add customer spawn and simple buy goal. Done for one deterministic in-store buyer.
 12. Add end-of-day summary. Done for in-memory cash, sales, revenue, cost, and profit via the backroom computer.
+13. Add simple customer queue. Done for two in-store buyers and three display slots.
 
 ## Slice Review Questions
 

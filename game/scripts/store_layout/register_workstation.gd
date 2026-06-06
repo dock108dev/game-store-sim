@@ -2,6 +2,7 @@ extends "res://scripts/interaction/interactable.gd"
 class_name RegisterWorkstation
 
 @export var customer_path: NodePath
+@export var customer_manager_path: NodePath
 @export var ledger_path: NodePath
 @export var store_session_path: NodePath
 
@@ -46,6 +47,10 @@ func _complete_waiting_sale() -> String:
 		store_session.apply_sale(transaction)
 
 	customer.complete_sale()
+	var customer_manager := _get_customer_manager()
+	if customer_manager != null and customer_manager.has_method("compact_after_sale"):
+		customer_manager.compact_after_sale()
+
 	return "Sold %s for $%0.2f. Profit $%0.2f." % [
 		str(transaction.get("display_name", "item")),
 		int(transaction.get("sale_price_cents", 0)) / 100.0,
@@ -54,6 +59,12 @@ func _complete_waiting_sale() -> String:
 
 
 func _get_waiting_customer() -> SimpleBuyerCustomer:
+	var customer_manager := _get_customer_manager()
+	if customer_manager != null and customer_manager.has_method("get_next_waiting_customer"):
+		var managed_customer := customer_manager.get_next_waiting_customer() as SimpleBuyerCustomer
+		if managed_customer != null:
+			return managed_customer
+
 	if customer_path.is_empty():
 		return null
 
@@ -62,6 +73,13 @@ func _get_waiting_customer() -> SimpleBuyerCustomer:
 		return customer
 
 	return null
+
+
+func _get_customer_manager() -> Node:
+	if customer_manager_path.is_empty():
+		return null
+
+	return get_node_or_null(customer_manager_path)
 
 
 func _get_ledger() -> TransactionLedger:

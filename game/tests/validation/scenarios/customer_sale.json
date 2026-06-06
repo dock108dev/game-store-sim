@@ -15,11 +15,18 @@
       "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_workstation_is_interactable"
     },
     {
-      "id": "buyer_customer_exists",
-      "name": "Buyer customer exists in the main scene",
+      "id": "customer_manager_exists",
+      "name": "Customer manager exists in the main scene",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_buyer_customer_exists"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_customer_manager_exists"
+    },
+    {
+      "id": "customer_manager_has_two_buyers",
+      "name": "Customer manager owns two buyer customers",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_customer_manager_has_two_buyers"
     },
     {
       "id": "transaction_ledger_exists",
@@ -33,14 +40,21 @@
       "name": "Register is wired to the buyer customer, transaction ledger, and store session",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_ledger_and_session"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_manager_ledger_and_session"
     },
     {
-      "id": "buyer_targets_display_slot",
-      "name": "Buyer customer targets the game display slot",
+      "id": "customer_manager_targets_display_slots",
+      "name": "Customer manager targets the game display slots",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_buyer_customer_targets_display_slot"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_customer_manager_targets_display_slots"
+    },
+    {
+      "id": "customer_manager_collects_children",
+      "name": "Customer manager collects child buyer customers",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_collects_child_customers"
     },
     {
       "id": "customer_claims_stocked_item",
@@ -48,6 +62,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_claims_matching_stocked_item_and_waits_at_register"
+    },
+    {
+      "id": "customer_manager_claims_multiple_items",
+      "name": "Customer manager claims multiple stocked items for multiple buyers",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_claims_stocked_items_for_multiple_customers"
     },
     {
       "id": "customer_ignores_unstocked_or_mismatched",
@@ -62,6 +83,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_completes_waiting_customer_sale"
+    },
+    {
+      "id": "register_completes_multiple_sales",
+      "name": "Register completes multiple queued customer sales",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_register_completes_multiple_customer_manager_sales"
     },
     {
       "id": "transaction_ledger_records_sale",

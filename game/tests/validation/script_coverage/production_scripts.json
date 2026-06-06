@@ -43,6 +43,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/customer_manager.gd",
+      "tests": [
+        "res://tests/gut/test_customer_manager.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/player/first_person_controller.gd",
       "tests": [
         "res://tests/gut/test_player_controller.gd"
