@@ -6,7 +6,7 @@ Major decisions go here so production choices stay visible as the game grows.
 
 Decision:
 
-- Use Godot 4.x.
+- Use Godot 4.6.3 stable.
 - Build desktop-first.
 - Build the first slices for keyboard/mouse only.
 - Use fictional products, fictional retailers, and fictional brands.
@@ -27,7 +27,7 @@ Rejected alternatives:
 Follow-up risk:
 
 - If controller support becomes a target later, input mapping and UI focus handling will need a deliberate pass.
-- Godot version should be pinned when the `game/` project is initialized.
+- Godot is pinned to 4.6.3 stable for active development. The local app detected during project setup was 4.6.2, so it should be upgraded before substantive game content is generated.
 
 ## 2026-06-05: Repository Foundation
 

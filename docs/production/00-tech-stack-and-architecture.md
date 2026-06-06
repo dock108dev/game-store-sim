@@ -2,7 +2,7 @@
 
 ## Recommended Stack
 
-Engine: Godot 4.x.
+Engine: Godot 4.6.3 stable.
 
 Why:
 

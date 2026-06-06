@@ -1,0 +1,10 @@
+; Engine configuration file.
+; Best edited using the Godot editor.
+
+config_version=5
+
+[application]
+
+config/name="Mall Sim"
+config/description="First-person retro video game retail simulator."
+config/features=PackedStringArray("4.6")
