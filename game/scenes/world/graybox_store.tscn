@@ -175,6 +175,9 @@ store_session_path = NodePath("../StoreSession")
 
 [node name="CustomerManager" type="Node3D" parent="."]
 script = ExtResource("9_customer_manager")
+register_queue_start = Vector3(2.25, 0, -3.55)
+register_queue_spacing = Vector3(0, 0, -0.82)
+minimum_queue_spacing_distance = 0.8
 display_slot_paths = Array[NodePath]([NodePath("../GameDisplayRack/ShelfSlot001"), NodePath("../GameDisplayRack/ShelfSlot002"), NodePath("../GameDisplayRack/ShelfSlot003")])
 
 [node name="BuyerCustomer001" parent="CustomerManager" instance=ExtResource("5_customer")]
@@ -186,16 +189,16 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 customer_id = "customer_002"
 
 [node name="TradeInCustomer" parent="." instance=ExtResource("10_trade_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.25, 0, -3.9)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.85, 0, -3.95)
 
 [node name="PreorderCustomer" parent="." instance=ExtResource("15_preorder_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.55, 0, -3.95)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.7, 0, -3.75)
 
 [node name="ServiceCustomer" parent="." instance=ExtResource("16_service_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.35, 0, -3.65)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -2.55, 0, -3.35)
 
 [node name="SuspiciousCustomer" parent="." instance=ExtResource("14_suspicious_customer")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2.15, 0, -3.2)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -3.45, 0, -2.9)
 event_log_path = NodePath("../SuspiciousEventLog")
 evidence_storage_path = NodePath("../EvidenceStorage")
 

@@ -44,11 +44,11 @@ func test_used_game_case_is_compact_for_display_racks() -> void:
 	var case_mesh := _item.get_node("CaseMesh") as MeshInstance3D
 	var collision_shape := _item.get_node("CollisionShape3D") as CollisionShape3D
 
-	assert_lte(case_mesh.mesh.size.x, 0.34)
-	assert_lte(case_mesh.mesh.size.y, 0.46)
+	assert_lte(case_mesh.mesh.size.x, 0.26)
+	assert_lte(case_mesh.mesh.size.y, 0.36)
 	assert_lte(case_mesh.mesh.size.z, 0.05)
-	assert_lte(collision_shape.shape.size.x, 0.36)
-	assert_lte(collision_shape.shape.size.y, 0.48)
+	assert_lte(collision_shape.shape.size.x, 0.28)
+	assert_lte(collision_shape.shape.size.y, 0.38)
 	assert_lte(collision_shape.shape.size.z, 0.065)
 
 
@@ -56,8 +56,8 @@ func test_used_game_has_readable_front_cover_label() -> void:
 	var cover_mesh := _item.get_node_or_null("CoverLabelMesh") as MeshInstance3D
 	var case_mesh := _item.get_node("CaseMesh") as MeshInstance3D
 	assert_not_null(cover_mesh)
-	assert_gt(cover_mesh.mesh.size.x, 0.2)
-	assert_gt(cover_mesh.mesh.size.y, 0.28)
+	assert_gt(cover_mesh.mesh.size.x, 0.16)
+	assert_gt(cover_mesh.mesh.size.y, 0.22)
 	assert_lt(cover_mesh.mesh.size.x, case_mesh.mesh.size.x)
 	assert_lt(cover_mesh.mesh.size.y, case_mesh.mesh.size.y)
 	assert_lt(cover_mesh.mesh.size.z, 0.02)

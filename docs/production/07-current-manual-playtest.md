@@ -72,11 +72,11 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
-- Buyer queue spacing is readable and does not overlap the register.
+- Buyer queue spacing is readable, uses a clear register lane, and does not overlap special register customers.
 - Buyer spawn, rack approach, and register queue pathing read naturally in the current layout.
 - Overpriced-item refusal feedback is readable and does not look like a register failure.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
-- Trade-in seller placement, carried item, offer panel, counteroffer controls, cash accept, store-credit accept, decline controls, prompt, and completion message read clearly at the register; the carried item should read as held, not floating through the seller or counter.
+- Trade-in seller placement, compact carried item, offer panel, counteroffer controls, cash accept, store-credit accept, decline controls, prompt, and completion message read clearly at the register; the carried item should read as held, not floating through the seller or counter.
 - Buyer, trade-in, preorder, service, and suspicious customers should read as separate people with separate jobs, not as one register pileup.
 - Used-game cases should look like compact boxed games on the rack, in the player's hand, and in customer hands; they should not read like oversized posters.
 - Backroom computer reads as the management terminal, not another register.

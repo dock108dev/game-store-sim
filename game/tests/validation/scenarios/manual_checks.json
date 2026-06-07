@@ -114,10 +114,10 @@
     },
     {
       "id": "customer_queue_spacing_visual",
-      "name": "Multiple queued buyers have readable spacing and do not overlap the register",
+      "name": "Multiple queued buyers have readable spacing and use a clear lane at the register",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment about queue composition and customer placement.",
+      "reason": "Automated checks enforce spacing from special customers; human review confirms the queue reads naturally from the playable camera.",
       "owner": "manual QA"
     },
     {
@@ -149,7 +149,7 @@
       "name": "Trade-in seller and carried game are readable at the register without obvious floating or clipping",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment after the automated compact-anchor checks that the game appears held against the seller and does not clip through the register counter.",
+      "reason": "Automated compact-anchor checks cover pose bounds; human review confirms the game appears held against the seller and does not clip through the register counter.",
       "owner": "manual QA"
     },
     {

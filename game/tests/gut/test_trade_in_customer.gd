@@ -24,17 +24,17 @@ func test_trade_in_customer_carried_item_is_compact_and_body_anchored() -> void:
 
 	var item := customer.get_trade_item()
 	assert_not_null(item)
-	assert_lte(item.scale.x, 0.46)
-	assert_gte(item.position.y, 0.55)
-	assert_lte(item.position.y, 0.68)
-	assert_gte(item.position.x, 0.12)
-	assert_lte(item.position.x, 0.3)
+	assert_lte(item.scale.x, 0.4)
+	assert_gte(item.position.y, 0.56)
+	assert_lte(item.position.y, 0.66)
+	assert_gte(item.position.x, 0.1)
+	assert_lte(item.position.x, 0.18)
 	assert_lte(item.position.z, -0.1)
-	assert_gte(item.position.z, -0.3)
+	assert_gte(item.position.z, -0.22)
 
 	var case_mesh := item.get_node("CaseMesh") as MeshInstance3D
 	var carried_top: float = item.position.y + (case_mesh.mesh.size.y * item.scale.y)
-	assert_lt(carried_top, 0.86)
+	assert_lt(carried_top, 0.76)
 
 
 func test_trade_in_customer_completes_into_receiving_inventory() -> void:

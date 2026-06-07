@@ -386,8 +386,24 @@ func test_register_area_customer_positions_are_spaced_for_readability() -> void:
 			)
 
 	for customer in register_customers:
-		assert_gte(_flat_distance_xz(customer.global_position, manager.register_queue_start), 0.65)
+		assert_gte(_flat_distance_xz(customer.global_position, manager.register_queue_start), 1.25)
 		assert_true(manager.is_position_inside_store(customer.global_position))
+
+
+func test_buyer_queue_lane_stays_clear_of_special_customers() -> void:
+	var manager := _store.get_node("CustomerManager")
+	var special_customers: Array[Node3D] = [
+		_store.get_node("TradeInCustomer") as Node3D,
+		_store.get_node("PreorderCustomer") as Node3D,
+		_store.get_node("ServiceCustomer") as Node3D,
+		_store.get_node("SuspiciousCustomer") as Node3D,
+	]
+
+	for queue_index in range(3):
+		var queue_position: Vector3 = manager._queue_position_for_index(queue_index)
+		assert_true(manager.is_position_inside_store(queue_position))
+		for customer in special_customers:
+			assert_gte(_flat_distance_xz(queue_position, customer.global_position), 1.2)
 
 
 func test_no_standalone_pricing_workstation_exists() -> void:

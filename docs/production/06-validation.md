@@ -49,7 +49,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Escape releases mouse capture and mouse click recaptures it.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
-- Receiving box, display rack, register, and used-game visual placement.
+- Receiving box, display rack, register, and compact used-game visual placement.
 - Display rack slots still behave like used-game slots after category assignment changes.
 - Held item stack stays visible without blocking normal navigation.
 - Stocking one carried game leaves the remaining carried games visible and usable.
@@ -61,11 +61,11 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Pricing panel closes back into first-person mouse capture cleanly.
 - Stocking `Star Trader` causes the buyer to wait at the register.
 - Overpricing `Star Trader` above buyer tolerance leaves it on the rack and produces readable customer feedback.
-- Stocking multiple `Star Trader` copies causes multiple buyers to queue without overlapping.
+- Stocking multiple `Star Trader` copies causes multiple buyers to queue in a clear lane without overlapping special register customers.
 - Buyers visibly walk from browsing to the rack and then to the register without confusing clipping.
-- Customer spawn, item approach, and queue positions read naturally in the current layout.
+- Customer spawn, item approach, buyer queue lane, and special-customer positions read naturally in the current layout.
 - Register prompt and sale completion message are readable.
-- Trade-in seller and carried item are readable at the register.
+- Trade-in seller and compact carried item are readable at the register and do not look detached from the seller.
 - Trade-in register prompt and completion message are readable.
 - Trade-in offer panel condition, demand, market, cash, store-credit, and accept/decline controls are readable.
 - Trade-in counteroffer `- $1` and `+ $1` controls are readable and update only the accepted cash offer amount.

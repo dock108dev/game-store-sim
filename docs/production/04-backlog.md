@@ -91,8 +91,8 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 
 - Keep used-game cases compact enough for wall racks, player carry, and customer carry. Done with smaller shared case geometry plus automated compact-case and carry-pose checks.
 - Keep manual stocking from becoming one-trip-per-copy busywork. Done with a bounded three-game carry stack and active-item stocking order.
-- Keep register-area customers from stacking into each other. Done with wider buyer queue spacing, separated special-customer placements, and a main-scene spacing test.
-- Keep trade-in items visually held rather than floating at the counter. Done by lowering/shrinking the trade-in carried item and requiring body-anchored pose validation.
+- Keep register-area customers from stacking into each other. Done with a distinct buyer queue lane, separated special-customer placements, and main-scene spacing tests.
+- Keep trade-in items visually held rather than floating at the counter. Done by shrinking/lowering the trade-in carried item and requiring body-anchored pose validation.
 
 ## Tooling
 

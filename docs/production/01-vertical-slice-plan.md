@@ -132,6 +132,7 @@ Technical:
 39. Add first launch-day fulfillment. Done as day-start resolution for `Neon Skyline` that fulfills pending preorders first, sells surplus allocations to launch queue demand, records launch cash/profit, marks allocations launched, and applies reputation penalties for missed demand.
 40. Add first register service request. Done as a `Disc Resurfacing` customer whose scratched-disc service is completed at the register and recorded as service revenue, cost, profit, recent activity, and daily report data.
 41. Add bounded multi-item carry. Done as a three-game carry stack where pricing and stocking use the active carried item and stocking one copy leaves the remaining carried games available.
+42. Tighten first-pass presentation polish. Done with smaller shared used-game case geometry, a clearer buyer queue lane, wider special-customer spacing, and a lower body-anchored trade-in item pose.
 
 ## Slice Review Questions
 

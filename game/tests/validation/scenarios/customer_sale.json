@@ -160,6 +160,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_register_area_customer_positions_are_spaced_for_readability"
+    },
+    {
+      "id": "buyer_queue_lane_clear_of_special_customers",
+      "name": "Buyer queue lane stays clear of trade-in, preorder, service, and suspicious customers",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_buyer_queue_lane_stays_clear_of_special_customers"
     }
   ]
 }
