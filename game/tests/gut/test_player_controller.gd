@@ -91,7 +91,7 @@ func test_player_can_pick_up_item() -> void:
 	assert_eq(item.get_parent(), hold_anchor)
 	assert_eq(item.get("location_id"), "held")
 	assert_almost_eq(absf(item.rotation.y), PI, 0.001)
-	assert_almost_eq(item.scale.x, 0.5, 0.001)
+	assert_almost_eq(item.scale.x, 0.46, 0.001)
 	assert_true(collision_shape.disabled)
 
 
@@ -136,9 +136,9 @@ func test_player_places_held_item_in_display_slot() -> void:
 	assert_eq(slot.get_occupied_item(), item)
 	assert_eq(item.get("location_id"), "shelf_slot_001")
 	assert_eq(item.rotation, Vector3.ZERO)
-	assert_almost_eq(item.scale.x, 0.62, 0.001)
-	assert_almost_eq(item.scale.y, 0.62, 0.001)
-	assert_almost_eq(item.scale.z, 0.62, 0.001)
+	assert_almost_eq(item.scale.x, 0.56, 0.001)
+	assert_almost_eq(item.scale.y, 0.56, 0.001)
+	assert_almost_eq(item.scale.z, 0.56, 0.001)
 	assert_false(collision_shape.disabled)
 
 

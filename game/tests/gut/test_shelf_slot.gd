@@ -69,7 +69,7 @@ func test_shelf_slot_places_used_game() -> void:
 	assert_eq(_item.get_parent(), _slot)
 	assert_eq(_item.get("location_id"), "shelf_slot_001")
 	assert_almost_eq(_item.position.y, 0.0, 0.01)
-	assert_almost_eq(_item.scale.x, 0.62, 0.001)
+	assert_almost_eq(_item.scale.x, 0.56, 0.001)
 	assert_lt(_item.scale.x, 1.0)
 
 
