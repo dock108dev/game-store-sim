@@ -29,6 +29,7 @@ var is_day_closed: bool = false
 var fixture_orders: Array[Dictionary] = []
 var placed_fixtures: Array[Dictionary] = []
 var supplier_orders: Array[Dictionary] = []
+var preorder_deposits: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -45,6 +46,12 @@ func apply_trade_in(transaction: Dictionary) -> void:
 		"trade_in_cash_cents",
 		transaction.get("trade_in_cost_cents", 0)
 	))
+
+
+func apply_preorder_deposit(transaction: Dictionary) -> void:
+	cash_cents += int(transaction.get("deposit_cents", 0))
+	if str(transaction.get("type", "")) == "preorder_deposit":
+		preorder_deposits.append(transaction.duplicate(true))
 
 
 func end_day() -> void:
@@ -126,6 +133,31 @@ func get_total_trade_in_credit_cents() -> int:
 		return 0
 
 	return ledger.get_total_trade_in_credit_cents()
+
+
+func get_preorder_deposit_count() -> int:
+	if not preorder_deposits.is_empty():
+		return preorder_deposits.size()
+
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_preorder_deposit_count"):
+		return 0
+
+	return ledger.get_preorder_deposit_count()
+
+
+func get_total_preorder_deposit_cents() -> int:
+	if not preorder_deposits.is_empty():
+		var total := 0
+		for preorder in preorder_deposits:
+			total += int(preorder.get("deposit_cents", 0))
+		return total
+
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_total_preorder_deposit_cents"):
+		return 0
+
+	return ledger.get_total_preorder_deposit_cents()
 
 
 func get_transactions() -> Array[Dictionary]:
@@ -317,6 +349,50 @@ func get_release_calendar_text(max_entries: int = 3) -> String:
 		remaining -= 1
 
 	return "\n".join(lines)
+
+
+func get_release_by_id(release_id: String) -> Resource:
+	for release in get_release_calendar():
+		if str(release.get("release_id")) == release_id:
+			return release
+	return null
+
+
+func get_preorder_summary_text() -> String:
+	var preorders := get_preorder_deposits()
+	if preorders.is_empty():
+		return "Preorders: none"
+
+	var lines: Array[String] = ["Preorders:"]
+	for preorder in preorders:
+		lines.append("%s deposit %s due day %d for %s" % [
+			str(preorder.get("product_name", preorder.get("display_name", "Release"))),
+			format_money(int(preorder.get("deposit_cents", 0))),
+			int(preorder.get("release_day", 0)),
+			str(preorder.get("customer_id", "customer")),
+		])
+	return "\n".join(lines)
+
+
+func get_preorder_deposits() -> Array[Dictionary]:
+	var preorders: Array[Dictionary] = []
+	if not preorder_deposits.is_empty():
+		for preorder in preorder_deposits:
+			preorders.append(preorder.duplicate(true))
+		return preorders
+
+	for transaction in get_transactions():
+		if str(transaction.get("type", "")) == "preorder_deposit":
+			preorders.append(transaction.duplicate(true))
+	return preorders
+
+
+func replace_preorder_deposits(preorders: Array) -> void:
+	preorder_deposits.clear()
+	for preorder in preorders:
+		if typeof(preorder) == TYPE_DICTIONARY:
+			var row: Dictionary = preorder
+			preorder_deposits.append(row.duplicate(true))
 
 
 func get_supplier_lot(lot_id: String) -> Resource:
@@ -574,15 +650,17 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nRevenue: %s\nCost: %s\nTrade cash: %s\nStore credit: %s\nProfit: %s\n%s" % [
+	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nPreorders: %d\nRevenue: %s\nCost: %s\nTrade cash: %s\nStore credit: %s\nPreorder deposits: %s\nProfit: %s\n%s" % [
 		day_number,
 		format_money(get_cash_cents()),
 		get_sale_count(),
 		get_trade_in_count(),
+		get_preorder_deposit_count(),
 		format_money(get_total_revenue_cents()),
 		format_money(get_total_cost_cents()),
 		format_money(get_total_trade_in_cost_cents()),
 		format_money(get_total_trade_in_credit_cents()),
+		format_money(get_total_preorder_deposit_cents()),
 		format_money(get_total_profit_cents()),
 		get_status_label(),
 	]
@@ -609,6 +687,11 @@ func _format_transaction_line(transaction: Dictionary) -> String:
 					"trade_in_cash_cents",
 					transaction.get("trade_in_cost_cents", 0)
 				))),
+			]
+		"preorder_deposit":
+			return "Preorder %s deposit %s" % [
+				display_name,
+				format_money(int(transaction.get("deposit_cents", 0))),
 			]
 		_:
 			return "Sale %s %s profit %s" % [

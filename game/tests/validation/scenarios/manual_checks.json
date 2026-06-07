@@ -161,6 +161,22 @@
       "owner": "manual QA"
     },
     {
+      "id": "preorder_register_readability",
+      "name": "Preorder register prompt and completion message are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether the register flow clearly reads as a deposit rather than a sale.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "preorder_backroom_readability",
+      "name": "Backroom preorder count and deposit total are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether preorder obligation text fits comfortably in the management panel.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_computer_visual_placement",
       "name": "Backroom computer placement is readable and does not look like a second register",
       "status": "manual",

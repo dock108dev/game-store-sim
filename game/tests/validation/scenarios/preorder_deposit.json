@@ -1,0 +1,74 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "preorder_customer_exists",
+      "name": "Preorder customer exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_preorder_customer_exists_and_targets_upcoming_release"
+    },
+    {
+      "id": "preorder_customer_targets_upcoming_release",
+      "name": "Preorder customer targets an upcoming fictional release",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_preorder_customer_exists_and_targets_upcoming_release"
+    },
+    {
+      "id": "preorder_customer_prompt",
+      "name": "Preorder customer describes the requested launch and deposit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_preorder_customer.gd::test_preorder_customer_describes_release_request"
+    },
+    {
+      "id": "preorder_customer_completion_state",
+      "name": "Preorder customer completes once after the deposit is taken",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_preorder_customer.gd::test_preorder_customer_completes_once"
+    },
+    {
+      "id": "register_preorder_wiring",
+      "name": "Register is wired to the preorder customer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_manager_ledger_and_session"
+    },
+    {
+      "id": "register_preorder_prompt",
+      "name": "Register prompts to take the preorder after higher-priority queues clear",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_preorder_customer.gd::test_register_records_preorder_deposit_after_trade_queue_clears"
+    },
+    {
+      "id": "ledger_records_preorder_deposit",
+      "name": "Transaction ledger records preorder deposit transactions",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_preorder_customer.gd::test_register_records_preorder_deposit_after_trade_queue_clears"
+    },
+    {
+      "id": "session_tracks_preorder_deposit",
+      "name": "Store session tracks preorder deposits separate from sale revenue and profit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_preorder_deposits_without_sale_revenue"
+    },
+    {
+      "id": "backroom_shows_preorder_deposits",
+      "name": "Backroom summary shows preorder count and deposit total",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_preorder_deposit_activity"
+    },
+    {
+      "id": "save_codec_preserves_preorder_deposits",
+      "name": "Save codec preserves preorder deposit records",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd"
+    }
+  ]
+}

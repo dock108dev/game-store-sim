@@ -60,6 +60,25 @@ func record_trade_in(customer_id: String, item: Node, offer_cents: int, tender_t
 	return transaction
 
 
+func record_preorder_deposit(customer_id: String, release: Resource, deposit_cents: int) -> Dictionary:
+	if release == null or deposit_cents <= 0:
+		return {}
+
+	var transaction := {
+		"transaction_id": "preorder_deposit_%03d" % (_transactions.size() + 1),
+		"type": "preorder_deposit",
+		"customer_id": customer_id,
+		"release_id": str(release.get("release_id")),
+		"product_name": str(release.get("product_name")),
+		"display_name": str(release.get("product_name")),
+		"platform": str(release.get("platform")),
+		"release_day": int(release.get("release_day")),
+		"deposit_cents": deposit_cents,
+	}
+	_transactions.append(transaction)
+	return transaction
+
+
 func get_transactions() -> Array[Dictionary]:
 	return _transactions.duplicate(true)
 
@@ -88,6 +107,14 @@ func get_trade_in_count() -> int:
 	return total
 
 
+func get_preorder_deposit_count() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "preorder_deposit":
+			total += 1
+	return total
+
+
 func get_total_revenue_cents() -> int:
 	var total := 0
 	for transaction in _transactions:
@@ -101,6 +128,14 @@ func get_total_profit_cents() -> int:
 	for transaction in _transactions:
 		if str(transaction.get("type", "sale")) == "sale":
 			total += int(transaction.get("profit_cents", 0))
+	return total
+
+
+func get_total_preorder_deposit_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "preorder_deposit":
+			total += int(transaction.get("deposit_cents", 0))
 	return total
 
 

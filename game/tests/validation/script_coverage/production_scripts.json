@@ -92,6 +92,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/simple_preorder_customer.gd",
+      "tests": [
+        "res://tests/gut/test_preorder_customer.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/customer_manager.gd",
       "tests": [
         "res://tests/gut/test_customer_manager.gd"

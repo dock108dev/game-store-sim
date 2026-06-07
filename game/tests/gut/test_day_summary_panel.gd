@@ -92,6 +92,18 @@ func test_day_summary_panel_includes_store_credit_trade_in_activity() -> void:
 	assert_string_contains(_panel.last_sale_label.text, "Trade-in Moon Escape credit $9.50")
 
 
+func test_day_summary_panel_includes_preorder_deposit_activity() -> void:
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	var transaction := _ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	_session.apply_preorder_deposit(transaction)
+
+	assert_true(_panel.open_for_session(_session))
+
+	assert_string_contains(_panel.summary_label.text, "Preorders: 1")
+	assert_string_contains(_panel.summary_label.text, "Preorder deposits: $5.00")
+	assert_string_contains(_panel.last_sale_label.text, "Preorder Neon Skyline deposit $5.00")
+
+
 func test_day_summary_panel_includes_inventory_summary() -> void:
 	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
 	add_child_autofree(item)

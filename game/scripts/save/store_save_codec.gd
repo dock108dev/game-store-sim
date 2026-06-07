@@ -14,6 +14,7 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"transactions": session.get_transactions(),
 		"fixture_orders": session.get_pending_fixture_orders(),
 		"supplier_orders": session.get_pending_supplier_orders(),
+		"preorder_deposits": session.get_preorder_deposits(),
 		"inventory_items": _serialize_inventory_items(session.get_active_inventory_items()),
 	}
 	return data
@@ -65,6 +66,11 @@ func restore_into_existing_scene(
 	if typeof(supplier_orders_value) == TYPE_ARRAY:
 		var supplier_orders: Array = supplier_orders_value
 		session.replace_supplier_orders(supplier_orders)
+
+	var preorder_deposits_value: Variant = data.get("preorder_deposits", [])
+	if typeof(preorder_deposits_value) == TYPE_ARRAY and session.has_method("replace_preorder_deposits"):
+		var preorder_deposits: Array = preorder_deposits_value
+		session.replace_preorder_deposits(preorder_deposits)
 
 	return true
 

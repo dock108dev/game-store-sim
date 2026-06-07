@@ -102,7 +102,7 @@ Features:
 - Supplier ordering. First pass done as a backroom `Used Game Starter Lot` order.
 - Delivery delays. First pass done as next-day receiving-box delivery.
 - New release calendar. First pass done as a read-only backroom calendar for fictional launches with countdown, wholesale cost, suggested price, allocation note, and demand tier.
-- Preorder deposits.
+- Preorder deposits. First pass done as a fixed register deposit for one fictional upcoming release customer, tracked separately from sale revenue and profit.
 - Allocation limits.
 - Launch-day queue and reputation stakes.
 

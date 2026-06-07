@@ -72,6 +72,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"trade_in_offer":
 			_prepare_trade_in_offer(scene)
 			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
+		"preorder_deposit":
+			_prepare_preorder_deposit(scene)
+			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
 		"backroom_summary":
 			_prepare_backroom_summary(scene)
 			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
@@ -142,6 +145,19 @@ func _prepare_trade_in_offer(scene: Node) -> void:
 
 	if player.has_method("open_trade_in_offer"):
 		player.open_trade_in_offer(register, customer)
+
+
+func _prepare_preorder_deposit(scene: Node) -> void:
+	_hide_node(scene, "PlayerController")
+	var register := scene.get_node_or_null("RegisterWorkstation")
+	var trade_customer := scene.get_node_or_null("TradeInCustomer")
+	if register == null:
+		return
+
+	if trade_customer != null and trade_customer.has_method("decline_trade_in"):
+		trade_customer.decline_trade_in()
+	var message := str(register.interact())
+	_show_overlay_message(scene, message)
 
 
 func _prepare_supplier_delivery(scene: Node) -> void:
@@ -222,6 +238,36 @@ func _hide_node(scene: Node, node_path: NodePath) -> void:
 	var node := scene.get_node_or_null(node_path) as Node3D
 	if node != null:
 		node.visible = false
+
+
+func _show_overlay_message(scene: Node, text: String) -> void:
+	var layer := CanvasLayer.new()
+	scene.add_child(layer)
+
+	var label := Label.new()
+	layer.add_child(label)
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", Color.WHITE)
+
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.07, 0.07, 0.07, 0.78)
+	style.content_margin_left = 18
+	style.content_margin_right = 18
+	style.content_margin_top = 8
+	style.content_margin_bottom = 8
+	label.add_theme_stylebox_override("normal", style)
+
+	label.anchor_left = 0.28
+	label.anchor_right = 0.72
+	label.anchor_top = 0.88
+	label.anchor_bottom = 0.94
+	label.offset_left = 0.0
+	label.offset_right = 0.0
+	label.offset_top = 0.0
+	label.offset_bottom = 0.0
 
 
 func _set_camera(scene: Node, position: Vector3, target: Vector3) -> void:

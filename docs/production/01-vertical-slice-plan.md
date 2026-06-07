@@ -126,6 +126,7 @@ Technical:
 34. Add first player-facing fixture placement confirmation. Done as a `Place Rack` backroom-computer action that turns the valid pending rack ghost into a real game display rack and clears pending placement.
 35. Add first supplier ordering and delivery delay. Done as a backroom `Order Games` action that reserves cash, creates a pending due-day order, and delivers used games into receiving when the next day starts.
 36. Add first new-release calendar. Done as fictional upcoming launch data surfaced on the backroom computer with countdown, wholesale cost, suggested price, allocation note, demand tier, and screenshot coverage.
+37. Add first preorder deposit. Done as one register preorder customer for `Neon Skyline`, with a fixed deposit tracked separately from sale revenue and profit.
 
 ## Slice Review Questions
 

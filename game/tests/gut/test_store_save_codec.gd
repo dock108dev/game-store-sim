@@ -16,6 +16,12 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	session.inventory_root_path = session.get_path_to(root)
 	var transaction := ledger.record_sale("customer_001", item)
 	session.apply_sale(transaction)
+	var preorder_transaction := ledger.record_preorder_deposit(
+		"preorder_customer_001",
+		load("res://data/releases/neon_skyline_launch.tres"),
+		500
+	)
+	session.apply_preorder_deposit(preorder_transaction)
 	session.order_fixture("fixture_game_display_rack")
 	session.order_supplier_lot("supplier_lot_used_games_001")
 	item.set("current_price_cents", 2399)
@@ -25,8 +31,12 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 
 	assert_eq(data.get("version"), 1)
 	assert_eq(data.get("day_number"), 1)
-	assert_eq(data.get("cash_cents"), 36999)
-	assert_eq((data.get("transactions") as Array).size(), 1)
+	assert_eq(data.get("cash_cents"), 37499)
+	assert_eq((data.get("transactions") as Array).size(), 2)
+	var preorder_deposits: Array = data.get("preorder_deposits")
+	assert_eq(preorder_deposits.size(), 1)
+	assert_eq(preorder_deposits[0].get("release_id"), "release_neon_skyline")
+	assert_eq(preorder_deposits[0].get("deposit_cents"), 500)
 	var fixture_orders: Array = data.get("fixture_orders")
 	assert_eq(fixture_orders.size(), 1)
 	assert_eq(fixture_orders[0].get("fixture_id"), "fixture_game_display_rack")
@@ -52,6 +62,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"transactions": [{"transaction_id": "sale_001", "type": "sale"}],
 		"fixture_orders": [{"fixture_id": "fixture_game_display_rack", "status": "pending_placement"}],
 		"supplier_orders": [{"lot_id": "supplier_lot_used_games_001", "status": "pending_delivery"}],
+		"preorder_deposits": [{"release_id": "release_neon_skyline", "deposit_cents": 500}],
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
 
@@ -65,6 +76,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("transactions") as Array).size(), 1)
 	assert_eq((decoded.get("fixture_orders") as Array)[0].get("fixture_id"), "fixture_game_display_rack")
 	assert_eq((decoded.get("supplier_orders") as Array)[0].get("lot_id"), "supplier_lot_used_games_001")
+	assert_eq((decoded.get("preorder_deposits") as Array)[0].get("release_id"), "release_neon_skyline")
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
 
@@ -114,6 +126,19 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"status": "pending_delivery",
 			}
 		],
+		"preorder_deposits": [
+			{
+				"transaction_id": "preorder_deposit_001",
+				"type": "preorder_deposit",
+				"customer_id": "preorder_customer_001",
+				"release_id": "release_neon_skyline",
+				"product_name": "Neon Skyline",
+				"display_name": "Neon Skyline",
+				"platform": "Orbit 64",
+				"release_day": 3,
+				"deposit_cents": 500,
+			}
+		],
 		"inventory_items": [
 			{
 				"instance_id": "item_used_star_trader_001",
@@ -133,5 +158,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(ledger.get_total_revenue_cents(), 2499)
 	assert_eq(session.get_pending_fixture_orders().size(), 1)
 	assert_eq(session.get_pending_supplier_orders().size(), 1)
+	assert_eq(session.get_preorder_deposits().size(), 1)
+	assert_eq(session.get_total_preorder_deposit_cents(), 500)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")

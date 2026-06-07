@@ -64,6 +64,13 @@
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     },
     {
+      "id": "preorder_deposit_screenshot",
+      "name": "Preorder-deposit validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
       "id": "backroom_summary_screenshot",
       "name": "Backroom-summary validation screenshot is captured and checked",
       "status": "automated",

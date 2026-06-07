@@ -14,6 +14,7 @@ SCREENSHOT_SCENARIOS=(
   register_counter
   customer_queue
   trade_in_offer
+  preorder_deposit
   backroom_summary
   release_calendar
   supplier_delivery

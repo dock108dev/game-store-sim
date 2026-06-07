@@ -4,6 +4,7 @@ class_name RegisterWorkstation
 @export var customer_path: NodePath
 @export var customer_manager_path: NodePath
 @export var trade_in_customer_path: NodePath
+@export var preorder_customer_path: NodePath
 @export var receiving_box_path: NodePath
 @export var ledger_path: NodePath
 @export var store_session_path: NodePath
@@ -19,6 +20,10 @@ func get_interaction_prompt() -> String:
 	if trade_in_customer != null:
 		var trade_item: Node = trade_in_customer.get_trade_item()
 		return "E Review Trade-In %s" % _get_item_display_name(trade_item)
+
+	var preorder_customer := _get_waiting_preorder_customer()
+	if preorder_customer != null:
+		return "E Take Preorder %s" % preorder_customer.get_release_name()
 
 	return "Register Workstation"
 
@@ -76,7 +81,7 @@ func _complete_waiting_sale() -> String:
 func _complete_waiting_trade_in() -> String:
 	var customer := _get_waiting_trade_in_customer()
 	if customer == null:
-		return "No customer waiting at the register."
+		return _complete_waiting_preorder()
 
 	return accept_trade_in(customer)
 
@@ -149,6 +154,32 @@ func decline_trade_in(customer: SimpleTradeInCustomer) -> String:
 	return "Could not decline trade-in."
 
 
+func _complete_waiting_preorder() -> String:
+	var customer := _get_waiting_preorder_customer()
+	if customer == null:
+		return "No customer waiting at the register."
+
+	var ledger := _get_ledger()
+	if ledger == null:
+		return "Register is not ready to record a preorder."
+
+	var release := customer.get_release()
+	var deposit_cents := customer.get_deposit_cents()
+	var transaction := ledger.record_preorder_deposit(customer.customer_id, release, deposit_cents)
+	if transaction.is_empty():
+		return "Register could not record the preorder."
+
+	var store_session := _get_store_session()
+	if store_session != null and store_session.has_method("apply_preorder_deposit"):
+		store_session.apply_preorder_deposit(transaction)
+
+	customer.complete_preorder()
+	return "Took %s preorder deposit for %s." % [
+		"$%0.2f" % (deposit_cents / 100.0),
+		str(transaction.get("display_name", "release")),
+	]
+
+
 func _get_waiting_customer() -> SimpleBuyerCustomer:
 	var customer_manager := _get_customer_manager()
 	if customer_manager != null and customer_manager.has_method("get_next_waiting_customer"):
@@ -172,6 +203,17 @@ func _get_waiting_trade_in_customer() -> SimpleTradeInCustomer:
 
 	var customer := get_node_or_null(trade_in_customer_path) as SimpleTradeInCustomer
 	if customer != null and customer.has_method("is_waiting_for_trade_in") and customer.is_waiting_for_trade_in():
+		return customer
+
+	return null
+
+
+func _get_waiting_preorder_customer() -> SimplePreorderCustomer:
+	if preorder_customer_path.is_empty():
+		return null
+
+	var customer := get_node_or_null(preorder_customer_path) as SimplePreorderCustomer
+	if customer != null and customer.has_method("is_waiting_for_preorder") and customer.is_waiting_for_preorder():
 		return customer
 
 	return null

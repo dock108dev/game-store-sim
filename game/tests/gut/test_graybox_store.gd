@@ -210,15 +210,26 @@ func test_register_is_wired_to_customer_manager_ledger_and_session() -> void:
 	var register := _store.get_node("RegisterWorkstation") as RegisterWorkstation
 	var manager := register.get_node_or_null(register.customer_manager_path)
 	var trade_customer := register.get_node_or_null(register.trade_in_customer_path)
+	var preorder_customer := register.get_node_or_null(register.preorder_customer_path)
 	var receiving_box := register.get_node_or_null(register.receiving_box_path)
 	var ledger := register.get_node_or_null(register.ledger_path) as TransactionLedger
 	var session := register.get_node_or_null(register.store_session_path)
 
 	assert_not_null(manager)
 	assert_not_null(trade_customer)
+	assert_not_null(preorder_customer)
 	assert_not_null(receiving_box)
 	assert_not_null(ledger)
 	assert_not_null(session)
+
+
+func test_preorder_customer_exists_and_targets_upcoming_release() -> void:
+	var customer := _store.get_node_or_null("PreorderCustomer") as SimplePreorderCustomer
+
+	assert_not_null(customer)
+	assert_true(customer.is_waiting_for_preorder())
+	assert_eq(customer.get_release_name(), "Neon Skyline")
+	assert_eq(customer.get_deposit_cents(), 500)
 
 
 func test_store_session_is_wired_to_transaction_ledger() -> void:

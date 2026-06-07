@@ -96,6 +96,27 @@ func test_store_session_tracks_store_credit_trade_in_without_spending_cash() -> 
 	assert_string_contains(session.get_summary_text(), "Store credit: $9.50")
 
 
+func test_store_session_tracks_preorder_deposits_without_sale_revenue() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var transaction := ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	session.apply_preorder_deposit(transaction)
+
+	assert_eq(session.get_preorder_deposit_count(), 1)
+	assert_eq(session.get_total_preorder_deposit_cents(), 500)
+	assert_eq(session.get_sale_count(), 0)
+	assert_eq(session.get_total_revenue_cents(), 0)
+	assert_eq(session.get_total_profit_cents(), 0)
+	assert_eq(session.get_cash_cents(), 50500)
+	assert_string_contains(session.get_summary_text(), "Preorders: 1")
+	assert_string_contains(session.get_summary_text(), "Preorder deposits: $5.00")
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
@@ -138,6 +159,23 @@ func test_store_session_formats_store_credit_recent_activity() -> void:
 
 	var activity: String = session.get_recent_activity_text()
 	assert_string_contains(activity, "Trade-in Moon Escape credit $9.50")
+
+
+func test_store_session_formats_preorder_recent_activity_and_summary() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var transaction := ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	session.apply_preorder_deposit(transaction)
+
+	assert_string_contains(session.get_recent_activity_text(), "Preorder Neon Skyline deposit $5.00")
+	assert_string_contains(session.get_preorder_summary_text(), "Preorders:")
+	assert_string_contains(session.get_preorder_summary_text(), "Neon Skyline deposit $5.00")
+	assert_string_contains(session.get_preorder_summary_text(), "due day 3")
 
 
 func test_store_session_suggests_reorder_for_low_active_stock_after_sales() -> void:
