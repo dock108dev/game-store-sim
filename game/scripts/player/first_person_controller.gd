@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @export var move_speed: float = 4.5
 @export var mouse_sensitivity: float = 0.0025
+@export var max_held_items: int = 3
 
 @onready var head: Node3D = $Head
 @onready var hold_anchor: Node3D = $Head/Camera3D/HoldAnchor
@@ -10,7 +11,7 @@ extends CharacterBody3D
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 
 var _look_pitch: float = 0.0
-var _held_item: Node3D = null
+var _held_items: Array[Node3D] = []
 
 
 func _ready() -> void:
@@ -59,15 +60,26 @@ func _physics_process(delta: float) -> void:
 
 
 func is_holding_item() -> bool:
-	return _held_item != null
+	return not _held_items.is_empty()
 
 
 func get_held_item() -> Node3D:
-	return _held_item
+	if _held_items.is_empty():
+		return null
+
+	return _held_items[_held_items.size() - 1]
+
+
+func get_held_items() -> Array[Node3D]:
+	return _held_items.duplicate()
+
+
+func get_held_item_count() -> int:
+	return _held_items.size()
 
 
 func can_pick_up_item(item: Node) -> bool:
-	return _held_item == null and item is Node3D
+	return _held_items.size() < max_held_items and item is Node3D
 
 
 func pick_up_item(item: Node3D) -> bool:
@@ -79,33 +91,34 @@ func pick_up_item(item: Node3D) -> bool:
 		parent.remove_child(item)
 
 	hold_anchor.add_child(item)
-	item.transform = Transform3D(Basis(Vector3.UP, PI), Vector3.ZERO)
-	item.scale = Vector3(0.5, 0.5, 0.5)
-	_held_item = item
+	_held_items.append(item)
 
 	if item.has_method("set_held"):
 		item.set_held()
 
+	_arrange_held_items()
 	return true
 
 
 func can_place_held_item(slot: Node) -> bool:
-	if _held_item == null:
+	var held_item := get_held_item()
+	if held_item == null:
 		return false
 
 	if slot == null or not slot.has_method("can_accept"):
 		return false
 
-	return slot.can_accept(_held_item)
+	return slot.can_accept(held_item)
 
 
 func place_held_item(slot: Node) -> bool:
 	if not can_place_held_item(slot):
 		return false
 
-	var item := _held_item
+	var item := get_held_item()
 	if slot.place_item(item):
-		_held_item = null
+		_held_items.erase(item)
+		_arrange_held_items()
 		return true
 
 	return false
@@ -124,13 +137,14 @@ func is_trade_in_offer_open() -> bool:
 
 
 func open_pricing_for_held_item() -> String:
-	if _held_item == null:
+	var held_item := get_held_item()
+	if held_item == null:
 		return "Hold an item to price it."
 
 	if pricing_panel == null:
 		return "Pricing panel unavailable."
 
-	if pricing_panel.open_for_item(_held_item):
+	if pricing_panel.open_for_item(held_item):
 		return ""
 
 	return "This item cannot be priced."
@@ -157,10 +171,11 @@ func open_trade_in_offer(register: RegisterWorkstation, customer: SimpleTradeInC
 
 
 func get_held_item_interaction_prompt() -> String:
-	if _held_item == null:
+	var held_item := get_held_item()
+	if held_item == null:
 		return ""
 
-	var product := _held_item.get("product") as ProductDefinition
+	var product := held_item.get("product") as ProductDefinition
 	if product == null:
 		return ""
 
@@ -189,3 +204,19 @@ func _close_active_modal() -> void:
 
 	if is_trade_in_offer_open():
 		trade_in_offer_panel.close()
+
+
+func _arrange_held_items() -> void:
+	for index in range(_held_items.size()):
+		var item := _held_items[index]
+		if item == null:
+			continue
+
+		var offset := index - (_held_items.size() - 1)
+		var carry_position := Vector3(
+			offset * 0.08,
+			abs(offset) * 0.035,
+			abs(offset) * -0.045
+		)
+		item.transform = Transform3D(Basis(Vector3.UP, PI + (offset * 0.08)), carry_position)
+		item.scale = Vector3(0.5, 0.5, 0.5)

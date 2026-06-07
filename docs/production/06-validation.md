@@ -25,7 +25,7 @@ The gate currently runs:
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
-- Named validation screenshot capture at `1280x720` for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, service request, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
+- Named validation screenshot capture at `1280x720` for main scene, carry stack, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, service request, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
 
@@ -51,7 +51,8 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Prompt readability in the actual game window.
 - Receiving box, display rack, register, and used-game visual placement.
 - Display rack slots still behave like used-game slots after category assignment changes.
-- Held item stays visible without blocking normal navigation.
+- Held item stack stays visible without blocking normal navigation.
+- Stocking one carried game leaves the remaining carried games visible and usable.
 - Stocked game is visibly upright and intentional in the rack.
 - Pricing panel text and controls are readable in the actual window.
 - Pricing opens from the held used item, not a standalone pricing terminal.
@@ -107,7 +108,7 @@ Update `game/tests/validation/` whenever a production script or player-facing va
 Scenario files are intentionally split by slice:
 
 - `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
-- `scenarios/receiving_stocking.json`: receiving box, item state, pickup, hold, shelf slot category assignment, and stocking checks.
+- `scenarios/receiving_stocking.json`: receiving box, item state, pickup, bounded carry stack, hold, shelf slot category assignment, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.

@@ -86,11 +86,37 @@ func test_player_can_pick_up_item() -> void:
 	var hold_anchor := _player.get_node("Head/Camera3D/HoldAnchor") as Node3D
 	var collision_shape := item.get_node("CollisionShape3D") as CollisionShape3D
 	assert_eq(_player.get_held_item(), item)
+	assert_eq(_player.get_held_item_count(), 1)
+	assert_eq(_player.get_held_items(), [item])
 	assert_eq(item.get_parent(), hold_anchor)
 	assert_eq(item.get("location_id"), "held")
 	assert_almost_eq(absf(item.rotation.y), PI, 0.001)
 	assert_almost_eq(item.scale.x, 0.5, 0.001)
 	assert_true(collision_shape.disabled)
+
+
+func test_player_can_hold_multiple_items_up_to_capacity() -> void:
+	var first_item := _make_used_game("item_used_star_trader_001")
+	var second_item := _make_used_game("item_used_star_trader_002")
+	var third_item := _make_used_game("item_used_star_trader_003")
+	var fourth_item := _make_used_game("item_used_star_trader_004")
+
+	assert_true(_player.pick_up_item(first_item))
+	assert_true(_player.pick_up_item(second_item))
+	assert_true(_player.pick_up_item(third_item))
+
+	assert_eq(_player.get_held_item_count(), 3)
+	assert_eq(_player.get_held_item(), third_item)
+	assert_eq(_player.get_held_items(), [first_item, second_item, third_item])
+	assert_false(_player.can_pick_up_item(fourth_item))
+	assert_false(_player.pick_up_item(fourth_item))
+
+	var hold_anchor := _player.get_node("Head/Camera3D/HoldAnchor") as Node3D
+	for item in [first_item, second_item, third_item]:
+		var collision_shape := item.get_node("CollisionShape3D") as CollisionShape3D
+		assert_eq(item.get_parent(), hold_anchor)
+		assert_eq(item.get("location_id"), "held")
+		assert_true(collision_shape.disabled)
 
 
 func test_player_places_held_item_in_display_slot() -> void:
@@ -106,6 +132,7 @@ func test_player_places_held_item_in_display_slot() -> void:
 
 	var collision_shape := item.get_node("CollisionShape3D") as CollisionShape3D
 	assert_null(_player.get_held_item())
+	assert_eq(_player.get_held_item_count(), 0)
 	assert_eq(slot.get_occupied_item(), item)
 	assert_eq(item.get("location_id"), "shelf_slot_001")
 	assert_eq(item.rotation, Vector3.ZERO)
@@ -113,6 +140,32 @@ func test_player_places_held_item_in_display_slot() -> void:
 	assert_almost_eq(item.scale.y, 0.62, 0.001)
 	assert_almost_eq(item.scale.z, 0.62, 0.001)
 	assert_false(collision_shape.disabled)
+
+
+func test_player_places_top_held_item_and_keeps_remaining_stack() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	add_child_autofree(rack)
+	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
+
+	var first_item := _make_used_game("item_used_star_trader_001")
+	var second_item := _make_used_game("item_used_star_trader_002")
+
+	assert_true(_player.pick_up_item(first_item))
+	assert_true(_player.pick_up_item(second_item))
+	assert_true(_player.place_held_item(slot))
+
+	var first_collision_shape := first_item.get_node("CollisionShape3D") as CollisionShape3D
+	var second_collision_shape := second_item.get_node("CollisionShape3D") as CollisionShape3D
+	var hold_anchor := _player.get_node("Head/Camera3D/HoldAnchor") as Node3D
+
+	assert_eq(slot.get_occupied_item(), second_item)
+	assert_eq(second_item.get("location_id"), "shelf_slot_001")
+	assert_false(second_collision_shape.disabled)
+	assert_eq(_player.get_held_item_count(), 1)
+	assert_eq(_player.get_held_item(), first_item)
+	assert_eq(first_item.get_parent(), hold_anchor)
+	assert_eq(first_item.get("location_id"), "held")
+	assert_true(first_collision_shape.disabled)
 
 
 func test_player_requires_held_item_for_pricing() -> void:
@@ -186,3 +239,10 @@ func test_player_opens_trade_in_offer() -> void:
 	assert_true(trade_in_offer_panel.is_open())
 	assert_eq(trade_in_offer_panel.get_active_customer(), customer)
 	assert_true(_player.is_trade_in_offer_open())
+
+
+func _make_used_game(instance_id: String) -> Node3D:
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	item.set("instance_id", instance_id)
+	add_child_autofree(item)
+	return item

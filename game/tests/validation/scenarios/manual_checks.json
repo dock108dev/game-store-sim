@@ -42,10 +42,18 @@
     },
     {
       "id": "held_item_visibility",
-      "name": "Held item stays visible without blocking normal navigation",
+      "name": "Held item stack stays visible without blocking normal navigation",
       "status": "manual",
       "critical": false,
       "reason": "Requires human judgment while moving and looking around the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "multi_item_stocking_visual",
+      "name": "Stocking one carried game leaves the remaining carried games visible and usable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that the carry stack reads naturally during movement and after one item is stocked.",
       "owner": "manual QA"
     },
     {

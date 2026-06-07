@@ -211,11 +211,25 @@
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_can_pick_up_item"
     },
     {
+      "id": "player_multi_item_carry_capacity",
+      "name": "Player can carry a bounded stack of used games from receiving",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_can_hold_multiple_items_up_to_capacity"
+    },
+    {
       "id": "player_place_held_item",
       "name": "Player can place the held game into the display slot",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_places_held_item_in_display_slot"
+    },
+    {
+      "id": "player_stocks_active_carried_item_first",
+      "name": "Player stocks the active carried item while keeping remaining held games",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_places_top_held_item_and_keeps_remaining_stack"
     }
   ]
 }

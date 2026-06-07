@@ -56,6 +56,8 @@ func _capture() -> void:
 
 func _prepare_scenario(scene: Node, scenario: String) -> void:
 	match scenario:
+		"carry_stack":
+			_prepare_carry_stack(scene)
 		"receiving_area":
 			_set_camera(scene, Vector3(-4.2, 1.8, 2.65), Vector3(-4.45, 0.55, 3.9))
 		"supplier_message":
@@ -120,6 +122,25 @@ func _prepare_customer_queue(scene: Node) -> void:
 	if manager.has_method("process_customer_claims"):
 		manager.process_customer_claims()
 	_advance_managed_customers(manager, 5.0)
+
+
+func _prepare_carry_stack(scene: Node) -> void:
+	_hide_node(scene, "CustomerManager")
+	_hide_node(scene, "TradeInCustomer")
+	_hide_node(scene, "PreorderCustomer")
+	_hide_node(scene, "ServiceCustomer")
+	_hide_node(scene, "SuspiciousCustomer")
+
+	var player := scene.get_node_or_null("PlayerController")
+	if player == null or not player.has_method("pick_up_item"):
+		return
+
+	for item_name in ["PlaceholderUsedGame", "PlaceholderUsedGame002", "PlaceholderUsedGame003"]:
+		var item := scene.get_node_or_null("ReceivingBox/%s" % item_name) as Node3D
+		if item != null:
+			player.pick_up_item(item)
+
+	_show_overlay_message(scene, "Carrying 3 used games")
 
 
 func _prepare_backroom_summary(scene: Node) -> void:

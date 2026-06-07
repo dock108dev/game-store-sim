@@ -16,6 +16,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Set a sale price. Done for used items.
 - Optionally apply a used-item sale price to active matching copies. Done from the direct pricing panel.
 - Place the item on a shelf/display rack. Done.
+- Carry multiple receiving-box games before stocking. Done as a bounded three-item carry stack, with pricing and stocking acting on the active carried item.
 - Spawn one target buyer customer. Done.
 - Let the customer find the item and queue at the register. Done, deterministic in-store claim.
 - Support multiple waiting buyers. Done for two in-store buyers through `CustomerManager`.
@@ -89,6 +90,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Presentation Polish
 
 - Keep used-game cases compact enough for wall racks, player carry, and customer carry. Done with smaller shared case geometry plus automated compact-case and carry-pose checks.
+- Keep manual stocking from becoming one-trip-per-copy busywork. Done with a bounded three-game carry stack and active-item stocking order.
 - Keep register-area customers from stacking into each other. Done with wider buyer queue spacing, separated special-customer placements, and a main-scene spacing test.
 - Keep trade-in items visually held rather than floating at the counter. Done by lowering/shrinking the trade-in carried item and requiring body-anchored pose validation.
 
@@ -97,7 +99,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
-- Keep named validation screenshots current for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
+- Keep named validation screenshots current for main scene, carry stack, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
 - Keep the service-request validation screenshot current as register service work changes.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.

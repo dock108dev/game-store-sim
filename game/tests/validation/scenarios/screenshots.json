@@ -22,6 +22,13 @@
       "evidence": "res://tests/tools/check_png.gd"
     },
     {
+      "id": "carry_stack_screenshot",
+      "name": "Carry-stack validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
       "id": "receiving_area_screenshot",
       "name": "Receiving-area validation screenshot is captured and checked",
       "status": "automated",

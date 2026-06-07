@@ -8,6 +8,7 @@ ARTIFACT_DIR="$REPO_ROOT/artifacts/validation/latest"
 SCREENSHOT_DIR="$ARTIFACT_DIR/screenshots"
 SCREENSHOT_SCENARIOS=(
   main_scene
+  carry_stack
   receiving_area
   supplier_message
   suspicious_customer

@@ -6,13 +6,13 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 1. Start the main scene.
 2. Confirm the front door still blocks exit from the playable store.
-3. Pick up a `Star Trader` from the receiving box.
-4. Open pricing from the held item.
+3. Pick up multiple `Star Trader` copies from the receiving box and confirm the carry stack stays low/right.
+4. Open pricing from the active held item.
 5. Adjust the price, optionally enable apply-to-matching, apply it, and confirm mouse capture returns.
 6. On a fresh run or before the sale loop, overprice one `Star Trader` above market tolerance, stock it, and confirm a buyer leaves it on the rack with readable feedback.
 7. Stock a fairly priced game in an empty display rack slot.
 8. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
-9. Repeat pickup, pricing, and stocking with a second fairly priced `Star Trader`.
+9. Price and stock the next carried `Star Trader`.
 10. Confirm a second buyer walks to the rack and queues with readable spacing.
 11. Ring up the first buyer.
 12. Ring up the second buyer.
@@ -67,7 +67,8 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Receiving box contains multiple visible used games without looking cluttered.
 - Display rack still reads as a used-game rack, and stocked used games still go into the expected slots.
 - Used-game cases look compact enough on the rack and while carried; they should not read like oversized display panels.
-- Held item stays low/right and does not block navigation.
+- Held item stack stays low/right and does not block navigation.
+- Stocking one carried game leaves the remaining carried games visible and usable.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
@@ -112,6 +113,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 The local gate writes these images under `artifacts/validation/latest/screenshots/`:
 
 - `main_scene.png`
+- `carry_stack.png`
 - `receiving_area.png`
 - `supplier_message.png`
 - `suspicious_customer.png`
