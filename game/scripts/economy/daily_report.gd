@@ -14,8 +14,12 @@ static func build_report(session: StoreSession) -> Dictionary:
 		"net_cash_change_cents": session.get_cash_cents() - session.starting_cash_cents,
 		"sales": session.get_sale_count(),
 		"trade_ins": session.get_trade_in_count(),
+		"services": session.get_service_count(),
 		"revenue_cents": session.get_total_revenue_cents(),
 		"cost_cents": session.get_total_cost_cents(),
+		"service_revenue_cents": session.get_total_service_revenue_cents(),
+		"service_cost_cents": session.get_total_service_cost_cents(),
+		"service_profit_cents": session.get_total_service_profit_cents(),
 		"trade_cash_cents": session.get_total_trade_in_cost_cents(),
 		"trade_credit_cents": session.get_total_trade_in_credit_cents(),
 		"gross_profit_cents": session.get_total_profit_cents(),
@@ -30,14 +34,18 @@ static func format_report(session: StoreSession) -> String:
 	if not bool(report.get("is_closed", false)):
 		return "Daily report: day still open"
 
-	return "Daily report day %d:\nClosing cash %s\nNet cash %s\nSales %d / Trade-ins %d\nRevenue %s / Cost %s\nTrade cash %s / Store credit %s\nGross profit %s" % [
+	return "Daily report day %d:\nClosing cash %s\nNet cash %s\nSales %d / Trade-ins %d / Services %d\nRevenue %s / Cost %s\nService revenue %s / Service cost %s / Service profit %s\nTrade cash %s / Store credit %s\nGross profit %s" % [
 		int(report.get("day_number", 0)),
 		_format_money(int(report.get("closing_cash_cents", 0))),
 		_format_delta(int(report.get("net_cash_change_cents", 0))),
 		int(report.get("sales", 0)),
 		int(report.get("trade_ins", 0)),
+		int(report.get("services", 0)),
 		_format_money(int(report.get("revenue_cents", 0))),
 		_format_money(int(report.get("cost_cents", 0))),
+		_format_money(int(report.get("service_revenue_cents", 0))),
+		_format_money(int(report.get("service_cost_cents", 0))),
+		_format_money(int(report.get("service_profit_cents", 0))),
 		_format_money(int(report.get("trade_cash_cents", 0))),
 		_format_money(int(report.get("trade_credit_cents", 0))),
 		_format_money(int(report.get("gross_profit_cents", 0))),

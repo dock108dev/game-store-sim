@@ -175,6 +175,17 @@ func test_trade_in_customer_exists_with_item() -> void:
 	assert_not_null(customer.get_trade_item())
 
 
+func test_service_customer_exists_with_disc_resurfacing_request() -> void:
+	var customer := _store.get_node_or_null("ServiceCustomer")
+
+	assert_not_null(customer)
+	assert_true(customer.call("is_waiting_for_service"))
+	assert_eq(customer.get("service_name"), "Disc Resurfacing")
+	assert_eq(customer.get("item_name"), "Scratched Orbit Disc")
+	assert_eq(customer.call("get_price_cents"), 499)
+	assert_eq(customer.call("get_cost_cents"), 100)
+
+
 func test_transaction_ledger_exists() -> void:
 	assert_not_null(_store.get_node_or_null("TransactionLedger"))
 
@@ -211,6 +222,7 @@ func test_register_is_wired_to_customer_manager_ledger_and_session() -> void:
 	var manager := register.get_node_or_null(register.customer_manager_path)
 	var trade_customer := register.get_node_or_null(register.trade_in_customer_path)
 	var preorder_customer := register.get_node_or_null(register.preorder_customer_path)
+	var service_customer := register.get_node_or_null(register.service_customer_path)
 	var receiving_box := register.get_node_or_null(register.receiving_box_path)
 	var ledger := register.get_node_or_null(register.ledger_path) as TransactionLedger
 	var session := register.get_node_or_null(register.store_session_path)
@@ -218,6 +230,7 @@ func test_register_is_wired_to_customer_manager_ledger_and_session() -> void:
 	assert_not_null(manager)
 	assert_not_null(trade_customer)
 	assert_not_null(preorder_customer)
+	assert_not_null(service_customer)
 	assert_not_null(receiving_box)
 	assert_not_null(ledger)
 	assert_not_null(session)

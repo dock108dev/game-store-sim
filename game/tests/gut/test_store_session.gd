@@ -117,6 +117,31 @@ func test_store_session_tracks_preorder_deposits_without_sale_revenue() -> void:
 	assert_string_contains(session.get_summary_text(), "Preorder deposits: $5.00")
 
 
+func test_store_session_tracks_service_revenue_cost_and_profit() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var customer: Node = load("res://scenes/customers/simple_service_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var transaction := ledger.record_service(customer)
+	session.apply_service(transaction)
+
+	assert_eq(session.get_service_count(), 1)
+	assert_eq(session.get_total_service_revenue_cents(), 499)
+	assert_eq(session.get_total_service_cost_cents(), 100)
+	assert_eq(session.get_total_service_profit_cents(), 399)
+	assert_eq(session.get_total_revenue_cents(), 499)
+	assert_eq(session.get_total_cost_cents(), 100)
+	assert_eq(session.get_total_profit_cents(), 399)
+	assert_eq(session.get_cash_cents(), 50499)
+	assert_string_contains(session.get_summary_text(), "Services: 1")
+	assert_string_contains(session.get_summary_text(), "Services revenue: $4.99")
+	assert_string_contains(session.get_summary_text(), "Services profit: $3.99")
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
@@ -176,6 +201,24 @@ func test_store_session_formats_preorder_recent_activity_and_summary() -> void:
 	assert_string_contains(session.get_preorder_summary_text(), "Preorders:")
 	assert_string_contains(session.get_preorder_summary_text(), "Neon Skyline deposit $5.00")
 	assert_string_contains(session.get_preorder_summary_text(), "due day 3")
+
+
+func test_store_session_formats_service_recent_activity() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var customer: Node = load("res://scenes/customers/simple_service_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var transaction := ledger.record_service(customer)
+	session.apply_service(transaction)
+
+	assert_string_contains(
+		session.get_recent_activity_text(),
+		"Service Disc Resurfacing for Scratched Orbit Disc $4.99 profit $3.99"
+	)
 
 
 func test_store_session_suggests_reorder_for_low_active_stock_after_sales() -> void:

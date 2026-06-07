@@ -57,6 +57,10 @@ func apply_preorder_deposit(transaction: Dictionary) -> void:
 		preorder_deposits.append(transaction.duplicate(true))
 
 
+func apply_service(transaction: Dictionary) -> void:
+	cash_cents += int(transaction.get("service_price_cents", 0))
+
+
 func end_day() -> void:
 	is_day_closed = true
 
@@ -104,8 +108,11 @@ func get_total_revenue_cents() -> int:
 func get_total_cost_cents() -> int:
 	var total := 0
 	for transaction in get_transactions():
-		if str(transaction.get("type", "sale")) == "sale":
+		var transaction_type := str(transaction.get("type", "sale"))
+		if transaction_type == "sale":
 			total += int(transaction.get("cost_basis_cents", 0))
+		elif transaction_type == "service":
+			total += int(transaction.get("service_cost_cents", 0))
 	return total
 
 
@@ -150,6 +157,38 @@ func get_preorder_deposit_count() -> int:
 		return 0
 
 	return ledger.get_preorder_deposit_count()
+
+
+func get_service_count() -> int:
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_service_count"):
+		return 0
+
+	return ledger.get_service_count()
+
+
+func get_total_service_revenue_cents() -> int:
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_total_service_revenue_cents"):
+		return 0
+
+	return ledger.get_total_service_revenue_cents()
+
+
+func get_total_service_cost_cents() -> int:
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_total_service_cost_cents"):
+		return 0
+
+	return ledger.get_total_service_cost_cents()
+
+
+func get_total_service_profit_cents() -> int:
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_total_service_profit_cents"):
+		return 0
+
+	return ledger.get_total_service_profit_cents()
 
 
 func get_total_preorder_deposit_cents() -> int:
@@ -843,7 +882,7 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d - %s\nCash: %s | Reputation: %d\nSales: %d | Trade-ins: %d | Preorders: %d | Release allocations: %d | Launch events: %d\nRevenue: %s | Cost: %s | Profit: %s\nTrade cash: %s | Store credit: %s\nPreorder deposits: %s | Allocation cost: %s | Launch cash: %s | Launch profit: %s" % [
+	return "Day %d - %s\nCash: %s | Reputation: %d\nSales: %d | Trade-ins: %d | Preorders: %d | Services: %d | Release allocations: %d | Launch events: %d\nRevenue: %s | Cost: %s | Profit: %s\nTrade cash: %s | Store credit: %s\nPreorder deposits: %s | Services revenue: %s | Services profit: %s\nAllocation cost: %s | Launch cash: %s | Launch profit: %s" % [
 		day_number,
 		get_status_label(),
 		format_money(get_cash_cents()),
@@ -851,6 +890,7 @@ func get_summary_text() -> String:
 		get_sale_count(),
 		get_trade_in_count(),
 		get_preorder_deposit_count(),
+		get_service_count(),
 		get_release_allocation_count(),
 		get_launch_event_count(),
 		format_money(get_total_revenue_cents()),
@@ -859,6 +899,8 @@ func get_summary_text() -> String:
 		format_money(get_total_trade_in_cost_cents()),
 		format_money(get_total_trade_in_credit_cents()),
 		format_money(get_total_preorder_deposit_cents()),
+		format_money(get_total_service_revenue_cents()),
+		format_money(get_total_service_profit_cents()),
 		format_money(get_total_release_allocation_cost_cents()),
 		format_money(get_total_launch_revenue_cents()),
 		format_money(get_total_launch_profit_cents()),
@@ -891,6 +933,13 @@ func _format_transaction_line(transaction: Dictionary) -> String:
 			return "Preorder %s deposit %s" % [
 				display_name,
 				format_money(int(transaction.get("deposit_cents", 0))),
+			]
+		"service":
+			return "Service %s for %s %s profit %s" % [
+				display_name,
+				str(transaction.get("item_name", "item")),
+				format_money(int(transaction.get("service_price_cents", 0))),
+				format_money(int(transaction.get("profit_cents", 0))),
 			]
 		_:
 			return "Sale %s %s profit %s" % [

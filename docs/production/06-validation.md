@@ -25,7 +25,7 @@ The gate currently runs:
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
-- Named validation screenshot capture at `1280x720` for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
+- Named validation screenshot capture at `1280x720` for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, service request, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
 - Old project-name scan outside ignored/generated paths.
 
@@ -79,6 +79,8 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom release calendar is readable and shows fictional upcoming launch timing, wholesale cost, suggested price, allocation limit, and demand tier.
 - Register preorder customer and fixed deposit flow are readable, and the deposit clearly does not count as a sale yet.
 - Backroom preorder count and preorder-deposit total are readable after taking a preorder.
+- Register service customer, service completion prompt, service completion message, backroom service totals, recent activity, and daily-report service totals are readable.
+- Service completion reads as register work and does not imply a separate service terminal, sale, trade-in, preorder, or inventory item.
 - Backroom release allocation commitment is readable, reserves launch wholesale cash, and stays clearly separate from launch-day fulfillment.
 - Starting launch day resolves `Neon Skyline` preorders first, sells surplus allocations to launch queue demand, and reports launch cash, launch profit, and reputation clearly.
 - Underallocating for launch day produces a readable missed-demand/reputation consequence.
@@ -115,6 +117,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/supplier_ordering.json`: supplier lot data, backroom supplier ordering, cash reservation, due-day delivery, receiving-box delivery, panel state, and persistence coverage.
 - `scenarios/release_calendar.json`: fictional new-release data, countdown text, sorted/upcoming filtering, and backroom release-calendar readout checks.
 - `scenarios/preorder_deposit.json`: preorder customer, register deposit prompt, preorder ledger/session accounting, backroom summary, persistence, and screenshot coverage.
+- `scenarios/services.json`: first service customer, disc resurfacing request, register service prompt/completion, ledger/session accounting, recent activity, daily report totals, and screenshot coverage.
 - `scenarios/release_allocation.json`: release allocation commitment, allocation-limit enforcement, cash reservation, backroom readout, persistence, and screenshot coverage.
 - `scenarios/launch_day.json`: launch-day preorder fulfillment, launch queue fulfillment, reputation shortage, backroom readout, persistence, and save/restore coverage.
 - `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, and optional evidence storage checks.

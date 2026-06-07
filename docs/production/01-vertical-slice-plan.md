@@ -30,6 +30,7 @@ Customers:
 - 1 browser.
 - 2 target buyers for the current queue smoke.
 - 1 trade-in seller, if trade-ins are included in the first slice.
+- 1 service customer for the first register-handled service request.
 
 Workstations:
 
@@ -129,6 +130,7 @@ Technical:
 37. Add first preorder deposit. Done as one register preorder customer for `Neon Skyline`, with a fixed deposit tracked separately from sale revenue and profit.
 38. Add first launch allocation commitment. Done as a backroom `Commit Allocation` action for `Neon Skyline`, with immediate wholesale cash reservation, allocation-limit enforcement, persistence, and screenshot coverage.
 39. Add first launch-day fulfillment. Done as day-start resolution for `Neon Skyline` that fulfills pending preorders first, sells surplus allocations to launch queue demand, records launch cash/profit, marks allocations launched, and applies reputation penalties for missed demand.
+40. Add first register service request. Done as a `Disc Resurfacing` customer whose scratched-disc service is completed at the register and recorded as service revenue, cost, profit, recent activity, and daily report data.
 
 ## Slice Review Questions
 

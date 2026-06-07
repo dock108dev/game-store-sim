@@ -79,6 +79,42 @@ func record_preorder_deposit(customer_id: String, release: Resource, deposit_cen
 	return transaction
 
 
+func record_service(customer: Node) -> Dictionary:
+	if (
+		customer == null
+		or not customer.has_method("is_waiting_for_service")
+		or not bool(customer.call("is_waiting_for_service"))
+	):
+		return {}
+
+	var price_cents := 0
+	if customer.has_method("get_price_cents"):
+		price_cents = int(customer.call("get_price_cents"))
+
+	var cost_cents := 0
+	if customer.has_method("get_cost_cents"):
+		cost_cents = int(customer.call("get_cost_cents"))
+
+	var turnaround_minutes := 0
+	if customer.has_method("get_turnaround_minutes"):
+		turnaround_minutes = int(customer.call("get_turnaround_minutes"))
+
+	var transaction := {
+		"transaction_id": "service_%03d" % (_transactions.size() + 1),
+		"type": "service",
+		"customer_id": str(customer.get("customer_id")),
+		"service_id": str(customer.get("service_id")),
+		"display_name": str(customer.get("service_name")),
+		"item_name": str(customer.get("item_name")),
+		"service_price_cents": price_cents,
+		"service_cost_cents": cost_cents,
+		"profit_cents": price_cents - cost_cents,
+		"turnaround_minutes": turnaround_minutes,
+	}
+	_transactions.append(transaction)
+	return transaction
+
+
 func get_transactions() -> Array[Dictionary]:
 	return _transactions.duplicate(true)
 
@@ -115,18 +151,54 @@ func get_preorder_deposit_count() -> int:
 	return total
 
 
+func get_service_count() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
+			total += 1
+	return total
+
+
 func get_total_revenue_cents() -> int:
 	var total := 0
 	for transaction in _transactions:
-		if str(transaction.get("type", "sale")) == "sale":
+		var transaction_type := str(transaction.get("type", "sale"))
+		if transaction_type == "sale":
 			total += int(transaction.get("sale_price_cents", 0))
+		elif transaction_type == "service":
+			total += int(transaction.get("service_price_cents", 0))
 	return total
 
 
 func get_total_profit_cents() -> int:
 	var total := 0
 	for transaction in _transactions:
-		if str(transaction.get("type", "sale")) == "sale":
+		var transaction_type := str(transaction.get("type", "sale"))
+		if transaction_type == "sale" or transaction_type == "service":
+			total += int(transaction.get("profit_cents", 0))
+	return total
+
+
+func get_total_service_revenue_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
+			total += int(transaction.get("service_price_cents", 0))
+	return total
+
+
+func get_total_service_cost_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
+			total += int(transaction.get("service_cost_cents", 0))
+	return total
+
+
+func get_total_service_profit_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
 			total += int(transaction.get("profit_cents", 0))
 	return total
 

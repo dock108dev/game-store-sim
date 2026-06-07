@@ -30,33 +30,37 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 24. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the register message reads as a preorder deposit rather than a sale.
 25. Open the backroom computer and confirm preorder count and preorder deposits are readable.
 26. Confirm the preorder flow clearly reads as an obligation before launch day, not an immediate sale.
-27. Use `Commit Allocation` on the backroom computer and confirm cash drops by `$32.00`.
-28. Confirm the backroom computer lists `Neon Skyline x1 committed $32.00 due day 3` and `Release allocations: 1`.
-29. Press `Commit Allocation` up to the `Neon Skyline` allocation limit and confirm it stops accepting commitments after four total copies.
-30. Confirm allocation commitment reads as launch planning, not stocked inventory, completed preorder fulfillment, or a launch-day sale.
-31. End day 1, start day 2, end day 2, then start day 3 and confirm the launch resolves.
-32. Confirm `Neon Skyline` preorders fulfill first, surplus allocation copies sell to launch queue demand, launch cash/profit appears, and reputation remains stable when demand is covered.
-33. On a fresh run, commit only one launch allocation before day 3 and confirm missed demand reduces reputation with readable launch-event text.
-34. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
-35. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
-36. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
-37. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
-38. Reopen the backroom computer and confirm pending placement is cleared and the rack is listed as placed.
-39. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
-40. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
-41. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
-42. Confirm the market drift readout is readable and makes sense for active inventory.
-43. Use `Order Games` on the backroom computer and confirm cash drops by `$27.00`.
-44. Confirm pending delivery says `Used Game Starter Lot`, due day 2, with 3 items.
-45. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending delivery clears.
-46. End the day and confirm the summary changes to `Day closed`.
-47. Confirm the closed-day report is readable and matches the played day.
-48. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
-49. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
-50. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
-51. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
-52. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
-53. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
+27. Clear the preorder queue, then interact with the register and complete the `Disc Resurfacing` service request.
+28. Confirm the service message names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
+29. Open the backroom computer and confirm service revenue, service cost, service profit, and recent activity are readable.
+30. End the day and confirm the closed-day report includes service count, service revenue, service cost, and service profit.
+31. Use `Commit Allocation` on the backroom computer and confirm cash drops by `$32.00`.
+32. Confirm the backroom computer lists `Neon Skyline x1 committed $32.00 due day 3` and `Release allocations: 1`.
+33. Press `Commit Allocation` up to the `Neon Skyline` allocation limit and confirm it stops accepting commitments after four total copies.
+34. Confirm allocation commitment reads as launch planning, not stocked inventory, completed preorder fulfillment, or a launch-day sale.
+35. End day 1, start day 2, end day 2, then start day 3 and confirm the launch resolves.
+36. Confirm `Neon Skyline` preorders fulfill first, surplus allocation copies sell to launch queue demand, launch cash/profit appears, and reputation remains stable when demand is covered.
+37. On a fresh run, commit only one launch allocation before day 3 and confirm missed demand reduces reputation with readable launch-event text.
+38. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
+39. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
+40. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
+41. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
+42. Reopen the backroom computer and confirm pending placement is cleared and the rack is listed as placed.
+43. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
+44. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
+45. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
+46. Confirm the market drift readout is readable and makes sense for active inventory.
+47. Use `Order Games` on the backroom computer and confirm cash drops by `$27.00`.
+48. Confirm pending delivery says `Used Game Starter Lot`, due day 2, with 3 items.
+49. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending delivery clears.
+50. End the day and confirm the summary changes to `Day closed`.
+51. Confirm the closed-day report is readable and matches the played day.
+52. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
+53. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
+54. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
+55. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
+56. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
+57. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
 
 ## Visual Checks
 
@@ -82,6 +86,8 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Release calendar text is readable, fictional, and clearly planning-oriented.
 - Preorder customer, register deposit prompt, completion message, and backroom preorder totals are readable.
 - Preorder deposit reads as an obligation/deposit, not a completed sale before launch day.
+- Service customer placement, register prompt, completion message, and backroom/daily-report service totals are readable.
+- Service completion reads as register work, not a sale, trade-in, preorder, or separate-terminal workflow.
 - Allocation commitment text/button are readable, reserve cash clearly, enforce the release limit, and do not imply stocked inventory before launch day.
 - Launch-day resolution text is readable and explains preorder fulfillment, queue fulfillment, missed demand, cash, profit, and reputation.
 - Category demand text is readable and does not crowd the management panel.
@@ -111,6 +117,7 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `customer_queue.png`
 - `trade_in_offer.png`
 - `preorder_deposit.png`
+- `service_request.png`
 - `backroom_summary.png`
 - `release_calendar.png`
 - `release_allocation.png`

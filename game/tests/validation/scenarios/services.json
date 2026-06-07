@@ -1,0 +1,67 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "service_customer_exists",
+      "name": "Service customer exists in the main scene",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_service_customer_exists_with_disc_resurfacing_request"
+    },
+    {
+      "id": "service_customer_disc_resurfacing_request",
+      "name": "Service customer requests disc resurfacing for a scratched disc",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_service_customer.gd::test_service_customer_describes_disc_resurfacing_request"
+    },
+    {
+      "id": "service_customer_completion_state",
+      "name": "Service customer completes once after the register handles the job",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_service_customer.gd::test_service_customer_completes_once"
+    },
+    {
+      "id": "register_service_wiring",
+      "name": "Register is wired to the service customer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_is_wired_to_customer_manager_ledger_and_session"
+    },
+    {
+      "id": "register_service_prompt",
+      "name": "Register prompts to complete the service after higher-priority queues clear",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_completes_waiting_service_customer"
+    },
+    {
+      "id": "ledger_records_service",
+      "name": "Transaction ledger records service transactions with revenue, cost, and profit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_service_customer.gd::test_ledger_records_service_transaction"
+    },
+    {
+      "id": "session_tracks_service_accounting",
+      "name": "Store session tracks service revenue, cost, profit, and cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_service_revenue_cost_and_profit"
+    },
+    {
+      "id": "service_recent_activity",
+      "name": "Backroom recent activity describes completed service work",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_service_recent_activity"
+    },
+    {
+      "id": "daily_report_includes_services",
+      "name": "Daily report includes service count, revenue, cost, and profit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_closed_day_totals"
+    }
+  ]
+}

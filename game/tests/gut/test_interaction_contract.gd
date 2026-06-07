@@ -74,6 +74,35 @@ func test_register_completes_waiting_customer_sale() -> void:
 	assert_false(customer.is_waiting_for_register())
 
 
+func test_register_completes_waiting_service_customer() -> void:
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var customer: Node = load("res://scenes/customers/simple_service_customer.tscn").instantiate()
+	add_child_autofree(register)
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	register.service_customer_path = register.get_path_to(customer)
+	register.ledger_path = register.get_path_to(ledger)
+	register.store_session_path = register.get_path_to(session)
+
+	assert_eq(register.get_interaction_prompt(), "E Complete Disc Resurfacing")
+
+	var message := register.interact()
+	assert_string_contains(message, "Completed Disc Resurfacing")
+	assert_string_contains(message, "Scratched Orbit Disc")
+	assert_eq(ledger.get_service_count(), 1)
+	assert_eq(session.get_service_count(), 1)
+	assert_eq(session.get_total_service_revenue_cents(), 499)
+	assert_eq(session.get_total_service_cost_cents(), 100)
+	assert_eq(session.get_total_service_profit_cents(), 399)
+	assert_eq(session.get_cash_cents(), 50499)
+	assert_false(customer.call("is_waiting_for_service"))
+
+
 func test_backroom_computer_opens_actor_summary_panel() -> void:
 	var computer: Node = load("res://scenes/props/backroom_computer.tscn").instantiate()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()

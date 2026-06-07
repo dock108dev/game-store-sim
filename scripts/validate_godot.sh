@@ -15,6 +15,7 @@ SCREENSHOT_SCENARIOS=(
   customer_queue
   trade_in_offer
   preorder_deposit
+  service_request
   backroom_summary
   release_calendar
   release_allocation

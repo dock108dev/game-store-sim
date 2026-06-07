@@ -75,6 +75,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"preorder_deposit":
 			_prepare_preorder_deposit(scene)
 			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
+		"service_request":
+			_prepare_service_request(scene)
+			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
 		"backroom_summary":
 			_prepare_backroom_summary(scene)
 			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
@@ -195,6 +198,25 @@ func _prepare_preorder_deposit(scene: Node) -> void:
 
 	if trade_customer != null and trade_customer.has_method("decline_trade_in"):
 		trade_customer.decline_trade_in()
+	var message := str(register.interact())
+	_show_overlay_message(scene, message)
+
+
+func _prepare_service_request(scene: Node) -> void:
+	_hide_node(scene, "PlayerController")
+	_hide_node(scene, "CustomerManager")
+	_hide_node(scene, "SuspiciousCustomer")
+	var register := scene.get_node_or_null("RegisterWorkstation")
+	var trade_customer := scene.get_node_or_null("TradeInCustomer")
+	var preorder_customer := scene.get_node_or_null("PreorderCustomer")
+	if register == null:
+		return
+
+	if trade_customer != null and trade_customer.has_method("decline_trade_in"):
+		trade_customer.decline_trade_in()
+	if preorder_customer != null and preorder_customer.has_method("complete_preorder"):
+		preorder_customer.complete_preorder()
+
 	var message := str(register.interact())
 	_show_overlay_message(scene, message)
 

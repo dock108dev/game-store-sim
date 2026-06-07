@@ -5,6 +5,7 @@ class_name RegisterWorkstation
 @export var customer_manager_path: NodePath
 @export var trade_in_customer_path: NodePath
 @export var preorder_customer_path: NodePath
+@export var service_customer_path: NodePath
 @export var receiving_box_path: NodePath
 @export var ledger_path: NodePath
 @export var store_session_path: NodePath
@@ -24,6 +25,10 @@ func get_interaction_prompt() -> String:
 	var preorder_customer := _get_waiting_preorder_customer()
 	if preorder_customer != null:
 		return "E Take Preorder %s" % preorder_customer.get_release_name()
+
+	var service_customer := _get_waiting_service_customer()
+	if service_customer != null:
+		return "E Complete %s" % str(service_customer.get("service_name"))
 
 	return "Register Workstation"
 
@@ -157,7 +162,7 @@ func decline_trade_in(customer: SimpleTradeInCustomer) -> String:
 func _complete_waiting_preorder() -> String:
 	var customer := _get_waiting_preorder_customer()
 	if customer == null:
-		return "No customer waiting at the register."
+		return _complete_waiting_service()
 
 	var ledger := _get_ledger()
 	if ledger == null:
@@ -177,6 +182,31 @@ func _complete_waiting_preorder() -> String:
 	return "Took %s preorder deposit for %s." % [
 		"$%0.2f" % (deposit_cents / 100.0),
 		str(transaction.get("display_name", "release")),
+	]
+
+
+func _complete_waiting_service() -> String:
+	var customer := _get_waiting_service_customer()
+	if customer == null:
+		return "No customer waiting at the register."
+
+	var ledger := _get_ledger()
+	if ledger == null:
+		return "Register is not ready to record a service."
+
+	var transaction := ledger.record_service(customer)
+	if transaction.is_empty():
+		return "Register could not record the service."
+
+	var store_session := _get_store_session()
+	if store_session != null and store_session.has_method("apply_service"):
+		store_session.apply_service(transaction)
+
+	customer.call("complete_service")
+	return "Completed %s for %s. Profit $%0.2f." % [
+		str(transaction.get("display_name", "service")),
+		str(transaction.get("item_name", "item")),
+		int(transaction.get("profit_cents", 0)) / 100.0,
 	]
 
 
@@ -214,6 +244,21 @@ func _get_waiting_preorder_customer() -> SimplePreorderCustomer:
 
 	var customer := get_node_or_null(preorder_customer_path) as SimplePreorderCustomer
 	if customer != null and customer.has_method("is_waiting_for_preorder") and customer.is_waiting_for_preorder():
+		return customer
+
+	return null
+
+
+func _get_waiting_service_customer() -> Node:
+	if service_customer_path.is_empty():
+		return null
+
+	var customer := get_node_or_null(service_customer_path)
+	if (
+		customer != null
+		and customer.has_method("is_waiting_for_service")
+		and bool(customer.call("is_waiting_for_service"))
+	):
 		return customer
 
 	return null

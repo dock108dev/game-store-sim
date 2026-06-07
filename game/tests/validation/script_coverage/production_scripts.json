@@ -99,6 +99,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/simple_service_customer.gd",
+      "tests": [
+        "res://tests/gut/test_service_customer.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/customer_manager.gd",
       "tests": [
         "res://tests/gut/test_customer_manager.gd"
@@ -179,6 +186,7 @@
       "script": "res://scripts/systems/transaction_ledger.gd",
       "tests": [
         "res://tests/gut/test_customer_sale_flow.gd",
+        "res://tests/gut/test_service_customer.gd",
         "res://tests/gut/test_store_save_codec.gd"
       ],
       "critical": true

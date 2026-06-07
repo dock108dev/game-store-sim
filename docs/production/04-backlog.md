@@ -35,6 +35,14 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add accept/counter/decline customer response. Done for cash accept, cash counteroffer adjustment, store-credit accept, and decline.
 - Add acquired item to inventory. Done for accepted trade-ins moving into the receiving box.
 
+## Service Counter Slice
+
+- Add first service request customer. Done as an in-store disc resurfacing customer at the register.
+- Add service request details. Done for service name, item name, price, internal cost, and turnaround note.
+- Complete service at the register. Done after buyer, trade-in, and preorder queues clear.
+- Record service revenue, cost, and profit. Done in the transaction ledger, store session, recent activity, and closed-day report.
+- Keep service work on the register. Done without adding another terminal or standalone service workstation.
+
 ## Store Layout Slice
 
 - Add fixture and equipment ordering interface. Done for ordering a pending game display rack from the backroom computer.
@@ -84,6 +92,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
 - Keep named validation screenshots current for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
+- Keep the service-request validation screenshot current as register service work changes.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex. Started with catalog count, uniqueness, variety, pricing sanity, and fictional-name checks.
