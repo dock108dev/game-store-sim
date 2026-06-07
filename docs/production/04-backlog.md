@@ -85,7 +85,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add supplier message artifact. Done as an optional receiving-box supplier note with metadata, inspection text, hidden-event flagging, and validation screenshot coverage.
 - Add optional evidence storage. Done as a hidden evidence service that can store deduped clue records from mismatched serial items and supplier messages.
 - Add one suspicious customer encounter. Done as an optional cash-buyer interaction near the register that records a hidden event and evidence without entering the buyer queue.
-- Keep all hidden-thread content optional and avoid blocking normal store progression. Current hidden-thread cues are passive until inspected or talked to.
+- Keep all hidden-thread content optional and avoid blocking normal store progression. Done with passive hidden-thread cues until inspected or talked to.
 
 ## Presentation Polish
 
