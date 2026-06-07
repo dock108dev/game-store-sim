@@ -121,6 +121,31 @@ func test_day_summary_panel_commits_release_allocation_from_backroom_computer() 
 	assert_false(_panel.commit_allocation_button.disabled)
 
 
+func test_day_summary_panel_starts_launch_day_and_shows_release_outcome() -> void:
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	var preorder := _ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	_session.apply_preorder_deposit(preorder)
+	_session.commit_release_allocation("release_neon_skyline", 4)
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.end_day())
+	assert_true(_panel.end_day())
+	assert_eq(_session.day_number, 2)
+	assert_true(_panel.end_day())
+	assert_true(_panel.end_day())
+
+	assert_eq(_session.day_number, 3)
+	assert_eq(_session.get_launch_event_count(), 1)
+	assert_string_contains(_panel.status_label.text, "Started day 3.")
+	assert_string_contains(_panel.status_label.text, "Resolved 1 launch.")
+	assert_string_contains(_panel.summary_label.text, "Launch events: 1")
+	assert_string_contains(_panel.summary_label.text, "Reputation: 100")
+	assert_string_contains(_panel.summary_label.text, "Launch cash: $144.97")
+	assert_string_contains(_panel.release_calendar_label.text, "Launch events:")
+	assert_string_contains(_panel.release_calendar_label.text, "Neon Skyline launch: preorders 1/1, queue 2/2, missed 0")
+	assert_true(_panel.commit_allocation_button.disabled)
+
+
 func test_day_summary_panel_includes_inventory_summary() -> void:
 	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
 	add_child_autofree(item)

@@ -373,6 +373,81 @@ func test_store_session_rejects_release_allocation_over_limit_without_cash_or_af
 	assert_false(closed_session.can_commit_release_allocation("release_neon_skyline", 1))
 	assert_true(closed_session.commit_release_allocation("release_neon_skyline", 1).is_empty())
 
+	var launch_day_session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(launch_day_session)
+	launch_day_session.day_number = 3
+	assert_false(launch_day_session.can_commit_release_allocation("release_neon_skyline", 1))
+	assert_true(launch_day_session.commit_release_allocation("release_neon_skyline", 1).is_empty())
+
+
+func test_store_session_resolves_launch_day_preorders_and_queue_demand() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	session.ledger_path = session.get_path_to(ledger)
+	var preorder := ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	session.apply_preorder_deposit(preorder)
+	session.commit_release_allocation("release_neon_skyline", 4)
+
+	session.end_day()
+	var day_two := session.start_next_day()
+	session.end_day()
+	var day_three := session.start_next_day()
+
+	assert_eq(day_two.get("launch_event_count"), 0)
+	assert_eq(day_three.get("day_number"), 3)
+	assert_eq(day_three.get("launch_event_count"), 1)
+	assert_eq(session.get_launch_event_count(), 1)
+	assert_eq(session.get_cash_cents(), 52197)
+	assert_eq(session.get_total_launch_revenue_cents(), 14497)
+	assert_eq(session.get_total_launch_profit_cents(), 5397)
+	assert_eq(session.get_reputation_score(), 100)
+	var event := session.get_launch_events()[0]
+	assert_eq(event.get("release_id"), "release_neon_skyline")
+	assert_eq(event.get("allocation_quantity"), 4)
+	assert_eq(event.get("preorder_count"), 1)
+	assert_eq(event.get("preorder_fulfilled"), 1)
+	assert_eq(event.get("launch_queue_demand"), 2)
+	assert_eq(event.get("launch_queue_fulfilled"), 2)
+	assert_eq(event.get("missed_demand"), 0)
+	assert_eq(event.get("surplus_quantity"), 1)
+	assert_eq(event.get("reputation_delta"), 0)
+	assert_string_contains(session.get_preorder_summary_text(), "Neon Skyline preorder fulfilled day 3")
+	assert_string_contains(session.get_release_allocation_summary_text(), "Neon Skyline x4 launched $128.00 due day 3")
+	assert_string_contains(session.get_launch_summary_text(), "Neon Skyline launch: preorders 1/1, queue 2/2, missed 0")
+	assert_string_contains(session.get_summary_text(), "Launch events: 1")
+	assert_string_contains(session.get_summary_text(), "Launch cash: $144.97")
+	assert_string_contains(session.get_summary_text(), "Launch profit: $53.97")
+
+
+func test_store_session_launch_day_shortage_reduces_reputation() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	session.ledger_path = session.get_path_to(ledger)
+	var preorder := ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	session.apply_preorder_deposit(preorder)
+	session.commit_release_allocation("release_neon_skyline", 1)
+
+	session.end_day()
+	session.start_next_day()
+	session.end_day()
+	session.start_next_day()
+
+	var event := session.get_launch_events()[0]
+	assert_eq(event.get("preorder_fulfilled"), 1)
+	assert_eq(event.get("launch_queue_fulfilled"), 0)
+	assert_eq(event.get("missed_demand"), 2)
+	assert_eq(event.get("reputation_delta"), -10)
+	assert_eq(event.get("reputation_score"), 90)
+	assert_eq(session.get_reputation_score(), 90)
+	assert_eq(session.get_cash_cents(), 51799)
+	assert_string_contains(session.get_launch_summary_text(), "queue 0/2, missed 2")
+
 
 func test_store_session_filters_released_calendar_entries() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()

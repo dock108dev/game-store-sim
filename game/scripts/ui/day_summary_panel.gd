@@ -2,16 +2,17 @@ extends CanvasLayer
 class_name DaySummaryPanel
 
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
-@onready var summary_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SummaryLabel
-@onready var report_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReportLabel
-@onready var last_sale_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/LastSaleLabel
-@onready var inventory_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/InventoryLabel
-@onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReorderLabel
-@onready var demand_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DemandLabel
-@onready var market_drift_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/MarketDriftLabel
-@onready var release_calendar_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ReleaseCalendarLabel
-@onready var supplier_order_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SupplierOrderLabel
-@onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FixtureLabel
+@onready var content_scroll: ScrollContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer
+@onready var summary_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SummaryLabel
+@onready var report_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ReportLabel
+@onready var last_sale_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/LastSaleLabel
+@onready var inventory_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/InventoryLabel
+@onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ReorderLabel
+@onready var demand_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/DemandLabel
+@onready var market_drift_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/MarketDriftLabel
+@onready var release_calendar_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ReleaseCalendarLabel
+@onready var supplier_order_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SupplierOrderLabel
+@onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/FixtureLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var commit_allocation_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CommitAllocationButton
 @onready var order_games_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/OrderGamesButton
@@ -52,6 +53,7 @@ func open_for_session(session: Node) -> bool:
 
 	_session = session
 	_update_labels()
+	content_scroll.scroll_vertical = 0
 	show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	return true
@@ -77,13 +79,13 @@ func end_day() -> bool:
 			return false
 
 		var delivered_count := int(started.get("delivered_count", 0))
+		var launch_event_count := int(started.get("launch_event_count", 0))
+		var status_parts: Array[String] = ["Started day %d." % int(started.get("day_number", 0))]
 		if delivered_count > 0:
-			status_label.text = "Started day %d. Delivered %d order." % [
-				int(started.get("day_number", 0)),
-				delivered_count,
-			]
-		else:
-			status_label.text = "Started day %d." % int(started.get("day_number", 0))
+			status_parts.append("Delivered %d order." % delivered_count)
+		if launch_event_count > 0:
+			status_parts.append("Resolved %d launch." % launch_event_count)
+		status_label.text = " ".join(status_parts)
 		return true
 
 	_session.end_day()
@@ -194,6 +196,8 @@ func _update_labels() -> void:
 		release_calendar_label.text = _session.get_release_calendar_text()
 		if _session.has_method("get_release_allocation_summary_text"):
 			release_calendar_label.text += "\n" + _session.get_release_allocation_summary_text()
+		if _session.has_method("get_launch_summary_text"):
+			release_calendar_label.text += "\n" + _session.get_launch_summary_text()
 	else:
 		release_calendar_label.text = "Release calendar unavailable"
 	if _session.has_method("get_supplier_order_summary_text"):

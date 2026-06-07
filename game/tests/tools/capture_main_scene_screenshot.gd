@@ -84,6 +84,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"release_allocation":
 			_prepare_release_allocation(scene)
 			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
+		"launch_day":
+			_prepare_launch_day(scene)
+			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
 		"supplier_delivery":
 			_prepare_supplier_delivery(scene)
 			_set_camera(scene, Vector3(-3.0, 1.25, 2.65), Vector3(-3.35, 0.34, 3.45))
@@ -149,6 +152,27 @@ func _prepare_release_allocation(scene: Node) -> void:
 		session.commit_release_allocation("release_neon_skyline", 1)
 	if player.has_method("open_day_summary"):
 		player.open_day_summary(session)
+
+
+func _prepare_launch_day(scene: Node) -> void:
+	var ledger := scene.get_node_or_null("TransactionLedger")
+	var session := scene.get_node_or_null("StoreSession")
+	var player := scene.get_node_or_null("PlayerController")
+	if ledger == null or session == null or player == null:
+		return
+
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	var preorder: Dictionary = ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	session.apply_preorder_deposit(preorder)
+	session.commit_release_allocation("release_neon_skyline", 4)
+	session.end_day()
+	session.start_next_day()
+	session.end_day()
+	session.start_next_day()
+	if player.has_method("open_day_summary"):
+		player.open_day_summary(session)
+	if session.has_method("get_launch_summary_text"):
+		_show_overlay_message(scene, session.get_launch_summary_text())
 
 
 func _prepare_trade_in_offer(scene: Node) -> void:

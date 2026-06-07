@@ -18,6 +18,7 @@ SCREENSHOT_SCENARIOS=(
   backroom_summary
   release_calendar
   release_allocation
+  launch_day
   supplier_delivery
   fixture_ghost
   fixture_invalid_ghost

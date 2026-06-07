@@ -16,6 +16,8 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"supplier_orders": session.get_pending_supplier_orders(),
 		"preorder_deposits": session.get_preorder_deposits(),
 		"release_allocations": session.get_release_allocations(),
+		"launch_events": session.get_launch_events(),
+		"reputation_score": session.get_reputation_score(),
 		"inventory_items": _serialize_inventory_items(session.get_active_inventory_items()),
 	}
 	return data
@@ -46,6 +48,7 @@ func restore_into_existing_scene(
 	session.day_number = int(data.get("day_number", session.day_number))
 	session.cash_cents = int(data.get("cash_cents", session.starting_cash_cents))
 	session.is_day_closed = bool(data.get("is_day_closed", false))
+	session.reputation_score = int(data.get("reputation_score", session.reputation_score))
 
 	var transactions_value: Variant = data.get("transactions", [])
 	if typeof(transactions_value) == TYPE_ARRAY:
@@ -77,6 +80,11 @@ func restore_into_existing_scene(
 	if typeof(release_allocations_value) == TYPE_ARRAY and session.has_method("replace_release_allocations"):
 		var release_allocations: Array = release_allocations_value
 		session.replace_release_allocations(release_allocations)
+
+	var launch_events_value: Variant = data.get("launch_events", [])
+	if typeof(launch_events_value) == TYPE_ARRAY and session.has_method("replace_launch_events"):
+		var launch_events: Array = launch_events_value
+		session.replace_launch_events(launch_events)
 
 	return true
 

@@ -104,7 +104,7 @@ Features:
 - New release calendar. First pass done as a read-only backroom calendar for fictional launches with countdown, wholesale cost, suggested price, allocation note, and demand tier.
 - Preorder deposits. First pass done as a fixed register deposit for one fictional upcoming release customer, tracked separately from sale revenue and profit.
 - Allocation limits. First pass done as a backroom allocation commitment for one upcoming release, with cash reservation and per-release limit enforcement.
-- Launch-day queue and reputation stakes.
+- Launch-day queue and reputation stakes. First pass done as day-start preorder-first fulfillment, surplus launch-queue sales, launch cash/profit accounting, and reputation penalties for missed demand.
 
 Exit criteria:
 

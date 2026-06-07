@@ -31,6 +31,8 @@ var placed_fixtures: Array[Dictionary] = []
 var supplier_orders: Array[Dictionary] = []
 var preorder_deposits: Array[Dictionary] = []
 var release_allocations: Array[Dictionary] = []
+var launch_events: Array[Dictionary] = []
+var reputation_score: int = 100
 
 
 func _ready() -> void:
@@ -66,10 +68,13 @@ func start_next_day() -> Dictionary:
 	day_number += 1
 	is_day_closed = false
 	var delivered_orders := _deliver_due_supplier_orders()
+	var resolved_launches := _process_due_launches()
 	return {
 		"day_number": day_number,
 		"delivered_orders": delivered_orders,
 		"delivered_count": delivered_orders.size(),
+		"launch_events": resolved_launches,
+		"launch_event_count": resolved_launches.size(),
 	}
 
 
@@ -366,12 +371,26 @@ func get_preorder_summary_text() -> String:
 
 	var lines: Array[String] = ["Preorders:"]
 	for preorder in preorders:
-		lines.append("%s deposit %s due day %d for %s" % [
-			str(preorder.get("product_name", preorder.get("display_name", "Release"))),
-			format_money(int(preorder.get("deposit_cents", 0))),
-			int(preorder.get("release_day", 0)),
-			str(preorder.get("customer_id", "customer")),
-		])
+		var status := str(preorder.get("status", "pending"))
+		if status == "fulfilled":
+			lines.append("%s preorder fulfilled day %d for %s" % [
+				str(preorder.get("product_name", preorder.get("display_name", "Release"))),
+				int(preorder.get("fulfilled_day", preorder.get("release_day", 0))),
+				str(preorder.get("customer_id", "customer")),
+			])
+		elif status == "missed":
+			lines.append("%s preorder missed day %d for %s" % [
+				str(preorder.get("product_name", preorder.get("display_name", "Release"))),
+				int(preorder.get("missed_day", preorder.get("release_day", 0))),
+				str(preorder.get("customer_id", "customer")),
+			])
+		else:
+			lines.append("%s deposit %s due day %d for %s" % [
+				str(preorder.get("product_name", preorder.get("display_name", "Release"))),
+				format_money(int(preorder.get("deposit_cents", 0))),
+				int(preorder.get("release_day", 0)),
+				str(preorder.get("customer_id", "customer")),
+			])
 	return "\n".join(lines)
 
 
@@ -400,7 +419,7 @@ func can_commit_release_allocation(release_id: String, quantity: int = 1) -> boo
 	var release := get_release_by_id(release_id)
 	if release == null or is_day_closed:
 		return false
-	if quantity <= 0 or int(release.get("release_day")) < day_number:
+	if quantity <= 0 or int(release.get("release_day")) <= day_number:
 		return false
 
 	var wholesale_cost_cents := int(release.get("wholesale_cost_cents"))
@@ -473,6 +492,62 @@ func get_total_release_allocation_cost_cents() -> int:
 	return total
 
 
+func get_launch_events() -> Array[Dictionary]:
+	var events: Array[Dictionary] = []
+	for event in launch_events:
+		events.append(event.duplicate(true))
+	return events
+
+
+func replace_launch_events(events: Array) -> void:
+	launch_events.clear()
+	for event in events:
+		if typeof(event) == TYPE_DICTIONARY:
+			var row: Dictionary = event
+			launch_events.append(row.duplicate(true))
+
+
+func get_launch_event_count() -> int:
+	return launch_events.size()
+
+
+func get_total_launch_revenue_cents() -> int:
+	var total := 0
+	for event in launch_events:
+		total += int(event.get("cash_received_cents", 0))
+	return total
+
+
+func get_total_launch_profit_cents() -> int:
+	var total := 0
+	for event in launch_events:
+		total += int(event.get("gross_profit_cents", 0))
+	return total
+
+
+func get_reputation_score() -> int:
+	return reputation_score
+
+
+func get_launch_summary_text() -> String:
+	if launch_events.is_empty():
+		return "Launch events: none"
+
+	var lines: Array[String] = ["Launch events:"]
+	for event in launch_events:
+		lines.append("%s launch: preorders %d/%d, queue %d/%d, missed %d, cash %s, reputation %d" % [
+			str(event.get("product_name", "Release")),
+			int(event.get("preorder_fulfilled", 0)),
+			int(event.get("preorder_count", 0)),
+			int(event.get("launch_queue_fulfilled", 0)),
+			int(event.get("launch_queue_demand", 0)),
+			int(event.get("missed_demand", 0)),
+			format_money(int(event.get("cash_received_cents", 0))),
+			int(event.get("reputation_score", reputation_score)),
+		])
+	return "\n".join(lines)
+
+
 func get_release_allocation_summary_text() -> String:
 	if release_allocations.is_empty():
 		return "Release allocations: none"
@@ -481,22 +556,32 @@ func get_release_allocation_summary_text() -> String:
 	var cost_by_release := {}
 	var names_by_release := {}
 	var days_by_release := {}
+	var status_by_release := {}
 	for allocation in release_allocations:
 		var release_id := str(allocation.get("release_id", ""))
 		if release_id.is_empty():
 			continue
-		quantity_by_release[release_id] = int(quantity_by_release.get(release_id, 0)) + int(allocation.get("quantity", 0))
-		cost_by_release[release_id] = int(cost_by_release.get(release_id, 0)) + int(allocation.get("total_cost_cents", 0))
-		names_by_release[release_id] = str(allocation.get("product_name", allocation.get("display_name", release_id)))
+		var current_quantity := int(quantity_by_release.get(release_id, 0))
+		var current_cost := int(cost_by_release.get(release_id, 0))
+		quantity_by_release[release_id] = current_quantity + int(allocation.get("quantity", 0))
+		cost_by_release[release_id] = current_cost + int(allocation.get("total_cost_cents", 0))
+		names_by_release[release_id] = str(allocation.get(
+			"product_name",
+			allocation.get("display_name", release_id)
+		))
 		days_by_release[release_id] = int(allocation.get("release_day", 0))
+		status_by_release[release_id] = str(allocation.get("status", "committed"))
 
 	var release_ids := quantity_by_release.keys()
 	release_ids.sort()
 	var lines: Array[String] = ["Release allocations:"]
 	for release_id in release_ids:
-		lines.append("%s x%d committed %s due day %d" % [
+		var status := str(status_by_release.get(release_id, "committed"))
+		var status_label := "launched" if status == "launched" else "committed"
+		lines.append("%s x%d %s %s due day %d" % [
 			str(names_by_release.get(release_id, release_id)),
 			int(quantity_by_release[release_id]),
+			status_label,
 			format_money(int(cost_by_release.get(release_id, 0))),
 			int(days_by_release.get(release_id, 0)),
 		])
@@ -758,21 +843,25 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nPreorders: %d\nRelease allocations: %d\nRevenue: %s\nCost: %s\nTrade cash: %s\nStore credit: %s\nPreorder deposits: %s\nAllocation cost: %s\nProfit: %s\n%s" % [
+	return "Day %d - %s\nCash: %s | Reputation: %d\nSales: %d | Trade-ins: %d | Preorders: %d | Release allocations: %d | Launch events: %d\nRevenue: %s | Cost: %s | Profit: %s\nTrade cash: %s | Store credit: %s\nPreorder deposits: %s | Allocation cost: %s | Launch cash: %s | Launch profit: %s" % [
 		day_number,
+		get_status_label(),
 		format_money(get_cash_cents()),
+		get_reputation_score(),
 		get_sale_count(),
 		get_trade_in_count(),
 		get_preorder_deposit_count(),
 		get_release_allocation_count(),
+		get_launch_event_count(),
 		format_money(get_total_revenue_cents()),
 		format_money(get_total_cost_cents()),
+		format_money(get_total_profit_cents()),
 		format_money(get_total_trade_in_cost_cents()),
 		format_money(get_total_trade_in_credit_cents()),
 		format_money(get_total_preorder_deposit_cents()),
 		format_money(get_total_release_allocation_cost_cents()),
-		format_money(get_total_profit_cents()),
-		get_status_label(),
+		format_money(get_total_launch_revenue_cents()),
+		format_money(get_total_launch_profit_cents()),
 	]
 
 
@@ -850,6 +939,171 @@ func _find_fixture_order_index(order_id: String) -> int:
 		if str(fixture_orders[index].get("order_id", "")) == order_id:
 			return index
 	return -1
+
+
+func _process_due_launches() -> Array[Dictionary]:
+	var resolved: Array[Dictionary] = []
+	for release in get_release_calendar():
+		if int(release.get("release_day")) != day_number:
+			continue
+		var release_id := str(release.get("release_id"))
+		if _has_launch_event(release_id):
+			continue
+
+		var event := _resolve_launch_event(release)
+		if event.is_empty():
+			continue
+		launch_events.append(event)
+		resolved.append(event.duplicate(true))
+
+	return resolved
+
+
+func _resolve_launch_event(release: Resource) -> Dictionary:
+	var release_id := str(release.get("release_id"))
+	var preorder_indexes := _get_pending_preorder_indexes(release_id)
+	var allocation_quantity := _get_committed_release_allocation_quantity(release_id)
+	var preorder_count := preorder_indexes.size()
+	var launch_queue_demand := _get_launch_queue_demand(release)
+	var suggested_price_cents := int(release.get("suggested_price_cents"))
+	var wholesale_cost_cents := int(release.get("wholesale_cost_cents"))
+
+	var remaining_allocated := allocation_quantity
+	var preorder_fulfilled := mini(preorder_count, remaining_allocated)
+	remaining_allocated -= preorder_fulfilled
+	var queue_fulfilled := mini(launch_queue_demand, remaining_allocated)
+	remaining_allocated -= queue_fulfilled
+
+	var missed_preorders := preorder_count - preorder_fulfilled
+	var missed_queue := launch_queue_demand - queue_fulfilled
+	var missed_demand := missed_preorders + missed_queue
+	var fulfilled_count := preorder_fulfilled + queue_fulfilled
+	var preorder_balance_cents := _get_preorder_balance_cents(
+		preorder_indexes,
+		preorder_fulfilled,
+		suggested_price_cents
+	)
+	var queue_revenue_cents := queue_fulfilled * suggested_price_cents
+	var cash_received_cents := preorder_balance_cents + queue_revenue_cents
+	var booked_sale_value_cents := fulfilled_count * suggested_price_cents
+	var fulfilled_cost_cents := fulfilled_count * wholesale_cost_cents
+	var gross_profit_cents := booked_sale_value_cents - fulfilled_cost_cents
+	var reputation_delta := -missed_demand * 5
+
+	cash_cents = get_cash_cents() + cash_received_cents
+	reputation_score = clampi(reputation_score + reputation_delta, 0, 100)
+	_mark_preorders_for_launch(preorder_indexes, preorder_fulfilled)
+	_mark_allocations_launched(release_id, fulfilled_count, remaining_allocated)
+
+	return {
+		"event_id": "launch_event_%03d" % (launch_events.size() + 1),
+		"release_id": release_id,
+		"product_name": str(release.get("product_name")),
+		"display_name": str(release.get("product_name")),
+		"platform": str(release.get("platform")),
+		"release_day": day_number,
+		"allocation_quantity": allocation_quantity,
+		"preorder_count": preorder_count,
+		"preorder_fulfilled": preorder_fulfilled,
+		"launch_queue_demand": launch_queue_demand,
+		"launch_queue_fulfilled": queue_fulfilled,
+		"surplus_quantity": remaining_allocated,
+		"missed_demand": missed_demand,
+		"cash_received_cents": cash_received_cents,
+		"booked_sale_value_cents": booked_sale_value_cents,
+		"fulfilled_cost_cents": fulfilled_cost_cents,
+		"gross_profit_cents": gross_profit_cents,
+		"reputation_delta": reputation_delta,
+		"reputation_score": reputation_score,
+		"status": "resolved",
+	}
+
+
+func _has_launch_event(release_id: String) -> bool:
+	for event in launch_events:
+		if str(event.get("release_id", "")) == release_id:
+			return true
+	return false
+
+
+func _get_pending_preorder_indexes(release_id: String) -> Array[int]:
+	var indexes: Array[int] = []
+	for index in range(preorder_deposits.size()):
+		var preorder := preorder_deposits[index]
+		if str(preorder.get("release_id", "")) != release_id:
+			continue
+		if str(preorder.get("status", "pending")) != "pending":
+			continue
+		indexes.append(index)
+	return indexes
+
+
+func _get_committed_release_allocation_quantity(release_id: String) -> int:
+	var total := 0
+	for allocation in release_allocations:
+		if str(allocation.get("release_id", "")) != release_id:
+			continue
+		if str(allocation.get("status", "committed")) != "committed":
+			continue
+		total += int(allocation.get("quantity", 0))
+	return total
+
+
+func _get_launch_queue_demand(release: Resource) -> int:
+	match str(release.get("demand_tier")).to_lower():
+		"high":
+			return 2
+		"medium":
+			return 1
+		"low":
+			return 0
+		_:
+			return 1
+
+
+func _get_preorder_balance_cents(
+	preorder_indexes: Array[int],
+	fulfilled_count: int,
+	suggested_price_cents: int
+) -> int:
+	var total := 0
+	for offset in range(mini(fulfilled_count, preorder_indexes.size())):
+		var preorder := preorder_deposits[preorder_indexes[offset]]
+		var deposit_cents := int(preorder.get("deposit_cents", 0))
+		total += maxi(0, suggested_price_cents - deposit_cents)
+	return total
+
+
+func _mark_preorders_for_launch(preorder_indexes: Array[int], fulfilled_count: int) -> void:
+	for offset in range(preorder_indexes.size()):
+		var index := preorder_indexes[offset]
+		var preorder := preorder_deposits[index]
+		if offset < fulfilled_count:
+			preorder["status"] = "fulfilled"
+			preorder["fulfilled_day"] = day_number
+		else:
+			preorder["status"] = "missed"
+			preorder["missed_day"] = day_number
+		preorder_deposits[index] = preorder
+
+
+func _mark_allocations_launched(
+	release_id: String,
+	fulfilled_count: int,
+	surplus_quantity: int
+) -> void:
+	for index in range(release_allocations.size()):
+		var allocation := release_allocations[index]
+		if str(allocation.get("release_id", "")) != release_id:
+			continue
+		if str(allocation.get("status", "committed")) != "committed":
+			continue
+
+		allocation["status"] = "launched"
+		allocation["launched_day"] = day_number
+		allocation["fulfilled_quantity"] = fulfilled_count
+		allocation["surplus_quantity"] = surplus_quantity
+		release_allocations[index] = allocation
 
 
 func _collect_active_inventory_items(node: Node, items: Array[Node]) -> void:

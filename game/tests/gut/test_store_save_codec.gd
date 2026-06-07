@@ -43,6 +43,8 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq(release_allocations[0].get("release_id"), "release_neon_skyline")
 	assert_eq(release_allocations[0].get("quantity"), 1)
 	assert_eq(release_allocations[0].get("total_cost_cents"), 3200)
+	assert_eq((data.get("launch_events") as Array).size(), 0)
+	assert_eq(data.get("reputation_score"), 100)
 	var fixture_orders: Array = data.get("fixture_orders")
 	assert_eq(fixture_orders.size(), 1)
 	assert_eq(fixture_orders[0].get("fixture_id"), "fixture_game_display_rack")
@@ -70,6 +72,8 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"supplier_orders": [{"lot_id": "supplier_lot_used_games_001", "status": "pending_delivery"}],
 		"preorder_deposits": [{"release_id": "release_neon_skyline", "deposit_cents": 500}],
 		"release_allocations": [{"release_id": "release_neon_skyline", "quantity": 1}],
+		"launch_events": [{"release_id": "release_neon_skyline", "missed_demand": 2}],
+		"reputation_score": 90,
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
 
@@ -85,6 +89,8 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("supplier_orders") as Array)[0].get("lot_id"), "supplier_lot_used_games_001")
 	assert_eq((decoded.get("preorder_deposits") as Array)[0].get("release_id"), "release_neon_skyline")
 	assert_eq((decoded.get("release_allocations") as Array)[0].get("release_id"), "release_neon_skyline")
+	assert_eq((decoded.get("launch_events") as Array)[0].get("release_id"), "release_neon_skyline")
+	assert_eq(int(decoded.get("reputation_score")), 90)
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
 
@@ -161,6 +167,23 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"status": "committed",
 			}
 		],
+		"launch_events": [
+			{
+				"event_id": "launch_event_001",
+				"release_id": "release_neon_skyline",
+				"product_name": "Neon Skyline",
+				"release_day": 3,
+				"preorder_count": 1,
+				"preorder_fulfilled": 1,
+				"launch_queue_demand": 2,
+				"launch_queue_fulfilled": 1,
+				"missed_demand": 1,
+				"cash_received_cents": 9498,
+				"gross_profit_cents": 3598,
+				"reputation_score": 95,
+			}
+		],
+		"reputation_score": 95,
 		"inventory_items": [
 			{
 				"instance_id": "item_used_star_trader_001",
@@ -184,5 +207,9 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_total_preorder_deposit_cents(), 500)
 	assert_eq(session.get_release_allocation_count(), 2)
 	assert_eq(session.get_total_release_allocation_cost_cents(), 6400)
+	assert_eq(session.get_launch_event_count(), 1)
+	assert_eq(session.get_total_launch_revenue_cents(), 9498)
+	assert_eq(session.get_total_launch_profit_cents(), 3598)
+	assert_eq(session.get_reputation_score(), 95)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")
