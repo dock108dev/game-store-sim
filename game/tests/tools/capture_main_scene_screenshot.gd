@@ -68,10 +68,11 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
 		"customer_queue":
 			_prepare_customer_queue(scene)
-			_set_camera(scene, Vector3(0.0, 1.7, -4.05), Vector3(1.0, 0.9, -3.3))
+			_hide_node(scene, "PlayerController")
+			_set_camera(scene, Vector3(0.35, 2.05, -5.15), Vector3(-0.2, 0.9, -3.55))
 		"trade_in_offer":
 			_prepare_trade_in_offer(scene)
-			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))
+			_set_camera(scene, Vector3(-0.15, 1.65, -4.55), Vector3(0.7, 0.95, -3.15))
 		"preorder_deposit":
 			_prepare_preorder_deposit(scene)
 			_set_camera(scene, Vector3(0.6, 1.7, -3.6), Vector3(2.2, 1.05, -2.4))

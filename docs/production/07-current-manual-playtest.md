@@ -76,6 +76,8 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Overpriced-item refusal feedback is readable and does not look like a register failure.
 - Apply-to-matching pricing reads clearly and does not make the direct pricing panel feel like a separate terminal.
 - Trade-in seller placement, carried item, offer panel, counteroffer controls, cash accept, store-credit accept, decline controls, prompt, and completion message read clearly at the register; the carried item should read as held, not floating through the seller or counter.
+- Buyer, trade-in, preorder, service, and suspicious customers should read as separate people with separate jobs, not as one register pileup.
+- Used-game cases should look like compact boxed games on the rack, in the player's hand, and in customer hands; they should not read like oversized posters.
 - Backroom computer reads as the management terminal, not another register.
 - Summary panel text and buttons fit in the actual game window.
 - Closed-day report text is readable and understandable after ending the day.

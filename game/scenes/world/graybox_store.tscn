@@ -186,16 +186,16 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 customer_id = "customer_002"
 
 [node name="TradeInCustomer" parent="." instance=ExtResource("10_trade_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.05, 0, -3.2)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.25, 0, -3.9)
 
 [node name="PreorderCustomer" parent="." instance=ExtResource("15_preorder_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.55, 0, -3.45)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.55, 0, -3.95)
 
 [node name="ServiceCustomer" parent="." instance=ExtResource("16_service_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.05, 0, -3.7)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.35, 0, -3.65)
 
 [node name="SuspiciousCustomer" parent="." instance=ExtResource("14_suspicious_customer")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -0.95, 0, -3.55)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -2.15, 0, -3.2)
 event_log_path = NodePath("../SuspiciousEventLog")
 evidence_storage_path = NodePath("../EvidenceStorage")
 

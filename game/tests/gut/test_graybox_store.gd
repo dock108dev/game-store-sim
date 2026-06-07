@@ -369,6 +369,27 @@ func test_customer_manager_paths_validate_inside_store() -> void:
 	assert_eq(manager.validate_customer_paths(), [])
 
 
+func test_register_area_customer_positions_are_spaced_for_readability() -> void:
+	var manager := _store.get_node("CustomerManager")
+	var register_customers: Array[Node3D] = [
+		_store.get_node("TradeInCustomer") as Node3D,
+		_store.get_node("PreorderCustomer") as Node3D,
+		_store.get_node("ServiceCustomer") as Node3D,
+		_store.get_node("SuspiciousCustomer") as Node3D,
+	]
+
+	for index in range(register_customers.size()):
+		for next_index in range(index + 1, register_customers.size()):
+			assert_gte(
+				_flat_distance_xz(register_customers[index].global_position, register_customers[next_index].global_position),
+				0.75
+			)
+
+	for customer in register_customers:
+		assert_gte(_flat_distance_xz(customer.global_position, manager.register_queue_start), 0.65)
+		assert_true(manager.is_position_inside_store(customer.global_position))
+
+
 func test_no_standalone_pricing_workstation_exists() -> void:
 	assert_null(_store.get_node_or_null("PricingWorkstation"))
 
@@ -379,3 +400,7 @@ func test_no_standalone_price_register_exists() -> void:
 
 func test_game_display_rack_exists() -> void:
 	assert_not_null(_store.get_node_or_null("GameDisplayRack"))
+
+
+func _flat_distance_xz(first: Vector3, second: Vector3) -> float:
+	return Vector2(first.x, first.z).distance_to(Vector2(second.x, second.z))

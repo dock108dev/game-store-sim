@@ -170,6 +170,14 @@ func test_customer_manager_validates_queue_spacing() -> void:
 	assert_true(issues.has("queue_spacing_1_too_tight"))
 
 
+func test_customer_manager_default_queue_spacing_is_readable() -> void:
+	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()
+	add_child_autofree(manager)
+
+	assert_gte(manager.register_queue_spacing.length(), manager.minimum_queue_spacing_distance)
+	assert_gte(manager._queue_position_for_index(0).distance_to(manager._queue_position_for_index(1)), 0.62)
+
+
 func test_customer_manager_validates_customer_approach_positions() -> void:
 	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
 	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()

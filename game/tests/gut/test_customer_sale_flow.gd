@@ -22,6 +22,11 @@ func test_customer_claims_matching_stocked_item_and_waits_at_register() -> void:
 	assert_eq(item.get("location_id"), "customer:customer_001")
 	assert_true(collision_shape.disabled)
 	assert_almost_eq(customer.global_position.x, customer.register_queue_position.x, 0.001)
+	assert_lte(item.scale.x, 0.46)
+	assert_gte(item.position.y, 0.6)
+	assert_lte(item.position.y, 0.75)
+	assert_gt(item.position.x, 0.0)
+	assert_lt(item.position.z, 0.0)
 
 
 func test_customer_moves_to_stocked_item_before_waiting_at_register() -> void:

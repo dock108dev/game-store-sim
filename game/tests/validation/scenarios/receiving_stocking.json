@@ -53,7 +53,7 @@
       "id": "used_game_compact_case_scale",
       "name": "Used-game case is compact enough for racks, carried view, and receiving-box placement",
       "status": "automated",
-      "critical": false,
+      "critical": true,
       "evidence": "res://tests/gut/test_product_item.gd::test_used_game_case_is_compact_for_display_racks"
     },
     {

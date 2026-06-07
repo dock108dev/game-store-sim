@@ -36,7 +36,7 @@ position = Vector3(0, 1.25, 0)
 mesh = SubResource("SphereMesh_head")
 
 [node name="TradeInItem" parent="." instance=ExtResource("2_used_game")]
-transform = Transform3D(0.52, 0, 0, 0, 0.52, 0, 0, 0, 0.52, 0.16, 0.66, -0.24)
+transform = Transform3D(0.44, 0, 0, 0, 0.44, 0, 0, 0, 0.44, 0.2, 0.6, -0.2)
 product = ExtResource("3_product")
 instance_id = "item_trade_moon_escape_001"
 location_id = "customer:trade_seller_001"

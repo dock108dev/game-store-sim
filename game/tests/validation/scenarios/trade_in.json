@@ -18,7 +18,7 @@
       "id": "trade_in_customer_carried_item_pose",
       "name": "Trade-in seller carried item is compact and anchored near the body",
       "status": "automated",
-      "critical": false,
+      "critical": true,
       "evidence": "res://tests/gut/test_trade_in_customer.gd::test_trade_in_customer_carried_item_is_compact_and_body_anchored"
     },
     {

@@ -153,6 +153,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_transaction_ledger_records_sale_totals"
+    },
+    {
+      "id": "register_area_customer_spacing",
+      "name": "Register-area buyer, trade-in, preorder, service, and suspicious customers keep readable spacing",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_area_customer_positions_are_spaced_for_readability"
     }
   ]
 }

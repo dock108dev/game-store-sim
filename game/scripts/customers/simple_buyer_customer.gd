@@ -16,8 +16,8 @@ const STATE_SALE_COMPLETE := "sale_complete"
 @export var item_approach_offset: Vector3 = Vector3(0.0, 0.0, -0.85)
 @export var movement_speed: float = 3.2
 @export var arrival_distance: float = 0.06
-@export var carried_item_position: Vector3 = Vector3(0.0, 0.85, -0.35)
-@export var carried_item_scale: Vector3 = Vector3(0.55, 0.55, 0.55)
+@export var carried_item_position: Vector3 = Vector3(0.18, 0.68, -0.24)
+@export var carried_item_scale: Vector3 = Vector3(0.44, 0.44, 0.44)
 
 var state: String = STATE_BROWSING
 var last_feedback: String = ""

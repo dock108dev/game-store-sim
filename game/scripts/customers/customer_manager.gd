@@ -2,11 +2,11 @@ extends Node3D
 class_name CustomerManager
 
 @export var target_product_id: String = "used_star_trader"
-@export var register_queue_start: Vector3 = Vector3(1.0, 0.0, -3.35)
-@export var register_queue_spacing: Vector3 = Vector3(-0.45, 0.0, 0.18)
+@export var register_queue_start: Vector3 = Vector3(1.65, 0.0, -3.55)
+@export var register_queue_spacing: Vector3 = Vector3(-0.7, 0.0, -0.2)
 @export var playable_min: Vector3 = Vector3(-6.6, 0.0, -5.6)
 @export var playable_max: Vector3 = Vector3(6.6, 0.0, 5.7)
-@export var minimum_queue_spacing_distance: float = 0.35
+@export var minimum_queue_spacing_distance: float = 0.62
 @export var display_slot_paths: Array[NodePath] = []
 
 

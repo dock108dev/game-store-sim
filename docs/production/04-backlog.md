@@ -86,6 +86,12 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add one suspicious customer encounter. Done as an optional cash-buyer interaction near the register that records a hidden event and evidence without entering the buyer queue.
 - Keep all hidden-thread content optional and avoid blocking normal store progression. Current hidden-thread cues are passive until inspected or talked to.
 
+## Presentation Polish
+
+- Keep used-game cases compact enough for wall racks, player carry, and customer carry. Done with smaller shared case geometry plus automated compact-case and carry-pose checks.
+- Keep register-area customers from stacking into each other. Done with wider buyer queue spacing, separated special-customer placements, and a main-scene spacing test.
+- Keep trade-in items visually held rather than floating at the counter. Done by lowering/shrinking the trade-in carried item and requiring body-anchored pose validation.
+
 ## Tooling
 
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.

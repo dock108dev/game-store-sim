@@ -80,7 +80,7 @@ func pick_up_item(item: Node3D) -> bool:
 
 	hold_anchor.add_child(item)
 	item.transform = Transform3D(Basis(Vector3.UP, PI), Vector3.ZERO)
-	item.scale = Vector3(0.58, 0.58, 0.58)
+	item.scale = Vector3(0.5, 0.5, 0.5)
 	_held_item = item
 
 	if item.has_method("set_held"):
