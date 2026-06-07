@@ -71,6 +71,7 @@ func test_used_game_inspect_text_is_product_backed() -> void:
 	var text: String = _item.interact()
 	assert_string_contains(text, "Star Trader")
 	assert_string_contains(text, "Orbit 64")
+	assert_string_contains(text, "Cost $9.00")
 	assert_string_contains(text, "Market $24.99")
 	assert_string_contains(text, "Price $21.99")
 	assert_string_contains(text, "receiving_box_001")
@@ -151,4 +152,5 @@ func test_product_definition_describes_retail_fields() -> void:
 	assert_string_contains(description, "Star Trader")
 	assert_string_contains(description, "Orbit 64")
 	assert_string_contains(description, "Good")
+	assert_string_contains(description, "Cost $9.00")
 	assert_string_contains(description, "Market $24.99")

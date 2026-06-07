@@ -21,6 +21,7 @@ func describe() -> String:
 		platform,
 		condition.capitalize(),
 		completeness.capitalize(),
+		"Cost $%0.2f" % (cost_basis_cents / 100.0),
 		"Market $%0.2f" % (market_value_cents / 100.0),
 	]
 	return " - ".join(details)

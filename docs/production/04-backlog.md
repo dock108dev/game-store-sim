@@ -12,7 +12,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## First Playable Counter Loop
 
 - Pick up an item from a receiving box. Done.
-- Inspect product name, platform, condition, cost, and market value.
+- Inspect product name, platform, condition, cost, and market value. Done with product-backed used-item inspection text.
 - Set a sale price. Done for used items.
 - Optionally apply a used-item sale price to active matching copies. Done from the direct pricing panel.
 - Place the item on a shelf/display rack. Done.

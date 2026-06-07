@@ -79,7 +79,7 @@
     },
     {
       "id": "used_game_inspect_text",
-      "name": "Used-game inspect text includes product, price, market value, and location",
+      "name": "Used-game inspect text includes product, cost, price, market value, and location",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_product_item.gd::test_used_game_inspect_text_is_product_backed"
