@@ -30,6 +30,7 @@ var fixture_orders: Array[Dictionary] = []
 var placed_fixtures: Array[Dictionary] = []
 var supplier_orders: Array[Dictionary] = []
 var preorder_deposits: Array[Dictionary] = []
+var release_allocations: Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -395,6 +396,113 @@ func replace_preorder_deposits(preorders: Array) -> void:
 			preorder_deposits.append(row.duplicate(true))
 
 
+func can_commit_release_allocation(release_id: String, quantity: int = 1) -> bool:
+	var release := get_release_by_id(release_id)
+	if release == null or is_day_closed:
+		return false
+	if quantity <= 0 or int(release.get("release_day")) < day_number:
+		return false
+
+	var wholesale_cost_cents := int(release.get("wholesale_cost_cents"))
+	var allocation_limit := int(release.get("allocation_limit"))
+	var remaining_allocation := allocation_limit - get_release_allocation_quantity(release_id)
+	return wholesale_cost_cents > 0 \
+		and allocation_limit > 0 \
+		and quantity <= remaining_allocation \
+		and get_cash_cents() >= wholesale_cost_cents * quantity
+
+
+func commit_release_allocation(release_id: String, quantity: int = 1) -> Dictionary:
+	var release := get_release_by_id(release_id)
+	if release == null or not can_commit_release_allocation(release_id, quantity):
+		return {}
+
+	var wholesale_cost_cents := int(release.get("wholesale_cost_cents"))
+	var total_cost_cents := wholesale_cost_cents * quantity
+	cash_cents = get_cash_cents() - total_cost_cents
+	var allocation := {
+		"allocation_id": "release_allocation_%03d" % (release_allocations.size() + 1),
+		"release_id": str(release.get("release_id")),
+		"product_name": str(release.get("product_name")),
+		"display_name": str(release.get("product_name")),
+		"platform": str(release.get("platform")),
+		"release_day": int(release.get("release_day")),
+		"quantity": quantity,
+		"wholesale_cost_cents": wholesale_cost_cents,
+		"total_cost_cents": total_cost_cents,
+		"status": "committed",
+	}
+	release_allocations.append(allocation)
+	return allocation.duplicate(true)
+
+
+func get_release_allocations() -> Array[Dictionary]:
+	var allocations: Array[Dictionary] = []
+	for allocation in release_allocations:
+		allocations.append(allocation.duplicate(true))
+	return allocations
+
+
+func replace_release_allocations(allocations: Array) -> void:
+	release_allocations.clear()
+	for allocation in allocations:
+		if typeof(allocation) == TYPE_DICTIONARY:
+			var row: Dictionary = allocation
+			release_allocations.append(row.duplicate(true))
+
+
+func get_release_allocation_count() -> int:
+	var total := 0
+	for allocation in release_allocations:
+		total += int(allocation.get("quantity", 0))
+	return total
+
+
+func get_release_allocation_quantity(release_id: String) -> int:
+	var total := 0
+	for allocation in release_allocations:
+		if str(allocation.get("release_id", "")) == release_id:
+			total += int(allocation.get("quantity", 0))
+	return total
+
+
+func get_total_release_allocation_cost_cents() -> int:
+	var total := 0
+	for allocation in release_allocations:
+		total += int(allocation.get("total_cost_cents", 0))
+	return total
+
+
+func get_release_allocation_summary_text() -> String:
+	if release_allocations.is_empty():
+		return "Release allocations: none"
+
+	var quantity_by_release := {}
+	var cost_by_release := {}
+	var names_by_release := {}
+	var days_by_release := {}
+	for allocation in release_allocations:
+		var release_id := str(allocation.get("release_id", ""))
+		if release_id.is_empty():
+			continue
+		quantity_by_release[release_id] = int(quantity_by_release.get(release_id, 0)) + int(allocation.get("quantity", 0))
+		cost_by_release[release_id] = int(cost_by_release.get(release_id, 0)) + int(allocation.get("total_cost_cents", 0))
+		names_by_release[release_id] = str(allocation.get("product_name", allocation.get("display_name", release_id)))
+		days_by_release[release_id] = int(allocation.get("release_day", 0))
+
+	var release_ids := quantity_by_release.keys()
+	release_ids.sort()
+	var lines: Array[String] = ["Release allocations:"]
+	for release_id in release_ids:
+		lines.append("%s x%d committed %s due day %d" % [
+			str(names_by_release.get(release_id, release_id)),
+			int(quantity_by_release[release_id]),
+			format_money(int(cost_by_release.get(release_id, 0))),
+			int(days_by_release.get(release_id, 0)),
+		])
+	return "\n".join(lines)
+
+
 func get_supplier_lot(lot_id: String) -> Resource:
 	for lot in get_available_supplier_lots():
 		if str(lot.get("lot_id")) == lot_id:
@@ -650,17 +758,19 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nPreorders: %d\nRevenue: %s\nCost: %s\nTrade cash: %s\nStore credit: %s\nPreorder deposits: %s\nProfit: %s\n%s" % [
+	return "Day %d\nCash: %s\nSales: %d\nTrade-ins: %d\nPreorders: %d\nRelease allocations: %d\nRevenue: %s\nCost: %s\nTrade cash: %s\nStore credit: %s\nPreorder deposits: %s\nAllocation cost: %s\nProfit: %s\n%s" % [
 		day_number,
 		format_money(get_cash_cents()),
 		get_sale_count(),
 		get_trade_in_count(),
 		get_preorder_deposit_count(),
+		get_release_allocation_count(),
 		format_money(get_total_revenue_cents()),
 		format_money(get_total_cost_cents()),
 		format_money(get_total_trade_in_cost_cents()),
 		format_money(get_total_trade_in_credit_cents()),
 		format_money(get_total_preorder_deposit_cents()),
+		format_money(get_total_release_allocation_cost_cents()),
 		format_money(get_total_profit_cents()),
 		get_status_label(),
 	]

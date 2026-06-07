@@ -85,6 +85,13 @@
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     },
     {
+      "id": "release_allocation_screenshot",
+      "name": "Release-allocation validation screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
       "id": "supplier_delivery_screenshot",
       "name": "Supplier-delivery validation screenshot is captured and checked",
       "status": "automated",

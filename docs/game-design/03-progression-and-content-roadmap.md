@@ -103,7 +103,7 @@ Features:
 - Delivery delays. First pass done as next-day receiving-box delivery.
 - New release calendar. First pass done as a read-only backroom calendar for fictional launches with countdown, wholesale cost, suggested price, allocation note, and demand tier.
 - Preorder deposits. First pass done as a fixed register deposit for one fictional upcoming release customer, tracked separately from sale revenue and profit.
-- Allocation limits.
+- Allocation limits. First pass done as a backroom allocation commitment for one upcoming release, with cash reservation and per-release limit enforcement.
 - Launch-day queue and reputation stakes.
 
 Exit criteria:

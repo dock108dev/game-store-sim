@@ -326,6 +326,54 @@ func test_store_session_formats_upcoming_release_calendar() -> void:
 	assert_string_contains(summary, "demand High")
 
 
+func test_store_session_commits_release_allocation_and_reserves_cash() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var allocation := session.commit_release_allocation("release_neon_skyline", 1)
+
+	assert_eq(allocation.get("release_id"), "release_neon_skyline")
+	assert_eq(allocation.get("product_name"), "Neon Skyline")
+	assert_eq(allocation.get("quantity"), 1)
+	assert_eq(allocation.get("wholesale_cost_cents"), 3200)
+	assert_eq(allocation.get("total_cost_cents"), 3200)
+	assert_eq(allocation.get("status"), "committed")
+	assert_eq(session.get_cash_cents(), 46800)
+	assert_eq(session.get_release_allocation_count(), 1)
+	assert_eq(session.get_release_allocation_quantity("release_neon_skyline"), 1)
+	assert_eq(session.get_total_release_allocation_cost_cents(), 3200)
+	assert_string_contains(session.get_release_allocation_summary_text(), "Release allocations:")
+	assert_string_contains(session.get_release_allocation_summary_text(), "Neon Skyline x1 committed $32.00 due day 3")
+	assert_string_contains(session.get_summary_text(), "Release allocations: 1")
+	assert_string_contains(session.get_summary_text(), "Allocation cost: $32.00")
+
+
+func test_store_session_rejects_release_allocation_over_limit_without_cash_or_after_close() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	assert_true(session.can_commit_release_allocation("release_neon_skyline", 4))
+	assert_true(session.commit_release_allocation("release_neon_skyline", 5).is_empty())
+	assert_eq(session.get_release_allocation_count(), 0)
+
+	assert_false(session.commit_release_allocation("release_neon_skyline", 4).is_empty())
+	assert_false(session.can_commit_release_allocation("release_neon_skyline", 1))
+	assert_true(session.commit_release_allocation("release_neon_skyline", 1).is_empty())
+	assert_eq(session.get_release_allocation_count(), 4)
+
+	var poor_session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(poor_session)
+	poor_session.cash_cents = 1000
+	assert_false(poor_session.can_commit_release_allocation("release_neon_skyline", 1))
+	assert_true(poor_session.commit_release_allocation("release_neon_skyline", 1).is_empty())
+
+	var closed_session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(closed_session)
+	closed_session.end_day()
+	assert_false(closed_session.can_commit_release_allocation("release_neon_skyline", 1))
+	assert_true(closed_session.commit_release_allocation("release_neon_skyline", 1).is_empty())
+
+
 func test_store_session_filters_released_calendar_entries() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

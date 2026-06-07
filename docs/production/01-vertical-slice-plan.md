@@ -127,6 +127,7 @@ Technical:
 35. Add first supplier ordering and delivery delay. Done as a backroom `Order Games` action that reserves cash, creates a pending due-day order, and delivers used games into receiving when the next day starts.
 36. Add first new-release calendar. Done as fictional upcoming launch data surfaced on the backroom computer with countdown, wholesale cost, suggested price, allocation note, demand tier, and screenshot coverage.
 37. Add first preorder deposit. Done as one register preorder customer for `Neon Skyline`, with a fixed deposit tracked separately from sale revenue and profit.
+38. Add first launch allocation commitment. Done as a backroom `Commit Allocation` action for `Neon Skyline`, with immediate wholesale cash reservation, allocation-limit enforcement, persistence, and screenshot coverage.
 
 ## Slice Review Questions
 

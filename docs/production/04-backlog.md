@@ -66,7 +66,8 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add fictional upcoming launch data. Done as data-driven `NewRelease` resources with release day, platform, wholesale cost, suggested price, allocation limit, and demand tier.
 - Surface launch planning information on the backroom computer. Done as a read-only release-calendar section with countdown text.
 - Add preorder deposits. Done as a fixed `$5.00` register deposit for one fictional upcoming release customer, with preorder cash and obligations tracked separately from sales revenue and profit.
-- Keep allocation commitments, launch-day queue, preorder fulfillment, and reputation consequences out of this slice until deposits can be validated in normal play.
+- Add allocation commitments. Done as a backroom `Commit Allocation` action for the first upcoming release, reserving wholesale cash immediately and enforcing the release allocation limit.
+- Keep launch-day queue, preorder fulfillment, and reputation consequences out of this slice until allocation planning can be validated in normal play.
 
 ## Hidden Thread Slice
 
@@ -82,7 +83,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
 - Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
 - Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
-- Keep named validation screenshots current for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, backroom summary, release calendar, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
+- Keep named validation screenshots current for main scene, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, backroom summary, release calendar, release allocation, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
 - Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
 - Add debug test maps only when they are called by the validation gate or a documented manual checklist.
 - Extend product data validation inside the local gate as product resources become more complex. Started with catalog count, uniqueness, variety, pricing sanity, and fictional-name checks.

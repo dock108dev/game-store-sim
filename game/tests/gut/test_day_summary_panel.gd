@@ -33,9 +33,11 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.release_calendar_label.text, "Release calendar:")
 	assert_string_contains(_panel.release_calendar_label.text, "Neon Skyline")
 	assert_string_contains(_panel.release_calendar_label.text, "MSRP $49.99")
+	assert_string_contains(_panel.release_calendar_label.text, "Release allocations: none")
 	assert_string_contains(_panel.supplier_order_label.text, "Order Used Game Starter Lot $27.00")
 	assert_string_contains(_panel.supplier_order_label.text, "Pending delivery: none")
 	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00")
+	assert_false(_panel.commit_allocation_button.disabled)
 	assert_false(_panel.order_games_button.disabled)
 	assert_false(_panel.order_rack_button.disabled)
 	assert_true(_panel.place_rack_button.disabled)
@@ -102,6 +104,21 @@ func test_day_summary_panel_includes_preorder_deposit_activity() -> void:
 	assert_string_contains(_panel.summary_label.text, "Preorders: 1")
 	assert_string_contains(_panel.summary_label.text, "Preorder deposits: $5.00")
 	assert_string_contains(_panel.last_sale_label.text, "Preorder Neon Skyline deposit $5.00")
+
+
+func test_day_summary_panel_commits_release_allocation_from_backroom_computer() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.commit_release_allocation())
+
+	assert_eq(_session.get_cash_cents(), 46800)
+	assert_eq(_session.get_release_allocation_count(), 1)
+	assert_string_contains(_panel.summary_label.text, "Cash: $468.00")
+	assert_string_contains(_panel.summary_label.text, "Release allocations: 1")
+	assert_string_contains(_panel.summary_label.text, "Allocation cost: $32.00")
+	assert_string_contains(_panel.release_calendar_label.text, "Neon Skyline x1 committed $32.00 due day 3")
+	assert_eq(_panel.status_label.text, "Committed 1 Neon Skyline allocation.")
+	assert_false(_panel.commit_allocation_button.disabled)
 
 
 func test_day_summary_panel_includes_inventory_summary() -> void:
@@ -235,6 +252,7 @@ func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_eq(_panel.status_label.text, "Day closed")
 	assert_string_contains(_panel.report_label.text, "Daily report day 1:")
 	assert_true(_panel.order_rack_button.disabled)
+	assert_true(_panel.commit_allocation_button.disabled)
 	assert_true(_panel.place_rack_button.disabled)
 	assert_false(_panel.end_day_button.disabled)
 	assert_eq(_panel.end_day_button.text, "Start Day")

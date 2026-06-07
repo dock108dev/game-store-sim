@@ -83,26 +83,31 @@ theme_override_constants/separation = 8
 alignment = 1
 
 [node name="OrderGamesButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(112, 44)
+custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
 text = "Order Games"
 
 [node name="OrderRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(112, 44)
+custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
 text = "Order Rack"
 
 [node name="PlaceRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(112, 44)
+custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
 text = "Place Rack"
 
+[node name="CommitAllocationButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(132, 44)
+layout_mode = 2
+text = "Commit Allocation"
+
 [node name="EndDayButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(112, 44)
+custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
 text = "End Day"
 
 [node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(112, 44)
+custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
 text = "Close"

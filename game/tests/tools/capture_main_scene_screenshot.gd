@@ -81,6 +81,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 		"release_calendar":
 			_prepare_release_calendar(scene)
 			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
+		"release_allocation":
+			_prepare_release_allocation(scene)
+			_set_camera(scene, Vector3(4.1, 1.55, 3.15), Vector3(4.65, 0.85, 4.35))
 		"supplier_delivery":
 			_prepare_supplier_delivery(scene)
 			_set_camera(scene, Vector3(-3.0, 1.25, 2.65), Vector3(-3.35, 0.34, 3.45))
@@ -132,6 +135,18 @@ func _prepare_release_calendar(scene: Node) -> void:
 	if session == null or player == null:
 		return
 
+	if player.has_method("open_day_summary"):
+		player.open_day_summary(session)
+
+
+func _prepare_release_allocation(scene: Node) -> void:
+	var session := scene.get_node_or_null("StoreSession")
+	var player := scene.get_node_or_null("PlayerController")
+	if session == null or player == null:
+		return
+
+	if session.has_method("commit_release_allocation"):
+		session.commit_release_allocation("release_neon_skyline", 1)
 	if player.has_method("open_day_summary"):
 		player.open_day_summary(session)
 

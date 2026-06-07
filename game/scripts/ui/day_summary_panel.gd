@@ -13,6 +13,7 @@ class_name DaySummaryPanel
 @onready var supplier_order_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SupplierOrderLabel
 @onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FixtureLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
+@onready var commit_allocation_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CommitAllocationButton
 @onready var order_games_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/OrderGamesButton
 @onready var order_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/OrderRackButton
 @onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/PlaceRackButton
@@ -21,12 +22,14 @@ class_name DaySummaryPanel
 
 const GAME_DISPLAY_RACK_ID := "fixture_game_display_rack"
 const USED_GAME_STARTER_LOT_ID := "supplier_lot_used_games_001"
+const NEON_SKYLINE_RELEASE_ID := "release_neon_skyline"
 
 var _session: Node = null
 
 
 func _ready() -> void:
 	hide()
+	commit_allocation_button.pressed.connect(commit_release_allocation)
 	order_games_button.pressed.connect(order_used_game_lot)
 	order_rack_button.pressed.connect(order_game_display_rack)
 	place_rack_button.pressed.connect(place_pending_rack)
@@ -85,6 +88,23 @@ func end_day() -> bool:
 
 	_session.end_day()
 	_update_labels()
+	return true
+
+
+func commit_release_allocation() -> bool:
+	if _session == null or not _session.has_method("commit_release_allocation"):
+		return false
+
+	var allocation: Dictionary = _session.commit_release_allocation(NEON_SKYLINE_RELEASE_ID, 1)
+	_update_labels()
+	if allocation.is_empty():
+		status_label.text = "Could not commit allocation."
+		return false
+
+	status_label.text = "Committed %d %s allocation." % [
+		int(allocation.get("quantity", 0)),
+		str(allocation.get("product_name", "release")),
+	]
 	return true
 
 
@@ -172,6 +192,8 @@ func _update_labels() -> void:
 		market_drift_label.text = "Market drift unavailable"
 	if _session.has_method("get_release_calendar_text"):
 		release_calendar_label.text = _session.get_release_calendar_text()
+		if _session.has_method("get_release_allocation_summary_text"):
+			release_calendar_label.text += "\n" + _session.get_release_allocation_summary_text()
 	else:
 		release_calendar_label.text = "Release calendar unavailable"
 	if _session.has_method("get_supplier_order_summary_text"):
@@ -183,6 +205,11 @@ func _update_labels() -> void:
 	else:
 		fixture_label.text = "Fixtures unavailable"
 	status_label.text = _session.get_status_label()
+	if _session.has_method("can_commit_release_allocation"):
+		commit_allocation_button.disabled = _session.is_day_closed \
+			or not _session.can_commit_release_allocation(NEON_SKYLINE_RELEASE_ID, 1)
+	else:
+		commit_allocation_button.disabled = true
 	if _session.has_method("can_order_supplier_lot"):
 		order_games_button.disabled = _session.is_day_closed \
 			or not _session.can_order_supplier_lot(USED_GAME_STARTER_LOT_ID)
