@@ -24,6 +24,8 @@ Completed commits:
 
 ## Slice 3: Backroom Computer And Menu Information Architecture
 
+Status: complete.
+
 Goal: make the backroom computer read as a management interface instead of a long debug summary.
 
 ### Stop 3.0: Computer IA Baseline
@@ -128,6 +130,24 @@ Validation:
 Commit:
 
 - `Sync backroom computer validation`
+
+### Slice 3 Result
+
+Completed commits:
+
+- `3063007` Section backroom computer readouts
+- `b6d9a91` Group backroom computer actions
+
+Validation:
+
+- `scripts/validate_godot.sh` passed after readout sectioning.
+- `scripts/validate_godot.sh` passed after action grouping.
+- Screenshot spot review covered `backroom_summary.png`, `release_calendar.png`, `release_allocation.png`, and `fixture_ghost.png`.
+
+Manual validation status:
+
+- Manual checklist and `manual_checks.json` are updated for the grouped computer controls.
+- Human controller/window validation is not performed by Codex; check button grouping, mouse capture, disabled states, and no register/backroom responsibility confusion during manual playtest.
 
 ## Slice 4: Customer Readability And Role Silhouettes
 

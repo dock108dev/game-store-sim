@@ -54,6 +54,8 @@ Validation:
 
 ## Slice 2: Backroom Computer And Menu Information Architecture
 
+Status: done.
+
 Outcome:
 
 - Backroom computer is organized into clear sections or tabs.
@@ -70,6 +72,7 @@ Likely work:
 Validation:
 
 - Existing day summary, supplier, fixture, release, service, preorder, and launch tests.
+- Automated day-summary scenarios for sectioned readouts and grouped actions.
 - Manual checks for panel readability, button labels, visual hierarchy, and mouse capture.
 
 ## Slice 3: Customer Readability And Role Silhouettes

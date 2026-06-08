@@ -28,8 +28,8 @@ Current implementation plan: `10-polish-execution-plan.md`.
 
 1. Production polish planning reset. Done in this docs slice.
 2. Backroom spatial and visual identity pass. Done.
-3. Backroom computer/menu information architecture pass. Next implementation target.
-4. Customer readability and role silhouette pass.
+3. Backroom computer/menu information architecture pass. Done.
+4. Customer readability and role silhouette pass. Next implementation target.
 5. Store lighting, materials, signage, and retail clutter pass.
 6. Product and fixture presentation pass.
 7. Validation/manual QA tightening for the full polish pass.
@@ -45,11 +45,11 @@ Current implementation plan: `10-polish-execution-plan.md`.
 
 ## Computer And Menu Polish
 
-- Split the backroom computer into clearer sections instead of one long mixed summary.
-- Create predictable grouping for reports, inventory, supplier orders, fixtures, release planning, and day controls.
-- Improve button labels, state text, disabled states, and status messages.
-- Make dense text fit at the actual game resolution.
-- Preserve all current accounting and session behavior while changing presentation.
+- Done: split the backroom computer into dashboard, activity, inventory, market, releases, and operations sections.
+- Done: grouped actions as Supplier, Storage, Release, Day, and Storage Placement controls.
+- Done: shortened button labels while keeping grouped context clear.
+- Done: preserved current accounting and session behavior while changing presentation.
+- Remaining polish risk: dense text still uses the same source strings and can be improved further during later menu polish if tabs become necessary.
 
 ## Customer Polish
 

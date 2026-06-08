@@ -134,6 +134,20 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
     },
     {
+      "id": "day_summary_panel_sectioned_readouts",
+      "name": "Backroom computer groups dashboard, activity, inventory, market, release, and operations readouts",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_groups_readouts_by_management_section"
+    },
+    {
+      "id": "day_summary_panel_grouped_actions",
+      "name": "Backroom computer groups supplier, storage, release, day, and placement actions",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_groups_actions_by_operation"
+    },
+    {
       "id": "day_summary_panel_recent_sale_activity",
       "name": "Day summary panel includes recent sale activity",
       "status": "automated",
