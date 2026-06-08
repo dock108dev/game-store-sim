@@ -76,6 +76,9 @@ python3 "$REPO_ROOT/scripts/check_product_catalog.py"
 echo "== Desktop export pack smoke =="
 "$REPO_ROOT/scripts/verify_desktop_export.sh" --pack-smoke
 
+echo "== Alpha performance smoke =="
+"$REPO_ROOT/scripts/measure_alpha_performance.sh" --skip-export
+
 echo "== Screenshot capture =="
 CAPTURE_LOG="$ARTIFACT_DIR/screenshot-capture.log"
 for scenario in "${SCREENSHOT_SCENARIOS[@]}"; do

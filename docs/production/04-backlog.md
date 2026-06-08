@@ -43,7 +43,7 @@ Current completion plan: `11-game-completion-plan.md`.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
-14. Alpha hardening. Current phase; alpha bug triage done through Stop 13.1.
+14. Alpha hardening. Current phase; performance baseline done through Stop 13.2.
 
 ## Completed Polish Scope
 
@@ -158,7 +158,9 @@ The following polish items remain valid historical checkpoints:
 
 - Done: created `13-alpha-bug-list.md` from the latest full gate, screenshot artifacts, current manual validation checklist, and release-wrapper limits for Stop 13.1.
 - Current P1 alpha risks: store still reads graybox, signage clips/loses hierarchy, customer roles remain placeholder-heavy, register queue composition is crowded, placed fixture framing can block the camera, and backroom computer screens are dense.
-- Remaining alpha-hardening work: Stop 13.2 performance pass, Stop 13.3 regression-test expansion, Stop 13.4 content pass, Stop 13.5 balance pass, Stop 13.6 playtest package, and Stop 13.7 alpha validation sync.
+- Done: added `scripts/measure_alpha_performance.sh`, the Godot performance metric collector, validation tool manifest, gate integration, and `14-alpha-performance-baseline.md` for Stop 13.2.
+- Current alpha performance baseline: main scene resource load 141 ms, instantiate 23 ms, 60-frame step 413 ms, UI panel cycle 43 ms, customer pathing 4 ms, screenshot capture 930 ms, and exported pack startup 413 ms.
+- Remaining alpha-hardening work: Stop 13.3 regression-test expansion, Stop 13.4 content pass, Stop 13.5 balance pass, Stop 13.6 playtest package, and Stop 13.7 alpha validation sync.
 
 ## Product And Fixture Polish
 

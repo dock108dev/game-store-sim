@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper pass: `scripts/validate_godot.sh` passes with 492 GUT tests, UI scenario automation coverage at 455/564, production script mapping coverage at 50/50, 2 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 492 GUT tests, UI scenario automation coverage at 455/564, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -58,6 +58,7 @@ Current automated baseline:
 - Desktop export pipeline is implemented through Stop 12.5; manual QA should run the Release Wrapper Focus checks to confirm pack artifact handoff, binary export template behavior, and future build relaunch/continue expectations are clear.
 - Release wrapper validation sync is implemented through Stop 12.6; automated checks now audit the release-wrapper matrix/docs/tool manifest, and manual QA should treat the Release Wrapper Focus section as the current release-readiness checklist.
 - Alpha bug triage is implemented through Stop 13.1; manual QA should review `13-alpha-bug-list.md` before treating visual, queue, fixture, backroom-computer, balance, or playtest-package issues as new discoveries.
+- Alpha performance pass is implemented through Stop 13.2; manual QA should review `14-alpha-performance-baseline.md` after content-heavy changes and rerun `scripts/measure_alpha_performance.sh --full` before packaging an external playtest.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -547,6 +548,14 @@ Run these first when manually checking the completed Stop 13.1 alpha bug triage:
 - Open `docs/production/13-alpha-bug-list.md` and confirm AH-001 through AH-011 still match the latest screenshot artifacts.
 - Confirm there are no hidden P0 issues in the latest `scripts/validate_godot.sh` output before starting performance, regression, content, balance, or playtest-package work.
 - Confirm each newly found visual/readability/playtest issue is either already covered by AH-001 through AH-011 or is added to the bug list with evidence, priority, target slice, and acceptance.
+
+## Alpha Performance Focus
+
+Run these first when manually checking the completed Stop 13.2 performance pass:
+
+- Run `scripts/measure_alpha_performance.sh --full` and confirm it writes core and shell reports under `artifacts/performance/latest/`.
+- Compare current results to `docs/production/14-alpha-performance-baseline.md`; investigate any large change even if the broad threshold still passes.
+- After content-heavy work, confirm screenshot capture and exported pack startup remain within the broad alpha thresholds before creating a playtest package.
 
 ## Automated Screenshot Artifacts
 

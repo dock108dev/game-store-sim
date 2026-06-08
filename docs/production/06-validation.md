@@ -26,6 +26,7 @@ The gate currently runs:
 - Standalone validation tool manifest coverage from `game/tests/validation/tool_checks/`.
 - Standalone product catalog content checks through `scripts/check_product_catalog.py`.
 - Desktop export pack smoke through `scripts/verify_desktop_export.sh --pack-smoke`.
+- Alpha performance smoke through `scripts/measure_alpha_performance.sh --skip-export`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, complete inventory schema fields, multi-day starter content depth, and category/platform/condition/format/demand/authenticity/rarity/risk/location variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
 - Named validation screenshot capture at `1280x720` for main scene, carry stack, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, service request, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
@@ -48,7 +49,7 @@ Current production validation baseline:
 - `scripts/validate_godot.sh` passes with 492 GUT tests.
 - UI scenario automation coverage is 455/564, above the 80% threshold.
 - Production script mapping coverage is 50/50.
-- There are 2 active standalone validation tool manifests: product catalog content checking and desktop export pack smoke.
+- There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
 - Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants, with product items applying generated cue meshes from data.
@@ -89,6 +90,7 @@ Current production validation baseline:
 - Desktop export pipeline coverage verifies the Stop 12.5 macOS desktop export preset, template-free pack export artifact, pack boot smoke, and clear binary-export template fallback message.
 - Release wrapper validation sync is complete through Stop 12.6; automated checks now audit the release-wrapper scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
 - Alpha bug triage is complete through Stop 13.1; `docs/production/13-alpha-bug-list.md` records the current no-P0 gate state, screenshot-derived P1/P2 issues, release-package limits, and target slices for alpha hardening.
+- Alpha performance pass is complete through Stop 13.2; `scripts/measure_alpha_performance.sh` records scene load, frame stepping, modal UI, customer pathing, save codec, screenshot, and exported pack startup timing under broad alpha regression thresholds.
 
 ## Manual Validation
 

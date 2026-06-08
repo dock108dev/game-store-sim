@@ -40,7 +40,7 @@ Current gate state:
 
 ## Slice Routing
 
-- Stop 13.2 performance pass: profile scene load, screenshot capture, exported pack startup, UI panel open/close, and customer pathing before adding more art/content weight.
+- Stop 13.2 performance pass: done in `14-alpha-performance-baseline.md`; rerun after content-heavy changes before tightening thresholds.
 - Stop 13.3 test expansion: add regression coverage for fixture placement framing, queue/register composition, screenshot subject framing, and any bug fix that changes core loop behavior.
 - Stop 13.4 content pass: address AH-001, AH-002, AH-003, AH-004, AH-006, and AH-007 with production-quality scene/content/UI composition.
 - Stop 13.5 balance pass: address AH-011 with multi-day economy tuning and documented balance targets.

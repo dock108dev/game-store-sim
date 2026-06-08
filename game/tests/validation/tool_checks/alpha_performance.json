@@ -1,0 +1,26 @@
+{
+  "validation_tools": [
+    {
+      "id": "alpha_performance_smoke",
+      "name": "Alpha performance smoke",
+      "status": "active",
+      "command": "scripts/measure_alpha_performance.sh --full",
+      "owner": "production validation",
+      "covered_paths": [
+        "game/tests/tools/measure_alpha_performance.gd",
+        "scripts/measure_alpha_performance.sh",
+        "game/scenes/world/graybox_store.tscn",
+        "game/tests/tools/capture_main_scene_screenshot.gd",
+        "scripts/verify_desktop_export.sh"
+      ],
+      "requirements": [
+        "Main scene load and settle timing stays under broad alpha regression thresholds.",
+        "First-person modal UI panel open and close cycle stays under broad alpha regression thresholds.",
+        "Customer pathing tick loop stays under broad alpha regression thresholds.",
+        "Save codec encode/decode/restore roundtrip stays under broad alpha regression thresholds.",
+        "Main-scene screenshot capture stays under broad alpha regression thresholds.",
+        "Exported pack startup stays under broad alpha regression thresholds."
+      ]
+    }
+  ]
+}
