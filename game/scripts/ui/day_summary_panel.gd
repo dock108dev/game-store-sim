@@ -630,9 +630,9 @@ func _update_labels() -> void:
 	else:
 		fixture_label.text = "Fixtures unavailable"
 	if _session.has_method("get_upgrade_summary_text"):
-		settings_label.text = "Settings: input and window settings are available from the pause/settings panel.\n" + _session.get_upgrade_summary_text()
+		settings_label.text = "Settings: audio, display, controls, mouse, accessibility, and reset defaults are available from the pause/settings panel.\n" + _session.get_upgrade_summary_text()
 	else:
-		settings_label.text = "Settings: input and window settings are available from the pause/settings panel."
+		settings_label.text = "Settings: audio, display, controls, mouse, accessibility, and reset defaults are available from the pause/settings panel."
 	if _session.has_method("get_decoration_summary_text"):
 		settings_label.text += "\n" + _session.get_decoration_summary_text()
 	if _session.has_method("get_management_desk_summary_text"):

@@ -185,7 +185,7 @@ autowrap_mode = 3
 
 [node name="SettingsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
-text = "Settings: input and window settings are available from the pause/settings panel."
+text = "Settings: audio, display, controls, mouse, accessibility, and reset defaults are available from the pause/settings panel."
 autowrap_mode = 3
 
 [node name="ManagementDeskLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]

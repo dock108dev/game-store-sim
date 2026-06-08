@@ -13,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(420, 280)
+custom_minimum_size = Vector2(600, 650)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
@@ -25,43 +25,204 @@ theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Settings"
 horizontal_alignment = 1
 
-[node name="SensitivityLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 520)
 layout_mode = 2
-text = "Look sensitivity: 0.0025"
-horizontal_alignment = 1
+horizontal_scroll_mode = 0
 
-[node name="SensitivityRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="SettingsContent" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="AudioHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Audio"
+
+[node name="MasterVolumeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Master volume: 80%"
+
+[node name="MasterVolumeRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="DecreaseSensitivityButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SensitivityRow"]
+[node name="DecreaseMasterVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MasterVolumeRow"]
 custom_minimum_size = Vector2(90, 38)
 layout_mode = 2
 text = "Less"
 
-[node name="IncreaseSensitivityButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SensitivityRow"]
+[node name="IncreaseMasterVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MasterVolumeRow"]
 custom_minimum_size = Vector2(90, 38)
 layout_mode = 2
 text = "More"
 
-[node name="InvertCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MusicVolumeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
-text = "Invert look"
+text = "Music volume: 70%"
 
-[node name="WindowModeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MusicVolumeRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DecreaseMusicVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MusicVolumeRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "Less"
+
+[node name="IncreaseMusicVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MusicVolumeRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "More"
+
+[node name="SfxVolumeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "SFX volume: 85%"
+
+[node name="SfxVolumeRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DecreaseSfxVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SfxVolumeRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "Less"
+
+[node name="IncreaseSfxVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SfxVolumeRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "More"
+
+[node name="DisplayHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Display"
+
+[node name="WindowModeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 custom_minimum_size = Vector2(180, 38)
 layout_mode = 2
 text = "Window: Windowed"
 
-[node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ResolutionScaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Render scale: 100%"
+
+[node name="ResolutionScaleRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DecreaseResolutionScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/ResolutionScaleRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "Less"
+
+[node name="IncreaseResolutionScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/ResolutionScaleRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "More"
+
+[node name="MouseHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Mouse"
+
+[node name="SensitivityLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Look sensitivity: 0.0025"
+horizontal_alignment = 1
+
+[node name="SensitivityRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DecreaseSensitivityButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SensitivityRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "Less"
+
+[node name="IncreaseSensitivityButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SensitivityRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "More"
+
+[node name="InvertCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "Invert look"
+
+[node name="ControlsHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Controls"
+
+[node name="ControlsSummaryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Move WASD / Interact Left Click / Pause Escape"
+autowrap_mode = 2
+
+[node name="ResetBindingsButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+custom_minimum_size = Vector2(120, 38)
+layout_mode = 2
+text = "Reset Bindings"
+
+[node name="AccessibilityHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Accessibility"
+
+[node name="TextScaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Text scale: 100%"
+
+[node name="TextScaleRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DecreaseTextScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/TextScaleRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "Less"
+
+[node name="IncreaseTextScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/TextScaleRow"]
+custom_minimum_size = Vector2(90, 38)
+layout_mode = 2
+text = "More"
+
+[node name="HighContrastCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "High contrast UI"
+
+[node name="ReduceMotionCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "Reduce motion"
+
+[node name="SettingsStatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
+layout_mode = 2
+text = "Settings saved automatically"
+autowrap_mode = 2
+
+[node name="FooterRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="ResetDefaultsButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FooterRow"]
+custom_minimum_size = Vector2(160, 38)
+layout_mode = 2
+text = "Reset Defaults"
+
+[node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FooterRow"]
 custom_minimum_size = Vector2(120, 38)
 layout_mode = 2
 text = "Close"

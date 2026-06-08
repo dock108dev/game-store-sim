@@ -831,6 +831,14 @@
       "critical": false,
       "reason": "Automated tests verify version 1 migration defaults, current schema IDs, future-version rejection, and malformed-save failure state; human review must confirm any surfaced load failure copy is understandable and never implies a corrupted or incompatible save was loaded.",
       "owner": "manual QA"
+    },
+    {
+      "id": "settings_menu_readability",
+      "name": "Settings menu clearly groups audio, display, controls, mouse, accessibility, persistence, and reset defaults",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify section presence, value clamping, player preference application, JSON persistence, bindings reset, defaults reset, modal focus, and accessibility floor; human review must confirm the larger settings surface remains readable at 1280x720 and reset actions do not feel destructive or hidden.",
+      "owner": "manual QA"
     }
   ]
 }

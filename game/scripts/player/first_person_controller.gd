@@ -5,6 +5,13 @@ extends CharacterBody3D
 @export var invert_look: bool = false
 @export var max_held_items: int = 3
 @export var comfort_fov: float = 72.0
+@export var master_volume: int = 80
+@export var music_volume: int = 70
+@export var sfx_volume: int = 85
+@export var resolution_scale: int = 100
+@export var text_scale: int = 100
+@export var high_contrast_ui: bool = false
+@export var reduce_motion: bool = false
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
@@ -232,6 +239,32 @@ func set_invert_look(value: bool) -> void:
 	invert_look = value
 
 
+func apply_settings_profile(settings: Dictionary) -> void:
+	master_volume = clampi(int(settings.get("master_volume", master_volume)), 0, 100)
+	music_volume = clampi(int(settings.get("music_volume", music_volume)), 0, 100)
+	sfx_volume = clampi(int(settings.get("sfx_volume", sfx_volume)), 0, 100)
+	resolution_scale = clampi(int(settings.get("resolution_scale", resolution_scale)), 70, 120)
+	text_scale = clampi(int(settings.get("text_scale", text_scale)), 90, 120)
+	high_contrast_ui = bool(settings.get("high_contrast", high_contrast_ui))
+	reduce_motion = bool(settings.get("reduce_motion", reduce_motion))
+	set_mouse_sensitivity(float(settings.get("look_sensitivity", mouse_sensitivity)))
+	set_invert_look(bool(settings.get("invert_look", invert_look)))
+
+
+func get_settings_profile() -> Dictionary:
+	return {
+		"master_volume": master_volume,
+		"music_volume": music_volume,
+		"sfx_volume": sfx_volume,
+		"resolution_scale": resolution_scale,
+		"text_scale": text_scale,
+		"high_contrast": high_contrast_ui,
+		"reduce_motion": reduce_motion,
+		"look_sensitivity": mouse_sensitivity,
+		"invert_look": invert_look,
+	}
+
+
 func get_camera_feel_state() -> Dictionary:
 	return {
 		"comfort_fov": comfort_fov,
@@ -243,6 +276,7 @@ func get_camera_feel_state() -> Dictionary:
 		"sway_amplitude": CAMERA_SWAY_AMPLITUDE,
 		"move_fov_boost": CAMERA_MOVE_FOV_BOOST,
 		"workstation_fov_reduction": CAMERA_WORKSTATION_FOV_REDUCTION,
+		"reduce_motion": reduce_motion,
 		"min_fov": CAMERA_MIN_FOV,
 		"max_fov": CAMERA_MAX_FOV,
 	}
@@ -438,10 +472,11 @@ func _update_camera_feel(delta: float, movement_amount: float) -> void:
 	_camera_workstation_focus_weight = lerpf(_camera_workstation_focus_weight, modal_focus, focus_lerp)
 
 	_camera_feel_time += delta * lerpf(1.8, 8.0, _camera_motion_weight)
-	var active_motion := _camera_motion_weight * (1.0 - _camera_workstation_focus_weight)
+	var motion_comfort_scale := 0.25 if reduce_motion else 1.0
+	var active_motion := _camera_motion_weight * (1.0 - _camera_workstation_focus_weight) * motion_comfort_scale
 	var bob_offset := sin(_camera_feel_time) * CAMERA_BOB_AMPLITUDE * active_motion
 	var sway_offset := sin(_camera_feel_time * 0.55) * CAMERA_SWAY_AMPLITUDE * active_motion
-	var settle_offset := CAMERA_WORKSTATION_SETTLE_Y * _camera_workstation_focus_weight
+	var settle_offset := CAMERA_WORKSTATION_SETTLE_Y * _camera_workstation_focus_weight * motion_comfort_scale
 	head.position = _head_base_position + Vector3(sway_offset, bob_offset - settle_offset, 0.0)
 
 	var target_fov := comfort_fov \
