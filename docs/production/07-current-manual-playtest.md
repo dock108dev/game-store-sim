@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this production-target pass: `scripts/validate_godot.sh` passed with 286 GUT tests, UI scenario coverage 289/344, and script mapping coverage 31/31.
+- Last full gate in this storefront pass: `scripts/validate_godot.sh` passed with 287 GUT tests, UI scenario coverage 290/345, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
@@ -86,6 +86,7 @@ Current automated baseline:
 - Register prompt and sale messages are readable.
 - Click prompts and the center reticle are readable in the actual game window.
 - Store lighting, material contrast, and signage make the room read as a small specialty game shop rather than a graybox test room.
+- Front entry glass, open sign, hours decal, and entry floor cue make the storefront read as a shop threshold without implying the player can leave yet.
 - `SAVE POINT GAMES`, register, backroom, receiving, storage, and display rack signs are readable, fictional, and do not look like real-brand signage.
 - Posters, deal tag, bargain bin, register mat, and controller display props add retail context without blocking movement or obscuring prompts.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
@@ -160,6 +161,7 @@ Run these first when manually checking the completed store visual pass:
 
 - Confirm the sales floor reads warmer than the backroom while the reticle, prompts, product cases, and shelf slots stay readable.
 - Confirm wall, floor, counter, and door colors provide enough contrast from normal player angles.
+- Confirm the production storefront cues read clearly: glass panels, `OPEN`, `11-8`, and entry floor cue should feel like a shop threshold while the front-door boundary still blocks exit.
 - Confirm `SAVE POINT GAMES` and zone signage is readable, fictional, and not mistaken for an interaction target.
 - Confirm posters, the price tag, bargain bin, register mat, and controller display feel like store dressing without blocking navigation or hiding click targets.
 - Confirm screenshot artifacts still compose clearly after lighting, signage, and clutter changes.

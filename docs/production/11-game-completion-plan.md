@@ -169,7 +169,7 @@ This milestone should make the first screenshot say "small game store" without r
 
 Stops:
 
-- Stop 2.1: Storefront and entry. Build a readable front exterior/interior threshold with glass, door, hours/sign cues, and fictional store identity.
+- Stop 2.1: Storefront and entry. Done as a first production cue pass with front glass, open sign, hours decal, and entry threshold.
 - Stop 2.2: Sales floor composition. Rework fixture spacing, wall/floor treatment, sightlines, customer lanes, and player spawn framing.
 - Stop 2.3: Register command center. Make the counter, register, scanner/card reader/cash area, bagging surface, customer queue point, and impulse items read as the store's main work surface.
 - Stop 2.4: Shelf and fixture kit. Create reusable production-intent shelves, display racks, bargain bins, locked case placeholders, peg walls, and category labels.

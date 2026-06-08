@@ -50,6 +50,35 @@ func test_front_door_opening_is_blocked_for_now() -> void:
 	assert_gte(shape.size.z, 0.2)
 
 
+func test_storefront_entry_has_production_cues() -> void:
+	var left_glass := _store.get_node_or_null("StorefrontGlassLeft") as CSGBox3D
+	var right_glass := _store.get_node_or_null("StorefrontGlassRight") as CSGBox3D
+	var entry_cue := _store.get_node_or_null("EntrySidewalkCue") as CSGBox3D
+	var open_label := _store.get_node_or_null("OpenSignPanel/OpenSignLabel") as Label3D
+	var hours_label := _store.get_node_or_null("HoursDecalPanel/HoursDecalLabel") as Label3D
+
+	assert_not_null(left_glass)
+	assert_not_null(right_glass)
+	assert_not_null(entry_cue)
+	assert_not_null(open_label)
+	assert_not_null(hours_label)
+	assert_false(left_glass.use_collision)
+	assert_false(right_glass.use_collision)
+	assert_false(entry_cue.use_collision)
+	assert_eq(open_label.text, "OPEN")
+	assert_eq(hours_label.text, "11-8")
+	assert_lt(left_glass.global_position.z, -5.8)
+	assert_lt(right_glass.global_position.z, -5.8)
+	assert_lt(entry_cue.global_position.z, -5.8)
+	assert_gt(left_glass.size.y, 1.6)
+	assert_gt(right_glass.size.y, 1.6)
+
+	var glass_material := left_glass.material as StandardMaterial3D
+	assert_not_null(glass_material)
+	assert_lt(glass_material.albedo_color.a, 0.5)
+	assert_eq(glass_material.transparency, BaseMaterial3D.TRANSPARENCY_ALPHA)
+
+
 func test_receiving_box_exists() -> void:
 	assert_not_null(_store.get_node_or_null("ReceivingBox"))
 

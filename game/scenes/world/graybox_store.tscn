@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=39 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -29,6 +29,12 @@ transparency = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_door"]
 albedo_color = Color(0.08, 0.2, 0.27, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_storefront_glass"]
+albedo_color = Color(0.62, 0.86, 0.95, 0.34)
+transparency = 1
+metallic = 0.05
+roughness = 0.18
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_counter"]
 albedo_color = Color(0.12, 0.13, 0.14, 1)
@@ -137,6 +143,21 @@ size = Vector3(3.5, 0.03, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -5.45)
 material = SubResource("StandardMaterial3D_door")
 
+[node name="StorefrontGlassLeft" type="CSGBox3D" parent="."]
+size = Vector3(2.55, 1.85, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35, 1.42, -5.875)
+material = SubResource("StandardMaterial3D_storefront_glass")
+
+[node name="StorefrontGlassRight" type="CSGBox3D" parent="."]
+size = Vector3(2.55, 1.85, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35, 1.42, -5.875)
+material = SubResource("StandardMaterial3D_storefront_glass")
+
+[node name="EntrySidewalkCue" type="CSGBox3D" parent="."]
+size = Vector3(3.9, 0.012, 0.62)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.026, -5.98)
+material = SubResource("StandardMaterial3D_backroom_path_zone")
+
 [node name="StoreIdentitySignPanel" type="CSGBox3D" parent="."]
 size = Vector3(3.8, 0.62, 0.045)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.18, -5.86)
@@ -150,6 +171,34 @@ outline_size = 6
 billboard = 1
 text = "SAVE POINT GAMES"
 font_size = 56
+
+[node name="OpenSignPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.72, 0.32, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 1.55, -5.84)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="OpenSignLabel" type="Label3D" parent="OpenSignPanel"]
+pixel_size = 0.0038
+modulate = Color(0.04, 0.18, 0.15, 1)
+outline_modulate = Color(0.92, 1, 0.78, 1)
+outline_size = 2
+billboard = 1
+text = "OPEN"
+font_size = 28
+
+[node name="HoursDecalPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.76, 0.3, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 1.55, -5.84)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="HoursDecalLabel" type="Label3D" parent="HoursDecalPanel"]
+pixel_size = 0.0034
+modulate = Color(0.95, 0.9, 0.7, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 2
+billboard = 1
+text = "11-8"
+font_size = 24
 
 [node name="DisplaySignPanel" type="CSGBox3D" parent="."]
 size = Vector3(2.1, 0.34, 0.04)
