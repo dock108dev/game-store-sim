@@ -27,6 +27,8 @@ Do not copy overlays, facecams, streamer UI, real brands, or platform chrome.
 
 ## Slice 1: Backroom Spatial And Visual Identity
 
+Status: done.
+
 Implementation plan: `09-backroom-polish-implementation-plan.md`.
 
 Outcome:
@@ -45,6 +47,7 @@ Likely work:
 Validation:
 
 - `scripts/validate_godot.sh`.
+- Automated `backroom_polish` scenarios for zone anchors and prop existence.
 - Manual checks for backroom readability, receiving clutter, computer identity, hidden clue optionality, and screenshot composition.
 
 ## Slice 2: Backroom Computer And Menu Information Architecture

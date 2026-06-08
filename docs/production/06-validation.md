@@ -117,6 +117,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, bounded carry stack, hold, shelf slot category assignment, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
 - `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
+- `scenarios/backroom_polish.json`: backroom zone anchors, receiving/storage props, and management/service prop existence checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.

@@ -114,6 +114,17 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Suspicious customer placement and text read as an optional hidden-thread cue, and the customer does not crowd the register queue or trade-in seller.
 - Evidence storage remains hidden infrastructure with no visible interruption.
 
+## Backroom Polish Focus
+
+Run these first when manually checking the completed backroom spatial pass:
+
+- Confirm receiving, storage, management, service/paperwork, and movement zones read as separate areas from normal player angles.
+- Confirm the receiving pallet, box stacks, storage shelf, and overflow boxes add physical receiving/storage identity without hiding prompts.
+- Confirm the supplier note and mismatched serial copy remain optional and readable.
+- Confirm the management board, computer desk, service bench, disc mat, paperwork stack, and tool tray read as backroom context.
+- Confirm the service props do not imply a new service terminal; service completion should still read as register work.
+- Confirm fixture ghost, invalid ghost, rotated ghost, and placed rack screenshots still compose clearly with the backroom props.
+
 ## Automated Screenshot Artifacts
 
 The local gate writes these images under `artifacts/validation/latest/screenshots/`:

@@ -27,8 +27,8 @@ Current implementation plan: `09-backroom-polish-implementation-plan.md`.
 ## Priority Backlog
 
 1. Production polish planning reset. Done in this docs slice.
-2. Backroom spatial and visual identity pass. Planned in `09-backroom-polish-implementation-plan.md`; next implementation target.
-3. Backroom computer/menu information architecture pass.
+2. Backroom spatial and visual identity pass. Done.
+3. Backroom computer/menu information architecture pass. Next implementation target.
 4. Customer readability and role silhouette pass.
 5. Store lighting, materials, signage, and retail clutter pass.
 6. Product and fixture presentation pass.
@@ -36,11 +36,12 @@ Current implementation plan: `09-backroom-polish-implementation-plan.md`.
 
 ## Backroom Polish
 
-- Make the backroom visually distinct from the sales floor.
-- Separate receiving, storage, computer, service/repair, paperwork, and optional hidden-thread cues.
-- Make supplier-delivered stock placement read as physical receiving, not UI inventory teleporting.
-- Make storage fixture ordering and placement read as a backroom/operations workflow.
-- Keep the backroom computer readable as a management terminal, not another register.
+- Done: made the backroom visually distinct from the sales floor with explicit zone anchors.
+- Done: separated receiving, storage, management, service/repair, paperwork, and optional hidden-thread cues.
+- Done: added receiving pallet, box stacks, storage shelf, management board, service bench, disc mat, paperwork, and tool tray as graybox identity props.
+- Done: kept supplier-delivered stock placement readable as physical receiving, not UI inventory teleporting.
+- Done: kept storage fixture ordering and placement readable as a backroom/operations workflow.
+- Done: kept the backroom computer readable as a management terminal, not another register.
 
 ## Computer And Menu Polish
 
