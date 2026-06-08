@@ -1,10 +1,12 @@
-# Vertical Slice Plan
+# Historical Vertical Slice Plan
 
-## Slice Goal
+This file is retained as the completed first-playable record. It is not the active backlog. Current production work is tracked in `04-backlog.md`, and the next visual/menu/backroom/customer polish phase is tracked in `08-polish-roadmap.md`.
+
+## Completed Slice Goal
 
 Build one playable day in a tiny game store where the player receives a box of used games, prices them, stocks a shelf, serves customers, completes register transactions, and closes the day.
 
-This is the first serious proof. It should be ugly but complete.
+This was the first serious proof. It is now validated as an ugly-but-complete playable loop.
 
 ## Slice Content
 
@@ -79,10 +81,10 @@ Technical:
 - Customer selection queries store inventory rather than hard-coded objects.
 - Day summary is derived from recorded transactions.
 
-## Explicit Non-Goals
+## Historical Non-Goals
 
 - No employees.
-- No full fixture or decoration ordering system.
+- No full fixture or decoration ordering system beyond the first storage-rack placement workflow.
 - No large store expansion.
 - No player-facing save/load slot UI yet; only codec-level persistence smoke exists.
 - No complex hidden narrative scene.
@@ -134,7 +136,7 @@ Technical:
 41. Add bounded multi-item carry. Done as a three-game carry stack where pricing and stocking use the active carried item and stocking one copy leaves the remaining carried games available.
 42. Tighten first-pass presentation polish. Done with smaller shared used-game case geometry, a clearer buyer queue lane, wider special-customer spacing, and a lower body-anchored trade-in item pose.
 
-## Slice Review Questions
+## Remaining Review Questions For Polish
 
 - Is it satisfying to physically stock and sell items?
 - Does price setting feel meaningful or busywork?

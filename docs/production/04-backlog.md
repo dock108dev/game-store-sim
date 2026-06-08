@@ -1,107 +1,103 @@
 # Backlog
 
-This backlog is intentionally coarse. Detailed tasks should be split when a slice is approved.
+This backlog is the active production view. The historical first-playable checklist remains in `01-vertical-slice-plan.md`.
 
-## Now
+## Current Phase
 
-- Keep used-game pricing distinct from fixed-price new game/hardware rules.
-- Keep validation coverage current as the sale loop changes.
-- Use the 12-item fictional product catalog when expanding inventory sources.
-- Use the backroom computer as the home for inventory and management features.
+Production polish and readability.
 
-## First Playable Counter Loop
+Goal: keep the validated retail loop intact while making the store, backroom, customers, computer, and menus read like an intentional game instead of a test harness.
 
-- Pick up an item from a receiving box. Done.
-- Inspect product name, platform, condition, cost, and market value. Done with product-backed used-item inspection text.
-- Set a sale price. Done for used items.
-- Optionally apply a used-item sale price to active matching copies. Done from the direct pricing panel.
-- Place the item on a shelf/display rack. Done.
-- Carry multiple receiving-box games before stocking. Done as a bounded three-item carry stack, with pricing and stocking acting on the active carried item.
-- Spawn one target buyer customer. Done.
-- Let the customer find the item and queue at the register. Done, deterministic in-store claim.
-- Support multiple waiting buyers. Done for two in-store buyers through `CustomerManager`.
-- Add customer movement/path validation so buyers feel less scripted. Done with deterministic buyer movement from rack to register and bounded target checks.
-- Ring up the item at the register. Done.
-- Complete sale. Done.
-- Record transaction. Done.
-- Show end-of-day cash and profit summary. Done for in-memory sales via the backroom computer.
-- Show active inventory summary. Done on the backroom computer from scene item instances.
+Active roadmap: `08-polish-roadmap.md`.
 
-## Trade-In Slice
+## Current Rules
 
-- Add customer-carried used item. Done for one in-store trade-in seller.
-- Add condition inspection UI. Done in the register trade-in offer panel.
-- Add market value and demand lookup. Done in the register trade-in offer panel.
-- Add cash/store-credit offer. Done for cash offers plus fixed store-credit offers.
-- Add accept/counter/decline customer response. Done for cash accept, cash counteroffer adjustment, store-credit accept, and decline.
-- Add acquired item to inventory. Done for accepted trade-ins moving into the receiving box.
+- Keep the game shippable after every slice.
+- Update `07-current-manual-playtest.md` and `game/tests/validation/scenarios/manual_checks.json` whenever a slice changes visual, UI, interaction, or manual validation expectations.
+- Run `scripts/validate_godot.sh` before every commit.
+- Commit and push each validated slice before starting another.
+- Keep click-first prompts, center-reticle interaction, and mouse-capture behavior consistent.
+- Keep the register focused on sales, returns, trade-ins, preorders, and services.
+- Keep the backroom computer focused on management, ordering, reports, inventory, releases, and fixture/storage work.
+- Do not add a standalone pricing terminal.
+- Keep hidden-thread content optional and nonblocking until a deliberate escalation phase.
 
-## Service Counter Slice
+## Priority Backlog
 
-- Add first service request customer. Done as an in-store disc resurfacing customer at the register.
-- Add service request details. Done for service name, item name, price, internal cost, and turnaround note.
-- Complete service at the register. Done after buyer, trade-in, and preorder queues clear.
-- Record service revenue, cost, and profit. Done in the transaction ledger, store session, recent activity, and closed-day report.
-- Keep service work on the register. Done without adding another terminal or standalone service workstation.
+1. Production polish planning reset. Done in this docs slice.
+2. Backroom spatial and visual identity pass.
+3. Backroom computer/menu information architecture pass.
+4. Customer readability and role silhouette pass.
+5. Store lighting, materials, signage, and retail clutter pass.
+6. Product and fixture presentation pass.
+7. Validation/manual QA tightening for the full polish pass.
 
-## Store Layout Slice
+## Backroom Polish
 
-- Add fixture and equipment ordering interface. Done for ordering a pending game display rack from the backroom computer.
-- Add fixture ghost placement. Done as a translucent pending-rack preview after ordering.
-- Add valid/invalid placement state. Done as green valid and red invalid translucent ghost states with bounds validation.
-- Add rotate and snap controls. Done as backroom panel controls backed by manager-level fixed-step rotation and grid movement.
-- Add player-facing fixture placement confirmation. Done as a `Place Storage Rack` backroom-computer action that confirms the current valid ghost into a real game display rack and clears pending storage placement.
-- Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
-- Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.
+- Make the backroom visually distinct from the sales floor.
+- Separate receiving, storage, computer, service/repair, paperwork, and optional hidden-thread cues.
+- Make supplier-delivered stock placement read as physical receiving, not UI inventory teleporting.
+- Make storage fixture ordering and placement read as a backroom/operations workflow.
+- Keep the backroom computer readable as a management terminal, not another register.
 
-## Economy Slice
+## Computer And Menu Polish
 
-- Add demand per category. Done as category-level multipliers that feed buyer price tolerance and the backroom demand readout.
-- Add price sensitivity. Done for buyer refusal of overpriced matching used games.
-- Add sales history. Done as recent sale/trade-in activity on the backroom computer.
-- Add market drift. Done as deterministic day/category/tier market-value drift on the backroom computer for active inventory.
-- Add daily report. Done as an explicit closed-day report with cash change, sales/trade-ins, revenue, cost, trade spend/credit, and gross profit.
-- Add reorder suggestions. Done as simple backroom suggestions from sales versus active inventory.
+- Split the backroom computer into clearer sections instead of one long mixed summary.
+- Create predictable grouping for reports, inventory, supplier orders, fixtures, release planning, and day controls.
+- Improve button labels, state text, disabled states, and status messages.
+- Make dense text fit at the actual game resolution.
+- Preserve all current accounting and session behavior while changing presentation.
 
-## Supplier Ordering Slice
+## Customer Polish
 
-- Add supplier lot data for used games. Done as a `Used Game Starter Lot` resource from North Dock Wholesale.
-- Add backroom supplier ordering. Done as `Order Stock` on the backroom computer with immediate cash reservation and receiving-box delivery.
-- Add delivery delay. Done as due-day supplier orders delivered when the next day starts.
-- Add delivered receiving inventory. Done by spawning ordered used games into the receiving box with active inventory state.
+- Improve customer silhouettes and role readability.
+- Make buyer, trade-in seller, preorder customer, service customer, and suspicious customer visually distinct.
+- Improve register-area spacing and facing.
+- Improve customer prompts and feedback text presentation.
+- Keep customers mechanically separated from hidden-thread infrastructure unless explicitly engaged.
 
-## New Release Calendar Slice
+## Store Visual Polish
 
-- Add fictional upcoming launch data. Done as data-driven `NewRelease` resources with release day, platform, wholesale cost, suggested price, allocation limit, and demand tier.
-- Surface launch planning information on the backroom computer. Done as a read-only release-calendar section with countdown text.
-- Add preorder deposits. Done as a fixed `$5.00` register deposit for one fictional upcoming release customer, with preorder cash and obligations tracked separately from sales revenue and profit.
-- Add allocation commitments. Done as a backroom `Commit Allocation` action for the first upcoming release, reserving wholesale cash immediately and enforcing the release allocation limit.
-- Add launch-day queue, preorder fulfillment, and reputation consequences. Done as a day-start launch resolution that fulfills pending preorders first, sells surplus allocation stock to deterministic launch queue demand, records launch cash/profit, and reduces reputation for missed demand.
+- Establish a warmer specialty-store lighting pass.
+- Add readable signage and fictional store identity without real brands.
+- Improve wall/floor material contrast and sales-floor/backroom zoning.
+- Add controlled retail clutter: posters, price signs, bins, display tags, boxes, and small props.
+- Keep product and interaction state readable; clutter must not hide shelf slots or prompts.
 
-## Hidden Thread Slice
+## Product And Fixture Polish
 
-- Add suspicious event flags. Done as a hidden, optional event log service with idempotent event flags and no visible normal-loop interruption.
-- Add mismatched serial item. Done as one receiving-box used-game copy with serial metadata, mismatch detection, and optional suspicious-event flagging.
-- Add supplier message artifact. Done as an optional receiving-box supplier note with metadata, inspection text, hidden-event flagging, and validation screenshot coverage.
-- Add optional evidence storage. Done as a hidden evidence service that can store deduped clue records from mismatched serial items and supplier messages.
-- Add one suspicious customer encounter. Done as an optional cash-buyer interaction near the register that records a hidden event and evidence without entering the buyer queue.
-- Keep all hidden-thread content optional and avoid blocking normal store progression. Done with passive hidden-thread cues until inspected or talked to.
+- Make used-game cases, shelf slots, display racks, receiving boxes, and carried items more intentional.
+- Keep products compact enough for rack, carry stack, and customer carry.
+- Add clearer shelf-slot/category affordances.
+- Make fixture ghost preview and placed fixture states visually distinct.
 
-## Presentation Polish
+## Completed First-Playable Scope
 
-- Keep used-game cases compact enough for wall racks, player carry, and customer carry. Done with smaller shared case geometry plus automated compact-case and carry-pose checks.
-- Keep manual stocking from becoming one-trip-per-copy busywork. Done with a bounded three-game carry stack and active-item stocking order.
-- Keep register-area customers from stacking into each other. Done with a distinct buyer queue lane, separated special-customer placements, and main-scene spacing tests.
-- Keep trade-in items visually held rather than floating at the counter. Done by shrinking/lowering the trade-in carried item and requiring body-anchored pose validation.
+Compressed summary of completed validated systems:
 
-## Tooling
+- First-person movement, click-first interaction, prompt, and reticle.
+- Receiving pickup, multi-item carry, held-item pricing, shelf stocking, and apply-to-matching pricing.
+- Product catalog, fictional product validation, item identity, price, cost basis, condition, market value, serial metadata, and active inventory summary.
+- Buyer customer manager, buyer movement, price sensitivity, lower-priced copy selection, register queue, sale completion, and transaction ledger.
+- Trade-in seller, offer panel, cash/store-credit acceptance, counteroffer adjustment, decline, and acquired inventory.
+- Service customer and register-completed service accounting.
+- Backroom computer summaries, daily report, recent activity, reorder suggestions, demand readout, market drift, supplier ordering, release calendar, allocation commitment, launch-day resolution, and fixture controls.
+- Fixture ordering, ghost preview, valid/invalid state, movement, rotation, snap, placement confirmation, and save-smoke coverage.
+- Supplier orders with due-day receiving-box delivery.
+- Preorder deposit and launch-day fulfillment/reputation outcome.
+- Hidden event log, mismatched serial item, supplier message, optional suspicious customer, and hidden evidence storage.
+- Mandatory validation gate, GUT tests, validation scenario matrix, script mapping, persistence smoke, and named screenshots.
 
-- Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
-- Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
-- Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
-- Keep named validation screenshots current for main scene, carry stack, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
-- Keep the service-request validation screenshot current as register service work changes.
-- Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
-- Add debug test maps only when they are called by the validation gate or a documented manual checklist.
-- Extend product data validation inside the local gate as product resources become more complex. Started with catalog count, uniqueness, variety, pricing sanity, and fictional-name checks.
-- Add save/load smoke tests to the local gate after persistence exists. Done for the first codec-level session, ledger, and active-inventory roundtrip.
+## Not Current Scope
+
+These remain future phases unless explicitly selected:
+
+- Theft and shrinkage systems.
+- Returns and exchanges.
+- Rich customer archetypes beyond current role stubs.
+- Player-facing save/load slot UI.
+- Employees and staff assignment.
+- Larger store expansion.
+- Decoration/build-mode beyond current fixture placement.
+- Complex hidden-thread consequences.
+- Full audio, animation, VFX, and art-production pass.

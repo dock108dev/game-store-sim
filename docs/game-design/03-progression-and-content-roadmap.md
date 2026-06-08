@@ -40,6 +40,8 @@ Exit criteria:
 
 Goal: one working day in a tiny store.
 
+Status: complete as the validated first-playable counter loop. Historical production details live in `docs/production/01-vertical-slice-plan.md`.
+
 Features:
 
 - First-person controller.
@@ -56,6 +58,29 @@ Exit criteria:
 - A player can stock and sell items without debug shortcuts.
 - Product price and quantity persist for the session.
 - The loop has understandable feedback: cash, stock, customer satisfaction.
+
+## Phase 1.5: Production Polish And Readability
+
+Goal: make the validated loop look and read like an intentional game before adding major mechanics.
+
+Status: active. Detailed production plan lives in `docs/production/08-polish-roadmap.md`.
+
+Features:
+
+- Backroom spatial and visual identity.
+- Backroom computer/menu information architecture.
+- Customer role silhouettes and placement readability.
+- Store lighting, materials, signage, and controlled retail clutter.
+- Product and fixture presentation.
+- Manual validation and screenshot usefulness cleanup.
+
+Exit criteria:
+
+- The sales floor and backroom are visually distinct.
+- The backroom computer can be used repeatedly without scanning one long debug-like panel.
+- Customer roles are recognizable before interaction.
+- Core products and fixtures look intentional without hiding gameplay state.
+- Manual validation reflects the actual current UI and scene.
 
 ## Phase 2: Trade-Ins And Used Economy
 

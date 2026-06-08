@@ -51,3 +51,27 @@ Follow-up risk:
 
 - The repository currently contains reference images before game code, so asset and Git LFS policy should be revisited before large production assets are added.
 - Reference screenshots should influence mechanics and layout principles only. Stream overlays, video UI, visible third-party branding, and non-video-game retail details should not become game requirements.
+
+## 2026-06-08: Production Polish Reset
+
+Decision:
+
+- Treat the validated first-playable counter loop as complete historical scope.
+- Start a dedicated production polish phase before adding larger mechanics.
+- Use inspiration images as concrete visual, menu, layout, customer, and backroom principles instead of vague reference material.
+
+Reason:
+
+- The current loop is mechanically broad enough that random new features would hide readability problems.
+- Backroom, computer, customers, menus, and scene visuals need a coherent pass before adding theft, returns, richer customer archetypes, or expansion.
+- A clear polish roadmap keeps future slices small, validated, and shippable.
+
+Rejected alternatives:
+
+- Continue adding mechanics on top of graybox presentation.
+- Do one broad "make it pretty" pass without slice boundaries.
+- Treat the inspiration screenshots as direct assets or exact UI copies.
+
+Follow-up risk:
+
+- Visual polish can easily break interaction readability. Each slice must keep manual validation and screenshots current.
