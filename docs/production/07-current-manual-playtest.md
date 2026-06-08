@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this input/settings baseline pass: `scripts/validate_godot.sh` passed with 314 GUT tests, UI scenario coverage 317/373, and script mapping coverage 32/32.
+- Last full gate in this interaction validation sync pass: `scripts/validate_godot.sh` passed with 314 GUT tests, UI scenario coverage 317/374, and script mapping coverage 32/32.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -13,6 +13,7 @@ Current automated baseline:
 - Workstation transitions are implemented through Stop 3.4; manual QA should confirm pricing, trade-in appraisal, and backroom computer panels enter with usable focus and exit back to captured first-person control.
 - Fixture placement controls are implemented through Stop 3.5; manual QA should confirm movement, rotation, snap, cancel, and place controls are readable and that cancel clears the ghost while refunding cash.
 - Input/settings baseline is implemented through Stop 3.6; manual QA should confirm Escape opens settings, sensitivity/invert/window controls work, and closing settings returns to captured first-person control.
+- Interaction validation sync is implemented through Stop 3.7; manual QA should run the Interaction Polish Focus section as one full repeated-workflow review.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -167,7 +168,7 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Interaction Polish Focus
 
-Run these first when manually checking the completed Stop 3.1 through Stop 3.3 interaction presentation passes:
+Run these first when manually checking the completed Stop 3.1 through Stop 3.7 interaction presentation pass:
 
 - Confirm normal prompts such as pickup, stock, price, register, computer, talk, and inspect read as clear click actions with a target subject.
 - Confirm blocked prompts such as fixed-price held-item actions use the warning reticle state and are not mistaken for successful feedback.
@@ -183,6 +184,7 @@ Run these first when manually checking the completed Stop 3.1 through Stop 3.3 i
 - Confirm pricing, trade-in appraisal, and backroom computer panels do not strand mouse focus after Apply, Cancel, Close, Accept, Decline, End Day, or Escape.
 - Confirm fixture placement `Cancel` clears the ghost preview, restores the reserved cash, and does not look like placing a rack.
 - Confirm settings text/buttons are readable, sensitivity changes feel noticeable but not extreme, invert look reverses vertical mouse movement, and window toggle is understandable.
+- Confirm the entire interaction pass reads as one consistent model: center reticle target, left click action, clear blocked feedback, visible carried item, focused modal workstations, and recoverable settings/pause access.
 
 ## Backroom Polish Focus
 

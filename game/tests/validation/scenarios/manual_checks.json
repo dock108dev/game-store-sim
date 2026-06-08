@@ -25,6 +25,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "interaction_milestone_review",
+      "name": "Completed interaction polish pass feels readable across prompts, carry, placement, workstations, and settings",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human review of the full repeated first-person workflow after the Stop 3 interaction pass.",
+      "owner": "manual QA"
+    },
+    {
       "id": "prompt_readability",
       "name": "Click prompt hierarchy readability is acceptable in the actual window",
       "status": "manual",
