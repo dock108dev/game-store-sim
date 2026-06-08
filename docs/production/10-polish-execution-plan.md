@@ -151,6 +151,8 @@ Manual validation status:
 
 ## Slice 4: Customer Readability And Role Silhouettes
 
+Status: complete.
+
 Goal: make customer roles readable before interaction.
 
 ### Stop 4.1: Role Color And Prop Pass
@@ -196,6 +198,24 @@ Work:
 Commit:
 
 - `Sync customer polish validation`
+
+### Slice 4 Result
+
+Completed commits:
+
+- `0066afa` Polish customer role silhouettes
+- `a666c76` Polish register customer spacing
+
+Validation:
+
+- `scripts/validate_godot.sh` passed after role silhouette polish.
+- `scripts/validate_godot.sh` passed after register spacing polish.
+- Screenshot spot review covered customer queue, register, trade-in, preorder, service, and suspicious-customer captures.
+
+Manual validation status:
+
+- Manual playtest checklist is updated with role prop and register-area arc checks.
+- Human controller/window validation is not performed by Codex; check role readability before clicking and queue clarity during playtest.
 
 ## Slice 5: Store Lighting, Materials, Signage, And Retail Clutter
 

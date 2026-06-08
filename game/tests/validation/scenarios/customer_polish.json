@@ -1,0 +1,46 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "buyer_customer_role_prop",
+      "name": "Buyer customer has a shopping basket role prop",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_buyer_customer_has_shopping_role_prop"
+    },
+    {
+      "id": "trade_in_customer_role_prop",
+      "name": "Trade-in customer has trade-in item and tag props",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_trade_in_customer_has_trade_role_prop"
+    },
+    {
+      "id": "preorder_customer_role_prop",
+      "name": "Preorder customer has a readable preorder slip prop",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_preorder_customer_has_larger_preorder_slip"
+    },
+    {
+      "id": "service_customer_role_prop",
+      "name": "Service customer has disc and ticket props",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_service_customer_has_disc_and_ticket_props"
+    },
+    {
+      "id": "suspicious_customer_role_prop",
+      "name": "Suspicious customer has note and cash cue props",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_suspicious_customer_has_note_and_cash_cue"
+    },
+    {
+      "id": "register_special_customer_spacing_arc",
+      "name": "Special register customers keep readable spacing and form a clear register-area arc",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_area_customer_positions_are_spaced_for_readability"
+    }
+  ]
+}

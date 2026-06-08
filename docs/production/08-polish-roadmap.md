@@ -77,6 +77,8 @@ Validation:
 
 ## Slice 3: Customer Readability And Role Silhouettes
 
+Status: done.
+
 Outcome:
 
 - Buyer, trade-in seller, preorder customer, service customer, and suspicious customer are visually distinct.
@@ -92,6 +94,7 @@ Likely work:
 Validation:
 
 - Existing customer, register, spacing, and screenshot tests.
+- Automated `customer_polish` scenarios for role props and spacing.
 - Manual checks for role readability, queue clarity, and special-customer separation.
 
 ## Slice 4: Store Lighting, Materials, And Signage

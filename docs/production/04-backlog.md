@@ -29,8 +29,8 @@ Current implementation plan: `10-polish-execution-plan.md`.
 1. Production polish planning reset. Done in this docs slice.
 2. Backroom spatial and visual identity pass. Done.
 3. Backroom computer/menu information architecture pass. Done.
-4. Customer readability and role silhouette pass. Next implementation target.
-5. Store lighting, materials, signage, and retail clutter pass.
+4. Customer readability and role silhouette pass. Done.
+5. Store lighting, materials, signage, and retail clutter pass. Next implementation target.
 6. Product and fixture presentation pass.
 7. Validation/manual QA tightening for the full polish pass.
 
@@ -53,11 +53,11 @@ Current implementation plan: `10-polish-execution-plan.md`.
 
 ## Customer Polish
 
-- Improve customer silhouettes and role readability.
-- Make buyer, trade-in seller, preorder customer, service customer, and suspicious customer visually distinct.
-- Improve register-area spacing and facing.
-- Improve customer prompts and feedback text presentation.
-- Keep customers mechanically separated from hidden-thread infrastructure unless explicitly engaged.
+- Done: improved customer role readability with distinct colors and role props.
+- Done: added buyer shopping basket, trade-in tag/item, preorder slip, service disc/ticket, and suspicious note/cash cues.
+- Done: improved register-area special customer spacing into a readable arc away from the buyer queue lane.
+- Done: kept customers mechanically separated from hidden-thread infrastructure unless explicitly engaged.
+- Remaining polish risk: customer prompt and feedback copy can still be refined in a future copy pass.
 
 ## Store Visual Polish
 
