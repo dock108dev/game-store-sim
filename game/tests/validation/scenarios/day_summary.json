@@ -92,6 +92,13 @@
       "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_closed_day_totals"
     },
     {
+      "id": "daily_report_production_sections",
+      "name": "Daily report formats launch activity, reputation, losses, bills, and tomorrow recommendations",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_launch_reputation_losses_and_tomorrow_plan"
+    },
+    {
       "id": "store_session_daily_report",
       "name": "Store session exposes a daily report after close",
       "status": "automated",

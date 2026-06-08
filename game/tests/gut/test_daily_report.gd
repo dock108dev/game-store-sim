@@ -44,12 +44,54 @@ func test_daily_report_formats_closed_day_totals() -> void:
 	assert_eq(report.get("closing_cash_cents"), 51938)
 	assert_eq(report.get("net_cash_change_cents"), 1938)
 	assert_eq(report.get("services"), 1)
+	assert_eq(report.get("preorders"), 0)
 	assert_eq(report.get("service_revenue_cents"), 499)
 	assert_eq(report.get("service_cost_cents"), 100)
 	assert_eq(report.get("service_profit_cents"), 399)
+	assert_eq(report.get("reputation"), 100)
+	assert_eq(report.get("losses_cents"), 0)
+	assert_eq(report.get("bills_text"), "none due")
 	assert_string_contains(text, "Daily report day 1:")
+	assert_string_contains(text, "End-of-day summary")
 	assert_string_contains(text, "Closing cash $519.38")
 	assert_string_contains(text, "Net cash +$19.38")
 	assert_string_contains(text, "Sales 1 / Trade-ins 1 / Services 1")
+	assert_string_contains(text, "Preorders 0")
 	assert_string_contains(text, "Service revenue $4.99 / Service cost $1.00 / Service profit $3.99")
 	assert_string_contains(text, "Gross profit $16.98")
+	assert_string_contains(text, "Preorders: count 0 / deposits $0.00")
+	assert_string_contains(text, "Launch activity: 0 events / cash $0.00 / profit $0.00 / missed demand 0")
+	assert_string_contains(text, "Reputation: 100")
+	assert_string_contains(text, "Losses: $0.00")
+	assert_string_contains(text, "Bills: none due")
+	assert_string_contains(text, "Tomorrow: Review reorder suggestions")
+
+
+func test_daily_report_formats_launch_reputation_losses_and_tomorrow_plan() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+	session.day_number = 4
+	session.reputation_score = 90
+	session.replace_launch_events([
+		{
+			"product_name": "Neon Skyline",
+			"missed_demand": 2,
+			"cash_received_cents": 4999,
+			"gross_profit_cents": 1299,
+		},
+	])
+	session.end_day()
+
+	var report := DailyReportPolicy.build_report(session)
+	var text := DailyReportPolicy.format_report(session)
+
+	assert_eq(report.get("launch_events"), 1)
+	assert_eq(report.get("launch_revenue_cents"), 4999)
+	assert_eq(report.get("launch_profit_cents"), 1299)
+	assert_eq(report.get("missed_launch_demand"), 2)
+	assert_eq(report.get("losses_cents"), 1000)
+	assert_eq(report.get("reputation"), 90)
+	assert_string_contains(text, "Launch activity: 1 events / cash $49.99 / profit $12.99 / missed demand 2")
+	assert_string_contains(text, "Reputation: 90")
+	assert_string_contains(text, "Losses: $10.00")
+	assert_string_contains(text, "Tomorrow: Prepare Pocket Farm DX launch allocation")

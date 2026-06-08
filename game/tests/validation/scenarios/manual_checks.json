@@ -402,10 +402,10 @@
     },
     {
       "id": "daily_report_readability",
-      "name": "Closed-day report is readable and matches the played day",
+      "name": "Closed-day report cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations are readable",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human confirmation after playing through a complete day and closing it.",
+      "reason": "Automated tests verify report text; human review must confirm the expanded end-of-day report fits the actual window and matches a played day.",
       "owner": "manual QA"
     },
     {

@@ -248,7 +248,7 @@ Stops:
 - Stop 4.4: Pricing UI. Done in `Polish pricing decision UI`: pricing now shows cost basis, market price, current price, suggested range, projected margin, demand, apply-to-matching batch scope, and outcome warnings for above-range, below-cost, below-range, and batch-price decisions.
 - Stop 4.5: Backroom computer tabs. Done in `Polish backroom computer tabs`: the backroom computer now splits dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records into task tabs with automated/manual validation coverage.
 - Stop 4.6: Supplier ordering UI. Done in `Polish supplier ordering UI`: supplier ordering now shows category, cart size, reserved cost, due day, delivery state, storage requirements, and physical receiving expectations with automated/manual validation coverage.
-- Stop 4.7: Daily report UI. Add end-of-day summary, cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
+- Stop 4.7: Daily report UI. Done in `Polish daily report UI`: daily reports now show end-of-day summary, cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations with automated/manual validation coverage.
 - Stop 4.8: UI accessibility pass. Validate text size, contrast, keyboard/mouse focus, panel fit, and 1280x720 readability.
 - Stop 4.9: UI validation sync. Update scenario coverage and manual checklist.
 
