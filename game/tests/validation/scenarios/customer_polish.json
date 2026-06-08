@@ -50,6 +50,13 @@
       "evidence": "res://tests/gut/test_customer_pose_animator.gd"
     },
     {
+      "id": "customer_pathing_queue_browse_leave_baseline",
+      "name": "Customer manager assigns readable browse, queue, recovery, and leave path points",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_manager.gd::test_customer_manager_assigns_browse_queue_and_exit_path_points"
+    },
+    {
       "id": "register_special_customer_spacing_arc",
       "name": "Special register customers keep readable spacing and form a clear register-area arc",
       "status": "automated",

@@ -4,10 +4,19 @@ class_name CustomerManager
 @export var target_product_id: String = "used_star_trader"
 @export var register_queue_start: Vector3 = Vector3(1.65, 0.0, -3.55)
 @export var register_queue_spacing: Vector3 = Vector3(-0.7, 0.0, -0.2)
+@export var browse_start: Vector3 = Vector3(-2.15, 0.0, 4.25)
+@export var browse_spacing: Vector3 = Vector3(-0.5, 0.0, -0.7)
+@export var register_approach_offset: Vector3 = Vector3(-0.35, 0.0, 0.45)
+@export var customer_exit_position: Vector3 = Vector3(-5.6, 0.0, 4.8)
 @export var playable_min: Vector3 = Vector3(-6.6, 0.0, -5.6)
 @export var playable_max: Vector3 = Vector3(6.6, 0.0, 5.7)
 @export var minimum_queue_spacing_distance: float = 0.62
+@export var minimum_browse_spacing_distance: float = 0.48
 @export var display_slot_paths: Array[NodePath] = []
+
+
+func _ready() -> void:
+	assign_customer_path_points()
 
 
 func _process(_delta: float) -> void:
@@ -15,6 +24,7 @@ func _process(_delta: float) -> void:
 
 
 func process_customer_claims() -> void:
+	assign_customer_path_points()
 	_compact_register_queue()
 
 	for customer in get_customers():
@@ -71,6 +81,34 @@ func compact_after_sale() -> void:
 	_compact_register_queue()
 
 
+func assign_customer_path_points() -> void:
+	var customers := get_customers()
+	for index in range(customers.size()):
+		var customer := customers[index]
+		var queue_position := _queue_position_for_index(index)
+		customer.set_path_points(
+			_browse_position_for_index(index),
+			queue_position + register_approach_offset,
+			customer_exit_position
+		)
+		if customer.state == SimpleBuyerCustomer.STATE_BROWSING:
+			customer.set_queue_position(queue_position)
+
+
+func get_queue_lane_positions(count: int) -> Array[Vector3]:
+	var positions: Array[Vector3] = []
+	for index in range(count):
+		positions.append(_queue_position_for_index(index))
+	return positions
+
+
+func get_browse_positions(count: int) -> Array[Vector3]:
+	var positions: Array[Vector3] = []
+	for index in range(count):
+		positions.append(_browse_position_for_index(index))
+	return positions
+
+
 func is_position_inside_store(position: Vector3) -> bool:
 	return (
 		position.x >= playable_min.x
@@ -92,10 +130,21 @@ func validate_customer_paths() -> Array[String]:
 		if not is_position_inside_store(queue_position):
 			issues.append("queue_position_%d_outside_store" % index)
 
+		var browse_position := _browse_position_for_index(index)
+		if not is_position_inside_store(browse_position):
+			issues.append("browse_position_%d_outside_store" % index)
+
 		if index > 0:
 			var previous_queue_position := _queue_position_for_index(index - 1)
 			if previous_queue_position.distance_to(queue_position) < minimum_queue_spacing_distance:
 				issues.append("queue_spacing_%d_too_tight" % index)
+
+			var previous_browse_position := _browse_position_for_index(index - 1)
+			if previous_browse_position.distance_to(browse_position) < minimum_browse_spacing_distance:
+				issues.append("browse_spacing_%d_too_tight" % index)
+
+	if not is_position_inside_store(customer_exit_position):
+		issues.append("customer_exit_position_outside_store")
 
 	for slot_path in display_slot_paths:
 		var slot := get_node_or_null(slot_path) as Node3D
@@ -172,11 +221,16 @@ func _compact_register_queue() -> void:
 	var index := 0
 	for customer in get_register_bound_customers():
 		customer.set_queue_position(_queue_position_for_index(index))
+		customer.register_approach_position = _queue_position_for_index(index) + register_approach_offset
 		index += 1
 
 
 func _queue_position_for_index(index: int) -> Vector3:
 	return register_queue_start + (register_queue_spacing * index)
+
+
+func _browse_position_for_index(index: int) -> Vector3:
+	return browse_start + (browse_spacing * index)
 
 
 func _approach_position_for_customer(customer: SimpleBuyerCustomer, slot: Node3D) -> Vector3:

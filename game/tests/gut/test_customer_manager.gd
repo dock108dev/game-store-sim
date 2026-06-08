@@ -211,6 +211,40 @@ func test_customer_manager_default_queue_spacing_is_readable() -> void:
 	assert_gte(manager._queue_position_for_index(0).distance_to(manager._queue_position_for_index(1)), 0.62)
 
 
+func test_customer_manager_assigns_browse_queue_and_exit_path_points() -> void:
+	var manager: CustomerManager = load("res://scripts/customers/customer_manager.gd").new()
+	var first_customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var second_customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	add_child_autofree(manager)
+	manager.add_child(first_customer)
+	manager.add_child(second_customer)
+
+	manager.assign_customer_path_points()
+
+	assert_eq(first_customer.browse_position, manager._browse_position_for_index(0))
+	assert_eq(second_customer.browse_position, manager._browse_position_for_index(1))
+	assert_eq(first_customer.register_queue_position, manager._queue_position_for_index(0))
+	assert_eq(second_customer.register_queue_position, manager._queue_position_for_index(1))
+	assert_eq(first_customer.leave_position, manager.customer_exit_position)
+	assert_gte(first_customer.browse_position.distance_to(second_customer.browse_position), manager.minimum_browse_spacing_distance)
+
+
+func test_customer_manager_validates_browse_spacing_and_exit_bounds() -> void:
+	var manager: CustomerManager = load("res://scripts/customers/customer_manager.gd").new()
+	var first_customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var second_customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	add_child_autofree(manager)
+	manager.add_child(first_customer)
+	manager.add_child(second_customer)
+	manager.browse_spacing = Vector3(0.01, 0.0, 0.0)
+	manager.customer_exit_position = Vector3(99.0, 0.0, 0.0)
+
+	var issues: Array[String] = manager.validate_customer_paths()
+
+	assert_true(issues.has("browse_spacing_1_too_tight"))
+	assert_true(issues.has("customer_exit_position_outside_store"))
+
+
 func test_customer_manager_validates_customer_approach_positions() -> void:
 	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
 	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()

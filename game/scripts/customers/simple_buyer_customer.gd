@@ -13,14 +13,19 @@ const STATE_SALE_COMPLETE := "sale_complete"
 @export var target_product_id: String = "used_star_trader"
 @export var display_slot_path: NodePath
 @export var register_queue_position: Vector3 = Vector3(1.15, 0.0, -3.2)
+@export var browse_position: Vector3 = Vector3(-2.15, 0.0, 4.25)
+@export var register_approach_position: Vector3 = Vector3(1.25, 0.0, -2.75)
+@export var leave_position: Vector3 = Vector3(-5.6, 0.0, 4.8)
 @export var item_approach_offset: Vector3 = Vector3(0.0, 0.0, -0.85)
 @export var movement_speed: float = 3.2
 @export var arrival_distance: float = 0.06
 @export var carried_item_position: Vector3 = Vector3(0.16, 0.64, -0.19)
 @export var carried_item_scale: Vector3 = Vector3(0.38, 0.38, 0.38)
+@export var leave_after_sale_enabled: bool = true
 
 var state: String = STATE_BROWSING
 var last_feedback: String = ""
+var has_left_store: bool = false
 var _checkout_item: Node3D = null
 var _move_target: Vector3 = Vector3.ZERO
 var _target_slot_path: NodePath
@@ -47,6 +52,12 @@ func _process(delta: float) -> void:
 	if state == STATE_MOVING_TO_REGISTER:
 		if _move_toward(register_queue_position, delta):
 			state = STATE_WAITING_FOR_REGISTER
+		return
+
+	if state == STATE_SALE_COMPLETE and leave_after_sale_enabled and not has_left_store:
+		if _move_toward(leave_position, delta):
+			has_left_store = true
+			visible = false
 
 
 func get_interaction_prompt() -> String:
@@ -60,6 +71,8 @@ func get_interaction_prompt() -> String:
 		return "%s Waiting At Register" % _get_item_display_name(_checkout_item)
 
 	if state == STATE_SALE_COMPLETE:
+		if has_left_store:
+			return "Customer Left Store"
 		return "Customer Checked Out"
 
 	if not last_feedback.is_empty():
@@ -79,6 +92,8 @@ func interact() -> String:
 		return "Customer is ready to buy %s." % _get_item_display_name(_checkout_item)
 
 	if state == STATE_SALE_COMPLETE:
+		if has_left_store:
+			return "Customer left after checkout."
 		return "Customer completed checkout."
 
 	if not last_feedback.is_empty():
@@ -205,6 +220,33 @@ func set_queue_position(queue_position: Vector3) -> void:
 		global_position = queue_position
 
 
+func set_path_points(new_browse_position: Vector3, new_register_approach: Vector3, new_leave_position: Vector3) -> void:
+	browse_position = new_browse_position
+	register_approach_position = new_register_approach
+	leave_position = new_leave_position
+	if state == STATE_BROWSING and _checkout_item == null:
+		global_position = browse_position
+
+
+func recover_from_blocked_path(recovery_position: Vector3) -> void:
+	global_position = recovery_position
+	browse_position = recovery_position
+	_move_target = Vector3.ZERO
+	_target_slot_path = NodePath("")
+	state = STATE_BROWSING
+	last_feedback = "Customer returned to browsing after a blocked path."
+
+
+func get_pathing_summary() -> Dictionary:
+	return {
+		"browse_position": browse_position,
+		"register_approach_position": register_approach_position,
+		"register_queue_position": register_queue_position,
+		"leave_position": leave_position,
+		"has_left_store": has_left_store,
+	}
+
+
 func begin_claim_from_slot(slot: Node, queue_position: Vector3) -> bool:
 	if state != STATE_BROWSING:
 		return false
@@ -218,6 +260,7 @@ func begin_claim_from_slot(slot: Node, queue_position: Vector3) -> bool:
 	register_queue_position = queue_position
 	_target_slot_path = get_path_to(slot)
 	_move_target = _approach_position_for_slot(slot)
+	register_approach_position = queue_position
 	state = STATE_MOVING_TO_ITEM
 	return true
 
@@ -242,6 +285,8 @@ func complete_sale() -> Node3D:
 	var item := _checkout_item
 	_checkout_item = null
 	state = STATE_SALE_COMPLETE
+	_move_target = leave_position
+	last_feedback = "Customer paid and is leaving the store."
 
 	if item.has_method("set_sold"):
 		item.set_sold()

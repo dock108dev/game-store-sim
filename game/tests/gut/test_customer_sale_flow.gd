@@ -151,6 +151,39 @@ func test_customer_completes_sale_and_marks_item_sold() -> void:
 	assert_false(item.visible)
 
 
+func test_customer_recovers_from_blocked_path_to_browse_state() -> void:
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	add_child_autofree(customer)
+
+	customer.state = SimpleBuyerCustomer.STATE_MOVING_TO_ITEM
+	customer.recover_from_blocked_path(Vector3(-1.5, 0.0, 2.5))
+
+	assert_eq(customer.state, SimpleBuyerCustomer.STATE_BROWSING)
+	assert_eq(customer.global_position, Vector3(-1.5, 0.0, 2.5))
+	assert_eq(customer.browse_position, Vector3(-1.5, 0.0, 2.5))
+	assert_string_contains(customer.get_last_feedback(), "blocked path")
+
+
+func test_customer_leaves_after_completed_sale_when_processed() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(customer)
+	customer.leave_position = Vector3(0.25, 0.0, -3.2)
+
+	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
+	assert_true(slot.place_item(item))
+	assert_true(customer.claim_item_from_slot(slot))
+
+	customer.complete_sale()
+	_advance_customer(customer, 1.0)
+
+	assert_eq(customer.state, SimpleBuyerCustomer.STATE_SALE_COMPLETE)
+	assert_true(customer.has_left_store)
+	assert_false(customer.visible)
+
+
 func test_transaction_ledger_records_sale_totals() -> void:
 	var ledger := TransactionLedger.new()
 	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()

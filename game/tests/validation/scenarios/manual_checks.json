@@ -273,6 +273,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_browse_queue_recovery_leave_readability",
+      "name": "Customer browsing, register approach, blocked-path recovery, and leaving behavior read naturally",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify bounded path points and state transitions; human review must confirm the route reads naturally in the production store layout.",
+      "owner": "manual QA"
+    },
+    {
       "id": "register_sale_message_readability",
       "name": "Register sale completion message is readable in the actual window",
       "status": "manual",
