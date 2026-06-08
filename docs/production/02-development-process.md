@@ -65,6 +65,30 @@ After each slice, answer:
 - Which data fields were missing?
 - What should be built next, and what should wait?
 
+## Slice Stop Protocol
+
+For production polish, every backlog item should be broken into explicit stops before implementation starts.
+
+Each stop must have:
+
+- Player-facing outcome.
+- Files likely to change.
+- Acceptance checklist.
+- Automated validation command.
+- Manual validation notes, even when skipped.
+- Commit message target.
+- Push/sync requirement before the next stop begins.
+
+Use this stop order by default:
+
+1. Baseline audit.
+2. Narrow implementation.
+3. Validation and screenshot review.
+4. Manual checklist sync.
+5. Commit and push.
+
+Do not start the next stop with uncommitted changes from the previous stop unless the current stop is being fixed because validation failed.
+
 ## Backlog Buckets
 
 Keep work grouped by game value:
@@ -93,6 +117,7 @@ A feature is done when:
 - Critical smoke scenarios are automated, not manual-only.
 - Any remaining manual validation is listed with the result in the change summary.
 - It is documented if it changes the design model.
+- The branch has been pushed after the validated commit.
 
 ## Early Playtest Plan
 

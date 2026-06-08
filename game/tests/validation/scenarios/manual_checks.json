@@ -209,6 +209,30 @@
       "owner": "manual QA"
     },
     {
+      "id": "backroom_zone_readability",
+      "name": "Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human composition review from normal player angles after the backroom spatial polish pass.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "backroom_receiving_storage_readability",
+      "name": "Receiving and storage props make delivered stock read as physical inventory without crowding prompts",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that graybox boxes, shelves, supplier stock, and pending fixture identity add clarity without blocking interaction.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "backroom_service_paperwork_context",
+      "name": "Backroom service and paperwork props read as context, not a separate service terminal",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that service/paperwork props support the theme while the register remains responsible for service completion.",
+      "owner": "manual QA"
+    },
+    {
       "id": "day_summary_panel_readability",
       "name": "Day summary panel text and controls are readable in the actual window",
       "status": "manual",

@@ -10,6 +10,8 @@ Goal: keep the validated retail loop intact while making the store, backroom, cu
 
 Active roadmap: `08-polish-roadmap.md`.
 
+Current implementation plan: `09-backroom-polish-implementation-plan.md`.
+
 ## Current Rules
 
 - Keep the game shippable after every slice.
@@ -25,7 +27,7 @@ Active roadmap: `08-polish-roadmap.md`.
 ## Priority Backlog
 
 1. Production polish planning reset. Done in this docs slice.
-2. Backroom spatial and visual identity pass.
+2. Backroom spatial and visual identity pass. Planned in `09-backroom-polish-implementation-plan.md`; next implementation target.
 3. Backroom computer/menu information architecture pass.
 4. Customer readability and role silhouette pass.
 5. Store lighting, materials, signage, and retail clutter pass.

@@ -27,6 +27,8 @@ Do not copy overlays, facecams, streamer UI, real brands, or platform chrome.
 
 ## Slice 1: Backroom Spatial And Visual Identity
 
+Implementation plan: `09-backroom-polish-implementation-plan.md`.
+
 Outcome:
 
 - Backroom has clear receiving, storage, computer, and service/paperwork zones.
