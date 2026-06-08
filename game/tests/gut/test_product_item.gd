@@ -63,6 +63,37 @@ func test_used_game_has_readable_front_cover_label() -> void:
 	assert_lt(cover_mesh.mesh.size.z, 0.02)
 
 
+func test_used_game_case_has_spine_platform_and_price_cues() -> void:
+	var spine_mesh := _item.get_node_or_null("SpineStripeMesh") as MeshInstance3D
+	var platform_band := _item.get_node_or_null("PlatformBandMesh") as MeshInstance3D
+	var price_sticker := _item.get_node_or_null("PriceStickerMesh") as MeshInstance3D
+
+	assert_not_null(spine_mesh)
+	assert_not_null(platform_band)
+	assert_not_null(price_sticker)
+	assert_gt(spine_mesh.mesh.size.y, 0.28)
+	assert_gt(platform_band.mesh.size.x, 0.15)
+	assert_lte(price_sticker.mesh.size.x, 0.06)
+	assert_lte(price_sticker.mesh.size.y, 0.04)
+
+
+func test_used_game_case_visual_cues_stay_inside_case_bounds() -> void:
+	var case_mesh := _item.get_node("CaseMesh") as MeshInstance3D
+	var front_cues := [
+		_item.get_node("CoverLabelMesh") as MeshInstance3D,
+		_item.get_node("SpineStripeMesh") as MeshInstance3D,
+		_item.get_node("PlatformBandMesh") as MeshInstance3D,
+		_item.get_node("PriceStickerMesh") as MeshInstance3D,
+	]
+	var half_width: float = case_mesh.mesh.size.x / 2.0
+	var top_y: float = case_mesh.position.y + case_mesh.mesh.size.y / 2.0
+
+	for cue in front_cues:
+		assert_lte(absf(cue.position.x) + cue.mesh.size.x / 2.0, half_width + 0.002)
+		assert_lte(cue.position.y + cue.mesh.size.y / 2.0, top_y + 0.002)
+		assert_lt(cue.mesh.size.z, case_mesh.mesh.size.z)
+
+
 func test_used_game_prompt_uses_product_name() -> void:
 	assert_eq(_item.get_interaction_prompt(), "Click Inspect Star Trader")
 
