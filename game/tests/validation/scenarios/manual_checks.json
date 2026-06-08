@@ -281,6 +281,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_feedback_bubble_readability",
+      "name": "Customer feedback bubbles for price refusal, purchase intent, impatience, trade-in, preorder, service, and suspicion are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify bubble presence and outcome tones; human review must confirm world-space text is readable without cluttering the player view.",
+      "owner": "manual QA"
+    },
+    {
       "id": "register_sale_message_readability",
       "name": "Register sale completion message is readable in the actual window",
       "status": "manual",

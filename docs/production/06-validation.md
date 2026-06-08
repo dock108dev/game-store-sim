@@ -42,9 +42,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 345 GUT tests.
-- UI scenario automation coverage is 341/405, above the required 80% threshold.
-- Production script mapping coverage is 35/35.
+- `scripts/validate_godot.sh` passes with 349 GUT tests.
+- UI scenario automation coverage is 342/407, above the required 80% threshold.
+- Production script mapping coverage is 36/36.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
 ## Manual Validation
@@ -65,7 +65,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, and customer pathing manual-validation docs are synced through Stop 5.3.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, and customer feedback manual-validation docs are synced through Stop 5.4.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
@@ -93,6 +93,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Customer idle, walk, browse, pickup, queue, talk, payment, handoff, leave, and impatient placeholder poses read clearly.
 - Customer spawn, item approach, buyer queue lane, and special-customer positions read naturally in the current layout.
 - Customer browsing points, register approach, blocked-path recovery, and post-sale leaving behavior read naturally.
+- Customer feedback bubbles for purchase intent, price refusal, trade-in, preorder, service, and suspicious cues are readable without cluttering the player view.
 - Register click prompt and sale completion message are readable.
 - Trade-in seller and compact carried item are readable at the register and do not look detached from the seller.
 - Customer torso, headwear, arms, legs, props, and role silhouettes read as stylized people rather than placeholder capsules.

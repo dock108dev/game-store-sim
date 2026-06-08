@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://dy3tbedu3rtbe"]
+[gd_scene load_steps=16 format=3 uid="uid://dy3tbedu3rtbe"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_buyer_customer.gd" id="1_customer"]
 [ext_resource type="Script" path="res://scripts/customers/customer_pose_animator.gd" id="2_pose"]
+[ext_resource type="Script" path="res://scripts/customers/customer_feedback_bubble.gd" id="3_feedback"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.08, 0.28, 0.4, 1)
@@ -104,3 +105,8 @@ shape = SubResource("CapsuleShape3D_customer")
 
 [node name="CustomerPoseAnimator" type="Node3D" parent="."]
 script = ExtResource("2_pose")
+
+[node name="FeedbackBubble" type="Label3D" parent="."]
+position = Vector3(0, 1.68, 0)
+pixel_size = 0.0024
+script = ExtResource("3_feedback")

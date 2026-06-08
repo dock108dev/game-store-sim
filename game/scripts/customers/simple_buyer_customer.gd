@@ -135,9 +135,11 @@ func would_buy_item(item: Node) -> bool:
 			product.display_name,
 			current_price / 100.0,
 		]
+		show_customer_feedback("Too expensive.", CustomerFeedbackBubble.TONE_WARNING)
 		return false
 
 	last_feedback = "Interested in %s." % product.display_name
+	show_customer_feedback(last_feedback, CustomerFeedbackBubble.TONE_POSITIVE)
 	return true
 
 
@@ -176,10 +178,12 @@ func is_item_affordable(item: Node, update_feedback: bool = true) -> bool:
 				product.display_name,
 				current_price / 100.0,
 			]
+			show_customer_feedback("Too expensive.", CustomerFeedbackBubble.TONE_WARNING)
 		return false
 
 	if update_feedback:
 		last_feedback = "Interested in %s." % product.display_name
+		show_customer_feedback(last_feedback, CustomerFeedbackBubble.TONE_POSITIVE)
 	return true
 
 
@@ -194,6 +198,7 @@ func report_item_too_expensive(item: Node) -> void:
 		product.display_name,
 		current_price / 100.0,
 	]
+	show_customer_feedback("Too expensive.", CustomerFeedbackBubble.TONE_WARNING)
 
 
 func get_price_limit_cents_for_item(item: Node) -> int:
@@ -235,6 +240,7 @@ func recover_from_blocked_path(recovery_position: Vector3) -> void:
 	_target_slot_path = NodePath("")
 	state = STATE_BROWSING
 	last_feedback = "Customer returned to browsing after a blocked path."
+	show_customer_feedback("Path blocked. Browsing again.", CustomerFeedbackBubble.TONE_WARNING)
 
 
 func get_pathing_summary() -> Dictionary:
@@ -245,6 +251,26 @@ func get_pathing_summary() -> Dictionary:
 		"leave_position": leave_position,
 		"has_left_store": has_left_store,
 	}
+
+
+func show_customer_feedback(message: String, tone: String = CustomerFeedbackBubble.TONE_INFO) -> void:
+	var bubble := _feedback_bubble()
+	if bubble != null:
+		bubble.show_feedback(message, tone)
+
+
+func clear_customer_feedback() -> void:
+	var bubble := _feedback_bubble()
+	if bubble != null:
+		bubble.clear_feedback()
+
+
+func get_feedback_summary() -> Dictionary:
+	var bubble := _feedback_bubble()
+	if bubble == null:
+		return {}
+
+	return bubble.get_feedback_summary()
 
 
 func begin_claim_from_slot(slot: Node, queue_position: Vector3) -> bool:
@@ -287,6 +313,7 @@ func complete_sale() -> Node3D:
 	state = STATE_SALE_COMPLETE
 	_move_target = leave_position
 	last_feedback = "Customer paid and is leaving the store."
+	show_customer_feedback("Thanks. Heading out.", CustomerFeedbackBubble.TONE_POSITIVE)
 
 	if item.has_method("set_sold"):
 		item.set_sold()
@@ -316,6 +343,7 @@ func _take_item_from_slot(slot: Node) -> bool:
 	item.rotation = Vector3.ZERO
 	item.scale = carried_item_scale
 	last_feedback = "Taking %s to the register." % _get_item_display_name(item)
+	show_customer_feedback("I'll take %s." % _get_item_display_name(item), CustomerFeedbackBubble.TONE_POSITIVE)
 	_checkout_item = item
 	_target_slot_path = NodePath("")
 
@@ -362,3 +390,7 @@ func _move_toward(target: Vector3, delta: float) -> bool:
 		return true
 
 	return false
+
+
+func _feedback_bubble() -> CustomerFeedbackBubble:
+	return get_node_or_null("FeedbackBubble") as CustomerFeedbackBubble

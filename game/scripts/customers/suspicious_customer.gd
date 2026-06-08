@@ -15,6 +15,7 @@ func _ready() -> void:
 		display_name = "Cash Buyer"
 	if inspect_text == "Nothing interesting yet." and not dialogue_text.strip_edges().is_empty():
 		inspect_text = dialogue_text.strip_edges()
+	show_customer_feedback("Cash?", CustomerFeedbackBubble.TONE_SUSPICIOUS)
 
 
 func get_interaction_prompt() -> String:
@@ -23,7 +24,22 @@ func get_interaction_prompt() -> String:
 
 func interact() -> String:
 	flag_encounter()
+	show_customer_feedback("Keep it quiet.", CustomerFeedbackBubble.TONE_SUSPICIOUS)
 	return get_encounter_text()
+
+
+func show_customer_feedback(message: String, tone: String = CustomerFeedbackBubble.TONE_INFO) -> void:
+	var bubble := _feedback_bubble()
+	if bubble != null:
+		bubble.show_feedback(message, tone)
+
+
+func get_feedback_summary() -> Dictionary:
+	var bubble := _feedback_bubble()
+	if bubble == null:
+		return {}
+
+	return bubble.get_feedback_summary()
 
 
 func get_encounter_text() -> String:
@@ -95,3 +111,7 @@ func _metadata() -> Dictionary:
 		"subject": subject.strip_edges(),
 		"dialogue_text": dialogue_text.strip_edges(),
 	}
+
+
+func _feedback_bubble() -> CustomerFeedbackBubble:
+	return get_node_or_null("FeedbackBubble") as CustomerFeedbackBubble

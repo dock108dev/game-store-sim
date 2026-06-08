@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this customer production pass: `scripts/validate_godot.sh` passed with 345 GUT tests, UI scenario coverage 341/405, and script mapping coverage 35/35.
+- Last full gate in this customer production pass: `scripts/validate_godot.sh` passed with 349 GUT tests, UI scenario coverage 342/407, and script mapping coverage 36/36.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -22,7 +22,7 @@ Current automated baseline:
 - Supplier ordering UI is implemented through Stop 4.6; manual QA should confirm category, cart, cost, due day, delivery state, storage needs, and receiving expectations stay readable and clearly imply physical receiving stock.
 - Daily report UI is implemented through Stop 4.7; manual QA should confirm cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations fit the report tab.
 - UI accessibility pass is implemented through Stop 4.8; manual QA should confirm text size, contrast, keyboard/mouse focus, and 1280x720 panel fit in the actual game window.
-- Customer visual-kit, animation baseline, and pathing polish are implemented through Stop 5.3; manual QA should include the Customer Production Focus checks when reviewing the next playable build.
+- Customer visual-kit, animation baseline, pathing, and feedback-bubble polish are implemented through Stop 5.4; manual QA should include the Customer Production Focus checks when reviewing the next playable build.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -128,6 +128,7 @@ Current automated baseline:
 - Customer torso, headwear, shoulders, arms, legs, and role silhouette markers should make every customer read as a stylized person rather than a capsule placeholder.
 - Customer idle, walk, browse, pickup, queue, talk, payment, handoff, happy-leave, annoyed-leave, and impatient-wait poses should be readable as placeholder animation states rather than static mannequins.
 - Customer browse positions, register approach, blocked-path recovery, queue lane, and post-sale leaving should read as one natural store route.
+- Customer feedback bubbles for purchase intent, price refusal, impatience, trade-in, preorder, service, and suspicion should be readable without turning into UI clutter.
 - Trade-in, preorder, service, and suspicious customers should form a readable register-area arc that stays clear of the buyer queue lane.
 - Used-game cases should look like compact boxed games on the rack, in the player's hand, and in customer hands; they should not read like oversized posters.
 - Backroom computer reads as the management terminal, not another register.
@@ -182,13 +183,14 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Customer Production Focus
 
-Run these first when manually checking the completed Stop 5.1 through Stop 5.3 customer visual-kit, animation baseline, and pathing pass:
+Run these first when manually checking the completed Stop 5.1 through Stop 5.4 customer visual-kit, animation baseline, pathing, and feedback pass:
 
 - Confirm buyer, trade-in, preorder, service, and suspicious customers read as different people before prompt text appears.
 - Confirm customers no longer look like capsule placeholders from the normal player camera.
 - Confirm headwear, shoulders, arms, legs, and held props stay readable while customers stand at the register and while buyers walk to the rack.
 - Confirm movement, queue, talk, handoff, payment, leave-happy, leave-annoyed, and impatient-wait poses are readable without final art.
 - Confirm browsing positions, rack approach, register approach, queue lane, blocked-path recovery, and leaving behavior do not look like teleporting or customers cutting through props.
+- Confirm feedback bubbles are readable from normal player angles for price refusal, purchase intent, impatient waiting, trade-in response, preorder confirmation, service pickup, and suspicious cues.
 - Confirm the new silhouettes do not hide prompts, stocked games, carried games, or register-counter props.
 - Confirm the darker suspicious-customer silhouette reads as optional hidden-thread context without crowding the normal queue.
 

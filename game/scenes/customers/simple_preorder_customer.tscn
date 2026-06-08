@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://ctu3fc8qprgmd"]
+[gd_scene load_steps=16 format=3 uid="uid://ctu3fc8qprgmd"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_preorder_customer.gd" id="1_preorder_customer"]
 [ext_resource type="Resource" path="res://data/releases/neon_skyline_launch.tres" id="2_release"]
 [ext_resource type="Script" path="res://scripts/customers/customer_pose_animator.gd" id="3_pose"]
+[ext_resource type="Script" path="res://scripts/customers/customer_feedback_bubble.gd" id="4_feedback"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.18, 0.18, 0.42, 1)
@@ -106,3 +107,8 @@ shape = SubResource("CapsuleShape3D_customer")
 
 [node name="CustomerPoseAnimator" type="Node3D" parent="."]
 script = ExtResource("3_pose")
+
+[node name="FeedbackBubble" type="Label3D" parent="."]
+position = Vector3(0, 1.68, 0)
+pixel_size = 0.0024
+script = ExtResource("4_feedback")

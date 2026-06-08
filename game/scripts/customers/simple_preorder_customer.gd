@@ -11,6 +11,10 @@ const STATE_PREORDER_COMPLETE := "preorder_complete"
 var state: String = STATE_WAITING_FOR_PREORDER
 
 
+func _ready() -> void:
+	show_customer_feedback("Preorder?", CustomerFeedbackBubble.TONE_INFO)
+
+
 func get_interaction_prompt() -> String:
 	if state == STATE_PREORDER_COMPLETE:
 		return "Preorder Complete"
@@ -59,8 +63,27 @@ func complete_preorder() -> bool:
 		return false
 
 	state = STATE_PREORDER_COMPLETE
+	show_customer_feedback("Preorder saved.", CustomerFeedbackBubble.TONE_POSITIVE)
 	return true
+
+
+func show_customer_feedback(message: String, tone: String = CustomerFeedbackBubble.TONE_INFO) -> void:
+	var bubble := _feedback_bubble()
+	if bubble != null:
+		bubble.show_feedback(message, tone)
+
+
+func get_feedback_summary() -> Dictionary:
+	var bubble := _feedback_bubble()
+	if bubble == null:
+		return {}
+
+	return bubble.get_feedback_summary()
 
 
 func _format_money(cents: int) -> String:
 	return "$%0.2f" % (cents / 100.0)
+
+
+func _feedback_bubble() -> CustomerFeedbackBubble:
+	return get_node_or_null("FeedbackBubble") as CustomerFeedbackBubble

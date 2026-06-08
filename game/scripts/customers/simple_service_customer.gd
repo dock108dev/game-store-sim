@@ -15,6 +15,10 @@ const STATE_SERVICE_COMPLETE := "service_complete"
 var state: String = STATE_WAITING_FOR_SERVICE
 
 
+func _ready() -> void:
+	show_customer_feedback("Service?", CustomerFeedbackBubble.TONE_INFO)
+
+
 func get_interaction_prompt() -> String:
 	if state == STATE_SERVICE_COMPLETE:
 		return "Service Complete"
@@ -38,7 +42,22 @@ func complete_service() -> bool:
 		return false
 
 	state = STATE_SERVICE_COMPLETE
+	show_customer_feedback("Service complete.", CustomerFeedbackBubble.TONE_POSITIVE)
 	return true
+
+
+func show_customer_feedback(message: String, tone: String = CustomerFeedbackBubble.TONE_INFO) -> void:
+	var bubble := _feedback_bubble()
+	if bubble != null:
+		bubble.show_feedback(message, tone)
+
+
+func get_feedback_summary() -> Dictionary:
+	var bubble := _feedback_bubble()
+	if bubble == null:
+		return {}
+
+	return bubble.get_feedback_summary()
 
 
 func get_service_summary() -> String:
@@ -65,3 +84,7 @@ func get_turnaround_minutes() -> int:
 
 func _format_money(cents: int) -> String:
 	return "$%0.2f" % (cents / 100.0)
+
+
+func _feedback_bubble() -> CustomerFeedbackBubble:
+	return get_node_or_null("FeedbackBubble") as CustomerFeedbackBubble

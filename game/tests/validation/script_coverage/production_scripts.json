@@ -99,6 +99,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/customer_feedback_bubble.gd",
+      "tests": [
+        "res://tests/gut/test_customer_feedback_bubble.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/simple_preorder_customer.gd",
       "tests": [
         "res://tests/gut/test_preorder_customer.gd"

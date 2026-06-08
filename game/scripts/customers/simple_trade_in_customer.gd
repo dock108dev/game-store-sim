@@ -18,6 +18,7 @@ func _ready() -> void:
 	var item := get_trade_item()
 	if item != null and item.has_method("set_customer_held"):
 		item.set_customer_held(customer_id)
+	show_customer_feedback("Trade-in?", CustomerFeedbackBubble.TONE_INFO)
 
 
 func get_interaction_prompt() -> String:
@@ -118,6 +119,7 @@ func complete_trade_in(receiving_box: Node) -> Node3D:
 	item.scale = Vector3.ONE
 	carried_item_path = NodePath("")
 	state = STATE_TRADE_COMPLETE
+	show_customer_feedback("Deal. Thanks.", CustomerFeedbackBubble.TONE_POSITIVE)
 
 	item.set("location_id", "receiving_box_001")
 	if item.has_method("set_collision_enabled"):
@@ -131,7 +133,22 @@ func decline_trade_in() -> bool:
 		return false
 
 	state = STATE_TRADE_DECLINED
+	show_customer_feedback("No deal.", CustomerFeedbackBubble.TONE_WARNING)
 	return true
+
+
+func show_customer_feedback(message: String, tone: String = CustomerFeedbackBubble.TONE_INFO) -> void:
+	var bubble := _feedback_bubble()
+	if bubble != null:
+		bubble.show_feedback(message, tone)
+
+
+func get_feedback_summary() -> Dictionary:
+	var bubble := _feedback_bubble()
+	if bubble == null:
+		return {}
+
+	return bubble.get_feedback_summary()
 
 
 func _get_item_display_name(item: Node) -> String:
@@ -143,3 +160,7 @@ func _get_item_display_name(item: Node) -> String:
 		return product.display_name
 
 	return item.name
+
+
+func _feedback_bubble() -> CustomerFeedbackBubble:
+	return get_node_or_null("FeedbackBubble") as CustomerFeedbackBubble
