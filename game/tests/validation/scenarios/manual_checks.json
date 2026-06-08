@@ -823,6 +823,14 @@
       "critical": false,
       "reason": "Automated tests verify file-backed slot creation, continue data, overwrite/delete behavior, modal focus, and player-panel wiring; human review must confirm slot metadata, destructive overwrite/delete language, and mouse capture transitions are readable in the actual window.",
       "owner": "manual QA"
+    },
+    {
+      "id": "save_migration_failure_readability",
+      "name": "Save migration and failure handling reads as compatibility protection instead of silent data loss",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify version 1 migration defaults, current schema IDs, future-version rejection, and malformed-save failure state; human review must confirm any surfaced load failure copy is understandable and never implies a corrupted or incompatible save was loaded.",
+      "owner": "manual QA"
     }
   ]
 }

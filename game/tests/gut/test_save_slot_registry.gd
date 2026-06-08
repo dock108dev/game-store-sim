@@ -22,7 +22,7 @@ func test_save_slot_registry_creates_new_game_slot_with_metadata() -> void:
 	assert_eq(slots.size(), 1)
 	assert_eq(metadata.get("slot_id"), "slot_1")
 	assert_eq(metadata.get("label"), "Slot 1")
-	assert_eq(int(metadata.get("version")), 1)
+	assert_eq(int(metadata.get("version")), StoreSaveCodec.CURRENT_SAVE_VERSION)
 	assert_eq(int(metadata.get("day_number")), 1)
 	assert_string_contains(str(metadata.get("summary_text", "")), "Day 1")
 	assert_string_contains(registry.get_save_slot_summary_text(), "Slot 1")

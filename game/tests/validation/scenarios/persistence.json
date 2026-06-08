@@ -62,6 +62,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_save_slot_panel"
+    },
+    {
+      "id": "save_codec_v1_migration_policy",
+      "name": "Save codec migrates version 1 data to the current schema with safe defaults",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_migrates_v1_and_rejects_invalid_versions"
+    },
+    {
+      "id": "save_codec_failure_handling",
+      "name": "Save codec rejects future and malformed save data with readable failure state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_migrates_v1_and_rejects_invalid_versions"
     }
   ]
 }

@@ -44,8 +44,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 479 GUT tests.
-- UI scenario automation coverage is 445/548, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 480 GUT tests.
+- UI scenario automation coverage is 447/551, above the 80% threshold.
 - Production script mapping coverage is 49/49.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
@@ -81,6 +81,7 @@ Current production validation baseline:
 - Camera feel coverage verifies the Stop 11.5 comfort FOV bounds, subtle movement bob, held-item sway, modal/workstation settling, and bounded runtime motion offsets.
 - Presentation validation sync is complete through Stop 11.6; automated checks now audit presentation scenario coverage, manual review coverage, and docs coverage for the completed ambience, interaction audio, customer audio, microfeedback, and camera-feel pass.
 - Save slot UI coverage verifies the Stop 12.1 file-backed slot registry, new game slot creation, continue data, overwrite/delete behavior, save metadata, modal accessibility, and player-controller save-panel wiring.
+- Save migration coverage verifies the Stop 12.2 current save version, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed JSON failure state, and readable migration-policy summary text.
 
 ## Manual Validation
 
@@ -103,7 +104,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, clue-surface, hidden-choice, hidden-consequence, hidden-optionality, hidden-thread validation sync, store-ambience validation, interaction-audio validation, customer-audio validation, microfeedback validation, camera-feel validation, presentation validation sync, and save-slot UI validation are synced through Stop 12.1.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, clue-surface, hidden-choice, hidden-consequence, hidden-optionality, hidden-thread validation sync, store-ambience validation, interaction-audio validation, customer-audio validation, microfeedback validation, camera-feel validation, presentation validation sync, save-slot UI validation, and save migration validation are synced through Stop 12.2.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding validation is synced through Stop 7.6; manual QA should confirm the checklist teaches the first-day loop without feeling like debug tutorial text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.

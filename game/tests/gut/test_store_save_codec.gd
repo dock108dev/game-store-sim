@@ -37,7 +37,8 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 
 	var data: Dictionary = codec.create_save_data(session)
 
-	assert_eq(data.get("version"), 1)
+	assert_eq(data.get("version"), StoreSaveCodec.CURRENT_SAVE_VERSION)
+	assert_eq(data.get("schema_id"), StoreSaveCodec.SAVE_SCHEMA_ID)
 	assert_eq(data.get("day_number"), 1)
 	assert_eq(data.get("day_phase"), StoreSession.DAY_PHASE_CUSTOMER_HOURS)
 	assert_eq(data.get("cash_cents"), 25299)
@@ -91,7 +92,8 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	var codec: RefCounted = load("res://scripts/save/store_save_codec.gd").new()
 	var data: Dictionary = {
-		"version": 1,
+		"version": StoreSaveCodec.CURRENT_SAVE_VERSION,
+		"schema_id": StoreSaveCodec.SAVE_SCHEMA_ID,
 		"day_number": 2,
 		"day_phase": StoreSession.DAY_PHASE_TOMORROW_PLANNING,
 		"cash_cents": 61234,
@@ -123,7 +125,8 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	var json_text: String = codec.encode_to_json(data)
 	var decoded: Dictionary = codec.decode_from_json(json_text)
 
-	assert_eq(int(decoded.get("version")), 1)
+	assert_eq(int(decoded.get("version")), StoreSaveCodec.CURRENT_SAVE_VERSION)
+	assert_eq(str(decoded.get("schema_id")), StoreSaveCodec.SAVE_SCHEMA_ID)
 	assert_eq(int(decoded.get("day_number")), 2)
 	assert_eq(str(decoded.get("day_phase")), StoreSession.DAY_PHASE_TOMORROW_PLANNING)
 	assert_eq(int(decoded.get("cash_cents")), 61234)
@@ -413,3 +416,31 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_reputation_score(), 95)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")
+
+
+func test_store_save_codec_migrates_v1_and_rejects_invalid_versions() -> void:
+	var codec: StoreSaveCodec = load("res://scripts/save/store_save_codec.gd").new()
+	var v1_data := {
+		"version": 1,
+		"day_number": 2,
+		"day_phase": StoreSession.DAY_PHASE_REPORT,
+		"cash_cents": 55555,
+	}
+
+	var migrated: Dictionary = codec.migrate_save_data(v1_data)
+	assert_eq(int(migrated.get("version")), StoreSaveCodec.CURRENT_SAVE_VERSION)
+	assert_eq(str(migrated.get("schema_id")), StoreSaveCodec.SAVE_SCHEMA_ID)
+	assert_eq(int(migrated.get("day_number")), 2)
+	assert_eq(int(migrated.get("cash_cents")), 55555)
+	assert_eq(int(migrated.get("reputation_score")), 100)
+	assert_true((migrated.get("transactions") as Array).is_empty())
+	assert_true((migrated.get("migration_history") as Array).has("v1_to_v2_defaults"))
+	assert_string_contains(codec.get_last_migration_messages()[0], "version 1 to version 2")
+	assert_string_contains(codec.get_migration_policy_summary_text(), "Current version 2")
+
+	var future_data := {"version": StoreSaveCodec.CURRENT_SAVE_VERSION + 1}
+	assert_true(codec.migrate_save_data(future_data).is_empty())
+	assert_string_contains(codec.get_last_error(), "newer than this build")
+
+	assert_true(codec.decode_from_json("not json").is_empty())
+	assert_string_contains(codec.get_last_error(), "not valid JSON")

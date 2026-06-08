@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save-slot pass: `scripts/validate_godot.sh` passes with 479 GUT tests, UI scenario automation coverage at 445/548, production script mapping coverage at 49/49, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this save/load pass: `scripts/validate_godot.sh` passes with 480 GUT tests, UI scenario automation coverage at 447/551, production script mapping coverage at 49/49, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -52,7 +52,7 @@ Current automated baseline:
 - Presentation microfeedback is implemented through Stop 11.4; manual QA should run the Presentation Feel Focus microfeedback checks to confirm highlights, item settle, sale confirmation, cash/reputation ticks, day transitions, delivery arrivals, and invalid actions are subtle and semantically clear.
 - Camera feel is implemented through Stop 11.5; manual QA should run the Presentation Feel Focus camera checks to confirm movement bob, FOV shift, held-item sway, and workstation settling feel comfortable and do not hide the reticle or prompts.
 - Presentation validation sync is implemented through Stop 11.6; automated checks now audit the presentation scenario matrix, manual readability checks, and docs for the completed audio, VFX, and camera-feel pass.
-- Save slot UI is implemented through Stop 12.1; manual QA should run the Save/Load Focus checks to confirm new game, continue, overwrite, delete, metadata readability, and mouse capture transitions work in the actual window.
+- Save slot UI is implemented through Stop 12.1, and save migration policy is implemented through Stop 12.2; manual QA should run the Save/Load Focus checks to confirm new game, continue, overwrite, delete, metadata readability, compatibility/failure copy, and mouse capture transitions work in the actual window.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -150,6 +150,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 88. Walk, turn, carry several items, open/close the register, pricing panel, trade-in panel, settings, and backroom computer, and confirm camera bob, FOV shift, held-item sway, and workstation settling remain comfortable and readable.
 89. Run a full day loop and confirm ambience, interaction sounds, customer audio placeholders, microfeedback, camera bob, FOV shift, held-item sway, and workstation settling feel like one coherent presentation baseline.
 90. Open the save slot panel, create a new game slot, continue from it, overwrite it from an active session, delete it, and confirm each state is clearly labeled before and after the action.
+91. Attempt a compatibility or corrupted-save manual smoke when surfaced by the build, and confirm migrated saves load with expected defaults while incompatible or malformed saves fail with clear copy instead of silent data loss.
 
 ## Visual Checks
 
@@ -283,12 +284,14 @@ Run these first when manually checking the completed Stop 11.1 store ambience ba
 
 ## Save/Load Focus
 
-Run these first when manually checking the completed Stop 12.1 save slot UI baseline:
+Run these first when manually checking the completed Stop 12.1 save slot UI baseline and Stop 12.2 migration policy:
 
 - Confirm empty slots, saved slots, day number, day phase, cash, reputation, inventory count, and transaction count are readable.
 - Confirm New Game does not silently overwrite an existing save.
 - Confirm Overwrite and Delete read as deliberate destructive actions.
-- Confirm Continue prepares the selected slot and does not imply migration or full scene restore beyond the current Stop 12.1 scope.
+- Confirm Continue prepares the selected slot and does not imply hidden full-scene restore beyond the current save/load scope.
+- Confirm version 1 save data can migrate to the current schema with defaults for newly added arrays and hidden-thread scores when a compatibility smoke is available.
+- Confirm future-version or malformed save data fails closed with readable copy and does not load partial or corrupted state.
 - Confirm closing the save slot panel restores captured first-person mouse control.
 
 ## Production Target Contract Focus
