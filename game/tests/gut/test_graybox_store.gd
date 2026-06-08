@@ -207,6 +207,58 @@ func test_store_lighting_has_warm_sales_and_cool_backroom_layers() -> void:
 	assert_gt(backroom_light.global_position.z, 4.0)
 
 
+func test_production_lighting_accents_stay_readable_and_bounded() -> void:
+	var accent_lights := {
+		"StorefrontAccentLight": {
+			"warm": true,
+			"z_less_than": -4.0,
+			"max_energy": 1.25,
+			"max_range": 3.3,
+		},
+		"ShelfAccentLight": {
+			"warm": true,
+			"z_greater_than": 4.0,
+			"max_energy": 1.35,
+			"max_range": 3.2,
+		},
+		"ReceivingWorkLight": {
+			"warm": false,
+			"z_greater_than": 4.0,
+			"max_energy": 1.0,
+			"max_range": 2.7,
+		},
+		"BackroomDeskLight": {
+			"warm": false,
+			"z_greater_than": 4.0,
+			"max_energy": 1.1,
+			"max_range": 2.6,
+		},
+	}
+
+	var total_accent_energy := 0.0
+	for light_name in accent_lights:
+		var light := _store.get_node_or_null(light_name) as OmniLight3D
+		assert_not_null(light)
+		assert_gt(light.global_position.y, 1.6)
+		assert_lte(light.light_energy, accent_lights[light_name]["max_energy"])
+		assert_lte(light.omni_range, accent_lights[light_name]["max_range"])
+		if accent_lights[light_name].has("z_less_than"):
+			assert_lt(light.global_position.z, accent_lights[light_name]["z_less_than"])
+		if accent_lights[light_name].has("z_greater_than"):
+			assert_gt(light.global_position.z, accent_lights[light_name]["z_greater_than"])
+		if accent_lights[light_name]["warm"]:
+			assert_gt(light.light_color.r, light.light_color.b)
+		else:
+			assert_gt(light.light_color.b, light.light_color.r)
+		total_accent_energy += light.light_energy
+
+	var sun_light := _store.get_node("SunLight") as DirectionalLight3D
+	var sales_light := _store.get_node("StoreLight") as OmniLight3D
+	var register_light := _store.get_node("RegisterTaskLight") as OmniLight3D
+	var backroom_light := _store.get_node("BackroomUtilityLight") as OmniLight3D
+	assert_lte(sun_light.light_energy + sales_light.light_energy + register_light.light_energy + backroom_light.light_energy + total_accent_energy, 11.0)
+
+
 func test_sales_floor_has_merchandising_and_route_cues() -> void:
 	var route_mat := _store.get_node_or_null("SalesFloorRouteMat") as CSGBox3D
 	var new_release_endcap := _store.get_node_or_null("NewReleaseEndcap") as Node3D

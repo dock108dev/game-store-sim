@@ -1022,22 +1022,46 @@ script = ExtResource("13_evidence_storage")
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)
-light_energy = 0.9
+light_energy = 0.75
 
 [node name="StoreLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.7, -0.15)
 light_color = Color(1, 0.92, 0.78, 1)
-light_energy = 2.6
-omni_range = 7.4
+light_energy = 2.35
+omni_range = 6.8
 
 [node name="RegisterTaskLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.35, -2.75)
 light_color = Color(1, 0.86, 0.68, 1)
-light_energy = 2.0
-omni_range = 4.2
+light_energy = 2.05
+omni_range = 3.8
 
 [node name="BackroomUtilityLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 2.45, 4.95)
 light_color = Color(0.78, 0.9, 1, 1)
-light_energy = 1.8
-omni_range = 5.6
+light_energy = 1.45
+omni_range = 5.0
+
+[node name="StorefrontAccentLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 2.15, -4.85)
+light_color = Color(1, 0.84, 0.58, 1)
+light_energy = 1.15
+omni_range = 3.2
+
+[node name="ShelfAccentLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 2.05, 4.7)
+light_color = Color(1, 0.88, 0.68, 1)
+light_energy = 1.25
+omni_range = 3.1
+
+[node name="ReceivingWorkLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.25, 1.85, 4.42)
+light_color = Color(0.72, 0.88, 1, 1)
+light_energy = 0.95
+omni_range = 2.65
+
+[node name="BackroomDeskLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35, 1.72, 4.18)
+light_color = Color(0.76, 0.9, 1, 1)
+light_energy = 1.05
+omni_range = 2.55

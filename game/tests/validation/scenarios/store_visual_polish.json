@@ -15,6 +15,13 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_store_lighting_has_warm_sales_and_cool_backroom_layers"
     },
     {
+      "id": "production_lighting_accents",
+      "name": "Production lighting accents are warm/cool by zone and bounded for screenshot-safe exposure",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_production_lighting_accents_stay_readable_and_bounded"
+    },
+    {
       "id": "storefront_entry_production_cues",
       "name": "Storefront entry has glass, open sign, hours decal, and entry cue",
       "status": "automated",

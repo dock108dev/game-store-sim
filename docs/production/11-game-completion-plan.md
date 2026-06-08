@@ -174,7 +174,7 @@ Stops:
 - Stop 2.3: Register command center. Done as a first prop pass with scanner, card reader, receipt printer, sleeve stack, impulse rack, customer-side mat, and queue context.
 - Stop 2.4: Shelf and fixture kit. Done as a first readable fixture-language pass with used-game rack, bargain bin, accessory peg wall, locked-case placeholder, and category labels.
 - Stop 2.5: Backroom production blockout. Done as a first operations-room pass with delivery, receiving invoice, backstock overflow, management desk cues, service ticket, safe/security, and evidence-locker placeholders.
-- Stop 2.6: Lighting and postprocess. Establish warm retail lighting, cooler backroom lighting, readable prompt contrast, and screenshot-safe exposure.
+- Stop 2.6: Lighting and postprocess. Done as a bounded explicit-light pass with warmer storefront/shelf/register accents, cooler receiving/backroom task lights, and screenshot-safe energy limits.
 - Stop 2.7: Collision and navigation. Ensure props do not block core paths, queue lanes, stocking, receiving, fixture placement, or screenshot capture.
 - Stop 2.8: Environment validation sync. Add or update automated scene assertions and manual screenshot checks.
 
