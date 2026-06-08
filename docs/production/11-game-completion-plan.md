@@ -305,12 +305,13 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 368 GUT tests.
-- UI scenario automation coverage is 348/417, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 369 GUT tests.
+- UI scenario automation coverage is 349/419, above the required 80% threshold.
 - Production script mapping coverage is 39/39.
 - Manual customer-production checks are current for visual kit, animation, pathing, feedback bubbles, archetype data, dialogue data, and validation sync.
 - Manual product-content checks are current for Stop 6.1 inventory schema expansion.
 - Manual product-visual checks are current for Stop 6.2 visual generation rules.
+- Manual starter-catalog checks are current for Stop 6.3 catalog expansion.
 
 ## Milestone 6: Product And Content Pipeline
 
@@ -320,7 +321,7 @@ Stops:
 
 - Stop 6.1: Inventory schema expansion. Done in `Expand inventory schema`: product definitions now expose category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata, with catalog resources, automated schema coverage, and manual content-review checklist updates.
 - Stop 6.2: Product visual generation rules. Done in `Build product visual variants`: product visual rules now generate reusable case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket profiles, and product items apply generated cue meshes from those profiles.
-- Stop 6.3: Starter catalog expansion. Add enough fictional products to support multiple days without repetition.
+- Stop 6.3: Starter catalog expansion. Done in `Expand starter catalog`: the product catalog now contains 33 fictional products across used games, new games, accessories, hardware, and service tickets, including 30 sellable physical products for several days of rotation.
 - Stop 6.4: Condition and authenticity cues. Add visible scratches, missing manual markers, loose media, damaged labels, resealed packaging, and suspicious serial markers.
 - Stop 6.5: Shelf label and price tag system. Show category, platform, price, sale tags, preorder tags, staff pick tags, and bargain tags without cluttering interactions.
 - Stop 6.6: Content validation tools. Add checks for unique IDs, fictional names, category coverage, pricing sanity, and visual variant coverage.

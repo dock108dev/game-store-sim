@@ -53,11 +53,14 @@ func test_hardware_profiles_choose_boxed_device_variants() -> void:
 	var console := ProductVisualRules.build_profile(_make_product("hardware", "console", "complete"))
 	var controller := ProductVisualRules.build_profile(_make_product("hardware", "controller", "complete"))
 	var accessory := ProductVisualRules.build_profile(_make_product("hardware", "cable", "complete"))
+	var boxed_accessory := ProductVisualRules.build_profile(_make_product("accessory", "card", "complete"))
 
 	assert_eq(console.get("container_variant"), ProductVisualRules.VARIANT_BOX)
 	assert_eq(console.get("media_variant"), ProductVisualRules.VARIANT_CONSOLE)
 	assert_eq(controller.get("media_variant"), ProductVisualRules.VARIANT_CONTROLLER)
 	assert_eq(accessory.get("media_variant"), ProductVisualRules.VARIANT_ACCESSORY)
+	assert_eq(boxed_accessory.get("container_variant"), ProductVisualRules.VARIANT_BOX)
+	assert_eq(boxed_accessory.get("media_variant"), ProductVisualRules.VARIANT_ACCESSORY)
 
 
 func test_service_ticket_profile_stays_distinct_from_sale_products() -> void:

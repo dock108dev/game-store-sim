@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this product/content pipeline pass: `scripts/validate_godot.sh` passed with 368 GUT tests, UI scenario coverage 348/417, and script mapping coverage 39/39.
+- Last full gate in this product/content pipeline pass: `scripts/validate_godot.sh` passed with 369 GUT tests, UI scenario coverage 349/419, and script mapping coverage 39/39.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -25,6 +25,7 @@ Current automated baseline:
 - Customer visual-kit, animation baseline, pathing, feedback-bubble, archetype-data, dialogue baseline, and validation sync are implemented through Stop 5.7; manual QA should include the Customer Production Focus checks when reviewing the next playable build.
 - Inventory schema expansion is implemented through Stop 6.1; manual QA should confirm product metadata choices read coherently as fictional game-store inventory data while visual differentiation work continues in later Stop 6 slices.
 - Product visual generation rules are implemented through Stop 6.2; manual QA should confirm the generated case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cues read as distinct physical inventory forms.
+- Starter catalog expansion is implemented through Stop 6.3; manual QA should confirm the 33-product fictional catalog feels coherent, broad enough, and not repetitive.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -187,13 +188,15 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Product Content Focus
 
-Run these first when manually checking the completed Stop 6.1 and Stop 6.2 product/content pass:
+Run these first when manually checking the completed Stop 6.1 through Stop 6.3 product/content pass:
 
 - Confirm product fields now cover category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location.
 - Confirm authenticity and risk metadata feel coherent for imperfect used copies, especially loose, missing-manual, poor-condition, and uncertain-origin items.
 - Confirm platform-family labels are fictional, consistent, and useful enough to drive later visual rules without resembling real platform branding.
 - Confirm generated visual variants cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket forms without becoming visual clutter.
 - Confirm product variant cues stay legible at receiving, hand, shelf, customer-held, and register-review scale.
+- Confirm the expanded catalog has enough fictional used games, new games, accessories, hardware, and service tickets to support several store days without repeating the same names constantly.
+- Confirm new catalog prices and risk/completeness metadata feel plausible before the later economy-balance pass.
 - Confirm schema updates did not imply that non-used-game categories are already implemented visually; category expansion comes in later product/content slices.
 
 ## Customer Production Focus

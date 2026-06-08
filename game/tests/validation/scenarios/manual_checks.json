@@ -249,6 +249,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "starter_catalog_breadth_review",
+      "name": "Starter catalog breadth feels sufficient for several fictional store days",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify count and category coverage; human review should confirm the used-game, new-game, accessory, hardware, and service-ticket names/prices feel coherent and not repetitive.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",

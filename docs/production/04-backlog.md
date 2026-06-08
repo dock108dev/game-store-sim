@@ -99,6 +99,7 @@ The following polish items remain valid historical checkpoints:
 - Done: added receiving-box intake lanes and label to make intake placement read as organized physical inventory.
 - Done: tuned carried item stack fanning so multiple held cases stay visible without blocking the center view.
 - Done: added data-driven product visual rules for case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cue variants.
+- Done: expanded the starter product catalog to 33 fictional products across used games, new games, accessories, hardware, and service tickets.
 - Remaining polish risk: fixture ghost/placed fixture state can still get a dedicated art pass later, but the current automated checks preserve valid/invalid ghost distinction and placed-rack behavior.
 
 ## Completed First-Playable Scope
@@ -107,7 +108,7 @@ Compressed summary of completed validated systems:
 
 - First-person movement, click-first interaction, prompt, and reticle.
 - Receiving pickup, multi-item carry, held-item pricing, shelf stocking, and apply-to-matching pricing.
-- Product catalog, fictional product validation, item identity, category, platform family, format, price, cost basis, condition, completeness, authenticity, rarity, demand, market value, risk, default location, data-driven visual variant profile, serial metadata, and active inventory summary.
+- Product catalog, fictional product validation, multi-day starter product depth, item identity, category, platform family, format, price, cost basis, condition, completeness, authenticity, rarity, demand, market value, risk, default location, data-driven visual variant profile, serial metadata, and active inventory summary.
 - Buyer customer manager, buyer movement, price sensitivity, lower-priced copy selection, register queue, sale completion, and transaction ledger.
 - Trade-in seller, offer panel, cash/store-credit acceptance, counteroffer adjustment, decline, and acquired inventory.
 - Service customer and register-completed service accounting.
@@ -125,7 +126,7 @@ These remain future phases unless explicitly selected:
 - Theft and shrinkage systems.
 - Returns and exchanges.
 - Final product art beyond the current generated cue-mesh variants.
-- Expanded multi-category starter catalog beyond the current used-game catalog.
+- Stocking fixtures for every expanded starter category beyond the current used-game display rack.
 - Player-facing save/load slot UI.
 - Employees and staff assignment.
 - Larger store expansion.

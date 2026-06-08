@@ -40,7 +40,7 @@ static func build_profile(product: ProductDefinition) -> Dictionary:
 	var media_variant := _get_media_variant(category, format)
 	var state_variant := VARIANT_BOX
 
-	if category == "hardware":
+	if category == "hardware" or category == "accessory":
 		container_variant = VARIANT_BOX
 	elif category == "service" or format == VARIANT_SERVICE_TICKET:
 		container_variant = VARIANT_SERVICE_TICKET
@@ -82,6 +82,8 @@ static func _get_media_variant(category: String, format: String) -> String:
 			return VARIANT_CONSOLE
 		if format == VARIANT_CONTROLLER:
 			return VARIANT_CONTROLLER
+		return VARIANT_ACCESSORY
+	if category == "accessory":
 		return VARIANT_ACCESSORY
 
 	if format == VARIANT_DISC:
