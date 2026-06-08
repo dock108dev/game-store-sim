@@ -42,8 +42,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 293 GUT tests.
-- UI scenario automation coverage is 296/352, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 294 GUT tests.
+- UI scenario automation coverage is 297/353, above the required 80% threshold.
 - Production script mapping coverage is 31/31.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
@@ -57,7 +57,8 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
-- Center reticle readability in the actual game window.
+- Prompt hierarchy readability in the actual game window, including action, subject, blocked, and feedback states.
+- Center reticle readability in normal, blocked, and feedback states in the actual game window.
 - Receiving box, display rack, register, and compact used-game visual placement.
 - Display rack slots still behave like used-game slots after category assignment changes.
 - Held item stack stays visible without blocking normal navigation.

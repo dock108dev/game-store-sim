@@ -78,6 +78,13 @@
       "evidence": "res://tests/gut/test_interaction_contract.gd::test_interaction_prompt_show_and_hide"
     },
     {
+      "id": "interaction_prompt_hierarchy",
+      "name": "Interaction prompt parses action, subject, blocked, and feedback tones",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_interaction_prompt_parses_prompt_hierarchy_and_feedback_tones"
+    },
+    {
       "id": "input_actions_exist",
       "name": "Keyboard input actions exist",
       "status": "automated",

@@ -4,9 +4,10 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this environment validation sync pass: `scripts/validate_godot.sh` passed with 293 GUT tests, UI scenario coverage 296/352, and script mapping coverage 31/31.
+- Last full gate in this interaction prompt hierarchy pass: `scripts/validate_godot.sh` passed with 294 GUT tests, UI scenario coverage 297/353, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
+- Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -85,7 +86,9 @@ Current automated baseline:
 - Stocking one carried game leaves the remaining carried games visible and usable.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
-- Click prompts and the center reticle are readable in the actual game window.
+- Click prompts clearly separate the action from the subject in the actual game window.
+- Blocked held-item prompts and short feedback messages read differently from normal action prompts without hiding the center reticle.
+- The center reticle remains readable in normal, blocked, and feedback states.
 - Store lighting, material contrast, and signage make the room read as a small specialty game shop rather than a graybox test room.
 - Storefront, shelf, register, receiving, and backroom desk lights create readable warm retail and cooler operations zones without washing out text, prompts, or product cases.
 - Production storefront, sales floor, register, fixture, and backroom props remain nonblocking and preserve the core route from entry to rack, register, receiving, storage, and fixture placement.
@@ -151,6 +154,16 @@ Run these when reviewing the current prototype against the new production direct
 - Confirm the UI target covers prompt, pricing, register, trade-in appraisal, backroom computer, ordering, releases, and daily report decisions.
 - Confirm the content target is broad enough for several days of play while staying data-first and fictional.
 - Confirm future implementation slices update this checklist and `manual_checks.json` when they change the visible store, UI, customers, content, or interaction flow.
+
+## Interaction Polish Focus
+
+Run these first when manually checking the completed Stop 3.1 prompt hierarchy pass:
+
+- Confirm normal prompts such as pickup, stock, price, register, computer, talk, and inspect read as clear click actions with a target subject.
+- Confirm blocked prompts such as fixed-price held-item actions use the warning reticle state and are not mistaken for successful feedback.
+- Confirm short feedback messages such as pickup, sale, service, and unavailable-action responses use the feedback reticle state and clear themselves normally.
+- Confirm prompt color changes remain readable against the sales floor, backroom, receiving box, register, and computer views.
+- Confirm no prompt state hides the center reticle or makes the player uncertain what a click will do.
 
 ## Backroom Polish Focus
 

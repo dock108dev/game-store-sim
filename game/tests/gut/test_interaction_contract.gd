@@ -135,9 +135,40 @@ func test_interaction_prompt_show_and_hide() -> void:
 	assert_true(prompt.visible)
 	assert_true(prompt.reticle.visible)
 	assert_eq(prompt.label.text, "Click Inspect Test")
+	assert_eq(prompt.get_prompt_action(), "Inspect")
+	assert_eq(prompt.get_prompt_subject(), "Test")
+	assert_eq(prompt.get_prompt_tone(), "action")
+	assert_eq(prompt.reticle.text, "+")
 
 	prompt.hide_prompt()
 	assert_false(prompt.visible)
+	assert_eq(prompt.get_prompt_action(), "")
+
+
+func test_interaction_prompt_parses_prompt_hierarchy_and_feedback_tones() -> void:
+	var prompt: Node = load("res://scenes/ui/interaction_prompt.tscn").instantiate()
+	add_child_autofree(prompt)
+
+	prompt.show_prompt("Click Stock Star Trader")
+	assert_eq(prompt.label.text, "Click Stock Star Trader")
+	assert_eq(prompt.get_prompt_action(), "Stock")
+	assert_eq(prompt.get_prompt_subject(), "Star Trader")
+	assert_eq(prompt.get_prompt_tone(), "action")
+	assert_eq(prompt.reticle.text, "+")
+
+	prompt.hide_prompt()
+	prompt.show_prompt("Fixed Price Item")
+	assert_eq(prompt.get_prompt_action(), "Blocked")
+	assert_eq(prompt.get_prompt_subject(), "Fixed Price Item")
+	assert_eq(prompt.get_prompt_tone(), "blocked")
+	assert_eq(prompt.reticle.text, "!")
+
+	prompt.hide_prompt()
+	prompt.show_message("Picked up Star Trader.")
+	assert_eq(prompt.get_prompt_action(), "Status")
+	assert_eq(prompt.get_prompt_subject(), "Picked up Star Trader.")
+	assert_eq(prompt.get_prompt_tone(), "message")
+	assert_eq(prompt.reticle.text, "!")
 
 
 func test_interaction_raycast_ignores_empty_interaction_messages() -> void:

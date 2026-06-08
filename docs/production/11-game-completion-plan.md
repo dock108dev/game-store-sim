@@ -210,7 +210,7 @@ Goal: make repeated first-person work feel deliberate, legible, and responsive.
 
 Stops:
 
-- Stop 3.1: Reticle and prompt hierarchy. Replace placeholder prompts with a consistent visual system for inspect, pickup, place, price, stock, register, computer, talk, and blocked actions.
+- Stop 3.1: Reticle and prompt hierarchy. Done in `Polish reticle prompts`: prompts now expose action, subject, blocked, and feedback tones with matching reticle states; validation covers prompt parsing and manual prompt hierarchy review.
 - Stop 3.2: Held item presentation. Improve carry pose, stack spacing, item bob/settle, hand-space framing, and item-specific held silhouettes.
 - Stop 3.3: Pickup/place feedback. Add hover highlights, target confirmation, invalid feedback, item landing feedback, and clear failure messages.
 - Stop 3.4: Workstation transitions. Make pricing, register, appraisal, computer, and summary panels enter/exit cleanly with mouse capture and focus rules.

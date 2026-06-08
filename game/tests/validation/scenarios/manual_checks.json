@@ -26,18 +26,18 @@
     },
     {
       "id": "prompt_readability",
-      "name": "Click prompt readability is acceptable in the actual window",
+      "name": "Click prompt hierarchy readability is acceptable in the actual window",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment beyond nonblank screenshot checks.",
+      "reason": "Requires human visual judgment that action, subject, blocked, and feedback prompt states stay readable across real player angles.",
       "owner": "manual QA"
     },
     {
       "id": "center_reticle_readability",
-      "name": "Center reticle readability is acceptable in the actual window",
+      "name": "Center reticle action and feedback readability is acceptable in the actual window",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment while aiming at receiving items, shelf slots, the register, and the backroom computer.",
+      "reason": "Requires human visual judgment while aiming at receiving items, shelf slots, the register, the backroom computer, and blocked held-item actions.",
       "owner": "manual QA"
     },
     {
