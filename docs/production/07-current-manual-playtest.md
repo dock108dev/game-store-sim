@@ -83,7 +83,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Used-game cases should look like compact boxed games on the rack, in the player's hand, and in customer hands; they should not read like oversized posters.
 - Backroom computer reads as the management terminal, not another register.
 - Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct from normal player angles.
-- Receiving and storage props make supplier-delivered stock read as physical inventory without crowding prompts or navigation.
+- Receiving pallet, box stacks, storage shelf, and overflow boxes make supplier-delivered stock read as physical inventory without crowding prompts or navigation.
 - Backroom service/paperwork props read as context only and do not imply a separate service terminal.
 - Summary panel text and buttons fit in the actual game window.
 - Closed-day report text is readable and understandable after ending the day.

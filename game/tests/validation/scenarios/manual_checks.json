@@ -218,10 +218,10 @@
     },
     {
       "id": "backroom_receiving_storage_readability",
-      "name": "Receiving and storage props make delivered stock read as physical inventory without crowding prompts",
+      "name": "Receiving pallet, box stacks, storage shelf, and overflow boxes make delivered stock read as physical inventory without crowding prompts",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment that graybox boxes, shelves, supplier stock, and pending fixture identity add clarity without blocking interaction.",
+      "reason": "Requires human judgment that the receiving pallet, box stacks, storage shelf, supplier stock, and pending fixture identity add clarity without blocking interaction.",
       "owner": "manual QA"
     },
     {

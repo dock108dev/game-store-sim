@@ -148,6 +148,29 @@ func test_backroom_visual_zones_exist_without_collision() -> void:
 		assert_almost_eq(zone.global_position.z, expected_zones[zone_name].z, 0.01)
 
 
+func test_backroom_receiving_and_storage_props_exist() -> void:
+	var receiving_props := [
+		"ReceivingPallet",
+		"ReceivingBoxStackA",
+		"ReceivingBoxStackALabel",
+		"ReceivingBoxStackB",
+	]
+	for prop_path in receiving_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision)
+		assert_lt(_flat_distance_xz(prop.global_position, _store.get_node("ReceivingBox").global_position), 1.4)
+
+	var storage_shelf := _store.get_node_or_null("BackroomStorageShelf") as Node3D
+	assert_not_null(storage_shelf)
+	assert_not_null(storage_shelf.get_node_or_null("LowerShelf"))
+	assert_not_null(storage_shelf.get_node_or_null("UpperShelf"))
+	assert_not_null(storage_shelf.get_node_or_null("StorageBoxA"))
+	assert_not_null(storage_shelf.get_node_or_null("StorageBoxB"))
+	assert_lt(storage_shelf.global_position.x, _store.get_node("ReceivingBox").global_position.x)
+	assert_gt(storage_shelf.global_position.z, 5.0)
+
+
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
