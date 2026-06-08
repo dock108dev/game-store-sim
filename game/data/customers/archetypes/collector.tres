@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CustomerArchetype" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_archetype.gd" id="1_customer_archetype"]
+
+[resource]
+script = ExtResource("1_customer_archetype")
+archetype_id = "collector"
+display_name = "Collector"
+role = "preorder"
+preferred_categories = Array[String](["new_game", "rare_used"])
+price_sensitivity = 1.2
+patience_seconds = 13.0
+visual_cue = "preorder slip, careful inspection"
+dialogue_style = "asks about launches and condition"
+default_feedback = "Hold one for launch."
+

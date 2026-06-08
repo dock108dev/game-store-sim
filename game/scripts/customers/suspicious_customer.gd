@@ -2,6 +2,7 @@ extends "res://scripts/interaction/interactable.gd"
 class_name SuspiciousCustomer
 
 @export var customer_id: String = "suspicious_customer_001"
+@export var archetype: CustomerArchetype
 @export var encounter_id: String = "cash_buyer_bulk_request_001"
 @export var subject: String = "Bulk cash buyer"
 @export_multiline var dialogue_text: String = ""
@@ -40,6 +41,13 @@ func get_feedback_summary() -> Dictionary:
 		return {}
 
 	return bubble.get_feedback_summary()
+
+
+func get_archetype_summary() -> String:
+	if archetype == null:
+		return ""
+
+	return archetype.summary_line()
 
 
 func get_encounter_text() -> String:

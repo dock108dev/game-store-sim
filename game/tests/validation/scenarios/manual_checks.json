@@ -289,6 +289,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_archetype_readability",
+      "name": "Customer archetypes feel distinct enough to support browser, buyer, parent, collector, trade-in, return, service, regular, and suspicious roles",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify data coverage and scene wiring; human review must judge whether the roles match the intended production customer mix.",
+      "owner": "manual QA"
+    },
+    {
       "id": "register_sale_message_readability",
       "name": "Register sale completion message is readable in the actual window",
       "status": "manual",

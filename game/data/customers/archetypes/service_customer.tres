@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CustomerArchetype" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_archetype.gd" id="1_customer_archetype"]
+
+[resource]
+script = ExtResource("1_customer_archetype")
+archetype_id = "service_customer"
+display_name = "Service Customer"
+role = "service"
+preferred_categories = Array[String](["service", "used_game"])
+price_sensitivity = 1.0
+patience_seconds = 10.0
+visual_cue = "disc and service ticket"
+dialogue_style = "needs item cleaned or repaired"
+default_feedback = "Can you fix this?"
+

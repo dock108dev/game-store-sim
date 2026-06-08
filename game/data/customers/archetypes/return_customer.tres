@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CustomerArchetype" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_archetype.gd" id="1_customer_archetype"]
+
+[resource]
+script = ExtResource("1_customer_archetype")
+archetype_id = "return_customer"
+display_name = "Return Customer"
+role = "return"
+preferred_categories = Array[String](["used_game", "service"])
+price_sensitivity = 1.0
+patience_seconds = 6.0
+visual_cue = "receipt slip, annoyed stance"
+dialogue_style = "complaint or return request"
+default_feedback = "This did not work."
+

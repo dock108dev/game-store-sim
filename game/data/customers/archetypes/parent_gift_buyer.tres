@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CustomerArchetype" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_archetype.gd" id="1_customer_archetype"]
+
+[resource]
+script = ExtResource("1_customer_archetype")
+archetype_id = "parent_gift_buyer"
+display_name = "Parent Gift Buyer"
+role = "buy"
+preferred_categories = Array[String](["new_game", "accessory"])
+price_sensitivity = 0.9
+patience_seconds = 11.0
+visual_cue = "gift note, cautious posture"
+dialogue_style = "asks for recommendations"
+default_feedback = "Is this good for a gift?"
+

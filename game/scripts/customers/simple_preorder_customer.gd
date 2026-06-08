@@ -5,6 +5,7 @@ const STATE_WAITING_FOR_PREORDER := "waiting_for_preorder"
 const STATE_PREORDER_COMPLETE := "preorder_complete"
 
 @export var customer_id: String = "preorder_customer_001"
+@export var archetype: CustomerArchetype
 @export var release: Resource
 @export var deposit_cents: int = 500
 
@@ -79,6 +80,13 @@ func get_feedback_summary() -> Dictionary:
 		return {}
 
 	return bubble.get_feedback_summary()
+
+
+func get_archetype_summary() -> String:
+	if archetype == null:
+		return ""
+
+	return archetype.summary_line()
 
 
 func _format_money(cents: int) -> String:

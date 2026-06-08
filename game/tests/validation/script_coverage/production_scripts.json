@@ -92,6 +92,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/customer_archetype.gd",
+      "tests": [
+        "res://tests/gut/test_customer_archetype.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/customer_pose_animator.gd",
       "tests": [
         "res://tests/gut/test_customer_pose_animator.gd"

@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://bqtradfa6q1p2"]
+[gd_scene load_steps=19 format=3 uid="uid://bqtradfa6q1p2"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_trade_in_customer.gd" id="1_trade_customer"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="2_used_game"]
 [ext_resource type="Resource" path="res://data/products/used_moon_escape.tres" id="3_product"]
 [ext_resource type="Script" path="res://scripts/customers/customer_pose_animator.gd" id="4_pose"]
 [ext_resource type="Script" path="res://scripts/customers/customer_feedback_bubble.gd" id="5_feedback"]
+[ext_resource type="Resource" path="res://data/customers/archetypes/trade_in_seller.tres" id="6_archetype"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.38, 0.22, 0.1, 1)
@@ -56,6 +57,7 @@ height = 1.25
 
 [node name="TradeInCustomer" type="StaticBody3D"]
 script = ExtResource("1_trade_customer")
+archetype = ExtResource("6_archetype")
 
 [node name="BodyMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.74, 0)

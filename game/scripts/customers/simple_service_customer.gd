@@ -5,6 +5,7 @@ const STATE_WAITING_FOR_SERVICE := "waiting_for_service"
 const STATE_SERVICE_COMPLETE := "service_complete"
 
 @export var customer_id: String = "service_customer_001"
+@export var archetype: CustomerArchetype
 @export var service_id: String = "disc_resurfacing"
 @export var service_name: String = "Disc Resurfacing"
 @export var item_name: String = "Scratched Orbit Disc"
@@ -58,6 +59,13 @@ func get_feedback_summary() -> Dictionary:
 		return {}
 
 	return bubble.get_feedback_summary()
+
+
+func get_archetype_summary() -> String:
+	if archetype == null:
+		return ""
+
+	return archetype.summary_line()
 
 
 func get_service_summary() -> String:

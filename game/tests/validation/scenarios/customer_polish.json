@@ -64,6 +64,13 @@
       "evidence": "res://tests/gut/test_customer_feedback_bubble.gd"
     },
     {
+      "id": "customer_archetype_data",
+      "name": "Customer archetype data covers browser, buyer, parent, collector, trade-in, return, service, regular, and suspicious roles",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_archetype.gd"
+    },
+    {
       "id": "register_special_customer_spacing_arc",
       "name": "Special register customers keep readable spacing and form a clear register-area arc",
       "status": "automated",

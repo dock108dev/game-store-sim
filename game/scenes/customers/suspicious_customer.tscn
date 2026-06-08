@@ -1,8 +1,9 @@
-[gd_scene load_steps=19 format=3 uid="uid://busdix6rxg8aj"]
+[gd_scene load_steps=20 format=3 uid="uid://busdix6rxg8aj"]
 
 [ext_resource type="Script" path="res://scripts/customers/suspicious_customer.gd" id="1_suspicious_customer"]
 [ext_resource type="Script" path="res://scripts/customers/customer_pose_animator.gd" id="2_pose"]
 [ext_resource type="Script" path="res://scripts/customers/customer_feedback_bubble.gd" id="3_feedback"]
+[ext_resource type="Resource" path="res://data/customers/archetypes/suspicious_contact.tres" id="4_archetype"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.1, 0.13, 0.15, 1)
@@ -63,6 +64,7 @@ height = 1.18
 script = ExtResource("1_suspicious_customer")
 display_name = "Cash Buyer"
 customer_id = "suspicious_customer_001"
+archetype = ExtResource("4_archetype")
 encounter_id = "cash_buyer_bulk_request_001"
 subject = "Bulk cash buyer"
 dialogue_text = "A nervous customer asks whether you can move several Orbit 64 copies for cash without receipts. They mention North Dock Wholesale by name, then pretend they did not."

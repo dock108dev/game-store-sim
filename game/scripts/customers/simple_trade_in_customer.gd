@@ -6,6 +6,7 @@ const STATE_TRADE_COMPLETE := "trade_complete"
 const STATE_TRADE_DECLINED := "trade_declined"
 
 @export var customer_id: String = "trade_seller_001"
+@export var archetype: CustomerArchetype
 @export var carried_item_path: NodePath = NodePath("TradeInItem")
 @export var offer_rate: float = 0.4
 @export var store_credit_offer_rate: float = 0.5
@@ -149,6 +150,13 @@ func get_feedback_summary() -> Dictionary:
 		return {}
 
 	return bubble.get_feedback_summary()
+
+
+func get_archetype_summary() -> String:
+	if archetype == null:
+		return ""
+
+	return archetype.summary_line()
 
 
 func _get_item_display_name(item: Node) -> String:

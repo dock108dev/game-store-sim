@@ -10,6 +10,7 @@ const STATE_WAITING_FOR_REGISTER := "waiting_for_register"
 const STATE_SALE_COMPLETE := "sale_complete"
 
 @export var customer_id: String = "customer_001"
+@export var archetype: CustomerArchetype
 @export var target_product_id: String = "used_star_trader"
 @export var display_slot_path: NodePath
 @export var register_queue_position: Vector3 = Vector3(1.15, 0.0, -3.2)
@@ -271,6 +272,13 @@ func get_feedback_summary() -> Dictionary:
 		return {}
 
 	return bubble.get_feedback_summary()
+
+
+func get_archetype_summary() -> String:
+	if archetype == null:
+		return ""
+
+	return archetype.summary_line()
 
 
 func begin_claim_from_slot(slot: Node, queue_position: Vector3) -> bool:
