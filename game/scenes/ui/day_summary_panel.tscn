@@ -259,6 +259,20 @@ custom_minimum_size = Vector2(88, 40)
 layout_mode = 2
 text = "Place Rack"
 
+[node name="BackstockActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StoreItemButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons"]
+custom_minimum_size = Vector2(88, 36)
+layout_mode = 2
+text = "Store"
+
+[node name="PullItemButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons"]
+custom_minimum_size = Vector2(88, 36)
+layout_mode = 2
+text = "Pull"
+
 [node name="ReleaseActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
 layout_mode = 2
 theme_override_constants/separation = 4

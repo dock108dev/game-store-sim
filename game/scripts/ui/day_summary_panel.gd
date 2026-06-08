@@ -72,6 +72,8 @@ const BACKROOM_TABS := [
 @onready var sort_receiving_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons/SortReceivingButton
 @onready var order_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/OrderRackButton
 @onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/PlaceRackButton
+@onready var store_item_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons/StoreItemButton
+@onready var pull_item_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons/PullItemButton
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/EndDayButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/CloseButton
 @onready var rack_left_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackLeftButton
@@ -113,6 +115,8 @@ func _ready() -> void:
 	sort_receiving_button.pressed.connect(sort_receiving_batch)
 	order_rack_button.pressed.connect(order_game_display_rack)
 	place_rack_button.pressed.connect(place_pending_rack)
+	store_item_button.pressed.connect(store_receiving_item)
+	pull_item_button.pressed.connect(pull_backstock_item)
 	rack_left_button.pressed.connect(move_pending_rack_left)
 	rack_right_button.pressed.connect(move_pending_rack_right)
 	rack_forward_button.pressed.connect(move_pending_rack_forward)
@@ -330,6 +334,34 @@ func place_pending_rack() -> bool:
 	return true
 
 
+func store_receiving_item() -> bool:
+	if _session == null or not _session.has_method("store_receiving_item_to_backstock"):
+		return false
+
+	var movement: Dictionary = _session.store_receiving_item_to_backstock()
+	_update_labels()
+	if movement.is_empty():
+		status_label.text = "No receiving item ready for backstock."
+		return false
+
+	status_label.text = "Stored %s in backstock." % str(movement.get("display_name", "item"))
+	return true
+
+
+func pull_backstock_item() -> bool:
+	if _session == null or not _session.has_method("retrieve_backstock_item_to_receiving"):
+		return false
+
+	var movement: Dictionary = _session.retrieve_backstock_item_to_receiving()
+	_update_labels()
+	if movement.is_empty():
+		status_label.text = "No backstock item ready to pull."
+		return false
+
+	status_label.text = "Pulled %s to receiving." % str(movement.get("display_name", "item"))
+	return true
+
+
 func move_pending_rack_left() -> bool:
 	return _adjust_pending_rack(-1, 0, "left")
 
@@ -470,6 +502,8 @@ func _update_labels() -> void:
 		supplier_order_label.text = "Supplier orders unavailable"
 	if _session.has_method("get_fixture_order_summary_text"):
 		fixture_label.text = _session.get_fixture_order_summary_text()
+		if _session.has_method("get_storage_workflow_summary_text"):
+			fixture_label.text += "\n" + _session.get_storage_workflow_summary_text()
 	else:
 		fixture_label.text = "Fixtures unavailable"
 	if _session.has_method("get_upgrade_summary_text"):
@@ -500,6 +534,14 @@ func _update_labels() -> void:
 		place_rack_button.disabled = _session.is_day_closed or not _session.can_place_pending_fixture()
 	else:
 		place_rack_button.disabled = true
+	if _session.has_method("can_store_receiving_item"):
+		store_item_button.disabled = _session.is_day_closed or not _session.can_store_receiving_item()
+	else:
+		store_item_button.disabled = true
+	if _session.has_method("can_retrieve_backstock_item"):
+		pull_item_button.disabled = _session.is_day_closed or not _session.can_retrieve_backstock_item()
+	else:
+		pull_item_button.disabled = true
 	var can_adjust_fixture := false
 	if _session.has_method("can_adjust_pending_fixture_placement"):
 		can_adjust_fixture = not _session.is_day_closed and _session.can_adjust_pending_fixture_placement()

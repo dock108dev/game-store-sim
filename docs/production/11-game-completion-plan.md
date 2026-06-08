@@ -435,7 +435,7 @@ Goal: make the backroom a real physical workflow hub.
 Stops:
 
 - Stop 8.1: Receiving workflow. Done in `Build receiving workflow`: supplier delivery now creates pending receiving batches with delivery point, sealed/opened box state, invoice check, sorting destination, completed status, backroom Open Box/Check Inv/Sort controls, save/load persistence, and validation/manual checklist coverage.
-- Stop 8.2: Storage workflow. Add storage shelves, overflow, backstock retrieval, and stock movement between receiving, storage, shelf, and register.
+- Stop 8.2: Storage workflow. Done in `Build storage workflow`: store sessions now move physical product item nodes from receiving into a backstock shelf and back to receiving, track shelf capacity and overflow, expose Store/Pull backroom controls, include storage movement history in save/load, and document manual readability checks.
 - Stop 8.3: Service bench workflow. Add disc resurfacing, cartridge cleaning, console test placeholder, repair tickets, parts, completion, and customer pickup.
 - Stop 8.4: Management desk workflow. Add supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering.
 - Stop 8.5: Security/safe placeholders. Add cash storage, high-value storage, suspicious goods isolation, and security footage placeholder.
@@ -459,13 +459,15 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 388 GUT tests.
-- UI scenario automation coverage is 376/457, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 390 GUT tests.
+- UI scenario automation coverage is 379/461, above the required 80% threshold.
 - Production script mapping coverage is 39/39.
 - Validation tool manifest coverage reports 1 active standalone tool.
 - Product catalog content validation passes with 33 products.
 - Focused GUT coverage passes for store session receiving delivery/lifecycle, save/load receiving persistence, and day-summary panel receiving controls.
 - Manual receiving workflow checks are current for delivery point, box opening, invoice check, sorting, and pending/completed state readability.
+- Focused GUT coverage passes for store session storage movement/retrieval, day-summary panel Store/Pull controls, and save/load storage movement persistence.
+- Manual storage workflow checks are current for capacity, overflow, Store/Pull controls, backstock movement, and retrieval readability.
 
 ## Milestone 9: Store Building, Decoration, And Expansion
 

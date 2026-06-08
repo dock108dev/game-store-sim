@@ -641,6 +641,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "storage_workflow_readability",
+      "name": "Backroom storage workflow clearly shows shelf capacity, overflow, Store/Pull controls, and backstock retrieval",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify receiving-to-backstock movement, retrieval, capacity text, and persistence; human review must confirm the storage workflow reads as physical backroom work and not an abstract inventory menu.",
+      "owner": "manual QA"
+    },
+    {
       "id": "evidence_storage_invisible",
       "name": "Evidence storage remains hidden during normal play",
       "status": "manual",

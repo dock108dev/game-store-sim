@@ -878,6 +878,45 @@ func test_store_session_opens_checks_and_sorts_receiving_batch() -> void:
 	assert_string_contains(session.get_receiving_workflow_summary_text(), "Receiving state: completed")
 
 
+func test_store_session_moves_receiving_items_to_backstock_and_retrieves_them() -> void:
+	var root := Node3D.new()
+	var receiving_box: Node3D = load("res://scenes/props/receiving_box.tscn").instantiate()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(root)
+	root.add_child(receiving_box)
+	root.add_child(session)
+	session.inventory_root_path = session.get_path_to(root)
+	session.receiving_box_path = session.get_path_to(receiving_box)
+	session.order_supplier_lot("supplier_lot_used_games_001")
+	session.end_day()
+	session.start_next_day()
+
+	assert_true(session.can_store_receiving_item())
+	var stored := session.store_receiving_item_to_backstock()
+
+	assert_eq(stored.get("action"), "stored")
+	assert_eq(stored.get("from_location"), "receiving_box_001")
+	assert_eq(stored.get("to_location"), "backstock_shelf_001")
+	assert_eq(session.get_storage_movements().size(), 1)
+	assert_eq((session.get_storage_status_counts()).get("backstock"), 1)
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Storage shelf: Backroom backstock shelf / backstock_shelf_001")
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Capacity: 6 cases")
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Backstock: 1 stored / 6 capacity / 0 overflow")
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Recent storage move: stored")
+	assert_not_null(root.get_node_or_null("BackstockShelf"))
+	assert_true(session.can_retrieve_backstock_item())
+
+	var retrieved := session.retrieve_backstock_item_to_receiving()
+
+	assert_eq(retrieved.get("action"), "retrieved")
+	assert_eq(retrieved.get("from_location"), "backstock_shelf_001")
+	assert_eq(retrieved.get("to_location"), "receiving_box_001")
+	assert_eq(session.get_storage_movements().size(), 2)
+	assert_eq((session.get_storage_status_counts()).get("backstock"), 0)
+	assert_eq((session.get_storage_status_counts()).get("receiving"), 6)
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Recent storage move: retrieved")
+
+
 func test_store_session_orders_fixture_and_reserves_cash() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

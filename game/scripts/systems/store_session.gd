@@ -16,6 +16,9 @@ const DAILY_UTILITIES_RESERVE_CENTS := 175
 const DAILY_PAYROLL_PLACEHOLDER_CENTS := 0
 const DAILY_REPAIRS_PLACEHOLDER_CENTS := 0
 const DAILY_SHRINKAGE_PLACEHOLDER_CENTS := 0
+const STORAGE_LOCATION_ID := "backstock_shelf_001"
+const BASE_STORAGE_CAPACITY := 6
+const UPGRADED_STORAGE_CAPACITY := 12
 const UPGRADE_CATALOG := [
 	{
 		"upgrade_id": "upgrade_fixture_peg_wall",
@@ -169,6 +172,7 @@ var fixture_orders: Array[Dictionary] = []
 var placed_fixtures: Array[Dictionary] = []
 var supplier_orders: Array[Dictionary] = []
 var receiving_batches: Array[Dictionary] = []
+var storage_movements: Array[Dictionary] = []
 var preorder_deposits: Array[Dictionary] = []
 var release_allocations: Array[Dictionary] = []
 var launch_events: Array[Dictionary] = []
@@ -710,7 +714,123 @@ func get_inventory_summary_text() -> String:
 	names.sort()
 	for name in names:
 		lines.append("%s x%d" % [name, int(counts[name])])
+	lines.append(get_storage_workflow_summary_text())
 	return "\n".join(lines)
+
+
+func get_storage_movements() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for movement in storage_movements:
+		rows.append(movement.duplicate(true))
+	return rows
+
+
+func replace_storage_movements(movements: Array) -> void:
+	storage_movements.clear()
+	for movement in movements:
+		if typeof(movement) == TYPE_DICTIONARY:
+			var row: Dictionary = movement
+			storage_movements.append(row.duplicate(true))
+
+
+func get_storage_capacity() -> int:
+	if has_upgrade("upgrade_backroom_storage"):
+		return UPGRADED_STORAGE_CAPACITY
+	return BASE_STORAGE_CAPACITY
+
+
+func get_storage_status_counts() -> Dictionary:
+	var counts := {
+		"receiving": 0,
+		"backstock": 0,
+		"shelf": 0,
+		"other": 0,
+	}
+	for item in get_active_inventory_items():
+		var location_id := str(item.get("location_id"))
+		if _is_receiving_location(location_id):
+			counts["receiving"] = int(counts["receiving"]) + 1
+		elif _is_storage_location(location_id):
+			counts["backstock"] = int(counts["backstock"]) + 1
+		elif location_id.begins_with("shelf_slot"):
+			counts["shelf"] = int(counts["shelf"]) + 1
+		else:
+			counts["other"] = int(counts["other"]) + 1
+	return counts
+
+
+func get_storage_workflow_summary_text() -> String:
+	var counts := get_storage_status_counts()
+	var backstock_count := int(counts.get("backstock", 0))
+	var capacity := get_storage_capacity()
+	var overflow := maxi(0, backstock_count - capacity)
+	var lines: Array[String] = ["Storage workflow:"]
+	lines.append("Storage shelf: Backroom backstock shelf / %s" % STORAGE_LOCATION_ID)
+	lines.append("Capacity: %d cases%s" % [
+		capacity,
+		" (expanded)" if has_upgrade("upgrade_backroom_storage") else "",
+	])
+	lines.append("Receiving ready: %d" % int(counts.get("receiving", 0)))
+	lines.append("Backstock: %d stored / %d capacity / %d overflow" % [
+		backstock_count,
+		capacity,
+		overflow,
+	])
+	lines.append("Sales floor shelf: %d" % int(counts.get("shelf", 0)))
+	if storage_movements.is_empty():
+		lines.append("Recent storage move: none")
+	else:
+		var last_movement := storage_movements[storage_movements.size() - 1]
+		lines.append("Recent storage move: %s %s from %s to %s" % [
+			str(last_movement.get("action", "moved")),
+			str(last_movement.get("display_name", "item")),
+			str(last_movement.get("from_location", "unknown")),
+			str(last_movement.get("to_location", "unknown")),
+		])
+	return "\n".join(lines)
+
+
+func can_store_receiving_item() -> bool:
+	return not is_day_closed \
+		and _find_first_inventory_item_by_locations(["receiving_box_001", "receiving_box"]) != null
+
+
+func store_receiving_item_to_backstock() -> Dictionary:
+	if not can_store_receiving_item():
+		return {}
+
+	var item := _find_first_inventory_item_by_locations(["receiving_box_001", "receiving_box"])
+	var shelf := _get_or_create_storage_shelf()
+	if item == null or shelf == null:
+		return {}
+
+	var from_location := str(item.get("location_id"))
+	_reparent_inventory_item(item, shelf)
+	item.set("location_id", STORAGE_LOCATION_ID)
+	_position_storage_item(item, _count_product_children(shelf) - 1)
+	return _record_storage_movement(item, "stored", from_location, STORAGE_LOCATION_ID)
+
+
+func can_retrieve_backstock_item() -> bool:
+	return not is_day_closed \
+		and _find_first_inventory_item_by_locations([STORAGE_LOCATION_ID, "storage", "backroom"]) != null \
+		and _get_receiving_box() != null
+
+
+func retrieve_backstock_item_to_receiving() -> Dictionary:
+	if not can_retrieve_backstock_item():
+		return {}
+
+	var item := _find_first_inventory_item_by_locations([STORAGE_LOCATION_ID, "storage", "backroom"])
+	var receiving_box := _get_receiving_box()
+	if item == null or receiving_box == null:
+		return {}
+
+	var from_location := str(item.get("location_id"))
+	_reparent_inventory_item(item, receiving_box)
+	item.set("location_id", "receiving_box_001")
+	_position_delivered_item(item, _count_product_children(receiving_box) - 1)
+	return _record_storage_movement(item, "retrieved", from_location, "receiving_box_001")
 
 
 func get_reorder_suggestions_text() -> String:
@@ -1821,9 +1941,9 @@ func _get_item_shelf_visibility(item: Node) -> String:
 		return "front"
 	if location_id.begins_with("customer:"):
 		return "front"
-	if location_id == "receiving_box" or location_id == "held":
+	if _is_receiving_location(location_id) or location_id == "held":
 		return "standard"
-	if location_id == "storage" or location_id == "backroom":
+	if _is_storage_location(location_id):
 		return "backroom"
 	return "standard"
 
@@ -1868,6 +1988,29 @@ func _get_receiving_box() -> Node:
 		return null
 
 	return get_node_or_null(receiving_box_path)
+
+
+func _get_or_create_storage_shelf() -> Node:
+	var root := _get_inventory_root()
+	if root == null:
+		return null
+
+	var shelf := root.get_node_or_null("BackstockShelf")
+	if shelf != null:
+		return shelf
+
+	var shelf_node := Node3D.new()
+	shelf_node.name = "BackstockShelf"
+	root.add_child(shelf_node)
+	return shelf_node
+
+
+func _is_receiving_location(location_id: String) -> bool:
+	return location_id == "receiving_box_001" or location_id == "receiving_box"
+
+
+func _is_storage_location(location_id: String) -> bool:
+	return location_id == STORAGE_LOCATION_ID or location_id == "storage" or location_id == "backroom"
 
 
 func _get_fixture_placement_manager() -> Node:
@@ -1936,7 +2079,7 @@ func _get_onboarding_status_label(status: String) -> String:
 func _has_inventory_left_receiving() -> bool:
 	for item in get_active_inventory_items():
 		var location_id := str(item.get("location_id"))
-		if location_id != "receiving_box_001" and location_id != "receiving_box":
+		if not _is_receiving_location(location_id):
 			return true
 	return false
 
@@ -2179,6 +2322,50 @@ func _collect_active_inventory_items(node: Node, items: Array[Node]) -> void:
 
 	for child in node.get_children():
 		_collect_active_inventory_items(child, items)
+
+
+func _find_first_inventory_item_by_locations(location_ids: Array[String]) -> Node:
+	for item in get_active_inventory_items():
+		if location_ids.has(str(item.get("location_id"))):
+			return item
+	return null
+
+
+func _reparent_inventory_item(item: Node, new_parent: Node) -> void:
+	if item == null or new_parent == null or item.get_parent() == new_parent:
+		return
+
+	var old_parent := item.get_parent()
+	if old_parent != null:
+		old_parent.remove_child(item)
+	new_parent.add_child(item)
+
+
+func _position_storage_item(item: Node, slot_index: int) -> void:
+	var item_3d := item as Node3D
+	if item_3d == null:
+		return
+
+	var column := slot_index % 4
+	var row := slot_index / 4
+	item_3d.position = Vector3(-0.45 + (column * 0.3), 0.18 + (row * 0.16), -0.2)
+	item_3d.rotation_degrees = Vector3(0.0, 12.0, 0.0)
+
+
+func _record_storage_movement(item: Node, action: String, from_location: String, to_location: String) -> Dictionary:
+	var product := item.get("product") as ProductDefinition
+	var movement := {
+		"movement_id": "storage_move_%03d" % (storage_movements.size() + 1),
+		"day_number": day_number,
+		"action": action,
+		"instance_id": str(item.get("instance_id")),
+		"product_id": product.product_id if product != null else "",
+		"display_name": product.display_name if product != null else "Inventory item",
+		"from_location": from_location,
+		"to_location": to_location,
+	}
+	storage_movements.append(movement)
+	return movement.duplicate(true)
 
 
 func _deliver_due_supplier_orders() -> Array[Dictionary]:

@@ -75,9 +75,13 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.open_box_button.text, "Open Box")
 	assert_eq(_panel.check_invoice_button.text, "Check Inv")
 	assert_eq(_panel.sort_receiving_button.text, "Sort")
+	assert_eq(_panel.store_item_button.text, "Store")
+	assert_eq(_panel.pull_item_button.text, "Pull")
 	assert_true(_panel.open_box_button.disabled)
 	assert_true(_panel.check_invoice_button.disabled)
 	assert_true(_panel.sort_receiving_button.disabled)
+	assert_true(_panel.store_item_button.disabled)
+	assert_true(_panel.pull_item_button.disabled)
 	assert_eq(_panel.order_rack_button.text, "Order Rack")
 	assert_eq(_panel.place_rack_button.text, "Place Rack")
 	assert_eq(_panel.commit_allocation_button.text, "Commit Release")
@@ -435,6 +439,31 @@ func test_day_summary_panel_starts_next_day_and_delivers_supplier_lot() -> void:
 	assert_string_contains(_panel.inventory_label.text, "Moon Escape x1")
 	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame004"))
 	assert_eq(_panel.end_day_button.text, "End Day")
+
+
+func test_day_summary_panel_moves_receiving_stock_to_backstock_and_back() -> void:
+	var root := Node3D.new()
+	var receiving_box: Node3D = load("res://scenes/props/receiving_box.tscn").instantiate()
+	add_child_autofree(root)
+	root.add_child(receiving_box)
+	_session.inventory_root_path = _session.get_path_to(root)
+	_session.receiving_box_path = _session.get_path_to(receiving_box)
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.order_used_game_lot())
+	assert_true(_panel.end_day())
+	assert_true(_panel.end_day())
+
+	assert_false(_panel.store_item_button.disabled)
+	assert_true(_panel.pull_item_button.disabled)
+	assert_true(_panel.store_receiving_item())
+	assert_string_contains(_panel.status_label.text, "Stored")
+	assert_string_contains(_panel.fixture_label.text, "Backstock: 1 stored / 6 capacity / 0 overflow")
+	assert_string_contains(_panel.fixture_label.text, "Recent storage move: stored")
+	assert_false(_panel.pull_item_button.disabled)
+	assert_true(_panel.pull_backstock_item())
+	assert_string_contains(_panel.status_label.text, "Pulled")
+	assert_string_contains(_panel.fixture_label.text, "Backstock: 0 stored / 6 capacity / 0 overflow")
+	assert_string_contains(_panel.fixture_label.text, "Recent storage move: retrieved")
 
 
 func test_day_summary_panel_places_pending_fixture_from_backroom_computer() -> void:

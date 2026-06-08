@@ -218,6 +218,27 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_places_pending_fixture_from_backroom_computer"
     },
     {
+      "id": "store_session_moves_receiving_to_backstock",
+      "name": "Store session moves physical receiving items into backstock and retrieves them",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_moves_receiving_items_to_backstock_and_retrieves_them"
+    },
+    {
+      "id": "backroom_panel_moves_backstock",
+      "name": "Backroom computer exposes Store and Pull controls for receiving/backstock movement",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_moves_receiving_stock_to_backstock_and_back"
+    },
+    {
+      "id": "storage_movements_persist_in_save_codec",
+      "name": "Storage movement history is included in save codec smoke coverage",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
       "id": "main_scene_fixture_order_places_rack",
       "name": "Main scene fixture order can be confirmed into a placed rack",
       "status": "automated",

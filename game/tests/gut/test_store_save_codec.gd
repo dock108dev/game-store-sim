@@ -39,6 +39,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq(data.get("cash_cents"), 29299)
 	assert_eq((data.get("transactions") as Array).size(), 2)
 	assert_eq((data.get("receiving_batches") as Array).size(), 0)
+	assert_eq((data.get("storage_movements") as Array).size(), 0)
 	var preorder_deposits: Array = data.get("preorder_deposits")
 	assert_eq(preorder_deposits.size(), 1)
 	assert_eq(preorder_deposits[0].get("release_id"), "release_neon_skyline")
@@ -80,6 +81,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"fixture_orders": [{"fixture_id": "fixture_game_display_rack", "status": "pending_placement"}],
 		"supplier_orders": [{"lot_id": "supplier_lot_used_games_001", "status": "pending_delivery"}],
 		"receiving_batches": [{"batch_id": "supplier_order_001", "status": "pending_receiving"}],
+		"storage_movements": [{"movement_id": "storage_move_001", "action": "stored"}],
 		"preorder_deposits": [{"release_id": "release_neon_skyline", "deposit_cents": 500}],
 		"release_allocations": [{"release_id": "release_neon_skyline", "quantity": 1}],
 		"launch_events": [{"release_id": "release_neon_skyline", "missed_demand": 2}],
@@ -102,6 +104,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("fixture_orders") as Array)[0].get("fixture_id"), "fixture_game_display_rack")
 	assert_eq((decoded.get("supplier_orders") as Array)[0].get("lot_id"), "supplier_lot_used_games_001")
 	assert_eq((decoded.get("receiving_batches") as Array)[0].get("status"), "pending_receiving")
+	assert_eq((decoded.get("storage_movements") as Array)[0].get("action"), "stored")
 	assert_eq((decoded.get("preorder_deposits") as Array)[0].get("release_id"), "release_neon_skyline")
 	assert_eq((decoded.get("release_allocations") as Array)[0].get("release_id"), "release_neon_skyline")
 	assert_eq((decoded.get("launch_events") as Array)[0].get("release_id"), "release_neon_skyline")
@@ -172,6 +175,15 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"sorting_status": "waiting",
 				"sort_destination": "unsorted",
 				"status": "invoice_checked",
+			}
+		],
+		"storage_movements": [
+			{
+				"movement_id": "storage_move_001",
+				"action": "stored",
+				"display_name": "Star Trader",
+				"from_location": "receiving_box_001",
+				"to_location": "backstock_shelf_001",
 			}
 		],
 		"preorder_deposits": [
@@ -267,7 +279,9 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_pending_fixture_orders().size(), 1)
 	assert_eq(session.get_pending_supplier_orders().size(), 1)
 	assert_eq(session.get_pending_receiving_batches().size(), 1)
+	assert_eq(session.get_storage_movements().size(), 1)
 	assert_string_contains(session.get_receiving_workflow_summary_text(), "Invoice: checked expected 3 received 3 variance 0")
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Recent storage move: stored Star Trader")
 	assert_eq(session.get_preorder_deposits().size(), 1)
 	assert_eq(session.get_total_preorder_deposit_cents(), 500)
 	assert_eq(session.get_release_allocation_count(), 2)
