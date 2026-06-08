@@ -790,6 +790,14 @@ func test_store_session_is_wired_to_evidence_storage() -> void:
 	assert_string_contains(session.get_security_placeholder_summary_text(), "Security placeholders:")
 
 
+func test_store_session_is_wired_to_customer_manager_for_layout_effects() -> void:
+	var session := _store.get_node("StoreSession")
+	var manager := session.get_node_or_null(session.get("customer_manager_path"))
+
+	assert_eq(manager, _store.get_node("CustomerManager"))
+	assert_string_contains(session.get_layout_effect_summary_text(), "queue")
+
+
 func test_fixture_order_shows_placement_ghost() -> void:
 	var session := _store.get_node("StoreSession")
 	var manager := _store.get_node("FixturePlacementManager")

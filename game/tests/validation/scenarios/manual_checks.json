@@ -633,6 +633,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "layout_effects_readability",
+      "name": "Layout effect summary makes fixture visibility, queue space, travel distance, impulse buys, and theft-risk placeholders understandable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the layout-effect state and outcome hooks; human review must confirm the backroom demand text explains those effects without sounding like debug math or hiding the physical store decisions.",
+      "owner": "manual QA"
+    },
+    {
       "id": "hidden_thread_flags_invisible",
       "name": "Suspicious event flags do not visibly interrupt normal store progression",
       "status": "manual",

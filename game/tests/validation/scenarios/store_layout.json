@@ -323,6 +323,41 @@
       "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_serializes_session_transactions_and_inventory; res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
     },
     {
+      "id": "category_demand_layout_signal",
+      "name": "Category demand includes layout as a contextual demand signal",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_category_demand.gd::test_category_demand_layout_signal_changes_context_multiplier"
+    },
+    {
+      "id": "store_session_layout_effect_summary",
+      "name": "Store session summarizes fixture visibility, impulse fixtures, queue spacing, travel distance, and theft-risk placeholder state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_layout_effects"
+    },
+    {
+      "id": "layout_effects_affect_demand_tuning",
+      "name": "Layout effects alter active inventory demand tuning lines",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_layout_effects_affect_demand_tuning"
+    },
+    {
+      "id": "layout_visibility_affects_launch_queue",
+      "name": "Launch-visibility fixtures can increase launch-day queue demand",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_layout_visibility_affects_launch_queue_demand"
+    },
+    {
+      "id": "main_scene_customer_manager_layout_wiring",
+      "name": "Main scene wires StoreSession to CustomerManager for queue and travel layout effects",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_customer_manager_for_layout_effects"
+    },
+    {
       "id": "placed_fixture_has_display_slots",
       "name": "Confirmed game display rack includes used-game display slots",
       "status": "automated",

@@ -1197,6 +1197,79 @@ func test_store_session_fixture_category_affects_demand_tuning() -> void:
 	assert_string_contains(lines[0], "featured")
 
 
+func test_store_session_summarizes_layout_effects() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	session.replace_fixture_orders([
+		{
+			"order_id": "layout_fixture_001",
+			"fixture_id": "fixture_bargain_bin",
+			"display_name": "Bargain Bin",
+			"status": "placed",
+		}
+	])
+
+	var effects := session.get_layout_effects()
+	var summary := session.get_layout_effect_summary_text()
+
+	assert_eq(effects.get("layout_signal"), "impulse")
+	assert_eq(effects.get("impulse_fixture_count"), 1)
+	assert_string_contains(summary, "Layout effects: impulse")
+	assert_string_contains(summary, "impulse 1")
+	assert_string_contains(session.get_category_demand_summary_text(), "Layout effects:")
+
+
+func test_store_session_layout_effects_affect_demand_tuning() -> void:
+	var root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(root)
+	add_child_autofree(session)
+	root.add_child(item)
+	session.inventory_root_path = session.get_path_to(root)
+	item.set("location_id", "shelf_slot_001")
+	session.fixture_slot_categories["shelf_slot_001"] = "bargain"
+
+	var lines := session.get_active_inventory_demand_tuning_lines(1)
+
+	assert_eq(lines.size(), 1)
+	assert_string_contains(lines[0], "low")
+	assert_string_contains(lines[0], "sale_tag")
+	assert_string_contains(lines[0], "layout:impulse")
+
+
+func test_store_session_layout_visibility_affects_launch_queue_demand() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var release := load("res://data/releases/neon_skyline_launch.tres")
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	session.ledger_path = session.get_path_to(ledger)
+	session.replace_fixture_orders([
+		{
+			"order_id": "layout_fixture_002",
+			"fixture_id": "fixture_new_release_wall",
+			"display_name": "New Release Wall",
+			"status": "placed",
+		}
+	])
+	var preorder := ledger.record_preorder_deposit("preorder_customer_001", release, 500)
+	session.apply_preorder_deposit(preorder)
+	session.commit_release_allocation("release_neon_skyline", 4)
+
+	session.end_day()
+	session.start_next_day()
+	session.end_day()
+	session.start_next_day()
+
+	var event := session.get_launch_events()[0]
+	assert_eq(event.get("launch_queue_demand"), 3)
+	assert_eq(event.get("launch_queue_fulfilled"), 3)
+	assert_eq(event.get("missed_demand"), 0)
+	assert_string_contains(session.get_launch_summary_text(), "queue 3/3")
+
+
 func test_store_session_adjusts_pending_fixture_placement() -> void:
 	var fixture_root := Node3D.new()
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()

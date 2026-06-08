@@ -54,6 +54,14 @@ const ARCHETYPE_MULTIPLIERS := {
 	"parent_gift_buyer": 1.04,
 	"regular": 1.02,
 }
+const LAYOUT_MULTIPLIERS := {
+	"balanced": 1.0,
+	"efficient": 1.06,
+	"impulse": 1.04,
+	"crowded": 0.92,
+	"long_walk": 0.95,
+	"risky": 0.94,
+}
 
 
 static func get_category_multiplier(category: String) -> float:
@@ -100,6 +108,7 @@ static func get_contextual_demand_multiplier(product: ProductDefinition, context
 	multiplier *= _lookup_multiplier(MARKETING_MULTIPLIERS, str(context.get("marketing", "none")), 1.0)
 	multiplier *= _lookup_multiplier(EVENT_MULTIPLIERS, str(context.get("event", "normal")), 1.0)
 	multiplier *= _lookup_multiplier(ARCHETYPE_MULTIPLIERS, str(context.get("customer_archetype", "regular")), 1.0)
+	multiplier *= _lookup_multiplier(LAYOUT_MULTIPLIERS, str(context.get("layout", "balanced")), 1.0)
 	multiplier *= _get_price_pressure_multiplier(product, int(context.get("price_cents", 0)))
 	return multiplier
 
@@ -108,7 +117,7 @@ static func get_context_summary_line(product: ProductDefinition, context: Dictio
 	if product == null:
 		return "Demand tuning: no product"
 
-	return "%s demand x%0.2f (%s, %s, %s, %s, %s)" % [
+	return "%s demand x%0.2f (%s, %s, %s, %s, %s, layout:%s)" % [
 		product.display_name,
 		get_contextual_demand_multiplier(product, context),
 		str(context.get("shelf_visibility", "standard")),
@@ -116,6 +125,7 @@ static func get_context_summary_line(product: ProductDefinition, context: Dictio
 		str(context.get("marketing", "none")),
 		str(context.get("event", "normal")),
 		str(context.get("customer_archetype", "regular")),
+		str(context.get("layout", "balanced")),
 	]
 
 
@@ -134,7 +144,7 @@ static func get_summary_lines() -> Array[String]:
 
 
 static func get_tuning_summary_text() -> String:
-	return "Demand tuning signals: shelf visibility, price, rarity, marketing, events, and customer archetypes"
+	return "Demand tuning signals: shelf visibility, price, rarity, marketing, events, customer archetypes, and layout"
 
 
 static func get_summary_text() -> String:

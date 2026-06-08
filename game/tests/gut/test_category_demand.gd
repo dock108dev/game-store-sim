@@ -62,10 +62,28 @@ func test_category_demand_context_connects_visibility_price_rarity_marketing_eve
 			"marketing": "staff_pick",
 			"event": "weekend",
 			"customer_archetype": "collector",
+			"layout": "efficient",
 			"price_cents": 3600,
 		}),
 		"Signal Sprout demand x"
 	)
+	assert_string_contains(
+		CategoryDemandPolicy.get_context_summary_line(product, {"layout": "impulse"}),
+		"layout:impulse"
+	)
+
+
+func test_category_demand_layout_signal_changes_context_multiplier() -> void:
+	var product := ProductDefinition.new()
+	product.category = "used_game"
+	product.demand_tier = "medium"
+	product.rarity = "common"
+	product.market_value_cents = 2500
+
+	var efficient := CategoryDemandPolicy.get_contextual_demand_multiplier(product, {"layout": "efficient"})
+	var crowded := CategoryDemandPolicy.get_contextual_demand_multiplier(product, {"layout": "crowded"})
+
+	assert_gt(efficient, crowded)
 
 
 func test_category_demand_summary_lists_categories() -> void:
@@ -86,3 +104,4 @@ func test_category_demand_tuning_summary_lists_signals() -> void:
 	assert_string_contains(summary, "marketing")
 	assert_string_contains(summary, "events")
 	assert_string_contains(summary, "customer archetypes")
+	assert_string_contains(summary, "layout")

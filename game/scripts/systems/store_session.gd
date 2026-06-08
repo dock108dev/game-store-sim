@@ -298,6 +298,7 @@ const ONBOARDING_STEPS := [
 @export var receiving_box_path: NodePath
 @export var fixture_placement_manager_path: NodePath
 @export var evidence_storage_path: NodePath
+@export var customer_manager_path: NodePath
 
 const DEFAULT_FIXTURE_CATALOG_PATHS := [
 	"res://data/fixtures/game_display_rack.tres",
@@ -1295,6 +1296,7 @@ func get_reorder_suggestions_text() -> String:
 func get_category_demand_summary_text() -> String:
 	var lines: Array[String] = CategoryDemandPolicy.get_summary_lines()
 	lines.append(CategoryDemandPolicy.get_tuning_summary_text())
+	lines.append(get_layout_effect_summary_text())
 	for line in get_active_inventory_demand_tuning_lines(3):
 		lines.append(line)
 	return "\n".join(lines)
@@ -1316,6 +1318,7 @@ func get_active_inventory_demand_tuning_lines(max_items: int = 3) -> Array[Strin
 			"marketing": _get_item_marketing_signal(item, product),
 			"event": _get_day_demand_event(),
 			"customer_archetype": "regular",
+			"layout": _get_layout_demand_signal_for_item(item, product),
 			"price_cents": int(item.get("current_price_cents")),
 		}
 		lines.append(CategoryDemandPolicy.get_context_summary_line(product, context))
@@ -2491,6 +2494,52 @@ func get_decoration_summary_text() -> String:
 	return "\n".join(lines)
 
 
+func get_layout_effects() -> Dictionary:
+	var tag_counts := _get_placed_fixture_tag_counts()
+	var customer_metrics := _get_customer_layout_metrics()
+	var visibility_count := int(tag_counts.get("browse_visibility", 0)) \
+		+ int(tag_counts.get("wall_visibility", 0)) \
+		+ int(tag_counts.get("launch_visibility", 0)) \
+		+ int(tag_counts.get("register_visibility", 0))
+	var impulse_count := int(tag_counts.get("impulse_browse", 0)) \
+		+ int(tag_counts.get("checkout_impulse", 0))
+	if has_decoration("decor_poster_launch_set"):
+		visibility_count += 1
+	if has_decoration("decor_signage_counter_refresh") or has_decoration("decor_controller_display_prop"):
+		impulse_count += 1
+
+	var theft_risk_state := _get_theft_risk_state(tag_counts)
+	var queue_state := str(customer_metrics.get("queue_state", "unwired"))
+	var travel_state := str(customer_metrics.get("travel_state", "unknown"))
+	var layout_signal := _get_layout_signal(queue_state, travel_state, theft_risk_state, visibility_count, impulse_count)
+
+	return {
+		"layout_signal": layout_signal,
+		"visibility_fixture_count": visibility_count,
+		"impulse_fixture_count": impulse_count,
+		"launch_visibility_count": int(tag_counts.get("launch_visibility", 0)),
+		"queue_state": queue_state,
+		"queue_spacing": float(customer_metrics.get("queue_spacing", 0.0)),
+		"travel_state": travel_state,
+		"average_travel_distance": float(customer_metrics.get("average_travel_distance", 0.0)),
+		"theft_risk_state": theft_risk_state,
+		"path_issue_count": (customer_metrics.get("path_issues", []) as Array).size(),
+	}
+
+
+func get_layout_effect_summary_text() -> String:
+	var effects := get_layout_effects()
+	return "Layout effects: %s, visibility %d, impulse %d, queue %s, travel %s %0.1fm, theft %s" % [
+		str(effects.get("layout_signal", "balanced")),
+		int(effects.get("visibility_fixture_count", 0)),
+		int(effects.get("impulse_fixture_count", 0)),
+		str(effects.get("queue_state", "unwired")),
+		str(effects.get("travel_state", "unknown")),
+		float(effects.get("average_travel_distance", 0.0)),
+		str(effects.get("theft_risk_state", "standard_placeholder")),
+	]
+
+
 func _fixture_requirements_met(fixture: Resource) -> bool:
 	if fixture == null:
 		return false
@@ -2715,6 +2764,133 @@ func _get_day_demand_event() -> String:
 	return "normal"
 
 
+func _get_layout_demand_signal_for_item(item: Node, product: ProductDefinition) -> String:
+	var location_id := str(item.get("location_id"))
+	var fixture_category := _get_fixture_category_for_slot(location_id)
+	if fixture_category == "bargain" or fixture_category == "impulse":
+		return "impulse"
+	if fixture_category in ["high_value", "rare_game", "collector_item"] and not _has_placed_fixture_tag("theft_risk_placeholder"):
+		return "risky"
+	if product != null and product.risk_level in ["medium", "high"] and not _has_placed_fixture_tag("theft_risk_placeholder"):
+		return "risky"
+
+	return str(get_layout_effects().get("layout_signal", "balanced"))
+
+
+func _get_placed_fixture_tag_counts() -> Dictionary:
+	var counts := {}
+	for order in get_placed_fixture_orders():
+		var fixture := get_fixture_definition(str(order.get("fixture_id", "")))
+		if fixture == null:
+			continue
+
+		var tags: PackedStringArray = fixture.get("gameplay_tags")
+		for tag in tags:
+			var key := str(tag)
+			counts[key] = int(counts.get(key, 0)) + 1
+	return counts
+
+
+func _has_placed_fixture_tag(tag: String) -> bool:
+	return int(_get_placed_fixture_tag_counts().get(tag, 0)) > 0
+
+
+func _get_theft_risk_state(tag_counts: Dictionary) -> String:
+	if int(tag_counts.get("theft_risk_placeholder", 0)) > 0:
+		return "guarded_placeholder"
+
+	for item in get_active_inventory_items():
+		var product := item.get("product") as ProductDefinition
+		if product == null:
+			continue
+		if product.risk_level in ["medium", "high"] or product.risk_tags.has("serial_check"):
+			return "open_placeholder"
+
+	return "standard_placeholder"
+
+
+func _get_layout_signal(
+	queue_state: String,
+	travel_state: String,
+	theft_risk_state: String,
+	visibility_count: int,
+	impulse_count: int
+) -> String:
+	if queue_state in ["blocked", "tight"]:
+		return "crowded"
+	if travel_state == "long":
+		return "long_walk"
+	if theft_risk_state == "open_placeholder":
+		return "risky"
+	if impulse_count > 0:
+		return "impulse"
+	if visibility_count > 0 or queue_state == "clear" or travel_state == "efficient":
+		return "efficient"
+	return "balanced"
+
+
+func _get_customer_layout_metrics() -> Dictionary:
+	var manager := _get_customer_manager()
+	if manager == null:
+		return {
+			"queue_state": "unwired",
+			"queue_spacing": 0.0,
+			"travel_state": "unknown",
+			"average_travel_distance": 0.0,
+			"path_issues": [],
+		}
+
+	var issues := manager.validate_customer_paths() if manager.has_method("validate_customer_paths") else []
+	var queue_spacing := manager.register_queue_spacing.length()
+	var minimum_queue_spacing := manager.minimum_queue_spacing_distance
+	var queue_state := "clear"
+	if not issues.is_empty():
+		queue_state = "blocked"
+	elif queue_spacing < minimum_queue_spacing:
+		queue_state = "tight"
+	elif queue_spacing < minimum_queue_spacing * 1.15:
+		queue_state = "usable"
+
+	var travel_distance := _get_average_customer_travel_distance(manager)
+	var travel_state := "normal"
+	if travel_distance <= 0.0:
+		travel_state = "unknown"
+	elif travel_distance <= 8.5:
+		travel_state = "efficient"
+	elif travel_distance >= 12.0:
+		travel_state = "long"
+
+	return {
+		"queue_state": queue_state,
+		"queue_spacing": queue_spacing,
+		"travel_state": travel_state,
+		"average_travel_distance": travel_distance,
+		"path_issues": issues,
+	}
+
+
+func _get_average_customer_travel_distance(manager: CustomerManager) -> float:
+	var customers := manager.get_customers()
+	if customers.is_empty():
+		return 0.0
+
+	var total := 0.0
+	var count := 0
+	for index in range(customers.size()):
+		var browse_position := manager._browse_position_for_index(index)
+		var queue_position := manager._queue_position_for_index(index)
+		for slot_path in manager.display_slot_paths:
+			var slot := manager.get_node_or_null(slot_path) as Node3D
+			if slot == null:
+				continue
+			total += browse_position.distance_to(slot.global_position) + slot.global_position.distance_to(queue_position)
+			count += 1
+
+	if count == 0:
+		return 0.0
+	return total / float(count)
+
+
 func _get_ledger() -> TransactionLedger:
 	if ledger_path.is_empty():
 		return null
@@ -2744,6 +2920,13 @@ func _get_evidence_storage() -> Node:
 		return null
 
 	return get_node_or_null(evidence_storage_path)
+
+
+func _get_customer_manager() -> CustomerManager:
+	if customer_manager_path.is_empty():
+		return null
+
+	return get_node_or_null(customer_manager_path) as CustomerManager
 
 
 func _get_or_create_storage_shelf() -> Node:
@@ -3080,15 +3263,27 @@ func _get_committed_release_allocation_quantity(release_id: String) -> int:
 
 
 func _get_launch_queue_demand(release: Resource) -> int:
+	var demand := 1
 	match str(release.get("demand_tier")).to_lower():
 		"high":
-			return 2
+			demand = 2
 		"medium":
-			return 1
+			demand = 1
 		"low":
-			return 0
+			demand = 0
 		_:
-			return 1
+			demand = 1
+
+	var effects := get_layout_effects()
+	var launch_visibility := int(effects.get("launch_visibility_count", 0))
+	if launch_visibility > 0 or has_decoration("decor_poster_launch_set"):
+		demand += 1
+
+	var layout_signal := str(effects.get("layout_signal", "balanced"))
+	if layout_signal in ["crowded", "long_walk", "risky"]:
+		demand -= 1
+
+	return maxi(0, demand)
 
 
 func _get_preorder_balance_cents(
