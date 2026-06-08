@@ -11,6 +11,12 @@ const VARIANT_BOX := "box"
 const VARIANT_SEALED := "sealed"
 const VARIANT_LOOSE := "loose"
 const VARIANT_SERVICE_TICKET := "service_ticket"
+const CUE_SCRATCHES := "scratches"
+const CUE_MISSING_MANUAL := "missing_manual"
+const CUE_LOOSE_MEDIA := "loose_media"
+const CUE_DAMAGED_LABEL := "damaged_label"
+const CUE_RESEALED := "resealed"
+const CUE_SERIAL_RISK := "serial_risk"
 
 const REQUIRED_VARIANTS := [
 	VARIANT_CASE,
@@ -35,6 +41,7 @@ static func build_profile(product: ProductDefinition) -> Dictionary:
 	var format := _normalize(product.format if product != null else "")
 	var completeness := _normalize(product.completeness if product != null else "")
 	var platform_family := _normalize(product.get_platform_family() if product != null else "")
+	var condition_cues := _get_condition_cues(product)
 
 	var container_variant := VARIANT_CASE
 	var media_variant := _get_media_variant(category, format)
@@ -68,6 +75,7 @@ static func build_profile(product: ProductDefinition) -> Dictionary:
 		"loose_position": Vector3(0.0, 0.068, -0.04),
 		"service_ticket_size": Vector3(0.18, 0.24, 0.012),
 		"service_ticket_position": Vector3(0.0, 0.18, -0.04),
+		"condition_cues": condition_cues,
 		"show_cover": container_variant != VARIANT_SERVICE_TICKET,
 		"show_spine": container_variant == VARIANT_CASE,
 		"show_platform_band": container_variant != VARIANT_SERVICE_TICKET,
@@ -147,6 +155,32 @@ static func _unique_variants(variants: Array) -> Array[String]:
 		if not keys.has(key):
 			keys.append(key)
 	return keys
+
+
+static func _get_condition_cues(product: ProductDefinition) -> Array[String]:
+	var cues: Array[String] = []
+	if product == null:
+		return cues
+
+	var condition := _normalize(product.condition)
+	var completeness := _normalize(product.completeness)
+	var authenticity := _normalize(product.authenticity)
+	var risk_tags := product.risk_tags
+
+	if condition == "fair" or condition == "poor":
+		cues.append(CUE_SCRATCHES)
+	if completeness == "manual_missing":
+		cues.append(CUE_MISSING_MANUAL)
+	if completeness == VARIANT_LOOSE or risk_tags.has(CUE_LOOSE_MEDIA):
+		cues.append(CUE_LOOSE_MEDIA)
+	if condition == "poor" or risk_tags.has("label_wear") or risk_tags.has("poor_condition"):
+		cues.append(CUE_DAMAGED_LABEL)
+	if completeness == VARIANT_SEALED and authenticity != "verified":
+		cues.append(CUE_RESEALED)
+	if authenticity == "uncertain" or authenticity == "needs_review" or risk_tags.has("serial_check"):
+		cues.append(CUE_SERIAL_RISK)
+
+	return _unique_variants(cues)
 
 
 static func _normalize(value: String) -> String:

@@ -257,6 +257,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "product_condition_authenticity_cue_readability",
+      "name": "Product condition and authenticity cues are readable but not noisy",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify scratches, missing manual, loose media, damaged label, reseal, and serial-risk cue meshes; human review should confirm they read clearly at gameplay scale without overwhelming product identity.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",

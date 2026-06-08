@@ -71,6 +71,30 @@ func test_service_ticket_profile_stays_distinct_from_sale_products() -> void:
 	assert_false(profile.get("show_price_sticker"))
 
 
+func test_condition_cues_mark_wear_missing_manual_reseal_and_serial_risk() -> void:
+	var worn_copy := _make_product("used_game", "disc", "manual_missing")
+	worn_copy.condition = "poor"
+	worn_copy.authenticity = "needs_review"
+	var worn_tags: Array[String] = ["label_wear", "serial_check"]
+	worn_copy.risk_tags = worn_tags
+	var worn_cues := ProductVisualRules.build_profile(worn_copy).get("condition_cues") as Array
+
+	assert_true(worn_cues.has(ProductVisualRules.CUE_SCRATCHES))
+	assert_true(worn_cues.has(ProductVisualRules.CUE_MISSING_MANUAL))
+	assert_true(worn_cues.has(ProductVisualRules.CUE_DAMAGED_LABEL))
+	assert_true(worn_cues.has(ProductVisualRules.CUE_SERIAL_RISK))
+
+	var loose_copy := _make_product("used_game", "cartridge", "loose")
+	var loose_cues := ProductVisualRules.build_profile(loose_copy).get("condition_cues") as Array
+	assert_true(loose_cues.has(ProductVisualRules.CUE_LOOSE_MEDIA))
+
+	var resealed_copy := _make_product("used_game", "disc", "sealed")
+	resealed_copy.authenticity = "uncertain"
+	var resealed_cues := ProductVisualRules.build_profile(resealed_copy).get("condition_cues") as Array
+	assert_true(resealed_cues.has(ProductVisualRules.CUE_RESEALED))
+	assert_true(resealed_cues.has(ProductVisualRules.CUE_SERIAL_RISK))
+
+
 func _make_product(category: String, format: String, completeness: String) -> ProductDefinition:
 	var product := ProductDefinition.new()
 	product.product_id = "%s_%s_%s" % [category, format, completeness]

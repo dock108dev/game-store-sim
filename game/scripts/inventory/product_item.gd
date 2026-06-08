@@ -93,6 +93,50 @@ func apply_product_visuals() -> void:
 		Color(0.98, 0.93, 0.72, 1.0)
 	)
 
+	var condition_cues := _visual_profile.get("condition_cues", []) as Array
+	_set_condition_cue_box(
+		"ScratchCueMesh",
+		condition_cues.has(ProductVisualRulesScript.CUE_SCRATCHES),
+		Vector3(0.16, 0.012, 0.01),
+		Vector3(0.0, 0.185, -0.052),
+		Color(0.74, 0.77, 0.74, 1.0)
+	)
+	_set_condition_cue_box(
+		"MissingManualCueMesh",
+		condition_cues.has(ProductVisualRulesScript.CUE_MISSING_MANUAL),
+		Vector3(0.06, 0.078, 0.012),
+		Vector3(0.07, 0.19, -0.054),
+		Color(0.98, 0.88, 0.58, 1.0)
+	)
+	_set_condition_cue_box(
+		"LooseMediaCueMesh",
+		condition_cues.has(ProductVisualRulesScript.CUE_LOOSE_MEDIA),
+		Vector3(0.105, 0.028, 0.012),
+		Vector3(-0.025, 0.055, -0.055),
+		Color(0.88, 0.62, 0.3, 1.0)
+	)
+	_set_condition_cue_box(
+		"DamagedLabelCueMesh",
+		condition_cues.has(ProductVisualRulesScript.CUE_DAMAGED_LABEL),
+		Vector3(0.082, 0.034, 0.012),
+		Vector3(-0.055, 0.275, -0.056),
+		Color(0.45, 0.2, 0.16, 1.0)
+	)
+	_set_condition_cue_box(
+		"ResealCueMesh",
+		condition_cues.has(ProductVisualRulesScript.CUE_RESEALED),
+		Vector3(0.19, 0.018, 0.012),
+		Vector3(0.0, 0.31, -0.057),
+		Color(0.75, 0.95, 1.0, 0.56)
+	)
+	_set_condition_cue_box(
+		"SerialRiskCueMesh",
+		condition_cues.has(ProductVisualRulesScript.CUE_SERIAL_RISK) or has_serial_mismatch(),
+		Vector3(0.052, 0.052, 0.013),
+		Vector3(0.082, 0.075, -0.058),
+		Color(0.95, 0.28, 0.18, 1.0)
+	)
+
 
 func get_interaction_prompt() -> String:
 	return _get_inspect_prompt()
@@ -249,6 +293,16 @@ func _set_variant_box(
 	mesh.size = size
 	mesh.material = _make_material(color)
 	node.mesh = mesh
+
+
+func _set_condition_cue_box(
+	node_name: String,
+	is_visible: bool,
+	size: Vector3,
+	position: Vector3,
+	color: Color
+) -> void:
+	_set_variant_box(node_name, is_visible, size, position, color)
 
 
 func _get_or_create_variant_node(node_name: String) -> MeshInstance3D:

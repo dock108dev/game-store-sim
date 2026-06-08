@@ -145,6 +145,46 @@ func test_product_item_rebuilds_visuals_for_hardware_and_service_profiles() -> v
 	assert_false((_item.get_node("PriceStickerMesh") as MeshInstance3D).visible)
 
 
+func test_product_item_applies_condition_and_authenticity_cue_meshes() -> void:
+	var product := _make_product("Risk Copy", "used_game", "disc", "manual_missing")
+	product.condition = "poor"
+	product.authenticity = "needs_review"
+	var product_tags: Array[String] = ["label_wear", "serial_check"]
+	product.risk_tags = product_tags
+	_item.set("product", product)
+	_item.apply_product_visuals()
+
+	assert_true((_item.get_node("ScratchCueMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("MissingManualCueMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("DamagedLabelCueMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("SerialRiskCueMesh") as MeshInstance3D).visible)
+	assert_false((_item.get_node("ResealCueMesh") as MeshInstance3D).visible)
+
+	var loose_product := _make_product("Loose Cart", "used_game", "cartridge", "loose")
+	_item.set("product", loose_product)
+	_item.apply_product_visuals()
+
+	assert_true((_item.get_node("LooseMediaCueMesh") as MeshInstance3D).visible)
+
+	var resealed_product := _make_product("Resealed Disc", "used_game", "disc", "sealed")
+	resealed_product.authenticity = "uncertain"
+	_item.set("product", resealed_product)
+	_item.apply_product_visuals()
+
+	assert_true((_item.get_node("ResealCueMesh") as MeshInstance3D).visible)
+
+
+func test_product_item_serial_mismatch_shows_suspicious_marker() -> void:
+	var product := _make_product("Clean Copy", "used_game", "disc", "complete")
+	_item.set("product", product)
+	_item.serial_id = "GST-999"
+	_item.expected_serial_id = "GST-001"
+	_item.apply_product_visuals()
+
+	assert_true(_item.has_serial_mismatch())
+	assert_true((_item.get_node("SerialRiskCueMesh") as MeshInstance3D).visible)
+
+
 func test_used_game_hover_highlight_toggles_visual_cue() -> void:
 	var highlight := _item.get_node_or_null("HoverHighlight") as CSGBox3D
 

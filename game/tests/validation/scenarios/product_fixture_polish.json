@@ -36,6 +36,20 @@
       "evidence": "res://tests/gut/test_product_item.gd::test_product_item_uses_product_visual_profile; res://tests/gut/test_product_item.gd::test_product_item_rebuilds_visuals_for_loose_disc_profile"
     },
     {
+      "id": "product_condition_authenticity_cues",
+      "name": "Product visual rules and product items show condition and authenticity cues",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_visual_rules.gd::test_condition_cues_mark_wear_missing_manual_reseal_and_serial_risk; res://tests/gut/test_product_item.gd::test_product_item_applies_condition_and_authenticity_cue_meshes"
+    },
+    {
+      "id": "product_suspicious_serial_marker",
+      "name": "Product item shows a suspicious serial marker for serial mismatch risk",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_serial_mismatch_shows_suspicious_marker"
+    },
+    {
       "id": "rack_category_header",
       "name": "Display rack has a readable used-game category header",
       "status": "automated",
