@@ -55,6 +55,27 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_presentation_microfeedback.gd::test_player_controller_contains_microfeedback_particles"
+    },
+    {
+      "id": "camera_feel_comfort_bounds",
+      "name": "Player camera feel defines comfort FOV bounds, subtle bob, held sway, and workstation transition summary",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_camera_feel_has_comfort_bounds_and_summary"
+    },
+    {
+      "id": "camera_feel_runtime_motion",
+      "name": "Player camera motion stays within bounded bob and movement FOV limits",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_camera_motion_adds_bounded_bob_and_fov_boost"
+    },
+    {
+      "id": "camera_feel_workstation_focus",
+      "name": "Player modal focus settles the camera and lowers FOV without breaking mouse-workstation flow",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_modal_camera_settles_for_workstation_focus"
     }
   ]
 }

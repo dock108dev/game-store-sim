@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this microfeedback pass: `scripts/validate_godot.sh` passes with 461 GUT tests, UI scenario automation coverage at 435/535, production script mapping coverage at 47/47, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this camera-feel pass: `scripts/validate_godot.sh` passes with 464 GUT tests, UI scenario automation coverage at 438/539, production script mapping coverage at 47/47, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -50,6 +50,7 @@ Current automated baseline:
 - Interaction audio baseline is implemented through Stop 11.2; manual QA should run the Presentation Feel Focus interaction checks to confirm pickup, place, stock, scan, register, cash drawer, computer, button, box, shelf bump, and error cues support actions without becoming noise.
 - Customer audio placeholders are implemented through Stop 11.3; manual QA should run the Presentation Feel Focus customer-audio checks to confirm footstep, mumble, greeting, approval, annoyance, and leaving cues add state readability without implying final voice acting.
 - Presentation microfeedback is implemented through Stop 11.4; manual QA should run the Presentation Feel Focus microfeedback checks to confirm highlights, item settle, sale confirmation, cash/reputation ticks, day transitions, delivery arrivals, and invalid actions are subtle and semantically clear.
+- Camera feel is implemented through Stop 11.5; manual QA should run the Presentation Feel Focus camera checks to confirm movement bob, FOV shift, held-item sway, and workstation settling feel comfortable and do not hide the reticle or prompts.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -144,6 +145,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 85. During pickup, stocking, register, computer, receiving, shelf-blocked, and modal interactions, confirm the interaction sound cue timing makes the action clearer and never implies a different system completed.
 86. Listen to buyer, trade-in, preorder, service, and suspicious customers and confirm their placeholder footsteps, mumbles, greetings, approval, annoyance, and leaving cues help distinguish state without covering feedback bubbles or register prompts.
 87. Watch target highlights, item settle, sale confirmation, cash/reputation ticks, day transition, delivery arrival, and invalid-action feedback and confirm each reads as the correct kind of event without obscuring prompts or UI.
+88. Walk, turn, carry several items, open/close the register, pricing panel, trade-in panel, settings, and backroom computer, and confirm camera bob, FOV shift, held-item sway, and workstation settling remain comfortable and readable.
 
 ## Visual Checks
 
@@ -269,6 +271,10 @@ Run these first when manually checking the completed Stop 11.1 store ambience ba
 - Confirm sale confirmation and cash/reputation ticks are distinct from invalid-action feedback.
 - Confirm day transition and delivery-arrival feedback support pacing without hiding report or receiving text.
 - Confirm invalid-action feedback reads as blocked/warning feedback and never as a completed sale, delivery, or placement.
+- Confirm walking bob is noticeable enough to add motion but subtle enough to avoid discomfort.
+- Confirm the movement FOV boost does not distort shelf, register, or backroom-computer reading distance.
+- Confirm held-item sway keeps active and stacked items below the center reticle while turning and walking.
+- Confirm workstation/modal settling lowers focus smoothly and restores first-person feel after closing the panel.
 
 ## Production Target Contract Focus
 

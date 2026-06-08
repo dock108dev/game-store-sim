@@ -4,8 +4,10 @@ extends CharacterBody3D
 @export var mouse_sensitivity: float = 0.0025
 @export var invert_look: bool = false
 @export var max_held_items: int = 3
+@export var comfort_fov: float = 72.0
 
 @onready var head: Node3D = $Head
+@onready var camera: Camera3D = $Head/Camera3D
 @onready var hold_anchor: Node3D = $Head/Camera3D/HoldAnchor
 @onready var pricing_panel: PricingPanel = $PricingPanel
 @onready var register_checkout_panel: Node = $RegisterCheckoutPanel
@@ -21,14 +23,30 @@ const CARRY_BOB_AMPLITUDE := 0.008
 const CARRY_IDLE_SETTLE := 0.004
 const CARRY_MOVE_BOB_SPEED := 7.0
 const CARRY_IDLE_BOB_SPEED := 2.5
+const CARRY_SWAY_AMPLITUDE := 0.014
+const CARRY_FORWARD_SWAY := 0.004
+const CARRY_SWAY_ROTATION := 0.025
+const CAMERA_BOB_AMPLITUDE := 0.018
+const CAMERA_SWAY_AMPLITUDE := 0.008
+const CAMERA_MOVE_FOV_BOOST := 2.0
+const CAMERA_WORKSTATION_FOV_REDUCTION := 4.0
+const CAMERA_WORKSTATION_SETTLE_Y := 0.012
+const CAMERA_MIN_FOV := 66.0
+const CAMERA_MAX_FOV := 76.0
 
 var _look_pitch: float = 0.0
 var _held_items: Array[Node3D] = []
 var _held_item_bob_time: float = 0.0
+var _camera_feel_time: float = 0.0
+var _camera_motion_weight: float = 0.0
+var _camera_workstation_focus_weight: float = 0.0
+var _head_base_position: Vector3 = Vector3.ZERO
 
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_head_base_position = head.position
+	camera.fov = clampf(comfort_fov, CAMERA_MIN_FOV, CAMERA_MAX_FOV)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -59,6 +77,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		move_and_slide()
+		_update_camera_feel(delta, 0.0)
 		_update_held_item_motion(delta, 0.0)
 		return
 
@@ -72,6 +91,7 @@ func _physics_process(delta: float) -> void:
 	velocity.z = move_direction.z * move_speed
 
 	move_and_slide()
+	_update_camera_feel(delta, input_vector.length())
 	_update_held_item_motion(delta, input_vector.length())
 
 
@@ -193,6 +213,30 @@ func get_invert_look() -> bool:
 
 func set_invert_look(value: bool) -> void:
 	invert_look = value
+
+
+func get_camera_feel_state() -> Dictionary:
+	return {
+		"comfort_fov": comfort_fov,
+		"camera_fov": camera.fov if camera != null else comfort_fov,
+		"motion_weight": _camera_motion_weight,
+		"workstation_focus_weight": _camera_workstation_focus_weight,
+		"head_offset": head.position - _head_base_position if head != null else Vector3.ZERO,
+		"bob_amplitude": CAMERA_BOB_AMPLITUDE,
+		"sway_amplitude": CAMERA_SWAY_AMPLITUDE,
+		"move_fov_boost": CAMERA_MOVE_FOV_BOOST,
+		"workstation_fov_reduction": CAMERA_WORKSTATION_FOV_REDUCTION,
+		"min_fov": CAMERA_MIN_FOV,
+		"max_fov": CAMERA_MAX_FOV,
+	}
+
+
+func get_camera_feel_summary_text() -> String:
+	return "Camera feel baseline:\nMovement bob - subtle head offset below reticle\nHeld item sway - bounded stack motion while walking\nWorkstation transition - modal focus settles camera and lowers FOV\nComfort FOV - %.1f base, %.1f-%.1f bounded range" % [
+		comfort_fov,
+		CAMERA_MIN_FOV,
+		CAMERA_MAX_FOV,
+	]
 
 
 func open_pricing_for_held_item() -> String:
@@ -354,9 +398,34 @@ func _arrange_held_items() -> void:
 		item.transform = Transform3D(Basis.from_euler(carry_rotation), carry_position)
 		item.scale = _get_held_item_silhouette_scale(item, depth)
 		item.set_meta("carry_base_position", carry_position)
+		item.set_meta("carry_base_rotation", carry_rotation)
 		item.set_meta("carry_depth", depth)
 		item.set_meta("carry_is_active", index == _held_items.size() - 1)
 		item.set_meta("carry_bob_phase", depth * 0.55)
+
+
+func _update_camera_feel(delta: float, movement_amount: float) -> void:
+	if head == null or camera == null:
+		return
+
+	var movement := clampf(movement_amount, 0.0, 1.0)
+	var modal_focus := 1.0 if _is_modal_open() else 0.0
+	var motion_lerp := minf(delta * 8.0, 1.0)
+	var focus_lerp := minf(delta * 10.0, 1.0)
+	_camera_motion_weight = lerpf(_camera_motion_weight, movement, motion_lerp)
+	_camera_workstation_focus_weight = lerpf(_camera_workstation_focus_weight, modal_focus, focus_lerp)
+
+	_camera_feel_time += delta * lerpf(1.8, 8.0, _camera_motion_weight)
+	var active_motion := _camera_motion_weight * (1.0 - _camera_workstation_focus_weight)
+	var bob_offset := sin(_camera_feel_time) * CAMERA_BOB_AMPLITUDE * active_motion
+	var sway_offset := sin(_camera_feel_time * 0.55) * CAMERA_SWAY_AMPLITUDE * active_motion
+	var settle_offset := CAMERA_WORKSTATION_SETTLE_Y * _camera_workstation_focus_weight
+	head.position = _head_base_position + Vector3(sway_offset, bob_offset - settle_offset, 0.0)
+
+	var target_fov := comfort_fov \
+		+ (CAMERA_MOVE_FOV_BOOST * active_motion) \
+		- (CAMERA_WORKSTATION_FOV_REDUCTION * _camera_workstation_focus_weight)
+	camera.fov = clampf(lerpf(camera.fov, target_fov, minf(delta * 6.0, 1.0)), CAMERA_MIN_FOV, CAMERA_MAX_FOV)
 
 
 func _update_held_item_motion(delta: float, movement_amount: float) -> void:
@@ -374,9 +443,14 @@ func _update_held_item_motion(delta: float, movement_amount: float) -> void:
 			continue
 
 		var base_position := item.get_meta("carry_base_position", item.position) as Vector3
+		var base_rotation := item.get_meta("carry_base_rotation", item.rotation) as Vector3
 		var phase := float(item.get_meta("carry_bob_phase", 0.0))
 		var bob_offset := sin(_held_item_bob_time + phase) * bob_strength
-		item.position = base_position + Vector3(0.0, bob_offset - settle_offset, 0.0)
+		var sway_offset := sin((_held_item_bob_time * 0.72) + phase) * CARRY_SWAY_AMPLITUDE * movement
+		var forward_sway := cos((_held_item_bob_time * 0.68) + phase) * CARRY_FORWARD_SWAY * movement
+		var roll_sway := sin(_held_item_bob_time + phase) * CARRY_SWAY_ROTATION * movement
+		item.position = base_position + Vector3(sway_offset, bob_offset - settle_offset, forward_sway)
+		item.rotation = base_rotation + Vector3(0.0, 0.0, roll_sway)
 
 
 func _get_held_item_silhouette_scale(item: Node3D, depth: float) -> Vector3:
@@ -393,6 +467,6 @@ func _clear_held_item_presentation(item: Node3D) -> void:
 	if item == null:
 		return
 
-	for key in ["carry_base_position", "carry_depth", "carry_is_active", "carry_bob_phase"]:
+	for key in ["carry_base_position", "carry_base_rotation", "carry_depth", "carry_is_active", "carry_bob_phase"]:
 		if item.has_meta(key):
 			item.remove_meta(key)

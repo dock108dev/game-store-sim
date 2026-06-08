@@ -570,7 +570,7 @@ Stops:
 - Stop 11.2: Interaction sounds. Done in `Add interaction audio baseline`: add pickup, place, stock, scan, register, cash drawer, computer click, button hover/click, box open, shelf bump, and error sounds.
 - Stop 11.3: Customer audio placeholders. Done in `Add customer audio placeholders`: add footstep, mumble, greeting, approval, annoyance, and leaving cues without committing to final voice.
 - Stop 11.4: VFX and microfeedback. Done in `Add presentation VFX baseline`: add subtle highlights, item settle, sale confirmation, cash/reputation tick, day transition, delivery arrival, and invalid action feedback.
-- Stop 11.5: Camera feel. Tune movement bob, held item sway, workstation transition, field of view, and motion comfort.
+- Stop 11.5: Camera feel. Done in `Tune camera feel`: tune movement bob, held item sway, workstation transition, field of view, and motion comfort.
 - Stop 11.6: Presentation validation sync. Add manual audio/feel checklist and automated asset/load checks where practical.
 
 Acceptance:
@@ -595,7 +595,8 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 11.2 interaction audio catalog, conservative cue mix levels, player-controller AudioStreamPlayer wiring, cue recording, and action-group summary text.
 - Focused GUT coverage passes for the Stop 11.3 customer audio placeholder catalog, conservative cue mix levels, buyer/trade-in/preorder/service/suspicious scene profile wiring, feedback-tone cue mapping, and summary text.
 - Focused GUT coverage passes for the Stop 11.4 presentation microfeedback catalog, player-controller CPUParticles3D wiring, result-driven effect mapping, and summary text.
-- Manual Presentation Feel Focus checks are current for room tone, HVAC, storefront muffle, door chime, register ambience, backroom ambience, closing quiet, pickup/place/stock cues, scan/register/cash cues, computer/button cues, box/shelf/error cues, customer footsteps, mumbles, greetings, approval, annoyance, leaving cues, target highlights, item settle, sale/cash/reputation ticks, day transition, delivery arrival, invalid-action feedback, and prompt/UI masking risk.
+- Focused GUT coverage passes for the Stop 11.5 camera-feel comfort bounds, movement bob, held-item sway, modal/workstation settling, FOV limits, and summary text.
+- Manual Presentation Feel Focus checks are current for room tone, HVAC, storefront muffle, door chime, register ambience, backroom ambience, closing quiet, pickup/place/stock cues, scan/register/cash cues, computer/button cues, box/shelf/error cues, customer footsteps, mumbles, greetings, approval, annoyance, leaving cues, target highlights, item settle, sale/cash/reputation ticks, day transition, delivery arrival, invalid-action feedback, movement bob, FOV shift, held-item sway, workstation settling, and prompt/UI masking risk.
 
 ## Milestone 12: Save, Load, Settings, And Release Wrapper
 

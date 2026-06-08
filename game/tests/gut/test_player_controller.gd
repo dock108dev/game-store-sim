@@ -27,6 +27,58 @@ func test_player_scene_has_current_camera() -> void:
 	var camera := _player.get_node_or_null("Head/Camera3D") as Camera3D
 	assert_not_null(camera)
 	assert_true(camera.current)
+	assert_almost_eq(camera.fov, 72.0, 0.001)
+
+
+func test_player_camera_feel_has_comfort_bounds_and_summary() -> void:
+	var state: Dictionary = _player.call("get_camera_feel_state")
+	var summary: String = _player.call("get_camera_feel_summary_text")
+
+	assert_eq(state.get("comfort_fov"), 72.0)
+	assert_eq(state.get("min_fov"), 66.0)
+	assert_eq(state.get("max_fov"), 76.0)
+	assert_lte(state.get("move_fov_boost"), 2.0)
+	assert_lte(state.get("bob_amplitude"), 0.018)
+	assert_string_contains(summary, "Movement bob")
+	assert_string_contains(summary, "Held item sway")
+	assert_string_contains(summary, "Workstation transition")
+	assert_string_contains(summary, "Comfort FOV")
+
+
+func test_player_camera_motion_adds_bounded_bob_and_fov_boost() -> void:
+	var head := _player.get_node("Head") as Node3D
+	var camera := _player.get_node("Head/Camera3D") as Camera3D
+	var base_position := head.position
+
+	_player.call("_update_camera_feel", 0.25, 1.0)
+	var state: Dictionary = _player.call("get_camera_feel_state")
+	var head_offset := state.get("head_offset") as Vector3
+
+	assert_gt(state.get("motion_weight"), 0.0)
+	assert_gt(camera.fov, 72.0)
+	assert_lte(camera.fov, 76.0)
+	assert_ne(head.position, base_position)
+	assert_lte(absf(head_offset.x), 0.008)
+	assert_lte(absf(head_offset.y), 0.018)
+	assert_almost_eq(head_offset.z, 0.0, 0.001)
+
+
+func test_player_modal_camera_settles_for_workstation_focus() -> void:
+	var head := _player.get_node("Head") as Node3D
+	var camera := _player.get_node("Head/Camera3D") as Camera3D
+	var base_position := head.position
+
+	assert_eq(_player.open_settings_panel(), "")
+	_player.call("_update_camera_feel", 0.25, 1.0)
+	var state: Dictionary = _player.call("get_camera_feel_state")
+	var head_offset := state.get("head_offset") as Vector3
+
+	assert_gt(state.get("workstation_focus_weight"), 0.0)
+	assert_lt(camera.fov, 72.0)
+	assert_gte(camera.fov, 66.0)
+	assert_lt(head.position.y, base_position.y)
+	assert_lte(absf(head_offset.x), 0.001)
+	assert_lte(absf(head_offset.y), 0.012)
 
 
 func test_interaction_raycast_is_configured() -> void:
@@ -174,9 +226,12 @@ func test_player_carry_presentation_has_depth_active_focus_and_motion() -> void:
 	assert_gt(absf(first_item.rotation.z), absf(third_item.rotation.z))
 
 	var active_base_position := third_item.get_meta("carry_base_position") as Vector3
+	var active_base_rotation := third_item.get_meta("carry_base_rotation") as Vector3
 	_player.call("_update_held_item_motion", 0.25, 1.0)
 
 	assert_ne(third_item.position.y, active_base_position.y)
+	assert_ne(third_item.position.x, active_base_position.x)
+	assert_ne(third_item.rotation.z, active_base_rotation.z)
 	assert_lte(absf(third_item.position.x), 0.02)
 	assert_lte(third_item.position.y, 0.02)
 	assert_lte(third_item.position.z, -0.04)
