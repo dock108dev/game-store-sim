@@ -94,6 +94,23 @@ func test_used_game_case_visual_cues_stay_inside_case_bounds() -> void:
 		assert_lt(cue.mesh.size.z, case_mesh.mesh.size.z)
 
 
+func test_used_game_hover_highlight_toggles_visual_cue() -> void:
+	var highlight := _item.get_node_or_null("HoverHighlight") as CSGBox3D
+
+	assert_not_null(highlight)
+	assert_false(highlight.use_collision)
+	assert_false(highlight.visible)
+	assert_false(_item.is_hovered())
+
+	_item.set_hovered(true)
+	assert_true(_item.is_hovered())
+	assert_true(highlight.visible)
+
+	_item.set_hovered(false)
+	assert_false(_item.is_hovered())
+	assert_false(highlight.visible)
+
+
 func test_used_game_prompt_uses_product_name() -> void:
 	assert_eq(_item.get_interaction_prompt(), "Click Inspect Star Trader")
 

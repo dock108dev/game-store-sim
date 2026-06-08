@@ -85,6 +85,13 @@
       "evidence": "res://tests/gut/test_interaction_contract.gd::test_interaction_prompt_parses_prompt_hierarchy_and_feedback_tones"
     },
     {
+      "id": "interaction_hover_target_handoff",
+      "name": "Interaction raycast transfers hover feedback between targets",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_interaction_raycast_transfers_hover_feedback_between_targets"
+    },
+    {
       "id": "input_actions_exist",
       "name": "Keyboard input actions exist",
       "status": "automated",

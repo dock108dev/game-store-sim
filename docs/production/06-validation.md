@@ -42,8 +42,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 295 GUT tests.
-- UI scenario automation coverage is 298/354, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 300 GUT tests.
+- UI scenario automation coverage is 303/359, above the required 80% threshold.
 - Production script mapping coverage is 31/31.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
@@ -59,8 +59,11 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Prompt readability in the actual game window.
 - Prompt hierarchy readability in the actual game window, including action, subject, blocked, and feedback states.
 - Center reticle readability in normal, blocked, and feedback states in the actual game window.
+- Hover highlights for pickup items and shelf slots are readable without implying separate targets.
 - Receiving box, display rack, register, and compact used-game visual placement.
 - Display rack slots still behave like used-game slots after category assignment changes.
+- Invalid stocking attempts give clear blocked feedback instead of silent failure.
+- Stocking a valid item gives a clear landing confirmation.
 - Held item stack stays visible without blocking normal navigation.
 - Held item stack active focus, depth fan, scale falloff, and subtle motion feel natural while moving.
 - Stocking one carried game leaves the remaining carried games visible and usable.

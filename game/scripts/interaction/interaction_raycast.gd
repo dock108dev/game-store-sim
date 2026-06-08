@@ -16,13 +16,13 @@ func _physics_process(_delta: float) -> void:
 
 	var collider := get_collider()
 	if collider != null and collider.has_method("get_interaction_prompt"):
-		_current_interactable = collider
+		_set_current_interactable(collider)
 		_using_actor_fallback = false
 		if _prompt != null and _prompt.has_method("show_prompt"):
 			_prompt.show_prompt(_get_prompt_text(collider))
 		return
 
-	_current_interactable = null
+	_set_current_interactable(null)
 	if _show_actor_fallback_prompt():
 		return
 
@@ -75,6 +75,20 @@ func _get_actor() -> Node:
 		node = node.get_parent()
 
 	return null
+
+
+func _set_current_interactable(interactable: Node) -> void:
+	if _current_interactable == interactable:
+		return
+
+	_set_hovered(_current_interactable, false)
+	_current_interactable = interactable
+	_set_hovered(_current_interactable, true)
+
+
+func _set_hovered(interactable: Node, is_hovered: bool) -> void:
+	if interactable != null and interactable.has_method("set_hovered"):
+		interactable.set_hovered(is_hovered)
 
 
 func _show_actor_fallback_prompt() -> bool:

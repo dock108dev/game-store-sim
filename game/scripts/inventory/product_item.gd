@@ -11,11 +11,13 @@ extends "res://scripts/interaction/interactable.gd"
 
 var _default_collision_layer: int = 1
 var _default_collision_mask: int = 1
+var _is_hovered: bool = false
 
 
 func _ready() -> void:
 	_default_collision_layer = collision_layer
 	_default_collision_mask = collision_mask
+	_set_hover_highlight_visible(_is_hovered)
 
 	if product == null:
 		return
@@ -64,6 +66,15 @@ func set_customer_held(customer_id: String) -> void:
 func set_sold() -> void:
 	location_id = "sold"
 	set_collision_enabled(false)
+
+
+func set_hovered(is_hovered: bool) -> void:
+	_is_hovered = is_hovered
+	_set_hover_highlight_visible(_is_hovered)
+
+
+func is_hovered() -> bool:
+	return _is_hovered
 
 
 func has_serial_mismatch() -> bool:
@@ -130,6 +141,12 @@ func set_collision_enabled(is_enabled: bool) -> void:
 	for child in find_children("*", "CollisionShape3D", true, false):
 		var shape := child as CollisionShape3D
 		shape.disabled = not is_enabled
+
+
+func _set_hover_highlight_visible(is_visible: bool) -> void:
+	var highlight := get_node_or_null("HoverHighlight") as Node3D
+	if highlight != null:
+		highlight.visible = is_visible
 
 
 func _get_inspect_prompt() -> String:

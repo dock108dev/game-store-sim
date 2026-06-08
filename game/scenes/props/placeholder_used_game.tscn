@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b4mvebgik4k2e"]
+[gd_scene load_steps=15 format=3 uid="uid://b4mvebgik4k2e"]
 
 [ext_resource type="Script" path="res://scripts/inventory/product_item.gd" id="1_product_item"]
 [ext_resource type="Resource" uid="uid://c7sb5i8ogb4uj" path="res://data/products/used_star_trader.tres" id="2_product"]
@@ -17,6 +17,10 @@ albedo_color = Color(0.16, 0.32, 0.92, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_price_sticker"]
 albedo_color = Color(0.98, 0.9, 0.62, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hover"]
+albedo_color = Color(0.95, 0.82, 0.28, 0.34)
+transparency = 1
 
 [sub_resource type="BoxMesh" id="BoxMesh_case"]
 material = SubResource("StandardMaterial3D_case")
@@ -65,6 +69,13 @@ mesh = SubResource("BoxMesh_platform_band")
 [node name="PriceStickerMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0.067, 0.075, -0.032)
 mesh = SubResource("BoxMesh_price_sticker")
+
+[node name="HoverHighlight" type="CSGBox3D" parent="."]
+visible = false
+use_collision = false
+position = Vector3(0, 0.18, -0.002)
+size = Vector3(0.29, 0.39, 0.065)
+material = SubResource("StandardMaterial3D_hover")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.18, 0)

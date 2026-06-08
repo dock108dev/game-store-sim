@@ -7,6 +7,12 @@ class_name ShelfSlot
 @export var placed_item_position: Vector3 = Vector3(0, 0, 0.02)
 @export var placed_item_scale: Vector3 = Vector3(0.56, 0.56, 0.56)
 
+var _is_hovered: bool = false
+
+
+func _ready() -> void:
+	_set_hover_highlight_visible(_is_hovered)
+
 
 func assign_category(category: String) -> bool:
 	var normalized_category := category.strip_edges()
@@ -109,8 +115,14 @@ func get_interaction_prompt() -> String:
 func get_interaction_prompt_for_actor(actor: Node) -> String:
 	if actor != null and actor.has_method("get_held_item"):
 		var held_item: Node = actor.get_held_item()
-		if held_item != null and can_accept(held_item):
-			return "Click Stock %s" % _get_item_display_name(held_item)
+		if held_item != null:
+			if can_accept(held_item):
+				return "Click Stock %s" % _get_item_display_name(held_item)
+
+			return _get_blocked_stock_text(held_item)
+
+	if is_available():
+		return "Hold an item to stock this slot."
 
 	return get_interaction_prompt()
 
@@ -129,9 +141,41 @@ func interact() -> String:
 func interact_with_actor(actor: Node) -> String:
 	if actor != null and actor.has_method("place_held_item") and actor.place_held_item(self):
 		var item := get_occupied_item()
-		return "Stocked %s" % _get_item_display_name(item)
+		return "Stocked %s in %s." % [_get_item_display_name(item), slot_id]
+
+	if actor != null and actor.has_method("get_held_item"):
+		var held_item: Node = actor.get_held_item()
+		if held_item != null:
+			return "%s." % _get_blocked_stock_text(held_item)
 
 	return interact()
+
+
+func set_hovered(is_hovered: bool) -> void:
+	_is_hovered = is_hovered
+	_set_hover_highlight_visible(_is_hovered)
+
+
+func is_hovered() -> bool:
+	return _is_hovered
+
+
+func _set_hover_highlight_visible(is_visible: bool) -> void:
+	var highlight := get_node_or_null("SlotHoverFrame") as Node3D
+	if highlight != null:
+		highlight.visible = is_visible
+
+
+func _get_blocked_stock_text(item: Node) -> String:
+	var item_name := _get_item_display_name(item)
+	if not is_available():
+		return "Cannot Stock %s: Slot Occupied" % item_name
+
+	var product := item.get("product") as ProductDefinition
+	if product == null:
+		return "Cannot Stock %s Here" % item_name
+
+	return "Cannot Stock %s In %s Slot" % [item_name, accepted_category]
 
 
 func _get_item_display_name(item: Node) -> String:

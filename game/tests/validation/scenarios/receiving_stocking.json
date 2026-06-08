@@ -190,6 +190,20 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_stock_prompt_uses_held_item_name"
     },
     {
+      "id": "slot_invalid_stock_feedback",
+      "name": "Display slot gives clear blocked feedback for incompatible held items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_rejects_wrong_category_with_clear_feedback"
+    },
+    {
+      "id": "slot_landing_confirmation",
+      "name": "Display slot confirms the stocked item and landing slot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_stocking_confirms_landing_slot"
+    },
+    {
       "id": "occupied_slot_inspect",
       "name": "Occupied display slot inspects the stocked item",
       "status": "automated",

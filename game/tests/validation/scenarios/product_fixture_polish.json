@@ -15,6 +15,13 @@
       "evidence": "res://tests/gut/test_product_item.gd::test_used_game_case_visual_cues_stay_inside_case_bounds"
     },
     {
+      "id": "used_game_hover_highlight",
+      "name": "Used-game product hover highlight toggles as a nonblocking visual cue",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_hover_highlight_toggles_visual_cue"
+    },
+    {
       "id": "rack_category_header",
       "name": "Display rack has a readable used-game category header",
       "status": "automated",
@@ -27,6 +34,13 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slots_have_compact_category_rails"
+    },
+    {
+      "id": "rack_slot_hover_highlight",
+      "name": "Display rack slot hover highlight toggles as a nonblocking visual cue",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_hover_highlight_toggles_nonblocking_frame"
     },
     {
       "id": "carry_stack_fan",

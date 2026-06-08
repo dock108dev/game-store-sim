@@ -4,11 +4,12 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this held-item presentation pass: `scripts/validate_godot.sh` passed with 295 GUT tests, UI scenario coverage 298/354, and script mapping coverage 31/31.
+- Last full gate in this pickup/place feedback pass: `scripts/validate_godot.sh` passed with 300 GUT tests, UI scenario coverage 303/359, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
 - Held item presentation is implemented through Stop 3.2; manual QA should confirm the carry pose, depth fan, scale falloff, and subtle motion feel natural without covering the reticle.
+- Pickup/place feedback is implemented through Stop 3.3; manual QA should confirm hover highlights, incompatible-stock feedback, and stocking confirmation messages are visible without reading as separate interaction targets.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -91,6 +92,7 @@ Current automated baseline:
 - Click prompts clearly separate the action from the subject in the actual game window.
 - Blocked held-item prompts and short feedback messages read differently from normal action prompts without hiding the center reticle.
 - The center reticle remains readable in normal, blocked, and feedback states.
+- Hover highlights on used-game cases and shelf slots are visible, nonblocking, and disappear when the reticle moves away.
 - Store lighting, material contrast, and signage make the room read as a small specialty game shop rather than a graybox test room.
 - Storefront, shelf, register, receiving, and backroom desk lights create readable warm retail and cooler operations zones without washing out text, prompts, or product cases.
 - Production storefront, sales floor, register, fixture, and backroom props remain nonblocking and preserve the core route from entry to rack, register, receiving, storage, and fixture placement.
@@ -159,7 +161,7 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Interaction Polish Focus
 
-Run these first when manually checking the completed Stop 3.1 and Stop 3.2 interaction presentation passes:
+Run these first when manually checking the completed Stop 3.1 through Stop 3.3 interaction presentation passes:
 
 - Confirm normal prompts such as pickup, stock, price, register, computer, talk, and inspect read as clear click actions with a target subject.
 - Confirm blocked prompts such as fixed-price held-item actions use the warning reticle state and are not mistaken for successful feedback.
@@ -169,6 +171,9 @@ Run these first when manually checking the completed Stop 3.1 and Stop 3.2 inter
 - Confirm the active carried item remains the most readable case in the stack, with older held items fanned behind it.
 - Confirm the carry stack bob/settle motion feels subtle while walking, turning, opening pricing, and stocking one item.
 - Confirm new held-item depth and scale changes still make used-game cases read as boxed games rather than flat posters.
+- Confirm used-game and shelf-slot hover highlights are visible enough to guide the click target but do not look like finished stocked items.
+- Confirm incompatible held items produce blocked stock feedback instead of silently inspecting the slot.
+- Confirm stocking a valid item produces a clear landing confirmation naming the stocked item and slot.
 
 ## Backroom Polish Focus
 

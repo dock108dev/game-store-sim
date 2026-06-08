@@ -191,6 +191,28 @@ func test_interaction_raycast_ignores_empty_interaction_messages() -> void:
 	assert_false(prompt.visible)
 
 
+func test_interaction_raycast_transfers_hover_feedback_between_targets() -> void:
+	var script: Script = load("res://scripts/interaction/interaction_raycast.gd")
+	var raycast: RayCast3D = script.new()
+	var first := _HoverInteractable.new()
+	var second := _HoverInteractable.new()
+	add_child_autofree(raycast)
+	add_child_autofree(first)
+	add_child_autofree(second)
+
+	raycast.call("_set_current_interactable", first)
+	assert_true(first.is_hovered)
+	assert_false(second.is_hovered)
+
+	raycast.call("_set_current_interactable", second)
+	assert_false(first.is_hovered)
+	assert_true(second.is_hovered)
+
+	raycast.call("_set_current_interactable", null)
+	assert_false(first.is_hovered)
+	assert_false(second.is_hovered)
+
+
 func test_interaction_raycast_uses_held_item_fallback_prompt() -> void:
 	var script: Script = load("res://scripts/interaction/interaction_raycast.gd")
 	var raycast: RayCast3D = script.new()
@@ -246,6 +268,15 @@ class _HeldItemActor:
 	func interact_with_held_item() -> String:
 		price_count += 1
 		return ""
+
+
+class _HoverInteractable:
+	extends Node
+
+	var is_hovered: bool = false
+
+	func set_hovered(value: bool) -> void:
+		is_hovered = value
 
 
 class _SummaryActor:
