@@ -337,7 +337,31 @@ func test_store_session_lists_available_supplier_lots() -> void:
 	assert_true(session.can_order_supplier_lot("supplier_lot_used_games_001"))
 	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving orders:")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Order Used Game Starter Lot $27.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Category: Used games")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Cart: 1 lot / 3 items")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Cost: $27.00 reserved on order")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Delivery: due day 2 (1 day)")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Storage: Receiving box intake")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving: Delivered as physical cases")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Pending receiving: none")
+
+
+func test_store_session_formats_supplier_order_ui_details() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var order := session.order_supplier_lot("supplier_lot_used_games_001")
+	var summary := session.get_supplier_order_summary_text()
+
+	assert_eq(order.get("category_label"), "Used games")
+	assert_eq(order.get("delivery_days"), 1)
+	assert_eq(order.get("storage_requirement"), "Receiving box intake, then display rack or backstock")
+	assert_string_contains(str(order.get("receiving_expectation")), "physical cases in the receiving box")
+	assert_string_contains(summary, "Pending receiving:")
+	assert_string_contains(summary, "Delivery state: pending delivery")
+	assert_string_contains(summary, "Cost reserved: $27.00")
+	assert_string_contains(summary, "Storage needed: Receiving box intake")
+	assert_string_contains(summary, "Receiving expectation: Delivered as physical cases")
 
 
 func test_store_session_lists_release_calendar_sorted_by_launch_day() -> void:
@@ -523,6 +547,8 @@ func test_store_session_orders_supplier_lot_and_reserves_cash() -> void:
 	assert_eq(session.get_pending_supplier_orders().size(), 1)
 	assert_string_contains(session.get_supplier_order_summary_text(), "Pending receiving:")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot due to receiving day 2 (3 items)")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Delivery state: pending delivery")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Cost reserved: $27.00")
 
 
 func test_store_session_rejects_supplier_order_without_cash() -> void:
@@ -561,6 +587,8 @@ func test_store_session_delivers_supplier_lot_on_next_day() -> void:
 	assert_eq(session.get_delivered_supplier_orders().size(), 1)
 	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving box:")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot delivered to receiving day 2")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Delivery state: delivered")
+	assert_string_contains(session.get_supplier_order_summary_text(), "3 items ready for pickup, pricing, and stocking")
 	assert_eq(_count_inventory_items(receiving_box), 6)
 	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame004"))
 	assert_string_contains(session.get_inventory_summary_text(), "Moon Escape x1")

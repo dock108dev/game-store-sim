@@ -658,10 +658,14 @@ func order_supplier_lot(lot_id: String) -> Dictionary:
 		"lot_id": str(lot.get("lot_id")),
 		"supplier_id": str(lot.get("supplier_id")),
 		"display_name": str(lot.get("display_name")),
+		"category_label": _get_supplier_lot_category_label(lot),
 		"cost_cents": cost_cents,
 		"ordered_day": day_number,
 		"due_day": day_number + delivery_days,
 		"item_count": product_paths.size(),
+		"delivery_days": delivery_days,
+		"storage_requirement": _get_supplier_lot_storage_requirement(lot),
+		"receiving_expectation": _get_supplier_lot_receiving_expectation(lot),
 		"status": "pending_delivery",
 	}
 	supplier_orders.append(order)
@@ -698,12 +702,22 @@ func get_supplier_order_summary_text() -> String:
 		var item_count := 0
 		if lot.has_method("get_item_count"):
 			item_count = int(lot.call("get_item_count"))
+		var delivery_days := maxi(1, int(lot.get("delivery_days")))
 		lines.append("Order %s %s (%d items to receiving, day +%d)" % [
 			str(lot.get("display_name")),
 			format_money(int(lot.get("cost_cents"))),
 			item_count,
-			maxi(1, int(lot.get("delivery_days"))),
+			delivery_days,
 		])
+		lines.append("Category: %s" % _get_supplier_lot_category_label(lot))
+		lines.append("Cart: 1 lot / %d items" % item_count)
+		lines.append("Cost: %s reserved on order" % format_money(int(lot.get("cost_cents"))))
+		lines.append("Delivery: due day %d (%d day)" % [
+			day_number + delivery_days,
+			delivery_days,
+		])
+		lines.append("Storage: %s" % _get_supplier_lot_storage_requirement(lot))
+		lines.append("Receiving: %s" % _get_supplier_lot_receiving_expectation(lot))
 
 	var pending := get_pending_supplier_orders()
 	if pending.is_empty():
@@ -716,6 +730,10 @@ func get_supplier_order_summary_text() -> String:
 				int(order.get("due_day", day_number + 1)),
 				int(order.get("item_count", 0)),
 			])
+			lines.append("Delivery state: pending delivery")
+			lines.append("Cost reserved: %s" % format_money(int(order.get("cost_cents", 0))))
+			lines.append("Storage needed: %s" % str(order.get("storage_requirement", "Receiving box intake")))
+			lines.append("Receiving expectation: %s" % str(order.get("receiving_expectation", "Physical stock appears in receiving")))
 
 	var delivered := get_delivered_supplier_orders()
 	if not delivered.is_empty():
@@ -725,8 +743,28 @@ func get_supplier_order_summary_text() -> String:
 				str(order.get("display_name", "Supplier lot")),
 				int(order.get("delivered_day", day_number)),
 			])
+			lines.append("Delivery state: delivered")
+			lines.append("%d items ready for pickup, pricing, and stocking" % int(order.get("item_count", 0)))
 
 	return "\n".join(lines)
+
+
+func _get_supplier_lot_category_label(lot: Resource) -> String:
+	if lot != null and lot.has_method("get_category_label"):
+		return str(lot.call("get_category_label"))
+	return "General stock"
+
+
+func _get_supplier_lot_storage_requirement(lot: Resource) -> String:
+	if lot != null and lot.has_method("get_storage_requirement"):
+		return str(lot.call("get_storage_requirement"))
+	return "Receiving box intake before floor placement"
+
+
+func _get_supplier_lot_receiving_expectation(lot: Resource) -> String:
+	if lot != null and lot.has_method("get_receiving_expectation"):
+		return str(lot.call("get_receiving_expectation"))
+	return "Physical stock appears in receiving for pickup and placement"
 
 
 func get_fixture_definition(fixture_id: String) -> Resource:

@@ -465,6 +465,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "supplier_ordering_ui_readability",
+      "name": "Supplier ordering card details are readable and make clear that orders arrive as physical receiving stock",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify category, cart, cost, delivery, storage, and receiving text; human review must confirm the backroom ordering tab fits the actual game window and does not imply instant inventory teleporting.",
+      "owner": "manual QA"
+    },
+    {
       "id": "evidence_storage_invisible",
       "name": "Evidence storage remains hidden during normal play",
       "status": "manual",

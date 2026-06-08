@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this backroom tabs pass: `scripts/validate_godot.sh` passed with 331 GUT tests, UI scenario coverage 335/394, and script mapping coverage 34/34.
+- Last full gate in this supplier ordering UI pass: `scripts/validate_godot.sh` passed with 332 GUT tests, UI scenario coverage 336/396, and script mapping coverage 34/34.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -19,6 +19,7 @@ Current automated baseline:
 - Trade-in appraisal UI is implemented through Stop 4.3; manual QA should confirm condition, completeness, authenticity confidence, market value, demand, projected margin, cash/store-credit offer, counteroffer, and risk notes remain readable.
 - Pricing UI is implemented through Stop 4.4; manual QA should confirm cost basis, market price, current price, suggested range, demand, projected margin, apply-to-matching batch scope, and outcome warnings remain readable.
 - Backroom computer tabs are implemented through Stop 4.5; manual QA should confirm dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable and do not hide required actions.
+- Supplier ordering UI is implemented through Stop 4.6; manual QA should confirm category, cart, cost, due day, delivery state, storage needs, and receiving expectations stay readable and clearly imply physical receiving stock.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -74,7 +75,7 @@ Current automated baseline:
 48. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
 49. Confirm the market drift readout is readable and makes sense for active inventory.
 50. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
-51. Confirm pending receiving says `Used Game Starter Lot`, due day 2, with 3 items.
+51. Confirm supplier ordering shows `Used Game Starter Lot`, category, cart size, reserved cost, due day 2, pending delivery state, storage needs, and physical receiving expectations.
 52. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
 53. End the day and confirm the summary changes to `Day closed`.
 54. Confirm the closed-day report is readable and matches the played day.
@@ -147,6 +148,7 @@ Current automated baseline:
 - Category demand text is readable and does not crowd the management panel.
 - Market drift text is readable and makes the active inventory value movement understandable.
 - Receiving order text and `Order Lot` button are readable and make clear that cash is reserved before physical stock appears in the receiving box.
+- Supplier ordering category, cart, cost, due day, delivery state, storage needs, and receiving expectation text fit without implying instant inventory teleporting.
 - Delivered supplier stock appears as receiving inventory without crowding or floating around the receiving box.
 - Storage fixture order text/buttons are readable and clearly communicate pending storage placement.
 - Storage fixture movement, rotation, snap, cancel, and placement buttons are grouped under Storage Placement and fit without crowding the backroom panel.
@@ -204,6 +206,7 @@ Run these first when manually checking the completed Stop 4.1 through Stop 4.5 U
 - Confirm the trade-in appraisal panel communicates authenticity confidence, projected margin, and risk notes clearly while the counteroffer buttons update the projected margin.
 - Confirm the pricing panel communicates current price, suggested range, margin, demand, and warning outcomes clearly while `+ $1`, `- $1`, and apply-to-matching update the decision text.
 - Confirm the backroom computer tabs switch cleanly between dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records without clipping text or making register work look like a backroom action.
+- Confirm supplier ordering reads as a small cart/order card with category, item count, reserved cost, due day, delivery state, storage requirement, and physical receiving expectation.
 
 ## Backroom Polish Focus
 

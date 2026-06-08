@@ -42,8 +42,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 331 GUT tests.
-- UI scenario automation coverage is 335/394, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 332 GUT tests.
+- UI scenario automation coverage is 336/396, above the required 80% threshold.
 - Production script mapping coverage is 34/34.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
@@ -62,6 +62,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Trade-in appraisal shows condition, completeness, authenticity confidence, market value, demand, projected margin, cash/store-credit offer, counteroffer, and risk notes.
 - Pricing shows cost basis, market price, current price, suggested range, demand, projected margin, apply-to-matching batch scope, and outcome warnings.
 - Backroom computer tabs split dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records into readable task sections.
+- Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.

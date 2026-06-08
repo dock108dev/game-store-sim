@@ -22,6 +22,13 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_orders_supplier_lot_and_reserves_cash"
     },
     {
+      "id": "supplier_ordering_ui_details",
+      "name": "Supplier ordering UI shows category, cart, cost, delivery state, storage needs, and receiving expectations",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_supplier_order_ui_details"
+    },
+    {
       "id": "store_session_rejects_supplier_lot_without_cash",
       "name": "Store session rejects supplier orders without enough cash",
       "status": "automated",
