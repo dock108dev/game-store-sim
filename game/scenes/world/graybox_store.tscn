@@ -449,6 +449,69 @@ billboard = 1
 text = "$9+ USED"
 font_size = 24
 
+[node name="RegisterScanner" type="CSGBox3D" parent="."]
+size = Vector3(0.34, 0.12, 0.24)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.45, 1.16, -2.45)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ScannerBeamCue" type="CSGBox3D" parent="."]
+size = Vector3(0.28, 0.018, 0.035)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.43, 1.235, -2.58)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CardReader" type="CSGBox3D" parent="."]
+size = Vector3(0.3, 0.1, 0.24)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.94, 1.15, -2.62)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="CardReaderScreen" type="CSGBox3D" parent="."]
+size = Vector3(0.22, 0.018, 0.14)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.94, 1.21, -2.63)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="ReceiptPrinter" type="CSGBox3D" parent="."]
+size = Vector3(0.42, 0.18, 0.3)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.58, 1.17, -2.08)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ReceiptSlip" type="CSGBox3D" parent="."]
+size = Vector3(0.24, 0.025, 0.18)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.52, 1.27, -2.02)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="SleeveStack" type="CSGBox3D" parent="."]
+size = Vector3(0.48, 0.08, 0.34)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.42, 1.14, -2.22)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="CounterImpulseRack" type="Node3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.82, 1.08, -2.22)
+
+[node name="ImpulseRackBase" type="CSGBox3D" parent="CounterImpulseRack"]
+size = Vector3(0.52, 0.16, 0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ImpulseCaseA" type="CSGBox3D" parent="CounterImpulseRack"]
+size = Vector3(0.18, 0.28, 0.045)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.16, 0.28, -0.08)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="ImpulseCaseB" type="CSGBox3D" parent="CounterImpulseRack"]
+size = Vector3(0.18, 0.28, 0.045)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0.02, 0.28, -0.08)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="ImpulseCaseC" type="CSGBox3D" parent="CounterImpulseRack"]
+size = Vector3(0.18, 0.28, 0.045)
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, 0.2, 0.28, -0.08)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CustomerCounterMat" type="CSGBox3D" parent="."]
+size = Vector3(1.55, 0.012, 0.58)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.35, 0.028, -3.12)
+material = SubResource("StandardMaterial3D_zone")
+
 [node name="RegisterQueueMat" type="CSGBox3D" parent="."]
 size = Vector3(2.2, 0.012, 1.05)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.12, 0.023, -3.62)

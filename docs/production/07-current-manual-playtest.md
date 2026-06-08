@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this sales-floor pass: `scripts/validate_godot.sh` passed with 288 GUT tests, UI scenario coverage 291/346, and script mapping coverage 31/31.
+- Last full gate in this register command-center pass: `scripts/validate_godot.sh` passed with 289 GUT tests, UI scenario coverage 292/347, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
@@ -88,6 +88,7 @@ Current automated baseline:
 - Store lighting, material contrast, and signage make the room read as a small specialty game shop rather than a graybox test room.
 - Front entry glass, open sign, hours decal, and entry floor cue make the storefront read as a shop threshold without implying the player can leave yet.
 - Sales floor route, new-release endcap, and staff-picks stand add merchandising context without blocking entry-to-shelf-to-register movement.
+- Register counter scanner, card reader, receipt printer/slip, sleeve stack, impulse rack, customer-side mat, and queue mat make the register read as the command center without blocking checkout.
 - `SAVE POINT GAMES`, register, backroom, receiving, storage, and display rack signs are readable, fictional, and do not look like real-brand signage.
 - Posters, deal tag, bargain bin, register mat, and controller display props add retail context without blocking movement or obscuring prompts.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
@@ -164,6 +165,7 @@ Run these first when manually checking the completed store visual pass:
 - Confirm wall, floor, counter, and door colors provide enough contrast from normal player angles.
 - Confirm the production storefront cues read clearly: glass panels, `OPEN`, `11-8`, and entry floor cue should feel like a shop threshold while the front-door boundary still blocks exit.
 - Confirm the sales floor composition reads more like a small shop: browse-route cue, `NEW RELEASES` endcap, and `STAFF PICKS` stand should help without becoming confusing interaction targets.
+- Confirm the register command-center props are readable from player and customer angles and do not make the actual register interaction target ambiguous.
 - Confirm `SAVE POINT GAMES` and zone signage is readable, fictional, and not mistaken for an interaction target.
 - Confirm posters, the price tag, bargain bin, register mat, and controller display feel like store dressing without blocking navigation or hiding click targets.
 - Confirm screenshot artifacts still compose clearly after lighting, signage, and clutter changes.

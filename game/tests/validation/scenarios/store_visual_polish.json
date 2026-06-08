@@ -55,6 +55,13 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_retail_clutter_is_nonblocking_and_away_from_interaction_hotspots"
+    },
+    {
+      "id": "register_command_center_props",
+      "name": "Register counter has scanner, payment, receipt, sleeve, impulse, and customer-side cues",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_register_counter_has_command_center_props"
     }
   ]
 }

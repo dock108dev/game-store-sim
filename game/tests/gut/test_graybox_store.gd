@@ -338,6 +338,38 @@ func test_retail_clutter_is_nonblocking_and_away_from_interaction_hotspots() -> 
 	assert_lte((_store.get_node("RegisterQueueMat") as CSGBox3D).size.y, 0.0121)
 
 
+func test_register_counter_has_command_center_props() -> void:
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var command_props := [
+		"RegisterScanner",
+		"ScannerBeamCue",
+		"CardReader",
+		"CardReaderScreen",
+		"ReceiptPrinter",
+		"ReceiptSlip",
+		"SleeveStack",
+		"CustomerCounterMat",
+		"CounterImpulseRack/ImpulseRackBase",
+		"CounterImpulseRack/ImpulseCaseA",
+		"CounterImpulseRack/ImpulseCaseB",
+		"CounterImpulseRack/ImpulseCaseC",
+	]
+
+	for prop_path in command_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision)
+		assert_true(_is_inside_store_floorprint(prop.global_position))
+		assert_lt(_flat_distance_xz(prop.global_position, register.global_position), 1.65)
+
+	var impulse_rack := _store.get_node_or_null("CounterImpulseRack") as Node3D
+	assert_not_null(impulse_rack)
+	assert_lt(_flat_distance_xz(impulse_rack.global_position, register.global_position), 1.45)
+	assert_lte((_store.get_node("CustomerCounterMat") as CSGBox3D).size.y, 0.0121)
+	assert_gt((_store.get_node("ReceiptSlip") as CSGBox3D).global_position.y, 1.2)
+	assert_gt((_store.get_node("SleeveStack") as CSGBox3D).global_position.x, register.global_position.x)
+
+
 func test_backroom_visual_zones_exist_without_collision() -> void:
 	var expected_zones := {
 		"BackroomReceivingZone": Vector3(-4.65, 0.028, 3.82),
