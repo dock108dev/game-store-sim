@@ -83,6 +83,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom inventory summary is readable and matches active receiving/shelf inventory.
 - Backroom reorder suggestions are readable and reflect sales versus active inventory.
 - Backroom release calendar is readable and shows fictional upcoming launch timing, wholesale cost, suggested price, allocation limit, and demand tier.
+- Backroom `Commit Release` button is readable and reserves release-allocation cash clearly.
 - Register preorder customer and fixed deposit flow are readable, and the deposit clearly does not count as a sale yet.
 - Backroom preorder count and preorder-deposit total are readable after taking a preorder.
 - Register service customer, service completion prompt, service completion message, backroom service totals, recent activity, and daily-report service totals are readable.
@@ -90,12 +91,12 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom release allocation commitment is readable, reserves launch wholesale cash, and stays clearly separate from launch-day fulfillment.
 - Starting launch day resolves `Neon Skyline` preorders first, sells surplus allocations to launch queue demand, and reports launch cash, launch profit, and reputation clearly.
 - Underallocating for launch day produces a readable missed-demand/reputation consequence.
-- Backroom `Order Stock` button is readable and reserves cash clearly.
+- Backroom `Order Lot` button is readable and reserves cash clearly.
 - Pending receiving order shows due day and item count clearly.
 - Starting the next day delivers the used-game starter lot into the receiving box and clears pending receiving.
 - Delivered supplier games look intentionally placed and do not crowd the receiving box, display rack, trade-in seller, or customer flow.
-- Backroom storage fixture ordering shows the game display rack option, cash reservation, and pending storage placement clearly.
-- Backroom pending storage fixture movement, rotation, and snap controls are readable and fit the panel.
+- Backroom `Order Rack` and `Place Rack` controls show the game display rack option, cash reservation, and pending storage placement clearly.
+- Backroom pending storage fixture `Left`, `Right`, `Fwd`, `Back`, `Rotate`, and `Snap` controls are readable and fit the panel.
 - Ordered fixture ghost preview is visible, translucent, and reads as a pending storage placement rather than a finished rack.
 - Fixture ghost valid and invalid states read clearly as green allowed and red blocked placement previews.
 - Fixture ghost rotate and snap behavior feels predictable through the backroom placement controls.

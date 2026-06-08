@@ -2,6 +2,11 @@
 
 Use this checklist after `scripts/validate_godot.sh` passes.
 
+Current automated baseline:
+
+- Last full gate in this polish pass: `scripts/validate_godot.sh` passed with 286 GUT tests, UI scenario coverage 289/338, and script mapping coverage 31/31.
+- Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
+
 ## Full Loop
 
 1. Start the main scene.
@@ -34,24 +39,24 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 28. Confirm the service message names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
 29. Open the backroom computer and confirm service revenue, service cost, service profit, and recent activity are readable.
 30. End the day and confirm the closed-day report includes service count, service revenue, service cost, and service profit.
-31. Use `Commit Allocation` on the backroom computer and confirm cash drops by `$32.00`.
+31. Use `Commit Release` on the backroom computer and confirm cash drops by `$32.00`.
 32. Confirm the backroom computer lists `Neon Skyline x1 committed $32.00 due day 3` and `Release allocations: 1`.
-33. Press `Commit Allocation` up to the `Neon Skyline` allocation limit and confirm it stops accepting commitments after four total copies.
+33. Press `Commit Release` up to the `Neon Skyline` allocation limit and confirm it stops accepting commitments after four total copies.
 34. Confirm allocation commitment reads as launch planning, not stocked inventory, completed preorder fulfillment, or a launch-day sale.
 35. End day 1, start day 2, end day 2, then start day 3 and confirm the launch resolves.
 36. Confirm `Neon Skyline` preorders fulfill first, surplus allocation copies sell to launch queue demand, launch cash/profit appears, and reputation remains stable when demand is covered.
 37. On a fresh run, commit only one launch allocation before day 3 and confirm missed demand reduces reputation with readable launch-event text.
-38. Use `Order Storage Rack` on the backroom computer and confirm cash drops by `$125.00`.
+38. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
 39. Confirm the backroom computer lists `Game Display Rack` under pending storage placement and does not imply the rack was already placed.
 40. Confirm a translucent rack ghost appears on the sales floor as a pending storage placement preview.
-41. Use `Rack Left`, `Rack Right`, `Rack Fwd`, `Rack Back`, `Rotate Rack`, and `Snap Rack` and confirm the preview moves on the grid, rotates cleanly, and remains readable.
-42. Use `Place Storage Rack` and confirm a real game display rack appears where the green ghost was.
+41. Use `Left`, `Right`, `Fwd`, `Back`, `Rotate`, and `Snap` under Storage Placement and confirm the preview moves on the grid, rotates cleanly, and remains readable.
+42. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
 43. Reopen the backroom computer and confirm pending storage placement is cleared and the rack is listed as placed.
 44. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
 45. Confirm rotated and snapped ghost states remain aligned to the floor grid.
 46. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
 47. Confirm the market drift readout is readable and makes sense for active inventory.
-48. Use `Order Stock` on the backroom computer and confirm cash drops by `$27.00`.
+48. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
 49. Confirm pending receiving says `Used Game Starter Lot`, due day 2, with 3 items.
 50. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
 51. End the day and confirm the summary changes to `Day closed`.
@@ -106,11 +111,11 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Preorder deposit reads as an obligation/deposit, not a completed sale before launch day.
 - Service customer placement, register prompt, completion message, and backroom/daily-report service totals are readable.
 - Service completion reads as register work, not a sale, trade-in, preorder, or separate-terminal workflow.
-- Allocation commitment text/button are readable, reserve cash clearly, enforce the release limit, and do not imply stocked inventory before launch day.
+- `Commit Release` text/button are readable, reserve cash clearly, enforce the release limit, and do not imply stocked inventory before launch day.
 - Launch-day resolution text is readable and explains preorder fulfillment, queue fulfillment, missed demand, cash, profit, and reputation.
 - Category demand text is readable and does not crowd the management panel.
 - Market drift text is readable and makes the active inventory value movement understandable.
-- Receiving order text and `Order Stock` button are readable and make clear that cash is reserved before physical stock appears in the receiving box.
+- Receiving order text and `Order Lot` button are readable and make clear that cash is reserved before physical stock appears in the receiving box.
 - Delivered supplier stock appears as receiving inventory without crowding or floating around the receiving box.
 - Storage fixture order text/buttons are readable and clearly communicate pending storage placement.
 - Storage fixture movement, rotation, snap, and placement buttons are grouped under Storage Placement and fit without crowding the backroom panel.
