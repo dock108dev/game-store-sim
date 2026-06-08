@@ -142,6 +142,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/customer_audio_profile.gd",
+      "tests": [
+        "res://tests/gut/test_customer_audio_profile.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/customer_pose_animator.gd",
       "tests": [
         "res://tests/gut/test_customer_pose_animator.gd"

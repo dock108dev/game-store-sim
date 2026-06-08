@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, and interaction audio is complete through Stop 11.2.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, and customer audio placeholders are complete through Stop 11.3.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -41,7 +41,7 @@ Current completion plan: `11-game-completion-plan.md`.
 9. Backroom operations. Done through Milestone 8.
 10. Store building, decoration, and expansion. Done through Milestone 9.
 11. Hidden-thread production arc. Done through Milestone 10.
-12. Audio, VFX, and presentation feel. Current phase; interaction audio done through Stop 11.2.
+12. Audio, VFX, and presentation feel. Current phase; customer audio placeholders done through Stop 11.3.
 13. Save/load, settings, and release wrapper.
 14. Alpha hardening.
 
@@ -133,7 +133,9 @@ The following polish items remain valid historical checkpoints:
 - Done: synced presentation scenario coverage, script mapping, validation baselines, and manual ambience readability checks for Stop 11.1.
 - Done: added an interaction audio cue catalog and player-controller wiring for pickup, place, stock, scan, register, cash drawer, computer clicks, UI buttons, box open, shelf bump, and errors.
 - Done: synced presentation scenario coverage, script mapping, validation baselines, and manual interaction-audio readability checks for Stop 11.2.
-- Remaining polish risk: Stop 11.3 still needs customer audio placeholders for footstep, mumble, greeting, approval, annoyance, and leaving cues.
+- Done: added customer audio placeholder profiles for buyer, trade-in, preorder, service, and suspicious customers, covering footstep, mumble, greeting, approval, annoyance, and leaving cues.
+- Done: synced presentation scenario coverage, script mapping, validation baselines, and manual customer-audio readability checks for Stop 11.3.
+- Remaining polish risk: Stop 11.4 still needs VFX and microfeedback for highlights, item settle, sale confirmation, cash/reputation ticks, day transition, delivery arrival, and invalid actions.
 
 ## Product And Fixture Polish
 

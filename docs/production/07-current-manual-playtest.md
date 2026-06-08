@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this interaction-audio pass: `scripts/validate_godot.sh` passes with 451 GUT tests, UI scenario automation coverage at 431/529, production script mapping coverage at 45/45, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this customer-audio pass: `scripts/validate_godot.sh` passes with 456 GUT tests, UI scenario automation coverage at 433/532, production script mapping coverage at 46/46, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -48,6 +48,7 @@ Current automated baseline:
 - Hidden-thread validation sync is implemented through Stop 10.6; automated checks now audit matrix coverage for flags, dedupe, persistence, optionality, and manual clue-readability checks.
 - Store ambience baseline is implemented through Stop 11.1; manual QA should run the Presentation Feel Focus ambience checks to confirm room tone, HVAC, street muffle, door chime, register ambience, backroom ambience, and closing quiet help mood without masking prompts or UI.
 - Interaction audio baseline is implemented through Stop 11.2; manual QA should run the Presentation Feel Focus interaction checks to confirm pickup, place, stock, scan, register, cash drawer, computer, button, box, shelf bump, and error cues support actions without becoming noise.
+- Customer audio placeholders are implemented through Stop 11.3; manual QA should run the Presentation Feel Focus customer-audio checks to confirm footstep, mumble, greeting, approval, annoyance, and leaving cues add state readability without implying final voice acting.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -140,6 +141,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 83. Play into the next day and confirm cash, stock, reputation, obligations, upgrade goals, and tomorrow planning read as one connected owner/operator loop.
 84. Listen through a normal store loop and confirm room tone, HVAC, storefront muffle, door chime, register bed, backroom bed, and closing quiet remain subtle enough that prompts, modal text, and player decisions are still clear.
 85. During pickup, stocking, register, computer, receiving, shelf-blocked, and modal interactions, confirm the interaction sound cue timing makes the action clearer and never implies a different system completed.
+86. Listen to buyer, trade-in, preorder, service, and suspicious customers and confirm their placeholder footsteps, mumbles, greetings, approval, annoyance, and leaving cues help distinguish state without covering feedback bubbles or register prompts.
 
 ## Visual Checks
 
@@ -256,6 +258,11 @@ Run these first when manually checking the completed Stop 11.1 store ambience ba
 - Confirm computer and button cues support modal work without making the backroom computer sound like the register.
 - Confirm box-open and shelf-bump/error cues communicate receiving or blocked action clearly without sounding like success.
 - Confirm interaction cues stay short enough for repeated stocking, pricing, and checkout loops.
+- Confirm customer footsteps are subtle enough not to distract from stocking and checkout.
+- Confirm customer mumbles and greetings read as nonverbal placeholders, not final voice performance.
+- Confirm approval and annoyance cues reinforce visible feedback bubbles without replacing them.
+- Confirm leaving cues make completed/abandoned customer flow clearer without masking day-summary or register feedback.
+- Confirm suspicious-customer audio remains understated and optional rather than announcing a forced story event.
 
 ## Production Target Contract Focus
 

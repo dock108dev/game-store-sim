@@ -783,6 +783,14 @@
       "critical": false,
       "reason": "Automated tests verify cue catalog coverage, player wiring, and prompt-safe mix levels; human review must confirm pickup, place, stock, scan, register, cash drawer, computer, button, box, shelf bump, and error cues support understanding once audible playback assets are enabled.",
       "owner": "manual QA"
+    },
+    {
+      "id": "customer_audio_placeholder_readability",
+      "name": "Customer audio placeholders add presence without implying final voice acting or masking feedback",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify placeholder cue coverage and scene profile wiring; human review must confirm footsteps, mumbles, greetings, approval, annoyance, and leaving cues support customer state readability without making current placeholder customers feel overproduced.",
+      "owner": "manual QA"
     }
   ]
 }

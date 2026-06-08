@@ -27,6 +27,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_interaction_audio_feedback.gd::test_player_controller_contains_interaction_audio_feedback"
+    },
+    {
+      "id": "customer_audio_placeholder_catalog",
+      "name": "Customer audio profile covers footstep, mumble, greeting, approval, annoyance, and leaving placeholders",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_audio_profile.gd::test_customer_audio_profile_covers_stop_11_3_placeholders"
+    },
+    {
+      "id": "customer_audio_scene_profiles",
+      "name": "Buyer, trade-in, preorder, service, and suspicious customer scenes contain configured customer audio profiles",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_audio_profile.gd::test_customer_scenes_contain_audio_profile_players"
     }
   ]
 }

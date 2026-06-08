@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://ctu3fc8qprgmd"]
+[gd_scene load_steps=18 format=3 uid="uid://ctu3fc8qprgmd"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_preorder_customer.gd" id="1_preorder_customer"]
 [ext_resource type="Resource" path="res://data/releases/neon_skyline_launch.tres" id="2_release"]
 [ext_resource type="Script" path="res://scripts/customers/customer_pose_animator.gd" id="3_pose"]
 [ext_resource type="Script" path="res://scripts/customers/customer_feedback_bubble.gd" id="4_feedback"]
 [ext_resource type="Resource" path="res://data/customers/archetypes/collector.tres" id="5_archetype"]
+[ext_resource type="Script" path="res://scripts/customers/customer_audio_profile.gd" id="6_audio"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.18, 0.18, 0.42, 1)
@@ -114,3 +115,25 @@ script = ExtResource("3_pose")
 position = Vector3(0, 1.68, 0)
 pixel_size = 0.0024
 script = ExtResource("4_feedback")
+
+[node name="CustomerAudioProfile" type="Node3D" parent="."]
+script = ExtResource("6_audio")
+role_id = "preorder_customer"
+
+[node name="FootstepPlayer" type="AudioStreamPlayer3D" parent="CustomerAudioProfile"]
+volume_db = -22.0
+
+[node name="MumblePlayer" type="AudioStreamPlayer3D" parent="CustomerAudioProfile"]
+volume_db = -26.0
+
+[node name="GreetingPlayer" type="AudioStreamPlayer3D" parent="CustomerAudioProfile"]
+volume_db = -20.0
+
+[node name="ApprovalPlayer" type="AudioStreamPlayer3D" parent="CustomerAudioProfile"]
+volume_db = -19.0
+
+[node name="AnnoyancePlayer" type="AudioStreamPlayer3D" parent="CustomerAudioProfile"]
+volume_db = -19.0
+
+[node name="LeavingPlayer" type="AudioStreamPlayer3D" parent="CustomerAudioProfile"]
+volume_db = -21.0
