@@ -26,10 +26,18 @@
     },
     {
       "id": "prompt_readability",
-      "name": "Prompt readability is acceptable in the actual window",
+      "name": "Click prompt readability is acceptable in the actual window",
       "status": "manual",
       "critical": false,
       "reason": "Requires human visual judgment beyond nonblank screenshot checks.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "center_reticle_readability",
+      "name": "Center reticle readability is acceptable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment while aiming at receiving items, shelf slots, the register, and the backroom computer.",
       "owner": "manual QA"
     },
     {
@@ -269,7 +277,7 @@
       "name": "Fixture rotate and snap controls feel predictable",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment about whether fixed-step rotation and grid movement feel understandable before final placement UI exists.",
+      "reason": "Requires human judgment about whether backroom panel movement, fixed-step rotation, and grid snap feel understandable before placing a storage rack.",
       "owner": "manual QA"
     },
     {
