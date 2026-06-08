@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and backroom operations are underway with receiving, storage, service bench, management desk, and security/safe placeholder workflow slices.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and backroom operations are complete through Milestone 8. The next priority is store building, decoration, and expansion.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -38,8 +38,8 @@ Current completion plan: `11-game-completion-plan.md`.
 6. Customer production pass.
 7. Product and content pipeline.
 8. Economy, day loop, and progression. Done through Milestone 7.
-9. Backroom operations. Current phase.
-10. Store building, decoration, and expansion.
+9. Backroom operations. Done through Milestone 8.
+10. Store building, decoration, and expansion. Current phase.
 11. Hidden-thread production arc.
 12. Audio, VFX, and presentation feel.
 13. Save/load, settings, and release wrapper.
@@ -70,6 +70,7 @@ The following polish items remain valid historical checkpoints:
 - Done: added service bench workflow state for disc resurfacing tickets, locked/placeholder future services, parts, queued/in-progress/ready/picked-up progress, Start Svc/Work Svc controls, register pickup integration, save/load coverage, and manual validation coverage.
 - Done: added management desk workflow state for supplier-message review, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk/Buy Upg controls, save/load coverage, and manual validation coverage.
 - Done: added security/safe placeholder state for cash safe, high-value storage, suspicious goods isolation, security footage, Records tab readout, StoreSession/EvidenceStorage wiring, and manual validation coverage.
+- Done: synced the backroom operations validation snapshot, scenario matrix, manual checks, and milestone status after the Stop 8 pass.
 
 ## Computer And Menu Polish
 

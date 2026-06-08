@@ -439,7 +439,7 @@ Stops:
 - Stop 8.3: Service bench workflow. Done in `Build service bench workflow`: store sessions now expose disc resurfacing service tickets, locked cartridge cleaning, console-test placeholder data, ticket parts, queued/in-progress/ready-for-pickup/picked-up states, Start Svc/Work Svc backroom controls, register pickup integration, save/load persistence, and manual checklist coverage.
 - Stop 8.4: Management desk workflow. Done in `Build management desk workflow`: store sessions now expose management desk tasks for supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering, with Review Desk/Buy Upg controls, Computer Analytics upgrade ordering, save/load persistence, and manual checklist coverage.
 - Stop 8.5: Security/safe placeholders. Done in `Add security safe placeholders`: EvidenceStorage now exposes cash safe, high-value storage, suspicious goods isolation, and security footage placeholders, StoreSession is wired to EvidenceStorage, Records tab shows inactive security placeholder state, and manual checklist coverage is current.
-- Stop 8.6: Backroom validation sync. Update tests and manual checks for physical operations.
+- Stop 8.6: Backroom validation sync. Done in `Sync backroom operations validation`: validation docs, manual playtest focus, backlog state, and Milestone 8 snapshot now reflect the complete backroom operations pass.
 
 Acceptance:
 
@@ -474,6 +474,7 @@ Validation snapshot:
 - Manual management desk checks are current for supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, and non-teleporting desk-work readability.
 - Focused GUT coverage passes for security placeholder catalog, placeholder records, StoreSession/EvidenceStorage wiring, and Records tab placeholder readout.
 - Manual security/safe placeholder checks are current for inactive cash safe, high-value storage, suspicious goods isolation, security footage, and non-objective readability.
+- Backroom operations validation is synced through Stop 8.6, with the scenario matrix and manual playtest checklist covering physical receiving, storage, service bench, management desk, and security placeholder operations.
 
 ## Milestone 9: Store Building, Decoration, And Expansion
 

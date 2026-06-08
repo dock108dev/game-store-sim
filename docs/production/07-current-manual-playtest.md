@@ -42,6 +42,7 @@ Current automated baseline:
 - Service bench workflow is implemented through Stop 8.3; manual QA should confirm service capabilities, parts, ticket progress, ready pickup, Start Svc/Work Svc controls, and register completion read as one physical service workflow.
 - Management desk workflow is implemented through Stop 8.4; manual QA should confirm supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk, and Buy Upg read as planning work in the backroom records flow.
 - Security/safe placeholders are implemented through Stop 8.5; manual QA should confirm cash safe, high-value storage, suspicious goods isolation, and security footage read as inactive backroom/hidden-thread infrastructure, not active objectives.
+- Backroom operations validation is synced through Stop 8.6; manual QA should run the Backroom Operations Focus before treating Milestone 8 as human-approved.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -266,7 +267,7 @@ Run these first when manually checking the completed Stop 7.1 through Stop 7.7 e
 
 ## Backroom Operations Focus
 
-Run these first when manually checking the completed Stop 8.1 through Stop 8.5 backroom workflows:
+Run these first when manually checking the completed Stop 8.1 through Stop 8.6 backroom workflows:
 
 - Confirm supplier delivery creates pending receiving work instead of making the order feel solved as soon as the next day starts.
 - Confirm delivery point, box state, invoice state, expected/received count, variance, sorting destination, and pending/completed status are readable in the backroom computer.
