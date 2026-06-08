@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this building-validation-sync pass: `scripts/validate_godot.sh` passes with 418 GUT tests, UI scenario automation coverage at 409/500, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this hidden-thread suspicion-rules pass: `scripts/validate_godot.sh` passes with 423 GUT tests, UI scenario automation coverage at 413/505, production script mapping coverage at 40/40, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -44,8 +44,9 @@ Current automated baseline:
 - Security/safe placeholders are implemented through Stop 8.5; manual QA should confirm cash safe, high-value storage, suspicious goods isolation, and security footage read as inactive backroom/hidden-thread infrastructure, not active objectives.
 - Backroom operations validation is synced through Stop 8.6; manual QA should run the Backroom Operations Focus before treating Milestone 8 as human-approved.
 - Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, layout effects through Stop 9.5, starter expansion through Stop 9.6, and building validation sync through Stop 9.7; manual QA should run the Store Building Focus before treating Milestone 9 as human-approved.
+- Suspicion rules are implemented through Stop 10.1; manual QA should run the Hidden Thread Focus checks to confirm the new flag catalog still reads as optional retail anomaly infrastructure rather than active story UI.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
-- Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
+- Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
 ## Full Loop
 
@@ -330,6 +331,16 @@ Run these first when manually checking the completed Stop 9.1 through Stop 9.7 s
 - Confirm purchased expansion increases storage capacity to 18 cases and explains wider fixture placement/customer queue/travel lanes.
 - Confirm restored saves with Starter Store Expansion preserve the expanded storage and layout state.
 - Confirm the validation docs, scenario matrix, and manual checklist all describe the same completed Milestone 9 behavior before moving into hidden-thread production work.
+
+## Hidden Thread Focus
+
+Run these first when manually checking the completed Stop 10.1 suspicion-rules baseline:
+
+- Confirm suspicious rule concepts still read as ordinary retail anomalies: serial mismatch, supplier discrepancy, quiet cash buyer, impossible provenance, counterfeit goods, and hidden storage.
+- Confirm no new objective marker, warning modal, quest label, or forced progression appears when the existing mismatched serial item, supplier note, suspicious customer, evidence storage, or security placeholders are present.
+- Confirm optional hidden-thread artifacts can be inspected or ignored while normal pickup, pricing, stocking, register, supplier ordering, storage, and day-loop work continue.
+- Confirm any rule/event summary text shown in debug or future records contexts uses store-operator language and does not expose raw scoring as player-facing quest math.
+- Confirm manual validation docs and scenario matrix now describe Stop 10.1 before moving into hidden clue surfaces.
 
 ## Customer Production Focus
 

@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, and store building, decoration, layout effects, and starter expansion are complete through Milestone 9.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, and hidden-thread suspicion rules are complete through Stop 10.1.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -39,8 +39,8 @@ Current completion plan: `11-game-completion-plan.md`.
 7. Product and content pipeline.
 8. Economy, day loop, and progression. Done through Milestone 7.
 9. Backroom operations. Done through Milestone 8.
-10. Store building, decoration, and expansion. Current phase.
-11. Hidden-thread production arc.
+10. Store building, decoration, and expansion. Done through Milestone 9.
+11. Hidden-thread production arc. Current phase; suspicion rules done through Stop 10.1.
 12. Audio, VFX, and presentation feel.
 13. Save/load, settings, and release wrapper.
 14. Alpha hardening.
@@ -109,6 +109,14 @@ The following polish items remain valid historical checkpoints:
 - Done: added a starter expansion baseline that unlocks after Backroom Storage Bay, increases storage capacity, widens placement bounds, expands customer playable/queue bounds, updates upgrade/storage summaries, and persists through save/restore.
 - Done: synced the final building validation snapshot, scenario matrix, manual checks, backlog state, and Milestone 9 status after the Stop 9 pass.
 - Remaining polish risk: the next production milestone is hidden-thread production; store-building art-visible remodel depth remains later expansion work beyond this baseline.
+
+## Hidden Thread Production
+
+- Done: added a data-first suspicion rules catalog for serial mismatch, suspicious supplier, cash buyer, impossible provenance, counterfeit goods, and hidden storage.
+- Done: added metadata and existing-node evaluation for product items, supplier messages, and suspicious customers without creating visible objectives.
+- Done: added event-log rule event creation so later clue surfaces and choices can reuse the same flagged anomaly data.
+- Done: synced hidden-thread scenario coverage, manual Hidden Thread Focus checks, validation baselines, and Milestone 10 status for Stop 10.1.
+- Remaining polish risk: Stop 10.2 still needs clue surfaces such as invoices, notes, serial lookup, supplier emails, customer comments, security clips, and backroom artifacts.
 
 ## Product And Fixture Polish
 

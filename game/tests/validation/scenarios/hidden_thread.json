@@ -174,6 +174,34 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_suspicious_customer_does_not_join_sales_customer_queue"
+    },
+    {
+      "id": "suspicion_rules_catalog",
+      "name": "Suspicion rules define the Stop 10.1 risk flag catalog",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicion_rules.gd::test_suspicion_rules_catalog_covers_stop_10_rule_set"
+    },
+    {
+      "id": "suspicion_rules_metadata_evaluation",
+      "name": "Suspicion rules evaluate metadata into scored severity flags",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicion_rules.gd::test_suspicion_rules_evaluate_metadata_and_score_flags"
+    },
+    {
+      "id": "suspicion_rules_node_evaluation",
+      "name": "Suspicion rules evaluate product, supplier message, and customer nodes without activating objectives",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicion_rules.gd::test_suspicion_rules_evaluate_nodes_without_activating_objectives"
+    },
+    {
+      "id": "suspicious_event_log_rule_events",
+      "name": "Suspicious event log can create deduped events from suspicion rules",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_suspicion_rules.gd::test_suspicious_event_log_flags_rule_events"
     }
   ]
 }

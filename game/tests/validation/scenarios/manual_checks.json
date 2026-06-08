@@ -649,6 +649,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "suspicion_rules_retail_tone",
+      "name": "Suspicion rules read as optional retail anomalies, not active quest objectives",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify rule IDs, scores, severity, metadata evaluation, node evaluation, and log event creation; human review should confirm the flagged concepts still feel like ordinary retail anomalies underneath normal play.",
+      "owner": "manual QA"
+    },
+    {
       "id": "hidden_thread_flags_invisible",
       "name": "Suspicious event flags do not visibly interrupt normal store progression",
       "status": "manual",

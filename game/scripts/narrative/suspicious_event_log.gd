@@ -1,6 +1,7 @@
 extends Node
 class_name SuspiciousEventLog
 
+const SuspicionRulesPolicy := preload("res://scripts/narrative/suspicion_rules.gd")
 const VALID_SEVERITIES := ["low", "medium", "high"]
 
 var _events: Array[Dictionary] = []
@@ -30,6 +31,21 @@ func flag_event(
 	}
 	_events.append(event)
 	return event.duplicate(true)
+
+
+func flag_rule(rule_id: String, subject_id: String = "", metadata: Dictionary = {}) -> Dictionary:
+	var rule := SuspicionRulesPolicy.get_rule(rule_id)
+	if rule.is_empty():
+		return {}
+
+	var event_data := SuspicionRulesPolicy.build_event_for_flag(rule, subject_id, metadata)
+	return flag_event(
+		str(event_data.get("event_id", "")),
+		str(event_data.get("title", "")),
+		str(event_data.get("source", "")),
+		str(event_data.get("severity", "low")),
+		event_data.get("metadata", {})
+	)
 
 
 func has_event(event_id: String) -> bool:
@@ -73,6 +89,10 @@ func get_summary_text() -> String:
 		])
 
 	return "\n".join(lines)
+
+
+func get_rule_summary_text() -> String:
+	return SuspicionRulesPolicy.get_summary_text()
 
 
 func _normalize_severity(severity: String) -> String:

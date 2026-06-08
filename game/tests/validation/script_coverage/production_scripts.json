@@ -50,6 +50,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/narrative/suspicion_rules.gd",
+      "tests": [
+        "res://tests/gut/test_suspicion_rules.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/narrative/evidence_storage.gd",
       "tests": [
         "res://tests/gut/test_evidence_storage.gd"

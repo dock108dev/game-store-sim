@@ -459,9 +459,9 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 418 GUT tests.
-- UI scenario automation coverage is 409/500, above the 80% threshold.
-- Production script mapping coverage is 39/39.
+- `scripts/validate_godot.sh` passes with 423 GUT tests.
+- UI scenario automation coverage is 413/505, above the 80% threshold.
+- Production script mapping coverage is 40/40.
 - Standalone validation tool manifest coverage has 1 active tool.
 - Product catalog content check passes with 33 fictional products.
 - Focused GUT coverage passes for store session receiving delivery/lifecycle, save/load receiving persistence, and day-summary panel receiving controls.
@@ -489,6 +489,7 @@ Stops:
 - Stop 9.5: Layout effects. Done in `Add layout effects baseline`: StoreSession now summarizes fixture visibility, impulse fixtures, queue space, customer travel distance, and theft-risk placeholder state; category demand includes a layout signal; active inventory demand text shows layout effects; launch-visibility fixtures can increase launch queue demand; crowded, long-walk, and risky layouts can reduce it; and the main scene wires StoreSession to CustomerManager for real queue/travel metrics.
 - Stop 9.6: Expansion baseline. Done in `Add starter expansion baseline`: Starter Store Expansion now unlocks after Backroom Storage Bay, purchases as progression state, increases storage capacity to 18 cases, widens fixture placement bounds, expands CustomerManager playable/queue bounds, updates upgrade/storage summaries, and persists through purchased-upgrade save/restore.
 - Stop 9.7: Building validation sync. Done in `Sync building validation`: validation docs, backlog state, scenario matrix, manual checklist, baseline counts, and Milestone 9 status now reflect the completed fixture catalog, placement UX, category assignment, decoration, layout effects, and starter expansion pass.
+- Stop 10.1: Suspicion rules. Done in `Define suspicion rules`: added a data-first suspicion rule catalog for serial mismatch, suspicious suppliers, cash buyers, impossible provenance, counterfeit goods, and hidden storage, with metadata/node evaluation, scoring, event-log rule creation, scenario coverage, and manual hidden-thread tone checks.
 
 Acceptance:
 
@@ -507,6 +508,8 @@ Validation snapshot:
 - Focused GUT coverage passes for starter expansion unlock/purchase, expanded storage capacity, placement/customer-manager bounds, upgrade/storage summary text, and save/restore persistence.
 - Manual Store Building Focus checks are current for the expanded fixture list, pricing/category/slot/zone readability, upgrade locks, starter rack placement flow, category assignment, demand tuning effects, footprint/path/overlap invalid feedback, undo behavior, demo kiosk placeholder readability, decoration catalog/application/clutter-budget readability, layout-effect readability, starter-expansion readability, and 1280x720 storage/settings/demand-tab fit.
 - Building validation is synced through Stop 9.7, with scenario coverage and manual playtest docs matching the completed Milestone 9 behavior.
+- Focused GUT coverage passes for the Stop 10.1 suspicion-rules catalog, metadata scoring, supplier/customer/provenance/storage signals, product/supplier/customer node evaluation, and rule-to-event logging.
+- Manual Hidden Thread Focus checks are current for Stop 10.1 rule tone, optionality, nonblocking behavior, and no visible objective escalation.
 
 Commit targets:
 
@@ -524,7 +527,7 @@ Goal: make suspicious activity a coherent optional layer under retail play.
 
 Stops:
 
-- Stop 10.1: Suspicion rules. Define risk flags for serial mismatch, suspicious suppliers, cash buyers, impossible provenance, counterfeit goods, and hidden storage.
+- Stop 10.1: Suspicion rules. Done in `Define suspicion rules`: define risk flags for serial mismatch, suspicious suppliers, cash buyers, impossible provenance, counterfeit goods, and hidden storage.
 - Stop 10.2: Clue surfaces. Add invoices, notes, serial lookup, supplier emails, customer comments, security clips, and backroom artifacts.
 - Stop 10.3: Choice points. Add ignore, document, sell, isolate, report, accept cash, reject goods, and follow-up paths.
 - Stop 10.4: Consequences. Add reputation, cash, supplier access, customer trust, inspection risk, and story state consequences.
