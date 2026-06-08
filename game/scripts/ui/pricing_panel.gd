@@ -1,11 +1,14 @@
 extends CanvasLayer
 class_name PricingPanel
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 @export var price_step_cents: int = 100
 @export var min_price_cents: int = 99
 @export var max_price_cents: int = 99999
 
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
+@onready var modal_root: Control = $CenterContainer
 @onready var details_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsLabel
 @onready var price_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/PriceLabel
 @onready var decrement_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/DecreaseButton
@@ -23,6 +26,7 @@ var _requested_mouse_mode: int = Input.MOUSE_MODE_CAPTURED
 
 func _ready() -> void:
 	hide()
+	UIComponents.apply_modal_language(modal_root, UIComponents.SURFACE_PRICING)
 	decrement_button.pressed.connect(decrease_price)
 	increment_button.pressed.connect(increase_price)
 	apply_button.pressed.connect(apply_price)
@@ -74,6 +78,13 @@ func has_modal_focus() -> bool:
 
 func get_draft_price_cents() -> int:
 	return _draft_price_cents
+
+
+func has_ui_component_language() -> bool:
+	return modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_MODAL) \
+		and modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_ALERT) \
+		and apply_button.get_meta("ui_component", "") == UIComponents.TOKEN_BUTTON \
+		and title_label.get_meta("ui_component", "") == UIComponents.TOKEN_STAT
 
 
 func increase_price() -> void:

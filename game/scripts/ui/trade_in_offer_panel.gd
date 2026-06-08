@@ -1,7 +1,10 @@
 extends CanvasLayer
 class_name TradeInOfferPanel
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
+@onready var modal_root: Control = $CenterContainer
 @onready var details_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsLabel
 @onready var offer_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OfferLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
@@ -23,6 +26,7 @@ var _requested_mouse_mode: int = Input.MOUSE_MODE_CAPTURED
 
 func _ready() -> void:
 	hide()
+	UIComponents.apply_modal_language(modal_root, UIComponents.SURFACE_TRADE_IN)
 	decrease_offer_button.pressed.connect(decrease_offer)
 	increase_offer_button.pressed.connect(increase_offer)
 	accept_button.pressed.connect(accept_offer)
@@ -77,6 +81,13 @@ func has_modal_focus() -> bool:
 
 func get_draft_offer_cents() -> int:
 	return _draft_offer_cents
+
+
+func has_ui_component_language() -> bool:
+	return modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_MODAL) \
+		and modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_RECEIPT) \
+		and accept_button.get_meta("ui_component", "") == UIComponents.TOKEN_BUTTON \
+		and status_label.get_meta("ui_component", "") == UIComponents.TOKEN_LIST
 
 
 func increase_offer() -> bool:

@@ -1,7 +1,10 @@
 extends CanvasLayer
 class_name DaySummaryPanel
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
+@onready var modal_root: Control = $CenterContainer
 @onready var content_scroll: ScrollContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer
 @onready var dashboard_header: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/DashboardHeader
 @onready var summary_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SummaryLabel
@@ -50,6 +53,7 @@ var _requested_mouse_mode: int = Input.MOUSE_MODE_CAPTURED
 
 func _ready() -> void:
 	hide()
+	UIComponents.apply_modal_language(modal_root, UIComponents.SURFACE_BACKROOM)
 	commit_allocation_button.pressed.connect(commit_release_allocation)
 	order_games_button.pressed.connect(order_used_game_lot)
 	order_rack_button.pressed.connect(order_game_display_rack)
@@ -104,6 +108,13 @@ func get_requested_mouse_mode() -> int:
 func has_modal_focus() -> bool:
 	var focus_owner := get_viewport().gui_get_focus_owner()
 	return focus_owner != null and is_ancestor_of(focus_owner)
+
+
+func has_ui_component_language() -> bool:
+	return modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_TAB) \
+		and modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_RECEIPT) \
+		and content_scroll.get_meta("ui_component", "") == UIComponents.TOKEN_LIST \
+		and close_button.get_meta("ui_component", "") == UIComponents.TOKEN_BUTTON
 
 
 func end_day() -> bool:

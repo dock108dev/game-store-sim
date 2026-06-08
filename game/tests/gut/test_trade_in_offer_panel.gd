@@ -30,6 +30,7 @@ func before_each() -> void:
 
 
 func test_trade_in_offer_panel_opens_with_condition_market_and_offer() -> void:
+	assert_true(_panel.has_ui_component_language())
 	assert_true(_panel.open_for_trade_in(_register, _customer))
 
 	assert_true(_panel.is_open())

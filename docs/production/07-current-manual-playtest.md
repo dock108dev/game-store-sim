@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this interaction validation sync pass: `scripts/validate_godot.sh` passed with 314 GUT tests, UI scenario coverage 317/374, and script mapping coverage 32/32.
+- Last full gate in this UI component language pass: `scripts/validate_godot.sh` passed with 317 GUT tests, UI scenario coverage 321/378, and script mapping coverage 33/33.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -14,6 +14,7 @@ Current automated baseline:
 - Fixture placement controls are implemented through Stop 3.5; manual QA should confirm movement, rotation, snap, cancel, and place controls are readable and that cancel clears the ghost while refunding cash.
 - Input/settings baseline is implemented through Stop 3.6; manual QA should confirm Escape opens settings, sensitivity/invert/window controls work, and closing settings returns to captured first-person control.
 - Interaction validation sync is implemented through Stop 3.7; manual QA should run the Interaction Polish Focus section as one full repeated-workflow review.
+- UI component language is implemented through Stop 4.1; manual QA should confirm pricing, trade-in, and backroom computer modals now feel like one production UI family with readable button, panel, disabled, selected, alert, list, stat, and receipt states.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -185,6 +186,14 @@ Run these first when manually checking the completed Stop 3.1 through Stop 3.7 i
 - Confirm fixture placement `Cancel` clears the ghost preview, restores the reserved cash, and does not look like placing a rack.
 - Confirm settings text/buttons are readable, sensitivity changes feel noticeable but not extreme, invert look reverses vertical mouse movement, and window toggle is understandable.
 - Confirm the entire interaction pass reads as one consistent model: center reticle target, left click action, clear blocked feedback, visible carried item, focused modal workstations, and recoverable settings/pause access.
+
+## Menu And Computer UI Focus
+
+Run these first when manually checking the completed Stop 4.1 UI component language pass:
+
+- Confirm pricing, trade-in, and backroom computer panels read as one UI family while still having distinct pricing, trade-in, and backroom accent identities.
+- Confirm button sizes, font sizes, modal frames, disabled controls, hover/pressed/selected states, alert tones, list text, stat headers, and receipt-like readouts remain readable at 1280x720.
+- Confirm the shared UI styling does not clip existing pricing, trade-in, fixture placement, release allocation, supplier ordering, or day-summary controls.
 
 ## Backroom Polish Focus
 

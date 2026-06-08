@@ -1,0 +1,32 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "ui_component_language_tokens",
+      "name": "Shared UI component language defines required production tokens",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_ui_component_library.gd::test_ui_component_library_defines_required_tokens"
+    },
+    {
+      "id": "ui_component_button_alert_states",
+      "name": "Shared UI component language defines button and alert states",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_ui_component_library.gd::test_ui_component_library_defines_button_and_alert_states"
+    },
+    {
+      "id": "ui_component_modal_language_applies",
+      "name": "Shared UI component language applies modal, list, stat, button, disabled, and selected metadata",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_ui_component_library.gd::test_ui_component_library_applies_modal_language"
+    },
+    {
+      "id": "production_modal_panels_use_shared_language",
+      "name": "Pricing, trade-in, and backroom computer panels use the shared UI component language",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_starts_hidden; res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_opens_with_condition_market_and_offer; res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_starts_hidden"
+    }
+  ]
+}

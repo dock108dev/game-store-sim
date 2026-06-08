@@ -242,7 +242,7 @@ Goal: replace prototype panels with a coherent production UI system.
 
 Stops:
 
-- Stop 4.1: UI component language. Establish reusable button, tab, list, stat, receipt, modal, tooltip, alert, disabled, and selected states.
+- Stop 4.1: UI component language. Done in `Add UI component language`: added a shared UI component library, reusable modal/button/list/stat/receipt/tooltip/alert/disabled/selected tokens, surface accents, and applied the language to pricing, trade-in, and backroom computer panels with automated validation coverage.
 - Stop 4.2: Register checkout UI. Add itemized cart, subtotal/tax/total, tender method, change due, sale confirmation, service line, preorder deposit line, return placeholder, and transaction feedback.
 - Stop 4.3: Trade-in appraisal UI. Add condition, completeness, authenticity confidence, market value, demand, margin, cash/store-credit offer, counteroffer, and risk notes.
 - Stop 4.4: Pricing UI. Add cost basis, market price, current price, suggested range, margin, demand, apply-to-matching, and price outcome warnings.

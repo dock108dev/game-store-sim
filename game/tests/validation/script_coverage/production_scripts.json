@@ -225,6 +225,16 @@
         "res://tests/gut/test_settings_panel.gd"
       ],
       "critical": true
+    },
+    {
+      "script": "res://scripts/ui/ui_component_library.gd",
+      "tests": [
+        "res://tests/gut/test_ui_component_library.gd",
+        "res://tests/gut/test_pricing_panel.gd",
+        "res://tests/gut/test_day_summary_panel.gd",
+        "res://tests/gut/test_trade_in_offer_panel.gd"
+      ],
+      "critical": true
     }
   ]
 }

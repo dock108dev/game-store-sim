@@ -18,6 +18,7 @@ func before_each() -> void:
 func test_day_summary_panel_starts_hidden() -> void:
 	assert_false(_panel.visible)
 	assert_false(_panel.is_open())
+	assert_true(_panel.has_ui_component_language())
 
 
 func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
