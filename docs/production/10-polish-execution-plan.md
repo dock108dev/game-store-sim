@@ -219,6 +219,8 @@ Manual validation status:
 
 ## Slice 5: Store Lighting, Materials, Signage, And Retail Clutter
 
+Status: complete.
+
 Goal: make the sales floor read as a small specialty game shop without hiding interactions.
 
 ### Stop 5.1: Lighting And Material Contrast
@@ -266,6 +268,26 @@ Work:
 Commit:
 
 - `Sync store visual validation`
+
+### Slice 5 Result
+
+Completed commits:
+
+- `6665948` Polish store lighting and materials
+- `ec9e880` Add fictional store signage
+- `432de9e` Add readable retail clutter
+
+Validation:
+
+- `scripts/validate_godot.sh` passed after lighting and material contrast.
+- `scripts/validate_godot.sh` passed after fictional signage.
+- `scripts/validate_godot.sh` passed after retail clutter.
+- Automated `store_visual_polish` scenarios cover material contrast, lighting layers, signage labels/panels, and clutter readability/nonblocking constraints.
+
+Manual validation status:
+
+- Manual playtest checklist is updated with lighting, signage, clutter, and screenshot-composition checks.
+- Human controller/window validation is not performed by Codex; check the store from normal player angles and screenshot artifacts before treating the visual pass as human-approved.
 
 ## Slice 6: Product And Fixture Presentation
 

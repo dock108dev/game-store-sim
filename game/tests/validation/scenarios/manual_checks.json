@@ -49,6 +49,30 @@
       "owner": "manual QA"
     },
     {
+      "id": "store_lighting_readability",
+      "name": "Store lighting keeps sales floor, register, prompts, reticle, and backroom readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify lighting layers and screenshot sanity; human review must judge readability from the actual player camera.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "fictional_signage_readability",
+      "name": "Fictional store and zone signage is readable and not mistaken for real brands or interaction targets",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify label text and nonblocking placement; human review must confirm signs compose clearly in the game window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "retail_clutter_readability",
+      "name": "Retail posters, price tag, bargain bin, mat, and small display props add identity without hiding click targets",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify nonblocking placement and short callouts; human review must confirm clutter does not obscure prompts or product readability.",
+      "owner": "manual QA"
+    },
+    {
       "id": "held_item_visibility",
       "name": "Held item stack stays visible without blocking normal navigation",
       "status": "manual",

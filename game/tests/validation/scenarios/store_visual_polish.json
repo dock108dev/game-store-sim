@@ -1,0 +1,46 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "store_material_contrast",
+      "name": "Store floor, wall, and counter materials keep readable contrast",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_materials_use_readable_floor_wall_counter_contrast"
+    },
+    {
+      "id": "store_lighting_layers",
+      "name": "Store uses warm sales/register lighting and cooler backroom utility lighting",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_lighting_has_warm_sales_and_cool_backroom_layers"
+    },
+    {
+      "id": "fictional_world_signage_labels",
+      "name": "World signage uses fictional store, register, backroom, receiving, storage, and display labels",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_signage_uses_fictional_world_labels"
+    },
+    {
+      "id": "fictional_signage_nonblocking",
+      "name": "World signage panels are nonblocking and aligned with their store zones",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_sign_panels_are_nonblocking_and_zone_aligned"
+    },
+    {
+      "id": "retail_clutter_callouts",
+      "name": "Retail posters, deal tag, and bargain bin use short fictional callouts",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_retail_clutter_uses_short_fictional_callouts"
+    },
+    {
+      "id": "retail_clutter_nonblocking",
+      "name": "Retail clutter is nonblocking and stays away from interaction hotspots",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_retail_clutter_is_nonblocking_and_away_from_interaction_hotspots"
+    }
+  ]
+}

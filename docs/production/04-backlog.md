@@ -30,8 +30,8 @@ Current implementation plan: `10-polish-execution-plan.md`.
 2. Backroom spatial and visual identity pass. Done.
 3. Backroom computer/menu information architecture pass. Done.
 4. Customer readability and role silhouette pass. Done.
-5. Store lighting, materials, signage, and retail clutter pass. Next implementation target.
-6. Product and fixture presentation pass.
+5. Store lighting, materials, signage, and retail clutter pass. Done.
+6. Product and fixture presentation pass. Next implementation target.
 7. Validation/manual QA tightening for the full polish pass.
 
 ## Backroom Polish
@@ -61,11 +61,12 @@ Current implementation plan: `10-polish-execution-plan.md`.
 
 ## Store Visual Polish
 
-- Establish a warmer specialty-store lighting pass.
-- Add readable signage and fictional store identity without real brands.
-- Improve wall/floor material contrast and sales-floor/backroom zoning.
-- Add controlled retail clutter: posters, price signs, bins, display tags, boxes, and small props.
-- Keep product and interaction state readable; clutter must not hide shelf slots or prompts.
+- Done: established a warmer specialty-store lighting pass with separate sales/register and backroom light layers.
+- Done: added readable fictional `SAVE POINT GAMES` identity signage plus register, backroom, receiving, storage, and display rack labels.
+- Done: improved wall/floor/counter material contrast while preserving sales-floor/backroom zoning.
+- Done: added controlled retail clutter: posters, price sign, bargain bin, queue mat, and controller display props.
+- Done: kept clutter noninteractive and away from interaction hotspots, shelf slots, prompts, and navigation-critical spaces.
+- Remaining polish risk: human screenshot review should confirm the new signs and clutter compose well from normal player camera angles.
 
 ## Product And Fixture Polish
 

@@ -99,6 +99,8 @@ Validation:
 
 ## Slice 4: Store Lighting, Materials, And Signage
 
+Status: done.
+
 Outcome:
 
 - Sales floor feels warmer and more like a specialty game shop.
@@ -114,6 +116,7 @@ Likely work:
 
 Validation:
 
+- Automated `store_visual_polish` scenarios for material contrast, lighting layers, fictional signage, and nonblocking clutter.
 - Screenshot sanity plus manual screenshot composition review.
 - Manual checks for prompt readability under lighting changes.
 

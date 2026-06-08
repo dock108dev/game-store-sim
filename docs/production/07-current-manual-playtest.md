@@ -73,6 +73,9 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
 - Click prompts and the center reticle are readable in the actual game window.
+- Store lighting, material contrast, and signage make the room read as a small specialty game shop rather than a graybox test room.
+- `SAVE POINT GAMES`, register, backroom, receiving, storage, and display rack signs are readable, fictional, and do not look like real-brand signage.
+- Posters, deal tag, bargain bin, register mat, and controller display props add retail context without blocking movement or obscuring prompts.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable, uses a clear register lane, and does not overlap special register customers.
 - Buyer spawn, rack approach, and register queue pathing read naturally in the current layout.
@@ -127,6 +130,16 @@ Run these first when manually checking the completed backroom spatial pass:
 - Confirm the management board, computer desk, service bench, disc mat, paperwork stack, and tool tray read as backroom context.
 - Confirm the service props do not imply a new service terminal; service completion should still read as register work.
 - Confirm fixture ghost, invalid ghost, rotated ghost, and placed rack screenshots still compose clearly with the backroom props.
+
+## Store Visual Polish Focus
+
+Run these first when manually checking the completed store visual pass:
+
+- Confirm the sales floor reads warmer than the backroom while the reticle, prompts, product cases, and shelf slots stay readable.
+- Confirm wall, floor, counter, and door colors provide enough contrast from normal player angles.
+- Confirm `SAVE POINT GAMES` and zone signage is readable, fictional, and not mistaken for an interaction target.
+- Confirm posters, the price tag, bargain bin, register mat, and controller display feel like store dressing without blocking navigation or hiding click targets.
+- Confirm screenshot artifacts still compose clearly after lighting, signage, and clutter changes.
 
 ## Automated Screenshot Artifacts
 
