@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this hidden-thread consequence pass: `scripts/validate_godot.sh` passes with 437 GUT tests, UI scenario automation coverage at 424/519, production script mapping coverage at 43/43, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this hidden-thread optionality pass: `scripts/validate_godot.sh` passes with 439 GUT tests, UI scenario automation coverage at 426/522, production script mapping coverage at 43/43, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -44,7 +44,7 @@ Current automated baseline:
 - Security/safe placeholders are implemented through Stop 8.5; manual QA should confirm cash safe, high-value storage, suspicious goods isolation, and security footage read as inactive backroom/hidden-thread infrastructure, not active objectives.
 - Backroom operations validation is synced through Stop 8.6; manual QA should run the Backroom Operations Focus before treating Milestone 8 as human-approved.
 - Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, layout effects through Stop 9.5, starter expansion through Stop 9.6, and building validation sync through Stop 9.7; manual QA should run the Store Building Focus before treating Milestone 9 as human-approved.
-- Suspicion rules are implemented through Stop 10.1, clue surfaces through Stop 10.2, choice paths through Stop 10.3, and consequences through Stop 10.4; manual QA should run the Hidden Thread Focus checks to confirm the flag catalog, Records-tab clue surfaces, choice paths, and consequence effects still read as optional retail anomaly infrastructure rather than active story UI.
+- Suspicion rules are implemented through Stop 10.1, clue surfaces through Stop 10.2, choice paths through Stop 10.3, consequences through Stop 10.4, and optionality guards through Stop 10.5; manual QA should run the Hidden Thread Focus checks to confirm the flag catalog, Records-tab clue surfaces, choice paths, consequence effects, and nonblocking guard still read as optional retail anomaly infrastructure rather than active story UI.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -130,10 +130,11 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 76. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
 77. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
 78. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
-79. Open the backroom computer settings tab and confirm the upgrade summary lists purchased, available, and locked upgrades clearly.
-80. Open the backroom computer dashboard and confirm the owner checklist starts with receiving on a fresh run.
-81. As the first-day loop progresses, confirm checklist rows move from `Next`/`Later` to `Done` based on real actions rather than hidden tutorial buttons.
-82. Play into the next day and confirm cash, stock, reputation, obligations, upgrade goals, and tomorrow planning read as one connected owner/operator loop.
+79. Open Records and confirm the hidden optionality guard says progression is not required, the retail loop is not blocked, and normal receiving, pricing, stocking, register, ordering, storage, services, reports, and day progression remain available.
+80. Open the backroom computer settings tab and confirm the upgrade summary lists purchased, available, and locked upgrades clearly.
+81. Open the backroom computer dashboard and confirm the owner checklist starts with receiving on a fresh run.
+82. As the first-day loop progresses, confirm checklist rows move from `Next`/`Later` to `Done` based on real actions rather than hidden tutorial buttons.
+83. Play into the next day and confirm cash, stock, reputation, obligations, upgrade goals, and tomorrow planning read as one connected owner/operator loop.
 
 ## Visual Checks
 
@@ -334,7 +335,7 @@ Run these first when manually checking the completed Stop 9.1 through Stop 9.7 s
 
 ## Hidden Thread Focus
 
-Run these first when manually checking the completed Stop 10.1 through Stop 10.4 hidden-thread baseline:
+Run these first when manually checking the completed Stop 10.1 through Stop 10.5 hidden-thread baseline:
 
 - Confirm suspicious rule concepts still read as ordinary retail anomalies: serial mismatch, supplier discrepancy, quiet cash buyer, impossible provenance, counterfeit goods, and hidden storage.
 - Confirm no new objective marker, warning modal, quest label, or forced progression appears when the existing mismatched serial item, supplier note, suspicious customer, evidence storage, or security placeholders are present.
@@ -344,7 +345,8 @@ Run these first when manually checking the completed Stop 10.1 through Stop 10.4
 - Confirm available clue surfaces line up with normal store context, such as existing supplier notes, mismatched serial stock, suspicious customer comments, security placeholders, and evidence storage.
 - Confirm the Records tab lists ignore, document, sell, isolate, report, cash, reject, and supplier follow-up paths as optional choices routed through consequence rules.
 - Confirm recording a choice reads as backroom documentation and applies understandable reputation, cash, supplier access, customer trust, inspection risk, and story-state consequences without blocking stock, customer flow, or the day loop.
-- Confirm manual validation docs and scenario matrix now describe Stop 10.4 before moving into the optionality guard.
+- Confirm the Records tab optionality guard says progression is not required, the retail loop is not blocked, and normal work remains available.
+- Confirm manual validation docs and scenario matrix now describe Stop 10.5 before moving into hidden-thread validation sync.
 
 ## Customer Production Focus
 

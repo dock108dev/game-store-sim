@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, and hidden-thread consequences are complete through Stop 10.4.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, and hidden-thread optionality guards are complete through Stop 10.5.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -40,7 +40,7 @@ Current completion plan: `11-game-completion-plan.md`.
 8. Economy, day loop, and progression. Done through Milestone 7.
 9. Backroom operations. Done through Milestone 8.
 10. Store building, decoration, and expansion. Done through Milestone 9.
-11. Hidden-thread production arc. Current phase; consequences done through Stop 10.4.
+11. Hidden-thread production arc. Current phase; optionality guard done through Stop 10.5.
 12. Audio, VFX, and presentation feel.
 13. Save/load, settings, and release wrapper.
 14. Alpha hardening.
@@ -121,8 +121,9 @@ The following polish items remain valid historical checkpoints:
 - Done: StoreSession records/deduplicates hidden choices, Records shows available paths and recorded choices, and save/load preserves recorded choices.
 - Done: added hidden consequences for reputation, cash, supplier access, customer trust, inspection risk, and story state.
 - Done: StoreSession applies hidden consequences once per recorded choice, Records shows consequence summaries, and save/load preserves consequence events and hidden state scores.
-- Done: synced hidden-thread scenario coverage, manual Hidden Thread Focus checks, validation baselines, and Milestone 10 status for Stop 10.4.
-- Remaining polish risk: Stop 10.5 still needs optionality guard checks proving normal retail progression can ignore the hidden thread.
+- Done: added an optionality guard that explicitly says hidden-thread progression is not required, the retail loop is not blocked, and normal work remains available.
+- Done: synced hidden-thread scenario coverage, manual Hidden Thread Focus checks, validation baselines, and Milestone 10 status for Stop 10.5.
+- Remaining polish risk: Stop 10.6 still needs the final hidden-thread validation sync before moving into audio/VFX presentation work.
 
 ## Product And Fixture Polish
 

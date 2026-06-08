@@ -380,6 +380,21 @@ func test_day_summary_panel_shows_hidden_thread_choice_paths() -> void:
 	assert_string_contains(panel.hidden_records_label.text, "Documented evidence")
 
 
+func test_day_summary_panel_shows_hidden_optionality_guard() -> void:
+	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	add_child_autofree(scene)
+	var panel: DaySummaryPanel = scene.get_node("PlayerController/DaySummaryPanel")
+	var session: StoreSession = scene.get_node("StoreSession")
+
+	assert_true(panel.open_for_session(session))
+	assert_true(panel.set_active_tab("records"))
+
+	assert_string_contains(panel.hidden_records_label.text, "Hidden optionality guard:")
+	assert_string_contains(panel.hidden_records_label.text, "Progression required: no")
+	assert_string_contains(panel.hidden_records_label.text, "Retail loop blocked: no")
+	assert_string_contains(panel.hidden_records_label.text, "Normal work remains available")
+
+
 func test_day_summary_panel_includes_recent_trade_in_activity() -> void:
 	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
 	add_child_autofree(customer)

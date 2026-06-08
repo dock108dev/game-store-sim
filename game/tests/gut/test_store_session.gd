@@ -603,6 +603,23 @@ func test_store_session_applies_hidden_cash_and_risk_consequences() -> void:
 	assert_string_contains(session.get_hidden_consequence_summary_text(), "Accepted suspicious cash")
 
 
+func test_store_session_hidden_thread_can_be_ignored_for_retail_progression() -> void:
+	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	add_child_autofree(scene)
+	var session: StoreSession = scene.get_node("StoreSession")
+
+	assert_true(session.can_ignore_hidden_thread_for_progression())
+	assert_false(session.is_hidden_thread_blocking_retail_loop())
+	assert_true(session.can_order_supplier_lot("supplier_lot_used_games_001"))
+	session.end_day()
+	assert_true(session.is_day_closed)
+	var started := session.start_next_day()
+	assert_eq(started.get("day_number"), 2)
+	assert_false(session.is_day_closed)
+	assert_string_contains(session.get_hidden_optionality_summary_text(), "Progression required: no")
+	assert_string_contains(session.get_hidden_optionality_summary_text(), "Retail loop blocked: no")
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()

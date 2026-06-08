@@ -279,6 +279,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
+      "id": "hidden_optionality_session_guard",
+      "name": "Store session confirms hidden-thread choices do not block normal retail progression",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_hidden_thread_can_be_ignored_for_retail_progression"
+    },
+    {
+      "id": "hidden_optionality_records_tab",
+      "name": "Backroom Records tab shows hidden-thread optionality and nonblocking retail-loop status",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_shows_hidden_optionality_guard"
     }
   ]
 }

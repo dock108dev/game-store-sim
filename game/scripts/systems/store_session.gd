@@ -1153,6 +1153,23 @@ func get_hidden_consequence_summary_text() -> String:
 	return "\n".join(lines)
 
 
+func can_ignore_hidden_thread_for_progression() -> bool:
+	return true
+
+
+func is_hidden_thread_blocking_retail_loop() -> bool:
+	return false
+
+
+func get_hidden_optionality_summary_text() -> String:
+	return "\n".join([
+		"Hidden optionality guard:",
+		"Progression required: no",
+		"Retail loop blocked: no",
+		"Normal work remains available: receiving, pricing, stocking, register, ordering, storage, services, reports, and day progression",
+	])
+
+
 func replace_hidden_consequence_state(
 	supplier_access: int,
 	customer_trust: int,

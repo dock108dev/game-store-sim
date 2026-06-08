@@ -689,6 +689,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "hidden_thread_optionality_guard",
+      "name": "Hidden-thread clues and choices can be ignored while the normal retail loop continues",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the session and Records-tab optionality guard; human review should confirm receiving, pricing, stocking, register, ordering, storage, services, reports, and day progression still feel available after ignoring all hidden-thread surfaces.",
+      "owner": "manual QA"
+    },
+    {
       "id": "mismatched_serial_discoverability",
       "name": "Mismatched serial item is discoverable without blocking normal inventory flow",
       "status": "manual",

@@ -649,6 +649,8 @@ func _update_labels() -> void:
 		hidden_records_label.text += "\n" + _session.get_hidden_thread_choice_summary_text()
 	if _session.has_method("get_hidden_consequence_summary_text"):
 		hidden_records_label.text += "\n" + _session.get_hidden_consequence_summary_text()
+	if _session.has_method("get_hidden_optionality_summary_text"):
+		hidden_records_label.text += "\n" + _session.get_hidden_optionality_summary_text()
 	status_label.text = _session.get_status_label()
 	if _session.has_method("can_commit_release_allocation"):
 		commit_allocation_button.disabled = _session.is_day_closed \
