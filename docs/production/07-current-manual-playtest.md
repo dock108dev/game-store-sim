@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 514 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 515 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -623,7 +623,7 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 514 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 515 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
 - Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and says accepted external feedback must be added before implementation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.

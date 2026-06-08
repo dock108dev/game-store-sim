@@ -46,7 +46,7 @@ func test_alpha_validation_snapshot_records_current_gate_outputs() -> void:
 	var bug_list := FileAccess.get_file_as_string(BUG_LIST_PATH)
 
 	for doc in [validation_doc, manual_doc, completion_plan, bug_list]:
-		assert_string_contains(doc, "514 GUT tests")
+		assert_string_contains(doc, "515 GUT tests")
 		assert_string_contains(doc, "476/594")
 		assert_string_contains(doc, "51/51")
 		assert_string_contains(doc, "3 active")
@@ -73,6 +73,15 @@ func test_completion_handoff_points_to_external_playtest_not_finished_milestones
 	assert_false(backlog.contains("- Player-facing save/load slot UI."))
 	assert_false(backlog.contains("- Full audio, animation, VFX, and art-production pass."))
 	assert_string_contains(decision_log, "Milestones 1 through 13")
+
+
+func test_alpha_bug_list_points_remaining_work_to_playtest_feedback() -> void:
+	var bug_list := FileAccess.get_file_as_string(BUG_LIST_PATH)
+
+	assert_string_contains(bug_list, "AH-001 through AH-008 have completed automated routing")
+	assert_string_contains(bug_list, "remaining readability concern now belongs in human external playtest feedback")
+	assert_string_contains(bug_list, "AH-011 remains the known human-feel checkpoint")
+	assert_false(bug_list.contains("The next implementation should fix P1 readability/composition issues before treating the build as external-playtest ready."))
 
 
 func test_alpha_manual_checklist_covers_all_alpha_focus_sections() -> void:
