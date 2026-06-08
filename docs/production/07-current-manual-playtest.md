@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 505 GUT tests, UI scenario automation coverage at 472/587, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 509 GUT tests, UI scenario automation coverage at 473/591, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -63,6 +63,7 @@ Current automated baseline:
 - Alpha scene-readability content pass is implemented as Stop 13.4A; manual QA should review the refreshed screenshot set for store read, sign cropping, special-customer separation, placed-rack framing, and backroom computer first-view controls.
 - Alpha content/copy pass is implemented as Stop 13.4B; manual QA should review customer role text, dialogue staff context, supplier order notes, release planning, daily report wording, register return-scope copy, and backroom action labels before treating the alpha copy pass as human-approved.
 - Alpha economy balance pass is implemented as Stop 13.5; manual QA should review the tuned $500 starting cash, $10 daily overhead, $30 one-day starter supplier lot, $5.99 disc resurfacing service, buyer tolerance/pricing range, launch allocation, and early upgrade-cost feel before treating balance as human-approved.
+- Alpha playtest package is implemented through Stop 13.6; manual QA should use `15-alpha-playtest-package.md` for external handoff, artifact review, the concise tester script, known issues, feedback capture, and rollback expectations.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -164,6 +165,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 92. Open settings, adjust audio, display, mouse, and accessibility values, reset bindings/defaults, close and reopen settings, and confirm the saved values and reset language are readable.
 93. Open pause, test Resume, Settings, Save/Load, Main Menu, Start Game, and Quit request language, and confirm mouse capture returns after every playable exit path.
 94. Run `scripts/verify_desktop_export.sh --pack-smoke`, confirm `artifacts/builds/desktop/game-store-sim.pck` is created and nonempty, and confirm the verifier reports a successful pack boot smoke.
+95. Open `docs/production/15-alpha-playtest-package.md`, confirm the package handoff names build commands, artifact paths, known issues, feedback form, rollback plan, and the shorter external playtest script.
 
 ## Visual Checks
 
@@ -602,6 +604,17 @@ Run these first when manually checking the completed Stop 13.5 balance pass:
 - Complete the $5.99 disc resurfacing service and confirm the register, report, recent activity, and service bench readouts show revenue, $1.25 parts cost, and $4.74 profit clearly.
 - Reserve a Neon Skyline launch allocation and play into launch day; confirm allocation cost, preorder/queue fulfillment, missed-demand reputation changes, and launch cash are understandable.
 - Buy early upgrades such as Staff Picks Signage, Computer Analytics, and Backroom Storage Bay; confirm the lower alpha costs feel like reachable goals without making progression trivial.
+
+## Alpha Playtest Package Focus
+
+Run these first when manually checking the completed Stop 13.6 external playtest package:
+
+- Run `scripts/validate_godot.sh` and `scripts/verify_desktop_export.sh --pack-smoke`, then confirm `artifacts/builds/desktop/game-store-sim.pck`, `artifacts/builds/desktop/pack-smoke.log`, `artifacts/validation/latest/gut-results.xml`, and `artifacts/validation/latest/screenshots/` are present.
+- If a runnable app is not produced, confirm the package notes clearly name the local Godot export template or macOS signing blocker rather than implying binary export was validated.
+- Hand the tester `15-alpha-playtest-package.md` and confirm the shorter script covers fresh start, settings, receiving, pricing, stocking, sale, trade-in, preorder, service, backroom, supplier delivery, launch allocation, save/load, and feedback.
+- Confirm the tester feedback form records build, platform, session length, blockers, confusing steps, economy feel, customer behavior, backroom/computer notes, menu/settings/save notes, bugs, screenshots/logs, and whether the tester would play another in-game day.
+- Add accepted external feedback to `13-alpha-bug-list.md` with evidence, priority, target slice, and acceptance criteria before implementing follow-up changes.
+- Confirm rollback guidance names the known-good Stop 13.5, Stop 13.4B, and Stop 13.4A checkpoints and requires a fresh full gate before sharing another package.
 
 ## Automated Screenshot Artifacts
 

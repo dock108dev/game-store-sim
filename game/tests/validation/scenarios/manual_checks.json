@@ -895,6 +895,30 @@
       "critical": false,
       "reason": "Automated tests verify seeded copy fields, report strings, release planning lines, supplier notes, and button labels; human review must confirm the copy improves clarity without becoming too dense or moving register work into the backroom computer.",
       "owner": "manual QA"
+    },
+    {
+      "id": "alpha_playtest_package_artifact_review",
+      "name": "Alpha package artifacts are generated and reviewed before external handoff",
+      "status": "manual",
+      "critical": false,
+      "reason": "The local gate creates the pack, logs, screenshots, and performance artifacts; human QA still needs to confirm the handoff folder and any binary-template blocker before sharing with testers.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_external_playtest_run",
+      "name": "External alpha script is run from fresh start through feedback capture",
+      "status": "manual",
+      "critical": false,
+      "reason": "The script measures player understanding, economy feel, customer readability, menu comfort, and save/load confidence, which require human playtest judgment.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_feedback_triage_review",
+      "name": "External playtest feedback is triaged into the alpha bug list before follow-up implementation",
+      "status": "manual",
+      "critical": false,
+      "reason": "Feedback priority depends on tester notes, screenshots, reproduction steps, and release intent, so it must be reviewed by a human before implementation.",
+      "owner": "manual QA"
     }
   ]
 }
