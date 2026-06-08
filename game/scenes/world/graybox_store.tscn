@@ -1013,6 +1013,7 @@ ledger_path = NodePath("../TransactionLedger")
 inventory_root_path = NodePath("..")
 receiving_box_path = NodePath("../ReceivingBox")
 fixture_placement_manager_path = NodePath("../FixturePlacementManager")
+evidence_storage_path = NodePath("../EvidenceStorage")
 
 [node name="SuspiciousEventLog" type="Node" parent="."]
 script = ExtResource("12_suspicious_event_log")

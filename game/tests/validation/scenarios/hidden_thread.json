@@ -106,6 +106,41 @@
       "evidence": "res://tests/gut/test_evidence_storage.gd::test_evidence_storage_can_store_supplier_message"
     },
     {
+      "id": "security_safe_placeholder_catalog",
+      "name": "Evidence storage exposes cash safe, high-value storage, suspicious goods isolation, and security footage placeholders",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_evidence_storage.gd::test_evidence_storage_exposes_security_safe_placeholders"
+    },
+    {
+      "id": "security_placeholder_records",
+      "name": "Security placeholders can record a reference without starting an active hidden objective",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_evidence_storage.gd::test_evidence_storage_records_security_placeholder_reference"
+    },
+    {
+      "id": "store_session_security_placeholder_summary",
+      "name": "Store session surfaces security safe placeholder state for the backroom computer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_surfaces_security_safe_placeholders"
+    },
+    {
+      "id": "backroom_records_security_placeholder_readout",
+      "name": "Backroom records tab shows security safe placeholders without activating hidden-thread UI",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_shows_security_safe_placeholders"
+    },
+    {
+      "id": "store_session_evidence_storage_wiring",
+      "name": "Main scene wires StoreSession to EvidenceStorage for security placeholder readouts",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_evidence_storage"
+    },
+    {
       "id": "suspicious_customer_exists",
       "name": "Main scene contains one optional suspicious customer encounter",
       "status": "automated",

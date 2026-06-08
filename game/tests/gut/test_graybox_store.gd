@@ -781,6 +781,14 @@ func test_store_session_is_wired_to_fixture_placement_manager() -> void:
 	assert_not_null(manager)
 
 
+func test_store_session_is_wired_to_evidence_storage() -> void:
+	var session := _store.get_node("StoreSession")
+	var storage := session.get_node_or_null(session.get("evidence_storage_path"))
+
+	assert_eq(storage, _store.get_node("EvidenceStorage"))
+	assert_string_contains(session.get_security_placeholder_summary_text(), "Security placeholders:")
+
+
 func test_fixture_order_shows_placement_ghost() -> void:
 	var session := _store.get_node("StoreSession")
 	var manager := _store.get_node("FixturePlacementManager")

@@ -231,6 +231,7 @@ const ONBOARDING_STEPS := [
 @export var inventory_root_path: NodePath
 @export var receiving_box_path: NodePath
 @export var fixture_placement_manager_path: NodePath
+@export var evidence_storage_path: NodePath
 
 const DEFAULT_FIXTURE_CATALOG_PATHS := [
 	"res://data/fixtures/game_display_rack.tres",
@@ -960,6 +961,23 @@ func get_management_desk_summary_text() -> String:
 			int(recent.get("reviewed_day", day_number)),
 		])
 	return "\n".join(lines)
+
+
+func get_security_placeholder_summary_text() -> String:
+	var storage := _get_evidence_storage()
+	if storage != null and storage.has_method("get_security_zone_summary_text"):
+		return str(storage.call("get_security_zone_summary_text"))
+
+	return "Security placeholders:\nCash safe - placeholder / backroom_safe / Cash storage\nHigh-value storage - placeholder / backroom_high_value_shelf / High-value stock hold\nSuspicious goods isolation - placeholder / backroom_evidence_locker / Quarantine suspicious items\nSecurity footage - placeholder / backroom_security_monitor / Review camera clips\nSecurity records: none\nStatus: placeholders only; no active hidden objective or register action"
+
+
+func record_security_placeholder(placeholder_id: String, reference_id: String = "", notes: String = "") -> Dictionary:
+	var storage := _get_evidence_storage()
+	if storage == null or not storage.has_method("record_security_placeholder"):
+		return {}
+
+	var record: Dictionary = storage.call("record_security_placeholder", placeholder_id, reference_id, notes)
+	return record
 
 
 func get_total_preorder_deposit_cents() -> int:
@@ -2310,6 +2328,13 @@ func _get_receiving_box() -> Node:
 		return null
 
 	return get_node_or_null(receiving_box_path)
+
+
+func _get_evidence_storage() -> Node:
+	if evidence_storage_path.is_empty():
+		return null
+
+	return get_node_or_null(evidence_storage_path)
 
 
 func _get_or_create_storage_shelf() -> Node:

@@ -77,3 +77,36 @@ func test_evidence_storage_can_store_supplier_message() -> void:
 	assert_eq(evidence.get("title"), "Receiving discrepancy")
 	assert_eq(evidence.get("metadata").get("message_id"), "msg_supplier_lot_a17")
 	assert_eq(evidence.get("metadata").get("supplier_id"), "North Dock Wholesale")
+
+
+func test_evidence_storage_exposes_security_safe_placeholders() -> void:
+	var placeholders: Array = _storage.get_security_placeholders()
+	var summary: String = _storage.get_security_zone_summary_text()
+
+	assert_eq(placeholders.size(), 4)
+	assert_eq(placeholders[0].get("placeholder_id"), "cash_safe")
+	assert_eq(placeholders[1].get("placeholder_id"), "high_value_storage")
+	assert_eq(placeholders[2].get("placeholder_id"), "suspicious_goods_isolation")
+	assert_eq(placeholders[3].get("placeholder_id"), "security_footage")
+	assert_string_contains(summary, "Cash safe - placeholder")
+	assert_string_contains(summary, "High-value storage - placeholder")
+	assert_string_contains(summary, "Suspicious goods isolation - placeholder")
+	assert_string_contains(summary, "Security footage - placeholder")
+	assert_string_contains(summary, "Status: placeholders only; no active hidden objective or register action")
+
+
+func test_evidence_storage_records_security_placeholder_reference() -> void:
+	var record: Dictionary = _storage.record_security_placeholder(
+		"suspicious_goods_isolation",
+		"serial_mismatch_item_used_star_trader_003",
+		"Hold for later review"
+	)
+	var summary: String = _storage.get_security_zone_summary_text()
+
+	assert_eq(record.get("record_id"), "security_record_001")
+	assert_eq(record.get("placeholder_id"), "suspicious_goods_isolation")
+	assert_eq(record.get("zone_id"), "backroom_evidence_locker")
+	assert_eq(record.get("reference_id"), "serial_mismatch_item_used_star_trader_003")
+	assert_eq(_storage.get_security_records().size(), 1)
+	assert_string_contains(summary, "Suspicious goods isolation - recorded")
+	assert_string_contains(summary, "security_record_001 Suspicious goods isolation")

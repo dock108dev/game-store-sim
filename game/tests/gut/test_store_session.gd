@@ -457,6 +457,32 @@ func test_store_session_runs_management_desk_review_and_upgrade_ordering() -> vo
 	assert_string_contains(session.get_management_desk_summary_text(), "computer analytics purchased")
 
 
+func test_store_session_surfaces_security_safe_placeholders() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var storage: EvidenceStorage = load("res://scripts/narrative/evidence_storage.gd").new()
+	add_child_autofree(session)
+	add_child_autofree(storage)
+	session.evidence_storage_path = session.get_path_to(storage)
+
+	var summary := session.get_security_placeholder_summary_text()
+
+	assert_string_contains(summary, "Security placeholders:")
+	assert_string_contains(summary, "Cash safe - placeholder")
+	assert_string_contains(summary, "High-value storage - placeholder")
+	assert_string_contains(summary, "Suspicious goods isolation - placeholder")
+	assert_string_contains(summary, "Security footage - placeholder")
+	assert_string_contains(summary, "no active hidden objective")
+
+	var record := session.record_security_placeholder(
+		"suspicious_goods_isolation",
+		"serial_mismatch_item_used_star_trader_003",
+		"Hold for later review"
+	)
+
+	assert_eq(record.get("record_id"), "security_record_001")
+	assert_string_contains(session.get_security_placeholder_summary_text(), "Suspicious goods isolation - recorded")
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()

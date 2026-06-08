@@ -60,7 +60,9 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.settings_label.text, "Settings:")
 	assert_string_contains(_panel.management_desk_label.text, "Management desk:")
 	assert_string_contains(_panel.management_desk_label.text, "Supplier messages - pending")
-	assert_eq(_panel.hidden_records_label.text, "Hidden records: no active records.")
+	assert_string_contains(_panel.hidden_records_label.text, "Security placeholders:")
+	assert_string_contains(_panel.hidden_records_label.text, "Cash safe - placeholder")
+	assert_string_contains(_panel.hidden_records_label.text, "no active hidden objective")
 	assert_eq(_panel.get_active_tab(), "dashboard")
 	assert_true(_panel.dashboard_tab_button.button_pressed)
 	assert_true(_panel.summary_label.visible)
@@ -170,6 +172,7 @@ func test_day_summary_panel_switches_backroom_tab_visibility() -> void:
 	assert_true(_panel.hidden_records_label.visible)
 	assert_true(_panel.management_desk_label.visible)
 	assert_string_contains(_panel.management_desk_label.text, "Management desk:")
+	assert_string_contains(_panel.hidden_records_label.text, "Security placeholders:")
 	assert_false(_panel.set_active_tab("missing"))
 	assert_eq(_panel.get_active_tab(), "records")
 
@@ -287,6 +290,26 @@ func test_day_summary_panel_runs_management_desk_workflow() -> void:
 	assert_string_contains(_panel.management_desk_label.text, "computer analytics purchased")
 	assert_string_contains(_panel.settings_label.text, "Purchased: Computer Analytics")
 	assert_true(_panel.buy_upgrade_button.disabled)
+
+
+func test_day_summary_panel_shows_security_safe_placeholders() -> void:
+	var storage: EvidenceStorage = load("res://scripts/narrative/evidence_storage.gd").new()
+	add_child_autofree(storage)
+	_session.evidence_storage_path = _session.get_path_to(storage)
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.set_active_tab("records"))
+
+	assert_string_contains(_panel.hidden_records_label.text, "Cash safe - placeholder")
+	assert_string_contains(_panel.hidden_records_label.text, "High-value storage - placeholder")
+	assert_string_contains(_panel.hidden_records_label.text, "Suspicious goods isolation - placeholder")
+	assert_string_contains(_panel.hidden_records_label.text, "Security footage - placeholder")
+	assert_string_contains(_panel.hidden_records_label.text, "Security records: none")
+	storage.record_security_placeholder("cash_safe", "close_day_cash", "Placeholder only")
+	_panel.open_for_session(_session)
+	assert_true(_panel.set_active_tab("records"))
+
+	assert_string_contains(_panel.hidden_records_label.text, "Cash safe - recorded")
+	assert_string_contains(_panel.hidden_records_label.text, "security_record_001 Cash safe")
 
 
 func test_day_summary_panel_includes_recent_trade_in_activity() -> void:

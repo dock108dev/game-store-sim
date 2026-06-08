@@ -585,6 +585,10 @@ func _update_labels() -> void:
 		management_desk_label.text = _session.get_management_desk_summary_text()
 	else:
 		management_desk_label.text = "Management desk unavailable"
+	if _session.has_method("get_security_placeholder_summary_text"):
+		hidden_records_label.text = _session.get_security_placeholder_summary_text()
+	else:
+		hidden_records_label.text = "Hidden records: no active records."
 	status_label.text = _session.get_status_label()
 	if _session.has_method("can_commit_release_allocation"):
 		commit_allocation_button.disabled = _session.is_day_closed \

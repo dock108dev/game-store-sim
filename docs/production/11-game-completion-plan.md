@@ -438,7 +438,7 @@ Stops:
 - Stop 8.2: Storage workflow. Done in `Build storage workflow`: store sessions now move physical product item nodes from receiving into a backstock shelf and back to receiving, track shelf capacity and overflow, expose Store/Pull backroom controls, include storage movement history in save/load, and document manual readability checks.
 - Stop 8.3: Service bench workflow. Done in `Build service bench workflow`: store sessions now expose disc resurfacing service tickets, locked cartridge cleaning, console-test placeholder data, ticket parts, queued/in-progress/ready-for-pickup/picked-up states, Start Svc/Work Svc backroom controls, register pickup integration, save/load persistence, and manual checklist coverage.
 - Stop 8.4: Management desk workflow. Done in `Build management desk workflow`: store sessions now expose management desk tasks for supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering, with Review Desk/Buy Upg controls, Computer Analytics upgrade ordering, save/load persistence, and manual checklist coverage.
-- Stop 8.5: Security/safe placeholders. Add cash storage, high-value storage, suspicious goods isolation, and security footage placeholder.
+- Stop 8.5: Security/safe placeholders. Done in `Add security safe placeholders`: EvidenceStorage now exposes cash safe, high-value storage, suspicious goods isolation, and security footage placeholders, StoreSession is wired to EvidenceStorage, Records tab shows inactive security placeholder state, and manual checklist coverage is current.
 - Stop 8.6: Backroom validation sync. Update tests and manual checks for physical operations.
 
 Acceptance:
@@ -459,8 +459,8 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 394 GUT tests.
-- UI scenario automation coverage is 385/469, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 399 GUT tests.
+- UI scenario automation coverage is 390/475, above the 80% threshold.
 - Production script mapping coverage is 39/39.
 - Standalone validation tool manifest coverage has 1 active tool.
 - Product catalog content check passes with 33 fictional products.
@@ -472,6 +472,8 @@ Validation snapshot:
 - Manual service bench checks are current for capabilities, parts, ticket progress, ready pickup, and register completion readability.
 - Focused GUT coverage passes for management desk review workflow, day-summary panel Review Desk/Buy Upg controls, upgrade ordering, and save/load management review persistence.
 - Manual management desk checks are current for supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, and non-teleporting desk-work readability.
+- Focused GUT coverage passes for security placeholder catalog, placeholder records, StoreSession/EvidenceStorage wiring, and Records tab placeholder readout.
+- Manual security/safe placeholder checks are current for inactive cash safe, high-value storage, suspicious goods isolation, security footage, and non-objective readability.
 
 ## Milestone 9: Store Building, Decoration, And Expansion
 

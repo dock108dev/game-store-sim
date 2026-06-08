@@ -665,6 +665,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "security_safe_placeholder_readability",
+      "name": "Backroom security placeholders clearly show cash safe, high-value storage, suspicious goods isolation, and security footage as inactive future surfaces",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify placeholder state, records-tab summary, and StoreSession wiring; human review must confirm the safe/security/evidence text reads as future optional infrastructure and not an active objective, register action, or solved hidden-thread flow.",
+      "owner": "manual QA"
+    },
+    {
       "id": "evidence_storage_invisible",
       "name": "Evidence storage remains hidden during normal play",
       "status": "manual",

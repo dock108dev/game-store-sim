@@ -1,7 +1,35 @@
 extends Node
 class_name EvidenceStorage
 
+const SECURITY_PLACEHOLDERS := [
+	{
+		"placeholder_id": "cash_safe",
+		"label": "Cash safe",
+		"zone_id": "backroom_safe",
+		"purpose": "Cash storage",
+	},
+	{
+		"placeholder_id": "high_value_storage",
+		"label": "High-value storage",
+		"zone_id": "backroom_high_value_shelf",
+		"purpose": "High-value stock hold",
+	},
+	{
+		"placeholder_id": "suspicious_goods_isolation",
+		"label": "Suspicious goods isolation",
+		"zone_id": "backroom_evidence_locker",
+		"purpose": "Quarantine suspicious items",
+	},
+	{
+		"placeholder_id": "security_footage",
+		"label": "Security footage",
+		"zone_id": "backroom_security_monitor",
+		"purpose": "Review camera clips",
+	},
+]
+
 var _evidence: Array[Dictionary] = []
+var _security_records: Array[Dictionary] = []
 
 
 func store_evidence(
@@ -73,6 +101,64 @@ func clear_evidence() -> void:
 	_evidence.clear()
 
 
+func get_security_placeholders() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for placeholder in SECURITY_PLACEHOLDERS:
+		var row: Dictionary = placeholder.duplicate(true)
+		row["status"] = "recorded" if _has_security_record(str(row.get("placeholder_id", ""))) else "placeholder"
+		rows.append(row)
+	return rows
+
+
+func get_security_records() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for record in _security_records:
+		rows.append(record.duplicate(true))
+	return rows
+
+
+func record_security_placeholder(placeholder_id: String, reference_id: String = "", notes: String = "") -> Dictionary:
+	var placeholder := _get_security_placeholder(placeholder_id)
+	if placeholder.is_empty():
+		return {}
+
+	var record := {
+		"record_id": "security_record_%03d" % (_security_records.size() + 1),
+		"placeholder_id": str(placeholder.get("placeholder_id", "")),
+		"label": str(placeholder.get("label", "Security placeholder")),
+		"zone_id": str(placeholder.get("zone_id", "backroom_security")),
+		"purpose": str(placeholder.get("purpose", "")),
+		"reference_id": reference_id.strip_edges(),
+		"notes": notes.strip_edges(),
+		"status": "recorded",
+	}
+	_security_records.append(record)
+	return record.duplicate(true)
+
+
+func get_security_zone_summary_text() -> String:
+	var lines: Array[String] = ["Security placeholders:"]
+	for placeholder in get_security_placeholders():
+		lines.append("%s - %s / %s / %s" % [
+			str(placeholder.get("label", "Security")),
+			str(placeholder.get("status", "placeholder")),
+			str(placeholder.get("zone_id", "backroom_security")),
+			str(placeholder.get("purpose", "")),
+		])
+	if _security_records.is_empty():
+		lines.append("Security records: none")
+	else:
+		lines.append("Security records:")
+		for record in _security_records:
+			lines.append("%s %s -> %s" % [
+				str(record.get("record_id", "security_record")),
+				str(record.get("label", "Security")),
+				str(record.get("reference_id", "")),
+			])
+	lines.append("Status: placeholders only; no active hidden objective or register action")
+	return "\n".join(lines)
+
+
 func get_summary_text() -> String:
 	if _evidence.is_empty():
 		return "Evidence stored: none"
@@ -85,6 +171,21 @@ func get_summary_text() -> String:
 		])
 
 	return "\n".join(lines)
+
+
+func _get_security_placeholder(placeholder_id: String) -> Dictionary:
+	var normalized_id := placeholder_id.strip_edges()
+	for placeholder in SECURITY_PLACEHOLDERS:
+		if str(placeholder.get("placeholder_id", "")) == normalized_id:
+			return placeholder.duplicate(true)
+	return {}
+
+
+func _has_security_record(placeholder_id: String) -> bool:
+	for record in _security_records:
+		if str(record.get("placeholder_id", "")) == placeholder_id:
+			return true
+	return false
 
 
 func _title_for_node(node: Node) -> String:
