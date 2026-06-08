@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 513 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 514 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
 
 ## Milestone 13: Alpha Hardening
 
@@ -682,25 +682,22 @@ Validation snapshot:
 - Stop 13.6 alpha playtest package records automated guardrails for package docs, build commands, artifact paths, known issues, feedback form, rollback plan, scenario matrix entries, manual package handoff checks, and the concise external playtest script.
 - Stop 13.7 alpha validation sync records automated guardrails for the final alpha-hardening docs, gate snapshot, desktop pack smoke handoff, manual checklist sections, scenario matrix entries, and feedback-triage routing.
 
-## Immediate Next Work After This Planning Slice
+## Current Handoff
 
-The next implementation phase should begin with Milestone 1, not with random art edits.
+Milestones 1 through 13 are implemented, validated, committed, and pushed on `codex/let-it-fly`.
 
-Priority order:
+The next checkpoint is not another automated implementation slice. It is the human external playtest and feedback-triage pass:
 
-1. Stop 1.1: screenshot teardown board.
-2. Stop 1.2: art direction contract.
-3. Stop 1.3: store layout contract.
-4. Stop 1.4: UI direction contract. Done.
-5. Stop 1.5: content target contract. Done.
-6. Stop 1.6: production acceptance checklist. Done.
-7. Milestone 2 store environment production pass.
+1. Run the external script in `15-alpha-playtest-package.md`.
+2. Capture tester feedback with build, platform, session length, blockers, confusing steps, economy feel, customer behavior, backroom/computer notes, menu/settings/save notes, bugs, screenshots/logs, and replay intent.
+3. Add accepted feedback to `13-alpha-bug-list.md` with evidence, priority, target slice, and acceptance criteria.
+4. Start the next implementation slice only after the feedback has a concrete target.
 
-The reason to start with direction contracts is practical: the current screenshots show every surface needs work. Without a locked target, environment, customer, UI, and menu polish will fight each other and produce more intermediate graybox churn.
+Codex can keep the repo mechanically validated, but it cannot mark controller feel, OS window behavior, mouse-capture feel, economy feel, or long-form playtest readability as human-approved.
 
 ## Completion Definition
 
-This phase is complete when the repo can produce an alpha-quality local desktop build with:
+This phase is mechanically complete when the repo can produce an alpha-quality local desktop build with:
 
 - A production-intent starter store scene.
 - A complete first-person day loop.
@@ -714,3 +711,5 @@ This phase is complete when the repo can produce an alpha-quality local desktop 
 - Save/load, settings, pause/main menu, and exported-build smoke validation.
 - Updated automated tests, screenshot artifacts, and manual validation docs.
 - Each completed slice committed and pushed.
+
+Human approval still requires the external playtest/manual window pass described in `15-alpha-playtest-package.md`.

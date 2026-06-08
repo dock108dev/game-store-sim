@@ -32,11 +32,11 @@ Current completion plan: `11-game-completion-plan.md`.
 
 1. Completion planning lock. Done in `11-game-completion-plan.md`.
 2. Production direction and target slice. Done in `12-production-target-contracts.md`.
-3. Store environment production pass.
-4. Interaction and game-feel production pass.
-5. Menu, register, and computer production UI.
-6. Customer production pass.
-7. Product and content pipeline.
+3. Store environment production pass. Done through Milestone 2.
+4. Interaction and game-feel production pass. Done through Milestone 3.
+5. Menu, register, and computer production UI. Done through Milestone 4.
+6. Customer production pass. Done through Milestone 5.
+7. Product and content pipeline. Done through Milestone 6.
 8. Economy, day loop, and progression. Done through Milestone 7.
 9. Backroom operations. Done through Milestone 8.
 10. Store building, decoration, and expansion. Done through Milestone 9.
@@ -218,11 +218,10 @@ These remain future phases unless explicitly selected:
 
 - Theft and shrinkage systems.
 - Returns and exchanges.
-- Final product art beyond the current generated cue-mesh variants.
+- Final production art beyond the current production-intent graybox, generated product variants, visual cue meshes, and alpha readability pass.
 - Stocking fixtures for every expanded starter category beyond the current used-game display rack.
-- Player-facing save/load slot UI.
 - Employees and staff assignment.
 - Larger store expansion.
 - Later expansion depth beyond the current starter expansion baseline, such as art-visible remodels, construction timing, and multi-room shop growth.
 - Complex hidden-thread consequences.
-- Full audio, animation, VFX, and art-production pass.
+- Final audio, animation, VFX, and art-production pass beyond the current placeholder/baseline presentation systems.

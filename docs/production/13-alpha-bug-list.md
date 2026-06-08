@@ -5,7 +5,7 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 513 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, and 33 catalog products.
+- Latest full gate passes with 514 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, and 33 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - Manual controller/window/playtest validation still needs a human pass.
 

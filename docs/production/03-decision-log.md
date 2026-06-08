@@ -98,4 +98,4 @@ Rejected alternatives:
 
 Follow-up risk:
 
-- Direction work can become abstract if it is not quickly converted into production target contracts and scene/UI slices. The next work should begin with Milestone 1 in `11-game-completion-plan.md`.
+- Direction work can become abstract if it is not quickly converted into production target contracts and scene/UI slices. Milestones 1 through 13 in `11-game-completion-plan.md` have now converted the target contracts into a mechanically validated alpha handoff; the next checkpoint is human external playtest and feedback triage.

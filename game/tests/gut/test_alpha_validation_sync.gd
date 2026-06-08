@@ -46,7 +46,7 @@ func test_alpha_validation_snapshot_records_current_gate_outputs() -> void:
 	var bug_list := FileAccess.get_file_as_string(BUG_LIST_PATH)
 
 	for doc in [validation_doc, manual_doc, completion_plan, bug_list]:
-		assert_string_contains(doc, "513 GUT tests")
+		assert_string_contains(doc, "514 GUT tests")
 		assert_string_contains(doc, "476/594")
 		assert_string_contains(doc, "51/51")
 		assert_string_contains(doc, "3 active")
@@ -54,6 +54,25 @@ func test_alpha_validation_snapshot_records_current_gate_outputs() -> void:
 
 	assert_string_contains(validation_doc, "Desktop pack export smoke passed")
 	assert_string_contains(completion_plan, "desktop pack smoke")
+
+
+func test_completion_handoff_points_to_external_playtest_not_finished_milestones() -> void:
+	var completion_plan := FileAccess.get_file_as_string(COMPLETION_PLAN_PATH)
+	var backlog := FileAccess.get_file_as_string(BACKLOG_PATH)
+	var decision_log := FileAccess.get_file_as_string("res://../docs/production/03-decision-log.md")
+
+	assert_string_contains(completion_plan, "## Current Handoff")
+	assert_string_contains(completion_plan, "Milestones 1 through 13 are implemented, validated, committed, and pushed")
+	assert_string_contains(completion_plan, "human external playtest and feedback-triage pass")
+	assert_string_contains(completion_plan, "Human approval still requires the external playtest/manual window pass")
+	assert_false(completion_plan.contains("The next implementation phase should begin with Milestone 1"))
+
+	assert_string_contains(backlog, "Store environment production pass. Done through Milestone 2.")
+	assert_string_contains(backlog, "Product and content pipeline. Done through Milestone 6.")
+	assert_string_contains(backlog, "Alpha hardening. Complete through Stop 13.7")
+	assert_false(backlog.contains("- Player-facing save/load slot UI."))
+	assert_false(backlog.contains("- Full audio, animation, VFX, and art-production pass."))
+	assert_string_contains(decision_log, "Milestones 1 through 13")
 
 
 func test_alpha_manual_checklist_covers_all_alpha_focus_sections() -> void:
