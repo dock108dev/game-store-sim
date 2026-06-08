@@ -2,6 +2,7 @@ extends Node
 class_name StoreSession
 
 const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd")
+const AlphaBalancePolicy := preload("res://scripts/economy/alpha_balance_profile.gd")
 const DailyReportPolicy := preload("res://scripts/economy/daily_report.gd")
 const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
 const ClueSurfaceCatalogPolicy := preload("res://scripts/narrative/clue_surface_catalog.gd")
@@ -14,8 +15,8 @@ const DAY_PHASE_CUSTOMER_HOURS := "customer_hours"
 const DAY_PHASE_CLOSING := "closing"
 const DAY_PHASE_REPORT := "report"
 const DAY_PHASE_TOMORROW_PLANNING := "tomorrow_planning"
-const DAILY_RENT_RESERVE_CENTS := 700
-const DAILY_UTILITIES_RESERVE_CENTS := 175
+const DAILY_RENT_RESERVE_CENTS := AlphaBalancePolicy.DAILY_RENT_RESERVE_CENTS
+const DAILY_UTILITIES_RESERVE_CENTS := AlphaBalancePolicy.DAILY_UTILITIES_RESERVE_CENTS
 const DAILY_PAYROLL_PLACEHOLDER_CENTS := 0
 const DAILY_REPAIRS_PLACEHOLDER_CENTS := 0
 const DAILY_SHRINKAGE_PLACEHOLDER_CENTS := 0
@@ -35,8 +36,8 @@ const SERVICE_BENCH_CATALOG := [
 		"item_name": "Scratched Orbit Disc",
 		"bench_id": "backroom_service_bench",
 		"parts": ["resurfacing_pad", "cleaning_solution", "paper_sleeve"],
-		"price_cents": 499,
-		"cost_cents": 100,
+		"price_cents": AlphaBalancePolicy.DISC_RESURFACING_PRICE_CENTS,
+		"cost_cents": AlphaBalancePolicy.DISC_RESURFACING_COST_CENTS,
 		"turnaround_minutes": 10,
 	},
 	{
@@ -45,8 +46,8 @@ const SERVICE_BENCH_CATALOG := [
 		"item_name": "Dusty Cart",
 		"bench_id": "backroom_service_bench",
 		"parts": ["contact_cleaner", "lint_swab"],
-		"price_cents": 699,
-		"cost_cents": 150,
+		"price_cents": AlphaBalancePolicy.CARTRIDGE_CLEANING_PRICE_CENTS,
+		"cost_cents": AlphaBalancePolicy.CARTRIDGE_CLEANING_COST_CENTS,
 		"turnaround_minutes": 15,
 		"requires_upgrade_id": "upgrade_service_cleaning_tools",
 	},
@@ -56,8 +57,8 @@ const SERVICE_BENCH_CATALOG := [
 		"item_name": "Trade-in Console",
 		"bench_id": "backroom_service_bench",
 		"parts": ["test_cable", "diagnostic_card"],
-		"price_cents": 999,
-		"cost_cents": 250,
+		"price_cents": AlphaBalancePolicy.CONSOLE_TEST_PRICE_CENTS,
+		"cost_cents": AlphaBalancePolicy.CONSOLE_TEST_COST_CENTS,
 		"turnaround_minutes": 20,
 		"placeholder": true,
 	},
@@ -177,49 +178,49 @@ const UPGRADE_CATALOG := [
 		"upgrade_id": "upgrade_fixture_peg_wall",
 		"label": "Accessory Peg Wall",
 		"category": "fixture",
-		"cost_cents": 8000,
+		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_fixture_peg_wall"],
 		"unlocks": "Accessory fixture orders",
 	},
 	{
 		"upgrade_id": "upgrade_category_accessories",
 		"label": "Accessory Category License",
 		"category": "category",
-		"cost_cents": 6000,
+		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_category_accessories"],
 		"unlocks": "Accessory stocking and customer demand",
 	},
 	{
 		"upgrade_id": "upgrade_service_cleaning_tools",
 		"label": "Service Cleaning Tools",
 		"category": "service_tool",
-		"cost_cents": 12000,
+		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_service_cleaning_tools"],
 		"unlocks": "Cartridge cleaning and controller testing",
 	},
 	{
 		"upgrade_id": "upgrade_computer_analytics",
 		"label": "Computer Analytics",
 		"category": "computer_tool",
-		"cost_cents": 9000,
+		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_computer_analytics"],
 		"unlocks": "Advanced demand and margin views",
 	},
 	{
 		"upgrade_id": "upgrade_signage_staff_picks",
 		"label": "Staff Picks Signage",
 		"category": "signage",
-		"cost_cents": 5000,
+		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_signage_staff_picks"],
 		"unlocks": "Featured shelf marketing",
 	},
 	{
 		"upgrade_id": "upgrade_backroom_storage",
 		"label": "Backroom Storage Bay",
 		"category": "storage",
-		"cost_cents": 10000,
+		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_backroom_storage"],
 		"unlocks": "More backstock and receiving capacity",
 	},
 	{
 		"upgrade_id": "upgrade_store_expansion",
 		"label": "Starter Store Expansion",
 		"category": "expansion",
-		"cost_cents": 30000,
+		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_store_expansion"],
 		"requires_upgrade_id": "upgrade_backroom_storage",
 		"unlocks": "Larger sales floor footprint",
 	},
@@ -301,7 +302,7 @@ const ONBOARDING_STEPS := [
 
 @export var day_number: int = 1
 @export var day_phase: String = DAY_PHASE_SETUP
-@export var starting_cash_cents: int = 50000
+@export var starting_cash_cents: int = AlphaBalancePolicy.STARTING_CASH_CENTS
 @export var ledger_path: NodePath
 @export var inventory_root_path: NodePath
 @export var receiving_box_path: NodePath

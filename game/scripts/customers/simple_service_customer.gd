@@ -1,6 +1,8 @@
 extends StaticBody3D
 class_name SimpleServiceCustomer
 
+const AlphaBalancePolicy := preload("res://scripts/economy/alpha_balance_profile.gd")
+
 const STATE_WAITING_FOR_SERVICE := "waiting_for_service"
 const STATE_SERVICE_COMPLETE := "service_complete"
 
@@ -9,8 +11,8 @@ const STATE_SERVICE_COMPLETE := "service_complete"
 @export var service_id: String = "disc_resurfacing"
 @export var service_name: String = "Disc Resurfacing"
 @export var item_name: String = "Scratched Orbit Disc"
-@export var price_cents: int = 499
-@export var cost_cents: int = 100
+@export var price_cents: int = AlphaBalancePolicy.DISC_RESURFACING_PRICE_CENTS
+@export var cost_cents: int = AlphaBalancePolicy.DISC_RESURFACING_COST_CENTS
 @export var turnaround_minutes: int = 10
 
 var state: String = STATE_WAITING_FOR_SERVICE

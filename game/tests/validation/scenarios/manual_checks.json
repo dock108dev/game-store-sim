@@ -593,6 +593,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "alpha_balance_playthrough_feel",
+      "name": "Alpha balance pass feels recoverable across prices, buyer tolerance, overhead, supplier orders, services, releases, and upgrades",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify tuned targets and accounting; human review must confirm a fresh multi-day run is neither trivially profitable nor punishing, and that $10 overhead, $30 starter lots, $5.99 service work, launch allocations, and early upgrade costs feel understandable in play.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_inventory_summary_readability",
       "name": "Backroom inventory summary is readable and matches visible active inventory",
       "status": "manual",

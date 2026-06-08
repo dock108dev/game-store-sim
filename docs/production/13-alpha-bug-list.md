@@ -5,7 +5,7 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 501 GUT tests, UI scenario automation coverage 468/582, production script mapping coverage 50/50, 3 active validation tools, and 33 catalog products.
+- Latest full gate passes with 505 GUT tests, UI scenario automation coverage 472/587, production script mapping coverage 51/51, 3 active validation tools, and 33 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - Manual controller/window/playtest validation still needs a human pass.
 
@@ -30,7 +30,7 @@ Current gate state:
 | AH-008 | P2 | Screenshot coverage quality | `release_calendar.png`, `release_allocation.png`, `launch_day.png`, `fixture_invalid_ghost.png` | Some automated screenshots prove nonblank rendering but are not composition-specific enough to catch all release/launch/invalid-placement readability issues. | Stop 13.3 regression tests | Screenshot scenarios frame their named subject clearly enough that human review can distinguish the intended state. |
 | AH-009 | P2 | Release packaging | `scripts/verify_desktop_export.sh`, `game/export_presets.cfg` | Pack smoke is automated, but binary app export and start-save-quit-relaunch-continue still depend on local Godot export templates/signing and remain manual. | Stop 13.6 external playtest package | Playtest package instructions either produce a runnable app or explicitly list the local template/signing blocker with rollback path. |
 | AH-010 | P2 | Manual validation debt | `07-current-manual-playtest.md` | The checklist is current but very large; external playtest needs a shorter script that exercises the alpha path without burying testers in internal validation details. | Stop 13.6 external playtest package | External playtest script covers fresh start, receiving, pricing, stocking, sale, trade-in, service/preorder, backroom, save/load, and feedback in one readable runbook. |
-| AH-011 | P2 | Economy/balance confidence | `07-current-manual-playtest.md`, StoreSession coverage | Automated tests protect accounting behavior, but multi-day prices, margins, rent/bills, delivery timing, launch allocation, and upgrade costs have not had a dedicated balance pass. | Stop 13.5 balance pass | Multi-day playtest notes show cash pressure, buyer tolerance, services, supplier ordering, launches, and upgrades are understandable and not trivially broken. |
+| AH-011 | P2 | Economy/balance confidence | `07-current-manual-playtest.md`, StoreSession coverage | Automated balance targets are now centralized and covered, but multi-day human feel still needs playtest confirmation before external release. | Stop 13.5 balance pass | Automated balance profile passes; manual multi-day playtest notes show cash pressure, buyer tolerance, services, supplier ordering, launches, and upgrades are understandable and not trivially broken. |
 
 ## Not Currently Blocked
 
@@ -44,5 +44,5 @@ Current gate state:
 - Stop 13.3 test expansion: done; regression coverage now protects rotated fixture placement bounds/history, visible buyer queue spacing against special register customers, screenshot scenario coverage for AH-001 through AH-006 and AH-008, and future bug fixes that change core loop behavior.
 - Stop 13.4A scene-readability content pass: done; addresses the first visual/UI composition layer for AH-001 through AH-007 with wall detail, sign framing, customer spacing, rack profile cues, placed-fixture screenshot framing, and backroom first-view controls.
 - Stop 13.4B content/copy pass: done; continues AH-001, AH-002, AH-003, AH-006, and AH-007 with customer text, dialogue context, supplier orders, release planning, report copy, register return-scope copy, and backroom action-label polish.
-- Stop 13.5 balance pass: address AH-011 with multi-day economy tuning and documented balance targets.
+- Stop 13.5 balance pass: done; addresses AH-011 with centralized alpha balance targets, tuned economy values, automated coverage, and manual multi-day balance checks.
 - Stop 13.6 external playtest package: address AH-009 and AH-010 with build packaging, known issues, playtest script, feedback form, and rollback plan.

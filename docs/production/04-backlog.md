@@ -43,7 +43,7 @@ Current completion plan: `11-game-completion-plan.md`.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
-14. Alpha hardening. Current phase; content/copy pass done through Stop 13.4B.
+14. Alpha hardening. Current phase; balance pass done through Stop 13.5.
 
 ## Completed Polish Scope
 

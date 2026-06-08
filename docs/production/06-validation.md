@@ -46,9 +46,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 501 GUT tests.
-- UI scenario automation coverage is 468/582, above the 80% threshold.
-- Production script mapping coverage is 50/50.
+- `scripts/validate_godot.sh` passes with 505 GUT tests.
+- UI scenario automation coverage is 472/587, above the 80% threshold.
+- Production script mapping coverage is 51/51.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
@@ -65,6 +65,7 @@ Current production validation baseline:
 - Upgrade path coverage verifies fixture, category, service-tool, computer-tool, signage, storage, and starter-expansion goals; purchase rules; the storage prerequisite for expansion; backroom summary text; and save/load persistence.
 - Owner onboarding coverage verifies the receiving, pricing, stocking, checkout, trade-in, backroom computer, ordering, and closing checklist; state-derived progress; and backroom dashboard presentation.
 - Economy progression sync verifies cross-flow day phase, close pressure, next-day setup, decision feedback, goals, and manual playtest coverage through Stop 7.7.
+- Alpha balance coverage verifies the Stop 13.5 tuning profile for $500 starting cash, $10 daily overhead, $30 starter supplier lots, one-day delivery, $5.99 disc resurfacing with $1.25 parts cost, pricing range targets, buyer tolerance targets, and more reachable early upgrade costs.
 - Receiving workflow coverage verifies supplier delivery creates pending receiving batches with delivery point, sealed/opened box state, invoice check, expected/received count variance, sorting destination, completed status, backroom controls, and save/load persistence.
 - Storage workflow coverage verifies receiving-to-backstock movement, backstock retrieval, shelf capacity, overflow summary, Store/Pull backroom controls, movement history, and save/load persistence.
 - Service bench workflow coverage verifies service capabilities, repair tickets, parts, queued/in-progress/ready/picked-up state, Start Job/Work Job backroom controls, register pickup integration, and save/load persistence.
@@ -243,7 +244,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/customer_polish.json`: customer role prop, silhouette, and register-area spacing polish checks.
 - `scenarios/store_visual_polish.json`: store material contrast, lighting layers, fictional signage, and nonblocking retail clutter checks.
 - `scenarios/product_fixture_polish.json`: used-game case cue, product visual variant rules, generated cue meshes, condition/authenticity cues, shelf/price tags, rack category, carry stack, and receiving intake polish checks.
-- `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
+- `scenarios/economy.json`: alpha balance profile targets, category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
 - `scenarios/supplier_ordering.json`: supplier lot data, backroom supplier ordering, cash reservation, due-day delivery, receiving-box delivery, pending receiving batch state, box opening, invoice check, sorting completion, panel controls, and persistence coverage.

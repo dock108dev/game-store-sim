@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name PricingPanel
 
 const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+const AlphaBalancePolicy := preload("res://scripts/economy/alpha_balance_profile.gd")
 
 @export var price_step_cents: int = 100
 @export var min_price_cents: int = 99
@@ -248,19 +249,14 @@ func _get_suggested_low_cents(product: ProductDefinition) -> int:
 	if product == null:
 		return 0
 
-	return int(round(product.market_value_cents * 0.85))
+	return AlphaBalancePolicy.get_price_range_low_cents(product.market_value_cents)
 
 
 func _get_suggested_high_cents(product: ProductDefinition) -> int:
 	if product == null:
 		return 0
 
-	var demand_multiplier := 1.05
-	if product.demand_tier == "high":
-		demand_multiplier = 1.10
-	elif product.demand_tier == "low":
-		demand_multiplier = 1.00
-	return int(round(product.market_value_cents * demand_multiplier))
+	return AlphaBalancePolicy.get_price_range_high_cents(product.market_value_cents, product.demand_tier)
 
 
 func _get_price_outcome_warning(product: ProductDefinition, cost_basis_cents: int) -> String:

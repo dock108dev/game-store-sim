@@ -63,18 +63,18 @@ func test_store_session_applies_daily_cash_pressure_once_on_close() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)
 
-	assert_eq(session.get_daily_cash_pressure_cents(), 875)
+	assert_eq(session.get_daily_cash_pressure_cents(), 1000)
 	session.end_day()
 
-	assert_eq(session.get_cash_cents(), 49125)
-	assert_eq(session.get_operating_expenses_total_cents(), 875)
-	assert_eq(session.get_operating_expenses_total_cents(1), 875)
+	assert_eq(session.get_cash_cents(), 49000)
+	assert_eq(session.get_operating_expenses_total_cents(), 1000)
+	assert_eq(session.get_operating_expenses_total_cents(1), 1000)
 	assert_eq(session.get_operating_expenses().size(), 2)
 
 	session.end_day()
 
-	assert_eq(session.get_cash_cents(), 49125)
-	assert_eq(session.get_operating_expenses_total_cents(), 875)
+	assert_eq(session.get_cash_cents(), 49000)
+	assert_eq(session.get_operating_expenses_total_cents(), 1000)
 
 
 func test_store_session_summarizes_cash_pressure_and_reserved_obligations() -> void:
@@ -87,14 +87,14 @@ func test_store_session_summarizes_cash_pressure_and_reserved_obligations() -> v
 	var summary := session.get_cash_pressure_summary_text()
 
 	assert_string_contains(summary, "Cash pressure:")
-	assert_string_contains(summary, "Daily overhead due at close: $8.75")
-	assert_string_contains(summary, "Rent reserve: $7.00")
-	assert_string_contains(summary, "Utilities: $1.75")
+	assert_string_contains(summary, "Daily overhead due at close: $10.00")
+	assert_string_contains(summary, "Rent reserve: $8.00")
+	assert_string_contains(summary, "Utilities: $2.00")
 	assert_string_contains(summary, "Payroll placeholder: $0.00")
 	assert_string_contains(summary, "Repairs placeholder: $0.00")
 	assert_string_contains(summary, "Shrinkage placeholder: $0.00")
 	assert_string_contains(summary, "Supplier terms: current starter lots are prepaid")
-	assert_string_contains(summary, "Reserved obligations: $184.00")
+	assert_string_contains(summary, "Reserved obligations: $187.00")
 
 
 func test_store_session_records_reputation_events_for_core_pressure_sources() -> void:
@@ -147,12 +147,12 @@ func test_store_session_lists_upgrade_path_baseline() -> void:
 	assert_eq(catalog.size(), 7)
 	assert_eq(available.size(), 6)
 	assert_false(session.can_purchase_upgrade("upgrade_store_expansion"))
-	assert_string_contains(summary, "Accessory Peg Wall $80.00 (fixture)")
-	assert_string_contains(summary, "Accessory Category License $60.00 (category)")
-	assert_string_contains(summary, "Service Cleaning Tools $120.00 (service_tool)")
-	assert_string_contains(summary, "Computer Analytics $90.00 (computer_tool)")
-	assert_string_contains(summary, "Staff Picks Signage $50.00 (signage)")
-	assert_string_contains(summary, "Backroom Storage Bay $100.00 (storage)")
+	assert_string_contains(summary, "Accessory Peg Wall $75.00 (fixture)")
+	assert_string_contains(summary, "Accessory Category License $50.00 (category)")
+	assert_string_contains(summary, "Service Cleaning Tools $90.00 (service_tool)")
+	assert_string_contains(summary, "Computer Analytics $75.00 (computer_tool)")
+	assert_string_contains(summary, "Staff Picks Signage $45.00 (signage)")
+	assert_string_contains(summary, "Backroom Storage Bay $90.00 (storage)")
 	assert_string_contains(summary, "Locked: Starter Store Expansion")
 
 
@@ -168,9 +168,9 @@ func test_store_session_purchases_upgrades_and_unlocks_expansion_path() -> void:
 	assert_true(session.has_upgrade("upgrade_signage_staff_picks"))
 	assert_true(session.has_upgrade("upgrade_backroom_storage"))
 	assert_true(session.can_purchase_upgrade("upgrade_store_expansion"))
-	assert_eq(session.get_cash_cents(), 35000)
+	assert_eq(session.get_cash_cents(), 36500)
 	assert_string_contains(session.get_upgrade_summary_text(), "Purchased: Staff Picks Signage, Backroom Storage Bay")
-	assert_string_contains(session.get_upgrade_summary_text(), "Starter Store Expansion $300.00")
+	assert_string_contains(session.get_upgrade_summary_text(), "Starter Store Expansion $260.00")
 
 
 func test_store_session_purchases_store_expansion_baseline() -> void:
@@ -185,7 +185,7 @@ func test_store_session_purchases_store_expansion_baseline() -> void:
 
 	assert_eq(expansion.get("upgrade_id"), "upgrade_store_expansion")
 	assert_true(session.has_store_expansion())
-	assert_eq(session.get_cash_cents(), 10000)
+	assert_eq(session.get_cash_cents(), 15000)
 	assert_eq(session.get_storage_capacity(), 18)
 	assert_string_contains(session.get_upgrade_summary_text(), "Store expansion: expanded footprint")
 	assert_string_contains(session.get_storage_workflow_summary_text(), "Capacity: 18 cases (store expansion)")
@@ -389,16 +389,16 @@ func test_store_session_tracks_service_revenue_cost_and_profit() -> void:
 	session.apply_service(transaction)
 
 	assert_eq(session.get_service_count(), 1)
-	assert_eq(session.get_total_service_revenue_cents(), 499)
-	assert_eq(session.get_total_service_cost_cents(), 100)
-	assert_eq(session.get_total_service_profit_cents(), 399)
-	assert_eq(session.get_total_revenue_cents(), 499)
-	assert_eq(session.get_total_cost_cents(), 100)
-	assert_eq(session.get_total_profit_cents(), 399)
-	assert_eq(session.get_cash_cents(), 50499)
+	assert_eq(session.get_total_service_revenue_cents(), 599)
+	assert_eq(session.get_total_service_cost_cents(), 125)
+	assert_eq(session.get_total_service_profit_cents(), 474)
+	assert_eq(session.get_total_revenue_cents(), 599)
+	assert_eq(session.get_total_cost_cents(), 125)
+	assert_eq(session.get_total_profit_cents(), 474)
+	assert_eq(session.get_cash_cents(), 50599)
 	assert_string_contains(session.get_summary_text(), "Services: 1")
-	assert_string_contains(session.get_summary_text(), "Services revenue: $4.99")
-	assert_string_contains(session.get_summary_text(), "Services profit: $3.99")
+	assert_string_contains(session.get_summary_text(), "Services revenue: $5.99")
+	assert_string_contains(session.get_summary_text(), "Services profit: $4.74")
 
 
 func test_store_session_runs_service_bench_ticket_to_register_pickup() -> void:
@@ -460,9 +460,9 @@ func test_store_session_runs_management_desk_review_and_upgrade_ordering() -> vo
 	assert_string_contains(summary, "Preorder planning - pending")
 	assert_string_contains(summary, "Upgrade ordering - pending")
 	assert_string_contains(summary, "Supplier messages: review supplier notes")
-	assert_string_contains(summary, "Bills: due at close $8.75, reserved obligations $59.00")
+	assert_string_contains(summary, "Bills: due at close $10.00, reserved obligations $62.00")
 	assert_string_contains(summary, "Preorder planning: 0 deposits, 1 allocations")
-	assert_string_contains(summary, "Upgrade ordering: next Accessory Peg Wall $80.00")
+	assert_string_contains(summary, "Upgrade ordering: next Accessory Peg Wall $75.00")
 
 	var first_review := session.review_management_task()
 
@@ -493,7 +493,7 @@ func test_store_session_runs_management_desk_review_and_upgrade_ordering() -> vo
 	assert_eq(purchase.get("desk_id"), "backroom_management_desk")
 	assert_eq(purchase.get("order_status"), "ordered")
 	assert_true(session.has_upgrade("upgrade_computer_analytics"))
-	assert_eq(session.get_cash_cents(), 35100)
+	assert_eq(session.get_cash_cents(), 36300)
 	assert_string_contains(session.get_management_desk_summary_text(), "computer analytics purchased")
 
 
@@ -695,7 +695,7 @@ func test_store_session_formats_service_recent_activity() -> void:
 
 	assert_string_contains(
 		session.get_recent_activity_text(),
-		"Service Disc Resurfacing for Scratched Orbit Disc $4.99 profit $3.99"
+		"Service Disc Resurfacing for Scratched Orbit Disc $5.99 profit $4.74"
 	)
 
 
@@ -786,9 +786,9 @@ func test_store_session_formats_daily_report_after_close() -> void:
 	assert_string_contains(session.get_daily_report_text(), "Daily report day 1:")
 	assert_string_contains(session.get_daily_report_text(), "Phase: Report")
 	assert_string_contains(session.get_daily_report_text(), "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
-	assert_string_contains(session.get_daily_report_text(), "closing $513.24")
+	assert_string_contains(session.get_daily_report_text(), "closing $511.99")
 	assert_string_contains(session.get_daily_report_text(), "gross profit $12.99")
-	assert_string_contains(session.get_daily_report_text(), "Operating pressure: expenses $8.75")
+	assert_string_contains(session.get_daily_report_text(), "Operating pressure: expenses $10.00")
 
 
 func test_store_session_summarizes_active_inventory_items() -> void:
@@ -890,10 +890,10 @@ func test_store_session_lists_available_supplier_lots() -> void:
 	assert_eq(lots[0].get("lot_id"), "supplier_lot_used_games_001")
 	assert_true(session.can_order_supplier_lot("supplier_lot_used_games_001"))
 	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving orders:")
-	assert_string_contains(session.get_supplier_order_summary_text(), "Order Used Game Starter Lot $27.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Order Used Game Starter Lot $30.00")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Category: Used games")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Cart: 1 lot / 3 items")
-	assert_string_contains(session.get_supplier_order_summary_text(), "Cost: $27.00 reserved on order")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Cost: $30.00 reserved on order")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Delivery: due day 2 (1 day)")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Storage: Receiving box intake")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving: Delivered as physical cases")
@@ -913,7 +913,7 @@ func test_store_session_formats_supplier_order_ui_details() -> void:
 	assert_string_contains(str(order.get("receiving_expectation")), "physical cases in the receiving box")
 	assert_string_contains(summary, "Pending receiving:")
 	assert_string_contains(summary, "Delivery state: pending delivery")
-	assert_string_contains(summary, "Cost reserved: $27.00")
+	assert_string_contains(summary, "Cost reserved: $30.00")
 	assert_string_contains(summary, "Storage needed: Receiving box intake")
 	assert_string_contains(summary, "Receiving expectation: Delivered as physical cases")
 
@@ -1021,8 +1021,8 @@ func test_store_session_resolves_launch_day_preorders_and_queue_demand() -> void
 	assert_eq(day_three.get("day_number"), 3)
 	assert_eq(day_three.get("launch_event_count"), 1)
 	assert_eq(session.get_launch_event_count(), 1)
-	assert_eq(session.get_cash_cents(), 50447)
-	assert_eq(session.get_operating_expenses_total_cents(), 1750)
+	assert_eq(session.get_cash_cents(), 50197)
+	assert_eq(session.get_operating_expenses_total_cents(), 2000)
 	assert_eq(session.get_total_launch_revenue_cents(), 14497)
 	assert_eq(session.get_total_launch_profit_cents(), 5397)
 	assert_eq(session.get_reputation_score(), 100)
@@ -1069,8 +1069,8 @@ func test_store_session_launch_day_shortage_reduces_reputation() -> void:
 	assert_eq(session.get_reputation_score(), 90)
 	assert_eq(session.get_reputation_events().size(), 1)
 	assert_string_contains(session.get_reputation_summary_text(), "Missed launch demand for Neon Skyline -10")
-	assert_eq(session.get_cash_cents(), 50049)
-	assert_eq(session.get_operating_expenses_total_cents(), 1750)
+	assert_eq(session.get_cash_cents(), 49799)
+	assert_eq(session.get_operating_expenses_total_cents(), 2000)
 	assert_string_contains(session.get_launch_summary_text(), "queue 0/2, missed 2")
 
 
@@ -1100,13 +1100,13 @@ func test_store_session_orders_supplier_lot_and_reserves_cash() -> void:
 	assert_eq(order.get("ordered_day"), 1)
 	assert_eq(order.get("due_day"), 2)
 	assert_eq(order.get("item_count"), 3)
-	assert_eq(order.get("cost_cents"), 2700)
-	assert_eq(session.get_cash_cents(), 47300)
+	assert_eq(order.get("cost_cents"), 3000)
+	assert_eq(session.get_cash_cents(), 47000)
 	assert_eq(session.get_pending_supplier_orders().size(), 1)
 	assert_string_contains(session.get_supplier_order_summary_text(), "Pending receiving:")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot due to receiving day 2 (3 items)")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Delivery state: pending delivery")
-	assert_string_contains(session.get_supplier_order_summary_text(), "Cost reserved: $27.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Cost reserved: $30.00")
 
 
 func test_store_session_rejects_supplier_order_without_cash() -> void:

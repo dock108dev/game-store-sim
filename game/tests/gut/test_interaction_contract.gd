@@ -96,10 +96,10 @@ func test_register_completes_waiting_service_customer() -> void:
 	assert_string_contains(message, "Scratched Orbit Disc")
 	assert_eq(ledger.get_service_count(), 1)
 	assert_eq(session.get_service_count(), 1)
-	assert_eq(session.get_total_service_revenue_cents(), 499)
-	assert_eq(session.get_total_service_cost_cents(), 100)
-	assert_eq(session.get_total_service_profit_cents(), 399)
-	assert_eq(session.get_cash_cents(), 50499)
+	assert_eq(session.get_total_service_revenue_cents(), 599)
+	assert_eq(session.get_total_service_cost_cents(), 125)
+	assert_eq(session.get_total_service_profit_cents(), 474)
+	assert_eq(session.get_cash_cents(), 50599)
 	assert_false(customer.call("is_waiting_for_service"))
 
 

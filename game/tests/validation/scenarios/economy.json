@@ -1,6 +1,34 @@
 {
   "ui_scenarios": [
     {
+      "id": "alpha_balance_profile_day_one_targets",
+      "name": "Alpha balance profile exposes starting cash, daily overhead, starter supplier lot, and delivery targets",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_balance_profile.gd::test_alpha_balance_profile_exposes_playable_day_one_targets"
+    },
+    {
+      "id": "alpha_balance_profile_service_pricing_targets",
+      "name": "Alpha balance profile exposes service margin and pricing range targets",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_balance_profile.gd::test_alpha_balance_profile_exposes_service_and_pricing_targets"
+    },
+    {
+      "id": "alpha_balance_profile_upgrade_targets",
+      "name": "Alpha balance profile tunes upgrade costs for early alpha progression",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_balance_profile.gd::test_alpha_balance_profile_tunes_upgrade_costs_for_alpha_progression"
+    },
+    {
+      "id": "alpha_balance_profile_summary",
+      "name": "Alpha balance profile summarizes player-facing balance targets",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_alpha_balance_profile.gd::test_alpha_balance_profile_summary_names_player_facing_targets"
+    },
+    {
       "id": "category_demand_defaults",
       "name": "Economy has default demand multipliers per category",
       "status": "automated",

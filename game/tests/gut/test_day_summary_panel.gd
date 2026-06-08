@@ -49,7 +49,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.release_calendar_label.text, "Collectors and regulars")
 	assert_string_contains(_panel.release_calendar_label.text, "Plan: In 2 days: Street-racing sequel")
 	assert_string_contains(_panel.release_calendar_label.text, "Release allocations: none committed")
-	assert_string_contains(_panel.supplier_order_label.text, "Order Used Game Starter Lot $27.00")
+	assert_string_contains(_panel.supplier_order_label.text, "Order Used Game Starter Lot $30.00")
 	assert_string_contains(_panel.supplier_order_label.text, "Category: Used games")
 	assert_string_contains(_panel.supplier_order_label.text, "Supplier note: North Dock sends a mixed crate")
 	assert_string_contains(_panel.supplier_order_label.text, "Cart: 1 lot / 3 items")
@@ -186,7 +186,7 @@ func test_day_summary_panel_switches_backroom_tab_visibility() -> void:
 	assert_eq(_panel.activity_header.text, "Services")
 	assert_true(_panel.services_label.visible)
 	assert_string_contains(_panel.services_label.text, "Services: 1 completed")
-	assert_string_contains(_panel.services_label.text, "Revenue: $4.99")
+	assert_string_contains(_panel.services_label.text, "Revenue: $5.99")
 	assert_string_contains(_panel.services_label.text, "Service bench:")
 	assert_false(_panel.inventory_label.visible)
 
@@ -326,7 +326,7 @@ func test_day_summary_panel_runs_management_desk_workflow() -> void:
 	assert_false(_panel.review_desk_button.disabled)
 	assert_true(_panel.buy_management_upgrade())
 	assert_eq(_panel.status_label.text, "Ordered Computer Analytics upgrade.")
-	assert_eq(_session.get_cash_cents(), 41000)
+	assert_eq(_session.get_cash_cents(), 42500)
 	assert_true(_session.has_upgrade("upgrade_computer_analytics"))
 	assert_string_contains(_panel.management_desk_label.text, "computer analytics purchased")
 	assert_string_contains(_panel.settings_label.text, "Purchased: Computer Analytics")
@@ -581,12 +581,12 @@ func test_day_summary_panel_orders_supplier_lot_from_backroom_computer() -> void
 
 	assert_true(_panel.order_used_game_lot())
 
-	assert_eq(_session.get_cash_cents(), 47300)
-	assert_string_contains(_panel.summary_label.text, "Cash: $473.00")
+	assert_eq(_session.get_cash_cents(), 47000)
+	assert_string_contains(_panel.summary_label.text, "Cash: $470.00")
 	assert_string_contains(_panel.supplier_order_label.text, "Pending receiving:")
 	assert_string_contains(_panel.supplier_order_label.text, "Used Game Starter Lot due to receiving day 2 (3 items)")
 	assert_string_contains(_panel.supplier_order_label.text, "Delivery state: pending delivery")
-	assert_string_contains(_panel.supplier_order_label.text, "Cost reserved: $27.00")
+	assert_string_contains(_panel.supplier_order_label.text, "Cost reserved: $30.00")
 	assert_eq(_panel.status_label.text, "Ordered Used Game Starter Lot to receiving.")
 
 

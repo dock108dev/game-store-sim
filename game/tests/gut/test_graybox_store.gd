@@ -719,8 +719,8 @@ func test_service_customer_exists_with_disc_resurfacing_request() -> void:
 	assert_true(customer.call("is_waiting_for_service"))
 	assert_eq(customer.get("service_name"), "Disc Resurfacing")
 	assert_eq(customer.get("item_name"), "Scratched Orbit Disc")
-	assert_eq(customer.call("get_price_cents"), 499)
-	assert_eq(customer.call("get_cost_cents"), 100)
+	assert_eq(customer.call("get_price_cents"), 599)
+	assert_eq(customer.call("get_cost_cents"), 125)
 
 
 func test_transaction_ledger_exists() -> void:

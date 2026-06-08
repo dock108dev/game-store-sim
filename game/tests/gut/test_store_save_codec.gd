@@ -41,7 +41,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq(data.get("schema_id"), StoreSaveCodec.SAVE_SCHEMA_ID)
 	assert_eq(data.get("day_number"), 1)
 	assert_eq(data.get("day_phase"), StoreSession.DAY_PHASE_CUSTOMER_HOURS)
-	assert_eq(data.get("cash_cents"), 25299)
+	assert_eq(data.get("cash_cents"), 25499)
 	assert_eq((data.get("transactions") as Array).size(), 2)
 	assert_eq((data.get("receiving_batches") as Array).size(), 0)
 	assert_eq((data.get("storage_movements") as Array).size(), 0)
@@ -193,7 +193,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"order_id": "supplier_order_001",
 				"lot_id": "supplier_lot_used_games_001",
 				"display_name": "Used Game Starter Lot",
-				"cost_cents": 2700,
+				"cost_cents": 3000,
 				"ordered_day": 3,
 				"due_day": 4,
 				"item_count": 3,

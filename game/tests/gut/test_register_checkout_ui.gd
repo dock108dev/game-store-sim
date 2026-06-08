@@ -79,9 +79,9 @@ func test_register_checkout_ui_builds_service_line_and_profit() -> void:
 	assert_eq(state.get("transaction_type"), "service")
 	assert_string_contains(str(state.get("service_line")), "Disc Resurfacing")
 	assert_string_contains(str(state.get("service_line")), "Scratched Orbit Disc")
-	assert_eq(state.get("subtotal_cents"), 499)
-	assert_eq(lines[0].get("service_cost_cents"), 100)
-	assert_eq(lines[0].get("profit_cents"), 399)
+	assert_eq(state.get("subtotal_cents"), 599)
+	assert_eq(lines[0].get("service_cost_cents"), 125)
+	assert_eq(lines[0].get("profit_cents"), 474)
 	assert_string_contains(str(state.get("sale_confirmation")), "Service revenue")
 
 

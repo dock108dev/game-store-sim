@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 501 GUT tests, UI scenario automation coverage at 468/582, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 505 GUT tests, UI scenario automation coverage at 472/587, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -62,6 +62,7 @@ Current automated baseline:
 - Alpha regression-test expansion is implemented through Stop 13.3; automated checks now protect rotated fixture placement bounds, visible buyer-queue spacing, and screenshot scenario coverage for the current alpha P1/P2 bug subjects.
 - Alpha scene-readability content pass is implemented as Stop 13.4A; manual QA should review the refreshed screenshot set for store read, sign cropping, special-customer separation, placed-rack framing, and backroom computer first-view controls.
 - Alpha content/copy pass is implemented as Stop 13.4B; manual QA should review customer role text, dialogue staff context, supplier order notes, release planning, daily report wording, register return-scope copy, and backroom action labels before treating the alpha copy pass as human-approved.
+- Alpha economy balance pass is implemented as Stop 13.5; manual QA should review the tuned $500 starting cash, $10 daily overhead, $30 one-day starter supplier lot, $5.99 disc resurfacing service, buyer tolerance/pricing range, launch allocation, and early upgrade-cost feel before treating balance as human-approved.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -590,6 +591,17 @@ Run these first when manually checking the completed Stop 13.4B content/copy pas
 - Confirm daily report sections read as an end-of-day owner readout, with cash drawer, counter work, margin, operating pressure, launch activity, reputation, bills, and tomorrow plan easy to scan.
 - Confirm register return-scope copy is clear and does not imply returns are fully implemented.
 - Confirm `Order`, `Invoice`, `Category`, `Start Job`, `Work Job`, `Upgrade`, and related backroom controls are readable in the actual window and do not overflow their buttons.
+
+## Alpha Balance Focus
+
+Run these first when manually checking the completed Stop 13.5 balance pass:
+
+- Start from a fresh game and confirm the opening $500 cash, $10 daily overhead, and $30 starter supplier lot make the first day feel pressured but recoverable.
+- Price the starter used games within and above the suggested range; confirm buyers still buy fair copies and reject overpriced copies in a way that matches the displayed demand guidance.
+- Order the starter supplier lot, close the day, and confirm the one-day delivery, receiving work, and cash movement are understandable.
+- Complete the $5.99 disc resurfacing service and confirm the register, report, recent activity, and service bench readouts show revenue, $1.25 parts cost, and $4.74 profit clearly.
+- Reserve a Neon Skyline launch allocation and play into launch day; confirm allocation cost, preorder/queue fulfillment, missed-demand reputation changes, and launch cash are understandable.
+- Buy early upgrades such as Staff Picks Signage, Computer Analytics, and Backroom Storage Bay; confirm the lower alpha costs feel like reachable goals without making progression trivial.
 
 ## Automated Screenshot Artifacts
 

@@ -1,6 +1,8 @@
 extends Resource
 class_name CategoryDemand
 
+const AlphaBalancePolicy := preload("res://scripts/economy/alpha_balance_profile.gd")
+
 const CATEGORY_DEMAND := {
 	"used_game": {
 		"label": "Used games",
@@ -17,9 +19,9 @@ const CATEGORY_DEMAND := {
 }
 
 const TIER_MULTIPLIERS := {
-	"high": 1.15,
-	"medium": 1.05,
-	"low": 0.95,
+	"high": AlphaBalancePolicy.BUYER_TOLERANCE_HIGH_DEMAND,
+	"medium": AlphaBalancePolicy.BUYER_TOLERANCE_MEDIUM_DEMAND,
+	"low": AlphaBalancePolicy.BUYER_TOLERANCE_LOW_DEMAND,
 }
 const RARITY_MULTIPLIERS := {
 	"common": 1.0,
