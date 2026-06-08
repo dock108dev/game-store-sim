@@ -121,6 +121,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/customer_polish.json`: customer role prop, silhouette, and register-area spacing polish checks.
 - `scenarios/store_visual_polish.json`: store material contrast, lighting layers, fictional signage, and nonblocking retail clutter checks.
+- `scenarios/product_fixture_polish.json`: used-game case cue, rack category, carry stack, and receiving intake polish checks.
 - `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.

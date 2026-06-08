@@ -31,8 +31,8 @@ Current implementation plan: `10-polish-execution-plan.md`.
 3. Backroom computer/menu information architecture pass. Done.
 4. Customer readability and role silhouette pass. Done.
 5. Store lighting, materials, signage, and retail clutter pass. Done.
-6. Product and fixture presentation pass. Next implementation target.
-7. Validation/manual QA tightening for the full polish pass.
+6. Product and fixture presentation pass. Done.
+7. Validation/manual QA tightening for the full polish pass. Next implementation target.
 
 ## Backroom Polish
 
@@ -70,10 +70,12 @@ Current implementation plan: `10-polish-execution-plan.md`.
 
 ## Product And Fixture Polish
 
-- Make used-game cases, shelf slots, display racks, receiving boxes, and carried items more intentional.
-- Keep products compact enough for rack, carry stack, and customer carry.
-- Add clearer shelf-slot/category affordances.
-- Make fixture ghost preview and placed fixture states visually distinct.
+- Done: made used-game cases more intentional with spine, platform, and price-sticker cues.
+- Done: kept products compact enough for rack, carry stack, and customer carry.
+- Done: added clearer display-rack category header and slot rails.
+- Done: added receiving-box intake lanes and label to make intake placement read as organized physical inventory.
+- Done: tuned carried item stack fanning so multiple held cases stay visible without blocking the center view.
+- Remaining polish risk: fixture ghost/placed fixture state can still get a dedicated art pass later, but the current automated checks preserve valid/invalid ghost distinction and placed-rack behavior.
 
 ## Completed First-Playable Scope
 

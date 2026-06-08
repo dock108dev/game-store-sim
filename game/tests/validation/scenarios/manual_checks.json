@@ -97,11 +97,35 @@
       "owner": "manual QA"
     },
     {
+      "id": "product_case_cue_readability",
+      "name": "Used-game case cue details read as boxed-game affordances without overwhelming prompts",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify cue existence and bounds; human review must judge visual clarity in receiving, rack, carry, and customer-held contexts.",
+      "owner": "manual QA"
+    },
+    {
       "id": "display_rack_category_readability",
       "name": "Display rack reads as a used-game rack after category assignment changes",
       "status": "manual",
       "critical": false,
       "reason": "Requires human judgment that metadata changes did not make stocking behavior or visual intent confusing.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "rack_slot_affordance_readability",
+      "name": "Rack category header and slot rails clarify stocking affordance without reading as separate interactions",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify header and rail placement; human review must confirm the added affordances do not distract from shelf-slot prompts.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "receiving_intake_readability",
+      "name": "Receiving intake lanes and label organize physical stock without hiding starter items or optional artifacts",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify nonblocking lanes and label; human review must confirm item, note, and serial-mismatch readability from player angles.",
       "owner": "manual QA"
     },
     {

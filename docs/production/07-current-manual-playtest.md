@@ -68,7 +68,11 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Receiving box contains multiple visible used games without looking cluttered.
 - Display rack still reads as a used-game rack, and stocked used games still go into the expected slots.
 - Used-game cases look compact enough on the rack and while carried; they should not read like oversized display panels.
+- Used-game case spine, platform band, cover block, and price sticker read as product cues without making the item too busy.
+- Rack `USED GAMES` header and slot rails read as category/stocking affordances, not extra interaction targets.
+- Receiving intake lanes and `INTAKE` label make the receiving box look organized without hiding the three starter items.
 - Held item stack stays low/right and does not block navigation.
+- Multi-item held stack fans enough to see separate cases while leaving the center reticle clear.
 - Stocking one carried game leaves the remaining carried games visible and usable.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
@@ -140,6 +144,16 @@ Run these first when manually checking the completed store visual pass:
 - Confirm `SAVE POINT GAMES` and zone signage is readable, fictional, and not mistaken for an interaction target.
 - Confirm posters, the price tag, bargain bin, register mat, and controller display feel like store dressing without blocking navigation or hiding click targets.
 - Confirm screenshot artifacts still compose clearly after lighting, signage, and clutter changes.
+
+## Product And Fixture Polish Focus
+
+Run these first when manually checking the completed product/fixture presentation pass:
+
+- Confirm used-game cases still look compact on the rack, in receiving, and in the held stack after the added case cues.
+- Confirm case cues help products read as boxed games without overwhelming prompts or the reticle.
+- Confirm rack header and slot rails clarify stocking/category affordance without looking clickable themselves.
+- Confirm receiving intake lanes help organize physical stock and do not hide the supplier note or mismatched serial copy.
+- Confirm the fanned carry stack keeps multiple held games visible while staying low/right during movement.
 
 ## Automated Screenshot Artifacts
 

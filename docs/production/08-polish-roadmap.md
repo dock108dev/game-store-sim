@@ -122,6 +122,8 @@ Validation:
 
 ## Slice 5: Product And Fixture Presentation
 
+Status: done.
+
 Outcome:
 
 - Used-game cases, shelves, racks, receiving box, carried stack, and customer-carried items look intentional.
@@ -137,6 +139,7 @@ Likely work:
 
 Validation:
 
+- Automated `product_fixture_polish` scenarios for product case cues, rack category affordances, carry-stack fanning, and receiving intake lanes.
 - Existing product, shelf, player carry, screenshot, and manual visual checks.
 
 ## Slice 6: Validation And Manual QA Tightening

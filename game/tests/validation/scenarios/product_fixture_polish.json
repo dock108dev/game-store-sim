@@ -1,0 +1,46 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "used_game_case_visual_cues",
+      "name": "Used-game case has spine, platform, and price-sticker cues",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_case_has_spine_platform_and_price_cues"
+    },
+    {
+      "id": "used_game_case_bounds",
+      "name": "Used-game case visual cues stay within compact case bounds",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_case_visual_cues_stay_inside_case_bounds"
+    },
+    {
+      "id": "rack_category_header",
+      "name": "Display rack has a readable used-game category header",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_readable_used_game_category_header"
+    },
+    {
+      "id": "rack_slot_category_rails",
+      "name": "Display rack slots have compact nonblocking category rails",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slots_have_compact_category_rails"
+    },
+    {
+      "id": "carry_stack_fan",
+      "name": "Held item stack fans multiple cases while staying low and off-center",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_carry_stack_fans_items_without_blocking_center"
+    },
+    {
+      "id": "receiving_intake_lanes",
+      "name": "Receiving box has nonblocking intake lanes and a readable intake label",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_has_nonblocking_intake_lanes_and_label"
+    }
+  ]
+}

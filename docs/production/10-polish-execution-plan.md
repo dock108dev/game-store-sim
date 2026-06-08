@@ -291,6 +291,8 @@ Manual validation status:
 
 ## Slice 6: Product And Fixture Presentation
 
+Status: complete.
+
 Goal: make product cases, racks, receiving, carried items, and fixture states more intentional.
 
 ### Stop 6.1: Used-Game Case Polish
@@ -335,6 +337,26 @@ Work:
 Commit:
 
 - `Sync product polish validation`
+
+### Slice 6 Result
+
+Completed commits:
+
+- `ee3eaf2` Polish used game cases
+- `0ff9f7a` Polish shelf and rack presentation
+- `8a73173` Polish carry and receiving presentation
+
+Validation:
+
+- `scripts/validate_godot.sh` passed after used-game case polish.
+- `scripts/validate_godot.sh` passed after shelf/rack presentation polish.
+- `scripts/validate_godot.sh` passed after carry/receiving presentation polish.
+- Automated `product_fixture_polish` scenarios cover case cues, case bounds, rack header/rails, carry-stack fanning, and receiving intake lanes.
+
+Manual validation status:
+
+- Manual playtest checklist is updated with case cue, rack affordance, receiving intake, and fanned carry-stack checks.
+- Human controller/window validation is not performed by Codex; check product scale/readability from normal player movement and screenshots.
 
 ## Slice 7: Full Polish Validation Tightening
 
