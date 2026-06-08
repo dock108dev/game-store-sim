@@ -71,6 +71,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/narrative/hidden_consequence_rules.gd",
+      "tests": [
+        "res://tests/gut/test_hidden_consequence_rules.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/narrative/evidence_storage.gd",
       "tests": [
         "res://tests/gut/test_evidence_storage.gd"

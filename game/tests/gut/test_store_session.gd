@@ -564,8 +564,14 @@ func test_store_session_records_hidden_thread_choice_paths() -> void:
 	assert_eq(record.get("choice_record_id"), "document_serial_mismatch_item_used_star_trader_003")
 	assert_eq(record.get("recorded_day"), 1)
 	assert_eq(session.get_hidden_thread_choice_records().size(), 1)
+	assert_eq(session.get_hidden_thread_consequence_events().size(), 1)
+	assert_eq(session.get_reputation_score(), 100)
+	assert_eq(session.customer_trust_score, 51)
+	assert_eq(session.inspection_risk_score, 0)
+	assert_eq(session.hidden_story_state, "documented")
 	assert_string_contains(session.get_hidden_thread_choice_summary_text(), "Document evidence")
-	assert_string_contains(session.get_hidden_thread_choice_summary_text(), "consequences deferred")
+	assert_string_contains(session.get_hidden_thread_choice_summary_text(), "consequence rules")
+	assert_string_contains(session.get_hidden_consequence_summary_text(), "Documented evidence")
 
 	var duplicate := session.record_hidden_thread_choice(
 		"document",
@@ -574,6 +580,27 @@ func test_store_session_records_hidden_thread_choice_paths() -> void:
 	)
 	assert_eq(duplicate.get("metadata").get("surface_id"), "serial_lookup")
 	assert_eq(session.get_hidden_thread_choice_records().size(), 1)
+	assert_eq(session.get_hidden_thread_consequence_events().size(), 1)
+
+
+func test_store_session_applies_hidden_cash_and_risk_consequences() -> void:
+	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	add_child_autofree(scene)
+	var session: StoreSession = scene.get_node("StoreSession")
+
+	var record := session.record_hidden_thread_choice(
+		"accept_cash_offer",
+		"cash_buyer_bulk_request_001",
+		{"surface_id": "customer_comment"}
+	)
+
+	assert_eq(record.get("choice_id"), "accept_cash_offer")
+	assert_eq(session.get_cash_cents(), 51200)
+	assert_eq(session.get_reputation_score(), 95)
+	assert_eq(session.customer_trust_score, 48)
+	assert_eq(session.inspection_risk_score, 4)
+	assert_eq(session.hidden_story_state, "cash_accepted")
+	assert_string_contains(session.get_hidden_consequence_summary_text(), "Accepted suspicious cash")
 
 
 func test_store_session_formats_recent_activity_history() -> void:

@@ -138,7 +138,7 @@ static func get_summary_text(context: Dictionary = {}, records: Array[Dictionary
 				str(record.get("follow_up", "")),
 			])
 
-	lines.append("Status: choice paths only; consequences deferred")
+	lines.append("Status: choice paths route through hidden consequence rules")
 	return "\n".join(lines)
 
 

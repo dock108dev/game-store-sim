@@ -57,7 +57,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq(release_allocations[0].get("total_cost_cents"), 3200)
 	assert_eq((data.get("launch_events") as Array).size(), 0)
 	assert_eq((data.get("operating_expenses") as Array).size(), 0)
-	assert_eq((data.get("reputation_events") as Array).size(), 1)
+	assert_eq((data.get("reputation_events") as Array).size(), 2)
 	assert_eq((data.get("purchased_upgrades") as Array).size(), 1)
 	var purchased_decorations: Array = data.get("purchased_decorations")
 	assert_eq(purchased_decorations.size(), 1)
@@ -65,7 +65,14 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	var hidden_thread_choices: Array = data.get("hidden_thread_choices")
 	assert_eq(hidden_thread_choices.size(), 1)
 	assert_eq(hidden_thread_choices[0].get("choice_id"), "document")
-	assert_eq(data.get("reputation_score"), 97)
+	var hidden_thread_consequences: Array = data.get("hidden_thread_consequences")
+	assert_eq(hidden_thread_consequences.size(), 1)
+	assert_eq(hidden_thread_consequences[0].get("story_state"), "documented")
+	assert_eq(data.get("hidden_supplier_access_score"), 50)
+	assert_eq(data.get("hidden_customer_trust_score"), 51)
+	assert_eq(data.get("hidden_inspection_risk_score"), 0)
+	assert_eq(data.get("hidden_story_state"), "documented")
+	assert_eq(data.get("reputation_score"), 98)
 	var fixture_orders: Array = data.get("fixture_orders")
 	assert_eq(fixture_orders.size(), 1)
 	assert_eq(fixture_orders[0].get("fixture_id"), "fixture_game_display_rack")
@@ -104,6 +111,11 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"purchased_upgrades": [{"upgrade_id": "upgrade_signage_staff_picks"}],
 		"purchased_decorations": [{"decoration_id": "decor_wall_paint_savepoint_blue"}],
 		"hidden_thread_choices": [{"choice_record_id": "document_serial_mismatch_item_used_star_trader_003", "choice_id": "document"}],
+		"hidden_thread_consequences": [{"consequence_id": "consequence_document_serial_mismatch_item_used_star_trader_003", "choice_id": "document"}],
+		"hidden_supplier_access_score": 50,
+		"hidden_customer_trust_score": 51,
+		"hidden_inspection_risk_score": 0,
+		"hidden_story_state": "documented",
 		"reputation_score": 90,
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
@@ -131,6 +143,9 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("purchased_upgrades") as Array)[0].get("upgrade_id"), "upgrade_signage_staff_picks")
 	assert_eq((decoded.get("purchased_decorations") as Array)[0].get("decoration_id"), "decor_wall_paint_savepoint_blue")
 	assert_eq((decoded.get("hidden_thread_choices") as Array)[0].get("choice_id"), "document")
+	assert_eq((decoded.get("hidden_thread_consequences") as Array)[0].get("choice_id"), "document")
+	assert_eq(int(decoded.get("hidden_customer_trust_score")), 51)
+	assert_eq(str(decoded.get("hidden_story_state")), "documented")
 	assert_eq(int(decoded.get("reputation_score")), 90)
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
@@ -331,6 +346,22 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"recorded_day": 3,
 			}
 		],
+		"hidden_thread_consequences": [
+			{
+				"consequence_id": "consequence_document_serial_mismatch_item_used_star_trader_003",
+				"choice_record_id": "document_serial_mismatch_item_used_star_trader_003",
+				"choice_id": "document",
+				"label": "Documented evidence",
+				"reputation_delta": 1,
+				"customer_trust_delta": 1,
+				"inspection_risk_delta": -1,
+				"story_state": "documented",
+			}
+		],
+		"hidden_supplier_access_score": 50,
+		"hidden_customer_trust_score": 51,
+		"hidden_inspection_risk_score": 0,
+		"hidden_story_state": "documented",
 		"reputation_score": 95,
 		"inventory_items": [
 			{
@@ -375,6 +406,10 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_true(session.has_store_expansion())
 	assert_eq(session.get_hidden_thread_choice_records().size(), 1)
 	assert_string_contains(session.get_hidden_thread_choice_summary_text(), "Document evidence")
+	assert_eq(session.get_hidden_thread_consequence_events().size(), 1)
+	assert_string_contains(session.get_hidden_consequence_summary_text(), "Documented evidence")
+	assert_eq(session.customer_trust_score, 51)
+	assert_eq(session.hidden_story_state, "documented")
 	assert_eq(session.get_reputation_score(), 95)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")

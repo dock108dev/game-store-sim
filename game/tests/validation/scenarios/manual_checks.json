@@ -666,10 +666,18 @@
     },
     {
       "id": "hidden_choice_path_readability",
-      "name": "Hidden choice paths are readable as optional decisions with consequences deferred",
+      "name": "Hidden choice paths are readable as optional decisions routed through consequence rules",
       "status": "manual",
       "critical": false,
-      "reason": "Automated tests verify choice IDs, availability, recording, Records-tab display, and save/load; human review should confirm ignore, document, sell, isolate, report, cash, reject, and follow-up choices do not feel like forced quest buttons yet.",
+      "reason": "Automated tests verify choice IDs, availability, recording, Records-tab display, and save/load; human review should confirm ignore, document, sell, isolate, report, cash, reject, and follow-up choices do not feel like forced quest buttons.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "hidden_consequence_readability",
+      "name": "Hidden consequences are readable across reputation, cash, supplier access, customer trust, inspection risk, and story state",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify consequence channels and persistence; human review should confirm the Records-tab consequence text is understandable without overwhelming normal retail accounting or implying the thread is mandatory.",
       "owner": "manual QA"
     },
     {

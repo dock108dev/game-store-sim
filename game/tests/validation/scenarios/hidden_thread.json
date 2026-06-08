@@ -251,6 +251,34 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
+      "id": "hidden_consequence_catalog",
+      "name": "Hidden consequence rules cover cash, reputation, supplier access, customer trust, inspection risk, and story state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_hidden_consequence_rules.gd::test_hidden_consequence_rules_cover_stop_10_effect_channels"
+    },
+    {
+      "id": "hidden_consequence_session_effects",
+      "name": "Store session applies hidden choice consequences once across cash, reputation, trust, risk, and story state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_applies_hidden_cash_and_risk_consequences"
+    },
+    {
+      "id": "hidden_consequence_records_tab",
+      "name": "Backroom Records tab shows hidden consequence summaries",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_shows_hidden_thread_choice_paths"
+    },
+    {
+      "id": "hidden_consequence_save_load",
+      "name": "Save codec preserves hidden consequence events and hidden state scores",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
     }
   ]
 }

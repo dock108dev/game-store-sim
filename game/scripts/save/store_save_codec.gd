@@ -27,6 +27,11 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"purchased_upgrades": session.get_purchased_upgrades(),
 		"purchased_decorations": session.get_purchased_decorations(),
 		"hidden_thread_choices": session.get_hidden_thread_choice_records(),
+		"hidden_thread_consequences": session.get_hidden_thread_consequence_events(),
+		"hidden_supplier_access_score": session.supplier_access_score,
+		"hidden_customer_trust_score": session.customer_trust_score,
+		"hidden_inspection_risk_score": session.inspection_risk_score,
+		"hidden_story_state": session.hidden_story_state,
 		"reputation_score": session.get_reputation_score(),
 		"inventory_items": _serialize_inventory_items(session.get_active_inventory_items()),
 	}
@@ -141,6 +146,19 @@ func restore_into_existing_scene(
 	if typeof(hidden_thread_choices_value) == TYPE_ARRAY and session.has_method("replace_hidden_thread_choice_records"):
 		var hidden_thread_choices: Array = hidden_thread_choices_value
 		session.replace_hidden_thread_choice_records(hidden_thread_choices)
+
+	var hidden_thread_consequences_value: Variant = data.get("hidden_thread_consequences", [])
+	if typeof(hidden_thread_consequences_value) == TYPE_ARRAY and session.has_method("replace_hidden_thread_consequence_events"):
+		var hidden_thread_consequences: Array = hidden_thread_consequences_value
+		session.replace_hidden_thread_consequence_events(hidden_thread_consequences)
+
+	if session.has_method("replace_hidden_consequence_state"):
+		session.replace_hidden_consequence_state(
+			int(data.get("hidden_supplier_access_score", session.supplier_access_score)),
+			int(data.get("hidden_customer_trust_score", session.customer_trust_score)),
+			int(data.get("hidden_inspection_risk_score", session.inspection_risk_score)),
+			str(data.get("hidden_story_state", session.hidden_story_state))
+		)
 
 	return true
 

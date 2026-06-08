@@ -376,6 +376,8 @@ func test_day_summary_panel_shows_hidden_thread_choice_paths() -> void:
 	assert_string_contains(panel.hidden_records_label.text, "Accept cash offer - available")
 	assert_string_contains(panel.hidden_records_label.text, "Recorded choices:")
 	assert_string_contains(panel.hidden_records_label.text, "document_serial_mismatch_item_used_star_trader_003")
+	assert_string_contains(panel.hidden_records_label.text, "Hidden consequences:")
+	assert_string_contains(panel.hidden_records_label.text, "Documented evidence")
 
 
 func test_day_summary_panel_includes_recent_trade_in_activity() -> void:

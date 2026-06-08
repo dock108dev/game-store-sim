@@ -40,7 +40,7 @@ func test_hidden_choice_catalog_evaluates_context_readiness() -> void:
 	assert_string_contains(summary, "Ignore for now - available")
 	assert_string_contains(summary, "Document evidence - available")
 	assert_string_contains(summary, "Accept cash offer - waiting")
-	assert_string_contains(summary, "consequences deferred")
+	assert_string_contains(summary, "consequence rules")
 
 
 func test_hidden_choice_catalog_builds_choice_records() -> void:

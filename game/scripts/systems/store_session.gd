@@ -6,6 +6,7 @@ const DailyReportPolicy := preload("res://scripts/economy/daily_report.gd")
 const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
 const ClueSurfaceCatalogPolicy := preload("res://scripts/narrative/clue_surface_catalog.gd")
 const HiddenChoiceCatalogPolicy := preload("res://scripts/narrative/hidden_choice_catalog.gd")
+const HiddenConsequenceRulesPolicy := preload("res://scripts/narrative/hidden_consequence_rules.gd")
 
 const DAY_PHASE_OPENING := "opening"
 const DAY_PHASE_SETUP := "setup"
@@ -346,6 +347,11 @@ var operating_expenses: Array[Dictionary] = []
 var reputation_events: Array[Dictionary] = []
 var purchased_upgrades: Array[Dictionary] = []
 var hidden_thread_choice_records: Array[Dictionary] = []
+var hidden_thread_consequence_events: Array[Dictionary] = []
+var supplier_access_score: int = 50
+var customer_trust_score: int = 50
+var inspection_risk_score: int = 0
+var hidden_story_state: String = "none"
 var reputation_score: int = 100
 
 
@@ -1100,6 +1106,7 @@ func record_hidden_thread_choice(choice_id: String, subject_id: String = "", met
 
 	record["recorded_day"] = day_number
 	hidden_thread_choice_records.append(record)
+	_apply_hidden_thread_consequence(record)
 	return record.duplicate(true)
 
 
@@ -1116,6 +1123,46 @@ func replace_hidden_thread_choice_records(records: Array) -> void:
 		if typeof(record_value) == TYPE_DICTIONARY:
 			var record: Dictionary = record_value
 			hidden_thread_choice_records.append(record.duplicate(true))
+
+
+func get_hidden_thread_consequence_events() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for event in hidden_thread_consequence_events:
+		rows.append(event.duplicate(true))
+	return rows
+
+
+func replace_hidden_thread_consequence_events(events: Array) -> void:
+	hidden_thread_consequence_events.clear()
+	for event_value in events:
+		if typeof(event_value) == TYPE_DICTIONARY:
+			var event: Dictionary = event_value
+			hidden_thread_consequence_events.append(event.duplicate(true))
+
+
+func get_hidden_consequence_summary_text() -> String:
+	var lines: Array[String] = [
+		HiddenConsequenceRulesPolicy.get_summary_text(get_hidden_thread_consequence_events()),
+		"Hidden state: supplier access %d, customer trust %d, inspection risk %d, story %s" % [
+			supplier_access_score,
+			customer_trust_score,
+			inspection_risk_score,
+			hidden_story_state,
+		],
+	]
+	return "\n".join(lines)
+
+
+func replace_hidden_consequence_state(
+	supplier_access: int,
+	customer_trust: int,
+	inspection_risk: int,
+	story_state: String
+) -> void:
+	supplier_access_score = supplier_access
+	customer_trust_score = customer_trust
+	inspection_risk_score = inspection_risk
+	hidden_story_state = story_state
 
 
 func record_security_placeholder(placeholder_id: String, reference_id: String = "", notes: String = "") -> Dictionary:
@@ -3068,6 +3115,37 @@ func _get_hidden_choice_context() -> Dictionary:
 		or bool(context.get("has_supplier_order", false)) \
 		or bool(context.get("has_receiving_batch", false))
 	return context
+
+
+func _apply_hidden_thread_consequence(choice_record: Dictionary) -> Dictionary:
+	var event: Dictionary = HiddenConsequenceRulesPolicy.build_consequence_event(choice_record)
+	if event.is_empty():
+		return {}
+
+	var consequence_id := str(event.get("consequence_id", "")).strip_edges()
+	for existing in hidden_thread_consequence_events:
+		if str(existing.get("consequence_id", "")) == consequence_id:
+			return existing.duplicate(true)
+
+	event["recorded_day"] = day_number
+	hidden_thread_consequence_events.append(event)
+
+	cash_cents += int(event.get("cash_delta_cents", 0))
+	supplier_access_score = clampi(supplier_access_score + int(event.get("supplier_access_delta", 0)), 0, 100)
+	customer_trust_score = clampi(customer_trust_score + int(event.get("customer_trust_delta", 0)), 0, 100)
+	inspection_risk_score = clampi(inspection_risk_score + int(event.get("inspection_risk_delta", 0)), 0, 100)
+	hidden_story_state = str(event.get("story_state", hidden_story_state))
+
+	var reputation_delta := int(event.get("reputation_delta", 0))
+	if reputation_delta != 0:
+		record_reputation_event(
+			"hidden_%s" % consequence_id,
+			str(event.get("label", "Hidden consequence")),
+			"hidden_thread",
+			reputation_delta
+		)
+
+	return event.duplicate(true)
 
 
 func _has_available_clue_surface(context: Dictionary) -> bool:
