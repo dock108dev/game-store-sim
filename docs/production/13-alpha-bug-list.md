@@ -5,7 +5,7 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 509 GUT tests, UI scenario automation coverage 473/591, production script mapping coverage 51/51, 3 active validation tools, and 33 catalog products.
+- Latest full gate passes with 513 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, and 33 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - Manual controller/window/playtest validation still needs a human pass.
 
@@ -46,3 +46,4 @@ Current gate state:
 - Stop 13.4B content/copy pass: done; continues AH-001, AH-002, AH-003, AH-006, and AH-007 with customer text, dialogue context, supplier orders, release planning, report copy, register return-scope copy, and backroom action-label polish.
 - Stop 13.5 balance pass: done; addresses AH-011 with centralized alpha balance targets, tuned economy values, automated coverage, and manual multi-day balance checks.
 - Stop 13.6 external playtest package: done; addresses AH-009 and AH-010 with `15-alpha-playtest-package.md`, build artifact guidance, known issues, playtest script, feedback form, rollback plan, validation scenario entries, and manual package checks.
+- Stop 13.7 alpha validation sync: done; records the current full-gate, desktop pack smoke, scenario matrix, manual checklist, bug-list routing, backlog state, and playtest-package handoff before human external playtest.

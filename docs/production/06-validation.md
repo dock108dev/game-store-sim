@@ -46,10 +46,12 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 509 GUT tests.
-- UI scenario automation coverage is 473/591, at the 80% threshold.
+- `scripts/validate_godot.sh` passes with 513 GUT tests.
+- UI scenario automation coverage is 476/594, above the 80% threshold.
 - Production script mapping coverage is 51/51.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
+- Desktop pack export smoke passed and produced `artifacts/builds/desktop/game-store-sim.pck`.
+- Product catalog content checks pass with 33 catalog products.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
 - Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants, with product items applying generated cue meshes from data.
@@ -96,6 +98,7 @@ Current production validation baseline:
 - Alpha scene-readability content pass is complete as Stop 13.4A; automated checks now cover right-wall/back-wall detail props, smaller non-cropping register/backroom sign placement, wider special-customer depth separation, display-rack face/profile cues, placed-fixture screenshot framing, and first-view backroom placement controls.
 - Alpha content/copy pass is complete as Stop 13.4B; automated checks now cover customer role copy, customer dialogue staff context, supplier crate/invoice/shelf-plan copy, release planning hooks, daily report readout language, register return-scope copy, and non-abbreviated backroom action labels.
 - Alpha playtest package is complete through Stop 13.6; automated checks now audit the package runbook, build commands, artifact paths, concise external playtest script, known issues, feedback form, rollback plan, scenario matrix entries, and manual package checks.
+- Alpha validation sync is complete through Stop 13.7; automated checks now audit full-gate evidence, desktop pack smoke handoff, scenario/manual checklist sync, alpha bug-list routing, backlog state, and completion-plan status.
 
 ## Manual Validation
 
@@ -119,7 +122,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, clue-surface, hidden-choice, hidden-consequence, hidden-optionality, hidden-thread validation sync, store-ambience validation, interaction-audio validation, customer-audio validation, microfeedback validation, camera-feel validation, presentation validation sync, save-slot UI validation, save migration validation, settings menu validation, pause/main-menu validation, desktop export validation, release-wrapper validation, alpha triage, alpha performance, and alpha regression validation are synced through Stop 13.3.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, clue-surface, hidden-choice, hidden-consequence, hidden-optionality, hidden-thread validation sync, store-ambience validation, interaction-audio validation, customer-audio validation, microfeedback validation, camera-feel validation, presentation validation sync, save-slot UI validation, save migration validation, settings menu validation, pause/main-menu validation, desktop export validation, release-wrapper validation, alpha triage, alpha performance, alpha regression, scene-readability, content/copy, balance, playtest-package, and alpha validation sync are synced through Stop 13.7.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding validation is synced through Stop 7.6; manual QA should confirm the checklist teaches the first-day loop without feeling like debug tutorial text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
@@ -216,6 +219,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Stop 13.4A manual review should compare the refreshed main scene, customer queue, register counter, fixture placed, and backroom computer screenshots against AH-001 through AH-007 before treating the visual-content pass as human-approved.
 - Stop 13.4B manual review should compare customer role copy, dialogue prompts, supplier ordering, release planning, daily report, register return copy, and backroom action labels in the actual window before treating the content/copy pass as human-approved.
 - Stop 13.6 manual review should use `15-alpha-playtest-package.md` for external tester handoff, then record any accepted feedback in `13-alpha-bug-list.md` before implementation.
+- Stop 13.7 manual review should treat the automated gate as current and then run the external playtest package; Codex has not performed human controller/window/playtest approval.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 
@@ -260,6 +264,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, JSON roundtrip checks, save-slot registry metadata, overwrite/delete, save-slot panel accessibility, new-game/continue, and player modal wiring checks.
 - `scenarios/store_layout.json`: expanded fixture catalog, fixture metadata, upgrade-gated fixture orders, fixture ordering, slot-category metadata, category assignment, demand tuning effects, decoration catalog, decoration application, clutter-budget limits, layout-effect demand signal, fixture visibility, impulse fixtures, queue spacing, travel distance, theft-risk placeholder state, launch queue demand effects, starter expansion purchase/capacity/bounds/persistence, cash reservation, pending storage placement, ghost preview, footprint-aware bounds, critical-path clearance, overlap rejection, valid/invalid placement state, move/rotate/snap/undo controls, placement confirmation, receiving/backstock movement, storage retrieval, insufficient-cash rejection, and persistence coverage.
 - `scenarios/alpha_playtest_package.json`: alpha playtest package runbook, docs, known-issues, feedback-form, rollback, and manual-check sync coverage.
+- `scenarios/alpha_validation_sync.json`: alpha hardening validation-sync docs, gate snapshot, scenario matrix, and manual checklist coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

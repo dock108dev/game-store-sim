@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 509 GUT tests, UI scenario automation coverage 473/591, production script mapping coverage 51/51, and 3 active validation tools.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 513 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
 
 ## Milestone 13: Alpha Hardening
 
@@ -652,7 +652,7 @@ Stops:
 - Stop 13.4B: Content/copy pass. Done in `Fill alpha starter content`: filled customer role text, dialogue staff context, supplier order notes, release planning hooks, daily report readout copy, register return-scope copy, and backroom action labels to alpha quality.
 - Stop 13.5: Balance pass. Done in `Tune alpha economy`: centralized alpha balance targets, tuned daily overhead, supplier lot cost, service margins, pricing range, buyer tolerance, and early upgrade costs.
 - Stop 13.6: External playtest package. Done in `Prepare alpha playtest package`: added the external package runbook, build/artifact handoff, concise playtest script, known issues, feedback form, rollback plan, scenario matrix coverage, and manual package checks.
-- Stop 13.7: Alpha validation sync. Run the full gate, exported build smoke, and manual alpha checklist.
+- Stop 13.7: Alpha validation sync. Done in `Sync alpha validation`: reran the full gate and desktop pack smoke, synced the validation snapshot, scenario matrix, manual alpha checklist, bug list, backlog state, playtest-package handoff, and completion-plan status.
 
 Acceptance:
 
@@ -680,6 +680,7 @@ Validation snapshot:
 - Stop 13.4B alpha content/copy pass records automated guardrails for customer copy, dialogue context, supplier order copy, release planning copy, daily report sections, register return-scope copy, and backroom action labels.
 - Stop 13.5 alpha balance pass records automated guardrails for starting cash, daily overhead, supplier lot cost/delivery, service margins, pricing range, buyer tolerance, early upgrade costs, updated accounting readouts, and manual multi-day balance review coverage.
 - Stop 13.6 alpha playtest package records automated guardrails for package docs, build commands, artifact paths, known issues, feedback form, rollback plan, scenario matrix entries, manual package handoff checks, and the concise external playtest script.
+- Stop 13.7 alpha validation sync records automated guardrails for the final alpha-hardening docs, gate snapshot, desktop pack smoke handoff, manual checklist sections, scenario matrix entries, and feedback-triage routing.
 
 ## Immediate Next Work After This Planning Slice
 

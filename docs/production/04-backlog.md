@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, audio, VFX, and presentation feel are complete through Milestone 11, save/load/settings/release-wrapper work is complete through Milestone 12, and alpha hardening is packaged for external playtest through Stop 13.6.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, audio, VFX, and presentation feel are complete through Milestone 11, save/load/settings/release-wrapper work is complete through Milestone 12, and Alpha hardening is complete through Stop 13.7.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -43,7 +43,7 @@ Current completion plan: `11-game-completion-plan.md`.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
-14. Alpha hardening. Current phase; external playtest package done through Stop 13.6.
+14. Alpha hardening. Complete through Stop 13.7; next checkpoint is human external playtest and feedback triage.
 
 ## Completed Polish Scope
 
@@ -164,7 +164,8 @@ The following polish items remain valid historical checkpoints:
 - Done: added a Stop 13.4A alpha scene-readability pass for wall detail, sign framing, special-customer spacing, display-rack profile cues, placed-fixture screenshot framing, and backroom computer first-view controls.
 - Done: added a Stop 13.4B alpha content/copy pass for customer role copy, dialogue staff context, supplier order notes, release planning hooks, daily report readouts, register return-scope copy, and backroom action labels.
 - Done: added `15-alpha-playtest-package.md`, an alpha package scenario matrix, manual package checks, and validation-sync coverage for Stop 13.6.
-- Remaining alpha-hardening work: Stop 13.7 alpha validation sync.
+- Done: synced alpha validation docs, scenario matrix, manual checklist, bug list, backlog state, and full-gate evidence for Stop 13.7.
+- Remaining alpha-hardening work: human external playtest and feedback triage before implementing post-alpha follow-up.
 
 ## Product And Fixture Polish
 

@@ -1,0 +1,25 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "alpha_validation_sync_audit",
+      "name": "Alpha hardening validation sync keeps completion docs, backlog, bug list, and manual checklist current",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_validation_sync.gd::test_alpha_validation_sync_docs_name_stop_13_7"
+    },
+    {
+      "id": "alpha_validation_gate_snapshot",
+      "name": "Alpha validation snapshot records full gate, pack smoke, scenario coverage, script coverage, tool manifests, and catalog count",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_validation_sync.gd::test_alpha_validation_snapshot_records_current_gate_outputs"
+    },
+    {
+      "id": "alpha_manual_checklist_sync_audit",
+      "name": "Alpha manual checklist includes triage, performance, regression, readability, copy, balance, package, and validation-sync focus sections",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_validation_sync.gd::test_alpha_manual_checklist_covers_all_alpha_focus_sections"
+    }
+  ]
+}

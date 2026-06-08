@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 509 GUT tests, UI scenario automation coverage at 473/591, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 513 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -64,8 +64,10 @@ Current automated baseline:
 - Alpha content/copy pass is implemented as Stop 13.4B; manual QA should review customer role text, dialogue staff context, supplier order notes, release planning, daily report wording, register return-scope copy, and backroom action labels before treating the alpha copy pass as human-approved.
 - Alpha economy balance pass is implemented as Stop 13.5; manual QA should review the tuned $500 starting cash, $10 daily overhead, $30 one-day starter supplier lot, $5.99 disc resurfacing service, buyer tolerance/pricing range, launch allocation, and early upgrade-cost feel before treating balance as human-approved.
 - Alpha playtest package is implemented through Stop 13.6; manual QA should use `15-alpha-playtest-package.md` for external handoff, artifact review, the concise tester script, known issues, feedback capture, and rollback expectations.
+- Alpha validation sync is implemented through Stop 13.7; manual QA should treat the gate, pack smoke, package doc, alpha bug list, and this checklist as current, then run the external playtest package before approving the alpha by feel.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
+- Every implementation summary should say whether these were checked, skipped, or not relevant.
 
 ## Full Loop
 
@@ -166,6 +168,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 93. Open pause, test Resume, Settings, Save/Load, Main Menu, Start Game, and Quit request language, and confirm mouse capture returns after every playable exit path.
 94. Run `scripts/verify_desktop_export.sh --pack-smoke`, confirm `artifacts/builds/desktop/game-store-sim.pck` is created and nonempty, and confirm the verifier reports a successful pack boot smoke.
 95. Open `docs/production/15-alpha-playtest-package.md`, confirm the package handoff names build commands, artifact paths, known issues, feedback form, rollback plan, and the shorter external playtest script.
+96. Confirm `13-alpha-bug-list.md`, `15-alpha-playtest-package.md`, this checklist, and the latest validation artifacts all describe the same alpha handoff state before sending the build to a tester.
 
 ## Visual Checks
 
@@ -547,7 +550,7 @@ Run these first when manually checking the completed Stop 12.5 desktop export pi
 - Once binary export templates are installed, launch the exported app outside the editor and run the start, save, quit, relaunch, and continue loop.
 - Confirm settings persistence and pause/main-menu transitions behave the same in the exported build as in the editor-run vertical slice.
 
-## Alpha Triage Focus
+## Alpha Bug Triage Focus
 
 Run these first when manually checking the completed Stop 13.1 alpha bug triage:
 
@@ -615,6 +618,16 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 - Confirm the tester feedback form records build, platform, session length, blockers, confusing steps, economy feel, customer behavior, backroom/computer notes, menu/settings/save notes, bugs, screenshots/logs, and whether the tester would play another in-game day.
 - Add accepted external feedback to `13-alpha-bug-list.md` with evidence, priority, target slice, and acceptance criteria before implementing follow-up changes.
 - Confirm rollback guidance names the known-good Stop 13.5, Stop 13.4B, and Stop 13.4A checkpoints and requires a fresh full gate before sharing another package.
+
+## Alpha Validation Sync Focus
+
+Run these first when manually checking the completed Stop 13.7 alpha validation sync:
+
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 513 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
+- Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and says accepted external feedback must be added before implementation.
+- Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
+- Treat the alpha-hardening milestone as mechanically validated but not human-approved until the external playtest script is run in a real window.
 
 ## Automated Screenshot Artifacts
 
