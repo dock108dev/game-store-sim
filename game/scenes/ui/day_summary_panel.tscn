@@ -33,7 +33,7 @@ text = "Backroom Computer"
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(720, 500)
+custom_minimum_size = Vector2(720, 452)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -121,3 +121,38 @@ text = "End Day"
 custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
 text = "Close"
+
+[node name="PlacementRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="RackLeftButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow"]
+custom_minimum_size = Vector2(96, 38)
+layout_mode = 2
+text = "Rack Left"
+
+[node name="RackRightButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow"]
+custom_minimum_size = Vector2(96, 38)
+layout_mode = 2
+text = "Rack Right"
+
+[node name="RackForwardButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow"]
+custom_minimum_size = Vector2(96, 38)
+layout_mode = 2
+text = "Rack Fwd"
+
+[node name="RackBackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow"]
+custom_minimum_size = Vector2(96, 38)
+layout_mode = 2
+text = "Rack Back"
+
+[node name="RotateRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow"]
+custom_minimum_size = Vector2(104, 38)
+layout_mode = 2
+text = "Rotate Rack"
+
+[node name="SnapRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow"]
+custom_minimum_size = Vector2(96, 38)
+layout_mode = 2
+text = "Snap Rack"

@@ -50,6 +50,20 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_orders_fixture_from_backroom_computer"
     },
     {
+      "id": "store_session_adjusts_pending_fixture",
+      "name": "Store session moves, rotates, and snaps a pending fixture preview",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_adjusts_pending_fixture_placement"
+    },
+    {
+      "id": "backroom_panel_adjusts_pending_fixture",
+      "name": "Backroom computer panel exposes pending fixture movement, rotation, and snap controls",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_adjusts_pending_fixture_preview"
+    },
+    {
       "id": "fixture_placement_manager_hidden_ghost",
       "name": "Fixture placement manager starts with hidden ghost preview",
       "status": "automated",

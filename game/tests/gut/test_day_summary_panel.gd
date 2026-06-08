@@ -203,6 +203,7 @@ func test_day_summary_panel_orders_fixture_from_backroom_computer() -> void:
 	assert_string_contains(_panel.fixture_label.text, "Game Display Rack $125.00")
 	assert_eq(_panel.status_label.text, "Ordered Game Display Rack for storage placement.")
 	assert_true(_panel.place_rack_button.disabled)
+	assert_true(_panel.rack_left_button.disabled)
 
 
 func test_day_summary_panel_orders_supplier_lot_from_backroom_computer() -> void:
@@ -268,6 +269,38 @@ func test_day_summary_panel_places_pending_fixture_from_backroom_computer() -> v
 	assert_true(_panel.place_rack_button.disabled)
 
 
+func test_day_summary_panel_adjusts_pending_fixture_preview() -> void:
+	var fixture_root := Node3D.new()
+	var manager: FixturePlacementManager = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	manager.add_child(ghost)
+	manager._ready()
+	_session.fixture_placement_manager_path = _session.get_path_to(manager)
+	_session.inventory_root_path = _session.get_path_to(fixture_root)
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.order_game_display_rack())
+
+	var start_position := manager.get_ghost_position()
+	var start_rotation := manager.get_ghost_rotation_y()
+
+	assert_false(_panel.rack_left_button.disabled)
+	assert_false(_panel.rotate_rack_button.disabled)
+	assert_true(_panel.move_pending_rack_right())
+	assert_gt(manager.get_ghost_position().x, start_position.x)
+	assert_eq(_panel.status_label.text, "Moved storage rack preview right.")
+	assert_true(_panel.rotate_pending_rack())
+	assert_ne(manager.get_ghost_rotation_y(), start_rotation)
+	assert_eq(_panel.status_label.text, "Rotated storage rack preview.")
+	manager.set_ghost_position(Vector3(-0.83, 0.04, 2.11))
+	assert_true(_panel.snap_pending_rack())
+	assert_almost_eq(manager.get_ghost_position().x, -0.75, 0.001)
+	assert_almost_eq(manager.get_ghost_position().z, 2.0, 0.001)
+	assert_eq(_panel.status_label.text, "Snapped storage rack preview to grid.")
+
+
 func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_true(_panel.open_for_session(_session))
 
@@ -279,6 +312,8 @@ func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_true(_panel.order_rack_button.disabled)
 	assert_true(_panel.commit_allocation_button.disabled)
 	assert_true(_panel.place_rack_button.disabled)
+	assert_true(_panel.rack_left_button.disabled)
+	assert_true(_panel.rotate_rack_button.disabled)
 	assert_false(_panel.end_day_button.disabled)
 	assert_eq(_panel.end_day_button.text, "Start Day")
 

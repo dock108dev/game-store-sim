@@ -49,7 +49,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add fixture and equipment ordering interface. Done for ordering a pending game display rack from the backroom computer.
 - Add fixture ghost placement. Done as a translucent pending-rack preview after ordering.
 - Add valid/invalid placement state. Done as green valid and red invalid translucent ghost states with bounds validation.
-- Add rotate and snap controls. Done as manager-level fixed-step rotation and grid movement.
+- Add rotate and snap controls. Done as backroom panel controls backed by manager-level fixed-step rotation and grid movement.
 - Add player-facing fixture placement confirmation. Done as a `Place Storage Rack` backroom-computer action that confirms the current valid ghost into a real game display rack and clears pending storage placement.
 - Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
 - Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.

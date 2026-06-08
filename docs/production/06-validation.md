@@ -92,9 +92,10 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Starting the next day delivers the used-game starter lot into the receiving box and clears pending receiving.
 - Delivered supplier games look intentionally placed and do not crowd the receiving box, display rack, trade-in seller, or customer flow.
 - Backroom storage fixture ordering shows the game display rack option, cash reservation, and pending storage placement clearly.
+- Backroom pending storage fixture movement, rotation, and snap controls are readable and fit the panel.
 - Ordered fixture ghost preview is visible, translucent, and reads as a pending storage placement rather than a finished rack.
 - Fixture ghost valid and invalid states read clearly as green allowed and red blocked placement previews.
-- Fixture ghost rotate and snap behavior feels predictable once exposed through player-facing placement controls.
+- Fixture ghost rotate and snap behavior feels predictable through the backroom placement controls.
 - Placing a pending storage rack through the backroom computer reads as a deliberate confirmation step, creates a real rack, and clears pending storage placement.
 - Suspicious event flags, supplier notes, and optional suspicious-customer conversations do not visibly interrupt normal store progression.
 - Backroom summary panel closes back into first-person mouse capture cleanly.

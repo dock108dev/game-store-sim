@@ -786,6 +786,43 @@ func can_place_pending_fixture() -> bool:
 		and placement_manager.can_confirm_current_placement()
 
 
+func can_adjust_pending_fixture_placement() -> bool:
+	if is_day_closed or get_pending_fixture_orders().is_empty():
+		return false
+
+	var placement_manager := _get_fixture_placement_manager()
+	return placement_manager != null \
+		and placement_manager.has_method("is_ghost_visible") \
+		and placement_manager.is_ghost_visible()
+
+
+func move_pending_fixture_placement(delta_x: int, delta_z: int) -> bool:
+	if not can_adjust_pending_fixture_placement():
+		return false
+
+	var placement_manager := _get_fixture_placement_manager()
+	return placement_manager.has_method("move_ghost_by_grid") \
+		and placement_manager.move_ghost_by_grid(delta_x, delta_z)
+
+
+func rotate_pending_fixture_placement(clockwise: bool = true) -> bool:
+	if not can_adjust_pending_fixture_placement():
+		return false
+
+	var placement_manager := _get_fixture_placement_manager()
+	return placement_manager.has_method("rotate_ghost") \
+		and placement_manager.rotate_ghost(clockwise)
+
+
+func snap_pending_fixture_placement() -> bool:
+	if not can_adjust_pending_fixture_placement():
+		return false
+
+	var placement_manager := _get_fixture_placement_manager()
+	return placement_manager.has_method("snap_ghost_to_grid") \
+		and placement_manager.snap_ghost_to_grid()
+
+
 func place_pending_fixture(parent: Node = null) -> Dictionary:
 	if not can_place_pending_fixture():
 		return {}

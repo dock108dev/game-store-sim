@@ -614,6 +614,36 @@ func test_store_session_places_pending_fixture_and_clears_pending_order() -> voi
 	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack placed")
 
 
+func test_store_session_adjusts_pending_fixture_placement() -> void:
+	var fixture_root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var manager: FixturePlacementManager = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	fixture_root.add_child(session)
+	manager.add_child(ghost)
+	manager._ready()
+	session.fixture_placement_manager_path = session.get_path_to(manager)
+	session.inventory_root_path = session.get_path_to(fixture_root)
+
+	assert_false(session.can_adjust_pending_fixture_placement())
+	session.order_fixture("fixture_game_display_rack")
+	var start_position := manager.get_ghost_position()
+	var start_rotation := manager.get_ghost_rotation_y()
+
+	assert_true(session.can_adjust_pending_fixture_placement())
+	assert_true(session.move_pending_fixture_placement(1, 0))
+	assert_gt(manager.get_ghost_position().x, start_position.x)
+	assert_true(session.rotate_pending_fixture_placement())
+	assert_ne(manager.get_ghost_rotation_y(), start_rotation)
+	manager.set_ghost_position(Vector3(-0.83, 0.04, 2.11))
+	assert_true(session.snap_pending_fixture_placement())
+	assert_almost_eq(manager.get_ghost_position().x, -0.75, 0.001)
+	assert_almost_eq(manager.get_ghost_position().z, 2.0, 0.001)
+
+
 func test_store_session_rejects_pending_fixture_placement_when_ghost_is_invalid() -> void:
 	var fixture_root := Node3D.new()
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()

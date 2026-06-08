@@ -113,7 +113,7 @@ Technical:
 20. Add first fixture ordering interface. Done as a backroom-computer order action for a pending game display rack.
 21. Add first fixture ghost preview. Done as a translucent pending-rack preview after ordering.
 22. Add first fixture placement validity state. Done as green valid and red invalid translucent ghost states with bounds validation.
-23. Add first fixture rotate and snap controls. Done as manager-level fixed-step rotation and grid movement.
+23. Add first fixture rotate and snap controls. Done as backroom panel controls backed by manager-level fixed-step rotation and grid movement.
 24. Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
 25. Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.
 26. Add category demand. Done as a category-level demand policy that combines with product demand tiers for buyer price tolerance and backroom demand readouts.

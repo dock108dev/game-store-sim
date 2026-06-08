@@ -20,6 +20,12 @@ class_name DaySummaryPanel
 @onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/PlaceRackButton
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/EndDayButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CloseButton
+@onready var rack_left_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow/RackLeftButton
+@onready var rack_right_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow/RackRightButton
+@onready var rack_forward_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow/RackForwardButton
+@onready var rack_back_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow/RackBackButton
+@onready var rotate_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow/RotateRackButton
+@onready var snap_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementRow/SnapRackButton
 
 const GAME_DISPLAY_RACK_ID := "fixture_game_display_rack"
 const USED_GAME_STARTER_LOT_ID := "supplier_lot_used_games_001"
@@ -34,6 +40,12 @@ func _ready() -> void:
 	order_games_button.pressed.connect(order_used_game_lot)
 	order_rack_button.pressed.connect(order_game_display_rack)
 	place_rack_button.pressed.connect(place_pending_rack)
+	rack_left_button.pressed.connect(move_pending_rack_left)
+	rack_right_button.pressed.connect(move_pending_rack_right)
+	rack_forward_button.pressed.connect(move_pending_rack_forward)
+	rack_back_button.pressed.connect(move_pending_rack_back)
+	rotate_rack_button.pressed.connect(rotate_pending_rack)
+	snap_rack_button.pressed.connect(snap_pending_rack)
 	end_day_button.pressed.connect(end_day)
 	close_button.pressed.connect(close)
 
@@ -152,6 +164,50 @@ func place_pending_rack() -> bool:
 	return true
 
 
+func move_pending_rack_left() -> bool:
+	return _adjust_pending_rack(-1, 0, "left")
+
+
+func move_pending_rack_right() -> bool:
+	return _adjust_pending_rack(1, 0, "right")
+
+
+func move_pending_rack_forward() -> bool:
+	return _adjust_pending_rack(0, -1, "forward")
+
+
+func move_pending_rack_back() -> bool:
+	return _adjust_pending_rack(0, 1, "back")
+
+
+func rotate_pending_rack() -> bool:
+	if _session == null or not _session.has_method("rotate_pending_fixture_placement"):
+		return false
+
+	var did_rotate: bool = _session.rotate_pending_fixture_placement(true)
+	_update_labels()
+	if not did_rotate:
+		status_label.text = "Could not rotate storage rack preview."
+		return false
+
+	status_label.text = "Rotated storage rack preview."
+	return true
+
+
+func snap_pending_rack() -> bool:
+	if _session == null or not _session.has_method("snap_pending_fixture_placement"):
+		return false
+
+	var did_snap: bool = _session.snap_pending_fixture_placement()
+	_update_labels()
+	if not did_snap:
+		status_label.text = "Could not snap storage rack preview."
+		return false
+
+	status_label.text = "Snapped storage rack preview to grid."
+	return true
+
+
 func close() -> bool:
 	if not is_open():
 		return false
@@ -227,5 +283,31 @@ func _update_labels() -> void:
 		place_rack_button.disabled = _session.is_day_closed or not _session.can_place_pending_fixture()
 	else:
 		place_rack_button.disabled = true
+	var can_adjust_fixture := false
+	if _session.has_method("can_adjust_pending_fixture_placement"):
+		can_adjust_fixture = not _session.is_day_closed and _session.can_adjust_pending_fixture_placement()
+	for button in [
+		rack_left_button,
+		rack_right_button,
+		rack_forward_button,
+		rack_back_button,
+		rotate_rack_button,
+		snap_rack_button,
+	]:
+		button.disabled = not can_adjust_fixture
 	end_day_button.disabled = false
 	end_day_button.text = "Start Day" if _session.is_day_closed else "End Day"
+
+
+func _adjust_pending_rack(delta_x: int, delta_z: int, direction_label: String) -> bool:
+	if _session == null or not _session.has_method("move_pending_fixture_placement"):
+		return false
+
+	var did_move: bool = _session.move_pending_fixture_placement(delta_x, delta_z)
+	_update_labels()
+	if not did_move:
+		status_label.text = "Could not move storage rack preview %s." % direction_label
+		return false
+
+	status_label.text = "Moved storage rack preview %s." % direction_label
+	return true
