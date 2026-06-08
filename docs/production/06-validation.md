@@ -74,7 +74,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct.
 - Receiving and storage props make delivered supplier stock read as physical inventory without crowding prompts or player movement.
-- Backroom service and paperwork props support the existing service theme without implying a separate service terminal.
+- Backroom service bench, paperwork stack, disc mat, and management board support the existing service theme without implying a separate service terminal.
 - Backroom summary opens after a sale and shows matching cash, revenue, cost, and profit.
 - Closed-day report is readable and matches the played day.
 - Backroom recent activity shows sale and trade-in entries with readable prices.

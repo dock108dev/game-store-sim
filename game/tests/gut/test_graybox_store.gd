@@ -171,6 +171,29 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 	assert_gt(storage_shelf.global_position.z, 5.0)
 
 
+func test_backroom_management_and_service_props_exist() -> void:
+	var management_props := [
+		"BackroomManagementBoard",
+		"ManagementReportCardA",
+		"ManagementReportCardB",
+	]
+	for prop_path in management_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision)
+		assert_gt(prop.global_position.x, 4.0)
+		assert_gt(prop.global_position.z, 5.7)
+
+	var service_bench := _store.get_node_or_null("BackroomServiceBench") as Node3D
+	assert_not_null(service_bench)
+	assert_not_null(service_bench.get_node_or_null("ServiceMat"))
+	assert_not_null(service_bench.get_node_or_null("ServiceDisc"))
+	assert_not_null(service_bench.get_node_or_null("PaperworkStack"))
+	assert_not_null(service_bench.get_node_or_null("ToolTray"))
+	assert_gt(service_bench.global_position.z, 5.0)
+	assert_gt(_flat_distance_xz(service_bench.global_position, _store.get_node("RegisterWorkstation").global_position), 7.0)
+
+
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 

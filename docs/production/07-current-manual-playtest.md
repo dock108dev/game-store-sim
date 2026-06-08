@@ -84,7 +84,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Backroom computer reads as the management terminal, not another register.
 - Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct from normal player angles.
 - Receiving pallet, box stacks, storage shelf, and overflow boxes make supplier-delivered stock read as physical inventory without crowding prompts or navigation.
-- Backroom service/paperwork props read as context only and do not imply a separate service terminal.
+- Backroom service bench, paperwork stack, disc mat, and management board read as context only and do not imply a separate service terminal.
 - Summary panel text and buttons fit in the actual game window.
 - Closed-day report text is readable and understandable after ending the day.
 - Recent activity text is readable and distinguishes sales from trade-ins.
