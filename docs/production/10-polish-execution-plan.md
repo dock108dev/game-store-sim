@@ -416,7 +416,7 @@ Validation:
 
 - `scripts/validate_godot.sh` passed after the manual checklist audit.
 - Final scenario matrix includes dedicated polish files for backroom, customer, store visual, and product/fixture presentation.
-- Latest automated baseline is 286 GUT tests, UI scenario coverage 289/339, and script mapping coverage 31/31.
+- Latest automated baseline is 286 GUT tests, UI scenario coverage 289/344, and script mapping coverage 31/31.
 
 Manual validation status:
 

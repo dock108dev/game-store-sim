@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this planning pass: `scripts/validate_godot.sh` passed with 286 GUT tests, UI scenario coverage 289/339, and script mapping coverage 31/31.
+- Last full gate in this production-target pass: `scripts/validate_godot.sh` passed with 286 GUT tests, UI scenario coverage 289/344, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
@@ -131,6 +131,17 @@ Current automated baseline:
 - Supplier note placement and text read as an optional receiving artifact, not a required tutorial or blocking objective.
 - Suspicious customer placement and text read as an optional hidden-thread cue, and the customer does not crowd the register queue or trade-in seller.
 - Evidence storage remains hidden infrastructure with no visible interruption.
+
+## Production Target Contract Focus
+
+Run these when reviewing the current prototype against the new production direction before starting or after finishing a production implementation slice:
+
+- Confirm `main_scene.png` communicates a small game store target only as a goal, not as current achieved production art.
+- Confirm the visual target in `12-production-target-contracts.md` matches the intended store tone: stylized realism, readable retail exaggeration, fictional brand language, and no real brands.
+- Confirm the starter layout target keeps the store small and physical: storefront, sales floor, register, backroom, receiving, storage, computer, service bench, and hidden clue surfaces.
+- Confirm the UI target covers prompt, pricing, register, trade-in appraisal, backroom computer, ordering, releases, and daily report decisions.
+- Confirm the content target is broad enough for several days of play while staying data-first and fictional.
+- Confirm future implementation slices update this checklist and `manual_checks.json` when they change the visible store, UI, customers, content, or interaction flow.
 
 ## Backroom Polish Focus
 

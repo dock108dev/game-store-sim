@@ -43,7 +43,7 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 Current polish-pass baseline:
 
 - `scripts/validate_godot.sh` passes with 286 GUT tests.
-- UI scenario automation coverage is 289/339, above the required 80% threshold.
+- UI scenario automation coverage is 289/344, above the required 80% threshold.
 - Production script mapping coverage is 31/31.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 

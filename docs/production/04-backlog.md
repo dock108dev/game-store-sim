@@ -31,7 +31,7 @@ Current completion plan: `11-game-completion-plan.md`.
 ## Priority Backlog
 
 1. Completion planning lock. Done in `11-game-completion-plan.md`.
-2. Production direction and target slice. In progress in `12-production-target-contracts.md`.
+2. Production direction and target slice. Done in `12-production-target-contracts.md`.
 3. Store environment production pass.
 4. Interaction and game-feel production pass.
 5. Menu, register, and computer production UI.

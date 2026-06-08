@@ -169,6 +169,46 @@
       "owner": "manual QA"
     },
     {
+      "id": "production_first_view_target_review",
+      "name": "First-view screenshot is reviewed against the production small-game-store target",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human composition judgment against the production target contract; automated screenshot checks only prove image presence and dimensions.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_art_direction_contract_review",
+      "name": "Visual target contract matches the intended stylized fictional game-store tone",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human art-direction judgment before production scene slices replace graybox surfaces.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_layout_contract_review",
+      "name": "Starter layout contract keeps storefront, sales floor, register, and backroom workflows physically readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human production review because automated layout checks cannot judge the intended small-store composition yet.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_ui_contract_review",
+      "name": "Production UI contract covers prompt, pricing, register, trade-in, computer, ordering, release, and report decisions",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human UX review before replacing the current functional prototype panels with production UI.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_content_contract_review",
+      "name": "Production content contract is broad enough for several days of fictional data-driven play",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human product review to confirm the target catalog, customer, supplier, event, and unlock scope before implementation.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",

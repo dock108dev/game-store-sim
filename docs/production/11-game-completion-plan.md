@@ -136,7 +136,7 @@ Stops:
 - Stop 1.3: Store layout contract. Done in `12-production-target-contracts.md`.
 - Stop 1.4: UI direction contract. Done in `12-production-target-contracts.md`.
 - Stop 1.5: Content target contract. Done in `12-production-target-contracts.md`.
-- Stop 1.6: Production acceptance checklist. Convert the contracts into manual and automated validation expectations.
+- Stop 1.6: Production acceptance checklist. Done in `12-production-target-contracts.md`, `07-current-manual-playtest.md`, and `manual_checks.json`.
 
 Acceptance:
 
@@ -552,9 +552,9 @@ Priority order:
 1. Stop 1.1: screenshot teardown board.
 2. Stop 1.2: art direction contract.
 3. Stop 1.3: store layout contract.
-4. Stop 1.4: UI direction contract.
-5. Stop 1.5: content target contract.
-6. Stop 1.6: production acceptance checklist.
+4. Stop 1.4: UI direction contract. Done.
+5. Stop 1.5: content target contract. Done.
+6. Stop 1.6: production acceptance checklist. Done.
 7. Milestone 2 store environment production pass.
 
 The reason to start with direction contracts is practical: the current screenshots show every surface needs work. Without a locked target, environment, customer, UI, and menu polish will fight each other and produce more intermediate graybox churn.

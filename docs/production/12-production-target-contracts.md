@@ -9,7 +9,7 @@ This document turns the game-completion plan into concrete production targets. I
 - Store layout contract: complete for the starter production pass.
 - UI direction contract: complete for the starter production pass.
 - Content target contract: complete for the first production vertical slice.
-- Production acceptance checklist: pending.
+- Production acceptance checklist: complete for Milestone 1.
 
 ## Source Screenshots
 
@@ -784,3 +784,113 @@ Future content slices must add or extend validation for:
 - Customer role data completeness.
 - Dialogue pool coverage.
 - Visual variant key coverage.
+
+## Production Acceptance Checklist
+
+This checklist defines the exit target for the first production-quality vertical slice. These are not all true of the current prototype; they are the acceptance targets for the next build phase.
+
+### First-View Acceptance
+
+The default player spawn passes when:
+
+- The first `main_scene.png` read communicates a small game store without explanation.
+- `SAVE POINT GAMES` or the current fictional store identity is visible and not clipped.
+- The register command center is visible and understandable.
+- At least one sellable product fixture is visible.
+- A customer route, queue hint, or active customer is visible.
+- A receiving/backroom hint is visible without making the room feel like a warehouse.
+- Empty ceiling and flat wall/floor planes do not dominate the screenshot.
+
+### Store Environment Acceptance
+
+The starter store passes when:
+
+- Storefront, sales floor, register, backroom, receiving, storage, computer, and service bench zones are readable from normal player angles.
+- Materials read as purposeful surfaces rather than untextured primitives.
+- Lighting separates sales floor from backroom while preserving prompt and product readability.
+- Signage is fictional, short, readable, and physically plausible.
+- Retail clutter supports function and does not hide paths, prompts, shelf slots, or products.
+- Collision preserves the core route: entry, shelf, register, backroom, receiving, storage, and fixture placement.
+
+### Interaction Acceptance
+
+The interaction layer passes when:
+
+- Left click remains the primary interaction.
+- The center-reticle prompt clearly states the object and action.
+- Held-item pricing still opens from the held product when no world target is selected.
+- Pickup, place, price, stock, register, computer, talk, and inspect states have distinct feedback.
+- Invalid actions explain what is blocked.
+- Workstation panels close back into captured first-person control.
+- Held items stay readable without blocking the reticle.
+
+### UI Acceptance
+
+The production UI passes when:
+
+- Pricing panel shows cost, market, draft price, margin, demand, and apply-to-matching scope.
+- Register UI distinguishes sales, preorders, services, trade-ins, and no-customer states.
+- Trade-in appraisal shows condition, completeness, demand, market, offer, store credit, margin, and risk notes.
+- Backroom computer is sectioned by task, not implementation order.
+- Supplier ordering shows cost, delivery, expected contents, storage/receiving implication, and cash impact.
+- Release planning shows launch day, wholesale cost, suggested price, allocation limit, preorders, expected demand, and cash impact.
+- Daily report distinguishes cash movement, revenue, cost, profit, obligations, reputation, and tomorrow planning.
+- All panels fit at `1280x720` without clipped critical text.
+
+### Customer Acceptance
+
+Customers pass when:
+
+- Customers no longer read as capsules.
+- Buyer, target buyer, parent gift buyer, collector, trade-in seller, return customer, preorder customer, service customer, regular, and suspicious contact have data or a deliberate implementation plan.
+- Role silhouettes are readable before prompt text.
+- Customers have plausible idle/walk/browse/queue/talk/pay/leave states or accepted animation placeholders.
+- Queue and special-customer positions remain readable in the production layout.
+- Feedback communicates purchase, refusal, impatience, trade-in response, preorder, service, return, and suspicious cues.
+
+### Content Acceptance
+
+Starter content passes when:
+
+- Product catalog contains enough fictional products for several days of play.
+- Product categories include used games, new releases, retro/collector, accessories, hardware, services, and suspicious/risk variants.
+- Product fields support condition, completeness, authenticity, rarity, platform family, format, cost, market, current price, demand, location, and risk.
+- Supplier lots, release calendar, fixture catalog, customer archetypes, dialogue pools, daily events, and unlocks are data-driven or have a documented migration path.
+- Validation covers unique IDs, fictional names, required fields, category variety, price sanity, and visual variant coverage.
+
+### Backroom Acceptance
+
+Backroom operations pass when:
+
+- Supplier orders create physical receiving/storage work.
+- Receiving, storage, management, service bench, paperwork, safe/security placeholder, and optional hidden clues are distinct.
+- The computer reports state and creates plans; it does not invisibly solve physical inventory handling.
+- Service bench supports service work while customer completion remains part of the register/customer loop.
+- Hidden-thread clues stay optional until deliberately escalated.
+
+### Progression Acceptance
+
+The first production vertical slice passes when:
+
+- A player can complete multiple in-game days without debug-only steps.
+- Cash, inventory, reputation, obligations, deliveries, and reports explain why the day changed.
+- At least one upgrade or fixture placement creates a meaningful new decision.
+- Bad decisions create recoverable pressure.
+- The player has a clear next goal at the end of the day.
+
+### Validation Acceptance
+
+Every implementation slice must keep:
+
+- `scripts/validate_godot.sh` passing.
+- UI scenario coverage at or above the required threshold.
+- Production script mapping at or above the required threshold.
+- Manual validation docs updated for changed player-facing behavior.
+- Screenshot artifacts useful for the changed surface.
+- A committed and pushed checkpoint before the next slice starts.
+
+Milestone 1 acceptance status:
+
+- Contracts are complete.
+- Implementation of these targets is pending in Milestone 2 and later.
+- Future slices should update this document only when the target itself changes, not as a substitute for implementation.
