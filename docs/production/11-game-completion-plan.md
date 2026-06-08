@@ -610,7 +610,7 @@ Stops:
 - Stop 12.3: Settings menu. Done in `Add settings menu`: add audio, display, controls, mouse, accessibility, and reset defaults.
 - Stop 12.4: Pause and main menu. Done in `Add pause main menu`: add pause state, resume, settings, quit, main menu, and safe mouse capture transitions.
 - Stop 12.5: Build/export pipeline. Done in `Add desktop export pipeline`: add desktop export settings, template-free pack export smoke, and local build verification script.
-- Stop 12.6: Release validation sync. Add launch-from-build smoke, save/load smoke, and manual release checklist.
+- Stop 12.6: Release validation sync. Done in `Sync release wrapper validation`: audit the release-wrapper matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load checklist.
 
 Acceptance:
 
@@ -636,7 +636,8 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.3 audio/display/mouse/accessibility controls, settings profile persistence, reset bindings/defaults, modal focus, and player settings application.
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 489 GUT tests, UI scenario automation coverage 454/563, production script mapping coverage 50/50, and 2 active validation tools.
+- Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 492 GUT tests, UI scenario automation coverage 455/564, production script mapping coverage 50/50, and 2 active validation tools.
 
 ## Milestone 13: Alpha Hardening
 

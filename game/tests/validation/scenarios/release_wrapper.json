@@ -1,6 +1,13 @@
 {
   "ui_scenarios": [
     {
+      "id": "release_wrapper_validation_sync_audit",
+      "name": "Release wrapper validation matrix, tool manifest, and docs stay synced",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_release_wrapper_validation_sync.gd::test_release_wrapper_validation_matrix_covers_build_and_save_load_review"
+    },
+    {
       "id": "release_pack_artifact_review",
       "name": "Exported desktop pack artifact is generated and reviewed from the local build verifier",
       "status": "manual",

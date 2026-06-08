@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper pass: `scripts/validate_godot.sh` passes with 489 GUT tests, UI scenario automation coverage at 454/563, production script mapping coverage at 50/50, 2 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper pass: `scripts/validate_godot.sh` passes with 492 GUT tests, UI scenario automation coverage at 455/564, production script mapping coverage at 50/50, 2 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -56,6 +56,7 @@ Current automated baseline:
 - Settings menu is implemented through Stop 12.3; manual QA should run the Settings Focus checks to confirm audio, display, controls, mouse, accessibility, persistence, reset defaults, and modal fit/readability work in the actual window.
 - Pause/main menu is implemented through Stop 12.4; manual QA should run the Pause/Main Menu Focus checks to confirm pause mode, main-menu mode, settings/save-load routing, quit request language, and mouse capture recovery work in the actual window.
 - Desktop export pipeline is implemented through Stop 12.5; manual QA should run the Release Wrapper Focus checks to confirm pack artifact handoff, binary export template behavior, and future build relaunch/continue expectations are clear.
+- Release wrapper validation sync is implemented through Stop 12.6; automated checks now audit the release-wrapper matrix/docs/tool manifest, and manual QA should treat the Release Wrapper Focus section as the current release-readiness checklist.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 

@@ -45,8 +45,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 489 GUT tests.
-- UI scenario automation coverage is 454/563, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 492 GUT tests.
+- UI scenario automation coverage is 455/564, above the 80% threshold.
 - Production script mapping coverage is 50/50.
 - There are 2 active standalone validation tool manifests: product catalog content checking and desktop export pack smoke.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
@@ -87,6 +87,7 @@ Current production validation baseline:
 - Settings menu coverage verifies the Stop 12.3 audio, display, controls, mouse, accessibility, persistence, bindings reset, default reset, modal focus, and player settings application surface.
 - Pause/main-menu coverage verifies the Stop 12.4 pause mode, resume transition, main-menu mode, start-game transition, settings/save-load requests, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage verifies the Stop 12.5 macOS desktop export preset, template-free pack export artifact, pack boot smoke, and clear binary-export template fallback message.
+- Release wrapper validation sync is complete through Stop 12.6; automated checks now audit the release-wrapper scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
 
 ## Manual Validation
 
