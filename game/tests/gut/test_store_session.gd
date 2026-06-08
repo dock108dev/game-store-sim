@@ -1124,6 +1124,58 @@ func test_store_session_places_pending_fixture_and_clears_pending_order() -> voi
 	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack placed")
 
 
+func test_store_session_assigns_category_to_placed_fixture_slots() -> void:
+	var fixture_root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var manager: Node = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	fixture_root.add_child(session)
+	manager.add_child(ghost)
+	manager._ready()
+	session.fixture_placement_manager_path = session.get_path_to(manager)
+	session.inventory_root_path = session.get_path_to(fixture_root)
+	var order := session.order_fixture("fixture_game_display_rack")
+	var placed := session.place_pending_fixture()
+
+	assert_true(session.can_assign_fixture_category(str(order.get("order_id")), "new_game"))
+	assert_false(session.can_assign_fixture_category(str(order.get("order_id")), "hardware"))
+	var assignment := session.assign_fixture_category(str(placed.get("order_id")), "new_game")
+
+	assert_eq(assignment.get("assigned_category"), "new_game")
+	assert_eq(assignment.get("slot_category"), "new_game")
+	assert_eq(session.get_placed_fixture_orders()[0].get("assigned_category"), "new_game")
+	assert_eq(session.get_fixture_slot_categories().get("shelf_slot_001"), "new_game")
+	var placed_rack := fixture_root.get_node("PlacedGameDisplayRack001")
+	var slot := placed_rack.get_node("ShelfSlot001") as ShelfSlot
+	assert_eq(slot.get_accepted_category(), "new_game")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack placed category:new_game")
+	assert_string_contains(session.get_fixture_category_assignment_summary_text(), "Game Display Rack -> new_game")
+
+
+func test_store_session_fixture_category_affects_demand_tuning() -> void:
+	var root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(root)
+	add_child_autofree(session)
+	root.add_child(item)
+	session.inventory_root_path = session.get_path_to(root)
+	item.set("product", load("res://data/products/new_neon_skyline.tres"))
+	item.set("location_id", "shelf_slot_001")
+	item.set("current_price_cents", 4999)
+	session.fixture_slot_categories["shelf_slot_001"] = "new_game"
+
+	var lines := session.get_active_inventory_demand_tuning_lines(1)
+
+	assert_eq(lines.size(), 1)
+	assert_string_contains(lines[0], "Neon Skyline")
+	assert_string_contains(lines[0], "endcap")
+	assert_string_contains(lines[0], "featured")
+
+
 func test_store_session_adjusts_pending_fixture_placement() -> void:
 	var fixture_root := Node3D.new()
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()

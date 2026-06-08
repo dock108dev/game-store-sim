@@ -79,6 +79,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_false(_panel.order_games_button.disabled)
 	assert_false(_panel.order_rack_button.disabled)
 	assert_true(_panel.place_rack_button.disabled)
+	assert_true(_panel.assign_category_button.disabled)
 	assert_true(_panel.undo_rack_button.disabled)
 	assert_eq(_panel.supplier_action_label.text, "Supplier")
 	assert_eq(_panel.storage_action_label.text, "Storage")
@@ -108,6 +109,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_false(_panel.buy_upgrade_button.disabled)
 	assert_eq(_panel.order_rack_button.text, "Order Rack")
 	assert_eq(_panel.place_rack_button.text, "Place Rack")
+	assert_eq(_panel.assign_category_button.text, "Assign Cat")
 	assert_eq(_panel.commit_allocation_button.text, "Commit Release")
 	assert_eq(_panel.rack_left_button.text, "Left")
 	assert_eq(_panel.rack_right_button.text, "Right")
@@ -578,6 +580,30 @@ func test_day_summary_panel_places_pending_fixture_from_backroom_computer() -> v
 	assert_string_contains(_panel.fixture_label.text, "Placed storage fixtures:")
 	assert_eq(_panel.status_label.text, "Placed Game Display Rack in storage.")
 	assert_true(_panel.place_rack_button.disabled)
+	assert_false(_panel.assign_category_button.disabled)
+
+
+func test_day_summary_panel_assigns_fixture_category_from_backroom_computer() -> void:
+	var fixture_root := Node3D.new()
+	var manager: Node = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	manager.add_child(ghost)
+	manager._ready()
+	_session.fixture_placement_manager_path = _session.get_path_to(manager)
+	_session.inventory_root_path = _session.get_path_to(fixture_root)
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.order_game_display_rack())
+	assert_true(_panel.place_pending_rack())
+
+	assert_true(_panel.assign_fixture_category())
+
+	assert_eq(_session.get_placed_fixture_orders()[0].get("assigned_category"), "new_game")
+	assert_string_contains(_panel.fixture_label.text, "Game Display Rack placed category:new_game")
+	assert_string_contains(_panel.fixture_label.text, "Game Display Rack -> new_game")
+	assert_eq(_panel.status_label.text, "Assigned Game Display Rack to new_game.")
 
 
 func test_day_summary_panel_adjusts_pending_fixture_preview() -> void:

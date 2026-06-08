@@ -489,6 +489,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "fixture_category_assignment_readability",
+      "name": "Fixture category assignment reads as store-building work and explains its demand effect",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify assignment state, slot updates, panel action, and demand tuning; human review must confirm Assign Cat, category summaries, and demand wording are understandable without feeling like a debug switch.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_computer_tabs_readability",
       "name": "Backroom computer dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable",
       "status": "manual",

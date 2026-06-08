@@ -75,6 +75,7 @@ const BACKROOM_TABS := [
 @onready var sort_receiving_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons/SortReceivingButton
 @onready var order_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/OrderRackButton
 @onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/PlaceRackButton
+@onready var assign_category_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/AssignCategoryButton
 @onready var store_item_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons/StoreItemButton
 @onready var pull_item_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons/PullItemButton
 @onready var start_service_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons/StartServiceButton
@@ -124,6 +125,7 @@ func _ready() -> void:
 	sort_receiving_button.pressed.connect(sort_receiving_batch)
 	order_rack_button.pressed.connect(order_game_display_rack)
 	place_rack_button.pressed.connect(place_pending_rack)
+	assign_category_button.pressed.connect(assign_fixture_category)
 	store_item_button.pressed.connect(store_receiving_item)
 	pull_item_button.pressed.connect(pull_backstock_item)
 	start_service_button.pressed.connect(start_service_ticket)
@@ -345,6 +347,23 @@ func place_pending_rack() -> bool:
 		return false
 
 	status_label.text = "Placed %s in storage." % str(placed.get("display_name", "fixture"))
+	return true
+
+
+func assign_fixture_category() -> bool:
+	if _session == null or not _session.has_method("assign_first_fixture_category"):
+		return false
+
+	var assignment: Dictionary = _session.assign_first_fixture_category("new_game")
+	_update_labels()
+	if assignment.is_empty():
+		status_label.text = "Could not assign fixture category."
+		return false
+
+	status_label.text = "Assigned %s to %s." % [
+		str(assignment.get("display_name", "fixture")),
+		str(assignment.get("assigned_category", "category")),
+	]
 	return true
 
 
@@ -629,6 +648,10 @@ func _update_labels() -> void:
 		place_rack_button.disabled = _session.is_day_closed or not _session.can_place_pending_fixture()
 	else:
 		place_rack_button.disabled = true
+	if _session.has_method("can_assign_first_fixture_category"):
+		assign_category_button.disabled = _session.is_day_closed or not _session.can_assign_first_fixture_category("new_game")
+	else:
+		assign_category_button.disabled = true
 	if _session.has_method("can_store_receiving_item"):
 		store_item_button.disabled = _session.is_day_closed or not _session.can_store_receiving_item()
 	else:

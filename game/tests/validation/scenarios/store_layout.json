@@ -50,6 +50,20 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_orders_fixture_and_reserves_cash"
     },
     {
+      "id": "store_session_assigns_fixture_category",
+      "name": "Store session assigns a supported category to a placed fixture and its shelf slots",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_assigns_category_to_placed_fixture_slots"
+    },
+    {
+      "id": "fixture_category_affects_demand",
+      "name": "Assigned fixture category affects active inventory demand tuning visibility and marketing",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_fixture_category_affects_demand_tuning"
+    },
+    {
       "id": "store_session_rejects_fixture_without_cash",
       "name": "Store session rejects fixture orders without enough cash",
       "status": "automated",
@@ -62,6 +76,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_orders_fixture_from_backroom_computer"
+    },
+    {
+      "id": "backroom_panel_assigns_fixture_category",
+      "name": "Backroom computer panel assigns a placed fixture category from storage controls",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_assigns_fixture_category_from_backroom_computer"
     },
     {
       "id": "store_session_adjusts_pending_fixture",

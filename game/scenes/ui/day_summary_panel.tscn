@@ -264,6 +264,11 @@ custom_minimum_size = Vector2(88, 40)
 layout_mode = 2
 text = "Place Rack"
 
+[node name="AssignCategoryButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Assign Cat"
+
 [node name="BackstockActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions"]
 layout_mode = 2
 theme_override_constants/separation = 6

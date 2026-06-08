@@ -103,7 +103,8 @@ The following polish items remain valid historical checkpoints:
 - Done: added fixture metadata for slot count, accepted product categories, placement zone, gameplay tags, upgrade locks, placeholder status, and catalog summaries.
 - Done: kept the existing starter rack order/place flow intact while exposing locked future fixtures as planning options.
 - Done: improved placement UX with footprint-aware bounds, critical-path clearance anchors, overlap rejection against placed fixtures, adjustment undo, placement issue text, and compact Undo controls.
-- Remaining polish risk: Stop 9.3 still needs category assignment so the expanded fixtures change product browsing and demand rather than only placement planning.
+- Done: added fixture category assignment with `Assign Cat` storage control, supported-category validation, placed fixture slot updates, category assignment summaries, and demand tuning effects for assigned shelf slots.
+- Remaining polish risk: Stop 9.4 still needs a decoration system baseline so the store-building phase can move beyond fixtures into walls, floors, posters, signage, lights, display props, and clutter budget.
 
 ## Product And Fixture Polish
 

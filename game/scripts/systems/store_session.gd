@@ -257,6 +257,7 @@ var cash_cents: int = 0
 var is_day_closed: bool = false
 var fixture_orders: Array[Dictionary] = []
 var placed_fixtures: Array[Dictionary] = []
+var fixture_slot_categories: Dictionary = {}
 var supplier_orders: Array[Dictionary] = []
 var receiving_batches: Array[Dictionary] = []
 var storage_movements: Array[Dictionary] = []
@@ -2177,6 +2178,7 @@ func place_pending_fixture(parent: Node = null) -> Dictionary:
 	order["placed_position"] = placed_node.global_position
 	order["placed_rotation_y"] = placed_node.global_rotation.y
 	fixture_orders[order_index] = order
+	_apply_fixture_category_to_node(placed_node, order)
 	placed_fixtures.append(order.duplicate(true))
 	return order.duplicate(true)
 
@@ -2192,6 +2194,7 @@ func get_placed_fixture_orders() -> Array[Dictionary]:
 func replace_fixture_orders(orders: Array) -> void:
 	fixture_orders.clear()
 	placed_fixtures.clear()
+	fixture_slot_categories.clear()
 	for order in orders:
 		if typeof(order) == TYPE_DICTIONARY:
 			var row: Dictionary = order
@@ -2241,8 +2244,83 @@ func get_fixture_order_summary_text() -> String:
 	if not placed.is_empty():
 		lines.append("Placed storage fixtures:")
 		for order in placed:
-			lines.append("%s placed" % str(order.get("display_name", "Fixture")))
+			var assigned_category := str(order.get("assigned_category", order.get("slot_category", "")))
+			lines.append("%s placed category:%s" % [
+				str(order.get("display_name", "Fixture")),
+				assigned_category,
+			])
+	lines.append(get_fixture_category_assignment_summary_text())
 
+	return "\n".join(lines)
+
+
+func can_assign_fixture_category(order_id: String, category: String) -> bool:
+	if is_day_closed:
+		return false
+
+	var order_index := _find_fixture_order_index(order_id)
+	if order_index == -1:
+		return false
+
+	var order := fixture_orders[order_index]
+	if not ["pending_placement", "placed"].has(str(order.get("status", ""))):
+		return false
+
+	return _get_assignable_fixture_categories(order).has(_normalize_fixture_category(category))
+
+
+func assign_fixture_category(order_id: String, category: String) -> Dictionary:
+	var normalized_category := _normalize_fixture_category(category)
+	if not can_assign_fixture_category(order_id, normalized_category):
+		return {}
+
+	var order_index := _find_fixture_order_index(order_id)
+	var order := fixture_orders[order_index]
+	order["assigned_category"] = normalized_category
+	order["slot_category"] = normalized_category
+	order["category_assigned_day"] = day_number
+	fixture_orders[order_index] = order
+
+	var placed_node := _get_placed_fixture_node(order)
+	if placed_node != null:
+		_apply_fixture_category_to_node(placed_node, order)
+
+	_refresh_placed_fixture_cache()
+	return order.duplicate(true)
+
+
+func can_assign_first_fixture_category(category: String = "new_game") -> bool:
+	var order := _get_first_assignable_fixture_order(category)
+	return not order.is_empty()
+
+
+func assign_first_fixture_category(category: String = "new_game") -> Dictionary:
+	var order := _get_first_assignable_fixture_order(category)
+	if order.is_empty():
+		return {}
+
+	return assign_fixture_category(str(order.get("order_id", "")), category)
+
+
+func get_fixture_slot_categories() -> Dictionary:
+	return fixture_slot_categories.duplicate(true)
+
+
+func get_fixture_category_assignment_summary_text() -> String:
+	var lines: Array[String] = ["Fixture category assignments:"]
+	var assigned := false
+	for order in fixture_orders:
+		var assigned_category := str(order.get("assigned_category", ""))
+		if assigned_category.is_empty():
+			continue
+		assigned = true
+		lines.append("%s -> %s (%d slots)" % [
+			str(order.get("display_name", "Fixture")),
+			assigned_category,
+			int(order.get("slot_count", 0)),
+		])
+	if not assigned:
+		lines.append("none")
 	return "\n".join(lines)
 
 
@@ -2252,6 +2330,85 @@ func _fixture_requirements_met(fixture: Resource) -> bool:
 
 	var required_upgrade_id := str(fixture.get("requires_upgrade_id"))
 	return required_upgrade_id.is_empty() or has_upgrade(required_upgrade_id)
+
+
+func _normalize_fixture_category(category: String) -> String:
+	return category.strip_edges().to_lower()
+
+
+func _get_assignable_fixture_categories(order: Dictionary) -> Array[String]:
+	var fixture := get_fixture_definition(str(order.get("fixture_id", "")))
+	var categories: Array[String] = []
+	if fixture != null:
+		for category in Array(fixture.get("accepted_product_categories")):
+			_append_unique_string(categories, _normalize_fixture_category(str(category)))
+		_append_unique_string(categories, _normalize_fixture_category(str(fixture.get("default_slot_category"))))
+	_append_unique_string(categories, _normalize_fixture_category(str(order.get("slot_category", ""))))
+	return categories
+
+
+func _append_unique_string(values: Array[String], value: String) -> void:
+	if value.is_empty() or values.has(value):
+		return
+	values.append(value)
+
+
+func _get_first_assignable_fixture_order(category: String) -> Dictionary:
+	var normalized_category := _normalize_fixture_category(category)
+	for order in fixture_orders:
+		if str(order.get("status", "")) != "placed":
+			continue
+		if _get_assignable_fixture_categories(order).has(normalized_category):
+			return order.duplicate(true)
+	for order in fixture_orders:
+		if str(order.get("status", "")) != "pending_placement":
+			continue
+		if _get_assignable_fixture_categories(order).has(normalized_category):
+			return order.duplicate(true)
+	return {}
+
+
+func _get_placed_fixture_node(order: Dictionary) -> Node3D:
+	var path_text := str(order.get("placed_node_path", ""))
+	if path_text.is_empty():
+		return null
+	return get_node_or_null(NodePath(path_text)) as Node3D
+
+
+func _apply_fixture_category_to_node(fixture_node: Node, order: Dictionary) -> void:
+	if fixture_node == null:
+		return
+
+	var category := _normalize_fixture_category(str(order.get("assigned_category", order.get("slot_category", ""))))
+	if category.is_empty():
+		return
+
+	var slots: Array[Node] = []
+	_collect_shelf_slots(fixture_node, slots)
+	for slot in slots:
+		if slot.has_method("assign_category"):
+			slot.assign_category(category)
+		else:
+			slot.set("accepted_category", category)
+
+		var slot_id := str(slot.get("slot_id"))
+		if slot_id.is_empty():
+			slot_id = slot.name
+		fixture_slot_categories[slot_id] = category
+
+
+func _collect_shelf_slots(node: Node, slots: Array[Node]) -> void:
+	if node is ShelfSlot:
+		slots.append(node)
+	for child in node.get_children():
+		_collect_shelf_slots(child, slots)
+
+
+func _refresh_placed_fixture_cache() -> void:
+	placed_fixtures.clear()
+	for order in fixture_orders:
+		if str(order.get("status", "")) == "placed":
+			placed_fixtures.append(order.duplicate(true))
 
 
 func get_status_label() -> String:
@@ -2335,6 +2492,14 @@ func _format_transaction_line(transaction: Dictionary) -> String:
 func _get_item_shelf_visibility(item: Node) -> String:
 	var location_id := str(item.get("location_id"))
 	if location_id.begins_with("shelf_slot"):
+		var fixture_category := _get_fixture_category_for_slot(location_id)
+		match fixture_category:
+			"new_game", "new_release", "launch_title":
+				return "endcap"
+			"bargain":
+				return "low"
+			"backstock":
+				return "backroom"
 		return "front"
 	if location_id.begins_with("customer:"):
 		return "front"
@@ -2346,12 +2511,25 @@ func _get_item_shelf_visibility(item: Node) -> String:
 
 
 func _get_item_marketing_signal(item: Node, product: ProductDefinition) -> String:
+	var fixture_category := _get_fixture_category_for_slot(str(item.get("location_id")))
 	var current_price := int(item.get("current_price_cents"))
 	if product.market_value_cents > 0 and current_price > 0 and current_price <= int(product.market_value_cents * 0.9):
+		return "sale_tag"
+	if not fixture_category.is_empty() and fixture_category == _normalize_fixture_category(product.category):
+		return "featured"
+	if fixture_category in ["new_game", "new_release", "launch_title"] and product.category == "new_game":
+		return "featured"
+	if fixture_category in ["high_value", "rare_game", "collector_item"]:
+		return "staff_pick"
+	if fixture_category == "bargain":
 		return "sale_tag"
 	if product.rarity in ["rare", "collector", "launch"]:
 		return "staff_pick"
 	return "none"
+
+
+func _get_fixture_category_for_slot(slot_id: String) -> String:
+	return _normalize_fixture_category(str(fixture_slot_categories.get(slot_id, "")))
 
 
 func _get_day_demand_event() -> String:
