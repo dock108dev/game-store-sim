@@ -43,7 +43,7 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 Current polish-pass baseline:
 
 - `scripts/validate_godot.sh` passes with 286 GUT tests.
-- UI scenario automation coverage is 289/338, above the required 80% threshold.
+- UI scenario automation coverage is 289/339, above the required 80% threshold.
 - Production script mapping coverage is 31/31.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
@@ -114,6 +114,18 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Screenshot composition is useful, not merely nonblank.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
+
+## Planning And Docs-Only Slices
+
+Planning-only slices still need validation discipline:
+
+- Run `git diff --check`.
+- Run `scripts/validate_godot.sh` unless the slice is explicitly blocked by a local toolchain showstopper.
+- Update `04-backlog.md` when the active phase changes.
+- Update `07-current-manual-playtest.md` when the planning decision changes how future manual validation should be interpreted.
+- Do not mark gameplay manual checks as performed when the slice only changed docs.
+
+The game-completion plan in `11-game-completion-plan.md` is the active source of truth for moving from validated prototype to alpha production. Each implementation slice from that plan must keep automated validation, screenshot review, manual checklist updates, commit, and push in the same stop.
 
 ## Maintaining The Matrix
 

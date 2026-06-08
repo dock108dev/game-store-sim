@@ -1,6 +1,6 @@
 # Production Polish Execution Plan
 
-This is the active execution plan after the completed backroom spatial pass. It breaks the remaining polish backlog into validated, committable slices.
+This is the completed execution plan for the first production polish pass after the backroom spatial pass. It is retained as historical slice evidence. Current completion work is tracked in `11-game-completion-plan.md`.
 
 Every slice follows the same rule:
 
@@ -416,7 +416,7 @@ Validation:
 
 - `scripts/validate_godot.sh` passed after the manual checklist audit.
 - Final scenario matrix includes dedicated polish files for backroom, customer, store visual, and product/fixture presentation.
-- Latest automated baseline is 286 GUT tests, UI scenario coverage 289/338, and script mapping coverage 31/31.
+- Latest automated baseline is 286 GUT tests, UI scenario coverage 289/339, and script mapping coverage 31/31.
 
 Manual validation status:
 

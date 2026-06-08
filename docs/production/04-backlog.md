@@ -4,15 +4,17 @@ This backlog is the active production view. The historical first-playable checkl
 
 ## Current Phase
 
-Production polish and readability.
+Game completion planning and alpha production setup.
 
-Goal: keep the validated retail loop intact while making the store, backroom, customers, computer, and menus read like an intentional game instead of a test harness.
+Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: planned production polish implementation is complete through the current execution plan; remaining work is human manual validation and future scope selection.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game.
 
-Active roadmap: `08-polish-roadmap.md`.
+Historical polish roadmap: `08-polish-roadmap.md`.
 
-Current implementation plan: `10-polish-execution-plan.md`.
+Completed polish implementation plan: `10-polish-execution-plan.md`.
+
+Current completion plan: `11-game-completion-plan.md`.
 
 ## Current Rules
 
@@ -28,7 +30,26 @@ Current implementation plan: `10-polish-execution-plan.md`.
 
 ## Priority Backlog
 
-1. Production polish planning reset. Done in this docs slice.
+1. Completion planning lock. Done in `11-game-completion-plan.md`.
+2. Production direction and target slice.
+3. Store environment production pass.
+4. Interaction and game-feel production pass.
+5. Menu, register, and computer production UI.
+6. Customer production pass.
+7. Product and content pipeline.
+8. Economy, day loop, and progression.
+9. Backroom operations.
+10. Store building, decoration, and expansion.
+11. Hidden-thread production arc.
+12. Audio, VFX, and presentation feel.
+13. Save/load, settings, and release wrapper.
+14. Alpha hardening.
+
+## Completed Polish Scope
+
+The following polish items remain valid historical checkpoints:
+
+1. Production polish planning reset. Done.
 2. Backroom spatial and visual identity pass. Done.
 3. Backroom computer/menu information architecture pass. Done.
 4. Customer readability and role silhouette pass. Done.

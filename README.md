@@ -2,7 +2,7 @@
 
 First-person specialty video game retail simulator. The player runs a small game shop by physically receiving stock, pricing used games, stocking fixtures, serving customers, handling trade-ins and services, planning launch allocations, and noticing optional suspicious activity under the normal retail loop.
 
-The first playable counter loop is implemented and validated. The project is now moving into a production polish phase focused on visuals, menus, backroom identity, customer readability, and computer/menu UX.
+The first playable counter loop is implemented and validated. The first polish/readability pass is also validated, but current screenshots still show a graybox prototype. The project is now moving into a game-completion phase that will define and build the production-directed store, UI, customers, content pipeline, economy, backroom, presentation, save/load, and alpha wrapper.
 
 ## Current Playable State
 
@@ -28,9 +28,10 @@ The first playable counter loop is implemented and validated. The project is now
 - [Backlog](docs/production/04-backlog.md): current production backlog and completed-slice summary.
 - [Validation Strategy](docs/production/06-validation.md): automated gate, coverage policy, manual validation expectations.
 - [Current Manual Playtest](docs/production/07-current-manual-playtest.md): human playtest checklist for the current build.
-- [Polish Roadmap](docs/production/08-polish-roadmap.md): next production phase for visuals, menus, backroom, computer UX, customers, and store readability.
+- [Polish Roadmap](docs/production/08-polish-roadmap.md): completed first readability pass for visuals, menus, backroom, computer UX, customers, and store readability.
 - [Backroom Polish Implementation Plan](docs/production/09-backroom-polish-implementation-plan.md): slice stops, acceptance checks, validation, and commit/sync rules for the backroom spatial pass.
-- [Production Polish Execution Plan](docs/production/10-polish-execution-plan.md): active multi-slice execution plan for the remaining polish backlog.
+- [Production Polish Execution Plan](docs/production/10-polish-execution-plan.md): completed multi-slice execution plan for the first polish backlog.
+- [Game Completion Plan](docs/production/11-game-completion-plan.md): active plan for moving from validated prototype to alpha-quality game.
 - [Hidden Thread](docs/narrative/hidden-thread.md): spoiler-facing plan for the optional suspicious narrative layer.
 
 ## Production Rule

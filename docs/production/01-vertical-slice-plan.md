@@ -1,6 +1,6 @@
 # Historical Vertical Slice Plan
 
-This file is retained as the completed first-playable record. It is not the active backlog. Current production work is tracked in `04-backlog.md`, and the next visual/menu/backroom/customer polish phase is tracked in `08-polish-roadmap.md`.
+This file is retained as the completed first-playable record. It is not the active backlog. Current production work is tracked in `04-backlog.md`, and the game-completion phase is tracked in `11-game-completion-plan.md`.
 
 ## Completed Slice Goal
 

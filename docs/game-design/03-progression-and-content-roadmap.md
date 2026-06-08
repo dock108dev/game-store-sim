@@ -63,7 +63,7 @@ Exit criteria:
 
 Goal: make the validated loop look and read like an intentional game before adding major mechanics.
 
-Status: active. Detailed production plan lives in `docs/production/08-polish-roadmap.md`.
+Status: complete as a first readability pass. Detailed production history lives in `docs/production/08-polish-roadmap.md` and `docs/production/10-polish-execution-plan.md`.
 
 Features:
 
@@ -81,6 +81,25 @@ Exit criteria:
 - Customer roles are recognizable before interaction.
 - Core products and fixtures look intentional without hiding gameplay state.
 - Manual validation reflects the actual current UI and scene.
+
+## Phase 1.75: Game Completion Planning And Production Direction
+
+Goal: move from validated prototype to a production-directed game plan before replacing large scene, UI, customer, and content surfaces.
+
+Status: active. Detailed completion plan lives in `docs/production/11-game-completion-plan.md`.
+
+Features:
+
+- Screenshot-driven diagnosis of the current graybox gap.
+- Production milestones from direction lock through alpha hardening.
+- Explicit slice stops with acceptance checks, validation, manual checklist sync, commit, and push requirements.
+- Production target contracts for visuals, UI, store layout, customer presentation, product content, economy, backroom operations, hidden thread, audio, save/load, and release wrapper.
+
+Exit criteria:
+
+- The repo has one current plan for turning the prototype into an alpha-quality local desktop build.
+- The backlog, manual validation docs, and document map point at the same active phase.
+- The next implementation sequence begins with production target contracts rather than random visual edits.
 
 ## Phase 2: Trade-Ins And Used Economy
 

@@ -75,3 +75,27 @@ Rejected alternatives:
 Follow-up risk:
 
 - Visual polish can easily break interaction readability. Each slice must keep manual validation and screenshots current.
+
+## 2026-06-08: Game Completion Phase
+
+Decision:
+
+- Treat the current build as a validated prototype foundation, not as a production-looking game.
+- Start a dedicated game-completion phase before broad feature expansion.
+- Use `11-game-completion-plan.md` as the active source of truth for milestones, slice stops, acceptance criteria, validation, commit, and push cadence.
+
+Reason:
+
+- The June 7 screenshot review shows that the store, backroom, customers, menus, signage, and presentation still read as graybox even though the mechanics are validated.
+- Continuing with isolated feature additions would make the game larger without making the first playable experience convincing.
+- A comprehensive phase plan gives each future slice a clear player-facing outcome and prevents open-ended "make it pretty" work.
+
+Rejected alternatives:
+
+- Keep adding mechanics on top of the current scene.
+- Declare the completed polish pass sufficient because automated validation passes.
+- Replace the whole scene in one large unvalidated art pass.
+
+Follow-up risk:
+
+- Direction work can become abstract if it is not quickly converted into production target contracts and scene/UI slices. The next work should begin with Milestone 1 in `11-game-completion-plan.md`.

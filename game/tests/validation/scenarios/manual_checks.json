@@ -161,6 +161,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "production_graybox_gap_review",
+      "name": "Current screenshots are reviewed as prototype gaps before production art work begins",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human production-direction judgment; the current build can validate mechanically while still needing the larger game-completion phase.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",

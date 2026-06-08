@@ -4,8 +4,10 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this polish pass: `scripts/validate_godot.sh` passed with 286 GUT tests, UI scenario coverage 289/338, and script mapping coverage 31/31.
+- Last full gate in this planning pass: `scripts/validate_godot.sh` passed with 286 GUT tests, UI scenario coverage 289/339, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
+- Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
+- Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
 ## Full Loop
 
@@ -70,6 +72,7 @@ Current automated baseline:
 
 ## Visual Checks
 
+- From player spawn, confirm the screenshot still reads as a validated prototype, not final production art; capture obvious graybox gaps as planning follow-up instead of treating them as current-loop validation failures.
 - Receiving box contains multiple visible used games without looking cluttered.
 - Display rack still reads as a used-game rack, and stocked used games still go into the expected slots.
 - Used-game cases look compact enough on the rack and while carried; they should not read like oversized display panels.
