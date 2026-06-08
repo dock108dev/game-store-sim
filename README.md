@@ -32,6 +32,7 @@ The first playable counter loop is implemented and validated. The first polish/r
 - [Backroom Polish Implementation Plan](docs/production/09-backroom-polish-implementation-plan.md): slice stops, acceptance checks, validation, and commit/sync rules for the backroom spatial pass.
 - [Production Polish Execution Plan](docs/production/10-polish-execution-plan.md): completed multi-slice execution plan for the first polish backlog.
 - [Game Completion Plan](docs/production/11-game-completion-plan.md): active plan for moving from validated prototype to alpha-quality game.
+- [Production Target Contracts](docs/production/12-production-target-contracts.md): active screenshot teardown, art, layout, UI, content, and acceptance contracts for the next production build.
 - [Hidden Thread](docs/narrative/hidden-thread.md): spoiler-facing plan for the optional suspicious narrative layer.
 
 ## Production Rule
