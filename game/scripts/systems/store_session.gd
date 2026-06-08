@@ -16,6 +16,58 @@ const DAILY_UTILITIES_RESERVE_CENTS := 175
 const DAILY_PAYROLL_PLACEHOLDER_CENTS := 0
 const DAILY_REPAIRS_PLACEHOLDER_CENTS := 0
 const DAILY_SHRINKAGE_PLACEHOLDER_CENTS := 0
+const UPGRADE_CATALOG := [
+	{
+		"upgrade_id": "upgrade_fixture_peg_wall",
+		"label": "Accessory Peg Wall",
+		"category": "fixture",
+		"cost_cents": 8000,
+		"unlocks": "Accessory fixture orders",
+	},
+	{
+		"upgrade_id": "upgrade_category_accessories",
+		"label": "Accessory Category License",
+		"category": "category",
+		"cost_cents": 6000,
+		"unlocks": "Accessory stocking and customer demand",
+	},
+	{
+		"upgrade_id": "upgrade_service_cleaning_tools",
+		"label": "Service Cleaning Tools",
+		"category": "service_tool",
+		"cost_cents": 12000,
+		"unlocks": "Cartridge cleaning and controller testing",
+	},
+	{
+		"upgrade_id": "upgrade_computer_analytics",
+		"label": "Computer Analytics",
+		"category": "computer_tool",
+		"cost_cents": 9000,
+		"unlocks": "Advanced demand and margin views",
+	},
+	{
+		"upgrade_id": "upgrade_signage_staff_picks",
+		"label": "Staff Picks Signage",
+		"category": "signage",
+		"cost_cents": 5000,
+		"unlocks": "Featured shelf marketing",
+	},
+	{
+		"upgrade_id": "upgrade_backroom_storage",
+		"label": "Backroom Storage Bay",
+		"category": "storage",
+		"cost_cents": 10000,
+		"unlocks": "More backstock and receiving capacity",
+	},
+	{
+		"upgrade_id": "upgrade_store_expansion",
+		"label": "Starter Store Expansion",
+		"category": "expansion",
+		"cost_cents": 30000,
+		"requires_upgrade_id": "upgrade_backroom_storage",
+		"unlocks": "Larger sales floor footprint",
+	},
+]
 const DAY_STRUCTURE := [
 	{
 		"phase": DAY_PHASE_OPENING,
@@ -79,6 +131,7 @@ var release_allocations: Array[Dictionary] = []
 var launch_events: Array[Dictionary] = []
 var operating_expenses: Array[Dictionary] = []
 var reputation_events: Array[Dictionary] = []
+var purchased_upgrades: Array[Dictionary] = []
 var reputation_score: int = 100
 
 
@@ -298,6 +351,103 @@ func get_cash_pressure_summary_text() -> String:
 		lines.append("Posted operating expenses: none")
 	else:
 		lines.append("Posted operating expenses: %s total" % format_money(get_operating_expenses_total_cents()))
+	return "\n".join(lines)
+
+
+func get_upgrade_catalog() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for upgrade in UPGRADE_CATALOG:
+		rows.append(upgrade.duplicate(true))
+	return rows
+
+
+func get_purchased_upgrades() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for upgrade in purchased_upgrades:
+		rows.append(upgrade.duplicate(true))
+	return rows
+
+
+func replace_purchased_upgrades(upgrades: Array) -> void:
+	purchased_upgrades.clear()
+	for upgrade in upgrades:
+		if typeof(upgrade) == TYPE_DICTIONARY:
+			var row: Dictionary = upgrade
+			purchased_upgrades.append(row.duplicate(true))
+
+
+func has_upgrade(upgrade_id: String) -> bool:
+	for upgrade in purchased_upgrades:
+		if str(upgrade.get("upgrade_id", "")) == upgrade_id:
+			return true
+	return false
+
+
+func get_available_upgrades() -> Array[Dictionary]:
+	var upgrades: Array[Dictionary] = []
+	for upgrade in UPGRADE_CATALOG:
+		var upgrade_id := str(upgrade.get("upgrade_id", ""))
+		if has_upgrade(upgrade_id):
+			continue
+		if not _upgrade_requirements_met(upgrade):
+			continue
+		upgrades.append(upgrade.duplicate(true))
+	return upgrades
+
+
+func can_purchase_upgrade(upgrade_id: String) -> bool:
+	if is_day_closed or has_upgrade(upgrade_id):
+		return false
+	var upgrade := _get_upgrade_definition(upgrade_id)
+	if upgrade.is_empty() or not _upgrade_requirements_met(upgrade):
+		return false
+	return get_cash_cents() >= int(upgrade.get("cost_cents", 0))
+
+
+func purchase_upgrade(upgrade_id: String) -> Dictionary:
+	if not can_purchase_upgrade(upgrade_id):
+		return {}
+
+	var upgrade := _get_upgrade_definition(upgrade_id)
+	cash_cents = get_cash_cents() - int(upgrade.get("cost_cents", 0))
+	var purchase := upgrade.duplicate(true)
+	purchase["purchased_day"] = day_number
+	purchase["status"] = "purchased"
+	purchased_upgrades.append(purchase)
+	return purchase.duplicate(true)
+
+
+func get_upgrade_summary_text() -> String:
+	var lines: Array[String] = ["Upgrades:"]
+	if purchased_upgrades.is_empty():
+		lines.append("Purchased: none")
+	else:
+		var purchased_labels: Array[String] = []
+		for upgrade in purchased_upgrades:
+			purchased_labels.append(str(upgrade.get("label", upgrade.get("upgrade_id", "upgrade"))))
+		lines.append("Purchased: %s" % ", ".join(purchased_labels))
+
+	var available := get_available_upgrades()
+	if available.is_empty():
+		lines.append("Available: none")
+	else:
+		lines.append("Available:")
+		for upgrade in available:
+			lines.append("%s %s (%s) unlocks %s" % [
+				str(upgrade.get("label", "Upgrade")),
+				format_money(int(upgrade.get("cost_cents", 0))),
+				str(upgrade.get("category", "upgrade")),
+				str(upgrade.get("unlocks", "new option")),
+			])
+
+	var locked: Array[String] = []
+	for upgrade in UPGRADE_CATALOG:
+		if has_upgrade(str(upgrade.get("upgrade_id", ""))):
+			continue
+		if not _upgrade_requirements_met(upgrade):
+			locked.append(str(upgrade.get("label", "Upgrade")))
+	if not locked.is_empty():
+		lines.append("Locked: %s" % ", ".join(locked))
 	return "\n".join(lines)
 
 
@@ -1561,6 +1711,18 @@ func _find_fixture_order_index(order_id: String) -> int:
 		if str(fixture_orders[index].get("order_id", "")) == order_id:
 			return index
 	return -1
+
+
+func _get_upgrade_definition(upgrade_id: String) -> Dictionary:
+	for upgrade in UPGRADE_CATALOG:
+		if str(upgrade.get("upgrade_id", "")) == upgrade_id:
+			return upgrade.duplicate(true)
+	return {}
+
+
+func _upgrade_requirements_met(upgrade: Dictionary) -> bool:
+	var required_upgrade_id := str(upgrade.get("requires_upgrade_id", ""))
+	return required_upgrade_id.is_empty() or has_upgrade(required_upgrade_id)
 
 
 func _format_opening_summary(delivered_orders: Array[Dictionary], resolved_launches: Array[Dictionary]) -> String:

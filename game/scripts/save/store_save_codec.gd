@@ -20,6 +20,7 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"launch_events": session.get_launch_events(),
 		"operating_expenses": session.get_operating_expenses(),
 		"reputation_events": session.get_reputation_events(),
+		"purchased_upgrades": session.get_purchased_upgrades(),
 		"reputation_score": session.get_reputation_score(),
 		"inventory_items": _serialize_inventory_items(session.get_active_inventory_items()),
 	}
@@ -99,6 +100,11 @@ func restore_into_existing_scene(
 	if typeof(reputation_events_value) == TYPE_ARRAY and session.has_method("replace_reputation_events"):
 		var reputation_events: Array = reputation_events_value
 		session.replace_reputation_events(reputation_events)
+
+	var purchased_upgrades_value: Variant = data.get("purchased_upgrades", [])
+	if typeof(purchased_upgrades_value) == TYPE_ARRAY and session.has_method("replace_purchased_upgrades"):
+		var purchased_upgrades: Array = purchased_upgrades_value
+		session.replace_purchased_upgrades(purchased_upgrades)
 
 	return true
 

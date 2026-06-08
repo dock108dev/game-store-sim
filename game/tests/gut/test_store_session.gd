@@ -136,6 +136,43 @@ func test_store_session_reputation_events_are_idempotent_and_clamped() -> void:
 	assert_eq(session.get_reputation_score(), 100)
 
 
+func test_store_session_lists_upgrade_path_baseline() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var catalog := session.get_upgrade_catalog()
+	var available := session.get_available_upgrades()
+	var summary := session.get_upgrade_summary_text()
+
+	assert_eq(catalog.size(), 7)
+	assert_eq(available.size(), 6)
+	assert_false(session.can_purchase_upgrade("upgrade_store_expansion"))
+	assert_string_contains(summary, "Accessory Peg Wall $80.00 (fixture)")
+	assert_string_contains(summary, "Accessory Category License $60.00 (category)")
+	assert_string_contains(summary, "Service Cleaning Tools $120.00 (service_tool)")
+	assert_string_contains(summary, "Computer Analytics $90.00 (computer_tool)")
+	assert_string_contains(summary, "Staff Picks Signage $50.00 (signage)")
+	assert_string_contains(summary, "Backroom Storage Bay $100.00 (storage)")
+	assert_string_contains(summary, "Locked: Starter Store Expansion")
+
+
+func test_store_session_purchases_upgrades_and_unlocks_expansion_path() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var signage := session.purchase_upgrade("upgrade_signage_staff_picks")
+	var storage := session.purchase_upgrade("upgrade_backroom_storage")
+
+	assert_eq(signage.get("upgrade_id"), "upgrade_signage_staff_picks")
+	assert_eq(storage.get("upgrade_id"), "upgrade_backroom_storage")
+	assert_true(session.has_upgrade("upgrade_signage_staff_picks"))
+	assert_true(session.has_upgrade("upgrade_backroom_storage"))
+	assert_true(session.can_purchase_upgrade("upgrade_store_expansion"))
+	assert_eq(session.get_cash_cents(), 35000)
+	assert_string_contains(session.get_upgrade_summary_text(), "Purchased: Staff Picks Signage, Backroom Storage Bay")
+	assert_string_contains(session.get_upgrade_summary_text(), "Starter Store Expansion $300.00")
+
+
 func test_store_session_applies_sale_to_cash() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

@@ -135,6 +135,8 @@ func test_day_summary_panel_switches_backroom_tab_visibility() -> void:
 
 	assert_true(_panel.set_active_tab("settings"))
 	assert_true(_panel.settings_label.visible)
+	assert_string_contains(_panel.settings_label.text, "Upgrades:")
+	assert_string_contains(_panel.settings_label.text, "Staff Picks Signage")
 	assert_false(_panel.services_label.visible)
 
 	assert_true(_panel.set_active_tab("records"))

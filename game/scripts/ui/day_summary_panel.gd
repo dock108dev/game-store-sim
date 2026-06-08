@@ -413,6 +413,10 @@ func _update_labels() -> void:
 		fixture_label.text = _session.get_fixture_order_summary_text()
 	else:
 		fixture_label.text = "Fixtures unavailable"
+	if _session.has_method("get_upgrade_summary_text"):
+		settings_label.text = "Settings: input and window settings are available from the pause/settings panel.\n" + _session.get_upgrade_summary_text()
+	else:
+		settings_label.text = "Settings: input and window settings are available from the pause/settings panel."
 	status_label.text = _session.get_status_label()
 	if _session.has_method("can_commit_release_allocation"):
 		commit_allocation_button.disabled = _session.is_day_closed \

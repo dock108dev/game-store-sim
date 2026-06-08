@@ -132,6 +132,34 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_reputation_events_are_idempotent_and_clamped"
+    },
+    {
+      "id": "upgrade_path_catalog_baseline",
+      "name": "Upgrade catalog exposes fixture, category, service, computer, signage, storage, and expansion goals",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_lists_upgrade_path_baseline"
+    },
+    {
+      "id": "upgrade_path_purchase_unlocks_expansion",
+      "name": "Purchased storage upgrade unlocks the starter store expansion path",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_purchases_upgrades_and_unlocks_expansion_path"
+    },
+    {
+      "id": "upgrade_path_persistence",
+      "name": "Purchased upgrades persist through save data and restore",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_serializes_session_transactions_and_inventory; res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
+      "id": "backroom_upgrade_summary_readout",
+      "name": "Backroom computer settings tab summarizes upgrade path state",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_switches_backroom_tab_visibility"
     }
   ]
 }

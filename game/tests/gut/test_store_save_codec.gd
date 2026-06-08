@@ -18,6 +18,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	session.apply_sale(transaction)
 	session.start_customer_hours()
 	session.record_reputation_event("pricing_high_star_trader", "Over-market pricing for Star Trader", "pricing", -3)
+	session.purchase_upgrade("upgrade_signage_staff_picks")
 	var preorder_transaction := ledger.record_preorder_deposit(
 		"preorder_customer_001",
 		load("res://data/releases/neon_skyline_launch.tres"),
@@ -35,7 +36,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq(data.get("version"), 1)
 	assert_eq(data.get("day_number"), 1)
 	assert_eq(data.get("day_phase"), StoreSession.DAY_PHASE_CUSTOMER_HOURS)
-	assert_eq(data.get("cash_cents"), 34299)
+	assert_eq(data.get("cash_cents"), 29299)
 	assert_eq((data.get("transactions") as Array).size(), 2)
 	var preorder_deposits: Array = data.get("preorder_deposits")
 	assert_eq(preorder_deposits.size(), 1)
@@ -49,6 +50,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq((data.get("launch_events") as Array).size(), 0)
 	assert_eq((data.get("operating_expenses") as Array).size(), 0)
 	assert_eq((data.get("reputation_events") as Array).size(), 1)
+	assert_eq((data.get("purchased_upgrades") as Array).size(), 1)
 	assert_eq(data.get("reputation_score"), 97)
 	var fixture_orders: Array = data.get("fixture_orders")
 	assert_eq(fixture_orders.size(), 1)
@@ -81,6 +83,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"launch_events": [{"release_id": "release_neon_skyline", "missed_demand": 2}],
 		"operating_expenses": [{"expense_id": "rent_reserve", "amount_cents": 700}],
 		"reputation_events": [{"event_id": "pricing_high_star_trader", "delta": -3}],
+		"purchased_upgrades": [{"upgrade_id": "upgrade_signage_staff_picks"}],
 		"reputation_score": 90,
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
@@ -101,6 +104,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("launch_events") as Array)[0].get("release_id"), "release_neon_skyline")
 	assert_eq((decoded.get("operating_expenses") as Array)[0].get("expense_id"), "rent_reserve")
 	assert_eq((decoded.get("reputation_events") as Array)[0].get("event_id"), "pricing_high_star_trader")
+	assert_eq((decoded.get("purchased_upgrades") as Array)[0].get("upgrade_id"), "upgrade_signage_staff_picks")
 	assert_eq(int(decoded.get("reputation_score")), 90)
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
@@ -214,6 +218,15 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"reputation_score": 95,
 			}
 		],
+		"purchased_upgrades": [
+			{
+				"upgrade_id": "upgrade_signage_staff_picks",
+				"label": "Staff Picks Signage",
+				"category": "signage",
+				"cost_cents": 5000,
+				"status": "purchased",
+			}
+		],
 		"reputation_score": 95,
 		"inventory_items": [
 			{
@@ -244,6 +257,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_total_launch_profit_cents(), 3598)
 	assert_eq(session.get_operating_expenses_total_cents(), 700)
 	assert_eq(session.get_reputation_events().size(), 1)
+	assert_true(session.has_upgrade("upgrade_signage_staff_picks"))
 	assert_eq(session.get_reputation_score(), 95)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")
