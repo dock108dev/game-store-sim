@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://busdix6rxg8aj"]
+[gd_scene load_steps=11 format=3 uid="uid://busdix6rxg8aj"]
 
 [ext_resource type="Script" path="res://scripts/customers/suspicious_customer.gd" id="1_suspicious_customer"]
 
@@ -10,6 +10,13 @@ albedo_color = Color(0.52, 0.41, 0.31, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_note"]
 albedo_color = Color(0.82, 0.76, 0.46, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cash"]
+albedo_color = Color(0.28, 0.56, 0.28, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cash_stack"]
+material = SubResource("StandardMaterial3D_cash")
+size = Vector3(0.22, 0.06, 0.14)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
 material = SubResource("StandardMaterial3D_body")
@@ -49,6 +56,11 @@ mesh = SubResource("SphereMesh_head")
 [node name="NoteMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.11, 0.88, -0.16)
 mesh = SubResource("BoxMesh_note")
+
+[node name="CashStackMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0.15, 0.72, -0.18)
+rotation = Vector3(-0.12, 0.22, 0)
+mesh = SubResource("BoxMesh_cash_stack")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.68, 0)

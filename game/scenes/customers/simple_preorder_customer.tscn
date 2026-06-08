@@ -4,7 +4,7 @@
 [ext_resource type="Resource" path="res://data/releases/neon_skyline_launch.tres" id="2_release"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
-albedo_color = Color(0.12, 0.16, 0.2, 1)
+albedo_color = Color(0.18, 0.18, 0.42, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_head"]
 albedo_color = Color(0.5, 0.39, 0.3, 1)
@@ -24,7 +24,7 @@ height = 0.36
 
 [sub_resource type="BoxMesh" id="BoxMesh_slip"]
 material = SubResource("StandardMaterial3D_slip")
-size = Vector3(0.34, 0.2, 0.03)
+size = Vector3(0.4, 0.24, 0.03)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_customer"]
 radius = 0.2
@@ -43,7 +43,7 @@ position = Vector3(0, 1.25, 0)
 mesh = SubResource("SphereMesh_head")
 
 [node name="PreorderSlipMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0.16, 0.72, -0.22)
+position = Vector3(0.16, 0.74, -0.22)
 rotation = Vector3(-0.25, 0.12, 0.0)
 mesh = SubResource("BoxMesh_slip")
 

@@ -1,14 +1,21 @@
-[gd_scene format=3 uid="uid://bqtradfa6q1p2"]
+[gd_scene load_steps=10 format=3 uid="uid://bqtradfa6q1p2"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_trade_in_customer.gd" id="1_trade_customer"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="2_used_game"]
 [ext_resource type="Resource" path="res://data/products/used_moon_escape.tres" id="3_product"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
-albedo_color = Color(0.18, 0.16, 0.13, 1)
+albedo_color = Color(0.38, 0.22, 0.1, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_head"]
 albedo_color = Color(0.5, 0.38, 0.28, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trade_tag"]
+albedo_color = Color(0.86, 0.62, 0.24, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_trade_tag"]
+material = SubResource("StandardMaterial3D_trade_tag")
+size = Vector3(0.28, 0.16, 0.025)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
 material = SubResource("StandardMaterial3D_body")
@@ -34,6 +41,11 @@ mesh = SubResource("CapsuleMesh_body")
 [node name="HeadMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0, 1.25, 0)
 mesh = SubResource("SphereMesh_head")
+
+[node name="TradeTagMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.14, 0.86, -0.19)
+rotation = Vector3(-0.18, -0.12, 0)
+mesh = SubResource("BoxMesh_trade_tag")
 
 [node name="TradeInItem" parent="." instance=ExtResource("2_used_game")]
 transform = Transform3D(0.38, 0, 0, 0, 0.38, 0, 0, 0, 0.38, 0.14, 0.62, -0.16)
