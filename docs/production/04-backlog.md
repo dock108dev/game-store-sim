@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and the next major implementation area is backroom operations.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -37,8 +37,8 @@ Current completion plan: `11-game-completion-plan.md`.
 5. Menu, register, and computer production UI.
 6. Customer production pass.
 7. Product and content pipeline.
-8. Economy, day loop, and progression.
-9. Backroom operations.
+8. Economy, day loop, and progression. Done through Milestone 7.
+9. Backroom operations. Current next phase.
 10. Store building, decoration, and expansion.
 11. Hidden-thread production arc.
 12. Audio, VFX, and presentation feel.
@@ -131,7 +131,7 @@ Compressed summary of completed validated systems:
 - Done: added contextual demand tuning for shelf visibility, price pressure, rarity, marketing, day events, and customer archetype signals, with active-inventory backroom summaries and validation coverage.
 - Done: added a baseline upgrade path for fixtures, category unlocks, service tools, computer tools, signage, storage, and starter expansion, with purchase rules, expansion prerequisite, backroom summary, save/load, and validation coverage.
 - Done: added owner onboarding checklist coverage for receiving, pricing, stocking, checkout, trade-ins, backroom computer, ordering, and closing, with dashboard presentation and validation coverage.
-- Remaining: final economy/progression validation sync.
+- Done: synced economy/progression validation across day structure, cash pressure, reputation, demand, upgrades, onboarding, manual playtest, and milestone docs.
 
 ## Not Current Scope
 

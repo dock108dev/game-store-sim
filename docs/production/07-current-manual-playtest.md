@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this economy/day-loop pass: `scripts/validate_godot.sh` passed with 387 GUT tests, UI scenario coverage 369/448, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
+- Last full gate in this economy/day-loop pass: `scripts/validate_godot.sh` passed with 387 GUT tests, UI scenario coverage 372/452, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -36,6 +36,7 @@ Current automated baseline:
 - Demand tuning is implemented through Stop 7.4; manual QA should confirm shelf visibility, price, rarity, marketing, event, and customer-archetype signals read as understandable demand causes in the backroom panel.
 - Upgrade path baseline is implemented through Stop 7.5; manual QA should confirm fixture, category, service, computer, signage, storage, and expansion upgrades read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding baseline is implemented through Stop 7.6; manual QA should confirm the backroom dashboard checklist teaches receiving, pricing, stocking, checkout, trade-ins, backroom computer use, ordering, and closing without feeling like debug text.
+- Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -105,6 +106,7 @@ Current automated baseline:
 62. Confirm `Starter Store Expansion` appears locked before buying `Backroom Storage Bay`, and appears available after the storage upgrade is purchased by test/debug setup.
 63. Open the backroom computer dashboard and confirm the owner checklist starts with receiving on a fresh run.
 64. As the first-day loop progresses, confirm checklist rows move from `Next`/`Later` to `Done` based on real actions rather than hidden tutorial buttons.
+65. Play into the next day and confirm cash, stock, reputation, obligations, upgrade goals, and tomorrow planning read as one connected owner/operator loop.
 
 ## Visual Checks
 
@@ -224,6 +226,19 @@ Run these first when manually checking the completed Stop 6.1 through Stop 6.7 p
 - Confirm `scripts/check_product_catalog.py` has passed before manually judging catalog tone, breadth, and price plausibility.
 - Confirm `game/tests/validation/tool_checks/product_catalog.json` still describes the active standalone content checker, its covered paths, and its production requirements before adding more product resources.
 - Confirm schema updates did not imply that non-used-game categories are already implemented visually; category expansion comes in later product/content slices.
+
+## Economy Progression Focus
+
+Run these first when manually checking the completed Stop 7.1 through Stop 7.7 economy, day-loop, and progression pass:
+
+- Confirm the day structure reads as opening, setup, customer hours, closing, report, and tomorrow planning rather than loose debug state.
+- Confirm end-of-day overhead reduces cash once and separates gross profit from operating expenses and reserved obligations.
+- Confirm pricing, wait time, preorders, services, returns, suspicious choices, stock variety, and launch shortage reputation changes are understandable and recoverable.
+- Confirm demand text explains shelf visibility, price pressure, rarity, marketing, events, and customer archetype signals without replacing physical stocking and pricing decisions.
+- Confirm fixture, category, service-tool, computer-tool, signage, storage, and expansion upgrades read as progression goals and future work unlocks.
+- Confirm the owner checklist teaches receiving, pricing, stocking, checkout, trade-ins, backroom computer, ordering, and closing in store-operator language.
+- Confirm a several-day playthrough makes cash, stock, reputation, obligations, upgrades, and tomorrow planning feel connected.
+- Confirm the economy systems create recoverable pressure rather than a dead-end fail state after one bad price, missed sale, or small order.
 
 ## Customer Production Focus
 

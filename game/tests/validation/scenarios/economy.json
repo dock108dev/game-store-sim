@@ -181,6 +181,27 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
+    },
+    {
+      "id": "economy_multi_day_phase_pressure_loop",
+      "name": "Several-day loop preserves phase changes, close pressure, next-day setup, and report readability",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_day_phase_through_close_and_next_day; res://tests/gut/test_store_session.gd::test_store_session_applies_daily_cash_pressure_once_on_close; res://tests/gut/test_daily_report.gd::test_daily_report_formats_closed_day_totals"
+    },
+    {
+      "id": "economy_player_decision_feedback_loop",
+      "name": "Player decisions connect pricing, demand, reputation, cash pressure, upgrades, and onboarding",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_customer_price_limit_uses_category_demand; res://tests/gut/test_store_session.gd::test_store_session_records_reputation_events_for_core_pressure_sources; res://tests/gut/test_store_session.gd::test_store_session_summarizes_cash_pressure_and_reserved_obligations; res://tests/gut/test_store_session.gd::test_store_session_purchases_upgrades_and_unlocks_expansion_path; res://tests/gut/test_store_session.gd::test_store_session_onboarding_advances_from_real_progress"
+    },
+    {
+      "id": "economy_progression_manual_docs_synced",
+      "name": "Economy progression validation sync is backed by automated day-loop and onboarding evidence",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_day_phase_through_close_and_next_day; res://tests/gut/test_store_session.gd::test_store_session_onboarding_advances_from_real_progress"
     }
   ]
 }
