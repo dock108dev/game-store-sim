@@ -249,6 +249,48 @@ func test_sales_floor_has_merchandising_and_route_cues() -> void:
 	assert_gt(_flat_distance_xz(staff_picks_stand.global_position, rack.global_position), 4.0)
 
 
+func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
+	var peg_wall := _store.get_node_or_null("AccessoryPegWall") as Node3D
+	var locked_case := _store.get_node_or_null("LockedCasePlaceholder") as Node3D
+	var peg_label := _store.get_node_or_null("AccessoryPegWall/PegWallHeaderPanel/PegWallHeaderLabel") as Label3D
+	var locked_label := _store.get_node_or_null("LockedCasePlaceholder/LockedCaseHeaderPanel/LockedCaseHeaderLabel") as Label3D
+
+	assert_not_null(peg_wall)
+	assert_not_null(locked_case)
+	assert_not_null(peg_label)
+	assert_not_null(locked_label)
+	assert_eq(peg_label.text, "ACCESSORIES")
+	assert_eq(locked_label.text, "LOCKED CASE")
+	assert_true(_is_inside_store_floorprint(peg_wall.global_position))
+	assert_true(_is_inside_store_floorprint(locked_case.global_position))
+	assert_gt(peg_wall.global_position.x, 6.0)
+	assert_gt(locked_case.global_position.x, 4.8)
+	assert_lt(locked_case.global_position.z, 0.0)
+
+	for cue_path in [
+		"AccessoryPegWall/PegWallBackPanel",
+		"AccessoryPegWall/PegWallHeaderPanel",
+		"AccessoryPegWall/PegHookA",
+		"AccessoryPegWall/PegHookB",
+		"AccessoryPegWall/PegHookC",
+		"AccessoryPegWall/PegAccessoryCardA",
+		"AccessoryPegWall/PegAccessoryCardB",
+		"AccessoryPegWall/PegAccessoryCardC",
+		"LockedCasePlaceholder/LockedCaseBase",
+		"LockedCasePlaceholder/LockedCaseGlass",
+		"LockedCasePlaceholder/LockedCaseHeaderPanel",
+		"LockedCasePlaceholder/LockedCaseItemA",
+		"LockedCasePlaceholder/LockedCaseItemB",
+	]:
+		var cue := _store.get_node_or_null(cue_path) as CSGBox3D
+		assert_not_null(cue)
+		assert_false(cue.use_collision)
+
+	var glass_material := (_store.get_node("LockedCasePlaceholder/LockedCaseGlass") as CSGBox3D).material as StandardMaterial3D
+	assert_not_null(glass_material)
+	assert_lt(glass_material.albedo_color.a, 0.5)
+
+
 func test_store_signage_uses_fictional_world_labels() -> void:
 	var expected_labels := {
 		"StoreIdentitySignPanel/StoreIdentitySignLabel": "SAVE POINT GAMES",

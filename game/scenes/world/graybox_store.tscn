@@ -567,6 +567,95 @@ size = Vector3(0.32, 0.07, 0.2)
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.18, 0.24, -0.02)
 material = SubResource("StandardMaterial3D_service_mat")
 
+[node name="AccessoryPegWall" type="Node3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 6.78, 0, 1.05)
+
+[node name="PegWallBackPanel" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(1.65, 1.12, 0.06)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="PegWallHeaderPanel" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(1.45, 0.22, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68, -0.04)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="PegWallHeaderLabel" type="Label3D" parent="AccessoryPegWall/PegWallHeaderPanel"]
+pixel_size = 0.004
+modulate = Color(0.86, 0.96, 0.9, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 3
+billboard = 1
+text = "ACCESSORIES"
+font_size = 26
+
+[node name="PegHookA" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(0.38, 0.035, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 1.2, -0.08)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="PegHookB" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(0.38, 0.035, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 1.2, -0.08)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="PegHookC" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(0.38, 0.035, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.82, -0.08)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="PegAccessoryCardA" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(0.22, 0.34, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.98, -0.1)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="PegAccessoryCardB" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(0.22, 0.34, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.98, -0.1)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="PegAccessoryCardC" type="CSGBox3D" parent="AccessoryPegWall"]
+size = Vector3(0.22, 0.32, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.62, -0.1)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="LockedCasePlaceholder" type="Node3D" parent="."]
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 5.45, 0, -0.95)
+
+[node name="LockedCaseBase" type="CSGBox3D" parent="LockedCasePlaceholder"]
+size = Vector3(1.18, 0.64, 0.48)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32, 0)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="LockedCaseGlass" type="CSGBox3D" parent="LockedCasePlaceholder"]
+size = Vector3(1.08, 0.34, 0.42)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
+material = SubResource("StandardMaterial3D_storefront_glass")
+
+[node name="LockedCaseHeaderPanel" type="CSGBox3D" parent="LockedCasePlaceholder"]
+size = Vector3(0.94, 0.2, 0.028)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -0.24)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="LockedCaseHeaderLabel" type="Label3D" parent="LockedCasePlaceholder/LockedCaseHeaderPanel"]
+pixel_size = 0.0036
+modulate = Color(0.98, 0.88, 0.58, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 2
+billboard = 1
+text = "LOCKED CASE"
+font_size = 22
+
+[node name="LockedCaseItemA" type="CSGBox3D" parent="LockedCasePlaceholder"]
+size = Vector3(0.22, 0.08, 0.24)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 0.98, 0.02)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="LockedCaseItemB" type="CSGBox3D" parent="LockedCasePlaceholder"]
+size = Vector3(0.22, 0.08, 0.24)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.28, 0.98, 0.02)
+material = SubResource("StandardMaterial3D_service_mat")
+
 [node name="FixturePlacementManager" type="Node3D" parent="."]
 script = ExtResource("11_fixture_placement_manager")
 valid_placement_material = SubResource("StandardMaterial3D_fixture_ghost_valid")

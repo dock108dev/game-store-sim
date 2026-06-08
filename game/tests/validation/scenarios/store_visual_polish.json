@@ -29,6 +29,13 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_sales_floor_has_merchandising_and_route_cues"
     },
     {
+      "id": "fixture_kit_accessory_locked_case_cues",
+      "name": "Fixture kit includes accessory peg wall and locked-case placeholder cues",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_kit_has_accessory_and_locked_case_cues"
+    },
+    {
       "id": "fictional_world_signage_labels",
       "name": "World signage uses fictional store, register, backroom, receiving, storage, and display labels",
       "status": "automated",

@@ -172,7 +172,7 @@ Stops:
 - Stop 2.1: Storefront and entry. Done as a first production cue pass with front glass, open sign, hours decal, and entry threshold.
 - Stop 2.2: Sales floor composition. Done as a first merchandising/readability pass with browse-route, new-release, and staff-picks cues.
 - Stop 2.3: Register command center. Done as a first prop pass with scanner, card reader, receipt printer, sleeve stack, impulse rack, customer-side mat, and queue context.
-- Stop 2.4: Shelf and fixture kit. Create reusable production-intent shelves, display racks, bargain bins, locked case placeholders, peg walls, and category labels.
+- Stop 2.4: Shelf and fixture kit. Done as a first readable fixture-language pass with used-game rack, bargain bin, accessory peg wall, locked-case placeholder, and category labels.
 - Stop 2.5: Backroom production blockout. Rebuild receiving, storage, computer desk, service bench, paperwork, safe/security placeholder, and hidden clue surfaces as one coherent operations room.
 - Stop 2.6: Lighting and postprocess. Establish warm retail lighting, cooler backroom lighting, readable prompt contrast, and screenshot-safe exposure.
 - Stop 2.7: Collision and navigation. Ensure props do not block core paths, queue lanes, stocking, receiving, fixture placement, or screenshot capture.
