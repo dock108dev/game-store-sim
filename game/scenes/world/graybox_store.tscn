@@ -18,20 +18,20 @@
 [ext_resource type="PackedScene" path="res://scenes/customers/simple_service_customer.tscn" id="16_service_customer"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.42, 0.38, 0.32, 1)
+albedo_color = Color(0.32, 0.3, 0.27, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.62, 0.64, 0.66, 1)
+albedo_color = Color(0.74, 0.76, 0.73, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_backroom"]
 albedo_color = Color(0.22, 0.28, 0.34, 0.22)
 transparency = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_door"]
-albedo_color = Color(0.1, 0.18, 0.24, 1)
+albedo_color = Color(0.08, 0.2, 0.27, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_counter"]
-albedo_color = Color(0.18, 0.2, 0.22, 1)
+albedo_color = Color(0.12, 0.13, 0.14, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zone"]
 albedo_color = Color(0.18, 0.34, 0.28, 0.18)
@@ -405,9 +405,22 @@ script = ExtResource("13_evidence_storage")
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)
-light_energy = 1.8
+light_energy = 0.9
 
 [node name="StoreLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, -0.5)
-light_energy = 3.0
-omni_range = 12.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.7, -0.15)
+light_color = Color(1, 0.92, 0.78, 1)
+light_energy = 2.6
+omni_range = 7.4
+
+[node name="RegisterTaskLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.35, -2.75)
+light_color = Color(1, 0.86, 0.68, 1)
+light_energy = 2.0
+omni_range = 4.2
+
+[node name="BackroomUtilityLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 2.45, 4.95)
+light_color = Color(0.78, 0.9, 1, 1)
+light_energy = 1.8
+omni_range = 5.6

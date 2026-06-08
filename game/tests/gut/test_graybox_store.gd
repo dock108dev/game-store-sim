@@ -130,6 +130,39 @@ func test_backroom_floor_marker_stays_subtle() -> void:
 	assert_lte(backroom_zone.size.x, 12.4)
 
 
+func test_store_materials_use_readable_floor_wall_counter_contrast() -> void:
+	var floor_material := (_store.get_node("Floor") as CSGBox3D).material as StandardMaterial3D
+	var wall_material := (_store.get_node("BackWall") as CSGBox3D).material as StandardMaterial3D
+	var counter_material := (_store.get_node("CounterBase") as CSGBox3D).material as StandardMaterial3D
+
+	assert_not_null(floor_material)
+	assert_not_null(wall_material)
+	assert_not_null(counter_material)
+	assert_gt(_color_luma(wall_material.albedo_color), _color_luma(floor_material.albedo_color) + 0.28)
+	assert_gt(_color_luma(floor_material.albedo_color), _color_luma(counter_material.albedo_color) + 0.14)
+	assert_gt(wall_material.albedo_color.b, floor_material.albedo_color.b)
+
+
+func test_store_lighting_has_warm_sales_and_cool_backroom_layers() -> void:
+	var sun_light := _store.get_node_or_null("SunLight") as DirectionalLight3D
+	var sales_light := _store.get_node_or_null("StoreLight") as OmniLight3D
+	var register_light := _store.get_node_or_null("RegisterTaskLight") as OmniLight3D
+	var backroom_light := _store.get_node_or_null("BackroomUtilityLight") as OmniLight3D
+
+	assert_not_null(sun_light)
+	assert_not_null(sales_light)
+	assert_not_null(register_light)
+	assert_not_null(backroom_light)
+	assert_lte(sun_light.light_energy, 1.0)
+	assert_gt(sales_light.light_energy, backroom_light.light_energy)
+	assert_gt(register_light.light_energy, 1.5)
+	assert_gt(sales_light.light_color.r, sales_light.light_color.b)
+	assert_gt(register_light.light_color.r, register_light.light_color.b)
+	assert_gt(backroom_light.light_color.b, backroom_light.light_color.r)
+	assert_lt(sales_light.global_position.z, 1.0)
+	assert_gt(backroom_light.global_position.z, 4.0)
+
+
 func test_backroom_visual_zones_exist_without_collision() -> void:
 	var expected_zones := {
 		"BackroomReceivingZone": Vector3(-4.65, 0.028, 3.82),
@@ -489,3 +522,7 @@ func test_game_display_rack_exists() -> void:
 
 func _flat_distance_xz(first: Vector3, second: Vector3) -> float:
 	return Vector2(first.x, first.z).distance_to(Vector2(second.x, second.z))
+
+
+func _color_luma(color: Color) -> float:
+	return color.r * 0.2126 + color.g * 0.7152 + color.b * 0.0722
