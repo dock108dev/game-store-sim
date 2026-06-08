@@ -31,6 +31,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	session.start_service_ticket("disc_resurfacing")
 	session.review_management_task("supplier_messages")
 	session.apply_decoration("decor_wall_paint_savepoint_blue")
+	session.record_hidden_thread_choice("document", "serial_mismatch_item_used_star_trader_003", {"surface_id": "serial_lookup"})
 	item.set("current_price_cents", 2399)
 	item.set("location_id", "shelf_slot_001")
 
@@ -61,6 +62,9 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	var purchased_decorations: Array = data.get("purchased_decorations")
 	assert_eq(purchased_decorations.size(), 1)
 	assert_eq(purchased_decorations[0].get("decoration_id"), "decor_wall_paint_savepoint_blue")
+	var hidden_thread_choices: Array = data.get("hidden_thread_choices")
+	assert_eq(hidden_thread_choices.size(), 1)
+	assert_eq(hidden_thread_choices[0].get("choice_id"), "document")
 	assert_eq(data.get("reputation_score"), 97)
 	var fixture_orders: Array = data.get("fixture_orders")
 	assert_eq(fixture_orders.size(), 1)
@@ -99,6 +103,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"reputation_events": [{"event_id": "pricing_high_star_trader", "delta": -3}],
 		"purchased_upgrades": [{"upgrade_id": "upgrade_signage_staff_picks"}],
 		"purchased_decorations": [{"decoration_id": "decor_wall_paint_savepoint_blue"}],
+		"hidden_thread_choices": [{"choice_record_id": "document_serial_mismatch_item_used_star_trader_003", "choice_id": "document"}],
 		"reputation_score": 90,
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
@@ -125,6 +130,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("reputation_events") as Array)[0].get("event_id"), "pricing_high_star_trader")
 	assert_eq((decoded.get("purchased_upgrades") as Array)[0].get("upgrade_id"), "upgrade_signage_staff_picks")
 	assert_eq((decoded.get("purchased_decorations") as Array)[0].get("decoration_id"), "decor_wall_paint_savepoint_blue")
+	assert_eq((decoded.get("hidden_thread_choices") as Array)[0].get("choice_id"), "document")
 	assert_eq(int(decoded.get("reputation_score")), 90)
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
@@ -315,6 +321,16 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"status": "applied",
 			}
 		],
+		"hidden_thread_choices": [
+			{
+				"choice_record_id": "document_serial_mismatch_item_used_star_trader_003",
+				"choice_id": "document",
+				"label": "Document evidence",
+				"stance": "cautious",
+				"subject_id": "serial_mismatch_item_used_star_trader_003",
+				"recorded_day": 3,
+			}
+		],
 		"reputation_score": 95,
 		"inventory_items": [
 			{
@@ -357,6 +373,8 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_reputation_events().size(), 1)
 	assert_true(session.has_upgrade("upgrade_signage_staff_picks"))
 	assert_true(session.has_store_expansion())
+	assert_eq(session.get_hidden_thread_choice_records().size(), 1)
+	assert_string_contains(session.get_hidden_thread_choice_summary_text(), "Document evidence")
 	assert_eq(session.get_reputation_score(), 95)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")

@@ -223,6 +223,34 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_shows_hidden_clue_surfaces"
+    },
+    {
+      "id": "hidden_choice_catalog",
+      "name": "Hidden choice catalog covers ignore, document, sell, isolate, report, cash, reject, and follow-up paths",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_hidden_choice_catalog.gd::test_hidden_choice_catalog_covers_stop_10_choice_paths"
+    },
+    {
+      "id": "hidden_choice_session_recording",
+      "name": "Store session records hidden choice paths without applying consequences yet",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_records_hidden_thread_choice_paths"
+    },
+    {
+      "id": "hidden_choice_records_tab",
+      "name": "Backroom Records tab shows hidden choice paths and recorded choices",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_shows_hidden_thread_choice_paths"
+    },
+    {
+      "id": "hidden_choice_save_load",
+      "name": "Save codec preserves recorded hidden choice paths",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
     }
   ]
 }

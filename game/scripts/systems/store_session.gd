@@ -5,6 +5,7 @@ const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd"
 const DailyReportPolicy := preload("res://scripts/economy/daily_report.gd")
 const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
 const ClueSurfaceCatalogPolicy := preload("res://scripts/narrative/clue_surface_catalog.gd")
+const HiddenChoiceCatalogPolicy := preload("res://scripts/narrative/hidden_choice_catalog.gd")
 
 const DAY_PHASE_OPENING := "opening"
 const DAY_PHASE_SETUP := "setup"
@@ -344,6 +345,7 @@ var launch_events: Array[Dictionary] = []
 var operating_expenses: Array[Dictionary] = []
 var reputation_events: Array[Dictionary] = []
 var purchased_upgrades: Array[Dictionary] = []
+var hidden_thread_choice_records: Array[Dictionary] = []
 var reputation_score: int = 100
 
 
@@ -1073,6 +1075,47 @@ func get_security_placeholder_summary_text() -> String:
 
 func get_hidden_clue_surface_summary_text() -> String:
 	return ClueSurfaceCatalogPolicy.get_summary_text(_get_hidden_clue_surface_context())
+
+
+func get_hidden_thread_choice_options() -> Array[Dictionary]:
+	return HiddenChoiceCatalogPolicy.evaluate_context(_get_hidden_choice_context())
+
+
+func get_hidden_thread_choice_summary_text() -> String:
+	return HiddenChoiceCatalogPolicy.get_summary_text(
+		_get_hidden_choice_context(),
+		get_hidden_thread_choice_records()
+	)
+
+
+func record_hidden_thread_choice(choice_id: String, subject_id: String = "", metadata: Dictionary = {}) -> Dictionary:
+	var record: Dictionary = HiddenChoiceCatalogPolicy.build_choice_record(choice_id, subject_id, metadata)
+	if record.is_empty():
+		return {}
+
+	var record_id := str(record.get("choice_record_id", "")).strip_edges()
+	for existing in hidden_thread_choice_records:
+		if str(existing.get("choice_record_id", "")) == record_id:
+			return existing.duplicate(true)
+
+	record["recorded_day"] = day_number
+	hidden_thread_choice_records.append(record)
+	return record.duplicate(true)
+
+
+func get_hidden_thread_choice_records() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for record in hidden_thread_choice_records:
+		rows.append(record.duplicate(true))
+	return rows
+
+
+func replace_hidden_thread_choice_records(records: Array) -> void:
+	hidden_thread_choice_records.clear()
+	for record_value in records:
+		if typeof(record_value) == TYPE_DICTIONARY:
+			var record: Dictionary = record_value
+			hidden_thread_choice_records.append(record.duplicate(true))
 
 
 func record_security_placeholder(placeholder_id: String, reference_id: String = "", notes: String = "") -> Dictionary:
@@ -3014,6 +3057,24 @@ func _get_hidden_clue_surface_context() -> Dictionary:
 		context["security_clip_subject"] = "security_footage"
 
 	return context
+
+
+func _get_hidden_choice_context() -> Dictionary:
+	var context := _get_hidden_clue_surface_context()
+	context["has_clue_surface"] = _has_available_clue_surface(context)
+	context["can_report_issue"] = bool(context.get("has_clue_surface", false)) \
+		and bool(context.get("has_evidence_storage", false))
+	context["has_supplier_thread"] = bool(context.get("has_supplier_message", false)) \
+		or bool(context.get("has_supplier_order", false)) \
+		or bool(context.get("has_receiving_batch", false))
+	return context
+
+
+func _has_available_clue_surface(context: Dictionary) -> bool:
+	for surface in ClueSurfaceCatalogPolicy.evaluate_context(context):
+		if str(surface.get("status", "")) == "available":
+			return true
+	return false
 
 
 func _get_first_supplier_order_or_batch() -> Dictionary:

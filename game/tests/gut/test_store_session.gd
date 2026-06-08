@@ -541,6 +541,41 @@ func test_store_session_surfaces_hidden_clue_surfaces() -> void:
 	assert_string_contains(summary, "no active hidden objective")
 
 
+func test_store_session_records_hidden_thread_choice_paths() -> void:
+	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	add_child_autofree(scene)
+	var session: StoreSession = scene.get_node("StoreSession")
+
+	var options := session.get_hidden_thread_choice_options()
+	var option_ids: Array[String] = []
+	for option in options:
+		option_ids.append(str(option.get("choice_id", "")))
+
+	assert_true(option_ids.has("ignore"))
+	assert_true(option_ids.has("document"))
+	assert_true(option_ids.has("accept_cash_offer"))
+
+	var record := session.record_hidden_thread_choice(
+		"document",
+		"serial_mismatch_item_used_star_trader_003",
+		{"surface_id": "serial_lookup"}
+	)
+
+	assert_eq(record.get("choice_record_id"), "document_serial_mismatch_item_used_star_trader_003")
+	assert_eq(record.get("recorded_day"), 1)
+	assert_eq(session.get_hidden_thread_choice_records().size(), 1)
+	assert_string_contains(session.get_hidden_thread_choice_summary_text(), "Document evidence")
+	assert_string_contains(session.get_hidden_thread_choice_summary_text(), "consequences deferred")
+
+	var duplicate := session.record_hidden_thread_choice(
+		"document",
+		"serial_mismatch_item_used_star_trader_003",
+		{"surface_id": "supplier_note"}
+	)
+	assert_eq(duplicate.get("metadata").get("surface_id"), "serial_lookup")
+	assert_eq(session.get_hidden_thread_choice_records().size(), 1)
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()

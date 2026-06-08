@@ -356,6 +356,28 @@ func test_day_summary_panel_shows_hidden_clue_surfaces() -> void:
 	assert_string_contains(panel.hidden_records_label.text, "Backroom artifact - available")
 
 
+func test_day_summary_panel_shows_hidden_thread_choice_paths() -> void:
+	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	add_child_autofree(scene)
+	var panel: DaySummaryPanel = scene.get_node("PlayerController/DaySummaryPanel")
+	var session: StoreSession = scene.get_node("StoreSession")
+	session.record_hidden_thread_choice(
+		"document",
+		"serial_mismatch_item_used_star_trader_003",
+		{"surface_id": "serial_lookup"}
+	)
+
+	assert_true(panel.open_for_session(session))
+	assert_true(panel.set_active_tab("records"))
+
+	assert_string_contains(panel.hidden_records_label.text, "Hidden choice paths:")
+	assert_string_contains(panel.hidden_records_label.text, "Ignore for now - available")
+	assert_string_contains(panel.hidden_records_label.text, "Document evidence - available")
+	assert_string_contains(panel.hidden_records_label.text, "Accept cash offer - available")
+	assert_string_contains(panel.hidden_records_label.text, "Recorded choices:")
+	assert_string_contains(panel.hidden_records_label.text, "document_serial_mismatch_item_used_star_trader_003")
+
+
 func test_day_summary_panel_includes_recent_trade_in_activity() -> void:
 	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
 	add_child_autofree(customer)

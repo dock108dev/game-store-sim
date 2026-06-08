@@ -665,6 +665,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "hidden_choice_path_readability",
+      "name": "Hidden choice paths are readable as optional decisions with consequences deferred",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify choice IDs, availability, recording, Records-tab display, and save/load; human review should confirm ignore, document, sell, isolate, report, cash, reject, and follow-up choices do not feel like forced quest buttons yet.",
+      "owner": "manual QA"
+    },
+    {
       "id": "hidden_thread_flags_invisible",
       "name": "Suspicious event flags do not visibly interrupt normal store progression",
       "status": "manual",

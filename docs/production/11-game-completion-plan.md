@@ -459,9 +459,9 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 428 GUT tests.
-- UI scenario automation coverage is 416/509, above the 80% threshold.
-- Production script mapping coverage is 41/41.
+- `scripts/validate_godot.sh` passes with 433 GUT tests.
+- UI scenario automation coverage is 420/514, above the 80% threshold.
+- Production script mapping coverage is 42/42.
 - Standalone validation tool manifest coverage has 1 active tool.
 - Product catalog content check passes with 33 fictional products.
 - Focused GUT coverage passes for store session receiving delivery/lifecycle, save/load receiving persistence, and day-summary panel receiving controls.
@@ -491,6 +491,7 @@ Stops:
 - Stop 9.7: Building validation sync. Done in `Sync building validation`: validation docs, backlog state, scenario matrix, manual checklist, baseline counts, and Milestone 9 status now reflect the completed fixture catalog, placement UX, category assignment, decoration, layout effects, and starter expansion pass.
 - Stop 10.1: Suspicion rules. Done in `Define suspicion rules`: added a data-first suspicion rule catalog for serial mismatch, suspicious suppliers, cash buyers, impossible provenance, counterfeit goods, and hidden storage, with metadata/node evaluation, scoring, event-log rule creation, scenario coverage, and manual hidden-thread tone checks.
 - Stop 10.2: Clue surfaces. Done in `Add hidden clue surfaces`: added a hidden clue-surface catalog for invoices, supplier notes, serial lookup, supplier emails, customer comments, security clips, and backroom artifacts; StoreSession now evaluates available/waiting clue status from store context; Records shows the clue summary without activating objectives.
+- Stop 10.3: Choice points. Done in `Add hidden choice paths`: added ignore, document, sell-as-normal, isolate, report, accept-cash, reject-goods, and supplier follow-up choice paths; StoreSession records and deduplicates choices; Records shows available paths and recorded choices; save/load preserves recorded hidden choices while consequences remain deferred.
 
 Acceptance:
 
@@ -511,7 +512,8 @@ Validation snapshot:
 - Building validation is synced through Stop 9.7, with scenario coverage and manual playtest docs matching the completed Milestone 9 behavior.
 - Focused GUT coverage passes for the Stop 10.1 suspicion-rules catalog, metadata scoring, supplier/customer/provenance/storage signals, product/supplier/customer node evaluation, and rule-to-event logging.
 - Focused GUT coverage passes for the Stop 10.2 clue-surface catalog, context readiness, StoreSession Records summary, and DaySummaryPanel Records-tab display.
-- Manual Hidden Thread Focus checks are current for Stop 10.2 rule tone, clue-surface readability, optionality, nonblocking behavior, and no visible objective escalation.
+- Focused GUT coverage passes for the Stop 10.3 choice catalog, choice availability, choice recording/deduplication, Records-tab choice display, and save/load preservation.
+- Manual Hidden Thread Focus checks are current for Stop 10.3 rule tone, clue-surface readability, choice-path readability, optionality, nonblocking behavior, and no visible objective escalation.
 
 Commit targets:
 
@@ -531,7 +533,7 @@ Stops:
 
 - Stop 10.1: Suspicion rules. Done in `Define suspicion rules`: define risk flags for serial mismatch, suspicious suppliers, cash buyers, impossible provenance, counterfeit goods, and hidden storage.
 - Stop 10.2: Clue surfaces. Done in `Add hidden clue surfaces`: add invoices, notes, serial lookup, supplier emails, customer comments, security clips, and backroom artifacts.
-- Stop 10.3: Choice points. Add ignore, document, sell, isolate, report, accept cash, reject goods, and follow-up paths.
+- Stop 10.3: Choice points. Done in `Add hidden choice paths`: add ignore, document, sell, isolate, report, accept cash, reject goods, and follow-up paths.
 - Stop 10.4: Consequences. Add reputation, cash, supplier access, customer trust, inspection risk, and story state consequences.
 - Stop 10.5: Optionality guard. Ensure a normal retail player can ignore the thread without blocked progression.
 - Stop 10.6: Hidden-thread validation sync. Add tests for flags, dedupe, persistence, optionality, and manual clue readability.
