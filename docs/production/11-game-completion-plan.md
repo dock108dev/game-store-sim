@@ -176,7 +176,7 @@ Stops:
 - Stop 2.5: Backroom production blockout. Done as a first operations-room pass with delivery, receiving invoice, backstock overflow, management desk cues, service ticket, safe/security, and evidence-locker placeholders.
 - Stop 2.6: Lighting and postprocess. Done as a bounded explicit-light pass with warmer storefront/shelf/register accents, cooler receiving/backroom task lights, and screenshot-safe energy limits.
 - Stop 2.7: Collision and navigation. Done as automated clearance coverage for production storefront, sales floor, register, fixture, and backroom props across entry, rack, register, receiving, storage, and fixture-placement routes.
-- Stop 2.8: Environment validation sync. Add or update automated scene assertions and manual screenshot checks.
+- Stop 2.8: Environment validation sync. Done with automated environment scene assertions, scenario matrix coverage, current validation baselines, manual screenshot/navigation checks, and manual JSON QA coverage.
 
 Acceptance:
 

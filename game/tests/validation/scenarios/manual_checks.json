@@ -193,6 +193,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "environment_production_pass_review",
+      "name": "Completed environment pass reads as a small game store while preserving the current playable loop",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human review of storefront, sales floor, register, fixture, backroom, lighting, screenshot composition, and movement readability after the environment production pass.",
+      "owner": "manual QA"
+    },
+    {
       "id": "production_ui_contract_review",
       "name": "Production UI contract covers prompt, pricing, register, trade-in, computer, ordering, release, and report decisions",
       "status": "manual",
@@ -314,18 +322,18 @@
     },
     {
       "id": "backroom_receiving_storage_readability",
-      "name": "Receiving pallet, box stacks, storage shelf, and overflow boxes make delivered stock read as physical inventory without crowding prompts",
+      "name": "Receiving pallet, delivery door, invoice clipboard, storage shelf, backstock overflow, and labels make delivered stock read as physical inventory",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment that the receiving pallet, box stacks, storage shelf, supplier stock, and pending fixture identity add clarity without blocking interaction.",
+      "reason": "Requires human judgment that receiving, storage, supplier stock, and pending fixture identity add clarity without blocking interaction.",
       "owner": "manual QA"
     },
     {
       "id": "backroom_service_paperwork_context",
-      "name": "Backroom service bench, paperwork stack, disc mat, and management board read as context, not a separate service terminal",
+      "name": "Backroom service, management, safe, security, and evidence-locker props read as context, not new active terminals",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment that service and management props support the theme while the register remains responsible for service completion.",
+      "reason": "Requires human judgment that service, management, and future hidden-thread placeholders support the theme while current register and hidden-thread behavior remain unchanged.",
       "owner": "manual QA"
     },
     {

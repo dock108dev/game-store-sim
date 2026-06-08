@@ -4,8 +4,9 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this collision/navigation hardening pass: `scripts/validate_godot.sh` passed with 293 GUT tests, UI scenario coverage 296/351, and script mapping coverage 31/31.
+- Last full gate in this environment validation sync pass: `scripts/validate_godot.sh` passed with 293 GUT tests, UI scenario coverage 296/352, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
+- Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -146,6 +147,7 @@ Run these when reviewing the current prototype against the new production direct
 - Confirm `main_scene.png` communicates a small game store target only as a goal, not as current achieved production art.
 - Confirm the visual target in `12-production-target-contracts.md` matches the intended store tone: stylized realism, readable retail exaggeration, fictional brand language, and no real brands.
 - Confirm the starter layout target keeps the store small and physical: storefront, sales floor, register, backroom, receiving, storage, computer, service bench, and hidden clue surfaces.
+- Confirm the completed environment pass reads as one coherent starter shop while preserving receiving, stocking, checkout, trade-ins, preorders, services, ordering, releases, fixture placement, screenshots, and navigation.
 - Confirm the UI target covers prompt, pricing, register, trade-in appraisal, backroom computer, ordering, releases, and daily report decisions.
 - Confirm the content target is broad enough for several days of play while staying data-first and fictional.
 - Confirm future implementation slices update this checklist and `manual_checks.json` when they change the visible store, UI, customers, content, or interaction flow.
