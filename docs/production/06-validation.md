@@ -25,6 +25,7 @@ The gate currently runs:
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
 - Standalone validation tool manifest coverage from `game/tests/validation/tool_checks/`.
 - Standalone product catalog content checks through `scripts/check_product_catalog.py`.
+- Desktop export pack smoke through `scripts/verify_desktop_export.sh --pack-smoke`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, complete inventory schema fields, multi-day starter content depth, and category/platform/condition/format/demand/authenticity/rarity/risk/location variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
 - Named validation screenshot capture at `1280x720` for main scene, carry stack, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, service request, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
@@ -45,8 +46,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 Current production validation baseline:
 
 - `scripts/validate_godot.sh` passes with 489 GUT tests.
-- UI scenario automation coverage is 454/560, above the 80% threshold.
+- UI scenario automation coverage is 454/563, above the 80% threshold.
 - Production script mapping coverage is 50/50.
+- There are 2 active standalone validation tool manifests: product catalog content checking and desktop export pack smoke.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
 - Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants, with product items applying generated cue meshes from data.
@@ -84,6 +86,7 @@ Current production validation baseline:
 - Save migration coverage verifies the Stop 12.2 current save version, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed JSON failure state, and readable migration-policy summary text.
 - Settings menu coverage verifies the Stop 12.3 audio, display, controls, mouse, accessibility, persistence, bindings reset, default reset, modal focus, and player settings application surface.
 - Pause/main-menu coverage verifies the Stop 12.4 pause mode, resume transition, main-menu mode, start-game transition, settings/save-load requests, quit request state, and mouse capture recovery.
+- Desktop export pipeline coverage verifies the Stop 12.5 macOS desktop export preset, template-free pack export artifact, pack boot smoke, and clear binary-export template fallback message.
 
 ## Manual Validation
 
@@ -107,7 +110,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, clue-surface, hidden-choice, hidden-consequence, hidden-optionality, hidden-thread validation sync, store-ambience validation, interaction-audio validation, customer-audio validation, microfeedback validation, camera-feel validation, presentation validation sync, save-slot UI validation, save migration validation, settings menu validation, and pause/main-menu validation are synced through Stop 12.4.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, clue-surface, hidden-choice, hidden-consequence, hidden-optionality, hidden-thread validation sync, store-ambience validation, interaction-audio validation, customer-audio validation, microfeedback validation, camera-feel validation, presentation validation sync, save-slot UI validation, save migration validation, settings menu validation, pause/main-menu validation, and desktop export validation are synced through Stop 12.5.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding validation is synced through Stop 7.6; manual QA should confirm the checklist teaches the first-day loop without feeling like debug tutorial text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
@@ -197,6 +200,8 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom computer opens with visible mouse focus and closes back into captured first-person control.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
 - Screenshot composition is useful, not merely nonblank.
+- Desktop export pack artifact is created by the local verifier, boots without editor-only paths, and has a reviewed artifact handoff location.
+- Desktop binary export either creates a runnable app when matching Godot templates/signing are available or fails with clear template-installation guidance.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 

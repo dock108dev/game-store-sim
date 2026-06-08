@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu pass: `scripts/validate_godot.sh` passes with 489 GUT tests, UI scenario automation coverage at 454/560, production script mapping coverage at 50/50, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper pass: `scripts/validate_godot.sh` passes with 489 GUT tests, UI scenario automation coverage at 454/563, production script mapping coverage at 50/50, 2 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -55,6 +55,7 @@ Current automated baseline:
 - Save slot UI is implemented through Stop 12.1, and save migration policy is implemented through Stop 12.2; manual QA should run the Save/Load Focus checks to confirm new game, continue, overwrite, delete, metadata readability, compatibility/failure copy, and mouse capture transitions work in the actual window.
 - Settings menu is implemented through Stop 12.3; manual QA should run the Settings Focus checks to confirm audio, display, controls, mouse, accessibility, persistence, reset defaults, and modal fit/readability work in the actual window.
 - Pause/main menu is implemented through Stop 12.4; manual QA should run the Pause/Main Menu Focus checks to confirm pause mode, main-menu mode, settings/save-load routing, quit request language, and mouse capture recovery work in the actual window.
+- Desktop export pipeline is implemented through Stop 12.5; manual QA should run the Release Wrapper Focus checks to confirm pack artifact handoff, binary export template behavior, and future build relaunch/continue expectations are clear.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -155,6 +156,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 91. Attempt a compatibility or corrupted-save manual smoke when surfaced by the build, and confirm migrated saves load with expected defaults while incompatible or malformed saves fail with clear copy instead of silent data loss.
 92. Open settings, adjust audio, display, mouse, and accessibility values, reset bindings/defaults, close and reopen settings, and confirm the saved values and reset language are readable.
 93. Open pause, test Resume, Settings, Save/Load, Main Menu, Start Game, and Quit request language, and confirm mouse capture returns after every playable exit path.
+94. Run `scripts/verify_desktop_export.sh --pack-smoke`, confirm `artifacts/builds/desktop/game-store-sim.pck` is created and nonempty, and confirm the verifier reports a successful pack boot smoke.
 
 ## Visual Checks
 
@@ -524,6 +526,17 @@ Run these first when manually checking the completed product/fixture presentatio
 - Confirm rack header and slot rails clarify stocking/category affordance without looking clickable themselves.
 - Confirm receiving intake lanes help organize physical stock and do not hide the supplier note or mismatched serial copy.
 - Confirm the fanned carry stack keeps multiple held games visible while staying low/right during movement.
+
+## Release Wrapper Focus
+
+Run these first when manually checking the completed Stop 12.5 desktop export pipeline:
+
+- Run `scripts/verify_desktop_export.sh --pack-smoke` from the repository root and confirm it exports `artifacts/builds/desktop/game-store-sim.pck`.
+- Confirm the verifier boots the pack, reports `Desktop pack export smoke passed`, and lists `desktop-export.log` plus `desktop-pack-boot.log`.
+- Confirm the pack artifact is nonempty and the artifact path is suitable for release handoff notes.
+- Run `scripts/verify_desktop_export.sh --binary` only on a machine with matching Godot 4.6.2 export templates and expected macOS signing state; if templates are missing, confirm the failure message clearly says to install templates or use `--pack-smoke`.
+- Once binary export templates are installed, launch the exported app outside the editor and run the start, save, quit, relaunch, and continue loop.
+- Confirm settings persistence and pause/main-menu transitions behave the same in the exported build as in the editor-run vertical slice.
 
 ## Automated Screenshot Artifacts
 
