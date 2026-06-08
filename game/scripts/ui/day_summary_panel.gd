@@ -58,6 +58,7 @@ const BACKROOM_TABS := [
 @onready var supplier_order_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SupplierOrderLabel
 @onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/FixtureLabel
 @onready var settings_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SettingsLabel
+@onready var management_desk_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ManagementDeskLabel
 @onready var hidden_records_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/HiddenRecordsLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var supplier_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/SupplierActionLabel
@@ -65,6 +66,7 @@ const BACKROOM_TABS := [
 @onready var service_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionLabel
 @onready var release_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ReleaseActions/ReleaseActionLabel
 @onready var day_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionLabel
+@onready var desk_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionLabel
 @onready var placement_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementActionLabel
 @onready var commit_allocation_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ReleaseActions/CommitAllocationButton
 @onready var order_games_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/OrderGamesButton
@@ -79,6 +81,8 @@ const BACKROOM_TABS := [
 @onready var work_service_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons/WorkServiceButton
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/EndDayButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/CloseButton
+@onready var review_desk_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow/ReviewDeskButton
+@onready var buy_upgrade_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow/BuyUpgradeButton
 @onready var rack_left_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackLeftButton
 @onready var rack_right_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackRightButton
 @onready var rack_forward_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackForwardButton
@@ -90,6 +94,7 @@ const BACKROOM_TABS := [
 const GAME_DISPLAY_RACK_ID := "fixture_game_display_rack"
 const USED_GAME_STARTER_LOT_ID := "supplier_lot_used_games_001"
 const NEON_SKYLINE_RELEASE_ID := "release_neon_skyline"
+const MANAGEMENT_UPGRADE_ID := "upgrade_computer_analytics"
 
 var _session: Node = null
 var _transition_state: String = "closed"
@@ -122,6 +127,8 @@ func _ready() -> void:
 	pull_item_button.pressed.connect(pull_backstock_item)
 	start_service_button.pressed.connect(start_service_ticket)
 	work_service_button.pressed.connect(work_service_ticket)
+	review_desk_button.pressed.connect(review_management_desk)
+	buy_upgrade_button.pressed.connect(buy_management_upgrade)
 	rack_left_button.pressed.connect(move_pending_rack_left)
 	rack_right_button.pressed.connect(move_pending_rack_right)
 	rack_forward_button.pressed.connect(move_pending_rack_forward)
@@ -398,6 +405,34 @@ func work_service_ticket() -> bool:
 	return true
 
 
+func review_management_desk() -> bool:
+	if _session == null or not _session.has_method("review_management_task"):
+		return false
+
+	var review: Dictionary = _session.review_management_task()
+	_update_labels()
+	if review.is_empty():
+		status_label.text = "No management desk task ready to review."
+		return false
+
+	status_label.text = "Reviewed %s at management desk." % str(review.get("label", "task"))
+	return true
+
+
+func buy_management_upgrade() -> bool:
+	if _session == null or not _session.has_method("purchase_management_upgrade"):
+		return false
+
+	var purchase: Dictionary = _session.purchase_management_upgrade(MANAGEMENT_UPGRADE_ID)
+	_update_labels()
+	if purchase.is_empty():
+		status_label.text = "Could not order management upgrade."
+		return false
+
+	status_label.text = "Ordered %s upgrade." % str(purchase.get("label", "management"))
+	return true
+
+
 func move_pending_rack_left() -> bool:
 	return _adjust_pending_rack(-1, 0, "left")
 
@@ -546,6 +581,10 @@ func _update_labels() -> void:
 		settings_label.text = "Settings: input and window settings are available from the pause/settings panel.\n" + _session.get_upgrade_summary_text()
 	else:
 		settings_label.text = "Settings: input and window settings are available from the pause/settings panel."
+	if _session.has_method("get_management_desk_summary_text"):
+		management_desk_label.text = _session.get_management_desk_summary_text()
+	else:
+		management_desk_label.text = "Management desk unavailable"
 	status_label.text = _session.get_status_label()
 	if _session.has_method("can_commit_release_allocation"):
 		commit_allocation_button.disabled = _session.is_day_closed \
@@ -586,6 +625,14 @@ func _update_labels() -> void:
 		work_service_button.disabled = _session.is_day_closed or not _session.can_work_service_ticket()
 	else:
 		work_service_button.disabled = true
+	if _session.has_method("can_review_management_task"):
+		review_desk_button.disabled = _session.is_day_closed or not _session.can_review_management_task()
+	else:
+		review_desk_button.disabled = true
+	if _session.has_method("can_purchase_management_upgrade"):
+		buy_upgrade_button.disabled = _session.is_day_closed or not _session.can_purchase_management_upgrade(MANAGEMENT_UPGRADE_ID)
+	else:
+		buy_upgrade_button.disabled = true
 	var can_adjust_fixture := false
 	if _session.has_method("can_adjust_pending_fixture_placement"):
 		can_adjust_fixture = not _session.is_day_closed and _session.can_adjust_pending_fixture_placement()
@@ -678,6 +725,7 @@ func _apply_tab_visibility() -> void:
 		supplier_order_label,
 		fixture_label,
 		settings_label,
+		management_desk_label,
 		hidden_records_label,
 	]
 	_set_controls_visible(all_content, false)
@@ -702,7 +750,7 @@ func _apply_tab_visibility() -> void:
 		TAB_SETTINGS:
 			_set_controls_visible([settings_label], true)
 		TAB_RECORDS:
-			_set_controls_visible([hidden_records_label], true)
+			_set_controls_visible([management_desk_label, hidden_records_label], true)
 	_update_tab_button_states()
 
 

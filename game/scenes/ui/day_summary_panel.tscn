@@ -188,6 +188,11 @@ layout_mode = 2
 text = "Settings: input and window settings are available from the pause/settings panel."
 autowrap_mode = 3
 
+[node name="ManagementDeskLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Management desk: no reviews."
+autowrap_mode = 3
+
 [node name="HiddenRecordsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Hidden records: no active records."
@@ -332,6 +337,30 @@ text = "End Day"
 custom_minimum_size = Vector2(82, 40)
 layout_mode = 2
 text = "Close"
+
+[node name="DeskGroup" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="DeskActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup"]
+layout_mode = 2
+text = "Management Desk"
+horizontal_alignment = 1
+
+[node name="DeskActionRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ReviewDeskButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+text = "Review Desk"
+
+[node name="BuyUpgradeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+text = "Buy Upg"
 
 [node name="PlacementGroup" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

@@ -58,6 +58,8 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.services_label.text, "Services: none")
 	assert_string_contains(_panel.services_label.text, "Service bench:")
 	assert_string_contains(_panel.settings_label.text, "Settings:")
+	assert_string_contains(_panel.management_desk_label.text, "Management desk:")
+	assert_string_contains(_panel.management_desk_label.text, "Supplier messages - pending")
 	assert_eq(_panel.hidden_records_label.text, "Hidden records: no active records.")
 	assert_eq(_panel.get_active_tab(), "dashboard")
 	assert_true(_panel.dashboard_tab_button.button_pressed)
@@ -72,6 +74,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.service_action_label.text, "Service")
 	assert_eq(_panel.release_action_label.text, "Release")
 	assert_eq(_panel.day_action_label.text, "Day")
+	assert_eq(_panel.desk_action_label.text, "Management Desk")
 	assert_eq(_panel.placement_action_label.text, "Storage Placement")
 	assert_eq(_panel.order_games_button.text, "Order Lot")
 	assert_eq(_panel.open_box_button.text, "Open Box")
@@ -81,6 +84,8 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.pull_item_button.text, "Pull")
 	assert_eq(_panel.start_service_button.text, "Start Svc")
 	assert_eq(_panel.work_service_button.text, "Work Svc")
+	assert_eq(_panel.review_desk_button.text, "Review Desk")
+	assert_eq(_panel.buy_upgrade_button.text, "Buy Upg")
 	assert_true(_panel.open_box_button.disabled)
 	assert_true(_panel.check_invoice_button.disabled)
 	assert_true(_panel.sort_receiving_button.disabled)
@@ -88,6 +93,8 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_true(_panel.pull_item_button.disabled)
 	assert_false(_panel.start_service_button.disabled)
 	assert_true(_panel.work_service_button.disabled)
+	assert_false(_panel.review_desk_button.disabled)
+	assert_false(_panel.buy_upgrade_button.disabled)
 	assert_eq(_panel.order_rack_button.text, "Order Rack")
 	assert_eq(_panel.place_rack_button.text, "Place Rack")
 	assert_eq(_panel.commit_allocation_button.text, "Commit Release")
@@ -161,6 +168,8 @@ func test_day_summary_panel_switches_backroom_tab_visibility() -> void:
 
 	assert_true(_panel.set_active_tab("records"))
 	assert_true(_panel.hidden_records_label.visible)
+	assert_true(_panel.management_desk_label.visible)
+	assert_string_contains(_panel.management_desk_label.text, "Management desk:")
 	assert_false(_panel.set_active_tab("missing"))
 	assert_eq(_panel.get_active_tab(), "records")
 
@@ -206,6 +215,7 @@ func test_day_summary_panel_groups_readouts_by_management_section() -> void:
 		"SupplierOrderLabel",
 		"FixtureLabel",
 		"SettingsLabel",
+		"ManagementDeskLabel",
 		"HiddenRecordsLabel",
 	]
 
@@ -221,6 +231,8 @@ func test_day_summary_panel_groups_actions_by_operation() -> void:
 	assert_eq(_panel.order_rack_button.get_parent().get_parent().name, "StorageActions")
 	assert_eq(_panel.place_rack_button.get_parent().get_parent().name, "StorageActions")
 	assert_eq(_panel.commit_allocation_button.get_parent().name, "ReleaseActions")
+	assert_eq(_panel.review_desk_button.get_parent().get_parent().name, "DeskGroup")
+	assert_eq(_panel.buy_upgrade_button.get_parent().get_parent().name, "DeskGroup")
 	assert_eq(_panel.end_day_button.get_parent().get_parent().name, "DayActions")
 	assert_eq(_panel.close_button.get_parent().get_parent().name, "DayActions")
 	assert_eq(_panel.rack_left_button.get_parent().get_parent().name, "PlacementGroup")
@@ -257,6 +269,24 @@ func test_day_summary_panel_runs_service_bench_workflow() -> void:
 	assert_string_contains(_panel.status_label.text, "Worked Disc Resurfacing: ready_for_pickup.")
 	assert_string_contains(_panel.services_label.text, "ready_for_pickup 100%")
 	assert_true(_panel.work_service_button.disabled)
+
+
+func test_day_summary_panel_runs_management_desk_workflow() -> void:
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.set_active_tab("records"))
+
+	assert_true(_panel.review_management_desk())
+	assert_eq(_panel.status_label.text, "Reviewed Supplier messages at management desk.")
+	assert_string_contains(_panel.management_desk_label.text, "Supplier messages - reviewed")
+	assert_string_contains(_panel.management_desk_label.text, "Bill review - pending")
+	assert_false(_panel.review_desk_button.disabled)
+	assert_true(_panel.buy_management_upgrade())
+	assert_eq(_panel.status_label.text, "Ordered Computer Analytics upgrade.")
+	assert_eq(_session.get_cash_cents(), 41000)
+	assert_true(_session.has_upgrade("upgrade_computer_analytics"))
+	assert_string_contains(_panel.management_desk_label.text, "computer analytics purchased")
+	assert_string_contains(_panel.settings_label.text, "Purchased: Computer Analytics")
+	assert_true(_panel.buy_upgrade_button.disabled)
 
 
 func test_day_summary_panel_includes_recent_trade_in_activity() -> void:

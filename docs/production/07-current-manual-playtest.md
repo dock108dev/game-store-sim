@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this backroom-operations pass: `scripts/validate_godot.sh` passes with 392 GUT tests, UI scenario automation coverage at 382/465, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this backroom-operations pass: `scripts/validate_godot.sh` passes with 394 GUT tests, UI scenario automation coverage at 385/469, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -40,6 +40,7 @@ Current automated baseline:
 - Receiving workflow is implemented through Stop 8.1; manual QA should confirm delivered supplier batches show delivery point, box state, invoice check, sorting state, pending/completed status, and Open Box/Check Inv/Sort controls without feeling like instant inventory teleporting.
 - Storage workflow is implemented through Stop 8.2; manual QA should confirm Store/Pull controls, backstock shelf capacity, overflow text, and recent movement history make stock movement feel like backroom work rather than an abstract inventory menu.
 - Service bench workflow is implemented through Stop 8.3; manual QA should confirm service capabilities, parts, ticket progress, ready pickup, Start Svc/Work Svc controls, and register completion read as one physical service workflow.
+- Management desk workflow is implemented through Stop 8.4; manual QA should confirm supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk, and Buy Upg read as planning work in the backroom records flow.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -67,6 +68,7 @@ Current automated baseline:
 20. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
 21. Open the backroom computer and confirm the dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable.
 22. Use the backroom tabs to confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
+Management desk subcheck: open Records, confirm the management desk lists supplier messages, bill review, inventory search, report review, preorder planning, and upgrade ordering; use `Review Desk` once and confirm the first task becomes reviewed without changing inventory or register state; use `Buy Upg` and confirm Computer Analytics is purchased from cash as an upgrade order.
 23. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier.
 24. Clear the trade-in queue by accepting or declining it, then click the register, review the `Neon Skyline` preorder deposit checkout panel, and click Confirm.
 25. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the checkout confirmation reads as a preorder deposit rather than a sale.
@@ -262,7 +264,7 @@ Run these first when manually checking the completed Stop 7.1 through Stop 7.7 e
 
 ## Backroom Operations Focus
 
-Run these first when manually checking the completed Stop 8.1 through Stop 8.3 backroom workflows:
+Run these first when manually checking the completed Stop 8.1 through Stop 8.4 backroom workflows:
 
 - Confirm supplier delivery creates pending receiving work instead of making the order feel solved as soon as the next day starts.
 - Confirm delivery point, box state, invoice state, expected/received count, variance, sorting destination, and pending/completed status are readable in the backroom computer.
@@ -275,6 +277,10 @@ Run these first when manually checking the completed Stop 8.1 through Stop 8.3 b
 - Confirm service ticket parts, progress, ready-for-pickup state, and picked-up state are readable in the Services tab.
 - Confirm `Start Svc` and `Work Svc` controls advance bench work without making the backroom computer feel like the register.
 - Confirm customer payment/completion still happens at the register after bench work is ready.
+- Confirm the Records tab management desk lists supplier messages, bill review, inventory search, report review, preorder planning, and upgrade ordering as planning tasks.
+- Confirm `Review Desk` advances one desk task at a time without moving inventory, completing customer work, or posting register revenue.
+- Confirm `Buy Upg` purchases Computer Analytics as a cash upgrade order and updates the settings/upgrade summary.
+- Confirm management desk text feels like backroom planning, not a standalone register, service terminal, or instant inventory solver.
 
 ## Customer Production Focus
 

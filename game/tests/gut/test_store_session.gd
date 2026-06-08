@@ -401,6 +401,62 @@ func test_store_session_runs_service_bench_ticket_to_register_pickup() -> void:
 	assert_eq(session.get_service_count(), 1)
 
 
+func test_store_session_runs_management_desk_review_and_upgrade_ordering() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	session.order_supplier_lot("supplier_lot_used_games_001")
+	session.commit_release_allocation("release_neon_skyline", 1)
+	var tasks := session.get_management_desk_tasks()
+	var summary := session.get_management_desk_summary_text()
+
+	assert_eq(tasks.size(), 6)
+	assert_eq(tasks[0].get("task_id"), "supplier_messages")
+	assert_string_contains(summary, "Management desk:")
+	assert_string_contains(summary, "Supplier messages - pending")
+	assert_string_contains(summary, "Bill review - pending")
+	assert_string_contains(summary, "Inventory search - pending")
+	assert_string_contains(summary, "Report review - pending")
+	assert_string_contains(summary, "Preorder planning - pending")
+	assert_string_contains(summary, "Upgrade ordering - pending")
+	assert_string_contains(summary, "Supplier messages: review supplier notes")
+	assert_string_contains(summary, "Bills: due at close $8.75, reserved obligations $59.00")
+	assert_string_contains(summary, "Preorder planning: 0 deposits, 1 allocations")
+	assert_string_contains(summary, "Upgrade ordering: next Accessory Peg Wall $80.00")
+
+	var first_review := session.review_management_task()
+
+	assert_eq(first_review.get("task_id"), "supplier_messages")
+	assert_eq(first_review.get("desk_id"), "backroom_management_desk")
+	assert_eq(first_review.get("status"), "reviewed")
+	assert_false(session.can_review_management_task("supplier_messages"))
+	assert_true(session.can_review_management_task("bill_review"))
+
+	var expected_tasks := [
+		"bill_review",
+		"inventory_search",
+		"report_review",
+		"preorder_planning",
+		"upgrade_ordering",
+	]
+	for task_id in expected_tasks:
+		assert_eq(session.review_management_task(task_id).get("task_id"), task_id)
+
+	assert_eq(session.get_management_reviews().size(), 6)
+	assert_false(session.can_review_management_task())
+	assert_string_contains(session.get_management_desk_summary_text(), "Upgrade ordering - reviewed")
+	assert_string_contains(session.get_management_desk_summary_text(), "Recent desk review: Upgrade ordering reviewed day 1")
+
+	var purchase := session.purchase_management_upgrade("upgrade_computer_analytics")
+
+	assert_eq(purchase.get("upgrade_id"), "upgrade_computer_analytics")
+	assert_eq(purchase.get("desk_id"), "backroom_management_desk")
+	assert_eq(purchase.get("order_status"), "ordered")
+	assert_true(session.has_upgrade("upgrade_computer_analytics"))
+	assert_eq(session.get_cash_cents(), 35100)
+	assert_string_contains(session.get_management_desk_summary_text(), "computer analytics purchased")
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()

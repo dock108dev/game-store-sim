@@ -53,6 +53,50 @@ const SERVICE_BENCH_CATALOG := [
 		"placeholder": true,
 	},
 ]
+const MANAGEMENT_DESK_TASKS := [
+	{
+		"task_id": "supplier_messages",
+		"label": "Supplier messages",
+		"category": "records",
+		"desk_id": "backroom_management_desk",
+		"summary": "Review supplier notes, due orders, receiving issues, and optional hidden records.",
+	},
+	{
+		"task_id": "bill_review",
+		"label": "Bill review",
+		"category": "bills",
+		"desk_id": "backroom_management_desk",
+		"summary": "Review rent reserve, utilities, operating expenses, and reserved obligations.",
+	},
+	{
+		"task_id": "inventory_search",
+		"label": "Inventory search",
+		"category": "inventory",
+		"desk_id": "backroom_management_desk",
+		"summary": "Search active inventory, backstock, receiving stock, and reorder gaps.",
+	},
+	{
+		"task_id": "report_review",
+		"label": "Report review",
+		"category": "reports",
+		"desk_id": "backroom_management_desk",
+		"summary": "Review the daily report, cash movement, reputation changes, and tomorrow notes.",
+	},
+	{
+		"task_id": "preorder_planning",
+		"label": "Preorder planning",
+		"category": "releases",
+		"desk_id": "backroom_management_desk",
+		"summary": "Review preorder obligations, release allocations, due days, and launch shortages.",
+	},
+	{
+		"task_id": "upgrade_ordering",
+		"label": "Upgrade ordering",
+		"category": "upgrades",
+		"desk_id": "backroom_management_desk",
+		"summary": "Review available upgrades and place upgrade orders from the management desk.",
+	},
+]
 const UPGRADE_CATALOG := [
 	{
 		"upgrade_id": "upgrade_fixture_peg_wall",
@@ -208,6 +252,7 @@ var supplier_orders: Array[Dictionary] = []
 var receiving_batches: Array[Dictionary] = []
 var storage_movements: Array[Dictionary] = []
 var service_tickets: Array[Dictionary] = []
+var management_reviews: Array[Dictionary] = []
 var preorder_deposits: Array[Dictionary] = []
 var release_allocations: Array[Dictionary] = []
 var launch_events: Array[Dictionary] = []
@@ -795,6 +840,125 @@ func get_service_bench_summary_text() -> String:
 			])
 			lines.append("Parts: %s" % ", ".join(ticket.get("parts", []) as Array))
 	lines.append("Pickup: complete ready service work at the register with the customer")
+	return "\n".join(lines)
+
+
+func get_management_desk_tasks() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for task in MANAGEMENT_DESK_TASKS:
+		var row: Dictionary = task.duplicate(true)
+		row["status"] = "reviewed" if _has_management_review(str(row.get("task_id", ""))) else "pending"
+		rows.append(row)
+	return rows
+
+
+func get_management_reviews() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for review in management_reviews:
+		rows.append(review.duplicate(true))
+	return rows
+
+
+func replace_management_reviews(reviews: Array) -> void:
+	management_reviews.clear()
+	for review in reviews:
+		if typeof(review) == TYPE_DICTIONARY:
+			var row: Dictionary = review
+			management_reviews.append(row.duplicate(true))
+
+
+func can_review_management_task(task_id: String = "") -> bool:
+	if is_day_closed:
+		return false
+	var task := _get_management_task_definition(task_id)
+	if task.is_empty() and task_id.is_empty():
+		task = _get_next_pending_management_task()
+	if task.is_empty():
+		return false
+	return not _has_management_review(str(task.get("task_id", "")))
+
+
+func review_management_task(task_id: String = "") -> Dictionary:
+	var task := _get_management_task_definition(task_id)
+	if task.is_empty() and task_id.is_empty():
+		task = _get_next_pending_management_task()
+	if task.is_empty() or not can_review_management_task(str(task.get("task_id", ""))):
+		return {}
+
+	var review := {
+		"review_id": "management_review_%03d" % (management_reviews.size() + 1),
+		"task_id": str(task.get("task_id", "")),
+		"label": str(task.get("label", "Management task")),
+		"category": str(task.get("category", "management")),
+		"desk_id": str(task.get("desk_id", "backroom_management_desk")),
+		"summary": str(task.get("summary", "")),
+		"reviewed_day": day_number,
+		"status": "reviewed",
+	}
+	management_reviews.append(review)
+	return review.duplicate(true)
+
+
+func can_purchase_management_upgrade(upgrade_id: String = "upgrade_computer_analytics") -> bool:
+	return can_purchase_upgrade(upgrade_id)
+
+
+func purchase_management_upgrade(upgrade_id: String = "upgrade_computer_analytics") -> Dictionary:
+	if not can_purchase_management_upgrade(upgrade_id):
+		return {}
+
+	var purchase := purchase_upgrade(upgrade_id)
+	if purchase.is_empty():
+		return {}
+	purchase["desk_id"] = "backroom_management_desk"
+	purchase["order_status"] = "ordered"
+	return purchase.duplicate(true)
+
+
+func get_management_desk_summary_text() -> String:
+	var lines: Array[String] = ["Management desk:"]
+	lines.append("Desk: Backroom management desk / backroom_management_desk")
+	lines.append("Tasks:")
+	for task in get_management_desk_tasks():
+		lines.append("%s - %s: %s" % [
+			str(task.get("label", "Task")),
+			str(task.get("status", "pending")),
+			str(task.get("summary", "")),
+		])
+	lines.append("Supplier messages: review supplier notes, hidden records, and %d pending orders" % get_pending_supplier_orders().size())
+	lines.append("Bills: due at close %s, reserved obligations %s" % [
+		format_money(get_daily_cash_pressure_cents()),
+		format_money(get_reserved_obligations_cents()),
+	])
+	lines.append("Inventory search: %d active items; %s" % [
+		get_active_inventory_items().size(),
+		get_reorder_suggestions_text().replace("\n", " / "),
+	])
+	lines.append("Report review: %s" % ("closed-day report ready" if is_day_closed else "day still open"))
+	lines.append("Preorder planning: %d deposits, %d allocations, %d launch events" % [
+		get_preorder_deposit_count(),
+		get_release_allocation_count(),
+		get_launch_event_count(),
+	])
+	var available := get_available_upgrades()
+	if available.is_empty():
+		lines.append("Upgrade ordering: no available upgrades")
+	else:
+		var next_upgrade := available[0]
+		lines.append("Upgrade ordering: next %s %s; computer analytics %s" % [
+			str(next_upgrade.get("label", "Upgrade")),
+			format_money(int(next_upgrade.get("cost_cents", 0))),
+			"purchased" if has_upgrade("upgrade_computer_analytics") else "available",
+		])
+	if management_reviews.is_empty():
+		lines.append("Recent desk review: none")
+	else:
+		var recent := management_reviews[management_reviews.size() - 1]
+		lines.append("Recent desk review: %s %s day %d" % [
+			str(recent.get("label", "Task")),
+			str(recent.get("status", "reviewed")),
+			int(recent.get("reviewed_day", day_number)),
+		])
 	return "\n".join(lines)
 
 
@@ -2210,6 +2374,29 @@ func _get_service_definition(service_id: String) -> Dictionary:
 func _service_requirements_met(service: Dictionary) -> bool:
 	var required_upgrade_id := str(service.get("requires_upgrade_id", ""))
 	return required_upgrade_id.is_empty() or has_upgrade(required_upgrade_id)
+
+
+func _get_management_task_definition(task_id: String) -> Dictionary:
+	for task in MANAGEMENT_DESK_TASKS:
+		if str(task.get("task_id", "")) == task_id:
+			return task.duplicate(true)
+	return {}
+
+
+func _get_next_pending_management_task() -> Dictionary:
+	for task in MANAGEMENT_DESK_TASKS:
+		if not _has_management_review(str(task.get("task_id", ""))):
+			return task.duplicate(true)
+	return {}
+
+
+func _has_management_review(task_id: String) -> bool:
+	if task_id.is_empty():
+		return false
+	for review in management_reviews:
+		if str(review.get("task_id", "")) == task_id:
+			return true
+	return false
 
 
 func _find_service_ticket_index(ticket_id: String = "", allow_first_workable: bool = false) -> int:

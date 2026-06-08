@@ -190,6 +190,27 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_switches_backroom_tab_visibility"
     },
     {
+      "id": "management_desk_task_workflow",
+      "name": "Management desk reviews supplier messages, bills, inventory search, reports, preorder planning, and upgrade ordering tasks",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_runs_management_desk_review_and_upgrade_ordering"
+    },
+    {
+      "id": "day_summary_panel_management_desk_controls",
+      "name": "Backroom computer exposes Review Desk and Buy Upg controls for management desk work",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_runs_management_desk_workflow"
+    },
+    {
+      "id": "management_desk_persistence",
+      "name": "Save codec preserves management desk review history",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
       "id": "day_summary_panel_recent_sale_activity",
       "name": "Day summary panel includes recent sale activity",
       "status": "automated",
