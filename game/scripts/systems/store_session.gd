@@ -168,6 +168,7 @@ var is_day_closed: bool = false
 var fixture_orders: Array[Dictionary] = []
 var placed_fixtures: Array[Dictionary] = []
 var supplier_orders: Array[Dictionary] = []
+var receiving_batches: Array[Dictionary] = []
 var preorder_deposits: Array[Dictionary] = []
 var release_allocations: Array[Dictionary] = []
 var launch_events: Array[Dictionary] = []
@@ -1352,6 +1353,75 @@ func get_delivered_supplier_orders() -> Array[Dictionary]:
 	return orders
 
 
+func get_receiving_batches() -> Array[Dictionary]:
+	var batches: Array[Dictionary] = []
+	for batch in receiving_batches:
+		batches.append(batch.duplicate(true))
+	return batches
+
+
+func get_pending_receiving_batches() -> Array[Dictionary]:
+	var batches: Array[Dictionary] = []
+	for batch in receiving_batches:
+		if str(batch.get("status", "")) != "completed":
+			batches.append(batch.duplicate(true))
+	return batches
+
+
+func replace_receiving_batches(batches: Array) -> void:
+	receiving_batches.clear()
+	for batch in batches:
+		if typeof(batch) == TYPE_DICTIONARY:
+			var row: Dictionary = batch
+			receiving_batches.append(row.duplicate(true))
+
+
+func open_receiving_batch(batch_id: String) -> Dictionary:
+	var index := _find_receiving_batch_index(batch_id)
+	if index < 0:
+		return {}
+
+	var batch := receiving_batches[index]
+	if str(batch.get("box_status", "")) == "sealed":
+		batch["box_status"] = "opened"
+		batch["status"] = "opened"
+		receiving_batches[index] = batch
+	return batch.duplicate(true)
+
+
+func check_receiving_invoice(batch_id: String) -> Dictionary:
+	var index := _find_receiving_batch_index(batch_id)
+	if index < 0:
+		return {}
+
+	var batch := receiving_batches[index]
+	if str(batch.get("box_status", "")) == "sealed":
+		batch["box_status"] = "opened"
+	batch["invoice_status"] = "checked"
+	batch["invoice_variance"] = int(batch.get("received_count", 0)) - int(batch.get("expected_count", 0))
+	batch["status"] = "invoice_checked"
+	receiving_batches[index] = batch
+	return batch.duplicate(true)
+
+
+func sort_receiving_batch(batch_id: String, destination: String = "price_stock") -> Dictionary:
+	var index := _find_receiving_batch_index(batch_id)
+	if index < 0:
+		return {}
+
+	var batch := receiving_batches[index]
+	if str(batch.get("box_status", "")) == "sealed":
+		batch["box_status"] = "opened"
+	if str(batch.get("invoice_status", "")) != "checked":
+		batch["invoice_status"] = "checked"
+		batch["invoice_variance"] = int(batch.get("received_count", 0)) - int(batch.get("expected_count", 0))
+	batch["sorting_status"] = "sorted"
+	batch["sort_destination"] = destination
+	batch["status"] = "completed"
+	receiving_batches[index] = batch
+	return batch.duplicate(true)
+
+
 func replace_supplier_orders(orders: Array) -> void:
 	supplier_orders.clear()
 	for order in orders:
@@ -1410,6 +1480,35 @@ func get_supplier_order_summary_text() -> String:
 			lines.append("Delivery state: delivered")
 			lines.append("%d items ready for pickup, pricing, and stocking" % int(order.get("item_count", 0)))
 
+	lines.append(get_receiving_workflow_summary_text())
+	return "\n".join(lines)
+
+
+func get_receiving_workflow_summary_text() -> String:
+	var lines: Array[String] = ["Receiving workflow:"]
+	lines.append("Delivery point: Backroom receiving mat / receiving_box_001")
+	lines.append("Sort lanes: price, stock, storage")
+	if receiving_batches.is_empty():
+		lines.append("Pending receiving work: none")
+		return "\n".join(lines)
+
+	for batch in receiving_batches:
+		lines.append("%s %s" % [
+			str(batch.get("display_name", "Supplier lot")),
+			str(batch.get("batch_id", "receiving_batch")),
+		])
+		lines.append("Box: %s" % str(batch.get("box_status", "sealed")))
+		lines.append("Invoice: %s expected %d received %d variance %d" % [
+			str(batch.get("invoice_status", "unchecked")),
+			int(batch.get("expected_count", 0)),
+			int(batch.get("received_count", 0)),
+			int(batch.get("invoice_variance", 0)),
+		])
+		lines.append("Sorting: %s -> %s" % [
+			str(batch.get("sorting_status", "waiting")),
+			str(batch.get("sort_destination", "unsorted")),
+		])
+		lines.append("Receiving state: %s" % str(batch.get("status", "pending_receiving")))
 	return "\n".join(lines)
 
 
@@ -2098,6 +2197,7 @@ func _deliver_due_supplier_orders() -> Array[Dictionary]:
 		order["status"] = "delivered"
 		order["delivered_day"] = day_number
 		order["delivered_count"] = items.size()
+		_record_receiving_batch(order, items.size())
 		supplier_orders[index] = order
 		delivered.append(order.duplicate(true))
 
@@ -2161,3 +2261,34 @@ func _position_delivered_item(item: Node3D, slot_index: int) -> void:
 	var row := int(slot_index / x_positions.size())
 	item.position = Vector3(float(x_positions[column]), 0.2, 0.12 + float(row) * 0.13)
 	item.rotation.y = deg_to_rad(-8.0 + float(column) * 5.0)
+
+
+func _record_receiving_batch(order: Dictionary, received_count: int) -> void:
+	if _find_receiving_batch_index(str(order.get("order_id", ""))) >= 0:
+		return
+
+	var expected_count := int(order.get("item_count", received_count))
+	receiving_batches.append({
+		"batch_id": str(order.get("order_id", "receiving_batch_%03d" % (receiving_batches.size() + 1))),
+		"order_id": str(order.get("order_id", "")),
+		"lot_id": str(order.get("lot_id", "")),
+		"display_name": str(order.get("display_name", "Supplier lot")),
+		"delivery_point": "receiving_box_001",
+		"delivered_day": day_number,
+		"expected_count": expected_count,
+		"received_count": received_count,
+		"box_status": "sealed",
+		"invoice_status": "unchecked",
+		"invoice_variance": received_count - expected_count,
+		"sorting_status": "waiting",
+		"sort_destination": "unsorted",
+		"status": "pending_receiving",
+	})
+
+
+func _find_receiving_batch_index(batch_id: String) -> int:
+	for index in range(receiving_batches.size()):
+		var batch := receiving_batches[index]
+		if str(batch.get("batch_id", "")) == batch_id or str(batch.get("order_id", "")) == batch_id:
+			return index
+	return -1

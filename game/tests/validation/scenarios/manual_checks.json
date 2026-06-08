@@ -633,6 +633,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "receiving_workflow_readability",
+      "name": "Backroom receiving workflow clearly shows delivery point, box opening, invoice check, sorting, and pending state",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the receiving batch state machine and panel buttons; human review must confirm Open Box, Check Inv, Sort, delivery-point text, invoice variance, and completed sorting read naturally in the actual backroom computer.",
+      "owner": "manual QA"
+    },
+    {
       "id": "evidence_storage_invisible",
       "name": "Evidence storage remains hidden during normal play",
       "status": "manual",

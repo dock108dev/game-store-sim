@@ -43,6 +43,20 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_delivers_supplier_lot_on_next_day"
     },
     {
+      "id": "supplier_delivery_creates_receiving_batch",
+      "name": "Supplier delivery creates a pending receiving batch with delivery point, box, invoice, and sorting state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_delivers_supplier_lot_on_next_day"
+    },
+    {
+      "id": "supplier_receiving_lifecycle",
+      "name": "Receiving batch can be opened, invoice checked, sorted, and completed",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_opens_checks_and_sorts_receiving_batch"
+    },
+    {
       "id": "day_summary_panel_orders_supplier_lot",
       "name": "Backroom computer can order a supplier lot",
       "status": "automated",
@@ -52,6 +66,13 @@
     {
       "id": "day_summary_panel_starts_next_day_delivery",
       "name": "Backroom computer starts the next day and shows delivered supplier stock",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_starts_next_day_and_delivers_supplier_lot"
+    },
+    {
+      "id": "day_summary_panel_receiving_controls",
+      "name": "Backroom computer exposes Open Box, Check Inv, and Sort controls for pending receiving batches",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_starts_next_day_and_delivers_supplier_lot"
@@ -76,6 +97,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_save_codec.gd"
+    },
+    {
+      "id": "supplier_receiving_batches_persist",
+      "name": "Supplier receiving batches save and restore through the save codec",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
     }
   ]
 }

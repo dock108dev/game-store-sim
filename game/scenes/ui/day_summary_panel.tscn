@@ -217,6 +217,25 @@ custom_minimum_size = Vector2(92, 40)
 layout_mode = 2
 text = "Order Lot"
 
+[node name="ReceivingActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="OpenBoxButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+text = "Open Box"
+
+[node name="CheckInvoiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+text = "Check Inv"
+
+[node name="SortReceivingButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+text = "Sort"
+
 [node name="StorageActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
 layout_mode = 2
 theme_override_constants/separation = 4

@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and the next major implementation area is backroom operations.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and backroom operations are underway with the receiving workflow slice.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -38,7 +38,7 @@ Current completion plan: `11-game-completion-plan.md`.
 6. Customer production pass.
 7. Product and content pipeline.
 8. Economy, day loop, and progression. Done through Milestone 7.
-9. Backroom operations. Current next phase.
+9. Backroom operations. Current phase.
 10. Store building, decoration, and expansion.
 11. Hidden-thread production arc.
 12. Audio, VFX, and presentation feel.
@@ -65,6 +65,7 @@ The following polish items remain valid historical checkpoints:
 - Done: kept supplier-delivered stock placement readable as physical receiving, not UI inventory teleporting.
 - Done: kept storage fixture ordering and placement readable as a backroom/operations workflow.
 - Done: kept the backroom computer readable as a management terminal, not another register.
+- Done: added a receiving workflow state for supplier deliveries with delivery point, sealed/opened box state, invoice check, sorting destination, pending/completed status, backroom controls, save/load coverage, and manual validation coverage.
 
 ## Computer And Menu Polish
 
@@ -118,7 +119,7 @@ Compressed summary of completed validated systems:
 - Service customer and register-completed service accounting.
 - Backroom computer summaries, daily report, recent activity, reorder suggestions, demand readout, market drift, supplier ordering, release calendar, allocation commitment, launch-day resolution, and fixture controls.
 - Fixture ordering, ghost preview, valid/invalid state, movement, rotation, snap, placement confirmation, and save-smoke coverage.
-- Supplier orders with due-day receiving-box delivery.
+- Supplier orders with due-day receiving-box delivery and a pending receiving workflow for opening, invoice checking, and sorting delivered batches.
 - Preorder deposit and launch-day fulfillment/reputation outcome.
 - Hidden event log, mismatched serial item, supplier message, optional suspicious customer, and hidden evidence storage.
 - Mandatory validation gate, product content checker, validation tool manifest, GUT tests, validation scenario matrix, script mapping, persistence smoke, and named screenshots.

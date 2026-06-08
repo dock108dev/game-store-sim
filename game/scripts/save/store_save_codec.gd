@@ -15,6 +15,7 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"transactions": session.get_transactions(),
 		"fixture_orders": session.get_pending_fixture_orders(),
 		"supplier_orders": session.get_pending_supplier_orders(),
+		"receiving_batches": session.get_receiving_batches(),
 		"preorder_deposits": session.get_preorder_deposits(),
 		"release_allocations": session.get_release_allocations(),
 		"launch_events": session.get_launch_events(),
@@ -75,6 +76,11 @@ func restore_into_existing_scene(
 	if typeof(supplier_orders_value) == TYPE_ARRAY:
 		var supplier_orders: Array = supplier_orders_value
 		session.replace_supplier_orders(supplier_orders)
+
+	var receiving_batches_value: Variant = data.get("receiving_batches", [])
+	if typeof(receiving_batches_value) == TYPE_ARRAY and session.has_method("replace_receiving_batches"):
+		var receiving_batches: Array = receiving_batches_value
+		session.replace_receiving_batches(receiving_batches)
 
 	var preorder_deposits_value: Variant = data.get("preorder_deposits", [])
 	if typeof(preorder_deposits_value) == TYPE_ARRAY and session.has_method("replace_preorder_deposits"):

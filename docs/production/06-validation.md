@@ -42,10 +42,10 @@ Critical smoke scenarios must be automated regardless of percentage. This includ
 
 Script coverage is measured as tested-script mapping, not true line coverage. Godot does not provide a built-in game GDScript line coverage gate here. If a stable GDScript line/function coverage tool is added later, this policy can be upgraded.
 
-Current polish-pass baseline:
+Current backroom-operations baseline:
 
-- `scripts/validate_godot.sh` passes with 387 GUT tests.
-- UI scenario automation coverage is 372/452, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 388 GUT tests.
+- UI scenario automation coverage is 376/457, above the required 80% threshold.
 - Production script mapping coverage is 39/39.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
@@ -62,6 +62,7 @@ Current polish-pass baseline:
 - Upgrade path coverage verifies fixture, category, service-tool, computer-tool, signage, storage, and starter-expansion goals; purchase rules; the storage prerequisite for expansion; backroom summary text; and save/load persistence.
 - Owner onboarding coverage verifies the receiving, pricing, stocking, checkout, trade-in, backroom computer, ordering, and closing checklist; state-derived progress; and backroom dashboard presentation.
 - Economy progression sync verifies cross-flow day phase, close pressure, next-day setup, decision feedback, goals, and manual playtest coverage through Stop 7.7.
+- Receiving workflow coverage verifies supplier delivery creates pending receiving batches with delivery point, sealed/opened box state, invoice check, expected/received count variance, sorting destination, completed status, backroom controls, and save/load persistence.
 
 ## Manual Validation
 
@@ -84,7 +85,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, and demand-tuning validation are synced through Stop 7.4.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, and receiving-workflow validation are synced through Stop 8.1.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding validation is synced through Stop 7.6; manual QA should confirm the checklist teaches the first-day loop without feeling like debug tutorial text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
@@ -147,7 +148,9 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Underallocating for launch day produces a readable missed-demand/reputation consequence.
 - Backroom `Order Lot` button is readable and reserves cash clearly.
 - Pending receiving order shows due day and item count clearly.
-- Starting the next day delivers the used-game starter lot into the receiving box and clears pending receiving.
+- Starting the next day delivers the used-game starter lot into the receiving box and creates pending receiving work.
+- Backroom receiving workflow shows delivery point, sealed/opened box state, unchecked/checked invoice state, expected count, received count, variance, sorting destination, and pending/completed state.
+- Backroom `Open Box`, `Check Inv`, and `Sort` controls are readable and enable/disable in a sensible order for the pending receiving batch.
 - Delivered supplier games look intentionally placed and do not crowd the receiving box, display rack, trade-in seller, or customer flow.
 - Backroom `Order Rack` and `Place Rack` controls show the game display rack option, cash reservation, and pending storage placement clearly.
 - Backroom pending storage fixture `Left`, `Right`, `Fwd`, `Back`, `Rotate`, `Snap`, and `Cancel` controls are readable and fit the panel.
@@ -194,7 +197,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.
-- `scenarios/supplier_ordering.json`: supplier lot data, backroom supplier ordering, cash reservation, due-day delivery, receiving-box delivery, panel state, and persistence coverage.
+- `scenarios/supplier_ordering.json`: supplier lot data, backroom supplier ordering, cash reservation, due-day delivery, receiving-box delivery, pending receiving batch state, box opening, invoice check, sorting completion, panel controls, and persistence coverage.
 - `scenarios/release_calendar.json`: fictional new-release data, countdown text, sorted/upcoming filtering, and backroom release-calendar readout checks.
 - `scenarios/preorder_deposit.json`: preorder customer, register deposit prompt, preorder ledger/session accounting, backroom summary, persistence, and screenshot coverage.
 - `scenarios/services.json`: first service customer, disc resurfacing request, register service prompt/completion, ledger/session accounting, recent activity, daily report totals, and screenshot coverage.

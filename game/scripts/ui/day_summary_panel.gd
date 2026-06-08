@@ -67,6 +67,9 @@ const BACKROOM_TABS := [
 @onready var placement_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementActionLabel
 @onready var commit_allocation_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ReleaseActions/CommitAllocationButton
 @onready var order_games_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/OrderGamesButton
+@onready var open_box_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons/OpenBoxButton
+@onready var check_invoice_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons/CheckInvoiceButton
+@onready var sort_receiving_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons/SortReceivingButton
 @onready var order_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/OrderRackButton
 @onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/PlaceRackButton
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/EndDayButton
@@ -105,6 +108,9 @@ func _ready() -> void:
 	_prepare_tab_button(records_tab_button, TAB_RECORDS)
 	commit_allocation_button.pressed.connect(commit_release_allocation)
 	order_games_button.pressed.connect(order_used_game_lot)
+	open_box_button.pressed.connect(open_receiving_box)
+	check_invoice_button.pressed.connect(check_receiving_invoice)
+	sort_receiving_button.pressed.connect(sort_receiving_batch)
 	order_rack_button.pressed.connect(order_game_display_rack)
 	place_rack_button.pressed.connect(place_pending_rack)
 	rack_left_button.pressed.connect(move_pending_rack_left)
@@ -242,6 +248,57 @@ func order_used_game_lot() -> bool:
 		return false
 
 	status_label.text = "Ordered %s to receiving." % str(order.get("display_name", "supplier lot"))
+	return true
+
+
+func open_receiving_box() -> bool:
+	var batch := _get_first_pending_receiving_batch()
+	if batch.is_empty() or _session == null or not _session.has_method("open_receiving_batch"):
+		status_label.text = "No receiving box waiting to open."
+		return false
+
+	var opened: Dictionary = _session.open_receiving_batch(str(batch.get("batch_id", batch.get("order_id", ""))))
+	_update_labels()
+	if opened.is_empty():
+		status_label.text = "Could not open receiving box."
+		return false
+
+	status_label.text = "Opened %s receiving box." % str(opened.get("display_name", "supplier lot"))
+	return true
+
+
+func check_receiving_invoice() -> bool:
+	var batch := _get_first_pending_receiving_batch()
+	if batch.is_empty() or _session == null or not _session.has_method("check_receiving_invoice"):
+		status_label.text = "No receiving invoice waiting."
+		return false
+
+	var checked: Dictionary = _session.check_receiving_invoice(str(batch.get("batch_id", batch.get("order_id", ""))))
+	_update_labels()
+	if checked.is_empty():
+		status_label.text = "Could not check receiving invoice."
+		return false
+
+	status_label.text = "Checked invoice: %d expected / %d received." % [
+		int(checked.get("expected_count", 0)),
+		int(checked.get("received_count", 0)),
+	]
+	return true
+
+
+func sort_receiving_batch() -> bool:
+	var batch := _get_first_pending_receiving_batch()
+	if batch.is_empty() or _session == null or not _session.has_method("sort_receiving_batch"):
+		status_label.text = "No receiving batch waiting to sort."
+		return false
+
+	var sorted: Dictionary = _session.sort_receiving_batch(str(batch.get("batch_id", batch.get("order_id", ""))), "price_stock")
+	_update_labels()
+	if sorted.is_empty():
+		status_label.text = "Could not sort receiving batch."
+		return false
+
+	status_label.text = "Sorted %s for pricing and stocking." % str(sorted.get("display_name", "supplier lot"))
 	return true
 
 
@@ -430,6 +487,11 @@ func _update_labels() -> void:
 			or not _session.can_order_supplier_lot(USED_GAME_STARTER_LOT_ID)
 	else:
 		order_games_button.disabled = true
+	var pending_receiving: Dictionary = _get_first_pending_receiving_batch()
+	var has_pending_receiving: bool = not pending_receiving.is_empty() and not _session.is_day_closed
+	open_box_button.disabled = not has_pending_receiving or str(pending_receiving.get("box_status", "")) != "sealed"
+	check_invoice_button.disabled = not has_pending_receiving or str(pending_receiving.get("invoice_status", "")) == "checked"
+	sort_receiving_button.disabled = not has_pending_receiving
 	if _session.has_method("can_order_fixture"):
 		order_rack_button.disabled = _session.is_day_closed or not _session.can_order_fixture(GAME_DISPLAY_RACK_ID)
 	else:
@@ -489,6 +551,18 @@ func _get_tab_button(tab_id: String) -> Button:
 		TAB_RECORDS:
 			return records_tab_button
 	return dashboard_tab_button
+
+
+func _get_first_pending_receiving_batch() -> Dictionary:
+	if _session == null or not _session.has_method("get_pending_receiving_batches"):
+		return {}
+
+	var batches: Array = _session.get_pending_receiving_batches()
+	if batches.is_empty() or typeof(batches[0]) != TYPE_DICTIONARY:
+		return {}
+
+	var batch: Dictionary = batches[0]
+	return batch
 
 
 func _update_tab_button_states() -> void:
