@@ -214,9 +214,9 @@ func _arrange_held_items() -> void:
 
 		var offset := index - (_held_items.size() - 1)
 		var carry_position := Vector3(
-			offset * 0.08,
-			abs(offset) * 0.035,
-			abs(offset) * -0.045
+			offset * 0.095,
+			abs(offset) * 0.042,
+			-0.02 + abs(offset) * -0.055
 		)
-		item.transform = Transform3D(Basis(Vector3.UP, PI + (offset * 0.08)), carry_position)
+		item.transform = Transform3D(Basis(Vector3.UP, PI + (offset * 0.11)), carry_position)
 		item.scale = Vector3(0.46, 0.46, 0.46)

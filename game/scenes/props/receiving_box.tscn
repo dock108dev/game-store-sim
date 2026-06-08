@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ch8di53ltfvaf"]
+[gd_scene load_steps=8 format=3 uid="uid://ch8di53ltfvaf"]
 
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="1_used_game"]
 [ext_resource type="PackedScene" path="res://scenes/props/supplier_message.tscn" id="2_supplier_message"]
@@ -8,6 +8,10 @@ albedo_color = Color(0.32, 0.24, 0.16, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_liner"]
 albedo_color = Color(0.18, 0.16, 0.13, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lane"]
+albedo_color = Color(0.94, 0.72, 0.32, 0.34)
+transparency = 1
 
 [sub_resource type="BoxMesh" id="BoxMesh_base"]
 material = SubResource("StandardMaterial3D_box")
@@ -50,6 +54,35 @@ material = SubResource("StandardMaterial3D_box")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, -0.03)
 size = Vector3(0.92, 0.02, 0.48)
 material = SubResource("StandardMaterial3D_liner")
+
+[node name="ReceivingLane001" type="CSGBox3D" parent="."]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 0.202, -0.04)
+size = Vector3(0.28, 0.012, 0.42)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="ReceivingLane002" type="CSGBox3D" parent="."]
+transform = Transform3D(0.996195, 0, -0.087156, 0, 1, 0, 0.087156, 0, 0.996195, 0.04, 0.202, -0.02)
+size = Vector3(0.28, 0.012, 0.42)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="ReceivingLane003" type="CSGBox3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.32, 0.202, 0.02)
+size = Vector3(0.28, 0.012, 0.42)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="IntakeTagPanel" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, -0.38)
+size = Vector3(0.58, 0.16, 0.03)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="IntakeTagLabel" type="Label3D" parent="IntakeTagPanel"]
+pixel_size = 0.0038
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+billboard = 1
+text = "INTAKE"
+font_size = 22
 
 [node name="PlaceholderUsedGame" parent="." instance=ExtResource("1_used_game")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 0.2, -0.04)

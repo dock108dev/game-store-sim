@@ -119,6 +119,28 @@ func test_player_can_hold_multiple_items_up_to_capacity() -> void:
 		assert_true(collision_shape.disabled)
 
 
+func test_player_carry_stack_fans_items_without_blocking_center() -> void:
+	var first_item := _make_used_game("item_used_star_trader_001")
+	var second_item := _make_used_game("item_used_star_trader_002")
+	var third_item := _make_used_game("item_used_star_trader_003")
+
+	assert_true(_player.pick_up_item(first_item))
+	assert_true(_player.pick_up_item(second_item))
+	assert_true(_player.pick_up_item(third_item))
+
+	assert_lt(first_item.position.x, second_item.position.x)
+	assert_lt(second_item.position.x, third_item.position.x)
+	assert_gt(first_item.position.y, second_item.position.y)
+	assert_gt(second_item.position.y, third_item.position.y)
+	assert_lt(first_item.position.z, second_item.position.z)
+	assert_lt(second_item.position.z, third_item.position.z)
+	assert_lte(absf(third_item.position.x), 0.02)
+	assert_lte(third_item.position.y, 0.01)
+	assert_lte(third_item.position.z, -0.015)
+	assert_lte(first_item.position.y, 0.09)
+	assert_lte(first_item.scale.x, 0.461)
+
+
 func test_player_places_held_item_in_display_slot() -> void:
 	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
 	add_child_autofree(rack)

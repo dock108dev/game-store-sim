@@ -74,6 +74,21 @@ func test_receiving_box_has_multiple_items() -> void:
 	assert_not_null(receiving_box.get_node_or_null("PlaceholderUsedGame003"))
 
 
+func test_receiving_box_has_nonblocking_intake_lanes_and_label() -> void:
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	var intake_label := receiving_box.get_node_or_null("IntakeTagPanel/IntakeTagLabel") as Label3D
+	assert_not_null(intake_label)
+	assert_eq(intake_label.text, "INTAKE")
+
+	for lane_name in ["ReceivingLane001", "ReceivingLane002", "ReceivingLane003"]:
+		var lane := receiving_box.get_node_or_null(lane_name) as CSGBox3D
+		assert_not_null(lane)
+		assert_false(lane.use_collision)
+		assert_lte(lane.size.y, 0.0121)
+		assert_lte(absf(lane.position.x), 0.35)
+		assert_lte(absf(lane.position.z), 0.08)
+
+
 func test_receiving_box_contains_mismatched_serial_item() -> void:
 	var item := _store.get_node("ReceivingBox/PlaceholderUsedGame003")
 
