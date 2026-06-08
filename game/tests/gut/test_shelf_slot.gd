@@ -69,6 +69,23 @@ func test_shelf_has_readable_used_game_category_header() -> void:
 	assert_lt(header_panel.global_position.y, 1.7)
 
 
+func test_shelf_has_alpha_profile_cues_for_angled_fixture_screenshots() -> void:
+	var front_face := _shelf.get_node_or_null("FrontFaceCue") as CSGBox3D
+	var left_stripe := _shelf.get_node_or_null("LeftProfileStripe") as CSGBox3D
+	var right_stripe := _shelf.get_node_or_null("RightProfileStripe") as CSGBox3D
+
+	assert_not_null(front_face)
+	assert_not_null(left_stripe)
+	assert_not_null(right_stripe)
+	assert_false(front_face.use_collision)
+	assert_false(left_stripe.use_collision)
+	assert_false(right_stripe.use_collision)
+	assert_gt(front_face.size.x, 1.4)
+	assert_gt(front_face.size.y, 0.6)
+	assert_lte(left_stripe.size.x, 0.04)
+	assert_lte(right_stripe.size.x, 0.04)
+
+
 func test_shelf_slots_have_compact_category_rails() -> void:
 	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
 		var slot := _shelf.get_node(slot_name) as Area3D

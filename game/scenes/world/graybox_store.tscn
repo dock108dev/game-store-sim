@@ -122,6 +122,39 @@ size = Vector3(0.2, 3, 12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, 0)
 material = SubResource("StandardMaterial3D_wall")
 
+[node name="RightWallMerchBand" type="CSGBox3D" parent="."]
+size = Vector3(0.035, 0.72, 3.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.88, 1.66, -1.05)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="RightWallUsedPosterPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.035, 0.58, 0.86)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.84, 1.66, -2.35)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="RightWallUsedPosterLabel" type="Label3D" parent="RightWallUsedPosterPanel"]
+pixel_size = 0.0042
+modulate = Color(0.05, 0.1, 0.12, 1)
+outline_modulate = Color(0.95, 0.9, 0.68, 1)
+outline_size = 2
+billboard = 1
+text = "USED WALL"
+font_size = 28
+
+[node name="RightWallControllerPosterPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.035, 0.58, 1.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.84, 1.66, 0.05)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="RightWallControllerPosterLabel" type="Label3D" parent="RightWallControllerPosterPanel"]
+pixel_size = 0.0038
+modulate = Color(0.9, 0.98, 0.9, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 2
+billboard = 1
+text = "CONTROLLERS"
+font_size = 26
+
 [node name="FrontWallLeft" type="CSGBox3D" parent="."]
 use_collision = true
 size = Vector3(5, 3, 0.2)
@@ -235,32 +268,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.06, -2.4)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="RegisterSignPanel" type="CSGBox3D" parent="."]
-size = Vector3(1.9, 0.32, 0.04)
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.25, 1.55, -2.95)
+size = Vector3(1.25, 0.28, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.05, 1.46, -2.9)
 material = SubResource("StandardMaterial3D_door")
 
 [node name="RegisterSignLabel" type="Label3D" parent="RegisterSignPanel"]
-pixel_size = 0.006
+pixel_size = 0.0046
 modulate = Color(1, 0.88, 0.7, 1)
 outline_modulate = Color(0.02, 0.03, 0.04, 1)
-outline_size = 5
+outline_size = 4
 billboard = 1
 text = "REGISTER"
-font_size = 42
+font_size = 34
 
 [node name="BackroomSignPanel" type="CSGBox3D" parent="."]
-size = Vector3(2.05, 0.34, 0.04)
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.72, 3.26)
+size = Vector3(1.72, 0.32, 0.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.96, 3.26)
 material = SubResource("StandardMaterial3D_storage_metal")
 
 [node name="BackroomSignLabel" type="Label3D" parent="BackroomSignPanel"]
-pixel_size = 0.006
+pixel_size = 0.0048
 modulate = Color(0.82, 0.94, 1, 1)
 outline_modulate = Color(0.02, 0.03, 0.04, 1)
-outline_size = 5
+outline_size = 4
 billboard = 1
 text = "BACKROOM"
-font_size = 42
+font_size = 34
 
 [node name="BackroomZone" type="CSGBox3D" parent="."]
 size = Vector3(12.4, 0.012, 2.35)
@@ -286,6 +319,20 @@ material = SubResource("StandardMaterial3D_backroom_management_zone")
 size = Vector3(2.35, 0.014, 0.85)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 0.034, 5.45)
 material = SubResource("StandardMaterial3D_backroom_service_zone")
+
+[node name="BackWallFeatureStripe" type="CSGBox3D" parent="."]
+size = Vector3(3.6, 0.42, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 1.48, 5.84)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="BackWallFeatureLabel" type="Label3D" parent="BackWallFeatureStripe"]
+pixel_size = 0.004
+modulate = Color(0.94, 0.98, 0.86, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 3
+billboard = 1
+text = "BUY  SELL  REPAIR"
+font_size = 30
 
 [node name="BackroomPathZone" type="CSGBox3D" parent="."]
 size = Vector3(6.0, 0.01, 0.72)
@@ -992,13 +1039,13 @@ customer_id = "customer_002"
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.55, 0, -3.95)
 
 [node name="PreorderCustomer" parent="." instance=ExtResource("15_preorder_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.55, 0, -4.25)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.9, 0, -4.62)
 
 [node name="ServiceCustomer" parent="." instance=ExtResource("16_service_customer")]
-transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -2.65, 0, -3.95)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.15, 0, -4.18)
 
 [node name="SuspiciousCustomer" parent="." instance=ExtResource("14_suspicious_customer")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -4.15, 0, -2.75)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -4.55, 0, -2.65)
 event_log_path = NodePath("../SuspiciousEventLog")
 evidence_storage_path = NodePath("../EvidenceStorage")
 

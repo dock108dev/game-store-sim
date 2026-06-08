@@ -83,6 +83,13 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_register_area_customer_positions_are_spaced_for_readability"
+    },
+    {
+      "id": "alpha_special_customer_depth_arc",
+      "name": "Alpha special register customers use extra depth and lateral separation to reduce prompt and prop overlap",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_alpha_special_customer_arc_has_readable_depth_separation"
     }
   ]
 }

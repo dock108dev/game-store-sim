@@ -71,6 +71,13 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_readable_used_game_category_header"
     },
     {
+      "id": "rack_alpha_profile_cues",
+      "name": "Display rack has front-face and side-profile cues for angled alpha fixture screenshots",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_alpha_profile_cues_for_angled_fixture_screenshots"
+    },
+    {
       "id": "rack_slot_category_rails",
       "name": "Display rack slots have compact nonblocking category rails",
       "status": "automated",

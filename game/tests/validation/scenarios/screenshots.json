@@ -142,7 +142,7 @@
     },
     {
       "id": "fixture_placed_screenshot",
-      "name": "Placed fixture validation screenshot is captured and checked",
+      "name": "Placed fixture validation screenshot is captured from an angled composition that shows rack face and orientation cues",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"

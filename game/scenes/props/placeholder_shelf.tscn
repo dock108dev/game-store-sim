@@ -45,6 +45,24 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0.24)
 size = Vector3(1.9, 1.25, 0.08)
 material = SubResource("StandardMaterial3D_shelf")
 
+[node name="FrontFaceCue" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, -0.155)
+size = Vector3(1.52, 0.68, 0.025)
+material = SubResource("StandardMaterial3D_header")
+
+[node name="LeftProfileStripe" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.92, -0.02)
+size = Vector3(0.035, 0.96, 0.16)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="RightProfileStripe" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.92, -0.02)
+size = Vector3(0.035, 0.96, 0.16)
+material = SubResource("StandardMaterial3D_slot_rail")
+
 [node name="BottomLedge" type="CSGBox3D" parent="."]
 use_collision = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, -0.08)

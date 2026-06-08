@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 495 GUT tests, UI scenario automation coverage 458/570, production script mapping coverage 50/50, and 3 active validation tools.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 499 GUT tests, UI scenario automation coverage 462/575, production script mapping coverage 50/50, and 3 active validation tools.
 
 ## Milestone 13: Alpha Hardening
 
@@ -648,7 +648,8 @@ Stops:
 - Stop 13.1: Bug triage. Done in `Triage alpha bugs`: create an alpha bug list from automated failures, screenshot review, manual validation, and playtest notes.
 - Stop 13.2: Performance pass. Done in `Run alpha performance pass`: profile scene load, frame time, UI panels, customer pathing, save/load, screenshots, and exported build startup.
 - Stop 13.3: Test expansion. Done in `Expand alpha regression tests`: add regression tests for rotated fixture placement bounds, visible buyer queue spacing, and screenshot subject coverage for current alpha P1/P2 risks.
-- Stop 13.4: Content pass. Fill starter catalog, customer text, supplier orders, daily events, signs, and report copy to alpha quality.
+- Stop 13.4A: Scene-readability content pass. Done in `Polish alpha scene readability`: improve wall detail, sign framing, special-customer spacing, display-rack profile cues, placed-fixture screenshot framing, and backroom computer first-view controls.
+- Stop 13.4B: Content/copy pass. Fill remaining customer text, supplier orders, daily events, signs, and report copy to alpha quality.
 - Stop 13.5: Balance pass. Tune prices, margins, buyer tolerance, demand, rent, bills, supplier delivery, launch allocations, services, and upgrade costs.
 - Stop 13.6: External playtest package. Produce a build, playtest script, known-issues list, feedback form, and rollback plan.
 - Stop 13.7: Alpha validation sync. Run the full gate, exported build smoke, and manual alpha checklist.
@@ -675,6 +676,7 @@ Validation snapshot:
 - Stop 13.1 alpha bug triage records no current P0 automated failures, latest full-gate evidence, screenshot-derived P1/P2 issues AH-001 through AH-011, release-package limits, and target slices for performance, regression, content, balance, and playtest-package follow-up.
 - Stop 13.2 alpha performance pass records a repeatable baseline for scene load, instantiation, 60-frame stepping, UI panel cycling, customer pathing, save codec roundtrip, screenshot capture, and exported pack startup in `14-alpha-performance-baseline.md`.
 - Stop 13.3 alpha regression-test expansion records automated guardrails for fixture placement framing risk, queue/register composition risk, and screenshot subject coverage before the content pass.
+- Stop 13.4A alpha scene-readability pass records automated guardrails for wall-detail props, sign framing, customer arc depth, rack profile cues, placed-fixture screenshot composition, and backroom computer first-view action controls.
 
 ## Immediate Next Work After This Planning Slice
 

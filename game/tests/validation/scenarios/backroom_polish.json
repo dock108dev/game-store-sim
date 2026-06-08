@@ -27,6 +27,13 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_backroom_production_blockout_has_security_and_paperwork_cues"
+    },
+    {
+      "id": "backroom_computer_alpha_first_view_layout",
+      "name": "Backroom computer alpha layout keeps storage-placement controls in the first modal view",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_alpha_layout_keeps_storage_placement_in_first_view"
     }
   ]
 }

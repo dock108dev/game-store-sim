@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 495 GUT tests, UI scenario automation coverage at 458/570, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 499 GUT tests, UI scenario automation coverage at 462/575, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -60,6 +60,7 @@ Current automated baseline:
 - Alpha bug triage is implemented through Stop 13.1; manual QA should review `13-alpha-bug-list.md` before treating visual, queue, fixture, backroom-computer, balance, or playtest-package issues as new discoveries.
 - Alpha performance pass is implemented through Stop 13.2; manual QA should review `14-alpha-performance-baseline.md` after content-heavy changes and rerun `scripts/measure_alpha_performance.sh --full` before packaging an external playtest.
 - Alpha regression-test expansion is implemented through Stop 13.3; automated checks now protect rotated fixture placement bounds, visible buyer-queue spacing, and screenshot scenario coverage for the current alpha P1/P2 bug subjects.
+- Alpha scene-readability content pass is implemented as Stop 13.4A; manual QA should review the refreshed screenshot set for store read, sign cropping, special-customer separation, placed-rack framing, and backroom computer first-view controls.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -565,6 +566,17 @@ Run these first when manually checking the completed Stop 13.3 regression-test e
 - Confirm the latest full gate reports the rotated fixture placement, buyer queue spacing, and alpha screenshot subject coverage tests as passing before content-heavy scene edits.
 - Review `customer_queue.png`, `register_counter.png`, `fixture_placed.png`, `fixture_ghost.png`, `fixture_rotated_ghost.png`, `release_calendar.png`, `release_allocation.png`, and `launch_day.png` after any visual/UI pass and compare them against AH-004, AH-005, and AH-008.
 - Treat new queue overlap, fixture framing, or screenshot subject-framing problems as alpha bugs with a documented ID, evidence image, target slice, and acceptance note before packaging a playtest.
+
+## Alpha Scene Readability Focus
+
+Run these first when manually checking the completed Stop 13.4A scene-readability pass:
+
+- Compare `main_scene.png`, `customer_queue.png`, `register_counter.png`, `fixture_placed.png`, and `backroom_summary.png` against AH-001 through AH-007.
+- Confirm right-wall and back-wall detail props reduce the blank graybox read without hiding products, customer silhouettes, or navigation space.
+- Confirm the smaller register/backroom signs are readable and no longer dominate or crop badly from normal screenshot angles.
+- Confirm preorder, service, suspicious, and trade-in customers have clearer depth separation and do not create a label or prop pileup at the register.
+- Confirm the placed fixture reads as an intentional rack with visible face/profile cues instead of a camera-blocking slab.
+- Confirm the backroom computer first view exposes the major action groups and storage-placement row without relying on hidden lower content.
 
 ## Automated Screenshot Artifacts
 

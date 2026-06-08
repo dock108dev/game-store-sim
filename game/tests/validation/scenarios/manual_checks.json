@@ -871,6 +871,14 @@
       "critical": false,
       "reason": "Automated tests verify current alpha bug subjects are represented by named screenshot scenarios and the validation gate; human review must confirm the artifacts show the actual store, queue, fixture, release, launch, and backroom subjects instead of merely proving a nonblank render.",
       "owner": "manual QA"
+    },
+    {
+      "id": "alpha_scene_readability_content_review",
+      "name": "Alpha scene readability pass makes the store, queue, fixture, and backroom computer read more intentionally in screenshots",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify wall-detail props, sign placement, customer arc spacing, rack profile cues, placed-fixture framing, and first-view backroom controls; human review must confirm the latest screenshots actually read as a small specialty game shop instead of a graybox with labels.",
+      "owner": "manual QA"
     }
   ]
 }

@@ -46,8 +46,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 495 GUT tests.
-- UI scenario automation coverage is 458/570, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 499 GUT tests.
+- UI scenario automation coverage is 462/575, above the 80% threshold.
 - Production script mapping coverage is 50/50.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
@@ -92,6 +92,7 @@ Current production validation baseline:
 - Alpha bug triage is complete through Stop 13.1; `docs/production/13-alpha-bug-list.md` records the current no-P0 gate state, screenshot-derived P1/P2 issues, release-package limits, and target slices for alpha hardening.
 - Alpha performance pass is complete through Stop 13.2; `scripts/measure_alpha_performance.sh` records scene load, frame stepping, modal UI, customer pathing, save codec, screenshot, and exported pack startup timing under broad alpha regression thresholds.
 - Alpha regression-test expansion is complete through Stop 13.3; automated checks now cover rotated fixture placement bounds, buyer queue spacing against special register customers, and screenshot scenario coverage for P1/P2 alpha bug subjects.
+- Alpha scene-readability content pass is complete as Stop 13.4A; automated checks now cover right-wall/back-wall detail props, smaller non-cropping register/backroom sign placement, wider special-customer depth separation, display-rack face/profile cues, placed-fixture screenshot framing, and first-view backroom placement controls.
 
 ## Manual Validation
 
@@ -209,6 +210,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Desktop binary export either creates a runnable app when matching Godot templates/signing are available or fails with clear template-installation guidance.
 - Alpha bug list entries AH-001 through AH-011 are reviewed against the latest screenshot artifacts before starting content, regression, balance, or playtest-package hardening work.
 - Stop 13.3 regression checks keep fixture placement bounds/history, visible buyer-queue spacing, and screenshot subject coverage in the automated gate before content-heavy alpha work begins.
+- Stop 13.4A manual review should compare the refreshed main scene, customer queue, register counter, fixture placed, and backroom computer screenshots against AH-001 through AH-007 before treating the visual-content pass as human-approved.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 

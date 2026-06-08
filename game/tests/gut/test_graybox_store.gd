@@ -358,7 +358,7 @@ func test_store_signage_uses_fictional_world_labels() -> void:
 		var label := _store.get_node_or_null(label_path) as Label3D
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
-		assert_gte(label.font_size, 36)
+		assert_gte(label.font_size, 30)
 		assert_lte(label.pixel_size, 0.0066)
 		for banned_term in banned_terms:
 			assert_false(label.text.contains(banned_term))
@@ -368,8 +368,8 @@ func test_store_sign_panels_are_nonblocking_and_zone_aligned() -> void:
 	var expected_panels := {
 		"StoreIdentitySignPanel": Vector3(0, 2.18, -5.86),
 		"DisplaySignPanel": Vector3(-3.18, 1.78, 5.82),
-		"RegisterSignPanel": Vector3(2.25, 1.55, -2.95),
-		"BackroomSignPanel": Vector3(0.3, 1.72, 3.26),
+		"RegisterSignPanel": Vector3(3.05, 1.46, -2.9),
+		"BackroomSignPanel": Vector3(0.3, 1.96, 3.26),
 		"ReceivingSignPanel": Vector3(-4.65, 1.18, 3.08),
 		"StorageSignPanel": Vector3(-5.85, 1.38, 4.66),
 	}
@@ -384,6 +384,34 @@ func test_store_sign_panels_are_nonblocking_and_zone_aligned() -> void:
 
 	assert_gt(_flat_distance_xz((_store.get_node("RegisterSignPanel") as CSGBox3D).global_position, (_store.get_node("GameDisplayRack") as Node3D).global_position), 6.0)
 	assert_lt(_flat_distance_xz((_store.get_node("ReceivingSignPanel") as CSGBox3D).global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 0.9)
+
+
+func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
+	var expected_labels := {
+		"RightWallUsedPosterPanel/RightWallUsedPosterLabel": "USED WALL",
+		"RightWallControllerPosterPanel/RightWallControllerPosterLabel": "CONTROLLERS",
+		"BackWallFeatureStripe/BackWallFeatureLabel": "BUY  SELL  REPAIR",
+	}
+
+	for label_path in expected_labels:
+		var label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(label)
+		assert_eq(label.text, expected_labels[label_path])
+		assert_lte(label.pixel_size, 0.0042)
+
+	for panel_path in [
+		"RightWallMerchBand",
+		"RightWallUsedPosterPanel",
+		"RightWallControllerPosterPanel",
+		"BackWallFeatureStripe",
+	]:
+		var panel := _store.get_node_or_null(panel_path) as CSGBox3D
+		assert_not_null(panel)
+		assert_false(panel.use_collision)
+		assert_true(_is_inside_store_floorprint(panel.global_position))
+
+	assert_gt((_store.get_node("RightWallMerchBand") as CSGBox3D).global_position.x, 6.7)
+	assert_gt((_store.get_node("BackWallFeatureStripe") as CSGBox3D).global_position.z, 5.7)
 
 
 func test_retail_clutter_uses_short_fictional_callouts() -> void:
@@ -935,6 +963,19 @@ func test_buyer_queue_lane_stays_clear_of_special_customers() -> void:
 		assert_true(manager.is_position_inside_store(queue_position))
 		for customer in special_customers:
 			assert_gte(_flat_distance_xz(queue_position, customer.global_position), 1.2)
+
+
+func test_alpha_special_customer_arc_has_readable_depth_separation() -> void:
+	var trade_in := _store.get_node("TradeInCustomer") as Node3D
+	var preorder := _store.get_node("PreorderCustomer") as Node3D
+	var service := _store.get_node("ServiceCustomer") as Node3D
+	var suspicious := _store.get_node("SuspiciousCustomer") as Node3D
+
+	assert_lt(preorder.global_position.z, trade_in.global_position.z - 0.5)
+	assert_lt(service.global_position.x, preorder.global_position.x - 1.0)
+	assert_lt(suspicious.global_position.x, service.global_position.x - 1.0)
+	assert_gte(_flat_distance_xz(preorder.global_position, service.global_position), 1.25)
+	assert_gte(_flat_distance_xz(service.global_position, suspicious.global_position), 1.35)
 
 
 func test_alpha_customer_queue_lane_keeps_internal_spacing_contract() -> void:

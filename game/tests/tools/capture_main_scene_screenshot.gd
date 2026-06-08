@@ -107,9 +107,9 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 			_set_camera(scene, Vector3(-2.55, 1.65, 2.75), Vector3(-0.55, 0.75, 2.4))
 		"fixture_placed":
 			_prepare_fixture_placed(scene)
-			_set_camera(scene, Vector3(-2.55, 1.65, 2.75), Vector3(-0.8, 0.75, 2.15))
+			_set_camera(scene, Vector3(-2.8, 1.55, 0.75), Vector3(-0.8, 0.82, 2.15))
 		_:
-			_set_camera(scene, Vector3(0.0, 2.0, -4.7), Vector3(0.0, 1.0, 1.5))
+			_set_camera(scene, Vector3(0.0, 1.55, -4.25), Vector3(0.0, 0.9, 1.6))
 
 
 func _prepare_customer_queue(scene: Node) -> void:

@@ -243,6 +243,19 @@ func test_day_summary_panel_groups_readouts_by_management_section() -> void:
 		assert_eq(content_vbox.get_child(index).name, expected_order[index])
 
 
+func test_day_summary_panel_alpha_layout_keeps_storage_placement_in_first_view() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as PanelContainer
+	var scroll_container := _panel.get_node("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer") as ScrollContainer
+	var placement_group := _panel.get_node("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup") as VBoxContainer
+	var placement_row := _panel.get_node("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow") as HBoxContainer
+
+	assert_lte(panel_container.custom_minimum_size.y, 660.0)
+	assert_lte(scroll_container.custom_minimum_size.y, 276.0)
+	assert_not_null(placement_group)
+	assert_not_null(placement_row)
+	assert_eq(placement_row.get_child_count(), 8)
+
+
 func test_day_summary_panel_groups_actions_by_operation() -> void:
 	assert_true(_panel.open_for_session(_session))
 
