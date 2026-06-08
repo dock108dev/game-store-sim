@@ -937,6 +937,35 @@ func test_buyer_queue_lane_stays_clear_of_special_customers() -> void:
 			assert_gte(_flat_distance_xz(queue_position, customer.global_position), 1.2)
 
 
+func test_alpha_customer_queue_lane_keeps_internal_spacing_contract() -> void:
+	var manager := _store.get_node("CustomerManager")
+	var queue_positions: Array[Vector3] = manager.get_queue_lane_positions(3)
+	assert_eq(queue_positions.size(), 3)
+	assert_gte(manager.register_queue_spacing.length(), manager.minimum_queue_spacing_distance)
+
+	for index in range(queue_positions.size()):
+		var queue_position := queue_positions[index]
+		assert_true(manager.is_position_inside_store(queue_position))
+		if index > 0:
+			assert_gte(
+				_flat_distance_xz(queue_positions[index - 1], queue_position),
+				manager.minimum_queue_spacing_distance
+			)
+
+	var special_customers: Array[Node3D] = [
+		_store.get_node("TradeInCustomer") as Node3D,
+		_store.get_node("PreorderCustomer") as Node3D,
+		_store.get_node("ServiceCustomer") as Node3D,
+		_store.get_node("SuspiciousCustomer") as Node3D,
+	]
+	for queue_position in queue_positions:
+		for customer in special_customers:
+			assert_gte(
+				_flat_distance_xz(queue_position, customer.global_position),
+				manager.minimum_queue_spacing_distance + 0.5
+			)
+
+
 func test_no_standalone_pricing_workstation_exists() -> void:
 	assert_null(_store.get_node_or_null("PricingWorkstation"))
 

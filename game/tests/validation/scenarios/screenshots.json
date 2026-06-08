@@ -146,6 +146,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "alpha_p1_screenshot_subjects",
+      "name": "Alpha P1/P2 bug subjects remain represented by named screenshot scenarios and the validation gate",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_regression_coverage.gd::test_alpha_screenshot_scenarios_cover_p1_bug_subjects"
     }
   ]
 }

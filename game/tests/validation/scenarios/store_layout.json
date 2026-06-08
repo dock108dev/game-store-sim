@@ -211,6 +211,13 @@
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_confirms_valid_placement"
     },
     {
+      "id": "fixture_placement_manager_rotated_bounds_regression",
+      "name": "Fixture placement manager records rotated placed-fixture bounds and display-slot state for alpha regression coverage",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_records_rotated_footprint_bounds_for_regression"
+    },
+    {
       "id": "fixture_placement_manager_rejects_invalid_confirmation",
       "name": "Fixture placement manager rejects confirmation for invalid ghost placement",
       "status": "automated",
@@ -356,6 +363,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_customer_manager_for_layout_effects"
+    },
+    {
+      "id": "alpha_customer_queue_spacing_contract",
+      "name": "Main scene buyer queue positions keep configured spacing and remain clear of special register customers",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_alpha_customer_queue_lane_keeps_internal_spacing_contract"
     },
     {
       "id": "store_expansion_purchase_baseline",

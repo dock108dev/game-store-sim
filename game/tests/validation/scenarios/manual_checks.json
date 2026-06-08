@@ -847,6 +847,30 @@
       "critical": false,
       "reason": "Automated tests verify pause/main-menu modes, button requests, resume/start transitions, modal focus, quit request state, and mouse capture recovery; human review must confirm the menu reads as a release wrapper and not a debug overlay.",
       "owner": "manual QA"
+    },
+    {
+      "id": "alpha_regression_queue_composition_review",
+      "name": "Alpha buyer queue and special register customers remain visually separated in screenshot review",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the visible buyer queue positions stay inside the store, preserve configured spacing, and remain clear of special customer roots; human review must confirm labels, props, bodies, and prompts do not pile up in customer_queue, register_counter, preorder_deposit, and service_request screenshots.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_regression_fixture_framing_review",
+      "name": "Alpha fixture placement screenshots show grounded ghost and placed rack states without camera-blocking framing",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify rotated placement bounds, placed-rack transform, and slot state; human review must confirm fixture_ghost, fixture_rotated_ghost, fixture_invalid_ghost, and fixture_placed screenshots frame the intended rack state clearly.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_regression_screenshot_subject_review",
+      "name": "Alpha screenshot scenarios frame their named P1 and P2 bug subjects clearly enough for human review",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify current alpha bug subjects are represented by named screenshot scenarios and the validation gate; human review must confirm the artifacts show the actual store, queue, fixture, release, launch, and backroom subjects instead of merely proving a nonblank render.",
+      "owner": "manual QA"
     }
   ]
 }

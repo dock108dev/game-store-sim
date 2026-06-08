@@ -242,6 +242,44 @@ func test_fixture_placement_manager_confirms_valid_placement() -> void:
 	assert_string_contains(manager.get_placement_summary_text(), "Last placed fixture_game_display_rack")
 
 
+func test_fixture_placement_manager_records_rotated_footprint_bounds_for_regression() -> void:
+	var manager := _make_manager()
+	var parent := Node3D.new()
+	add_child_autofree(parent)
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+		"footprint_size": Vector2(2.4, 0.6),
+	})
+	manager.move_ghost_by_grid(1, 1)
+	manager.rotate_ghost()
+	var expected_position: Vector3 = manager.get_ghost_position()
+	var expected_rotation_y: float = manager.get_ghost_rotation_y()
+
+	var placed: Node3D = manager.confirm_current_placement(
+		parent,
+		"res://scenes/props/placeholder_shelf.tscn"
+	)
+
+	assert_not_null(placed)
+	assert_eq(manager.placed_fixture_bounds.size(), 1)
+	var bounds: Dictionary = manager.placed_fixture_bounds[0]
+	var stored_position: Vector3 = bounds.get("position", Vector3.ZERO)
+	var stored_footprint: Vector2 = bounds.get("footprint_size", Vector2.ZERO)
+	assert_almost_eq(stored_position.x, expected_position.x, 0.001)
+	assert_almost_eq(stored_position.z, expected_position.z, 0.001)
+	assert_almost_eq(stored_footprint.x, 0.6, 0.001)
+	assert_almost_eq(stored_footprint.y, 2.4, 0.001)
+	assert_almost_eq(float(manager.last_confirmation.get("rotation_y", 0.0)), expected_rotation_y, 0.001)
+	assert_almost_eq(placed.global_rotation.x, 0.0, 0.001)
+	assert_almost_eq(placed.global_rotation.z, 0.0, 0.001)
+	assert_eq(placed.scale, Vector3.ONE)
+	assert_not_null(placed.get_node_or_null("ShelfSlot001"))
+	assert_not_null(placed.get_node_or_null("ShelfSlot002"))
+	assert_not_null(placed.get_node_or_null("ShelfSlot003"))
+	assert_string_contains(manager.get_placement_summary_text(), "Last placed")
+
+
 func test_fixture_placement_manager_rejects_invalid_confirmation() -> void:
 	var manager := _make_manager()
 	var parent := Node3D.new()

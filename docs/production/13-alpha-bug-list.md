@@ -5,7 +5,7 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 492 GUT tests, UI scenario automation coverage 455/564, production script mapping coverage 50/50, 2 active validation tools, and 33 catalog products.
+- Latest full gate passes with 495 GUT tests, UI scenario automation coverage 458/570, production script mapping coverage 50/50, 3 active validation tools, and 33 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - Manual controller/window/playtest validation still needs a human pass.
 
@@ -41,7 +41,7 @@ Current gate state:
 ## Slice Routing
 
 - Stop 13.2 performance pass: done in `14-alpha-performance-baseline.md`; rerun after content-heavy changes before tightening thresholds.
-- Stop 13.3 test expansion: add regression coverage for fixture placement framing, queue/register composition, screenshot subject framing, and any bug fix that changes core loop behavior.
+- Stop 13.3 test expansion: done; regression coverage now protects rotated fixture placement bounds/history, visible buyer queue spacing against special register customers, screenshot scenario coverage for AH-001 through AH-006 and AH-008, and future bug fixes that change core loop behavior.
 - Stop 13.4 content pass: address AH-001, AH-002, AH-003, AH-004, AH-006, and AH-007 with production-quality scene/content/UI composition.
 - Stop 13.5 balance pass: address AH-011 with multi-day economy tuning and documented balance targets.
 - Stop 13.6 external playtest package: address AH-009 and AH-010 with build packaging, known issues, playtest script, feedback form, and rollback plan.

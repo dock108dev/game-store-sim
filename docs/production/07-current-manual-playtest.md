@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 492 GUT tests, UI scenario automation coverage at 455/564, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 495 GUT tests, UI scenario automation coverage at 458/570, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -59,6 +59,7 @@ Current automated baseline:
 - Release wrapper validation sync is implemented through Stop 12.6; automated checks now audit the release-wrapper matrix/docs/tool manifest, and manual QA should treat the Release Wrapper Focus section as the current release-readiness checklist.
 - Alpha bug triage is implemented through Stop 13.1; manual QA should review `13-alpha-bug-list.md` before treating visual, queue, fixture, backroom-computer, balance, or playtest-package issues as new discoveries.
 - Alpha performance pass is implemented through Stop 13.2; manual QA should review `14-alpha-performance-baseline.md` after content-heavy changes and rerun `scripts/measure_alpha_performance.sh --full` before packaging an external playtest.
+- Alpha regression-test expansion is implemented through Stop 13.3; automated checks now protect rotated fixture placement bounds, visible buyer-queue spacing, and screenshot scenario coverage for the current alpha P1/P2 bug subjects.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -556,6 +557,14 @@ Run these first when manually checking the completed Stop 13.2 performance pass:
 - Run `scripts/measure_alpha_performance.sh --full` and confirm it writes core and shell reports under `artifacts/performance/latest/`.
 - Compare current results to `docs/production/14-alpha-performance-baseline.md`; investigate any large change even if the broad threshold still passes.
 - After content-heavy work, confirm screenshot capture and exported pack startup remain within the broad alpha thresholds before creating a playtest package.
+
+## Alpha Regression Focus
+
+Run these first when manually checking the completed Stop 13.3 regression-test expansion:
+
+- Confirm the latest full gate reports the rotated fixture placement, buyer queue spacing, and alpha screenshot subject coverage tests as passing before content-heavy scene edits.
+- Review `customer_queue.png`, `register_counter.png`, `fixture_placed.png`, `fixture_ghost.png`, `fixture_rotated_ghost.png`, `release_calendar.png`, `release_allocation.png`, and `launch_day.png` after any visual/UI pass and compare them against AH-004, AH-005, and AH-008.
+- Treat new queue overlap, fixture framing, or screenshot subject-framing problems as alpha bugs with a documented ID, evidence image, target slice, and acceptance note before packaging a playtest.
 
 ## Automated Screenshot Artifacts
 
