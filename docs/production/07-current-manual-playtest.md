@@ -85,6 +85,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct from normal player angles.
 - Receiving pallet, box stacks, storage shelf, and overflow boxes make supplier-delivered stock read as physical inventory without crowding prompts or navigation.
 - Backroom service bench, paperwork stack, disc mat, and management board read as context only and do not imply a separate service terminal.
+- Backroom computer actions are grouped as Supplier, Storage, Release, Day, and Storage Placement controls.
 - Summary panel text and buttons fit in the actual game window.
 - Closed-day report text is readable and understandable after ending the day.
 - Recent activity text is readable and distinguishes sales from trade-ins.
@@ -103,7 +104,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Receiving order text and `Order Stock` button are readable and make clear that cash is reserved before physical stock appears in the receiving box.
 - Delivered supplier stock appears as receiving inventory without crowding or floating around the receiving box.
 - Storage fixture order text/buttons are readable and clearly communicate pending storage placement.
-- Storage fixture movement, rotation, snap, and placement buttons are readable and fit without crowding the backroom panel.
+- Storage fixture movement, rotation, snap, and placement buttons are grouped under Storage Placement and fit without crowding the backroom panel.
 - Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
 - Placed rack confirmation reads as a deliberate action, and the real rack does not look like another ghost preview.
 - Green valid placement and red invalid placement are visually distinct in the actual window.

@@ -241,6 +241,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "backroom_computer_action_grouping",
+      "name": "Backroom computer actions are grouped as Supplier, Storage, Release, Day, and Storage Placement controls",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that grouped button labels read clearly in the actual game window and do not imply register work belongs on the backroom computer.",
+      "owner": "manual QA"
+    },
+    {
       "id": "category_demand_panel_readability",
       "name": "Backroom category demand readout is readable and does not crowd the panel",
       "status": "manual",

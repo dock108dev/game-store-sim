@@ -47,6 +47,21 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_false(_panel.order_games_button.disabled)
 	assert_false(_panel.order_rack_button.disabled)
 	assert_true(_panel.place_rack_button.disabled)
+	assert_eq(_panel.supplier_action_label.text, "Supplier")
+	assert_eq(_panel.storage_action_label.text, "Storage")
+	assert_eq(_panel.release_action_label.text, "Release")
+	assert_eq(_panel.day_action_label.text, "Day")
+	assert_eq(_panel.placement_action_label.text, "Storage Placement")
+	assert_eq(_panel.order_games_button.text, "Order Lot")
+	assert_eq(_panel.order_rack_button.text, "Order Rack")
+	assert_eq(_panel.place_rack_button.text, "Place Rack")
+	assert_eq(_panel.commit_allocation_button.text, "Commit Release")
+	assert_eq(_panel.rack_left_button.text, "Left")
+	assert_eq(_panel.rack_right_button.text, "Right")
+	assert_eq(_panel.rack_forward_button.text, "Fwd")
+	assert_eq(_panel.rack_back_button.text, "Back")
+	assert_eq(_panel.rotate_rack_button.text, "Rotate")
+	assert_eq(_panel.snap_rack_button.text, "Snap")
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
 	assert_eq(_panel.end_day_button.text, "End Day")
@@ -78,6 +93,18 @@ func test_day_summary_panel_groups_readouts_by_management_section() -> void:
 	assert_eq(content_vbox.get_child_count(), expected_order.size())
 	for index in range(expected_order.size()):
 		assert_eq(content_vbox.get_child(index).name, expected_order[index])
+
+
+func test_day_summary_panel_groups_actions_by_operation() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_eq(_panel.order_games_button.get_parent().name, "SupplierActions")
+	assert_eq(_panel.order_rack_button.get_parent().get_parent().name, "StorageActions")
+	assert_eq(_panel.place_rack_button.get_parent().get_parent().name, "StorageActions")
+	assert_eq(_panel.commit_allocation_button.get_parent().name, "ReleaseActions")
+	assert_eq(_panel.end_day_button.get_parent().get_parent().name, "DayActions")
+	assert_eq(_panel.close_button.get_parent().get_parent().name, "DayActions")
+	assert_eq(_panel.rack_left_button.get_parent().get_parent().name, "PlacementGroup")
 
 
 func test_day_summary_panel_includes_recent_sale_activity() -> void:
