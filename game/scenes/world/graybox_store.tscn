@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=40 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://scenes/customers/suspicious_customer.tscn" id="14_suspicious_customer"]
 [ext_resource type="PackedScene" path="res://scenes/customers/simple_preorder_customer.tscn" id="15_preorder_customer"]
 [ext_resource type="PackedScene" path="res://scenes/customers/simple_service_customer.tscn" id="16_service_customer"]
+[ext_resource type="Script" path="res://scripts/systems/store_ambience.gd" id="17_store_ambience"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.32, 0.3, 0.27, 1)
@@ -1021,6 +1022,44 @@ script = ExtResource("12_suspicious_event_log")
 
 [node name="EvidenceStorage" type="Node" parent="."]
 script = ExtResource("13_evidence_storage")
+
+[node name="StoreAmbience" type="Node3D" parent="."]
+script = ExtResource("17_store_ambience")
+
+[node name="RoomTonePlayer" type="AudioStreamPlayer3D" parent="StoreAmbience"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 1.4, 0.1)
+volume_db = -26.0
+max_distance = 12.0
+
+[node name="HvacPlayer" type="AudioStreamPlayer3D" parent="StoreAmbience"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 2.7, 1.4)
+volume_db = -30.0
+max_distance = 11.0
+
+[node name="StreetMufflePlayer" type="AudioStreamPlayer3D" parent="StoreAmbience"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 1.35, -5.35)
+volume_db = -31.0
+max_distance = 5.5
+
+[node name="DoorChimePlayer" type="AudioStreamPlayer3D" parent="StoreAmbience"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 2.05, -5.05)
+volume_db = -18.0
+max_distance = 5.0
+
+[node name="RegisterAmbiencePlayer" type="AudioStreamPlayer3D" parent="StoreAmbience"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.15, 1.35, -2.65)
+volume_db = -29.0
+max_distance = 4.5
+
+[node name="BackroomAmbiencePlayer" type="AudioStreamPlayer3D" parent="StoreAmbience"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.25, 1.4, 4.65)
+volume_db = -28.0
+max_distance = 6.5
+
+[node name="ClosingQuietPlayer" type="AudioStreamPlayer3D" parent="StoreAmbience"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 1.65, 0.2)
+volume_db = -34.0
+max_distance = 12.0
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)

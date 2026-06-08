@@ -1,0 +1,18 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "store_ambience_catalog",
+      "name": "Store ambience catalog covers room tone, HVAC, street muffle, door chime, register, backroom, and closing quiet",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_ambience.gd::test_store_ambience_catalog_covers_stop_11_1_layers"
+    },
+    {
+      "id": "store_ambience_scene_players",
+      "name": "Main scene contains configured placeholder ambience players at conservative mix levels",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_ambience.gd::test_graybox_store_contains_configured_ambience_players"
+    }
+  ]
+}

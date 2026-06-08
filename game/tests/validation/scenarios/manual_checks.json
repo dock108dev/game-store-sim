@@ -767,6 +767,14 @@
       "critical": false,
       "reason": "Requires human confirmation that hidden evidence infrastructure did not add a visible objective, warning, or panel before a deliberate UI slice.",
       "owner": "manual QA"
+    },
+    {
+      "id": "store_ambience_mix_readability",
+      "name": "Store ambience layers support the shop mood without masking prompts, UI, or player judgment",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the placeholder ambience catalog, scene players, and conservative mix levels; human review must confirm room tone, HVAC, storefront muffle, door chime, register bed, backroom bed, and closing quiet feel helpful rather than noisy in the actual window.",
+      "owner": "manual QA"
     }
   ]
 }

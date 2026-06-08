@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, and the hidden-thread production arc is complete through Milestone 10.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, and store ambience is complete through Stop 11.1.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -41,7 +41,7 @@ Current completion plan: `11-game-completion-plan.md`.
 9. Backroom operations. Done through Milestone 8.
 10. Store building, decoration, and expansion. Done through Milestone 9.
 11. Hidden-thread production arc. Done through Milestone 10.
-12. Audio, VFX, and presentation feel. Next phase.
+12. Audio, VFX, and presentation feel. Current phase; store ambience done through Stop 11.1.
 13. Save/load, settings, and release wrapper.
 14. Alpha hardening.
 
@@ -125,6 +125,13 @@ The following polish items remain valid historical checkpoints:
 - Done: added a validation-sync GUT audit proving the scenario matrix and manual checklist cover flags, dedupe, persistence, optionality, and manual clue readability.
 - Done: synced hidden-thread scenario coverage, manual Hidden Thread Focus checks, validation baselines, backlog state, and Milestone 10 status for Stop 10.6.
 - Remaining polish risk: the next production milestone is audio, VFX, and presentation feel.
+
+## Audio, VFX, And Presentation Feel
+
+- Done: added a store ambience baseline catalog for room tone, HVAC, street muffle, door chime, register area ambience, backroom ambience, and closing quiet.
+- Done: wired conservative placeholder AudioStreamPlayer3D nodes into the main scene under `StoreAmbience`.
+- Done: synced presentation scenario coverage, script mapping, validation baselines, and manual ambience readability checks for Stop 11.1.
+- Remaining polish risk: Stop 11.2 still needs interaction sounds for pickup, place, stock, scan, register, cash drawer, computer clicks, UI buttons, box open, shelf bump, and errors.
 
 ## Product And Fixture Polish
 

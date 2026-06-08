@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this hidden-thread validation-sync pass: `scripts/validate_godot.sh` passes with 442 GUT tests, UI scenario automation coverage at 427/523, production script mapping coverage at 43/43, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this store-ambience pass: `scripts/validate_godot.sh` passes with 446 GUT tests, UI scenario automation coverage at 429/526, production script mapping coverage at 44/44, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -46,6 +46,7 @@ Current automated baseline:
 - Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, layout effects through Stop 9.5, starter expansion through Stop 9.6, and building validation sync through Stop 9.7; manual QA should run the Store Building Focus before treating Milestone 9 as human-approved.
 - Suspicion rules are implemented through Stop 10.1, clue surfaces through Stop 10.2, choice paths through Stop 10.3, consequences through Stop 10.4, and optionality guards through Stop 10.5; manual QA should run the Hidden Thread Focus checks to confirm the flag catalog, Records-tab clue surfaces, choice paths, consequence effects, and nonblocking guard still read as optional retail anomaly infrastructure rather than active story UI.
 - Hidden-thread validation sync is implemented through Stop 10.6; automated checks now audit matrix coverage for flags, dedupe, persistence, optionality, and manual clue-readability checks.
+- Store ambience baseline is implemented through Stop 11.1; manual QA should run the Presentation Feel Focus ambience checks to confirm room tone, HVAC, street muffle, door chime, register ambience, backroom ambience, and closing quiet help mood without masking prompts or UI.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -136,6 +137,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 81. Open the backroom computer dashboard and confirm the owner checklist starts with receiving on a fresh run.
 82. As the first-day loop progresses, confirm checklist rows move from `Next`/`Later` to `Done` based on real actions rather than hidden tutorial buttons.
 83. Play into the next day and confirm cash, stock, reputation, obligations, upgrade goals, and tomorrow planning read as one connected owner/operator loop.
+84. Listen through a normal store loop and confirm room tone, HVAC, storefront muffle, door chime, register bed, backroom bed, and closing quiet remain subtle enough that prompts, modal text, and player decisions are still clear.
 
 ## Visual Checks
 
@@ -234,6 +236,19 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 - Supplier note placement and text read as an optional receiving artifact, not a required tutorial or blocking objective.
 - Suspicious customer placement and text read as an optional hidden-thread cue, and the customer does not crowd the register queue or trade-in seller.
 - Evidence storage remains hidden infrastructure with no visible interruption.
+- Store ambience should add a quiet retail bed without making prompts, customer feedback, backroom text, or checkout UI harder to understand.
+
+## Presentation Feel Focus
+
+Run these first when manually checking the completed Stop 11.1 store ambience baseline:
+
+- Confirm room tone and HVAC make the sales floor feel present without creating fatigue during repeated stocking and checkout.
+- Confirm the storefront street muffle reads as exterior context near the glass, not a distracting global noise layer.
+- Confirm the door chime is short and readable as an entry cue once later trigger playback is enabled.
+- Confirm register ambience supports the counter area without masking checkout, trade-in, preorder, or service panel text.
+- Confirm backroom ambience reads cooler and more operational than the sales floor while keeping the computer readable.
+- Confirm closing quiet feels calmer after the day ends and does not imply the store loop has failed.
+- Confirm all ambience remains subordinate to prompts, customer feedback bubbles, and modal UI.
 
 ## Production Target Contract Focus
 

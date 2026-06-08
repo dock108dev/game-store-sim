@@ -249,6 +249,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/systems/store_ambience.gd",
+      "tests": [
+        "res://tests/gut/test_store_ambience.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/systems/transaction_ledger.gd",
       "tests": [
         "res://tests/gut/test_customer_sale_flow.gd",

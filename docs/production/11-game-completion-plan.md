@@ -566,7 +566,7 @@ Goal: add sensory feedback that makes the store feel alive.
 
 Stops:
 
-- Stop 11.1: Store ambience. Add room tone, HVAC, street muffling, door chime, register area ambience, backroom ambience, and closing quiet.
+- Stop 11.1: Store ambience. Done in `Add store ambience baseline`: add room tone, HVAC, street muffling, door chime, register area ambience, backroom ambience, and closing quiet.
 - Stop 11.2: Interaction sounds. Add pickup, place, stock, scan, register, cash drawer, computer click, button hover/click, box open, shelf bump, and error sounds.
 - Stop 11.3: Customer audio placeholders. Add footstep, mumble, greeting, approval, annoyance, and leaving cues without committing to final voice.
 - Stop 11.4: VFX and microfeedback. Add subtle highlights, item settle, sale confirmation, cash/reputation tick, day transition, delivery arrival, and invalid action feedback.
@@ -588,6 +588,11 @@ Commit targets:
 - `Add presentation VFX baseline`
 - `Tune camera feel`
 - `Sync presentation validation`
+
+Validation snapshot:
+
+- Focused GUT coverage passes for the Stop 11.1 store ambience catalog, conservative mix levels, main-scene AudioStreamPlayer3D wiring, and store-zone summary text.
+- Manual Presentation Feel Focus checks are current for room tone, HVAC, storefront muffle, door chime, register ambience, backroom ambience, closing quiet, and prompt/UI masking risk.
 
 ## Milestone 12: Save, Load, Settings, And Release Wrapper
 
