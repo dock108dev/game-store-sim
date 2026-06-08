@@ -50,6 +50,18 @@ func hide_ghost() -> void:
 	placement_state = PLACEMENT_STATE_HIDDEN
 
 
+func cancel_current_placement() -> Dictionary:
+	if current_order_id.is_empty():
+		return {}
+
+	var canceled := {
+		"order_id": current_order_id,
+		"fixture_id": current_fixture_id,
+	}
+	hide_ghost()
+	return canceled
+
+
 func is_ghost_visible() -> bool:
 	var ghost := _get_ghost_preview()
 	return ghost != null and ghost.visible

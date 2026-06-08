@@ -62,6 +62,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.rack_back_button.text, "Back")
 	assert_eq(_panel.rotate_rack_button.text, "Rotate")
 	assert_eq(_panel.snap_rack_button.text, "Snap")
+	assert_eq(_panel.cancel_rack_button.text, "Cancel")
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
 	assert_eq(_panel.end_day_button.text, "End Day")
@@ -367,6 +368,7 @@ func test_day_summary_panel_adjusts_pending_fixture_preview() -> void:
 
 	assert_false(_panel.rack_left_button.disabled)
 	assert_false(_panel.rotate_rack_button.disabled)
+	assert_false(_panel.cancel_rack_button.disabled)
 	assert_true(_panel.move_pending_rack_right())
 	assert_gt(manager.get_ghost_position().x, start_position.x)
 	assert_eq(_panel.status_label.text, "Moved storage rack preview right.")
@@ -378,6 +380,32 @@ func test_day_summary_panel_adjusts_pending_fixture_preview() -> void:
 	assert_almost_eq(manager.get_ghost_position().x, -0.75, 0.001)
 	assert_almost_eq(manager.get_ghost_position().z, 2.0, 0.001)
 	assert_eq(_panel.status_label.text, "Snapped storage rack preview to grid.")
+
+
+func test_day_summary_panel_cancels_pending_fixture_preview() -> void:
+	var fixture_root := Node3D.new()
+	var manager: FixturePlacementManager = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	manager.add_child(ghost)
+	manager._ready()
+	_session.fixture_placement_manager_path = _session.get_path_to(manager)
+	_session.inventory_root_path = _session.get_path_to(fixture_root)
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.order_game_display_rack())
+
+	assert_false(_panel.cancel_rack_button.disabled)
+	assert_eq(_session.get_cash_cents(), 37500)
+	assert_true(_panel.cancel_pending_rack())
+
+	assert_eq(_session.get_cash_cents(), 50000)
+	assert_eq(_session.get_pending_fixture_orders().size(), 0)
+	assert_false(manager.is_ghost_visible())
+	assert_string_contains(_panel.fixture_label.text, "Pending storage placement: none")
+	assert_eq(_panel.status_label.text, "Canceled Game Display Rack placement. Refunded $125.00.")
+	assert_true(_panel.cancel_rack_button.disabled)
 
 
 func test_day_summary_panel_end_day_updates_status() -> void:
@@ -393,6 +421,7 @@ func test_day_summary_panel_end_day_updates_status() -> void:
 	assert_true(_panel.place_rack_button.disabled)
 	assert_true(_panel.rack_left_button.disabled)
 	assert_true(_panel.rotate_rack_button.disabled)
+	assert_true(_panel.cancel_rack_button.disabled)
 	assert_false(_panel.end_day_button.disabled)
 	assert_eq(_panel.end_day_button.text, "Start Day")
 

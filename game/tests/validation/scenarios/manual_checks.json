@@ -349,7 +349,7 @@
       "name": "Backroom computer actions are grouped as Supplier, Storage, Release, Day, and Storage Placement controls",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment that grouped button labels read clearly in the actual game window and do not imply register work belongs on the backroom computer.",
+      "reason": "Requires human judgment that grouped button labels, including fixture Cancel, read clearly in the actual game window and do not imply register work belongs on the backroom computer.",
       "owner": "manual QA"
     },
     {
@@ -410,10 +410,10 @@
     },
     {
       "id": "fixture_rotate_snap_feel",
-      "name": "Fixture rotate and snap controls feel predictable",
+      "name": "Fixture movement, rotate, snap, cancel, and placement controls feel predictable",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment about whether backroom panel movement, fixed-step rotation, and grid snap feel understandable before placing a storage rack.",
+      "reason": "Requires human judgment about whether backroom panel movement, fixed-step rotation, grid snap, cancel/refund, and placement confirmation feel understandable before placing a storage rack.",
       "owner": "manual QA"
     },
     {

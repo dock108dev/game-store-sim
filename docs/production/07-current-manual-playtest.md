@@ -4,13 +4,14 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this workstation transition pass: `scripts/validate_godot.sh` passed with 303 GUT tests, UI scenario coverage 306/362, and script mapping coverage 31/31.
+- Last full gate in this fixture placement controls pass: `scripts/validate_godot.sh` passed with 306 GUT tests, UI scenario coverage 309/365, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
 - Held item presentation is implemented through Stop 3.2; manual QA should confirm the carry pose, depth fan, scale falloff, and subtle motion feel natural without covering the reticle.
 - Pickup/place feedback is implemented through Stop 3.3; manual QA should confirm hover highlights, incompatible-stock feedback, and stocking confirmation messages are visible without reading as separate interaction targets.
 - Workstation transitions are implemented through Stop 3.4; manual QA should confirm pricing, trade-in appraisal, and backroom computer panels enter with usable focus and exit back to captured first-person control.
+- Fixture placement controls are implemented through Stop 3.5; manual QA should confirm movement, rotation, snap, cancel, and place controls are readable and that cancel clears the ghost while refunding cash.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -57,23 +58,24 @@ Current automated baseline:
 39. Confirm the backroom computer lists `Game Display Rack` under pending storage placement and does not imply the rack was already placed.
 40. Confirm a translucent rack ghost appears on the sales floor as a pending storage placement preview.
 41. Use `Left`, `Right`, `Fwd`, `Back`, `Rotate`, and `Snap` under Storage Placement and confirm the preview moves on the grid, rotates cleanly, and remains readable.
-42. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
-43. Reopen the backroom computer and confirm pending storage placement is cleared and the rack is listed as placed.
-44. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
-45. Confirm rotated and snapped ghost states remain aligned to the floor grid.
-46. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
-47. Confirm the market drift readout is readable and makes sense for active inventory.
-48. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
-49. Confirm pending receiving says `Used Game Starter Lot`, due day 2, with 3 items.
-50. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
-51. End the day and confirm the summary changes to `Day closed`.
-52. Confirm the closed-day report is readable and matches the played day.
-53. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
-54. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
-55. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
-56. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
-57. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
-58. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
+42. Use `Cancel` under Storage Placement and confirm the ghost disappears, pending placement clears, and the `$125.00` rack cost is refunded.
+43. Order another rack, use `Place Rack`, and confirm a real game display rack appears where the green ghost was.
+44. Reopen the backroom computer and confirm pending storage placement is cleared and the rack is listed as placed.
+45. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
+46. Confirm rotated and snapped ghost states remain aligned to the floor grid.
+47. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
+48. Confirm the market drift readout is readable and makes sense for active inventory.
+49. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
+50. Confirm pending receiving says `Used Game Starter Lot`, due day 2, with 3 items.
+51. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
+52. End the day and confirm the summary changes to `Day closed`.
+53. Confirm the closed-day report is readable and matches the played day.
+54. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
+55. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
+56. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
+57. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
+58. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
+59. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
 
 ## Visual Checks
 
@@ -138,7 +140,7 @@ Current automated baseline:
 - Receiving order text and `Order Lot` button are readable and make clear that cash is reserved before physical stock appears in the receiving box.
 - Delivered supplier stock appears as receiving inventory without crowding or floating around the receiving box.
 - Storage fixture order text/buttons are readable and clearly communicate pending storage placement.
-- Storage fixture movement, rotation, snap, and placement buttons are grouped under Storage Placement and fit without crowding the backroom panel.
+- Storage fixture movement, rotation, snap, cancel, and placement buttons are grouped under Storage Placement and fit without crowding the backroom panel.
 - Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
 - Placed rack confirmation reads as a deliberate action, and the real rack does not look like another ghost preview.
 - Green valid placement and red invalid placement are visually distinct in the actual window.
@@ -177,6 +179,7 @@ Run these first when manually checking the completed Stop 3.1 through Stop 3.3 i
 - Confirm incompatible held items produce blocked stock feedback instead of silently inspecting the slot.
 - Confirm stocking a valid item produces a clear landing confirmation naming the stocked item and slot.
 - Confirm pricing, trade-in appraisal, and backroom computer panels do not strand mouse focus after Apply, Cancel, Close, Accept, Decline, End Day, or Escape.
+- Confirm fixture placement `Cancel` clears the ghost preview, restores the reserved cash, and does not look like placing a rack.
 
 ## Backroom Polish Focus
 

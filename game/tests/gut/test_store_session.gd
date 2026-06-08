@@ -644,6 +644,37 @@ func test_store_session_adjusts_pending_fixture_placement() -> void:
 	assert_almost_eq(manager.get_ghost_position().z, 2.0, 0.001)
 
 
+func test_store_session_cancels_pending_fixture_placement_and_refunds_cash() -> void:
+	var fixture_root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var manager: FixturePlacementManager = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var ghost := Node3D.new()
+	ghost.name = "GhostRackPreview"
+	add_child_autofree(fixture_root)
+	fixture_root.add_child(manager)
+	fixture_root.add_child(session)
+	manager.add_child(ghost)
+	manager._ready()
+	session.fixture_placement_manager_path = session.get_path_to(manager)
+	session.inventory_root_path = session.get_path_to(fixture_root)
+
+	assert_eq(session.get_cash_cents(), 50000)
+	var order := session.order_fixture("fixture_game_display_rack")
+	assert_false(order.is_empty())
+	assert_eq(session.get_cash_cents(), 37500)
+	assert_true(manager.is_ghost_visible())
+
+	var canceled := session.cancel_pending_fixture_placement()
+
+	assert_eq(canceled.get("order_id"), order.get("order_id"))
+	assert_eq(canceled.get("status"), "canceled")
+	assert_eq(session.get_cash_cents(), 50000)
+	assert_eq(session.get_pending_fixture_orders().size(), 0)
+	assert_eq(session.get_placed_fixture_orders().size(), 0)
+	assert_false(manager.is_ghost_visible())
+	assert_eq(session.fixture_orders[0].get("status"), "canceled")
+
+
 func test_store_session_rejects_pending_fixture_placement_when_ghost_is_invalid() -> void:
 	var fixture_root := Node3D.new()
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()

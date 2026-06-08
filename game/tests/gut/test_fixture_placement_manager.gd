@@ -134,6 +134,23 @@ func test_fixture_placement_manager_hides_ghost() -> void:
 	assert_eq(manager.get_placement_state(), "hidden")
 
 
+func test_fixture_placement_manager_cancels_current_placement() -> void:
+	var manager := _make_manager()
+	manager.show_ghost_for_order({
+		"order_id": "fixture_order_001",
+		"fixture_id": "fixture_game_display_rack",
+	})
+
+	var canceled: Dictionary = manager.cancel_current_placement()
+
+	assert_eq(canceled.get("order_id"), "fixture_order_001")
+	assert_eq(canceled.get("fixture_id"), "fixture_game_display_rack")
+	assert_false(manager.is_ghost_visible())
+	assert_eq(manager.get_current_order_id(), "")
+	assert_eq(manager.get_current_fixture_id(), "")
+	assert_eq(manager.get_placement_state(), "hidden")
+
+
 func test_fixture_placement_manager_confirms_valid_placement() -> void:
 	var manager := _make_manager()
 	var parent := Node3D.new()

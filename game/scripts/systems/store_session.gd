@@ -796,6 +796,10 @@ func can_adjust_pending_fixture_placement() -> bool:
 		and placement_manager.is_ghost_visible()
 
 
+func can_cancel_pending_fixture_placement() -> bool:
+	return can_adjust_pending_fixture_placement()
+
+
 func move_pending_fixture_placement(delta_x: int, delta_z: int) -> bool:
 	if not can_adjust_pending_fixture_placement():
 		return false
@@ -821,6 +825,27 @@ func snap_pending_fixture_placement() -> bool:
 	var placement_manager := _get_fixture_placement_manager()
 	return placement_manager.has_method("snap_ghost_to_grid") \
 		and placement_manager.snap_ghost_to_grid()
+
+
+func cancel_pending_fixture_placement() -> Dictionary:
+	if not can_cancel_pending_fixture_placement():
+		return {}
+
+	var placement_manager := _get_fixture_placement_manager()
+	var order_index := _find_fixture_order_index(str(placement_manager.get_current_order_id()))
+	if order_index == -1:
+		return {}
+
+	var order := fixture_orders[order_index]
+	cash_cents = get_cash_cents() + int(order.get("cost_cents", 0))
+	order["status"] = "canceled"
+	order["canceled_day"] = day_number
+	fixture_orders[order_index] = order
+	if placement_manager.has_method("cancel_current_placement"):
+		placement_manager.cancel_current_placement()
+	else:
+		placement_manager.hide_ghost()
+	return order.duplicate(true)
 
 
 func place_pending_fixture(parent: Node = null) -> Dictionary:

@@ -42,8 +42,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 303 GUT tests.
-- UI scenario automation coverage is 306/362, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 306 GUT tests.
+- UI scenario automation coverage is 309/365, above the required 80% threshold.
 - Production script mapping coverage is 31/31.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
@@ -110,7 +110,8 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Starting the next day delivers the used-game starter lot into the receiving box and clears pending receiving.
 - Delivered supplier games look intentionally placed and do not crowd the receiving box, display rack, trade-in seller, or customer flow.
 - Backroom `Order Rack` and `Place Rack` controls show the game display rack option, cash reservation, and pending storage placement clearly.
-- Backroom pending storage fixture `Left`, `Right`, `Fwd`, `Back`, `Rotate`, and `Snap` controls are readable and fit the panel.
+- Backroom pending storage fixture `Left`, `Right`, `Fwd`, `Back`, `Rotate`, `Snap`, and `Cancel` controls are readable and fit the panel.
+- Canceling a pending fixture clears the ghost and refunds reserved fixture cash.
 - Ordered fixture ghost preview is visible, translucent, and reads as a pending storage placement rather than a finished rack.
 - Fixture ghost valid and invalid states read clearly as green allowed and red blocked placement previews.
 - Fixture ghost rotate and snap behavior feels predictable through the backroom placement controls.

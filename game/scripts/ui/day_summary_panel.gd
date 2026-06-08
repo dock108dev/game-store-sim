@@ -37,6 +37,7 @@ class_name DaySummaryPanel
 @onready var rack_back_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackBackButton
 @onready var rotate_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RotateRackButton
 @onready var snap_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/SnapRackButton
+@onready var cancel_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/CancelRackButton
 
 const GAME_DISPLAY_RACK_ID := "fixture_game_display_rack"
 const USED_GAME_STARTER_LOT_ID := "supplier_lot_used_games_001"
@@ -59,6 +60,7 @@ func _ready() -> void:
 	rack_back_button.pressed.connect(move_pending_rack_back)
 	rotate_rack_button.pressed.connect(rotate_pending_rack)
 	snap_rack_button.pressed.connect(snap_pending_rack)
+	cancel_rack_button.pressed.connect(cancel_pending_rack)
 	end_day_button.pressed.connect(end_day)
 	close_button.pressed.connect(close)
 
@@ -233,6 +235,23 @@ func snap_pending_rack() -> bool:
 	return true
 
 
+func cancel_pending_rack() -> bool:
+	if _session == null or not _session.has_method("cancel_pending_fixture_placement"):
+		return false
+
+	var canceled: Dictionary = _session.cancel_pending_fixture_placement()
+	_update_labels()
+	if canceled.is_empty():
+		status_label.text = "Could not cancel storage rack placement."
+		return false
+
+	status_label.text = "Canceled %s placement. Refunded %s." % [
+		str(canceled.get("display_name", "fixture")),
+		"$%0.2f" % (int(canceled.get("cost_cents", 0)) / 100.0),
+	]
+	return true
+
+
 func close() -> bool:
 	if not is_open():
 		return false
@@ -340,8 +359,11 @@ func _update_labels() -> void:
 		rack_back_button,
 		rotate_rack_button,
 		snap_rack_button,
+		cancel_rack_button,
 	]:
 		button.disabled = not can_adjust_fixture
+	if _session.has_method("can_cancel_pending_fixture_placement"):
+		cancel_rack_button.disabled = _session.is_day_closed or not _session.can_cancel_pending_fixture_placement()
 	end_day_button.disabled = false
 	end_day_button.text = "Start Day" if _session.is_day_closed else "End Day"
 

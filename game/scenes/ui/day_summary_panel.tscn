@@ -249,3 +249,8 @@ text = "Rotate"
 custom_minimum_size = Vector2(88, 36)
 layout_mode = 2
 text = "Snap"
+
+[node name="CancelRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(88, 36)
+layout_mode = 2
+text = "Cancel"

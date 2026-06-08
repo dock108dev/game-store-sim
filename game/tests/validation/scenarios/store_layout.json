@@ -57,11 +57,25 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_adjusts_pending_fixture_placement"
     },
     {
+      "id": "store_session_cancels_pending_fixture",
+      "name": "Store session cancels a pending fixture placement and refunds cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_cancels_pending_fixture_placement_and_refunds_cash"
+    },
+    {
       "id": "backroom_panel_adjusts_pending_fixture",
       "name": "Backroom computer panel exposes pending fixture movement, rotation, and snap controls",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_adjusts_pending_fixture_preview"
+    },
+    {
+      "id": "backroom_panel_cancels_pending_fixture",
+      "name": "Backroom computer panel cancels a pending fixture placement and clears the preview",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_cancels_pending_fixture_preview"
     },
     {
       "id": "fixture_placement_manager_hidden_ghost",
@@ -125,6 +139,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_counter_rotates_ghost"
+    },
+    {
+      "id": "fixture_placement_manager_cancel_ghost",
+      "name": "Fixture placement manager cancels the current placement ghost",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_cancels_current_placement"
     },
     {
       "id": "fixture_placement_manager_confirms_valid_placement",
