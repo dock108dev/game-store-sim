@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this product/content pipeline pass: `scripts/validate_godot.sh` passed with 374 GUT tests, UI scenario coverage 353/425, script mapping coverage 39/39, and product catalog content validation.
+- Last full gate in this product/content pipeline pass: `scripts/validate_godot.sh` passed with 374 GUT tests, UI scenario coverage 353/426, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -29,6 +29,7 @@ Current automated baseline:
 - Condition and authenticity cues are implemented through Stop 6.4; manual QA should confirm scratches, missing manual, loose media, damaged label, reseal, and serial-risk markers read clearly without clutter.
 - Shelf label and price tag system is implemented through Stop 6.5; manual QA should confirm category, platform, price, sale, preorder, staff-pick, and bargain tags remain readable without obscuring prompts.
 - Product content validation tools are implemented through Stop 6.6; manual QA can rely on the local gate for duplicate IDs, required fields, fictional names, pricing sanity, category coverage, sellable depth, and visual variant coverage before doing human content review.
+- Product pipeline validation sync is implemented through Stop 6.7; manual QA should use the Product Content Focus section as the current review surface for schema, visual variants, condition/authenticity cues, shelf tags, catalog breadth, validation manifest coverage, and content tone.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -191,7 +192,7 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Product Content Focus
 
-Run these first when manually checking the completed Stop 6.1 through Stop 6.5 product/content pass:
+Run these first when manually checking the completed Stop 6.1 through Stop 6.7 product/content pass:
 
 - Confirm product fields now cover category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location.
 - Confirm authenticity and risk metadata feel coherent for imperfect used copies, especially loose, missing-manual, poor-condition, and uncertain-origin items.
@@ -205,6 +206,7 @@ Run these first when manually checking the completed Stop 6.1 through Stop 6.5 p
 - Confirm category/platform/price labels and sale, preorder, staff-pick, and bargain tags are readable from normal player angles without hiding interaction prompts.
 - Confirm tags remain compact when products are in receiving, held, stocked, customer-held, and register-review positions.
 - Confirm `scripts/check_product_catalog.py` has passed before manually judging catalog tone, breadth, and price plausibility.
+- Confirm `game/tests/validation/tool_checks/product_catalog.json` still describes the active standalone content checker, its covered paths, and its production requirements before adding more product resources.
 - Confirm schema updates did not imply that non-used-game categories are already implemented visually; category expansion comes in later product/content slices.
 
 ## Customer Production Focus

@@ -103,6 +103,7 @@ The following polish items remain valid historical checkpoints:
 - Done: added generated condition/authenticity cues for scratches, missing manual, loose media, damaged labels, reseals, and serial risk.
 - Done: added generated product label/price tag text for category, platform, price, sale, preorder, staff-pick, and bargain cues.
 - Done: added standalone product catalog content validation for IDs, fictional names, required fields, category coverage, pricing sanity, sellable depth, and visual variant coverage.
+- Done: synced the product/content pipeline validation manifest, manual review checklist, and milestone status after the Stop 6 pass.
 - Remaining polish risk: fixture ghost/placed fixture state can still get a dedicated art pass later, but the current automated checks preserve valid/invalid ghost distinction and placed-rack behavior.
 
 ## Completed First-Playable Scope
@@ -120,7 +121,7 @@ Compressed summary of completed validated systems:
 - Supplier orders with due-day receiving-box delivery.
 - Preorder deposit and launch-day fulfillment/reputation outcome.
 - Hidden event log, mismatched serial item, supplier message, optional suspicious customer, and hidden evidence storage.
-- Mandatory validation gate, product content checker, GUT tests, validation scenario matrix, script mapping, persistence smoke, and named screenshots.
+- Mandatory validation gate, product content checker, validation tool manifest, GUT tests, validation scenario matrix, script mapping, persistence smoke, and named screenshots.
 
 ## Not Current Scope
 

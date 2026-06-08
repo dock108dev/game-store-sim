@@ -1,0 +1,25 @@
+{
+  "validation_tools": [
+    {
+      "id": "product_catalog_content_checker",
+      "name": "Product catalog standalone content checker",
+      "status": "active",
+      "command": "scripts/check_product_catalog.py",
+      "owner": "production validation",
+      "covered_paths": [
+        "game/data/products",
+        "game/scripts/inventory/product_definition.gd",
+        "game/scripts/inventory/product_visual_rules.gd"
+      ],
+      "requirements": [
+        "Product IDs are unique and nonempty.",
+        "Display names remain fictional and avoid forbidden real-world brand or product fragments.",
+        "Required production inventory schema fields are present on every product resource.",
+        "Category coverage includes used games, new games, accessories, hardware, and service tickets.",
+        "Pricing data stays positive and suggested price remains between cost basis and market value.",
+        "The catalog has enough total and sellable products for a multi-day starter loop.",
+        "Data-driven visual variant coverage includes case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket forms."
+      ]
+    }
+  ]
+}

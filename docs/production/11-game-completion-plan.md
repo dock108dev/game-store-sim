@@ -306,7 +306,7 @@ Commit targets:
 Validation snapshot:
 
 - `scripts/validate_godot.sh` passes with 374 GUT tests.
-- UI scenario automation coverage is 353/425, above the required 80% threshold.
+- UI scenario automation coverage is 353/426, above the required 80% threshold.
 - Production script mapping coverage is 39/39.
 - Manual customer-production checks are current for visual kit, animation, pathing, feedback bubbles, archetype data, dialogue data, and validation sync.
 - Manual product-content checks are current for Stop 6.1 inventory schema expansion.
@@ -327,7 +327,7 @@ Stops:
 - Stop 6.4: Condition and authenticity cues. Done in `Add condition authenticity cues`: product visual rules now add visible scratches, missing manual markers, loose media, damaged label, reseal, and suspicious serial-risk cue meshes from condition, completeness, authenticity, risk tags, and serial mismatch state.
 - Stop 6.5: Shelf label and price tag system. Done in `Add shelf label price tags`: product items now generate compact category, platform, price, sale, preorder, staff-pick, and bargain tag text without replacing interaction prompts.
 - Stop 6.6: Content validation tools. Done in `Add product content validation`: `scripts/check_product_catalog.py` now runs in the local gate and checks unique IDs, fictional names, required fields, category coverage, pricing sanity, sellable depth, and visual variant coverage.
-- Stop 6.7: Product pipeline validation sync. Update automation and manual content review.
+- Stop 6.7: Product pipeline validation sync. Done in `Sync product pipeline validation`: standalone validation tool manifests, validation docs, manual content review, and milestone status now reflect the completed Stop 6 product/content pass.
 
 Acceptance:
 
@@ -345,6 +345,15 @@ Commit targets:
 - `Add shelf label price tags`
 - `Add product content validation`
 - `Sync product pipeline validation`
+
+Validation snapshot:
+
+- `scripts/validate_godot.sh` passes with 374 GUT tests.
+- UI scenario automation coverage is 353/425, above the required 80% threshold.
+- Production script mapping coverage is 39/39.
+- Validation tool manifest coverage reports 1 active standalone tool.
+- Product catalog content validation passes with 33 products.
+- Manual product-content checks are current for schema, visual variants, starter catalog breadth, condition/authenticity cues, shelf labels, price tags, content validation, and validation-manifest sync.
 
 ## Milestone 7: Economy, Day Loop, And Progression
 

@@ -10,6 +10,7 @@ VALIDATION_ROOT = GAME_ROOT / "tests" / "validation"
 THRESHOLDS_PATH = VALIDATION_ROOT / "thresholds.json"
 SCENARIOS_ROOT = VALIDATION_ROOT / "scenarios"
 SCRIPT_COVERAGE_ROOT = VALIDATION_ROOT / "script_coverage"
+TOOL_CHECKS_ROOT = VALIDATION_ROOT / "tool_checks"
 
 
 def pct(numerator: int, denominator: int) -> float:
@@ -50,6 +51,7 @@ def load_validation_data() -> dict:
         "thresholds": load_json(THRESHOLDS_PATH),
         "ui_scenarios": [],
         "script_tests": [],
+        "validation_tools": [],
     }
 
     scenario_files = sorted(SCENARIOS_ROOT.glob("*.json"))
@@ -73,6 +75,14 @@ def load_validation_data() -> dict:
         if not isinstance(script_tests, list):
             raise ValueError(f"{path.relative_to(REPO_ROOT)} must contain script_tests list")
         data["script_tests"].extend(script_tests)
+
+    if TOOL_CHECKS_ROOT.exists():
+        for path in sorted(TOOL_CHECKS_ROOT.glob("*.json")):
+            file_data = load_json(path)
+            validation_tools = file_data.get("validation_tools")
+            if not isinstance(validation_tools, list):
+                raise ValueError(f"{path.relative_to(REPO_ROOT)} must contain validation_tools list")
+            data["validation_tools"].extend(validation_tools)
 
     return data
 
@@ -161,8 +171,42 @@ def main() -> int:
             f"script test mapping coverage {script_percent:.1f}% is below {script_threshold:.1f}%"
         )
 
+    tool_ids = [item["id"] for item in data["validation_tools"]]
+    duplicate_tool_ids = sorted({
+        tool_id for tool_id in tool_ids
+        if tool_ids.count(tool_id) > 1
+    })
+    for tool_id in duplicate_tool_ids:
+        failures.append(f"duplicate validation tool id: {tool_id}")
+
+    active_tools = [
+        item for item in data["validation_tools"]
+        if item.get("status") != "retired"
+    ]
+    for item in active_tools:
+        status = item.get("status")
+        if status != "active":
+            failures.append(f"validation tool {item.get('id', '<missing>')} has invalid status {status}")
+        command = item.get("command", "")
+        if not command:
+            failures.append(f"validation tool {item.get('id', '<missing>')} lacks command")
+        else:
+            command_path = REPO_ROOT / command.split()[0]
+            if not command_path.exists():
+                failures.append(f"validation tool {item.get('id', '<missing>')} command is missing: {command}")
+        covered_paths = item.get("covered_paths", [])
+        if not covered_paths:
+            failures.append(f"validation tool {item.get('id', '<missing>')} needs covered_paths")
+        for covered_path in covered_paths:
+            path = REPO_ROOT / covered_path
+            if not path.exists():
+                failures.append(f"validation tool {item.get('id', '<missing>')} covered path is missing: {covered_path}")
+        if not item.get("requirements"):
+            failures.append(f"validation tool {item.get('id', '<missing>')} needs requirements")
+
     print(f"UI automation coverage: {len(automated_scenarios)}/{len(active_scenarios)} = {ui_percent:.1f}%")
     print(f"Script test mapping coverage: {len(set(covered_scripts))}/{len(production_scripts)} = {script_percent:.1f}%")
+    print(f"Validation tool manifests: {len(active_tools)} active")
 
     if failures:
         for failure in failures:

@@ -273,6 +273,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "product_pipeline_validation_review",
+      "name": "Product pipeline validation manifest matches the current content checker and manual review scope",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the manifest shape, command, covered paths, and requirements; human review should confirm it remains the right content-quality bar before adding more product resources.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",

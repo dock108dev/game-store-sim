@@ -23,6 +23,7 @@ The gate currently runs:
 - GUT tests under `game/tests/gut/`, with JUnit XML exported to `artifacts/validation/latest/gut-results.xml`.
 - UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
+- Standalone validation tool manifest coverage from `game/tests/validation/tool_checks/`.
 - Standalone product catalog content checks through `scripts/check_product_catalog.py`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, complete inventory schema fields, multi-day starter content depth, and category/platform/condition/format/demand/authenticity/rarity/risk/location variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
@@ -53,6 +54,7 @@ Current polish-pass baseline:
 - Product condition/authenticity cues show scratches, missing manual, loose media, damaged label, reseal, and suspicious serial-risk markers through generated product-item meshes.
 - Product shelf/price tags show compact category, platform, price, sale, preorder, staff-pick, and bargain text without replacing core interaction prompts.
 - `scripts/check_product_catalog.py` validates product IDs, fictional names, required schema fields, category coverage, pricing sanity, sellable depth, and visual variant coverage as part of the local gate.
+- `game/tests/validation/tool_checks/product_catalog.json` declares the product catalog standalone checker as an active validation tool and keeps its command, covered paths, and requirements auditable.
 
 ## Manual Validation
 
@@ -194,7 +196,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 
-Script test mappings live in `script_coverage/production_scripts.json`, and thresholds live in `thresholds.json`.
+Script test mappings live in `script_coverage/production_scripts.json`, standalone tool manifests live in `tool_checks/*.json`, and thresholds live in `thresholds.json`.
 Standalone non-Godot validation tools live under `scripts/`; `scripts/check_product_catalog.py` is run by `scripts/validate_godot.sh` after scenario coverage and before screenshot capture.
 
 Use these statuses:
