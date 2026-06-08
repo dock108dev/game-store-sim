@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this product/content pipeline pass: `scripts/validate_godot.sh` passed with 372 GUT tests, UI scenario coverage 351/422, and script mapping coverage 39/39.
+- Last full gate in this product/content pipeline pass: `scripts/validate_godot.sh` passed with 374 GUT tests, UI scenario coverage 353/425, and script mapping coverage 39/39.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -27,6 +27,7 @@ Current automated baseline:
 - Product visual generation rules are implemented through Stop 6.2; manual QA should confirm the generated case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cues read as distinct physical inventory forms.
 - Starter catalog expansion is implemented through Stop 6.3; manual QA should confirm the 33-product fictional catalog feels coherent, broad enough, and not repetitive.
 - Condition and authenticity cues are implemented through Stop 6.4; manual QA should confirm scratches, missing manual, loose media, damaged label, reseal, and serial-risk markers read clearly without clutter.
+- Shelf label and price tag system is implemented through Stop 6.5; manual QA should confirm category, platform, price, sale, preorder, staff-pick, and bargain tags remain readable without obscuring prompts.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -189,7 +190,7 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Product Content Focus
 
-Run these first when manually checking the completed Stop 6.1 through Stop 6.4 product/content pass:
+Run these first when manually checking the completed Stop 6.1 through Stop 6.5 product/content pass:
 
 - Confirm product fields now cover category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location.
 - Confirm authenticity and risk metadata feel coherent for imperfect used copies, especially loose, missing-manual, poor-condition, and uncertain-origin items.
@@ -200,6 +201,8 @@ Run these first when manually checking the completed Stop 6.1 through Stop 6.4 p
 - Confirm new catalog prices and risk/completeness metadata feel plausible before the later economy-balance pass.
 - Confirm scratches, missing manual, loose media, damaged label, reseal, and serial-risk cues are readable on relevant products without making every product look damaged.
 - Confirm suspicious serial markers read as optional risk cues, not as blocking objectives.
+- Confirm category/platform/price labels and sale, preorder, staff-pick, and bargain tags are readable from normal player angles without hiding interaction prompts.
+- Confirm tags remain compact when products are in receiving, held, stocked, customer-held, and register-review positions.
 - Confirm schema updates did not imply that non-used-game categories are already implemented visually; category expansion comes in later product/content slices.
 
 ## Customer Production Focus

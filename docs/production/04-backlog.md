@@ -101,6 +101,7 @@ The following polish items remain valid historical checkpoints:
 - Done: added data-driven product visual rules for case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cue variants.
 - Done: expanded the starter product catalog to 33 fictional products across used games, new games, accessories, hardware, and service tickets.
 - Done: added generated condition/authenticity cues for scratches, missing manual, loose media, damaged labels, reseals, and serial risk.
+- Done: added generated product label/price tag text for category, platform, price, sale, preorder, staff-pick, and bargain cues.
 - Remaining polish risk: fixture ghost/placed fixture state can still get a dedicated art pass later, but the current automated checks preserve valid/invalid ghost distinction and placed-rack behavior.
 
 ## Completed First-Playable Scope
@@ -109,7 +110,7 @@ Compressed summary of completed validated systems:
 
 - First-person movement, click-first interaction, prompt, and reticle.
 - Receiving pickup, multi-item carry, held-item pricing, shelf stocking, and apply-to-matching pricing.
-- Product catalog, fictional product validation, multi-day starter product depth, item identity, category, platform family, format, price, cost basis, condition, completeness, authenticity, rarity, demand, market value, risk, default location, data-driven visual variant profile, generated condition/authenticity cue meshes, serial metadata, and active inventory summary.
+- Product catalog, fictional product validation, multi-day starter product depth, item identity, category, platform family, format, price, cost basis, condition, completeness, authenticity, rarity, demand, market value, risk, default location, data-driven visual variant profile, generated condition/authenticity cue meshes, shelf/price tag text, serial metadata, and active inventory summary.
 - Buyer customer manager, buyer movement, price sensitivity, lower-priced copy selection, register queue, sale completion, and transaction ledger.
 - Trade-in seller, offer panel, cash/store-credit acceptance, counteroffer adjustment, decline, and acquired inventory.
 - Service customer and register-completed service accounting.

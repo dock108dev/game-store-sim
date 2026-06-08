@@ -305,14 +305,15 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 372 GUT tests.
-- UI scenario automation coverage is 351/422, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 374 GUT tests.
+- UI scenario automation coverage is 353/425, above the required 80% threshold.
 - Production script mapping coverage is 39/39.
 - Manual customer-production checks are current for visual kit, animation, pathing, feedback bubbles, archetype data, dialogue data, and validation sync.
 - Manual product-content checks are current for Stop 6.1 inventory schema expansion.
 - Manual product-visual checks are current for Stop 6.2 visual generation rules.
 - Manual starter-catalog checks are current for Stop 6.3 catalog expansion.
 - Manual condition/authenticity cue checks are current for Stop 6.4.
+- Manual shelf-label/price-tag checks are current for Stop 6.5.
 
 ## Milestone 6: Product And Content Pipeline
 
@@ -324,7 +325,7 @@ Stops:
 - Stop 6.2: Product visual generation rules. Done in `Build product visual variants`: product visual rules now generate reusable case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket profiles, and product items apply generated cue meshes from those profiles.
 - Stop 6.3: Starter catalog expansion. Done in `Expand starter catalog`: the product catalog now contains 33 fictional products across used games, new games, accessories, hardware, and service tickets, including 30 sellable physical products for several days of rotation.
 - Stop 6.4: Condition and authenticity cues. Done in `Add condition authenticity cues`: product visual rules now add visible scratches, missing manual markers, loose media, damaged label, reseal, and suspicious serial-risk cue meshes from condition, completeness, authenticity, risk tags, and serial mismatch state.
-- Stop 6.5: Shelf label and price tag system. Show category, platform, price, sale tags, preorder tags, staff pick tags, and bargain tags without cluttering interactions.
+- Stop 6.5: Shelf label and price tag system. Done in `Add shelf label price tags`: product items now generate compact category, platform, price, sale, preorder, staff-pick, and bargain tag text without replacing interaction prompts.
 - Stop 6.6: Content validation tools. Add checks for unique IDs, fictional names, category coverage, pricing sanity, and visual variant coverage.
 - Stop 6.7: Product pipeline validation sync. Update automation and manual content review.
 

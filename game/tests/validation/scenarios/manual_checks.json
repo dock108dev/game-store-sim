@@ -265,6 +265,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "product_shelf_price_tag_readability",
+      "name": "Product shelf labels and price tags are readable without cluttering interaction targets",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify compact category, platform, price, sale, preorder, staff-pick, and bargain text; human review should confirm world-space label scale and density work in receiving, hand, shelf, customer, and register contexts.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",

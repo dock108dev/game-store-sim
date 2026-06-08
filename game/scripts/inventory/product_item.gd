@@ -136,6 +136,22 @@ func apply_product_visuals() -> void:
 		Vector3(0.082, 0.075, -0.058),
 		Color(0.95, 0.28, 0.18, 1.0)
 	)
+	_apply_price_tag_label()
+
+
+func get_price_tag_lines() -> Array[String]:
+	if product == null:
+		return []
+
+	var lines: Array[String] = [
+		_get_category_label(product.category),
+		"%s $%0.2f" % [product.platform, current_price_cents / 100.0],
+	]
+	var badges := _get_price_tag_badges()
+	if not badges.is_empty():
+		lines.append(" ".join(badges))
+
+	return lines
 
 
 func get_interaction_prompt() -> String:
@@ -303,6 +319,57 @@ func _set_condition_cue_box(
 	color: Color
 ) -> void:
 	_set_variant_box(node_name, is_visible, size, position, color)
+
+
+func _apply_price_tag_label() -> void:
+	var label := _get_or_create_price_tag_label()
+	var lines := get_price_tag_lines()
+	label.visible = not lines.is_empty()
+	label.text = "\n".join(lines)
+	label.position = Vector3(0.0, 0.372, -0.07)
+	label.rotation = Vector3.ZERO
+	label.pixel_size = 0.00235
+	label.font_size = 18
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.modulate = Color(1.0, 0.92, 0.58, 1.0)
+	label.outline_size = 2
+	label.outline_modulate = Color(0.02, 0.025, 0.03, 1.0)
+
+
+func _get_or_create_price_tag_label() -> Label3D:
+	var existing := get_node_or_null("ProductTagLabel") as Label3D
+	if existing != null:
+		return existing
+
+	var label := Label3D.new()
+	label.name = "ProductTagLabel"
+	label.visible = false
+	add_child(label)
+	return label
+
+
+func _get_price_tag_badges() -> Array[String]:
+	var badges: Array[String] = []
+	if product == null:
+		return badges
+
+	if product.category == "new_game":
+		badges.append("PREORDER")
+
+	if product.demand_tier == "high" and (product.rarity == "rare" or product.rarity == "collector" or product.rarity == "launch"):
+		badges.append("STAFF")
+
+	if current_price_cents > 0 and current_price_cents < product.suggested_price_cents:
+		badges.append("SALE")
+
+	if product.market_value_cents > 0 and current_price_cents <= int(round(product.market_value_cents * 0.8)):
+		badges.append("BARGAIN")
+
+	return badges
+
+
+func _get_category_label(category: String) -> String:
+	return category.strip_edges().capitalize()
 
 
 func _get_or_create_variant_node(node_name: String) -> MeshInstance3D:

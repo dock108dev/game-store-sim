@@ -50,6 +50,20 @@
       "evidence": "res://tests/gut/test_product_item.gd::test_product_item_serial_mismatch_shows_suspicious_marker"
     },
     {
+      "id": "product_shelf_price_tag_label",
+      "name": "Product item shows compact category, platform, and price tag text",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_price_tag_label_shows_category_platform_and_price"
+    },
+    {
+      "id": "product_shelf_merchandising_badges",
+      "name": "Product item price tag supports sale, preorder, staff pick, and bargain badges",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_price_tag_badges_cover_sale_preorder_staff_and_bargain"
+    },
+    {
       "id": "rack_category_header",
       "name": "Display rack has a readable used-game category header",
       "status": "automated",

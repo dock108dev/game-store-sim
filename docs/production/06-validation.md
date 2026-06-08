@@ -42,14 +42,15 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 372 GUT tests.
-- UI scenario automation coverage is 351/422, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 374 GUT tests.
+- UI scenario automation coverage is 353/425, above the required 80% threshold.
 - Production script mapping coverage is 39/39.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
 - Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants, with product items applying generated cue meshes from data.
 - Starter product catalog includes 33 fictional products across used games, new games, accessories, hardware, and service tickets, with 30 sellable physical products for several days of rotation.
 - Product condition/authenticity cues show scratches, missing manual, loose media, damaged label, reseal, and suspicious serial-risk markers through generated product-item meshes.
+- Product shelf/price tags show compact category, platform, price, sale, preorder, staff-pick, and bargain text without replacing core interaction prompts.
 
 ## Manual Validation
 
@@ -67,6 +68,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Pricing shows cost basis, market price, current price, suggested range, demand, projected margin, apply-to-matching batch scope, and outcome warnings.
 - Product visual variants for case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cues read clearly in receiving, hand, shelf, customer, and register contexts.
 - Product condition and authenticity cues read clearly without overwhelming case, platform, price, and variant identity.
+- Product shelf labels and price tags are readable without crowding pickup, stocking, pricing, customer-held, or register-review contexts.
 - Backroom computer tabs split dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records into readable task sections.
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
@@ -174,7 +176,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/customer_polish.json`: customer role prop, silhouette, and register-area spacing polish checks.
 - `scenarios/store_visual_polish.json`: store material contrast, lighting layers, fictional signage, and nonblocking retail clutter checks.
-- `scenarios/product_fixture_polish.json`: used-game case cue, product visual variant rules, generated cue meshes, condition/authenticity cues, rack category, carry stack, and receiving intake polish checks.
+- `scenarios/product_fixture_polish.json`: used-game case cue, product visual variant rules, generated cue meshes, condition/authenticity cues, shelf/price tags, rack category, carry stack, and receiving intake polish checks.
 - `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.

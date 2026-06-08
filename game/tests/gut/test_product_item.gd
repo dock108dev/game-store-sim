@@ -185,6 +185,40 @@ func test_product_item_serial_mismatch_shows_suspicious_marker() -> void:
 	assert_true((_item.get_node("SerialRiskCueMesh") as MeshInstance3D).visible)
 
 
+func test_product_item_price_tag_label_shows_category_platform_and_price() -> void:
+	var label := _item.get_node_or_null("ProductTagLabel") as Label3D
+	var lines: Array[String] = _item.get_price_tag_lines()
+
+	assert_not_null(label)
+	assert_true(label.visible)
+	assert_eq(lines.size(), 2)
+	assert_eq(lines[0], "Used Game")
+	assert_string_contains(lines[1], "Orbit 64")
+	assert_string_contains(lines[1], "$21.99")
+	assert_eq(label.text, "\n".join(lines))
+	assert_lte(label.pixel_size, 0.0025)
+	assert_gte(label.font_size, 18)
+
+
+func test_product_item_price_tag_badges_cover_sale_preorder_staff_and_bargain() -> void:
+	var product := _make_product("Launch Pick", "new_game", "disc", "sealed")
+	product.demand_tier = "high"
+	product.rarity = "launch"
+	product.market_value_cents = 5000
+	product.suggested_price_cents = 5000
+	_item.set("product", product)
+	_item.current_price_cents = 3500
+	_item.apply_product_visuals()
+
+	var lines: Array[String] = _item.get_price_tag_lines()
+	assert_eq(lines.size(), 3)
+	assert_string_contains(lines[2], "PREORDER")
+	assert_string_contains(lines[2], "STAFF")
+	assert_string_contains(lines[2], "SALE")
+	assert_string_contains(lines[2], "BARGAIN")
+	assert_lte(lines[2].length(), 32)
+
+
 func test_used_game_hover_highlight_toggles_visual_cue() -> void:
 	var highlight := _item.get_node_or_null("HoverHighlight") as CSGBox3D
 
