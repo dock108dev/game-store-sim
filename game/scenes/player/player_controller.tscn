@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cag7fgl2cb7di"]
+[gd_scene load_steps=12 format=3 uid="uid://cag7fgl2cb7di"]
 
 [ext_resource type="Script" path="res://scripts/player/first_person_controller.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_raycast.gd" id="2_raycast"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="7_settings_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/register_checkout_panel.tscn" id="8_register_checkout_panel"]
 [ext_resource type="Script" path="res://scripts/player/interaction_audio_feedback.gd" id="9_interaction_audio"]
+[ext_resource type="Script" path="res://scripts/player/presentation_microfeedback.gd" id="10_microfeedback"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.35
@@ -77,6 +78,57 @@ volume_db = -18.0
 
 [node name="ErrorPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
 volume_db = -20.0
+
+[node name="PresentationMicrofeedback" type="Node3D" parent="."]
+script = ExtResource("10_microfeedback")
+
+[node name="TargetHighlightParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="ItemSettleParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="SaleConfirmationParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 10
+lifetime = 0.4
+one_shot = true
+emitting = false
+
+[node name="CashTickParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="ReputationTickParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="DayTransitionParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 12
+lifetime = 0.45
+one_shot = true
+emitting = false
+
+[node name="DeliveryArrivalParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 10
+lifetime = 0.4
+one_shot = true
+emitting = false
+
+[node name="InvalidActionParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 6
+lifetime = 0.28
+one_shot = true
+emitting = false
 
 [node name="PricingPanel" parent="." instance=ExtResource("4_pricing_panel")]
 

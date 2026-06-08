@@ -13,6 +13,7 @@ extends CharacterBody3D
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 @onready var settings_panel: SettingsPanel = $SettingsPanel
 @onready var interaction_audio: Node = $InteractionAudioFeedback
+@onready var presentation_microfeedback: Node = $PresentationMicrofeedback
 
 const CARRY_BASE_SCALE := 0.45
 const CARRY_DEPTH_SCALE_STEP := 0.025
@@ -114,6 +115,7 @@ func pick_up_item(item: Node3D) -> bool:
 
 	_arrange_held_items()
 	play_interaction_audio("pickup")
+	play_presentation_feedback("item_settle")
 	return true
 
 
@@ -139,9 +141,11 @@ func place_held_item(slot: Node) -> bool:
 		_clear_held_item_presentation(item)
 		_arrange_held_items()
 		play_interaction_audio("stock")
+		play_presentation_feedback("item_settle")
 		return true
 
 	play_interaction_audio("shelf_bump")
+	play_presentation_feedback("invalid_action")
 	return false
 
 
@@ -282,6 +286,22 @@ func play_interaction_audio_for_result(result: String) -> bool:
 	if lower_result.contains("placed") or lower_result.contains("stocked"):
 		return play_interaction_audio("place")
 	return play_interaction_audio("button_click")
+
+
+func play_presentation_feedback(effect_id: String) -> bool:
+	if presentation_microfeedback == null or not presentation_microfeedback.has_method("trigger_effect"):
+		return false
+	return bool(presentation_microfeedback.call("trigger_effect", effect_id))
+
+
+func play_presentation_feedback_for_result(result: String) -> bool:
+	if result.is_empty() or presentation_microfeedback == null:
+		return false
+	if not presentation_microfeedback.has_method("effect_for_result") or not presentation_microfeedback.has_method("trigger_effect"):
+		return false
+
+	var effect_id := str(presentation_microfeedback.call("effect_for_result", result))
+	return bool(presentation_microfeedback.call("trigger_effect", effect_id))
 
 
 func _is_modal_open() -> bool:

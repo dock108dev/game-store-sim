@@ -51,6 +51,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		var actor := _get_actor()
 		if actor != null and actor.has_method("play_interaction_audio_for_result"):
 			actor.play_interaction_audio_for_result(result)
+		if actor != null and actor.has_method("play_presentation_feedback_for_result"):
+			actor.play_presentation_feedback_for_result(result)
 
 
 func _is_primary_interaction_pressed(event: InputEvent) -> bool:

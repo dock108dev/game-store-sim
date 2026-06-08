@@ -212,6 +212,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/player/presentation_microfeedback.gd",
+      "tests": [
+        "res://tests/gut/test_presentation_microfeedback.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/register_workstation.gd",
       "tests": [
         "res://tests/gut/test_interaction_contract.gd",

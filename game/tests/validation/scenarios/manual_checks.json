@@ -791,6 +791,14 @@
       "critical": false,
       "reason": "Automated tests verify placeholder cue coverage and scene profile wiring; human review must confirm footsteps, mumbles, greetings, approval, annoyance, and leaving cues support customer state readability without making current placeholder customers feel overproduced.",
       "owner": "manual QA"
+    },
+    {
+      "id": "presentation_microfeedback_readability",
+      "name": "Presentation microfeedback supports actions and state changes without hiding prompts or implying false success",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify microfeedback effect coverage, player particle wiring, and result mapping; human review must confirm target highlights, item settle, sale confirmation, cash/reputation ticks, day transition, delivery arrival, and invalid-action feedback are subtle and semantically clear.",
+      "owner": "manual QA"
     }
   ]
 }

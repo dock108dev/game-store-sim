@@ -41,6 +41,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_customer_audio_profile.gd::test_customer_scenes_contain_audio_profile_players"
+    },
+    {
+      "id": "presentation_microfeedback_catalog",
+      "name": "Presentation microfeedback catalog covers highlights, item settle, sale confirmation, cash/reputation ticks, day transition, delivery arrival, and invalid actions",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_presentation_microfeedback.gd::test_presentation_microfeedback_catalog_covers_stop_11_4_effects"
+    },
+    {
+      "id": "presentation_microfeedback_player_wiring",
+      "name": "Player controller contains configured microfeedback particle placeholders and records result-driven effects",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_presentation_microfeedback.gd::test_player_controller_contains_microfeedback_particles"
     }
   ]
 }
