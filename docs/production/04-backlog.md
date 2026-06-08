@@ -126,7 +126,8 @@ Compressed summary of completed validated systems:
 ## Economy, Day Loop, And Progression
 
 - Done: added production day structure phases for opening, setup, customer hours, closing, report, and tomorrow planning, with daily report, save/load, and validation coverage.
-- Remaining: cash pressure, reputation detail, demand tuning, upgrade path, onboarding, and final economy/progression validation sync.
+- Done: added daily cash pressure with rent reserve, utilities/bills, prepaid supplier terms, payroll/repairs/shrinkage placeholders, reserved-obligation summaries, daily report accounting, save/load, and validation coverage.
+- Remaining: reputation detail, demand tuning, upgrade path, onboarding, and final economy/progression validation sync.
 
 ## Not Current Scope
 

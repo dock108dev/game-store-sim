@@ -46,6 +46,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq(release_allocations[0].get("quantity"), 1)
 	assert_eq(release_allocations[0].get("total_cost_cents"), 3200)
 	assert_eq((data.get("launch_events") as Array).size(), 0)
+	assert_eq((data.get("operating_expenses") as Array).size(), 0)
 	assert_eq(data.get("reputation_score"), 100)
 	var fixture_orders: Array = data.get("fixture_orders")
 	assert_eq(fixture_orders.size(), 1)
@@ -76,6 +77,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"preorder_deposits": [{"release_id": "release_neon_skyline", "deposit_cents": 500}],
 		"release_allocations": [{"release_id": "release_neon_skyline", "quantity": 1}],
 		"launch_events": [{"release_id": "release_neon_skyline", "missed_demand": 2}],
+		"operating_expenses": [{"expense_id": "rent_reserve", "amount_cents": 700}],
 		"reputation_score": 90,
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
@@ -94,6 +96,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("preorder_deposits") as Array)[0].get("release_id"), "release_neon_skyline")
 	assert_eq((decoded.get("release_allocations") as Array)[0].get("release_id"), "release_neon_skyline")
 	assert_eq((decoded.get("launch_events") as Array)[0].get("release_id"), "release_neon_skyline")
+	assert_eq((decoded.get("operating_expenses") as Array)[0].get("expense_id"), "rent_reserve")
 	assert_eq(int(decoded.get("reputation_score")), 90)
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
@@ -188,6 +191,15 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"reputation_score": 95,
 			}
 		],
+		"operating_expenses": [
+			{
+				"expense_id": "rent_reserve",
+				"label": "Rent reserve",
+				"amount_cents": 700,
+				"day_number": 3,
+				"status": "posted",
+			}
+		],
 		"reputation_score": 95,
 		"inventory_items": [
 			{
@@ -216,6 +228,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_launch_event_count(), 1)
 	assert_eq(session.get_total_launch_revenue_cents(), 9498)
 	assert_eq(session.get_total_launch_profit_cents(), 3598)
+	assert_eq(session.get_operating_expenses_total_cents(), 700)
 	assert_eq(session.get_reputation_score(), 95)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")

@@ -59,6 +59,44 @@ func test_store_session_tracks_day_phase_through_close_and_next_day() -> void:
 	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_SETUP)
 
 
+func test_store_session_applies_daily_cash_pressure_once_on_close() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	assert_eq(session.get_daily_cash_pressure_cents(), 875)
+	session.end_day()
+
+	assert_eq(session.get_cash_cents(), 49125)
+	assert_eq(session.get_operating_expenses_total_cents(), 875)
+	assert_eq(session.get_operating_expenses_total_cents(1), 875)
+	assert_eq(session.get_operating_expenses().size(), 2)
+
+	session.end_day()
+
+	assert_eq(session.get_cash_cents(), 49125)
+	assert_eq(session.get_operating_expenses_total_cents(), 875)
+
+
+func test_store_session_summarizes_cash_pressure_and_reserved_obligations() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	session.commit_release_allocation("release_neon_skyline", 1)
+	session.order_supplier_lot("supplier_lot_used_games_001")
+	session.order_fixture("fixture_game_display_rack")
+	var summary := session.get_cash_pressure_summary_text()
+
+	assert_string_contains(summary, "Cash pressure:")
+	assert_string_contains(summary, "Daily overhead due at close: $8.75")
+	assert_string_contains(summary, "Rent reserve: $7.00")
+	assert_string_contains(summary, "Utilities: $1.75")
+	assert_string_contains(summary, "Payroll placeholder: $0.00")
+	assert_string_contains(summary, "Repairs placeholder: $0.00")
+	assert_string_contains(summary, "Shrinkage placeholder: $0.00")
+	assert_string_contains(summary, "Supplier terms: current starter lots are prepaid")
+	assert_string_contains(summary, "Reserved obligations: $184.00")
+
+
 func test_store_session_applies_sale_to_cash() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)
@@ -336,8 +374,9 @@ func test_store_session_formats_daily_report_after_close() -> void:
 	assert_string_contains(session.get_daily_report_text(), "Daily report day 1:")
 	assert_string_contains(session.get_daily_report_text(), "Phase: Report")
 	assert_string_contains(session.get_daily_report_text(), "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
-	assert_string_contains(session.get_daily_report_text(), "Closing cash $521.99")
+	assert_string_contains(session.get_daily_report_text(), "Closing cash $513.24")
 	assert_string_contains(session.get_daily_report_text(), "Gross profit $12.99")
+	assert_string_contains(session.get_daily_report_text(), "Operating expenses: $8.75")
 
 
 func test_store_session_summarizes_active_inventory_items() -> void:
@@ -517,7 +556,8 @@ func test_store_session_resolves_launch_day_preorders_and_queue_demand() -> void
 	assert_eq(day_three.get("day_number"), 3)
 	assert_eq(day_three.get("launch_event_count"), 1)
 	assert_eq(session.get_launch_event_count(), 1)
-	assert_eq(session.get_cash_cents(), 52197)
+	assert_eq(session.get_cash_cents(), 50447)
+	assert_eq(session.get_operating_expenses_total_cents(), 1750)
 	assert_eq(session.get_total_launch_revenue_cents(), 14497)
 	assert_eq(session.get_total_launch_profit_cents(), 5397)
 	assert_eq(session.get_reputation_score(), 100)
@@ -562,7 +602,8 @@ func test_store_session_launch_day_shortage_reduces_reputation() -> void:
 	assert_eq(event.get("reputation_delta"), -10)
 	assert_eq(event.get("reputation_score"), 90)
 	assert_eq(session.get_reputation_score(), 90)
-	assert_eq(session.get_cash_cents(), 51799)
+	assert_eq(session.get_cash_cents(), 50049)
+	assert_eq(session.get_operating_expenses_total_cents(), 1750)
 	assert_string_contains(session.get_launch_summary_text(), "queue 0/2, missed 2")
 
 

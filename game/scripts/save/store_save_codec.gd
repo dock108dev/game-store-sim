@@ -18,6 +18,7 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"preorder_deposits": session.get_preorder_deposits(),
 		"release_allocations": session.get_release_allocations(),
 		"launch_events": session.get_launch_events(),
+		"operating_expenses": session.get_operating_expenses(),
 		"reputation_score": session.get_reputation_score(),
 		"inventory_items": _serialize_inventory_items(session.get_active_inventory_items()),
 	}
@@ -87,6 +88,11 @@ func restore_into_existing_scene(
 	if typeof(launch_events_value) == TYPE_ARRAY and session.has_method("replace_launch_events"):
 		var launch_events: Array = launch_events_value
 		session.replace_launch_events(launch_events)
+
+	var operating_expenses_value: Variant = data.get("operating_expenses", [])
+	if typeof(operating_expenses_value) == TYPE_ARRAY and session.has_method("replace_operating_expenses"):
+		var operating_expenses: Array = operating_expenses_value
+		session.replace_operating_expenses(operating_expenses)
 
 	return true
 

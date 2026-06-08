@@ -362,7 +362,7 @@ Goal: turn isolated systems into a game with pressure and forward motion.
 Stops:
 
 - Stop 7.1: Day structure. Done in `Build production day structure`: store sessions now expose opening, setup, customer-hours, closing, report, and tomorrow-planning phases; start-day payloads include opening summaries; daily reports show the phase/plan; save/load preserves the current phase.
-- Stop 7.2: Cash pressure. Add rent, bills, supplier terms, payroll placeholder, repairs, shrinkage placeholder, and reserve obligations.
+- Stop 7.2: Cash pressure. Done in `Add cash pressure systems`: end-of-day close now posts daily rent/utility operating expenses once, reports supplier terms, payroll, repairs, and shrinkage as expandable pressure hooks, tracks reserved obligations, and persists posted expenses.
 - Stop 7.3: Reputation. Track pricing fairness, wait times, fulfilled preorders, service success, return handling, suspicious choices, and stock variety.
 - Stop 7.4: Demand tuning. Connect shelf visibility, category demand, price, rarity, marketing, events, and customer archetypes.
 - Stop 7.5: Upgrade path. Add unlocks for fixtures, categories, service tools, computer tools, signage, storage, and store expansion.
@@ -388,15 +388,19 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 376 GUT tests.
-- UI scenario automation coverage is 355/429, above the required 80% threshold.
-- Production script mapping coverage is 39/39.
-- Validation tool manifest coverage reports 1 active standalone tool.
-- Product catalog content validation passes with 33 products.
 - Store session tests cover production day structure and phase transitions through customer hours, closing, report, tomorrow planning, and next-day setup.
 - Daily report tests cover the production day-plan line.
 - Save/load tests preserve the current day phase.
 - Manual day-structure checks are current for report readability and owner/operator day-loop language.
+- `scripts/validate_godot.sh` passes with 378 GUT tests.
+- UI scenario automation coverage is 357/432, above the required 80% threshold.
+- Production script mapping coverage is 39/39.
+- Validation tool manifest coverage reports 1 active standalone tool.
+- Product catalog content validation passes with 33 products.
+- Store session tests cover daily cash pressure posting once per close, cash-pressure summary text, and reserved obligations.
+- Daily report tests cover operating expenses, reserved obligations, bill language, and cash-pressure text.
+- Save/load tests preserve posted operating expenses.
+- Manual cash-pressure checks are current for report readability, bill language, gross-profit separation, and recoverable pressure.
 
 ## Milestone 8: Backroom Operations
 

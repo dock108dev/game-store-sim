@@ -11,6 +11,11 @@ const DAY_PHASE_CUSTOMER_HOURS := "customer_hours"
 const DAY_PHASE_CLOSING := "closing"
 const DAY_PHASE_REPORT := "report"
 const DAY_PHASE_TOMORROW_PLANNING := "tomorrow_planning"
+const DAILY_RENT_RESERVE_CENTS := 700
+const DAILY_UTILITIES_RESERVE_CENTS := 175
+const DAILY_PAYROLL_PLACEHOLDER_CENTS := 0
+const DAILY_REPAIRS_PLACEHOLDER_CENTS := 0
+const DAILY_SHRINKAGE_PLACEHOLDER_CENTS := 0
 const DAY_STRUCTURE := [
 	{
 		"phase": DAY_PHASE_OPENING,
@@ -72,6 +77,7 @@ var supplier_orders: Array[Dictionary] = []
 var preorder_deposits: Array[Dictionary] = []
 var release_allocations: Array[Dictionary] = []
 var launch_events: Array[Dictionary] = []
+var operating_expenses: Array[Dictionary] = []
 var reputation_score: int = 100
 
 
@@ -105,6 +111,7 @@ func end_day() -> void:
 	if is_day_closed:
 		return
 
+	_apply_end_day_cash_pressure()
 	day_phase = DAY_PHASE_REPORT
 	is_day_closed = true
 
@@ -190,6 +197,107 @@ func get_day_structure_text() -> String:
 
 func get_tomorrow_planning_text() -> String:
 	return "Tomorrow planning: %s" % "; ".join(DailyReportPolicy.get_tomorrow_recommendations(self))
+
+
+func get_daily_cash_pressure_rules() -> Array[Dictionary]:
+	return [
+		{
+			"expense_id": "rent_reserve",
+			"label": "Rent reserve",
+			"category": "rent",
+			"amount_cents": DAILY_RENT_RESERVE_CENTS,
+			"due_timing": "daily close reserve",
+		},
+		{
+			"expense_id": "utilities_reserve",
+			"label": "Utilities",
+			"category": "bill",
+			"amount_cents": DAILY_UTILITIES_RESERVE_CENTS,
+			"due_timing": "daily close reserve",
+		},
+		{
+			"expense_id": "payroll_placeholder",
+			"label": "Payroll placeholder",
+			"category": "payroll",
+			"amount_cents": DAILY_PAYROLL_PLACEHOLDER_CENTS,
+			"due_timing": "owner-operated placeholder",
+		},
+		{
+			"expense_id": "repairs_placeholder",
+			"label": "Repairs placeholder",
+			"category": "repairs",
+			"amount_cents": DAILY_REPAIRS_PLACEHOLDER_CENTS,
+			"due_timing": "future maintenance hook",
+		},
+		{
+			"expense_id": "shrinkage_placeholder",
+			"label": "Shrinkage placeholder",
+			"category": "shrinkage",
+			"amount_cents": DAILY_SHRINKAGE_PLACEHOLDER_CENTS,
+			"due_timing": "future loss hook",
+		},
+	]
+
+
+func get_daily_cash_pressure_cents() -> int:
+	var total := 0
+	for rule in get_daily_cash_pressure_rules():
+		total += int(rule.get("amount_cents", 0))
+	return total
+
+
+func get_operating_expenses() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for expense in operating_expenses:
+		rows.append(expense.duplicate(true))
+	return rows
+
+
+func replace_operating_expenses(expenses: Array) -> void:
+	operating_expenses.clear()
+	for expense in expenses:
+		if typeof(expense) == TYPE_DICTIONARY:
+			var row: Dictionary = expense
+			operating_expenses.append(row.duplicate(true))
+
+
+func get_operating_expenses_total_cents(day: int = 0) -> int:
+	var total := 0
+	for expense in operating_expenses:
+		if day > 0 and int(expense.get("day_number", 0)) != day:
+			continue
+		total += int(expense.get("amount_cents", 0))
+	return total
+
+
+func get_reserved_obligations_cents() -> int:
+	var total := 0
+	for order in get_pending_supplier_orders():
+		total += int(order.get("cost_cents", 0))
+	for order in get_pending_fixture_orders():
+		total += int(order.get("cost_cents", 0))
+	for allocation in release_allocations:
+		if str(allocation.get("status", "committed")) == "committed":
+			total += int(allocation.get("total_cost_cents", 0))
+	return total
+
+
+func get_cash_pressure_summary_text() -> String:
+	var lines: Array[String] = ["Cash pressure:"]
+	lines.append("Daily overhead due at close: %s" % format_money(get_daily_cash_pressure_cents()))
+	for rule in get_daily_cash_pressure_rules():
+		lines.append("%s: %s (%s)" % [
+			str(rule.get("label", "Expense")),
+			format_money(int(rule.get("amount_cents", 0))),
+			str(rule.get("due_timing", "daily")),
+		])
+	lines.append("Supplier terms: current starter lots are prepaid; receiving/storage time is the constraint")
+	lines.append("Reserved obligations: %s" % format_money(get_reserved_obligations_cents()))
+	if operating_expenses.is_empty():
+		lines.append("Posted operating expenses: none")
+	else:
+		lines.append("Posted operating expenses: %s total" % format_money(get_operating_expenses_total_cents()))
+	return "\n".join(lines)
 
 
 func get_cash_cents() -> int:
@@ -1092,7 +1200,7 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d - %s | Phase: %s\nCash: %s | Reputation: %d\nSales: %d | Trade-ins: %d | Preorders: %d | Services: %d | Release allocations: %d | Launch events: %d\nRevenue: %s | Cost: %s | Profit: %s\nTrade cash: %s | Store credit: %s\nPreorder deposits: %s | Services revenue: %s | Services profit: %s\nAllocation cost: %s | Launch cash: %s | Launch profit: %s" % [
+	return "Day %d - %s | Phase: %s\nCash: %s | Reputation: %d\nSales: %d | Trade-ins: %d | Preorders: %d | Services: %d | Release allocations: %d | Launch events: %d\nRevenue: %s | Cost: %s | Profit: %s\nTrade cash: %s | Store credit: %s\nPreorder deposits: %s | Services revenue: %s | Services profit: %s\nAllocation cost: %s | Launch cash: %s | Launch profit: %s\nOperating expenses: %s | Reserved obligations: %s" % [
 		day_number,
 		get_status_label(),
 		get_day_phase_label(),
@@ -1115,6 +1223,8 @@ func get_summary_text() -> String:
 		format_money(get_total_release_allocation_cost_cents()),
 		format_money(get_total_launch_revenue_cents()),
 		format_money(get_total_launch_profit_cents()),
+		format_money(get_operating_expenses_total_cents()),
+		format_money(get_reserved_obligations_cents()),
 	]
 
 
@@ -1207,6 +1317,38 @@ func _format_opening_summary(delivered_orders: Array[Dictionary], resolved_launc
 		delivered_orders.size(),
 		resolved_launches.size(),
 	]
+
+
+func _apply_end_day_cash_pressure() -> void:
+	if _has_operating_expenses_for_day(day_number):
+		return
+
+	var total := 0
+	for rule in get_daily_cash_pressure_rules():
+		var amount := int(rule.get("amount_cents", 0))
+		if amount <= 0:
+			continue
+
+		var expense := {
+			"expense_id": str(rule.get("expense_id", "expense")),
+			"label": str(rule.get("label", "Expense")),
+			"category": str(rule.get("category", "operating")),
+			"amount_cents": amount,
+			"day_number": day_number,
+			"status": "posted",
+		}
+		operating_expenses.append(expense)
+		total += amount
+
+	if total > 0:
+		cash_cents = get_cash_cents() - total
+
+
+func _has_operating_expenses_for_day(day: int) -> bool:
+	for expense in operating_expenses:
+		if int(expense.get("day_number", 0)) == day:
+			return true
+	return false
 
 
 func _process_due_launches() -> Array[Dictionary]:

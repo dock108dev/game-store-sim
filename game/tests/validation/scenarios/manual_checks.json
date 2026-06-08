@@ -521,6 +521,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "cash_pressure_readability",
+      "name": "Operating expenses, reserved obligations, and bill language create clear but recoverable cash pressure",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify posted overhead and summary text; human review must confirm the report and backroom wording explain cash pressure without hiding item gross profit or making the day feel unrecoverable.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_inventory_summary_readability",
       "name": "Backroom inventory summary is readable and matches visible active inventory",
       "status": "manual",

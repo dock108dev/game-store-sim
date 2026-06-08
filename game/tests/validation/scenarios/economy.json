@@ -83,6 +83,20 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_market_drift"
+    },
+    {
+      "id": "daily_cash_pressure_posts_once",
+      "name": "Daily cash pressure posts operating expenses once on close",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_applies_daily_cash_pressure_once_on_close"
+    },
+    {
+      "id": "cash_pressure_reserved_obligations",
+      "name": "Cash pressure summary includes rent, bills, supplier terms, payroll, repairs, shrinkage, and reserved obligations",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_cash_pressure_and_reserved_obligations"
     }
   ]
 }
