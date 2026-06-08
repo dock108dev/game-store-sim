@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @export var move_speed: float = 4.5
 @export var mouse_sensitivity: float = 0.0025
+@export var invert_look: bool = false
 @export var max_held_items: int = 3
 
 @onready var head: Node3D = $Head
@@ -9,6 +10,7 @@ extends CharacterBody3D
 @onready var pricing_panel: PricingPanel = $PricingPanel
 @onready var day_summary_panel: Node = $DaySummaryPanel
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
+@onready var settings_panel: SettingsPanel = $SettingsPanel
 
 const CARRY_BASE_SCALE := 0.45
 const CARRY_DEPTH_SCALE_STEP := 0.025
@@ -33,7 +35,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("ui_cancel"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		open_settings_panel()
 		return
 
 	if event is InputEventMouseButton and event.pressed:
@@ -41,7 +43,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * mouse_sensitivity)
-		_look_pitch = clampf(_look_pitch - event.relative.y * mouse_sensitivity, -1.35, 1.35)
+		var look_direction := -1.0 if invert_look else 1.0
+		_look_pitch = clampf(_look_pitch - event.relative.y * mouse_sensitivity * look_direction, -1.35, 1.35)
 		head.rotation.x = _look_pitch
 
 
@@ -147,6 +150,36 @@ func is_trade_in_offer_open() -> bool:
 	return trade_in_offer_panel != null and trade_in_offer_panel.is_open()
 
 
+func is_settings_open() -> bool:
+	return settings_panel != null and settings_panel.is_open()
+
+
+func open_settings_panel() -> String:
+	if settings_panel == null:
+		return "Settings unavailable."
+
+	if settings_panel.open_for_player(self):
+		return ""
+
+	return "Settings unavailable."
+
+
+func get_mouse_sensitivity() -> float:
+	return mouse_sensitivity
+
+
+func set_mouse_sensitivity(value: float) -> void:
+	mouse_sensitivity = clampf(value, 0.0005, 0.01)
+
+
+func get_invert_look() -> bool:
+	return invert_look
+
+
+func set_invert_look(value: bool) -> void:
+	invert_look = value
+
+
 func open_pricing_for_held_item() -> String:
 	var held_item := get_held_item()
 	if held_item == null:
@@ -201,7 +234,7 @@ func interact_with_held_item() -> String:
 
 
 func _is_modal_open() -> bool:
-	return is_pricing_open() or is_day_summary_open() or is_trade_in_offer_open()
+	return is_pricing_open() or is_day_summary_open() or is_trade_in_offer_open() or is_settings_open()
 
 
 func _close_active_modal() -> void:
@@ -215,6 +248,10 @@ func _close_active_modal() -> void:
 
 	if is_trade_in_offer_open():
 		trade_in_offer_panel.close()
+		return
+
+	if is_settings_open():
+		settings_panel.close()
 
 
 func _arrange_held_items() -> void:

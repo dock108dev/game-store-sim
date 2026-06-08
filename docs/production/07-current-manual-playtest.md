@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this fixture placement controls pass: `scripts/validate_godot.sh` passed with 306 GUT tests, UI scenario coverage 309/365, and script mapping coverage 31/31.
+- Last full gate in this input/settings baseline pass: `scripts/validate_godot.sh` passed with 314 GUT tests, UI scenario coverage 317/373, and script mapping coverage 32/32.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -12,70 +12,72 @@ Current automated baseline:
 - Pickup/place feedback is implemented through Stop 3.3; manual QA should confirm hover highlights, incompatible-stock feedback, and stocking confirmation messages are visible without reading as separate interaction targets.
 - Workstation transitions are implemented through Stop 3.4; manual QA should confirm pricing, trade-in appraisal, and backroom computer panels enter with usable focus and exit back to captured first-person control.
 - Fixture placement controls are implemented through Stop 3.5; manual QA should confirm movement, rotation, snap, cancel, and place controls are readable and that cancel clears the ghost while refunding cash.
+- Input/settings baseline is implemented through Stop 3.6; manual QA should confirm Escape opens settings, sensitivity/invert/window controls work, and closing settings returns to captured first-person control.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
 ## Full Loop
 
 1. Start the main scene.
-2. Confirm the front door still blocks exit from the playable store.
-3. Aim the center reticle at multiple `Star Trader` copies in the receiving box, click to pick them up, and confirm the carry stack stays low/right.
-4. Click to open pricing from the active held item when no world target is selected.
-5. Adjust the price, optionally enable apply-to-matching, apply it, and confirm mouse capture returns.
-6. On a fresh run or before the sale loop, overprice one `Star Trader` above market tolerance, click to stock it, and confirm a buyer leaves it on the rack with readable feedback.
-7. Click to stock a fairly priced game in an empty display rack slot.
-8. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
-9. Price and stock the next carried `Star Trader`.
-10. Confirm a second buyer walks to the rack and queues with readable spacing.
-11. Aim at the register and click to ring up the first buyer.
-12. Aim at the register and click to ring up the second buyer.
-13. Confirm sold items are gone from the rack and no longer inspectable.
-14. Click the register when no buyer is queued and review the seller trade-in offer.
-15. Confirm the offer panel shows condition, demand, market value, cash offer, and store-credit offer.
-16. Use `+ $1` and `- $1` in the trade-in panel and confirm only the cash offer updates.
-17. Accept the adjusted cash trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
-18. On a fresh run, accept the store-credit trade-in and confirm cash does not decrease while the acquired item appears in the receiving box.
-19. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
-20. Open the backroom computer.
-21. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
-22. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier.
-23. Clear the trade-in queue by accepting or declining it, then click the register and take the `Neon Skyline` preorder deposit.
-24. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the register message reads as a preorder deposit rather than a sale.
-25. Open the backroom computer and confirm preorder count and preorder deposits are readable.
-26. Confirm the preorder flow clearly reads as an obligation before launch day, not an immediate sale.
-27. Clear the preorder queue, then click the register and complete the `Disc Resurfacing` service request.
-28. Confirm the service message names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
-29. Open the backroom computer and confirm service revenue, service cost, service profit, and recent activity are readable.
-30. End the day and confirm the closed-day report includes service count, service revenue, service cost, and service profit.
-31. Use `Commit Release` on the backroom computer and confirm cash drops by `$32.00`.
-32. Confirm the backroom computer lists `Neon Skyline x1 committed $32.00 due day 3` and `Release allocations: 1`.
-33. Press `Commit Release` up to the `Neon Skyline` allocation limit and confirm it stops accepting commitments after four total copies.
-34. Confirm allocation commitment reads as launch planning, not stocked inventory, completed preorder fulfillment, or a launch-day sale.
-35. End day 1, start day 2, end day 2, then start day 3 and confirm the launch resolves.
-36. Confirm `Neon Skyline` preorders fulfill first, surplus allocation copies sell to launch queue demand, launch cash/profit appears, and reputation remains stable when demand is covered.
-37. On a fresh run, commit only one launch allocation before day 3 and confirm missed demand reduces reputation with readable launch-event text.
-38. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
-39. Confirm the backroom computer lists `Game Display Rack` under pending storage placement and does not imply the rack was already placed.
-40. Confirm a translucent rack ghost appears on the sales floor as a pending storage placement preview.
-41. Use `Left`, `Right`, `Fwd`, `Back`, `Rotate`, and `Snap` under Storage Placement and confirm the preview moves on the grid, rotates cleanly, and remains readable.
-42. Use `Cancel` under Storage Placement and confirm the ghost disappears, pending placement clears, and the `$125.00` rack cost is refunded.
-43. Order another rack, use `Place Rack`, and confirm a real game display rack appears where the green ghost was.
-44. Reopen the backroom computer and confirm pending storage placement is cleared and the rack is listed as placed.
-45. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
-46. Confirm rotated and snapped ghost states remain aligned to the floor grid.
-47. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
-48. Confirm the market drift readout is readable and makes sense for active inventory.
-49. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
-50. Confirm pending receiving says `Used Game Starter Lot`, due day 2, with 3 items.
-51. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
-52. End the day and confirm the summary changes to `Day closed`.
-53. Confirm the closed-day report is readable and matches the played day.
-54. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
-55. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
-56. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
-57. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
-58. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
-59. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
+2. Press Escape, confirm settings opens, adjust sensitivity/invert/window mode, close settings, and confirm first-person mouse capture returns.
+3. Confirm the front door still blocks exit from the playable store.
+4. Aim the center reticle at multiple `Star Trader` copies in the receiving box, click to pick them up, and confirm the carry stack stays low/right.
+5. Click to open pricing from the active held item when no world target is selected.
+6. Adjust the price, optionally enable apply-to-matching, apply it, and confirm mouse capture returns.
+7. On a fresh run or before the sale loop, overprice one `Star Trader` above market tolerance, click to stock it, and confirm a buyer leaves it on the rack with readable feedback.
+8. Click to stock a fairly priced game in an empty display rack slot.
+9. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
+10. Price and stock the next carried `Star Trader`.
+11. Confirm a second buyer walks to the rack and queues with readable spacing.
+12. Aim at the register and click to ring up the first buyer.
+13. Aim at the register and click to ring up the second buyer.
+14. Confirm sold items are gone from the rack and no longer inspectable.
+15. Click the register when no buyer is queued and review the seller trade-in offer.
+16. Confirm the offer panel shows condition, demand, market value, cash offer, and store-credit offer.
+17. Use `+ $1` and `- $1` in the trade-in panel and confirm only the cash offer updates.
+18. Accept the adjusted cash trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
+19. On a fresh run, accept the store-credit trade-in and confirm cash does not decrease while the acquired item appears in the receiving box.
+20. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
+21. Open the backroom computer.
+22. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
+23. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier.
+24. Clear the trade-in queue by accepting or declining it, then click the register and take the `Neon Skyline` preorder deposit.
+25. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the register message reads as a preorder deposit rather than a sale.
+26. Open the backroom computer and confirm preorder count and preorder deposits are readable.
+27. Confirm the preorder flow clearly reads as an obligation before launch day, not an immediate sale.
+28. Clear the preorder queue, then click the register and complete the `Disc Resurfacing` service request.
+29. Confirm the service message names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
+30. Open the backroom computer and confirm service revenue, service cost, service profit, and recent activity are readable.
+31. End the day and confirm the closed-day report includes service count, service revenue, service cost, and service profit.
+32. Use `Commit Release` on the backroom computer and confirm cash drops by `$32.00`.
+33. Confirm the backroom computer lists `Neon Skyline x1 committed $32.00 due day 3` and `Release allocations: 1`.
+34. Press `Commit Release` up to the `Neon Skyline` allocation limit and confirm it stops accepting commitments after four total copies.
+35. Confirm allocation commitment reads as launch planning, not stocked inventory, completed preorder fulfillment, or a launch-day sale.
+36. End day 1, start day 2, end day 2, then start day 3 and confirm the launch resolves.
+37. Confirm `Neon Skyline` preorders fulfill first, surplus allocation copies sell to launch queue demand, launch cash/profit appears, and reputation remains stable when demand is covered.
+38. On a fresh run, commit only one launch allocation before day 3 and confirm missed demand reduces reputation with readable launch-event text.
+39. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
+40. Confirm the backroom computer lists `Game Display Rack` under pending storage placement and does not imply the rack was already placed.
+41. Confirm a translucent rack ghost appears on the sales floor as a pending storage placement preview.
+42. Use `Left`, `Right`, `Fwd`, `Back`, `Rotate`, and `Snap` under Storage Placement and confirm the preview moves on the grid, rotates cleanly, and remains readable.
+43. Use `Cancel` under Storage Placement and confirm the ghost disappears, pending placement clears, and the `$125.00` rack cost is refunded.
+44. Order another rack, use `Place Rack`, and confirm a real game display rack appears where the green ghost was.
+45. Reopen the backroom computer and confirm pending storage placement is cleared and the rack is listed as placed.
+46. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
+47. Confirm rotated and snapped ghost states remain aligned to the floor grid.
+48. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
+49. Confirm the market drift readout is readable and makes sense for active inventory.
+50. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
+51. Confirm pending receiving says `Used Game Starter Lot`, due day 2, with 3 items.
+52. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
+53. End the day and confirm the summary changes to `Day closed`.
+54. Confirm the closed-day report is readable and matches the played day.
+55. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
+56. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
+57. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
+58. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
+59. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
+60. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
 
 ## Visual Checks
 
@@ -180,6 +182,7 @@ Run these first when manually checking the completed Stop 3.1 through Stop 3.3 i
 - Confirm stocking a valid item produces a clear landing confirmation naming the stocked item and slot.
 - Confirm pricing, trade-in appraisal, and backroom computer panels do not strand mouse focus after Apply, Cancel, Close, Accept, Decline, End Day, or Escape.
 - Confirm fixture placement `Cancel` clears the ghost preview, restores the reserved cash, and does not look like placing a rack.
+- Confirm settings text/buttons are readable, sensitivity changes feel noticeable but not extreme, invert look reverses vertical mouse movement, and window toggle is understandable.
 
 ## Backroom Polish Focus
 

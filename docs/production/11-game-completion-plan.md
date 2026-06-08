@@ -215,7 +215,7 @@ Stops:
 - Stop 3.3: Pickup/place feedback. Done in `Polish pickup place feedback`: raycast hover ownership, product and slot hover highlights, incompatible-stock blocked prompts, and stocked-item landing confirmations are implemented and validated.
 - Stop 3.4: Workstation transitions. Done in `Polish workstation transitions`: pricing, trade-in appraisal, and backroom computer panels now expose open/closed transition state, enter with visible mouse and focused controls, release focus on close, and restore captured first-person mouse.
 - Stop 3.5: Fixture placement feel. Done in `Polish fixture placement controls`: storage placement now includes a backroom `Cancel` control, manager/session cancel flow, cash refund, ghost clear, and automated coverage for manager, session, and panel behavior.
-- Stop 3.6: Input/settings baseline. Add remappable input data, mouse sensitivity, invert look, fullscreen/window controls, and pause/settings access.
+- Stop 3.6: Input/settings baseline. Done in `Add input settings baseline`: added a settings panel, pause/settings access from cancel, sensitivity and invert-look preferences, window-mode toggle request, remappable input binding data, and automated/script coverage.
 - Stop 3.7: Interaction validation sync. Update automation and manual checks for all changed input flows.
 
 Acceptance:

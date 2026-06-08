@@ -42,9 +42,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 306 GUT tests.
-- UI scenario automation coverage is 309/365, above the required 80% threshold.
-- Production script mapping coverage is 31/31.
+- `scripts/validate_godot.sh` passes with 314 GUT tests.
+- UI scenario automation coverage is 317/373, above the required 80% threshold.
+- Production script mapping coverage is 32/32.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
 ## Manual Validation
@@ -53,7 +53,9 @@ Automated checks do not replace player-feel review. For the current graybox stag
 
 - WASD movement feel.
 - Mouse-look feel.
-- Escape releases mouse capture and mouse click recaptures it.
+- Escape opens the settings panel, and closing settings returns to captured first-person mouse control.
+- Settings sensitivity, invert look, and fullscreen/window controls are readable and understandable.
+- Remappable input binding data lists core movement, interaction, and pause/settings actions.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.

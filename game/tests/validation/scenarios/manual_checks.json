@@ -18,10 +18,10 @@
     },
     {
       "id": "mouse_capture_cycle",
-      "name": "Escape releases mouse capture and click recaptures it",
+      "name": "Escape opens settings and settings close returns to captured mouse",
       "status": "manual",
       "critical": false,
-      "reason": "Current automated input checks do not exercise OS-level mouse capture reliably.",
+      "reason": "Automated checks cover panel state and requested mouse mode; human review must confirm OS-level mouse capture and click feel in the actual window.",
       "owner": "manual QA"
     },
     {

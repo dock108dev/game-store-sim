@@ -59,6 +59,12 @@ func test_trade_in_offer_panel_exists() -> void:
 	assert_false(trade_in_offer_panel.visible)
 
 
+func test_settings_panel_exists() -> void:
+	var settings_panel := _player.get_node_or_null("SettingsPanel") as SettingsPanel
+	assert_not_null(settings_panel)
+	assert_false(settings_panel.visible)
+
+
 func test_keyboard_input_actions_exist() -> void:
 	for action in REQUIRED_ACTIONS:
 		assert_true(InputMap.has_action(action), "%s should exist" % action)
@@ -266,6 +272,26 @@ func test_player_rejects_fixed_price_held_item() -> void:
 	assert_true(_player.pick_up_item(item))
 	assert_eq(_player.get_held_item_interaction_prompt(), "Fixed Price Item")
 	assert_eq(_player.open_pricing_for_held_item(), "This item cannot be priced.")
+
+
+func test_player_opens_and_closes_settings_from_cancel_action() -> void:
+	var event := InputEventAction.new()
+	event.action = "ui_cancel"
+	event.pressed = true
+
+	_player._unhandled_input(event)
+	assert_true(_player.is_settings_open())
+
+	_player._unhandled_input(event)
+	assert_false(_player.is_settings_open())
+
+
+func test_player_look_settings_update_sensitivity_and_invert() -> void:
+	_player.set_mouse_sensitivity(0.0035)
+	_player.set_invert_look(true)
+
+	assert_almost_eq(_player.get_mouse_sensitivity(), 0.0035, 0.00001)
+	assert_true(_player.get_invert_look())
 
 
 func test_player_opens_day_summary() -> void:

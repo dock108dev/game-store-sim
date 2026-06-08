@@ -218,6 +218,13 @@
         "res://tests/gut/test_trade_in_offer_panel.gd"
       ],
       "critical": true
+    },
+    {
+      "script": "res://scripts/ui/settings_panel.gd",
+      "tests": [
+        "res://tests/gut/test_settings_panel.gd"
+      ],
+      "critical": true
     }
   ]
 }

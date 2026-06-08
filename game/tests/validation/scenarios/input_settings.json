@@ -1,0 +1,60 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "settings_panel_exists",
+      "name": "Player has a hidden settings panel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_settings_panel_exists"
+    },
+    {
+      "id": "settings_panel_starts_hidden",
+      "name": "Settings panel starts hidden and closed",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_starts_hidden"
+    },
+    {
+      "id": "settings_panel_modal_transition",
+      "name": "Settings panel opens with visible mouse and focus, then closes back to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_opens_with_mouse_focus_and_player_values"
+    },
+    {
+      "id": "settings_panel_adjusts_preferences",
+      "name": "Settings panel updates sensitivity, invert look, and window mode request",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_updates_sensitivity_invert_and_window_mode"
+    },
+    {
+      "id": "settings_panel_close_transition",
+      "name": "Settings panel closes by releasing focus and requesting captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_closes_to_captured_mouse_and_releases_focus"
+    },
+    {
+      "id": "input_binding_catalog",
+      "name": "Default input binding catalog lists remappable core actions",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_input_binding_catalog_has_remappable_core_actions"
+    },
+    {
+      "id": "player_pause_settings_access",
+      "name": "Player opens and closes settings from the cancel action",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_and_closes_settings_from_cancel_action"
+    },
+    {
+      "id": "player_look_preferences",
+      "name": "Player exposes sensitivity and invert-look preferences",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_look_settings_update_sensitivity_and_invert"
+    }
+  ]
+}
