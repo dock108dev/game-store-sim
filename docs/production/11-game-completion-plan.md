@@ -494,6 +494,7 @@ Stops:
 - Stop 10.3: Choice points. Done in `Add hidden choice paths`: added ignore, document, sell-as-normal, isolate, report, accept-cash, reject-goods, and supplier follow-up choice paths; StoreSession records and deduplicates choices; Records shows available paths and recorded choices; save/load preserves recorded hidden choices.
 - Stop 10.4: Consequences. Done in `Add hidden consequences`: added consequence rules for reputation, cash, supplier access, customer trust, inspection risk, and story state; recorded choices now apply consequences once, Records shows consequence summaries, and save/load preserves consequence events and hidden state scores.
 - Stop 10.5: Optionality guard. Done in `Guard hidden thread optionality`: StoreSession and Records now explicitly state hidden-thread progression is not required, the retail loop is not blocked, and normal receiving, pricing, stocking, register, ordering, storage, services, reports, and day progression remain available.
+- Stop 10.6: Hidden-thread validation sync. Done in `Sync hidden thread validation`: added a validation-sync GUT audit for hidden-thread flags, dedupe, persistence, optionality, and manual clue-readability coverage; validation docs, manual checklist, scenario matrix, and backlog status now reflect the completed Milestone 10 pass.
 
 Acceptance:
 
@@ -517,7 +518,8 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 10.3 choice catalog, choice availability, choice recording/deduplication, Records-tab choice display, and save/load preservation.
 - Focused GUT coverage passes for the Stop 10.4 consequence rules, hidden cash/risk/reputation effects, Records-tab consequence display, and save/load preservation.
 - Focused GUT coverage passes for the Stop 10.5 optionality guard, proving hidden-thread content can be ignored without blocking supplier ordering, day close, next-day progression, Records-tab status, or normal retail work.
-- Manual Hidden Thread Focus checks are current for Stop 10.5 rule tone, clue-surface readability, choice-path readability, consequence readability, optionality, nonblocking behavior, and no visible objective escalation.
+- Focused GUT coverage passes for the Stop 10.6 validation-sync audit, proving the scenario matrix and manual checklist retain flags, dedupe, persistence, optionality, and clue-readability coverage.
+- Manual Hidden Thread Focus checks are current for Stop 10.6 rule tone, clue-surface readability, choice-path readability, consequence readability, optionality, nonblocking behavior, validation sync, and no visible objective escalation.
 
 Commit targets:
 
@@ -540,7 +542,7 @@ Stops:
 - Stop 10.3: Choice points. Done in `Add hidden choice paths`: add ignore, document, sell, isolate, report, accept cash, reject goods, and follow-up paths.
 - Stop 10.4: Consequences. Done in `Add hidden consequences`: add reputation, cash, supplier access, customer trust, inspection risk, and story state consequences.
 - Stop 10.5: Optionality guard. Done in `Guard hidden thread optionality`: ensure a normal retail player can ignore the thread without blocked progression.
-- Stop 10.6: Hidden-thread validation sync. Add tests for flags, dedupe, persistence, optionality, and manual clue readability.
+- Stop 10.6: Hidden-thread validation sync. Done in `Sync hidden thread validation`: add tests for flags, dedupe, persistence, optionality, and manual clue readability.
 
 Acceptance:
 

@@ -293,6 +293,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_shows_hidden_optionality_guard"
+    },
+    {
+      "id": "hidden_thread_validation_sync",
+      "name": "Hidden-thread validation matrix and manual checklist cover flags, dedupe, persistence, optionality, and clue readability",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_hidden_thread_validation_sync.gd::test_hidden_thread_validation_matrix_covers_flags_dedupe_persistence_and_optionality"
     }
   ]
 }
