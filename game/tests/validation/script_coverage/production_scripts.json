@@ -336,6 +336,14 @@
       "critical": true
     },
     {
+      "script": "res://scripts/ui/pause_menu_panel.gd",
+      "tests": [
+        "res://tests/gut/test_pause_menu_panel.gd",
+        "res://tests/gut/test_player_controller.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/ui/register_checkout_panel.gd",
       "tests": [
         "res://tests/gut/test_register_checkout_panel.gd",

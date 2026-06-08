@@ -608,7 +608,7 @@ Stops:
 - Stop 12.1: Save slot UI. Done in `Add save slot UI`: add new game, continue, save slot list, overwrite, delete, and save metadata.
 - Stop 12.2: Save migration policy. Done in `Add save migration policy`: version save data and add migration/failure handling.
 - Stop 12.3: Settings menu. Done in `Add settings menu`: add audio, display, controls, mouse, accessibility, and reset defaults.
-- Stop 12.4: Pause and main menu. Add pause state, resume, settings, quit, main menu, and safe mouse capture transitions.
+- Stop 12.4: Pause and main menu. Done in `Add pause main menu`: add pause state, resume, settings, quit, main menu, and safe mouse capture transitions.
 - Stop 12.5: Build/export pipeline. Add desktop export settings and a local build verification script.
 - Stop 12.6: Release validation sync. Add launch-from-build smoke, save/load smoke, and manual release checklist.
 
@@ -634,7 +634,8 @@ Validation snapshot:
 - Manual Save/Load Focus checks are current for slot metadata readability, New Game overwrite protection, explicit overwrite/delete review, continue-scope clarity, and mouse capture restoration.
 - Focused GUT coverage passes for the Stop 12.2 current save version, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed JSON failure state, and migration-policy summary text.
 - Focused GUT coverage passes for the Stop 12.3 audio/display/mouse/accessibility controls, settings profile persistence, reset bindings/defaults, modal focus, and player settings application.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 483 GUT tests, UI scenario automation coverage 450/555, and production script mapping coverage 49/49.
+- Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 489 GUT tests, UI scenario automation coverage 454/560, and production script mapping coverage 50/50.
 
 ## Milestone 13: Alpha Hardening
 

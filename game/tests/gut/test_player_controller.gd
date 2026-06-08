@@ -123,6 +123,12 @@ func test_settings_panel_exists() -> void:
 	assert_false(settings_panel.visible)
 
 
+func test_pause_menu_panel_exists() -> void:
+	var pause_menu_panel := _player.get_node_or_null("PauseMenuPanel")
+	assert_not_null(pause_menu_panel)
+	assert_false(pause_menu_panel.visible)
+
+
 func test_save_slot_panel_exists() -> void:
 	var save_slot_panel := _player.get_node_or_null("SaveSlotPanel")
 	assert_not_null(save_slot_panel)
@@ -367,16 +373,40 @@ func test_player_opens_register_checkout() -> void:
 	assert_true(_player.is_register_checkout_open())
 
 
-func test_player_opens_and_closes_settings_from_cancel_action() -> void:
+func test_player_opens_and_closes_pause_menu_from_cancel_action() -> void:
 	var event := InputEventAction.new()
 	event.action = "ui_cancel"
 	event.pressed = true
 
 	_player._unhandled_input(event)
-	assert_true(_player.is_settings_open())
+	assert_true(_player.is_pause_menu_open())
 
 	_player._unhandled_input(event)
+	assert_false(_player.is_pause_menu_open())
+
+
+func test_player_pause_menu_opens_settings_save_slots_main_menu_and_quit() -> void:
+	assert_eq(_player.open_pause_menu(), "")
+	var pause_menu := _player.get_node("PauseMenuPanel")
+	assert_true(pause_menu.request_settings())
+	assert_true(_player.is_settings_open())
+
+	_player.call("_close_active_modal")
 	assert_false(_player.is_settings_open())
+
+	assert_eq(_player.open_pause_menu(), "")
+	assert_true(pause_menu.request_save_load())
+	assert_true(_player.is_save_slot_open())
+
+	_player.call("_close_active_modal")
+	assert_false(_player.is_save_slot_open())
+
+	assert_eq(_player.open_main_menu(), "")
+	assert_true(_player.is_pause_menu_open())
+	assert_true(pause_menu.is_main_menu_mode())
+
+	assert_true(pause_menu.request_quit())
+	assert_true(_player.has_quit_request())
 
 
 func test_player_opens_save_slot_panel() -> void:

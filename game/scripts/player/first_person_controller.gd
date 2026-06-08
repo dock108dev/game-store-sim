@@ -22,6 +22,7 @@ extends CharacterBody3D
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 @onready var settings_panel: SettingsPanel = $SettingsPanel
 @onready var save_slot_panel: Node = $SaveSlotPanel
+@onready var pause_menu_panel: Node = $PauseMenuPanel
 @onready var interaction_audio: Node = $InteractionAudioFeedback
 @onready var presentation_microfeedback: Node = $PresentationMicrofeedback
 
@@ -49,12 +50,14 @@ var _camera_feel_time: float = 0.0
 var _camera_motion_weight: float = 0.0
 var _camera_workstation_focus_weight: float = 0.0
 var _head_base_position: Vector3 = Vector3.ZERO
+var _quit_requested: bool = false
 
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	_head_base_position = head.position
 	camera.fov = clampf(comfort_fov, CAMERA_MIN_FOV, CAMERA_MAX_FOV)
+	_connect_pause_menu()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -64,7 +67,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("ui_cancel"):
-		open_settings_panel()
+		open_pause_menu()
 		return
 
 	if event is InputEventMouseButton and event.pressed:
@@ -201,6 +204,10 @@ func is_save_slot_open() -> bool:
 	return save_slot_panel != null and save_slot_panel.is_open()
 
 
+func is_pause_menu_open() -> bool:
+	return pause_menu_panel != null and pause_menu_panel.is_open()
+
+
 func open_settings_panel() -> String:
 	if settings_panel == null:
 		return "Settings unavailable."
@@ -209,6 +216,34 @@ func open_settings_panel() -> String:
 		return ""
 
 	return "Settings unavailable."
+
+
+func open_pause_menu() -> String:
+	if pause_menu_panel == null:
+		return "Pause menu unavailable."
+
+	if pause_menu_panel.open_pause(self):
+		play_interaction_audio("button_click")
+		return ""
+
+	play_interaction_audio("error")
+	return "Pause menu unavailable."
+
+
+func open_main_menu() -> String:
+	if pause_menu_panel == null:
+		return "Main menu unavailable."
+
+	if pause_menu_panel.open_main_menu(self):
+		play_interaction_audio("button_click")
+		return ""
+
+	play_interaction_audio("error")
+	return "Main menu unavailable."
+
+
+func has_quit_request() -> bool:
+	return _quit_requested
 
 
 func open_save_slot_panel(store_session: StoreSession = null) -> String:
@@ -405,7 +440,8 @@ func _is_modal_open() -> bool:
 		or is_day_summary_open() \
 		or is_trade_in_offer_open() \
 		or is_settings_open() \
-		or is_save_slot_open()
+		or is_save_slot_open() \
+		or is_pause_menu_open()
 
 
 func _close_active_modal() -> void:
@@ -431,6 +467,42 @@ func _close_active_modal() -> void:
 
 	if is_save_slot_open():
 		save_slot_panel.close()
+		return
+
+	if is_pause_menu_open():
+		pause_menu_panel.resume_game()
+
+
+func _connect_pause_menu() -> void:
+	if pause_menu_panel == null:
+		return
+	pause_menu_panel.settings_requested.connect(_on_pause_settings_requested)
+	pause_menu_panel.save_load_requested.connect(_on_pause_save_load_requested)
+	pause_menu_panel.quit_requested.connect(_on_pause_quit_requested)
+	pause_menu_panel.start_requested.connect(_on_pause_start_requested)
+	pause_menu_panel.resume_requested.connect(_on_pause_resume_requested)
+
+
+func _on_pause_settings_requested() -> void:
+	open_settings_panel()
+
+
+func _on_pause_save_load_requested() -> void:
+	open_save_slot_panel()
+
+
+func _on_pause_quit_requested() -> void:
+	_quit_requested = true
+	play_interaction_audio("button_click")
+
+
+func _on_pause_start_requested() -> void:
+	_quit_requested = false
+	play_interaction_audio("button_click")
+
+
+func _on_pause_resume_requested() -> void:
+	play_interaction_audio("button_click")
 
 
 func _arrange_held_items() -> void:

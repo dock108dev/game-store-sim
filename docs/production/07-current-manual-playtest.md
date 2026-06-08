@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings pass: `scripts/validate_godot.sh` passes with 483 GUT tests, UI scenario automation coverage at 450/555, production script mapping coverage at 49/49, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this save/load/settings/menu pass: `scripts/validate_godot.sh` passes with 489 GUT tests, UI scenario automation coverage at 454/560, production script mapping coverage at 50/50, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -12,7 +12,7 @@ Current automated baseline:
 - Pickup/place feedback is implemented through Stop 3.3; manual QA should confirm hover highlights, incompatible-stock feedback, and stocking confirmation messages are visible without reading as separate interaction targets.
 - Workstation transitions are implemented through Stop 3.4; manual QA should confirm pricing, trade-in appraisal, and backroom computer panels enter with usable focus and exit back to captured first-person control.
 - Fixture placement controls are implemented through Stop 3.5; manual QA should confirm movement, rotation, snap, cancel, and place controls are readable and that cancel clears the ghost while refunding cash.
-- Input/settings baseline is implemented through Stop 3.6, and the expanded settings menu is implemented through Stop 12.3; manual QA should confirm Escape opens settings; audio, display, controls, mouse, accessibility, persistence, and reset defaults work; and closing settings returns to captured first-person control.
+- Input/settings baseline is implemented through Stop 3.6, the expanded settings menu is implemented through Stop 12.3, and pause/main menu is implemented through Stop 12.4; manual QA should confirm Escape opens pause; Resume, Settings, Save/Load, Main Menu, Start Game, and Quit requests are readable; settings still works; and closing menus returns to captured first-person control.
 - Interaction validation sync is implemented through Stop 3.7; manual QA should run the Interaction Polish Focus section as one full repeated-workflow review.
 - UI component language is implemented through Stop 4.1; manual QA should confirm pricing, trade-in, and backroom computer modals now feel like one production UI family with readable button, panel, disabled, selected, alert, list, stat, and receipt states.
 - Register checkout UI is implemented through Stop 4.2; manual QA should confirm sale, preorder, and service checkout panels show itemized lines, subtotal, tax, total, tender, change due, return placeholder, and confirmation feedback before the transaction completes.
@@ -54,13 +54,14 @@ Current automated baseline:
 - Presentation validation sync is implemented through Stop 11.6; automated checks now audit the presentation scenario matrix, manual readability checks, and docs for the completed audio, VFX, and camera-feel pass.
 - Save slot UI is implemented through Stop 12.1, and save migration policy is implemented through Stop 12.2; manual QA should run the Save/Load Focus checks to confirm new game, continue, overwrite, delete, metadata readability, compatibility/failure copy, and mouse capture transitions work in the actual window.
 - Settings menu is implemented through Stop 12.3; manual QA should run the Settings Focus checks to confirm audio, display, controls, mouse, accessibility, persistence, reset defaults, and modal fit/readability work in the actual window.
+- Pause/main menu is implemented through Stop 12.4; manual QA should run the Pause/Main Menu Focus checks to confirm pause mode, main-menu mode, settings/save-load routing, quit request language, and mouse capture recovery work in the actual window.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
 ## Full Loop
 
 1. Start the main scene.
-2. Press Escape, confirm settings opens, adjust audio/display/mouse/accessibility values, reset defaults, close settings, and confirm first-person mouse capture returns.
+2. Press Escape, confirm the pause menu opens, resume back to play, reopen pause, route into settings, adjust audio/display/mouse/accessibility values, reset defaults, close settings, and confirm first-person mouse capture returns.
 3. Confirm the front door still blocks exit from the playable store.
 4. Aim the center reticle at multiple `Star Trader` copies in the receiving box, click to pick them up, and confirm the carry stack stays low/right.
 5. Click to open pricing from the active held item when no world target is selected.
@@ -153,6 +154,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 90. Open the save slot panel, create a new game slot, continue from it, overwrite it from an active session, delete it, and confirm each state is clearly labeled before and after the action.
 91. Attempt a compatibility or corrupted-save manual smoke when surfaced by the build, and confirm migrated saves load with expected defaults while incompatible or malformed saves fail with clear copy instead of silent data loss.
 92. Open settings, adjust audio, display, mouse, and accessibility values, reset bindings/defaults, close and reopen settings, and confirm the saved values and reset language are readable.
+93. Open pause, test Resume, Settings, Save/Load, Main Menu, Start Game, and Quit request language, and confirm mouse capture returns after every playable exit path.
 
 ## Visual Checks
 
@@ -307,6 +309,17 @@ Run these first when manually checking the completed Stop 12.3 settings menu:
 - Confirm accessibility rows for text scale, high contrast, and reduce motion are readable at 1280x720.
 - Confirm Reset Defaults restores audio, display, mouse, controls, and accessibility values without unclear destructive copy.
 - Confirm settings persist after closing/reopening and closing settings restores captured first-person mouse control.
+
+## Pause/Main Menu Focus
+
+Run these first when manually checking the completed Stop 12.4 pause and main-menu wrapper:
+
+- Confirm Escape opens pause instead of jumping directly to settings.
+- Confirm Resume closes pause and restores captured first-person mouse control.
+- Confirm Settings and Save/Load route from pause into the correct modal surfaces without leaving overlapping panels.
+- Confirm Main Menu switches to a main-menu mode with Start Game, Settings, Save/Load, and Quit readable.
+- Confirm Start Game returns to the playable store with captured mouse.
+- Confirm Quit communicates a request state clearly without looking like a debug crash/exit.
 
 ## Production Target Contract Focus
 

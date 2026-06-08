@@ -839,6 +839,14 @@
       "critical": false,
       "reason": "Automated tests verify section presence, value clamping, player preference application, JSON persistence, bindings reset, defaults reset, modal focus, and accessibility floor; human review must confirm the larger settings surface remains readable at 1280x720 and reset actions do not feel destructive or hidden.",
       "owner": "manual QA"
+    },
+    {
+      "id": "pause_main_menu_readability",
+      "name": "Pause and main menu clearly support resume, start game, settings, save/load, main menu, quit, and mouse capture recovery",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify pause/main-menu modes, button requests, resume/start transitions, modal focus, quit request state, and mouse capture recovery; human review must confirm the menu reads as a release wrapper and not a debug overlay.",
+      "owner": "manual QA"
     }
   ]
 }

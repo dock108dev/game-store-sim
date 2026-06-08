@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, audio, VFX, and presentation feel are complete through Milestone 11, and save/load/settings are complete through Stop 12.3.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, audio, VFX, and presentation feel are complete through Milestone 11, and save/load/settings/pause are complete through Stop 12.4.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -42,7 +42,7 @@ Current completion plan: `11-game-completion-plan.md`.
 10. Store building, decoration, and expansion. Done through Milestone 9.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
-13. Save/load, settings, and release wrapper. Current phase; settings menu done through Stop 12.3.
+13. Save/load, settings, and release wrapper. Current phase; pause/main menu done through Stop 12.4.
 14. Alpha hardening.
 
 ## Completed Polish Scope
@@ -149,7 +149,8 @@ The following polish items remain valid historical checkpoints:
 - Done: synced persistence scenario coverage, script mapping, validation baselines, and manual save-slot UI readability checks for Stop 12.1.
 - Done: added save versioning, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed-save failure state, and migration/failure validation coverage for Stop 12.2.
 - Done: expanded the settings menu with audio, display, controls, mouse, accessibility, reset bindings, reset defaults, file-backed settings persistence, player preference application, and manual validation coverage for Stop 12.3.
-- Remaining polish risk: Stop 12.4 still needs pause state, resume, settings, quit, main menu, and safe mouse capture transitions.
+- Done: added pause/main-menu panel support with Resume, Start Game, Settings, Save/Load, Main Menu, Quit request state, pause/main menu modes, and safe mouse capture transitions for Stop 12.4.
+- Remaining polish risk: Stop 12.5 still needs desktop export settings and a local build verification script.
 
 ## Product And Fixture Polish
 

@@ -44,10 +44,10 @@
     },
     {
       "id": "player_pause_settings_access",
-      "name": "Player opens and closes settings from the cancel action",
+      "name": "Player opens and closes the pause menu from the cancel action",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_and_closes_settings_from_cancel_action"
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_and_closes_pause_menu_from_cancel_action"
     },
     {
       "id": "player_look_preferences",
@@ -76,6 +76,34 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_persists_profile_between_instances"
+    },
+    {
+      "id": "pause_menu_panel_accessibility",
+      "name": "Pause menu panel starts hidden with UI language and accessibility floor",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pause_menu_panel.gd::test_pause_menu_panel_starts_hidden_with_ui_language"
+    },
+    {
+      "id": "pause_menu_resume_transition",
+      "name": "Pause menu opens with visible mouse and resumes to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pause_menu_panel.gd::test_pause_menu_opens_pause_and_resumes_with_mouse_capture"
+    },
+    {
+      "id": "pause_menu_main_menu_mode",
+      "name": "Pause menu supports main-menu mode and start-game transition",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pause_menu_panel.gd::test_pause_menu_opens_main_menu_and_start_returns_to_game"
+    },
+    {
+      "id": "pause_menu_player_actions",
+      "name": "Player pause menu requests settings, save/load, main menu, and quit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_pause_menu_opens_settings_save_slots_main_menu_and_quit"
     }
   ]
 }
