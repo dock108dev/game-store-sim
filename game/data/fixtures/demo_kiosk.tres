@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="FixtureDefinition" format=3 uid="uid://bt6xvbj13v60y"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
+
+[resource]
+script = ExtResource("1_fixture_definition")
+fixture_id = "fixture_demo_kiosk"
+display_name = "Demo Kiosk"
+category = "demo"
+cost_cents = 22000
+footprint_size = Vector2(1.4, 1.1)
+default_slot_category = "demo"
+slot_count = 1
+accepted_product_categories = PackedStringArray("new_game", "hardware", "demo")
+placement_zone = "sales_floor_center"
+gameplay_tags = PackedStringArray("dwell_time_placeholder", "new_release_marketing", "sound_hook")
+scene_path = "res://scenes/props/placeholder_shelf.tscn"
+placeable = true
+placeholder = true
+description = "Playable demo kiosk placeholder for later dwell-time, audio, and new-release promotion effects."

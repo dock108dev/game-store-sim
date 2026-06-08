@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and backroom operations are complete through Milestone 8. The next priority is store building, decoration, and expansion.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, and store building work is underway with the Stop 9.1 fixture catalog.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -96,6 +96,13 @@ The following polish items remain valid historical checkpoints:
 - Done: added controlled retail clutter: posters, price sign, bargain bin, queue mat, and controller display props.
 - Done: kept clutter noninteractive and away from interaction hotspots, shelf slots, prompts, and navigation-critical spaces.
 - Remaining polish risk: human screenshot review should confirm the new signs and clutter compose well from normal player camera angles.
+
+## Store Building And Expansion
+
+- Done: expanded the fixture catalog with wall shelf, accessory peg wall, bargain bin, locked case, counter rack, demo kiosk placeholder, new-release wall, and backroom rack entries.
+- Done: added fixture metadata for slot count, accepted product categories, placement zone, gameplay tags, upgrade locks, placeholder status, and catalog summaries.
+- Done: kept the existing starter rack order/place flow intact while exposing locked future fixtures as planning options.
+- Remaining polish risk: Stop 9.2 still needs stronger placement UX, collision/path validation, undo, and confirmation polish before the expanded catalog feels production-ready in play.
 
 ## Product And Fixture Polish
 

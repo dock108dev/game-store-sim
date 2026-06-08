@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="FixtureDefinition" format=3 uid="uid://b73c6mrgw5pi1"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
+
+[resource]
+script = ExtResource("1_fixture_definition")
+fixture_id = "fixture_bargain_bin"
+display_name = "Bargain Bin"
+category = "impulse"
+cost_cents = 4500
+footprint_size = Vector2(1.25, 1.0)
+default_slot_category = "bargain"
+slot_count = 8
+accepted_product_categories = PackedStringArray("used_game", "loose_disc", "loose_cart", "bargain")
+placement_zone = "sales_floor_center"
+gameplay_tags = PackedStringArray("impulse_browse", "low_price", "bargain")
+scene_path = "res://scenes/props/placeholder_shelf.tscn"
+placeable = true
+description = "Floor bin for low-price used items and impulse browsing near traffic lanes."

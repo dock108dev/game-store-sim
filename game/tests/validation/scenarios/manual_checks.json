@@ -473,6 +473,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "expanded_fixture_catalog_readability",
+      "name": "Expanded fixture catalog entries are readable as store-building options in the backroom computer",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify fixture data, ordering locks, and panel text; human review must confirm the expanded list, slot counts, placement zones, and locked requirements fit the storage tab and read as planning work rather than register work.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_computer_tabs_readability",
       "name": "Backroom computer dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable",
       "status": "manual",

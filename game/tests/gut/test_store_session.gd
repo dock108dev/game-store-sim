@@ -683,11 +683,43 @@ func test_store_session_lists_available_fixture_orders() -> void:
 
 	var fixtures := session.get_available_fixture_definitions()
 
-	assert_eq(fixtures.size(), 1)
+	assert_eq(fixtures.size(), 9)
 	assert_eq(fixtures[0].get("fixture_id"), "fixture_game_display_rack")
 	assert_true(session.can_order_fixture("fixture_game_display_rack"))
+	assert_true(session.can_order_fixture("fixture_wall_shelf"))
+	assert_true(session.can_order_fixture("fixture_bargain_bin"))
+	assert_true(session.can_order_fixture("fixture_locked_case"))
+	assert_true(session.can_order_fixture("fixture_counter_rack"))
+	assert_true(session.can_order_fixture("fixture_demo_kiosk"))
+	assert_true(session.can_order_fixture("fixture_new_release_wall"))
+	assert_false(session.can_order_fixture("fixture_accessory_peg_wall"))
+	assert_false(session.can_order_fixture("fixture_backroom_rack"))
 	assert_string_contains(session.get_fixture_order_summary_text(), "Order Game Display Rack $125.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Wall Shelf $95.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Accessory Peg Wall $80.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "locked:upgrade_fixture_peg_wall")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Bargain Bin $45.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Locked Case $180.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Counter Rack $65.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Demo Kiosk $220.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order New Release Wall $140.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Backroom Rack $100.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "locked:upgrade_backroom_storage")
 	assert_string_contains(session.get_fixture_order_summary_text(), "Pending storage placement: none")
+
+
+func test_store_session_unlocks_upgrade_gated_fixture_orders() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	assert_false(session.can_order_fixture("fixture_accessory_peg_wall"))
+	assert_false(session.can_order_fixture("fixture_backroom_rack"))
+
+	session.purchase_upgrade("upgrade_fixture_peg_wall")
+	session.purchase_upgrade("upgrade_backroom_storage")
+
+	assert_true(session.can_order_fixture("fixture_accessory_peg_wall"))
+	assert_true(session.can_order_fixture("fixture_backroom_rack"))
 
 
 func test_store_session_lists_available_supplier_lots() -> void:
@@ -1048,12 +1080,17 @@ func test_store_session_orders_fixture_and_reserves_cash() -> void:
 	assert_eq(order.get("fixture_id"), "fixture_game_display_rack")
 	assert_eq(order.get("status"), "pending_placement")
 	assert_eq(order.get("slot_category"), "used_game")
+	assert_eq(order.get("slot_count"), 3)
+	assert_eq(order.get("placement_zone"), "sales_floor")
+	assert_true((order.get("gameplay_tags") as Array).has("starter_fixture"))
 	assert_eq(order.get("cost_cents"), 12500)
 	assert_eq(session.get_cash_cents(), 37500)
 	assert_eq(session.get_pending_fixture_orders().size(), 1)
 	assert_string_contains(session.get_fixture_order_summary_text(), "Pending storage placement:")
 	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack $125.00")
 	assert_string_contains(session.get_fixture_order_summary_text(), "slots:used_game")
+	assert_string_contains(session.get_fixture_order_summary_text(), "count:3")
+	assert_string_contains(session.get_fixture_order_summary_text(), "zone:sales_floor")
 
 
 func test_store_session_places_pending_fixture_and_clears_pending_order() -> void:

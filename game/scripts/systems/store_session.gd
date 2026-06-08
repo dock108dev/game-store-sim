@@ -235,6 +235,14 @@ const ONBOARDING_STEPS := [
 
 const DEFAULT_FIXTURE_CATALOG_PATHS := [
 	"res://data/fixtures/game_display_rack.tres",
+	"res://data/fixtures/wall_shelf.tres",
+	"res://data/fixtures/accessory_peg_wall.tres",
+	"res://data/fixtures/bargain_bin.tres",
+	"res://data/fixtures/locked_case.tres",
+	"res://data/fixtures/counter_rack.tres",
+	"res://data/fixtures/demo_kiosk.tres",
+	"res://data/fixtures/new_release_wall.tres",
+	"res://data/fixtures/backroom_rack.tres",
 ]
 const DEFAULT_SUPPLIER_LOT_PATHS := [
 	"res://data/suppliers/used_game_starter_lot.tres",
@@ -2001,12 +2009,13 @@ func can_order_fixture(fixture_id: String) -> bool:
 	var fixture: Resource = get_fixture_definition(fixture_id)
 	return fixture != null \
 		and bool(fixture.get("placeable")) \
+		and _fixture_requirements_met(fixture) \
 		and get_cash_cents() >= int(fixture.get("cost_cents"))
 
 
 func order_fixture(fixture_id: String) -> Dictionary:
 	var fixture: Resource = get_fixture_definition(fixture_id)
-	if fixture == null or not bool(fixture.get("placeable")):
+	if fixture == null or not bool(fixture.get("placeable")) or not _fixture_requirements_met(fixture):
 		return {}
 	if get_cash_cents() < int(fixture.get("cost_cents")):
 		return {}
@@ -2019,6 +2028,10 @@ func order_fixture(fixture_id: String) -> Dictionary:
 		"display_name": str(fixture.get("display_name")),
 		"category": str(fixture.get("category")),
 		"slot_category": str(fixture.get("default_slot_category")),
+		"slot_count": int(fixture.get("slot_count")),
+		"placement_zone": str(fixture.get("placement_zone")),
+		"gameplay_tags": Array(fixture.get("gameplay_tags")),
+		"requires_upgrade_id": str(fixture.get("requires_upgrade_id")),
 		"cost_cents": cost_cents,
 		"status": "pending_placement",
 	}
@@ -2171,9 +2184,16 @@ func get_fixture_order_summary_text() -> String:
 	var fixtures := get_available_fixture_definitions()
 	var lines: Array[String] = ["Storage fixtures:"]
 	for fixture in fixtures:
-		lines.append("Order %s %s for storage placement" % [
+		var locked_note := ""
+		if not _fixture_requirements_met(fixture):
+			locked_note = " locked:%s" % str(fixture.get("requires_upgrade_id"))
+		lines.append("Order %s %s for storage placement (%s, slots:%d, zone:%s%s)" % [
 			str(fixture.get("display_name")),
 			format_money(int(fixture.get("cost_cents"))),
+			str(fixture.get("category")),
+			int(fixture.get("slot_count")),
+			str(fixture.get("placement_zone")),
+			locked_note,
 		])
 
 	var pending := get_pending_fixture_orders()
@@ -2182,10 +2202,12 @@ func get_fixture_order_summary_text() -> String:
 	else:
 		lines.append("Pending storage placement:")
 		for order in pending:
-			lines.append("%s %s slots:%s" % [
+			lines.append("%s %s slots:%s count:%d zone:%s" % [
 				str(order.get("display_name", "Fixture")),
 				format_money(int(order.get("cost_cents", 0))),
 				str(order.get("slot_category", "unassigned")),
+				int(order.get("slot_count", 0)),
+				str(order.get("placement_zone", "sales_floor")),
 			])
 
 	var placed := get_placed_fixture_orders()
@@ -2195,6 +2217,14 @@ func get_fixture_order_summary_text() -> String:
 			lines.append("%s placed" % str(order.get("display_name", "Fixture")))
 
 	return "\n".join(lines)
+
+
+func _fixture_requirements_met(fixture: Resource) -> bool:
+	if fixture == null:
+		return false
+
+	var required_upgrade_id := str(fixture.get("requires_upgrade_id"))
+	return required_upgrade_id.is_empty() or has_upgrade(required_upgrade_id)
 
 
 func get_status_label() -> String:

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="FixtureDefinition" format=3 uid="uid://d1y0yhu1f83go"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
+
+[resource]
+script = ExtResource("1_fixture_definition")
+fixture_id = "fixture_wall_shelf"
+display_name = "Wall Shelf"
+category = "display"
+cost_cents = 9500
+footprint_size = Vector2(2.0, 0.35)
+default_slot_category = "used_game"
+slot_count = 4
+accepted_product_categories = PackedStringArray("used_game", "new_game", "retro_game")
+placement_zone = "sales_floor_wall"
+gameplay_tags = PackedStringArray("wall_visibility", "browse_visibility", "compact_floorprint")
+scene_path = "res://scenes/props/placeholder_shelf.tscn"
+placeable = true
+description = "Wall-mounted shelf row for dense case display without consuming the center of the sales floor."

@@ -1,25 +1,39 @@
 {
   "ui_scenarios": [
     {
-      "id": "fixture_catalog_contains_game_display_rack",
-      "name": "Fixture catalog contains the orderable game display rack",
+      "id": "fixture_catalog_contains_stop_9_fixture_set",
+      "name": "Fixture catalog contains shelves, peg wall, bargain bin, locked case, counter rack, demo kiosk, new-release wall, and backroom rack",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_contains_game_display_rack"
+      "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_contains_stop_9_fixture_set"
     },
     {
-      "id": "fixture_catalog_has_scene_path",
-      "name": "Fixture catalog maps the game display rack to its placeable scene",
+      "id": "fixture_catalog_has_placeable_resources",
+      "name": "Fixture catalog entries have positive cost, slot count, accepted categories, gameplay tags, and placeable scenes",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_contains_game_display_rack"
+      "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_all_entries_are_placeable_resources"
+    },
+    {
+      "id": "fixture_catalog_has_fixture_specific_metadata",
+      "name": "Fixture catalog records placement zones, fixture-specific slot categories, upgrade locks, and placeholder tags",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_catalog.gd::test_fixture_catalog_has_fixture_specific_metadata"
     },
     {
       "id": "store_session_lists_fixture_orders",
-      "name": "Store session lists available fixture orders",
+      "name": "Store session lists the expanded fixture catalog with slot counts, zones, and lock state",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_lists_available_fixture_orders"
+    },
+    {
+      "id": "store_session_unlocks_upgrade_gated_fixtures",
+      "name": "Store session unlocks peg-wall and backroom-rack fixture orders after their upgrades are purchased",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_unlocks_upgrade_gated_fixture_orders"
     },
     {
       "id": "store_session_orders_fixture",
