@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cag7fgl2cb7di"]
+[gd_scene load_steps=10 format=3 uid="uid://cag7fgl2cb7di"]
 
 [ext_resource type="Script" path="res://scripts/player/first_person_controller.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_raycast.gd" id="2_raycast"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/day_summary_panel.tscn" id="5_day_summary_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/trade_in_offer_panel.tscn" id="6_trade_in_offer_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="7_settings_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/register_checkout_panel.tscn" id="8_register_checkout_panel"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.35
@@ -38,6 +39,8 @@ prompt_path = NodePath("../../../InteractionPrompt")
 [node name="InteractionPrompt" parent="." instance=ExtResource("3_prompt")]
 
 [node name="PricingPanel" parent="." instance=ExtResource("4_pricing_panel")]
+
+[node name="RegisterCheckoutPanel" parent="." instance=ExtResource("8_register_checkout_panel")]
 
 [node name="DaySummaryPanel" parent="." instance=ExtResource("5_day_summary_panel")]
 

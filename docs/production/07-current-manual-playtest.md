@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this UI component language pass: `scripts/validate_godot.sh` passed with 317 GUT tests, UI scenario coverage 321/378, and script mapping coverage 33/33.
+- Last full gate in this register checkout UI pass: `scripts/validate_godot.sh` passed with 328 GUT tests, UI scenario coverage 331/389, and script mapping coverage 34/34.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -15,6 +15,7 @@ Current automated baseline:
 - Input/settings baseline is implemented through Stop 3.6; manual QA should confirm Escape opens settings, sensitivity/invert/window controls work, and closing settings returns to captured first-person control.
 - Interaction validation sync is implemented through Stop 3.7; manual QA should run the Interaction Polish Focus section as one full repeated-workflow review.
 - UI component language is implemented through Stop 4.1; manual QA should confirm pricing, trade-in, and backroom computer modals now feel like one production UI family with readable button, panel, disabled, selected, alert, list, stat, and receipt states.
+- Register checkout UI is implemented through Stop 4.2; manual QA should confirm sale, preorder, and service checkout panels show itemized lines, subtotal, tax, total, tender, change due, return placeholder, and confirmation feedback before the transaction completes.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -31,8 +32,8 @@ Current automated baseline:
 9. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
 10. Price and stock the next carried `Star Trader`.
 11. Confirm a second buyer walks to the rack and queues with readable spacing.
-12. Aim at the register and click to ring up the first buyer.
-13. Aim at the register and click to ring up the second buyer.
+12. Aim at the register, click to open checkout, review itemized line, subtotal, tax, total, tender, change due, return placeholder, and click Confirm to ring up the first buyer.
+13. Aim at the register, click to open checkout, review the same receipt fields, and click Confirm to ring up the second buyer.
 14. Confirm sold items are gone from the rack and no longer inspectable.
 15. Click the register when no buyer is queued and review the seller trade-in offer.
 16. Confirm the offer panel shows condition, demand, market value, cash offer, and store-credit offer.
@@ -43,12 +44,12 @@ Current automated baseline:
 21. Open the backroom computer.
 22. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
 23. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier.
-24. Clear the trade-in queue by accepting or declining it, then click the register and take the `Neon Skyline` preorder deposit.
-25. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the register message reads as a preorder deposit rather than a sale.
+24. Clear the trade-in queue by accepting or declining it, then click the register, review the `Neon Skyline` preorder deposit checkout panel, and click Confirm.
+25. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the checkout confirmation reads as a preorder deposit rather than a sale.
 26. Open the backroom computer and confirm preorder count and preorder deposits are readable.
 27. Confirm the preorder flow clearly reads as an obligation before launch day, not an immediate sale.
-28. Clear the preorder queue, then click the register and complete the `Disc Resurfacing` service request.
-29. Confirm the service message names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
+28. Clear the preorder queue, then click the register, review the `Disc Resurfacing` service checkout panel, and click Confirm.
+29. Confirm the service confirmation names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
 30. Open the backroom computer and confirm service revenue, service cost, service profit, and recent activity are readable.
 31. End the day and confirm the closed-day report includes service count, service revenue, service cost, and service profit.
 32. Use `Commit Release` on the backroom computer and confirm cash drops by `$32.00`.
@@ -189,11 +190,13 @@ Run these first when manually checking the completed Stop 3.1 through Stop 3.7 i
 
 ## Menu And Computer UI Focus
 
-Run these first when manually checking the completed Stop 4.1 UI component language pass:
+Run these first when manually checking the completed Stop 4.1 through Stop 4.2 UI component and register checkout pass:
 
 - Confirm pricing, trade-in, and backroom computer panels read as one UI family while still having distinct pricing, trade-in, and backroom accent identities.
 - Confirm button sizes, font sizes, modal frames, disabled controls, hover/pressed/selected states, alert tones, list text, stat headers, and receipt-like readouts remain readable at 1280x720.
 - Confirm the shared UI styling does not clip existing pricing, trade-in, fixture placement, release allocation, supplier ordering, or day-summary controls.
+- Confirm the register checkout panel reads as the register surface, not the backroom computer, and that Confirm/Close focus returns cleanly to first-person control.
+- Confirm sale, preorder, and service checkout variants keep their itemized lines, totals, tender/change, return placeholder, and confirmation feedback readable without clipped text.
 
 ## Backroom Polish Focus
 

@@ -47,6 +47,12 @@ func test_pricing_panel_exists() -> void:
 	assert_false(pricing_panel.visible)
 
 
+func test_register_checkout_panel_exists() -> void:
+	var register_checkout_panel := _player.get_node_or_null("RegisterCheckoutPanel")
+	assert_not_null(register_checkout_panel)
+	assert_false(register_checkout_panel.visible)
+
+
 func test_day_summary_panel_exists() -> void:
 	var day_summary_panel := _player.get_node_or_null("DaySummaryPanel")
 	assert_not_null(day_summary_panel)
@@ -272,6 +278,32 @@ func test_player_rejects_fixed_price_held_item() -> void:
 	assert_true(_player.pick_up_item(item))
 	assert_eq(_player.get_held_item_interaction_prompt(), "Fixed Price Item")
 	assert_eq(_player.open_pricing_for_held_item(), "This item cannot be priced.")
+
+
+func test_player_opens_register_checkout() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var ledger := TransactionLedger.new()
+	var item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(customer)
+	add_child_autofree(register)
+	add_child_autofree(ledger)
+
+	var slot := rack.get_node("ShelfSlot001") as ShelfSlot
+	assert_true(slot.place_item(item))
+	assert_true(customer.claim_item_from_slot(slot))
+	register.customer_path = register.get_path_to(customer)
+	register.ledger_path = register.get_path_to(ledger)
+
+	assert_eq(_player.open_register_checkout(register), "")
+
+	var register_checkout_panel := _player.get_node("RegisterCheckoutPanel")
+	assert_true(register_checkout_panel.is_open())
+	assert_eq(register_checkout_panel.get_active_register(), register)
+	assert_string_contains(register_checkout_panel.cart_label.text, "Star Trader")
+	assert_true(_player.is_register_checkout_open())
 
 
 func test_player_opens_and_closes_settings_from_cancel_action() -> void:

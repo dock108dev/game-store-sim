@@ -42,9 +42,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 317 GUT tests.
-- UI scenario automation coverage is 321/378, above the required 80% threshold.
-- Production script mapping coverage is 33/33.
+- `scripts/validate_godot.sh` passes with 328 GUT tests.
+- UI scenario automation coverage is 331/389, above the required 80% threshold.
+- Production script mapping coverage is 34/34.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
 ## Manual Validation
@@ -58,6 +58,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Remappable input binding data lists core movement, interaction, and pause/settings actions.
 - The completed interaction polish pass needs a manual repeated-workflow review across prompts, carry, placement, workstations, and settings.
 - Pricing, trade-in, and backroom computer modal surfaces share readable production UI button, modal, list, stat, alert, disabled, and selected-state language.
+- Register checkout uses a receipt-style panel with itemized sale, subtotal, tax, total, tender, change due, service line, preorder deposit line, return placeholder, and confirmation feedback.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.

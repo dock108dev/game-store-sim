@@ -243,7 +243,7 @@ Goal: replace prototype panels with a coherent production UI system.
 Stops:
 
 - Stop 4.1: UI component language. Done in `Add UI component language`: added a shared UI component library, reusable modal/button/list/stat/receipt/tooltip/alert/disabled/selected tokens, surface accents, and applied the language to pricing, trade-in, and backroom computer panels with automated validation coverage.
-- Stop 4.2: Register checkout UI. Add itemized cart, subtotal/tax/total, tender method, change due, sale confirmation, service line, preorder deposit line, return placeholder, and transaction feedback.
+- Stop 4.2: Register checkout UI. Done in `Add register checkout UI`: added a register checkout panel, itemized sale cart, subtotal/tax/total, cash tender/change due, sale confirmation, service line, preorder deposit line, return placeholder, transaction feedback, player modal access, and automated/manual validation coverage.
 - Stop 4.3: Trade-in appraisal UI. Add condition, completeness, authenticity confidence, market value, demand, margin, cash/store-credit offer, counteroffer, and risk notes.
 - Stop 4.4: Pricing UI. Add cost basis, market price, current price, suggested range, margin, demand, apply-to-matching, and price outcome warnings.
 - Stop 4.5: Backroom computer tabs. Split dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and optional hidden records.

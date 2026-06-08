@@ -8,6 +8,7 @@ extends CharacterBody3D
 @onready var head: Node3D = $Head
 @onready var hold_anchor: Node3D = $Head/Camera3D/HoldAnchor
 @onready var pricing_panel: PricingPanel = $PricingPanel
+@onready var register_checkout_panel: Node = $RegisterCheckoutPanel
 @onready var day_summary_panel: Node = $DaySummaryPanel
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 @onready var settings_panel: SettingsPanel = $SettingsPanel
@@ -142,6 +143,10 @@ func is_pricing_open() -> bool:
 	return pricing_panel != null and pricing_panel.is_open()
 
 
+func is_register_checkout_open() -> bool:
+	return register_checkout_panel != null and register_checkout_panel.is_open()
+
+
 func is_day_summary_open() -> bool:
 	return day_summary_panel != null and day_summary_panel.is_open()
 
@@ -194,6 +199,16 @@ func open_pricing_for_held_item() -> String:
 	return "This item cannot be priced."
 
 
+func open_register_checkout(register: RegisterWorkstation) -> String:
+	if register_checkout_panel == null:
+		return "Register checkout unavailable."
+
+	if register_checkout_panel.open_for_register(register):
+		return ""
+
+	return "No checkout waiting at the register."
+
+
 func open_day_summary(store_session: Node) -> String:
 	if day_summary_panel == null:
 		return "Backroom summary unavailable."
@@ -234,12 +249,20 @@ func interact_with_held_item() -> String:
 
 
 func _is_modal_open() -> bool:
-	return is_pricing_open() or is_day_summary_open() or is_trade_in_offer_open() or is_settings_open()
+	return is_pricing_open() \
+		or is_register_checkout_open() \
+		or is_day_summary_open() \
+		or is_trade_in_offer_open() \
+		or is_settings_open()
 
 
 func _close_active_modal() -> void:
 	if is_pricing_open():
 		pricing_panel.cancel_price()
+		return
+
+	if is_register_checkout_open():
+		register_checkout_panel.close()
 		return
 
 	if is_day_summary_open():

@@ -136,7 +136,9 @@
     {
       "script": "res://scripts/store_layout/register_workstation.gd",
       "tests": [
-        "res://tests/gut/test_interaction_contract.gd"
+        "res://tests/gut/test_interaction_contract.gd",
+        "res://tests/gut/test_register_checkout_ui.gd",
+        "res://tests/gut/test_register_checkout_panel.gd"
       ],
       "critical": true
     },
@@ -227,12 +229,21 @@
       "critical": true
     },
     {
+      "script": "res://scripts/ui/register_checkout_panel.gd",
+      "tests": [
+        "res://tests/gut/test_register_checkout_panel.gd",
+        "res://tests/gut/test_player_controller.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/ui/ui_component_library.gd",
       "tests": [
         "res://tests/gut/test_ui_component_library.gd",
         "res://tests/gut/test_pricing_panel.gd",
         "res://tests/gut/test_day_summary_panel.gd",
-        "res://tests/gut/test_trade_in_offer_panel.gd"
+        "res://tests/gut/test_trade_in_offer_panel.gd",
+        "res://tests/gut/test_register_checkout_panel.gd"
       ],
       "critical": true
     }
