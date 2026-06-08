@@ -76,6 +76,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_modal_camera_settles_for_workstation_focus"
+    },
+    {
+      "id": "presentation_validation_sync_audit",
+      "name": "Presentation validation sync audits automated and manual coverage for ambience, interaction audio, customer audio, microfeedback, and camera feel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_presentation_validation_sync.gd::test_presentation_validation_matrix_covers_audio_vfx_and_camera_stops"
     }
   ]
 }

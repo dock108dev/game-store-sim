@@ -807,6 +807,14 @@
       "critical": false,
       "reason": "Automated tests verify bounded camera offsets, FOV limits, modal focus settling, and held-item sway; human review must confirm movement does not cause discomfort, hide the reticle, or make workstation transitions feel abrupt.",
       "owner": "manual QA"
+    },
+    {
+      "id": "presentation_milestone_11_review",
+      "name": "Completed audio, VFX, and camera-feel pass reads as a coherent presentation baseline",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify scenario/doc coverage through Stop 11.6; human review must confirm ambience, interaction sounds, customer audio placeholders, microfeedback, camera bob, FOV shift, held-item sway, and workstation settling work together without masking retail decisions.",
+      "owner": "manual QA"
     }
   ]
 }

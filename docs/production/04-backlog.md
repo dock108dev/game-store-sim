@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, and camera feel is complete through Stop 11.5.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, and audio, VFX, and presentation feel are complete through Milestone 11.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -41,8 +41,8 @@ Current completion plan: `11-game-completion-plan.md`.
 9. Backroom operations. Done through Milestone 8.
 10. Store building, decoration, and expansion. Done through Milestone 9.
 11. Hidden-thread production arc. Done through Milestone 10.
-12. Audio, VFX, and presentation feel. Current phase; camera feel done through Stop 11.5.
-13. Save/load, settings, and release wrapper.
+12. Audio, VFX, and presentation feel. Done through Milestone 11.
+13. Save/load, settings, and release wrapper. Current phase.
 14. Alpha hardening.
 
 ## Completed Polish Scope
@@ -139,7 +139,8 @@ The following polish items remain valid historical checkpoints:
 - Done: synced presentation scenario coverage, script mapping, validation baselines, and manual microfeedback readability checks for Stop 11.4.
 - Done: tuned camera feel for subtle movement bob, held-item sway, workstation/modal settling, comfort FOV bounds, and motion comfort.
 - Done: synced presentation scenario coverage, validation baselines, and manual camera-feel readability checks for Stop 11.5.
-- Remaining polish risk: Stop 11.6 still needs final presentation validation sync before moving into save/load and release-wrapper work.
+- Done: synced presentation validation coverage, validation baselines, manual milestone review checks, and production docs for Stop 11.6.
+- Remaining polish risk: the next production milestone is save/load, settings, and release wrapper.
 
 ## Product And Fixture Polish
 
