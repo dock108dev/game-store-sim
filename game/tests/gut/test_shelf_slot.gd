@@ -57,6 +57,31 @@ func test_shelf_slot_marker_is_upright_display_bay() -> void:
 	assert_gt(marker.size.y, marker.size.z * 10.0)
 
 
+func test_shelf_has_readable_used_game_category_header() -> void:
+	var header_panel := _shelf.get_node_or_null("CategoryHeaderPanel") as CSGBox3D
+	var header_label := _shelf.get_node_or_null("CategoryHeaderPanel/CategoryHeaderLabel") as Label3D
+
+	assert_not_null(header_panel)
+	assert_not_null(header_label)
+	assert_false(header_panel.use_collision)
+	assert_eq(header_label.text, "USED GAMES")
+	assert_gte(header_label.font_size, 30)
+	assert_lt(header_panel.global_position.y, 1.7)
+
+
+func test_shelf_slots_have_compact_category_rails() -> void:
+	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
+		var slot := _shelf.get_node(slot_name) as Area3D
+		var marker := slot.get_node("SlotMarker") as CSGBox3D
+		var rail := slot.get_node_or_null("SlotCategoryRail") as CSGBox3D
+
+		assert_not_null(rail)
+		assert_false(rail.use_collision)
+		assert_lt(rail.size.x, marker.size.x)
+		assert_lte(rail.size.y, 0.04)
+		assert_lte(absf(rail.position.x) + rail.size.x / 2.0, marker.size.x / 2.0)
+
+
 func test_shelf_slot_accepts_used_game_when_empty() -> void:
 	assert_true(_slot.can_accept(_item))
 

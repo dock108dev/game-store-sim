@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxowl2h2n2bti"]
+[gd_scene load_steps=8 format=3 uid="uid://dxowl2h2n2bti"]
 
 [ext_resource type="Script" path="res://scripts/store_layout/shelf_slot.gd" id="1_shelf_slot"]
 
@@ -11,6 +11,12 @@ albedo_color = Color(0.08, 0.08, 0.09, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot"]
 albedo_color = Color(0.1, 0.28, 0.24, 0.2)
 transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_rail"]
+albedo_color = Color(0.95, 0.78, 0.36, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_header"]
+albedo_color = Color(0.07, 0.18, 0.26, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_slot"]
 size = Vector3(0.58, 0.72, 0.12)
@@ -47,6 +53,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, -0.08)
 size = Vector3(1.75, 0.08, 0.1)
 material = SubResource("StandardMaterial3D_shelf")
 
+[node name="CategoryHeaderPanel" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.09)
+size = Vector3(1.64, 0.24, 0.045)
+material = SubResource("StandardMaterial3D_header")
+
+[node name="CategoryHeaderLabel" type="Label3D" parent="CategoryHeaderPanel"]
+pixel_size = 0.0048
+modulate = Color(0.9, 0.98, 0.9, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 4
+billboard = 1
+text = "USED GAMES"
+font_size = 30
+
 [node name="ShelfSlot001" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
@@ -59,6 +79,11 @@ shape = SubResource("BoxShape3D_slot")
 position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")
+
+[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot001"]
+position = Vector3(0, 0.065, 0.01)
+size = Vector3(0.5, 0.04, 0.035)
+material = SubResource("StandardMaterial3D_slot_rail")
 
 [node name="ShelfSlot002" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -0.13)
@@ -74,6 +99,11 @@ position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")
 
+[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot002"]
+position = Vector3(0, 0.065, 0.01)
+size = Vector3(0.5, 0.04, 0.035)
+material = SubResource("StandardMaterial3D_slot_rail")
+
 [node name="ShelfSlot003" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
@@ -87,3 +117,8 @@ shape = SubResource("BoxShape3D_slot")
 position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")
+
+[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot003"]
+position = Vector3(0, 0.065, 0.01)
+size = Vector3(0.5, 0.04, 0.035)
+material = SubResource("StandardMaterial3D_slot_rail")
