@@ -488,7 +488,7 @@ Stops:
 - Stop 9.4: Decoration system. Done in `Add decoration baseline`: StoreSession now exposes wall paint, floor material, posters, signage, lights, display props, and clutter-budget decoration entries; the backroom computer applies the starter wall-paint decoration, charges cash, disables repeat purchase, summarizes applied decorations and clutter budget, and save/load preserves purchased decoration state.
 - Stop 9.5: Layout effects. Done in `Add layout effects baseline`: StoreSession now summarizes fixture visibility, impulse fixtures, queue space, customer travel distance, and theft-risk placeholder state; category demand includes a layout signal; active inventory demand text shows layout effects; launch-visibility fixtures can increase launch queue demand; crowded, long-walk, and risky layouts can reduce it; and the main scene wires StoreSession to CustomerManager for real queue/travel metrics.
 - Stop 9.6: Expansion baseline. Done in `Add starter expansion baseline`: Starter Store Expansion now unlocks after Backroom Storage Bay, purchases as progression state, increases storage capacity to 18 cases, widens fixture placement bounds, expands CustomerManager playable/queue bounds, updates upgrade/storage summaries, and persists through purchased-upgrade save/restore.
-- Stop 9.7: Building validation sync. Update automation and manual layout checks.
+- Stop 9.7: Building validation sync. Done in `Sync building validation`: validation docs, backlog state, scenario matrix, manual checklist, baseline counts, and Milestone 9 status now reflect the completed fixture catalog, placement UX, category assignment, decoration, layout effects, and starter expansion pass.
 
 Acceptance:
 
@@ -506,6 +506,7 @@ Validation snapshot:
 - Focused GUT coverage passes for category-demand layout multipliers, layout-effect summaries, active-inventory layout demand tuning, launch-visibility queue demand effects, and main-scene CustomerManager wiring.
 - Focused GUT coverage passes for starter expansion unlock/purchase, expanded storage capacity, placement/customer-manager bounds, upgrade/storage summary text, and save/restore persistence.
 - Manual Store Building Focus checks are current for the expanded fixture list, pricing/category/slot/zone readability, upgrade locks, starter rack placement flow, category assignment, demand tuning effects, footprint/path/overlap invalid feedback, undo behavior, demo kiosk placeholder readability, decoration catalog/application/clutter-budget readability, layout-effect readability, starter-expansion readability, and 1280x720 storage/settings/demand-tab fit.
+- Building validation is synced through Stop 9.7, with scenario coverage and manual playtest docs matching the completed Milestone 9 behavior.
 
 Commit targets:
 

@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, and store building work is underway with the Stop 9.1 fixture catalog.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, and store building, decoration, layout effects, and starter expansion are complete through Milestone 9.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -107,7 +107,8 @@ The following polish items remain valid historical checkpoints:
 - Done: added a decoration system baseline with wall paint, floor material, posters, signage, lights, display props, a safe clutter budget, backroom `Apply Decor` action, save/load coverage, and manual readability checks.
 - Done: added layout effects for fixture visibility, impulse fixtures, queue spacing, customer travel distance, theft-risk placeholder state, demand tuning, launch queue demand, and main-scene CustomerManager wiring.
 - Done: added a starter expansion baseline that unlocks after Backroom Storage Bay, increases storage capacity, widens placement bounds, expands customer playable/queue bounds, updates upgrade/storage summaries, and persists through save/restore.
-- Remaining polish risk: Stop 9.7 still needs the final building validation sync to reconcile the milestone docs after the complete Stop 9 pass.
+- Done: synced the final building validation snapshot, scenario matrix, manual checks, backlog state, and Milestone 9 status after the Stop 9 pass.
+- Remaining polish risk: the next production milestone is hidden-thread production; store-building art-visible remodel depth remains later expansion work beyond this baseline.
 
 ## Product And Fixture Polish
 

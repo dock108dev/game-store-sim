@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this starter-expansion pass: `scripts/validate_godot.sh` passes with 418 GUT tests, UI scenario automation coverage at 409/500, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this building-validation-sync pass: `scripts/validate_godot.sh` passes with 418 GUT tests, UI scenario automation coverage at 409/500, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -43,7 +43,7 @@ Current automated baseline:
 - Management desk workflow is implemented through Stop 8.4; manual QA should confirm supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk, and Buy Upg read as planning work in the backroom records flow.
 - Security/safe placeholders are implemented through Stop 8.5; manual QA should confirm cash safe, high-value storage, suspicious goods isolation, and security footage read as inactive backroom/hidden-thread infrastructure, not active objectives.
 - Backroom operations validation is synced through Stop 8.6; manual QA should run the Backroom Operations Focus before treating Milestone 8 as human-approved.
-- Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, layout effects through Stop 9.5, and starter expansion through Stop 9.6; manual QA should run the Store Building Focus before treating the current Milestone 9 slices as human-approved.
+- Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, layout effects through Stop 9.5, starter expansion through Stop 9.6, and building validation sync through Stop 9.7; manual QA should run the Store Building Focus before treating Milestone 9 as human-approved.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -301,7 +301,7 @@ Run these first when manually checking the completed Stop 8.1 through Stop 8.6 b
 
 ## Store Building Focus
 
-Run these first when manually checking the completed Stop 9.1 through Stop 9.6 store-building pass:
+Run these first when manually checking the completed Stop 9.1 through Stop 9.7 store-building pass:
 
 - Confirm the Storage tab lists the expanded fixture catalog: Game Display Rack, Wall Shelf, Accessory Peg Wall, Bargain Bin, Locked Case, Counter Rack, Demo Kiosk, New Release Wall, and Backroom Rack.
 - Confirm each fixture entry shows price, broad fixture category, slot count, and placement zone rather than only a debug ID.
@@ -329,6 +329,7 @@ Run these first when manually checking the completed Stop 9.1 through Stop 9.6 s
 - Confirm Starter Store Expansion unlocks only after Backroom Storage Bay and reads as a larger shop footprint rather than an invisible money sink.
 - Confirm purchased expansion increases storage capacity to 18 cases and explains wider fixture placement/customer queue/travel lanes.
 - Confirm restored saves with Starter Store Expansion preserve the expanded storage and layout state.
+- Confirm the validation docs, scenario matrix, and manual checklist all describe the same completed Milestone 9 behavior before moving into hidden-thread production work.
 
 ## Customer Production Focus
 
