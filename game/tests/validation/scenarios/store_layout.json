@@ -358,6 +358,27 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_customer_manager_for_layout_effects"
     },
     {
+      "id": "store_expansion_purchase_baseline",
+      "name": "Starter Store Expansion unlocks after Backroom Storage Bay and increases store capacity",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_purchases_store_expansion_baseline"
+    },
+    {
+      "id": "store_expansion_applies_layout_managers",
+      "name": "Starter Store Expansion expands placement bounds and CustomerManager playable queue bounds when managers are wired",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_applies_expansion_to_layout_managers"
+    },
+    {
+      "id": "store_expansion_persists_in_save_codec",
+      "name": "Starter Store Expansion restore state preserves expanded storage capacity from purchased upgrades",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
       "id": "placed_fixture_has_display_slots",
       "name": "Confirmed game display rack includes used-game display slots",
       "status": "automated",

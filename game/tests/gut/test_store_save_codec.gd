@@ -290,6 +290,20 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"category": "signage",
 				"cost_cents": 5000,
 				"status": "purchased",
+			},
+			{
+				"upgrade_id": "upgrade_backroom_storage",
+				"label": "Backroom Storage Bay",
+				"category": "storage",
+				"cost_cents": 10000,
+				"status": "purchased",
+			},
+			{
+				"upgrade_id": "upgrade_store_expansion",
+				"label": "Starter Store Expansion",
+				"category": "expansion",
+				"cost_cents": 30000,
+				"status": "purchased",
 			}
 		],
 		"purchased_decorations": [
@@ -329,6 +343,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_true(session.has_decoration("decor_wall_paint_savepoint_blue"))
 	assert_string_contains(session.get_receiving_workflow_summary_text(), "Invoice: checked expected 3 received 3 variance 0")
 	assert_string_contains(session.get_storage_workflow_summary_text(), "Recent storage move: stored Star Trader")
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Capacity: 18 cases (store expansion)")
 	assert_string_contains(session.get_service_bench_summary_text(), "ready_for_pickup 100%")
 	assert_string_contains(session.get_management_desk_summary_text(), "Supplier messages - reviewed")
 	assert_eq(session.get_preorder_deposits().size(), 1)
@@ -341,6 +356,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_operating_expenses_total_cents(), 700)
 	assert_eq(session.get_reputation_events().size(), 1)
 	assert_true(session.has_upgrade("upgrade_signage_staff_picks"))
+	assert_true(session.has_store_expansion())
 	assert_eq(session.get_reputation_score(), 95)
 	assert_eq(item.get("current_price_cents"), 2499)
 	assert_eq(item.get("location_id"), "shelf_slot_001")

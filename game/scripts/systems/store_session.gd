@@ -19,6 +19,12 @@ const DAILY_SHRINKAGE_PLACEHOLDER_CENTS := 0
 const STORAGE_LOCATION_ID := "backstock_shelf_001"
 const BASE_STORAGE_CAPACITY := 6
 const UPGRADED_STORAGE_CAPACITY := 12
+const EXPANDED_STORAGE_CAPACITY := 18
+const EXPANDED_PLACEMENT_BOUNDS_MIN := Vector3(-7.2, 0.0, -5.4)
+const EXPANDED_PLACEMENT_BOUNDS_MAX := Vector3(7.2, 0.0, 5.9)
+const EXPANDED_CUSTOMER_PLAYABLE_MIN := Vector3(-8.0, 0.0, -6.2)
+const EXPANDED_CUSTOMER_PLAYABLE_MAX := Vector3(8.0, 0.0, 6.4)
+const EXPANDED_QUEUE_SPACING := Vector3(0.0, 0.0, -1.0)
 const SERVICE_BENCH_CATALOG := [
 	{
 		"service_id": "disc_resurfacing",
@@ -343,6 +349,7 @@ var reputation_score: int = 100
 func _ready() -> void:
 	if cash_cents == 0:
 		cash_cents = starting_cash_cents
+	_apply_progression_effects()
 
 
 func apply_sale(transaction: Dictionary) -> void:
@@ -613,6 +620,7 @@ func replace_purchased_upgrades(upgrades: Array) -> void:
 		if typeof(upgrade) == TYPE_DICTIONARY:
 			var row: Dictionary = upgrade
 			purchased_upgrades.append(row.duplicate(true))
+	_apply_progression_effects()
 
 
 func has_upgrade(upgrade_id: String) -> bool:
@@ -653,6 +661,7 @@ func purchase_upgrade(upgrade_id: String) -> Dictionary:
 	purchase["purchased_day"] = day_number
 	purchase["status"] = "purchased"
 	purchased_upgrades.append(purchase)
+	_apply_progression_effects()
 	return purchase.duplicate(true)
 
 
@@ -687,7 +696,20 @@ func get_upgrade_summary_text() -> String:
 			locked.append(str(upgrade.get("label", "Upgrade")))
 	if not locked.is_empty():
 		lines.append("Locked: %s" % ", ".join(locked))
+	lines.append(get_store_expansion_summary_text())
 	return "\n".join(lines)
+
+
+func has_store_expansion() -> bool:
+	return has_upgrade("upgrade_store_expansion")
+
+
+func get_store_expansion_summary_text() -> String:
+	if has_store_expansion():
+		return "Store expansion: expanded footprint, storage %d cases, wider placement bounds, clearer queue/travel lanes" % get_storage_capacity()
+	if has_upgrade("upgrade_backroom_storage"):
+		return "Store expansion: available after purchase; current storage %d cases, starter footprint active" % get_storage_capacity()
+	return "Store expansion: locked until Backroom Storage Bay; starter footprint active"
 
 
 func get_cash_cents() -> int:
@@ -1151,6 +1173,8 @@ func replace_storage_movements(movements: Array) -> void:
 
 
 func get_storage_capacity() -> int:
+	if has_store_expansion():
+		return EXPANDED_STORAGE_CAPACITY
 	if has_upgrade("upgrade_backroom_storage"):
 		return UPGRADED_STORAGE_CAPACITY
 	return BASE_STORAGE_CAPACITY
@@ -1185,7 +1209,7 @@ func get_storage_workflow_summary_text() -> String:
 	lines.append("Storage shelf: Backroom backstock shelf / %s" % STORAGE_LOCATION_ID)
 	lines.append("Capacity: %d cases%s" % [
 		capacity,
-		" (expanded)" if has_upgrade("upgrade_backroom_storage") else "",
+		" (store expansion)" if has_store_expansion() else " (expanded)" if has_upgrade("upgrade_backroom_storage") else "",
 	])
 	lines.append("Receiving ready: %d" % int(counts.get("receiving", 0)))
 	lines.append("Backstock: %d stored / %d capacity / %d overflow" % [
@@ -2889,6 +2913,28 @@ func _get_average_customer_travel_distance(manager: CustomerManager) -> float:
 	if count == 0:
 		return 0.0
 	return total / float(count)
+
+
+func _apply_progression_effects() -> void:
+	if not has_store_expansion():
+		return
+
+	var placement_manager := _get_fixture_placement_manager()
+	if placement_manager != null:
+		placement_manager.set("placement_bounds_min", EXPANDED_PLACEMENT_BOUNDS_MIN)
+		placement_manager.set("placement_bounds_max", EXPANDED_PLACEMENT_BOUNDS_MAX)
+
+	var customer_manager := _get_customer_manager()
+	if customer_manager != null:
+		customer_manager.playable_min = EXPANDED_CUSTOMER_PLAYABLE_MIN
+		customer_manager.playable_max = EXPANDED_CUSTOMER_PLAYABLE_MAX
+		customer_manager.register_queue_spacing = EXPANDED_QUEUE_SPACING
+		customer_manager.minimum_queue_spacing_distance = minf(
+			customer_manager.minimum_queue_spacing_distance,
+			EXPANDED_QUEUE_SPACING.length()
+		)
+		if customer_manager.has_method("assign_customer_path_points"):
+			customer_manager.assign_customer_path_points()
 
 
 func _get_ledger() -> TransactionLedger:

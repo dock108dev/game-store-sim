@@ -173,6 +173,46 @@ func test_store_session_purchases_upgrades_and_unlocks_expansion_path() -> void:
 	assert_string_contains(session.get_upgrade_summary_text(), "Starter Store Expansion $300.00")
 
 
+func test_store_session_purchases_store_expansion_baseline() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	assert_false(session.has_store_expansion())
+	assert_eq(session.get_storage_capacity(), 6)
+
+	session.purchase_upgrade("upgrade_backroom_storage")
+	var expansion := session.purchase_upgrade("upgrade_store_expansion")
+
+	assert_eq(expansion.get("upgrade_id"), "upgrade_store_expansion")
+	assert_true(session.has_store_expansion())
+	assert_eq(session.get_cash_cents(), 10000)
+	assert_eq(session.get_storage_capacity(), 18)
+	assert_string_contains(session.get_upgrade_summary_text(), "Store expansion: expanded footprint")
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Capacity: 18 cases (store expansion)")
+
+
+func test_store_session_applies_expansion_to_layout_managers() -> void:
+	var root := Node3D.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var placement_manager: FixturePlacementManager = load("res://scripts/store_layout/fixture_placement_manager.gd").new()
+	var customer_manager: CustomerManager = load("res://scripts/customers/customer_manager.gd").new()
+	add_child_autofree(root)
+	root.add_child(placement_manager)
+	root.add_child(customer_manager)
+	root.add_child(session)
+	session.fixture_placement_manager_path = session.get_path_to(placement_manager)
+	session.customer_manager_path = session.get_path_to(customer_manager)
+
+	session.purchase_upgrade("upgrade_backroom_storage")
+	session.purchase_upgrade("upgrade_store_expansion")
+
+	assert_almost_eq(placement_manager.placement_bounds_min.x, -7.2, 0.001)
+	assert_almost_eq(placement_manager.placement_bounds_max.x, 7.2, 0.001)
+	assert_almost_eq(customer_manager.playable_min.x, -8.0, 0.001)
+	assert_almost_eq(customer_manager.playable_max.x, 8.0, 0.001)
+	assert_almost_eq(customer_manager.register_queue_spacing.length(), 1.0, 0.001)
+
+
 func test_store_session_exposes_owner_onboarding_baseline() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

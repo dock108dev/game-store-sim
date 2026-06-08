@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this layout-effects pass: `scripts/validate_godot.sh` passes with 416 GUT tests, UI scenario automation coverage at 406/496, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this starter-expansion pass: `scripts/validate_godot.sh` passes with 418 GUT tests, UI scenario automation coverage at 409/500, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -43,7 +43,7 @@ Current automated baseline:
 - Management desk workflow is implemented through Stop 8.4; manual QA should confirm supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk, and Buy Upg read as planning work in the backroom records flow.
 - Security/safe placeholders are implemented through Stop 8.5; manual QA should confirm cash safe, high-value storage, suspicious goods isolation, and security footage read as inactive backroom/hidden-thread infrastructure, not active objectives.
 - Backroom operations validation is synced through Stop 8.6; manual QA should run the Backroom Operations Focus before treating Milestone 8 as human-approved.
-- Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, and layout effects through Stop 9.5; manual QA should run the Store Building Focus before treating the current Milestone 9 slices as human-approved.
+- Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, layout effects through Stop 9.5, and starter expansion through Stop 9.6; manual QA should run the Store Building Focus before treating the current Milestone 9 slices as human-approved.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -109,29 +109,30 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 56. Confirm the clutter budget still reads as safe after applying the starter wall paint and does not imply props can hide prompts or products.
 57. Confirm the demand summary includes `Layout effects` and explains visibility, impulse, queue, travel, and theft placeholder state without crowding the panel.
 58. In a test/debug setup with a New Release Wall placed, confirm launch queue demand can increase; in crowded/long/risky layouts, confirm the summary makes the penalty understandable.
-59. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
-60. Confirm supplier ordering shows `Used Game Starter Lot`, category, cart size, reserved cost, due day 2, pending delivery state, storage needs, and physical receiving expectations.
-61. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and a pending receiving workflow appears instead of auto-clearing the delivery.
-62. Confirm the supplier summary shows delivery point, `Box: sealed`, unchecked invoice count/variance, and sorting waiting state.
-63. Use `Open Box` and confirm the box state changes to opened while the batch remains pending receiving.
-64. Use `Check Inv` and confirm the invoice state changes to checked with expected count, received count, and variance.
-65. Use `Sort` and confirm the batch becomes completed, pending receiving clears, and the sorted destination reads as `price_stock`.
-66. Use `Store` and confirm one receiving item moves into backstock, the storage summary shows `Backstock: 1 stored / 6 capacity / 0 overflow`, and recent movement reads as stored.
-67. Use `Pull` and confirm that item returns to receiving, backstock drops to zero, and recent movement reads as retrieved.
-68. Confirm Store/Pull controls disable when there is no valid item for that direction.
-69. End the day and confirm the summary changes to `Day closed`.
-70. Confirm the closed-day report is readable and matches the played day, including phase, day plan, cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, operating expenses, reserved obligations, bills, and tomorrow recommendations.
-71. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
-72. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
-73. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
-74. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
-75. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
-76. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
-77. Open the backroom computer settings tab and confirm the upgrade summary lists purchased, available, and locked upgrades clearly.
-78. Confirm `Starter Store Expansion` appears locked before buying `Backroom Storage Bay`, and appears available after the storage upgrade is purchased by test/debug setup.
-79. Open the backroom computer dashboard and confirm the owner checklist starts with receiving on a fresh run.
-80. As the first-day loop progresses, confirm checklist rows move from `Next`/`Later` to `Done` based on real actions rather than hidden tutorial buttons.
-81. Play into the next day and confirm cash, stock, reputation, obligations, upgrade goals, and tomorrow planning read as one connected owner/operator loop.
+59. Confirm `Starter Store Expansion` appears locked before buying `Backroom Storage Bay`, appears available after the storage upgrade is purchased by test/debug setup, and reads as a larger operational footprint.
+60. After Starter Store Expansion is purchased in test/debug setup, confirm storage reads as 18 cases and placement/customer layout text implies wider bounds and clearer queue/travel lanes.
+61. Use `Order Lot` on the backroom computer and confirm cash drops by `$27.00`.
+62. Confirm supplier ordering shows `Used Game Starter Lot`, category, cart size, reserved cost, due day 2, pending delivery state, storage needs, and physical receiving expectations.
+63. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and a pending receiving workflow appears instead of auto-clearing the delivery.
+64. Confirm the supplier summary shows delivery point, `Box: sealed`, unchecked invoice count/variance, and sorting waiting state.
+65. Use `Open Box` and confirm the box state changes to opened while the batch remains pending receiving.
+66. Use `Check Inv` and confirm the invoice state changes to checked with expected count, received count, and variance.
+67. Use `Sort` and confirm the batch becomes completed, pending receiving clears, and the sorted destination reads as `price_stock`.
+68. Use `Store` and confirm one receiving item moves into backstock, the storage summary shows `Backstock: 1 stored / 6 capacity / 0 overflow`, and recent movement reads as stored.
+69. Use `Pull` and confirm that item returns to receiving, backstock drops to zero, and recent movement reads as retrieved.
+70. Confirm Store/Pull controls disable when there is no valid item for that direction.
+71. End the day and confirm the summary changes to `Day closed`.
+72. Confirm the closed-day report is readable and matches the played day, including phase, day plan, cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, operating expenses, reserved obligations, bills, and tomorrow recommendations.
+73. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
+74. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
+75. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
+76. Talk to the `Cash Buyer` near the register and confirm the conversation reads as optional suspicious behavior, not a required objective.
+77. Confirm normal stocking, pricing, buyer queueing, sales, trade-ins, preorder deposit, service completion, allocation commitment, launch-day resolution, and day summary still work after talking to the `Cash Buyer`.
+78. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
+79. Open the backroom computer settings tab and confirm the upgrade summary lists purchased, available, and locked upgrades clearly.
+80. Open the backroom computer dashboard and confirm the owner checklist starts with receiving on a fresh run.
+81. As the first-day loop progresses, confirm checklist rows move from `Next`/`Later` to `Done` based on real actions rather than hidden tutorial buttons.
+82. Play into the next day and confirm cash, stock, reputation, obligations, upgrade goals, and tomorrow planning read as one connected owner/operator loop.
 
 ## Visual Checks
 
@@ -224,6 +225,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 - Decoration summary, `Apply Decor`, applied-decoration state, and clutter budget fit in the backroom computer and read as store-building choices.
 - Decoration choices should not visually hide product cases, shelf slots, register prompts, backroom controls, or customer paths.
 - Layout effects text should make it clear when store setup improves visibility/impulse demand or hurts outcomes through tight queues, long walking routes, or open theft-risk placeholders.
+- Starter Store Expansion should read as real store growth: more storage, wider fixture placement room, and clearer queue/travel lanes, even before final construction art exists.
 - Suspicious event flag infrastructure remains invisible during normal play.
 - Optional mismatched serial text is readable when inspecting that copy and does not make the normal store loop feel blocked.
 - Supplier note placement and text read as an optional receiving artifact, not a required tutorial or blocking objective.
@@ -299,7 +301,7 @@ Run these first when manually checking the completed Stop 8.1 through Stop 8.6 b
 
 ## Store Building Focus
 
-Run these first when manually checking the completed Stop 9.1 through Stop 9.5 store-building pass:
+Run these first when manually checking the completed Stop 9.1 through Stop 9.6 store-building pass:
 
 - Confirm the Storage tab lists the expanded fixture catalog: Game Display Rack, Wall Shelf, Accessory Peg Wall, Bargain Bin, Locked Case, Counter Rack, Demo Kiosk, New Release Wall, and Backroom Rack.
 - Confirm each fixture entry shows price, broad fixture category, slot count, and placement zone rather than only a debug ID.
@@ -324,6 +326,9 @@ Run these first when manually checking the completed Stop 9.1 through Stop 9.5 s
 - Confirm placed visibility fixtures and matching fixture categories affect demand text without replacing physical stocking, pricing, and placement work.
 - Confirm launch-visibility fixtures can change launch-day queue demand and that crowded, long-walk, or risky layouts read as understandable penalties.
 - Confirm main-scene customer queue and travel wiring still reflects the actual CustomerManager pathing rather than a detached abstract score.
+- Confirm Starter Store Expansion unlocks only after Backroom Storage Bay and reads as a larger shop footprint rather than an invisible money sink.
+- Confirm purchased expansion increases storage capacity to 18 cases and explains wider fixture placement/customer queue/travel lanes.
+- Confirm restored saves with Starter Store Expansion preserve the expanded storage and layout state.
 
 ## Customer Production Focus
 

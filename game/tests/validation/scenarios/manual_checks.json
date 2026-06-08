@@ -641,6 +641,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "store_expansion_readability",
+      "name": "Starter Store Expansion reads as a larger operational footprint with clearer placement, storage, queue, and travel choices",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify purchase rules, capacity, placement bounds, customer bounds, and persistence; human review must confirm the upgrade text and expanded layout implications feel like real store growth rather than an invisible stat boost.",
+      "owner": "manual QA"
+    },
+    {
       "id": "hidden_thread_flags_invisible",
       "name": "Suspicious event flags do not visibly interrupt normal store progression",
       "status": "manual",

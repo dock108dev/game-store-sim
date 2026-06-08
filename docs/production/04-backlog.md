@@ -106,7 +106,8 @@ The following polish items remain valid historical checkpoints:
 - Done: added fixture category assignment with `Assign Cat` storage control, supported-category validation, placed fixture slot updates, category assignment summaries, and demand tuning effects for assigned shelf slots.
 - Done: added a decoration system baseline with wall paint, floor material, posters, signage, lights, display props, a safe clutter budget, backroom `Apply Decor` action, save/load coverage, and manual readability checks.
 - Done: added layout effects for fixture visibility, impulse fixtures, queue spacing, customer travel distance, theft-risk placeholder state, demand tuning, launch queue demand, and main-scene CustomerManager wiring.
-- Remaining polish risk: Stop 9.6 still needs a starter expansion baseline so progression can unlock a larger operational footprint after the store-building loop is proven.
+- Done: added a starter expansion baseline that unlocks after Backroom Storage Bay, increases storage capacity, widens placement bounds, expands customer playable/queue bounds, updates upgrade/storage summaries, and persists through save/restore.
+- Remaining polish risk: Stop 9.7 still needs the final building validation sync to reconcile the milestone docs after the complete Stop 9 pass.
 
 ## Product And Fixture Polish
 
@@ -164,6 +165,6 @@ These remain future phases unless explicitly selected:
 - Player-facing save/load slot UI.
 - Employees and staff assignment.
 - Larger store expansion.
-- Expansion/building progression beyond current fixture placement, category assignment, decoration baseline, and layout-effect outcomes.
+- Later expansion depth beyond the current starter expansion baseline, such as art-visible remodels, construction timing, and multi-room shop growth.
 - Complex hidden-thread consequences.
 - Full audio, animation, VFX, and art-production pass.

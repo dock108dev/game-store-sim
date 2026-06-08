@@ -459,8 +459,8 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 416 GUT tests.
-- UI scenario automation coverage is 406/496, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 418 GUT tests.
+- UI scenario automation coverage is 409/500, above the 80% threshold.
 - Production script mapping coverage is 39/39.
 - Standalone validation tool manifest coverage has 1 active tool.
 - Product catalog content check passes with 33 fictional products.
@@ -487,7 +487,7 @@ Stops:
 - Stop 9.3: Category assignment. Done in `Add fixture category assignment`: StoreSession can assign supported categories to pending or placed fixtures, placed fixture ShelfSlot nodes receive the assigned category, storage summaries list category assignments, the backroom computer exposes a compact Assign Cat action for the first placed rack, unsupported categories are rejected, and assigned shelf slots affect demand tuning through visibility and marketing signals.
 - Stop 9.4: Decoration system. Done in `Add decoration baseline`: StoreSession now exposes wall paint, floor material, posters, signage, lights, display props, and clutter-budget decoration entries; the backroom computer applies the starter wall-paint decoration, charges cash, disables repeat purchase, summarizes applied decorations and clutter budget, and save/load preserves purchased decoration state.
 - Stop 9.5: Layout effects. Done in `Add layout effects baseline`: StoreSession now summarizes fixture visibility, impulse fixtures, queue space, customer travel distance, and theft-risk placeholder state; category demand includes a layout signal; active inventory demand text shows layout effects; launch-visibility fixtures can increase launch queue demand; crowded, long-walk, and risky layouts can reduce it; and the main scene wires StoreSession to CustomerManager for real queue/travel metrics.
-- Stop 9.6: Expansion baseline. Add one larger footprint or backroom expansion option after the starter store loop is proven.
+- Stop 9.6: Expansion baseline. Done in `Add starter expansion baseline`: Starter Store Expansion now unlocks after Backroom Storage Bay, purchases as progression state, increases storage capacity to 18 cases, widens fixture placement bounds, expands CustomerManager playable/queue bounds, updates upgrade/storage summaries, and persists through purchased-upgrade save/restore.
 - Stop 9.7: Building validation sync. Update automation and manual layout checks.
 
 Acceptance:
@@ -504,7 +504,8 @@ Validation snapshot:
 - Focused GUT coverage passes for fixture category assignment, supported/unsupported category validation, placed slot category updates, Assign Cat panel flow, and assigned-fixture demand tuning effects.
 - Focused GUT coverage passes for decoration catalog entries, starter decoration application, clutter budget text, backroom Apply Decor flow, repeat-purchase disabling, and save/load persistence.
 - Focused GUT coverage passes for category-demand layout multipliers, layout-effect summaries, active-inventory layout demand tuning, launch-visibility queue demand effects, and main-scene CustomerManager wiring.
-- Manual Store Building Focus checks are current for the expanded fixture list, pricing/category/slot/zone readability, upgrade locks, starter rack placement flow, category assignment, demand tuning effects, footprint/path/overlap invalid feedback, undo behavior, demo kiosk placeholder readability, decoration catalog/application/clutter-budget readability, layout-effect readability, and 1280x720 storage/settings/demand-tab fit.
+- Focused GUT coverage passes for starter expansion unlock/purchase, expanded storage capacity, placement/customer-manager bounds, upgrade/storage summary text, and save/restore persistence.
+- Manual Store Building Focus checks are current for the expanded fixture list, pricing/category/slot/zone readability, upgrade locks, starter rack placement flow, category assignment, demand tuning effects, footprint/path/overlap invalid feedback, undo behavior, demo kiosk placeholder readability, decoration catalog/application/clutter-budget readability, layout-effect readability, starter-expansion readability, and 1280x720 storage/settings/demand-tab fit.
 
 Commit targets:
 
