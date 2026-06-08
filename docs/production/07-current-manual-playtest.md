@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this economy/day-loop pass: `scripts/validate_godot.sh` passed with 385 GUT tests, UI scenario coverage 366/444, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
+- Last full gate in this economy/day-loop pass: `scripts/validate_godot.sh` passed with 387 GUT tests, UI scenario coverage 369/448, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -35,6 +35,7 @@ Current automated baseline:
 - Reputation baseline is implemented through Stop 7.3; manual QA should confirm pricing, wait-time, preorder, service, return, suspicious-choice, stock-variety, and launch-shortage consequences read clearly and feel recoverable.
 - Demand tuning is implemented through Stop 7.4; manual QA should confirm shelf visibility, price, rarity, marketing, event, and customer-archetype signals read as understandable demand causes in the backroom panel.
 - Upgrade path baseline is implemented through Stop 7.5; manual QA should confirm fixture, category, service, computer, signage, storage, and expansion upgrades read as future work/progression goals rather than cash-only debug options.
+- Owner onboarding baseline is implemented through Stop 7.6; manual QA should confirm the backroom dashboard checklist teaches receiving, pricing, stocking, checkout, trade-ins, backroom computer use, ordering, and closing without feeling like debug text.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -102,6 +103,8 @@ Current automated baseline:
 60. Confirm evidence storage remains invisible during normal play; no new objective, panel, or warning should appear yet.
 61. Open the backroom computer settings tab and confirm the upgrade summary lists purchased, available, and locked upgrades clearly.
 62. Confirm `Starter Store Expansion` appears locked before buying `Backroom Storage Bay`, and appears available after the storage upgrade is purchased by test/debug setup.
+63. Open the backroom computer dashboard and confirm the owner checklist starts with receiving on a fresh run.
+64. As the first-day loop progresses, confirm checklist rows move from `Next`/`Later` to `Done` based on real actions rather than hidden tutorial buttons.
 
 ## Visual Checks
 
@@ -162,6 +165,7 @@ Current automated baseline:
 - Reputation event text explains why the score changed and does not hide the link between player decisions and outcomes.
 - Demand tuning text explains why visible/featured/rare/discounted/event-relevant inventory is more attractive without replacing the physical stocking and pricing loop.
 - Upgrade path text explains fixture, category, service-tool, computer-tool, signage, storage, and expansion progression without making those future systems look already fully implemented.
+- Owner checklist text teaches the first-day loop in store-operator language and does not read like debug instructions or a detached tutorial overlay.
 - Recent activity text is readable and distinguishes sales from trade-ins.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
 - Inventory summary text is readable and matches active receiving/rack items.

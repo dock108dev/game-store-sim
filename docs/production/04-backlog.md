@@ -130,7 +130,8 @@ Compressed summary of completed validated systems:
 - Done: added reputation baseline events for pricing fairness, wait times, fulfilled/missed preorders, service success/failure, return handling, suspicious choices, stock variety, launch shortage integration, daily reports, save/load, and validation coverage.
 - Done: added contextual demand tuning for shelf visibility, price pressure, rarity, marketing, day events, and customer archetype signals, with active-inventory backroom summaries and validation coverage.
 - Done: added a baseline upgrade path for fixtures, category unlocks, service tools, computer tools, signage, storage, and starter expansion, with purchase rules, expansion prerequisite, backroom summary, save/load, and validation coverage.
-- Remaining: onboarding and final economy/progression validation sync.
+- Done: added owner onboarding checklist coverage for receiving, pricing, stocking, checkout, trade-ins, backroom computer, ordering, and closing, with dashboard presentation and validation coverage.
+- Remaining: final economy/progression validation sync.
 
 ## Not Current Scope
 

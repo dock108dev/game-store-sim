@@ -160,6 +160,27 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_switches_backroom_tab_visibility"
+    },
+    {
+      "id": "owner_onboarding_baseline",
+      "name": "Owner onboarding checklist teaches receiving, pricing, stocking, checkout, trade-in, computer, ordering, and closing",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_exposes_owner_onboarding_baseline"
+    },
+    {
+      "id": "owner_onboarding_state_progress",
+      "name": "Owner onboarding checklist advances from real inventory, ledger, order, and closing progress",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_onboarding_advances_from_real_progress"
+    },
+    {
+      "id": "backroom_onboarding_dashboard_readout",
+      "name": "Backroom dashboard shows the owner onboarding checklist without a separate debug tutorial overlay",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
     }
   ]
 }

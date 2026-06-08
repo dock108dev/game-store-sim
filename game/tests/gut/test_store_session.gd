@@ -173,6 +173,63 @@ func test_store_session_purchases_upgrades_and_unlocks_expansion_path() -> void:
 	assert_string_contains(session.get_upgrade_summary_text(), "Starter Store Expansion $300.00")
 
 
+func test_store_session_exposes_owner_onboarding_baseline() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var steps := session.get_onboarding_steps()
+	var summary := session.get_onboarding_summary_text()
+
+	assert_eq(steps.size(), 8)
+	assert_eq(steps[0].get("step_id"), "receiving")
+	assert_eq(steps[0].get("status"), "next")
+	assert_eq(steps[1].get("status"), "later")
+	assert_string_contains(summary, "Owner checklist:")
+	assert_string_contains(summary, "Next - Receiving: Pick up incoming games from receiving")
+	assert_string_contains(summary, "Later - Pricing: Set a fair price")
+	assert_string_contains(summary, "Later - Stocking: Place priced games")
+	assert_string_contains(summary, "Later - Checkout: Ring up waiting buyers")
+	assert_string_contains(summary, "Later - Trade-in: Review condition")
+	assert_string_contains(summary, "Later - Backroom Computer: Review reports")
+	assert_string_contains(summary, "Later - Ordering: Order supplier lots")
+	assert_string_contains(summary, "Later - Closing: End the day")
+
+
+func test_store_session_onboarding_advances_from_real_progress() -> void:
+	var ledger := TransactionLedger.new()
+	var inventory_root := Node.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var trade_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(inventory_root)
+	add_child_autofree(session)
+	inventory_root.add_child(item)
+	inventory_root.add_child(trade_item)
+	session.ledger_path = session.get_path_to(ledger)
+	session.inventory_root_path = session.get_path_to(inventory_root)
+
+	item.set("location_id", "shelf_slot_001")
+	item.set("current_price_cents", 1999)
+	var sale_transaction := ledger.record_sale("customer_001", item)
+	session.apply_sale(sale_transaction)
+	var trade_transaction := ledger.record_trade_in("trade_seller_001", trade_item, 760)
+	session.apply_trade_in(trade_transaction)
+	session.order_supplier_lot("supplier_lot_used_games_001")
+	session.end_day()
+
+	var summary := session.get_onboarding_summary_text()
+
+	assert_string_contains(summary, "Done - Receiving")
+	assert_string_contains(summary, "Done - Pricing")
+	assert_string_contains(summary, "Done - Stocking")
+	assert_string_contains(summary, "Done - Checkout")
+	assert_string_contains(summary, "Done - Trade-in")
+	assert_string_contains(summary, "Done - Backroom Computer")
+	assert_string_contains(summary, "Done - Ordering")
+	assert_string_contains(summary, "Done - Closing")
+
+
 func test_store_session_applies_sale_to_cash() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

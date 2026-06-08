@@ -100,6 +100,48 @@ const DAY_STRUCTURE := [
 		"purpose": "Plan deliveries, release allocations, reorder needs, and setup priorities for the next day.",
 	},
 ]
+const ONBOARDING_STEPS := [
+	{
+		"step_id": "receiving",
+		"label": "Receiving",
+		"instruction": "Pick up incoming games from receiving before serving the rush.",
+	},
+	{
+		"step_id": "pricing",
+		"label": "Pricing",
+		"instruction": "Set a fair price while the game is in hand.",
+	},
+	{
+		"step_id": "stocking",
+		"label": "Stocking",
+		"instruction": "Place priced games on a matching display slot.",
+	},
+	{
+		"step_id": "checkout",
+		"label": "Checkout",
+		"instruction": "Ring up waiting buyers at the register.",
+	},
+	{
+		"step_id": "trade_in",
+		"label": "Trade-in",
+		"instruction": "Review condition, market value, and offer before accepting.",
+	},
+	{
+		"step_id": "computer",
+		"label": "Backroom Computer",
+		"instruction": "Review reports, releases, services, storage, and upgrade planning.",
+	},
+	{
+		"step_id": "ordering",
+		"label": "Ordering",
+		"instruction": "Order supplier lots so new stock arrives in receiving.",
+	},
+	{
+		"step_id": "closing",
+		"label": "Closing",
+		"instruction": "End the day, read the report, and plan tomorrow.",
+	},
+]
 
 @export var day_number: int = 1
 @export var day_phase: String = DAY_PHASE_SETUP
@@ -251,6 +293,39 @@ func get_day_structure_text() -> String:
 
 func get_tomorrow_planning_text() -> String:
 	return "Tomorrow planning: %s" % "; ".join(DailyReportPolicy.get_tomorrow_recommendations(self))
+
+
+func get_onboarding_steps() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	var found_next := false
+	for step in ONBOARDING_STEPS:
+		var row: Dictionary = step.duplicate(true)
+		var completed := _is_onboarding_step_complete(str(row.get("step_id", "")))
+		row["complete"] = completed
+		if completed:
+			row["status"] = "done"
+		elif not found_next:
+			row["status"] = "next"
+			found_next = true
+		else:
+			row["status"] = "later"
+		rows.append(row)
+	return rows
+
+
+func get_onboarding_summary_text(max_steps: int = 8) -> String:
+	var lines: Array[String] = ["Owner checklist:"]
+	var count := 0
+	for step in get_onboarding_steps():
+		if max_steps > 0 and count >= max_steps:
+			break
+		lines.append("%s - %s: %s" % [
+			_get_onboarding_status_label(str(step.get("status", "later"))),
+			str(step.get("label", "Step")),
+			str(step.get("instruction", "")),
+		])
+		count += 1
+	return "\n".join(lines)
 
 
 func get_daily_cash_pressure_rules() -> Array[Dictionary]:
@@ -1723,6 +1798,65 @@ func _get_upgrade_definition(upgrade_id: String) -> Dictionary:
 func _upgrade_requirements_met(upgrade: Dictionary) -> bool:
 	var required_upgrade_id := str(upgrade.get("requires_upgrade_id", ""))
 	return required_upgrade_id.is_empty() or has_upgrade(required_upgrade_id)
+
+
+func _is_onboarding_step_complete(step_id: String) -> bool:
+	match step_id:
+		"receiving":
+			return _has_inventory_left_receiving()
+		"pricing":
+			return _has_repriced_inventory()
+		"stocking":
+			return _has_stocked_inventory()
+		"checkout":
+			return get_sale_count() > 0
+		"trade_in":
+			return get_trade_in_count() > 0
+		"computer":
+			return not release_allocations.is_empty() \
+				or not supplier_orders.is_empty() \
+				or not fixture_orders.is_empty() \
+				or not purchased_upgrades.is_empty() \
+				or not operating_expenses.is_empty()
+		"ordering":
+			return not supplier_orders.is_empty()
+		"closing":
+			return is_day_closed or not operating_expenses.is_empty()
+	return false
+
+
+func _get_onboarding_status_label(status: String) -> String:
+	match status:
+		"done":
+			return "Done"
+		"next":
+			return "Next"
+	return "Later"
+
+
+func _has_inventory_left_receiving() -> bool:
+	for item in get_active_inventory_items():
+		var location_id := str(item.get("location_id"))
+		if location_id != "receiving_box_001" and location_id != "receiving_box":
+			return true
+	return false
+
+
+func _has_repriced_inventory() -> bool:
+	for item in get_active_inventory_items():
+		var product := item.get("product") as ProductDefinition
+		if product == null:
+			continue
+		if int(item.get("current_price_cents")) != product.suggested_price_cents:
+			return true
+	return false
+
+
+func _has_stocked_inventory() -> bool:
+	for item in get_active_inventory_items():
+		if str(item.get("location_id")).begins_with("shelf_slot"):
+			return true
+	return false
 
 
 func _format_opening_summary(delivered_orders: Array[Dictionary], resolved_launches: Array[Dictionary]) -> String:

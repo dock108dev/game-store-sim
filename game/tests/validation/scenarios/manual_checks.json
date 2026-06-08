@@ -553,6 +553,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "owner_onboarding_readability",
+      "name": "Owner checklist teaches the first-day loop without feeling like debug tutorial text",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify checklist coverage and state-derived progress; human review must confirm the wording helps players learn receiving, pricing, stocking, checkout, trade-ins, backroom computer, ordering, and closing without breaking store immersion.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_inventory_summary_readability",
       "name": "Backroom inventory summary is readable and matches visible active inventory",
       "status": "manual",

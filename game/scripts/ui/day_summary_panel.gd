@@ -372,6 +372,8 @@ func _update_labels() -> void:
 
 	title_label.text = "Backroom Computer"
 	summary_label.text = _session.get_summary_text()
+	if _session.has_method("get_onboarding_summary_text"):
+		summary_label.text += "\n" + _session.get_onboarding_summary_text()
 	if _session.has_method("get_daily_report_text"):
 		report_label.text = _session.get_daily_report_text()
 	else:
