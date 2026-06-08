@@ -206,6 +206,52 @@ func test_store_sign_panels_are_nonblocking_and_zone_aligned() -> void:
 	assert_lt(_flat_distance_xz((_store.get_node("ReceivingSignPanel") as CSGBox3D).global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 0.9)
 
 
+func test_retail_clutter_uses_short_fictional_callouts() -> void:
+	var expected_labels := {
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel": "WEEKLY PICKS",
+		"NewThisWeekPosterPanel/NewThisWeekPosterLabel": "NEW THIS WEEK",
+		"TradeBonusPosterPanel/TradeBonusPosterLabel": "TRADE BONUS",
+		"CounterDealTagPanel/CounterDealTagLabel": "$9+ USED",
+		"BargainBin/BinFrontTag/BinFrontLabel": "BARGAIN BIN",
+	}
+
+	for label_path in expected_labels:
+		var label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(label)
+		assert_eq(label.text, expected_labels[label_path])
+		assert_lte(label.text.length(), 13)
+		assert_lte(label.pixel_size, 0.0049)
+
+
+func test_retail_clutter_is_nonblocking_and_away_from_interaction_hotspots() -> void:
+	var clutter_boxes := [
+		"WeeklyPicksPosterPanel",
+		"NewThisWeekPosterPanel",
+		"TradeBonusPosterPanel",
+		"CounterDealTagPanel",
+		"RegisterQueueMat",
+		"BargainBin/BinBase",
+		"BargainBin/BinFrontTag",
+		"BargainBin/BinGameStackA",
+		"BargainBin/BinGameStackB",
+		"ControllerDisplayStand/StandBase",
+		"ControllerDisplayStand/ControllerPadA",
+		"ControllerDisplayStand/ControllerPadB",
+	]
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var rack := _store.get_node("GameDisplayRack") as Node3D
+
+	for box_path in clutter_boxes:
+		var box := _store.get_node_or_null(box_path) as CSGBox3D
+		assert_not_null(box)
+		assert_false(box.use_collision)
+		assert_true(_is_inside_store_floorprint(box.global_position))
+
+	assert_gt(_flat_distance_xz((_store.get_node("BargainBin") as Node3D).global_position, register.global_position), 4.0)
+	assert_gt(_flat_distance_xz((_store.get_node("ControllerDisplayStand") as Node3D).global_position, rack.global_position), 3.0)
+	assert_lte((_store.get_node("RegisterQueueMat") as CSGBox3D).size.y, 0.0121)
+
+
 func test_backroom_visual_zones_exist_without_collision() -> void:
 	var expected_zones := {
 		"BackroomReceivingZone": Vector3(-4.65, 0.028, 3.82),
@@ -569,3 +615,7 @@ func _flat_distance_xz(first: Vector3, second: Vector3) -> float:
 
 func _color_luma(color: Color) -> float:
 	return color.r * 0.2126 + color.g * 0.7152 + color.b * 0.0722
+
+
+func _is_inside_store_floorprint(position: Vector3) -> bool:
+	return position.x >= -6.9 and position.x <= 6.9 and position.z >= -5.9 and position.z <= 5.9

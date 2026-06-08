@@ -275,6 +275,117 @@ size = Vector3(4.8, 0.01, 1.6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4, 0.014, 1.9)
 material = SubResource("StandardMaterial3D_zone")
 
+[node name="WeeklyPicksPosterPanel" type="CSGBox3D" parent="."]
+size = Vector3(1.0, 0.62, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.82, 1.42, 5.86)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="WeeklyPicksPosterLabel" type="Label3D" parent="WeeklyPicksPosterPanel"]
+pixel_size = 0.0048
+modulate = Color(0.1, 0.12, 0.13, 1)
+outline_modulate = Color(0.96, 0.88, 0.66, 1)
+outline_size = 2
+billboard = 1
+text = "WEEKLY PICKS"
+font_size = 30
+
+[node name="NewThisWeekPosterPanel" type="CSGBox3D" parent="."]
+size = Vector3(1.08, 0.62, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08, 1.42, 5.86)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="NewThisWeekPosterLabel" type="Label3D" parent="NewThisWeekPosterPanel"]
+pixel_size = 0.0048
+modulate = Color(0.88, 0.96, 1, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 3
+billboard = 1
+text = "NEW THIS WEEK"
+font_size = 28
+
+[node name="TradeBonusPosterPanel" type="CSGBox3D" parent="."]
+size = Vector3(1.0, 0.62, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 1.42, 5.86)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="TradeBonusPosterLabel" type="Label3D" parent="TradeBonusPosterPanel"]
+pixel_size = 0.0048
+modulate = Color(1, 0.92, 0.72, 1)
+outline_modulate = Color(0.08, 0.04, 0.02, 1)
+outline_size = 3
+billboard = 1
+text = "TRADE BONUS"
+font_size = 30
+
+[node name="CounterDealTagPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.82, 0.22, 0.03)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.95, 1.24, -2.78)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CounterDealTagLabel" type="Label3D" parent="CounterDealTagPanel"]
+pixel_size = 0.0038
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+billboard = 1
+text = "$9+ USED"
+font_size = 24
+
+[node name="RegisterQueueMat" type="CSGBox3D" parent="."]
+size = Vector3(2.2, 0.012, 1.05)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.12, 0.023, -3.62)
+material = SubResource("StandardMaterial3D_zone")
+
+[node name="BargainBin" type="Node3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -5.35, 0, 1.15)
+
+[node name="BinBase" type="CSGBox3D" parent="BargainBin"]
+size = Vector3(0.86, 0.5, 0.62)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="BinFrontTag" type="CSGBox3D" parent="BargainBin"]
+size = Vector3(0.62, 0.18, 0.025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, -0.33)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BinFrontLabel" type="Label3D" parent="BargainBin/BinFrontTag"]
+pixel_size = 0.0038
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+billboard = 1
+text = "BARGAIN BIN"
+font_size = 20
+
+[node name="BinGameStackA" type="CSGBox3D" parent="BargainBin"]
+size = Vector3(0.42, 0.08, 0.32)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.16, 0.55, -0.05)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="BinGameStackB" type="CSGBox3D" parent="BargainBin"]
+size = Vector3(0.38, 0.08, 0.3)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 0.2, 0.58, 0.07)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="ControllerDisplayStand" type="Node3D" parent="."]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -5.55, 0, 2.35)
+
+[node name="StandBase" type="CSGBox3D" parent="ControllerDisplayStand"]
+size = Vector3(0.72, 0.18, 0.44)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ControllerPadA" type="CSGBox3D" parent="ControllerDisplayStand"]
+size = Vector3(0.34, 0.07, 0.22)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.16, 0.24, 0.02)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="ControllerPadB" type="CSGBox3D" parent="ControllerDisplayStand"]
+size = Vector3(0.32, 0.07, 0.2)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.18, 0.24, -0.02)
+material = SubResource("StandardMaterial3D_service_mat")
+
 [node name="FixturePlacementManager" type="Node3D" parent="."]
 script = ExtResource("11_fixture_placement_manager")
 valid_placement_material = SubResource("StandardMaterial3D_fixture_ghost_valid")
