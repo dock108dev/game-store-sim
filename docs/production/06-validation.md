@@ -44,8 +44,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current backroom-operations baseline:
 
-- `scripts/validate_godot.sh` passes with 390 GUT tests.
-- UI scenario automation coverage is 379/461, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 392 GUT tests.
+- UI scenario automation coverage is 382/465, above the 80% threshold.
 - Production script mapping coverage is 39/39.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
@@ -64,6 +64,7 @@ Current backroom-operations baseline:
 - Economy progression sync verifies cross-flow day phase, close pressure, next-day setup, decision feedback, goals, and manual playtest coverage through Stop 7.7.
 - Receiving workflow coverage verifies supplier delivery creates pending receiving batches with delivery point, sealed/opened box state, invoice check, expected/received count variance, sorting destination, completed status, backroom controls, and save/load persistence.
 - Storage workflow coverage verifies receiving-to-backstock movement, backstock retrieval, shelf capacity, overflow summary, Store/Pull backroom controls, movement history, and save/load persistence.
+- Service bench workflow coverage verifies service capabilities, repair tickets, parts, queued/in-progress/ready/picked-up state, Start Svc/Work Svc backroom controls, register pickup integration, and save/load persistence.
 
 ## Manual Validation
 
@@ -86,7 +87,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, and storage-workflow validation are synced through Stop 8.2.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, and service-bench validation are synced through Stop 8.3.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding validation is synced through Stop 7.6; manual QA should confirm the checklist teaches the first-day loop without feeling like debug tutorial text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
@@ -144,6 +145,8 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom preorder count and preorder-deposit total are readable after taking a preorder.
 - Register service customer, service completion prompt, service completion message, backroom service totals, recent activity, and daily-report service totals are readable.
 - Service completion reads as register work and does not imply a separate service terminal, sale, trade-in, preorder, or inventory item.
+- Backroom service bench shows available, locked, and placeholder service capabilities, ticket parts, progress, ready-for-pickup state, and pickup instructions.
+- Backroom `Start Svc` and `Work Svc` controls advance bench work without bypassing register customer completion.
 - Backroom release allocation commitment is readable, reserves launch wholesale cash, and stays clearly separate from launch-day fulfillment.
 - Starting launch day resolves `Neon Skyline` preorders first, sells surplus allocations to launch queue demand, and reports launch cash, launch profit, and reputation clearly.
 - Underallocating for launch day produces a readable missed-demand/reputation consequence.
@@ -203,7 +206,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/supplier_ordering.json`: supplier lot data, backroom supplier ordering, cash reservation, due-day delivery, receiving-box delivery, pending receiving batch state, box opening, invoice check, sorting completion, panel controls, and persistence coverage.
 - `scenarios/release_calendar.json`: fictional new-release data, countdown text, sorted/upcoming filtering, and backroom release-calendar readout checks.
 - `scenarios/preorder_deposit.json`: preorder customer, register deposit prompt, preorder ledger/session accounting, backroom summary, persistence, and screenshot coverage.
-- `scenarios/services.json`: first service customer, disc resurfacing request, register service prompt/completion, ledger/session accounting, recent activity, daily report totals, and screenshot coverage.
+- `scenarios/services.json`: first service customer, disc resurfacing request, service bench ticket workflow, register service prompt/completion, ledger/session accounting, recent activity, daily report totals, save/load service tickets, and screenshot coverage.
 - `scenarios/release_allocation.json`: release allocation commitment, allocation-limit enforcement, cash reservation, backroom readout, persistence, and screenshot coverage.
 - `scenarios/launch_day.json`: launch-day preorder fulfillment, launch queue fulfillment, reputation shortage, backroom readout, persistence, and save/restore coverage.
 - `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, and optional evidence storage checks.

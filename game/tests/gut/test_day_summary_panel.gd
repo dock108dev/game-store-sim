@@ -55,7 +55,8 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.supplier_order_label.text, "Receiving: Delivered as physical cases")
 	assert_string_contains(_panel.supplier_order_label.text, "Pending receiving: none")
 	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00 for storage placement")
-	assert_eq(_panel.services_label.text, "Services: none")
+	assert_string_contains(_panel.services_label.text, "Services: none")
+	assert_string_contains(_panel.services_label.text, "Service bench:")
 	assert_string_contains(_panel.settings_label.text, "Settings:")
 	assert_eq(_panel.hidden_records_label.text, "Hidden records: no active records.")
 	assert_eq(_panel.get_active_tab(), "dashboard")
@@ -68,6 +69,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_true(_panel.place_rack_button.disabled)
 	assert_eq(_panel.supplier_action_label.text, "Supplier")
 	assert_eq(_panel.storage_action_label.text, "Storage")
+	assert_eq(_panel.service_action_label.text, "Service")
 	assert_eq(_panel.release_action_label.text, "Release")
 	assert_eq(_panel.day_action_label.text, "Day")
 	assert_eq(_panel.placement_action_label.text, "Storage Placement")
@@ -77,11 +79,15 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.sort_receiving_button.text, "Sort")
 	assert_eq(_panel.store_item_button.text, "Store")
 	assert_eq(_panel.pull_item_button.text, "Pull")
+	assert_eq(_panel.start_service_button.text, "Start Svc")
+	assert_eq(_panel.work_service_button.text, "Work Svc")
 	assert_true(_panel.open_box_button.disabled)
 	assert_true(_panel.check_invoice_button.disabled)
 	assert_true(_panel.sort_receiving_button.disabled)
 	assert_true(_panel.store_item_button.disabled)
 	assert_true(_panel.pull_item_button.disabled)
+	assert_false(_panel.start_service_button.disabled)
+	assert_true(_panel.work_service_button.disabled)
 	assert_eq(_panel.order_rack_button.text, "Order Rack")
 	assert_eq(_panel.place_rack_button.text, "Place Rack")
 	assert_eq(_panel.commit_allocation_button.text, "Commit Release")
@@ -144,6 +150,7 @@ func test_day_summary_panel_switches_backroom_tab_visibility() -> void:
 	assert_true(_panel.services_label.visible)
 	assert_string_contains(_panel.services_label.text, "Services: 1 completed")
 	assert_string_contains(_panel.services_label.text, "Revenue: $4.99")
+	assert_string_contains(_panel.services_label.text, "Service bench:")
 	assert_false(_panel.inventory_label.visible)
 
 	assert_true(_panel.set_active_tab("settings"))
@@ -232,6 +239,24 @@ func test_day_summary_panel_includes_recent_sale_activity() -> void:
 	assert_string_contains(_panel.summary_label.text, "Profit: $12.99")
 	assert_string_contains(_panel.last_sale_label.text, "Recent activity:")
 	assert_string_contains(_panel.last_sale_label.text, "Sale Star Trader $21.99 profit $12.99")
+
+
+func test_day_summary_panel_runs_service_bench_workflow() -> void:
+	assert_true(_panel.open_for_session(_session))
+	assert_true(_panel.set_active_tab("services"))
+
+	assert_true(_panel.start_service_ticket())
+	assert_string_contains(_panel.status_label.text, "Started Disc Resurfacing bench ticket.")
+	assert_string_contains(_panel.services_label.text, "service_ticket_001 Disc Resurfacing")
+	assert_string_contains(_panel.services_label.text, "queued 0%")
+	assert_false(_panel.work_service_button.disabled)
+	assert_true(_panel.work_service_ticket())
+	assert_string_contains(_panel.status_label.text, "Worked Disc Resurfacing: in_progress.")
+	assert_string_contains(_panel.services_label.text, "in_progress 50%")
+	assert_true(_panel.work_service_ticket())
+	assert_string_contains(_panel.status_label.text, "Worked Disc Resurfacing: ready_for_pickup.")
+	assert_string_contains(_panel.services_label.text, "ready_for_pickup 100%")
+	assert_true(_panel.work_service_button.disabled)
 
 
 func test_day_summary_panel_includes_recent_trade_in_activity() -> void:

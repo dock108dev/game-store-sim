@@ -50,6 +50,27 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_service_revenue_cost_and_profit"
     },
     {
+      "id": "service_bench_ticket_workflow",
+      "name": "Store session runs a service bench ticket from queued to ready and register pickup",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_runs_service_bench_ticket_to_register_pickup"
+    },
+    {
+      "id": "backroom_panel_service_bench_controls",
+      "name": "Backroom computer exposes Start Svc and Work Svc controls for bench tickets",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_runs_service_bench_workflow"
+    },
+    {
+      "id": "service_tickets_persist",
+      "name": "Service bench tickets save and restore through the save codec",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
       "id": "service_recent_activity",
       "name": "Backroom recent activity describes completed service work",
       "status": "automated",

@@ -17,6 +17,7 @@ func create_save_data(session: StoreSession) -> Dictionary:
 		"supplier_orders": session.get_pending_supplier_orders(),
 		"receiving_batches": session.get_receiving_batches(),
 		"storage_movements": session.get_storage_movements(),
+		"service_tickets": session.get_service_tickets(),
 		"preorder_deposits": session.get_preorder_deposits(),
 		"release_allocations": session.get_release_allocations(),
 		"launch_events": session.get_launch_events(),
@@ -87,6 +88,11 @@ func restore_into_existing_scene(
 	if typeof(storage_movements_value) == TYPE_ARRAY and session.has_method("replace_storage_movements"):
 		var storage_movements: Array = storage_movements_value
 		session.replace_storage_movements(storage_movements)
+
+	var service_tickets_value: Variant = data.get("service_tickets", [])
+	if typeof(service_tickets_value) == TYPE_ARRAY and session.has_method("replace_service_tickets"):
+		var service_tickets: Array = service_tickets_value
+		session.replace_service_tickets(service_tickets)
 
 	var preorder_deposits_value: Variant = data.get("preorder_deposits", [])
 	if typeof(preorder_deposits_value) == TYPE_ARRAY and session.has_method("replace_preorder_deposits"):

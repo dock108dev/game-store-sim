@@ -273,6 +273,29 @@ custom_minimum_size = Vector2(88, 36)
 layout_mode = 2
 text = "Pull"
 
+[node name="ServiceActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ServiceActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions"]
+layout_mode = 2
+text = "Service"
+horizontal_alignment = 1
+
+[node name="ServiceActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StartServiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Start Svc"
+
+[node name="WorkServiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Work Svc"
+
 [node name="ReleaseActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
 layout_mode = 2
 theme_override_constants/separation = 4

@@ -436,7 +436,7 @@ Stops:
 
 - Stop 8.1: Receiving workflow. Done in `Build receiving workflow`: supplier delivery now creates pending receiving batches with delivery point, sealed/opened box state, invoice check, sorting destination, completed status, backroom Open Box/Check Inv/Sort controls, save/load persistence, and validation/manual checklist coverage.
 - Stop 8.2: Storage workflow. Done in `Build storage workflow`: store sessions now move physical product item nodes from receiving into a backstock shelf and back to receiving, track shelf capacity and overflow, expose Store/Pull backroom controls, include storage movement history in save/load, and document manual readability checks.
-- Stop 8.3: Service bench workflow. Add disc resurfacing, cartridge cleaning, console test placeholder, repair tickets, parts, completion, and customer pickup.
+- Stop 8.3: Service bench workflow. Done in `Build service bench workflow`: store sessions now expose disc resurfacing service tickets, locked cartridge cleaning, console-test placeholder data, ticket parts, queued/in-progress/ready-for-pickup/picked-up states, Start Svc/Work Svc backroom controls, register pickup integration, save/load persistence, and manual checklist coverage.
 - Stop 8.4: Management desk workflow. Add supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering.
 - Stop 8.5: Security/safe placeholders. Add cash storage, high-value storage, suspicious goods isolation, and security footage placeholder.
 - Stop 8.6: Backroom validation sync. Update tests and manual checks for physical operations.
@@ -459,15 +459,17 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 390 GUT tests.
-- UI scenario automation coverage is 379/461, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 392 GUT tests.
+- UI scenario automation coverage is 382/465, above the 80% threshold.
 - Production script mapping coverage is 39/39.
-- Validation tool manifest coverage reports 1 active standalone tool.
-- Product catalog content validation passes with 33 products.
+- Standalone validation tool manifest coverage has 1 active tool.
+- Product catalog content check passes with 33 fictional products.
 - Focused GUT coverage passes for store session receiving delivery/lifecycle, save/load receiving persistence, and day-summary panel receiving controls.
 - Manual receiving workflow checks are current for delivery point, box opening, invoice check, sorting, and pending/completed state readability.
 - Focused GUT coverage passes for store session storage movement/retrieval, day-summary panel Store/Pull controls, and save/load storage movement persistence.
 - Manual storage workflow checks are current for capacity, overflow, Store/Pull controls, backstock movement, and retrieval readability.
+- Focused GUT coverage passes for service bench ticket workflow, day-summary panel Start Svc/Work Svc controls, register pickup integration, and save/load service ticket persistence.
+- Manual service bench checks are current for capabilities, parts, ticket progress, ready pickup, and register completion readability.
 
 ## Milestone 9: Store Building, Decoration, And Expansion
 

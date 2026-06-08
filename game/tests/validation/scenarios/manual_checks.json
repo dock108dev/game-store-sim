@@ -649,6 +649,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "service_bench_workflow_readability",
+      "name": "Backroom service bench workflow clearly shows service capabilities, parts, ticket progress, ready pickup, and register completion",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify service ticket states, Start Svc/Work Svc controls, save/load, and register pickup accounting; human review must confirm the bench workflow reads as physical service work while customer completion still belongs at the register.",
+      "owner": "manual QA"
+    },
+    {
       "id": "evidence_storage_invisible",
       "name": "Evidence storage remains hidden during normal play",
       "status": "manual",

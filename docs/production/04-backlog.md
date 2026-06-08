@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and backroom operations are underway with receiving and storage workflow slices.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7 and backroom operations are underway with receiving, storage, and service bench workflow slices.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -67,6 +67,7 @@ The following polish items remain valid historical checkpoints:
 - Done: kept the backroom computer readable as a management terminal, not another register.
 - Done: added a receiving workflow state for supplier deliveries with delivery point, sealed/opened box state, invoice check, sorting destination, pending/completed status, backroom controls, save/load coverage, and manual validation coverage.
 - Done: added storage workflow state for receiving-to-backstock movement, backstock retrieval, shelf capacity, overflow summary, Store/Pull backroom controls, movement history, save/load coverage, and manual validation coverage.
+- Done: added service bench workflow state for disc resurfacing tickets, locked/placeholder future services, parts, queued/in-progress/ready/picked-up progress, Start Svc/Work Svc controls, register pickup integration, save/load coverage, and manual validation coverage.
 
 ## Computer And Menu Polish
 
@@ -118,6 +119,7 @@ Compressed summary of completed validated systems:
 - Buyer customer manager, buyer movement, price sensitivity, lower-priced copy selection, register queue, sale completion, and transaction ledger.
 - Trade-in seller, offer panel, cash/store-credit acceptance, counteroffer adjustment, decline, and acquired inventory.
 - Service customer and register-completed service accounting.
+- Service bench ticket preparation with register-completed customer pickup/accounting.
 - Backroom computer summaries, daily report, recent activity, reorder suggestions, demand readout, market drift, supplier ordering, release calendar, allocation commitment, launch-day resolution, and fixture controls.
 - Fixture ordering, ghost preview, valid/invalid state, movement, rotation, snap, placement confirmation, and save-smoke coverage.
 - Supplier orders with due-day receiving-box delivery, pending receiving workflow, and backstock storage/retrieval for delivered inventory.

@@ -19,6 +19,40 @@ const DAILY_SHRINKAGE_PLACEHOLDER_CENTS := 0
 const STORAGE_LOCATION_ID := "backstock_shelf_001"
 const BASE_STORAGE_CAPACITY := 6
 const UPGRADED_STORAGE_CAPACITY := 12
+const SERVICE_BENCH_CATALOG := [
+	{
+		"service_id": "disc_resurfacing",
+		"service_name": "Disc Resurfacing",
+		"item_name": "Scratched Orbit Disc",
+		"bench_id": "backroom_service_bench",
+		"parts": ["resurfacing_pad", "cleaning_solution", "paper_sleeve"],
+		"price_cents": 499,
+		"cost_cents": 100,
+		"turnaround_minutes": 10,
+	},
+	{
+		"service_id": "cartridge_cleaning",
+		"service_name": "Cartridge Cleaning",
+		"item_name": "Dusty Cart",
+		"bench_id": "backroom_service_bench",
+		"parts": ["contact_cleaner", "lint_swab"],
+		"price_cents": 699,
+		"cost_cents": 150,
+		"turnaround_minutes": 15,
+		"requires_upgrade_id": "upgrade_service_cleaning_tools",
+	},
+	{
+		"service_id": "console_test",
+		"service_name": "Console Test",
+		"item_name": "Trade-in Console",
+		"bench_id": "backroom_service_bench",
+		"parts": ["test_cable", "diagnostic_card"],
+		"price_cents": 999,
+		"cost_cents": 250,
+		"turnaround_minutes": 20,
+		"placeholder": true,
+	},
+]
 const UPGRADE_CATALOG := [
 	{
 		"upgrade_id": "upgrade_fixture_peg_wall",
@@ -173,6 +207,7 @@ var placed_fixtures: Array[Dictionary] = []
 var supplier_orders: Array[Dictionary] = []
 var receiving_batches: Array[Dictionary] = []
 var storage_movements: Array[Dictionary] = []
+var service_tickets: Array[Dictionary] = []
 var preorder_deposits: Array[Dictionary] = []
 var release_allocations: Array[Dictionary] = []
 var launch_events: Array[Dictionary] = []
@@ -206,6 +241,7 @@ func apply_preorder_deposit(transaction: Dictionary) -> void:
 
 func apply_service(transaction: Dictionary) -> void:
 	cash_cents += int(transaction.get("service_price_cents", 0))
+	_mark_service_ticket_picked_up(transaction)
 
 
 func end_day() -> void:
@@ -638,6 +674,128 @@ func get_total_service_profit_cents() -> int:
 		return 0
 
 	return ledger.get_total_service_profit_cents()
+
+
+func get_service_catalog() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for service in SERVICE_BENCH_CATALOG:
+		var row: Dictionary = service.duplicate(true)
+		row["available"] = _service_requirements_met(row)
+		rows.append(row)
+	return rows
+
+
+func get_service_tickets() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for ticket in service_tickets:
+		rows.append(ticket.duplicate(true))
+	return rows
+
+
+func replace_service_tickets(tickets: Array) -> void:
+	service_tickets.clear()
+	for ticket in tickets:
+		if typeof(ticket) == TYPE_DICTIONARY:
+			var row: Dictionary = ticket
+			service_tickets.append(row.duplicate(true))
+
+
+func can_start_service_ticket(service_id: String = "disc_resurfacing") -> bool:
+	return not is_day_closed and not _get_service_definition(service_id).is_empty()
+
+
+func start_service_ticket(service_id: String = "disc_resurfacing") -> Dictionary:
+	if not can_start_service_ticket(service_id):
+		return {}
+
+	var service := _get_service_definition(service_id)
+	var ticket := {
+		"ticket_id": "service_ticket_%03d" % (service_tickets.size() + 1),
+		"service_id": str(service.get("service_id", service_id)),
+		"service_name": str(service.get("service_name", "Service")),
+		"item_name": str(service.get("item_name", "item")),
+		"bench_id": str(service.get("bench_id", "backroom_service_bench")),
+		"parts": (service.get("parts", []) as Array).duplicate(true),
+		"price_cents": int(service.get("price_cents", 0)),
+		"cost_cents": int(service.get("cost_cents", 0)),
+		"turnaround_minutes": int(service.get("turnaround_minutes", 0)),
+		"started_day": day_number,
+		"progress_percent": 0,
+		"status": "queued",
+	}
+	service_tickets.append(ticket)
+	return ticket.duplicate(true)
+
+
+func get_active_service_ticket() -> Dictionary:
+	for ticket in service_tickets:
+		var status := str(ticket.get("status", "queued"))
+		if status == "queued" or status == "in_progress" or status == "ready_for_pickup":
+			return ticket.duplicate(true)
+	return {}
+
+
+func can_work_service_ticket() -> bool:
+	if is_day_closed:
+		return false
+	for ticket in service_tickets:
+		var status := str(ticket.get("status", "queued"))
+		if status == "queued" or status == "in_progress":
+			return true
+	return false
+
+
+func work_service_ticket(ticket_id: String = "") -> Dictionary:
+	if not can_work_service_ticket():
+		return {}
+
+	var index := _find_service_ticket_index(ticket_id, true)
+	if index < 0:
+		return {}
+
+	var ticket := service_tickets[index]
+	var status := str(ticket.get("status", "queued"))
+	if status == "queued":
+		ticket["status"] = "in_progress"
+		ticket["progress_percent"] = 50
+	elif status == "in_progress":
+		ticket["status"] = "ready_for_pickup"
+		ticket["progress_percent"] = 100
+		ticket["ready_day"] = day_number
+	service_tickets[index] = ticket
+	return ticket.duplicate(true)
+
+
+func get_service_bench_summary_text() -> String:
+	var lines: Array[String] = ["Service bench:"]
+	lines.append("Bench: Backroom service bench / backroom_service_bench")
+	lines.append("Capabilities:")
+	for service in get_service_catalog():
+		var availability := "available" if bool(service.get("available", false)) else "locked"
+		if bool(service.get("placeholder", false)):
+			availability = "placeholder"
+		lines.append("%s: %s (%s, %dm, parts %d)" % [
+			str(service.get("service_name", "Service")),
+			availability,
+			format_money(int(service.get("price_cents", 0))),
+			int(service.get("turnaround_minutes", 0)),
+			(service.get("parts", []) as Array).size(),
+		])
+	if service_tickets.is_empty():
+		lines.append("Tickets: none")
+	else:
+		lines.append("Tickets:")
+		for ticket in service_tickets:
+			lines.append("%s %s for %s - %s %d%%" % [
+				str(ticket.get("ticket_id", "service_ticket")),
+				str(ticket.get("service_name", "Service")),
+				str(ticket.get("item_name", "item")),
+				str(ticket.get("status", "queued")),
+				int(ticket.get("progress_percent", 0)),
+			])
+			lines.append("Parts: %s" % ", ".join(ticket.get("parts", []) as Array))
+	lines.append("Pickup: complete ready service work at the register with the customer")
+	return "\n".join(lines)
 
 
 func get_total_preorder_deposit_cents() -> int:
@@ -2040,6 +2198,50 @@ func _get_upgrade_definition(upgrade_id: String) -> Dictionary:
 func _upgrade_requirements_met(upgrade: Dictionary) -> bool:
 	var required_upgrade_id := str(upgrade.get("requires_upgrade_id", ""))
 	return required_upgrade_id.is_empty() or has_upgrade(required_upgrade_id)
+
+
+func _get_service_definition(service_id: String) -> Dictionary:
+	for service in SERVICE_BENCH_CATALOG:
+		if str(service.get("service_id", "")) == service_id and _service_requirements_met(service):
+			return service.duplicate(true)
+	return {}
+
+
+func _service_requirements_met(service: Dictionary) -> bool:
+	var required_upgrade_id := str(service.get("requires_upgrade_id", ""))
+	return required_upgrade_id.is_empty() or has_upgrade(required_upgrade_id)
+
+
+func _find_service_ticket_index(ticket_id: String = "", allow_first_workable: bool = false) -> int:
+	for index in range(service_tickets.size()):
+		var ticket := service_tickets[index]
+		if not ticket_id.is_empty() and str(ticket.get("ticket_id", "")) == ticket_id:
+			return index
+		if allow_first_workable and ticket_id.is_empty():
+			var status := str(ticket.get("status", "queued"))
+			if status == "queued" or status == "in_progress":
+				return index
+	return -1
+
+
+func _mark_service_ticket_picked_up(transaction: Dictionary) -> void:
+	var service_id := str(transaction.get("service_id", ""))
+	if service_id.is_empty():
+		return
+
+	for index in range(service_tickets.size()):
+		var ticket := service_tickets[index]
+		if str(ticket.get("service_id", "")) != service_id:
+			continue
+		var status := str(ticket.get("status", "queued"))
+		if status != "ready_for_pickup" and status != "in_progress" and status != "queued":
+			continue
+		ticket["status"] = "picked_up"
+		ticket["progress_percent"] = 100
+		ticket["pickup_day"] = day_number
+		ticket["transaction_id"] = str(transaction.get("transaction_id", ""))
+		service_tickets[index] = ticket
+		return
 
 
 func _is_onboarding_step_complete(step_id: String) -> bool:

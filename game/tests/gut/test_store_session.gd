@@ -361,6 +361,46 @@ func test_store_session_tracks_service_revenue_cost_and_profit() -> void:
 	assert_string_contains(session.get_summary_text(), "Services profit: $3.99")
 
 
+func test_store_session_runs_service_bench_ticket_to_register_pickup() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var customer: Node = load("res://scenes/customers/simple_service_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+	session.ledger_path = session.get_path_to(ledger)
+
+	assert_true(session.can_start_service_ticket("disc_resurfacing"))
+	var ticket := session.start_service_ticket("disc_resurfacing")
+
+	assert_eq(ticket.get("service_id"), "disc_resurfacing")
+	assert_eq(ticket.get("bench_id"), "backroom_service_bench")
+	assert_eq(ticket.get("status"), "queued")
+	assert_eq((ticket.get("parts") as Array).size(), 3)
+	assert_string_contains(session.get_service_bench_summary_text(), "Disc Resurfacing: available")
+	assert_string_contains(session.get_service_bench_summary_text(), "Cartridge Cleaning: locked")
+	assert_string_contains(session.get_service_bench_summary_text(), "Console Test: placeholder")
+	assert_string_contains(session.get_service_bench_summary_text(), "service_ticket_001 Disc Resurfacing for Scratched Orbit Disc - queued 0%")
+
+	var worked := session.work_service_ticket()
+	var ready := session.work_service_ticket()
+
+	assert_eq(worked.get("status"), "in_progress")
+	assert_eq(worked.get("progress_percent"), 50)
+	assert_eq(ready.get("status"), "ready_for_pickup")
+	assert_eq(ready.get("progress_percent"), 100)
+	assert_false(session.can_work_service_ticket())
+	assert_string_contains(session.get_service_bench_summary_text(), "ready_for_pickup 100%")
+
+	var transaction := ledger.record_service(customer)
+	session.apply_service(transaction)
+
+	assert_eq(session.get_service_tickets()[0].get("status"), "picked_up")
+	assert_eq(session.get_service_tickets()[0].get("transaction_id"), "service_001")
+	assert_string_contains(session.get_service_bench_summary_text(), "picked_up 100%")
+	assert_eq(session.get_service_count(), 1)
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()

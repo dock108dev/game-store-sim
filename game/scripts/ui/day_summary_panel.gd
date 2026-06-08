@@ -62,6 +62,7 @@ const BACKROOM_TABS := [
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var supplier_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/SupplierActionLabel
 @onready var storage_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionLabel
+@onready var service_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionLabel
 @onready var release_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ReleaseActions/ReleaseActionLabel
 @onready var day_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionLabel
 @onready var placement_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementActionLabel
@@ -74,6 +75,8 @@ const BACKROOM_TABS := [
 @onready var place_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons/PlaceRackButton
 @onready var store_item_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons/StoreItemButton
 @onready var pull_item_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons/PullItemButton
+@onready var start_service_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons/StartServiceButton
+@onready var work_service_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons/WorkServiceButton
 @onready var end_day_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/EndDayButton
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/CloseButton
 @onready var rack_left_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackLeftButton
@@ -117,6 +120,8 @@ func _ready() -> void:
 	place_rack_button.pressed.connect(place_pending_rack)
 	store_item_button.pressed.connect(store_receiving_item)
 	pull_item_button.pressed.connect(pull_backstock_item)
+	start_service_button.pressed.connect(start_service_ticket)
+	work_service_button.pressed.connect(work_service_ticket)
 	rack_left_button.pressed.connect(move_pending_rack_left)
 	rack_right_button.pressed.connect(move_pending_rack_right)
 	rack_forward_button.pressed.connect(move_pending_rack_forward)
@@ -362,6 +367,37 @@ func pull_backstock_item() -> bool:
 	return true
 
 
+func start_service_ticket() -> bool:
+	if _session == null or not _session.has_method("start_service_ticket"):
+		return false
+
+	var ticket: Dictionary = _session.start_service_ticket("disc_resurfacing")
+	_update_labels()
+	if ticket.is_empty():
+		status_label.text = "Could not start service ticket."
+		return false
+
+	status_label.text = "Started %s bench ticket." % str(ticket.get("service_name", "service"))
+	return true
+
+
+func work_service_ticket() -> bool:
+	if _session == null or not _session.has_method("work_service_ticket"):
+		return false
+
+	var ticket: Dictionary = _session.work_service_ticket()
+	_update_labels()
+	if ticket.is_empty():
+		status_label.text = "No service ticket ready for bench work."
+		return false
+
+	status_label.text = "Worked %s: %s." % [
+		str(ticket.get("service_name", "service")),
+		str(ticket.get("status", "in_progress")),
+	]
+	return true
+
+
 func move_pending_rack_left() -> bool:
 	return _adjust_pending_rack(-1, 0, "left")
 
@@ -542,6 +578,14 @@ func _update_labels() -> void:
 		pull_item_button.disabled = _session.is_day_closed or not _session.can_retrieve_backstock_item()
 	else:
 		pull_item_button.disabled = true
+	if _session.has_method("can_start_service_ticket"):
+		start_service_button.disabled = _session.is_day_closed or not _session.can_start_service_ticket("disc_resurfacing")
+	else:
+		start_service_button.disabled = true
+	if _session.has_method("can_work_service_ticket"):
+		work_service_button.disabled = _session.is_day_closed or not _session.can_work_service_ticket()
+	else:
+		work_service_button.disabled = true
 	var can_adjust_fixture := false
 	if _session.has_method("can_adjust_pending_fixture_placement"):
 		can_adjust_fixture = not _session.is_day_closed and _session.can_adjust_pending_fixture_placement()
@@ -675,14 +719,18 @@ func _get_services_text() -> String:
 		return "Services unavailable"
 
 	var count := int(_session.get_service_count())
+	var bench_text := ""
+	if _session.has_method("get_service_bench_summary_text"):
+		bench_text = "\n" + _session.get_service_bench_summary_text()
 	if count <= 0:
-		return "Services: none"
+		return "Services: none" + bench_text
 
-	return "Services: %d completed\nRevenue: %s\nCost: %s\nProfit: %s" % [
+	return "Services: %d completed\nRevenue: %s\nCost: %s\nProfit: %s%s" % [
 		count,
 		_session.format_money(int(_session.get_total_service_revenue_cents())),
 		_session.format_money(int(_session.get_total_service_cost_cents())),
 		_session.format_money(int(_session.get_total_service_profit_cents())),
+		bench_text,
 	]
 
 
