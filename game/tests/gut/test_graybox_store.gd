@@ -207,6 +207,48 @@ func test_store_lighting_has_warm_sales_and_cool_backroom_layers() -> void:
 	assert_gt(backroom_light.global_position.z, 4.0)
 
 
+func test_sales_floor_has_merchandising_and_route_cues() -> void:
+	var route_mat := _store.get_node_or_null("SalesFloorRouteMat") as CSGBox3D
+	var new_release_endcap := _store.get_node_or_null("NewReleaseEndcap") as Node3D
+	var staff_picks_stand := _store.get_node_or_null("StaffPicksStand") as Node3D
+	var new_release_label := _store.get_node_or_null("NewReleaseEndcap/EndcapHeaderPanel/EndcapHeaderLabel") as Label3D
+	var staff_picks_label := _store.get_node_or_null("StaffPicksStand/StaffPicksHeaderPanel/StaffPicksHeaderLabel") as Label3D
+
+	assert_not_null(route_mat)
+	assert_not_null(new_release_endcap)
+	assert_not_null(staff_picks_stand)
+	assert_not_null(new_release_label)
+	assert_not_null(staff_picks_label)
+	assert_false(route_mat.use_collision)
+	assert_eq(new_release_label.text, "NEW RELEASES")
+	assert_eq(staff_picks_label.text, "STAFF PICKS")
+	assert_lte(route_mat.size.y, 0.0121)
+	assert_true(_is_inside_store_floorprint(route_mat.global_position))
+	assert_true(_is_inside_store_floorprint(new_release_endcap.global_position))
+	assert_true(_is_inside_store_floorprint(staff_picks_stand.global_position))
+	assert_lt(new_release_endcap.global_position.z, 0.0)
+	assert_lt(staff_picks_stand.global_position.z, 1.0)
+
+	for cue_path in [
+		"NewReleaseEndcap/EndcapBase",
+		"NewReleaseEndcap/EndcapHeaderPanel",
+		"NewReleaseEndcap/EndcapCaseStackA",
+		"NewReleaseEndcap/EndcapCaseStackB",
+		"StaffPicksStand/StaffPicksBase",
+		"StaffPicksStand/StaffPicksHeaderPanel",
+		"StaffPicksStand/StaffPickCaseA",
+		"StaffPicksStand/StaffPickCaseB",
+	]:
+		var cue := _store.get_node_or_null(cue_path) as CSGBox3D
+		assert_not_null(cue)
+		assert_false(cue.use_collision)
+
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var rack := _store.get_node("GameDisplayRack") as Node3D
+	assert_gt(_flat_distance_xz(new_release_endcap.global_position, register.global_position), 3.0)
+	assert_gt(_flat_distance_xz(staff_picks_stand.global_position, rack.global_position), 4.0)
+
+
 func test_store_signage_uses_fictional_world_labels() -> void:
 	var expected_labels := {
 		"StoreIdentitySignPanel/StoreIdentitySignLabel": "SAVE POINT GAMES",
