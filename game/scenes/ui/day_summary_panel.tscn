@@ -42,45 +42,85 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
+[node name="DashboardHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Dashboard"
+
 [node name="SummaryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Day summary"
+autowrap_mode = 3
 
 [node name="ReportLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Daily report: day still open"
+autowrap_mode = 3
+
+[node name="ActivityHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Activity"
 
 [node name="LastSaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Recent activity: none"
+autowrap_mode = 3
+
+[node name="InventoryHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Inventory"
 
 [node name="InventoryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Inventory: none"
+autowrap_mode = 3
 
 [node name="ReorderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Reorder suggestions: none"
+autowrap_mode = 3
+
+[node name="MarketHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Market"
 
 [node name="DemandLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Category demand: none"
+autowrap_mode = 3
 
 [node name="MarketDriftLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Market drift: none"
+autowrap_mode = 3
+
+[node name="ReleaseHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Releases"
 
 [node name="ReleaseCalendarLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Release calendar: none"
+autowrap_mode = 3
+
+[node name="OperationsHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Operations"
 
 [node name="SupplierOrderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Supplier orders: none"
+autowrap_mode = 3
 
 [node name="FixtureLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Fixtures: none"
+autowrap_mode = 3
 
 [node name="StatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2

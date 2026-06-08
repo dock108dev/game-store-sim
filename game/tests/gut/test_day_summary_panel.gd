@@ -26,6 +26,12 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_true(_panel.is_open())
 	assert_eq(_panel.get_active_session(), _session)
 	assert_string_contains(_panel.title_label.text, "Backroom Computer")
+	assert_eq(_panel.dashboard_header.text, "Dashboard")
+	assert_eq(_panel.activity_header.text, "Activity")
+	assert_eq(_panel.inventory_header.text, "Inventory")
+	assert_eq(_panel.market_header.text, "Market")
+	assert_eq(_panel.release_header.text, "Releases")
+	assert_eq(_panel.operations_header.text, "Operations")
 	assert_string_contains(_panel.summary_label.text, "Cash: $500.00")
 	assert_string_contains(_panel.summary_label.text, "Sales: 0")
 	assert_eq(_panel.report_label.text, "Daily report: day still open")
@@ -44,6 +50,34 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
 	assert_eq(_panel.end_day_button.text, "End Day")
+
+
+func test_day_summary_panel_groups_readouts_by_management_section() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	var content_vbox := _panel.get_node("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox")
+	var expected_order := [
+		"DashboardHeader",
+		"SummaryLabel",
+		"ReportLabel",
+		"ActivityHeader",
+		"LastSaleLabel",
+		"InventoryHeader",
+		"InventoryLabel",
+		"ReorderLabel",
+		"MarketHeader",
+		"DemandLabel",
+		"MarketDriftLabel",
+		"ReleaseHeader",
+		"ReleaseCalendarLabel",
+		"OperationsHeader",
+		"SupplierOrderLabel",
+		"FixtureLabel",
+	]
+
+	assert_eq(content_vbox.get_child_count(), expected_order.size())
+	for index in range(expected_order.size()):
+		assert_eq(content_vbox.get_child(index).name, expected_order[index])
 
 
 func test_day_summary_panel_includes_recent_sale_activity() -> void:
