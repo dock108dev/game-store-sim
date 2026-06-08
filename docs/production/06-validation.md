@@ -42,11 +42,12 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 359 GUT tests.
-- UI scenario automation coverage is 346/414, above the required 80% threshold.
-- Production script mapping coverage is 38/38.
+- `scripts/validate_godot.sh` passes with 368 GUT tests.
+- UI scenario automation coverage is 348/417, above the required 80% threshold.
+- Production script mapping coverage is 39/39.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
+- Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants, with product items applying generated cue meshes from data.
 
 ## Manual Validation
 
@@ -62,11 +63,12 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Register checkout uses a receipt-style panel with itemized sale, subtotal, tax, total, tender, change due, service line, preorder deposit line, return placeholder, and confirmation feedback.
 - Trade-in appraisal shows condition, completeness, authenticity confidence, market value, demand, projected margin, cash/store-credit offer, counteroffer, and risk notes.
 - Pricing shows cost basis, market price, current price, suggested range, demand, projected margin, apply-to-matching batch scope, and outcome warnings.
+- Product visual variants for case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cues read clearly in receiving, hand, shelf, customer, and register contexts.
 - Backroom computer tabs split dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records into readable task sections.
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, customer validation docs, and product schema validation are synced through Stop 6.1.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, customer validation docs, product schema validation, and product visual variant rules are synced through Stop 6.2.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
@@ -169,7 +171,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/customer_polish.json`: customer role prop, silhouette, and register-area spacing polish checks.
 - `scenarios/store_visual_polish.json`: store material contrast, lighting layers, fictional signage, and nonblocking retail clutter checks.
-- `scenarios/product_fixture_polish.json`: used-game case cue, rack category, carry stack, and receiving intake polish checks.
+- `scenarios/product_fixture_polish.json`: used-game case cue, product visual variant rules, generated cue meshes, rack category, carry stack, and receiving intake polish checks.
 - `scenarios/economy.json`: category demand defaults, demand normalization, buyer price-limit wiring, market drift math, and backroom economy readout checks.
 - `scenarios/trade_in.json`: trade-in seller, carried item, offer review panel, counteroffer controls, cash accept, store-credit accept, decline, receiving inventory, and tender accounting checks.
 - `scenarios/day_summary.json`: store session cash/accounting totals, explicit daily report, store-credit trade-in activity, recent activity history, active inventory summary, reorder suggestions, backroom computer, and day summary panel checks.

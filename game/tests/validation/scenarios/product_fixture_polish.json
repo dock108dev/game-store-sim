@@ -22,6 +22,20 @@
       "evidence": "res://tests/gut/test_product_item.gd::test_used_game_hover_highlight_toggles_visual_cue"
     },
     {
+      "id": "product_visual_variant_rules",
+      "name": "Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_visual_rules.gd::test_product_visual_rules_support_required_variants"
+    },
+    {
+      "id": "product_item_visual_profile_application",
+      "name": "Product items apply visual variant profiles to generated cue meshes",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_uses_product_visual_profile; res://tests/gut/test_product_item.gd::test_product_item_rebuilds_visuals_for_loose_disc_profile"
+    },
+    {
       "id": "rack_category_header",
       "name": "Display rack has a readable used-game category header",
       "status": "automated",

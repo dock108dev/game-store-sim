@@ -85,6 +85,14 @@
       "critical": true
     },
     {
+      "script": "res://scripts/inventory/product_visual_rules.gd",
+      "tests": [
+        "res://tests/gut/test_product_visual_rules.gd",
+        "res://tests/gut/test_product_item.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/simple_buyer_customer.gd",
       "tests": [
         "res://tests/gut/test_customer_sale_flow.gd"

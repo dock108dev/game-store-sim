@@ -68,14 +68,17 @@ func test_used_game_case_has_spine_platform_and_price_cues() -> void:
 	var spine_mesh := _item.get_node_or_null("SpineStripeMesh") as MeshInstance3D
 	var platform_band := _item.get_node_or_null("PlatformBandMesh") as MeshInstance3D
 	var price_sticker := _item.get_node_or_null("PriceStickerMesh") as MeshInstance3D
+	var media_variant := _item.get_node_or_null("MediaVariantMesh") as MeshInstance3D
 
 	assert_not_null(spine_mesh)
 	assert_not_null(platform_band)
 	assert_not_null(price_sticker)
+	assert_not_null(media_variant)
 	assert_gt(spine_mesh.mesh.size.y, 0.28)
 	assert_gt(platform_band.mesh.size.x, 0.15)
 	assert_lte(price_sticker.mesh.size.x, 0.06)
 	assert_lte(price_sticker.mesh.size.y, 0.04)
+	assert_true(media_variant.visible)
 
 
 func test_used_game_case_visual_cues_stay_inside_case_bounds() -> void:
@@ -93,6 +96,53 @@ func test_used_game_case_visual_cues_stay_inside_case_bounds() -> void:
 		assert_lte(absf(cue.position.x) + cue.mesh.size.x / 2.0, half_width + 0.002)
 		assert_lte(cue.position.y + cue.mesh.size.y / 2.0, top_y + 0.002)
 		assert_lt(cue.mesh.size.z, case_mesh.mesh.size.z)
+
+
+func test_product_item_uses_product_visual_profile() -> void:
+	var profile: Dictionary = _item.get_visual_profile()
+	var variant_keys := profile.get("variant_keys") as Array
+
+	assert_eq(profile.get("container_variant"), ProductVisualRules.VARIANT_CASE)
+	assert_eq(profile.get("media_variant"), ProductVisualRules.VARIANT_CARTRIDGE)
+	assert_true(variant_keys.has(ProductVisualRules.VARIANT_CASE))
+	assert_true(variant_keys.has(ProductVisualRules.VARIANT_CARTRIDGE))
+	assert_true(variant_keys.has(ProductVisualRules.VARIANT_BOX))
+
+
+func test_product_item_rebuilds_visuals_for_loose_disc_profile() -> void:
+	var product := _make_product("Loose Disc", "used_game", "disc", "loose")
+	_item.set("product", product)
+	_item.apply_product_visuals()
+
+	var case_mesh := _item.get_node("CaseMesh") as MeshInstance3D
+	var media_variant := _item.get_node("MediaVariantMesh") as MeshInstance3D
+	var loose_variant := _item.get_node("LooseVariantMesh") as MeshInstance3D
+	var spine_mesh := _item.get_node("SpineStripeMesh") as MeshInstance3D
+
+	assert_eq(_item.get_visual_profile().get("container_variant"), ProductVisualRules.VARIANT_LOOSE)
+	assert_eq(_item.get_visual_profile().get("media_variant"), ProductVisualRules.VARIANT_DISC)
+	assert_lt(case_mesh.mesh.size.y, 0.24)
+	assert_true(media_variant.visible)
+	assert_true(loose_variant.visible)
+	assert_false(spine_mesh.visible)
+
+
+func test_product_item_rebuilds_visuals_for_hardware_and_service_profiles() -> void:
+	var hardware := _make_product("Controller Dock", "hardware", "controller", "complete")
+	_item.set("product", hardware)
+	_item.apply_product_visuals()
+
+	assert_eq(_item.get_visual_profile().get("container_variant"), ProductVisualRules.VARIANT_BOX)
+	assert_eq(_item.get_visual_profile().get("media_variant"), ProductVisualRules.VARIANT_CONTROLLER)
+	assert_true((_item.get_node("BoxVariantMesh") as MeshInstance3D).visible)
+
+	var service := _make_product("Service Ticket", "service", "service_ticket", "complete")
+	_item.set("product", service)
+	_item.apply_product_visuals()
+
+	assert_eq(_item.get_visual_profile().get("container_variant"), ProductVisualRules.VARIANT_SERVICE_TICKET)
+	assert_true((_item.get_node("ServiceTicketVariantMesh") as MeshInstance3D).visible)
+	assert_false((_item.get_node("PriceStickerMesh") as MeshInstance3D).visible)
 
 
 func test_used_game_hover_highlight_toggles_visual_cue() -> void:
@@ -228,3 +278,28 @@ func test_product_definition_exposes_complete_inventory_schema_summary() -> void
 	assert_eq(summary.get("market_value_cents"), 2499)
 	assert_eq(summary.get("risk_level"), "low")
 	assert_eq(summary.get("default_location_id"), "receiving_box_001")
+
+
+func _make_product(
+	display_name: String,
+	category: String,
+	format: String,
+	completeness: String
+) -> ProductDefinition:
+	var product := ProductDefinition.new()
+	product.product_id = display_name.to_snake_case()
+	product.display_name = display_name
+	product.category = category
+	product.platform = "Test Platform"
+	product.platform_family = "test_family"
+	product.format = format
+	product.condition = "good"
+	product.completeness = completeness
+	product.authenticity = "verified"
+	product.rarity = "common"
+	product.demand_tier = "medium"
+	product.cost_basis_cents = 100
+	product.market_value_cents = 200
+	product.suggested_price_cents = 150
+	product.risk_level = "low"
+	return product

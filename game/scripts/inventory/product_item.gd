@@ -1,5 +1,7 @@
 extends "res://scripts/interaction/interactable.gd"
 
+const ProductVisualRulesScript := preload("res://scripts/inventory/product_visual_rules.gd")
+
 @export var product: ProductDefinition
 @export var instance_id: String = ""
 @export var current_price_cents: int = 0
@@ -12,6 +14,7 @@ extends "res://scripts/interaction/interactable.gd"
 var _default_collision_layer: int = 1
 var _default_collision_mask: int = 1
 var _is_hovered: bool = false
+var _visual_profile: Dictionary = {}
 
 
 func _ready() -> void:
@@ -29,6 +32,66 @@ func _ready() -> void:
 		cost_basis_cents = product.cost_basis_cents
 	if location_id.strip_edges().is_empty():
 		location_id = product.default_location_id
+	apply_product_visuals()
+
+
+func get_visual_profile() -> Dictionary:
+	if _visual_profile.is_empty() and product != null:
+		_visual_profile = ProductVisualRulesScript.build_profile(product)
+	return _visual_profile.duplicate(true)
+
+
+func apply_product_visuals() -> void:
+	if product == null:
+		return
+
+	_visual_profile = ProductVisualRulesScript.build_profile(product)
+
+	_apply_box_mesh_size("CaseMesh", _visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04)))
+	_set_node_visible("CoverLabelMesh", bool(_visual_profile.get("show_cover", true)))
+	_set_node_visible("SpineStripeMesh", bool(_visual_profile.get("show_spine", true)))
+	_set_node_visible("PlatformBandMesh", bool(_visual_profile.get("show_platform_band", true)))
+	_set_node_visible("PriceStickerMesh", bool(_visual_profile.get("show_price_sticker", true)))
+
+	var container_variant := str(_visual_profile.get("container_variant", ""))
+	var media_variant := str(_visual_profile.get("media_variant", ""))
+	var state_variant := str(_visual_profile.get("state_variant", ""))
+
+	_set_variant_box(
+		"MediaVariantMesh",
+		media_variant != "" and media_variant != ProductVisualRulesScript.VARIANT_SERVICE_TICKET,
+		_visual_profile.get("media_size", Vector3(0.08, 0.08, 0.012)),
+		_visual_profile.get("media_position", Vector3(-0.035, 0.112, -0.044)),
+		_get_variant_color(media_variant)
+	)
+	_set_variant_box(
+		"BoxVariantMesh",
+		container_variant == ProductVisualRulesScript.VARIANT_BOX,
+		_visual_profile.get("box_size", Vector3(0.22, 0.09, 0.025)),
+		_visual_profile.get("box_position", Vector3(0.0, 0.062, -0.037)),
+		Color(0.52, 0.58, 0.64, 1.0)
+	)
+	_set_variant_box(
+		"SealWrapMesh",
+		state_variant == ProductVisualRulesScript.VARIANT_SEALED,
+		_visual_profile.get("seal_size", Vector3(0.255, 0.355, 0.014)),
+		_visual_profile.get("seal_position", Vector3(0.0, 0.17, -0.039)),
+		Color(0.8, 0.95, 1.0, 0.36)
+	)
+	_set_variant_box(
+		"LooseVariantMesh",
+		state_variant == ProductVisualRulesScript.VARIANT_LOOSE,
+		_visual_profile.get("loose_size", Vector3(0.11, 0.05, 0.016)),
+		_visual_profile.get("loose_position", Vector3(0.0, 0.068, -0.04)),
+		Color(0.9, 0.78, 0.36, 1.0)
+	)
+	_set_variant_box(
+		"ServiceTicketVariantMesh",
+		container_variant == ProductVisualRulesScript.VARIANT_SERVICE_TICKET,
+		_visual_profile.get("service_ticket_size", Vector3(0.18, 0.24, 0.012)),
+		_visual_profile.get("service_ticket_position", Vector3(0.0, 0.18, -0.04)),
+		Color(0.98, 0.93, 0.72, 1.0)
+	)
 
 
 func get_interaction_prompt() -> String:
@@ -149,6 +212,79 @@ func _set_hover_highlight_visible(is_visible: bool) -> void:
 	var highlight := get_node_or_null("HoverHighlight") as Node3D
 	if highlight != null:
 		highlight.visible = is_visible
+
+
+func _set_node_visible(node_name: String, is_visible: bool) -> void:
+	var node := get_node_or_null(node_name) as Node3D
+	if node != null:
+		node.visible = is_visible
+
+
+func _apply_box_mesh_size(node_name: String, size: Vector3) -> void:
+	var node := get_node_or_null(node_name) as MeshInstance3D
+	if node == null:
+		return
+
+	var box_mesh := node.mesh as BoxMesh
+	if box_mesh == null:
+		return
+
+	var local_mesh := box_mesh.duplicate() as BoxMesh
+	local_mesh.size = size
+	node.mesh = local_mesh
+
+
+func _set_variant_box(
+	node_name: String,
+	is_visible: bool,
+	size: Vector3,
+	position: Vector3,
+	color: Color
+) -> void:
+	var node := _get_or_create_variant_node(node_name)
+	node.visible = is_visible
+	node.position = position
+
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	mesh.material = _make_material(color)
+	node.mesh = mesh
+
+
+func _get_or_create_variant_node(node_name: String) -> MeshInstance3D:
+	var existing := get_node_or_null(node_name) as MeshInstance3D
+	if existing != null:
+		return existing
+
+	var node := MeshInstance3D.new()
+	node.name = node_name
+	node.visible = false
+	add_child(node)
+	return node
+
+
+func _make_material(color: Color) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	if color.a < 1.0:
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	return material
+
+
+func _get_variant_color(variant: String) -> Color:
+	match variant:
+		ProductVisualRulesScript.VARIANT_DISC:
+			return Color(0.86, 0.9, 0.92, 1.0)
+		ProductVisualRulesScript.VARIANT_CARTRIDGE:
+			return Color(0.18, 0.22, 0.28, 1.0)
+		ProductVisualRulesScript.VARIANT_CONSOLE:
+			return Color(0.1, 0.12, 0.16, 1.0)
+		ProductVisualRulesScript.VARIANT_CONTROLLER:
+			return Color(0.12, 0.2, 0.32, 1.0)
+		ProductVisualRulesScript.VARIANT_ACCESSORY:
+			return Color(0.25, 0.38, 0.34, 1.0)
+		_:
+			return Color(0.7, 0.72, 0.74, 1.0)
 
 
 func _get_inspect_prompt() -> String:

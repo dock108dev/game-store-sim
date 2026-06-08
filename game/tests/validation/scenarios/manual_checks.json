@@ -241,6 +241,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "product_visual_variant_readability",
+      "name": "Product visual variants read as distinct inventory forms without becoming clutter",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify variant-rule coverage and cue-node visibility; human review should confirm case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cues are readable at receiving, hand, shelf, customer, and register scale.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",
