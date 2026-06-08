@@ -213,7 +213,7 @@ Stops:
 - Stop 3.1: Reticle and prompt hierarchy. Done in `Polish reticle prompts`: prompts now expose action, subject, blocked, and feedback tones with matching reticle states; validation covers prompt parsing and manual prompt hierarchy review.
 - Stop 3.2: Held item presentation. Done in `Polish held item feel`: carry stacks now use active-item focus, depth spacing, scale falloff, subtle bob/settle motion, and held-silhouette metadata while staying below the center reticle.
 - Stop 3.3: Pickup/place feedback. Done in `Polish pickup place feedback`: raycast hover ownership, product and slot hover highlights, incompatible-stock blocked prompts, and stocked-item landing confirmations are implemented and validated.
-- Stop 3.4: Workstation transitions. Make pricing, register, appraisal, computer, and summary panels enter/exit cleanly with mouse capture and focus rules.
+- Stop 3.4: Workstation transitions. Done in `Polish workstation transitions`: pricing, trade-in appraisal, and backroom computer panels now expose open/closed transition state, enter with visible mouse and focused controls, release focus on close, and restore captured first-person mouse.
 - Stop 3.5: Fixture placement feel. Improve ghost controls, rotation, snap, valid/invalid presentation, placement confirmation, and cancel path.
 - Stop 3.6: Input/settings baseline. Add remappable input data, mouse sensitivity, invert look, fullscreen/window controls, and pause/settings access.
 - Stop 3.7: Interaction validation sync. Update automation and manual checks for all changed input flows.

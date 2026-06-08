@@ -67,6 +67,24 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.end_day_button.text, "End Day")
 
 
+func test_day_summary_panel_transition_controls_mouse_and_focus() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_true(_panel.open_for_session(_session))
+
+	assert_eq(_panel.get_transition_state(), "open")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_VISIBLE)
+	assert_true(_panel.has_modal_focus())
+	assert_eq(get_viewport().gui_get_focus_owner(), _panel.close_button)
+
+	assert_true(_panel.close())
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_CAPTURED)
+	assert_false(_panel.has_modal_focus())
+
+
 func test_day_summary_panel_groups_readouts_by_management_section() -> void:
 	assert_true(_panel.open_for_session(_session))
 

@@ -43,6 +43,13 @@
       "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_opens_with_product_fields"
     },
     {
+      "id": "pricing_panel_modal_transition",
+      "name": "Pricing panel opens with visible mouse and focus, then closes back to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_transition_controls_mouse_and_focus"
+    },
+    {
       "id": "pricing_panel_fixed_price_reject",
       "name": "Pricing panel rejects fixed-price products",
       "status": "automated",

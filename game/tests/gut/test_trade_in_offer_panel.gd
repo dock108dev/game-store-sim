@@ -47,6 +47,26 @@ func test_trade_in_offer_panel_opens_with_condition_market_and_offer() -> void:
 	assert_false(_panel.decline_button.disabled)
 
 
+func test_trade_in_offer_panel_transition_controls_mouse_and_focus() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_true(_panel.open_for_trade_in(_register, _customer))
+
+	assert_eq(_panel.get_transition_state(), "open")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_VISIBLE)
+	assert_true(_panel.has_modal_focus())
+	assert_eq(get_viewport().gui_get_focus_owner(), _panel.accept_button)
+
+	assert_true(_panel.decline_offer())
+	assert_eq(get_viewport().gui_get_focus_owner(), _panel.close_button)
+	assert_true(_panel.close())
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_CAPTURED)
+	assert_false(_panel.has_modal_focus())
+
+
 func test_trade_in_offer_panel_adjusts_counter_offer() -> void:
 	assert_true(_panel.open_for_trade_in(_register, _customer))
 

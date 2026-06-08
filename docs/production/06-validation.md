@@ -42,8 +42,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 300 GUT tests.
-- UI scenario automation coverage is 303/359, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 303 GUT tests.
+- UI scenario automation coverage is 306/362, above the required 80% threshold.
 - Production script mapping coverage is 31/31.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
@@ -71,6 +71,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Pricing panel text and controls are readable in the actual window.
 - Pricing opens from the held used item, not a standalone pricing terminal.
 - Apply-to-matching pricing option is readable and understandable when pricing a used item.
+- Pricing panel opens with visible mouse focus and closes back into captured first-person control.
 - The only current visible terminals are the register and the backroom computer.
 - Pricing panel closes back into first-person mouse capture cleanly.
 - Stocking `Star Trader` causes the buyer to wait at the register.
@@ -82,6 +83,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Trade-in seller and compact carried item are readable at the register and do not look detached from the seller.
 - Trade-in register prompt and completion message are readable.
 - Trade-in offer panel condition, demand, market, cash, store-credit, and accept/decline controls are readable.
+- Trade-in appraisal opens with visible mouse focus, moves focus to close after a decision, and closes back into captured first-person control.
 - Trade-in counteroffer `- $1` and `+ $1` controls are readable and update only the accepted cash offer amount.
 - Backroom computer placement is readable and does not look like a second register.
 - Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct.
@@ -115,6 +117,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Placing a pending storage rack through the backroom computer reads as a deliberate confirmation step, creates a real rack, and clears pending storage placement.
 - Suspicious event flags, supplier notes, and optional suspicious-customer conversations do not visibly interrupt normal store progression.
 - Backroom summary panel closes back into first-person mouse capture cleanly.
+- Backroom computer opens with visible mouse focus and closes back into captured first-person control.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
 - Screenshot composition is useful, not merely nonblank.
 

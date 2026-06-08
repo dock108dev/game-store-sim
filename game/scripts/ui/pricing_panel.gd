@@ -17,6 +17,8 @@ class_name PricingPanel
 var _item: Node = null
 var _draft_price_cents: int = 0
 var _original_price_cents: int = 0
+var _transition_state: String = "closed"
+var _requested_mouse_mode: int = Input.MOUSE_MODE_CAPTURED
 
 
 func _ready() -> void:
@@ -45,8 +47,7 @@ func open_for_item(item: Node) -> bool:
 	_draft_price_cents = clampi(_original_price_cents, min_price_cents, max_price_cents)
 	apply_matching_check_box.button_pressed = false
 	_update_labels()
-	show()
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_enter_modal(apply_button)
 	return true
 
 
@@ -56,6 +57,19 @@ func is_open() -> bool:
 
 func get_active_item() -> Node:
 	return _item
+
+
+func get_transition_state() -> String:
+	return _transition_state
+
+
+func get_requested_mouse_mode() -> int:
+	return _requested_mouse_mode
+
+
+func has_modal_focus() -> bool:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	return focus_owner != null and is_ancestor_of(focus_owner)
 
 
 func get_draft_price_cents() -> int:
@@ -104,8 +118,30 @@ func _close() -> void:
 	_item = null
 	_draft_price_cents = 0
 	_original_price_cents = 0
+	_exit_modal()
+
+
+func _enter_modal(default_focus: Control) -> void:
+	show()
+	_requested_mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_transition_state = "open"
+	if default_focus != null:
+		default_focus.grab_focus()
+
+
+func _exit_modal() -> void:
+	_release_modal_focus()
 	hide()
+	_requested_mouse_mode = Input.MOUSE_MODE_CAPTURED
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_transition_state = "closed"
+
+
+func _release_modal_focus() -> void:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner != null and is_ancestor_of(focus_owner):
+		focus_owner.release_focus()
 
 
 func _can_price_item(item: Node) -> bool:

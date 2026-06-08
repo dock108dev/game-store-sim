@@ -32,6 +32,24 @@ func test_pricing_panel_opens_with_product_fields() -> void:
 	assert_string_contains(_panel.apply_matching_check_box.text, "Star Trader")
 
 
+func test_pricing_panel_transition_controls_mouse_and_focus() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_true(_panel.open_for_item(_item))
+
+	assert_eq(_panel.get_transition_state(), "open")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_VISIBLE)
+	assert_true(_panel.has_modal_focus())
+	assert_eq(get_viewport().gui_get_focus_owner(), _panel.apply_button)
+
+	assert_true(_panel.cancel_price())
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_CAPTURED)
+	assert_false(_panel.has_modal_focus())
+
+
 func test_pricing_panel_rejects_non_product_item() -> void:
 	var plain_node := Node.new()
 	add_child_autofree(plain_node)

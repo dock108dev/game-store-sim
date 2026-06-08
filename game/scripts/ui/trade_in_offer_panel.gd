@@ -17,6 +17,8 @@ const OFFER_STEP_CENTS := 100
 var _register: RegisterWorkstation = null
 var _customer: SimpleTradeInCustomer = null
 var _draft_offer_cents: int = 0
+var _transition_state: String = "closed"
+var _requested_mouse_mode: int = Input.MOUSE_MODE_CAPTURED
 
 
 func _ready() -> void:
@@ -48,8 +50,7 @@ func open_for_trade_in(register: RegisterWorkstation, customer: SimpleTradeInCus
 	status_label.text = "Review the offer."
 	_update_labels()
 	_set_offer_buttons_enabled(true)
-	show()
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_enter_modal(accept_button)
 	return true
 
 
@@ -59,6 +60,19 @@ func is_open() -> bool:
 
 func get_active_customer() -> SimpleTradeInCustomer:
 	return _customer
+
+
+func get_transition_state() -> String:
+	return _transition_state
+
+
+func get_requested_mouse_mode() -> int:
+	return _requested_mouse_mode
+
+
+func has_modal_focus() -> bool:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	return focus_owner != null and is_ancestor_of(focus_owner)
 
 
 func get_draft_offer_cents() -> int:
@@ -79,6 +93,7 @@ func accept_offer() -> bool:
 
 	status_label.text = _register.accept_trade_in(_customer, _draft_offer_cents)
 	_set_offer_buttons_enabled(false)
+	close_button.grab_focus()
 	return true
 
 
@@ -91,6 +106,7 @@ func accept_store_credit() -> bool:
 		_customer.get_store_credit_offer_cents()
 	)
 	_set_offer_buttons_enabled(false)
+	close_button.grab_focus()
 	return true
 
 
@@ -100,6 +116,7 @@ func decline_offer() -> bool:
 
 	status_label.text = _register.decline_trade_in(_customer)
 	_set_offer_buttons_enabled(false)
+	close_button.grab_focus()
 	return true
 
 
@@ -109,9 +126,31 @@ func close() -> bool:
 
 	_register = null
 	_customer = null
-	hide()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_exit_modal()
 	return true
+
+
+func _enter_modal(default_focus: Control) -> void:
+	show()
+	_requested_mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_transition_state = "open"
+	if default_focus != null:
+		default_focus.grab_focus()
+
+
+func _exit_modal() -> void:
+	_release_modal_focus()
+	hide()
+	_requested_mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_transition_state = "closed"
+
+
+func _release_modal_focus() -> void:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner != null and is_ancestor_of(focus_owner):
+		focus_owner.release_focus()
 
 
 func _update_labels() -> void:

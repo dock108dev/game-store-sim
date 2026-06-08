@@ -43,6 +43,8 @@ const USED_GAME_STARTER_LOT_ID := "supplier_lot_used_games_001"
 const NEON_SKYLINE_RELEASE_ID := "release_neon_skyline"
 
 var _session: Node = null
+var _transition_state: String = "closed"
+var _requested_mouse_mode: int = Input.MOUSE_MODE_CAPTURED
 
 
 func _ready() -> void:
@@ -77,8 +79,7 @@ func open_for_session(session: Node) -> bool:
 	_session = session
 	_update_labels()
 	content_scroll.scroll_vertical = 0
-	show()
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_enter_modal(close_button)
 	return true
 
 
@@ -88,6 +89,19 @@ func is_open() -> bool:
 
 func get_active_session() -> Node:
 	return _session
+
+
+func get_transition_state() -> String:
+	return _transition_state
+
+
+func get_requested_mouse_mode() -> int:
+	return _requested_mouse_mode
+
+
+func has_modal_focus() -> bool:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	return focus_owner != null and is_ancestor_of(focus_owner)
 
 
 func end_day() -> bool:
@@ -224,9 +238,31 @@ func close() -> bool:
 		return false
 
 	_session = null
-	hide()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_exit_modal()
 	return true
+
+
+func _enter_modal(default_focus: Control) -> void:
+	show()
+	_requested_mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_transition_state = "open"
+	if default_focus != null:
+		default_focus.grab_focus()
+
+
+func _exit_modal() -> void:
+	_release_modal_focus()
+	hide()
+	_requested_mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	_transition_state = "closed"
+
+
+func _release_modal_focus() -> void:
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	if focus_owner != null and is_ancestor_of(focus_owner):
+		focus_owner.release_focus()
 
 
 func _update_labels() -> void:

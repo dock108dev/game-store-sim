@@ -4,12 +4,13 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this pickup/place feedback pass: `scripts/validate_godot.sh` passed with 300 GUT tests, UI scenario coverage 303/359, and script mapping coverage 31/31.
+- Last full gate in this workstation transition pass: `scripts/validate_godot.sh` passed with 303 GUT tests, UI scenario coverage 306/362, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
 - Held item presentation is implemented through Stop 3.2; manual QA should confirm the carry pose, depth fan, scale falloff, and subtle motion feel natural without covering the reticle.
 - Pickup/place feedback is implemented through Stop 3.3; manual QA should confirm hover highlights, incompatible-stock feedback, and stocking confirmation messages are visible without reading as separate interaction targets.
+- Workstation transitions are implemented through Stop 3.4; manual QA should confirm pricing, trade-in appraisal, and backroom computer panels enter with usable focus and exit back to captured first-person control.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -119,6 +120,7 @@ Current automated baseline:
 - Safe, security monitor, and evidence-locker placeholders read as future operations/hidden-thread surfaces without exposing an active hidden-thread workflow.
 - Backroom computer actions are grouped as Supplier, Storage, Release, Day, and Storage Placement controls.
 - Summary panel text and buttons fit in the actual game window.
+- Pricing, trade-in appraisal, and backroom computer panels open with visible mouse focus and close back into captured first-person control.
 - Closed-day report text is readable and understandable after ending the day.
 - Recent activity text is readable and distinguishes sales from trade-ins.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
@@ -174,6 +176,7 @@ Run these first when manually checking the completed Stop 3.1 through Stop 3.3 i
 - Confirm used-game and shelf-slot hover highlights are visible enough to guide the click target but do not look like finished stocked items.
 - Confirm incompatible held items produce blocked stock feedback instead of silently inspecting the slot.
 - Confirm stocking a valid item produces a clear landing confirmation naming the stocked item and slot.
+- Confirm pricing, trade-in appraisal, and backroom computer panels do not strand mouse focus after Apply, Cancel, Close, Accept, Decline, End Day, or Escape.
 
 ## Backroom Polish Focus
 

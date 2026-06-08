@@ -134,6 +134,13 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
     },
     {
+      "id": "day_summary_panel_modal_transition",
+      "name": "Backroom computer panel opens with visible mouse and focus, then closes back to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_transition_controls_mouse_and_focus"
+    },
+    {
       "id": "day_summary_panel_sectioned_readouts",
       "name": "Backroom computer groups dashboard, activity, inventory, market, release, and operations readouts",
       "status": "automated",

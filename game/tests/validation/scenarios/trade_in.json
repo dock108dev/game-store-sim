@@ -57,6 +57,13 @@
       "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_opens_with_condition_market_and_offer"
     },
     {
+      "id": "trade_in_offer_panel_modal_transition",
+      "name": "Trade-in offer panel opens with visible mouse and focus, then closes back to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_transition_controls_mouse_and_focus"
+    },
+    {
       "id": "trade_in_offer_panel_counter_offer_controls",
       "name": "Trade-in offer panel adjusts the cash counteroffer",
       "status": "automated",
