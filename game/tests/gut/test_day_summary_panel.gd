@@ -339,6 +339,23 @@ func test_day_summary_panel_shows_security_safe_placeholders() -> void:
 	assert_string_contains(_panel.hidden_records_label.text, "security_record_001 Cash safe")
 
 
+func test_day_summary_panel_shows_hidden_clue_surfaces() -> void:
+	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	add_child_autofree(scene)
+	var panel: DaySummaryPanel = scene.get_node("PlayerController/DaySummaryPanel")
+	var session: StoreSession = scene.get_node("StoreSession")
+
+	assert_true(panel.open_for_session(session))
+	assert_true(panel.set_active_tab("records"))
+
+	assert_string_contains(panel.hidden_records_label.text, "Hidden clue surfaces:")
+	assert_string_contains(panel.hidden_records_label.text, "Supplier note - available")
+	assert_string_contains(panel.hidden_records_label.text, "Serial lookup - available")
+	assert_string_contains(panel.hidden_records_label.text, "Customer comment - available")
+	assert_string_contains(panel.hidden_records_label.text, "Security clip - available")
+	assert_string_contains(panel.hidden_records_label.text, "Backroom artifact - available")
+
+
 func test_day_summary_panel_includes_recent_trade_in_activity() -> void:
 	var customer: SimpleTradeInCustomer = load("res://scenes/customers/simple_trade_in_customer.tscn").instantiate()
 	add_child_autofree(customer)

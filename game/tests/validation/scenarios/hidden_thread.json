@@ -202,6 +202,27 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_suspicion_rules.gd::test_suspicious_event_log_flags_rule_events"
+    },
+    {
+      "id": "hidden_clue_surface_catalog",
+      "name": "Hidden clue surface catalog covers invoices, notes, lookup, emails, comments, security clips, and backroom artifacts",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_clue_surface_catalog.gd::test_clue_surface_catalog_covers_stop_10_clue_surfaces"
+    },
+    {
+      "id": "hidden_clue_surface_context_summary",
+      "name": "Store session summarizes available and waiting hidden clue surfaces from current store context",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_surfaces_hidden_clue_surfaces"
+    },
+    {
+      "id": "hidden_clue_surface_records_tab",
+      "name": "Backroom Records tab shows hidden clue surfaces without activating objectives",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_shows_hidden_clue_surfaces"
     }
   ]
 }

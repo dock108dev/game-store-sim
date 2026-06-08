@@ -643,6 +643,8 @@ func _update_labels() -> void:
 		hidden_records_label.text = _session.get_security_placeholder_summary_text()
 	else:
 		hidden_records_label.text = "Hidden records: no active records."
+	if _session.has_method("get_hidden_clue_surface_summary_text"):
+		hidden_records_label.text += "\n" + _session.get_hidden_clue_surface_summary_text()
 	status_label.text = _session.get_status_label()
 	if _session.has_method("can_commit_release_allocation"):
 		commit_allocation_button.disabled = _session.is_day_closed \

@@ -657,6 +657,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "hidden_clue_surface_readability",
+      "name": "Hidden clue surfaces are readable as optional invoices, notes, lookup, emails, comments, clips, and artifacts",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the clue surface catalog, context status, and Records-tab summary; human review should confirm those surfaces feel discoverable without becoming a quest list or blocking normal store work.",
+      "owner": "manual QA"
+    },
+    {
       "id": "hidden_thread_flags_invisible",
       "name": "Suspicious event flags do not visibly interrupt normal store progression",
       "status": "manual",

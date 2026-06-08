@@ -57,6 +57,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/narrative/clue_surface_catalog.gd",
+      "tests": [
+        "res://tests/gut/test_clue_surface_catalog.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/narrative/evidence_storage.gd",
       "tests": [
         "res://tests/gut/test_evidence_storage.gd"

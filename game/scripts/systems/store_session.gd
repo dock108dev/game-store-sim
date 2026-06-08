@@ -4,6 +4,7 @@ class_name StoreSession
 const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd")
 const DailyReportPolicy := preload("res://scripts/economy/daily_report.gd")
 const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
+const ClueSurfaceCatalogPolicy := preload("res://scripts/narrative/clue_surface_catalog.gd")
 
 const DAY_PHASE_OPENING := "opening"
 const DAY_PHASE_SETUP := "setup"
@@ -1068,6 +1069,10 @@ func get_security_placeholder_summary_text() -> String:
 		return str(storage.call("get_security_zone_summary_text"))
 
 	return "Security placeholders:\nCash safe - placeholder / backroom_safe / Cash storage\nHigh-value storage - placeholder / backroom_high_value_shelf / High-value stock hold\nSuspicious goods isolation - placeholder / backroom_evidence_locker / Quarantine suspicious items\nSecurity footage - placeholder / backroom_security_monitor / Review camera clips\nSecurity records: none\nStatus: placeholders only; no active hidden objective or register action"
+
+
+func get_hidden_clue_surface_summary_text() -> String:
+	return ClueSurfaceCatalogPolicy.get_summary_text(_get_hidden_clue_surface_context())
 
 
 func record_security_placeholder(placeholder_id: String, reference_id: String = "", notes: String = "") -> Dictionary:
@@ -2966,6 +2971,90 @@ func _get_evidence_storage() -> Node:
 		return null
 
 	return get_node_or_null(evidence_storage_path)
+
+
+func _get_hidden_clue_surface_context() -> Dictionary:
+	var context := {
+		"has_supplier_order": not supplier_orders.is_empty(),
+		"has_receiving_batch": not receiving_batches.is_empty(),
+		"has_supplier_message": false,
+		"has_serial_mismatch": false,
+		"has_suspicious_customer": false,
+		"has_security_footage_placeholder": true,
+		"has_evidence_storage": false,
+	}
+
+	var first_order := _get_first_supplier_order_or_batch()
+	if not first_order.is_empty():
+		context["has_supplier_order"] = true
+		context["supplier_email_subject"] = str(first_order.get("order_id", first_order.get("batch_id", "")))
+	if not receiving_batches.is_empty():
+		context["has_receiving_batch"] = true
+		context["receiving_invoice_subject"] = str(receiving_batches[0].get("batch_id", "receiving_batch"))
+
+	var supplier_message := _find_first_node_with_methods(["get_message_text", "flag_supplier_message"])
+	if supplier_message != null:
+		context["has_supplier_message"] = true
+		context["supplier_note_subject"] = str(supplier_message.call("get_suspicious_event_id")) if supplier_message.has_method("get_suspicious_event_id") else supplier_message.name
+
+	var serial_subject := _get_first_serial_mismatch_subject()
+	if not serial_subject.is_empty():
+		context["has_serial_mismatch"] = true
+		context["serial_lookup_subject"] = serial_subject
+
+	var suspicious_customer := _find_first_node_with_methods(["get_encounter_text", "flag_encounter"])
+	if suspicious_customer != null:
+		context["has_suspicious_customer"] = true
+		context["customer_comment_subject"] = str(suspicious_customer.call("get_suspicious_event_id")) if suspicious_customer.has_method("get_suspicious_event_id") else suspicious_customer.name
+
+	var storage := _get_evidence_storage()
+	if storage != null:
+		context["has_evidence_storage"] = true
+		context["backroom_artifact_subject"] = "evidence_storage"
+		context["security_clip_subject"] = "security_footage"
+
+	return context
+
+
+func _get_first_supplier_order_or_batch() -> Dictionary:
+	if not supplier_orders.is_empty():
+		return supplier_orders[0].duplicate(true)
+	if not receiving_batches.is_empty():
+		return receiving_batches[0].duplicate(true)
+	return {}
+
+
+func _get_first_serial_mismatch_subject() -> String:
+	for item in get_active_inventory_items():
+		if item.has_method("has_serial_mismatch") and bool(item.call("has_serial_mismatch")):
+			if item.has_method("get_suspicious_event_id"):
+				return str(item.call("get_suspicious_event_id"))
+			return item.name
+	return ""
+
+
+func _find_first_node_with_methods(methods: Array[String]) -> Node:
+	var root := _get_inventory_root()
+	if root == null:
+		return null
+	return _find_first_node_with_methods_recursive(root, methods)
+
+
+func _find_first_node_with_methods_recursive(node: Node, methods: Array[String]) -> Node:
+	var has_all_methods := true
+	for method in methods:
+		if not node.has_method(method):
+			has_all_methods = false
+			break
+	if has_all_methods:
+		return node
+
+	for child in node.get_children():
+		var match_node := _find_first_node_with_methods_recursive(child, methods)
+		if match_node != null:
+			return match_node
+
+	return null
 
 
 func _get_customer_manager() -> CustomerManager:

@@ -44,9 +44,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current hidden-thread baseline:
 
-- `scripts/validate_godot.sh` passes with 423 GUT tests.
-- UI scenario automation coverage is 413/505, above the 80% threshold.
-- Production script mapping coverage is 40/40.
+- `scripts/validate_godot.sh` passes with 428 GUT tests.
+- UI scenario automation coverage is 416/509, above the 80% threshold.
+- Production script mapping coverage is 41/41.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
 - Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants, with product items applying generated cue meshes from data.
@@ -69,6 +69,7 @@ Current hidden-thread baseline:
 - Security/safe placeholder coverage verifies cash safe, high-value storage, suspicious goods isolation, security footage, placeholder recording, StoreSession/EvidenceStorage wiring, and Records tab readout without active hidden-thread UI.
 - Store-building coverage verifies expanded fixture catalog metadata, footprint-aware placement, category assignment, demand tuning effects, decoration catalog, backroom decoration application, clutter-budget limits, layout-effect summaries, fixture visibility, impulse fixtures, queue spacing, customer travel distance, theft-risk placeholder state, launch queue demand effects, starter expansion purchase/capacity/bounds, and fixture/decoration/expansion save-load persistence.
 - Suspicion-rules coverage verifies the Stop 10.1 risk flag catalog, severity/score metadata, serial mismatch, suspicious supplier, cash buyer, impossible provenance, counterfeit goods, hidden storage, node evaluation for existing hidden-thread props, and event-log rule event creation without visible objectives.
+- Hidden clue-surface coverage verifies invoices, supplier notes, serial lookup, supplier emails, customer comments, security clips, and backroom artifacts as available/waiting Records-tab surfaces without active hidden objectives.
 
 ## Manual Validation
 
@@ -91,7 +92,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, and suspicion-rules validation are synced through Stop 10.1.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, and clue-surface validation are synced through Stop 10.2.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding validation is synced through Stop 7.6; manual QA should confirm the checklist teaches the first-day loop without feeling like debug tutorial text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
@@ -175,6 +176,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Placing a pending storage rack through the backroom computer reads as a deliberate confirmation step, creates a real rack, and clears pending storage placement.
 - Suspicious event flags, supplier notes, and optional suspicious-customer conversations do not visibly interrupt normal store progression.
 - Suspicion rule flags read as retail anomalies under normal inventory, supplier, customer, and storage play rather than active quest objectives.
+- Hidden clue surfaces in Records read as optional invoices, notes, lookup, emails, comments, clips, and artifacts instead of a required quest list.
 - Backroom summary panel closes back into first-person mouse capture cleanly.
 - Backroom computer opens with visible mouse focus and closes back into captured first-person control.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
@@ -218,7 +220,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/services.json`: first service customer, disc resurfacing request, service bench ticket workflow, register service prompt/completion, ledger/session accounting, recent activity, daily report totals, save/load service tickets, and screenshot coverage.
 - `scenarios/release_allocation.json`: release allocation commitment, allocation-limit enforcement, cash reservation, backroom readout, persistence, and screenshot coverage.
 - `scenarios/launch_day.json`: launch-day preorder fulfillment, launch queue fulfillment, reputation shortage, backroom readout, persistence, and save/restore coverage.
-- `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, optional evidence storage checks, suspicion rule catalog checks, metadata evaluation, node evaluation, and rule-to-event logging.
+- `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, optional evidence storage checks, suspicion rule catalog checks, metadata evaluation, node evaluation, rule-to-event logging, hidden clue-surface catalog coverage, store-context readiness, and Records-tab readout.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
 - `scenarios/store_layout.json`: expanded fixture catalog, fixture metadata, upgrade-gated fixture orders, fixture ordering, slot-category metadata, category assignment, demand tuning effects, decoration catalog, decoration application, clutter-budget limits, layout-effect demand signal, fixture visibility, impulse fixtures, queue spacing, travel distance, theft-risk placeholder state, launch queue demand effects, starter expansion purchase/capacity/bounds/persistence, cash reservation, pending storage placement, ghost preview, footprint-aware bounds, critical-path clearance, overlap rejection, valid/invalid placement state, move/rotate/snap/undo controls, placement confirmation, receiving/backstock movement, storage retrieval, insufficient-cash rejection, and persistence coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.

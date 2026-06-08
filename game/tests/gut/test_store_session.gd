@@ -523,6 +523,24 @@ func test_store_session_surfaces_security_safe_placeholders() -> void:
 	assert_string_contains(session.get_security_placeholder_summary_text(), "Suspicious goods isolation - recorded")
 
 
+func test_store_session_surfaces_hidden_clue_surfaces() -> void:
+	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	add_child_autofree(scene)
+	var session: StoreSession = scene.get_node("StoreSession")
+
+	var summary := session.get_hidden_clue_surface_summary_text()
+
+	assert_string_contains(summary, "Hidden clue surfaces:")
+	assert_string_contains(summary, "Receiving invoice - waiting")
+	assert_string_contains(summary, "Supplier note - available")
+	assert_string_contains(summary, "Serial lookup - available")
+	assert_string_contains(summary, "Supplier email - waiting")
+	assert_string_contains(summary, "Customer comment - available")
+	assert_string_contains(summary, "Security clip - available")
+	assert_string_contains(summary, "Backroom artifact - available")
+	assert_string_contains(summary, "no active hidden objective")
+
+
 func test_store_session_formats_recent_activity_history() -> void:
 	var ledger := TransactionLedger.new()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
