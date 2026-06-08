@@ -162,7 +162,7 @@ Validation:
 
 - `scripts/validate_godot.sh`.
 - Human manual pass recorded in the implementation summary when performed.
-- Latest automated baseline: 337 GUT tests, UI scenario coverage 339/401, and script mapping coverage 34/34.
+- Latest automated baseline: 341 GUT tests, UI scenario coverage 340/403, and script mapping coverage 35/35.
 
 ## Phase Exit Criteria
 

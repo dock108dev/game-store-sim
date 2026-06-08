@@ -43,6 +43,13 @@
       "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_customer_role_silhouettes_are_visually_distinct"
     },
     {
+      "id": "customer_animation_pose_baseline",
+      "name": "Customer states map to readable placeholder poses for movement, queueing, talk, handoff, and outcomes",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_pose_animator.gd"
+    },
+    {
       "id": "register_special_customer_spacing_arc",
       "name": "Special register customers keep readable spacing and form a clear register-area arc",
       "status": "automated",

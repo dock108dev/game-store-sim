@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this customer production pass: `scripts/validate_godot.sh` passed with 337 GUT tests, UI scenario coverage 339/401, and script mapping coverage 34/34.
+- Last full gate in this customer production pass: `scripts/validate_godot.sh` passed with 341 GUT tests, UI scenario coverage 340/403, and script mapping coverage 35/35.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -22,7 +22,7 @@ Current automated baseline:
 - Supplier ordering UI is implemented through Stop 4.6; manual QA should confirm category, cart, cost, due day, delivery state, storage needs, and receiving expectations stay readable and clearly imply physical receiving stock.
 - Daily report UI is implemented through Stop 4.7; manual QA should confirm cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations fit the report tab.
 - UI accessibility pass is implemented through Stop 4.8; manual QA should confirm text size, contrast, keyboard/mouse focus, and 1280x720 panel fit in the actual game window.
-- Customer visual-kit polish is implemented through Stop 5.1; manual QA should include the Customer Production Focus checks when reviewing the next playable build.
+- Customer visual-kit and animation baseline polish are implemented through Stop 5.2; manual QA should include the Customer Production Focus checks when reviewing the next playable build.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -126,6 +126,7 @@ Current automated baseline:
 - Buyer, trade-in, preorder, service, and suspicious customers should read as separate people with separate jobs, not as one register pileup.
 - Buyer shopping basket, trade-in tag/item, preorder slip, service disc/ticket, and suspicious note/cash cue should make roles readable before clicking.
 - Customer torso, headwear, shoulders, arms, legs, and role silhouette markers should make every customer read as a stylized person rather than a capsule placeholder.
+- Customer idle, walk, browse, pickup, queue, talk, payment, handoff, happy-leave, annoyed-leave, and impatient-wait poses should be readable as placeholder animation states rather than static mannequins.
 - Trade-in, preorder, service, and suspicious customers should form a readable register-area arc that stays clear of the buyer queue lane.
 - Used-game cases should look like compact boxed games on the rack, in the player's hand, and in customer hands; they should not read like oversized posters.
 - Backroom computer reads as the management terminal, not another register.
@@ -180,11 +181,12 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Customer Production Focus
 
-Run these first when manually checking the completed Stop 5.1 customer visual-kit pass:
+Run these first when manually checking the completed Stop 5.1 through Stop 5.2 customer visual-kit and animation baseline pass:
 
 - Confirm buyer, trade-in, preorder, service, and suspicious customers read as different people before prompt text appears.
 - Confirm customers no longer look like capsule placeholders from the normal player camera.
 - Confirm headwear, shoulders, arms, legs, and held props stay readable while customers stand at the register and while buyers walk to the rack.
+- Confirm movement, queue, talk, handoff, payment, leave-happy, leave-annoyed, and impatient-wait poses are readable without final art.
 - Confirm the new silhouettes do not hide prompts, stocked games, carried games, or register-counter props.
 - Confirm the darker suspicious-customer silhouette reads as optional hidden-thread context without crowding the normal queue.
 

@@ -257,6 +257,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_animation_pose_readability",
+      "name": "Customer idle, walk, browse, pickup, queue, talk, payment, handoff, leave, and impatient poses read clearly",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the pose-state contract; human review must confirm the placeholder motion reads naturally in the actual game window.",
+      "owner": "manual QA"
+    },
+    {
       "id": "customer_path_layout_readability",
       "name": "Customer spawn, approach, and queue positions read naturally in the current layout",
       "status": "manual",

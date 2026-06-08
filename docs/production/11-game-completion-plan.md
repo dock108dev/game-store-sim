@@ -278,7 +278,7 @@ Goal: replace placeholder customers with understandable store visitors who creat
 Stops:
 
 - Stop 5.1: Customer visual kit. Done in `Build customer visual kit`: buyer, trade-in, preorder, service, and suspicious customer scenes now use modular non-capsule torso, shoulder, arm, leg, headwear, prop, and role-silhouette meshes, with automated role-readability coverage and manual checklist sync.
-- Stop 5.2: Animation baseline. Add idle, walk, browse, pick up, queue, talk, pay, hand-over-item, leave-happy, leave-annoyed, and wait-impatient animations or animation placeholders.
+- Stop 5.2: Animation baseline. Done in `Add customer animation baseline`: customer scenes now share a `CustomerPoseAnimator` component with idle, walk, browse, pick up, queue, talk, pay, hand-over-item, leave-happy, leave-annoyed, and wait-impatient placeholder poses mapped from current customer states, with script coverage, automated pose tests, and manual readability checks.
 - Stop 5.3: Queue and browsing behavior. Improve pathing, browse points, queue lane, register approach, blocked-path recovery, and leave behavior.
 - Stop 5.4: Customer feedback. Add speech bubbles or compact world/UI feedback for price refusal, purchase intent, impatience, trade-in response, preorder confirmation, service pickup, and suspicion cues.
 - Stop 5.5: Archetype data. Add browser, target buyer, parent gift buyer, collector, trade-in seller, return customer, service customer, regular, and suspicious contact data.

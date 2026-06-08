@@ -42,9 +42,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 337 GUT tests.
-- UI scenario automation coverage is 339/401, above the required 80% threshold.
-- Production script mapping coverage is 34/34.
+- `scripts/validate_godot.sh` passes with 341 GUT tests.
+- UI scenario automation coverage is 340/403, above the required 80% threshold.
+- Production script mapping coverage is 35/35.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
 ## Manual Validation
@@ -65,7 +65,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, and customer visual-kit manual-validation docs are synced through Stop 5.1.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, and customer animation manual-validation docs are synced through Stop 5.2.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
@@ -90,6 +90,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Overpricing `Star Trader` above buyer tolerance leaves it on the rack and produces readable customer feedback.
 - Stocking multiple `Star Trader` copies causes multiple buyers to queue in a clear lane without overlapping special register customers.
 - Buyers visibly walk from browsing to the rack and then to the register without confusing clipping.
+- Customer idle, walk, browse, pickup, queue, talk, payment, handoff, leave, and impatient placeholder poses read clearly.
 - Customer spawn, item approach, buyer queue lane, and special-customer positions read naturally in the current layout.
 - Register click prompt and sale completion message are readable.
 - Trade-in seller and compact carried item are readable at the register and do not look detached from the seller.

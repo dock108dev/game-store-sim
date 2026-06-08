@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://drly0rh26xygo"]
+[gd_scene load_steps=17 format=3 uid="uid://drly0rh26xygo"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_service_customer.gd" id="1_service_customer"]
+[ext_resource type="Script" path="res://scripts/customers/customer_pose_animator.gd" id="2_pose"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
 albedo_color = Color(0.08, 0.32, 0.34, 1)
@@ -114,3 +115,6 @@ mesh = SubResource("BoxMesh_ticket")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.7, 0)
 shape = SubResource("CapsuleShape3D_customer")
+
+[node name="CustomerPoseAnimator" type="Node3D" parent="."]
+script = ExtResource("2_pose")
