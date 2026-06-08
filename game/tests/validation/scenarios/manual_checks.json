@@ -815,6 +815,14 @@
       "critical": false,
       "reason": "Automated tests verify scenario/doc coverage through Stop 11.6; human review must confirm ambience, interaction sounds, customer audio placeholders, microfeedback, camera bob, FOV shift, held-item sway, and workstation settling work together without masking retail decisions.",
       "owner": "manual QA"
+    },
+    {
+      "id": "save_slot_ui_readability",
+      "name": "Save slot UI clearly supports new game, continue, overwrite, delete, and save metadata review",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify file-backed slot creation, continue data, overwrite/delete behavior, modal focus, and player-panel wiring; human review must confirm slot metadata, destructive overwrite/delete language, and mouse capture transitions are readable in the actual window.",
+      "owner": "manual QA"
     }
   ]
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cag7fgl2cb7di"]
+[gd_scene load_steps=13 format=3 uid="uid://cag7fgl2cb7di"]
 
 [ext_resource type="Script" path="res://scripts/player/first_person_controller.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_raycast.gd" id="2_raycast"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/register_checkout_panel.tscn" id="8_register_checkout_panel"]
 [ext_resource type="Script" path="res://scripts/player/interaction_audio_feedback.gd" id="9_interaction_audio"]
 [ext_resource type="Script" path="res://scripts/player/presentation_microfeedback.gd" id="10_microfeedback"]
+[ext_resource type="PackedScene" path="res://scenes/ui/save_slot_panel.tscn" id="11_save_slot_panel"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.35
@@ -139,3 +140,5 @@ emitting = false
 [node name="TradeInOfferPanel" parent="." instance=ExtResource("6_trade_in_offer_panel")]
 
 [node name="SettingsPanel" parent="." instance=ExtResource("7_settings_panel")]
+
+[node name="SaveSlotPanel" parent="." instance=ExtResource("11_save_slot_panel")]

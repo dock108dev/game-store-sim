@@ -293,6 +293,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/save/save_slot_registry.gd",
+      "tests": [
+        "res://tests/gut/test_save_slot_registry.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/ui/pricing_panel.gd",
       "tests": [
         "res://tests/gut/test_pricing_panel.gd"
@@ -317,6 +324,14 @@
       "script": "res://scripts/ui/settings_panel.gd",
       "tests": [
         "res://tests/gut/test_settings_panel.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/save_slot_panel.gd",
+      "tests": [
+        "res://tests/gut/test_save_slot_panel.gd",
+        "res://tests/gut/test_player_controller.gd"
       ],
       "critical": true
     },

@@ -14,6 +14,7 @@ extends CharacterBody3D
 @onready var day_summary_panel: Node = $DaySummaryPanel
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 @onready var settings_panel: SettingsPanel = $SettingsPanel
+@onready var save_slot_panel: Node = $SaveSlotPanel
 @onready var interaction_audio: Node = $InteractionAudioFeedback
 @onready var presentation_microfeedback: Node = $PresentationMicrofeedback
 
@@ -189,6 +190,10 @@ func is_settings_open() -> bool:
 	return settings_panel != null and settings_panel.is_open()
 
 
+func is_save_slot_open() -> bool:
+	return save_slot_panel != null and save_slot_panel.is_open()
+
+
 func open_settings_panel() -> String:
 	if settings_panel == null:
 		return "Settings unavailable."
@@ -197,6 +202,18 @@ func open_settings_panel() -> String:
 		return ""
 
 	return "Settings unavailable."
+
+
+func open_save_slot_panel(store_session: StoreSession = null) -> String:
+	if save_slot_panel == null:
+		return "Save slots unavailable."
+
+	if save_slot_panel.open_for_session(store_session):
+		play_interaction_audio("button_click")
+		return ""
+
+	play_interaction_audio("error")
+	return "Save slots unavailable."
 
 
 func get_mouse_sensitivity() -> float:
@@ -353,7 +370,8 @@ func _is_modal_open() -> bool:
 		or is_register_checkout_open() \
 		or is_day_summary_open() \
 		or is_trade_in_offer_open() \
-		or is_settings_open()
+		or is_settings_open() \
+		or is_save_slot_open()
 
 
 func _close_active_modal() -> void:
@@ -375,6 +393,10 @@ func _close_active_modal() -> void:
 
 	if is_settings_open():
 		settings_panel.close()
+		return
+
+	if is_save_slot_open():
+		save_slot_panel.close()
 
 
 func _arrange_held_items() -> void:

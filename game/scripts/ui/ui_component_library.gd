@@ -6,6 +6,7 @@ const SURFACE_BACKROOM := "backroom"
 const SURFACE_PRICING := "pricing"
 const SURFACE_TRADE_IN := "trade_in"
 const SURFACE_SETTINGS := "settings"
+const SURFACE_SAVE_LOAD := "save_load"
 
 const BUTTON_PRIMARY := "primary"
 const BUTTON_SECONDARY := "secondary"
@@ -44,6 +45,7 @@ const _SURFACE_ACCENTS := {
 	SURFACE_PRICING: Color(0.35, 0.45, 0.24),
 	SURFACE_TRADE_IN: Color(0.47, 0.34, 0.20),
 	SURFACE_SETTINGS: Color(0.30, 0.36, 0.45),
+	SURFACE_SAVE_LOAD: Color(0.22, 0.42, 0.46),
 }
 
 const _SURFACE_TITLES := {
@@ -52,6 +54,7 @@ const _SURFACE_TITLES := {
 	SURFACE_PRICING: "Pricing",
 	SURFACE_TRADE_IN: "Trade-In",
 	SURFACE_SETTINGS: "Settings",
+	SURFACE_SAVE_LOAD: "Save / Load",
 }
 
 

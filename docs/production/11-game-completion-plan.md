@@ -605,7 +605,7 @@ Goal: make the game session durable and presentable outside the editor.
 
 Stops:
 
-- Stop 12.1: Save slot UI. Add new game, continue, save slot list, overwrite, delete, and save metadata.
+- Stop 12.1: Save slot UI. Done in `Add save slot UI`: add new game, continue, save slot list, overwrite, delete, and save metadata.
 - Stop 12.2: Save migration policy. Version save data and add migration/failure handling.
 - Stop 12.3: Settings menu. Add audio, display, controls, mouse, accessibility, and reset defaults.
 - Stop 12.4: Pause and main menu. Add pause state, resume, settings, quit, main menu, and safe mouse capture transitions.
@@ -627,6 +627,11 @@ Commit targets:
 - `Add pause main menu`
 - `Add desktop export pipeline`
 - `Sync release wrapper validation`
+
+Validation snapshot:
+
+- Focused GUT coverage passes for the Stop 12.1 file-backed save slot registry, new game slot metadata, accidental overwrite guard, explicit overwrite, delete, continue data, save slot panel modal/accessibility behavior, player-controller panel wiring, and save/load UI component language.
+- Manual Save/Load Focus checks are current for slot metadata readability, New Game overwrite protection, explicit overwrite/delete review, continue-scope clarity, and mouse capture restoration.
 
 ## Milestone 13: Alpha Hardening
 

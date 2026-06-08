@@ -8,7 +8,7 @@ Game completion planning and alpha production setup.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, and audio, VFX, and presentation feel are complete through Milestone 11.
+Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, audio, VFX, and presentation feel are complete through Milestone 11, and save slot UI is complete through Stop 12.1.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -42,7 +42,7 @@ Current completion plan: `11-game-completion-plan.md`.
 10. Store building, decoration, and expansion. Done through Milestone 9.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
-13. Save/load, settings, and release wrapper. Current phase.
+13. Save/load, settings, and release wrapper. Current phase; save slot UI done through Stop 12.1.
 14. Alpha hardening.
 
 ## Completed Polish Scope
@@ -141,6 +141,13 @@ The following polish items remain valid historical checkpoints:
 - Done: synced presentation scenario coverage, validation baselines, and manual camera-feel readability checks for Stop 11.5.
 - Done: synced presentation validation coverage, validation baselines, manual milestone review checks, and production docs for Stop 11.6.
 - Remaining polish risk: the next production milestone is save/load, settings, and release wrapper.
+
+## Save, Load, Settings, And Release Wrapper
+
+- Done: added file-backed save slot registry with new game slot creation, continue data, overwrite/delete behavior, and save metadata.
+- Done: added save slot panel with New Game, Continue, Overwrite, Delete, slot list, metadata readout, modal focus, mouse capture transition, and player-controller wiring.
+- Done: synced persistence scenario coverage, script mapping, validation baselines, and manual save-slot UI readability checks for Stop 12.1.
+- Remaining polish risk: Stop 12.2 still needs save versioning, migration, and failure handling.
 
 ## Product And Fixture Polish
 

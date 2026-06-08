@@ -81,6 +81,8 @@ func test_ui_component_library_applies_modal_language() -> void:
 	assert_true(panel.custom_minimum_size.x >= UIComponents.MIN_MODAL_WIDTH)
 	assert_true(action.custom_minimum_size.y >= UIComponents.MIN_BUTTON_HEIGHT)
 	assert_eq(action.focus_mode, Control.FOCUS_ALL)
+	assert_eq(UIComponents.get_surface_title(UIComponents.SURFACE_SAVE_LOAD), "Save / Load")
+	assert_ne(UIComponents.get_surface_accent(UIComponents.SURFACE_SAVE_LOAD), Color(0.24, 0.34, 0.40))
 
 
 func test_ui_component_library_audits_modal_accessibility_floor() -> void:

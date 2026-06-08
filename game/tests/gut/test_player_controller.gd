@@ -123,6 +123,12 @@ func test_settings_panel_exists() -> void:
 	assert_false(settings_panel.visible)
 
 
+func test_save_slot_panel_exists() -> void:
+	var save_slot_panel := _player.get_node_or_null("SaveSlotPanel")
+	assert_not_null(save_slot_panel)
+	assert_false(save_slot_panel.visible)
+
+
 func test_keyboard_input_actions_exist() -> void:
 	for action in REQUIRED_ACTIONS:
 		assert_true(InputMap.has_action(action), "%s should exist" % action)
@@ -371,6 +377,18 @@ func test_player_opens_and_closes_settings_from_cancel_action() -> void:
 
 	_player._unhandled_input(event)
 	assert_false(_player.is_settings_open())
+
+
+func test_player_opens_save_slot_panel() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	assert_eq(_player.open_save_slot_panel(session), "")
+	assert_true(_player.is_save_slot_open())
+
+	var save_slot_panel := _player.get_node("SaveSlotPanel")
+	assert_true(save_slot_panel.is_open())
+	assert_eq(save_slot_panel.get_transition_state(), "open")
 
 
 func test_player_look_settings_update_sensitivity_and_invert() -> void:

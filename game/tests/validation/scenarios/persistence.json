@@ -20,6 +20,48 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
+      "id": "save_slot_registry_metadata",
+      "name": "Save slot registry creates new-game slots with save metadata",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_save_slot_registry.gd::test_save_slot_registry_creates_new_game_slot_with_metadata"
+    },
+    {
+      "id": "save_slot_registry_overwrite_delete",
+      "name": "Save slot registry blocks accidental overwrite and supports explicit overwrite and delete",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_save_slot_registry.gd::test_save_slot_registry_blocks_accidental_overwrite_and_allows_explicit_overwrite"
+    },
+    {
+      "id": "save_slot_panel_accessibility",
+      "name": "Save slot panel uses modal language, focus, mouse transition, and accessibility floor",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_save_slot_panel.gd::test_save_slot_panel_opens_with_mouse_focus_and_slot_metadata"
+    },
+    {
+      "id": "save_slot_panel_new_continue",
+      "name": "Save slot panel can create a new game slot and prepare continue data",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_save_slot_panel.gd::test_save_slot_panel_creates_and_continues_new_game_slot"
+    },
+    {
+      "id": "save_slot_panel_overwrite_delete",
+      "name": "Save slot panel requires overwrite for existing saves and can delete the selected slot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_save_slot_panel.gd::test_save_slot_panel_requires_overwrite_for_existing_slot"
+    },
+    {
+      "id": "save_slot_player_modal_wiring",
+      "name": "Player controller contains and opens the save slot panel as a safe modal surface",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_save_slot_panel"
     }
   ]
 }
