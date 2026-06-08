@@ -283,7 +283,7 @@ Stops:
 - Stop 5.4: Customer feedback. Done in `Add customer feedback bubbles`: customer scenes now include compact world-space feedback bubbles with shared tone handling for purchase intent, price refusal, trade-in response, preorder confirmation, service pickup, and suspicious cues, with automated outcome coverage and manual readability checks.
 - Stop 5.5: Archetype data. Done in `Add customer archetype data`: added resource-backed browser, target buyer, parent gift buyer, collector, trade-in seller, return customer, service customer, regular, and suspicious contact archetypes, wired current customer scenes to role archetypes, and covered the data contract in validation/manual checks.
 - Stop 5.6: Conversation baseline. Done in `Add customer conversation baseline`: added resource-backed dialogue flows for help requests, recommendations, trade-in pushback, complaints/returns, and hidden-thread probes, linked archetypes to flow IDs, and covered optional hidden-thread probe isolation in validation/manual checks.
-- Stop 5.7: Customer validation sync. Add automated role/path assertions and manual readability checks.
+- Stop 5.7: Customer validation sync. Done in `Sync customer production validation`: validation docs, manual checks, scenario coverage, and milestone status now reflect the completed Stop 5.1 through Stop 5.7 customer production pass.
 
 Acceptance:
 
@@ -302,6 +302,13 @@ Commit targets:
 - `Add customer archetype data`
 - `Add customer conversation baseline`
 - `Sync customer production validation`
+
+Validation snapshot:
+
+- `scripts/validate_godot.sh` passes with 357 GUT tests.
+- UI scenario automation coverage is 344/411, above the required 80% threshold.
+- Production script mapping coverage is 38/38.
+- Manual customer-production checks are current for visual kit, animation, pathing, feedback bubbles, archetype data, dialogue data, and validation sync.
 
 ## Milestone 6: Product And Content Pipeline
 

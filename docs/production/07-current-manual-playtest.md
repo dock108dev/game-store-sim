@@ -22,7 +22,7 @@ Current automated baseline:
 - Supplier ordering UI is implemented through Stop 4.6; manual QA should confirm category, cart, cost, due day, delivery state, storage needs, and receiving expectations stay readable and clearly imply physical receiving stock.
 - Daily report UI is implemented through Stop 4.7; manual QA should confirm cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations fit the report tab.
 - UI accessibility pass is implemented through Stop 4.8; manual QA should confirm text size, contrast, keyboard/mouse focus, and 1280x720 panel fit in the actual game window.
-- Customer visual-kit, animation baseline, pathing, feedback-bubble, archetype-data, and dialogue baseline polish are implemented through Stop 5.6; manual QA should include the Customer Production Focus checks when reviewing the next playable build.
+- Customer visual-kit, animation baseline, pathing, feedback-bubble, archetype-data, dialogue baseline, and validation sync are implemented through Stop 5.7; manual QA should include the Customer Production Focus checks when reviewing the next playable build.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -185,7 +185,7 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Customer Production Focus
 
-Run these first when manually checking the completed Stop 5.1 through Stop 5.6 customer visual-kit, animation baseline, pathing, feedback, archetype-data, and dialogue baseline pass:
+Run these first when manually checking the completed Stop 5.1 through Stop 5.7 customer visual-kit, animation baseline, pathing, feedback, archetype-data, dialogue baseline, and validation-sync pass:
 
 - Confirm buyer, trade-in, preorder, service, and suspicious customers read as different people before prompt text appears.
 - Confirm customers no longer look like capsule placeholders from the normal player camera.
