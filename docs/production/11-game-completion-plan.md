@@ -277,7 +277,7 @@ Goal: replace placeholder customers with understandable store visitors who creat
 
 Stops:
 
-- Stop 5.1: Customer visual kit. Create a modular stylized customer body set with readable heads, clothing palettes, carried props, and role-specific silhouettes.
+- Stop 5.1: Customer visual kit. Done in `Build customer visual kit`: buyer, trade-in, preorder, service, and suspicious customer scenes now use modular non-capsule torso, shoulder, arm, leg, headwear, prop, and role-silhouette meshes, with automated role-readability coverage and manual checklist sync.
 - Stop 5.2: Animation baseline. Add idle, walk, browse, pick up, queue, talk, pay, hand-over-item, leave-happy, leave-annoyed, and wait-impatient animations or animation placeholders.
 - Stop 5.3: Queue and browsing behavior. Improve pathing, browse points, queue lane, register approach, blocked-path recovery, and leave behavior.
 - Stop 5.4: Customer feedback. Add speech bubbles or compact world/UI feedback for price refusal, purchase intent, impatience, trade-in response, preorder confirmation, service pickup, and suspicion cues.

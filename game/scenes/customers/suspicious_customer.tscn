@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://busdix6rxg8aj"]
+[gd_scene load_steps=17 format=3 uid="uid://busdix6rxg8aj"]
 
 [ext_resource type="Script" path="res://scripts/customers/suspicious_customer.gd" id="1_suspicious_customer"]
 
@@ -14,14 +14,31 @@ albedo_color = Color(0.82, 0.76, 0.46, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cash"]
 albedo_color = Color(0.28, 0.56, 0.28, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pants"]
+albedo_color = Color(0.035, 0.04, 0.045, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hood"]
+albedo_color = Color(0.045, 0.055, 0.065, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_cash_stack"]
 material = SubResource("StandardMaterial3D_cash")
 size = Vector3(0.22, 0.06, 0.14)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
 material = SubResource("StandardMaterial3D_body")
-radius = 0.17
-height = 0.95
+size = Vector3(0.3, 0.56, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_shoulders"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(0.4, 0.11, 0.19)
+
+[sub_resource type="BoxMesh" id="BoxMesh_arm"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(0.1, 0.42, 0.095)
+
+[sub_resource type="BoxMesh" id="BoxMesh_leg"]
+material = SubResource("StandardMaterial3D_pants")
+size = Vector3(0.1, 0.4, 0.1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_head"]
 material = SubResource("StandardMaterial3D_head")
@@ -31,6 +48,10 @@ height = 0.34
 [sub_resource type="BoxMesh" id="BoxMesh_note"]
 material = SubResource("StandardMaterial3D_note")
 size = Vector3(0.34, 0.22, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hood"]
+material = SubResource("StandardMaterial3D_hood")
+size = Vector3(0.31, 0.12, 0.29)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_customer"]
 radius = 0.19
@@ -46,12 +67,43 @@ dialogue_text = "A nervous customer asks whether you can move several Orbit 64 c
 severity = "medium"
 
 [node name="BodyMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.62, 0)
-mesh = SubResource("CapsuleMesh_body")
+position = Vector3(0, 0.7, 0)
+mesh = SubResource("BoxMesh_body")
+
+[node name="ShoulderMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.0, 0)
+mesh = SubResource("BoxMesh_shoulders")
+
+[node name="LeftArmMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.24, 0.72, -0.02)
+rotation = Vector3(-0.2, 0, -0.16)
+mesh = SubResource("BoxMesh_arm")
+
+[node name="RightArmMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0.24, 0.73, -0.06)
+rotation = Vector3(-0.28, 0.08, 0.14)
+mesh = SubResource("BoxMesh_arm")
+
+[node name="LeftLegMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.08, 0.26, 0)
+mesh = SubResource("BoxMesh_leg")
+
+[node name="RightLegMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0.08, 0.26, 0)
+mesh = SubResource("BoxMesh_leg")
 
 [node name="HeadMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0, 1.17, 0)
 mesh = SubResource("SphereMesh_head")
+
+[node name="HairMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.32, 0)
+mesh = SubResource("BoxMesh_hood")
+
+[node name="RoleSilhouetteMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.12, 0.94, -0.15)
+rotation = Vector3(-0.12, -0.25, 0)
+mesh = SubResource("BoxMesh_note")
 
 [node name="NoteMesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.11, 0.88, -0.16)

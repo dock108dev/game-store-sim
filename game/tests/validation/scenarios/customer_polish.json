@@ -36,6 +36,13 @@
       "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_suspicious_customer_has_note_and_cash_cue"
     },
     {
+      "id": "customer_modular_visual_kit",
+      "name": "Customer roles use modular non-capsule body kits with distinct silhouettes",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_role_visuals.gd::test_customer_role_silhouettes_are_visually_distinct"
+    },
+    {
       "id": "register_special_customer_spacing_arc",
       "name": "Special register customers keep readable spacing and form a clear register-area arc",
       "status": "automated",

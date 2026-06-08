@@ -42,8 +42,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 336 GUT tests.
-- UI scenario automation coverage is 338/399, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 337 GUT tests.
+- UI scenario automation coverage is 339/401, above the required 80% threshold.
 - Production script mapping coverage is 34/34.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 
@@ -65,7 +65,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, and manual-validation docs are synced through Stop 4.9.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, and customer visual-kit manual-validation docs are synced through Stop 5.1.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
@@ -93,6 +93,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Customer spawn, item approach, buyer queue lane, and special-customer positions read naturally in the current layout.
 - Register click prompt and sale completion message are readable.
 - Trade-in seller and compact carried item are readable at the register and do not look detached from the seller.
+- Customer torso, headwear, arms, legs, props, and role silhouettes read as stylized people rather than placeholder capsules.
 - Trade-in register prompt and completion message are readable.
 - Trade-in offer panel condition, demand, market, cash, store-credit, and accept/decline controls are readable.
 - Trade-in appraisal opens with visible mouse focus, moves focus to close after a decision, and closes back into captured first-person control.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://drly0rh26xygo"]
+[gd_scene load_steps=16 format=3 uid="uid://drly0rh26xygo"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_service_customer.gd" id="1_service_customer"]
 
@@ -14,10 +14,27 @@ albedo_color = Color(0.72, 0.74, 0.7, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ticket"]
 albedo_color = Color(0.7, 0.66, 0.38, 1)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pants"]
+albedo_color = Color(0.05, 0.12, 0.13, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cap"]
+albedo_color = Color(0.05, 0.22, 0.24, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
 material = SubResource("StandardMaterial3D_body")
-radius = 0.18
-height = 1.0
+size = Vector3(0.36, 0.58, 0.23)
+
+[sub_resource type="BoxMesh" id="BoxMesh_shoulders"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(0.48, 0.1, 0.21)
+
+[sub_resource type="BoxMesh" id="BoxMesh_arm"]
+material = SubResource("StandardMaterial3D_body")
+size = Vector3(0.11, 0.42, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_leg"]
+material = SubResource("StandardMaterial3D_pants")
+size = Vector3(0.11, 0.42, 0.11)
 
 [sub_resource type="SphereMesh" id="SphereMesh_head"]
 material = SubResource("StandardMaterial3D_head")
@@ -34,6 +51,10 @@ height = 0.035
 material = SubResource("StandardMaterial3D_ticket")
 size = Vector3(0.32, 0.18, 0.025)
 
+[sub_resource type="BoxMesh" id="BoxMesh_cap"]
+material = SubResource("StandardMaterial3D_cap")
+size = Vector3(0.3, 0.07, 0.25)
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_customer"]
 radius = 0.2
 height = 1.25
@@ -42,12 +63,43 @@ height = 1.25
 script = ExtResource("1_service_customer")
 
 [node name="BodyMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.65, 0)
-mesh = SubResource("CapsuleMesh_body")
+position = Vector3(0, 0.74, 0)
+mesh = SubResource("BoxMesh_body")
+
+[node name="ShoulderMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.06, 0)
+mesh = SubResource("BoxMesh_shoulders")
+
+[node name="LeftArmMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.28, 0.76, -0.01)
+rotation = Vector3(-0.14, 0, -0.14)
+mesh = SubResource("BoxMesh_arm")
+
+[node name="RightArmMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0.27, 0.8, -0.09)
+rotation = Vector3(-0.3, 0.08, 0.16)
+mesh = SubResource("BoxMesh_arm")
+
+[node name="LeftLegMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.09, 0.28, 0)
+mesh = SubResource("BoxMesh_leg")
+
+[node name="RightLegMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0.09, 0.28, 0)
+mesh = SubResource("BoxMesh_leg")
 
 [node name="HeadMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0, 1.25, 0)
 mesh = SubResource("SphereMesh_head")
+
+[node name="HairMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.42, 0)
+mesh = SubResource("BoxMesh_cap")
+
+[node name="RoleSilhouetteMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.02, 0.94, -0.14)
+rotation = Vector3(-0.16, 0, 0)
+mesh = SubResource("BoxMesh_ticket")
 
 [node name="ServiceDiscMesh" type="MeshInstance3D" parent="."]
 position = Vector3(0.18, 0.78, -0.2)

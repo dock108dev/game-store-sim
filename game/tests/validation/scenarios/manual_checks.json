@@ -297,6 +297,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_modular_body_readability",
+      "name": "Customer torso, headwear, arms, legs, props, and role silhouettes read as people rather than capsules",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the modular body kit exists; human review must confirm the stylized shapes read clearly from normal player angles.",
+      "owner": "manual QA"
+    },
+    {
       "id": "trade_in_register_message_readability",
       "name": "Trade-in register prompt and completion message are readable",
       "status": "manual",
