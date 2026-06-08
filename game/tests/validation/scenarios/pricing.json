@@ -37,10 +37,17 @@
     },
     {
       "id": "pricing_panel_product_fields",
-      "name": "Pricing panel opens with product-backed fields",
+      "name": "Pricing panel opens with product-backed cost, market, current price, suggested range, margin, and demand fields",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_opens_with_product_fields"
+    },
+    {
+      "id": "pricing_panel_outcome_warnings",
+      "name": "Pricing panel warns for above-range, below-cost, below-range, and batch-pricing outcomes",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_warns_for_high_and_below_cost_prices; res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_matching_updates_active_matching_items"
     },
     {
       "id": "pricing_panel_modal_transition",

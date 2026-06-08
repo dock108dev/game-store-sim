@@ -10,10 +10,12 @@ const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
 @onready var modal_root: Control = $CenterContainer
 @onready var details_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsLabel
+@onready var guidance_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/GuidanceLabel
 @onready var price_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/PriceLabel
 @onready var decrement_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/DecreaseButton
 @onready var increment_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PriceRow/IncreaseButton
 @onready var apply_matching_check_box: CheckBox = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ApplyMatchingCheckBox
+@onready var warning_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/WarningLabel
 @onready var apply_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/ApplyButton
 @onready var cancel_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow/CancelButton
 
@@ -29,6 +31,7 @@ func _ready() -> void:
 	UIComponents.apply_modal_language(modal_root, UIComponents.SURFACE_PRICING)
 	decrement_button.pressed.connect(decrease_price)
 	increment_button.pressed.connect(increase_price)
+	apply_matching_check_box.toggled.connect(_on_apply_matching_toggled)
 	apply_button.pressed.connect(apply_price)
 	cancel_button.pressed.connect(cancel_price)
 
@@ -180,10 +183,22 @@ func _update_labels() -> void:
 		product.market_value_cents / 100.0,
 	]
 	price_label.text = "$%0.2f" % (_draft_price_cents / 100.0)
+	guidance_label.text = "Current: $%0.2f\nSuggested range: %s\nDemand: %s\nMargin: $%0.2f" % [
+		_original_price_cents / 100.0,
+		_get_suggested_range_text(product),
+		product.demand_tier.capitalize(),
+		(_draft_price_cents - cost_basis_cents) / 100.0,
+	]
 	apply_matching_check_box.text = "Apply to all %s copies (%d)" % [
 		product.display_name,
 		get_matching_priceable_items().size(),
 	]
+	warning_label.text = _get_price_outcome_warning(product, cost_basis_cents)
+
+
+func _on_apply_matching_toggled(_is_pressed: bool) -> void:
+	if is_open():
+		_update_labels()
 
 
 func get_matching_priceable_items() -> Array[Node]:
@@ -221,3 +236,48 @@ func _is_matching_priceable_item(node: Node, product_id: String) -> bool:
 		return false
 
 	return true
+
+
+func _get_suggested_range_text(product: ProductDefinition) -> String:
+	var low_cents := _get_suggested_low_cents(product)
+	var high_cents := _get_suggested_high_cents(product)
+	return "$%0.2f-$%0.2f" % [low_cents / 100.0, high_cents / 100.0]
+
+
+func _get_suggested_low_cents(product: ProductDefinition) -> int:
+	if product == null:
+		return 0
+
+	return int(round(product.market_value_cents * 0.85))
+
+
+func _get_suggested_high_cents(product: ProductDefinition) -> int:
+	if product == null:
+		return 0
+
+	var demand_multiplier := 1.05
+	if product.demand_tier == "high":
+		demand_multiplier = 1.10
+	elif product.demand_tier == "low":
+		demand_multiplier = 1.00
+	return int(round(product.market_value_cents * demand_multiplier))
+
+
+func _get_price_outcome_warning(product: ProductDefinition, cost_basis_cents: int) -> String:
+	if product == null:
+		return "Pricing unavailable."
+
+	var notes: Array[String] = []
+	if _draft_price_cents < cost_basis_cents:
+		notes.append("Below cost; sale would lose money.")
+	if _draft_price_cents > _get_suggested_high_cents(product):
+		notes.append("Above suggested range; customers may reject it.")
+	if _draft_price_cents < _get_suggested_low_cents(product):
+		notes.append("Below suggested range; margin may be left on the table.")
+	if apply_matching_check_box.button_pressed:
+		notes.append("Batch price will apply to %d active copies." % get_matching_priceable_items().size())
+
+	if notes.is_empty():
+		return "Price is inside the suggested range."
+
+	return " ".join(notes)

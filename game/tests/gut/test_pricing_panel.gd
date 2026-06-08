@@ -28,6 +28,11 @@ func test_pricing_panel_opens_with_product_fields() -> void:
 	assert_string_contains(_panel.details_label.text, "Good")
 	assert_string_contains(_panel.details_label.text, "Cost: $9.00")
 	assert_string_contains(_panel.details_label.text, "Market: $24.99")
+	assert_string_contains(_panel.guidance_label.text, "Current: $21.99")
+	assert_string_contains(_panel.guidance_label.text, "Suggested range: $21.24-$26.24")
+	assert_string_contains(_panel.guidance_label.text, "Demand: Medium")
+	assert_string_contains(_panel.guidance_label.text, "Margin: $12.99")
+	assert_eq(_panel.warning_label.text, "Price is inside the suggested range.")
 	assert_eq(_panel.price_label.text, "$21.99")
 	assert_false(_panel.apply_matching_check_box.button_pressed)
 	assert_string_contains(_panel.apply_matching_check_box.text, "Star Trader")
@@ -132,6 +137,7 @@ func test_pricing_panel_apply_matching_updates_active_matching_items() -> void:
 	_panel.increase_price()
 
 	assert_eq(_panel.get_matching_priceable_items().size(), 2)
+	assert_string_contains(_panel.warning_label.text, "Batch price will apply to 2 active copies.")
 	assert_true(_panel.apply_price())
 	assert_eq(_item.get("current_price_cents"), 2299)
 	assert_eq(matching_item.get("current_price_cents"), 2299)
@@ -147,6 +153,21 @@ func test_pricing_panel_cancel_keeps_original_item_price() -> void:
 	assert_true(_panel.cancel_price())
 	assert_eq(_item.get("current_price_cents"), 2199)
 	assert_false(_panel.is_open())
+
+
+func test_pricing_panel_warns_for_high_and_below_cost_prices() -> void:
+	_item.set("current_price_cents", 4000)
+	assert_true(_panel.open_for_item(_item))
+
+	assert_string_contains(_panel.warning_label.text, "Above suggested range")
+	assert_string_contains(_panel.warning_label.text, "customers may reject")
+	assert_true(_panel.cancel_price())
+
+	_item.set("current_price_cents", 500)
+	assert_true(_panel.open_for_item(_item))
+
+	assert_string_contains(_panel.warning_label.text, "Below cost")
+	assert_string_contains(_panel.warning_label.text, "Below suggested range")
 
 
 func _make_fixed_price_item() -> Node:

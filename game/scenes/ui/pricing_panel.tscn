@@ -35,6 +35,15 @@ horizontal_alignment = 1
 [node name="DetailsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Product details"
+autowrap_mode = 3
+
+[node name="GuidanceLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Current: $0.00
+Suggested range: $0.00-$0.00
+Demand: Medium
+Margin: $0.00"
+autowrap_mode = 3
 
 [node name="PriceRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -60,6 +69,12 @@ text = "+ $1"
 [node name="ApplyMatchingCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Apply to matching used copies"
+
+[node name="WarningLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Price is inside the suggested range."
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="ActionRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
