@@ -76,6 +76,13 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_register_counter_has_command_center_props"
+    },
+    {
+      "id": "production_navigation_clearance",
+      "name": "Production environment props preserve core navigation and fixture-placement clearance",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_production_environment_props_preserve_core_navigation_clearance"
     }
   ]
 }

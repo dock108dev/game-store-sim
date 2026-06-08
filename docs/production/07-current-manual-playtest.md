@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this lighting/postprocess pass: `scripts/validate_godot.sh` passed with 292 GUT tests, UI scenario coverage 295/350, and script mapping coverage 31/31.
+- Last full gate in this collision/navigation hardening pass: `scripts/validate_godot.sh` passed with 293 GUT tests, UI scenario coverage 296/351, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
@@ -87,6 +87,7 @@ Current automated baseline:
 - Click prompts and the center reticle are readable in the actual game window.
 - Store lighting, material contrast, and signage make the room read as a small specialty game shop rather than a graybox test room.
 - Storefront, shelf, register, receiving, and backroom desk lights create readable warm retail and cooler operations zones without washing out text, prompts, or product cases.
+- Production storefront, sales floor, register, fixture, and backroom props remain nonblocking and preserve the core route from entry to rack, register, receiving, storage, and fixture placement.
 - Front entry glass, open sign, hours decal, and entry floor cue make the storefront read as a shop threshold without implying the player can leave yet.
 - Sales floor route, new-release endcap, and staff-picks stand add merchandising context without blocking entry-to-shelf-to-register movement.
 - Register counter scanner, card reader, receipt printer/slip, sleeve stack, impulse rack, customer-side mat, and queue mat make the register read as the command center without blocking checkout.
@@ -173,6 +174,7 @@ Run these first when manually checking the completed store visual pass:
 - Confirm the sales floor composition reads more like a small shop: browse-route cue, `NEW RELEASES` endcap, and `STAFF PICKS` stand should help without becoming confusing interaction targets.
 - Confirm the register command-center props are readable from player and customer angles and do not make the actual register interaction target ambiguous.
 - Confirm the accessory peg wall and locked-case placeholder read as future fixture categories without blocking player or customer movement.
+- Confirm production props still leave clear movement through entry, rack, register queue, backroom receiving, storage shelf, and fixture placement preview paths.
 - Confirm `SAVE POINT GAMES` and zone signage is readable, fictional, and not mistaken for an interaction target.
 - Confirm posters, the price tag, bargain bin, register mat, and controller display feel like store dressing without blocking navigation or hiding click targets.
 - Confirm screenshot artifacts still compose clearly after lighting, signage, and clutter changes.

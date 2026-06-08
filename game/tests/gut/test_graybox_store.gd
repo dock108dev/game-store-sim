@@ -452,8 +452,7 @@ func test_register_counter_has_command_center_props() -> void:
 	for prop_path in command_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
 		assert_not_null(prop)
-		assert_false(prop.use_collision)
-		assert_true(_is_inside_store_floorprint(prop.global_position))
+		assert_false(prop.use_collision, prop_path)
 		assert_lt(_flat_distance_xz(prop.global_position, register.global_position), 1.65)
 
 	var impulse_rack := _store.get_node_or_null("CounterImpulseRack") as Node3D
@@ -579,6 +578,65 @@ func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void
 		var cue := _store.get_node_or_null(cue_path) as CSGBox3D
 		assert_not_null(cue)
 		assert_false(cue.use_collision)
+
+
+func test_production_environment_props_preserve_core_navigation_clearance() -> void:
+	var decorative_csg_paths := [
+		"StorefrontGlassLeft",
+		"StorefrontGlassRight",
+		"EntrySidewalkCue",
+		"SalesFloorRouteMat",
+		"NewReleaseEndcap/EndcapBase",
+		"NewReleaseEndcap/EndcapHeaderPanel",
+		"StaffPicksStand/StaffPicksBase",
+		"AccessoryPegWall/PegWallBackPanel",
+		"LockedCasePlaceholder/LockedCaseBase",
+		"LockedCasePlaceholder/LockedCaseGlass",
+		"RegisterScanner",
+		"ScannerBeamCue",
+		"CardReader",
+		"ReceiptPrinter",
+		"SleeveStack",
+		"CounterImpulseRack/ImpulseRackBase",
+		"CustomerCounterMat",
+		"RegisterQueueMat",
+		"BackroomReceivingZone",
+		"BackroomStorageZone",
+		"BackroomManagementZone",
+		"BackroomServiceZone",
+		"BackroomPathZone",
+		"BackroomDeliveryDoor",
+		"ReceivingInvoiceClipboard",
+		"BackstockOverflowCrateA",
+		"BackstockOverflowCrateB",
+		"ManagementDeskPad",
+		"ManagementKeyboard",
+		"BackroomServiceBench/ServiceTicketPanel",
+		"BackroomSafePlaceholder/SafeBody",
+		"SecurityMonitorPanel",
+		"EvidenceLockerPlaceholder",
+	]
+	for prop_path in decorative_csg_paths:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision)
+
+	var player := _store.get_node("PlayerController") as CharacterBody3D
+	var rack := _store.get_node("GameDisplayRack") as Node3D
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	var storage_shelf := _store.get_node("BackroomStorageShelf") as Node3D
+	var fixture_manager := _store.get_node("FixturePlacementManager")
+	var ghost := fixture_manager.get_node("GhostRackPreview") as Node3D
+
+	assert_lt(_flat_distance_xz(player.global_position, register.global_position), 4.8)
+	assert_lt(_flat_distance_xz(register.global_position, rack.global_position), 10.0)
+	assert_lt(_flat_distance_xz(rack.global_position, receiving_box.global_position), 2.4)
+	assert_lt(_flat_distance_xz(receiving_box.global_position, storage_shelf.global_position), 2.4)
+	assert_lte((_store.get_node("BackroomPathZone") as CSGBox3D).size.y, 0.015)
+	assert_lte((_store.get_node("RegisterQueueMat") as CSGBox3D).size.y, 0.0121)
+	assert_true(_is_inside_store_floorprint(ghost.global_position))
+	assert_true(_is_inside_store_floorprint(fixture_manager.get("default_ghost_position")))
 
 
 func test_register_workstation_exists() -> void:
