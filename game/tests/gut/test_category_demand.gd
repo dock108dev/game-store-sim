@@ -28,6 +28,46 @@ func test_category_demand_combines_tier_and_category() -> void:
 	assert_almost_eq(CategoryDemandPolicy.get_price_limit_multiplier(product), 0.76, 0.001)
 
 
+func test_category_demand_context_connects_visibility_price_rarity_marketing_event_and_archetype() -> void:
+	var product := ProductDefinition.new()
+	product.product_id = "used_signal_sprout"
+	product.display_name = "Signal Sprout"
+	product.category = "used_game"
+	product.demand_tier = "high"
+	product.rarity = "collector"
+	product.market_value_cents = 4000
+	product.suggested_price_cents = 3800
+
+	var base_multiplier := CategoryDemandPolicy.get_price_limit_multiplier(product)
+	var tuned_multiplier := CategoryDemandPolicy.get_contextual_demand_multiplier(product, {
+		"shelf_visibility": "endcap",
+		"marketing": "staff_pick",
+		"event": "weekend",
+		"customer_archetype": "collector",
+		"price_cents": 3600,
+	})
+	var overpriced_multiplier := CategoryDemandPolicy.get_contextual_demand_multiplier(product, {
+		"shelf_visibility": "backroom",
+		"marketing": "none",
+		"event": "rainy_day",
+		"customer_archetype": "browser",
+		"price_cents": 5200,
+	})
+
+	assert_gt(tuned_multiplier, base_multiplier)
+	assert_lt(overpriced_multiplier, base_multiplier)
+	assert_string_contains(
+		CategoryDemandPolicy.get_context_summary_line(product, {
+			"shelf_visibility": "endcap",
+			"marketing": "staff_pick",
+			"event": "weekend",
+			"customer_archetype": "collector",
+			"price_cents": 3600,
+		}),
+		"Signal Sprout demand x"
+	)
+
+
 func test_category_demand_summary_lists_categories() -> void:
 	var summary := CategoryDemandPolicy.get_summary_text()
 
@@ -35,3 +75,14 @@ func test_category_demand_summary_lists_categories() -> void:
 	assert_string_contains(summary, "Used games x1.00")
 	assert_string_contains(summary, "New games x0.90")
 	assert_string_contains(summary, "Hardware x0.80")
+
+
+func test_category_demand_tuning_summary_lists_signals() -> void:
+	var summary := CategoryDemandPolicy.get_tuning_summary_text()
+
+	assert_string_contains(summary, "shelf visibility")
+	assert_string_contains(summary, "price")
+	assert_string_contains(summary, "rarity")
+	assert_string_contains(summary, "marketing")
+	assert_string_contains(summary, "events")
+	assert_string_contains(summary, "customer archetypes")

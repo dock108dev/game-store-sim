@@ -531,7 +531,33 @@ func get_reorder_suggestions_text() -> String:
 
 
 func get_category_demand_summary_text() -> String:
-	return CategoryDemandPolicy.get_summary_text()
+	var lines: Array[String] = CategoryDemandPolicy.get_summary_lines()
+	lines.append(CategoryDemandPolicy.get_tuning_summary_text())
+	for line in get_active_inventory_demand_tuning_lines(3):
+		lines.append(line)
+	return "\n".join(lines)
+
+
+func get_active_inventory_demand_tuning_lines(max_items: int = 3) -> Array[String]:
+	var lines: Array[String] = []
+	var seen_products := {}
+	for item in get_active_inventory_items():
+		if lines.size() >= max_items:
+			break
+		var product := item.get("product") as ProductDefinition
+		if product == null or seen_products.has(product.product_id):
+			continue
+
+		seen_products[product.product_id] = true
+		var context := {
+			"shelf_visibility": _get_item_shelf_visibility(item),
+			"marketing": _get_item_marketing_signal(item, product),
+			"event": _get_day_demand_event(),
+			"customer_archetype": "regular",
+			"price_cents": int(item.get("current_price_cents")),
+		}
+		lines.append(CategoryDemandPolicy.get_context_summary_line(product, context))
+	return lines
 
 
 func get_market_drift_summary_text() -> String:
@@ -1463,6 +1489,37 @@ func _format_transaction_line(transaction: Dictionary) -> String:
 				format_money(int(transaction.get("sale_price_cents", 0))),
 				format_money(int(transaction.get("profit_cents", 0))),
 			]
+
+
+func _get_item_shelf_visibility(item: Node) -> String:
+	var location_id := str(item.get("location_id"))
+	if location_id.begins_with("shelf_slot"):
+		return "front"
+	if location_id.begins_with("customer:"):
+		return "front"
+	if location_id == "receiving_box" or location_id == "held":
+		return "standard"
+	if location_id == "storage" or location_id == "backroom":
+		return "backroom"
+	return "standard"
+
+
+func _get_item_marketing_signal(item: Node, product: ProductDefinition) -> String:
+	var current_price := int(item.get("current_price_cents"))
+	if product.market_value_cents > 0 and current_price > 0 and current_price <= int(product.market_value_cents * 0.9):
+		return "sale_tag"
+	if product.rarity in ["rare", "collector", "launch"]:
+		return "staff_pick"
+	return "none"
+
+
+func _get_day_demand_event() -> String:
+	for release in get_upcoming_releases(false):
+		if int(release.get("release_day")) == day_number:
+			return "launch_day"
+	if day_number % 6 == 0:
+		return "weekend"
+	return "normal"
 
 
 func _get_ledger() -> TransactionLedger:

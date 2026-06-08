@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this economy/day-loop pass: `scripts/validate_godot.sh` passed with 380 GUT tests, UI scenario coverage 359/435, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
+- Last full gate in this economy/day-loop pass: `scripts/validate_godot.sh` passed with 383 GUT tests, UI scenario coverage 362/439, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -33,6 +33,7 @@ Current automated baseline:
 - Production day structure is implemented through Stop 7.1; manual QA should confirm opening, setup, customer-hours, closing, report, and tomorrow-planning language makes the store day feel like an owner/operator loop rather than a debug summary.
 - Cash pressure is implemented through Stop 7.2; manual QA should confirm rent reserve, utilities/bills, prepaid supplier terms, payroll/repairs/shrinkage placeholders, operating expenses, and reserved obligations are understandable and do not obscure item gross profit.
 - Reputation baseline is implemented through Stop 7.3; manual QA should confirm pricing, wait-time, preorder, service, return, suspicious-choice, stock-variety, and launch-shortage consequences read clearly and feel recoverable.
+- Demand tuning is implemented through Stop 7.4; manual QA should confirm shelf visibility, price, rarity, marketing, event, and customer-archetype signals read as understandable demand causes in the backroom panel.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -156,6 +157,7 @@ Current automated baseline:
 - Day structure text reads as opening, setup, customer-hours, closing, report, and tomorrow-planning phases instead of a loose debug summary.
 - Cash pressure text separates gross profit from operating expenses and reserved obligations so the player understands why cash changed after close.
 - Reputation event text explains why the score changed and does not hide the link between player decisions and outcomes.
+- Demand tuning text explains why visible/featured/rare/discounted/event-relevant inventory is more attractive without replacing the physical stocking and pricing loop.
 - Recent activity text is readable and distinguishes sales from trade-ins.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
 - Inventory summary text is readable and matches active receiving/rack items.

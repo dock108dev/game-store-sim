@@ -337,6 +337,7 @@ func test_day_summary_panel_includes_category_demand() -> void:
 	assert_string_contains(_panel.demand_label.text, "Category demand:")
 	assert_string_contains(_panel.demand_label.text, "Used games x1.00")
 	assert_string_contains(_panel.demand_label.text, "Hardware x0.80")
+	assert_string_contains(_panel.demand_label.text, "Demand tuning signals:")
 
 
 func test_day_summary_panel_includes_market_drift() -> void:

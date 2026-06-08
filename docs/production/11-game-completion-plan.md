@@ -364,7 +364,7 @@ Stops:
 - Stop 7.1: Day structure. Done in `Build production day structure`: store sessions now expose opening, setup, customer-hours, closing, report, and tomorrow-planning phases; start-day payloads include opening summaries; daily reports show the phase/plan; save/load preserves the current phase.
 - Stop 7.2: Cash pressure. Done in `Add cash pressure systems`: end-of-day close now posts daily rent/utility operating expenses once, reports supplier terms, payroll, repairs, and shrinkage as expandable pressure hooks, tracks reserved obligations, and persists posted expenses.
 - Stop 7.3: Reputation. Done in `Add reputation baseline`: reputation events now cover pricing fairness, wait time, preorder outcomes, service outcomes, return handling, suspicious choices, stock variety, and launch shortage consequences, with clamped score changes, summaries, daily report counts, and save/load coverage.
-- Stop 7.4: Demand tuning. Connect shelf visibility, category demand, price, rarity, marketing, events, and customer archetypes.
+- Stop 7.4: Demand tuning. Done in `Tune demand systems`: category demand now supports contextual shelf visibility, price pressure, rarity, marketing, day-event, and customer-archetype multipliers, with active-inventory backroom summaries while preserving current default category/tier price-limit behavior.
 - Stop 7.5: Upgrade path. Add unlocks for fixtures, categories, service tools, computer tools, signage, storage, and store expansion.
 - Stop 7.6: Tutorial/onboarding. Teach receiving, pricing, stocking, checkout, trade-in, computer, ordering, and closing without visible debug explanations.
 - Stop 7.7: Economy validation sync. Add scenario coverage for day-to-day outcomes and manual progression checks.
@@ -410,6 +410,14 @@ Validation snapshot:
 - Daily report tests cover reputation event counts.
 - Save/load tests preserve reputation events.
 - Manual reputation checks are current for consequence readability and recoverability.
+- `scripts/validate_godot.sh` passes with 383 GUT tests.
+- UI scenario automation coverage is 362/439, above the required 80% threshold.
+- Production script mapping coverage is 39/39.
+- Validation tool manifest coverage reports 1 active standalone tool.
+- Product catalog content validation passes with 33 products.
+- Category demand tests cover contextual demand tuning and tuning-signal summaries.
+- Store session and day-summary panel tests cover active inventory demand tuning in the backroom computer.
+- Manual demand-tuning checks are current for readability and player-understandable demand causes.
 
 ## Milestone 8: Backroom Operations
 

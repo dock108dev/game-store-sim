@@ -377,6 +377,7 @@ func test_store_session_summarizes_category_demand() -> void:
 	assert_string_contains(summary, "Used games x1.00")
 	assert_string_contains(summary, "New games x0.90")
 	assert_string_contains(summary, "Hardware x0.80")
+	assert_string_contains(summary, "Demand tuning signals:")
 
 
 func test_store_session_summarizes_market_drift_for_active_inventory() -> void:
@@ -395,6 +396,25 @@ func test_store_session_summarizes_market_drift_for_active_inventory() -> void:
 	assert_string_contains(summary, "Market drift day 2:")
 	assert_string_contains(summary, "Star Trader $24.99")
 	assert_string_contains(summary, "+$")
+
+
+func test_store_session_summarizes_active_inventory_demand_tuning() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var root := Node3D.new()
+	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(session)
+	add_child_autofree(root)
+	root.add_child(item)
+
+	item.set("location_id", "shelf_slot_001")
+	session.inventory_root_path = session.get_path_to(root)
+	var lines := session.get_active_inventory_demand_tuning_lines()
+	var summary := session.get_category_demand_summary_text()
+
+	assert_eq(lines.size(), 1)
+	assert_string_contains(lines[0], "Star Trader demand x")
+	assert_string_contains(lines[0], "front")
+	assert_string_contains(summary, "Star Trader demand x")
 
 
 func test_store_session_formats_daily_report_after_close() -> void:

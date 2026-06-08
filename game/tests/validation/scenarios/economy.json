@@ -22,6 +22,20 @@
       "evidence": "res://tests/gut/test_category_demand.gd::test_category_demand_combines_tier_and_category"
     },
     {
+      "id": "category_demand_contextual_tuning",
+      "name": "Demand tuning connects shelf visibility, price, rarity, marketing, events, and customer archetypes",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_category_demand.gd::test_category_demand_context_connects_visibility_price_rarity_marketing_event_and_archetype"
+    },
+    {
+      "id": "category_demand_tuning_summary",
+      "name": "Demand tuning summary lists contextual demand signals",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_category_demand.gd::test_category_demand_tuning_summary_lists_signals"
+    },
+    {
       "id": "buyer_price_limit_uses_category_demand",
       "name": "Buyer price limit uses category demand",
       "status": "automated",
@@ -34,6 +48,13 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_category_demand"
+    },
+    {
+      "id": "backroom_active_inventory_demand_tuning",
+      "name": "Backroom computer summarizes active inventory demand tuning",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_active_inventory_demand_tuning"
     },
     {
       "id": "backroom_panel_category_demand_readout",

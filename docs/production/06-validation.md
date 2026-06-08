@@ -44,7 +44,7 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 380 GUT tests.
+- `scripts/validate_godot.sh` passes with 383 GUT tests.
 - UI scenario automation coverage is 353/425, above the required 80% threshold.
 - Production script mapping coverage is 39/39.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
@@ -58,6 +58,7 @@ Current polish-pass baseline:
 - Store sessions expose production day structure phases for opening, setup, customer hours, closing, report, and tomorrow planning; daily reports and save/load preserve the current phase.
 - Daily cash pressure posts rent/utility operating expenses once at close, reports reserved obligations separately from gross profit, and keeps supplier terms/payroll/repairs/shrinkage visible as expandable pressure hooks.
 - Reputation events track pricing fairness, wait time, preorder outcomes, service outcomes, return handling, suspicious choices, stock variety, and launch shortage consequences with clamped score changes and save/load coverage.
+- Demand tuning connects shelf visibility, price pressure, rarity, marketing, day events, and customer archetypes while preserving default category/tier customer-price behavior.
 
 ## Manual Validation
 
@@ -80,7 +81,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, and reputation validation are synced through Stop 7.3.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, and demand-tuning validation are synced through Stop 7.4.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
