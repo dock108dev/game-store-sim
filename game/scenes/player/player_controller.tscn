@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cag7fgl2cb7di"]
+[gd_scene load_steps=11 format=3 uid="uid://cag7fgl2cb7di"]
 
 [ext_resource type="Script" path="res://scripts/player/first_person_controller.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_raycast.gd" id="2_raycast"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/trade_in_offer_panel.tscn" id="6_trade_in_offer_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="7_settings_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/register_checkout_panel.tscn" id="8_register_checkout_panel"]
+[ext_resource type="Script" path="res://scripts/player/interaction_audio_feedback.gd" id="9_interaction_audio"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.35
@@ -37,6 +38,45 @@ script = ExtResource("2_raycast")
 prompt_path = NodePath("../../../InteractionPrompt")
 
 [node name="InteractionPrompt" parent="." instance=ExtResource("3_prompt")]
+
+[node name="InteractionAudioFeedback" type="Node3D" parent="."]
+script = ExtResource("9_interaction_audio")
+
+[node name="PickupPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -16.0
+
+[node name="PlacePlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -17.0
+
+[node name="StockPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -15.0
+
+[node name="ScanPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -15.0
+
+[node name="RegisterPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -16.0
+
+[node name="CashDrawerPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -14.0
+
+[node name="ComputerClickPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -18.0
+
+[node name="ButtonHoverPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -24.0
+
+[node name="ButtonClickPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -18.0
+
+[node name="BoxOpenPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -16.0
+
+[node name="ShelfBumpPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -18.0
+
+[node name="ErrorPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -20.0
 
 [node name="PricingPanel" parent="." instance=ExtResource("4_pricing_panel")]
 

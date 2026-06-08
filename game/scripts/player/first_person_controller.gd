@@ -12,6 +12,7 @@ extends CharacterBody3D
 @onready var day_summary_panel: Node = $DaySummaryPanel
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 @onready var settings_panel: SettingsPanel = $SettingsPanel
+@onready var interaction_audio: Node = $InteractionAudioFeedback
 
 const CARRY_BASE_SCALE := 0.45
 const CARRY_DEPTH_SCALE_STEP := 0.025
@@ -98,6 +99,7 @@ func can_pick_up_item(item: Node) -> bool:
 
 func pick_up_item(item: Node3D) -> bool:
 	if not can_pick_up_item(item):
+		play_interaction_audio("error")
 		return false
 
 	var parent := item.get_parent()
@@ -111,6 +113,7 @@ func pick_up_item(item: Node3D) -> bool:
 		item.set_held()
 
 	_arrange_held_items()
+	play_interaction_audio("pickup")
 	return true
 
 
@@ -127,6 +130,7 @@ func can_place_held_item(slot: Node) -> bool:
 
 func place_held_item(slot: Node) -> bool:
 	if not can_place_held_item(slot):
+		play_interaction_audio("shelf_bump")
 		return false
 
 	var item := get_held_item()
@@ -134,8 +138,10 @@ func place_held_item(slot: Node) -> bool:
 		_held_items.erase(item)
 		_clear_held_item_presentation(item)
 		_arrange_held_items()
+		play_interaction_audio("stock")
 		return true
 
+	play_interaction_audio("shelf_bump")
 	return false
 
 
@@ -194,8 +200,10 @@ func open_pricing_for_held_item() -> String:
 		return "Pricing panel unavailable."
 
 	if pricing_panel.open_for_item(held_item):
+		play_interaction_audio("button_click")
 		return ""
 
+	play_interaction_audio("error")
 	return "This item cannot be priced."
 
 
@@ -204,8 +212,10 @@ func open_register_checkout(register: RegisterWorkstation) -> String:
 		return "Register checkout unavailable."
 
 	if register_checkout_panel.open_for_register(register):
+		play_interaction_audio("register")
 		return ""
 
+	play_interaction_audio("error")
 	return "No checkout waiting at the register."
 
 
@@ -214,8 +224,10 @@ func open_day_summary(store_session: Node) -> String:
 		return "Backroom summary unavailable."
 
 	if day_summary_panel.open_for_session(store_session):
+		play_interaction_audio("computer_click")
 		return ""
 
+	play_interaction_audio("error")
 	return "Backroom summary unavailable."
 
 
@@ -224,8 +236,10 @@ func open_trade_in_offer(register: RegisterWorkstation, customer: SimpleTradeInC
 		return "Trade-in review unavailable."
 
 	if trade_in_offer_panel.open_for_trade_in(register, customer):
+		play_interaction_audio("register")
 		return ""
 
+	play_interaction_audio("error")
 	return "Trade-in review unavailable."
 
 
@@ -246,6 +260,28 @@ func get_held_item_interaction_prompt() -> String:
 
 func interact_with_held_item() -> String:
 	return open_pricing_for_held_item()
+
+
+func play_interaction_audio(cue_id: String) -> bool:
+	if interaction_audio == null or not interaction_audio.has_method("play_cue"):
+		return false
+	return bool(interaction_audio.call("play_cue", cue_id))
+
+
+func play_interaction_audio_for_result(result: String) -> bool:
+	if result.is_empty():
+		return false
+
+	var lower_result := result.to_lower()
+	if lower_result.contains("sold") or lower_result.contains("preorder") or lower_result.contains("service complete"):
+		return play_interaction_audio("cash_drawer")
+	if lower_result.contains("unavailable") or lower_result.contains("cannot") or lower_result.contains("no "):
+		return play_interaction_audio("error")
+	if lower_result.contains("box"):
+		return play_interaction_audio("box_open")
+	if lower_result.contains("placed") or lower_result.contains("stocked"):
+		return play_interaction_audio("place")
+	return play_interaction_audio("button_click")
 
 
 func _is_modal_open() -> bool:

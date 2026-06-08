@@ -13,6 +13,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_ambience.gd::test_graybox_store_contains_configured_ambience_players"
+    },
+    {
+      "id": "interaction_audio_catalog",
+      "name": "Interaction audio catalog covers pickup, place, stock, scan, register, cash drawer, computer, UI, receiving, shelf, and error cues",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_audio_feedback.gd::test_interaction_audio_catalog_covers_stop_11_2_cues"
+    },
+    {
+      "id": "interaction_audio_player_wiring",
+      "name": "Player controller contains configured interaction audio players and records cue requests",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_audio_feedback.gd::test_player_controller_contains_interaction_audio_feedback"
     }
   ]
 }

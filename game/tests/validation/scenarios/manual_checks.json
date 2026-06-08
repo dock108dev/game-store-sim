@@ -775,6 +775,14 @@
       "critical": false,
       "reason": "Automated tests verify the placeholder ambience catalog, scene players, and conservative mix levels; human review must confirm room tone, HVAC, storefront muffle, door chime, register bed, backroom bed, and closing quiet feel helpful rather than noisy in the actual window.",
       "owner": "manual QA"
+    },
+    {
+      "id": "interaction_audio_readability",
+      "name": "Interaction sound cues make common actions readable without becoming noisy or misleading",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify cue catalog coverage, player wiring, and prompt-safe mix levels; human review must confirm pickup, place, stock, scan, register, cash drawer, computer, button, box, shelf bump, and error cues support understanding once audible playback assets are enabled.",
+      "owner": "manual QA"
     }
   ]
 }

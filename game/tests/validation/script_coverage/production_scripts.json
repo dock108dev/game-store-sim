@@ -198,6 +198,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/player/interaction_audio_feedback.gd",
+      "tests": [
+        "res://tests/gut/test_interaction_audio_feedback.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/register_workstation.gd",
       "tests": [
         "res://tests/gut/test_interaction_contract.gd",
