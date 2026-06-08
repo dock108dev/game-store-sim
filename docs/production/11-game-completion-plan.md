@@ -282,7 +282,7 @@ Stops:
 - Stop 5.3: Queue and browsing behavior. Done in `Polish customer pathing`: customer manager now assigns readable browse points, queue-lane positions, register approach points, and leave targets; buyer customers expose pathing summaries, recover from blocked paths, and leave after completed sales while preserving the validated sale-complete state contract.
 - Stop 5.4: Customer feedback. Done in `Add customer feedback bubbles`: customer scenes now include compact world-space feedback bubbles with shared tone handling for purchase intent, price refusal, trade-in response, preorder confirmation, service pickup, and suspicious cues, with automated outcome coverage and manual readability checks.
 - Stop 5.5: Archetype data. Done in `Add customer archetype data`: added resource-backed browser, target buyer, parent gift buyer, collector, trade-in seller, return customer, service customer, regular, and suspicious contact archetypes, wired current customer scenes to role archetypes, and covered the data contract in validation/manual checks.
-- Stop 5.6: Conversation baseline. Add simple dialogue flow for help requests, recommendations, trade-in pushback, complaints, and hidden-thread probes.
+- Stop 5.6: Conversation baseline. Done in `Add customer conversation baseline`: added resource-backed dialogue flows for help requests, recommendations, trade-in pushback, complaints/returns, and hidden-thread probes, linked archetypes to flow IDs, and covered optional hidden-thread probe isolation in validation/manual checks.
 - Stop 5.7: Customer validation sync. Add automated role/path assertions and manual readability checks.
 
 Acceptance:

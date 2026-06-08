@@ -99,6 +99,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/customers/customer_dialogue_flow.gd",
+      "tests": [
+        "res://tests/gut/test_customer_dialogue_flow.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/customer_pose_animator.gd",
       "tests": [
         "res://tests/gut/test_customer_pose_animator.gd"

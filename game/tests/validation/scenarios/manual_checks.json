@@ -297,6 +297,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "customer_conversation_baseline_readability",
+      "name": "Customer help, recommendation, trade-in pushback, complaint, and hidden-thread probe dialogue feels useful and nonblocking",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify dialogue-flow data coverage; human review must judge tone, usefulness, and whether hidden-thread probes stay optional.",
+      "owner": "manual QA"
+    },
+    {
       "id": "register_sale_message_readability",
       "name": "Register sale completion message is readable in the actual window",
       "status": "manual",

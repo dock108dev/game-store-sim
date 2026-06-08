@@ -12,5 +12,5 @@ price_sensitivity = 1.05
 patience_seconds = 7.0
 visual_cue = "focused basket, direct rack route"
 dialogue_style = "specific request"
+dialogue_flow_ids = Array[String](["recommendation_request"])
 default_feedback = "Looking for this one."
-

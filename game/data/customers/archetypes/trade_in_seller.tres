@@ -12,5 +12,5 @@ price_sensitivity = 1.15
 patience_seconds = 8.0
 visual_cue = "carried game, trade tag"
 dialogue_style = "pushes for a better offer"
+dialogue_flow_ids = Array[String](["trade_in_pushback"])
 default_feedback = "What can you do on this?"
-

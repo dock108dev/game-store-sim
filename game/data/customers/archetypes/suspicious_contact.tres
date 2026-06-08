@@ -12,5 +12,6 @@ price_sensitivity = 1.35
 patience_seconds = 5.0
 visual_cue = "cash stack, note, hood"
 dialogue_style = "quiet hidden-thread probe"
+dialogue_flow_ids = Array[String](["hidden_thread_probe"])
 default_feedback = "Cash, no receipt."
 hidden_thread_contact = true

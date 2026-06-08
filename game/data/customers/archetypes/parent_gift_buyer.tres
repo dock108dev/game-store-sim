@@ -12,5 +12,5 @@ price_sensitivity = 0.9
 patience_seconds = 11.0
 visual_cue = "gift note, cautious posture"
 dialogue_style = "asks for recommendations"
+dialogue_flow_ids = Array[String](["help_request", "recommendation_request"])
 default_feedback = "Is this good for a gift?"
-

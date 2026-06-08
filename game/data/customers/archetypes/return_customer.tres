@@ -12,5 +12,5 @@ price_sensitivity = 1.0
 patience_seconds = 6.0
 visual_cue = "receipt slip, annoyed stance"
 dialogue_style = "complaint or return request"
+dialogue_flow_ids = Array[String](["complaint_return"])
 default_feedback = "This did not work."
-

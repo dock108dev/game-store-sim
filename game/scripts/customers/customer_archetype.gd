@@ -9,6 +9,7 @@ class_name CustomerArchetype
 @export_range(1.0, 30.0, 0.5) var patience_seconds: float = 8.0
 @export var visual_cue: String = ""
 @export var dialogue_style: String = ""
+@export var dialogue_flow_ids: Array[String] = []
 @export var default_feedback: String = ""
 @export var hidden_thread_contact: bool = false
 

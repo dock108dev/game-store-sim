@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CustomerDialogueFlow" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_dialogue_flow.gd" id="1_dialogue_flow"]
+
+[resource]
+script = ExtResource("1_dialogue_flow")
+flow_id = "hidden_thread_probe"
+archetype_id = "suspicious_contact"
+trigger = "hidden_probe"
+opening_line = "I can pay cash for bulk Orbit 64 copies, no receipts needed."
+player_options = Array[String](["Ask for supplier name", "Refuse the deal", "Take the cash"])
+response_lines = Array[String](["North Dock can make things move.", "Your call.", "Keep this quiet."])
+consequence_key = "hidden_cash_probe"
+hidden_thread_probe = true

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CustomerDialogueFlow" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_dialogue_flow.gd" id="1_dialogue_flow"]
+
+[resource]
+script = ExtResource("1_dialogue_flow")
+flow_id = "help_request"
+archetype_id = "browser"
+trigger = "help"
+opening_line = "Can you help me find something that still works on an Orbit 64?"
+player_options = Array[String](["Recommend used games", "Point to new releases", "Say you are busy"])
+response_lines = Array[String](["Thanks, I will check that rack.", "I am looking for older stuff today.", "I will browse for a minute."])
+consequence_key = "customer_helped"
+

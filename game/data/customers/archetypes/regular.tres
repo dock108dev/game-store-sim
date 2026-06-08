@@ -12,5 +12,5 @@ price_sensitivity = 1.05
 patience_seconds = 14.0
 visual_cue = "loyalty card, relaxed stance"
 dialogue_style = "friendly repeat customer"
+dialogue_flow_ids = Array[String](["recommendation_request"])
 default_feedback = "What is new today?"
-

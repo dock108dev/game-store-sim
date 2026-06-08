@@ -71,6 +71,13 @@
       "evidence": "res://tests/gut/test_customer_archetype.gd"
     },
     {
+      "id": "customer_conversation_baseline",
+      "name": "Customer dialogue data covers help, recommendation, trade-in pushback, complaint, and hidden-thread probe flows",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_customer_dialogue_flow.gd"
+    },
+    {
       "id": "register_special_customer_spacing_arc",
       "name": "Special register customers keep readable spacing and form a clear register-area arc",
       "status": "automated",

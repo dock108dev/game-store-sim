@@ -12,5 +12,5 @@ price_sensitivity = 1.0
 patience_seconds = 10.0
 visual_cue = "disc and service ticket"
 dialogue_style = "needs item cleaned or repaired"
+dialogue_flow_ids = Array[String](["help_request"])
 default_feedback = "Can you fix this?"
-

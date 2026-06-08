@@ -12,5 +12,5 @@ price_sensitivity = 0.95
 patience_seconds = 9.0
 visual_cue = "small basket, scanning shelves"
 dialogue_style = "casual browsing"
+dialogue_flow_ids = Array[String](["help_request"])
 default_feedback = "Just looking."
-
