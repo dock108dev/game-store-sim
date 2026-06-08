@@ -1,5 +1,7 @@
 extends GutTest
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 var _panel: TradeInOfferPanel
 var _register: RegisterWorkstation
 var _customer: SimpleTradeInCustomer
@@ -31,6 +33,7 @@ func before_each() -> void:
 
 func test_trade_in_offer_panel_opens_with_condition_market_and_offer() -> void:
 	assert_true(_panel.has_ui_component_language())
+	assert_true(UIComponents.audit_modal_accessibility(_panel.modal_root).get("passes"))
 	assert_true(_panel.open_for_trade_in(_register, _customer))
 
 	assert_true(_panel.is_open())

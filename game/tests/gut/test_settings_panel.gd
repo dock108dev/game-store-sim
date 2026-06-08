@@ -15,6 +15,8 @@ func test_settings_panel_starts_hidden() -> void:
 	assert_false(_panel.visible)
 	assert_false(_panel.is_open())
 	assert_eq(_panel.get_transition_state(), "closed")
+	assert_true(_panel.has_ui_component_language())
+	assert_true(_panel.has_accessibility_floor())
 
 
 func test_settings_panel_opens_with_mouse_focus_and_player_values() -> void:
@@ -26,6 +28,7 @@ func test_settings_panel_opens_with_mouse_focus_and_player_values() -> void:
 	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_VISIBLE)
 	assert_true(_panel.has_modal_focus())
 	assert_eq(get_viewport().gui_get_focus_owner(), _panel.close_button)
+	assert_eq(_panel.close_button.focus_mode, Control.FOCUS_ALL)
 	assert_string_contains(_panel.sensitivity_label.text, "0.0025")
 	assert_false(_panel.invert_check_box.button_pressed)
 

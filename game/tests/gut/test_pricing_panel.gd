@@ -1,5 +1,7 @@
 extends GutTest
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 var _panel: PricingPanel
 var _item: Node
 
@@ -15,6 +17,7 @@ func test_pricing_panel_starts_hidden() -> void:
 	assert_false(_panel.visible)
 	assert_false(_panel.is_open())
 	assert_true(_panel.has_ui_component_language())
+	assert_true(UIComponents.audit_modal_accessibility(_panel.modal_root).get("passes"))
 
 
 func test_pricing_panel_opens_with_product_fields() -> void:

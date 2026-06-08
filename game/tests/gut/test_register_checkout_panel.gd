@@ -1,5 +1,7 @@
 extends GutTest
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 var _panel: Node
 var _register: RegisterWorkstation
 var _customer: SimpleBuyerCustomer
@@ -37,6 +39,7 @@ func test_register_checkout_panel_starts_hidden_with_ui_language() -> void:
 	assert_false(_panel.visible)
 	assert_false(_panel.is_open())
 	assert_true(_panel.has_ui_component_language())
+	assert_true(UIComponents.audit_modal_accessibility(_panel.modal_root).get("passes"))
 
 
 func test_register_checkout_panel_opens_with_receipt_fields() -> void:

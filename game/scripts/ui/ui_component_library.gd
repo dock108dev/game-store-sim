@@ -5,6 +5,7 @@ const SURFACE_REGISTER := "register"
 const SURFACE_BACKROOM := "backroom"
 const SURFACE_PRICING := "pricing"
 const SURFACE_TRADE_IN := "trade_in"
+const SURFACE_SETTINGS := "settings"
 
 const BUTTON_PRIMARY := "primary"
 const BUTTON_SECONDARY := "secondary"
@@ -33,12 +34,16 @@ const MIN_MODAL_WIDTH := 520
 const MIN_MODAL_HEIGHT := 360
 const MIN_BODY_FONT_SIZE := 15
 const MIN_HEADER_FONT_SIZE := 18
+const MAX_MODAL_WIDTH_1280 := 760
+const MAX_MODAL_HEIGHT_720 := 700
+const MIN_CONTRAST_RATIO := 4.5
 
 const _SURFACE_ACCENTS := {
 	SURFACE_REGISTER: Color(0.18, 0.40, 0.55),
 	SURFACE_BACKROOM: Color(0.26, 0.33, 0.42),
 	SURFACE_PRICING: Color(0.35, 0.45, 0.24),
 	SURFACE_TRADE_IN: Color(0.47, 0.34, 0.20),
+	SURFACE_SETTINGS: Color(0.30, 0.36, 0.45),
 }
 
 const _SURFACE_TITLES := {
@@ -46,6 +51,7 @@ const _SURFACE_TITLES := {
 	SURFACE_BACKROOM: "Backroom",
 	SURFACE_PRICING: "Pricing",
 	SURFACE_TRADE_IN: "Trade-In",
+	SURFACE_SETTINGS: "Settings",
 }
 
 
@@ -82,6 +88,17 @@ static func get_alert_states() -> Array[String]:
 		ALERT_WARNING,
 		ALERT_DANGER,
 	]
+
+
+static func get_accessibility_requirements() -> Dictionary:
+	return {
+		"min_button_height": MIN_BUTTON_HEIGHT,
+		"min_body_font_size": MIN_BODY_FONT_SIZE,
+		"min_header_font_size": MIN_HEADER_FONT_SIZE,
+		"max_modal_width_1280": MAX_MODAL_WIDTH_1280,
+		"max_modal_height_720": MAX_MODAL_HEIGHT_720,
+		"min_contrast_ratio": MIN_CONTRAST_RATIO,
+	}
 
 
 static func get_surface_title(surface: String) -> String:
@@ -147,6 +164,18 @@ static func get_alert_color(state: String) -> Color:
 	return Color(0.48, 0.65, 0.78)
 
 
+static func get_contrast_ratio(first: Color, second: Color) -> float:
+	var first_luminance := _relative_luminance(first)
+	var second_luminance := _relative_luminance(second)
+	var lighter := maxf(first_luminance, second_luminance)
+	var darker := minf(first_luminance, second_luminance)
+	return (lighter + 0.05) / (darker + 0.05)
+
+
+static func has_accessible_contrast(first: Color, second: Color) -> bool:
+	return get_contrast_ratio(first, second) >= MIN_CONTRAST_RATIO
+
+
 static func apply_modal_language(root: Control, surface: String) -> void:
 	if root == null:
 		return
@@ -154,10 +183,45 @@ static func apply_modal_language(root: Control, surface: String) -> void:
 	root.set_meta("ui_surface", surface)
 	root.set_meta("ui_language_tokens", get_component_tokens())
 	root.set_meta("ui_surface_title", get_surface_title(surface))
+	root.set_meta("ui_accessibility_requirements", get_accessibility_requirements())
 	root.add_theme_font_size_override("font_size", MIN_BODY_FONT_SIZE)
 
 	for child in _collect_controls(root):
 		_apply_control_language(child, surface)
+
+
+static func audit_modal_accessibility(root: Control) -> Dictionary:
+	var violations: Array[String] = []
+	if root == null:
+		return {"passes": false, "violations": ["Missing modal root"]}
+
+	for control in _collect_controls(root):
+		if control is PanelContainer:
+			if control.custom_minimum_size.x > MAX_MODAL_WIDTH_1280:
+				violations.append("%s exceeds 1280-width modal target" % control.name)
+			if control.custom_minimum_size.y > MAX_MODAL_HEIGHT_720:
+				violations.append("%s exceeds 720-height modal target" % control.name)
+		elif control is Button:
+			var button := control as Button
+			if button.custom_minimum_size.y < MIN_BUTTON_HEIGHT:
+				violations.append("%s button is below hit-height floor" % button.name)
+			if button.focus_mode == Control.FOCUS_NONE:
+				violations.append("%s button is not keyboard-focusable" % button.name)
+		elif control is CheckBox:
+			var check_box := control as CheckBox
+			if check_box.custom_minimum_size.y < MIN_BUTTON_HEIGHT:
+				violations.append("%s checkbox is below hit-height floor" % check_box.name)
+			if check_box.focus_mode == Control.FOCUS_NONE:
+				violations.append("%s checkbox is not keyboard-focusable" % check_box.name)
+		elif control is Label:
+			var label := control as Label
+			if label.get_theme_font_size("font_size") < MIN_BODY_FONT_SIZE:
+				violations.append("%s label is below text-size floor" % label.name)
+
+	return {
+		"passes": violations.is_empty(),
+		"violations": violations,
+	}
 
 
 static func _collect_controls(root: Control) -> Array[Control]:
@@ -187,6 +251,7 @@ static func _apply_control_language(control: Control, surface: String) -> void:
 
 static func _apply_button_language(button: Button, surface: String) -> void:
 	button.custom_minimum_size.y = maxf(button.custom_minimum_size.y, MIN_BUTTON_HEIGHT)
+	button.focus_mode = Control.FOCUS_ALL
 	button.add_theme_stylebox_override("normal", get_button_style(surface, BUTTON_SECONDARY))
 	button.add_theme_stylebox_override("hover", get_button_style(surface, BUTTON_PRIMARY))
 	button.add_theme_stylebox_override("pressed", get_button_style(surface, TOKEN_SELECTED))
@@ -203,3 +268,17 @@ static func _apply_label_language(label: Label) -> void:
 		label.set_meta("ui_component", TOKEN_STAT)
 	else:
 		label.set_meta("ui_component", TOKEN_LIST)
+
+
+static func _relative_luminance(color: Color) -> float:
+	var red := _linearized_channel(color.r)
+	var green := _linearized_channel(color.g)
+	var blue := _linearized_channel(color.b)
+	return 0.2126 * red + 0.7152 * green + 0.0722 * blue
+
+
+static func _linearized_channel(channel: float) -> float:
+	if channel <= 0.03928:
+		return channel / 12.92
+
+	return pow((channel + 0.055) / 1.055, 2.4)

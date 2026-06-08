@@ -22,6 +22,13 @@
       "evidence": "res://tests/gut/test_ui_component_library.gd::test_ui_component_library_applies_modal_language"
     },
     {
+      "id": "production_ui_accessibility_floor",
+      "name": "Production UI language enforces accessibility floors for text size, contrast, focusable controls, and modal fit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_ui_component_library.gd::test_ui_component_library_defines_accessibility_requirements; res://tests/gut/test_ui_component_library.gd::test_ui_component_library_contrast_meets_accessibility_floor; res://tests/gut/test_ui_component_library.gd::test_ui_component_library_audits_modal_accessibility_floor"
+    },
+    {
       "id": "production_modal_panels_use_shared_language",
       "name": "Pricing, trade-in, and backroom computer panels use the shared UI component language",
       "status": "automated",

@@ -217,6 +217,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "production_ui_accessibility_readability",
+      "name": "Production UI text size, contrast, keyboard/mouse focus, and 1280x720 panel fit are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the shared accessibility floor; human review must confirm perceived readability, focus behavior, and no clipping in the actual game window.",
+      "owner": "manual QA"
+    },
+    {
       "id": "production_content_contract_review",
       "name": "Production content contract is broad enough for several days of fictional data-driven play",
       "status": "manual",

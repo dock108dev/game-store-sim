@@ -1,10 +1,13 @@
 extends CanvasLayer
 class_name SettingsPanel
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 @export var sensitivity_step: float = 0.0005
 @export var min_sensitivity: float = 0.0005
 @export var max_sensitivity: float = 0.01
 
+@onready var modal_root: Control = $CenterContainer
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
 @onready var sensitivity_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SensitivityLabel
 @onready var decrease_sensitivity_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/SensitivityRow/DecreaseSensitivityButton
@@ -21,6 +24,7 @@ var _requested_window_mode: int = DisplayServer.WINDOW_MODE_WINDOWED
 
 func _ready() -> void:
 	hide()
+	UIComponents.apply_modal_language(modal_root, UIComponents.SURFACE_SETTINGS)
 	decrease_sensitivity_button.pressed.connect(decrease_sensitivity)
 	increase_sensitivity_button.pressed.connect(increase_sensitivity)
 	invert_check_box.toggled.connect(set_invert_look)
@@ -71,6 +75,17 @@ func get_requested_window_mode() -> int:
 func has_modal_focus() -> bool:
 	var focus_owner := get_viewport().gui_get_focus_owner()
 	return focus_owner != null and is_ancestor_of(focus_owner)
+
+
+func has_ui_component_language() -> bool:
+	return modal_root.get_meta("ui_surface", "") == UIComponents.SURFACE_SETTINGS \
+		and modal_root.get_meta("ui_accessibility_requirements", {}).get("min_body_font_size", 0) >= UIComponents.MIN_BODY_FONT_SIZE \
+		and close_button.get_meta("ui_component", "") == UIComponents.TOKEN_BUTTON
+
+
+func has_accessibility_floor() -> bool:
+	var audit: Dictionary = UIComponents.audit_modal_accessibility(modal_root)
+	return bool(audit.get("passes", false))
 
 
 func increase_sensitivity() -> bool:

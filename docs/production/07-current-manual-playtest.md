@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this daily report UI pass: `scripts/validate_godot.sh` passed with 333 GUT tests, UI scenario coverage 337/397, and script mapping coverage 34/34.
+- Last full gate in this UI accessibility pass: `scripts/validate_godot.sh` passed with 336 GUT tests, UI scenario coverage 338/399, and script mapping coverage 34/34.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -21,6 +21,7 @@ Current automated baseline:
 - Backroom computer tabs are implemented through Stop 4.5; manual QA should confirm dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable and do not hide required actions.
 - Supplier ordering UI is implemented through Stop 4.6; manual QA should confirm category, cart, cost, due day, delivery state, storage needs, and receiving expectations stay readable and clearly imply physical receiving stock.
 - Daily report UI is implemented through Stop 4.7; manual QA should confirm cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations fit the report tab.
+- UI accessibility pass is implemented through Stop 4.8; manual QA should confirm text size, contrast, keyboard/mouse focus, and 1280x720 panel fit in the actual game window.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -209,6 +210,7 @@ Run these first when manually checking the completed Stop 4.1 through Stop 4.5 U
 - Confirm the backroom computer tabs switch cleanly between dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records without clipping text or making register work look like a backroom action.
 - Confirm supplier ordering reads as a small cart/order card with category, item count, reserved cost, due day, delivery state, storage requirement, and physical receiving expectation.
 - Confirm the daily report reads as an end-of-day report rather than a raw ledger dump, with cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations still fitting the report tab.
+- Confirm the shared accessibility pass holds up in the actual window: readable text size, sufficient contrast, focusable controls, visible mouse focus, and no clipped production modal at 1280x720.
 
 ## Backroom Polish Focus
 
