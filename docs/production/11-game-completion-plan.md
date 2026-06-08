@@ -645,7 +645,7 @@ Goal: stabilize a coherent alpha build.
 
 Stops:
 
-- Stop 13.1: Bug triage. Create an alpha bug list from automated failures, screenshot review, manual validation, and playtest notes.
+- Stop 13.1: Bug triage. Done in `Triage alpha bugs`: create an alpha bug list from automated failures, screenshot review, manual validation, and playtest notes.
 - Stop 13.2: Performance pass. Profile scene load, frame time, UI panels, customer pathing, save/load, screenshots, and exported build startup.
 - Stop 13.3: Test expansion. Add regression tests for critical bug fixes and high-risk systems.
 - Stop 13.4: Content pass. Fill starter catalog, customer text, supplier orders, daily events, signs, and report copy to alpha quality.
@@ -669,6 +669,10 @@ Commit targets:
 - `Tune alpha economy`
 - `Prepare alpha playtest package`
 - `Sync alpha validation`
+
+Validation snapshot:
+
+- Stop 13.1 alpha bug triage records no current P0 automated failures, latest full-gate evidence, screenshot-derived P1/P2 issues AH-001 through AH-011, release-package limits, and target slices for performance, regression, content, balance, and playtest-package follow-up.
 
 ## Immediate Next Work After This Planning Slice
 

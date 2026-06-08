@@ -88,6 +88,7 @@ Current production validation baseline:
 - Pause/main-menu coverage verifies the Stop 12.4 pause mode, resume transition, main-menu mode, start-game transition, settings/save-load requests, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage verifies the Stop 12.5 macOS desktop export preset, template-free pack export artifact, pack boot smoke, and clear binary-export template fallback message.
 - Release wrapper validation sync is complete through Stop 12.6; automated checks now audit the release-wrapper scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
+- Alpha bug triage is complete through Stop 13.1; `docs/production/13-alpha-bug-list.md` records the current no-P0 gate state, screenshot-derived P1/P2 issues, release-package limits, and target slices for alpha hardening.
 
 ## Manual Validation
 
@@ -203,6 +204,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Screenshot composition is useful, not merely nonblank.
 - Desktop export pack artifact is created by the local verifier, boots without editor-only paths, and has a reviewed artifact handoff location.
 - Desktop binary export either creates a runnable app when matching Godot templates/signing are available or fails with clear template-installation guidance.
+- Alpha bug list entries AH-001 through AH-011 are reviewed against the latest screenshot artifacts before starting content, regression, balance, or playtest-package hardening work.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 

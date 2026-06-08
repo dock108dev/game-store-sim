@@ -57,6 +57,7 @@ Current automated baseline:
 - Pause/main menu is implemented through Stop 12.4; manual QA should run the Pause/Main Menu Focus checks to confirm pause mode, main-menu mode, settings/save-load routing, quit request language, and mouse capture recovery work in the actual window.
 - Desktop export pipeline is implemented through Stop 12.5; manual QA should run the Release Wrapper Focus checks to confirm pack artifact handoff, binary export template behavior, and future build relaunch/continue expectations are clear.
 - Release wrapper validation sync is implemented through Stop 12.6; automated checks now audit the release-wrapper matrix/docs/tool manifest, and manual QA should treat the Release Wrapper Focus section as the current release-readiness checklist.
+- Alpha bug triage is implemented through Stop 13.1; manual QA should review `13-alpha-bug-list.md` before treating visual, queue, fixture, backroom-computer, balance, or playtest-package issues as new discoveries.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -538,6 +539,14 @@ Run these first when manually checking the completed Stop 12.5 desktop export pi
 - Run `scripts/verify_desktop_export.sh --binary` only on a machine with matching Godot 4.6.2 export templates and expected macOS signing state; if templates are missing, confirm the failure message clearly says to install templates or use `--pack-smoke`.
 - Once binary export templates are installed, launch the exported app outside the editor and run the start, save, quit, relaunch, and continue loop.
 - Confirm settings persistence and pause/main-menu transitions behave the same in the exported build as in the editor-run vertical slice.
+
+## Alpha Triage Focus
+
+Run these first when manually checking the completed Stop 13.1 alpha bug triage:
+
+- Open `docs/production/13-alpha-bug-list.md` and confirm AH-001 through AH-011 still match the latest screenshot artifacts.
+- Confirm there are no hidden P0 issues in the latest `scripts/validate_godot.sh` output before starting performance, regression, content, balance, or playtest-package work.
+- Confirm each newly found visual/readability/playtest issue is either already covered by AH-001 through AH-011 or is added to the bug list with evidence, priority, target slice, and acceptance.
 
 ## Automated Screenshot Artifacts
 

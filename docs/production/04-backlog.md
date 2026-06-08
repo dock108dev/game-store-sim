@@ -43,7 +43,7 @@ Current completion plan: `11-game-completion-plan.md`.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
-14. Alpha hardening.
+14. Alpha hardening. Current phase; alpha bug triage done through Stop 13.1.
 
 ## Completed Polish Scope
 
@@ -153,6 +153,12 @@ The following polish items remain valid historical checkpoints:
 - Done: added the macOS desktop export preset, local pack export/boot smoke verifier, validation tool manifest, gate integration, and manual release-wrapper checks for Stop 12.5.
 - Done: synced release-wrapper validation coverage, docs coverage, desktop export tool manifest audit, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist for Stop 12.6.
 - Remaining polish risk: the next production milestone is alpha hardening.
+
+## Alpha Hardening
+
+- Done: created `13-alpha-bug-list.md` from the latest full gate, screenshot artifacts, current manual validation checklist, and release-wrapper limits for Stop 13.1.
+- Current P1 alpha risks: store still reads graybox, signage clips/loses hierarchy, customer roles remain placeholder-heavy, register queue composition is crowded, placed fixture framing can block the camera, and backroom computer screens are dense.
+- Remaining alpha-hardening work: Stop 13.2 performance pass, Stop 13.3 regression-test expansion, Stop 13.4 content pass, Stop 13.5 balance pass, Stop 13.6 playtest package, and Stop 13.7 alpha validation sync.
 
 ## Product And Fixture Polish
 
