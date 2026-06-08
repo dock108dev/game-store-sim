@@ -15,7 +15,7 @@ func _ready() -> void:
 
 
 func get_interaction_prompt() -> String:
-	return "E Read %s" % display_name
+	return "Click Read %s" % display_name
 
 
 func interact() -> String:

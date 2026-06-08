@@ -64,7 +64,7 @@ func test_used_game_has_readable_front_cover_label() -> void:
 
 
 func test_used_game_prompt_uses_product_name() -> void:
-	assert_eq(_item.get_interaction_prompt(), "E Inspect Star Trader")
+	assert_eq(_item.get_interaction_prompt(), "Click Inspect Star Trader")
 
 
 func test_used_game_inspect_text_is_product_backed() -> void:

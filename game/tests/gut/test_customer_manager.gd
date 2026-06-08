@@ -76,6 +76,39 @@ func test_customer_manager_leaves_overpriced_items_stocked() -> void:
 	assert_string_contains(customer.get_last_feedback(), "too expensive")
 
 
+func test_customer_manager_skips_overpriced_copy_for_lower_priced_match() -> void:
+	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
+	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()
+	var customer: SimpleBuyerCustomer = load("res://scenes/customers/simple_buyer_customer.tscn").instantiate()
+	var overpriced_item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var lower_priced_item: Node3D = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(rack)
+	add_child_autofree(manager)
+	manager.add_child(customer)
+
+	var first_slot := rack.get_node("ShelfSlot001") as ShelfSlot
+	var second_slot := rack.get_node("ShelfSlot002") as ShelfSlot
+	overpriced_item.set("current_price_cents", 4000)
+	lower_priced_item.set("current_price_cents", 2000)
+	assert_true(first_slot.place_item(overpriced_item))
+	assert_true(second_slot.place_item(lower_priced_item))
+	var slot_paths: Array[NodePath] = [
+		manager.get_path_to(first_slot),
+		manager.get_path_to(second_slot),
+	]
+	manager.display_slot_paths = slot_paths
+
+	manager.process_customer_claims()
+	_advance_customers([customer], 5.0)
+
+	assert_eq(customer.state, SimpleBuyerCustomer.STATE_WAITING_FOR_REGISTER)
+	assert_eq(customer.get_checkout_item(), lower_priced_item)
+	assert_false(first_slot.is_available())
+	assert_eq(first_slot.get_occupied_item(), overpriced_item)
+	assert_true(second_slot.is_available())
+	assert_string_contains(customer.get_last_feedback(), "Taking Star Trader")
+
+
 func test_register_completes_multiple_customer_manager_sales() -> void:
 	var rack: Node3D = load("res://scenes/props/placeholder_shelf.tscn").instantiate()
 	var manager: Node = load("res://scripts/customers/customer_manager.gd").new()

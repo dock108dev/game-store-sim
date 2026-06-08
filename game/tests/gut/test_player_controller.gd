@@ -190,7 +190,7 @@ func test_player_held_item_prompt_prices_used_item() -> void:
 	add_child_autofree(item)
 
 	assert_true(_player.pick_up_item(item))
-	assert_eq(_player.get_held_item_interaction_prompt(), "E Price Star Trader")
+	assert_eq(_player.get_held_item_interaction_prompt(), "Click Price Star Trader")
 
 
 func test_player_rejects_fixed_price_held_item() -> void:

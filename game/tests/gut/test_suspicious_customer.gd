@@ -17,7 +17,7 @@ func test_suspicious_customer_has_metadata() -> void:
 
 
 func test_suspicious_customer_prompt_reads_as_optional_talk() -> void:
-	assert_eq(_customer.get_interaction_prompt(), "E Talk To Cash Buyer")
+	assert_eq(_customer.get_interaction_prompt(), "Click Talk To Cash Buyer")
 
 
 func test_suspicious_customer_interaction_text_contains_hidden_clues() -> void:

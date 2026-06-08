@@ -120,7 +120,7 @@ func order_used_game_lot() -> bool:
 		status_label.text = "Could not order games."
 		return false
 
-	status_label.text = "Ordered %s." % str(order.get("display_name", "supplier lot"))
+	status_label.text = "Ordered %s to receiving." % str(order.get("display_name", "supplier lot"))
 	return true
 
 
@@ -134,7 +134,7 @@ func order_game_display_rack() -> bool:
 		status_label.text = "Could not order rack."
 		return false
 
-	status_label.text = "Ordered %s." % str(order.get("display_name", "fixture"))
+	status_label.text = "Ordered %s for storage placement." % str(order.get("display_name", "fixture"))
 	return true
 
 
@@ -148,7 +148,7 @@ func place_pending_rack() -> bool:
 		status_label.text = "Could not place rack."
 		return false
 
-	status_label.text = "Placed %s." % str(placed.get("display_name", "fixture"))
+	status_label.text = "Placed %s in storage." % str(placed.get("display_name", "fixture"))
 	return true
 
 

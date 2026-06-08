@@ -47,8 +47,10 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - WASD movement feel.
 - Mouse-look feel.
 - Escape releases mouse capture and mouse click recaptures it.
+- Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
+- Center reticle readability in the actual game window.
 - Receiving box, display rack, register, and compact used-game visual placement.
 - Display rack slots still behave like used-game slots after category assignment changes.
 - Held item stack stays visible without blocking normal navigation.
@@ -64,7 +66,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Stocking multiple `Star Trader` copies causes multiple buyers to queue in a clear lane without overlapping special register customers.
 - Buyers visibly walk from browsing to the rack and then to the register without confusing clipping.
 - Customer spawn, item approach, buyer queue lane, and special-customer positions read naturally in the current layout.
-- Register prompt and sale completion message are readable.
+- Register click prompt and sale completion message are readable.
 - Trade-in seller and compact carried item are readable at the register and do not look detached from the seller.
 - Trade-in register prompt and completion message are readable.
 - Trade-in offer panel condition, demand, market, cash, store-credit, and accept/decline controls are readable.
@@ -85,15 +87,15 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Backroom release allocation commitment is readable, reserves launch wholesale cash, and stays clearly separate from launch-day fulfillment.
 - Starting launch day resolves `Neon Skyline` preorders first, sells surplus allocations to launch queue demand, and reports launch cash, launch profit, and reputation clearly.
 - Underallocating for launch day produces a readable missed-demand/reputation consequence.
-- Backroom `Order Games` button is readable and reserves cash clearly.
-- Pending supplier delivery shows due day and item count clearly.
-- Starting the next day delivers the used-game starter lot into the receiving box and clears pending delivery.
+- Backroom `Order Stock` button is readable and reserves cash clearly.
+- Pending receiving order shows due day and item count clearly.
+- Starting the next day delivers the used-game starter lot into the receiving box and clears pending receiving.
 - Delivered supplier games look intentionally placed and do not crowd the receiving box, display rack, trade-in seller, or customer flow.
-- Backroom fixture ordering shows the game display rack option, cash reservation, and pending placement clearly.
-- Ordered fixture ghost preview is visible, translucent, and reads as a pending placement rather than a finished rack.
+- Backroom storage fixture ordering shows the game display rack option, cash reservation, and pending storage placement clearly.
+- Ordered fixture ghost preview is visible, translucent, and reads as a pending storage placement rather than a finished rack.
 - Fixture ghost valid and invalid states read clearly as green allowed and red blocked placement previews.
 - Fixture ghost rotate and snap behavior feels predictable once exposed through player-facing placement controls.
-- Placing a pending rack through the backroom computer reads as a deliberate confirmation step, creates a real rack, and clears pending placement.
+- Placing a pending storage rack through the backroom computer reads as a deliberate confirmation step, creates a real rack, and clears pending storage placement.
 - Suspicious event flags, supplier notes, and optional suspicious-customer conversations do not visibly interrupt normal store progression.
 - Backroom summary panel closes back into first-person mouse capture cleanly.
 - After checkout, the stocked game is gone from the rack and no longer available for inspection.
@@ -123,7 +125,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/launch_day.json`: launch-day preorder fulfillment, launch queue fulfillment, reputation shortage, backroom readout, persistence, and save/restore coverage.
 - `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, and optional evidence storage checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
-- `scenarios/store_layout.json`: fixture catalog, fixture ordering, slot-category metadata, cash reservation, pending placement, ghost preview, valid/invalid placement state, rotate/snap controls, placement confirmation, insufficient-cash rejection, and persistence coverage.
+- `scenarios/store_layout.json`: fixture catalog, fixture ordering, slot-category metadata, cash reservation, pending storage placement, ghost preview, valid/invalid placement state, rotate/snap controls, placement confirmation, insufficient-cash rejection, and persistence coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

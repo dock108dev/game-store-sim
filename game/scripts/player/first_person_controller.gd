@@ -182,7 +182,7 @@ func get_held_item_interaction_prompt() -> String:
 	if not product.player_priceable:
 		return "Fixed Price Item"
 
-	return "E Price %s" % product.display_name
+	return "Click Price %s" % product.display_name
 
 
 func interact_with_held_item() -> String:

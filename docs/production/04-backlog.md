@@ -50,7 +50,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 - Add fixture ghost placement. Done as a translucent pending-rack preview after ordering.
 - Add valid/invalid placement state. Done as green valid and red invalid translucent ghost states with bounds validation.
 - Add rotate and snap controls. Done as manager-level fixed-step rotation and grid movement.
-- Add player-facing fixture placement confirmation. Done as a `Place Rack` backroom-computer action that confirms the current valid ghost into a real game display rack and clears pending placement.
+- Add player-facing fixture placement confirmation. Done as a `Place Storage Rack` backroom-computer action that confirms the current valid ghost into a real game display rack and clears pending storage placement.
 - Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
 - Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.
 
@@ -66,7 +66,7 @@ This backlog is intentionally coarse. Detailed tasks should be split when a slic
 ## Supplier Ordering Slice
 
 - Add supplier lot data for used games. Done as a `Used Game Starter Lot` resource from North Dock Wholesale.
-- Add backroom supplier ordering. Done as `Order Games` on the backroom computer with immediate cash reservation.
+- Add backroom supplier ordering. Done as `Order Stock` on the backroom computer with immediate cash reservation and receiving-box delivery.
 - Add delivery delay. Done as due-day supplier orders delivered when the next day starts.
 - Add delivered receiving inventory. Done by spawning ordered used games into the receiving box with active inventory state.
 

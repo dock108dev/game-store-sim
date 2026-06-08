@@ -91,13 +91,13 @@ func test_shelf_slot_rejects_category_assignment_when_occupied() -> void:
 
 func test_shelf_slot_stock_prompt_uses_held_item_name() -> void:
 	var actor := _make_actor_with_held_item(_item)
-	assert_eq(_slot.get_interaction_prompt_for_actor(actor), "E Stock Star Trader")
+	assert_eq(_slot.get_interaction_prompt_for_actor(actor), "Click Stock Star Trader")
 
 
 func test_shelf_slot_inspects_occupied_item() -> void:
 	_slot.place_item(_item)
 
-	assert_eq(_slot.get_interaction_prompt(), "E Inspect Star Trader")
+	assert_eq(_slot.get_interaction_prompt(), "Click Inspect Star Trader")
 	assert_string_contains(_slot.interact(), "Star Trader")
 	assert_string_contains(_slot.interact(), "shelf_slot_001")
 

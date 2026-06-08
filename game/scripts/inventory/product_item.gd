@@ -33,7 +33,7 @@ func get_interaction_prompt() -> String:
 
 func get_interaction_prompt_for_actor(actor: Node) -> String:
 	if _can_actor_pick_up(actor):
-		return "E Pick Up %s" % product.display_name
+		return "Click Pick Up %s" % product.display_name
 
 	return _get_inspect_prompt()
 
@@ -136,7 +136,7 @@ func _get_inspect_prompt() -> String:
 	if product == null:
 		return super.get_interaction_prompt()
 
-	return "E Inspect %s" % product.display_name
+	return "Click Inspect %s" % product.display_name
 
 
 func interact() -> String:

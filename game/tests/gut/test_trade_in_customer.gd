@@ -74,7 +74,7 @@ func test_register_completes_trade_in_when_no_buyer_is_waiting() -> void:
 	register.ledger_path = register.get_path_to(ledger)
 	register.store_session_path = register.get_path_to(session)
 
-	assert_eq(register.get_interaction_prompt(), "E Review Trade-In Moon Escape")
+	assert_eq(register.get_interaction_prompt(), "Click Review Trade-In Moon Escape")
 	var message := register.interact()
 
 	assert_string_contains(message, "Bought Moon Escape trade-in")

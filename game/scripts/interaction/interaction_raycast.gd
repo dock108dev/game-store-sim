@@ -31,7 +31,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event.is_action_pressed("interact"):
+	if not _is_primary_interaction_pressed(event):
 		return
 
 	var result := ""
@@ -48,6 +48,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if not result.is_empty() and _prompt != null and _prompt.has_method("show_message"):
 		_prompt.show_message(result)
+
+
+func _is_primary_interaction_pressed(event: InputEvent) -> bool:
+	if event.is_action_pressed("interact"):
+		return true
+
+	var mouse_event := event as InputEventMouseButton
+	return mouse_event != null \
+		and mouse_event.pressed \
+		and mouse_event.button_index == MOUSE_BUTTON_LEFT
 
 
 func _get_prompt_text(interactable: Node) -> String:

@@ -17,7 +17,7 @@ func test_supplier_message_has_metadata() -> void:
 
 
 func test_supplier_message_prompt_reads_as_note() -> void:
-	assert_eq(_message.get_interaction_prompt(), "E Read Supplier Note")
+	assert_eq(_message.get_interaction_prompt(), "Click Read Supplier Note")
 
 
 func test_supplier_message_inspect_text_contains_artifact_details() -> void:

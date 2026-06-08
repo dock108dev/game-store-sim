@@ -122,6 +122,11 @@ func _customer_can_claim(customer: SimpleBuyerCustomer) -> bool:
 
 
 func _find_available_target_slot(customer: SimpleBuyerCustomer) -> Node:
+	var best_slot: Node = null
+	var best_price := 0
+	var cheapest_rejected_item: Node = null
+	var cheapest_rejected_price := 0
+
 	for slot_path in display_slot_paths:
 		var slot := get_node_or_null(slot_path)
 		if slot == null or not slot.has_method("get_occupied_item"):
@@ -130,21 +135,37 @@ func _find_available_target_slot(customer: SimpleBuyerCustomer) -> Node:
 			continue
 
 		var item: Node = slot.get_occupied_item()
-		if _customer_wants_item(customer, item):
-			return slot
+		if not _customer_targets_item(customer, item):
+			continue
+
+		var item_price := customer.get_effective_price_cents_for_item(item)
+		if customer.is_item_affordable(item, false):
+			if best_slot == null or item_price < best_price:
+				best_slot = slot
+				best_price = item_price
+		elif cheapest_rejected_item == null or item_price < cheapest_rejected_price:
+			cheapest_rejected_item = item
+			cheapest_rejected_price = item_price
+
+	if best_slot != null:
+		customer.is_item_affordable(best_slot.get_occupied_item(), true)
+		return best_slot
+
+	if cheapest_rejected_item != null:
+		customer.report_item_too_expensive(cheapest_rejected_item)
 
 	return null
 
 
-func _customer_wants_item(customer: SimpleBuyerCustomer, item: Node) -> bool:
+func _customer_targets_item(customer: SimpleBuyerCustomer, item: Node) -> bool:
 	if item == null:
 		return false
 
-	var product := item.get("product") as ProductDefinition
-	if product == null:
-		return false
+	if customer != null and customer.has_method("matches_target_product"):
+		return customer.matches_target_product(item)
 
-	return product.product_id == customer.target_product_id
+	var product := item.get("product") as ProductDefinition
+	return product != null and customer != null and product.product_id == customer.target_product_id
 
 
 func _compact_register_queue() -> void:

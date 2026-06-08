@@ -5,7 +5,7 @@ class_name BackroomComputer
 
 
 func get_interaction_prompt() -> String:
-	return "E View Backroom Computer"
+	return "Click View Backroom Computer"
 
 
 func get_interaction_prompt_for_actor(_actor: Node) -> String:

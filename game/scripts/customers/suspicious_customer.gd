@@ -18,7 +18,7 @@ func _ready() -> void:
 
 
 func get_interaction_prompt() -> String:
-	return "E Talk To %s" % display_name
+	return "Click Talk To %s" % display_name
 
 
 func interact() -> String:

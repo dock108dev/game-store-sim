@@ -95,17 +95,17 @@ alignment = 1
 [node name="OrderGamesButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
 custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
-text = "Order Games"
+text = "Order Stock"
 
 [node name="OrderRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
 custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
-text = "Order Rack"
+text = "Order Storage Rack"
 
 [node name="PlaceRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
 custom_minimum_size = Vector2(96, 44)
 layout_mode = 2
-text = "Place Rack"
+text = "Place Storage Rack"
 
 [node name="CommitAllocationButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
 custom_minimum_size = Vector2(132, 44)

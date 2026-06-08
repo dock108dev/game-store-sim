@@ -108,21 +108,12 @@ func get_last_feedback() -> String:
 
 
 func would_buy_item(item: Node) -> bool:
-	var product: ProductDefinition = null
-	if item != null:
-		product = item.get("product") as ProductDefinition
-	if product == null:
+	if not matches_target_product(item):
 		last_feedback = ""
 		return false
 
-	if product.product_id != target_product_id:
-		last_feedback = ""
-		return false
-
-	var current_price := int(item.get("current_price_cents"))
-	if current_price <= 0:
-		current_price = product.suggested_price_cents
-
+	var product := item.get("product") as ProductDefinition
+	var current_price := get_effective_price_cents_for_item(item)
 	var max_price := get_price_limit_cents_for_item(item)
 	if current_price > max_price:
 		last_feedback = "%s is too expensive at $%0.2f." % [
@@ -133,6 +124,61 @@ func would_buy_item(item: Node) -> bool:
 
 	last_feedback = "Interested in %s." % product.display_name
 	return true
+
+
+func matches_target_product(item: Node) -> bool:
+	var product: ProductDefinition = null
+	if item != null:
+		product = item.get("product") as ProductDefinition
+	return product != null and product.product_id == target_product_id
+
+
+func get_effective_price_cents_for_item(item: Node) -> int:
+	var product: ProductDefinition = null
+	if item != null:
+		product = item.get("product") as ProductDefinition
+	if product == null:
+		return 0
+
+	var current_price := int(item.get("current_price_cents"))
+	if current_price <= 0:
+		current_price = product.suggested_price_cents
+	return current_price
+
+
+func is_item_affordable(item: Node, update_feedback: bool = true) -> bool:
+	if not matches_target_product(item):
+		if update_feedback:
+			last_feedback = ""
+		return false
+
+	var product := item.get("product") as ProductDefinition
+	var current_price := get_effective_price_cents_for_item(item)
+	var max_price := get_price_limit_cents_for_item(item)
+	if current_price > max_price:
+		if update_feedback:
+			last_feedback = "%s is too expensive at $%0.2f." % [
+				product.display_name,
+				current_price / 100.0,
+			]
+		return false
+
+	if update_feedback:
+		last_feedback = "Interested in %s." % product.display_name
+	return true
+
+
+func report_item_too_expensive(item: Node) -> void:
+	if not matches_target_product(item):
+		last_feedback = ""
+		return
+
+	var product := item.get("product") as ProductDefinition
+	var current_price := get_effective_price_cents_for_item(item)
+	last_feedback = "%s is too expensive at $%0.2f." % [
+		product.display_name,
+		current_price / 100.0,
+	]
 
 
 func get_price_limit_cents_for_item(item: Node) -> int:

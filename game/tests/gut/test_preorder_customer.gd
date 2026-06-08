@@ -40,7 +40,7 @@ func test_register_records_preorder_deposit_after_trade_queue_clears() -> void:
 	register.ledger_path = register.get_path_to(ledger)
 	register.store_session_path = register.get_path_to(session)
 
-	assert_eq(register.get_interaction_prompt(), "E Take Preorder Neon Skyline")
+	assert_eq(register.get_interaction_prompt(), "Click Take Preorder Neon Skyline")
 	var message := register.interact()
 
 	assert_string_contains(message, "Took $5.00 preorder deposit for Neon Skyline")

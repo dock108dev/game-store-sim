@@ -693,12 +693,12 @@ func replace_supplier_orders(orders: Array) -> void:
 
 
 func get_supplier_order_summary_text() -> String:
-	var lines: Array[String] = ["Supplier orders:"]
+	var lines: Array[String] = ["Receiving orders:"]
 	for lot in get_available_supplier_lots():
 		var item_count := 0
 		if lot.has_method("get_item_count"):
 			item_count = int(lot.call("get_item_count"))
-		lines.append("Order %s %s (%d items, day +%d)" % [
+		lines.append("Order %s %s (%d items to receiving, day +%d)" % [
 			str(lot.get("display_name")),
 			format_money(int(lot.get("cost_cents"))),
 			item_count,
@@ -707,11 +707,11 @@ func get_supplier_order_summary_text() -> String:
 
 	var pending := get_pending_supplier_orders()
 	if pending.is_empty():
-		lines.append("Pending delivery: none")
+		lines.append("Pending receiving: none")
 	else:
-		lines.append("Pending delivery:")
+		lines.append("Pending receiving:")
 		for order in pending:
-			lines.append("%s due day %d (%d items)" % [
+			lines.append("%s due to receiving day %d (%d items)" % [
 				str(order.get("display_name", "Supplier lot")),
 				int(order.get("due_day", day_number + 1)),
 				int(order.get("item_count", 0)),
@@ -719,9 +719,9 @@ func get_supplier_order_summary_text() -> String:
 
 	var delivered := get_delivered_supplier_orders()
 	if not delivered.is_empty():
-		lines.append("Delivered lots:")
+		lines.append("Receiving box:")
 		for order in delivered:
-			lines.append("%s delivered day %d" % [
+			lines.append("%s delivered to receiving day %d" % [
 				str(order.get("display_name", "Supplier lot")),
 				int(order.get("delivered_day", day_number)),
 			])
@@ -846,18 +846,18 @@ func replace_fixture_orders(orders: Array) -> void:
 
 func get_fixture_order_summary_text() -> String:
 	var fixtures := get_available_fixture_definitions()
-	var lines: Array[String] = ["Fixtures:"]
+	var lines: Array[String] = ["Storage fixtures:"]
 	for fixture in fixtures:
-		lines.append("Order %s %s" % [
+		lines.append("Order %s %s for storage placement" % [
 			str(fixture.get("display_name")),
 			format_money(int(fixture.get("cost_cents"))),
 		])
 
 	var pending := get_pending_fixture_orders()
 	if pending.is_empty():
-		lines.append("Pending placement: none")
+		lines.append("Pending storage placement: none")
 	else:
-		lines.append("Pending placement:")
+		lines.append("Pending storage placement:")
 		for order in pending:
 			lines.append("%s %s slots:%s" % [
 				str(order.get("display_name", "Fixture")),
@@ -867,7 +867,7 @@ func get_fixture_order_summary_text() -> String:
 
 	var placed := get_placed_fixture_orders()
 	if not placed.is_empty():
-		lines.append("Placed fixtures:")
+		lines.append("Placed storage fixtures:")
 		for order in placed:
 			lines.append("%s placed" % str(order.get("display_name", "Fixture")))
 

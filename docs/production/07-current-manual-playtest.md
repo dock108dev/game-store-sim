@@ -6,18 +6,18 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 1. Start the main scene.
 2. Confirm the front door still blocks exit from the playable store.
-3. Pick up multiple `Star Trader` copies from the receiving box and confirm the carry stack stays low/right.
-4. Open pricing from the active held item.
+3. Aim the center reticle at multiple `Star Trader` copies in the receiving box, click to pick them up, and confirm the carry stack stays low/right.
+4. Click to open pricing from the active held item when no world target is selected.
 5. Adjust the price, optionally enable apply-to-matching, apply it, and confirm mouse capture returns.
-6. On a fresh run or before the sale loop, overprice one `Star Trader` above market tolerance, stock it, and confirm a buyer leaves it on the rack with readable feedback.
-7. Stock a fairly priced game in an empty display rack slot.
+6. On a fresh run or before the sale loop, overprice one `Star Trader` above market tolerance, click to stock it, and confirm a buyer leaves it on the rack with readable feedback.
+7. Click to stock a fairly priced game in an empty display rack slot.
 8. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
 9. Price and stock the next carried `Star Trader`.
 10. Confirm a second buyer walks to the rack and queues with readable spacing.
-11. Ring up the first buyer.
-12. Ring up the second buyer.
+11. Aim at the register and click to ring up the first buyer.
+12. Aim at the register and click to ring up the second buyer.
 13. Confirm sold items are gone from the rack and no longer inspectable.
-14. Interact with the register when no buyer is queued and review the seller trade-in offer.
+14. Click the register when no buyer is queued and review the seller trade-in offer.
 15. Confirm the offer panel shows condition, demand, market value, cash offer, and store-credit offer.
 16. Use `+ $1` and `- $1` in the trade-in panel and confirm only the cash offer updates.
 17. Accept the adjusted cash trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
@@ -26,11 +26,11 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 20. Open the backroom computer.
 21. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
 22. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier.
-23. Clear the trade-in queue by accepting or declining it, then interact with the register and take the `Neon Skyline` preorder deposit.
+23. Clear the trade-in queue by accepting or declining it, then click the register and take the `Neon Skyline` preorder deposit.
 24. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the register message reads as a preorder deposit rather than a sale.
 25. Open the backroom computer and confirm preorder count and preorder deposits are readable.
 26. Confirm the preorder flow clearly reads as an obligation before launch day, not an immediate sale.
-27. Clear the preorder queue, then interact with the register and complete the `Disc Resurfacing` service request.
+27. Clear the preorder queue, then click the register and complete the `Disc Resurfacing` service request.
 28. Confirm the service message names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
 29. Open the backroom computer and confirm service revenue, service cost, service profit, and recent activity are readable.
 30. End the day and confirm the closed-day report includes service count, service revenue, service cost, and service profit.
@@ -41,18 +41,18 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 35. End day 1, start day 2, end day 2, then start day 3 and confirm the launch resolves.
 36. Confirm `Neon Skyline` preorders fulfill first, surplus allocation copies sell to launch queue demand, launch cash/profit appears, and reputation remains stable when demand is covered.
 37. On a fresh run, commit only one launch allocation before day 3 and confirm missed demand reduces reputation with readable launch-event text.
-38. Use `Order Rack` on the backroom computer and confirm cash drops by `$125.00`.
-39. Confirm the backroom computer lists `Game Display Rack` under pending placement and does not imply the rack was already placed.
-40. Confirm a translucent rack ghost appears on the sales floor as a pending placement preview.
-41. Use `Place Rack` and confirm a real game display rack appears where the green ghost was.
-42. Reopen the backroom computer and confirm pending placement is cleared and the rack is listed as placed.
+38. Use `Order Storage Rack` on the backroom computer and confirm cash drops by `$125.00`.
+39. Confirm the backroom computer lists `Game Display Rack` under pending storage placement and does not imply the rack was already placed.
+40. Confirm a translucent rack ghost appears on the sales floor as a pending storage placement preview.
+41. Use `Place Storage Rack` and confirm a real game display rack appears where the green ghost was.
+42. Reopen the backroom computer and confirm pending storage placement is cleared and the rack is listed as placed.
 43. Confirm valid placement reads green and invalid placement reads red if the ghost is moved outside allowed bounds by test/debug flow.
 44. Confirm rotated and snapped ghost states remain aligned to the floor grid if exercised by test/debug flow.
 45. Confirm the category demand readout is readable and not crowding the rest of the backroom panel.
 46. Confirm the market drift readout is readable and makes sense for active inventory.
-47. Use `Order Games` on the backroom computer and confirm cash drops by `$27.00`.
-48. Confirm pending delivery says `Used Game Starter Lot`, due day 2, with 3 items.
-49. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending delivery clears.
+47. Use `Order Stock` on the backroom computer and confirm cash drops by `$27.00`.
+48. Confirm pending receiving says `Used Game Starter Lot`, due day 2, with 3 items.
+49. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
 50. End the day and confirm the summary changes to `Day closed`.
 51. Confirm the closed-day report is readable and matches the played day.
 52. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
@@ -71,6 +71,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Stocking one carried game leaves the remaining carried games visible and usable.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
+- Click prompts and the center reticle are readable in the actual game window.
 - Buyer movement from browsing to rack to register reads clearly and does not clip badly through fixtures.
 - Buyer queue spacing is readable, uses a clear register lane, and does not overlap special register customers.
 - Buyer spawn, rack approach, and register queue pathing read naturally in the current layout.
@@ -95,9 +96,9 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 - Launch-day resolution text is readable and explains preorder fulfillment, queue fulfillment, missed demand, cash, profit, and reputation.
 - Category demand text is readable and does not crowd the management panel.
 - Market drift text is readable and makes the active inventory value movement understandable.
-- Supplier delivery text and `Order Games` button are readable and make clear that cash is reserved before delivery.
+- Receiving order text and `Order Stock` button are readable and make clear that cash is reserved before physical stock appears in the receiving box.
 - Delivered supplier stock appears as receiving inventory without crowding or floating around the receiving box.
-- Fixture order text/button are readable and clearly communicate pending placement.
+- Storage fixture order text/buttons are readable and clearly communicate pending storage placement.
 - Fixture ghost preview is visible, translucent, and not confused with a usable placed rack.
 - Placed rack confirmation reads as a deliberate action, and the real rack does not look like another ghost preview.
 - Green valid placement and red invalid placement are visually distinct in the actual window.

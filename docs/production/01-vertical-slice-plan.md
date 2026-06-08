@@ -46,7 +46,7 @@ Workstations:
 - Inspect item.
 - Set item price.
 - Place item on shelf.
-- Interact with customer.
+- Click center-screen targets to interact with customers.
 - Scan item at register.
 - Complete sale.
 - Close store.
@@ -124,8 +124,8 @@ Technical:
 31. Add supplier message artifact. Done as an optional receiving-box note with supplier metadata, inspection text, hidden event flag support, and screenshot coverage.
 32. Add optional evidence storage. Done as hidden deduped clue storage for serial mismatch and supplier message records.
 33. Add one suspicious customer encounter. Done as an optional cash-buyer interaction that flags a hidden event, stores evidence, and stays out of normal sales queue progression.
-34. Add first player-facing fixture placement confirmation. Done as a `Place Rack` backroom-computer action that turns the valid pending rack ghost into a real game display rack and clears pending placement.
-35. Add first supplier ordering and delivery delay. Done as a backroom `Order Games` action that reserves cash, creates a pending due-day order, and delivers used games into receiving when the next day starts.
+34. Add first player-facing fixture placement confirmation. Done as a `Place Storage Rack` backroom-computer action that turns the valid pending rack ghost into a real game display rack and clears pending storage placement.
+35. Add first supplier ordering and delivery delay. Done as a backroom `Order Stock` action that reserves cash, creates a pending due-day receiving order, and delivers used games into receiving when the next day starts.
 36. Add first new-release calendar. Done as fictional upcoming launch data surfaced on the backroom computer with countdown, wholesale cost, suggested price, allocation note, demand tier, and screenshot coverage.
 37. Add first preorder deposit. Done as one register preorder customer for `Neon Skyline`, with a fixed deposit tracked separately from sale revenue and profit.
 38. Add first launch allocation commitment. Done as a backroom `Commit Allocation` action for `Neon Skyline`, with immediate wholesale cash reservation, allocation-limit enforcement, persistence, and screenshot coverage.

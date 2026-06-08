@@ -35,8 +35,8 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.release_calendar_label.text, "MSRP $49.99")
 	assert_string_contains(_panel.release_calendar_label.text, "Release allocations: none")
 	assert_string_contains(_panel.supplier_order_label.text, "Order Used Game Starter Lot $27.00")
-	assert_string_contains(_panel.supplier_order_label.text, "Pending delivery: none")
-	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00")
+	assert_string_contains(_panel.supplier_order_label.text, "Pending receiving: none")
+	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00 for storage placement")
 	assert_false(_panel.commit_allocation_button.disabled)
 	assert_false(_panel.order_games_button.disabled)
 	assert_false(_panel.order_rack_button.disabled)
@@ -199,9 +199,9 @@ func test_day_summary_panel_orders_fixture_from_backroom_computer() -> void:
 
 	assert_eq(_session.get_cash_cents(), 37500)
 	assert_string_contains(_panel.summary_label.text, "Cash: $375.00")
-	assert_string_contains(_panel.fixture_label.text, "Pending placement:")
+	assert_string_contains(_panel.fixture_label.text, "Pending storage placement:")
 	assert_string_contains(_panel.fixture_label.text, "Game Display Rack $125.00")
-	assert_eq(_panel.status_label.text, "Ordered Game Display Rack.")
+	assert_eq(_panel.status_label.text, "Ordered Game Display Rack for storage placement.")
 	assert_true(_panel.place_rack_button.disabled)
 
 
@@ -212,9 +212,9 @@ func test_day_summary_panel_orders_supplier_lot_from_backroom_computer() -> void
 
 	assert_eq(_session.get_cash_cents(), 47300)
 	assert_string_contains(_panel.summary_label.text, "Cash: $473.00")
-	assert_string_contains(_panel.supplier_order_label.text, "Pending delivery:")
-	assert_string_contains(_panel.supplier_order_label.text, "Used Game Starter Lot due day 2 (3 items)")
-	assert_eq(_panel.status_label.text, "Ordered Used Game Starter Lot.")
+	assert_string_contains(_panel.supplier_order_label.text, "Pending receiving:")
+	assert_string_contains(_panel.supplier_order_label.text, "Used Game Starter Lot due to receiving day 2 (3 items)")
+	assert_eq(_panel.status_label.text, "Ordered Used Game Starter Lot to receiving.")
 
 
 func test_day_summary_panel_starts_next_day_and_delivers_supplier_lot() -> void:
@@ -236,7 +236,7 @@ func test_day_summary_panel_starts_next_day_and_delivers_supplier_lot() -> void:
 	assert_false(_session.is_day_closed)
 	assert_eq(_session.day_number, 2)
 	assert_string_contains(_panel.status_label.text, "Started day 2. Delivered 1 order.")
-	assert_string_contains(_panel.supplier_order_label.text, "Delivered lots:")
+	assert_string_contains(_panel.supplier_order_label.text, "Receiving box:")
 	assert_string_contains(_panel.inventory_label.text, "Moon Escape x1")
 	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame004"))
 	assert_eq(_panel.end_day_button.text, "End Day")
@@ -262,9 +262,9 @@ func test_day_summary_panel_places_pending_fixture_from_backroom_computer() -> v
 	assert_eq(_session.get_pending_fixture_orders().size(), 0)
 	assert_eq(_session.get_placed_fixture_orders().size(), 1)
 	assert_not_null(fixture_root.get_node_or_null("PlacedGameDisplayRack001"))
-	assert_string_contains(_panel.fixture_label.text, "Pending placement: none")
-	assert_string_contains(_panel.fixture_label.text, "Placed fixtures:")
-	assert_eq(_panel.status_label.text, "Placed Game Display Rack.")
+	assert_string_contains(_panel.fixture_label.text, "Pending storage placement: none")
+	assert_string_contains(_panel.fixture_label.text, "Placed storage fixtures:")
+	assert_eq(_panel.status_label.text, "Placed Game Display Rack in storage.")
 	assert_true(_panel.place_rack_button.disabled)
 
 

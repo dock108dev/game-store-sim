@@ -103,14 +103,14 @@ func get_interaction_prompt() -> String:
 	if item != null and item.has_method("get_interaction_prompt"):
 		return item.get_interaction_prompt()
 
-	return "E Inspect Game Display Slot"
+	return "Click Inspect Game Display Slot"
 
 
 func get_interaction_prompt_for_actor(actor: Node) -> String:
 	if actor != null and actor.has_method("get_held_item"):
 		var held_item: Node = actor.get_held_item()
 		if held_item != null and can_accept(held_item):
-			return "E Stock %s" % _get_item_display_name(held_item)
+			return "Click Stock %s" % _get_item_display_name(held_item)
 
 	return get_interaction_prompt()
 

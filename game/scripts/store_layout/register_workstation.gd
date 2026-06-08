@@ -15,20 +15,20 @@ func get_interaction_prompt() -> String:
 	var customer := _get_waiting_customer()
 	if customer != null:
 		var item: Node = customer.get_checkout_item()
-		return "E Ring Up %s" % _get_item_display_name(item)
+		return "Click Ring Up %s" % _get_item_display_name(item)
 
 	var trade_in_customer := _get_waiting_trade_in_customer()
 	if trade_in_customer != null:
 		var trade_item: Node = trade_in_customer.get_trade_item()
-		return "E Review Trade-In %s" % _get_item_display_name(trade_item)
+		return "Click Review Trade-In %s" % _get_item_display_name(trade_item)
 
 	var preorder_customer := _get_waiting_preorder_customer()
 	if preorder_customer != null:
-		return "E Take Preorder %s" % preorder_customer.get_release_name()
+		return "Click Take Preorder %s" % preorder_customer.get_release_name()
 
 	var service_customer := _get_waiting_service_customer()
 	if service_customer != null:
-		return "E Complete %s" % str(service_customer.get("service_name"))
+		return "Click Complete %s" % str(service_customer.get("service_name"))
 
 	return "Register Workstation"
 

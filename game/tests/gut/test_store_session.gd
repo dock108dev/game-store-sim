@@ -322,8 +322,8 @@ func test_store_session_lists_available_fixture_orders() -> void:
 	assert_eq(fixtures.size(), 1)
 	assert_eq(fixtures[0].get("fixture_id"), "fixture_game_display_rack")
 	assert_true(session.can_order_fixture("fixture_game_display_rack"))
-	assert_string_contains(session.get_fixture_order_summary_text(), "Order Game Display Rack $125.00")
-	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement: none")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Order Game Display Rack $125.00 for storage placement")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Pending storage placement: none")
 
 
 func test_store_session_lists_available_supplier_lots() -> void:
@@ -335,9 +335,9 @@ func test_store_session_lists_available_supplier_lots() -> void:
 	assert_eq(lots.size(), 1)
 	assert_eq(lots[0].get("lot_id"), "supplier_lot_used_games_001")
 	assert_true(session.can_order_supplier_lot("supplier_lot_used_games_001"))
-	assert_string_contains(session.get_supplier_order_summary_text(), "Supplier orders:")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving orders:")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Order Used Game Starter Lot $27.00")
-	assert_string_contains(session.get_supplier_order_summary_text(), "Pending delivery: none")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Pending receiving: none")
 
 
 func test_store_session_lists_release_calendar_sorted_by_launch_day() -> void:
@@ -521,8 +521,8 @@ func test_store_session_orders_supplier_lot_and_reserves_cash() -> void:
 	assert_eq(order.get("cost_cents"), 2700)
 	assert_eq(session.get_cash_cents(), 47300)
 	assert_eq(session.get_pending_supplier_orders().size(), 1)
-	assert_string_contains(session.get_supplier_order_summary_text(), "Pending delivery:")
-	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot due day 2 (3 items)")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Pending receiving:")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot due to receiving day 2 (3 items)")
 
 
 func test_store_session_rejects_supplier_order_without_cash() -> void:
@@ -559,8 +559,8 @@ func test_store_session_delivers_supplier_lot_on_next_day() -> void:
 	assert_eq(session.day_number, 2)
 	assert_eq(session.get_pending_supplier_orders().size(), 0)
 	assert_eq(session.get_delivered_supplier_orders().size(), 1)
-	assert_string_contains(session.get_supplier_order_summary_text(), "Delivered lots:")
-	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot delivered day 2")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving box:")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Used Game Starter Lot delivered to receiving day 2")
 	assert_eq(_count_inventory_items(receiving_box), 6)
 	assert_not_null(receiving_box.get_node_or_null("DeliveredUsedGame004"))
 	assert_string_contains(session.get_inventory_summary_text(), "Moon Escape x1")
@@ -579,7 +579,7 @@ func test_store_session_orders_fixture_and_reserves_cash() -> void:
 	assert_eq(order.get("cost_cents"), 12500)
 	assert_eq(session.get_cash_cents(), 37500)
 	assert_eq(session.get_pending_fixture_orders().size(), 1)
-	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement:")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Pending storage placement:")
 	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack $125.00")
 	assert_string_contains(session.get_fixture_order_summary_text(), "slots:used_game")
 
@@ -609,8 +609,8 @@ func test_store_session_places_pending_fixture_and_clears_pending_order() -> voi
 	assert_eq(session.get_placed_fixture_orders().size(), 1)
 	assert_false(manager.is_ghost_visible())
 	assert_not_null(fixture_root.get_node_or_null("PlacedGameDisplayRack001"))
-	assert_string_contains(session.get_fixture_order_summary_text(), "Pending placement: none")
-	assert_string_contains(session.get_fixture_order_summary_text(), "Placed fixtures:")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Pending storage placement: none")
+	assert_string_contains(session.get_fixture_order_summary_text(), "Placed storage fixtures:")
 	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack placed")
 
 
