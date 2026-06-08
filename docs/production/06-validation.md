@@ -23,7 +23,7 @@ The gate currently runs:
 - GUT tests under `game/tests/gut/`, with JUnit XML exported to `artifacts/validation/latest/gut-results.xml`.
 - UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
-- Product catalog validation for fictional names, unique IDs, pricing sanity, and platform/condition/demand variety.
+- Product catalog validation for fictional names, unique IDs, pricing sanity, complete inventory schema fields, and platform/condition/demand/authenticity/rarity/risk/location variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
 - Named validation screenshot capture at `1280x720` for main scene, carry stack, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, service request, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
 - Screenshot dimension and nonblank pixel checks for each named screenshot.
@@ -42,10 +42,11 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current polish-pass baseline:
 
-- `scripts/validate_godot.sh` passes with 357 GUT tests.
-- UI scenario automation coverage is 344/411, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 359 GUT tests.
+- UI scenario automation coverage is 346/414, above the required 80% threshold.
 - Production script mapping coverage is 38/38.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
+- Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
 
 ## Manual Validation
 
@@ -65,7 +66,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, and customer validation docs are synced through Stop 5.7.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, customer validation docs, and product schema validation are synced through Stop 6.1.
 - Left click is the primary center-reticle interaction for pickup, stocking, held-item pricing, register work, and backroom computer use.
 - Front door opening blocks the player from leaving the playable store until exits are implemented.
 - Prompt readability in the actual game window.
@@ -163,7 +164,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/core_smoke.json`: main scene, player, input, floor, and front-door boundary smoke checks.
 - `scenarios/receiving_stocking.json`: receiving box, item state, pickup, bounded carry stack, hold, shelf slot category assignment, and stocking checks.
 - `scenarios/pricing.json`: direct held-item pricing, apply-to-matching pricing, pricing panel, and fixed-price rejection checks.
-- `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, and variety checks.
+- `scenarios/product_catalog.json`: fictional product catalog count, uniqueness, pricing sanity, complete inventory schema, and variety checks.
 - `scenarios/backroom_polish.json`: backroom zone anchors, receiving/storage props, and management/service prop existence checks.
 - `scenarios/customer_sale.json`: customer manager, buyer movement, buyer path validation, buyer queue, price sensitivity/refusal, register checkout, and transaction ledger checks.
 - `scenarios/customer_polish.json`: customer role prop, silhouette, and register-area spacing polish checks.

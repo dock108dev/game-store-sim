@@ -305,10 +305,11 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 357 GUT tests.
-- UI scenario automation coverage is 344/411, above the required 80% threshold.
+- `scripts/validate_godot.sh` passes with 359 GUT tests.
+- UI scenario automation coverage is 346/414, above the required 80% threshold.
 - Production script mapping coverage is 38/38.
 - Manual customer-production checks are current for visual kit, animation, pathing, feedback bubbles, archetype data, dialogue data, and validation sync.
+- Manual product-content checks are current for Stop 6.1 inventory schema expansion.
 
 ## Milestone 6: Product And Content Pipeline
 
@@ -316,7 +317,7 @@ Goal: make inventory scalable and visibly game-specific.
 
 Stops:
 
-- Stop 6.1: Inventory schema expansion. Extend product data for category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and location.
+- Stop 6.1: Inventory schema expansion. Done in `Expand inventory schema`: product definitions now expose category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata, with catalog resources, automated schema coverage, and manual content-review checklist updates.
 - Stop 6.2: Product visual generation rules. Create reusable case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants.
 - Stop 6.3: Starter catalog expansion. Add enough fictional products to support multiple days without repetition.
 - Stop 6.4: Condition and authenticity cues. Add visible scratches, missing manual markers, loose media, damaged labels, resealed packaging, and suspicious serial markers.

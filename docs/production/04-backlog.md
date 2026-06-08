@@ -106,7 +106,7 @@ Compressed summary of completed validated systems:
 
 - First-person movement, click-first interaction, prompt, and reticle.
 - Receiving pickup, multi-item carry, held-item pricing, shelf stocking, and apply-to-matching pricing.
-- Product catalog, fictional product validation, item identity, price, cost basis, condition, market value, serial metadata, and active inventory summary.
+- Product catalog, fictional product validation, item identity, category, platform family, format, price, cost basis, condition, completeness, authenticity, rarity, demand, market value, risk, default location, serial metadata, and active inventory summary.
 - Buyer customer manager, buyer movement, price sensitivity, lower-priced copy selection, register queue, sale completion, and transaction ledger.
 - Trade-in seller, offer panel, cash/store-credit acceptance, counteroffer adjustment, decline, and acquired inventory.
 - Service customer and register-completed service accounting.
@@ -123,7 +123,8 @@ These remain future phases unless explicitly selected:
 
 - Theft and shrinkage systems.
 - Returns and exchanges.
-- Rich customer archetypes beyond current role stubs.
+- Production product visual variants beyond the current used-game case cues.
+- Expanded multi-category starter catalog beyond the current used-game catalog.
 - Player-facing save/load slot UI.
 - Employees and staff assignment.
 - Larger store expansion.

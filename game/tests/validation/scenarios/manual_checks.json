@@ -233,6 +233,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "product_schema_content_review",
+      "name": "Product schema metadata reads like useful game-store inventory data",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify field presence and coverage; human review should confirm category, platform family, format, condition, completeness, authenticity, rarity, demand, value, risk, and location choices feel coherent for fictional game-store products.",
+      "owner": "manual QA"
+    },
+    {
       "id": "buyer_register_wait_visual",
       "name": "Buyers visibly wait at the register after stocking Star Trader copies",
       "status": "manual",

@@ -20,6 +20,20 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_product_catalog.gd::test_product_catalog_covers_platform_condition_and_demand_variety"
+    },
+    {
+      "id": "product_catalog_inventory_schema",
+      "name": "Product catalog uses the complete production inventory schema",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_catalog.gd::test_product_catalog_contains_twelve_fictional_used_games; res://tests/gut/test_product_item.gd::test_product_definition_exposes_complete_inventory_schema_summary"
+    },
+    {
+      "id": "product_catalog_authenticity_rarity_risk_location",
+      "name": "Product catalog covers authenticity, rarity, risk, and default location metadata",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_catalog.gd::test_product_catalog_covers_authenticity_rarity_risk_and_location_schema"
     }
   ]
 }

@@ -27,6 +27,8 @@ func _ready() -> void:
 		current_price_cents = product.suggested_price_cents
 	if cost_basis_cents <= 0:
 		cost_basis_cents = product.cost_basis_cents
+	if location_id.strip_edges().is_empty():
+		location_id = product.default_location_id
 
 
 func get_interaction_prompt() -> String:
