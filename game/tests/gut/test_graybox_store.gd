@@ -163,6 +163,49 @@ func test_store_lighting_has_warm_sales_and_cool_backroom_layers() -> void:
 	assert_gt(backroom_light.global_position.z, 4.0)
 
 
+func test_store_signage_uses_fictional_world_labels() -> void:
+	var expected_labels := {
+		"StoreIdentitySignPanel/StoreIdentitySignLabel": "SAVE POINT GAMES",
+		"DisplaySignPanel/DisplaySignLabel": "DISPLAY RACKS",
+		"RegisterSignPanel/RegisterSignLabel": "REGISTER",
+		"BackroomSignPanel/BackroomSignLabel": "BACKROOM",
+		"ReceivingSignPanel/ReceivingSignLabel": "RECEIVING",
+		"StorageSignPanel/StorageSignLabel": "STORAGE",
+	}
+	var banned_terms := ["GAMESTOP", "NINTENDO", "PLAYSTATION", "XBOX", "SEGA", "ATARI"]
+
+	for label_path in expected_labels:
+		var label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(label)
+		assert_eq(label.text, expected_labels[label_path])
+		assert_gte(label.font_size, 36)
+		assert_lte(label.pixel_size, 0.0066)
+		for banned_term in banned_terms:
+			assert_false(label.text.contains(banned_term))
+
+
+func test_store_sign_panels_are_nonblocking_and_zone_aligned() -> void:
+	var expected_panels := {
+		"StoreIdentitySignPanel": Vector3(0, 2.18, -5.86),
+		"DisplaySignPanel": Vector3(-3.18, 1.78, 5.82),
+		"RegisterSignPanel": Vector3(2.25, 1.55, -2.95),
+		"BackroomSignPanel": Vector3(0.3, 1.72, 3.26),
+		"ReceivingSignPanel": Vector3(-4.65, 1.18, 3.08),
+		"StorageSignPanel": Vector3(-5.85, 1.38, 4.66),
+	}
+
+	for panel_name in expected_panels:
+		var panel := _store.get_node_or_null(panel_name) as CSGBox3D
+		assert_not_null(panel)
+		assert_false(panel.use_collision)
+		assert_almost_eq(panel.global_position.x, expected_panels[panel_name].x, 0.01)
+		assert_almost_eq(panel.global_position.y, expected_panels[panel_name].y, 0.01)
+		assert_almost_eq(panel.global_position.z, expected_panels[panel_name].z, 0.01)
+
+	assert_gt(_flat_distance_xz((_store.get_node("RegisterSignPanel") as CSGBox3D).global_position, (_store.get_node("GameDisplayRack") as Node3D).global_position), 6.0)
+	assert_lt(_flat_distance_xz((_store.get_node("ReceivingSignPanel") as CSGBox3D).global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 0.9)
+
+
 func test_backroom_visual_zones_exist_without_collision() -> void:
 	var expected_zones := {
 		"BackroomReceivingZone": Vector3(-4.65, 0.028, 3.82),

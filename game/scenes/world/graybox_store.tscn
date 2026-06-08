@@ -137,6 +137,34 @@ size = Vector3(3.5, 0.03, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -5.45)
 material = SubResource("StandardMaterial3D_door")
 
+[node name="StoreIdentitySignPanel" type="CSGBox3D" parent="."]
+size = Vector3(3.8, 0.62, 0.045)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.18, -5.86)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="StoreIdentitySignLabel" type="Label3D" parent="StoreIdentitySignPanel"]
+pixel_size = 0.0065
+modulate = Color(0.98, 0.88, 0.58, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 6
+billboard = 1
+text = "SAVE POINT GAMES"
+font_size = 56
+
+[node name="DisplaySignPanel" type="CSGBox3D" parent="."]
+size = Vector3(2.1, 0.34, 0.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.18, 1.78, 5.82)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="DisplaySignLabel" type="Label3D" parent="DisplaySignPanel"]
+pixel_size = 0.006
+modulate = Color(0.86, 0.96, 0.9, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 5
+billboard = 1
+text = "DISPLAY RACKS"
+font_size = 42
+
 [node name="FrontDoorBlocker" type="StaticBody3D" parent="."]
 visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -6)
@@ -155,6 +183,34 @@ use_collision = true
 size = Vector3(4.2, 0.12, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.06, -2.4)
 material = SubResource("StandardMaterial3D_wall")
+
+[node name="RegisterSignPanel" type="CSGBox3D" parent="."]
+size = Vector3(1.9, 0.32, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.25, 1.55, -2.95)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="RegisterSignLabel" type="Label3D" parent="RegisterSignPanel"]
+pixel_size = 0.006
+modulate = Color(1, 0.88, 0.7, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 5
+billboard = 1
+text = "REGISTER"
+font_size = 42
+
+[node name="BackroomSignPanel" type="CSGBox3D" parent="."]
+size = Vector3(2.05, 0.34, 0.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.72, 3.26)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="BackroomSignLabel" type="Label3D" parent="BackroomSignPanel"]
+pixel_size = 0.006
+modulate = Color(0.82, 0.94, 1, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 5
+billboard = 1
+text = "BACKROOM"
+font_size = 42
 
 [node name="BackroomZone" type="CSGBox3D" parent="."]
 size = Vector3(12.4, 0.012, 2.35)
@@ -185,6 +241,34 @@ material = SubResource("StandardMaterial3D_backroom_service_zone")
 size = Vector3(6.0, 0.01, 0.72)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.04, 4.45)
 material = SubResource("StandardMaterial3D_backroom_path_zone")
+
+[node name="ReceivingSignPanel" type="CSGBox3D" parent="."]
+size = Vector3(1.45, 0.28, 0.035)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.65, 1.18, 3.08)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="ReceivingSignLabel" type="Label3D" parent="ReceivingSignPanel"]
+pixel_size = 0.0055
+modulate = Color(1, 0.9, 0.64, 1)
+outline_modulate = Color(0.04, 0.025, 0.015, 1)
+outline_size = 4
+billboard = 1
+text = "RECEIVING"
+font_size = 36
+
+[node name="StorageSignPanel" type="CSGBox3D" parent="."]
+size = Vector3(1.25, 0.28, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 1.38, 4.66)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="StorageSignLabel" type="Label3D" parent="StorageSignPanel"]
+pixel_size = 0.0055
+modulate = Color(0.84, 0.95, 0.9, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 4
+billboard = 1
+text = "STORAGE"
+font_size = 36
 
 [node name="SalesFloorZone" type="CSGBox3D" parent="."]
 size = Vector3(4.8, 0.01, 1.6)
