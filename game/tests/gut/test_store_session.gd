@@ -97,6 +97,45 @@ func test_store_session_summarizes_cash_pressure_and_reserved_obligations() -> v
 	assert_string_contains(summary, "Reserved obligations: $184.00")
 
 
+func test_store_session_records_reputation_events_for_core_pressure_sources() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	session.record_pricing_fairness("Star Trader", 3200, 2499)
+	session.record_wait_time("customer_001", 75.0)
+	session.record_preorder_outcome("Neon Skyline", true)
+	session.record_service_outcome("Disc Resurfacing", true)
+	session.record_return_handling("rejected_unfairly")
+	session.record_suspicious_choice("accepted_suspicious_cash")
+	session.record_stock_variety(1)
+
+	assert_eq(session.get_reputation_events().size(), 7)
+	assert_eq(session.get_reputation_score(), 89)
+	var summary := session.get_reputation_summary_text(7)
+	assert_string_contains(summary, "Reputation: 89")
+	assert_string_contains(summary, "Over-market pricing for Star Trader -3 (pricing)")
+	assert_string_contains(summary, "Long register wait -2 (wait_time)")
+	assert_string_contains(summary, "Preorder fulfilled: Neon Skyline +3 (preorder)")
+	assert_string_contains(summary, "Service completed: Disc Resurfacing +2 (service)")
+	assert_string_contains(summary, "Unfair return rejection -4 (returns)")
+	assert_string_contains(summary, "Accepted suspicious cash -5 (suspicious)")
+	assert_string_contains(summary, "Low stock variety -2 (stock_variety)")
+
+
+func test_store_session_reputation_events_are_idempotent_and_clamped() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var event := session.record_reputation_event("repeat_event", "Repeated event", "test", -80)
+	var duplicate := session.record_reputation_event("repeat_event", "Repeated event", "test", -80)
+	session.record_reputation_event("large_penalty", "Large penalty", "test", -80)
+	session.record_reputation_event("large_bonus", "Large bonus", "test", 200)
+
+	assert_eq(event.get("event_id"), duplicate.get("event_id"))
+	assert_eq(session.get_reputation_events().size(), 3)
+	assert_eq(session.get_reputation_score(), 100)
+
+
 func test_store_session_applies_sale_to_cash() -> void:
 	var session: Node = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)
@@ -602,6 +641,8 @@ func test_store_session_launch_day_shortage_reduces_reputation() -> void:
 	assert_eq(event.get("reputation_delta"), -10)
 	assert_eq(event.get("reputation_score"), 90)
 	assert_eq(session.get_reputation_score(), 90)
+	assert_eq(session.get_reputation_events().size(), 1)
+	assert_string_contains(session.get_reputation_summary_text(), "Missed launch demand for Neon Skyline -10")
 	assert_eq(session.get_cash_cents(), 50049)
 	assert_eq(session.get_operating_expenses_total_cents(), 1750)
 	assert_string_contains(session.get_launch_summary_text(), "queue 0/2, missed 2")

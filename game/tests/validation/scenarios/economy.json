@@ -97,6 +97,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_cash_pressure_and_reserved_obligations"
+    },
+    {
+      "id": "reputation_core_pressure_sources",
+      "name": "Reputation tracks pricing fairness, wait time, preorder, service, return, suspicious choice, and stock variety events",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_records_reputation_events_for_core_pressure_sources"
+    },
+    {
+      "id": "reputation_events_idempotent_clamped",
+      "name": "Reputation events are idempotent by event ID and reputation score stays clamped",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_reputation_events_are_idempotent_and_clamped"
     }
   ]
 }

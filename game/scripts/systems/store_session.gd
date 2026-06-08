@@ -78,6 +78,7 @@ var preorder_deposits: Array[Dictionary] = []
 var release_allocations: Array[Dictionary] = []
 var launch_events: Array[Dictionary] = []
 var operating_expenses: Array[Dictionary] = []
+var reputation_events: Array[Dictionary] = []
 var reputation_score: int = 100
 
 
@@ -786,6 +787,200 @@ func get_reputation_score() -> int:
 	return reputation_score
 
 
+func get_reputation_events() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for event in reputation_events:
+		rows.append(event.duplicate(true))
+	return rows
+
+
+func replace_reputation_events(events: Array) -> void:
+	reputation_events.clear()
+	for event in events:
+		if typeof(event) == TYPE_DICTIONARY:
+			var row: Dictionary = event
+			reputation_events.append(row.duplicate(true))
+
+
+func record_reputation_event(
+	event_id: String,
+	label: String,
+	category: String,
+	delta: int,
+	metadata: Dictionary = {}
+) -> Dictionary:
+	if event_id.is_empty():
+		event_id = "reputation_event_%03d" % (reputation_events.size() + 1)
+
+	for event in reputation_events:
+		if str(event.get("event_id", "")) == event_id:
+			return event.duplicate(true)
+
+	reputation_score = clampi(reputation_score + delta, 0, 100)
+	var event := {
+		"event_id": event_id,
+		"label": label,
+		"category": category,
+		"delta": delta,
+		"day_number": day_number,
+		"reputation_score": reputation_score,
+		"metadata": metadata.duplicate(true),
+	}
+	reputation_events.append(event)
+	return event.duplicate(true)
+
+
+func record_pricing_fairness(product_name: String, price_cents: int, market_value_cents: int) -> Dictionary:
+	var limit := int(roundi(market_value_cents * 1.20))
+	if market_value_cents <= 0:
+		return record_reputation_event(
+			"pricing_unknown_%03d" % (reputation_events.size() + 1),
+			"Pricing unknown market value",
+			"pricing",
+			0,
+			{"product_name": product_name, "price_cents": price_cents}
+		)
+	if price_cents > limit:
+		return record_reputation_event(
+			"pricing_high_%s_%d" % [product_name.to_snake_case(), day_number],
+			"Over-market pricing for %s" % product_name,
+			"pricing",
+			-3,
+			{"product_name": product_name, "price_cents": price_cents, "market_value_cents": market_value_cents}
+		)
+	return record_reputation_event(
+		"pricing_fair_%s_%d" % [product_name.to_snake_case(), day_number],
+		"Fair pricing for %s" % product_name,
+		"pricing",
+		1,
+		{"product_name": product_name, "price_cents": price_cents, "market_value_cents": market_value_cents}
+	)
+
+
+func record_wait_time(customer_id: String, wait_seconds: float) -> Dictionary:
+	if wait_seconds > 60.0:
+		return record_reputation_event(
+			"wait_long_%s_%d" % [customer_id, day_number],
+			"Long register wait",
+			"wait_time",
+			-2,
+			{"customer_id": customer_id, "wait_seconds": wait_seconds}
+		)
+	return record_reputation_event(
+		"wait_ok_%s_%d" % [customer_id, day_number],
+		"Prompt register service",
+		"wait_time",
+		1,
+		{"customer_id": customer_id, "wait_seconds": wait_seconds}
+	)
+
+
+func record_preorder_outcome(product_name: String, fulfilled: bool) -> Dictionary:
+	var delta := 3 if fulfilled else -5
+	var label := "Preorder fulfilled" if fulfilled else "Preorder missed"
+	return record_reputation_event(
+		"preorder_%s_%s_%d" % ["fulfilled" if fulfilled else "missed", product_name.to_snake_case(), day_number],
+		"%s: %s" % [label, product_name],
+		"preorder",
+		delta,
+		{"product_name": product_name, "fulfilled": fulfilled}
+	)
+
+
+func record_service_outcome(service_name: String, success: bool) -> Dictionary:
+	var delta := 2 if success else -4
+	var label := "Service completed" if success else "Service failed"
+	return record_reputation_event(
+		"service_%s_%s_%d" % ["success" if success else "failed", service_name.to_snake_case(), day_number],
+		"%s: %s" % [label, service_name],
+		"service",
+		delta,
+		{"service_name": service_name, "success": success}
+	)
+
+
+func record_return_handling(outcome: String) -> Dictionary:
+	var normalized := outcome.to_snake_case()
+	var delta := 0
+	var label := "Return handled"
+	match normalized:
+		"accepted_fairly":
+			delta = 2
+			label = "Fair return accepted"
+		"rejected_unfairly":
+			delta = -4
+			label = "Unfair return rejection"
+		_:
+			delta = 0
+	return record_reputation_event(
+		"return_%s_%d" % [normalized, day_number],
+		label,
+		"returns",
+		delta,
+		{"outcome": normalized}
+	)
+
+
+func record_suspicious_choice(choice: String) -> Dictionary:
+	var normalized := choice.to_snake_case()
+	var delta := 0
+	var label := "Suspicious choice recorded"
+	match normalized:
+		"accepted_suspicious_cash":
+			delta = -5
+			label = "Accepted suspicious cash"
+		"documented_and_declined":
+			delta = 2
+			label = "Documented and declined suspicious offer"
+		_:
+			delta = 0
+	return record_reputation_event(
+		"suspicious_%s_%d" % [normalized, day_number],
+		label,
+		"suspicious",
+		delta,
+		{"choice": normalized}
+	)
+
+
+func record_stock_variety(category_count: int) -> Dictionary:
+	if category_count >= 3:
+		return record_reputation_event(
+			"stock_variety_good_%d" % day_number,
+			"Good stock variety",
+			"stock_variety",
+			2,
+			{"category_count": category_count}
+		)
+	return record_reputation_event(
+		"stock_variety_low_%d" % day_number,
+		"Low stock variety",
+		"stock_variety",
+		-2,
+		{"category_count": category_count}
+	)
+
+
+func get_reputation_summary_text(max_entries: int = 5) -> String:
+	var lines: Array[String] = ["Reputation: %d" % reputation_score]
+	if reputation_events.is_empty():
+		lines.append("Reputation events: none")
+		return "\n".join(lines)
+
+	lines.append("Reputation events:")
+	var start_index := maxi(0, reputation_events.size() - max_entries)
+	for index in range(start_index, reputation_events.size()):
+		var event := reputation_events[index]
+		var delta := int(event.get("delta", 0))
+		var delta_text := "+%d" % delta if delta > 0 else str(delta)
+		lines.append("%s %s (%s)" % [
+			str(event.get("label", "Event")),
+			delta_text,
+			str(event.get("category", "general")),
+		])
+	return "\n".join(lines)
+
+
 func get_launch_summary_text() -> String:
 	if launch_events.is_empty():
 		return "Launch events: none"
@@ -1401,7 +1596,14 @@ func _resolve_launch_event(release: Resource) -> Dictionary:
 	var reputation_delta := -missed_demand * 5
 
 	cash_cents = get_cash_cents() + cash_received_cents
-	reputation_score = clampi(reputation_score + reputation_delta, 0, 100)
+	if reputation_delta != 0:
+		record_reputation_event(
+			"launch_missed_%s_day_%d" % [release_id, day_number],
+			"Missed launch demand for %s" % str(release.get("product_name")),
+			"preorder",
+			reputation_delta,
+			{"release_id": release_id, "missed_demand": missed_demand}
+		)
 	_mark_preorders_for_launch(preorder_indexes, preorder_fulfilled)
 	_mark_allocations_launched(release_id, fulfilled_count, remaining_allocated)
 

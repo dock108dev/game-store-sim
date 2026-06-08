@@ -529,6 +529,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "reputation_feedback_readability",
+      "name": "Reputation changes read as understandable consequences of pricing, waits, preorder/service outcomes, returns, suspicious choices, and stock variety",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify reputation scoring hooks and clamping; human review must confirm the report and future UI wording make reputation changes understandable without feeling punitive or hidden.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_inventory_summary_readability",
       "name": "Backroom inventory summary is readable and matches visible active inventory",
       "status": "manual",
