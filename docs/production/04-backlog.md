@@ -10,7 +10,7 @@ Goal: keep the validated retail loop intact while making the store, backroom, cu
 
 Active roadmap: `08-polish-roadmap.md`.
 
-Current implementation plan: `09-backroom-polish-implementation-plan.md`.
+Current implementation plan: `10-polish-execution-plan.md`.
 
 ## Current Rules
 

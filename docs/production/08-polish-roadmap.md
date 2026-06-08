@@ -2,6 +2,8 @@
 
 This phase turns the validated graybox into a readable, appealing first production pass. The goal is not final art. The goal is visual clarity, better menus, stronger store identity, and a manual checklist that matches what the player actually sees.
 
+Active execution plan: `10-polish-execution-plan.md`.
+
 ## Phase Goal
 
 Make the current retail loop feel intentional:

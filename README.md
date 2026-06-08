@@ -30,6 +30,7 @@ The first playable counter loop is implemented and validated. The project is now
 - [Current Manual Playtest](docs/production/07-current-manual-playtest.md): human playtest checklist for the current build.
 - [Polish Roadmap](docs/production/08-polish-roadmap.md): next production phase for visuals, menus, backroom, computer UX, customers, and store readability.
 - [Backroom Polish Implementation Plan](docs/production/09-backroom-polish-implementation-plan.md): slice stops, acceptance checks, validation, and commit/sync rules for the backroom spatial pass.
+- [Production Polish Execution Plan](docs/production/10-polish-execution-plan.md): active multi-slice execution plan for the remaining polish backlog.
 - [Hidden Thread](docs/narrative/hidden-thread.md): spoiler-facing plan for the optional suspicious narrative layer.
 
 ## Production Rule
