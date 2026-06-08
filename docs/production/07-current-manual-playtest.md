@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this fixture-kit pass: `scripts/validate_godot.sh` passed with 290 GUT tests, UI scenario coverage 293/348, and script mapping coverage 31/31.
+- Last full gate in this backroom production blockout pass: `scripts/validate_godot.sh` passed with 291 GUT tests, UI scenario coverage 294/349, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
@@ -104,8 +104,9 @@ Current automated baseline:
 - Used-game cases should look like compact boxed games on the rack, in the player's hand, and in customer hands; they should not read like oversized posters.
 - Backroom computer reads as the management terminal, not another register.
 - Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct from normal player angles.
-- Receiving pallet, box stacks, storage shelf, and overflow boxes make supplier-delivered stock read as physical inventory without crowding prompts or navigation.
-- Backroom service bench, paperwork stack, disc mat, and management board read as context only and do not imply a separate service terminal.
+- Receiving pallet, delivery door, box stacks, invoice clipboard, storage shelf, backstock overflow, and labels make supplier-delivered stock read as physical inventory without crowding prompts or navigation.
+- Backroom service bench, service ticket, paperwork stack, disc mat, management desk cues, and management board read as context only and do not imply a separate service terminal.
+- Safe, security monitor, and evidence-locker placeholders read as future operations/hidden-thread surfaces without exposing an active hidden-thread workflow.
 - Backroom computer actions are grouped as Supplier, Storage, Release, Day, and Storage Placement controls.
 - Summary panel text and buttons fit in the actual game window.
 - Closed-day report text is readable and understandable after ending the day.
@@ -152,9 +153,10 @@ Run these when reviewing the current prototype against the new production direct
 Run these first when manually checking the completed backroom spatial pass:
 
 - Confirm receiving, storage, management, service/paperwork, and movement zones read as separate areas from normal player angles.
-- Confirm the receiving pallet, box stacks, storage shelf, and overflow boxes add physical receiving/storage identity without hiding prompts.
+- Confirm the receiving pallet, delivery door, box stacks, invoice clipboard, storage shelf, backstock overflow, and labels add physical receiving/storage identity without hiding prompts.
 - Confirm the supplier note and mismatched serial copy remain optional and readable.
-- Confirm the management board, computer desk, service bench, disc mat, paperwork stack, and tool tray read as backroom context.
+- Confirm the management board, computer desk, keyboard/task-card cues, service bench, service ticket, disc mat, paperwork stack, and tool tray read as backroom context.
+- Confirm the safe, security monitor, and evidence-locker placeholders read as future operations/hidden-thread surfaces and do not present a new active objective.
 - Confirm the service props do not imply a new service terminal; service completion should still read as register work.
 - Confirm fixture ghost, invalid ghost, rotated ghost, and placed rack screenshots still compose clearly with the backroom props.
 

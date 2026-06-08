@@ -436,12 +436,17 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 		"ReceivingBoxStackA",
 		"ReceivingBoxStackALabel",
 		"ReceivingBoxStackB",
+		"BackroomDeliveryDoor",
+		"DeliveryDoorSlatA",
+		"DeliveryDoorSlatB",
+		"ReceivingInvoiceClipboard",
+		"ReceivingInvoicePaper",
 	]
 	for prop_path in receiving_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
 		assert_not_null(prop)
 		assert_false(prop.use_collision)
-		assert_lt(_flat_distance_xz(prop.global_position, _store.get_node("ReceivingBox").global_position), 1.4)
+		assert_lt(_flat_distance_xz(prop.global_position, _store.get_node("ReceivingBox").global_position), 2.25)
 
 	var storage_shelf := _store.get_node_or_null("BackroomStorageShelf") as Node3D
 	assert_not_null(storage_shelf)
@@ -449,6 +454,9 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 	assert_not_null(storage_shelf.get_node_or_null("UpperShelf"))
 	assert_not_null(storage_shelf.get_node_or_null("StorageBoxA"))
 	assert_not_null(storage_shelf.get_node_or_null("StorageBoxB"))
+	assert_not_null(_store.get_node_or_null("BackstockOverflowCrateA"))
+	assert_not_null(_store.get_node_or_null("BackstockOverflowCrateB"))
+	assert_not_null(_store.get_node_or_null("BackstockOverflowLabelPanel/BackstockOverflowLabel"))
 	assert_lt(storage_shelf.global_position.x, _store.get_node("ReceivingBox").global_position.x)
 	assert_gt(storage_shelf.global_position.z, 5.0)
 
@@ -458,13 +466,16 @@ func test_backroom_management_and_service_props_exist() -> void:
 		"BackroomManagementBoard",
 		"ManagementReportCardA",
 		"ManagementReportCardB",
+		"ManagementDeskPad",
+		"ManagementKeyboard",
+		"ManagementTaskCard",
 	]
 	for prop_path in management_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
 		assert_not_null(prop)
 		assert_false(prop.use_collision)
 		assert_gt(prop.global_position.x, 4.0)
-		assert_gt(prop.global_position.z, 5.7)
+		assert_gt(prop.global_position.z, 3.8)
 
 	var service_bench := _store.get_node_or_null("BackroomServiceBench") as Node3D
 	assert_not_null(service_bench)
@@ -472,8 +483,50 @@ func test_backroom_management_and_service_props_exist() -> void:
 	assert_not_null(service_bench.get_node_or_null("ServiceDisc"))
 	assert_not_null(service_bench.get_node_or_null("PaperworkStack"))
 	assert_not_null(service_bench.get_node_or_null("ToolTray"))
+	assert_not_null(service_bench.get_node_or_null("ServiceTicketPanel"))
+	assert_eq((service_bench.get_node("ServiceTicketPanel/ServiceTicketLabel") as Label3D).text, "SERVICE")
 	assert_gt(service_bench.global_position.z, 5.0)
 	assert_gt(_flat_distance_xz(service_bench.global_position, _store.get_node("RegisterWorkstation").global_position), 7.0)
+
+
+func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void:
+	var expected_labels := {
+		"BackroomDeliveryDoor/DeliveryDoorLabel": "DELIVERIES",
+		"ReceivingInvoiceClipboard/ReceivingInvoiceLabel": "INVOICE",
+		"BackstockOverflowLabelPanel/BackstockOverflowLabel": "BACKSTOCK",
+		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel": "SAFE",
+		"SecurityMonitorPanel/SecurityMonitorLabel": "SECURITY",
+	}
+	for label_path in expected_labels:
+		var label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(label)
+		assert_eq(label.text, expected_labels[label_path])
+
+	var safe := _store.get_node_or_null("BackroomSafePlaceholder") as Node3D
+	var security_monitor := _store.get_node_or_null("SecurityMonitorPanel") as CSGBox3D
+	var evidence_locker := _store.get_node_or_null("EvidenceLockerPlaceholder") as CSGBox3D
+	assert_not_null(safe)
+	assert_not_null(security_monitor)
+	assert_not_null(evidence_locker)
+	assert_true(_is_inside_store_floorprint(safe.global_position))
+	assert_true(_is_inside_store_floorprint(security_monitor.global_position))
+	assert_true(_is_inside_store_floorprint(evidence_locker.global_position))
+	assert_gt(safe.global_position.x, 5.5)
+	assert_gt(security_monitor.global_position.x, 5.0)
+	assert_gt(evidence_locker.global_position.z, 4.0)
+
+	for cue_path in [
+		"BackroomSafePlaceholder/SafeBody",
+		"BackroomSafePlaceholder/SafeDoorPanel",
+		"BackroomSafePlaceholder/SafeHandle",
+		"BackroomSafePlaceholder/SafeLabelPanel",
+		"SecurityMonitorPanel",
+		"SecurityMonitorScreen",
+		"EvidenceLockerPlaceholder",
+	]:
+		var cue := _store.get_node_or_null(cue_path) as CSGBox3D
+		assert_not_null(cue)
+		assert_false(cue.use_collision)
 
 
 func test_register_workstation_exists() -> void:

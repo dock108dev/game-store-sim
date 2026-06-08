@@ -753,6 +753,73 @@ size = Vector3(0.54, 0.34, 0.42)
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.75, 0.17, 4.36)
 material = SubResource("StandardMaterial3D_cardboard")
 
+[node name="BackroomDeliveryDoor" type="CSGBox3D" parent="."]
+size = Vector3(1.55, 1.36, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.35, 0.82, 5.86)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="DeliveryDoorSlatA" type="CSGBox3D" parent="."]
+size = Vector3(1.42, 0.035, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.35, 1.2, 5.835)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="DeliveryDoorSlatB" type="CSGBox3D" parent="."]
+size = Vector3(1.42, 0.035, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.35, 0.78, 5.835)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="DeliveryDoorLabel" type="Label3D" parent="BackroomDeliveryDoor"]
+pixel_size = 0.0044
+modulate = Color(0.86, 0.96, 0.9, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 3
+billboard = 1
+text = "DELIVERIES"
+font_size = 28
+
+[node name="ReceivingInvoiceClipboard" type="CSGBox3D" parent="."]
+size = Vector3(0.44, 0.28, 0.03)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.05, 0.82, 3.32)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="ReceivingInvoicePaper" type="CSGBox3D" parent="."]
+size = Vector3(0.34, 0.22, 0.014)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.03, 0.825, 3.30)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ReceivingInvoiceLabel" type="Label3D" parent="ReceivingInvoiceClipboard"]
+pixel_size = 0.0028
+modulate = Color(0.98, 0.9, 0.66, 1)
+outline_modulate = Color(0.04, 0.025, 0.015, 1)
+outline_size = 2
+billboard = 1
+text = "INVOICE"
+font_size = 18
+
+[node name="BackstockOverflowCrateA" type="CSGBox3D" parent="."]
+size = Vector3(0.66, 0.36, 0.46)
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, -3.22, 0.18, 5.42)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="BackstockOverflowCrateB" type="CSGBox3D" parent="."]
+size = Vector3(0.54, 0.3, 0.4)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -2.58, 0.15, 5.62)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="BackstockOverflowLabelPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.68, 0.18, 0.025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.92, 0.62, 5.82)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BackstockOverflowLabel" type="Label3D" parent="BackstockOverflowLabelPanel"]
+pixel_size = 0.0028
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+billboard = 1
+text = "BACKSTOCK"
+font_size = 18
+
 [node name="BackroomManagementBoard" type="CSGBox3D" parent="."]
 size = Vector3(1.35, 0.72, 0.04)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, 1.42, 5.88)
@@ -767,6 +834,21 @@ material = SubResource("StandardMaterial3D_paper")
 size = Vector3(0.38, 0.2, 0.014)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.88, 1.58, 5.844)
 material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ManagementDeskPad" type="CSGBox3D" parent="."]
+size = Vector3(0.78, 0.025, 0.42)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.38, 0.73, 4.08)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="ManagementKeyboard" type="CSGBox3D" parent="."]
+size = Vector3(0.42, 0.035, 0.16)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.3, 0.78, 3.9)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ManagementTaskCard" type="CSGBox3D" parent="."]
+size = Vector3(0.34, 0.22, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.72, 0.79, 4.23)
+material = SubResource("StandardMaterial3D_paper")
 
 [node name="BackroomServiceBench" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 0, 5.45)
@@ -805,6 +887,76 @@ material = SubResource("StandardMaterial3D_paper")
 size = Vector3(0.36, 0.05, 0.12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.718, 0.17)
 material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ServiceTicketPanel" type="CSGBox3D" parent="BackroomServiceBench"]
+size = Vector3(0.28, 0.2, 0.018)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.02, 0.73, -0.18)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ServiceTicketLabel" type="Label3D" parent="BackroomServiceBench/ServiceTicketPanel"]
+pixel_size = 0.0025
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+billboard = 1
+text = "SERVICE"
+font_size = 16
+
+[node name="BackroomSafePlaceholder" type="Node3D" parent="."]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.08, 0, 5.16)
+
+[node name="SafeBody" type="CSGBox3D" parent="BackroomSafePlaceholder"]
+size = Vector3(0.74, 0.72, 0.48)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="SafeDoorPanel" type="CSGBox3D" parent="BackroomSafePlaceholder"]
+size = Vector3(0.58, 0.54, 0.025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -0.255)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="SafeHandle" type="CSGBox3D" parent="BackroomSafePlaceholder"]
+size = Vector3(0.16, 0.035, 0.035)
+transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0.18, 0.43, -0.285)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="SafeLabelPanel" type="CSGBox3D" parent="BackroomSafePlaceholder"]
+size = Vector3(0.38, 0.16, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08, 0.74, -0.27)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="SafeLabel" type="Label3D" parent="BackroomSafePlaceholder/SafeLabelPanel"]
+pixel_size = 0.0024
+modulate = Color(0.98, 0.88, 0.58, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 1
+billboard = 1
+text = "SAFE"
+font_size = 16
+
+[node name="SecurityMonitorPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.86, 0.42, 0.035)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 5.54, 1.35, 5.86)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="SecurityMonitorScreen" type="CSGBox3D" parent="."]
+size = Vector3(0.66, 0.28, 0.018)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 5.54, 1.35, 5.835)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="SecurityMonitorLabel" type="Label3D" parent="SecurityMonitorPanel"]
+pixel_size = 0.0027
+modulate = Color(0.82, 0.94, 1, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 2
+billboard = 1
+text = "SECURITY"
+font_size = 18
+
+[node name="EvidenceLockerPlaceholder" type="CSGBox3D" parent="."]
+size = Vector3(0.56, 0.92, 0.36)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.04, 0.46, 4.42)
+material = SubResource("StandardMaterial3D_management_board")
 
 [node name="BackroomComputer" parent="." instance=ExtResource("7_backroom_computer")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.65, 0, 4.35)
