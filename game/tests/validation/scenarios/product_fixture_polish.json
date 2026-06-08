@@ -36,6 +36,13 @@
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_carry_stack_fans_items_without_blocking_center"
     },
     {
+      "id": "carry_stack_presentation_motion",
+      "name": "Held item presentation uses active focus, depth scaling, and bounded carry motion",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_carry_presentation_has_depth_active_focus_and_motion"
+    },
+    {
       "id": "receiving_intake_lanes",
       "name": "Receiving box has nonblocking intake lanes and a readable intake label",
       "status": "automated",

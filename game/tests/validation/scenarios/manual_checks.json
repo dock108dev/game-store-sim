@@ -74,10 +74,10 @@
     },
     {
       "id": "held_item_visibility",
-      "name": "Held item stack stays visible without blocking normal navigation",
+      "name": "Held item stack pose and motion stay visible without blocking normal navigation",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment while moving and looking around the actual window.",
+      "reason": "Automated tests verify pose bounds and motion constraints; human review must confirm the carry stack feels natural while moving and looking around the actual window.",
       "owner": "manual QA"
     },
     {

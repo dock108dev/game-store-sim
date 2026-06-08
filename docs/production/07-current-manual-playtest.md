@@ -4,10 +4,11 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this interaction prompt hierarchy pass: `scripts/validate_godot.sh` passed with 294 GUT tests, UI scenario coverage 297/353, and script mapping coverage 31/31.
+- Last full gate in this held-item presentation pass: `scripts/validate_godot.sh` passed with 295 GUT tests, UI scenario coverage 298/354, and script mapping coverage 31/31.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
+- Held item presentation is implemented through Stop 3.2; manual QA should confirm the carry pose, depth fan, scale falloff, and subtle motion feel natural without covering the reticle.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -82,7 +83,8 @@ Current automated baseline:
 - Rack `USED GAMES` header and slot rails read as category/stocking affordances, not extra interaction targets.
 - Receiving intake lanes and `INTAKE` label make the receiving box look organized without hiding the three starter items.
 - Held item stack stays low/right and does not block navigation.
-- Multi-item held stack fans enough to see separate cases while leaving the center reticle clear.
+- Multi-item held stack fans enough to see separate cases, uses clear active-item focus and depth scale, and leaves the center reticle clear.
+- Held item motion feels subtle while walking and settling; it should never read as jitter or screen-center clutter.
 - Stocking one carried game leaves the remaining carried games visible and usable.
 - Stocked games look upright and intentional.
 - Register prompt and sale messages are readable.
@@ -157,13 +159,16 @@ Run these when reviewing the current prototype against the new production direct
 
 ## Interaction Polish Focus
 
-Run these first when manually checking the completed Stop 3.1 prompt hierarchy pass:
+Run these first when manually checking the completed Stop 3.1 and Stop 3.2 interaction presentation passes:
 
 - Confirm normal prompts such as pickup, stock, price, register, computer, talk, and inspect read as clear click actions with a target subject.
 - Confirm blocked prompts such as fixed-price held-item actions use the warning reticle state and are not mistaken for successful feedback.
 - Confirm short feedback messages such as pickup, sale, service, and unavailable-action responses use the feedback reticle state and clear themselves normally.
 - Confirm prompt color changes remain readable against the sales floor, backroom, receiving box, register, and computer views.
 - Confirm no prompt state hides the center reticle or makes the player uncertain what a click will do.
+- Confirm the active carried item remains the most readable case in the stack, with older held items fanned behind it.
+- Confirm the carry stack bob/settle motion feels subtle while walking, turning, opening pricing, and stocking one item.
+- Confirm new held-item depth and scale changes still make used-game cases read as boxed games rather than flat posters.
 
 ## Backroom Polish Focus
 

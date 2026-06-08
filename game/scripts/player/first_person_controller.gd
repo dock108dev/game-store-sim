@@ -10,8 +10,16 @@ extends CharacterBody3D
 @onready var day_summary_panel: Node = $DaySummaryPanel
 @onready var trade_in_offer_panel: TradeInOfferPanel = $TradeInOfferPanel
 
+const CARRY_BASE_SCALE := 0.45
+const CARRY_DEPTH_SCALE_STEP := 0.025
+const CARRY_BOB_AMPLITUDE := 0.008
+const CARRY_IDLE_SETTLE := 0.004
+const CARRY_MOVE_BOB_SPEED := 7.0
+const CARRY_IDLE_BOB_SPEED := 2.5
+
 var _look_pitch: float = 0.0
 var _held_items: Array[Node3D] = []
+var _held_item_bob_time: float = 0.0
 
 
 func _ready() -> void:
@@ -45,6 +53,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		move_and_slide()
+		_update_held_item_motion(delta, 0.0)
 		return
 
 	if not is_on_floor():
@@ -57,6 +66,7 @@ func _physics_process(delta: float) -> void:
 	velocity.z = move_direction.z * move_speed
 
 	move_and_slide()
+	_update_held_item_motion(delta, input_vector.length())
 
 
 func is_holding_item() -> bool:
@@ -118,6 +128,7 @@ func place_held_item(slot: Node) -> bool:
 	var item := get_held_item()
 	if slot.place_item(item):
 		_held_items.erase(item)
+		_clear_held_item_presentation(item)
 		_arrange_held_items()
 		return true
 
@@ -212,11 +223,60 @@ func _arrange_held_items() -> void:
 		if item == null:
 			continue
 
-		var offset := index - (_held_items.size() - 1)
+		var offset := float(index - (_held_items.size() - 1))
+		var depth := absf(offset)
 		var carry_position := Vector3(
-			offset * 0.095,
-			abs(offset) * 0.042,
-			-0.02 + abs(offset) * -0.055
+			offset * 0.11,
+			(depth * 0.052) - 0.015,
+			-0.045 + (depth * -0.06)
 		)
-		item.transform = Transform3D(Basis(Vector3.UP, PI + (offset * 0.11)), carry_position)
-		item.scale = Vector3(0.46, 0.46, 0.46)
+		var carry_rotation := Vector3(
+			deg_to_rad(-8.0 + depth * 2.0),
+			PI + (offset * 0.16),
+			deg_to_rad(offset * -4.0)
+		)
+		item.transform = Transform3D(Basis.from_euler(carry_rotation), carry_position)
+		item.scale = _get_held_item_silhouette_scale(item, depth)
+		item.set_meta("carry_base_position", carry_position)
+		item.set_meta("carry_depth", depth)
+		item.set_meta("carry_is_active", index == _held_items.size() - 1)
+		item.set_meta("carry_bob_phase", depth * 0.55)
+
+
+func _update_held_item_motion(delta: float, movement_amount: float) -> void:
+	if _held_items.is_empty():
+		return
+
+	var movement := clampf(movement_amount, 0.0, 1.0)
+	var bob_speed := lerpf(CARRY_IDLE_BOB_SPEED, CARRY_MOVE_BOB_SPEED, movement)
+	var bob_strength := lerpf(0.0015, CARRY_BOB_AMPLITUDE, movement)
+	var settle_offset := CARRY_IDLE_SETTLE * (1.0 - movement)
+	_held_item_bob_time += delta * bob_speed
+
+	for item in _held_items:
+		if item == null:
+			continue
+
+		var base_position := item.get_meta("carry_base_position", item.position) as Vector3
+		var phase := float(item.get_meta("carry_bob_phase", 0.0))
+		var bob_offset := sin(_held_item_bob_time + phase) * bob_strength
+		item.position = base_position + Vector3(0.0, bob_offset - settle_offset, 0.0)
+
+
+func _get_held_item_silhouette_scale(item: Node3D, depth: float) -> Vector3:
+	var scale_factor := CARRY_BASE_SCALE - (depth * CARRY_DEPTH_SCALE_STEP)
+	var product := item.get("product") as ProductDefinition
+	if product != null and product.category != "used_game":
+		scale_factor -= 0.025
+
+	scale_factor = clampf(scale_factor, 0.38, CARRY_BASE_SCALE)
+	return Vector3(scale_factor, scale_factor, scale_factor)
+
+
+func _clear_held_item_presentation(item: Node3D) -> void:
+	if item == null:
+		return
+
+	for key in ["carry_base_position", "carry_depth", "carry_is_active", "carry_bob_phase"]:
+		if item.has_meta(key):
+			item.remove_meta(key)

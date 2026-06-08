@@ -90,8 +90,9 @@ func test_player_can_pick_up_item() -> void:
 	assert_eq(_player.get_held_items(), [item])
 	assert_eq(item.get_parent(), hold_anchor)
 	assert_eq(item.get("location_id"), "held")
+	assert_true(item.get_meta("carry_is_active"))
 	assert_almost_eq(absf(item.rotation.y), PI, 0.001)
-	assert_almost_eq(item.scale.x, 0.46, 0.001)
+	assert_almost_eq(item.scale.x, 0.45, 0.001)
 	assert_true(collision_shape.disabled)
 
 
@@ -136,9 +137,37 @@ func test_player_carry_stack_fans_items_without_blocking_center() -> void:
 	assert_lt(second_item.position.z, third_item.position.z)
 	assert_lte(absf(third_item.position.x), 0.02)
 	assert_lte(third_item.position.y, 0.01)
-	assert_lte(third_item.position.z, -0.015)
-	assert_lte(first_item.position.y, 0.09)
-	assert_lte(first_item.scale.x, 0.461)
+	assert_lte(third_item.position.z, -0.04)
+	assert_lte(first_item.position.y, 0.095)
+	assert_lte(first_item.scale.x, 0.401)
+
+
+func test_player_carry_presentation_has_depth_active_focus_and_motion() -> void:
+	var first_item := _make_used_game("item_used_star_trader_001")
+	var second_item := _make_used_game("item_used_star_trader_002")
+	var third_item := _make_used_game("item_used_star_trader_003")
+
+	assert_true(_player.pick_up_item(first_item))
+	assert_true(_player.pick_up_item(second_item))
+	assert_true(_player.pick_up_item(third_item))
+
+	assert_eq(first_item.get_meta("carry_depth"), 2.0)
+	assert_eq(second_item.get_meta("carry_depth"), 1.0)
+	assert_eq(third_item.get_meta("carry_depth"), 0.0)
+	assert_false(first_item.get_meta("carry_is_active"))
+	assert_false(second_item.get_meta("carry_is_active"))
+	assert_true(third_item.get_meta("carry_is_active"))
+	assert_lt(first_item.scale.x, second_item.scale.x)
+	assert_lt(second_item.scale.x, third_item.scale.x)
+	assert_gt(absf(first_item.rotation.z), absf(third_item.rotation.z))
+
+	var active_base_position := third_item.get_meta("carry_base_position") as Vector3
+	_player.call("_update_held_item_motion", 0.25, 1.0)
+
+	assert_ne(third_item.position.y, active_base_position.y)
+	assert_lte(absf(third_item.position.x), 0.02)
+	assert_lte(third_item.position.y, 0.02)
+	assert_lte(third_item.position.z, -0.04)
 
 
 func test_player_places_held_item_in_display_slot() -> void:
@@ -187,6 +216,8 @@ func test_player_places_top_held_item_and_keeps_remaining_stack() -> void:
 	assert_eq(_player.get_held_item(), first_item)
 	assert_eq(first_item.get_parent(), hold_anchor)
 	assert_eq(first_item.get("location_id"), "held")
+	assert_false(second_item.has_meta("carry_is_active"))
+	assert_true(first_item.get_meta("carry_is_active"))
 	assert_true(first_collision_shape.disabled)
 
 
