@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this fixture-catalog pass: `scripts/validate_godot.sh` passes with 403 GUT tests, UI scenario automation coverage at 392/478, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
+- Last full gate in this placement-UX pass: `scripts/validate_godot.sh` passes with 406 GUT tests, UI scenario automation coverage at 395/482, production script mapping coverage at 39/39, 1 active standalone validation tool, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -43,7 +43,7 @@ Current automated baseline:
 - Management desk workflow is implemented through Stop 8.4; manual QA should confirm supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk, and Buy Upg read as planning work in the backroom records flow.
 - Security/safe placeholders are implemented through Stop 8.5; manual QA should confirm cash safe, high-value storage, suspicious goods isolation, and security footage read as inactive backroom/hidden-thread infrastructure, not active objectives.
 - Backroom operations validation is synced through Stop 8.6; manual QA should run the Backroom Operations Focus before treating Milestone 8 as human-approved.
-- Fixture catalog expansion is implemented through Stop 9.1; manual QA should run the Store Building Focus before treating the first Milestone 9 slice as human-approved.
+- Fixture catalog expansion is implemented through Stop 9.1 and placement UX is implemented through Stop 9.2; manual QA should run the Store Building Focus before treating the current Milestone 9 slices as human-approved.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -291,12 +291,15 @@ Run these first when manually checking the completed Stop 8.1 through Stop 8.6 b
 
 ## Store Building Focus
 
-Run these first when manually checking the completed Stop 9.1 fixture catalog pass:
+Run these first when manually checking the completed Stop 9.1 through Stop 9.2 store-building pass:
 
 - Confirm the Storage tab lists the expanded fixture catalog: Game Display Rack, Wall Shelf, Accessory Peg Wall, Bargain Bin, Locked Case, Counter Rack, Demo Kiosk, New Release Wall, and Backroom Rack.
 - Confirm each fixture entry shows price, broad fixture category, slot count, and placement zone rather than only a debug ID.
 - Confirm Accessory Peg Wall and Backroom Rack read as locked behind their upgrade requirements until the related upgrades are purchased.
 - Confirm the existing `Order Rack`, preview ghost, placement movement, rotate, snap, cancel, and place flow still works for the Game Display Rack.
+- Confirm footprint-aware bounds reject a placement before the full fixture footprint crosses the store placement bounds, not only when the ghost center crosses a line.
+- Confirm critical-path clearance and overlap rejection produce readable invalid ghost/issue text instead of allowing a rack to block key routes or stack on another placed fixture.
+- Confirm `Undo` stays disabled before an adjustment, enables after movement/rotation/snap, restores the previous preview position or rotation, and disables again when no history remains.
 - Confirm ordering a starter rack still reserves cash and creates a pending physical placement, not instant abstract inventory.
 - Confirm the demo kiosk reads as a placeholder future gameplay fixture, not a finished playable kiosk objective.
 - Confirm the expanded fixture list does not hide storage workflow text, receiving/backstock controls, or placement controls at the target 1280x720 UI size.

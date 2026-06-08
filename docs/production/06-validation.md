@@ -44,8 +44,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current backroom-operations baseline:
 
-- `scripts/validate_godot.sh` passes with 403 GUT tests.
-- UI scenario automation coverage is 392/478, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 406 GUT tests.
+- UI scenario automation coverage is 395/482, above the 80% threshold.
 - Production script mapping coverage is 39/39.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
 - Product inventory schema now includes category, platform family, format, condition, completeness, authenticity, rarity, demand, cost, market value, risk, and default location metadata.
@@ -89,7 +89,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
 - Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
-- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, and fixture-catalog validation are synced through Stop 9.1.
+- Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, and placement-UX validation are synced through Stop 9.2.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding validation is synced through Stop 7.6; manual QA should confirm the checklist teaches the first-day loop without feeling like debug tutorial text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
@@ -213,7 +213,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/launch_day.json`: launch-day preorder fulfillment, launch queue fulfillment, reputation shortage, backroom readout, persistence, and save/restore coverage.
 - `scenarios/hidden_thread.json`: hidden suspicious event log existence, flag recording, deduplication, input normalization, optional mismatched serial checks, optional supplier message checks, optional suspicious customer checks, and optional evidence storage checks.
 - `scenarios/persistence.json`: codec-level session, ledger, active inventory, and JSON roundtrip checks.
-- `scenarios/store_layout.json`: expanded fixture catalog, fixture metadata, upgrade-gated fixture orders, fixture ordering, slot-category metadata, cash reservation, pending storage placement, ghost preview, valid/invalid placement state, rotate/snap controls, placement confirmation, receiving/backstock movement, storage retrieval, insufficient-cash rejection, and persistence coverage.
+- `scenarios/store_layout.json`: expanded fixture catalog, fixture metadata, upgrade-gated fixture orders, fixture ordering, slot-category metadata, cash reservation, pending storage placement, ghost preview, footprint-aware bounds, critical-path clearance, overlap rejection, valid/invalid placement state, move/rotate/snap/undo controls, placement confirmation, receiving/backstock movement, storage retrieval, insufficient-cash rejection, and persistence coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 

@@ -377,36 +377,41 @@ theme_override_constants/separation = 8
 alignment = 1
 
 [node name="RackLeftButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
-custom_minimum_size = Vector2(88, 36)
+custom_minimum_size = Vector2(76, 36)
 layout_mode = 2
 text = "Left"
 
 [node name="RackRightButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
-custom_minimum_size = Vector2(88, 36)
+custom_minimum_size = Vector2(76, 36)
 layout_mode = 2
 text = "Right"
 
 [node name="RackForwardButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
-custom_minimum_size = Vector2(88, 36)
+custom_minimum_size = Vector2(76, 36)
 layout_mode = 2
 text = "Fwd"
 
 [node name="RackBackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
-custom_minimum_size = Vector2(88, 36)
+custom_minimum_size = Vector2(76, 36)
 layout_mode = 2
 text = "Back"
 
 [node name="RotateRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
-custom_minimum_size = Vector2(88, 36)
+custom_minimum_size = Vector2(76, 36)
 layout_mode = 2
 text = "Rotate"
 
 [node name="SnapRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
-custom_minimum_size = Vector2(88, 36)
+custom_minimum_size = Vector2(76, 36)
 layout_mode = 2
 text = "Snap"
 
+[node name="UndoRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Undo"
+
 [node name="CancelRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
-custom_minimum_size = Vector2(88, 36)
+custom_minimum_size = Vector2(76, 36)
 layout_mode = 2
 text = "Cancel"

@@ -724,6 +724,7 @@ func test_fixture_placement_manager_exists_with_hidden_ghost() -> void:
 	assert_not_null(manager)
 	assert_false(manager.is_ghost_visible())
 	assert_not_null(_store.get_node_or_null("FixturePlacementManager/GhostRackPreview"))
+	assert_gt((manager.get("path_clearance_points") as PackedVector3Array).size(), 0)
 
 
 func test_register_is_wired_to_customer_manager_ledger_and_session() -> void:

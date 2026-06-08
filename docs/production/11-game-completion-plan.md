@@ -459,8 +459,8 @@ Commit targets:
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 403 GUT tests.
-- UI scenario automation coverage is 392/478, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 406 GUT tests.
+- UI scenario automation coverage is 395/482, above the 80% threshold.
 - Production script mapping coverage is 39/39.
 - Standalone validation tool manifest coverage has 1 active tool.
 - Product catalog content check passes with 33 fictional products.
@@ -483,7 +483,7 @@ Goal: make store layout and personalization matter.
 Stops:
 
 - Stop 9.1: Fixture catalog. Done in `Expand fixture catalog`: the fixture catalog now includes wall shelf, accessory peg wall, bargain bin, locked case, counter rack, demo kiosk placeholder, new-release wall, and backroom rack entries, with slot counts, accepted product categories, placement zones, gameplay tags, upgrade locks, placeholder flags, StoreSession summaries, and backroom computer visibility.
-- Stop 9.2: Placement UX. Improve ghost placement, rotate, snap, collision, path validation, affordability, cancel, undo, and confirmation.
+- Stop 9.2: Placement UX. Done in `Polish placement UX`: fixture placement now validates full fixture footprints against placement bounds, protects critical path clearance points, rejects overlap with already placed fixtures, records placement issues, summarizes preview position/rotation/footprint, supports undo for movement/rotation/snap, exposes a compact Undo button, and preserves cancel/refund and confirmation behavior.
 - Stop 9.3: Category assignment. Let fixtures have categories and product slots that affect browsing and demand.
 - Stop 9.4: Decoration system. Add wall paint, floor material, posters, signage, lights, display props, and clutter budget.
 - Stop 9.5: Layout effects. Connect fixture visibility, queue space, theft risk placeholder, impulse buys, and travel distance to outcomes.
@@ -500,7 +500,8 @@ Acceptance:
 Validation snapshot:
 
 - Focused GUT coverage passes for the expanded fixture catalog, fixture metadata, placeable scene paths, StoreSession fixture summaries, upgrade-gated fixture ordering, starter rack order metadata, and backroom computer catalog visibility.
-- Manual Store Building Focus checks are current for the expanded fixture list, pricing/category/slot/zone readability, upgrade locks, starter rack placement flow, demo kiosk placeholder readability, and 1280x720 storage-tab fit.
+- Focused GUT coverage passes for footprint-aware placement bounds, critical-path clearance rejection, overlap rejection, movement/rotation/snap undo, compact Undo button state, and main-scene path-clearance manager wiring.
+- Manual Store Building Focus checks are current for the expanded fixture list, pricing/category/slot/zone readability, upgrade locks, starter rack placement flow, footprint/path/overlap invalid feedback, undo behavior, demo kiosk placeholder readability, and 1280x720 storage-tab fit.
 
 Commit targets:
 

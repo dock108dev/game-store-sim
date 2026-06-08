@@ -2030,6 +2030,7 @@ func order_fixture(fixture_id: String) -> Dictionary:
 		"slot_category": str(fixture.get("default_slot_category")),
 		"slot_count": int(fixture.get("slot_count")),
 		"placement_zone": str(fixture.get("placement_zone")),
+		"footprint_size": fixture.get("footprint_size"),
 		"gameplay_tags": Array(fixture.get("gameplay_tags")),
 		"requires_upgrade_id": str(fixture.get("requires_upgrade_id")),
 		"cost_cents": cost_cents,
@@ -2074,6 +2075,16 @@ func can_cancel_pending_fixture_placement() -> bool:
 	return can_adjust_pending_fixture_placement()
 
 
+func can_undo_pending_fixture_placement() -> bool:
+	if not can_adjust_pending_fixture_placement():
+		return false
+
+	var placement_manager := _get_fixture_placement_manager()
+	return placement_manager != null \
+		and placement_manager.has_method("can_undo_adjustment") \
+		and placement_manager.can_undo_adjustment()
+
+
 func move_pending_fixture_placement(delta_x: int, delta_z: int) -> bool:
 	if not can_adjust_pending_fixture_placement():
 		return false
@@ -2099,6 +2110,15 @@ func snap_pending_fixture_placement() -> bool:
 	var placement_manager := _get_fixture_placement_manager()
 	return placement_manager.has_method("snap_ghost_to_grid") \
 		and placement_manager.snap_ghost_to_grid()
+
+
+func undo_pending_fixture_placement() -> bool:
+	if not can_undo_pending_fixture_placement():
+		return false
+
+	var placement_manager := _get_fixture_placement_manager()
+	return placement_manager.has_method("undo_last_adjustment") \
+		and placement_manager.undo_last_adjustment()
 
 
 func cancel_pending_fixture_placement() -> Dictionary:
@@ -2209,6 +2229,13 @@ func get_fixture_order_summary_text() -> String:
 				int(order.get("slot_count", 0)),
 				str(order.get("placement_zone", "sales_floor")),
 			])
+		var placement_manager := _get_fixture_placement_manager()
+		if placement_manager != null and placement_manager.has_method("get_placement_summary_text"):
+			lines.append(str(placement_manager.get_placement_summary_text()))
+			if placement_manager.has_method("get_placement_issue"):
+				var issue := str(placement_manager.get_placement_issue())
+				if not issue.is_empty():
+					lines.append("Placement issue: %s" % issue)
 
 	var placed := get_placed_fixture_orders()
 	if not placed.is_empty():

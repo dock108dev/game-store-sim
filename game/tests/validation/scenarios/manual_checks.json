@@ -481,6 +481,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "fixture_placement_ux_readability",
+      "name": "Fixture placement invalid feedback, undo, confirmation, and cancellation are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify footprint bounds, path clearance, overlap rejection, undo state, and confirmation behavior; human review must confirm the ghost, issue text, compact Undo button, and placement summary are understandable during real first-person placement.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_computer_tabs_readability",
       "name": "Backroom computer dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable",
       "status": "manual",

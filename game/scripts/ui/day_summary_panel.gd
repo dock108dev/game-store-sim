@@ -89,6 +89,7 @@ const BACKROOM_TABS := [
 @onready var rack_back_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackBackButton
 @onready var rotate_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RotateRackButton
 @onready var snap_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/SnapRackButton
+@onready var undo_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/UndoRackButton
 @onready var cancel_rack_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/CancelRackButton
 
 const GAME_DISPLAY_RACK_ID := "fixture_game_display_rack"
@@ -135,6 +136,7 @@ func _ready() -> void:
 	rack_back_button.pressed.connect(move_pending_rack_back)
 	rotate_rack_button.pressed.connect(rotate_pending_rack)
 	snap_rack_button.pressed.connect(snap_pending_rack)
+	undo_rack_button.pressed.connect(undo_pending_rack)
 	cancel_rack_button.pressed.connect(cancel_pending_rack)
 	end_day_button.pressed.connect(end_day)
 	close_button.pressed.connect(close)
@@ -477,6 +479,20 @@ func snap_pending_rack() -> bool:
 	return true
 
 
+func undo_pending_rack() -> bool:
+	if _session == null or not _session.has_method("undo_pending_fixture_placement"):
+		return false
+
+	var did_undo: bool = _session.undo_pending_fixture_placement()
+	_update_labels()
+	if not did_undo:
+		status_label.text = "Could not undo storage rack adjustment."
+		return false
+
+	status_label.text = "Undid storage rack adjustment."
+	return true
+
+
 func cancel_pending_rack() -> bool:
 	if _session == null or not _session.has_method("cancel_pending_fixture_placement"):
 		return false
@@ -647,9 +663,12 @@ func _update_labels() -> void:
 		rack_back_button,
 		rotate_rack_button,
 		snap_rack_button,
+		undo_rack_button,
 		cancel_rack_button,
 	]:
 		button.disabled = not can_adjust_fixture
+	if _session.has_method("can_undo_pending_fixture_placement"):
+		undo_rack_button.disabled = _session.is_day_closed or not _session.can_undo_pending_fixture_placement()
 	if _session.has_method("can_cancel_pending_fixture_placement"):
 		cancel_rack_button.disabled = _session.is_day_closed or not _session.can_cancel_pending_fixture_placement()
 	end_day_button.disabled = false

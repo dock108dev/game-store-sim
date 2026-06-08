@@ -102,7 +102,8 @@ The following polish items remain valid historical checkpoints:
 - Done: expanded the fixture catalog with wall shelf, accessory peg wall, bargain bin, locked case, counter rack, demo kiosk placeholder, new-release wall, and backroom rack entries.
 - Done: added fixture metadata for slot count, accepted product categories, placement zone, gameplay tags, upgrade locks, placeholder status, and catalog summaries.
 - Done: kept the existing starter rack order/place flow intact while exposing locked future fixtures as planning options.
-- Remaining polish risk: Stop 9.2 still needs stronger placement UX, collision/path validation, undo, and confirmation polish before the expanded catalog feels production-ready in play.
+- Done: improved placement UX with footprint-aware bounds, critical-path clearance anchors, overlap rejection against placed fixtures, adjustment undo, placement issue text, and compact Undo controls.
+- Remaining polish risk: Stop 9.3 still needs category assignment so the expanded fixtures change product browsing and demand rather than only placement planning.
 
 ## Product And Fixture Polish
 

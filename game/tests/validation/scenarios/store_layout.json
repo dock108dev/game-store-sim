@@ -79,7 +79,7 @@
     },
     {
       "id": "backroom_panel_adjusts_pending_fixture",
-      "name": "Backroom computer panel exposes pending fixture movement, rotation, and snap controls",
+      "name": "Backroom computer panel exposes pending fixture movement, rotation, snap, and undo controls",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_adjusts_pending_fixture_preview"
@@ -114,10 +114,17 @@
     },
     {
       "id": "fixture_placement_manager_invalid_out_of_bounds",
-      "name": "Fixture placement manager marks out-of-bounds ghost positions invalid",
+      "name": "Fixture placement manager marks footprint-aware out-of-bounds ghost positions invalid",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_marks_out_of_bounds_ghost_invalid"
+    },
+    {
+      "id": "fixture_placement_manager_blocks_critical_paths",
+      "name": "Fixture placement manager rejects ghost placement that blocks configured critical path points",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_blocks_critical_path_points"
     },
     {
       "id": "fixture_placement_manager_material_state",
@@ -141,6 +148,13 @@
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_moves_ghost_by_grid"
     },
     {
+      "id": "fixture_placement_manager_undo_adjustment",
+      "name": "Fixture placement manager can undo the latest placement adjustment",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_undoes_adjustments"
+    },
+    {
       "id": "fixture_placement_manager_rotate",
       "name": "Fixture placement manager rotates the ghost by a fixed step",
       "status": "automated",
@@ -153,6 +167,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_counter_rotates_ghost"
+    },
+    {
+      "id": "fixture_placement_manager_rejects_overlap",
+      "name": "Fixture placement manager rejects overlap with an already placed fixture",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_fixture_placement_manager.gd::test_fixture_placement_manager_rejects_overlapping_placed_fixture"
     },
     {
       "id": "fixture_placement_manager_cancel_ghost",
