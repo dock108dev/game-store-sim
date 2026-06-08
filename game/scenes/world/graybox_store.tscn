@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=31 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -35,6 +35,26 @@ albedo_color = Color(0.18, 0.2, 0.22, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zone"]
 albedo_color = Color(0.18, 0.34, 0.28, 0.18)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_backroom_receiving_zone"]
+albedo_color = Color(0.58, 0.42, 0.18, 0.24)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_backroom_storage_zone"]
+albedo_color = Color(0.18, 0.38, 0.3, 0.22)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_backroom_management_zone"]
+albedo_color = Color(0.18, 0.26, 0.42, 0.22)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_backroom_service_zone"]
+albedo_color = Color(0.42, 0.28, 0.24, 0.2)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_backroom_path_zone"]
+albedo_color = Color(0.62, 0.66, 0.62, 0.16)
 transparency = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fixture_ghost_valid"]
@@ -119,6 +139,31 @@ material = SubResource("StandardMaterial3D_wall")
 size = Vector3(12.4, 0.012, 2.35)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, 4.62)
 material = SubResource("StandardMaterial3D_backroom")
+
+[node name="BackroomReceivingZone" type="CSGBox3D" parent="."]
+size = Vector3(2.45, 0.014, 1.25)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.65, 0.028, 3.82)
+material = SubResource("StandardMaterial3D_backroom_receiving_zone")
+
+[node name="BackroomStorageZone" type="CSGBox3D" parent="."]
+size = Vector3(3.0, 0.014, 0.78)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, 0.03, 5.55)
+material = SubResource("StandardMaterial3D_backroom_storage_zone")
+
+[node name="BackroomManagementZone" type="CSGBox3D" parent="."]
+size = Vector3(2.6, 0.014, 1.35)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.6, 0.032, 4.28)
+material = SubResource("StandardMaterial3D_backroom_management_zone")
+
+[node name="BackroomServiceZone" type="CSGBox3D" parent="."]
+size = Vector3(2.35, 0.014, 0.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 0.034, 5.45)
+material = SubResource("StandardMaterial3D_backroom_service_zone")
+
+[node name="BackroomPathZone" type="CSGBox3D" parent="."]
+size = Vector3(6.0, 0.01, 0.72)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.04, 4.45)
+material = SubResource("StandardMaterial3D_backroom_path_zone")
 
 [node name="SalesFloorZone" type="CSGBox3D" parent="."]
 size = Vector3(4.8, 0.01, 1.6)

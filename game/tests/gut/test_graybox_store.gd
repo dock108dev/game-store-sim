@@ -130,6 +130,24 @@ func test_backroom_floor_marker_stays_subtle() -> void:
 	assert_lte(backroom_zone.size.x, 12.4)
 
 
+func test_backroom_visual_zones_exist_without_collision() -> void:
+	var expected_zones := {
+		"BackroomReceivingZone": Vector3(-4.65, 0.028, 3.82),
+		"BackroomStorageZone": Vector3(-2.75, 0.03, 5.55),
+		"BackroomManagementZone": Vector3(4.6, 0.032, 4.28),
+		"BackroomServiceZone": Vector3(2.05, 0.034, 5.45),
+		"BackroomPathZone": Vector3(-0.45, 0.04, 4.45),
+	}
+
+	for zone_name in expected_zones:
+		var zone := _store.get_node_or_null(zone_name) as CSGBox3D
+		assert_not_null(zone)
+		assert_false(zone.use_collision)
+		assert_lte(zone.size.y, 0.015)
+		assert_almost_eq(zone.global_position.x, expected_zones[zone_name].x, 0.01)
+		assert_almost_eq(zone.global_position.z, expected_zones[zone_name].z, 0.01)
+
+
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
