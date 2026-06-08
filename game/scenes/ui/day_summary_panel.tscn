@@ -110,7 +110,7 @@ autowrap_mode = 3
 
 [node name="ReportLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
-text = "Daily report: day still open"
+text = "Backroom report: day still open"
 autowrap_mode = 3
 
 [node name="ActivityHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
@@ -220,7 +220,7 @@ horizontal_alignment = 1
 [node name="OrderGamesButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions"]
 custom_minimum_size = Vector2(92, 40)
 layout_mode = 2
-text = "Order Lot"
+text = "Order"
 
 [node name="ReceivingActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions"]
 layout_mode = 2
@@ -234,7 +234,7 @@ text = "Open Box"
 [node name="CheckInvoiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
 custom_minimum_size = Vector2(72, 36)
 layout_mode = 2
-text = "Check Inv"
+text = "Invoice"
 
 [node name="SortReceivingButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
 custom_minimum_size = Vector2(72, 36)
@@ -267,7 +267,7 @@ text = "Place Rack"
 [node name="AssignCategoryButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons"]
 custom_minimum_size = Vector2(88, 40)
 layout_mode = 2
-text = "Assign Cat"
+text = "Category"
 
 [node name="BackstockActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions"]
 layout_mode = 2
@@ -299,12 +299,12 @@ theme_override_constants/separation = 6
 [node name="StartServiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons"]
 custom_minimum_size = Vector2(88, 40)
 layout_mode = 2
-text = "Start Svc"
+text = "Start Job"
 
 [node name="WorkServiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons"]
 custom_minimum_size = Vector2(88, 40)
 layout_mode = 2
-text = "Work Svc"
+text = "Work Job"
 
 [node name="ReleaseActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
 layout_mode = 2
@@ -365,7 +365,7 @@ text = "Review Desk"
 [node name="BuyUpgradeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
 custom_minimum_size = Vector2(110, 36)
 layout_mode = 2
-text = "Buy Upg"
+text = "Upgrade"
 
 [node name="ApplyDecorButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
 custom_minimum_size = Vector2(110, 36)

@@ -786,9 +786,9 @@ func test_store_session_formats_daily_report_after_close() -> void:
 	assert_string_contains(session.get_daily_report_text(), "Daily report day 1:")
 	assert_string_contains(session.get_daily_report_text(), "Phase: Report")
 	assert_string_contains(session.get_daily_report_text(), "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
-	assert_string_contains(session.get_daily_report_text(), "Closing cash $513.24")
-	assert_string_contains(session.get_daily_report_text(), "Gross profit $12.99")
-	assert_string_contains(session.get_daily_report_text(), "Operating expenses: $8.75")
+	assert_string_contains(session.get_daily_report_text(), "closing $513.24")
+	assert_string_contains(session.get_daily_report_text(), "gross profit $12.99")
+	assert_string_contains(session.get_daily_report_text(), "Operating pressure: expenses $8.75")
 
 
 func test_store_session_summarizes_active_inventory_items() -> void:

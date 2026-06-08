@@ -725,7 +725,7 @@
       "name": "Backroom receiving workflow clearly shows delivery point, box opening, invoice check, sorting, and pending state",
       "status": "manual",
       "critical": false,
-      "reason": "Automated tests verify the receiving batch state machine and panel buttons; human review must confirm Open Box, Check Inv, Sort, delivery-point text, invoice variance, and completed sorting read naturally in the actual backroom computer.",
+      "reason": "Automated tests verify the receiving batch state machine and panel buttons; human review must confirm Open Box, Invoice, Sort, delivery-point text, invoice variance, and completed sorting read naturally in the actual backroom computer.",
       "owner": "manual QA"
     },
     {
@@ -741,7 +741,7 @@
       "name": "Backroom service bench workflow clearly shows service capabilities, parts, ticket progress, ready pickup, and register completion",
       "status": "manual",
       "critical": false,
-      "reason": "Automated tests verify service ticket states, Start Svc/Work Svc controls, save/load, and register pickup accounting; human review must confirm the bench workflow reads as physical service work while customer completion still belongs at the register.",
+      "reason": "Automated tests verify service ticket states, Start Job/Work Job controls, save/load, and register pickup accounting; human review must confirm the bench workflow reads as physical service work while customer completion still belongs at the register.",
       "owner": "manual QA"
     },
     {
@@ -749,7 +749,7 @@
       "name": "Backroom management desk workflow clearly shows supplier messages, bills, inventory search, reports, preorder planning, and upgrade ordering",
       "status": "manual",
       "critical": false,
-      "reason": "Automated tests verify management desk task state, Review Desk and Buy Upg controls, save/load, and upgrade ordering; human review must confirm the records tab reads as desk planning work and not a register or inventory teleport.",
+      "reason": "Automated tests verify management desk task state, Review Desk and Upgrade controls, save/load, and upgrade ordering; human review must confirm the records tab reads as desk planning work and not a register or inventory teleport.",
       "owner": "manual QA"
     },
     {
@@ -878,6 +878,14 @@
       "status": "manual",
       "critical": false,
       "reason": "Automated tests verify wall-detail props, sign placement, customer arc spacing, rack profile cues, placed-fixture framing, and first-view backroom controls; human review must confirm the latest screenshots actually read as a small specialty game shop instead of a graybox with labels.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_content_copy_review",
+      "name": "Alpha content and UI copy makes customers, supplier orders, releases, reports, and backroom controls understandable in play",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify seeded copy fields, report strings, release planning lines, supplier notes, and button labels; human review must confirm the copy improves clarity without becoming too dense or moving register work into the backroom computer.",
       "owner": "manual QA"
     }
   ]

@@ -37,6 +37,9 @@ func test_customer_dialogue_flows_have_options_responses_and_preview() -> void:
 		assert_gte(flow.response_lines.size(), 3, flow.flow_id)
 		assert_false(flow.consequence_key.is_empty(), flow.flow_id)
 		assert_string_contains(flow.preview_line(), "->")
+		assert_false(flow.tone_tag.is_empty(), flow.flow_id)
+		assert_gte(flow.staff_note.length(), 40, flow.flow_id)
+		assert_string_contains(flow.get_alpha_context_line(), ":")
 
 
 func test_hidden_thread_dialogue_probe_is_isolated() -> void:
@@ -44,6 +47,7 @@ func test_hidden_thread_dialogue_probe_is_isolated() -> void:
 		if flow.flow_id == "hidden_thread_probe":
 			assert_true(flow.is_hidden_probe())
 			assert_eq(flow.archetype_id, "suspicious_contact")
+			assert_string_contains(flow.staff_note, "optional")
 		else:
 			assert_false(flow.is_hidden_probe(), flow.flow_id)
 

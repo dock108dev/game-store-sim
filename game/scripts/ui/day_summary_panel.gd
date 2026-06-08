@@ -586,10 +586,7 @@ func _update_labels() -> void:
 	summary_label.text = _session.get_summary_text()
 	if _session.has_method("get_onboarding_summary_text"):
 		summary_label.text += "\n" + _session.get_onboarding_summary_text()
-	if _session.has_method("get_daily_report_text"):
-		report_label.text = _session.get_daily_report_text()
-	else:
-		report_label.text = "Daily report unavailable"
+	report_label.text = _get_report_readout_text()
 	if _session.has_method("get_recent_activity_text"):
 		last_sale_label.text = _session.get_recent_activity_text()
 	else:
@@ -611,14 +608,7 @@ func _update_labels() -> void:
 		market_drift_label.text = _session.get_market_drift_summary_text()
 	else:
 		market_drift_label.text = "Market drift unavailable"
-	if _session.has_method("get_release_calendar_text"):
-		release_calendar_label.text = _session.get_release_calendar_text()
-		if _session.has_method("get_release_allocation_summary_text"):
-			release_calendar_label.text += "\n" + _session.get_release_allocation_summary_text()
-		if _session.has_method("get_launch_summary_text"):
-			release_calendar_label.text += "\n" + _session.get_launch_summary_text()
-	else:
-		release_calendar_label.text = "Release calendar unavailable"
+	release_calendar_label.text = _get_release_readout_text()
 	if _session.has_method("get_supplier_order_summary_text"):
 		supplier_order_label.text = _session.get_supplier_order_summary_text()
 	else:
@@ -783,6 +773,13 @@ func _update_tab_button_states() -> void:
 
 
 func _apply_tab_visibility() -> void:
+	dashboard_header.text = "Dashboard"
+	release_header.text = "Releases"
+	operations_header.text = "Operations"
+	activity_header.text = "Activity"
+	inventory_header.text = "Inventory"
+	market_header.text = "Market"
+
 	var all_content := [
 		dashboard_header,
 		summary_label,
@@ -813,22 +810,77 @@ func _apply_tab_visibility() -> void:
 		TAB_INVENTORY:
 			_set_controls_visible([inventory_header, inventory_label, reorder_label, market_header, demand_label, market_drift_label], true)
 		TAB_ORDERING:
+			operations_header.text = "Ordering"
 			_set_controls_visible([operations_header, supplier_order_label, fixture_label], true)
 		TAB_RELEASES:
 			_set_controls_visible([release_header, release_calendar_label], true)
 		TAB_REPORTS:
+			dashboard_header.text = "Reports"
 			_set_controls_visible([dashboard_header, report_label], true)
 		TAB_SERVICES:
+			activity_header.text = "Services"
 			_set_controls_visible([activity_header, services_label], true)
 		TAB_STORAGE:
+			operations_header.text = "Storage"
 			_set_controls_visible([operations_header, fixture_label], true)
 		TAB_SUPPLIERS:
+			operations_header.text = "Suppliers"
 			_set_controls_visible([operations_header, supplier_order_label], true)
 		TAB_SETTINGS:
 			_set_controls_visible([settings_label], true)
 		TAB_RECORDS:
 			_set_controls_visible([management_desk_label, hidden_records_label], true)
 	_update_tab_button_states()
+
+
+func _get_release_readout_text() -> String:
+	if _session == null:
+		return "Release calendar unavailable"
+
+	var calendar_text := "Release calendar unavailable"
+	if _session.has_method("get_release_calendar_text"):
+		calendar_text = _session.get_release_calendar_text()
+
+	var allocation_text := ""
+	if _session.has_method("get_release_allocation_summary_text"):
+		allocation_text = _session.get_release_allocation_summary_text()
+
+	var launch_text := ""
+	if _session.has_method("get_launch_summary_text"):
+		launch_text = _session.get_launch_summary_text()
+
+	var has_committed_allocations := not allocation_text.is_empty() \
+		and not allocation_text.contains("none committed")
+	var has_launch_events := not launch_text.is_empty() \
+		and not launch_text.contains("Launch events: none")
+	var lines: Array[String] = []
+	if has_launch_events:
+		lines.append(launch_text)
+	if has_committed_allocations:
+		lines.append(allocation_text)
+	lines.append(calendar_text)
+	if not has_committed_allocations and not allocation_text.is_empty():
+		lines.append(allocation_text)
+	if not has_launch_events and not launch_text.is_empty():
+		lines.append(launch_text)
+	return "\n".join(lines)
+
+
+func _get_report_readout_text() -> String:
+	if _session == null:
+		return "Daily report unavailable"
+
+	var report_text := "Daily report unavailable"
+	if _session.has_method("get_daily_report_text"):
+		report_text = _session.get_daily_report_text()
+
+	if not _session.has_method("get_launch_summary_text"):
+		return report_text
+
+	var launch_text: String = _session.get_launch_summary_text()
+	if launch_text.is_empty() or launch_text.contains("Launch events: none"):
+		return report_text
+	return "%s\n%s" % [launch_text, report_text]
 
 
 func _set_controls_visible(controls: Array, is_control_visible: bool) -> void:

@@ -13,3 +13,6 @@ wholesale_cost_cents = 2400
 suggested_price_cents = 3999
 allocation_limit = 6
 demand_tier = "medium"
+tagline = "Cozy handheld farming update with strong gift-buyer appeal."
+buyer_hook = "Parents and handheld fans respond to clear shelf signs"
+allocation_note = "Moderate allocation is safe if cash is tight; do not bury it in backstock on launch day."

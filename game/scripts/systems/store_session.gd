@@ -1537,6 +1537,8 @@ func get_release_calendar_text(max_entries: int = 3) -> String:
 				str(release.get("platform")),
 				format_money(int(release.get("suggested_price_cents"))),
 			])
+		if release.has_method("format_planning_line"):
+			lines.append("Plan: %s" % str(release.call("format_planning_line", day_number)))
 		remaining -= 1
 
 	return "\n".join(lines)
@@ -1929,7 +1931,7 @@ func get_launch_summary_text() -> String:
 
 func get_release_allocation_summary_text() -> String:
 	if release_allocations.is_empty():
-		return "Release allocations: none"
+		return "Release allocations: none committed; use the backroom computer to reserve stock before launch day"
 
 	var quantity_by_release := {}
 	var cost_by_release := {}
@@ -1957,7 +1959,7 @@ func get_release_allocation_summary_text() -> String:
 	for release_id in release_ids:
 		var status := str(status_by_release.get(release_id, "committed"))
 		var status_label := "launched" if status == "launched" else "committed"
-		lines.append("%s x%d %s %s due day %d" % [
+		lines.append("%s x%d %s %s due day %d; receiving holds launch stock until you stock the new-release wall" % [
 			str(names_by_release.get(release_id, release_id)),
 			int(quantity_by_release[release_id]),
 			status_label,
@@ -2119,6 +2121,8 @@ func get_supplier_order_summary_text() -> String:
 			delivery_days,
 		])
 		lines.append("Category: %s" % _get_supplier_lot_category_label(lot))
+		if lot.has_method("get_order_note"):
+			lines.append("Supplier note: %s" % str(lot.call("get_order_note")))
 		lines.append("Cart: 1 lot / %d items" % item_count)
 		lines.append("Cost: %s reserved on order" % format_money(int(lot.get("cost_cents"))))
 		lines.append("Delivery: due day %d (%d day)" % [
@@ -2127,6 +2131,10 @@ func get_supplier_order_summary_text() -> String:
 		])
 		lines.append("Storage: %s" % _get_supplier_lot_storage_requirement(lot))
 		lines.append("Receiving: %s" % _get_supplier_lot_receiving_expectation(lot))
+		if lot.has_method("get_invoice_note"):
+			lines.append("Invoice: %s" % str(lot.call("get_invoice_note")))
+		if lot.has_method("get_shelf_plan"):
+			lines.append("Shelf plan: %s" % str(lot.call("get_shelf_plan")))
 
 	var pending := get_pending_supplier_orders()
 	if pending.is_empty():
@@ -2143,6 +2151,7 @@ func get_supplier_order_summary_text() -> String:
 			lines.append("Cost reserved: %s" % format_money(int(order.get("cost_cents", 0))))
 			lines.append("Storage needed: %s" % str(order.get("storage_requirement", "Receiving box intake")))
 			lines.append("Receiving expectation: %s" % str(order.get("receiving_expectation", "Physical stock appears in receiving")))
+			lines.append("Next action: open the receiving box, check the invoice, then sort cases for pricing")
 
 	var delivered := get_delivered_supplier_orders()
 	if not delivered.is_empty():
@@ -2154,6 +2163,7 @@ func get_supplier_order_summary_text() -> String:
 			])
 			lines.append("Delivery state: delivered")
 			lines.append("%d items ready for pickup, pricing, and stocking" % int(order.get("item_count", 0)))
+			lines.append("Next action: physically pick up cases from receiving before placing them on fixtures")
 
 	lines.append(get_receiving_workflow_summary_text())
 	return "\n".join(lines)

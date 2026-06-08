@@ -417,7 +417,7 @@ func _build_checkout_state(input: Dictionary) -> Dictionary:
 	state["tender_method"] = tender_method
 	state["tendered_cents"] = tendered_cents
 	state["change_due_cents"] = maxi(0, tendered_cents - total_cents)
-	state["return_placeholder"] = "Returns: not available in this build."
+	state["return_placeholder"] = "Returns: register review is planned; alpha checkout handles sales, trade-ins, preorders, and service pickups."
 	state["transaction_feedback"] = str(state.get("confirmation", ""))
 	state["completed"] = false
 	state["has_active_checkout"] = has_checkout_type(str(state.get("transaction_type", "")))

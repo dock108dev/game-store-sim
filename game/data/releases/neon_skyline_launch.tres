@@ -13,3 +13,6 @@ wholesale_cost_cents = 3200
 suggested_price_cents = 4999
 allocation_limit = 4
 demand_tier = "high"
+tagline = "Street-racing sequel with neon city posters and preorder chatter."
+buyer_hook = "Collectors and regulars ask for this before the delivery truck arrives"
+allocation_note = "Reserve at least one copy early, then keep launch stock visible near the register."

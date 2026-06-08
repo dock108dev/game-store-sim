@@ -434,10 +434,10 @@ Goal: make the backroom a real physical workflow hub.
 
 Stops:
 
-- Stop 8.1: Receiving workflow. Done in `Build receiving workflow`: supplier delivery now creates pending receiving batches with delivery point, sealed/opened box state, invoice check, sorting destination, completed status, backroom Open Box/Check Inv/Sort controls, save/load persistence, and validation/manual checklist coverage.
+- Stop 8.1: Receiving workflow. Done in `Build receiving workflow`: supplier delivery now creates pending receiving batches with delivery point, sealed/opened box state, invoice check, sorting destination, completed status, backroom Open Box/Invoice/Sort controls, save/load persistence, and validation/manual checklist coverage.
 - Stop 8.2: Storage workflow. Done in `Build storage workflow`: store sessions now move physical product item nodes from receiving into a backstock shelf and back to receiving, track shelf capacity and overflow, expose Store/Pull backroom controls, include storage movement history in save/load, and document manual readability checks.
-- Stop 8.3: Service bench workflow. Done in `Build service bench workflow`: store sessions now expose disc resurfacing service tickets, locked cartridge cleaning, console-test placeholder data, ticket parts, queued/in-progress/ready-for-pickup/picked-up states, Start Svc/Work Svc backroom controls, register pickup integration, save/load persistence, and manual checklist coverage.
-- Stop 8.4: Management desk workflow. Done in `Build management desk workflow`: store sessions now expose management desk tasks for supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering, with Review Desk/Buy Upg controls, Computer Analytics upgrade ordering, save/load persistence, and manual checklist coverage.
+- Stop 8.3: Service bench workflow. Done in `Build service bench workflow`: store sessions now expose disc resurfacing service tickets, locked cartridge cleaning, console-test placeholder data, ticket parts, queued/in-progress/ready-for-pickup/picked-up states, Start Job/Work Job backroom controls, register pickup integration, save/load persistence, and manual checklist coverage.
+- Stop 8.4: Management desk workflow. Done in `Build management desk workflow`: store sessions now expose management desk tasks for supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering, with Review Desk/Upgrade controls, Computer Analytics upgrade ordering, save/load persistence, and manual checklist coverage.
 - Stop 8.5: Security/safe placeholders. Done in `Add security safe placeholders`: EvidenceStorage now exposes cash safe, high-value storage, suspicious goods isolation, and security footage placeholders, StoreSession is wired to EvidenceStorage, Records tab shows inactive security placeholder state, and manual checklist coverage is current.
 - Stop 8.6: Backroom validation sync. Done in `Sync backroom operations validation`: validation docs, manual playtest focus, backlog state, and Milestone 8 snapshot now reflect the complete backroom operations pass.
 
@@ -468,9 +468,9 @@ Validation snapshot:
 - Manual receiving workflow checks are current for delivery point, box opening, invoice check, sorting, and pending/completed state readability.
 - Focused GUT coverage passes for store session storage movement/retrieval, day-summary panel Store/Pull controls, and save/load storage movement persistence.
 - Manual storage workflow checks are current for capacity, overflow, Store/Pull controls, backstock movement, and retrieval readability.
-- Focused GUT coverage passes for service bench ticket workflow, day-summary panel Start Svc/Work Svc controls, register pickup integration, and save/load service ticket persistence.
+- Focused GUT coverage passes for service bench ticket workflow, day-summary panel Start Job/Work Job controls, register pickup integration, and save/load service ticket persistence.
 - Manual service bench checks are current for capabilities, parts, ticket progress, ready pickup, and register completion readability.
-- Focused GUT coverage passes for management desk review workflow, day-summary panel Review Desk/Buy Upg controls, upgrade ordering, and save/load management review persistence.
+- Focused GUT coverage passes for management desk review workflow, day-summary panel Review Desk/Upgrade controls, upgrade ordering, and save/load management review persistence.
 - Manual management desk checks are current for supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, and non-teleporting desk-work readability.
 - Focused GUT coverage passes for security placeholder catalog, placeholder records, StoreSession/EvidenceStorage wiring, and Records tab placeholder readout.
 - Manual security/safe placeholder checks are current for inactive cash safe, high-value storage, suspicious goods isolation, security footage, and non-objective readability.
@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 499 GUT tests, UI scenario automation coverage 462/575, production script mapping coverage 50/50, and 3 active validation tools.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 501 GUT tests, UI scenario automation coverage 468/582, production script mapping coverage 50/50, and 3 active validation tools.
 
 ## Milestone 13: Alpha Hardening
 
@@ -649,7 +649,7 @@ Stops:
 - Stop 13.2: Performance pass. Done in `Run alpha performance pass`: profile scene load, frame time, UI panels, customer pathing, save/load, screenshots, and exported build startup.
 - Stop 13.3: Test expansion. Done in `Expand alpha regression tests`: add regression tests for rotated fixture placement bounds, visible buyer queue spacing, and screenshot subject coverage for current alpha P1/P2 risks.
 - Stop 13.4A: Scene-readability content pass. Done in `Polish alpha scene readability`: improve wall detail, sign framing, special-customer spacing, display-rack profile cues, placed-fixture screenshot framing, and backroom computer first-view controls.
-- Stop 13.4B: Content/copy pass. Fill remaining customer text, supplier orders, daily events, signs, and report copy to alpha quality.
+- Stop 13.4B: Content/copy pass. Done in `Fill alpha starter content`: filled customer role text, dialogue staff context, supplier order notes, release planning hooks, daily report readout copy, register return-scope copy, and backroom action labels to alpha quality.
 - Stop 13.5: Balance pass. Tune prices, margins, buyer tolerance, demand, rent, bills, supplier delivery, launch allocations, services, and upgrade costs.
 - Stop 13.6: External playtest package. Produce a build, playtest script, known-issues list, feedback form, and rollback plan.
 - Stop 13.7: Alpha validation sync. Run the full gate, exported build smoke, and manual alpha checklist.
@@ -677,6 +677,7 @@ Validation snapshot:
 - Stop 13.2 alpha performance pass records a repeatable baseline for scene load, instantiation, 60-frame stepping, UI panel cycling, customer pathing, save codec roundtrip, screenshot capture, and exported pack startup in `14-alpha-performance-baseline.md`.
 - Stop 13.3 alpha regression-test expansion records automated guardrails for fixture placement framing risk, queue/register composition risk, and screenshot subject coverage before the content pass.
 - Stop 13.4A alpha scene-readability pass records automated guardrails for wall-detail props, sign framing, customer arc depth, rack profile cues, placed-fixture screenshot composition, and backroom computer first-view action controls.
+- Stop 13.4B alpha content/copy pass records automated guardrails for customer copy, dialogue context, supplier order copy, release planning copy, daily report sections, register return-scope copy, and backroom action labels.
 
 ## Immediate Next Work After This Planning Slice
 

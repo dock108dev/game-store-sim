@@ -15,7 +15,10 @@ func test_daily_report_builds_open_day_snapshot() -> void:
 	assert_eq(report.get("day_phase_label"), "Setup")
 	assert_eq(report.get("opening_cash_cents"), 50000)
 	assert_eq(report.get("closing_cash_cents"), 50000)
-	assert_eq(DailyReportPolicy.format_report(session), "Daily report: day still open")
+	assert_eq(
+		DailyReportPolicy.format_report(session),
+		"Backroom report: day still open - finish customer hours, clear receiving, and close from the register before final totals post."
+	)
 
 
 func test_daily_report_formats_closed_day_totals() -> void:
@@ -60,23 +63,20 @@ func test_daily_report_formats_closed_day_totals() -> void:
 	assert_eq(report.get("bills_text"), "daily overhead posted at close")
 	assert_string_contains(str(report.get("cash_pressure_text")), "Daily overhead due at close: $8.75")
 	assert_string_contains(text, "Daily report day 1:")
-	assert_string_contains(text, "End-of-day summary")
+	assert_string_contains(text, "End-of-day readout")
 	assert_string_contains(text, "Phase: Report")
 	assert_string_contains(text, "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
-	assert_string_contains(text, "Closing cash $510.63")
-	assert_string_contains(text, "Net cash +$10.63")
-	assert_string_contains(text, "Sales 1 / Trade-ins 1 / Services 1")
-	assert_string_contains(text, "Preorders 0")
-	assert_string_contains(text, "Service revenue $4.99 / Service cost $1.00 / Service profit $3.99")
-	assert_string_contains(text, "Gross profit $16.98")
-	assert_string_contains(text, "Operating expenses: $8.75")
-	assert_string_contains(text, "Reserved obligations: $0.00")
-	assert_string_contains(text, "Preorders: count 0 / deposits $0.00")
-	assert_string_contains(text, "Launch activity: 0 events / cash $0.00 / profit $0.00 / missed demand 0")
+	assert_string_contains(text, "Cash drawer: opening $500.00 / closing $510.63 / net +$10.63")
+	assert_string_contains(text, "Counter work: sales 1 / trade-ins 1 / services 1 / preorders 0")
+	assert_string_contains(text, "Service bench: 1 completed / revenue $4.99 / parts cost $1.00 / profit $3.99")
+	assert_string_contains(text, "Merch margin: revenue $26.98 / cost $10.00 / gross profit $16.98")
+	assert_string_contains(text, "Operating pressure: expenses $8.75 / reserved obligations $0.00")
+	assert_string_contains(text, "Preorders: 0 deposits / cash held $0.00")
+	assert_string_contains(text, "Launch activity: 0 events / launch cash $0.00 / launch profit $0.00 / missed demand 0")
 	assert_string_contains(text, "Reputation: 100 / events 0")
 	assert_string_contains(text, "Losses: $0.00")
 	assert_string_contains(text, "Bills: daily overhead posted at close")
-	assert_string_contains(text, "Tomorrow: Review reorder suggestions")
+	assert_string_contains(text, "Tomorrow plan: Review reorder suggestions")
 
 
 func test_daily_report_formats_launch_reputation_losses_and_tomorrow_plan() -> void:
@@ -105,8 +105,8 @@ func test_daily_report_formats_launch_reputation_losses_and_tomorrow_plan() -> v
 	assert_eq(report.get("losses_cents"), 1000)
 	assert_eq(report.get("reputation"), 90)
 	assert_eq(report.get("reputation_events"), 1)
-	assert_string_contains(text, "Launch activity: 1 events / cash $49.99 / profit $12.99 / missed demand 2")
+	assert_string_contains(text, "Launch activity: 1 events / launch cash $49.99 / launch profit $12.99 / missed demand 2")
 	assert_string_contains(text, "Reputation: 90 / events 1")
 	assert_string_contains(text, "Losses: $10.00")
 	assert_string_contains(text, "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
-	assert_string_contains(text, "Tomorrow: Prepare Pocket Farm DX launch allocation")
+	assert_string_contains(text, "Tomorrow plan: Prepare Pocket Farm DX launch allocation")

@@ -17,6 +17,9 @@ func test_supplier_lot_has_orderable_used_game_products() -> void:
 		lot.call("get_receiving_expectation"),
 		"physical cases in the receiving box"
 	)
+	assert_string_contains(lot.call("get_order_note"), "mixed crate")
+	assert_string_contains(lot.call("get_invoice_note"), "Count three cases")
+	assert_string_contains(lot.call("get_shelf_plan"), "eye-level used wall")
 	assert_not_null(load(str(lot.get("item_scene_path"))) as PackedScene)
 
 	for product_path in lot.get("product_paths"):

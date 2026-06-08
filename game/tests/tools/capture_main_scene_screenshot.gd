@@ -163,8 +163,7 @@ func _prepare_release_calendar(scene: Node) -> void:
 	if session == null or player == null:
 		return
 
-	if player.has_method("open_day_summary"):
-		player.open_day_summary(session)
+	_open_day_summary_tab(player, session, "releases")
 
 
 func _prepare_release_allocation(scene: Node) -> void:
@@ -175,8 +174,7 @@ func _prepare_release_allocation(scene: Node) -> void:
 
 	if session.has_method("commit_release_allocation"):
 		session.commit_release_allocation("release_neon_skyline", 1)
-	if player.has_method("open_day_summary"):
-		player.open_day_summary(session)
+	_open_day_summary_tab(player, session, "releases")
 
 
 func _prepare_launch_day(scene: Node) -> void:
@@ -194,8 +192,7 @@ func _prepare_launch_day(scene: Node) -> void:
 	session.start_next_day()
 	session.end_day()
 	session.start_next_day()
-	if player.has_method("open_day_summary"):
-		player.open_day_summary(session)
+	_open_day_summary_tab(player, session, "reports")
 	if session.has_method("get_launch_summary_text"):
 		_show_overlay_message(scene, session.get_launch_summary_text())
 
@@ -295,6 +292,19 @@ func _prepare_fixture_placed(scene: Node) -> void:
 		return
 
 	session.place_pending_fixture()
+
+
+func _open_day_summary_tab(player: Node, session: Node, tab_id: String) -> void:
+	if not player.has_method("open_day_summary"):
+		return
+
+	player.open_day_summary(session)
+	var panel: Node = player.get("day_summary_panel") as Node
+	if panel == null:
+		panel = player.get_node_or_null("DaySummaryPanel")
+	if panel != null and panel.has_method("set_active_tab"):
+		panel.set_active_tab(tab_id)
+		panel.call_deferred("set_active_tab", tab_id)
 
 
 func _stock_receiving_item(scene: Node, item_name: String, slot_path: String) -> void:

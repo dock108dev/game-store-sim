@@ -56,7 +56,8 @@ func test_register_checkout_panel_opens_with_receipt_fields() -> void:
 	assert_string_contains(_panel.totals_label.text, "Total $21.99")
 	assert_string_contains(_panel.tender_label.text, "Cash tendered $50.00")
 	assert_string_contains(_panel.tender_label.text, "Change due $28.01")
-	assert_string_contains(_panel.return_label.text, "Returns")
+	assert_string_contains(_panel.return_label.text, "Returns: register review is planned")
+	assert_string_contains(_panel.return_label.text, "alpha checkout handles sales")
 	assert_false(_panel.confirm_button.disabled)
 
 

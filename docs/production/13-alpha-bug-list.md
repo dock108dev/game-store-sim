@@ -5,7 +5,7 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 499 GUT tests, UI scenario automation coverage 462/575, production script mapping coverage 50/50, 3 active validation tools, and 33 catalog products.
+- Latest full gate passes with 501 GUT tests, UI scenario automation coverage 468/582, production script mapping coverage 50/50, 3 active validation tools, and 33 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - Manual controller/window/playtest validation still needs a human pass.
 
@@ -43,6 +43,6 @@ Current gate state:
 - Stop 13.2 performance pass: done in `14-alpha-performance-baseline.md`; rerun after content-heavy changes before tightening thresholds.
 - Stop 13.3 test expansion: done; regression coverage now protects rotated fixture placement bounds/history, visible buyer queue spacing against special register customers, screenshot scenario coverage for AH-001 through AH-006 and AH-008, and future bug fixes that change core loop behavior.
 - Stop 13.4A scene-readability content pass: done; addresses the first visual/UI composition layer for AH-001 through AH-007 with wall detail, sign framing, customer spacing, rack profile cues, placed-fixture screenshot framing, and backroom first-view controls.
-- Stop 13.4B content/copy pass: continue AH-001, AH-002, AH-003, AH-006, and AH-007 with customer text, supplier orders, daily events, sign/report copy, and remaining screen-specific hierarchy.
+- Stop 13.4B content/copy pass: done; continues AH-001, AH-002, AH-003, AH-006, and AH-007 with customer text, dialogue context, supplier orders, release planning, report copy, register return-scope copy, and backroom action-label polish.
 - Stop 13.5 balance pass: address AH-011 with multi-day economy tuning and documented balance targets.
 - Stop 13.6 external playtest package: address AH-009 and AH-010 with build packaging, known issues, playtest script, feedback form, and rollback plan.

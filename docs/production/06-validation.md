@@ -46,8 +46,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 499 GUT tests.
-- UI scenario automation coverage is 462/575, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 501 GUT tests.
+- UI scenario automation coverage is 468/582, above the 80% threshold.
 - Production script mapping coverage is 50/50.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - New critical production-polish scenarios added in this pass are automated; remaining manual scenarios are intentionally human visual/controller checks.
@@ -67,8 +67,8 @@ Current production validation baseline:
 - Economy progression sync verifies cross-flow day phase, close pressure, next-day setup, decision feedback, goals, and manual playtest coverage through Stop 7.7.
 - Receiving workflow coverage verifies supplier delivery creates pending receiving batches with delivery point, sealed/opened box state, invoice check, expected/received count variance, sorting destination, completed status, backroom controls, and save/load persistence.
 - Storage workflow coverage verifies receiving-to-backstock movement, backstock retrieval, shelf capacity, overflow summary, Store/Pull backroom controls, movement history, and save/load persistence.
-- Service bench workflow coverage verifies service capabilities, repair tickets, parts, queued/in-progress/ready/picked-up state, Start Svc/Work Svc backroom controls, register pickup integration, and save/load persistence.
-- Management desk workflow coverage verifies supplier-message review, bill review, inventory search, report review, preorder planning, upgrade ordering, Review Desk/Buy Upg controls, and save/load persistence.
+- Service bench workflow coverage verifies service capabilities, repair tickets, parts, queued/in-progress/ready/picked-up state, Start Job/Work Job backroom controls, register pickup integration, and save/load persistence.
+- Management desk workflow coverage verifies supplier-message review, bill review, inventory search, report review, preorder planning, upgrade ordering, Review Desk/Upgrade controls, and save/load persistence.
 - Security/safe placeholder coverage verifies cash safe, high-value storage, suspicious goods isolation, security footage, placeholder recording, StoreSession/EvidenceStorage wiring, and Records tab readout without active hidden-thread UI.
 - Store-building coverage verifies expanded fixture catalog metadata, footprint-aware placement, category assignment, demand tuning effects, decoration catalog, backroom decoration application, clutter-budget limits, layout-effect summaries, fixture visibility, impulse fixtures, queue spacing, customer travel distance, theft-risk placeholder state, launch queue demand effects, starter expansion purchase/capacity/bounds, and fixture/decoration/expansion save-load persistence.
 - Suspicion-rules coverage verifies the Stop 10.1 risk flag catalog, severity/score metadata, serial mismatch, suspicious supplier, cash buyer, impossible provenance, counterfeit goods, hidden storage, node evaluation for existing hidden-thread props, and event-log rule event creation without visible objectives.
@@ -93,6 +93,7 @@ Current production validation baseline:
 - Alpha performance pass is complete through Stop 13.2; `scripts/measure_alpha_performance.sh` records scene load, frame stepping, modal UI, customer pathing, save codec, screenshot, and exported pack startup timing under broad alpha regression thresholds.
 - Alpha regression-test expansion is complete through Stop 13.3; automated checks now cover rotated fixture placement bounds, buyer queue spacing against special register customers, and screenshot scenario coverage for P1/P2 alpha bug subjects.
 - Alpha scene-readability content pass is complete as Stop 13.4A; automated checks now cover right-wall/back-wall detail props, smaller non-cropping register/backroom sign placement, wider special-customer depth separation, display-rack face/profile cues, placed-fixture screenshot framing, and first-view backroom placement controls.
+- Alpha content/copy pass is complete as Stop 13.4B; automated checks now cover customer role copy, customer dialogue staff context, supplier crate/invoice/shelf-plan copy, release planning hooks, daily report readout language, register return-scope copy, and non-abbreviated backroom action labels.
 
 ## Manual Validation
 
@@ -175,7 +176,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Register service customer, service completion prompt, service completion message, backroom service totals, recent activity, and daily-report service totals are readable.
 - Service completion reads as register work and does not imply a separate service terminal, sale, trade-in, preorder, or inventory item.
 - Backroom service bench shows available, locked, and placeholder service capabilities, ticket parts, progress, ready-for-pickup state, and pickup instructions.
-- Backroom `Start Svc` and `Work Svc` controls advance bench work without bypassing register customer completion.
+- Backroom `Start Job` and `Work Job` controls advance bench work without bypassing register customer completion.
 - Backroom release allocation commitment is readable, reserves launch wholesale cash, and stays clearly separate from launch-day fulfillment.
 - Starting launch day resolves `Neon Skyline` preorders first, sells surplus allocations to launch queue demand, and reports launch cash, launch profit, and reputation clearly.
 - Underallocating for launch day produces a readable missed-demand/reputation consequence.
@@ -183,7 +184,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Pending receiving order shows due day and item count clearly.
 - Starting the next day delivers the used-game starter lot into the receiving box and creates pending receiving work.
 - Backroom receiving workflow shows delivery point, sealed/opened box state, unchecked/checked invoice state, expected count, received count, variance, sorting destination, and pending/completed state.
-- Backroom `Open Box`, `Check Inv`, and `Sort` controls are readable and enable/disable in a sensible order for the pending receiving batch.
+- Backroom `Open Box`, `Invoice`, and `Sort` controls are readable and enable/disable in a sensible order for the pending receiving batch.
 - Backroom storage workflow shows receiving-ready count, backstock count, shelf capacity, overflow, recent storage movement, and Store/Pull controls.
 - Moving stock to backstock and pulling it back to receiving preserves item identity, inventory summary visibility, and save/load movement history.
 - Delivered supplier games look intentionally placed and do not crowd the receiving box, display rack, trade-in seller, or customer flow.
@@ -211,6 +212,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Alpha bug list entries AH-001 through AH-011 are reviewed against the latest screenshot artifacts before starting content, regression, balance, or playtest-package hardening work.
 - Stop 13.3 regression checks keep fixture placement bounds/history, visible buyer-queue spacing, and screenshot subject coverage in the automated gate before content-heavy alpha work begins.
 - Stop 13.4A manual review should compare the refreshed main scene, customer queue, register counter, fixture placed, and backroom computer screenshots against AH-001 through AH-007 before treating the visual-content pass as human-approved.
+- Stop 13.4B manual review should compare customer role copy, dialogue prompts, supplier ordering, release planning, daily report, register return copy, and backroom action labels in the actual window before treating the content/copy pass as human-approved.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 

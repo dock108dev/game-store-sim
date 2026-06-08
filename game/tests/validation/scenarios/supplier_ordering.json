@@ -72,7 +72,7 @@
     },
     {
       "id": "day_summary_panel_receiving_controls",
-      "name": "Backroom computer exposes Open Box, Check Inv, and Sort controls for pending receiving batches",
+      "name": "Backroom computer exposes Open Box, Invoice, and Sort controls for pending receiving batches",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_starts_next_day_and_delivers_supplier_lot"

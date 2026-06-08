@@ -33,3 +33,13 @@ func test_alpha_screenshot_scenarios_cover_p1_bug_subjects() -> void:
 	for scenario in required_scenarios:
 		assert_string_contains(capture_tool, '"%s"' % scenario)
 		assert_string_contains(validation_gate, scenario)
+
+
+func test_alpha_backroom_screenshot_scenarios_select_named_tabs() -> void:
+	var capture_tool := FileAccess.get_file_as_string(CAPTURE_TOOL_PATH)
+
+	assert_string_contains(capture_tool, '_open_day_summary_tab(player, session, "releases")')
+	assert_string_contains(capture_tool, '_open_day_summary_tab(player, session, "reports")')
+	assert_string_contains(capture_tool, "func _open_day_summary_tab")
+	assert_string_contains(capture_tool, "func _prepare_backroom_summary")
+	assert_string_contains(capture_tool, "player.open_day_summary(session)")

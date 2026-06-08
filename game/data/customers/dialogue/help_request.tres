@@ -11,4 +11,5 @@ opening_line = "Can you help me find something that still works on an Orbit 64?"
 player_options = Array[String](["Recommend used games", "Point to new releases", "Say you are busy"])
 response_lines = Array[String](["Thanks, I will check that rack.", "I am looking for older stuff today.", "I will browse for a minute."])
 consequence_key = "customer_helped"
-
+tone_tag = "uncertain"
+staff_note = "Use this as the early prompt for shelf guidance and gift-safe recommendations."

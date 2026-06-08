@@ -198,7 +198,7 @@
     },
     {
       "id": "day_summary_panel_management_desk_controls",
-      "name": "Backroom computer exposes Review Desk and Buy Upg controls for management desk work",
+      "name": "Backroom computer exposes Review Desk and Upgrade controls for management desk work",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_runs_management_desk_workflow"

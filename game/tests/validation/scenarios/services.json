@@ -58,7 +58,7 @@
     },
     {
       "id": "backroom_panel_service_bench_controls",
-      "name": "Backroom computer exposes Start Svc and Work Svc controls for bench tickets",
+      "name": "Backroom computer exposes Start Job and Work Job controls for bench tickets",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_runs_service_bench_workflow"

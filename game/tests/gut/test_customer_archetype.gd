@@ -34,8 +34,21 @@ func test_customer_archetype_data_has_unique_ids_and_tuning_ranges() -> void:
 		assert_false(archetype.preferred_categories.is_empty(), archetype.archetype_id)
 		assert_false(archetype.visual_cue.is_empty(), archetype.archetype_id)
 		assert_false(archetype.default_feedback.is_empty(), archetype.archetype_id)
+		assert_eq(archetype.get_alpha_copy_lines().size(), 4, archetype.archetype_id)
+		for line in archetype.get_alpha_copy_lines():
+			assert_gte(line.length(), 24, "%s:%s" % [archetype.archetype_id, line])
 
 	assert_eq(ids.size(), 9)
+
+
+func test_alpha_customer_copy_is_role_specific_and_non_placeholder() -> void:
+	var blocked_fragments := ["Just looking", "Looking for this one", "Can you fix this?", "Cash, no receipt"]
+	for archetype in _load_archetypes():
+		var combined := " ".join(archetype.get_alpha_copy_lines())
+		assert_string_contains(combined, "." if archetype.archetype_id != "regular" else "?")
+		for fragment in blocked_fragments:
+			assert_false(combined.contains(fragment), "%s still contains %s" % [archetype.archetype_id, fragment])
+		assert_false(combined.to_lower().contains("placeholder"), archetype.archetype_id)
 
 
 func test_suspicious_archetype_is_hidden_thread_contact_only() -> void:

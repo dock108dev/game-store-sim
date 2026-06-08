@@ -14,6 +14,9 @@ func test_new_release_resource_has_calendar_data() -> void:
 	assert_eq(release.get("suggested_price_cents"), 4999)
 	assert_eq(release.get("allocation_limit"), 4)
 	assert_eq(release.get("demand_tier"), "high")
+	assert_string_contains(str(release.get("tagline")), "Street-racing")
+	assert_string_contains(str(release.get("buyer_hook")), "Collectors")
+	assert_string_contains(str(release.get("allocation_note")), "Reserve")
 
 
 func test_new_release_formats_countdown_lines() -> void:
@@ -27,3 +30,6 @@ func test_new_release_formats_countdown_lines() -> void:
 	assert_string_contains(release.call("format_calendar_line", 1), "cost $32.00")
 	assert_string_contains(release.call("format_calendar_line", 1), "MSRP $49.99")
 	assert_string_contains(release.call("format_calendar_line", 1), "allocation 4")
+	assert_string_contains(release.call("format_calendar_line", 1), "Collectors and regulars")
+	assert_string_contains(release.call("format_planning_line", 1), "Street-racing sequel")
+	assert_string_contains(release.call("format_planning_line", 1), "Reserve at least one copy")

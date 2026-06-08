@@ -11,4 +11,5 @@ opening_line = "This copy froze after ten minutes. I kept the receipt."
 player_options = Array[String](["Offer exchange", "Offer service check", "Refuse return"])
 response_lines = Array[String](["An exchange is fair.", "If you can test it, I will wait.", "That is disappointing."])
 consequence_key = "return_handled"
-
+tone_tag = "tense"
+staff_note = "Keep the customer at the register surface; do not route returns through the backroom computer."

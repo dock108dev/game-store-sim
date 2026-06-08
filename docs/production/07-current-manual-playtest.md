@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 499 GUT tests, UI scenario automation coverage at 462/575, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 501 GUT tests, UI scenario automation coverage at 468/582, production script mapping coverage at 50/50, 3 active standalone validation tools, and 33 catalog products.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -37,10 +37,10 @@ Current automated baseline:
 - Upgrade path baseline is implemented through Stop 7.5; manual QA should confirm fixture, category, service, computer, signage, storage, and expansion upgrades read as future work/progression goals rather than cash-only debug options.
 - Owner onboarding baseline is implemented through Stop 7.6; manual QA should confirm the backroom dashboard checklist teaches receiving, pricing, stocking, checkout, trade-ins, backroom computer use, ordering, and closing without feeling like debug text.
 - Economy progression validation is synced through Stop 7.7; manual QA should run the Economy Progression Focus before treating the milestone as human-approved.
-- Receiving workflow is implemented through Stop 8.1; manual QA should confirm delivered supplier batches show delivery point, box state, invoice check, sorting state, pending/completed status, and Open Box/Check Inv/Sort controls without feeling like instant inventory teleporting.
+- Receiving workflow is implemented through Stop 8.1; manual QA should confirm delivered supplier batches show delivery point, box state, invoice check, sorting state, pending/completed status, and Open Box/Invoice/Sort controls without feeling like instant inventory teleporting.
 - Storage workflow is implemented through Stop 8.2; manual QA should confirm Store/Pull controls, backstock shelf capacity, overflow text, and recent movement history make stock movement feel like backroom work rather than an abstract inventory menu.
-- Service bench workflow is implemented through Stop 8.3; manual QA should confirm service capabilities, parts, ticket progress, ready pickup, Start Svc/Work Svc controls, and register completion read as one physical service workflow.
-- Management desk workflow is implemented through Stop 8.4; manual QA should confirm supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk, and Buy Upg read as planning work in the backroom records flow.
+- Service bench workflow is implemented through Stop 8.3; manual QA should confirm service capabilities, parts, ticket progress, ready pickup, Start Job/Work Job controls, and register completion read as one physical service workflow.
+- Management desk workflow is implemented through Stop 8.4; manual QA should confirm supplier messages, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk, and Upgrade read as planning work in the backroom records flow.
 - Security/safe placeholders are implemented through Stop 8.5; manual QA should confirm cash safe, high-value storage, suspicious goods isolation, and security footage read as inactive backroom/hidden-thread infrastructure, not active objectives.
 - Backroom operations validation is synced through Stop 8.6; manual QA should run the Backroom Operations Focus before treating Milestone 8 as human-approved.
 - Fixture catalog expansion is implemented through Stop 9.1, placement UX through Stop 9.2, fixture category assignment through Stop 9.3, decoration baseline through Stop 9.4, layout effects through Stop 9.5, starter expansion through Stop 9.6, and building validation sync through Stop 9.7; manual QA should run the Store Building Focus before treating Milestone 9 as human-approved.
@@ -61,6 +61,7 @@ Current automated baseline:
 - Alpha performance pass is implemented through Stop 13.2; manual QA should review `14-alpha-performance-baseline.md` after content-heavy changes and rerun `scripts/measure_alpha_performance.sh --full` before packaging an external playtest.
 - Alpha regression-test expansion is implemented through Stop 13.3; automated checks now protect rotated fixture placement bounds, visible buyer-queue spacing, and screenshot scenario coverage for the current alpha P1/P2 bug subjects.
 - Alpha scene-readability content pass is implemented as Stop 13.4A; manual QA should review the refreshed screenshot set for store read, sign cropping, special-customer separation, placed-rack framing, and backroom computer first-view controls.
+- Alpha content/copy pass is implemented as Stop 13.4B; manual QA should review customer role text, dialogue staff context, supplier order notes, release planning, daily report wording, register return-scope copy, and backroom action labels before treating the alpha copy pass as human-approved.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 
@@ -88,7 +89,7 @@ Current automated baseline:
 20. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
 21. Open the backroom computer and confirm the dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable.
 22. Use the backroom tabs to confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
-Management desk subcheck: open Records, confirm the management desk lists supplier messages, bill review, inventory search, report review, preorder planning, and upgrade ordering; use `Review Desk` once and confirm the first task becomes reviewed without changing inventory or register state; use `Buy Upg` and confirm Computer Analytics is purchased from cash as an upgrade order.
+Management desk subcheck: open Records, confirm the management desk lists supplier messages, bill review, inventory search, report review, preorder planning, and upgrade ordering; use `Review Desk` once and confirm the first task becomes reviewed without changing inventory or register state; use `Upgrade` and confirm Computer Analytics is purchased from cash as an upgrade order.
 Security placeholder subcheck: in Records, confirm cash safe, high-value storage, suspicious goods isolation, and security footage are listed as placeholders; if a placeholder record exists, confirm it reads as inactive documentation and does not create a register action, inventory teleport, or visible objective.
 23. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier.
 24. Clear the trade-in queue by accepting or declining it, then click the register, review the `Neon Skyline` preorder deposit checkout panel, and click Confirm.
@@ -98,9 +99,9 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 28. Clear the preorder queue, then click the register, review the `Disc Resurfacing` service checkout panel, and click Confirm.
 29. Confirm the service confirmation names `Disc Resurfacing`, `Scratched Orbit Disc`, and `$3.99` profit.
 30. Open the backroom computer and confirm service revenue, service cost, service profit, and recent activity are readable.
-31. Use `Start Svc` on the backroom computer and confirm a `Disc Resurfacing` bench ticket appears with parts, queued state, and `Scratched Orbit Disc`.
-32. Use `Work Svc` once and confirm the service ticket moves to in-progress with 50% progress.
-33. Use `Work Svc` again and confirm the service ticket moves to ready-for-pickup with 100% progress and does not complete customer payment from the backroom.
+31. Use `Start Job` on the backroom computer and confirm a `Disc Resurfacing` bench ticket appears with parts, queued state, and `Scratched Orbit Disc`.
+32. Use `Work Job` once and confirm the service ticket moves to in-progress with 50% progress.
+33. Use `Work Job` again and confirm the service ticket moves to ready-for-pickup with 100% progress and does not complete customer payment from the backroom.
 34. Complete the service customer at the register and confirm the service ticket reads as picked up while register service revenue/cost/profit still post normally.
 35. End the day and confirm the closed-day report includes service count, service revenue, service cost, and service profit.
 36. Use `Commit Release` on the backroom computer and confirm cash drops by `$32.00`.
@@ -133,7 +134,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 63. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and a pending receiving workflow appears instead of auto-clearing the delivery.
 64. Confirm the supplier summary shows delivery point, `Box: sealed`, unchecked invoice count/variance, and sorting waiting state.
 65. Use `Open Box` and confirm the box state changes to opened while the batch remains pending receiving.
-66. Use `Check Inv` and confirm the invoice state changes to checked with expected count, received count, and variance.
+66. Use `Invoice` and confirm the invoice state changes to checked with expected count, received count, and variance.
 67. Use `Sort` and confirm the batch becomes completed, pending receiving clears, and the sorted destination reads as `price_stock`.
 68. Use `Store` and confirm one receiving item moves into backstock, the storage summary shows `Backstock: 1 stored / 6 capacity / 0 overflow`, and recent movement reads as stored.
 69. Use `Pull` and confirm that item returns to receiving, backstock drops to zero, and recent movement reads as retrieved.
@@ -232,7 +233,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 - Preorder deposit reads as an obligation/deposit, not a completed sale before launch day.
 - Service customer placement, register prompt, completion message, and backroom/daily-report service totals are readable.
 - Service completion reads as register work, not a sale, trade-in, preorder, or separate-terminal workflow.
-- Service bench capabilities, ticket parts, queued/in-progress/ready/picked-up state, Start Svc/Work Svc controls, and register pickup instruction are readable.
+- Service bench capabilities, ticket parts, queued/in-progress/ready/picked-up state, Start Job/Work Job controls, and register pickup instruction are readable.
 - Backroom service work prepares the ticket but does not bypass customer payment/completion at the register.
 - `Commit Release` text/button are readable, reserve cash clearly, enforce the release limit, and do not imply stocked inventory before launch day.
 - Launch-day resolution text is readable and explains preorder fulfillment, queue fulfillment, missed demand, cash, profit, and reputation.
@@ -242,7 +243,7 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 - Supplier ordering category, cart, cost, due day, delivery state, storage needs, and receiving expectation text fit without implying instant inventory teleporting.
 - Delivered supplier stock appears as receiving inventory without crowding or floating around the receiving box.
 - Receiving workflow text/buttons make delivery point, sealed/opened box state, invoice checked/unchecked state, count variance, sorting destination, pending state, and completion readable.
-- `Open Box`, `Check Inv`, and `Sort` controls are grouped with supplier receiving work and do not look like register actions.
+- `Open Box`, `Invoice`, and `Sort` controls are grouped with supplier receiving work and do not look like register actions.
 - Storage workflow text/buttons make receiving-ready count, backstock count, capacity, overflow, and recent Store/Pull movement readable.
 - `Store` and `Pull` controls are grouped with storage work and do not look like register actions or a solved inventory menu.
 - Storage fixture order text/buttons are readable and clearly communicate pending storage placement.
@@ -378,18 +379,18 @@ Run these first when manually checking the completed Stop 8.1 through Stop 8.6 b
 
 - Confirm supplier delivery creates pending receiving work instead of making the order feel solved as soon as the next day starts.
 - Confirm delivery point, box state, invoice state, expected/received count, variance, sorting destination, and pending/completed status are readable in the backroom computer.
-- Confirm `Open Box`, `Check Inv`, and `Sort` buttons enable and disable in a sensible order and fit the supplier/backroom workflow.
+- Confirm `Open Box`, `Invoice`, and `Sort` buttons enable and disable in a sensible order and fit the supplier/backroom workflow.
 - Confirm sorting completion reads as physical backroom work, not register work or an instant inventory menu.
 - Confirm storage shelf capacity, backstock count, overflow count, and recent movement history are readable in the storage tab.
 - Confirm `Store` moves a receiving item into backstock and `Pull` returns a backstock item to receiving for pricing/stocking.
 - Confirm Store/Pull disabled states make sense when there is no receiving item or no backstock item available.
 - Confirm service capabilities show disc resurfacing as available, cartridge cleaning as locked, and console test as a placeholder.
 - Confirm service ticket parts, progress, ready-for-pickup state, and picked-up state are readable in the Services tab.
-- Confirm `Start Svc` and `Work Svc` controls advance bench work without making the backroom computer feel like the register.
+- Confirm `Start Job` and `Work Job` controls advance bench work without making the backroom computer feel like the register.
 - Confirm customer payment/completion still happens at the register after bench work is ready.
 - Confirm the Records tab management desk lists supplier messages, bill review, inventory search, report review, preorder planning, and upgrade ordering as planning tasks.
 - Confirm `Review Desk` advances one desk task at a time without moving inventory, completing customer work, or posting register revenue.
-- Confirm `Buy Upg` purchases Computer Analytics as a cash upgrade order and updates the settings/upgrade summary.
+- Confirm `Upgrade` purchases Computer Analytics as a cash upgrade order and updates the settings/upgrade summary.
 - Confirm management desk text feels like backroom planning, not a standalone register, service terminal, or instant inventory solver.
 - Confirm the Records tab lists cash safe, high-value storage, suspicious goods isolation, and security footage as placeholders.
 - Confirm security/safe placeholder text stays inactive and does not expose a new hidden-thread objective, warning, register action, or inventory teleport.
@@ -577,6 +578,18 @@ Run these first when manually checking the completed Stop 13.4A scene-readabilit
 - Confirm preorder, service, suspicious, and trade-in customers have clearer depth separation and do not create a label or prop pileup at the register.
 - Confirm the placed fixture reads as an intentional rack with visible face/profile cues instead of a camera-blocking slab.
 - Confirm the backroom computer first view exposes the major action groups and storage-placement row without relying on hidden lower content.
+
+## Alpha Content Copy Focus
+
+Run these first when manually checking the completed Stop 13.4B content/copy pass:
+
+- Confirm buyer, browser, parent, collector, regular, trade-in, return, service, and suspicious customer copy reads as distinct store visitors rather than generic debug labels.
+- Confirm dialogue staff notes reinforce the intended responsibility split: register for sales, returns, trade-ins, preorders, and services; backroom computer for orders, reports, releases, suppliers, storage, and records.
+- Confirm supplier ordering explains crate contents, invoice check, shelf plan, receiving box work, and next physical actions without implying instant inventory teleporting.
+- Confirm release calendar/planning text makes launch hooks, allocation limits, and new-release wall work clear at 1280x720.
+- Confirm daily report sections read as an end-of-day owner readout, with cash drawer, counter work, margin, operating pressure, launch activity, reputation, bills, and tomorrow plan easy to scan.
+- Confirm register return-scope copy is clear and does not imply returns are fully implemented.
+- Confirm `Order`, `Invoice`, `Category`, `Start Job`, `Work Job`, `Upgrade`, and related backroom controls are readable in the actual window and do not overflow their buttons.
 
 ## Automated Screenshot Artifacts
 

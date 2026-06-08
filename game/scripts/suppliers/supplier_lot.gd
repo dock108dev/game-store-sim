@@ -11,6 +11,9 @@ class_name SupplierLot
 @export var product_paths: Array[String] = []
 @export var storage_requirement: String = ""
 @export var receiving_expectation: String = ""
+@export_multiline var order_note: String = ""
+@export_multiline var invoice_note: String = ""
+@export_multiline var shelf_plan: String = ""
 
 
 func get_item_count() -> int:
@@ -36,3 +39,24 @@ func get_receiving_expectation() -> String:
 		return receiving_expectation.strip_edges()
 
 	return "Physical stock appears in receiving for pickup and placement"
+
+
+func get_order_note() -> String:
+	if not order_note.strip_edges().is_empty():
+		return order_note.strip_edges()
+
+	return "Starter lot fills the used wall with quick-turn shelf stock"
+
+
+func get_invoice_note() -> String:
+	if not invoice_note.strip_edges().is_empty():
+		return invoice_note.strip_edges()
+
+	return "Check the invoice before pricing and stocking"
+
+
+func get_shelf_plan() -> String:
+	if not shelf_plan.strip_edges().is_empty():
+		return shelf_plan.strip_edges()
+
+	return "Price each case, then split between display slots and backstock"

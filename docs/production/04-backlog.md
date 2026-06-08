@@ -43,7 +43,7 @@ Current completion plan: `11-game-completion-plan.md`.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
-14. Alpha hardening. Current phase; scene-readability content pass done through Stop 13.4A.
+14. Alpha hardening. Current phase; content/copy pass done through Stop 13.4B.
 
 ## Completed Polish Scope
 
@@ -67,8 +67,8 @@ The following polish items remain valid historical checkpoints:
 - Done: kept the backroom computer readable as a management terminal, not another register.
 - Done: added a receiving workflow state for supplier deliveries with delivery point, sealed/opened box state, invoice check, sorting destination, pending/completed status, backroom controls, save/load coverage, and manual validation coverage.
 - Done: added storage workflow state for receiving-to-backstock movement, backstock retrieval, shelf capacity, overflow summary, Store/Pull backroom controls, movement history, save/load coverage, and manual validation coverage.
-- Done: added service bench workflow state for disc resurfacing tickets, locked/placeholder future services, parts, queued/in-progress/ready/picked-up progress, Start Svc/Work Svc controls, register pickup integration, save/load coverage, and manual validation coverage.
-- Done: added management desk workflow state for supplier-message review, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk/Buy Upg controls, save/load coverage, and manual validation coverage.
+- Done: added service bench workflow state for disc resurfacing tickets, locked/placeholder future services, parts, queued/in-progress/ready/picked-up progress, Start Job/Work Job controls, register pickup integration, save/load coverage, and manual validation coverage.
+- Done: added management desk workflow state for supplier-message review, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk/Upgrade controls, save/load coverage, and manual validation coverage.
 - Done: added security/safe placeholder state for cash safe, high-value storage, suspicious goods isolation, security footage, Records tab readout, StoreSession/EvidenceStorage wiring, and manual validation coverage.
 - Done: synced the backroom operations validation snapshot, scenario matrix, manual checks, and milestone status after the Stop 8 pass.
 
@@ -162,7 +162,8 @@ The following polish items remain valid historical checkpoints:
 - Current alpha performance baseline: main scene resource load 141 ms, instantiate 23 ms, 60-frame step 413 ms, UI panel cycle 43 ms, customer pathing 4 ms, screenshot capture 930 ms, and exported pack startup 413 ms.
 - Done: added regression coverage for rotated fixture placement bounds/history, visible buyer queue spacing against special register customers, and screenshot scenario coverage for current P1/P2 alpha bug subjects for Stop 13.3.
 - Done: added a Stop 13.4A alpha scene-readability pass for wall detail, sign framing, special-customer spacing, display-rack profile cues, placed-fixture screenshot framing, and backroom computer first-view controls.
-- Remaining alpha-hardening work: Stop 13.4B content/copy pass, Stop 13.5 balance pass, Stop 13.6 playtest package, and Stop 13.7 alpha validation sync.
+- Done: added a Stop 13.4B alpha content/copy pass for customer role copy, dialogue staff context, supplier order notes, release planning hooks, daily report readouts, register return-scope copy, and backroom action labels.
+- Remaining alpha-hardening work: Stop 13.5 balance pass, Stop 13.6 playtest package, and Stop 13.7 alpha validation sync.
 
 ## Product And Fixture Polish
 

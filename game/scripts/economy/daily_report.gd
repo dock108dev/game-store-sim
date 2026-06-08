@@ -47,12 +47,12 @@ static func build_report(session: StoreSession) -> Dictionary:
 static func format_report(session: StoreSession) -> String:
 	var report := build_report(session)
 	if report.is_empty():
-		return "Daily report unavailable"
+		return "Backroom report unavailable"
 
 	if not bool(report.get("is_closed", false)):
-		return "Daily report: day still open"
+		return "Backroom report: day still open - finish customer hours, clear receiving, and close from the register before final totals post."
 
-	return "Daily report day %d:\nEnd-of-day summary\nPhase: %s\nDay plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning\nCash: opening %s / Closing cash %s / Net cash %s\nSales %d / Trade-ins %d / Services %d / Preorders %d\nRevenue %s / Cost %s\nGross profit %s\nOperating expenses: %s\nReserved obligations: %s\nTrade-ins: cash %s / Store credit %s\nServices: count %d / Service revenue %s / Service cost %s / Service profit %s\nPreorders: count %d / deposits %s\nLaunch activity: %d events / cash %s / profit %s / missed demand %d\nReputation: %d / events %d\nLosses: %s\nBills: %s\nTomorrow: %s" % [
+	return "Daily report day %d:\nEnd-of-day readout\nPhase: %s\nDay plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning\nCash drawer: opening %s / closing %s / net %s\nCounter work: sales %d / trade-ins %d / services %d / preorders %d\nMerch margin: revenue %s / cost %s / gross profit %s\nOperating pressure: expenses %s / reserved obligations %s\nTrade-ins: cash paid %s / store credit issued %s\nService bench: %d completed / revenue %s / parts cost %s / profit %s\nPreorders: %d deposits / cash held %s\nLaunch activity: %d events / launch cash %s / launch profit %s / missed demand %d\nReputation: %d / events %d\nLosses: %s\nBills: %s\nTomorrow plan: %s" % [
 		int(report.get("day_number", 0)),
 		str(report.get("day_phase_label", "Report")),
 		_format_money(int(report.get("opening_cash_cents", 0))),

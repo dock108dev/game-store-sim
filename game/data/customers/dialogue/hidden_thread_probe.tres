@@ -11,4 +11,6 @@ opening_line = "I can pay cash for bulk Orbit 64 copies, no receipts needed."
 player_options = Array[String](["Ask for supplier name", "Refuse the deal", "Take the cash"])
 response_lines = Array[String](["North Dock can make things move.", "Your call.", "Keep this quiet."])
 consequence_key = "hidden_cash_probe"
+tone_tag = "quiet"
+staff_note = "This conversation is optional and must never block sales, receiving, or day close."
 hidden_thread_probe = true

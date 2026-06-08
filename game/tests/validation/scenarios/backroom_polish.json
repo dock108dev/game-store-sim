@@ -34,6 +34,34 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_alpha_layout_keeps_storage_placement_in_first_view"
+    },
+    {
+      "id": "alpha_supplier_order_copy",
+      "name": "Supplier ordering copy explains crate contents, invoice check, shelf plan, and physical receiving next actions",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_supplier_lot.gd::test_supplier_lot_has_orderable_used_game_products"
+    },
+    {
+      "id": "alpha_release_planning_copy",
+      "name": "Release planning copy includes launch hooks, allocation notes, and backroom calendar planning lines",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_new_release.gd::test_new_release_formats_countdown_lines"
+    },
+    {
+      "id": "alpha_daily_report_readout_copy",
+      "name": "Daily report copy reads as an end-of-day backroom readout with cash, counter, margin, pressure, and tomorrow sections",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_closed_day_totals"
+    },
+    {
+      "id": "alpha_backroom_action_copy",
+      "name": "Backroom computer action labels avoid debug abbreviations for supplier, service, upgrade, and category controls",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
     }
   ]
 }
