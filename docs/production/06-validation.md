@@ -23,6 +23,7 @@ The gate currently runs:
 - GUT tests under `game/tests/gut/`, with JUnit XML exported to `artifacts/validation/latest/gut-results.xml`.
 - UI scenario automation coverage from modular scenario files under `game/tests/validation/scenarios/`.
 - Production-script test mapping coverage from `game/tests/validation/script_coverage/production_scripts.json`.
+- Standalone product catalog content checks through `scripts/check_product_catalog.py`.
 - Product catalog validation for fictional names, unique IDs, pricing sanity, complete inventory schema fields, multi-day starter content depth, and category/platform/condition/format/demand/authenticity/rarity/risk/location variety.
 - Codec-level save/load smoke tests for session state, transactions, and active inventory.
 - Named validation screenshot capture at `1280x720` for main scene, carry stack, receiving area, supplier message, suspicious customer, register counter, customer queue, trade-in offer, preorder deposit, service request, backroom summary, release calendar, release allocation, launch day, supplier delivery, fixture ghost preview, invalid fixture ghost preview, rotated fixture ghost preview, and placed fixture.
@@ -51,6 +52,7 @@ Current polish-pass baseline:
 - Starter product catalog includes 33 fictional products across used games, new games, accessories, hardware, and service tickets, with 30 sellable physical products for several days of rotation.
 - Product condition/authenticity cues show scratches, missing manual, loose media, damaged label, reseal, and suspicious serial-risk markers through generated product-item meshes.
 - Product shelf/price tags show compact category, platform, price, sale, preorder, staff-pick, and bargain text without replacing core interaction prompts.
+- `scripts/check_product_catalog.py` validates product IDs, fictional names, required schema fields, category coverage, pricing sanity, sellable depth, and visual variant coverage as part of the local gate.
 
 ## Manual Validation
 
@@ -193,6 +195,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
 
 Script test mappings live in `script_coverage/production_scripts.json`, and thresholds live in `thresholds.json`.
+Standalone non-Godot validation tools live under `scripts/`; `scripts/check_product_catalog.py` is run by `scripts/validate_godot.sh` after scenario coverage and before screenshot capture.
 
 Use these statuses:
 

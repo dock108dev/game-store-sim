@@ -326,7 +326,7 @@ Stops:
 - Stop 6.3: Starter catalog expansion. Done in `Expand starter catalog`: the product catalog now contains 33 fictional products across used games, new games, accessories, hardware, and service tickets, including 30 sellable physical products for several days of rotation.
 - Stop 6.4: Condition and authenticity cues. Done in `Add condition authenticity cues`: product visual rules now add visible scratches, missing manual markers, loose media, damaged label, reseal, and suspicious serial-risk cue meshes from condition, completeness, authenticity, risk tags, and serial mismatch state.
 - Stop 6.5: Shelf label and price tag system. Done in `Add shelf label price tags`: product items now generate compact category, platform, price, sale, preorder, staff-pick, and bargain tag text without replacing interaction prompts.
-- Stop 6.6: Content validation tools. Add checks for unique IDs, fictional names, category coverage, pricing sanity, and visual variant coverage.
+- Stop 6.6: Content validation tools. Done in `Add product content validation`: `scripts/check_product_catalog.py` now runs in the local gate and checks unique IDs, fictional names, required fields, category coverage, pricing sanity, sellable depth, and visual variant coverage.
 - Stop 6.7: Product pipeline validation sync. Update automation and manual content review.
 
 Acceptance:

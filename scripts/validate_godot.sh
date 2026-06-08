@@ -70,6 +70,9 @@ fi
 echo "== Coverage policy =="
 python3 "$REPO_ROOT/scripts/check_validation_coverage.py"
 
+echo "== Product catalog content =="
+python3 "$REPO_ROOT/scripts/check_product_catalog.py"
+
 echo "== Screenshot capture =="
 CAPTURE_LOG="$ARTIFACT_DIR/screenshot-capture.log"
 for scenario in "${SCREENSHOT_SCENARIOS[@]}"; do
