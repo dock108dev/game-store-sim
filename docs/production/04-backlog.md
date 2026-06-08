@@ -123,6 +123,11 @@ Compressed summary of completed validated systems:
 - Hidden event log, mismatched serial item, supplier message, optional suspicious customer, and hidden evidence storage.
 - Mandatory validation gate, product content checker, validation tool manifest, GUT tests, validation scenario matrix, script mapping, persistence smoke, and named screenshots.
 
+## Economy, Day Loop, And Progression
+
+- Done: added production day structure phases for opening, setup, customer hours, closing, report, and tomorrow planning, with daily report, save/load, and validation coverage.
+- Remaining: cash pressure, reputation detail, demand tuning, upgrade path, onboarding, and final economy/progression validation sync.
+
 ## Not Current Scope
 
 These remain future phases unless explicitly selected:

@@ -9,6 +9,7 @@ func create_save_data(session: StoreSession) -> Dictionary:
 	var data: Dictionary = {
 		"version": 1,
 		"day_number": session.day_number,
+		"day_phase": session.get_day_phase(),
 		"cash_cents": session.get_cash_cents(),
 		"is_day_closed": session.is_day_closed,
 		"transactions": session.get_transactions(),
@@ -46,6 +47,7 @@ func restore_into_existing_scene(
 		return false
 
 	session.day_number = int(data.get("day_number", session.day_number))
+	session.day_phase = str(data.get("day_phase", session.day_phase))
 	session.cash_cents = int(data.get("cash_cents", session.starting_cash_cents))
 	session.is_day_closed = bool(data.get("is_day_closed", false))
 	session.reputation_score = int(data.get("reputation_score", session.reputation_score))

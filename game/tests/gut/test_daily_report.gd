@@ -11,6 +11,8 @@ func test_daily_report_builds_open_day_snapshot() -> void:
 
 	assert_eq(report.get("day_number"), 1)
 	assert_false(report.get("is_closed"))
+	assert_eq(report.get("day_phase"), StoreSession.DAY_PHASE_SETUP)
+	assert_eq(report.get("day_phase_label"), "Setup")
 	assert_eq(report.get("opening_cash_cents"), 50000)
 	assert_eq(report.get("closing_cash_cents"), 50000)
 	assert_eq(DailyReportPolicy.format_report(session), "Daily report: day still open")
@@ -41,6 +43,8 @@ func test_daily_report_formats_closed_day_totals() -> void:
 	var text := DailyReportPolicy.format_report(session)
 
 	assert_true(report.get("is_closed"))
+	assert_eq(report.get("day_phase"), StoreSession.DAY_PHASE_REPORT)
+	assert_eq(report.get("day_phase_label"), "Report")
 	assert_eq(report.get("closing_cash_cents"), 51938)
 	assert_eq(report.get("net_cash_change_cents"), 1938)
 	assert_eq(report.get("services"), 1)
@@ -53,6 +57,8 @@ func test_daily_report_formats_closed_day_totals() -> void:
 	assert_eq(report.get("bills_text"), "none due")
 	assert_string_contains(text, "Daily report day 1:")
 	assert_string_contains(text, "End-of-day summary")
+	assert_string_contains(text, "Phase: Report")
+	assert_string_contains(text, "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
 	assert_string_contains(text, "Closing cash $519.38")
 	assert_string_contains(text, "Net cash +$19.38")
 	assert_string_contains(text, "Sales 1 / Trade-ins 1 / Services 1")
@@ -94,4 +100,5 @@ func test_daily_report_formats_launch_reputation_losses_and_tomorrow_plan() -> v
 	assert_string_contains(text, "Launch activity: 1 events / cash $49.99 / profit $12.99 / missed demand 2")
 	assert_string_contains(text, "Reputation: 90")
 	assert_string_contains(text, "Losses: $10.00")
+	assert_string_contains(text, "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
 	assert_string_contains(text, "Tomorrow: Prepare Pocket Farm DX launch allocation")

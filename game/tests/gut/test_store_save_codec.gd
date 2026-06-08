@@ -16,6 +16,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	session.inventory_root_path = session.get_path_to(root)
 	var transaction := ledger.record_sale("customer_001", item)
 	session.apply_sale(transaction)
+	session.start_customer_hours()
 	var preorder_transaction := ledger.record_preorder_deposit(
 		"preorder_customer_001",
 		load("res://data/releases/neon_skyline_launch.tres"),
@@ -32,6 +33,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 
 	assert_eq(data.get("version"), 1)
 	assert_eq(data.get("day_number"), 1)
+	assert_eq(data.get("day_phase"), StoreSession.DAY_PHASE_CUSTOMER_HOURS)
 	assert_eq(data.get("cash_cents"), 34299)
 	assert_eq((data.get("transactions") as Array).size(), 2)
 	var preorder_deposits: Array = data.get("preorder_deposits")
@@ -65,6 +67,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	var data: Dictionary = {
 		"version": 1,
 		"day_number": 2,
+		"day_phase": StoreSession.DAY_PHASE_TOMORROW_PLANNING,
 		"cash_cents": 61234,
 		"is_day_closed": true,
 		"transactions": [{"transaction_id": "sale_001", "type": "sale"}],
@@ -82,6 +85,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 
 	assert_eq(int(decoded.get("version")), 1)
 	assert_eq(int(decoded.get("day_number")), 2)
+	assert_eq(str(decoded.get("day_phase")), StoreSession.DAY_PHASE_TOMORROW_PLANNING)
 	assert_eq(int(decoded.get("cash_cents")), 61234)
 	assert_true(decoded.get("is_day_closed"))
 	assert_eq((decoded.get("transactions") as Array).size(), 1)
@@ -108,6 +112,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	var data: Dictionary = {
 		"version": 1,
 		"day_number": 3,
+		"day_phase": StoreSession.DAY_PHASE_REPORT,
 		"cash_cents": 44444,
 		"is_day_closed": true,
 		"transactions": [
@@ -197,6 +202,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_true(codec.restore_into_existing_scene(session, ledger, root, data))
 
 	assert_eq(session.day_number, 3)
+	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_REPORT)
 	assert_eq(session.get_cash_cents(), 44444)
 	assert_true(session.is_day_closed)
 	assert_eq(ledger.get_sale_count(), 1)

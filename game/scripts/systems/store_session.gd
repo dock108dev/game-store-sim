@@ -5,7 +5,47 @@ const CategoryDemandPolicy := preload("res://scripts/economy/category_demand.gd"
 const DailyReportPolicy := preload("res://scripts/economy/daily_report.gd")
 const MarketDriftPolicy := preload("res://scripts/economy/market_drift.gd")
 
+const DAY_PHASE_OPENING := "opening"
+const DAY_PHASE_SETUP := "setup"
+const DAY_PHASE_CUSTOMER_HOURS := "customer_hours"
+const DAY_PHASE_CLOSING := "closing"
+const DAY_PHASE_REPORT := "report"
+const DAY_PHASE_TOMORROW_PLANNING := "tomorrow_planning"
+const DAY_STRUCTURE := [
+	{
+		"phase": DAY_PHASE_OPENING,
+		"label": "Opening",
+		"purpose": "Post overnight bills, deliveries, launch events, and daily setup notes.",
+	},
+	{
+		"phase": DAY_PHASE_SETUP,
+		"label": "Setup",
+		"purpose": "Price incoming stock, place fixtures, review orders, and prepare shelves before traffic.",
+	},
+	{
+		"phase": DAY_PHASE_CUSTOMER_HOURS,
+		"label": "Customer hours",
+		"purpose": "Serve buyers, trade-ins, preorders, service pickups, and optional suspicious encounters.",
+	},
+	{
+		"phase": DAY_PHASE_CLOSING,
+		"label": "Closing",
+		"purpose": "Stop new customer work, finish counter tasks, and close the register.",
+	},
+	{
+		"phase": DAY_PHASE_REPORT,
+		"label": "Report",
+		"purpose": "Review sales, trade-ins, services, launch outcomes, reputation, losses, and bills.",
+	},
+	{
+		"phase": DAY_PHASE_TOMORROW_PLANNING,
+		"label": "Tomorrow planning",
+		"purpose": "Plan deliveries, release allocations, reorder needs, and setup priorities for the next day.",
+	},
+]
+
 @export var day_number: int = 1
+@export var day_phase: String = DAY_PHASE_SETUP
 @export var starting_cash_cents: int = 50000
 @export var ledger_path: NodePath
 @export var inventory_root_path: NodePath
@@ -62,6 +102,10 @@ func apply_service(transaction: Dictionary) -> void:
 
 
 func end_day() -> void:
+	if is_day_closed:
+		return
+
+	day_phase = DAY_PHASE_REPORT
 	is_day_closed = true
 
 
@@ -71,15 +115,81 @@ func start_next_day() -> Dictionary:
 
 	day_number += 1
 	is_day_closed = false
+	day_phase = DAY_PHASE_OPENING
 	var delivered_orders := _deliver_due_supplier_orders()
 	var resolved_launches := _process_due_launches()
+	day_phase = DAY_PHASE_SETUP
 	return {
 		"day_number": day_number,
+		"day_phase": day_phase,
+		"day_phase_label": get_day_phase_label(),
+		"day_structure": get_day_structure(),
+		"opening_summary": _format_opening_summary(delivered_orders, resolved_launches),
 		"delivered_orders": delivered_orders,
 		"delivered_count": delivered_orders.size(),
 		"launch_events": resolved_launches,
 		"launch_event_count": resolved_launches.size(),
 	}
+
+
+func start_customer_hours() -> bool:
+	if is_day_closed:
+		return false
+
+	day_phase = DAY_PHASE_CUSTOMER_HOURS
+	return true
+
+
+func begin_closing() -> bool:
+	if is_day_closed:
+		return false
+
+	day_phase = DAY_PHASE_CLOSING
+	return true
+
+
+func begin_tomorrow_planning() -> bool:
+	if not is_day_closed:
+		return false
+
+	day_phase = DAY_PHASE_TOMORROW_PLANNING
+	return true
+
+
+func get_day_phase() -> String:
+	return day_phase
+
+
+func get_day_phase_label(phase: String = "") -> String:
+	var target_phase := phase
+	if target_phase.is_empty():
+		target_phase = day_phase
+
+	for row in DAY_STRUCTURE:
+		if str(row.get("phase", "")) == target_phase:
+			return str(row.get("label", target_phase.capitalize()))
+	return target_phase.capitalize()
+
+
+func get_day_structure() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for row in DAY_STRUCTURE:
+		rows.append(row.duplicate(true))
+	return rows
+
+
+func get_day_structure_text() -> String:
+	var lines: Array[String] = ["Day structure:"]
+	for row in DAY_STRUCTURE:
+		lines.append("%s: %s" % [
+			str(row.get("label", "")),
+			str(row.get("purpose", "")),
+		])
+	return "\n".join(lines)
+
+
+func get_tomorrow_planning_text() -> String:
+	return "Tomorrow planning: %s" % "; ".join(DailyReportPolicy.get_tomorrow_recommendations(self))
 
 
 func get_cash_cents() -> int:
@@ -982,9 +1092,10 @@ func get_status_label() -> String:
 
 
 func get_summary_text() -> String:
-	return "Day %d - %s\nCash: %s | Reputation: %d\nSales: %d | Trade-ins: %d | Preorders: %d | Services: %d | Release allocations: %d | Launch events: %d\nRevenue: %s | Cost: %s | Profit: %s\nTrade cash: %s | Store credit: %s\nPreorder deposits: %s | Services revenue: %s | Services profit: %s\nAllocation cost: %s | Launch cash: %s | Launch profit: %s" % [
+	return "Day %d - %s | Phase: %s\nCash: %s | Reputation: %d\nSales: %d | Trade-ins: %d | Preorders: %d | Services: %d | Release allocations: %d | Launch events: %d\nRevenue: %s | Cost: %s | Profit: %s\nTrade cash: %s | Store credit: %s\nPreorder deposits: %s | Services revenue: %s | Services profit: %s\nAllocation cost: %s | Launch cash: %s | Launch profit: %s" % [
 		day_number,
 		get_status_label(),
+		get_day_phase_label(),
 		format_money(get_cash_cents()),
 		get_reputation_score(),
 		get_sale_count(),
@@ -1088,6 +1199,14 @@ func _find_fixture_order_index(order_id: String) -> int:
 		if str(fixture_orders[index].get("order_id", "")) == order_id:
 			return index
 	return -1
+
+
+func _format_opening_summary(delivered_orders: Array[Dictionary], resolved_launches: Array[Dictionary]) -> String:
+	return "Opening day %d: %d deliveries, %d launch events, setup ready" % [
+		day_number,
+		delivered_orders.size(),
+		resolved_launches.size(),
+	]
 
 
 func _process_due_launches() -> Array[Dictionary]:

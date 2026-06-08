@@ -9,6 +9,9 @@ static func build_report(session: StoreSession) -> Dictionary:
 	return {
 		"day_number": session.day_number,
 		"is_closed": session.is_day_closed,
+		"day_phase": session.get_day_phase(),
+		"day_phase_label": session.get_day_phase_label(),
+		"day_structure_text": session.get_day_structure_text(),
 		"opening_cash_cents": session.starting_cash_cents,
 		"closing_cash_cents": session.get_cash_cents(),
 		"net_cash_change_cents": session.get_cash_cents() - session.starting_cash_cents,
@@ -31,8 +34,8 @@ static func build_report(session: StoreSession) -> Dictionary:
 		"missed_launch_demand": _get_missed_launch_demand(session),
 		"reputation": session.get_reputation_score(),
 		"losses_cents": _get_losses_cents(session),
-		"bills_text": _get_bills_text(session),
-		"tomorrow_recommendations": _get_tomorrow_recommendations(session),
+		"bills_text": get_bills_text(session),
+		"tomorrow_recommendations": get_tomorrow_recommendations(session),
 	}
 
 
@@ -44,8 +47,9 @@ static func format_report(session: StoreSession) -> String:
 	if not bool(report.get("is_closed", false)):
 		return "Daily report: day still open"
 
-	return "Daily report day %d:\nEnd-of-day summary\nCash: opening %s / Closing cash %s / Net cash %s\nSales %d / Trade-ins %d / Services %d / Preorders %d\nRevenue %s / Cost %s\nGross profit %s\nTrade-ins: cash %s / Store credit %s\nServices: count %d / Service revenue %s / Service cost %s / Service profit %s\nPreorders: count %d / deposits %s\nLaunch activity: %d events / cash %s / profit %s / missed demand %d\nReputation: %d\nLosses: %s\nBills: %s\nTomorrow: %s" % [
+	return "Daily report day %d:\nEnd-of-day summary\nPhase: %s\nDay plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning\nCash: opening %s / Closing cash %s / Net cash %s\nSales %d / Trade-ins %d / Services %d / Preorders %d\nRevenue %s / Cost %s\nGross profit %s\nTrade-ins: cash %s / Store credit %s\nServices: count %d / Service revenue %s / Service cost %s / Service profit %s\nPreorders: count %d / deposits %s\nLaunch activity: %d events / cash %s / profit %s / missed demand %d\nReputation: %d\nLosses: %s\nBills: %s\nTomorrow: %s" % [
 		int(report.get("day_number", 0)),
+		str(report.get("day_phase_label", "Report")),
 		_format_money(int(report.get("opening_cash_cents", 0))),
 		_format_money(int(report.get("closing_cash_cents", 0))),
 		_format_delta(int(report.get("net_cash_change_cents", 0))),
@@ -89,11 +93,11 @@ static func _get_losses_cents(session: StoreSession) -> int:
 	return losses
 
 
-static func _get_bills_text(_session: StoreSession) -> String:
+static func get_bills_text(_session: StoreSession) -> String:
 	return "none due"
 
 
-static func _get_tomorrow_recommendations(session: StoreSession) -> Array[String]:
+static func get_tomorrow_recommendations(session: StoreSession) -> Array[String]:
 	var recommendations: Array[String] = []
 	for order in session.get_pending_supplier_orders():
 		if int(order.get("due_day", session.day_number + 1)) <= session.day_number + 1:

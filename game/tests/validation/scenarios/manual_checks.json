@@ -513,6 +513,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "production_day_structure_readability",
+      "name": "Opening, setup, customer-hours, closing, report, and tomorrow-planning phases read as a store day",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the phase contract and report text; human review must confirm the wording makes the loop feel like owner/operator planning rather than debug state.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_inventory_summary_readability",
       "name": "Backroom inventory summary is readable and matches visible active inventory",
       "status": "manual",

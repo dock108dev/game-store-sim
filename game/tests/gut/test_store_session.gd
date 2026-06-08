@@ -9,6 +9,54 @@ func test_store_session_starts_with_open_day_and_cash() -> void:
 	assert_false(session.is_day_closed)
 	assert_eq(session.get_cash_cents(), 50000)
 	assert_eq(session.get_status_label(), "Day open")
+	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_SETUP)
+	assert_eq(session.get_day_phase_label(), "Setup")
+
+
+func test_store_session_exposes_production_day_structure() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var structure := session.get_day_structure()
+	var structure_text := session.get_day_structure_text()
+
+	assert_eq(structure.size(), 6)
+	assert_eq(structure[0].get("phase"), StoreSession.DAY_PHASE_OPENING)
+	assert_eq(structure[2].get("phase"), StoreSession.DAY_PHASE_CUSTOMER_HOURS)
+	assert_string_contains(structure_text, "Opening: Post overnight bills, deliveries, launch events")
+	assert_string_contains(structure_text, "Setup: Price incoming stock")
+	assert_string_contains(structure_text, "Customer hours: Serve buyers")
+	assert_string_contains(structure_text, "Closing: Stop new customer work")
+	assert_string_contains(structure_text, "Report: Review sales")
+	assert_string_contains(structure_text, "Tomorrow planning: Plan deliveries")
+	assert_string_contains(session.get_tomorrow_planning_text(), "Tomorrow planning:")
+
+
+func test_store_session_tracks_day_phase_through_close_and_next_day() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	assert_true(session.start_customer_hours())
+	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_CUSTOMER_HOURS)
+	assert_true(session.begin_closing())
+	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_CLOSING)
+
+	session.end_day()
+
+	assert_true(session.is_day_closed)
+	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_REPORT)
+	assert_true(session.begin_tomorrow_planning())
+	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_TOMORROW_PLANNING)
+
+	var started := session.start_next_day()
+
+	assert_eq(started.get("day_number"), 2)
+	assert_eq(started.get("day_phase"), StoreSession.DAY_PHASE_SETUP)
+	assert_eq(started.get("day_phase_label"), "Setup")
+	assert_string_contains(str(started.get("opening_summary")), "Opening day 2")
+	assert_eq((started.get("day_structure") as Array).size(), 6)
+	assert_false(session.is_day_closed)
+	assert_eq(session.get_day_phase(), StoreSession.DAY_PHASE_SETUP)
 
 
 func test_store_session_applies_sale_to_cash() -> void:
@@ -286,6 +334,8 @@ func test_store_session_formats_daily_report_after_close() -> void:
 	session.end_day()
 
 	assert_string_contains(session.get_daily_report_text(), "Daily report day 1:")
+	assert_string_contains(session.get_daily_report_text(), "Phase: Report")
+	assert_string_contains(session.get_daily_report_text(), "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
 	assert_string_contains(session.get_daily_report_text(), "Closing cash $521.99")
 	assert_string_contains(session.get_daily_report_text(), "Gross profit $12.99")
 

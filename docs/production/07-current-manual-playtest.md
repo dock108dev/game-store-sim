@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this product/content pipeline pass: `scripts/validate_godot.sh` passed with 374 GUT tests, UI scenario coverage 353/426, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
+- Last full gate in this economy/day-loop pass: `scripts/validate_godot.sh` passed with 376 GUT tests, UI scenario coverage 355/429, script mapping coverage 39/39, 1 active validation-tool manifest, and product catalog content validation.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -30,6 +30,7 @@ Current automated baseline:
 - Shelf label and price tag system is implemented through Stop 6.5; manual QA should confirm category, platform, price, sale, preorder, staff-pick, and bargain tags remain readable without obscuring prompts.
 - Product content validation tools are implemented through Stop 6.6; manual QA can rely on the local gate for duplicate IDs, required fields, fictional names, pricing sanity, category coverage, sellable depth, and visual variant coverage before doing human content review.
 - Product pipeline validation sync is implemented through Stop 6.7; manual QA should use the Product Content Focus section as the current review surface for schema, visual variants, condition/authenticity cues, shelf tags, catalog breadth, validation manifest coverage, and content tone.
+- Production day structure is implemented through Stop 7.1; manual QA should confirm opening, setup, customer-hours, closing, report, and tomorrow-planning language makes the store day feel like an owner/operator loop rather than a debug summary.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -88,7 +89,7 @@ Current automated baseline:
 51. Confirm supplier ordering shows `Used Game Starter Lot`, category, cart size, reserved cost, due day 2, pending delivery state, storage needs, and physical receiving expectations.
 52. End the day, then use `Start Day` and confirm delivered stock appears in the receiving box and pending receiving clears.
 53. End the day and confirm the summary changes to `Day closed`.
-54. Confirm the closed-day report is readable and matches the played day, including cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
+54. Confirm the closed-day report is readable and matches the played day, including phase, day plan, cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
 55. Confirm no visible hidden-thread UI or interruption appears during the normal store loop.
 56. If you inspect the third receiving-box `Star Trader`, confirm the serial mismatch text is readable and the item still works with pickup, pricing, stocking, and sale flow.
 57. Read the receiving-box supplier note and confirm it is readable, optional, and does not interrupt normal stocking or sales.
@@ -150,6 +151,7 @@ Current automated baseline:
 - Summary panel text and buttons fit in the actual game window.
 - Pricing, trade-in appraisal, and backroom computer panels open with visible mouse focus and close back into captured first-person control.
 - Closed-day report text is readable and understandable after ending the day, including cash movement, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
+- Day structure text reads as opening, setup, customer-hours, closing, report, and tomorrow-planning phases instead of a loose debug summary.
 - Recent activity text is readable and distinguishes sales from trade-ins.
 - Store-credit trade-in text is readable and clearly separate from cash trade spend.
 - Inventory summary text is readable and matches active receiving/rack items.

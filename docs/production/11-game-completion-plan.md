@@ -361,7 +361,7 @@ Goal: turn isolated systems into a game with pressure and forward motion.
 
 Stops:
 
-- Stop 7.1: Day structure. Define opening, setup, customer hours, closing, report, bills, deliveries, events, and tomorrow planning.
+- Stop 7.1: Day structure. Done in `Build production day structure`: store sessions now expose opening, setup, customer-hours, closing, report, and tomorrow-planning phases; start-day payloads include opening summaries; daily reports show the phase/plan; save/load preserves the current phase.
 - Stop 7.2: Cash pressure. Add rent, bills, supplier terms, payroll placeholder, repairs, shrinkage placeholder, and reserve obligations.
 - Stop 7.3: Reputation. Track pricing fairness, wait times, fulfilled preorders, service success, return handling, suspicious choices, and stock variety.
 - Stop 7.4: Demand tuning. Connect shelf visibility, category demand, price, rarity, marketing, events, and customer archetypes.
@@ -385,6 +385,18 @@ Commit targets:
 - `Add upgrade path baseline`
 - `Add onboarding baseline`
 - `Sync economy progression validation`
+
+Validation snapshot:
+
+- `scripts/validate_godot.sh` passes with 376 GUT tests.
+- UI scenario automation coverage is 355/429, above the required 80% threshold.
+- Production script mapping coverage is 39/39.
+- Validation tool manifest coverage reports 1 active standalone tool.
+- Product catalog content validation passes with 33 products.
+- Store session tests cover production day structure and phase transitions through customer hours, closing, report, tomorrow planning, and next-day setup.
+- Daily report tests cover the production day-plan line.
+- Save/load tests preserve the current day phase.
+- Manual day-structure checks are current for report readability and owner/operator day-loop language.
 
 ## Milestone 8: Backroom Operations
 

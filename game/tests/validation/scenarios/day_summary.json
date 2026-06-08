@@ -29,6 +29,20 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_starts_with_open_day_and_cash"
     },
     {
+      "id": "store_session_production_day_structure",
+      "name": "Store session exposes opening, setup, customer-hours, closing, report, and tomorrow-planning phases",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_exposes_production_day_structure"
+    },
+    {
+      "id": "store_session_day_phase_transitions",
+      "name": "Store session tracks phase transitions through customer hours, closing, report, tomorrow planning, and next-day setup",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_day_phase_through_close_and_next_day"
+    },
+    {
       "id": "register_updates_store_cash",
       "name": "Register sale updates store cash",
       "status": "automated",
