@@ -360,6 +360,8 @@ Manual validation status:
 
 ## Slice 7: Full Polish Validation Tightening
 
+Status: complete.
+
 Goal: make the manual checklist and validation matrix fully current after the polish pass.
 
 ### Stop 7.1: Manual Playtest Checklist Audit
@@ -402,6 +404,24 @@ Validation:
 Commit:
 
 - `Complete production polish validation sync`
+
+### Slice 7 Result
+
+Completed commits:
+
+- `2c9dd01` Audit manual polish checklist
+- `fddee73` Audit polish validation matrix
+
+Validation:
+
+- `scripts/validate_godot.sh` passed after the manual checklist audit.
+- Final scenario matrix includes dedicated polish files for backroom, customer, store visual, and product/fixture presentation.
+- Latest automated baseline is 286 GUT tests, UI scenario coverage 289/338, and script mapping coverage 31/31.
+
+Manual validation status:
+
+- Manual playtest checklist is current and explicitly marked as not performed by Codex.
+- Human manual validation remains the required next checkpoint before calling the polish pass human-approved.
 
 ## Showstoppers
 

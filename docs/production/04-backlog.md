@@ -8,6 +8,8 @@ Production polish and readability.
 
 Goal: keep the validated retail loop intact while making the store, backroom, customers, computer, and menus read like an intentional game instead of a test harness.
 
+Status: planned production polish implementation is complete through the current execution plan; remaining work is human manual validation and future scope selection.
+
 Active roadmap: `08-polish-roadmap.md`.
 
 Current implementation plan: `10-polish-execution-plan.md`.
@@ -32,7 +34,7 @@ Current implementation plan: `10-polish-execution-plan.md`.
 4. Customer readability and role silhouette pass. Done.
 5. Store lighting, materials, signage, and retail clutter pass. Done.
 6. Product and fixture presentation pass. Done.
-7. Validation/manual QA tightening for the full polish pass. Next implementation target.
+7. Validation/manual QA tightening for the full polish pass. Done.
 
 ## Backroom Polish
 
