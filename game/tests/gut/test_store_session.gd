@@ -722,6 +722,27 @@ func test_store_session_unlocks_upgrade_gated_fixture_orders() -> void:
 	assert_true(session.can_order_fixture("fixture_backroom_rack"))
 
 
+func test_store_session_applies_decoration_baseline() -> void:
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	add_child_autofree(session)
+
+	var catalog := session.get_decoration_catalog()
+
+	assert_eq(catalog.size(), 7)
+	assert_true(session.can_apply_decoration("decor_wall_paint_savepoint_blue"))
+	assert_string_contains(session.get_decoration_summary_text(), "Savepoint Blue Wall Paint $40.00")
+	assert_string_contains(session.get_decoration_summary_text(), "Clutter budget: 0 used / 4 safe points")
+
+	var decoration := session.apply_decoration("decor_wall_paint_savepoint_blue")
+
+	assert_eq(decoration.get("decoration_id"), "decor_wall_paint_savepoint_blue")
+	assert_eq(decoration.get("category"), "wall_paint")
+	assert_eq(session.get_cash_cents(), 46000)
+	assert_true(session.has_decoration("decor_wall_paint_savepoint_blue"))
+	assert_false(session.can_apply_decoration("decor_wall_paint_savepoint_blue"))
+	assert_string_contains(session.get_decoration_summary_text(), "Applied: Savepoint Blue Wall Paint")
+
+
 func test_store_session_lists_available_supplier_lots() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)

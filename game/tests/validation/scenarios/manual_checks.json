@@ -625,6 +625,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "decoration_clutter_budget_readability",
+      "name": "Decoration summary, Apply Decor action, and clutter budget read as store-building choices without hiding interactables",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify decoration catalog, purchase rules, panel action, and persistence; human review must confirm the decoration text fits the backroom computer and the resulting visual intent does not obscure prompts or stocked products.",
+      "owner": "manual QA"
+    },
+    {
       "id": "hidden_thread_flags_invisible",
       "name": "Suspicious event flags do not visibly interrupt normal store progression",
       "status": "manual",

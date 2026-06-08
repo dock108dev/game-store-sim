@@ -66,6 +66,8 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.services_label.text, "Services: none")
 	assert_string_contains(_panel.services_label.text, "Service bench:")
 	assert_string_contains(_panel.settings_label.text, "Settings:")
+	assert_string_contains(_panel.settings_label.text, "Decorations:")
+	assert_string_contains(_panel.settings_label.text, "Savepoint Blue Wall Paint $40.00")
 	assert_string_contains(_panel.management_desk_label.text, "Management desk:")
 	assert_string_contains(_panel.management_desk_label.text, "Supplier messages - pending")
 	assert_string_contains(_panel.hidden_records_label.text, "Security placeholders:")
@@ -98,6 +100,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.work_service_button.text, "Work Svc")
 	assert_eq(_panel.review_desk_button.text, "Review Desk")
 	assert_eq(_panel.buy_upgrade_button.text, "Buy Upg")
+	assert_eq(_panel.apply_decor_button.text, "Apply Decor")
 	assert_true(_panel.open_box_button.disabled)
 	assert_true(_panel.check_invoice_button.disabled)
 	assert_true(_panel.sort_receiving_button.disabled)
@@ -107,6 +110,7 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_true(_panel.work_service_button.disabled)
 	assert_false(_panel.review_desk_button.disabled)
 	assert_false(_panel.buy_upgrade_button.disabled)
+	assert_false(_panel.apply_decor_button.disabled)
 	assert_eq(_panel.order_rack_button.text, "Order Rack")
 	assert_eq(_panel.place_rack_button.text, "Place Rack")
 	assert_eq(_panel.assign_category_button.text, "Assign Cat")
@@ -302,6 +306,17 @@ func test_day_summary_panel_runs_management_desk_workflow() -> void:
 	assert_string_contains(_panel.management_desk_label.text, "computer analytics purchased")
 	assert_string_contains(_panel.settings_label.text, "Purchased: Computer Analytics")
 	assert_true(_panel.buy_upgrade_button.disabled)
+
+
+func test_day_summary_panel_applies_decoration_from_backroom_computer() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.apply_starter_decoration())
+
+	assert_eq(_session.get_cash_cents(), 46000)
+	assert_string_contains(_panel.settings_label.text, "Applied: Savepoint Blue Wall Paint")
+	assert_eq(_panel.status_label.text, "Applied Savepoint Blue Wall Paint.")
+	assert_true(_panel.apply_decor_button.disabled)
 
 
 func test_day_summary_panel_shows_security_safe_placeholders() -> void:

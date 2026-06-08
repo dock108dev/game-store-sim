@@ -84,6 +84,7 @@ const BACKROOM_TABS := [
 @onready var close_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons/CloseButton
 @onready var review_desk_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow/ReviewDeskButton
 @onready var buy_upgrade_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow/BuyUpgradeButton
+@onready var apply_decor_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow/ApplyDecorButton
 @onready var rack_left_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackLeftButton
 @onready var rack_right_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackRightButton
 @onready var rack_forward_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow/RackForwardButton
@@ -97,6 +98,7 @@ const GAME_DISPLAY_RACK_ID := "fixture_game_display_rack"
 const USED_GAME_STARTER_LOT_ID := "supplier_lot_used_games_001"
 const NEON_SKYLINE_RELEASE_ID := "release_neon_skyline"
 const MANAGEMENT_UPGRADE_ID := "upgrade_computer_analytics"
+const STARTER_DECORATION_ID := "decor_wall_paint_savepoint_blue"
 
 var _session: Node = null
 var _transition_state: String = "closed"
@@ -132,6 +134,7 @@ func _ready() -> void:
 	work_service_button.pressed.connect(work_service_ticket)
 	review_desk_button.pressed.connect(review_management_desk)
 	buy_upgrade_button.pressed.connect(buy_management_upgrade)
+	apply_decor_button.pressed.connect(apply_starter_decoration)
 	rack_left_button.pressed.connect(move_pending_rack_left)
 	rack_right_button.pressed.connect(move_pending_rack_right)
 	rack_forward_button.pressed.connect(move_pending_rack_forward)
@@ -454,6 +457,20 @@ func buy_management_upgrade() -> bool:
 	return true
 
 
+func apply_starter_decoration() -> bool:
+	if _session == null or not _session.has_method("apply_decoration"):
+		return false
+
+	var decoration: Dictionary = _session.apply_decoration(STARTER_DECORATION_ID)
+	_update_labels()
+	if decoration.is_empty():
+		status_label.text = "Could not apply decoration."
+		return false
+
+	status_label.text = "Applied %s." % str(decoration.get("label", "decoration"))
+	return true
+
+
 func move_pending_rack_left() -> bool:
 	return _adjust_pending_rack(-1, 0, "left")
 
@@ -616,6 +633,8 @@ func _update_labels() -> void:
 		settings_label.text = "Settings: input and window settings are available from the pause/settings panel.\n" + _session.get_upgrade_summary_text()
 	else:
 		settings_label.text = "Settings: input and window settings are available from the pause/settings panel."
+	if _session.has_method("get_decoration_summary_text"):
+		settings_label.text += "\n" + _session.get_decoration_summary_text()
 	if _session.has_method("get_management_desk_summary_text"):
 		management_desk_label.text = _session.get_management_desk_summary_text()
 	else:
@@ -676,6 +695,10 @@ func _update_labels() -> void:
 		buy_upgrade_button.disabled = _session.is_day_closed or not _session.can_purchase_management_upgrade(MANAGEMENT_UPGRADE_ID)
 	else:
 		buy_upgrade_button.disabled = true
+	if _session.has_method("can_apply_decoration"):
+		apply_decor_button.disabled = _session.is_day_closed or not _session.can_apply_decoration(STARTER_DECORATION_ID)
+	else:
+		apply_decor_button.disabled = true
 	var can_adjust_fixture := false
 	if _session.has_method("can_adjust_pending_fixture_placement"):
 		can_adjust_fixture = not _session.is_day_closed and _session.can_adjust_pending_fixture_placement()

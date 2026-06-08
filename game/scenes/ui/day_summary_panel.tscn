@@ -367,6 +367,11 @@ custom_minimum_size = Vector2(110, 36)
 layout_mode = 2
 text = "Buy Upg"
 
+[node name="ApplyDecorButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+text = "Apply Decor"
+
 [node name="PlacementGroup" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 4

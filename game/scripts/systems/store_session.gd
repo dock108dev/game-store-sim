@@ -97,6 +97,72 @@ const MANAGEMENT_DESK_TASKS := [
 		"summary": "Review available upgrades and place upgrade orders from the management desk.",
 	},
 ]
+const DECORATION_CATALOG := [
+	{
+		"decoration_id": "decor_wall_paint_savepoint_blue",
+		"label": "Savepoint Blue Wall Paint",
+		"category": "wall_paint",
+		"surface": "sales_floor_walls",
+		"cost_cents": 4000,
+		"clutter_points": 0,
+		"effect": "Strengthens store identity without adding floor clutter.",
+	},
+	{
+		"decoration_id": "decor_floor_warm_wood",
+		"label": "Warm Wood Floor",
+		"category": "floor_material",
+		"surface": "sales_floor_floor",
+		"cost_cents": 6500,
+		"clutter_points": 0,
+		"effect": "Warmer retail floor finish for the sales area.",
+	},
+	{
+		"decoration_id": "decor_poster_launch_set",
+		"label": "Launch Poster Set",
+		"category": "poster",
+		"surface": "front_wall",
+		"cost_cents": 2500,
+		"clutter_points": 1,
+		"effect": "Adds new-release flavor and a small featured-marketing hook.",
+	},
+	{
+		"decoration_id": "decor_signage_counter_refresh",
+		"label": "Counter Signage Refresh",
+		"category": "signage",
+		"surface": "register_counter",
+		"cost_cents": 3500,
+		"clutter_points": 1,
+		"effect": "Clarifies register identity without changing checkout rules.",
+	},
+	{
+		"decoration_id": "decor_light_track_warm",
+		"label": "Warm Track Lights",
+		"category": "light",
+		"surface": "ceiling",
+		"cost_cents": 5000,
+		"clutter_points": 0,
+		"effect": "Improves fixture readability and store tone.",
+	},
+	{
+		"decoration_id": "decor_controller_display_prop",
+		"label": "Controller Display Prop",
+		"category": "display_prop",
+		"surface": "sales_floor_fixture",
+		"cost_cents": 3000,
+		"clutter_points": 1,
+		"effect": "Adds accessory flavor near displays.",
+	},
+	{
+		"decoration_id": "decor_small_clutter_budget",
+		"label": "Small Clutter Budget",
+		"category": "clutter_budget",
+		"surface": "whole_store",
+		"cost_cents": 1500,
+		"clutter_points": -2,
+		"effect": "Raises the safe prop budget for future small clutter.",
+	},
+]
+const BASE_CLUTTER_BUDGET_POINTS := 4
 const UPGRADE_CATALOG := [
 	{
 		"upgrade_id": "upgrade_fixture_peg_wall",
@@ -258,6 +324,7 @@ var is_day_closed: bool = false
 var fixture_orders: Array[Dictionary] = []
 var placed_fixtures: Array[Dictionary] = []
 var fixture_slot_categories: Dictionary = {}
+var purchased_decorations: Array[Dictionary] = []
 var supplier_orders: Array[Dictionary] = []
 var receiving_batches: Array[Dictionary] = []
 var storage_movements: Array[Dictionary] = []
@@ -2324,6 +2391,106 @@ func get_fixture_category_assignment_summary_text() -> String:
 	return "\n".join(lines)
 
 
+func get_decoration_catalog() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for decoration in DECORATION_CATALOG:
+		rows.append(decoration.duplicate(true))
+	return rows
+
+
+func get_purchased_decorations() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	for decoration in purchased_decorations:
+		rows.append(decoration.duplicate(true))
+	return rows
+
+
+func replace_purchased_decorations(decorations: Array) -> void:
+	purchased_decorations.clear()
+	for decoration in decorations:
+		if typeof(decoration) == TYPE_DICTIONARY:
+			var row: Dictionary = decoration
+			purchased_decorations.append(row.duplicate(true))
+
+
+func has_decoration(decoration_id: String) -> bool:
+	for decoration in purchased_decorations:
+		if str(decoration.get("decoration_id", "")) == decoration_id:
+			return true
+	return false
+
+
+func can_apply_decoration(decoration_id: String) -> bool:
+	if is_day_closed or has_decoration(decoration_id):
+		return false
+
+	var decoration := _get_decoration_definition(decoration_id)
+	if decoration.is_empty():
+		return false
+
+	var clutter_after := get_used_clutter_budget_points() + int(decoration.get("clutter_points", 0))
+	return get_cash_cents() >= int(decoration.get("cost_cents", 0)) \
+		and clutter_after <= get_clutter_budget_points()
+
+
+func apply_decoration(decoration_id: String) -> Dictionary:
+	if not can_apply_decoration(decoration_id):
+		return {}
+
+	var decoration := _get_decoration_definition(decoration_id)
+	cash_cents = get_cash_cents() - int(decoration.get("cost_cents", 0))
+	var purchase := decoration.duplicate(true)
+	purchase["applied_day"] = day_number
+	purchase["status"] = "applied"
+	purchased_decorations.append(purchase)
+	return purchase.duplicate(true)
+
+
+func get_clutter_budget_points() -> int:
+	var budget := BASE_CLUTTER_BUDGET_POINTS
+	for decoration in purchased_decorations:
+		var points := int(decoration.get("clutter_points", 0))
+		if points < 0:
+			budget += abs(points)
+	return budget
+
+
+func get_used_clutter_budget_points() -> int:
+	var used := 0
+	for decoration in purchased_decorations:
+		used += max(0, int(decoration.get("clutter_points", 0)))
+	return used
+
+
+func get_decoration_summary_text() -> String:
+	var lines: Array[String] = ["Decorations:"]
+	lines.append("Clutter budget: %d used / %d safe points" % [
+		get_used_clutter_budget_points(),
+		get_clutter_budget_points(),
+	])
+	if purchased_decorations.is_empty():
+		lines.append("Applied: none")
+	else:
+		var applied_labels: Array[String] = []
+		for decoration in purchased_decorations:
+			applied_labels.append(str(decoration.get("label", "Decoration")))
+		lines.append("Applied: %s" % ", ".join(applied_labels))
+
+	lines.append("Available:")
+	for decoration in DECORATION_CATALOG:
+		var lock_text := "applied" if has_decoration(str(decoration.get("decoration_id", ""))) else "ready"
+		lines.append("%s %s (%s/%s, clutter %d, %s): %s" % [
+			str(decoration.get("label", "Decoration")),
+			format_money(int(decoration.get("cost_cents", 0))),
+			str(decoration.get("category", "decor")),
+			str(decoration.get("surface", "store")),
+			int(decoration.get("clutter_points", 0)),
+			lock_text,
+			str(decoration.get("effect", "")),
+		])
+	return "\n".join(lines)
+
+
 func _fixture_requirements_met(fixture: Resource) -> bool:
 	if fixture == null:
 		return false
@@ -2409,6 +2576,13 @@ func _refresh_placed_fixture_cache() -> void:
 	for order in fixture_orders:
 		if str(order.get("status", "")) == "placed":
 			placed_fixtures.append(order.duplicate(true))
+
+
+func _get_decoration_definition(decoration_id: String) -> Dictionary:
+	for decoration in DECORATION_CATALOG:
+		if str(decoration.get("decoration_id", "")) == decoration_id:
+			return decoration.duplicate(true)
+	return {}
 
 
 func get_status_label() -> String:

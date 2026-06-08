@@ -104,7 +104,8 @@ The following polish items remain valid historical checkpoints:
 - Done: kept the existing starter rack order/place flow intact while exposing locked future fixtures as planning options.
 - Done: improved placement UX with footprint-aware bounds, critical-path clearance anchors, overlap rejection against placed fixtures, adjustment undo, placement issue text, and compact Undo controls.
 - Done: added fixture category assignment with `Assign Cat` storage control, supported-category validation, placed fixture slot updates, category assignment summaries, and demand tuning effects for assigned shelf slots.
-- Remaining polish risk: Stop 9.4 still needs a decoration system baseline so the store-building phase can move beyond fixtures into walls, floors, posters, signage, lights, display props, and clutter budget.
+- Done: added a decoration system baseline with wall paint, floor material, posters, signage, lights, display props, a safe clutter budget, backroom `Apply Decor` action, save/load coverage, and manual readability checks.
+- Remaining polish risk: Stop 9.5 still needs layout effects so fixture visibility, queue space, theft-risk placeholders, impulse buys, and travel distance affect outcomes.
 
 ## Product And Fixture Polish
 
@@ -162,6 +163,6 @@ These remain future phases unless explicitly selected:
 - Player-facing save/load slot UI.
 - Employees and staff assignment.
 - Larger store expansion.
-- Decoration/build-mode beyond current fixture placement.
+- Layout-effect outcomes beyond current fixture placement, category assignment, and decoration baseline.
 - Complex hidden-thread consequences.
 - Full audio, animation, VFX, and art-production pass.

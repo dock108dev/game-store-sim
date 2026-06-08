@@ -302,6 +302,27 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_fixture_order_can_be_placed_in_main_scene"
     },
     {
+      "id": "store_session_decoration_catalog",
+      "name": "Store session exposes wall paint, floor, poster, signage, light, display prop, and clutter-budget decoration options",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_applies_decoration_baseline"
+    },
+    {
+      "id": "backroom_panel_applies_decoration",
+      "name": "Backroom computer applies the starter decoration and disables repeat application",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_applies_decoration_from_backroom_computer"
+    },
+    {
+      "id": "decoration_purchase_persists_in_save_codec",
+      "name": "Purchased decorations are included in save codec smoke coverage and restore into the session",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_serializes_session_transactions_and_inventory; res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
       "id": "placed_fixture_has_display_slots",
       "name": "Confirmed game display rack includes used-game display slots",
       "status": "automated",

@@ -30,6 +30,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	session.order_supplier_lot("supplier_lot_used_games_001")
 	session.start_service_ticket("disc_resurfacing")
 	session.review_management_task("supplier_messages")
+	session.apply_decoration("decor_wall_paint_savepoint_blue")
 	item.set("current_price_cents", 2399)
 	item.set("location_id", "shelf_slot_001")
 
@@ -38,7 +39,7 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq(data.get("version"), 1)
 	assert_eq(data.get("day_number"), 1)
 	assert_eq(data.get("day_phase"), StoreSession.DAY_PHASE_CUSTOMER_HOURS)
-	assert_eq(data.get("cash_cents"), 29299)
+	assert_eq(data.get("cash_cents"), 25299)
 	assert_eq((data.get("transactions") as Array).size(), 2)
 	assert_eq((data.get("receiving_batches") as Array).size(), 0)
 	assert_eq((data.get("storage_movements") as Array).size(), 0)
@@ -57,6 +58,9 @@ func test_store_save_codec_serializes_session_transactions_and_inventory() -> vo
 	assert_eq((data.get("operating_expenses") as Array).size(), 0)
 	assert_eq((data.get("reputation_events") as Array).size(), 1)
 	assert_eq((data.get("purchased_upgrades") as Array).size(), 1)
+	var purchased_decorations: Array = data.get("purchased_decorations")
+	assert_eq(purchased_decorations.size(), 1)
+	assert_eq(purchased_decorations[0].get("decoration_id"), "decor_wall_paint_savepoint_blue")
 	assert_eq(data.get("reputation_score"), 97)
 	var fixture_orders: Array = data.get("fixture_orders")
 	assert_eq(fixture_orders.size(), 1)
@@ -94,6 +98,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 		"operating_expenses": [{"expense_id": "rent_reserve", "amount_cents": 700}],
 		"reputation_events": [{"event_id": "pricing_high_star_trader", "delta": -3}],
 		"purchased_upgrades": [{"upgrade_id": "upgrade_signage_staff_picks"}],
+		"purchased_decorations": [{"decoration_id": "decor_wall_paint_savepoint_blue"}],
 		"reputation_score": 90,
 		"inventory_items": [{"instance_id": "item_001", "location_id": "held"}],
 	}
@@ -119,6 +124,7 @@ func test_store_save_codec_json_roundtrip_preserves_data() -> void:
 	assert_eq((decoded.get("operating_expenses") as Array)[0].get("expense_id"), "rent_reserve")
 	assert_eq((decoded.get("reputation_events") as Array)[0].get("event_id"), "pricing_high_star_trader")
 	assert_eq((decoded.get("purchased_upgrades") as Array)[0].get("upgrade_id"), "upgrade_signage_staff_picks")
+	assert_eq((decoded.get("purchased_decorations") as Array)[0].get("decoration_id"), "decor_wall_paint_savepoint_blue")
 	assert_eq(int(decoded.get("reputation_score")), 90)
 	assert_eq((decoded.get("inventory_items") as Array)[0].get("location_id"), "held")
 
@@ -286,6 +292,15 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 				"status": "purchased",
 			}
 		],
+		"purchased_decorations": [
+			{
+				"decoration_id": "decor_wall_paint_savepoint_blue",
+				"label": "Savepoint Blue Wall Paint",
+				"category": "wall_paint",
+				"cost_cents": 4000,
+				"status": "applied",
+			}
+		],
 		"reputation_score": 95,
 		"inventory_items": [
 			{
@@ -311,6 +326,7 @@ func test_store_save_codec_restores_session_ledger_and_existing_item_state() -> 
 	assert_eq(session.get_storage_movements().size(), 1)
 	assert_eq(session.get_service_tickets().size(), 1)
 	assert_eq(session.get_management_reviews().size(), 1)
+	assert_true(session.has_decoration("decor_wall_paint_savepoint_blue"))
 	assert_string_contains(session.get_receiving_workflow_summary_text(), "Invoice: checked expected 3 received 3 variance 0")
 	assert_string_contains(session.get_storage_workflow_summary_text(), "Recent storage move: stored Star Trader")
 	assert_string_contains(session.get_service_bench_summary_text(), "ready_for_pickup 100%")
