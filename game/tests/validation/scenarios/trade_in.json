@@ -51,7 +51,14 @@
     },
     {
       "id": "trade_in_offer_panel_product_fields",
-      "name": "Trade-in offer panel shows condition, market, demand, and cash offer",
+      "name": "Trade-in offer panel shows condition, completeness, market, demand, and cash offer",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_opens_with_condition_market_and_offer"
+    },
+    {
+      "id": "trade_in_offer_panel_appraisal_fields",
+      "name": "Trade-in offer panel shows authenticity confidence, projected margin, and risk notes",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_opens_with_condition_market_and_offer"
@@ -65,7 +72,7 @@
     },
     {
       "id": "trade_in_offer_panel_counter_offer_controls",
-      "name": "Trade-in offer panel adjusts the cash counteroffer",
+      "name": "Trade-in offer panel adjusts the cash counteroffer and projected margin",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_trade_in_offer_panel.gd::test_trade_in_offer_panel_adjusts_counter_offer"

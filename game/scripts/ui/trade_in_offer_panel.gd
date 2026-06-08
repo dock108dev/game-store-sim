@@ -6,6 +6,8 @@ const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
 @onready var modal_root: Control = $CenterContainer
 @onready var details_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DetailsLabel
+@onready var appraisal_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/AppraisalLabel
+@onready var risk_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/RiskLabel
 @onready var offer_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OfferLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var decrease_offer_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OfferAdjustRow/DecreaseOfferButton
@@ -183,6 +185,13 @@ func _update_labels() -> void:
 		product.demand_tier.capitalize(),
 		product.market_value_cents / 100.0,
 	]
+	appraisal_label.text = "Authenticity: %s\nMarket value: $%0.2f\nProjected margin: $%0.2f\nDemand: %s" % [
+		_get_authenticity_confidence(item),
+		product.market_value_cents / 100.0,
+		_get_projected_margin_cents(product) / 100.0,
+		product.demand_tier.capitalize(),
+	]
+	risk_label.text = "Risk notes: %s" % _get_risk_notes(item, product)
 	offer_label.text = "Cash offer: $%0.2f  |  Store credit: $%0.2f" % [
 		_draft_offer_cents / 100.0,
 		_customer.get_store_credit_offer_cents() / 100.0,
@@ -220,3 +229,45 @@ func _update_adjust_buttons() -> void:
 	var controls_enabled := not accept_button.disabled
 	decrease_offer_button.disabled = not controls_enabled or _draft_offer_cents <= 1
 	increase_offer_button.disabled = not controls_enabled or _draft_offer_cents >= _customer.get_max_offer_cents()
+
+
+func _get_authenticity_confidence(item: Node) -> String:
+	if item == null:
+		return "Unknown"
+
+	if item.has_method("has_serial_mismatch") and bool(item.call("has_serial_mismatch")):
+		return "Low"
+
+	var serial_id := str(item.get("serial_id")).strip_edges()
+	if serial_id.is_empty():
+		return "Medium"
+
+	return "High"
+
+
+func _get_projected_margin_cents(product: ProductDefinition) -> int:
+	if product == null:
+		return 0
+
+	return product.market_value_cents - _draft_offer_cents
+
+
+func _get_risk_notes(item: Node, product: ProductDefinition) -> String:
+	var notes: Array[String] = []
+	if item != null and item.has_method("has_serial_mismatch") and bool(item.call("has_serial_mismatch")):
+		notes.append("serial mismatch")
+	elif item != null and str(item.get("serial_id")).strip_edges().is_empty():
+		notes.append("serial untracked")
+
+	if product != null:
+		if product.demand_tier == "low":
+			notes.append("low demand")
+		if product.condition == "fair" or product.condition == "poor":
+			notes.append("%s condition" % product.condition)
+		if product.completeness != "complete":
+			notes.append("%s copy" % product.completeness)
+
+	if notes.is_empty():
+		return "standard buyback risk"
+
+	return ", ".join(notes)

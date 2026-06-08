@@ -35,6 +35,20 @@ horizontal_alignment = 1
 [node name="DetailsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Trade-in details"
+autowrap_mode = 3
+
+[node name="AppraisalLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Authenticity: Medium
+Market value: $0.00
+Projected margin: $0.00
+Demand: Medium"
+autowrap_mode = 3
+
+[node name="RiskLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Risk notes: standard buyback risk"
+autowrap_mode = 3
 
 [node name="OfferLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
