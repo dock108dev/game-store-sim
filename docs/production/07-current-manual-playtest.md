@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this pricing UI pass: `scripts/validate_godot.sh` passed with 329 GUT tests, UI scenario coverage 333/391, and script mapping coverage 34/34.
+- Last full gate in this backroom tabs pass: `scripts/validate_godot.sh` passed with 331 GUT tests, UI scenario coverage 335/394, and script mapping coverage 34/34.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
 - Interaction prompt hierarchy is implemented through Stop 3.1; manual QA should confirm action prompts, blocked held-item prompts, feedback messages, and the center reticle states are readable in the actual window.
@@ -18,6 +18,7 @@ Current automated baseline:
 - Register checkout UI is implemented through Stop 4.2; manual QA should confirm sale, preorder, and service checkout panels show itemized lines, subtotal, tax, total, tender, change due, return placeholder, and confirmation feedback before the transaction completes.
 - Trade-in appraisal UI is implemented through Stop 4.3; manual QA should confirm condition, completeness, authenticity confidence, market value, demand, projected margin, cash/store-credit offer, counteroffer, and risk notes remain readable.
 - Pricing UI is implemented through Stop 4.4; manual QA should confirm cost basis, market price, current price, suggested range, demand, projected margin, apply-to-matching batch scope, and outcome warnings remain readable.
+- Backroom computer tabs are implemented through Stop 4.5; manual QA should confirm dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable and do not hide required actions.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, or player workflow must update this checklist before commit.
 
@@ -43,8 +44,8 @@ Current automated baseline:
 18. Accept the adjusted cash trade-in and confirm the acquired item appears in the receiving box and can be treated as inventory.
 19. On a fresh run, accept the store-credit trade-in and confirm cash does not decrease while the acquired item appears in the receiving box.
 20. On a fresh run, decline the trade-in and confirm cash/inventory do not change.
-21. Open the backroom computer.
-22. Confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
+21. Open the backroom computer and confirm the dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable.
+22. Use the backroom tabs to confirm cash, sales count, revenue, cost, profit, trade-in count, trade cash, store credit, recent activity, active inventory summary, and reorder suggestions match the completed sales/trade-in and remaining items.
 23. Confirm the release calendar lists fictional upcoming launches with countdown, platform, wholesale cost, suggested price, allocation limit, and demand tier.
 24. Clear the trade-in queue by accepting or declining it, then click the register, review the `Neon Skyline` preorder deposit checkout panel, and click Confirm.
 25. Confirm cash increases by `$5.00`, sale count/revenue/profit do not change, and the checkout confirmation reads as a preorder deposit rather than a sale.
@@ -128,6 +129,7 @@ Current automated baseline:
 - Backroom service bench, service ticket, paperwork stack, disc mat, management desk cues, and management board read as context only and do not imply a separate service terminal.
 - Safe, security monitor, and evidence-locker placeholders read as future operations/hidden-thread surfaces without exposing an active hidden-thread workflow.
 - Backroom computer actions are grouped as Supplier, Storage, Release, Day, and Storage Placement controls.
+- Backroom computer tabs fit the actual game window and make dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records feel like task sections rather than one long report.
 - Summary panel text and buttons fit in the actual game window.
 - Pricing, trade-in appraisal, and backroom computer panels open with visible mouse focus and close back into captured first-person control.
 - Closed-day report text is readable and understandable after ending the day.
@@ -192,7 +194,7 @@ Run these first when manually checking the completed Stop 3.1 through Stop 3.7 i
 
 ## Menu And Computer UI Focus
 
-Run these first when manually checking the completed Stop 4.1 through Stop 4.2 UI component and register checkout pass:
+Run these first when manually checking the completed Stop 4.1 through Stop 4.5 UI component, register checkout, pricing, appraisal, and backroom tab pass:
 
 - Confirm pricing, trade-in, and backroom computer panels read as one UI family while still having distinct pricing, trade-in, and backroom accent identities.
 - Confirm button sizes, font sizes, modal frames, disabled controls, hover/pressed/selected states, alert tones, list text, stat headers, and receipt-like readouts remain readable at 1280x720.
@@ -201,6 +203,7 @@ Run these first when manually checking the completed Stop 4.1 through Stop 4.2 U
 - Confirm sale, preorder, and service checkout variants keep their itemized lines, totals, tender/change, return placeholder, and confirmation feedback readable without clipped text.
 - Confirm the trade-in appraisal panel communicates authenticity confidence, projected margin, and risk notes clearly while the counteroffer buttons update the projected margin.
 - Confirm the pricing panel communicates current price, suggested range, margin, demand, and warning outcomes clearly while `+ $1`, `- $1`, and apply-to-matching update the decision text.
+- Confirm the backroom computer tabs switch cleanly between dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records without clipping text or making register work look like a backroom action.
 
 ## Backroom Polish Focus
 

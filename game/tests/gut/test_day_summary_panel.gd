@@ -44,6 +44,13 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_string_contains(_panel.supplier_order_label.text, "Order Used Game Starter Lot $27.00")
 	assert_string_contains(_panel.supplier_order_label.text, "Pending receiving: none")
 	assert_string_contains(_panel.fixture_label.text, "Order Game Display Rack $125.00 for storage placement")
+	assert_eq(_panel.services_label.text, "Services: none")
+	assert_string_contains(_panel.settings_label.text, "Settings:")
+	assert_eq(_panel.hidden_records_label.text, "Hidden records: no active records.")
+	assert_eq(_panel.get_active_tab(), "dashboard")
+	assert_true(_panel.dashboard_tab_button.button_pressed)
+	assert_true(_panel.summary_label.visible)
+	assert_false(_panel.inventory_label.visible)
 	assert_false(_panel.commit_allocation_button.disabled)
 	assert_false(_panel.order_games_button.disabled)
 	assert_false(_panel.order_rack_button.disabled)
@@ -67,6 +74,65 @@ func test_day_summary_panel_opens_with_cash_and_sales_fields() -> void:
 	assert_eq(_panel.status_label.text, "Day open")
 	assert_false(_panel.end_day_button.disabled)
 	assert_eq(_panel.end_day_button.text, "End Day")
+
+
+func test_day_summary_panel_exposes_backroom_computer_tabs() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_eq(_panel.get_available_tabs(), [
+		"dashboard",
+		"inventory",
+		"ordering",
+		"releases",
+		"reports",
+		"services",
+		"storage",
+		"suppliers",
+		"settings",
+		"records",
+	])
+	assert_eq(_panel.dashboard_tab_button.text, "Dashboard")
+	assert_eq(_panel.inventory_tab_button.text, "Inventory")
+	assert_eq(_panel.ordering_tab_button.text, "Ordering")
+	assert_eq(_panel.releases_tab_button.text, "Releases")
+	assert_eq(_panel.reports_tab_button.text, "Reports")
+	assert_eq(_panel.services_tab_button.text, "Services")
+	assert_eq(_panel.storage_tab_button.text, "Storage")
+	assert_eq(_panel.suppliers_tab_button.text, "Suppliers")
+	assert_eq(_panel.settings_tab_button.text, "Settings")
+	assert_eq(_panel.records_tab_button.text, "Records")
+	assert_eq(_panel.tab_grid.get_meta("ui_component", ""), "tab")
+
+
+func test_day_summary_panel_switches_backroom_tab_visibility() -> void:
+	var customer: Node = load("res://scenes/customers/simple_service_customer.tscn").instantiate()
+	add_child_autofree(customer)
+	var transaction := _ledger.record_service(customer)
+	_session.apply_service(transaction)
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.set_active_tab("inventory"))
+	assert_eq(_panel.get_active_tab(), "inventory")
+	assert_true(_panel.inventory_label.visible)
+	assert_true(_panel.demand_label.visible)
+	assert_false(_panel.summary_label.visible)
+	assert_true(_panel.inventory_tab_button.button_pressed)
+	assert_false(_panel.dashboard_tab_button.button_pressed)
+
+	assert_true(_panel.set_active_tab("services"))
+	assert_true(_panel.services_label.visible)
+	assert_string_contains(_panel.services_label.text, "Services: 1 completed")
+	assert_string_contains(_panel.services_label.text, "Revenue: $4.99")
+	assert_false(_panel.inventory_label.visible)
+
+	assert_true(_panel.set_active_tab("settings"))
+	assert_true(_panel.settings_label.visible)
+	assert_false(_panel.services_label.visible)
+
+	assert_true(_panel.set_active_tab("records"))
+	assert_true(_panel.hidden_records_label.visible)
+	assert_false(_panel.set_active_tab("missing"))
+	assert_eq(_panel.get_active_tab(), "records")
 
 
 func test_day_summary_panel_transition_controls_mouse_and_focus() -> void:
@@ -97,6 +163,7 @@ func test_day_summary_panel_groups_readouts_by_management_section() -> void:
 		"ReportLabel",
 		"ActivityHeader",
 		"LastSaleLabel",
+		"ServicesLabel",
 		"InventoryHeader",
 		"InventoryLabel",
 		"ReorderLabel",
@@ -108,6 +175,8 @@ func test_day_summary_panel_groups_readouts_by_management_section() -> void:
 		"OperationsHeader",
 		"SupplierOrderLabel",
 		"FixtureLabel",
+		"SettingsLabel",
+		"HiddenRecordsLabel",
 	]
 
 	assert_eq(content_vbox.get_child_count(), expected_order.size())

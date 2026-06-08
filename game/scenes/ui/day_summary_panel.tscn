@@ -32,8 +32,64 @@ layout_mode = 2
 text = "Backroom Computer"
 horizontal_alignment = 1
 
+[node name="TabGrid" type="GridContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 5
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="DashboardTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Dashboard"
+
+[node name="InventoryTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Inventory"
+
+[node name="OrderingTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Ordering"
+
+[node name="ReleasesTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Releases"
+
+[node name="ReportsTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Reports"
+
+[node name="ServicesTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Services"
+
+[node name="StorageTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Storage"
+
+[node name="SuppliersTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Suppliers"
+
+[node name="SettingsTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Settings"
+
+[node name="RecordsTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Records"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(720, 452)
+custom_minimum_size = Vector2(720, 384)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -65,6 +121,11 @@ text = "Activity"
 [node name="LastSaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Recent activity: none"
+autowrap_mode = 3
+
+[node name="ServicesLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Services: none"
 autowrap_mode = 3
 
 [node name="InventoryHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
@@ -120,6 +181,16 @@ autowrap_mode = 3
 [node name="FixtureLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Fixtures: none"
+autowrap_mode = 3
+
+[node name="SettingsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Settings: input and window settings are available from the pause/settings panel."
+autowrap_mode = 3
+
+[node name="HiddenRecordsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Hidden records: no active records."
 autowrap_mode = 3
 
 [node name="StatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]

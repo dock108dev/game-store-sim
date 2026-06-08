@@ -369,6 +369,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "backroom_computer_tabs_readability",
+      "name": "Backroom computer dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify tab existence and section visibility; human review must confirm the tab grid fits the actual window, communicates the computer information architecture, and keeps register work out of the backroom surface.",
+      "owner": "manual QA"
+    },
+    {
       "id": "category_demand_panel_readability",
       "name": "Backroom category demand readout is readable and does not crowd the panel",
       "status": "manual",

@@ -155,6 +155,20 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_groups_actions_by_operation"
     },
     {
+      "id": "day_summary_panel_backroom_tabs",
+      "name": "Backroom computer exposes dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_exposes_backroom_computer_tabs"
+    },
+    {
+      "id": "day_summary_panel_tab_visibility",
+      "name": "Backroom computer tabs switch visible management sections without losing tab state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_switches_backroom_tab_visibility"
+    },
+    {
       "id": "day_summary_panel_recent_sale_activity",
       "name": "Day summary panel includes recent sale activity",
       "status": "automated",

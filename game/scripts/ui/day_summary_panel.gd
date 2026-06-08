@@ -3,14 +3,49 @@ class_name DaySummaryPanel
 
 const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
 
+const TAB_DASHBOARD := "dashboard"
+const TAB_INVENTORY := "inventory"
+const TAB_ORDERING := "ordering"
+const TAB_RELEASES := "releases"
+const TAB_REPORTS := "reports"
+const TAB_SERVICES := "services"
+const TAB_STORAGE := "storage"
+const TAB_SUPPLIERS := "suppliers"
+const TAB_SETTINGS := "settings"
+const TAB_RECORDS := "records"
+const BACKROOM_TABS := [
+	TAB_DASHBOARD,
+	TAB_INVENTORY,
+	TAB_ORDERING,
+	TAB_RELEASES,
+	TAB_REPORTS,
+	TAB_SERVICES,
+	TAB_STORAGE,
+	TAB_SUPPLIERS,
+	TAB_SETTINGS,
+	TAB_RECORDS,
+]
+
 @onready var title_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TitleLabel
 @onready var modal_root: Control = $CenterContainer
+@onready var tab_grid: GridContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid
+@onready var dashboard_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/DashboardTabButton
+@onready var inventory_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/InventoryTabButton
+@onready var ordering_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/OrderingTabButton
+@onready var releases_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/ReleasesTabButton
+@onready var reports_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/ReportsTabButton
+@onready var services_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/ServicesTabButton
+@onready var storage_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/StorageTabButton
+@onready var suppliers_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/SuppliersTabButton
+@onready var settings_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/SettingsTabButton
+@onready var records_tab_button: Button = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid/RecordsTabButton
 @onready var content_scroll: ScrollContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer
 @onready var dashboard_header: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/DashboardHeader
 @onready var summary_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SummaryLabel
 @onready var report_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ReportLabel
 @onready var activity_header: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ActivityHeader
 @onready var last_sale_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/LastSaleLabel
+@onready var services_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ServicesLabel
 @onready var inventory_header: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/InventoryHeader
 @onready var inventory_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/InventoryLabel
 @onready var reorder_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ReorderLabel
@@ -22,6 +57,8 @@ const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
 @onready var operations_header: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/OperationsHeader
 @onready var supplier_order_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SupplierOrderLabel
 @onready var fixture_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/FixtureLabel
+@onready var settings_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/SettingsLabel
+@onready var hidden_records_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/HiddenRecordsLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
 @onready var supplier_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/SupplierActionLabel
 @onready var storage_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionLabel
@@ -49,11 +86,23 @@ const NEON_SKYLINE_RELEASE_ID := "release_neon_skyline"
 var _session: Node = null
 var _transition_state: String = "closed"
 var _requested_mouse_mode: int = Input.MOUSE_MODE_CAPTURED
+var _active_tab: String = TAB_DASHBOARD
 
 
 func _ready() -> void:
 	hide()
 	UIComponents.apply_modal_language(modal_root, UIComponents.SURFACE_BACKROOM)
+	tab_grid.set_meta("ui_component", UIComponents.TOKEN_TAB)
+	_prepare_tab_button(dashboard_tab_button, TAB_DASHBOARD)
+	_prepare_tab_button(inventory_tab_button, TAB_INVENTORY)
+	_prepare_tab_button(ordering_tab_button, TAB_ORDERING)
+	_prepare_tab_button(releases_tab_button, TAB_RELEASES)
+	_prepare_tab_button(reports_tab_button, TAB_REPORTS)
+	_prepare_tab_button(services_tab_button, TAB_SERVICES)
+	_prepare_tab_button(storage_tab_button, TAB_STORAGE)
+	_prepare_tab_button(suppliers_tab_button, TAB_SUPPLIERS)
+	_prepare_tab_button(settings_tab_button, TAB_SETTINGS)
+	_prepare_tab_button(records_tab_button, TAB_RECORDS)
 	commit_allocation_button.pressed.connect(commit_release_allocation)
 	order_games_button.pressed.connect(order_used_game_lot)
 	order_rack_button.pressed.connect(order_game_display_rack)
@@ -67,6 +116,7 @@ func _ready() -> void:
 	cancel_rack_button.pressed.connect(cancel_pending_rack)
 	end_day_button.pressed.connect(end_day)
 	close_button.pressed.connect(close)
+	_apply_tab_visibility()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -83,8 +133,10 @@ func open_for_session(session: Node) -> bool:
 		return false
 
 	_session = session
+	_active_tab = TAB_DASHBOARD
 	_update_labels()
 	content_scroll.scroll_vertical = 0
+	_apply_tab_visibility()
 	_enter_modal(close_button)
 	return true
 
@@ -113,8 +165,27 @@ func has_modal_focus() -> bool:
 func has_ui_component_language() -> bool:
 	return modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_TAB) \
 		and modal_root.get_meta("ui_language_tokens", []).has(UIComponents.TOKEN_RECEIPT) \
+		and tab_grid.get_meta("ui_component", "") == UIComponents.TOKEN_TAB \
 		and content_scroll.get_meta("ui_component", "") == UIComponents.TOKEN_LIST \
 		and close_button.get_meta("ui_component", "") == UIComponents.TOKEN_BUTTON
+
+
+func get_available_tabs() -> Array:
+	return BACKROOM_TABS.duplicate()
+
+
+func get_active_tab() -> String:
+	return _active_tab
+
+
+func set_active_tab(tab_id: String) -> bool:
+	if not BACKROOM_TABS.has(tab_id):
+		return false
+
+	_active_tab = tab_id
+	_apply_tab_visibility()
+	content_scroll.scroll_vertical = 0
+	return true
 
 
 func end_day() -> bool:
@@ -309,6 +380,7 @@ func _update_labels() -> void:
 		last_sale_label.text = _session.get_recent_activity_text()
 	else:
 		last_sale_label.text = "Recent activity unavailable"
+	services_label.text = _get_services_text()
 	if _session.has_method("get_inventory_summary_text"):
 		inventory_label.text = _session.get_inventory_summary_text()
 	else:
@@ -377,6 +449,119 @@ func _update_labels() -> void:
 		cancel_rack_button.disabled = _session.is_day_closed or not _session.can_cancel_pending_fixture_placement()
 	end_day_button.disabled = false
 	end_day_button.text = "Start Day" if _session.is_day_closed else "End Day"
+	_update_tab_button_states()
+
+
+func _prepare_tab_button(button: Button, tab_id: String) -> void:
+	button.toggle_mode = true
+	button.focus_mode = Control.FOCUS_ALL
+	button.set_meta("ui_component", UIComponents.TOKEN_TAB)
+	button.set_meta("ui_tab", tab_id)
+	button.pressed.connect(set_active_tab.bind(tab_id))
+
+
+func _get_tab_button(tab_id: String) -> Button:
+	match tab_id:
+		TAB_DASHBOARD:
+			return dashboard_tab_button
+		TAB_INVENTORY:
+			return inventory_tab_button
+		TAB_ORDERING:
+			return ordering_tab_button
+		TAB_RELEASES:
+			return releases_tab_button
+		TAB_REPORTS:
+			return reports_tab_button
+		TAB_SERVICES:
+			return services_tab_button
+		TAB_STORAGE:
+			return storage_tab_button
+		TAB_SUPPLIERS:
+			return suppliers_tab_button
+		TAB_SETTINGS:
+			return settings_tab_button
+		TAB_RECORDS:
+			return records_tab_button
+	return dashboard_tab_button
+
+
+func _update_tab_button_states() -> void:
+	for tab_id in BACKROOM_TABS:
+		var button := _get_tab_button(tab_id)
+		button.button_pressed = tab_id == _active_tab
+		button.set_meta("ui_selected", button.button_pressed)
+
+
+func _apply_tab_visibility() -> void:
+	var all_content := [
+		dashboard_header,
+		summary_label,
+		report_label,
+		activity_header,
+		last_sale_label,
+		services_label,
+		inventory_header,
+		inventory_label,
+		reorder_label,
+		market_header,
+		demand_label,
+		market_drift_label,
+		release_header,
+		release_calendar_label,
+		operations_header,
+		supplier_order_label,
+		fixture_label,
+		settings_label,
+		hidden_records_label,
+	]
+	_set_controls_visible(all_content, false)
+
+	match _active_tab:
+		TAB_DASHBOARD:
+			_set_controls_visible([dashboard_header, summary_label, activity_header, last_sale_label], true)
+		TAB_INVENTORY:
+			_set_controls_visible([inventory_header, inventory_label, reorder_label, market_header, demand_label, market_drift_label], true)
+		TAB_ORDERING:
+			_set_controls_visible([operations_header, supplier_order_label, fixture_label], true)
+		TAB_RELEASES:
+			_set_controls_visible([release_header, release_calendar_label], true)
+		TAB_REPORTS:
+			_set_controls_visible([dashboard_header, report_label], true)
+		TAB_SERVICES:
+			_set_controls_visible([activity_header, services_label], true)
+		TAB_STORAGE:
+			_set_controls_visible([operations_header, fixture_label], true)
+		TAB_SUPPLIERS:
+			_set_controls_visible([operations_header, supplier_order_label], true)
+		TAB_SETTINGS:
+			_set_controls_visible([settings_label], true)
+		TAB_RECORDS:
+			_set_controls_visible([hidden_records_label], true)
+	_update_tab_button_states()
+
+
+func _set_controls_visible(controls: Array, is_control_visible: bool) -> void:
+	for control in controls:
+		if control is Control:
+			(control as Control).visible = is_control_visible
+
+
+func _get_services_text() -> String:
+	if _session == null:
+		return "Services: none"
+	if not _session.has_method("get_service_count"):
+		return "Services unavailable"
+
+	var count := int(_session.get_service_count())
+	if count <= 0:
+		return "Services: none"
+
+	return "Services: %d completed\nRevenue: %s\nCost: %s\nProfit: %s" % [
+		count,
+		_session.format_money(int(_session.get_total_service_revenue_cents())),
+		_session.format_money(int(_session.get_total_service_cost_cents())),
+		_session.format_money(int(_session.get_total_service_profit_cents())),
+	]
 
 
 func _adjust_pending_rack(delta_x: int, delta_z: int, direction_label: String) -> bool:
