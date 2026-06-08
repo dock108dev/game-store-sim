@@ -7,8 +7,8 @@ This document turns the game-completion plan into concrete production targets. I
 - Screenshot teardown: complete for the current validation artifact set.
 - Art direction contract: complete for the starter production pass.
 - Store layout contract: complete for the starter production pass.
-- UI direction contract: pending.
-- Content target contract: pending.
+- UI direction contract: complete for the starter production pass.
+- Content target contract: complete for the first production vertical slice.
 - Production acceptance checklist: pending.
 
 ## Source Screenshots
@@ -312,3 +312,475 @@ Future scene slices should prioritize:
 - Separating receiving/storage/sellable rack visuals before adding more inventory categories.
 - Establishing material and lighting rules before adding large content sets.
 
+## UI Direction Contract
+
+The current UI is functional, but the production UI must become a coherent in-world business system. The player should understand what surface they are using, what decision they are making, and what the consequence is before committing.
+
+### UI Principles
+
+Rules:
+
+- Every panel must answer one player task first.
+- Use grouped information hierarchy: title, current context, decision values, action controls, outcome/status.
+- Values that affect the decision must appear next to the action, not buried in summary text.
+- Use tabs or segmented sections when repeated-use management screens exceed one viewport.
+- Disabled buttons must explain why they are unavailable through nearby status text or tooltip/copy.
+- Panels must fit and remain readable at `1280x720`.
+- Escape closes workstation/panel mode and returns mouse capture.
+- Left click remains the primary confirmation input.
+
+### Visual Language
+
+Base UI:
+
+- Dark translucent panel background.
+- Soft but minimal border.
+- High-contrast off-white primary text.
+- Muted secondary text for context.
+- Warm yellow accent for money/actionable values.
+- Teal/green accent for valid/available/confirmed states.
+- Red/orange accent only for blocked, loss, debt, warning, missed demand, or suspicious-risk states.
+
+Typography:
+
+- Use small production UI headings inside panels, not hero-sized world signage.
+- Keep labels short and scan-friendly.
+- Avoid long paragraph blocks in interactive panels.
+- Use item rows, stat cards, receipt lines, and compact warnings instead of one mixed text blob.
+
+Controls:
+
+- Buttons represent commands.
+- Checkboxes/toggles represent binary options such as apply-to-matching.
+- Tabs represent major computer sections.
+- Stepper buttons represent money or quantity adjustments.
+- Lists/tables represent inventory, orders, release calendar, reports, and activity.
+- Tooltips or inline helper text explain unfamiliar icons or disabled states.
+
+### Reticle And Prompt UI
+
+Required prompt states:
+
+- Inspect.
+- Pick up.
+- Place/stock.
+- Price held item.
+- Talk.
+- Register checkout.
+- Computer use.
+- Open note/clue.
+- Invalid/blocked action.
+
+Rules:
+
+- Prompt should include the object name and verb.
+- Prompt should not cover the reticle.
+- If multiple actions are possible, the primary action is left click and secondary information appears below it.
+- Held-item fallback prompt must remain clear when no world target is selected.
+- Prompt color must stay readable under sales-floor and backroom lighting.
+
+### Pricing Panel
+
+Production purpose:
+
+- Help the player decide a sale price for a specific physical item or matching copies.
+
+Required information:
+
+- Product name.
+- Category and platform.
+- Condition and completeness.
+- Cost basis.
+- Market value.
+- Suggested price range.
+- Draft price.
+- Expected margin.
+- Demand tier.
+- Warning if the price is likely too high or too low.
+- Apply-to-matching scope and count.
+
+Required actions:
+
+- Decrease price.
+- Increase price.
+- Apply to this copy.
+- Apply to matching copies when enabled.
+- Cancel.
+
+Rules:
+
+- Pricing must feel tied to the held item, not to a separate terminal.
+- The panel must show profit/margin before the player applies the price.
+- Batch pricing must make its affected count explicit.
+
+### Register UI
+
+Production purpose:
+
+- Complete customer-facing counter work: sales, returns, trade-ins, preorders, and services.
+
+Required sales information:
+
+- Customer name or role.
+- Itemized cart lines.
+- Unit price.
+- Subtotal.
+- Tax placeholder or explicit no-tax decision.
+- Total.
+- Payment method.
+- Change due or card approved placeholder.
+- Profit/cost summary for owner view.
+
+Required action groups:
+
+- Scan/confirm sale.
+- Complete preorder deposit.
+- Complete service.
+- Start return/exchange once implemented.
+- Open trade-in appraisal.
+- Close/cancel.
+
+Rules:
+
+- Register UI should look distinct from the backroom computer.
+- Customer-facing state and owner-facing business values should not blur together.
+- Service and preorder actions must not read as normal product sales.
+- When no customer is ready, the register should communicate what it is waiting for.
+
+### Trade-In Appraisal UI
+
+Production purpose:
+
+- Make the trade-in loop the signature judgment surface.
+
+Required information:
+
+- Product identity.
+- Category/platform/format.
+- Condition.
+- Completeness.
+- Authenticity confidence.
+- Market value.
+- Store demand.
+- Current inventory count.
+- Cash offer.
+- Store-credit offer.
+- Maximum offer threshold.
+- Expected resale margin.
+- Risk note when suspicious/damaged/fake/low-confidence.
+
+Required actions:
+
+- Lower cash offer.
+- Raise cash offer.
+- Accept cash.
+- Accept store credit.
+- Decline.
+- Close after result.
+
+Rules:
+
+- The player must understand why the offer is what it is.
+- Store credit should read as a separate tender path, not free inventory.
+- Counteroffer changes should update expected margin.
+- Suspicious goods warnings should be subtle until the hidden-thread phase escalates.
+
+### Backroom Computer UI
+
+Production purpose:
+
+- Management hub for planning, ordering, inventory, reports, storage, releases, services, suppliers, and hidden records.
+
+Required top-level sections:
+
+- Dashboard.
+- Inventory.
+- Ordering.
+- Releases.
+- Reports.
+- Storage.
+- Services.
+- Suppliers.
+- Settings or tools.
+- Hidden records, locked until discovered.
+
+Dashboard must show:
+
+- Cash.
+- Reputation.
+- Open/closed day state.
+- Sales/trade-ins/preorders/services counts.
+- Pending deliveries.
+- Pending storage placement.
+- Launch obligations.
+- Top warnings or next recommended action.
+
+Inventory must show:
+
+- Receiving count.
+- Storage/backstock count.
+- Shelf count.
+- Sold/removed count.
+- Category/platform filters.
+- Low-stock and overstock hints.
+
+Ordering must show:
+
+- Supplier.
+- Lot/category.
+- Cost.
+- Delivery day.
+- Item count or expected contents.
+- Storage/receiving implication.
+- Cash after order.
+
+Releases must show:
+
+- Release name.
+- Launch day.
+- Platform.
+- Wholesale cost.
+- Suggested price.
+- Allocation limit.
+- Preorders.
+- Expected demand.
+- Commit quantity and cash impact.
+
+Reports must show:
+
+- Revenue.
+- Cost.
+- Profit.
+- Trade-in spend.
+- Store-credit liability.
+- Service revenue/profit.
+- Preorder deposits.
+- Launch outcomes.
+- Missed demand.
+- Reputation changes.
+
+Rules:
+
+- Computer sections should use tabs or a left navigation rail.
+- Buttons should stay near their relevant rows.
+- The computer can expose data, but physical inventory still appears in receiving/storage for the player to handle.
+- Hidden records must not appear as mandatory objectives before discovery.
+
+### Daily Report UI
+
+Production purpose:
+
+- Close the day and explain what changed.
+
+Required information:
+
+- Starting cash and ending cash.
+- Sales revenue/cost/profit.
+- Trade-in spend and inventory gained.
+- Store-credit liability.
+- Preorder deposits and obligations.
+- Service revenue/cost/profit.
+- Supplier/order costs.
+- Launch allocation outcomes.
+- Bills/rent when implemented.
+- Reputation delta.
+- Tomorrow deliveries/events.
+
+Rules:
+
+- Report should help the player plan tomorrow.
+- It should distinguish cash movement from profit.
+- It should call out obligations, not just totals.
+
+## Content Target Contract
+
+The first production vertical slice needs enough content to support repeated play across several in-game days without feeling like the same debug item loop.
+
+### Current Content Baseline
+
+Current data:
+
+- 12 fictional used-game products.
+- 3 fictional new releases.
+- 1 supplier lot.
+- 1 fixture definition.
+- Customer roles exist as scene/script types, not yet as full data resources.
+- Dialogue, progression, and customer data folders exist but are mostly placeholders.
+
+Production target:
+
+- Expand content breadth only after the data model and visual generation rules can carry it.
+- Keep every name fictional and legally independent.
+- Add content in category packs with validation coverage.
+
+### Starter Product Families
+
+Minimum first production vertical slice:
+
+- Used games: at least 30 products.
+- New releases: at least 8 releases across the first two in-game weeks.
+- Retro/collector games: at least 10 products with rarity/authenticity hooks.
+- Accessories: at least 12 products, including controllers, cables, memory cards, cases, chargers, cleaning kits, and adapters.
+- Hardware: at least 6 console/handheld products or placeholders.
+- Services: at least 4 service definitions.
+- Suspicious/risk items: at least 6 optional variants tied to normal product categories.
+
+Product fields needed beyond the current baseline:
+
+- Rarity score.
+- Authenticity confidence.
+- Region or compatibility group.
+- Condition notes.
+- Completeness flags.
+- Visual variant key.
+- Shelf footprint.
+- Theft/risk flag placeholder.
+- Trade-in offer tuning.
+- Category demand weight.
+- Supplier availability.
+
+### Fictional Platform Families
+
+Initial platform families should stay compact:
+
+- `Orbit 64`: retro cartridge home console family.
+- `Nova Cube`: disc-based home console family.
+- `Pocket Star`: handheld cartridge family.
+- `Velo CD`: disc-based late-cycle console family.
+- `Bitty Boy`: older handheld/collector family.
+- `Arcade Annex`: accessories and odd peripherals.
+
+Rules:
+
+- Platforms should imply era and format without copying real names.
+- Each platform family needs a visual color/label language.
+- Platform names must be validated like product names.
+
+### Customer Roles
+
+Minimum production customer set:
+
+- Browser.
+- Target buyer.
+- Parent gift buyer.
+- Retro collector.
+- Trade-in seller.
+- Return customer.
+- Preorder customer.
+- Service customer.
+- Regular.
+- Suspicious contact.
+
+Each role needs:
+
+- Data resource or data row.
+- Budget range.
+- Patience range.
+- Desired categories.
+- Price sensitivity.
+- Knowledge level.
+- Role prop/silhouette rule.
+- Basic dialogue pool.
+- Success/failure feedback.
+- Reputation impact.
+
+### Daily Events
+
+Starter events:
+
+- Normal weekday.
+- Slow morning.
+- After-school rush.
+- Weekend collector traffic.
+- Used-lot delivery day.
+- New release launch day.
+- Service pickup day.
+- Trade-in promo day.
+- Suspicious cash buyer visit.
+- Supplier message day.
+
+Rules:
+
+- Daily events should create operational pressure, not only text flavor.
+- Event effects must be visible in customer mix, demand, deliveries, or obligations.
+
+### Suppliers And Orders
+
+Minimum supplier set:
+
+- Used-game lot supplier.
+- New-release distributor.
+- Accessory wholesaler.
+- Repair/service supply vendor.
+- Fixture/equipment supplier.
+- Suspicious or gray-market supplier, optional and hidden-thread gated.
+
+Every order needs:
+
+- Cost.
+- Delivery day.
+- Expected contents or category range.
+- Storage/receiving footprint.
+- Risk/quality range.
+- Reorder availability.
+- Cash impact shown before confirmation.
+
+### Unlocks And Progression
+
+First production unlocks:
+
+- Second used-game fixture.
+- Bargain bin.
+- Locked case placeholder.
+- Accessory peg wall.
+- Disc resurfacing tool.
+- Inventory lookup upgrade.
+- Storefront sign style option.
+- Backroom storage shelf.
+- Basic ad/promo option.
+- Hidden records access, only if discovered.
+
+Rules:
+
+- Unlocks must add new work or new decisions.
+- Avoid percentage-only upgrades until the physical loop is satisfying.
+- Upgrade costs should create meaningful cash planning.
+
+### Dialogue And Copy
+
+Minimum copy pools:
+
+- Buyer greeting.
+- Buyer refusal.
+- Buyer purchase.
+- Trade-in ask.
+- Trade-in counter/accept/decline.
+- Parent gift confusion.
+- Collector authenticity concern.
+- Preorder request.
+- Service request.
+- Return complaint.
+- Supplier message.
+- Suspicious contact.
+- End-of-day report notes.
+
+Rules:
+
+- Copy should be grounded and concise.
+- Customers can be funny because retail is funny, but not every customer should be a joke.
+- Hidden-thread copy should feel plausible and optional.
+
+### Content Validation Expectations
+
+Future content slices must add or extend validation for:
+
+- Unique IDs.
+- Fictional/legal-safe names.
+- Required fields.
+- Category/platform/condition/demand variety.
+- Price sanity.
+- Supplier availability.
+- Release calendar sort and due days.
+- Customer role data completeness.
+- Dialogue pool coverage.
+- Visual variant key coverage.

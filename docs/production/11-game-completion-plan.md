@@ -134,8 +134,8 @@ Stops:
 - Stop 1.1: Screenshot teardown board. Done in `12-production-target-contracts.md`.
 - Stop 1.2: Art direction contract. Done in `12-production-target-contracts.md`.
 - Stop 1.3: Store layout contract. Done in `12-production-target-contracts.md`.
-- Stop 1.4: UI direction contract. Define the visual system for prompts, panels, buttons, tabs, inventory rows, register receipts, trade-in appraisal, and backroom computer sections.
-- Stop 1.5: Content target contract. Define the starter product families, customer roles, daily events, suppliers, and unlocks needed for the first production vertical slice.
+- Stop 1.4: UI direction contract. Done in `12-production-target-contracts.md`.
+- Stop 1.5: Content target contract. Done in `12-production-target-contracts.md`.
 - Stop 1.6: Production acceptance checklist. Convert the contracts into manual and automated validation expectations.
 
 Acceptance:
