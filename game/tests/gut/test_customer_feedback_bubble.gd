@@ -31,7 +31,27 @@ func test_customer_scenes_have_feedback_bubbles() -> void:
 		add_child_autofree(customer)
 		var bubble := customer.get_node_or_null("FeedbackBubble") as CustomerFeedbackBubble
 		assert_not_null(bubble)
-		assert_gt(bubble.position.y, 1.5)
+		assert_gte(bubble.position.y, 1.48)
+		assert_lte(bubble.position.y, 1.581)
+		assert_lte(bubble.pixel_size, CustomerFeedbackBubble.ROLE_BUBBLE_PIXEL_SIZE + 0.00001)
+		assert_lte(bubble.max_characters, CustomerFeedbackBubble.ROLE_BUBBLE_MAX_CHARACTERS)
+		assert_false(bubble.no_depth_test)
+
+
+func test_special_customer_role_bubbles_stay_compact() -> void:
+	for scene_path in [
+		"res://scenes/customers/simple_trade_in_customer.tscn",
+		"res://scenes/customers/simple_preorder_customer.tscn",
+		"res://scenes/customers/simple_service_customer.tscn",
+		"res://scenes/customers/suspicious_customer.tscn",
+	]:
+		var customer: Node = load(scene_path).instantiate()
+		add_child_autofree(customer)
+		var bubble := customer.get_node("FeedbackBubble") as CustomerFeedbackBubble
+		assert_true(bubble.visible)
+		assert_lte(str(bubble.text).length(), CustomerFeedbackBubble.ROLE_BUBBLE_MAX_CHARACTERS)
+		assert_lte(absf(bubble.position.x), 0.18)
+		assert_lte(absf(bubble.position.z), 0.04)
 
 
 func test_buyer_feedback_bubble_reacts_to_purchase_intent_and_price_refusal() -> void:

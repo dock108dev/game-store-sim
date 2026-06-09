@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 522 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 524 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -630,9 +630,9 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 516 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 524 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
-- Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and tracks AH-012 through AH-015 as active readability recovery blockers.
+- Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, tracks AH-012 and AH-013 as active P0 readability recovery blockers, and keeps AH-014/AH-015 routed to final recovery validation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
 - Treat the alpha-hardening milestone as mechanically validated but not human-approved until the readability recovery exits and the external playtest script is run in a real window.
 
@@ -647,7 +647,7 @@ Run these first before attempting another external alpha playtest:
 - Confirm the second recovery slice keeps oversized signage fixed: starter receiving products remain visible, the `INTAKE` tag stays compact, and rack/register signs do not become foreground slabs.
 - Confirm the third recovery slice keeps the larger bottom prompt readable, the reticle visible, hover targets obvious, and lower-priced-copy sale feedback understandable without relying on debug knowledge.
 - Confirm the fourth recovery slice keeps pricing, register, trade-in, preorder, service, settings, pause/main menu, and save/load panels comfortably readable in the actual window with clear button hierarchy and mouse focus.
-- Confirm customer role markers are compact, consistent, and useful without dominating the store view or crowding the register queue.
+- Confirm the fifth recovery slice keeps buyer, trade-in, preorder, service, and suspicious customer role bubbles compact, consistent, depth-tested, and useful without dominating the store view or crowding the register queue.
 - Confirm the backroom entry, dashboard, ordering, releases, records, receiving workflow, and service ticket screens read as operations space rather than dense debug UI.
 - Rerun the short recovery screenshot set before reopening `15-alpha-playtest-package.md`.
 

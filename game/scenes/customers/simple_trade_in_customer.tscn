@@ -118,8 +118,8 @@ shape = SubResource("CapsuleShape3D_customer")
 script = ExtResource("4_pose")
 
 [node name="FeedbackBubble" type="Label3D" parent="."]
-position = Vector3(0, 1.68, 0)
-pixel_size = 0.0024
+position = Vector3(-0.16, 1.54, -0.03)
+pixel_size = 0.0017
 script = ExtResource("5_feedback")
 
 [node name="CustomerAudioProfile" type="Node3D" parent="."]

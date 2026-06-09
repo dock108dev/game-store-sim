@@ -75,6 +75,23 @@ func test_customer_role_silhouettes_are_visually_distinct() -> void:
 	assert_gt(max_width - min_width, 0.07)
 
 
+func test_customer_role_props_stay_below_head_and_off_center() -> void:
+	for scene_path in [
+		"res://scenes/customers/simple_buyer_customer.tscn",
+		"res://scenes/customers/simple_trade_in_customer.tscn",
+		"res://scenes/customers/simple_preorder_customer.tscn",
+		"res://scenes/customers/simple_service_customer.tscn",
+		"res://scenes/customers/suspicious_customer.tscn",
+	]:
+		var customer: Node = load(scene_path).instantiate()
+		add_child_autofree(customer)
+		var role_prop := customer.get_node("RoleSilhouetteMesh") as MeshInstance3D
+		var head := customer.get_node("HeadMesh") as MeshInstance3D
+		assert_lt(role_prop.position.y, head.position.y)
+		assert_gte(absf(role_prop.position.z), 0.14)
+		assert_lte(role_prop.position.y, 1.0)
+
+
 func _assert_customer_uses_modular_body_kit(customer: Node) -> void:
 	var body := customer.get_node_or_null("BodyMesh") as MeshInstance3D
 	assert_not_null(body)

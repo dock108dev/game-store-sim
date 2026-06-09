@@ -1,6 +1,6 @@
 # Playability Readability Recovery Plan
 
-This is the active next implementation plan after the June 9 manual screenshot review.
+This is the active implementation plan after the June 9 manual screenshot review. Slices 1-5 are implemented; Slice 6 is the next active work before final recovery validation.
 
 The automated alpha gate is still valuable: movement, pickup, pricing, stocking, customers, register flows, services, ordering, storage, fixture placement, save/load, and package smoke remain mechanically protected. The manual evidence changes the release state: the build is not ready for external playtest because a player cannot reliably read the room, signs, prompts, customer roles, or pricing UI from normal play angles.
 
@@ -51,7 +51,7 @@ Recovery exit criteria:
 
 ## Slice 0: Recovery Planning And Docs Lock
 
-Status: active in this docs slice.
+Status: complete.
 
 Goal: make the manual blocker and next recovery sequence explicit before editing gameplay files.
 
@@ -203,6 +203,8 @@ Commit target:
 
 Goal: make customers readable as roles without giant floating labels or register crowding.
 
+Status: implemented in `Fix alpha customer readability`; pending final recovery screenshot review.
+
 Work:
 
 - Replace inconsistent billboard dominance with compact, consistent role markers.
@@ -215,6 +217,7 @@ Acceptance:
 - Customers read as different roles before clicking.
 - Role labels do not dominate the scene or shrink below readability.
 - Buyer queue, trade-in seller, preorder, service, and suspicious customer do not form a visual pileup at the register.
+- Automated coverage locks role bubbles to compact depth-tested labels, keeps role props below head height and off center, and preserves existing queue separation checks.
 
 Manual screenshots:
 

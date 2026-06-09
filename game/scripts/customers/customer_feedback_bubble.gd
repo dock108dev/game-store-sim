@@ -5,6 +5,8 @@ const TONE_INFO := "info"
 const TONE_POSITIVE := "positive"
 const TONE_WARNING := "warning"
 const TONE_SUSPICIOUS := "suspicious"
+const ROLE_BUBBLE_MAX_CHARACTERS := 18
+const ROLE_BUBBLE_PIXEL_SIZE := 0.0017
 
 @export var max_characters: int = 28
 
@@ -13,7 +15,9 @@ var tone: String = TONE_INFO
 
 func _ready() -> void:
 	billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	no_depth_test = true
+	no_depth_test = false
+	pixel_size = minf(pixel_size, ROLE_BUBBLE_PIXEL_SIZE)
+	max_characters = mini(max_characters, ROLE_BUBBLE_MAX_CHARACTERS)
 	visible = false
 	text = ""
 
