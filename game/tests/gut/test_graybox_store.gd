@@ -426,9 +426,12 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 		"DisplaySignPanel/DisplaySignLabel",
 		"RegisterSignPanel/RegisterSignLabel",
 		"BackroomSignPanel/BackroomSignLabel",
+		"EmployeesOnlySignPanel/EmployeesOnlySignLabel",
 		"BackWallFeatureStripe/BackWallFeatureLabel",
 		"ReceivingSignPanel/ReceivingSignLabel",
 		"StorageSignPanel/StorageSignLabel",
+		"OfficeSignPanel/OfficeSignLabel",
+		"ServiceSignPanel/ServiceSignLabel",
 		"NewReleaseEndcap/EndcapHeaderPanel/EndcapHeaderLabel",
 		"StaffPicksStand/StaffPicksHeaderPanel/StaffPicksHeaderLabel",
 		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel",
@@ -452,6 +455,55 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 		var label := _store.get_node_or_null(label_path) as Label3D
 		assert_not_null(label, label_path)
 		assert_true(label.no_depth_test, label_path)
+
+
+func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
+	var label := _store.get_node_or_null("EmployeesOnlySignPanel/EmployeesOnlySignLabel") as Label3D
+	assert_not_null(label)
+	assert_eq(label.text, "EMPLOYEES ONLY")
+	assert_lte(label.pixel_size, 0.0032)
+	assert_true(label.no_depth_test)
+
+	for path in [
+		"StaffThresholdMat",
+		"StaffDoorFrameLeft",
+		"StaffDoorFrameRight",
+		"EmployeesOnlySignPanel",
+	]:
+		var marker := _store.get_node_or_null(path) as CSGBox3D
+		assert_not_null(marker, path)
+		assert_false(marker.use_collision, path)
+		assert_true(_is_inside_store_floorprint(marker.global_position), path)
+
+	var threshold := _store.get_node("StaffThresholdMat") as CSGBox3D
+	assert_almost_eq(threshold.global_position.z, 3.34, 0.01)
+	assert_gte(threshold.size.x, 2.2)
+	assert_lte(threshold.size.z, 0.75)
+
+
+func test_stockroom_shell_has_office_service_and_carry_route_cues() -> void:
+	var expected_labels := {
+		"OfficeSignPanel/OfficeSignLabel": "OFFICE",
+		"ServiceSignPanel/ServiceSignLabel": "SERVICE",
+	}
+
+	for label_path in expected_labels:
+		var label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(label)
+		assert_eq(label.text, expected_labels[label_path])
+		assert_lte(label.pixel_size, 0.0031)
+		assert_true(label.no_depth_test)
+
+	for panel_path in ["OfficeSignPanel", "ServiceSignPanel", "StockroomCarryRoute"]:
+		var panel := _store.get_node_or_null(panel_path) as CSGBox3D
+		assert_not_null(panel, panel_path)
+		assert_false(panel.use_collision, panel_path)
+		assert_true(_is_inside_store_floorprint(panel.global_position), panel_path)
+
+	var carry_route := _store.get_node("StockroomCarryRoute") as CSGBox3D
+	assert_gte(carry_route.size.x, 8.0)
+	assert_lt(_flat_distance_xz(carry_route.global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 3.8)
+	assert_lt(_flat_distance_xz(carry_route.global_position, (_store.get_node("BackroomStorageShelf") as Node3D).global_position), 4.8)
 
 
 func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:

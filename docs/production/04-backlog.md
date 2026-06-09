@@ -183,6 +183,7 @@ The following polish items remain valid historical checkpoints:
 
 - Active: use `17-stockroom-production-plan.md` as the next implementation sequence.
 - Goal: turn the functional backroom/receiving systems into a physical employees-only stockroom with receiving station, backstock shelves, manager office/computer, service bench, safe/security corner, and clear carry routes to the sales floor.
+- Done: Slice 1 adds an employees-only staff threshold, doorway frame, office/service cue signs, and a nonblocking floor route cue from receiving/backstock toward the sales floor.
 - Do first: staff boundary and stockroom shell, then receiving station, then backstock shelving, then manager office/computer context, then service/security corners, then workflow copy, lighting/materials, and validation sync.
 - Do not reopen external playtest from this phase unless owner screenshot validation and stockroom screenshot review both pass.
 

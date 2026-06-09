@@ -51,7 +51,7 @@ The employees-only area should read as one compact but coherent operations suite
 
 ## Slice 0: Docs, Audit, And Validation Lock
 
-Status: active in this planning slice.
+Status: complete in `Plan stockroom production phase`.
 
 Goal: make the next production phase explicit and remove stale "recovery is next" wording.
 
@@ -78,6 +78,8 @@ Commit target:
 - `Plan stockroom production phase`
 
 ## Slice 1: Stockroom Shell And Staff Boundary
+
+Status: implemented in `Build stockroom staff boundary`; pending owner screenshot validation.
 
 Goal: make the backroom read as an employees-only room before adding more props.
 

@@ -48,6 +48,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
+    },
+    {
+      "id": "stockroom_staff_boundary_shell",
+      "name": "Stockroom shell has employees-only threshold, door frame, and nonblocking staff boundary cues",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_stockroom_staff_boundary_reads_as_employees_only"
+    },
+    {
+      "id": "stockroom_office_service_route_cues",
+      "name": "Stockroom shell has office, service, and carry-route cues without blocking receiving/backstock travel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_stockroom_shell_has_office_service_and_carry_route_cues"
     }
   ]
 }

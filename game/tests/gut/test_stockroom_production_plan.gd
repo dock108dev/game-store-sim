@@ -73,6 +73,8 @@ func test_stockroom_validation_scenarios_are_registered() -> void:
 		"stockroom_backlog_pointer_sync",
 		"stockroom_completion_handoff_sync",
 		"stockroom_package_pause_guard",
+		"stockroom_staff_boundary_shell",
+		"stockroom_office_service_route_cues",
 	]
 
 	for scenario_id in required_ids:
@@ -80,7 +82,7 @@ func test_stockroom_validation_scenarios_are_registered() -> void:
 		var scenario: Dictionary = scenarios.get(scenario_id)
 		assert_eq(scenario.get("status"), "automated", scenario_id)
 		assert_true(scenario.get("critical"), scenario_id)
-		assert_string_contains(str(scenario.get("evidence", "")), "test_stockroom_production_plan.gd")
+		assert_string_contains(str(scenario.get("evidence", "")), "res://tests/gut/")
 
 
 func _scenario_map(path: String) -> Dictionary:

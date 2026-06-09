@@ -295,6 +295,35 @@ no_depth_test = true
 text = "BACKROOM"
 font_size = 30
 
+[node name="StaffThresholdMat" type="CSGBox3D" parent="."]
+size = Vector3(2.25, 0.014, 0.72)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.045, 3.34)
+material = SubResource("StandardMaterial3D_backroom_path_zone")
+
+[node name="StaffDoorFrameLeft" type="CSGBox3D" parent="."]
+size = Vector3(0.1, 1.72, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.04, 0.86, 3.36)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="StaffDoorFrameRight" type="CSGBox3D" parent="."]
+size = Vector3(0.1, 1.72, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.44, 0.86, 3.36)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="EmployeesOnlySignPanel" type="CSGBox3D" parent="."]
+size = Vector3(1.22, 0.18, 0.028)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 1.48, 3.31)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="EmployeesOnlySignLabel" type="Label3D" parent="EmployeesOnlySignPanel"]
+pixel_size = 0.0031
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+no_depth_test = true
+text = "EMPLOYEES ONLY"
+font_size = 24
+
 [node name="BackroomZone" type="CSGBox3D" parent="."]
 size = Vector3(12.4, 0.012, 2.35)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.018, 4.62)
@@ -339,6 +368,11 @@ size = Vector3(6.0, 0.01, 0.72)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.04, 4.45)
 material = SubResource("StandardMaterial3D_backroom_path_zone")
 
+[node name="StockroomCarryRoute" type="CSGBox3D" parent="."]
+size = Vector3(8.4, 0.012, 0.38)
+transform = Transform3D(0.996195, 0, -0.087156, 0, 1, 0, 0.087156, 0, 0.996195, -1.18, 0.052, 4.18)
+material = SubResource("StandardMaterial3D_backroom_path_zone")
+
 [node name="ReceivingSignPanel" type="CSGBox3D" parent="."]
 size = Vector3(0.92, 0.18, 0.028)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.28, 1.72, 5.84)
@@ -366,6 +400,34 @@ outline_size = 3
 no_depth_test = true
 text = "STORAGE"
 font_size = 30
+
+[node name="OfficeSignPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.72, 0.16, 0.026)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.62, 1.18, 5.84)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="OfficeSignLabel" type="Label3D" parent="OfficeSignPanel"]
+pixel_size = 0.003
+modulate = Color(0.98, 0.9, 0.66, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 2
+no_depth_test = true
+text = "OFFICE"
+font_size = 22
+
+[node name="ServiceSignPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.78, 0.16, 0.026)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 1.18, 5.84)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="ServiceSignLabel" type="Label3D" parent="ServiceSignPanel"]
+pixel_size = 0.003
+modulate = Color(0.94, 0.98, 0.86, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 2
+no_depth_test = true
+text = "SERVICE"
+font_size = 22
 
 [node name="SalesFloorZone" type="CSGBox3D" parent="."]
 size = Vector3(4.8, 0.01, 1.6)
