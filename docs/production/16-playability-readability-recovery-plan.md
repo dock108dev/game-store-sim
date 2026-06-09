@@ -109,6 +109,8 @@ Commit target:
 
 ## Slice 2: Signage, Prop Scale, And Receiving Sightlines
 
+Status: implemented in `Fix alpha signage sightlines`.
+
 Goal: remove the giant-label/foreground-blocker problem while preserving useful zone cues.
 
 Work:
@@ -123,6 +125,7 @@ Acceptance:
 - `04_receiving_box_before_pickup.png` shows the starter items without a sign covering them.
 - Register and rack signage help orientation without becoming foreground slabs.
 - Product labels and signs do not fight the reticle prompt.
+- Automated coverage now locks the main zone signs as fixed in-world labels under the new pixel-size budget and keeps the receiving `INTAKE` tag compact and non-billboarded.
 
 Manual screenshots:
 

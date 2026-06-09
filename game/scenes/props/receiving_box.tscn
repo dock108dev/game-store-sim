@@ -71,18 +71,17 @@ size = Vector3(0.28, 0.012, 0.42)
 material = SubResource("StandardMaterial3D_lane")
 
 [node name="IntakeTagPanel" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39, -0.38)
-size = Vector3(0.58, 0.16, 0.03)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, -0.4)
+size = Vector3(0.46, 0.12, 0.026)
 material = SubResource("StandardMaterial3D_lane")
 
 [node name="IntakeTagLabel" type="Label3D" parent="IntakeTagPanel"]
-pixel_size = 0.0038
+pixel_size = 0.0028
 modulate = Color(0.08, 0.07, 0.04, 1)
 outline_modulate = Color(0.95, 0.78, 0.36, 1)
 outline_size = 2
-billboard = 1
 text = "INTAKE"
-font_size = 22
+font_size = 18
 
 [node name="PlaceholderUsedGame" parent="." instance=ExtResource("1_used_game")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 0.2, -0.04)

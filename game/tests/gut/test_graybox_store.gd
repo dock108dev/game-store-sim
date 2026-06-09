@@ -134,6 +134,8 @@ func test_receiving_box_has_nonblocking_intake_lanes_and_label() -> void:
 	var intake_label := receiving_box.get_node_or_null("IntakeTagPanel/IntakeTagLabel") as Label3D
 	assert_not_null(intake_label)
 	assert_eq(intake_label.text, "INTAKE")
+	assert_eq(intake_label.billboard, 0)
+	assert_lte(intake_label.pixel_size, 0.0028)
 
 	for lane_name in ["ReceivingLane001", "ReceivingLane002", "ReceivingLane003"]:
 		var lane := receiving_box.get_node_or_null(lane_name) as CSGBox3D
@@ -385,7 +387,8 @@ func test_store_signage_uses_fictional_world_labels() -> void:
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
 		assert_gte(label.font_size, 30)
-		assert_lte(label.pixel_size, 0.0066)
+		assert_lte(label.pixel_size, 0.0048)
+		assert_eq(label.billboard, 0)
 		for banned_term in banned_terms:
 			assert_false(label.text.contains(banned_term))
 
@@ -393,11 +396,11 @@ func test_store_signage_uses_fictional_world_labels() -> void:
 func test_store_sign_panels_are_nonblocking_and_zone_aligned() -> void:
 	var expected_panels := {
 		"StoreIdentitySignPanel": Vector3(0, 2.18, -5.86),
-		"DisplaySignPanel": Vector3(-3.18, 1.78, 5.82),
-		"RegisterSignPanel": Vector3(3.05, 1.46, -2.9),
-		"BackroomSignPanel": Vector3(0.3, 1.96, 3.26),
-		"ReceivingSignPanel": Vector3(-4.65, 1.18, 3.08),
-		"StorageSignPanel": Vector3(-5.85, 1.38, 4.66),
+		"DisplaySignPanel": Vector3(-3.18, 1.98, 5.82),
+		"RegisterSignPanel": Vector3(2.55, 1.38, -2.92),
+		"BackroomSignPanel": Vector3(0.2, 1.78, 3.36),
+		"ReceivingSignPanel": Vector3(-5.28, 1.72, 5.84),
+		"StorageSignPanel": Vector3(-5.85, 1.52, 4.78),
 	}
 
 	for panel_name in expected_panels:
@@ -409,7 +412,8 @@ func test_store_sign_panels_are_nonblocking_and_zone_aligned() -> void:
 		assert_almost_eq(panel.global_position.z, expected_panels[panel_name].z, 0.01)
 
 	assert_gt(_flat_distance_xz((_store.get_node("RegisterSignPanel") as CSGBox3D).global_position, (_store.get_node("GameDisplayRack") as Node3D).global_position), 6.0)
-	assert_lt(_flat_distance_xz((_store.get_node("ReceivingSignPanel") as CSGBox3D).global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 0.9)
+	assert_gt(_flat_distance_xz((_store.get_node("ReceivingSignPanel") as CSGBox3D).global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 1.8)
+	assert_lt(_flat_distance_xz((_store.get_node("ReceivingSignPanel") as CSGBox3D).global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 2.2)
 
 
 func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
