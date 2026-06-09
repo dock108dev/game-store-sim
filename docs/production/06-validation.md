@@ -46,8 +46,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 526 GUT tests.
-- UI scenario automation coverage is 476/594, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 530 GUT tests.
+- UI scenario automation coverage is 483/602, above the 80% threshold.
 - Production script mapping coverage is 51/51.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - Desktop pack export smoke passed and produced `artifacts/builds/desktop/game-store-sim.pck`.
@@ -89,6 +89,7 @@ Current production validation baseline:
 - Readability recovery Slice 5 coverage verifies compact depth-tested customer role bubbles, below-head/off-center role props, and existing queue separation coverage before final recovery validation.
 - Readability recovery Slice 6 coverage verifies contextual backroom computer action groups so supplier, storage, service, release, records, and placement controls only occupy the frame on their relevant tabs.
 - Label depth-safety coverage verifies panel-backed world labels and generated product price tags stay whole at oblique viewing angles instead of losing their left or right side to backing geometry.
+- Stockroom production planning coverage verifies the active next-stage docs, ordered slice stops, manual checklist, and validation scenario matrix are synced before implementation begins.
 - Save slot UI coverage verifies the Stop 12.1 file-backed slot registry, new game slot creation, continue data, overwrite/delete behavior, save metadata, modal accessibility, and player-controller save-panel wiring.
 - Save migration coverage verifies the Stop 12.2 current save version, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed JSON failure state, and readable migration-policy summary text.
 - Settings menu coverage verifies the Stop 12.3 audio, display, controls, mouse, accessibility, persistence, bindings reset, default reset, modal focus, and player settings application surface.

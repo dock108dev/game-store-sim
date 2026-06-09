@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 526 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 530 GUT tests, UI scenario automation coverage at 483/602, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -67,6 +67,7 @@ Current automated baseline:
 - Alpha playtest package is implemented through Stop 13.6 but remains paused until the owner recovery screenshot set passes; manual QA should use `15-alpha-playtest-package.md` only after that owner capture is approved.
 - Alpha validation sync is implemented through Stop 13.7; manual QA should treat the gate, pack smoke, package doc, alpha bug list, and this checklist as mechanically current, then run the owner recovery screenshot pass before external playtest.
 - Playability readability recovery implementation is complete in `16-playability-readability-recovery-plan.md`; manual QA should review the recovery focus and capture list before approving any new external playtest package.
+- Employees-only stockroom production is planned in `17-stockroom-production-plan.md`; manual QA should use the Stockroom Production Focus before and during the next implementation sequence.
 - Readability recovery Slice 1 is implemented; manual QA should confirm the fresh spawn, sales-floor route, and backroom entry screenshots now benefit from the wider comfort FOV, taller eye line, farther spawn, and lower/right held-item anchor before moving deeper into signage and UI work.
 - Readability recovery Slice 2 is implemented; manual QA should confirm receiving, register, rack, backroom, storage, and retail-callout signs are fixed in-world, compact, and no longer cover starter products or normal register/rack sightlines before moving into interaction and modal legibility.
 - Readability recovery Slice 3 is implemented; manual QA should confirm the bottom prompt, center reticle, product hover highlight, shelf slot hover highlight, pickup, pricing-entry, stocking, and lower-priced-copy sale checks are readable before moving into modal/menu legibility.
@@ -74,6 +75,7 @@ Current automated baseline:
 - Readability recovery Slice 5 is implemented; manual QA should confirm buyer, trade-in, preorder, service, and suspicious customer role bubbles stay compact/depth-tested, props remain below head height/off-center, and the register queue does not visually pile up.
 - Readability recovery Slice 6 is implemented; manual QA should confirm dashboard, ordering, releases, records, receiving, storage placement, and service bench controls are contextual by tab and no longer crowd every backroom computer screenshot.
 - Label depth-safety stabilization is implemented; manual QA should confirm panel-backed signs, receiving/rack labels, and product price tags stay whole when viewed from shallow left and right angles.
+- Stockroom planning is implemented; manual QA should confirm future stockroom screenshots prove stock starts behind an employees-only boundary, moves through receiving/backstock, and reaches sales-floor fixtures physically instead of appearing as floor clutter or instant inventory.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 - Every implementation summary should say whether these were checked, skipped, or not relevant.
@@ -633,7 +635,7 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 526 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 530 GUT tests, 483/602 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
 - Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and keeps AH-006/AH-012/AH-013/AH-014/AH-015 routed to owner recovery screenshot validation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
@@ -655,6 +657,21 @@ Run these first before attempting another external alpha playtest:
 - Confirm the label depth-safety stabilization keeps panel-backed signs, receiving/rack labels, and product price tags fully visible from shallow left/right viewing angles; fail the owner screenshot pass if a label loses a side based on camera angle.
 - Confirm the backroom entry, dashboard, ordering, releases, records, receiving workflow, and service ticket screens read as operations space rather than dense debug UI.
 - Rerun the short recovery screenshot set before reopening `15-alpha-playtest-package.md`; keep the package paused if any capture is still unreadable.
+
+## Stockroom Production Focus
+
+Run these first when manually checking the upcoming employees-only stockroom implementation:
+
+- Review `docs/production/17-stockroom-production-plan.md` and confirm the next implementation slices keep the backroom physical rather than adding another abstract inventory menu.
+- Capture `43_stockroom_staff_threshold.png` from the sales-floor side and confirm the player understands the area is employees-only without a giant sign blocking the route.
+- Capture `45_receiving_intake_station.png` and confirm delivered stock appears in an intentional delivery/pallet/intake station, not loose on the floor.
+- Capture `46_backstock_shelving.png` and confirm stored products read as backstock on shelves, bins, or staging surfaces, with clear store/pull context.
+- Capture `47_backstock_pull_stage.png` and confirm pulled stock has an obvious staging place before the player carries it to sales-floor fixtures.
+- Capture `48_manager_office_context.png` and confirm the computer reads as a manager office workstation with desk, paperwork, board, and supplier context.
+- Capture `49_service_safe_records_corner.png` and confirm service, safe, security, and records props remain secondary and do not look like mandatory objectives.
+- Capture `50_storage_tab_physical_flow.png` and confirm the computer copy explains where stock appears and what physical action the player should take next.
+- Confirm stockroom lighting/materials stay cooler and operational while preserving prompt, reticle, product-label, and computer readability at 1280x720.
+- Keep `15-alpha-playtest-package.md` paused if any stockroom screenshot still reads as floor clutter, debug props, or instant inventory.
 
 ## Automated Screenshot Artifacts
 

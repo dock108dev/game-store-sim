@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 526 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 530 GUT tests, UI scenario automation coverage 483/602, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
 
 ## Milestone 13: Alpha Hardening
 
@@ -686,7 +686,7 @@ Validation snapshot:
 
 Milestones 1 through 13 are implemented, validated, committed, and pushed on `codex/let-it-fly`.
 
-The June 9 manual screenshot review supersedes the previous external-playtest handoff. The repo remains mechanically green, and readability recovery implementation is complete, but the build still needs the owner recovery screenshot set before it can be sent to external testers.
+The June 9 manual screenshot review supersedes the previous external-playtest handoff. The repo remains mechanically green, readability recovery implementation is complete, and label depth-safety stabilization is complete, but the build still needs the owner recovery screenshot set before it can be sent to external testers.
 
 The playability readability recovery phase in `16-playability-readability-recovery-plan.md` is implemented through Slice 7:
 
@@ -697,6 +697,9 @@ The playability readability recovery phase in `16-playability-readability-recove
 5. Fix customer role markers and register queue readability.
 6. Fix backroom/computer readability.
 7. Done: reran the automated gate and kept the external playtest package paused pending the owner recovery screenshot set.
+8. Done: stabilized angle-dependent label clipping for panel-backed signs and product price tags.
+
+The next active build plan is `17-stockroom-production-plan.md`: turn the current functional backroom into an employees-only stockroom and manager office with physical receiving, backstock shelving, service/security corners, computer office context, and clear stock movement to the sales floor.
 
 Codex can keep the repo mechanically validated, but it cannot mark controller feel, OS window behavior, mouse-capture feel, economy feel, or long-form playtest readability as human-approved.
 
@@ -717,4 +720,4 @@ This phase is mechanically complete when the repo can produce an alpha-quality l
 - Updated automated tests, screenshot artifacts, and manual validation docs.
 - Each completed slice committed and pushed.
 
-Human approval still requires the owner screenshot pass described in `16-playability-readability-recovery-plan.md`, followed by the external playtest/manual window pass described in `15-alpha-playtest-package.md`.
+Human approval still requires the owner screenshot pass described in `16-playability-readability-recovery-plan.md`, the stockroom screenshot review described in `17-stockroom-production-plan.md` if that phase is implemented before handoff, and the external playtest/manual window pass described in `15-alpha-playtest-package.md`.

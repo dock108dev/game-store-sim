@@ -98,7 +98,7 @@ Rejected alternatives:
 
 Follow-up risk:
 
-- Direction work can become abstract if it is not quickly converted into production target contracts and scene/UI slices. Milestones 1 through 13 in `11-game-completion-plan.md` converted the target contracts into a mechanically validated alpha handoff, but the June 9 manual screenshot review showed the build is not readable enough for external playtest. The next checkpoint is the playability readability recovery phase in `16-playability-readability-recovery-plan.md`.
+- Direction work can become abstract if it is not quickly converted into production target contracts and scene/UI slices. Milestones 1 through 13 in `11-game-completion-plan.md` converted the target contracts into a mechanically validated alpha handoff, and the June 9 manual screenshot review produced the completed readability recovery phase in `16-playability-readability-recovery-plan.md`.
 
 ## 2026-06-09: Playability Readability Recovery
 
@@ -106,7 +106,7 @@ Decision:
 
 - Pause the external alpha playtest package.
 - Treat the current build as mechanically validated but manually blocked for readability.
-- Use `16-playability-readability-recovery-plan.md` as the next implementation source of truth.
+- Use `16-playability-readability-recovery-plan.md` as the recovery implementation source of truth.
 
 Reason:
 
@@ -123,3 +123,27 @@ Rejected alternatives:
 Follow-up risk:
 
 - Recovery work can accidentally become a second broad polish roadmap. Keep each slice tied to the screenshot blocker, full validation, docs sync, commit, and push cadence.
+
+## 2026-06-09: Employees-Only Stockroom Production
+
+Decision:
+
+- Keep external alpha playtest paused until owner screenshot validation passes.
+- Use `17-stockroom-production-plan.md` as the next implementation source of truth.
+- Turn the current working backroom/receiving mechanics into an actual employees-only stockroom and manager office.
+
+Reason:
+
+- The mechanics prove that supplier orders, receiving, sorting, backstock, service, records, and computer workflows function, but the world still reads too much like stock and props placed in a room.
+- The inspiration analysis points to an office/backroom as the practical hub for supplier ordering, inventory records, console testing, repairs, paperwork, and suspicious artifacts.
+- The next useful work is physical organization: staff threshold, receiving station, backstock shelves, office computer, service bench, safe/security, and clear stock movement to the sales floor.
+
+Rejected alternatives:
+
+- Reopen external playtest before the owner screenshot set is readable.
+- Add more abstract inventory menus instead of physical stockroom work.
+- Delete completed polish/recovery planning docs that are still useful as validated historical checkpoints.
+
+Follow-up risk:
+
+- Stockroom polish can hide core interactions if prop density grows too fast. Build the shell and routes first, then add receiving/backstock/office detail, and keep manual screenshots current after every visual slice.

@@ -4,11 +4,11 @@ This backlog is the active production view. The historical first-playable checkl
 
 ## Current Phase
 
-Owner recovery screenshot validation.
+Employees-only stockroom production planning and implementation.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, and readability recovery implementation is complete through Slice 7. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set in a real 1280x720 window.
+Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, and readability recovery implementation plus label depth-safety stabilization are complete. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set in a real 1280x720 window. The active next implementation plan is the employees-only stockroom and office pass in `17-stockroom-production-plan.md`.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -17,6 +17,8 @@ Completed polish implementation plan: `10-polish-execution-plan.md`.
 Current completion plan: `11-game-completion-plan.md`.
 
 Completed recovery implementation plan: `16-playability-readability-recovery-plan.md`.
+
+Active stockroom production plan: `17-stockroom-production-plan.md`.
 
 ## Current Rules
 
@@ -46,7 +48,8 @@ Completed recovery implementation plan: `16-playability-readability-recovery-pla
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
 14. Alpha hardening. Complete through Stop 13.7; external playtest package exists but is paused by the June 9 manual readability blocker.
-15. Playability readability recovery. Implementation complete; owner screenshot validation is next in `16-playability-readability-recovery-plan.md`.
+15. Playability readability recovery. Implementation complete; owner screenshot validation remains required before external playtest.
+16. Employees-only stockroom production. Planned in `17-stockroom-production-plan.md`; implementation next.
 
 ## Completed Polish Scope
 
@@ -172,11 +175,16 @@ The following polish items remain valid historical checkpoints:
 
 ## Playability Readability Recovery
 
-- Active: use `16-playability-readability-recovery-plan.md` as the next implementation sequence.
+- Complete: `16-playability-readability-recovery-plan.md` records the completed implementation sequence and the remaining owner screenshot validation gate.
 - Current blocker: the June 9 manual screenshots `intro_1.png`, `receiveing.png`, `intro_2.png`, and `pricing.png` triggered the recovery work; the implementation is complete, but the owner still needs to capture the recovery screenshot set before external playtest.
-- Do first: camera/player scale/spawn composition, then signage/receiving sightlines, then core interaction prompts, then modal legibility, then customer role/queue readability, then backroom/computer readability.
-- Do not add new systems in this phase.
 - Reopen the external playtest package only after the recovery screenshot set is readable and the full gate passes.
+
+## Employees-Only Stockroom Production
+
+- Active: use `17-stockroom-production-plan.md` as the next implementation sequence.
+- Goal: turn the functional backroom/receiving systems into a physical employees-only stockroom with receiving station, backstock shelves, manager office/computer, service bench, safe/security corner, and clear carry routes to the sales floor.
+- Do first: staff boundary and stockroom shell, then receiving station, then backstock shelving, then manager office/computer context, then service/security corners, then workflow copy, lighting/materials, and validation sync.
+- Do not reopen external playtest from this phase unless owner screenshot validation and stockroom screenshot review both pass.
 
 ## Product And Fixture Polish
 

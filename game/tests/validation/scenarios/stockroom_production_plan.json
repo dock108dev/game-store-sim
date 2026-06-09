@@ -1,0 +1,53 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "stockroom_plan_docs_sync",
+      "name": "Stockroom production plan is the active next implementation sequence while external playtest remains paused",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
+    },
+    {
+      "id": "stockroom_slice_stop_contract",
+      "name": "Stockroom plan defines staff boundary, receiving, backstock, office, service, workflow-copy, lighting, and validation slices",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_has_ordered_slice_stops"
+    },
+    {
+      "id": "stockroom_manual_checklist_sync",
+      "name": "Manual checklist names the stockroom production focus and screenshot targets",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_manual_checks_are_synced"
+    },
+    {
+      "id": "stockroom_readme_pointer_sync",
+      "name": "README points the current next implementation sequence at the stockroom production plan",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
+    },
+    {
+      "id": "stockroom_backlog_pointer_sync",
+      "name": "Backlog marks stockroom production as active while recovery remains a completed gate",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
+    },
+    {
+      "id": "stockroom_completion_handoff_sync",
+      "name": "Completion plan names the stockroom plan as the next active build plan",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
+    },
+    {
+      "id": "stockroom_package_pause_guard",
+      "name": "Playtest package remains paused until recovery and stockroom screenshot reviews pass",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
+    }
+  ]
+}

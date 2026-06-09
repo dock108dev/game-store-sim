@@ -897,6 +897,14 @@
       "owner": "manual QA"
     },
     {
+      "id": "stockroom_production_screenshot_review",
+      "name": "Employees-only stockroom screenshots prove receiving, backstock, office computer, and service/security spaces read as physical operations",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the stockroom plan and doc pointers; human review must confirm 43_stockroom_staff_threshold, 45_receiving_intake_station, 46_backstock_shelving, 48_manager_office_context, and 50_storage_tab_physical_flow read as organized stockroom work instead of floor clutter or instant inventory.",
+      "owner": "manual QA"
+    },
+    {
       "id": "alpha_playtest_package_artifact_review",
       "name": "Alpha package artifacts are generated and reviewed before external handoff",
       "status": "manual",
