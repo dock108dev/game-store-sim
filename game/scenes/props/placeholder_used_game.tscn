@@ -19,7 +19,7 @@ albedo_color = Color(0.16, 0.32, 0.92, 1)
 albedo_color = Color(0.98, 0.9, 0.62, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hover"]
-albedo_color = Color(0.95, 0.82, 0.28, 0.34)
+albedo_color = Color(1, 0.86, 0.24, 0.52)
 transparency = 1
 
 [sub_resource type="BoxMesh" id="BoxMesh_case"]
@@ -74,7 +74,7 @@ mesh = SubResource("BoxMesh_price_sticker")
 visible = false
 use_collision = false
 position = Vector3(0, 0.18, -0.002)
-size = Vector3(0.29, 0.39, 0.065)
+size = Vector3(0.32, 0.42, 0.072)
 material = SubResource("StandardMaterial3D_hover")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

@@ -225,6 +225,11 @@ func test_used_game_hover_highlight_toggles_visual_cue() -> void:
 	assert_not_null(highlight)
 	assert_false(highlight.use_collision)
 	assert_false(highlight.visible)
+	assert_gte(highlight.size.x, 0.319)
+	assert_gte(highlight.size.y, 0.419)
+	var highlight_material := highlight.material as StandardMaterial3D
+	assert_not_null(highlight_material)
+	assert_gte(highlight_material.albedo_color.a, 0.5)
 	assert_false(_item.is_hovered())
 
 	_item.set_hovered(true)

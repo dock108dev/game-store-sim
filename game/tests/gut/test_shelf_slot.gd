@@ -105,6 +105,11 @@ func test_shelf_slot_hover_highlight_toggles_nonblocking_frame() -> void:
 	assert_not_null(frame)
 	assert_false(frame.use_collision)
 	assert_false(frame.visible)
+	assert_gte(frame.size.x, 0.66)
+	assert_gte(frame.size.y, 0.8)
+	var frame_material := frame.material as StandardMaterial3D
+	assert_not_null(frame_material)
+	assert_gte(frame_material.albedo_color.a, 0.55)
 	assert_false(_slot.is_hovered())
 
 	_slot.set_hovered(true)

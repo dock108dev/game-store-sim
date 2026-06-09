@@ -69,6 +69,7 @@ Current automated baseline:
 - Playability readability recovery is active in `16-playability-readability-recovery-plan.md`; manual QA should review the recovery focus before approving any new external playtest package.
 - Readability recovery Slice 1 is implemented; manual QA should confirm the fresh spawn, sales-floor route, and backroom entry screenshots now benefit from the wider comfort FOV, taller eye line, farther spawn, and lower/right held-item anchor before moving deeper into signage and UI work.
 - Readability recovery Slice 2 is implemented; manual QA should confirm receiving, register, rack, backroom, storage, and retail-callout signs are fixed in-world, compact, and no longer cover starter products or normal register/rack sightlines before moving into interaction and modal legibility.
+- Readability recovery Slice 3 is implemented; manual QA should confirm the bottom prompt, center reticle, product hover highlight, shelf slot hover highlight, pickup, pricing-entry, stocking, and lower-priced-copy sale checks are readable before moving into modal/menu legibility.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 - Every implementation summary should say whether these were checked, skipped, or not relevant.
@@ -643,7 +644,7 @@ Run these first before attempting another external alpha playtest:
 - Confirm the first recovery slice fixes camera scale, ceiling dominance, near-camera prop dominance, and spawn composition before deeper UI polish begins.
 - Confirm the player now starts farther from the register/special-customer pileup, sees more of the store at 1280x720, and carries items low/right without blocking the reticle.
 - Confirm the second recovery slice keeps oversized signage fixed: starter receiving products remain visible, the `INTAKE` tag stays compact, and rack/register signs do not become foreground slabs.
-- Confirm prompt, reticle, pickup, pricing-entry, and stocking feedback are readable at 1280x720 before continuing the full loop.
+- Confirm the third recovery slice keeps the larger bottom prompt readable, the reticle visible, hover targets obvious, and lower-priced-copy sale feedback understandable without relying on debug knowledge.
 - Confirm pricing, register, trade-in, preorder, service, settings, and save/load panels are comfortably readable in the actual window.
 - Confirm customer role markers are compact, consistent, and useful without dominating the store view or crowding the register queue.
 - Confirm the backroom entry, dashboard, ordering, releases, records, receiving workflow, and service ticket screens read as operations space rather than dense debug UI.

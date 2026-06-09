@@ -131,6 +131,21 @@ func test_interaction_prompt_show_and_hide() -> void:
 	var prompt: Node = load("res://scenes/ui/interaction_prompt.tscn").instantiate()
 	add_child_autofree(prompt)
 
+	var prompt_margin := prompt.get_node("MarginContainer") as MarginContainer
+	var prompt_panel := prompt.get_node("MarginContainer/PanelContainer") as PanelContainer
+	var panel_style := prompt_panel.get_theme_stylebox("panel") as StyleBoxFlat
+	assert_lte(prompt_margin.offset_left, -330.0)
+	assert_gte(prompt_margin.offset_right, 330.0)
+	assert_lte(prompt_margin.offset_top, -120.0)
+	assert_gte(prompt.label.custom_minimum_size.y, 48.0)
+	assert_gte(int(prompt.label.get("theme_override_font_sizes/font_size")), 22)
+	assert_gte(int(prompt.reticle.get("theme_override_font_sizes/font_size")), 36)
+	assert_gte(int(prompt.reticle.get("theme_override_constants/outline_size")), 5)
+	assert_eq(int(prompt.label.autowrap_mode), 3)
+	assert_not_null(panel_style)
+	assert_gte(panel_style.bg_color.a, 0.85)
+	assert_gte(panel_style.border_color.a, 0.7)
+
 	prompt.show_prompt("Click Inspect Test")
 	assert_true(prompt.visible)
 	assert_true(prompt.reticle.visible)

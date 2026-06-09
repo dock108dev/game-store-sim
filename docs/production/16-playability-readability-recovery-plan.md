@@ -139,6 +139,8 @@ Commit target:
 
 ## Slice 3: Core Interaction Readability
 
+Status: implemented in `Fix alpha interaction readability`.
+
 Goal: make pickup, pricing entry, stocking, and lower-priced-copy validation readable enough to perform repeatedly.
 
 Work:
@@ -153,6 +155,7 @@ Acceptance:
 - A player can identify click action and target subject without squinting.
 - Pickup, pricing, and stocking feedback stay readable while moving.
 - `09_buyer_selects_lower_price.png` can be captured without needing debug knowledge.
+- Automated coverage now locks the larger bottom prompt card, larger center reticle, prompt panel contrast, product hover highlight, shelf slot hover highlight, and lower-priced-copy customer selection behavior.
 
 Manual screenshots:
 

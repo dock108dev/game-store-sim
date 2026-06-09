@@ -16,7 +16,7 @@ transparency = 1
 albedo_color = Color(0.95, 0.78, 0.36, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_hover"]
-albedo_color = Color(0.95, 0.82, 0.28, 0.42)
+albedo_color = Color(1, 0.86, 0.24, 0.58)
 transparency = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_header"]
@@ -111,7 +111,7 @@ material = SubResource("StandardMaterial3D_slot_rail")
 visible = false
 use_collision = false
 position = Vector3(0, 0.36, 0.055)
-size = Vector3(0.62, 0.76, 0.025)
+size = Vector3(0.66, 0.8, 0.028)
 material = SubResource("StandardMaterial3D_slot_hover")
 
 [node name="ShelfSlot002" type="Area3D" parent="."]
@@ -137,7 +137,7 @@ material = SubResource("StandardMaterial3D_slot_rail")
 visible = false
 use_collision = false
 position = Vector3(0, 0.36, 0.055)
-size = Vector3(0.62, 0.76, 0.025)
+size = Vector3(0.66, 0.8, 0.028)
 material = SubResource("StandardMaterial3D_slot_hover")
 
 [node name="ShelfSlot003" type="Area3D" parent="."]
@@ -163,5 +163,5 @@ material = SubResource("StandardMaterial3D_slot_rail")
 visible = false
 use_collision = false
 position = Vector3(0, 0.36, 0.055)
-size = Vector3(0.62, 0.76, 0.025)
+size = Vector3(0.66, 0.8, 0.028)
 material = SubResource("StandardMaterial3D_slot_hover")
