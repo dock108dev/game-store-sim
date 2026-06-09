@@ -56,30 +56,34 @@ func test_alpha_validation_snapshot_records_current_gate_outputs() -> void:
 	assert_string_contains(completion_plan, "desktop pack smoke")
 
 
-func test_completion_handoff_points_to_external_playtest_not_finished_milestones() -> void:
+func test_completion_handoff_points_to_readability_recovery_not_finished_milestones() -> void:
 	var completion_plan := FileAccess.get_file_as_string(COMPLETION_PLAN_PATH)
 	var backlog := FileAccess.get_file_as_string(BACKLOG_PATH)
 	var decision_log := FileAccess.get_file_as_string("res://../docs/production/03-decision-log.md")
 
 	assert_string_contains(completion_plan, "## Current Handoff")
 	assert_string_contains(completion_plan, "Milestones 1 through 13 are implemented, validated, committed, and pushed")
-	assert_string_contains(completion_plan, "human external playtest and feedback-triage pass")
-	assert_string_contains(completion_plan, "Human approval still requires the external playtest/manual window pass")
+	assert_string_contains(completion_plan, "June 9 manual screenshot review supersedes the previous external-playtest handoff")
+	assert_string_contains(completion_plan, "playability readability recovery phase")
+	assert_string_contains(completion_plan, "Human approval still requires the recovery pass")
 	assert_false(completion_plan.contains("The next implementation phase should begin with Milestone 1"))
 
 	assert_string_contains(backlog, "Store environment production pass. Done through Milestone 2.")
 	assert_string_contains(backlog, "Product and content pipeline. Done through Milestone 6.")
 	assert_string_contains(backlog, "Alpha hardening. Complete through Stop 13.7")
+	assert_string_contains(backlog, "Playability readability recovery. Active next")
 	assert_false(backlog.contains("- Player-facing save/load slot UI."))
 	assert_false(backlog.contains("- Full audio, animation, VFX, and art-production pass."))
-	assert_string_contains(decision_log, "Milestones 1 through 13")
+	assert_string_contains(decision_log, "Playability Readability Recovery")
 
 
-func test_alpha_bug_list_points_remaining_work_to_playtest_feedback() -> void:
+func test_alpha_bug_list_points_remaining_work_to_readability_recovery() -> void:
 	var bug_list := FileAccess.get_file_as_string(BUG_LIST_PATH)
 
-	assert_string_contains(bug_list, "AH-001 through AH-008 have completed automated routing")
-	assert_string_contains(bug_list, "remaining readability concern now belongs in human external playtest feedback")
+	assert_string_contains(bug_list, "AH-012")
+	assert_string_contains(bug_list, "AH-013")
+	assert_string_contains(bug_list, "P0 manual playability blockers")
+	assert_string_contains(bug_list, "readability recovery phase before external playtest")
 	assert_string_contains(bug_list, "AH-011 remains the known human-feel checkpoint")
 	assert_false(bug_list.contains("The next implementation should fix P1 readability/composition issues before treating the build as external-playtest ready."))
 

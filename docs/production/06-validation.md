@@ -92,13 +92,14 @@ Current production validation baseline:
 - Pause/main-menu coverage verifies the Stop 12.4 pause mode, resume transition, main-menu mode, start-game transition, settings/save-load requests, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage verifies the Stop 12.5 macOS desktop export preset, template-free pack export artifact, pack boot smoke, and clear binary-export template fallback message.
 - Release wrapper validation sync is complete through Stop 12.6; automated checks now audit the release-wrapper scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Alpha bug triage is complete through Stop 13.1; `docs/production/13-alpha-bug-list.md` records the current no-P0 gate state, screenshot-derived P1/P2 issues, release-package limits, and target slices for alpha hardening.
+- Alpha bug triage is complete through Stop 13.1; `docs/production/13-alpha-bug-list.md` records the current no-P0 automated gate state, screenshot-derived P1/P2 issues, release-package limits, and the June 9 P0 manual readability blockers.
 - Alpha performance pass is complete through Stop 13.2; `scripts/measure_alpha_performance.sh` records scene load, frame stepping, modal UI, customer pathing, save codec, screenshot, and exported pack startup timing under broad alpha regression thresholds.
 - Alpha regression-test expansion is complete through Stop 13.3; automated checks now cover rotated fixture placement bounds, buyer queue spacing against special register customers, and screenshot scenario coverage for P1/P2 alpha bug subjects.
 - Alpha scene-readability content pass is complete as Stop 13.4A; automated checks now cover right-wall/back-wall detail props, smaller non-cropping register/backroom sign placement, wider special-customer depth separation, display-rack face/profile cues, placed-fixture screenshot framing, and first-view backroom placement controls.
 - Alpha content/copy pass is complete as Stop 13.4B; automated checks now cover customer role copy, customer dialogue staff context, supplier crate/invoice/shelf-plan copy, release planning hooks, daily report readout language, register return-scope copy, and non-abbreviated backroom action labels.
 - Alpha playtest package is complete through Stop 13.6; automated checks now audit the package runbook, build commands, artifact paths, concise external playtest script, known issues, feedback form, rollback plan, scenario matrix entries, and manual package checks.
 - Alpha validation sync is complete through Stop 13.7; automated checks now audit full-gate evidence, desktop pack smoke handoff, scenario/manual checklist sync, alpha bug-list routing, backlog state, and completion-plan status.
+- Playability readability recovery is active in `16-playability-readability-recovery-plan.md`; automated validation remains required, but external playtest is paused until manual screenshot review confirms the build is readable in a real window.
 
 ## Manual Validation
 
@@ -214,12 +215,12 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Screenshot composition is useful, not merely nonblank.
 - Desktop export pack artifact is created by the local verifier, boots without editor-only paths, and has a reviewed artifact handoff location.
 - Desktop binary export either creates a runnable app when matching Godot templates/signing are available or fails with clear template-installation guidance.
-- Alpha bug list entries AH-001 through AH-011 are reviewed against the latest screenshot artifacts before starting content, regression, balance, or playtest-package hardening work.
+- Alpha bug list entries AH-001 through AH-015 are reviewed against the latest screenshot artifacts before starting readability recovery, content, regression, balance, or playtest-package hardening work.
 - Stop 13.3 regression checks keep fixture placement bounds/history, visible buyer-queue spacing, and screenshot subject coverage in the automated gate before content-heavy alpha work begins.
 - Stop 13.4A manual review should compare the refreshed main scene, customer queue, register counter, fixture placed, and backroom computer screenshots against AH-001 through AH-007 before treating the visual-content pass as human-approved.
 - Stop 13.4B manual review should compare customer role copy, dialogue prompts, supplier ordering, release planning, daily report, register return copy, and backroom action labels in the actual window before treating the content/copy pass as human-approved.
-- Stop 13.6 manual review should use `15-alpha-playtest-package.md` for external tester handoff, then record any accepted feedback in `13-alpha-bug-list.md` before implementation.
-- Stop 13.7 manual review should treat the automated gate as current and then run the external playtest package; Codex has not performed human controller/window/playtest approval.
+- Stop 13.6 manual review should keep `15-alpha-playtest-package.md` as the external tester handoff artifact, but it remains paused until readability recovery exits.
+- Stop 13.7 manual review should treat the automated gate as current, then run `16-playability-readability-recovery-plan.md` before reopening the external playtest package; Codex has not performed human controller/window/playtest approval.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 
@@ -233,7 +234,7 @@ Planning-only slices still need validation discipline:
 - Update `07-current-manual-playtest.md` when the planning decision changes how future manual validation should be interpreted.
 - Do not mark gameplay manual checks as performed when the slice only changed docs.
 
-The game-completion plan in `11-game-completion-plan.md` is the active source of truth for moving from validated prototype to alpha production. Each implementation slice from that plan must keep automated validation, screenshot review, manual checklist updates, commit, and push in the same stop.
+The game-completion plan in `11-game-completion-plan.md` remains the production history, and `16-playability-readability-recovery-plan.md` is the active source of truth for the next recovery slices. Each implementation slice must keep automated validation, screenshot review, manual checklist updates, commit, and push in the same stop.
 
 ## Maintaining The Matrix
 

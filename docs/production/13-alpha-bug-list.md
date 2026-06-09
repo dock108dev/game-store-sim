@@ -8,6 +8,7 @@ Current gate state:
 - Latest full gate passes with 515 GUT tests, UI scenario automation coverage 476/594, production script mapping coverage 51/51, 3 active validation tools, and 33 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - Manual controller/window/playtest validation still needs a human pass.
+- June 9 manual screenshots found P0 readability blockers in the actual game window. External playtest is paused until `16-playability-readability-recovery-plan.md` exits.
 
 ## Priority Key
 
@@ -31,12 +32,16 @@ Current gate state:
 | AH-009 | P2 | Release packaging | `scripts/verify_desktop_export.sh`, `game/export_presets.cfg`, `15-alpha-playtest-package.md` | Pack smoke is automated, but binary app export and start-save-quit-relaunch-continue still depend on local Godot export templates/signing and remain manual. | Stop 13.6 external playtest package | Done: playtest package instructions produce the pack-smoke artifact, list local binary-template/signing blockers, and include rollback guidance. |
 | AH-010 | P2 | Manual validation debt | `07-current-manual-playtest.md`, `15-alpha-playtest-package.md` | The internal checklist is current but very large; external playtest uses a shorter script that exercises the alpha path without burying testers in internal validation details. | Stop 13.6 external playtest package | Done: external playtest script covers fresh start, receiving, pricing, stocking, sale, trade-in, service/preorder, backroom, save/load, and feedback in one readable runbook. |
 | AH-011 | P2 | Economy/balance confidence | `07-current-manual-playtest.md`, StoreSession coverage | Automated balance targets are now centralized and covered, but multi-day human feel still needs playtest confirmation before external release. | Stop 13.5 balance pass | Automated balance profile passes; manual multi-day playtest notes show cash pressure, buyer tolerance, services, supplier ordering, launches, and upgrades are understandable and not trivially broken. |
+| AH-012 | P0 | Playability readability | `intro_1.png`, `intro_2.png` | Normal player views are dominated by ceiling, counter mass, oversized signs, and near-camera props, so a tester cannot reliably understand the store at spawn or while moving. | Readability recovery Slices 1-2 | Spawn, sales-floor, register, receiving, and backroom entry screenshots read as a navigable small game store without explanation. |
+| AH-013 | P0 | Core UI legibility | `pricing.png` | Pricing is functional but the modal, bottom prompt, and item labels are too small/low-contrast to comfortably read at 1280x720. | Readability recovery Slices 3-4 | Pricing, register, trade-in, preorder, service, settings, and save/load panels are readable in the actual window, with clear action buttons and no clipped tiny text. |
+| AH-014 | P1 | Receiving sightlines | `receiveing.png`, `pricing.png` | Receiving products are present but obscured by large signage, overlapping props, tiny labels, and crowded composition around the intake area. | Readability recovery Slice 2 | The receiving screenshot shows starter products, intake context, and pickup prompt clearly without signs or props blocking the action. |
+| AH-015 | P1 | Customer role hierarchy | `intro_1.png` | Floating role labels are inconsistent: `Trade-in?` dominates the frame while other roles are tiny, making customers read as label billboards rather than people with compact role cues. | Readability recovery Slice 5 | Buyer, trade-in, preorder, service, and suspicious roles are readable from normal angles with compact, consistent markers that do not block the store or queue. |
 
-## Not Currently Blocked
+## Current Blocker
 
-- No P0 automated validation failures are open.
+- No P0 automated validation failures are open, but AH-012 and AH-013 are P0 manual playability blockers.
 - Core retail loop tests pass, including pickup, pricing, stocking, checkout, trade-ins, preorders, services, ordering, fixture placement, save/load codec, settings, pause/menu, hidden-thread optionality, screenshots, and export pack smoke.
-- AH-001 through AH-008 have completed automated routing through the alpha regression, scene-readability, and content/copy slices; any remaining readability concern now belongs in human external playtest feedback with screenshots and acceptance criteria.
+- AH-001 through AH-008 completed automated routing through the alpha regression, scene-readability, and content/copy slices, but June 9 manual evidence shows the build still needs a dedicated readability recovery phase before external playtest.
 - AH-011 remains the known human-feel checkpoint: multi-day economy balance is mechanically covered but still needs external playtest notes before alpha approval.
 
 ## Slice Routing
@@ -48,3 +53,4 @@ Current gate state:
 - Stop 13.5 balance pass: done; addresses AH-011 with centralized alpha balance targets, tuned economy values, automated coverage, and manual multi-day balance checks.
 - Stop 13.6 external playtest package: done; addresses AH-009 and AH-010 with `15-alpha-playtest-package.md`, build artifact guidance, known issues, playtest script, feedback form, rollback plan, validation scenario entries, and manual package checks.
 - Stop 13.7 alpha validation sync: done; records the current full-gate, desktop pack smoke, scenario matrix, manual checklist, bug-list routing, backlog state, and playtest-package handoff before human external playtest.
+- Readability recovery: active next; addresses AH-012 through AH-015 with camera/scale, signage/sightline, prompt/modal, customer, and backroom readability slices before reopening external playtest.

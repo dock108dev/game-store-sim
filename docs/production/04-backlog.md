@@ -4,17 +4,19 @@ This backlog is the active production view. The historical first-playable checkl
 
 ## Current Phase
 
-Game completion planning and alpha production setup.
+Playability readability recovery.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, but the June 7 screenshot review shows the game still reads as a graybox. The active work is now the completion plan that defines how to move from validated prototype to alpha-quality game; economy/day-loop progression is synced through Milestone 7, backroom operations are complete through Milestone 8, store building, decoration, layout effects, and starter expansion are complete through Milestone 9, the hidden-thread production arc is complete through Milestone 10, audio, VFX, and presentation feel are complete through Milestone 11, save/load/settings/release-wrapper work is complete through Milestone 12, and Alpha hardening is complete through Stop 13.7.
+Status: the prototype and first polish pass are validated, and Alpha hardening is complete through Stop 13.7 as a mechanical gate. The June 9 manual screenshot review found a new P0 human-readability blocker: the game is functionally alive but not currently human-validateable in a real window because camera scale, foreground signage, prompt legibility, pricing UI size, customer labels, and receiving composition make the core loop hard to see or read. External alpha playtest is paused until `16-playability-readability-recovery-plan.md` exits.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
 Completed polish implementation plan: `10-polish-execution-plan.md`.
 
 Current completion plan: `11-game-completion-plan.md`.
+
+Active recovery plan: `16-playability-readability-recovery-plan.md`.
 
 ## Current Rules
 
@@ -43,7 +45,8 @@ Current completion plan: `11-game-completion-plan.md`.
 11. Hidden-thread production arc. Done through Milestone 10.
 12. Audio, VFX, and presentation feel. Done through Milestone 11.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
-14. Alpha hardening. Complete through Stop 13.7; next checkpoint is human external playtest and feedback triage.
+14. Alpha hardening. Complete through Stop 13.7; external playtest package exists but is paused by the June 9 manual readability blocker.
+15. Playability readability recovery. Active next in `16-playability-readability-recovery-plan.md`.
 
 ## Completed Polish Scope
 
@@ -165,7 +168,15 @@ The following polish items remain valid historical checkpoints:
 - Done: added a Stop 13.4B alpha content/copy pass for customer role copy, dialogue staff context, supplier order notes, release planning hooks, daily report readouts, register return-scope copy, and backroom action labels.
 - Done: added `15-alpha-playtest-package.md`, an alpha package scenario matrix, manual package checks, and validation-sync coverage for Stop 13.6.
 - Done: synced alpha validation docs, scenario matrix, manual checklist, bug list, backlog state, and full-gate evidence for Stop 13.7.
-- Remaining alpha-hardening work: human external playtest and feedback triage before implementing post-alpha follow-up.
+- Remaining alpha-hardening work: external playtest and feedback triage after the playability readability recovery exits.
+
+## Playability Readability Recovery
+
+- Active: use `16-playability-readability-recovery-plan.md` as the next implementation sequence.
+- Current blocker: manual screenshots `intro_1.png`, `receiveing.png`, `intro_2.png`, and `pricing.png` show the build is mechanically functional but not readable enough for a human validation pass.
+- Do first: camera/player scale/spawn composition, then signage/receiving sightlines, then core interaction prompts, then modal legibility, then customer role/queue readability, then backroom/computer readability.
+- Do not add new systems in this phase.
+- Reopen the external playtest package only after the recovery screenshot set is readable and the full gate passes.
 
 ## Product And Fixture Polish
 

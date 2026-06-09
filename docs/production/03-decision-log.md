@@ -98,4 +98,28 @@ Rejected alternatives:
 
 Follow-up risk:
 
-- Direction work can become abstract if it is not quickly converted into production target contracts and scene/UI slices. Milestones 1 through 13 in `11-game-completion-plan.md` have now converted the target contracts into a mechanically validated alpha handoff; the next checkpoint is human external playtest and feedback triage.
+- Direction work can become abstract if it is not quickly converted into production target contracts and scene/UI slices. Milestones 1 through 13 in `11-game-completion-plan.md` converted the target contracts into a mechanically validated alpha handoff, but the June 9 manual screenshot review showed the build is not readable enough for external playtest. The next checkpoint is the playability readability recovery phase in `16-playability-readability-recovery-plan.md`.
+
+## 2026-06-09: Playability Readability Recovery
+
+Decision:
+
+- Pause the external alpha playtest package.
+- Treat the current build as mechanically validated but manually blocked for readability.
+- Use `16-playability-readability-recovery-plan.md` as the next implementation source of truth.
+
+Reason:
+
+- Manual screenshots from the actual game window show that camera scale, ceiling dominance, oversized signs, foreground props, small UI, and inconsistent customer labels make the game difficult to read even though movement and pickup work.
+- External playtest would mostly collect obvious readability complaints instead of useful loop, economy, customer, backroom, and save/load feedback.
+- A focused recovery phase keeps the work bounded: fix camera/scale first, then sightlines, prompts, modals, customers, backroom, and finally reopen the playtest package.
+
+Rejected alternatives:
+
+- Continue with external playtest because the automated gate is green.
+- Add more content or mechanics before the current loop is readable.
+- Do one large unbounded visual pass that mixes camera, UI, customers, and backroom changes without slice stops.
+
+Follow-up risk:
+
+- Recovery work can accidentally become a second broad polish roadmap. Keep each slice tied to the screenshot blocker, full validation, docs sync, commit, and push cadence.

@@ -686,12 +686,17 @@ Validation snapshot:
 
 Milestones 1 through 13 are implemented, validated, committed, and pushed on `codex/let-it-fly`.
 
-The next checkpoint is not another automated implementation slice. It is the human external playtest and feedback-triage pass:
+The June 9 manual screenshot review supersedes the previous external-playtest handoff. The repo remains mechanically green, but the current build is not human-validateable enough to send to external testers.
 
-1. Run the external script in `15-alpha-playtest-package.md`.
-2. Capture tester feedback with build, platform, session length, blockers, confusing steps, economy feel, customer behavior, backroom/computer notes, menu/settings/save notes, bugs, screenshots/logs, and replay intent.
-3. Add accepted feedback to `13-alpha-bug-list.md` with evidence, priority, target slice, and acceptance criteria.
-4. Start the next implementation slice only after the feedback has a concrete target.
+The next checkpoint is the playability readability recovery phase in `16-playability-readability-recovery-plan.md`:
+
+1. Fix camera scale, player framing, and spawn composition.
+2. Fix oversized signage, foreground blockers, and receiving sightlines.
+3. Fix prompt, reticle, pickup, pricing-entry, and stocking readability.
+4. Fix pricing/register/trade-in/preorder/service/save modal legibility.
+5. Fix customer role markers and register queue readability.
+6. Fix backroom/computer readability.
+7. Rerun the short screenshot capture set and reopen the external playtest package only if the build is readable.
 
 Codex can keep the repo mechanically validated, but it cannot mark controller feel, OS window behavior, mouse-capture feel, economy feel, or long-form playtest readability as human-approved.
 
@@ -712,4 +717,4 @@ This phase is mechanically complete when the repo can produce an alpha-quality l
 - Updated automated tests, screenshot artifacts, and manual validation docs.
 - Each completed slice committed and pushed.
 
-Human approval still requires the external playtest/manual window pass described in `15-alpha-playtest-package.md`.
+Human approval still requires the recovery pass described in `16-playability-readability-recovery-plan.md`, followed by the external playtest/manual window pass described in `15-alpha-playtest-package.md`.
