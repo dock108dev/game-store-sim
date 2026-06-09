@@ -282,6 +282,58 @@ func test_day_summary_panel_groups_actions_by_operation() -> void:
 	assert_eq(_panel.rack_left_button.get_parent().get_parent().name, "PlacementGroup")
 
 
+func test_day_summary_panel_shows_only_contextual_backroom_action_groups() -> void:
+	assert_true(_panel.open_for_session(_session))
+
+	assert_true(_panel.day_actions.visible)
+	assert_false(_panel.supplier_actions.visible)
+	assert_false(_panel.storage_actions.visible)
+	assert_false(_panel.service_actions.visible)
+	assert_false(_panel.release_actions.visible)
+	assert_false(_panel.desk_group.visible)
+	assert_false(_panel.placement_group.visible)
+
+	assert_true(_panel.set_active_tab("ordering"))
+	assert_true(_panel.supplier_actions.visible)
+	assert_true(_panel.storage_actions.visible)
+	assert_false(_panel.service_actions.visible)
+	assert_false(_panel.release_actions.visible)
+	assert_false(_panel.desk_group.visible)
+	assert_false(_panel.placement_group.visible)
+
+	assert_true(_panel.set_active_tab("releases"))
+	assert_false(_panel.supplier_actions.visible)
+	assert_false(_panel.storage_actions.visible)
+	assert_false(_panel.service_actions.visible)
+	assert_true(_panel.release_actions.visible)
+	assert_false(_panel.desk_group.visible)
+	assert_false(_panel.placement_group.visible)
+
+	assert_true(_panel.set_active_tab("services"))
+	assert_false(_panel.supplier_actions.visible)
+	assert_false(_panel.storage_actions.visible)
+	assert_true(_panel.service_actions.visible)
+	assert_false(_panel.release_actions.visible)
+	assert_false(_panel.desk_group.visible)
+	assert_false(_panel.placement_group.visible)
+
+	assert_true(_panel.set_active_tab("storage"))
+	assert_false(_panel.supplier_actions.visible)
+	assert_true(_panel.storage_actions.visible)
+	assert_false(_panel.service_actions.visible)
+	assert_false(_panel.release_actions.visible)
+	assert_false(_panel.desk_group.visible)
+	assert_true(_panel.placement_group.visible)
+
+	assert_true(_panel.set_active_tab("records"))
+	assert_false(_panel.supplier_actions.visible)
+	assert_false(_panel.storage_actions.visible)
+	assert_false(_panel.service_actions.visible)
+	assert_false(_panel.release_actions.visible)
+	assert_true(_panel.desk_group.visible)
+	assert_false(_panel.placement_group.visible)
+
+
 func test_day_summary_panel_includes_recent_sale_activity() -> void:
 	var item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
 	add_child_autofree(item)

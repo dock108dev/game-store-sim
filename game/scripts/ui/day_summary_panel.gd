@@ -61,6 +61,13 @@ const BACKROOM_TABS := [
 @onready var management_desk_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/ManagementDeskLabel
 @onready var hidden_records_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox/HiddenRecordsLabel
 @onready var status_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/StatusLabel
+@onready var supplier_actions: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions
+@onready var storage_actions: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions
+@onready var service_actions: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions
+@onready var release_actions: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ReleaseActions
+@onready var day_actions: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions
+@onready var desk_group: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup
+@onready var placement_group: VBoxContainer = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup
 @onready var supplier_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/SupplierActionLabel
 @onready var storage_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionLabel
 @onready var service_action_label: Label = $CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionLabel
@@ -803,6 +810,15 @@ func _apply_tab_visibility() -> void:
 		hidden_records_label,
 	]
 	_set_controls_visible(all_content, false)
+	_set_controls_visible([
+		supplier_actions,
+		storage_actions,
+		service_actions,
+		release_actions,
+		desk_group,
+		placement_group,
+	], false)
+	day_actions.visible = true
 
 	match _active_tab:
 		TAB_DASHBOARD:
@@ -812,24 +828,30 @@ func _apply_tab_visibility() -> void:
 		TAB_ORDERING:
 			operations_header.text = "Ordering"
 			_set_controls_visible([operations_header, supplier_order_label, fixture_label], true)
+			_set_controls_visible([supplier_actions, storage_actions], true)
 		TAB_RELEASES:
 			_set_controls_visible([release_header, release_calendar_label], true)
+			release_actions.visible = true
 		TAB_REPORTS:
 			dashboard_header.text = "Reports"
 			_set_controls_visible([dashboard_header, report_label], true)
 		TAB_SERVICES:
 			activity_header.text = "Services"
 			_set_controls_visible([activity_header, services_label], true)
+			service_actions.visible = true
 		TAB_STORAGE:
 			operations_header.text = "Storage"
 			_set_controls_visible([operations_header, fixture_label], true)
+			_set_controls_visible([storage_actions, placement_group], true)
 		TAB_SUPPLIERS:
 			operations_header.text = "Suppliers"
 			_set_controls_visible([operations_header, supplier_order_label], true)
+			supplier_actions.visible = true
 		TAB_SETTINGS:
 			_set_controls_visible([settings_label], true)
 		TAB_RECORDS:
 			_set_controls_visible([management_desk_label, hidden_records_label], true)
+			desk_group.visible = true
 	_update_tab_button_states()
 
 

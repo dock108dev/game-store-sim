@@ -1,6 +1,6 @@
 # Playability Readability Recovery Plan
 
-This is the active implementation plan after the June 9 manual screenshot review. Slices 1-5 are implemented; Slice 6 is the next active work before final recovery validation.
+This is the active implementation plan after the June 9 manual screenshot review. Slices 1-6 are implemented; final recovery validation is the next active work before external playtest can reopen.
 
 The automated alpha gate is still valuable: movement, pickup, pricing, stocking, customers, register flows, services, ordering, storage, fixture placement, save/load, and package smoke remain mechanically protected. The manual evidence changes the release state: the build is not ready for external playtest because a player cannot reliably read the room, signs, prompts, customer roles, or pricing UI from normal play angles.
 
@@ -234,6 +234,8 @@ Commit target:
 
 Goal: make the backroom usable as operations space instead of a dense debug room.
 
+Status: implemented in `Fix alpha backroom readability`; pending final recovery screenshot review.
+
 Work:
 
 - Recompose backroom entry, receiving, storage, service bench, management desk, and computer sightlines.
@@ -245,6 +247,7 @@ Acceptance:
 - Backroom entry reads as a physical operations room.
 - Computer tabs fit and differ visually enough to review.
 - Receiving workflow controls are readable without hidden lower-frame actions.
+- Automated coverage keeps supplier, storage, service, release, records, and placement action groups contextual to their tabs so unrelated controls no longer crowd every screenshot.
 
 Manual screenshots:
 
