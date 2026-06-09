@@ -4,7 +4,7 @@ extends CharacterBody3D
 @export var mouse_sensitivity: float = 0.0025
 @export var invert_look: bool = false
 @export var max_held_items: int = 3
-@export var comfort_fov: float = 72.0
+@export var comfort_fov: float = 80.0
 @export var master_volume: int = 80
 @export var music_volume: int = 70
 @export var sfx_volume: int = 85
@@ -37,11 +37,11 @@ const CARRY_FORWARD_SWAY := 0.004
 const CARRY_SWAY_ROTATION := 0.025
 const CAMERA_BOB_AMPLITUDE := 0.018
 const CAMERA_SWAY_AMPLITUDE := 0.008
-const CAMERA_MOVE_FOV_BOOST := 2.0
-const CAMERA_WORKSTATION_FOV_REDUCTION := 4.0
+const CAMERA_MOVE_FOV_BOOST := 1.5
+const CAMERA_WORKSTATION_FOV_REDUCTION := 5.0
 const CAMERA_WORKSTATION_SETTLE_Y := 0.012
-const CAMERA_MIN_FOV := 66.0
-const CAMERA_MAX_FOV := 76.0
+const CAMERA_MIN_FOV := 72.0
+const CAMERA_MAX_FOV := 86.0
 
 var _look_pitch: float = 0.0
 var _held_items: Array[Node3D] = []

@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 515 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 516 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -67,6 +67,7 @@ Current automated baseline:
 - Alpha playtest package is implemented through Stop 13.6 but paused by the June 9 readability blocker; manual QA should use `15-alpha-playtest-package.md` only after the recovery plan exits.
 - Alpha validation sync is implemented through Stop 13.7; manual QA should treat the gate, pack smoke, package doc, alpha bug list, and this checklist as mechanically current, then run the readability recovery plan before external playtest.
 - Playability readability recovery is active in `16-playability-readability-recovery-plan.md`; manual QA should review the recovery focus before approving any new external playtest package.
+- Readability recovery Slice 1 is implemented; manual QA should confirm the fresh spawn, sales-floor route, and backroom entry screenshots now benefit from the wider comfort FOV, taller eye line, farther spawn, and lower/right held-item anchor before moving deeper into signage and UI work.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 - Every implementation summary should say whether these were checked, skipped, or not relevant.
@@ -626,7 +627,7 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 515 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 516 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
 - Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and tracks AH-012 through AH-015 as active readability recovery blockers.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
@@ -639,6 +640,7 @@ Run these first before attempting another external alpha playtest:
 - Review `docs/production/16-playability-readability-recovery-plan.md` and confirm the current active slice is clear.
 - Compare the June 9 manual screenshots `intro_1.png`, `receiveing.png`, `intro_2.png`, and `pricing.png` against AH-012 through AH-015 in `13-alpha-bug-list.md`.
 - Confirm the first recovery slice fixes camera scale, ceiling dominance, near-camera prop dominance, and spawn composition before deeper UI polish begins.
+- Confirm the player now starts farther from the register/special-customer pileup, sees more of the store at 1280x720, and carries items low/right without blocking the reticle.
 - Confirm the second recovery slice fixes oversized signage, receiving sightlines, and rack/register sign hierarchy before adding more visual detail.
 - Confirm prompt, reticle, pickup, pricing-entry, and stocking feedback are readable at 1280x720 before continuing the full loop.
 - Confirm pricing, register, trade-in, preorder, service, settings, and save/load panels are comfortably readable in the actual window.

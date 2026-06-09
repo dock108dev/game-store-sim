@@ -28,6 +28,32 @@ func test_player_starts_above_floor() -> void:
 	assert_gt(player.global_position.y, -0.01)
 
 
+func test_player_spawn_has_recovery_view_budget() -> void:
+	var player := _store.get_node("PlayerController") as CharacterBody3D
+	var head := player.get_node_or_null("Head") as Node3D
+	var camera := player.get_node_or_null("Head/Camera3D") as Camera3D
+	var hold_anchor := player.get_node_or_null("Head/Camera3D/HoldAnchor") as Node3D
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var trade_in_customer := _store.get_node("TradeInCustomer") as Node3D
+
+	assert_not_null(head)
+	assert_not_null(camera)
+	assert_not_null(hold_anchor)
+	assert_lt(player.global_position.z, -5.0)
+	assert_gt(player.global_position.x, 4.4)
+	assert_lt(player.global_position.x, 5.3)
+	assert_gt(head.position.y, 1.65)
+	assert_gte(camera.fov, 78.0)
+	assert_lte(camera.near, 0.04)
+	assert_gt(-player.global_transform.basis.z.x, 0.45)
+	assert_gt(-player.global_transform.basis.z.z, 0.55)
+	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 3.4)
+	assert_gt(_flat_distance_xz(player.global_position, trade_in_customer.global_position), 1.7)
+	assert_gt(hold_anchor.position.x, 0.55)
+	assert_lt(hold_anchor.position.y, -0.55)
+	assert_lt(hold_anchor.position.z, -1.45)
+
+
 func test_floor_collision_is_enabled() -> void:
 	var floor := _store.get_node("Floor") as CSGBox3D
 	assert_true(floor.use_collision)
@@ -657,7 +683,7 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 	var fixture_manager := _store.get_node("FixturePlacementManager")
 	var ghost := fixture_manager.get_node("GhostRackPreview") as Node3D
 
-	assert_lt(_flat_distance_xz(player.global_position, register.global_position), 4.8)
+	assert_lt(_flat_distance_xz(player.global_position, register.global_position), 5.2)
 	assert_lt(_flat_distance_xz(register.global_position, rack.global_position), 10.0)
 	assert_lt(_flat_distance_xz(rack.global_position, receiving_box.global_position), 2.4)
 	assert_lt(_flat_distance_xz(receiving_box.global_position, storage_shelf.global_position), 2.4)

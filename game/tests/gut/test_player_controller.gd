@@ -27,17 +27,18 @@ func test_player_scene_has_current_camera() -> void:
 	var camera := _player.get_node_or_null("Head/Camera3D") as Camera3D
 	assert_not_null(camera)
 	assert_true(camera.current)
-	assert_almost_eq(camera.fov, 72.0, 0.001)
+	assert_almost_eq(camera.fov, 80.0, 0.001)
+	assert_lte(camera.near, 0.04)
 
 
 func test_player_camera_feel_has_comfort_bounds_and_summary() -> void:
 	var state: Dictionary = _player.call("get_camera_feel_state")
 	var summary: String = _player.call("get_camera_feel_summary_text")
 
-	assert_eq(state.get("comfort_fov"), 72.0)
-	assert_eq(state.get("min_fov"), 66.0)
-	assert_eq(state.get("max_fov"), 76.0)
-	assert_lte(state.get("move_fov_boost"), 2.0)
+	assert_eq(state.get("comfort_fov"), 80.0)
+	assert_eq(state.get("min_fov"), 72.0)
+	assert_eq(state.get("max_fov"), 86.0)
+	assert_lte(state.get("move_fov_boost"), 1.5)
 	assert_lte(state.get("bob_amplitude"), 0.018)
 	assert_string_contains(summary, "Movement bob")
 	assert_string_contains(summary, "Held item sway")
@@ -55,8 +56,8 @@ func test_player_camera_motion_adds_bounded_bob_and_fov_boost() -> void:
 	var head_offset := state.get("head_offset") as Vector3
 
 	assert_gt(state.get("motion_weight"), 0.0)
-	assert_gt(camera.fov, 72.0)
-	assert_lte(camera.fov, 76.0)
+	assert_gt(camera.fov, 80.0)
+	assert_lte(camera.fov, 86.0)
 	assert_ne(head.position, base_position)
 	assert_lte(absf(head_offset.x), 0.008)
 	assert_lte(absf(head_offset.y), 0.018)
@@ -74,8 +75,8 @@ func test_player_modal_camera_settles_for_workstation_focus() -> void:
 	var head_offset := state.get("head_offset") as Vector3
 
 	assert_gt(state.get("workstation_focus_weight"), 0.0)
-	assert_lt(camera.fov, 72.0)
-	assert_gte(camera.fov, 66.0)
+	assert_lt(camera.fov, 80.0)
+	assert_gte(camera.fov, 72.0)
 	assert_lt(head.position.y, base_position.y)
 	assert_lte(absf(head_offset.x), 0.001)
 	assert_lte(absf(head_offset.y), 0.012)

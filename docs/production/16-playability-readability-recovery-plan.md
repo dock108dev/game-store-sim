@@ -79,6 +79,8 @@ Commit target:
 
 ## Slice 1: Camera, Player Scale, And Spawn Composition
 
+Status: implemented in `Fix alpha camera scale`.
+
 Goal: make the first view and normal walking scale readable before touching detailed UI.
 
 Work:
@@ -93,6 +95,7 @@ Acceptance:
 - `01_spawn_first_view.png` reads as a store at a glance.
 - Walking around the register and receiving area does not put large props or ceiling planes into most of the screen.
 - The held item stack and reticle remain visible after scale changes.
+- Automated coverage now locks the wider comfort FOV, tighter near clip, taller head height, lower/right held-item anchor, and spawn distance away from the register/special-customer pileup.
 
 Manual screenshots:
 

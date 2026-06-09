@@ -15,23 +15,24 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.35
-height = 1.8
+height = 1.9
 
 [node name="PlayerController" type="CharacterBody3D"]
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.9, 0)
+position = Vector3(0, 0.95, 0)
 shape = SubResource("CapsuleShape3D_player")
 
 [node name="Head" type="Node3D" parent="."]
-position = Vector3(0, 1.62, 0)
+position = Vector3(0, 1.7, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
 current = true
+near = 0.03
 
 [node name="HoldAnchor" type="Node3D" parent="Head/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, -0.52, -1.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, -0.62, -1.55)
 
 [node name="InteractionRaycast" type="RayCast3D" parent="Head/Camera3D"]
 enabled = true
