@@ -46,7 +46,7 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 516 GUT tests.
+- `scripts/validate_godot.sh` passes with 522 GUT tests.
 - UI scenario automation coverage is 476/594, above the 80% threshold.
 - Production script mapping coverage is 51/51.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.

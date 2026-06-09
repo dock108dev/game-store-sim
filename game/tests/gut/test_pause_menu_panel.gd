@@ -19,6 +19,25 @@ func test_pause_menu_panel_starts_hidden_with_ui_language() -> void:
 	assert_true(_panel.has_accessibility_floor())
 
 
+func test_pause_menu_panel_alpha_layout_is_readable() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as Control
+	assert_gte(panel_container.custom_minimum_size.x, 600.0)
+	assert_gte(panel_container.custom_minimum_size.y, 500.0)
+	assert_gte(_font_size(_panel.title_label), 26)
+	assert_gte(_font_size(_panel.status_label), 18)
+	for button in [
+		_panel.resume_button,
+		_panel.start_button,
+		_panel.settings_button,
+		_panel.save_load_button,
+		_panel.main_menu_button,
+		_panel.quit_button,
+	]:
+		assert_gte(button.custom_minimum_size.x, 220.0)
+		assert_gte(button.custom_minimum_size.y, 48.0)
+		assert_gte(_font_size(button), 18)
+
+
 func test_pause_menu_opens_pause_and_resumes_with_mouse_capture() -> void:
 	assert_true(_panel.open_pause(_player))
 
@@ -79,3 +98,7 @@ func test_pause_menu_requests_settings_save_load_and_quit() -> void:
 	assert_true(_panel.has_quit_request())
 	assert_true(_panel.is_open())
 	assert_string_contains(_panel.status_label.text, "Quit requested")
+
+
+func _font_size(control: Control) -> int:
+	return int(control.get("theme_override_font_sizes/font_size"))

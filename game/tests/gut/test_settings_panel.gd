@@ -26,6 +26,48 @@ func test_settings_panel_starts_hidden() -> void:
 	assert_true(_panel.has_accessibility_floor())
 
 
+func test_settings_panel_alpha_layout_is_readable() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as Control
+	var scroll_container := _panel.get_node("CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer") as Control
+	assert_gte(panel_container.custom_minimum_size.x, 680.0)
+	assert_gte(panel_container.custom_minimum_size.y, 670.0)
+	assert_gte(scroll_container.custom_minimum_size.y, 540.0)
+	assert_gte(_font_size(_panel.title_label), 24)
+	assert_gte(_font_size(_panel.master_volume_label), 18)
+	assert_gte(_font_size(_panel.music_volume_label), 18)
+	assert_gte(_font_size(_panel.sfx_volume_label), 18)
+	assert_gte(_font_size(_panel.resolution_scale_label), 18)
+	assert_gte(_font_size(_panel.sensitivity_label), 18)
+	assert_gte(_font_size(_panel.controls_summary_label), 18)
+	assert_gte(_font_size(_panel.settings_status_label), 18)
+	for button in [
+		_panel.decrease_master_volume_button,
+		_panel.increase_master_volume_button,
+		_panel.decrease_music_volume_button,
+		_panel.increase_music_volume_button,
+		_panel.decrease_sfx_volume_button,
+		_panel.increase_sfx_volume_button,
+		_panel.decrease_sensitivity_button,
+		_panel.increase_sensitivity_button,
+		_panel.decrease_text_scale_button,
+		_panel.increase_text_scale_button,
+	]:
+		assert_gte(button.custom_minimum_size.x, 110.0)
+		assert_gte(button.custom_minimum_size.y, 44.0)
+		assert_gte(_font_size(button), 18)
+	assert_gte(_panel.window_mode_button.custom_minimum_size.x, 220.0)
+	assert_gte(_panel.window_mode_button.custom_minimum_size.y, 44.0)
+	assert_gte(_panel.reset_bindings_button.custom_minimum_size.x, 180.0)
+	assert_gte(_panel.reset_bindings_button.custom_minimum_size.y, 44.0)
+	assert_gte(_panel.invert_check_box.custom_minimum_size.y, 44.0)
+	assert_gte(_panel.high_contrast_check_box.custom_minimum_size.y, 44.0)
+	assert_gte(_panel.reduce_motion_check_box.custom_minimum_size.y, 44.0)
+	assert_gte(_panel.reset_defaults_button.custom_minimum_size.x, 190.0)
+	assert_gte(_panel.reset_defaults_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.close_button.custom_minimum_size.x, 140.0)
+	assert_gte(_panel.close_button.custom_minimum_size.y, 48.0)
+
+
 func test_settings_panel_opens_with_mouse_focus_and_player_values() -> void:
 	assert_true(_panel.open_for_player(_player))
 
@@ -205,3 +247,7 @@ class _SettingsPlayer:
 		reduce_motion = bool(settings.get("reduce_motion", reduce_motion))
 		mouse_sensitivity = float(settings.get("look_sensitivity", mouse_sensitivity))
 		invert_look = bool(settings.get("invert_look", invert_look))
+
+
+func _font_size(control: Control) -> int:
+	return int(control.get("theme_override_font_sizes/font_size"))

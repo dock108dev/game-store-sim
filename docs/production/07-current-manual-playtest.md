@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 516 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 522 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -70,6 +70,7 @@ Current automated baseline:
 - Readability recovery Slice 1 is implemented; manual QA should confirm the fresh spawn, sales-floor route, and backroom entry screenshots now benefit from the wider comfort FOV, taller eye line, farther spawn, and lower/right held-item anchor before moving deeper into signage and UI work.
 - Readability recovery Slice 2 is implemented; manual QA should confirm receiving, register, rack, backroom, storage, and retail-callout signs are fixed in-world, compact, and no longer cover starter products or normal register/rack sightlines before moving into interaction and modal legibility.
 - Readability recovery Slice 3 is implemented; manual QA should confirm the bottom prompt, center reticle, product hover highlight, shelf slot hover highlight, pickup, pricing-entry, stocking, and lower-priced-copy sale checks are readable before moving into modal/menu legibility.
+- Readability recovery Slice 4 is implemented; manual QA should confirm pricing, register checkout, trade-in, preorder/service register states, settings, pause/main menu, and save/load panels use readable text, larger action targets, clear focus, and no clipped tiny controls before moving into customer role readability.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 - Every implementation summary should say whether these were checked, skipped, or not relevant.
@@ -645,7 +646,7 @@ Run these first before attempting another external alpha playtest:
 - Confirm the player now starts farther from the register/special-customer pileup, sees more of the store at 1280x720, and carries items low/right without blocking the reticle.
 - Confirm the second recovery slice keeps oversized signage fixed: starter receiving products remain visible, the `INTAKE` tag stays compact, and rack/register signs do not become foreground slabs.
 - Confirm the third recovery slice keeps the larger bottom prompt readable, the reticle visible, hover targets obvious, and lower-priced-copy sale feedback understandable without relying on debug knowledge.
-- Confirm pricing, register, trade-in, preorder, service, settings, and save/load panels are comfortably readable in the actual window.
+- Confirm the fourth recovery slice keeps pricing, register, trade-in, preorder, service, settings, pause/main menu, and save/load panels comfortably readable in the actual window with clear button hierarchy and mouse focus.
 - Confirm customer role markers are compact, consistent, and useful without dominating the store view or crowding the register queue.
 - Confirm the backroom entry, dashboard, ordering, releases, records, receiving workflow, and service ticket screens read as operations space rather than dense debug UI.
 - Rerun the short recovery screenshot set before reopening `15-alpha-playtest-package.md`.

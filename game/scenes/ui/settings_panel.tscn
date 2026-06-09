@@ -13,15 +13,15 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(600, 650)
+custom_minimum_size = Vector2(680, 670)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
@@ -30,10 +30,11 @@ theme_override_constants/separation = 8
 [node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Settings"
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 520)
+custom_minimum_size = Vector2(0, 540)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -45,10 +46,12 @@ theme_override_constants/separation = 6
 [node name="AudioHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Audio"
+theme_override_font_sizes/font_size = 20
 
 [node name="MasterVolumeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Master volume: 80%"
+theme_override_font_sizes/font_size = 18
 
 [node name="MasterVolumeRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
@@ -56,18 +59,21 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="DecreaseMasterVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MasterVolumeRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "Less"
+theme_override_font_sizes/font_size = 18
 
 [node name="IncreaseMasterVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MasterVolumeRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "More"
+theme_override_font_sizes/font_size = 18
 
 [node name="MusicVolumeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Music volume: 70%"
+theme_override_font_sizes/font_size = 18
 
 [node name="MusicVolumeRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
@@ -75,18 +81,21 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="DecreaseMusicVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MusicVolumeRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "Less"
+theme_override_font_sizes/font_size = 18
 
 [node name="IncreaseMusicVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/MusicVolumeRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "More"
+theme_override_font_sizes/font_size = 18
 
 [node name="SfxVolumeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "SFX volume: 85%"
+theme_override_font_sizes/font_size = 18
 
 [node name="SfxVolumeRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
@@ -94,27 +103,32 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="DecreaseSfxVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SfxVolumeRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "Less"
+theme_override_font_sizes/font_size = 18
 
 [node name="IncreaseSfxVolumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SfxVolumeRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "More"
+theme_override_font_sizes/font_size = 18
 
 [node name="DisplayHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Display"
+theme_override_font_sizes/font_size = 20
 
 [node name="WindowModeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
-custom_minimum_size = Vector2(180, 38)
+custom_minimum_size = Vector2(220, 44)
 layout_mode = 2
 text = "Window: Windowed"
+theme_override_font_sizes/font_size = 18
 
 [node name="ResolutionScaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Render scale: 100%"
+theme_override_font_sizes/font_size = 18
 
 [node name="ResolutionScaleRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
@@ -122,22 +136,26 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="DecreaseResolutionScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/ResolutionScaleRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "Less"
+theme_override_font_sizes/font_size = 18
 
 [node name="IncreaseResolutionScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/ResolutionScaleRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "More"
+theme_override_font_sizes/font_size = 18
 
 [node name="MouseHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Mouse"
+theme_override_font_sizes/font_size = 20
 
 [node name="SensitivityLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Look sensitivity: 0.0025"
+theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 
 [node name="SensitivityRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
@@ -146,41 +164,49 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="DecreaseSensitivityButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SensitivityRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "Less"
+theme_override_font_sizes/font_size = 18
 
 [node name="IncreaseSensitivityButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/SensitivityRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "More"
+theme_override_font_sizes/font_size = 18
 
 [node name="InvertCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
-custom_minimum_size = Vector2(0, 38)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "Invert look"
+theme_override_font_sizes/font_size = 18
 
 [node name="ControlsHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Controls"
+theme_override_font_sizes/font_size = 20
 
 [node name="ControlsSummaryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Move WASD / Interact Left Click / Pause Escape"
+theme_override_font_sizes/font_size = 18
 autowrap_mode = 2
 
 [node name="ResetBindingsButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
-custom_minimum_size = Vector2(120, 38)
+custom_minimum_size = Vector2(180, 44)
 layout_mode = 2
 text = "Reset Bindings"
+theme_override_font_sizes/font_size = 18
 
 [node name="AccessibilityHeaderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Accessibility"
+theme_override_font_sizes/font_size = 20
 
 [node name="TextScaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Text scale: 100%"
+theme_override_font_sizes/font_size = 18
 
 [node name="TextScaleRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
@@ -188,28 +214,33 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="DecreaseTextScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/TextScaleRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "Less"
+theme_override_font_sizes/font_size = 18
 
 [node name="IncreaseTextScaleButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent/TextScaleRow"]
-custom_minimum_size = Vector2(90, 38)
+custom_minimum_size = Vector2(110, 44)
 layout_mode = 2
 text = "More"
+theme_override_font_sizes/font_size = 18
 
 [node name="HighContrastCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
-custom_minimum_size = Vector2(0, 38)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "High contrast UI"
+theme_override_font_sizes/font_size = 18
 
 [node name="ReduceMotionCheckBox" type="CheckBox" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
-custom_minimum_size = Vector2(0, 38)
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "Reduce motion"
+theme_override_font_sizes/font_size = 18
 
 [node name="SettingsStatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/SettingsContent"]
 layout_mode = 2
 text = "Settings saved automatically"
+theme_override_font_sizes/font_size = 18
 autowrap_mode = 2
 
 [node name="FooterRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
@@ -218,11 +249,13 @@ theme_override_constants/separation = 10
 alignment = 1
 
 [node name="ResetDefaultsButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FooterRow"]
-custom_minimum_size = Vector2(160, 38)
+custom_minimum_size = Vector2(190, 48)
 layout_mode = 2
 text = "Reset Defaults"
+theme_override_font_sizes/font_size = 18
 
 [node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/FooterRow"]
-custom_minimum_size = Vector2(120, 38)
+custom_minimum_size = Vector2(140, 48)
 layout_mode = 2
 text = "Close"
+theme_override_font_sizes/font_size = 18

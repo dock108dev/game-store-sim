@@ -59,6 +59,24 @@ func test_trade_in_offer_panel_opens_with_condition_market_and_offer() -> void:
 	assert_false(_panel.decline_button.disabled)
 
 
+func test_trade_in_offer_panel_alpha_layout_is_readable() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as Control
+	assert_gte(panel_container.custom_minimum_size.x, 660.0)
+	assert_gte(panel_container.custom_minimum_size.y, 500.0)
+	assert_gte(_font_size(_panel.title_label), 24)
+	assert_gte(_font_size(_panel.details_label), 18)
+	assert_gte(_font_size(_panel.appraisal_label), 18)
+	assert_gte(_font_size(_panel.risk_label), 18)
+	assert_gte(_font_size(_panel.offer_label), 22)
+	assert_gte(_font_size(_panel.status_label), 18)
+	assert_gte(_panel.accept_button.custom_minimum_size.x, 136.0)
+	assert_gte(_panel.accept_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.store_credit_button.custom_minimum_size.x, 144.0)
+	assert_gte(_panel.store_credit_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.decline_button.custom_minimum_size.x, 112.0)
+	assert_gte(_panel.decline_button.custom_minimum_size.y, 48.0)
+
+
 func test_trade_in_offer_panel_transition_controls_mouse_and_focus() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -162,3 +180,7 @@ func test_trade_in_offer_panel_close_hides_panel() -> void:
 
 	assert_false(_panel.is_open())
 	assert_false(_panel.visible)
+
+
+func _font_size(control: Control) -> int:
+	return int(control.get("theme_override_font_sizes/font_size"))

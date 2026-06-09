@@ -169,6 +169,8 @@ Commit target:
 
 ## Slice 4: Modal And Menu Legibility
 
+Status: implemented in `Fix alpha modal legibility`.
+
 Goal: make required decision panels readable at 1280x720.
 
 Work:
@@ -183,6 +185,7 @@ Acceptance:
 - Pricing details, suggested range, current price, and Apply controls are readable.
 - Register receipts, trade-in appraisal, preorder deposit, service ticket, settings, and save slots fit without clipped or tiny text.
 - Manual capture can proceed past pricing instead of stopping.
+- Automated coverage now locks larger runtime font sizes, panel dimensions, scroll heights, button hit targets, and shared UI language preserving scene-specific readable font overrides for pricing, register, trade-in, save/load, pause, and settings surfaces.
 
 Manual screenshots:
 

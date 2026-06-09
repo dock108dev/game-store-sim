@@ -42,6 +42,22 @@ func test_register_checkout_panel_starts_hidden_with_ui_language() -> void:
 	assert_true(UIComponents.audit_modal_accessibility(_panel.modal_root).get("passes"))
 
 
+func test_register_checkout_panel_alpha_layout_is_readable() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as Control
+	assert_gte(panel_container.custom_minimum_size.x, 640.0)
+	assert_gte(panel_container.custom_minimum_size.y, 500.0)
+	assert_gte(_font_size(_panel.title_label), 24)
+	assert_gte(_font_size(_panel.cart_label), 18)
+	assert_gte(_font_size(_panel.totals_label), 18)
+	assert_gte(_font_size(_panel.tender_label), 18)
+	assert_gte(_font_size(_panel.return_label), 18)
+	assert_gte(_font_size(_panel.status_label), 18)
+	assert_gte(_panel.confirm_button.custom_minimum_size.x, 150.0)
+	assert_gte(_panel.confirm_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.close_button.custom_minimum_size.x, 130.0)
+	assert_gte(_panel.close_button.custom_minimum_size.y, 48.0)
+
+
 func test_register_checkout_panel_opens_with_receipt_fields() -> void:
 	_register.default_cash_tender_cents = 5000
 
@@ -92,3 +108,7 @@ func test_register_checkout_panel_confirm_completes_sale_and_disables_action() -
 	assert_eq(get_viewport().gui_get_focus_owner(), _panel.close_button)
 	assert_string_contains(_panel.status_label.text, "Sold Star Trader")
 	assert_string_contains(_panel.status_label.text, "Profit")
+
+
+func _font_size(control: Control) -> int:
+	return int(control.get("theme_override_font_sizes/font_size"))

@@ -20,6 +20,23 @@ func test_pricing_panel_starts_hidden() -> void:
 	assert_true(UIComponents.audit_modal_accessibility(_panel.modal_root).get("passes"))
 
 
+func test_pricing_panel_alpha_layout_is_readable() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as Control
+	assert_gte(panel_container.custom_minimum_size.x, 620.0)
+	assert_gte(panel_container.custom_minimum_size.y, 440.0)
+	assert_gte(_font_size(_panel.title_label), 24)
+	assert_gte(_font_size(_panel.details_label), 18)
+	assert_gte(_font_size(_panel.guidance_label), 18)
+	assert_gte(_font_size(_panel.warning_label), 18)
+	assert_gte(_font_size(_panel.price_label), 24)
+	assert_gte(_panel.price_label.custom_minimum_size.x, 220.0)
+	assert_gte(_panel.price_label.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.apply_button.custom_minimum_size.x, 140.0)
+	assert_gte(_panel.apply_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.cancel_button.custom_minimum_size.x, 140.0)
+	assert_gte(_panel.cancel_button.custom_minimum_size.y, 48.0)
+
+
 func test_pricing_panel_opens_with_product_fields() -> void:
 	assert_true(_panel.open_for_item(_item))
 
@@ -189,3 +206,7 @@ func _make_fixed_price_item() -> Node:
 	item.set("product", product)
 	item.set("current_price_cents", 5999)
 	return item
+
+
+func _font_size(control: Control) -> int:
+	return int(control.get("theme_override_font_sizes/font_size"))

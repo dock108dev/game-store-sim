@@ -29,6 +29,24 @@ func test_save_slot_panel_starts_hidden_with_ui_language() -> void:
 	assert_eq(_panel.get_selected_slot_id(), "slot_1")
 
 
+func test_save_slot_panel_alpha_layout_is_readable() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as Control
+	assert_gte(panel_container.custom_minimum_size.x, 700.0)
+	assert_gte(panel_container.custom_minimum_size.y, 500.0)
+	assert_gte(_font_size(_panel.title_label), 24)
+	assert_gte(_font_size(_panel.slot_list_label), 18)
+	assert_gte(_font_size(_panel.metadata_label), 18)
+	assert_gte(_font_size(_panel.status_label), 18)
+	assert_gte(_panel.new_game_button.custom_minimum_size.x, 200.0)
+	assert_gte(_panel.new_game_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.continue_button.custom_minimum_size.x, 200.0)
+	assert_gte(_panel.continue_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.overwrite_button.custom_minimum_size.x, 200.0)
+	assert_gte(_panel.overwrite_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.delete_button.custom_minimum_size.x, 200.0)
+	assert_gte(_panel.delete_button.custom_minimum_size.y, 48.0)
+
+
 func test_save_slot_panel_opens_with_mouse_focus_and_slot_metadata() -> void:
 	assert_true(_panel.open_for_session(_session, _registry))
 
@@ -108,3 +126,7 @@ func _remove_save_dir(save_dir: String) -> void:
 			file_name = directory.get_next()
 		directory.list_dir_end()
 	DirAccess.remove_absolute(absolute_dir)
+
+
+func _font_size(control: Control) -> int:
+	return int(control.get("theme_override_font_sizes/font_size"))

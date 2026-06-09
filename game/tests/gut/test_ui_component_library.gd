@@ -64,6 +64,8 @@ func test_ui_component_library_applies_modal_language() -> void:
 	var action := Button.new()
 	title.name = "TitleLabel"
 	action.name = "ApplyButton"
+	title.add_theme_font_size_override("font_size", 24)
+	action.add_theme_font_size_override("font_size", 18)
 	root.add_child(panel)
 	panel.add_child(title)
 	panel.add_child(action)
@@ -80,6 +82,8 @@ func test_ui_component_library_applies_modal_language() -> void:
 	assert_true(action.get_meta("ui_states").has(UIComponents.TOKEN_DISABLED))
 	assert_true(panel.custom_minimum_size.x >= UIComponents.MIN_MODAL_WIDTH)
 	assert_true(action.custom_minimum_size.y >= UIComponents.MIN_BUTTON_HEIGHT)
+	assert_eq(title.get_theme_font_size("font_size"), 24)
+	assert_eq(action.get_theme_font_size("font_size"), 18)
 	assert_eq(action.focus_mode, Control.FOCUS_ALL)
 	assert_eq(UIComponents.get_surface_title(UIComponents.SURFACE_SAVE_LOAD), "Save / Load")
 	assert_ne(UIComponents.get_surface_accent(UIComponents.SURFACE_SAVE_LOAD), Color(0.24, 0.34, 0.40))

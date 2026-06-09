@@ -244,7 +244,7 @@ static func _apply_control_language(control: Control, surface: String) -> void:
 	elif control is Button:
 		_apply_button_language(control as Button, surface)
 	elif control is CheckBox:
-		control.add_theme_font_size_override("font_size", MIN_BODY_FONT_SIZE)
+		control.add_theme_font_size_override("font_size", maxi(_get_control_font_size(control), MIN_BODY_FONT_SIZE))
 		control.set_meta("ui_component", TOKEN_BUTTON)
 	elif control is Label:
 		_apply_label_language(control as Label)
@@ -259,18 +259,26 @@ static func _apply_button_language(button: Button, surface: String) -> void:
 	button.add_theme_stylebox_override("hover", get_button_style(surface, BUTTON_PRIMARY))
 	button.add_theme_stylebox_override("pressed", get_button_style(surface, TOKEN_SELECTED))
 	button.add_theme_stylebox_override("disabled", get_button_style(surface, TOKEN_DISABLED))
-	button.add_theme_font_size_override("font_size", MIN_BODY_FONT_SIZE)
+	button.add_theme_font_size_override("font_size", maxi(_get_control_font_size(button), MIN_BODY_FONT_SIZE))
 	button.set_meta("ui_component", TOKEN_BUTTON)
 	button.set_meta("ui_states", get_button_states())
 
 
 static func _apply_label_language(label: Label) -> void:
-	label.add_theme_font_size_override("font_size", MIN_BODY_FONT_SIZE)
+	var font_size: int = maxi(_get_control_font_size(label), MIN_BODY_FONT_SIZE)
 	if label.name.to_lower().contains("title") or label.name.to_lower().contains("header"):
-		label.add_theme_font_size_override("font_size", MIN_HEADER_FONT_SIZE)
+		label.add_theme_font_size_override("font_size", maxi(font_size, MIN_HEADER_FONT_SIZE))
 		label.set_meta("ui_component", TOKEN_STAT)
 	else:
+		label.add_theme_font_size_override("font_size", font_size)
 		label.set_meta("ui_component", TOKEN_LIST)
+
+
+static func _get_control_font_size(control: Control) -> int:
+	var font_size = control.get("theme_override_font_sizes/font_size")
+	if typeof(font_size) == TYPE_INT or typeof(font_size) == TYPE_FLOAT:
+		return int(font_size)
+	return 0
 
 
 static func _relative_luminance(color: Color) -> float:
