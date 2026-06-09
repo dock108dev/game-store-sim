@@ -198,6 +198,7 @@ func test_product_item_price_tag_label_shows_category_platform_and_price() -> vo
 	assert_eq(label.text, "\n".join(lines))
 	assert_lte(label.pixel_size, 0.0025)
 	assert_gte(label.font_size, 18)
+	assert_true(label.no_depth_test)
 
 
 func test_product_item_price_tag_badges_cover_sale_preorder_staff_and_bargain() -> void:

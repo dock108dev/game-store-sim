@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 525 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 526 GUT tests, UI scenario automation coverage at 476/594, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -73,6 +73,7 @@ Current automated baseline:
 - Readability recovery Slice 4 is implemented; manual QA should confirm pricing, register checkout, trade-in, preorder/service register states, settings, pause/main menu, and save/load panels use readable text, larger action targets, clear focus, and no clipped tiny controls before moving into customer role readability.
 - Readability recovery Slice 5 is implemented; manual QA should confirm buyer, trade-in, preorder, service, and suspicious customer role bubbles stay compact/depth-tested, props remain below head height/off-center, and the register queue does not visually pile up.
 - Readability recovery Slice 6 is implemented; manual QA should confirm dashboard, ordering, releases, records, receiving, storage placement, and service bench controls are contextual by tab and no longer crowd every backroom computer screenshot.
+- Label depth-safety stabilization is implemented; manual QA should confirm panel-backed signs, receiving/rack labels, and product price tags stay whole when viewed from shallow left and right angles.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 - Every implementation summary should say whether these were checked, skipped, or not relevant.
@@ -632,7 +633,7 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 525 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 526 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
 - Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and keeps AH-006/AH-012/AH-013/AH-014/AH-015 routed to owner recovery screenshot validation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
@@ -651,6 +652,7 @@ Run these first before attempting another external alpha playtest:
 - Confirm the fourth recovery slice keeps pricing, register, trade-in, preorder, service, settings, pause/main menu, and save/load panels comfortably readable in the actual window with clear button hierarchy and mouse focus.
 - Confirm the fifth recovery slice keeps buyer, trade-in, preorder, service, and suspicious customer role bubbles compact, consistent, depth-tested, and useful without dominating the store view or crowding the register queue.
 - Confirm the sixth recovery slice keeps the backroom dashboard, ordering, releases, records, receiving workflow, storage placement, and service ticket controls contextual by tab so the lower frame is not crowded by unrelated action rows.
+- Confirm the label depth-safety stabilization keeps panel-backed signs, receiving/rack labels, and product price tags fully visible from shallow left/right viewing angles; fail the owner screenshot pass if a label loses a side based on camera angle.
 - Confirm the backroom entry, dashboard, ordering, releases, records, receiving workflow, and service ticket screens read as operations space rather than dense debug UI.
 - Rerun the short recovery screenshot set before reopening `15-alpha-playtest-package.md`; keep the package paused if any capture is still unreadable.
 

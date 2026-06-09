@@ -416,6 +416,44 @@ func test_store_sign_panels_are_nonblocking_and_zone_aligned() -> void:
 	assert_lt(_flat_distance_xz((_store.get_node("ReceivingSignPanel") as CSGBox3D).global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 2.2)
 
 
+func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
+	var label_paths := [
+		"RightWallUsedPosterPanel/RightWallUsedPosterLabel",
+		"RightWallControllerPosterPanel/RightWallControllerPosterLabel",
+		"StoreIdentitySignPanel/StoreIdentitySignLabel",
+		"OpenSignPanel/OpenSignLabel",
+		"HoursDecalPanel/HoursDecalLabel",
+		"DisplaySignPanel/DisplaySignLabel",
+		"RegisterSignPanel/RegisterSignLabel",
+		"BackroomSignPanel/BackroomSignLabel",
+		"BackWallFeatureStripe/BackWallFeatureLabel",
+		"ReceivingSignPanel/ReceivingSignLabel",
+		"StorageSignPanel/StorageSignLabel",
+		"NewReleaseEndcap/EndcapHeaderPanel/EndcapHeaderLabel",
+		"StaffPicksStand/StaffPicksHeaderPanel/StaffPicksHeaderLabel",
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel",
+		"NewThisWeekPosterPanel/NewThisWeekPosterLabel",
+		"TradeBonusPosterPanel/TradeBonusPosterLabel",
+		"CounterDealTagPanel/CounterDealTagLabel",
+		"BargainBin/BinFrontTag/BinFrontLabel",
+		"AccessoryPegWall/PegWallHeaderPanel/PegWallHeaderLabel",
+		"LockedCasePlaceholder/LockedCaseHeaderPanel/LockedCaseHeaderLabel",
+		"BackroomDeliveryDoor/DeliveryDoorLabel",
+		"ReceivingInvoiceClipboard/ReceivingInvoiceLabel",
+		"BackstockOverflowLabelPanel/BackstockOverflowLabel",
+		"BackroomServiceBench/ServiceTicketPanel/ServiceTicketLabel",
+		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel",
+		"SecurityMonitorPanel/SecurityMonitorLabel",
+		"ReceivingBox/IntakeTagPanel/IntakeTagLabel",
+		"GameDisplayRack/CategoryHeaderPanel/CategoryHeaderLabel",
+	]
+
+	for label_path in label_paths:
+		var label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(label, label_path)
+		assert_true(label.no_depth_test, label_path)
+
+
 func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 	var expected_labels := {
 		"RightWallUsedPosterPanel/RightWallUsedPosterLabel": "USED WALL",

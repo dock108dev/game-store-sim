@@ -46,7 +46,7 @@ func test_alpha_validation_snapshot_records_current_gate_outputs() -> void:
 	var bug_list := FileAccess.get_file_as_string(BUG_LIST_PATH)
 
 	for doc in [validation_doc, manual_doc, completion_plan, bug_list]:
-		assert_string_contains(doc, "525 GUT tests")
+		assert_string_contains(doc, "526 GUT tests")
 		assert_string_contains(doc, "476/594")
 		assert_string_contains(doc, "51/51")
 		assert_string_contains(doc, "3 active")

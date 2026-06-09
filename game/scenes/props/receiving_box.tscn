@@ -80,6 +80,7 @@ pixel_size = 0.0028
 modulate = Color(0.08, 0.07, 0.04, 1)
 outline_modulate = Color(0.95, 0.78, 0.36, 1)
 outline_size = 2
+no_depth_test = true
 text = "INTAKE"
 font_size = 18
 

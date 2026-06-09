@@ -331,6 +331,7 @@ func _apply_price_tag_label() -> void:
 	label.pixel_size = 0.00235
 	label.font_size = 18
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true
 	label.modulate = Color(1.0, 0.92, 0.58, 1.0)
 	label.outline_size = 2
 	label.outline_modulate = Color(0.02, 0.025, 0.03, 1.0)

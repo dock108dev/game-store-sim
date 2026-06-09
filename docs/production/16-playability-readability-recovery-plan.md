@@ -1,6 +1,6 @@
 # Playability Readability Recovery Plan
 
-This is the completed implementation plan after the June 9 manual screenshot review. Slices 1-7 are implemented; owner screenshot validation is the next gate before external playtest can reopen.
+This is the completed implementation plan after the June 9 manual screenshot review. Slices 1-7 and the label depth-safety stabilization are implemented; owner screenshot validation is the next gate before external playtest can reopen.
 
 The automated alpha gate is still valuable: movement, pickup, pricing, stocking, customers, register flows, services, ordering, storage, fixture placement, save/load, and package smoke remain mechanically protected. The manual evidence changes the release state: the build is not ready for external playtest because a player cannot reliably read the room, signs, prompts, customer roles, or pricing UI from normal play angles.
 
@@ -36,6 +36,7 @@ Recovery exit criteria:
 - Customer role markers help orientation without becoming the main visual object in the scene.
 - The backroom and receiving workflows read as physical work, not dense debug UI.
 - The short screenshot capture set can be completed without stopping because the build is unreadable.
+- Panel-backed signs, receiving/rack labels, and product price tags stay whole from shallow left/right viewing angles instead of losing a side to angle-dependent clipping.
 
 ## Recovery Rules
 
@@ -305,6 +306,35 @@ Manual screenshots:
 Commit target:
 
 - `Sync readability recovery validation`
+
+## Post-Recovery Stabilization: Label Depth Safety
+
+Goal: fix the follow-up owner report that world labels can lose the left or right side depending on the camera angle.
+
+Status: implemented in `Fix alpha label depth clipping`; pending owner screenshot validation.
+
+Work:
+
+- Make panel-backed world labels render in front of their backing geometry.
+- Make generated product price tags render without angle-dependent self-occlusion.
+- Preserve compact depth-tested customer role bubbles so they still respect store geometry.
+- Add automated coverage for panel-backed world labels and product price tags.
+
+Acceptance:
+
+- Receiving, rack, register, backroom, storage, and price-tag labels stay whole when viewed from shallow left and right angles.
+- Customer role bubbles remain governed by the Slice 5 compact/depth-tested readability rules.
+- Full gate passes with the updated label depth-safety regression coverage.
+
+Manual screenshots:
+
+- `04_receiving_box_before_pickup.png`
+- `10_stocked_rack_readability.png`
+- `12_register_queue_spacing.png`
+
+Commit target:
+
+- `Fix alpha label depth clipping`
 
 ## User Review Order
 
