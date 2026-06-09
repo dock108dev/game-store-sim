@@ -84,6 +84,72 @@ no_depth_test = true
 text = "INTAKE"
 font_size = 18
 
+[node name="OpenBoxFlapFront" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, 0, 0.31, -0.46)
+size = Vector3(0.86, 0.022, 0.24)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="OpenBoxFlapLeft" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -0.66, 0.31, -0.04)
+size = Vector3(0.22, 0.022, 0.58)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="OpenBoxFlapRight" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 0.66, 0.31, -0.02)
+size = Vector3(0.22, 0.022, 0.58)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="OpenBoxStatePanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36, 0.55, -0.56)
+size = Vector3(0.36, 0.11, 0.02)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="OpenBoxStateLabel" type="Label3D" parent="OpenBoxStatePanel"]
+pixel_size = 0.003
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "OPEN"
+font_size = 15
+
+[node name="InvoiceStatePanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -0.56)
+size = Vector3(0.36, 0.11, 0.02)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="InvoiceStateLabel" type="Label3D" parent="InvoiceStatePanel"]
+pixel_size = 0.003
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "CHECK"
+font_size = 15
+
+[node name="SortStatePanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 0.55, -0.56)
+size = Vector3(0.36, 0.11, 0.02)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="SortStateLabel" type="Label3D" parent="SortStatePanel"]
+pixel_size = 0.003
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "SORT"
+font_size = 15
+
 [node name="PlaceholderUsedGame" parent="." instance=ExtResource("1_used_game")]
 transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 0.2, -0.04)
 location_id = "receiving_box_001"

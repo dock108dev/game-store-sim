@@ -75,6 +75,8 @@ func test_stockroom_validation_scenarios_are_registered() -> void:
 		"stockroom_package_pause_guard",
 		"stockroom_staff_boundary_shell",
 		"stockroom_office_service_route_cues",
+		"stockroom_receiving_state_cues",
+		"stockroom_receiving_intake_station",
 	]
 
 	for scenario_id in required_ids:

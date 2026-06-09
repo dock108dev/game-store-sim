@@ -146,6 +146,29 @@ func test_receiving_box_has_nonblocking_intake_lanes_and_label() -> void:
 		assert_lte(absf(lane.position.z), 0.08)
 
 
+func test_receiving_box_has_open_invoice_sort_state_cues() -> void:
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	var expected_labels := {
+		"OpenBoxStatePanel/OpenBoxStateLabel": "OPEN",
+		"InvoiceStatePanel/InvoiceStateLabel": "CHECK",
+		"SortStatePanel/SortStateLabel": "SORT",
+	}
+
+	for label_path in expected_labels:
+		var label := receiving_box.get_node_or_null(label_path) as Label3D
+		assert_not_null(label)
+		assert_eq(label.text, expected_labels[label_path])
+		assert_true(label.no_depth_test)
+		assert_eq(label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
+		assert_lte(label.pixel_size, 0.0032)
+
+	for flap_name in ["OpenBoxFlapFront", "OpenBoxFlapLeft", "OpenBoxFlapRight"]:
+		var flap := receiving_box.get_node_or_null(flap_name) as CSGBox3D
+		assert_not_null(flap)
+		assert_false(flap.use_collision)
+		assert_gt(flap.global_position.y, 0.25)
+
+
 func test_receiving_box_contains_mismatched_serial_item() -> void:
 	var item := _store.get_node("ReceivingBox/PlaceholderUsedGame003")
 
@@ -632,6 +655,9 @@ func test_backroom_visual_zones_exist_without_collision() -> void:
 func test_backroom_receiving_and_storage_props_exist() -> void:
 	var receiving_props := [
 		"ReceivingPallet",
+		"ReceivingIntakeTableTop",
+		"ReceivingIntakeTableLegA",
+		"ReceivingIntakeTableLegB",
 		"ReceivingBoxStackA",
 		"ReceivingBoxStackALabel",
 		"ReceivingBoxStackB",
@@ -640,6 +666,10 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 		"DeliveryDoorSlatB",
 		"ReceivingInvoiceClipboard",
 		"ReceivingInvoicePaper",
+		"ReceivingSortedTray",
+		"ReceivingSortedTrayLaneA",
+		"ReceivingSortedTrayLaneB",
+		"ReceivingSortedTrayLaneC",
 	]
 	for prop_path in receiving_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -658,6 +688,30 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 	assert_not_null(_store.get_node_or_null("BackstockOverflowLabelPanel/BackstockOverflowLabel"))
 	assert_lt(storage_shelf.global_position.x, _store.get_node("ReceivingBox").global_position.x)
 	assert_gt(storage_shelf.global_position.z, 5.0)
+
+
+func test_receiving_intake_station_reads_as_workflow_surface() -> void:
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	var intake_table := _store.get_node_or_null("ReceivingIntakeTableTop") as CSGBox3D
+	var sorted_tray := _store.get_node_or_null("ReceivingSortedTray") as CSGBox3D
+	var sorted_label := _store.get_node_or_null("ReceivingSortedTrayLabelPanel/ReceivingSortedTrayLabel") as Label3D
+
+	assert_not_null(intake_table)
+	assert_not_null(sorted_tray)
+	assert_not_null(sorted_label)
+	assert_false(intake_table.use_collision)
+	assert_false(sorted_tray.use_collision)
+	assert_eq(sorted_label.text, "SORTED")
+	assert_true(sorted_label.no_depth_test)
+	assert_eq(sorted_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
+	assert_lt(_flat_distance_xz(intake_table.global_position, receiving_box.global_position), 0.9)
+	assert_lt(_flat_distance_xz(sorted_tray.global_position, receiving_box.global_position), 1.1)
+	assert_gt(sorted_tray.global_position.y, receiving_box.global_position.y + 0.35)
+
+	for item_name in ["PlaceholderUsedGame", "PlaceholderUsedGame002", "PlaceholderUsedGame003"]:
+		var item := receiving_box.get_node(item_name) as Node3D
+		assert_eq(item.get("location_id"), "receiving_box_001")
+		assert_gt(item.global_position.y, receiving_box.global_position.y + 0.18)
 
 
 func test_backroom_management_and_service_props_exist() -> void:

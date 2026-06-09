@@ -62,6 +62,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_stockroom_shell_has_office_service_and_carry_route_cues"
+    },
+    {
+      "id": "stockroom_receiving_state_cues",
+      "name": "Receiving box has compact open, invoice, and sort state cues without blocking product pickup",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_has_open_invoice_sort_state_cues"
+    },
+    {
+      "id": "stockroom_receiving_intake_station",
+      "name": "Receiving station has intake table, invoice context, sorted-stock tray, and products visible in receiving",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_intake_station_reads_as_workflow_surface"
     }
   ]
 }

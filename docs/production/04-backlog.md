@@ -49,7 +49,7 @@ Active stockroom production plan: `17-stockroom-production-plan.md`.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
 14. Alpha hardening. Complete through Stop 13.7; external playtest package exists but is paused by the June 9 manual readability blocker.
 15. Playability readability recovery. Implementation complete; owner screenshot validation remains required before external playtest.
-16. Employees-only stockroom production. Planned in `17-stockroom-production-plan.md`; implementation next.
+16. Employees-only stockroom production. Slice 2 receiving/intake station implemented; continue with backstock shelving in `17-stockroom-production-plan.md`.
 
 ## Completed Polish Scope
 
@@ -184,7 +184,8 @@ The following polish items remain valid historical checkpoints:
 - Active: use `17-stockroom-production-plan.md` as the next implementation sequence.
 - Goal: turn the functional backroom/receiving systems into a physical employees-only stockroom with receiving station, backstock shelves, manager office/computer, service bench, safe/security corner, and clear carry routes to the sales floor.
 - Done: Slice 1 adds an employees-only staff threshold, doorway frame, office/service cue signs, and a nonblocking floor route cue from receiving/backstock toward the sales floor.
-- Do first: staff boundary and stockroom shell, then receiving station, then backstock shelving, then manager office/computer context, then service/security corners, then workflow copy, lighting/materials, and validation sync.
+- Done: Slice 2 adds a more intentional receiving station with open-box flaps, state cards, intake table, invoice cue, and sorted-stock tray.
+- Do next: backstock shelving, then manager office/computer context, then service/security corners, then workflow copy, lighting/materials, and validation sync.
 - Do not reopen external playtest from this phase unless owner screenshot validation and stockroom screenshot review both pass.
 
 ## Product And Fixture Polish

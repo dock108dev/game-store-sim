@@ -108,6 +108,8 @@ Commit target:
 
 ## Slice 2: Receiving And Intake Stations
 
+Status: implemented in `Build stockroom receiving station`; pending owner screenshot validation.
+
 Goal: replace the "stock on floor" read with a proper incoming-stock workflow.
 
 Work:
@@ -120,7 +122,7 @@ Work:
 Acceptance:
 
 - `04_receiving_box_before_pickup.png` and `32_open_box_invoice_sort.png` show products in an organized receiving station, not floor clutter.
-- Sealed/opened/sorted states are visually distinct enough for manual review.
+- Sealed/opened/sorted states are visually distinct enough for manual review through box flaps, state cards, invoice clipboard, and sorted tray cues.
 - Product labels remain whole from shallow left/right angles.
 
 Manual screenshots:

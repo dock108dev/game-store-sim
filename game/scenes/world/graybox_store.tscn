@@ -849,6 +849,21 @@ size = Vector3(1.85, 0.1, 1.05)
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.65, 0.055, 3.82)
 material = SubResource("StandardMaterial3D_pallet")
 
+[node name="ReceivingIntakeTableTop" type="CSGBox3D" parent="."]
+size = Vector3(1.95, 0.08, 0.52)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.62, 0.34, 3.17)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="ReceivingIntakeTableLegA" type="CSGBox3D" parent="."]
+size = Vector3(0.07, 0.64, 0.07)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -5.42, 0.17, 3.0)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ReceivingIntakeTableLegB" type="CSGBox3D" parent="."]
+size = Vector3(0.07, 0.64, 0.07)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.82, 0.17, 3.32)
+material = SubResource("StandardMaterial3D_storage_metal")
+
 [node name="ReceivingBoxStackA" type="CSGBox3D" parent="."]
 size = Vector3(0.62, 0.42, 0.48)
 transform = Transform3D(0.996195, 0, -0.087156, 0, 1, 0, 0.087156, 0, 0.996195, -5.72, 0.21, 3.72)
@@ -908,6 +923,41 @@ no_depth_test = true
 billboard = 1
 text = "INVOICE"
 font_size = 18
+
+[node name="ReceivingSortedTray" type="CSGBox3D" parent="."]
+size = Vector3(0.82, 0.08, 0.48)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.78, 0.42, 3.28)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ReceivingSortedTrayLaneA" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.018, 0.38)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.02, 0.47, 3.23)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ReceivingSortedTrayLaneB" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.018, 0.38)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.78, 0.47, 3.28)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ReceivingSortedTrayLaneC" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.018, 0.38)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.54, 0.47, 3.33)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ReceivingSortedTrayLabelPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.42, 0.12, 0.02)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.78, 0.62, 3.04)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ReceivingSortedTrayLabel" type="Label3D" parent="ReceivingSortedTrayLabelPanel"]
+pixel_size = 0.0025
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "SORTED"
+font_size = 16
 
 [node name="BackstockOverflowCrateA" type="CSGBox3D" parent="."]
 size = Vector3(0.66, 0.36, 0.46)
