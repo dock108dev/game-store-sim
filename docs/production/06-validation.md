@@ -221,8 +221,8 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Stop 13.3 regression checks keep fixture placement bounds/history, visible buyer-queue spacing, and screenshot subject coverage in the automated gate before content-heavy alpha work begins.
 - Stop 13.4A manual review should compare the refreshed main scene, customer queue, register counter, fixture placed, and backroom computer screenshots against AH-001 through AH-007 before treating the visual-content pass as human-approved.
 - Stop 13.4B manual review should compare customer role copy, dialogue prompts, supplier ordering, release planning, daily report, register return copy, and backroom action labels in the actual window before treating the content/copy pass as human-approved.
-- Stop 13.6 manual review should keep `15-alpha-playtest-package.md` as the external tester handoff artifact, but it remains paused until readability recovery exits.
-- Stop 13.7 manual review should treat the automated gate as current, then run `16-playability-readability-recovery-plan.md` before reopening the external playtest package; Codex has not performed human controller/window/playtest approval.
+- Stop 13.6 manual review should keep `15-alpha-playtest-package.md` as the external tester handoff artifact, but it remains paused until owner recovery screenshot validation passes.
+- Stop 13.7 manual review should treat the automated gate as current, then run the owner screenshot pass from `16-playability-readability-recovery-plan.md` before reopening the external playtest package; Codex has not performed human controller/window/playtest approval.
 
 Every implementation summary should say whether these were checked, skipped, or not relevant.
 

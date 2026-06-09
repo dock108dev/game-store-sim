@@ -64,9 +64,9 @@ Current automated baseline:
 - Alpha scene-readability content pass is implemented as Stop 13.4A; manual QA should review the refreshed screenshot set for store read, sign cropping, special-customer separation, placed-rack framing, and backroom computer first-view controls.
 - Alpha content/copy pass is implemented as Stop 13.4B; manual QA should review customer role text, dialogue staff context, supplier order notes, release planning, daily report wording, register return-scope copy, and backroom action labels before treating the alpha copy pass as human-approved.
 - Alpha economy balance pass is implemented as Stop 13.5; manual QA should review the tuned $500 starting cash, $10 daily overhead, $30 one-day starter supplier lot, $5.99 disc resurfacing service, buyer tolerance/pricing range, launch allocation, and early upgrade-cost feel before treating balance as human-approved.
-- Alpha playtest package is implemented through Stop 13.6 but paused by the June 9 readability blocker; manual QA should use `15-alpha-playtest-package.md` only after the recovery plan exits.
-- Alpha validation sync is implemented through Stop 13.7; manual QA should treat the gate, pack smoke, package doc, alpha bug list, and this checklist as mechanically current, then run the readability recovery plan before external playtest.
-- Playability readability recovery is active in `16-playability-readability-recovery-plan.md`; manual QA should review the recovery focus before approving any new external playtest package.
+- Alpha playtest package is implemented through Stop 13.6 but remains paused until the owner recovery screenshot set passes; manual QA should use `15-alpha-playtest-package.md` only after that owner capture is approved.
+- Alpha validation sync is implemented through Stop 13.7; manual QA should treat the gate, pack smoke, package doc, alpha bug list, and this checklist as mechanically current, then run the owner recovery screenshot pass before external playtest.
+- Playability readability recovery implementation is complete in `16-playability-readability-recovery-plan.md`; manual QA should review the recovery focus and capture list before approving any new external playtest package.
 - Readability recovery Slice 1 is implemented; manual QA should confirm the fresh spawn, sales-floor route, and backroom entry screenshots now benefit from the wider comfort FOV, taller eye line, farther spawn, and lower/right held-item anchor before moving deeper into signage and UI work.
 - Readability recovery Slice 2 is implemented; manual QA should confirm receiving, register, rack, backroom, storage, and retail-callout signs are fixed in-world, compact, and no longer cover starter products or normal register/rack sightlines before moving into interaction and modal legibility.
 - Readability recovery Slice 3 is implemented; manual QA should confirm the bottom prompt, center reticle, product hover highlight, shelf slot hover highlight, pickup, pricing-entry, stocking, and lower-priced-copy sale checks are readable before moving into modal/menu legibility.
@@ -175,8 +175,8 @@ Security placeholder subcheck: in Records, confirm cash safe, high-value storage
 92. Open settings, adjust audio, display, mouse, and accessibility values, reset bindings/defaults, close and reopen settings, and confirm the saved values and reset language are readable.
 93. Open pause, test Resume, Settings, Save/Load, Main Menu, Start Game, and Quit request language, and confirm mouse capture returns after every playable exit path.
 94. Run `scripts/verify_desktop_export.sh --pack-smoke`, confirm `artifacts/builds/desktop/game-store-sim.pck` is created and nonempty, and confirm the verifier reports a successful pack boot smoke.
-95. Open `docs/production/16-playability-readability-recovery-plan.md`, confirm the active recovery slices match the latest manual screenshot blockers, and do not send the build to a tester while the package is paused.
-96. Open `docs/production/15-alpha-playtest-package.md`, confirm the package handoff names build commands, artifact paths, known issues, feedback form, rollback plan, and the shorter external playtest script, but treat it as paused until recovery exits.
+95. Open `docs/production/16-playability-readability-recovery-plan.md`, confirm Slices 1-7 are complete, and do not send the build to a tester until the owner recovery screenshot set passes.
+96. Open `docs/production/15-alpha-playtest-package.md`, confirm the package handoff names build commands, artifact paths, known issues, feedback form, rollback plan, and the shorter external playtest script, but treat it as paused pending owner screenshot validation.
 97. Confirm `13-alpha-bug-list.md`, `15-alpha-playtest-package.md`, `16-playability-readability-recovery-plan.md`, this checklist, and the latest validation artifacts all describe the same recovery handoff state before sending the build to a tester.
 
 ## Visual Checks
@@ -634,15 +634,15 @@ Run these first when manually checking the completed Stop 13.7 alpha validation 
 
 - Confirm `scripts/validate_godot.sh` is green for the current branch and reports 525 GUT tests, 476/594 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
-- Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, tracks AH-012 and AH-013 as active P0 readability recovery blockers, and keeps AH-014/AH-015 routed to final recovery validation.
+- Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and keeps AH-006/AH-012/AH-013/AH-014/AH-015 routed to owner recovery screenshot validation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
-- Treat the alpha-hardening milestone as mechanically validated but not human-approved until the readability recovery exits and the external playtest script is run in a real window.
+- Treat the alpha-hardening milestone as mechanically validated but not human-approved until the owner recovery screenshot set and the external playtest script are run in real windows.
 
 ## Playability Readability Recovery Focus
 
 Run these first before attempting another external alpha playtest:
 
-- Review `docs/production/16-playability-readability-recovery-plan.md` and confirm the current active slice is clear.
+- Review `docs/production/16-playability-readability-recovery-plan.md` and confirm Slices 1-7 are complete and the owner screenshot pass is the current gate.
 - Compare the June 9 manual screenshots `intro_1.png`, `receiveing.png`, `intro_2.png`, and `pricing.png` against AH-012 through AH-015 in `13-alpha-bug-list.md`.
 - Confirm the first recovery slice fixes camera scale, ceiling dominance, near-camera prop dominance, and spawn composition before deeper UI polish begins.
 - Confirm the player now starts farther from the register/special-customer pileup, sees more of the store at 1280x720, and carries items low/right without blocking the reticle.
@@ -652,7 +652,7 @@ Run these first before attempting another external alpha playtest:
 - Confirm the fifth recovery slice keeps buyer, trade-in, preorder, service, and suspicious customer role bubbles compact, consistent, depth-tested, and useful without dominating the store view or crowding the register queue.
 - Confirm the sixth recovery slice keeps the backroom dashboard, ordering, releases, records, receiving workflow, storage placement, and service ticket controls contextual by tab so the lower frame is not crowded by unrelated action rows.
 - Confirm the backroom entry, dashboard, ordering, releases, records, receiving workflow, and service ticket screens read as operations space rather than dense debug UI.
-- Rerun the short recovery screenshot set before reopening `15-alpha-playtest-package.md`.
+- Rerun the short recovery screenshot set before reopening `15-alpha-playtest-package.md`; keep the package paused if any capture is still unreadable.
 
 ## Automated Screenshot Artifacts
 

@@ -686,9 +686,9 @@ Validation snapshot:
 
 Milestones 1 through 13 are implemented, validated, committed, and pushed on `codex/let-it-fly`.
 
-The June 9 manual screenshot review supersedes the previous external-playtest handoff. The repo remains mechanically green, but the current build is not human-validateable enough to send to external testers.
+The June 9 manual screenshot review supersedes the previous external-playtest handoff. The repo remains mechanically green, and readability recovery implementation is complete, but the build still needs the owner recovery screenshot set before it can be sent to external testers.
 
-The next checkpoint is the playability readability recovery phase in `16-playability-readability-recovery-plan.md`:
+The playability readability recovery phase in `16-playability-readability-recovery-plan.md` is implemented through Slice 7:
 
 1. Fix camera scale, player framing, and spawn composition.
 2. Fix oversized signage, foreground blockers, and receiving sightlines.
@@ -696,7 +696,7 @@ The next checkpoint is the playability readability recovery phase in `16-playabi
 4. Fix pricing/register/trade-in/preorder/service/save modal legibility.
 5. Fix customer role markers and register queue readability.
 6. Fix backroom/computer readability.
-7. Rerun the short screenshot capture set and reopen the external playtest package only if the build is readable.
+7. Done: reran the automated gate and kept the external playtest package paused pending the owner recovery screenshot set.
 
 Codex can keep the repo mechanically validated, but it cannot mark controller feel, OS window behavior, mouse-capture feel, economy feel, or long-form playtest readability as human-approved.
 
@@ -717,4 +717,4 @@ This phase is mechanically complete when the repo can produce an alpha-quality l
 - Updated automated tests, screenshot artifacts, and manual validation docs.
 - Each completed slice committed and pushed.
 
-Human approval still requires the recovery pass described in `16-playability-readability-recovery-plan.md`, followed by the external playtest/manual window pass described in `15-alpha-playtest-package.md`.
+Human approval still requires the owner screenshot pass described in `16-playability-readability-recovery-plan.md`, followed by the external playtest/manual window pass described in `15-alpha-playtest-package.md`.

@@ -1,6 +1,6 @@
 # Playability Readability Recovery Plan
 
-This is the active implementation plan after the June 9 manual screenshot review. Slices 1-6 are implemented; final recovery validation is the next active work before external playtest can reopen.
+This is the completed implementation plan after the June 9 manual screenshot review. Slices 1-7 are implemented; owner screenshot validation is the next gate before external playtest can reopen.
 
 The automated alpha gate is still valuable: movement, pickup, pricing, stocking, customers, register flows, services, ordering, storage, fixture placement, save/load, and package smoke remain mechanically protected. The manual evidence changes the release state: the build is not ready for external playtest because a player cannot reliably read the room, signs, prompts, customer roles, or pricing UI from normal play angles.
 
@@ -57,7 +57,7 @@ Goal: make the manual blocker and next recovery sequence explicit before editing
 
 Work:
 
-- Mark external playtest as paused until readability recovery exits.
+- Mark external playtest as paused until recovery implementation exits and owner screenshot validation passes.
 - Add P0/P1 readability blocker entries to the alpha bug list.
 - Make the backlog and completion plan point to this recovery plan.
 - Keep the existing alpha package as a paused handoff artifact, not the next action.
@@ -266,6 +266,8 @@ Commit target:
 
 Goal: prove the build is ready to resume the external alpha playtest package.
 
+Status: complete as repo-side validation. External playtest remains paused pending owner capture and approval of the screenshot set below.
+
 Work:
 
 - Run the short capture set again.
@@ -276,8 +278,8 @@ Work:
 Acceptance:
 
 - Full gate passes.
-- The required screenshot set is readable enough for human review.
-- The alpha package is either reopened or remains explicitly blocked with remaining evidence.
+- The required screenshot set is ready for human review.
+- The alpha package remains explicitly blocked pending owner screenshot validation, with no open automated failures.
 
 Manual screenshots:
 

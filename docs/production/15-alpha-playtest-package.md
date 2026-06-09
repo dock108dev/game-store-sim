@@ -4,15 +4,15 @@ This is the Stop 13.6 external playtest handoff. It is intentionally shorter tha
 
 ## Current Package State
 
-Paused.
+Paused pending owner recovery screenshot validation.
 
-The package remains useful as the intended external tester script, but it should not be handed to testers until `16-playability-readability-recovery-plan.md` exits. June 9 manual screenshots show the current build is mechanically functional but not readable enough for external validation: camera scale, foreground signs, receiving sightlines, prompt size, pricing UI size, and customer role labels block useful playtest feedback.
+The package remains useful as the intended external tester script, but it should not be handed to testers until the owner recovery screenshot set in `16-playability-readability-recovery-plan.md` passes. Readability recovery implementation is complete and the full automated gate is green; the remaining blocker is real-window human review, not a known automated failure.
 
-Before reopening this package, complete the recovery screenshot set listed in `16-playability-readability-recovery-plan.md`, keep `13-alpha-bug-list.md` current, rerun `scripts/validate_godot.sh`, and confirm the build can be read in a real 1280x720 window.
+Before reopening this package, capture the recovery screenshot set listed in `16-playability-readability-recovery-plan.md`, keep `13-alpha-bug-list.md` current, rerun `scripts/validate_godot.sh`, and confirm the build can be read in a real 1280x720 window.
 
 ## Package Scope
 
-After the recovery phase exits, the alpha package will cover the local desktop build on `codex/let-it-fly` after the full gate passes. It is meant to prove the first-person store loop from fresh start through receiving, pricing, stocking, checkout, trade-ins, preorders, services, backroom planning, day close, save/load, and feedback capture.
+After owner screenshot validation passes, the alpha package will cover the local desktop build on `codex/let-it-fly` after the full gate passes. It is meant to prove the first-person store loop from fresh start through receiving, pricing, stocking, checkout, trade-ins, preorders, services, backroom planning, day close, save/load, and feedback capture.
 
 This is not a final art/audio/content release. Known graybox and manual release-wrapper limits remain listed below so they are visible to testers instead of buried in chat.
 
