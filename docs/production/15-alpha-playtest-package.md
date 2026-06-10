@@ -6,7 +6,7 @@ This is the Stop 13.6 external playtest handoff. It is intentionally shorter tha
 
 Paused pending owner recovery screenshot validation.
 
-The package remains useful as the intended external tester script, but it should not be handed to testers until the owner recovery screenshot set in `16-playability-readability-recovery-plan.md` passes. Readability recovery implementation is complete and the full automated gate is green; the remaining blocker is real-window human review, not a known automated failure.
+The package remains useful as the intended external tester script, but it should not be handed to testers until the owner recovery screenshot set in `16-playability-readability-recovery-plan.md` and the stockroom screenshot set in `17-stockroom-production-plan.md` pass. Readability recovery and stockroom production implementation are complete and the full automated gate is green; the remaining blocker is real-window human review, not a known automated failure.
 
 Before reopening this package, capture the recovery screenshot set listed in `16-playability-readability-recovery-plan.md`, capture the stockroom screenshot set listed in `17-stockroom-production-plan.md`, keep `13-alpha-bug-list.md` current, rerun `scripts/validate_godot.sh`, and confirm the build can be read in a real 1280x720 window. Keep the package paused if the employees-only receiving/backstock/office flow still reads as floor clutter, debug props, or instant inventory.
 

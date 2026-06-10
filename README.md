@@ -2,7 +2,7 @@
 
 First-person specialty video game retail simulator. The player runs a small game shop by physically receiving stock, pricing used games, stocking fixtures, serving customers, handling trade-ins and services, planning launch allocations, and noticing optional suspicious activity under the normal retail loop.
 
-The first playable counter loop is implemented and validated. The first polish/readability pass, alpha hardening pass, readability recovery implementation, and stockroom production work through Slice 7 are also validated. External alpha playtest is still paused for owner screenshot review, and the active remaining build plan is the employees-only stockroom validation-sync closeout.
+The first playable counter loop is implemented and validated. The first polish/readability pass, alpha hardening pass, readability recovery implementation, and employees-only stockroom production phase are also validated. External alpha playtest is still paused for owner recovery and stockroom screenshot review.
 
 ## Current Playable State
 
@@ -10,7 +10,7 @@ The first playable counter loop is implemented and validated. The first polish/r
 - Current branch work targets keyboard/mouse desktop play.
 - The validated graybox includes receiving stock, multi-item carry, click-first interaction, used-game pricing, display stocking, buyer queueing, register sales, trade-ins, preorder deposits, service completion, supplier ordering, release allocation, launch-day resolution, fixture ordering/placement, hidden-thread clues, persistence smoke coverage, and named validation screenshots.
 - The local validation gate is `scripts/validate_godot.sh`.
-- The remaining implementation sequence is `docs/production/17-stockroom-production-plan.md`.
+- The completed stockroom production sequence is `docs/production/17-stockroom-production-plan.md`.
 
 ## Current Inputs
 
@@ -34,7 +34,7 @@ The first playable counter loop is implemented and validated. The first polish/r
 - [Production Polish Execution Plan](docs/production/10-polish-execution-plan.md): completed multi-slice execution plan for the first polish backlog.
 - [Game Completion Plan](docs/production/11-game-completion-plan.md): active plan for moving from validated prototype to alpha-quality game.
 - [Production Target Contracts](docs/production/12-production-target-contracts.md): active screenshot teardown, art, layout, UI, content, and acceptance contracts for the next production build.
-- [Employees-Only Stockroom Production Plan](docs/production/17-stockroom-production-plan.md): active next-stage slice plan for the physical stockroom, receiving, backstock, office computer, service/security corners, and validation sync.
+- [Employees-Only Stockroom Production Plan](docs/production/17-stockroom-production-plan.md): completed Slice 1-8 production record for the physical stockroom, receiving, backstock, office computer, service/security corners, and validation sync.
 - [Hidden Thread](docs/narrative/hidden-thread.md): spoiler-facing plan for the optional suspicious narrative layer.
 
 ## Production Rule

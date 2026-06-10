@@ -47,7 +47,7 @@ func test_alpha_validation_snapshot_records_current_gate_outputs() -> void:
 
 	for doc in [validation_doc, manual_doc, completion_plan, bug_list]:
 		assert_string_contains(doc, "539 GUT tests")
-		assert_string_contains(doc, "495/614")
+		assert_string_contains(doc, "496/615")
 		assert_string_contains(doc, "51/51")
 		assert_string_contains(doc, "3 active")
 		assert_string_contains(doc, "33 catalog products")

@@ -2,7 +2,7 @@
   "ui_scenarios": [
     {
       "id": "stockroom_plan_docs_sync",
-      "name": "Stockroom production plan is the active next implementation sequence while external playtest remains paused",
+      "name": "Stockroom production plan is mechanically complete while external playtest remains paused",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
@@ -23,21 +23,21 @@
     },
     {
       "id": "stockroom_readme_pointer_sync",
-      "name": "README points the current next implementation sequence at the stockroom production plan",
+      "name": "README points the completed stockroom production record at the stockroom plan",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
     },
     {
       "id": "stockroom_backlog_pointer_sync",
-      "name": "Backlog marks stockroom production as active while recovery remains a completed gate",
+      "name": "Backlog marks stockroom production as mechanically complete while recovery remains a completed gate",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
     },
     {
       "id": "stockroom_completion_handoff_sync",
-      "name": "Completion plan names the stockroom plan as the next active build plan",
+      "name": "Completion plan names the stockroom plan as a mechanically complete production phase",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
@@ -132,6 +132,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_stockroom_lighting_materials_and_density_cues_stay_nonblocking"
+    },
+    {
+      "id": "stockroom_phase_validation_sync",
+      "name": "Stockroom production phase is mechanically complete while external playtest remains paused for owner screenshot approval",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_stockroom_production_plan.gd::test_stockroom_plan_is_active_next_stage"
     }
   ]
 }

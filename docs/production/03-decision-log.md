@@ -129,7 +129,7 @@ Follow-up risk:
 Decision:
 
 - Keep external alpha playtest paused until owner screenshot validation passes.
-- Use `17-stockroom-production-plan.md` as the stockroom implementation source of truth through Slice 8.
+- Use `17-stockroom-production-plan.md` as the completed stockroom implementation record through Slice 8.
 - Turn the current working backroom/receiving mechanics into an actual employees-only stockroom and manager office.
 
 Reason:
@@ -146,4 +146,4 @@ Rejected alternatives:
 
 Follow-up risk:
 
-- Stockroom polish can hide core interactions if prop density grows too fast. Slices 1-7 now establish shell, routes, receiving, backstock, office, service/security, workflow copy, and lighting/material hierarchy; remaining Slice 8 work must keep validation and owner-screenshot gating explicit without reopening external playtest automatically.
+- Stockroom polish can hide core interactions if prop density grows too fast. Slices 1-8 now establish shell, routes, receiving, backstock, office, service/security, workflow copy, lighting/material hierarchy, validation sync, and owner-screenshot gating without reopening external playtest automatically.

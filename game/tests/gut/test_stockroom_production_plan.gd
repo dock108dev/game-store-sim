@@ -18,16 +18,16 @@ func test_stockroom_plan_is_active_next_stage() -> void:
 	var decision_log := FileAccess.get_file_as_string(DECISION_LOG_PATH)
 	var package_doc := FileAccess.get_file_as_string(PACKAGE_DOC_PATH)
 
-	assert_string_contains(plan, "next active implementation plan after readability recovery")
-	assert_string_contains(plan, "External alpha playtest remains paused until the owner screenshot pass is readable")
+	assert_string_contains(plan, "mechanically implemented through Slice 8")
+	assert_string_contains(plan, "External alpha playtest remains paused until the owner recovery screenshot pass and stockroom screenshot pass are readable")
 	assert_string_contains(plan, "employees-only stockroom and office")
 	assert_string_contains(plan, "do not turn them into instant sales-floor inventory")
 	assert_string_contains(plan, "Docs Audit Result")
 	assert_string_contains(plan, "No production doc should be deleted in this pass")
-	assert_string_contains(plan, "implemented through Slice 7")
+	assert_string_contains(plan, "mechanically complete")
 	assert_string_contains(readme, "Employees-Only Stockroom Production Plan")
 	assert_string_contains(backlog, "Employees-only stockroom production")
-	assert_string_contains(backlog, "Implemented through Slice 7")
+	assert_string_contains(backlog, "Mechanically complete through Slice 8")
 	assert_string_contains(completion_plan, "17-stockroom-production-plan.md")
 	assert_string_contains(decision_log, "Employees-Only Stockroom Production")
 	assert_string_contains(package_doc, "stockroom screenshot set")
@@ -89,6 +89,7 @@ func test_stockroom_validation_scenarios_are_registered() -> void:
 			"stockroom_supplier_physical_flow_copy",
 			"stockroom_storage_physical_flow_copy",
 			"stockroom_lighting_material_density",
+			"stockroom_phase_validation_sync",
 		]
 
 	for scenario_id in required_ids:

@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 539 GUT tests, UI scenario automation coverage 495/614, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 539 GUT tests, UI scenario automation coverage 496/615, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
 
 ## Milestone 13: Alpha Hardening
 
@@ -699,7 +699,7 @@ The playability readability recovery phase in `16-playability-readability-recove
 7. Done: reran the automated gate and kept the external playtest package paused pending the owner recovery screenshot set.
 8. Done: stabilized angle-dependent label clipping for panel-backed signs and product price tags.
 
-The active build plan is `17-stockroom-production-plan.md`: stockroom production is implemented through Slice 7 with employees-only boundary, physical receiving, backstock shelving, service/security corners, manager-office computer context, workflow copy, cooler light/material hierarchy, route tape, floor shadows, wall cards, and box/paper material variation. The remaining stockroom work is Slice 8 validation sync/external-package decision.
+The stockroom build plan in `17-stockroom-production-plan.md` is mechanically complete through Slice 8 with employees-only boundary, physical receiving, backstock shelving, service/security corners, manager-office computer context, workflow copy, cooler light/material hierarchy, route tape, floor shadows, wall cards, box/paper material variation, validation sync, and external-package gating. External playtest remains paused until owner recovery and stockroom screenshot approval pass.
 
 Codex can keep the repo mechanically validated, but it cannot mark controller feel, OS window behavior, mouse-capture feel, economy feel, or long-form playtest readability as human-approved.
 
