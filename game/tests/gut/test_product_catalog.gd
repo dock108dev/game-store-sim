@@ -42,12 +42,18 @@ const ALLOWED_SERVICE_NAMES := [
 	"Controller Test Ticket",
 	"Disc Resurfacing Ticket",
 ]
+const MIN_TOTAL_PRODUCTS := 60
+const MIN_SELLABLE_PRODUCTS := 57
+const MIN_USED_GAMES := 36
+const MIN_NEW_GAMES := 9
+const MIN_ACCESSORY_HARDWARE := 9
+const MIN_SERVICE_TICKETS := 3
 
 
 func test_product_catalog_contains_expanded_fictional_products() -> void:
 	var products := _load_products()
 
-	assert_gte(products.size(), 30)
+	assert_gte(products.size(), MIN_TOTAL_PRODUCTS)
 	for product in products:
 		assert_false(product.display_name.is_empty())
 		assert_false(product.category.is_empty())
@@ -114,18 +120,32 @@ func test_product_catalog_covers_category_platform_condition_format_and_demand_v
 func test_product_catalog_has_enough_sellable_content_for_multiple_days() -> void:
 	var sellable_count := 0
 	var used_game_count := 0
+	var new_game_count := 0
+	var accessory_hardware_count := 0
+	var service_count := 0
 	var non_used_sellable_count := 0
 	for product in _load_products():
+		match product.category:
+			"used_game":
+				used_game_count += 1
+			"new_game":
+				new_game_count += 1
+			"accessory", "hardware":
+				accessory_hardware_count += 1
+			"service":
+				service_count += 1
+
 		if product.player_priceable:
 			sellable_count += 1
-			if product.category == "used_game":
-				used_game_count += 1
-			else:
+			if product.category != "used_game":
 				non_used_sellable_count += 1
 
-	assert_gte(sellable_count, 24)
-	assert_gte(used_game_count, 18)
-	assert_gte(non_used_sellable_count, 6)
+	assert_gte(sellable_count, MIN_SELLABLE_PRODUCTS)
+	assert_gte(used_game_count, MIN_USED_GAMES)
+	assert_gte(new_game_count, MIN_NEW_GAMES)
+	assert_gte(accessory_hardware_count, MIN_ACCESSORY_HARDWARE)
+	assert_gte(service_count, MIN_SERVICE_TICKETS)
+	assert_gte(non_used_sellable_count, MIN_NEW_GAMES + MIN_ACCESSORY_HARDWARE)
 
 
 func test_product_catalog_covers_authenticity_rarity_risk_and_location_schema() -> void:

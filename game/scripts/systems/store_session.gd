@@ -323,11 +323,20 @@ const DEFAULT_FIXTURE_CATALOG_PATHS := [
 ]
 const DEFAULT_SUPPLIER_LOT_PATHS := [
 	"res://data/suppliers/used_game_starter_lot.tres",
+	"res://data/suppliers/new_release_sampler_lot.tres",
+	"res://data/suppliers/accessory_counter_lot.tres",
+	"res://data/suppliers/backstock_used_depth_lot.tres",
 ]
 const DEFAULT_RELEASE_CALENDAR_PATHS := [
 	"res://data/releases/neon_skyline_launch.tres",
+	"res://data/releases/moonlight_menders_launch.tres",
 	"res://data/releases/pocket_farm_dx_launch.tres",
+	"res://data/releases/cobalt_courier_launch.tres",
+	"res://data/releases/dream_dock_launch.tres",
 	"res://data/releases/skycart_grand_prix_launch.tres",
+	"res://data/releases/lunar_lanterns_launch.tres",
+	"res://data/releases/turbo_tome_launch.tres",
+	"res://data/releases/velvet_voltage_launch.tres",
 ]
 
 var cash_cents: int = 0

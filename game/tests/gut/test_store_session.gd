@@ -911,11 +911,17 @@ func test_store_session_lists_available_supplier_lots() -> void:
 
 	var lots := session.get_available_supplier_lots()
 
-	assert_eq(lots.size(), 1)
+	assert_eq(lots.size(), 4)
 	assert_eq(lots[0].get("lot_id"), "supplier_lot_used_games_001")
+	assert_eq(lots[1].get("lot_id"), "supplier_lot_new_release_sampler")
+	assert_eq(lots[2].get("lot_id"), "supplier_lot_accessory_counter")
+	assert_eq(lots[3].get("lot_id"), "supplier_lot_backstock_used_depth")
 	assert_true(session.can_order_supplier_lot("supplier_lot_used_games_001"))
+	assert_true(session.can_order_supplier_lot("supplier_lot_accessory_counter"))
 	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving orders:")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Order Used Game Starter Lot $30.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Order New Release Sampler Lot $78.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Order Accessory Counter Lot $26.50")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Category: Used games")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Cart: 1 lot / 3 items")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Cost: $30.00 reserved on order")
@@ -949,13 +955,20 @@ func test_store_session_lists_release_calendar_sorted_by_launch_day() -> void:
 
 	var releases := session.get_release_calendar()
 
-	assert_eq(releases.size(), 3)
+	assert_eq(releases.size(), 9)
 	assert_eq(releases[0].get("product_name"), "Neon Skyline")
-	assert_eq(releases[1].get("product_name"), "Pocket Farm DX")
-	assert_eq(releases[2].get("product_name"), "Skycart Grand Prix")
+	assert_eq(releases[1].get("product_name"), "Moonlight Menders")
+	assert_eq(releases[2].get("product_name"), "Pocket Farm DX")
+	assert_eq(releases[3].get("product_name"), "Cobalt Courier")
+	assert_eq(releases[4].get("product_name"), "Dream Dock")
+	assert_eq(releases[5].get("product_name"), "Skycart Grand Prix")
+	assert_eq(releases[6].get("product_name"), "Lunar Lanterns")
+	assert_eq(releases[7].get("product_name"), "Turbo Tome")
+	assert_eq(releases[8].get("product_name"), "Velvet Voltage")
 	assert_eq(releases[0].get("release_day"), 3)
-	assert_eq(releases[1].get("release_day"), 5)
-	assert_eq(releases[2].get("release_day"), 8)
+	assert_eq(releases[1].get("release_day"), 4)
+	assert_eq(releases[2].get("release_day"), 5)
+	assert_eq(releases[8].get("release_day"), 12)
 
 
 func test_store_session_formats_upcoming_release_calendar() -> void:
@@ -1107,9 +1120,12 @@ func test_store_session_filters_released_calendar_entries() -> void:
 	var upcoming := session.get_upcoming_releases()
 	var summary: String = session.get_release_calendar_text()
 
-	assert_eq(upcoming.size(), 2)
-	assert_eq(upcoming[0].get("product_name"), "Pocket Farm DX")
+	assert_eq(upcoming.size(), 8)
+	assert_eq(upcoming[0].get("product_name"), "Moonlight Menders")
+	assert_eq(upcoming[1].get("product_name"), "Pocket Farm DX")
+	assert_eq(upcoming[7].get("product_name"), "Velvet Voltage")
 	assert_eq(summary.find("Neon Skyline"), -1)
+	assert_string_contains(summary, "Day 4 (today): Moonlight Menders")
 	assert_string_contains(summary, "Day 5 (tomorrow): Pocket Farm DX")
 
 

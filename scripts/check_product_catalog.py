@@ -126,17 +126,24 @@ REQUIRED_CATEGORIES = {
 }
 
 REQUIRED_VISUAL_VARIANTS = {
-    "case",
-    "disc",
-    "cartridge",
+	"case",
+	"disc",
+	"cartridge",
     "accessory",
     "console",
     "controller",
     "box",
     "sealed",
     "loose",
-    "service_ticket",
+	"service_ticket",
 }
+
+MIN_TOTAL_PRODUCTS = 60
+MIN_SELLABLE_PRODUCTS = 57
+MIN_USED_GAMES = 36
+MIN_NEW_GAMES = 9
+MIN_ACCESSORY_HARDWARE = 9
+MIN_SERVICE_TICKETS = 3
 
 
 def parse_value(raw: str):
@@ -197,6 +204,7 @@ def validate_products(products: list[tuple[Path, dict]]) -> list[str]:
     categories = set()
     variants = set()
     sellable_count = 0
+    category_counts = {}
 
     for path, product in products:
         relative_path = path.relative_to(REPO_ROOT)
@@ -229,6 +237,7 @@ def validate_products(products: list[tuple[Path, dict]]) -> list[str]:
         category = str(product.get("category", "")).strip()
         if category:
             categories.add(category)
+            category_counts[category] = int(category_counts.get(category, 0)) + 1
         if category and category not in ALLOWED_CATEGORIES:
             failures.append(f"{relative_path} uses unknown category: {category}")
 
@@ -299,10 +308,27 @@ def validate_products(products: list[tuple[Path, dict]]) -> list[str]:
     if missing_variants:
         failures.append(f"missing product visual variants: {', '.join(missing_variants)}")
 
-    if len(products) < 30:
-        failures.append(f"product catalog has {len(products)} products; expected at least 30")
-    if sellable_count < 24:
-        failures.append(f"product catalog has {sellable_count} sellable products; expected at least 24")
+    used_game_count = int(category_counts.get("used_game", 0))
+    new_game_count = int(category_counts.get("new_game", 0))
+    accessory_hardware_count = int(category_counts.get("accessory", 0)) + int(category_counts.get("hardware", 0))
+    service_count = int(category_counts.get("service", 0))
+
+    if len(products) < MIN_TOTAL_PRODUCTS:
+        failures.append(f"product catalog has {len(products)} products; expected at least {MIN_TOTAL_PRODUCTS}")
+    if sellable_count < MIN_SELLABLE_PRODUCTS:
+        failures.append(
+            f"product catalog has {sellable_count} sellable products; expected at least {MIN_SELLABLE_PRODUCTS}"
+        )
+    if used_game_count < MIN_USED_GAMES:
+        failures.append(f"product catalog has {used_game_count} used games; expected at least {MIN_USED_GAMES}")
+    if new_game_count < MIN_NEW_GAMES:
+        failures.append(f"product catalog has {new_game_count} new games; expected at least {MIN_NEW_GAMES}")
+    if accessory_hardware_count < MIN_ACCESSORY_HARDWARE:
+        failures.append(
+            f"product catalog has {accessory_hardware_count} accessories/hardware; expected at least {MIN_ACCESSORY_HARDWARE}"
+        )
+    if service_count < MIN_SERVICE_TICKETS:
+        failures.append(f"product catalog has {service_count} service tickets; expected at least {MIN_SERVICE_TICKETS}")
 
     return failures
 

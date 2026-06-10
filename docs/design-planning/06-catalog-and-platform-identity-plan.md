@@ -25,10 +25,12 @@ Implemented in the current branch:
 
 - `scripts/check_product_catalog.py` validates platform-family mappings, taxonomy vocabularies, service names, short title rules, and platform IP leakage.
 - `test_product_catalog.gd` mirrors platform/taxonomy/title rules after loading real Godot resources.
-- Starter catalog has 33 products across used games, new games, accessories, hardware, and service tickets.
+- Full first-catalog pass now has 60 products: 39 used games, 9 new games, 9 accessory/hardware items, and 3 service tickets.
+- Release calendar now has 9 launch resources across Nova Cube, Orbit 64, and Pocket Star.
+- Supplier catalog now has 4 orderable lots: used starter, new-release sampler, accessory counter, and backstock used-depth.
 - Platform families are currently locked to Nova Cube, Orbit 64, Pocket Star, and Service Bench.
 
-This is a foundation, not the full catalog. Future catalog growth must update docs, data, Python checks, and GUT tests together.
+Future catalog growth must update docs, data, Python checks, and GUT tests together.
 
 ## Scope
 
