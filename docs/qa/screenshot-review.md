@@ -22,7 +22,7 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 Generated on June 10, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 561 GUT tests and 8099 asserts.
+- Full validation passed with 563 GUT tests and 9607 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.

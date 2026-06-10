@@ -518,7 +518,7 @@ Type: checklist/review slice.
 
 Purpose:
 
-Approve or reject the quality bar before moving to full catalog/decor/platform work.
+Approve or reject the quality bar before moving to multi-day playtest work.
 
 Implement:
 
@@ -535,11 +535,11 @@ Acceptance:
 - Full gate passes.
 - All required screenshots pass.
 - P0/P1 quality-bar issues are closed.
-- A clear next-phase decision exists: full catalog/platform/decor implementation or targeted rework.
+- A clear next-phase decision exists: multi-day playtest/tuning or targeted rework.
 
 Implemented evidence:
 
-- Ran `scripts/validate_godot.sh` after all eight slices; the gate passed with 561 GUT tests, 8099 asserts, coverage policy, catalog check, desktop pack smoke, performance smoke, screenshot capture/sanity, and old-name scan.
+- Ran `scripts/validate_godot.sh` after all eight slices; the gate passed with 563 GUT tests, 9607 asserts, coverage policy, 60-product catalog check, desktop pack smoke, performance smoke, screenshot capture/sanity, and old-name scan.
 - Generated `artifacts/validation/latest/screenshot-contact-sheet.png` from the 23 required screenshots.
 - Updated `docs/status.json`, `docs/CURRENT_STATE.md`, `README.md`, `docs/qa/screenshot-review.md`, and `docs/production/13-alpha-bug-list.md` for the ready-for-owner-review lock.
 - Kept external playtest paused until owner screenshot review approves the real-window read.
@@ -590,7 +590,7 @@ Update only the docs that changed meaning:
 
 After Slice 8, choose one path:
 
-1. If quality bar passes: start full catalog/platform/decor implementation and then multi-day playtesting.
+1. If quality bar passes: start multi-day playtesting and tuning.
 2. If quality bar fails: implement only the failed slice surfaces and repeat Slice 8.
 
-Do not start full catalog/decor/platform depth while the opening store still fails the quality bar.
+Do not start multi-day tuning while the opening store/catalog/decor quality bar still fails.

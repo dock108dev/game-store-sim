@@ -20,11 +20,11 @@ The gate writes logs and screenshots to `artifacts/validation/latest/`.
 
 Current validated baseline:
 
-- 561 GUT tests.
+- 563 GUT tests.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 52/52.
 - 3 active standalone validation tools.
-- 33 catalog products.
+- 60 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture/sanity, old-name scan, and 23 required screenshots pass.
 
 ## Active Docs

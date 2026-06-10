@@ -10,7 +10,8 @@ The current Godot game is a broad validated production-blockout build, not a fin
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
 - Returns, trade-ins, preorder deposits, service tickets, and daily reports.
 - Supplier ordering, physical receiving, backstock storage, stock pulls, fixture orders, fixture placement, and category assignment.
-- Release calendar, launch allocation, launch-day resolution, market/demand summaries, upgrades, decoration, save/load, settings, pause/main menu, and desktop pack smoke.
+- Release calendar, launch allocation, launch-day resolution, market/demand summaries, upgrades, decoration surface hooks, save/load, settings, pause/main menu, and desktop pack smoke.
+- Full first-catalog data with 60 fictional products, 9 release-calendar entries, and 4 supplier lots.
 - Optional hidden-thread infrastructure for suspicious items, supplier notes, suspicious customer cues, records, choices, and nonblocking consequences.
 
 ## Validation Snapshot
@@ -19,11 +20,11 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 561 GUT tests and 8099 asserts pass.
+- 563 GUT tests and 9607 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 52/52, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
-- Product catalog validation passes with 33 products.
+- Product catalog validation passes with 60 products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, and old-name scan pass.
 - All 23 required screenshots are present, and the latest contact sheet is `artifacts/validation/latest/screenshot-contact-sheet.png`.
 
@@ -42,7 +43,7 @@ Required reviews:
 
 ## Visual Read
 
-The game now reads as a playable small game shop with production-blockout visual language: clear zones, signs, products, customers, counter props, stockroom stations, and build-mode ghosts. It still uses primitive geometry and placeholder-heavy bodies/props, so it should not be described as final art.
+The game now reads as a playable small game shop with production-blockout visual language: clear zones, signs, products, customers, counter props, stockroom stations, build-mode ghosts, full first-catalog naming, and decoration/upgrade preview surfaces. It still uses primitive geometry and placeholder-heavy bodies/props, so it should not be described as final art.
 
 Current visual risk areas:
 
@@ -53,7 +54,7 @@ Current visual risk areas:
 
 ## Current Design Planning
 
-The active planning program is [Design Planning](design-planning/README.md). The first milestone is [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md): make the opening store, sales floor, receiving/stockroom, and backroom office good enough to become the quality bar for catalog, decoration, platform, and multi-day playtest work. Its eight implementation slices are complete and routed to owner screenshot review.
+The active planning program is [Design Planning](design-planning/README.md). The first milestone is [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md): make the opening store, sales floor, receiving/stockroom, backroom office, first catalog, and decoration/upgrade surfaces good enough to become the quality bar for multi-day playtest work. Its eight implementation slices are complete and routed to owner screenshot review.
 
 ## Next Decision
 
@@ -61,7 +62,7 @@ Review [Screenshot Review](qa/screenshot-review.md).
 
 If the screenshot set passes:
 
-1. Use [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md) to decide whether the first store/backroom quality target is met.
+1. Use [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md) and [Quality Bar Checklist](design-planning/08-quality-bar-checklist.md) to decide whether the first store/catalog/decor quality target is met.
 2. Rerun `scripts/validate_godot.sh`.
 3. Run [Release Package Check](qa/release-package-check.md) if the target is good enough for external alpha.
 4. Reopen [Alpha Playtest Package](production/15-alpha-playtest-package.md) only after the quality bar passes.

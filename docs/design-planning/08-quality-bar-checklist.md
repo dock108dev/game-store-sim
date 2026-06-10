@@ -1,6 +1,6 @@
 # Quality Bar Checklist
 
-Pass/fail checklist for approving the opening store and backroom before full catalog, decoration, platform, console, and multi-day playtest implementation.
+Pass/fail checklist for approving the opening store, backroom, full first catalog, and decoration/upgrade surface plan before multi-day playtest implementation.
 
 ## Purpose
 
@@ -27,10 +27,10 @@ Required evidence:
 
 Latest automated lock:
 
-- June 10, 2026 `scripts/validate_godot.sh` passed with 561 GUT tests and 8099 asserts at the time the opening-store quality-bar implementation was locked.
+- June 10, 2026 `scripts/validate_godot.sh` passed with 563 GUT tests and 9607 asserts after the full first-catalog and decoration/upgrade surface hook implementations were locked.
 - All 23 required screenshots were present under `artifacts/validation/latest/screenshots/`.
 - Contact sheet was generated at `artifacts/validation/latest/screenshot-contact-sheet.png`.
-- Owner screenshot review remains the approval gate before full catalog/decor/platform and multi-day playtest work.
+- Owner screenshot review remains the approval gate before multi-day playtest work.
 
 ## Review Method
 
@@ -211,7 +211,7 @@ Pass if:
 
 - Product and platform names are fictional and coherent.
 - Platform families, title rules, supplier lanes, and taxonomy values are documented and test-enforced.
-- Starter products support the store identity.
+- Full first-catalog data supports the store identity with 60 fictional products, 9 release-calendar entries, and 4 supplier lots.
 - Categories and condition/risk language fit receipts, tags, and panels.
 - No real IP leakage appears.
 
@@ -235,7 +235,7 @@ Pass if:
 - Current decor/upgrade UI is understandable as a management catalog.
 - Upgrade costs, lock states, and effects are visible.
 - Fixture unlock language is clear.
-- The next implementation phase can add visible decor/upgrades without revisiting the opening-store layout.
+- Decoration and upgrade catalog entries map to stable visible world surfaces without revisiting the opening-store layout.
 
 Fail if:
 
@@ -288,10 +288,9 @@ Use this if all required areas pass.
 
 Next work:
 
-1. Start full catalog/platform/decor implementation.
-2. Expand products and suppliers from `06-catalog-and-platform-identity-plan.md`.
-3. Add visible decor/upgrades from `07-decorations-and-upgrades-plan.md`.
-4. Begin multi-day playtesting from `09-testing-plan.md`.
+1. Begin multi-day playtesting from `09-testing-plan.md`.
+2. File any failed catalog, decor, economy, or readability surface as targeted rework.
+3. Tune only the failed day-loop surfaces before reopening external playtest.
 
 ### Targeted Rework
 

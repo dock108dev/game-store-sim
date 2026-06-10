@@ -27,12 +27,12 @@ The gate runs:
 
 Current validated baseline:
 
-- 561 GUT tests.
-- 8099 GUT asserts.
+- 563 GUT tests.
+- 9607 GUT asserts.
 - UI scenario automation coverage: 508/628, or 80.9%.
 - Production script mapping coverage: 52/52, or 100.0%.
 - 3 active standalone validation tools.
-- 33 catalog products.
+- 60 catalog products.
 - Desktop pack export smoke passed.
 - Alpha performance smoke passed.
 - Screenshot sanity passed.

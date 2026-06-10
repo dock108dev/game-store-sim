@@ -5,7 +5,7 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 561 GUT tests, 8099 asserts, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, and 33 catalog products.
+- Latest full gate passes with 563 GUT tests, 9607 asserts, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, and 60 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - All 23 required screenshot files are present, screenshot sanity passes, and `artifacts/validation/latest/screenshot-contact-sheet.png` is ready for owner review.
 - Manual controller/window/playtest validation still needs a human pass.
@@ -45,7 +45,7 @@ Current gate state:
 - Core retail loop tests pass, including pickup, pricing, stocking, checkout, trade-ins, preorders, services, ordering, fixture placement, save/load codec, settings, pause/menu, hidden-thread optionality, screenshots, and export pack smoke.
 - AH-001 through AH-008 completed automated routing through the alpha regression, scene-readability, content/copy, and readability recovery slices, but owner screenshot validation still needs to confirm the real-window result before external playtest.
 - AH-011 remains the known human-feel checkpoint: multi-day economy balance is mechanically covered but still needs external playtest notes before alpha approval.
-- Opening-store quality-bar slices 1 through 8 are mechanically complete and routed to owner screenshot review before full catalog/decor/platform and multi-day playtest work.
+- Opening-store quality-bar slices 1 through 8, including full first-catalog and decoration/upgrade surface hooks, are mechanically complete and routed to owner screenshot review before multi-day playtest work.
 - The stockroom production phase in `17-stockroom-production-plan.md` is mechanically complete through Slice 8, and the production-visual baseline in `18-production-visuals-plan.md` is mechanically complete through Slice 14; neither phase reopens external playtest by itself without owner screenshot review.
 
 ## Slice Routing
