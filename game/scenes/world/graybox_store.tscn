@@ -1094,6 +1094,21 @@ size = Vector3(1.35, 0.72, 0.04)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, 1.42, 5.88)
 material = SubResource("StandardMaterial3D_management_board")
 
+[node name="ManagementBoardLabelPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.64, 0.12, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.75, 1.86, 5.835)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ManagementBoardLabel" type="Label3D" parent="ManagementBoardLabelPanel"]
+pixel_size = 0.0025
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "PLAN"
+font_size = 16
+
 [node name="ManagementReportCardA" type="CSGBox3D" parent="."]
 size = Vector3(0.32, 0.26, 0.014)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.34, 1.48, 5.845)
@@ -1117,6 +1132,51 @@ material = SubResource("StandardMaterial3D_storage_metal")
 [node name="ManagementTaskCard" type="CSGBox3D" parent="."]
 size = Vector3(0.34, 0.22, 0.018)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.72, 0.79, 4.23)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ManagerOfficeRug" type="CSGBox3D" parent="."]
+size = Vector3(1.95, 0.012, 1.35)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.65, 0.055, 4.28)
+material = SubResource("StandardMaterial3D_backroom_management_zone")
+
+[node name="ManagerChairSeat" type="CSGBox3D" parent="."]
+size = Vector3(0.46, 0.1, 0.42)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.05, 0.46, 4.55)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="ManagerChairBack" type="CSGBox3D" parent="."]
+size = Vector3(0.5, 0.58, 0.08)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.22, 0.78, 4.84)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="ManagerChairLegA" type="CSGBox3D" parent="."]
+size = Vector3(0.055, 0.42, 0.055)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.86, 0.22, 4.42)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ManagerChairLegB" type="CSGBox3D" parent="."]
+size = Vector3(0.055, 0.42, 0.055)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.18, 0.22, 4.62)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="OfficeFileBoxA" type="CSGBox3D" parent="."]
+size = Vector3(0.38, 0.28, 0.32)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.55, 0.14, 4.02)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="OfficeFileBoxB" type="CSGBox3D" parent="."]
+size = Vector3(0.34, 0.22, 0.3)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.82, 0.39, 4.22)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="OfficeSupplierNote" type="CSGBox3D" parent="."]
+size = Vector3(0.3, 0.19, 0.014)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.86, 0.81, 3.92)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="OfficeBillStack" type="CSGBox3D" parent="."]
+size = Vector3(0.34, 0.05, 0.22)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.12, 0.8, 4.28)
 material = SubResource("StandardMaterial3D_paper")
 
 [node name="BackroomServiceBench" type="Node3D" parent="."]

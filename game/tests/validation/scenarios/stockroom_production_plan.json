@@ -90,6 +90,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_backstock_pull_stage_connects_storage_to_carry_route"
+    },
+    {
+      "id": "stockroom_manager_office_context",
+      "name": "Backroom computer is framed as a manager office workstation with planning, files, bills, and supplier paperwork",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_manager_office_frames_backroom_computer_without_register_actions"
     }
   ]
 }

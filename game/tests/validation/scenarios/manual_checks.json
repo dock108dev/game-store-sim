@@ -901,7 +901,7 @@
       "name": "Employees-only stockroom screenshots prove receiving, backstock, office computer, and service/security spaces read as physical operations",
       "status": "manual",
       "critical": false,
-      "reason": "Automated tests verify the stockroom plan, doc pointers, staff boundary, route cues, receiving-station open/invoice/sort props, and backstock shelf/pull-stage props; human review must confirm 43_stockroom_staff_threshold, 44_stockroom_route_to_sales_floor, 04_receiving_box_before_pickup, 32_open_box_invoice_sort, 45_receiving_intake_station, 46_backstock_shelving, 47_backstock_pull_stage, 48_manager_office_context, and 50_storage_tab_physical_flow read as organized stockroom work instead of floor clutter or instant inventory.",
+      "reason": "Automated tests verify the stockroom plan, doc pointers, staff boundary, route cues, receiving-station open/invoice/sort props, backstock shelf/pull-stage props, and manager-office computer context; human review must confirm 43_stockroom_staff_threshold, 44_stockroom_route_to_sales_floor, 04_receiving_box_before_pickup, 32_open_box_invoice_sort, 45_receiving_intake_station, 46_backstock_shelving, 47_backstock_pull_stage, 48_manager_office_context, and 50_storage_tab_physical_flow read as organized stockroom work instead of floor clutter or instant inventory.",
       "owner": "manual QA"
     },
     {

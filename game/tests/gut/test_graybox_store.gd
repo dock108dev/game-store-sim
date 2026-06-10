@@ -471,6 +471,7 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 		"BackroomStorageShelf/BackstockAccessoryLabelPanel/BackstockAccessoryLabel",
 		"BackroomStorageShelf/BackstockHardwareLabelPanel/BackstockHardwareLabel",
 		"BackstockPullStageLabelPanel/BackstockPullStageLabel",
+		"ManagementBoardLabelPanel/ManagementBoardLabel",
 		"BackroomServiceBench/ServiceTicketPanel/ServiceTicketLabel",
 		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel",
 		"SecurityMonitorPanel/SecurityMonitorLabel",
@@ -781,11 +782,21 @@ func test_receiving_intake_station_reads_as_workflow_surface() -> void:
 func test_backroom_management_and_service_props_exist() -> void:
 	var management_props := [
 		"BackroomManagementBoard",
+		"ManagementBoardLabelPanel",
 		"ManagementReportCardA",
 		"ManagementReportCardB",
 		"ManagementDeskPad",
 		"ManagementKeyboard",
 		"ManagementTaskCard",
+		"ManagerOfficeRug",
+		"ManagerChairSeat",
+		"ManagerChairBack",
+		"ManagerChairLegA",
+		"ManagerChairLegB",
+		"OfficeFileBoxA",
+		"OfficeFileBoxB",
+		"OfficeSupplierNote",
+		"OfficeBillStack",
 	]
 	for prop_path in management_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -804,6 +815,35 @@ func test_backroom_management_and_service_props_exist() -> void:
 	assert_eq((service_bench.get_node("ServiceTicketPanel/ServiceTicketLabel") as Label3D).text, "SERVICE")
 	assert_gt(service_bench.global_position.z, 5.0)
 	assert_gt(_flat_distance_xz(service_bench.global_position, _store.get_node("RegisterWorkstation").global_position), 7.0)
+
+
+func test_manager_office_frames_backroom_computer_without_register_actions() -> void:
+	var computer := _store.get_node("BackroomComputer") as Node3D
+	var office_rug := _store.get_node_or_null("ManagerOfficeRug") as CSGBox3D
+	var chair := _store.get_node_or_null("ManagerChairSeat") as CSGBox3D
+	var file_box := _store.get_node_or_null("OfficeFileBoxA") as CSGBox3D
+	var supplier_note := _store.get_node_or_null("OfficeSupplierNote") as CSGBox3D
+	var bill_stack := _store.get_node_or_null("OfficeBillStack") as CSGBox3D
+	var board_label := _store.get_node_or_null("ManagementBoardLabelPanel/ManagementBoardLabel") as Label3D
+
+	assert_not_null(office_rug)
+	assert_not_null(chair)
+	assert_not_null(file_box)
+	assert_not_null(supplier_note)
+	assert_not_null(bill_stack)
+	assert_not_null(board_label)
+	assert_eq(board_label.text, "PLAN")
+	assert_true(board_label.no_depth_test)
+	assert_eq(board_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
+
+	for cue in [office_rug, chair, file_box, supplier_note, bill_stack]:
+		assert_false(cue.use_collision)
+		assert_lt(_flat_distance_xz(cue.global_position, computer.global_position), 1.4)
+		assert_true(_is_inside_store_floorprint(cue.global_position))
+
+	assert_gt(_flat_distance_xz(computer.global_position, _store.get_node("RegisterWorkstation").global_position), 7.0)
+	assert_gt(computer.global_position.x, 4.0)
+	assert_gt(computer.global_position.z, 4.0)
 
 
 func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void:

@@ -166,6 +166,8 @@ Commit target:
 
 ## Slice 4: Manager Office And Computer World Context
 
+Status: implemented in `Build stockroom manager office`; pending owner screenshot validation.
+
 Goal: make the computer feel like the manager's office workstation.
 
 Work:
@@ -178,7 +180,7 @@ Work:
 Acceptance:
 
 - `24_backroom_dashboard.png`, `26_ordering_tab.png`, `27_releases_tab.png`, and `29_records_tab.png` read as screens opened from an office computer.
-- World background reinforces office context without fighting modal readability.
+- World background reinforces office context with chair, file boxes, paperwork, supplier notes, bills, and planning board cues without fighting modal readability.
 - Register work still stays out of the computer.
 
 Manual screenshots:
