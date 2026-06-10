@@ -22,6 +22,10 @@ SCREENSHOT_SCENARIOS=(
   release_allocation
   launch_day
   supplier_delivery
+  storefront_entry
+  stocked_aisle
+  catalog_design_cues
+  upgrade_preview
   fixture_ghost
   fixture_invalid_ghost
   fixture_rotated_ghost

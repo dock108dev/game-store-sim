@@ -120,6 +120,34 @@
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     },
     {
+      "id": "storefront_entry_screenshot",
+      "name": "Storefront-entry production visual screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "stocked_aisle_screenshot",
+      "name": "Stocked-aisle production visual screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "catalog_design_cues_screenshot",
+      "name": "Catalog and design-cue production visual screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "upgrade_preview_screenshot",
+      "name": "Upgrade-preview production visual screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
       "id": "fixture_ghost_screenshot",
       "name": "Fixture ghost validation screenshot is captured and checked",
       "status": "automated",

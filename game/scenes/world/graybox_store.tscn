@@ -1609,20 +1609,64 @@ size = Vector3(0.38, 0.46, 0.018)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.08, 1.12, 4.02)
 material = SubResource("StandardMaterial3D_paper")
 
+[node name="BackroomCatalogCardALabel" type="Label3D" parent="BackroomCatalogCardA"]
+pixel_size = 0.0024
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "CATALOG"
+font_size = 13
+
 [node name="BackroomCatalogCardB" type="CSGBox3D" parent="."]
 size = Vector3(0.38, 0.46, 0.018)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.44, 1.13, 3.88)
 material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="BackroomCatalogCardBLabel" type="Label3D" parent="BackroomCatalogCardB"]
+pixel_size = 0.0024
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.86, 0.95, 1, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "BUILD"
+font_size = 13
 
 [node name="BackroomCartSummaryPanel" type="CSGBox3D" parent="."]
 size = Vector3(0.52, 0.18, 0.018)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.82, 1.02, 3.77)
 material = SubResource("StandardMaterial3D_shipping_label")
 
+[node name="BackroomCartSummaryLabel" type="Label3D" parent="BackroomCartSummaryPanel"]
+pixel_size = 0.0022
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "CART"
+font_size = 12
+
 [node name="DesignSwatchStrip" type="CSGBox3D" parent="."]
 size = Vector3(0.82, 0.12, 0.018)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.05, 0.82, 4.02)
 material = SubResource("StandardMaterial3D_management_board")
+
+[node name="DesignSwatchStripLabel" type="Label3D" parent="DesignSwatchStrip"]
+pixel_size = 0.0019
+modulate = Color(0.98, 0.9, 0.66, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "PALETTE"
+font_size = 11
 
 [node name="DesignSwatchTeal" type="CSGBox3D" parent="."]
 size = Vector3(0.12, 0.12, 0.024)

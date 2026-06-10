@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening/stockroom/returns/production-visuals pass: `scripts/validate_godot.sh` passes with 552 GUT tests, UI scenario automation coverage at 504/624, production script mapping coverage at 52/52, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening/stockroom/returns/production-visuals pass: `scripts/validate_godot.sh` passes with 553 GUT tests, UI scenario automation coverage at 508/628, production script mapping coverage at 52/52, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -645,7 +645,7 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 552 GUT tests, 504/624 UI scenario automation coverage, 52/52 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 553 GUT tests, 508/628 UI scenario automation coverage, 52/52 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
 - Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and keeps AH-006/AH-012/AH-013/AH-014/AH-015 routed to owner recovery screenshot validation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
@@ -693,9 +693,9 @@ Run these first when manually checking the completed production visual overhaul 
 
 - Review `docs/production/18-production-visuals-plan.md` and confirm the implementation status, inspiration groups, required screenshots, acceptance criteria, and validation command match the current build.
 - Confirm the slice ignores stream overlays, facecams, creator branding, video controls, and exact third-party names/logos from `inspiration/`.
-- For storefront work, compare `main_scene.png` against `inspiration/IMG_1033.PNG`, `IMG_1035.PNG`, `IMG_1038.PNG`, `IMG_1054.PNG`, and `IMG_1055.PNG`; pass only if the first view reads as a real small game shop with a bounded readable `SAVE POINT GAMES` sign.
+- For storefront work, compare `main_scene.png` and `storefront_entry.png` against `inspiration/IMG_1033.PNG`, `IMG_1035.PNG`, `IMG_1038.PNG`, `IMG_1054.PNG`, and `IMG_1055.PNG`; pass only if the first view reads as a real small game shop with a bounded readable `SAVE POINT GAMES` sign.
 - For interior architecture/material work, confirm walls, floor, counter, trim, glass, cardboard, metal shelving, and paper signs read as different materials without turning the whole screen into one color family.
-- For sales-floor fixture work, confirm `main_scene.png` and `customer_queue.png` show used games, new releases/preorders, accessories, services/trade-ins, and a readable queue/path without crowding interaction targets.
+- For sales-floor fixture work, confirm `main_scene.png`, `stocked_aisle.png`, and `customer_queue.png` show used games, new releases/preorders, accessories, services/trade-ins, and a readable queue/path without crowding interaction targets.
 - For register work, confirm `register_counter.png` reads as a command center with scanner/payment/receipt/cash/return/trade-in/preorder/service cues while preserving the single register interaction target.
 - For product visual work, confirm `carry_stack.png`, `receiving_area.png`, and shelf views make cases/cards/accessories look like inventory rather than blocks, with price/condition/risk tags readable only at appropriate distance.
 - For signage work, confirm category signs, policy cards, decals, and shelf talkers are short, fictional, physically attached, depth-safe, and not replacing prompts.
@@ -713,6 +713,8 @@ Run these first when manually checking the completed production visual overhaul 
 The local gate writes these images under `artifacts/validation/latest/screenshots/`:
 
 - `main_scene.png`
+- `storefront_entry.png`
+- `stocked_aisle.png`
 - `carry_stack.png`
 - `receiving_area.png`
 - `supplier_message.png`
@@ -723,6 +725,8 @@ The local gate writes these images under `artifacts/validation/latest/screenshot
 - `preorder_deposit.png`
 - `service_request.png`
 - `backroom_summary.png`
+- `catalog_design_cues.png`
+- `upgrade_preview.png`
 - `release_calendar.png`
 - `release_allocation.png`
 - `launch_day.png`

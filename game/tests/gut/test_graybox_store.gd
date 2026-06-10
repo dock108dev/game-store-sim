@@ -1205,6 +1205,10 @@ func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> v
 		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
 
 	assert_eq((_store.get_node("FixturePlacementInstructionPanel/FixturePlacementInstructionLabel") as Label3D).text, "VALID FOOTPRINT")
+	assert_eq((_store.get_node("BackroomCatalogCardA/BackroomCatalogCardALabel") as Label3D).text, "CATALOG")
+	assert_eq((_store.get_node("BackroomCatalogCardB/BackroomCatalogCardBLabel") as Label3D).text, "BUILD")
+	assert_eq((_store.get_node("BackroomCartSummaryPanel/BackroomCartSummaryLabel") as Label3D).text, "CART")
+	assert_eq((_store.get_node("DesignSwatchStrip/DesignSwatchStripLabel") as Label3D).text, "PALETTE")
 	assert_eq((_store.get_node("UpgradePreviewRackCard/UpgradePreviewRackLabel") as Label3D).text, "UPGRADE")
 	assert_lte((_store.get_node("ExpansionFootprintTapeA") as CSGBox3D).size.y, 0.0061)
 	assert_lte((_store.get_node("ExpansionFootprintTapeB") as CSGBox3D).size.y, 0.0061)

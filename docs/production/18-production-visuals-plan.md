@@ -20,8 +20,8 @@ Completed baseline: Slice 0 through Slice 14 are mechanically implemented and va
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 552 GUT tests.
-- UI scenario automation coverage is 504/624.
+- `scripts/validate_godot.sh` passes with 553 GUT tests.
+- UI scenario automation coverage is 508/628.
 - Production script mapping coverage is 52/52.
 - Product catalog validation passes with 33 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot sanity, and old-name scan pass.
@@ -46,7 +46,7 @@ Automated coverage added in this pass:
 Human review still required:
 
 - Inspect the generated screenshot set under `artifacts/validation/latest/screenshots/`.
-- Approve `main_scene.png`, `customer_queue.png`, `register_counter.png`, `receiving_area.png`, `backroom_summary.png`, `fixture_ghost.png`, `fixture_invalid_ghost.png`, `fixture_rotated_ghost.png`, and `fixture_placed.png` against this plan.
+- Approve `main_scene.png`, `storefront_entry.png`, `stocked_aisle.png`, `customer_queue.png`, `register_counter.png`, `catalog_design_cues.png`, `upgrade_preview.png`, `receiving_area.png`, `backroom_summary.png`, `fixture_ghost.png`, `fixture_invalid_ghost.png`, `fixture_rotated_ghost.png`, and `fixture_placed.png` against this plan.
 - Keep `15-alpha-playtest-package.md` paused if any screenshot still reads as graybox, label clutter, blocked product path, unreadable signage, or UI squeeze.
 
 ## Inspiration Audit
@@ -524,8 +524,12 @@ scripts/validate_godot.sh
 For visual-heavy slices, also inspect:
 
 - `artifacts/validation/latest/screenshots/main_scene.png`
+- `artifacts/validation/latest/screenshots/storefront_entry.png`
+- `artifacts/validation/latest/screenshots/stocked_aisle.png`
 - `artifacts/validation/latest/screenshots/register_counter.png`
 - `artifacts/validation/latest/screenshots/customer_queue.png`
+- `artifacts/validation/latest/screenshots/catalog_design_cues.png`
+- `artifacts/validation/latest/screenshots/upgrade_preview.png`
 - `artifacts/validation/latest/screenshots/receiving_area.png`
 - `artifacts/validation/latest/screenshots/backroom_summary.png`
 - `artifacts/validation/latest/screenshots/fixture_placed.png`

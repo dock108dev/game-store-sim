@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 552 GUT tests, UI scenario automation coverage 504/624, production script mapping coverage 52/52, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 553 GUT tests, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
 
 ## Milestone 13: Alpha Hardening
 

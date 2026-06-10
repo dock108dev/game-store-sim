@@ -43,3 +43,20 @@ func test_alpha_backroom_screenshot_scenarios_select_named_tabs() -> void:
 	assert_string_contains(capture_tool, "func _open_day_summary_tab")
 	assert_string_contains(capture_tool, "func _prepare_backroom_summary")
 	assert_string_contains(capture_tool, "player.open_day_summary(session)")
+
+
+func test_production_visual_screenshot_scenarios_have_named_compositions() -> void:
+	var capture_tool := FileAccess.get_file_as_string(CAPTURE_TOOL_PATH)
+	var validation_gate := FileAccess.get_file_as_string(VALIDATION_GATE_PATH)
+	var required_scenarios := [
+		"storefront_entry",
+		"stocked_aisle",
+		"catalog_design_cues",
+		"upgrade_preview",
+	]
+
+	for scenario in required_scenarios:
+		assert_string_contains(capture_tool, '"%s"' % scenario)
+		assert_string_contains(validation_gate, scenario)
+
+	assert_string_contains(capture_tool, "_prepare_fixture_ghost(scene)")
