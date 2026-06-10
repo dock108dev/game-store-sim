@@ -335,6 +335,35 @@ func _apply_price_tag_label() -> void:
 	label.modulate = Color(1.0, 0.92, 0.58, 1.0)
 	label.outline_size = 2
 	label.outline_modulate = Color(0.02, 0.025, 0.03, 1.0)
+	_apply_price_tag_card(lines)
+
+
+func _apply_price_tag_card(lines: Array[String]) -> void:
+	var is_visible := not lines.is_empty()
+	var extra_lines: int = maxi(0, lines.size() - 2)
+	var card_height := 0.104 + float(extra_lines) * 0.032
+
+	_set_variant_box(
+		"ProductTagBackerMesh",
+		is_visible,
+		Vector3(0.31, card_height, 0.012),
+		Vector3(0.0, 0.364, -0.078),
+		Color(0.055, 0.07, 0.078, 1.0)
+	)
+	_set_variant_box(
+		"ProductTagCategoryStripeMesh",
+		is_visible,
+		Vector3(0.27, 0.024, 0.014),
+		Vector3(0.0, 0.41, -0.087),
+		_get_price_tag_stripe_color()
+	)
+	_set_variant_box(
+		"ProductTagPinMesh",
+		is_visible,
+		Vector3(0.035, 0.035, 0.015),
+		Vector3(-0.13, 0.416, -0.089),
+		Color(0.98, 0.9, 0.62, 1.0)
+	)
 
 
 func _get_or_create_price_tag_label() -> Label3D:
@@ -367,6 +396,23 @@ func _get_price_tag_badges() -> Array[String]:
 		badges.append("BARGAIN")
 
 	return badges
+
+
+func _get_price_tag_stripe_color() -> Color:
+	if product == null:
+		return Color(0.98, 0.9, 0.62, 1.0)
+
+	match product.category:
+		"new_game":
+			return Color(0.62, 0.74, 0.92, 1.0)
+		"hardware":
+			return Color(0.7, 0.72, 0.74, 1.0)
+		"accessory":
+			return Color(0.58, 0.82, 0.68, 1.0)
+		"service":
+			return Color(0.88, 0.7, 0.36, 1.0)
+		_:
+			return Color(0.98, 0.9, 0.62, 1.0)
 
 
 func _get_category_label(category: String) -> String:

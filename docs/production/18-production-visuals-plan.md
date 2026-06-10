@@ -11,7 +11,7 @@ The game is mechanically broad but still visually underdeveloped:
 - The first-person loop works: receiving, pricing, stocking, checkout, trade-ins, preorders, services, supplier ordering, storage, fixture placement, release planning, save/load, and reports.
 - The readability recovery and stockroom phases improved composition, UI legibility, backroom zoning, and physical stock handling.
 - The store now has a mechanically complete production-blockout visual baseline for storefront identity, finished-room cues, product density, register transaction surfaces, backroom/catalog context, build-mode language, lighting/signage, and upgrade/decor visibility.
-- The visual language is still primitive-prop based rather than final bespoke art, but replacement has started on high-impact clusters: storefront/window display, register counter command-center details, and reusable shelf-density props.
+- The visual language is still primitive-prop based rather than final bespoke art, but the first real-art replacement pass now covers the high-impact storefront/window display, register counter, reusable shelf-density, and product-facing tag clusters.
 - External alpha playtest remains paused until the owner confirms the recovery, stockroom, and production-visual screenshot sets in a real 1280x720 window.
 
 ## Implementation Status
@@ -23,6 +23,7 @@ Real-art replacement progress:
 - Storefront/window display cluster is implemented as the first replacement pass: shelf deck, spotlight bar, controller details, and labeled used/sealed display cases now replace the loose block-only window read.
 - Register counter cluster is implemented as the second replacement pass: payment, receipt, returns, trade-in, preorder, service, and cash drawer props now carry readable counter-top labels and a work rail while preserving the single register interaction target.
 - Shelf-density cluster is implemented as the third replacement pass: the reusable display rack now includes nonblocking game spines plus `USED` and `STAFF` shelf talkers so fixture density travels with placed racks instead of relying only on one-off main-scene props.
+- Product-facing tag cluster is implemented as the fourth replacement pass: product items now generate a backed price-tag card with category stripe and pin behind the existing data-driven product/price text.
 
 Validation snapshot:
 
@@ -551,6 +552,5 @@ For visual-heavy slices, also inspect:
 ## Next Goals
 
 1. Owner screenshot review gate: inspect the recovery, stockroom, and production-visual screenshot sets in a real 1280x720 window and update `13-alpha-bug-list.md` with any remaining P0/P1 readability issues.
-2. Continue real art replacement on the remaining highest-impact primitive-prop cluster: product-facing tags.
-3. Screenshot composition pass: retune screenshot camera positions only where human review shows the named artifact does not frame its subject clearly enough.
-4. External alpha reopen decision: reopen `15-alpha-playtest-package.md` only after the owner screenshot review passes and the full validation gate remains green.
+2. Screenshot composition pass: retune screenshot camera positions only where human review shows the named artifact does not frame its subject clearly enough.
+3. External alpha reopen decision: reopen `15-alpha-playtest-package.md` only after the owner screenshot review passes and the full validation gate remains green.

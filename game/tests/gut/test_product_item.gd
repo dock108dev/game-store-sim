@@ -187,10 +187,19 @@ func test_product_item_serial_mismatch_shows_suspicious_marker() -> void:
 
 func test_product_item_price_tag_label_shows_category_platform_and_price() -> void:
 	var label := _item.get_node_or_null("ProductTagLabel") as Label3D
+	var backer := _item.get_node_or_null("ProductTagBackerMesh") as MeshInstance3D
+	var stripe := _item.get_node_or_null("ProductTagCategoryStripeMesh") as MeshInstance3D
+	var pin := _item.get_node_or_null("ProductTagPinMesh") as MeshInstance3D
 	var lines: Array[String] = _item.get_price_tag_lines()
 
 	assert_not_null(label)
+	assert_not_null(backer)
+	assert_not_null(stripe)
+	assert_not_null(pin)
 	assert_true(label.visible)
+	assert_true(backer.visible)
+	assert_true(stripe.visible)
+	assert_true(pin.visible)
 	assert_eq(lines.size(), 2)
 	assert_eq(lines[0], "Used Game")
 	assert_string_contains(lines[1], "Orbit 64")
@@ -199,6 +208,9 @@ func test_product_item_price_tag_label_shows_category_platform_and_price() -> vo
 	assert_lte(label.pixel_size, 0.0025)
 	assert_gte(label.font_size, 18)
 	assert_true(label.no_depth_test)
+	assert_gt((backer.mesh as BoxMesh).size.x, (stripe.mesh as BoxMesh).size.x)
+	assert_gt((backer.mesh as BoxMesh).size.y, (stripe.mesh as BoxMesh).size.y)
+	assert_lt(backer.position.z, label.position.z)
 
 
 func test_product_item_price_tag_badges_cover_sale_preorder_staff_and_bargain() -> void:
