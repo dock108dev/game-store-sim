@@ -18,6 +18,16 @@ Optional contact sheet:
 magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 -label '%t' -background '#1f2328' -fill white -pointsize 18 -geometry 320x220+8+8 artifacts/validation/latest/screenshot-contact-sheet.png
 ```
 
+## Latest Automated Lock
+
+Generated on June 10, 2026 from `scripts/validate_godot.sh`.
+
+- Full validation passed with 561 GUT tests and 8099 asserts.
+- All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
+- Screenshot sanity and old-name scan passed.
+- Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
+- Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
+
 ## Required Screenshots
 
 - `main_scene.png`

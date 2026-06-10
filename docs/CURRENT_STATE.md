@@ -19,18 +19,19 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 553 GUT tests and 7064 asserts pass.
+- 561 GUT tests and 8099 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 52/52, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
 - Product catalog validation passes with 33 products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, and old-name scan pass.
+- All 23 required screenshots are present, and the latest contact sheet is `artifacts/validation/latest/screenshot-contact-sheet.png`.
 
 Validation artifacts are written to `artifacts/validation/latest/`. The important screenshots are listed in [Screenshot Review](qa/screenshot-review.md) (`docs/qa/screenshot-review.md`).
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but human review still has to approve the current 1280x720 screenshot set in a real game window.
+External alpha playtest remains paused. The repo is mechanically green and the opening-store quality-bar slices are ready for owner review, but human review still has to approve the current 1280x720 screenshot set in a real game window.
 
 Required reviews:
 
@@ -52,7 +53,7 @@ Current visual risk areas:
 
 ## Current Design Planning
 
-The active planning program is [Design Planning](design-planning/README.md). The first milestone is [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md): make the opening store, sales floor, receiving/stockroom, and backroom office good enough to become the quality bar for catalog, decoration, platform, and multi-day playtest work.
+The active planning program is [Design Planning](design-planning/README.md). The first milestone is [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md): make the opening store, sales floor, receiving/stockroom, and backroom office good enough to become the quality bar for catalog, decoration, platform, and multi-day playtest work. Its eight implementation slices are complete and routed to owner screenshot review.
 
 ## Next Decision
 

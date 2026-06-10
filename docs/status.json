@@ -2,7 +2,7 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-10",
-  "current_phase": "opening_store_quality_bar_design_planning",
+  "current_phase": "opening_store_quality_bar_ready_for_owner_review",
   "playtest_state": "paused_pending_owner_review",
   "playable_state": {
     "summary": "Broad validated first-person retail loop with production-blockout visuals.",
@@ -33,8 +33,8 @@
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 553,
-    "gut_asserts": 7064,
+    "gut_tests": 561,
+    "gut_asserts": 8099,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -52,6 +52,8 @@
     "desktop_pack_smoke": "passed",
     "alpha_performance_smoke": "passed",
     "screenshot_sanity": "passed",
+    "screenshot_count": 23,
+    "screenshot_contact_sheet": "artifacts/validation/latest/screenshot-contact-sheet.png",
     "old_name_scan": "passed"
   },
   "blocking_reviews": [

@@ -537,6 +537,13 @@ Acceptance:
 - P0/P1 quality-bar issues are closed.
 - A clear next-phase decision exists: full catalog/platform/decor implementation or targeted rework.
 
+Implemented evidence:
+
+- Ran `scripts/validate_godot.sh` after all eight slices; the gate passed with 561 GUT tests, 8099 asserts, coverage policy, catalog check, desktop pack smoke, performance smoke, screenshot capture/sanity, and old-name scan.
+- Generated `artifacts/validation/latest/screenshot-contact-sheet.png` from the 23 required screenshots.
+- Updated `docs/status.json`, `docs/CURRENT_STATE.md`, `README.md`, `docs/qa/screenshot-review.md`, and `docs/production/13-alpha-bug-list.md` for the ready-for-owner-review lock.
+- Kept external playtest paused until owner screenshot review approves the real-window read.
+
 Stop condition:
 
 - Stop if any owner screenshot review rejects the opening store/backroom read.

@@ -27,8 +27,8 @@ The gate runs:
 
 Current validated baseline:
 
-- 553 GUT tests.
-- 7064 GUT asserts.
+- 561 GUT tests.
+- 8099 GUT asserts.
 - UI scenario automation coverage: 508/628, or 80.9%.
 - Production script mapping coverage: 52/52, or 100.0%.
 - 3 active standalone validation tools.
@@ -36,6 +36,8 @@ Current validated baseline:
 - Desktop pack export smoke passed.
 - Alpha performance smoke passed.
 - Screenshot sanity passed.
+- 23 required screenshots captured.
+- Screenshot contact sheet generated at `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Old-name scan passed.
 
 ## Validation Data Shape

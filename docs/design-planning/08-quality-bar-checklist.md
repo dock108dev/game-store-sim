@@ -56,3 +56,10 @@ Use this checklist to approve the opening store and backroom before full catalog
 - `docs/qa/screenshot-review.md` passes.
 - No open P0/P1 issue remains in `docs/production/13-alpha-bug-list.md`.
 - Human review confirms the first five minutes feel like a deliberate game store.
+
+## Latest Automated Lock
+
+- June 10, 2026 `scripts/validate_godot.sh` passed with 561 GUT tests and 8099 asserts.
+- All 23 required screenshots are present under `artifacts/validation/latest/screenshots/`.
+- Contact sheet generated at `artifacts/validation/latest/screenshot-contact-sheet.png`.
+- Owner screenshot review remains the approval gate before full catalog/decor/platform and multi-day playtest work.

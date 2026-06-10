@@ -12,11 +12,12 @@ Use this order:
 
 Current automated baseline:
 
-- 553 GUT tests.
+- 561 GUT tests.
 - UI scenario automation coverage: 508/628.
 - Production script mapping coverage: 52/52.
 - 3 active standalone validation tools.
 - 33 catalog products.
+- 23 required screenshots and contact sheet generated.
 
 External alpha playtest remains paused until owner recovery, stockroom, and production-visual screenshot review pass in a real 1280x720 window.
 
