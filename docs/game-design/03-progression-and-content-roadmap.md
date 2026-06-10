@@ -40,6 +40,8 @@ Exit criteria:
 
 Goal: one working day in a tiny store.
 
+Status: complete as the validated first-playable counter loop. Historical production details live in `docs/production/01-vertical-slice-plan.md`.
+
 Features:
 
 - First-person controller.
@@ -56,6 +58,48 @@ Exit criteria:
 - A player can stock and sell items without debug shortcuts.
 - Product price and quantity persist for the session.
 - The loop has understandable feedback: cash, stock, customer satisfaction.
+
+## Phase 1.5: Production Polish And Readability
+
+Goal: make the validated loop look and read like an intentional game before adding major mechanics.
+
+Status: complete as a first readability pass. Detailed production history lives in `docs/production/08-polish-roadmap.md` and `docs/production/10-polish-execution-plan.md`.
+
+Features:
+
+- Backroom spatial and visual identity.
+- Backroom computer/menu information architecture.
+- Customer role silhouettes and placement readability.
+- Store lighting, materials, signage, and controlled retail clutter.
+- Product and fixture presentation.
+- Manual validation and screenshot usefulness cleanup.
+
+Exit criteria:
+
+- The sales floor and backroom are visually distinct.
+- The backroom computer can be used repeatedly without scanning one long debug-like panel.
+- Customer roles are recognizable before interaction.
+- Core products and fixtures look intentional without hiding gameplay state.
+- Manual validation reflects the actual current UI and scene.
+
+## Phase 1.75: Game Completion Planning And Production Direction
+
+Goal: move from validated prototype to a production-directed game plan before replacing large scene, UI, customer, and content surfaces.
+
+Status: active. Detailed completion plan lives in `docs/production/11-game-completion-plan.md`.
+
+Features:
+
+- Screenshot-driven diagnosis of the current graybox gap.
+- Production milestones from direction lock through alpha hardening.
+- Explicit slice stops with acceptance checks, validation, manual checklist sync, commit, and push requirements.
+- Production target contracts for visuals, UI, store layout, customer presentation, product content, economy, backroom operations, hidden thread, audio, save/load, and release wrapper.
+
+Exit criteria:
+
+- The repo has one current plan for turning the prototype into an alpha-quality local desktop build.
+- The backlog, manual validation docs, and document map point at the same active phase.
+- The next implementation sequence begins with production target contracts rather than random visual edits.
 
 ## Phase 2: Trade-Ins And Used Economy
 
@@ -99,12 +143,12 @@ Goal: add planning pressure.
 
 Features:
 
-- Supplier ordering.
-- Delivery delays.
-- New release calendar.
-- Preorder deposits.
-- Allocation limits.
-- Launch-day queue and reputation stakes.
+- Supplier ordering. First pass done as a backroom `Used Game Starter Lot` order.
+- Delivery delays. First pass done as next-day receiving-box delivery.
+- New release calendar. First pass done as a read-only backroom calendar for fictional launches with countdown, wholesale cost, suggested price, allocation note, and demand tier.
+- Preorder deposits. First pass done as a fixed register deposit for one fictional upcoming release customer, tracked separately from sale revenue and profit.
+- Allocation limits. First pass done as a backroom allocation commitment for one upcoming release, with cash reservation and per-release limit enforcement.
+- Launch-day queue and reputation stakes. First pass done as day-start preorder-first fulfillment, surplus launch-queue sales, launch cash/profit accounting, and reputation penalties for missed demand.
 
 Exit criteria:
 

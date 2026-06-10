@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxowl2h2n2bti"]
+[gd_scene load_steps=10 format=3 uid="uid://dxowl2h2n2bti"]
 
 [ext_resource type="Script" path="res://scripts/store_layout/shelf_slot.gd" id="1_shelf_slot"]
 
@@ -11,6 +11,19 @@ albedo_color = Color(0.08, 0.08, 0.09, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot"]
 albedo_color = Color(0.1, 0.28, 0.24, 0.2)
 transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_rail"]
+albedo_color = Color(0.95, 0.78, 0.36, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_hover"]
+albedo_color = Color(1, 0.86, 0.24, 0.58)
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_header"]
+albedo_color = Color(0.07, 0.18, 0.26, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_paper"]
+albedo_color = Color(0.9, 0.86, 0.72, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_slot"]
 size = Vector3(0.58, 0.72, 0.12)
@@ -35,6 +48,94 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0.24)
 size = Vector3(1.9, 1.25, 0.08)
 material = SubResource("StandardMaterial3D_shelf")
 
+[node name="FrontFaceCue" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, -0.155)
+size = Vector3(1.52, 0.68, 0.025)
+material = SubResource("StandardMaterial3D_header")
+
+[node name="LeftProfileStripe" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.92, -0.02)
+size = Vector3(0.035, 0.96, 0.16)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="RightProfileStripe" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.92, -0.02)
+size = Vector3(0.035, 0.96, 0.16)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="ShelfFacingSpineA" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74, 0.58, -0.17)
+size = Vector3(0.07, 0.36, 0.032)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ShelfFacingSpineB" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.64, 0.6, -0.17)
+size = Vector3(0.07, 0.4, 0.032)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="ShelfFacingSpineC" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.57, -0.17)
+size = Vector3(0.07, 0.34, 0.032)
+material = SubResource("StandardMaterial3D_header")
+
+[node name="ShelfFacingSpineD" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1.04, -0.17)
+size = Vector3(0.075, 0.34, 0.032)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ShelfFacingSpineE" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51, 1.06, -0.17)
+size = Vector3(0.075, 0.39, 0.032)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="ShelfFacingSpineF" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 1.03, -0.17)
+size = Vector3(0.075, 0.33, 0.032)
+material = SubResource("StandardMaterial3D_header")
+
+[node name="ShelfUsedTalkerPanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, 0.18, -0.18)
+size = Vector3(0.36, 0.1, 0.035)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="ShelfUsedTalkerLabel" type="Label3D" parent="ShelfUsedTalkerPanel"]
+pixel_size = 0.002
+modulate = Color(0.08, 0.08, 0.09, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "USED"
+font_size = 11
+
+[node name="ShelfStaffTalkerPanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.68, -0.18)
+size = Vector3(0.38, 0.1, 0.035)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ShelfStaffTalkerLabel" type="Label3D" parent="ShelfStaffTalkerPanel"]
+pixel_size = 0.0019
+modulate = Color(0.08, 0.08, 0.09, 1)
+outline_modulate = Color(0.9, 0.98, 0.9, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "STAFF"
+font_size = 10
+
 [node name="BottomLedge" type="CSGBox3D" parent="."]
 use_collision = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, -0.08)
@@ -47,9 +148,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, -0.08)
 size = Vector3(1.75, 0.08, 0.1)
 material = SubResource("StandardMaterial3D_shelf")
 
+[node name="CategoryHeaderPanel" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.09)
+size = Vector3(1.64, 0.24, 0.045)
+material = SubResource("StandardMaterial3D_header")
+
+[node name="CategoryHeaderLabel" type="Label3D" parent="CategoryHeaderPanel"]
+pixel_size = 0.0048
+modulate = Color(0.9, 0.98, 0.9, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 4
+no_depth_test = true
+billboard = 1
+text = "USED GAMES"
+font_size = 30
+
 [node name="ShelfSlot001" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.38, -0.13)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.38, -0.13)
 script = ExtResource("1_shelf_slot")
+accepted_category = "used_game"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot001"]
 shape = SubResource("BoxShape3D_slot")
@@ -58,3 +175,67 @@ shape = SubResource("BoxShape3D_slot")
 position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")
+
+[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot001"]
+position = Vector3(0, 0.065, 0.01)
+size = Vector3(0.5, 0.04, 0.035)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot001"]
+visible = false
+use_collision = false
+position = Vector3(0, 0.36, 0.055)
+size = Vector3(0.66, 0.8, 0.028)
+material = SubResource("StandardMaterial3D_slot_hover")
+
+[node name="ShelfSlot002" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -0.13)
+script = ExtResource("1_shelf_slot")
+slot_id = "shelf_slot_002"
+accepted_category = "used_game"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot002"]
+shape = SubResource("BoxShape3D_slot")
+
+[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot002"]
+position = Vector3(0, 0.36, 0.035)
+size = Vector3(0.58, 0.72, 0.03)
+material = SubResource("StandardMaterial3D_slot")
+
+[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot002"]
+position = Vector3(0, 0.065, 0.01)
+size = Vector3(0.5, 0.04, 0.035)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot002"]
+visible = false
+use_collision = false
+position = Vector3(0, 0.36, 0.055)
+size = Vector3(0.66, 0.8, 0.028)
+material = SubResource("StandardMaterial3D_slot_hover")
+
+[node name="ShelfSlot003" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.38, -0.13)
+script = ExtResource("1_shelf_slot")
+slot_id = "shelf_slot_003"
+accepted_category = "used_game"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot003"]
+shape = SubResource("BoxShape3D_slot")
+
+[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot003"]
+position = Vector3(0, 0.36, 0.035)
+size = Vector3(0.58, 0.72, 0.03)
+material = SubResource("StandardMaterial3D_slot")
+
+[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot003"]
+position = Vector3(0, 0.065, 0.01)
+size = Vector3(0.5, 0.04, 0.035)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot003"]
+visible = false
+use_collision = false
+position = Vector3(0, 0.36, 0.055)
+size = Vector3(0.66, 0.8, 0.028)
+material = SubResource("StandardMaterial3D_slot_hover")

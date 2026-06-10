@@ -1,0 +1,109 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "settings_panel_exists",
+      "name": "Player has a hidden settings panel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_settings_panel_exists"
+    },
+    {
+      "id": "settings_panel_starts_hidden",
+      "name": "Settings panel starts hidden and closed",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_starts_hidden"
+    },
+    {
+      "id": "settings_panel_modal_transition",
+      "name": "Settings panel opens with visible mouse and focus, then closes back to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_opens_with_mouse_focus_and_player_values"
+    },
+    {
+      "id": "settings_panel_adjusts_preferences",
+      "name": "Settings panel updates sensitivity, invert look, and window mode request",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_updates_sensitivity_invert_and_window_mode"
+    },
+    {
+      "id": "settings_panel_close_transition",
+      "name": "Settings panel closes by releasing focus and requesting captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_closes_to_captured_mouse_and_releases_focus"
+    },
+    {
+      "id": "input_binding_catalog",
+      "name": "Default input binding catalog lists remappable core actions",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_input_binding_catalog_has_remappable_core_actions"
+    },
+    {
+      "id": "player_pause_settings_access",
+      "name": "Player opens and closes the pause menu from the cancel action",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_and_closes_pause_menu_from_cancel_action"
+    },
+    {
+      "id": "player_look_preferences",
+      "name": "Player exposes sensitivity and invert-look preferences",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_look_settings_update_sensitivity_and_invert"
+    },
+    {
+      "id": "settings_panel_production_sections",
+      "name": "Settings panel exposes audio, display, controls, mouse, accessibility, and reset sections",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_exposes_production_settings_sections"
+    },
+    {
+      "id": "settings_panel_audio_display_accessibility_reset",
+      "name": "Settings panel updates audio, display, accessibility values and resets defaults",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_updates_audio_display_accessibility_and_reset_defaults"
+    },
+    {
+      "id": "settings_panel_profile_persistence",
+      "name": "Settings panel persists the player settings profile between instances",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_settings_panel.gd::test_settings_panel_persists_profile_between_instances"
+    },
+    {
+      "id": "pause_menu_panel_accessibility",
+      "name": "Pause menu panel starts hidden with UI language and accessibility floor",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pause_menu_panel.gd::test_pause_menu_panel_starts_hidden_with_ui_language"
+    },
+    {
+      "id": "pause_menu_resume_transition",
+      "name": "Pause menu opens with visible mouse and resumes to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pause_menu_panel.gd::test_pause_menu_opens_pause_and_resumes_with_mouse_capture"
+    },
+    {
+      "id": "pause_menu_main_menu_mode",
+      "name": "Pause menu supports main-menu mode and start-game transition",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pause_menu_panel.gd::test_pause_menu_opens_main_menu_and_start_returns_to_game"
+    },
+    {
+      "id": "pause_menu_player_actions",
+      "name": "Player pause menu requests settings, save/load, main menu, and quit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_pause_menu_opens_settings_save_slots_main_menu_and_quit"
+    }
+  ]
+}

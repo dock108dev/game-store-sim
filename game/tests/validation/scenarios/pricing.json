@@ -37,10 +37,24 @@
     },
     {
       "id": "pricing_panel_product_fields",
-      "name": "Pricing panel opens with product-backed fields",
+      "name": "Pricing panel opens with product-backed cost, market, current price, suggested range, margin, and demand fields",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_opens_with_product_fields"
+    },
+    {
+      "id": "pricing_panel_outcome_warnings",
+      "name": "Pricing panel warns for above-range, below-cost, below-range, and batch-pricing outcomes",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_warns_for_high_and_below_cost_prices; res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_matching_updates_active_matching_items"
+    },
+    {
+      "id": "pricing_panel_modal_transition",
+      "name": "Pricing panel opens with visible mouse and focus, then closes back to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_transition_controls_mouse_and_focus"
     },
     {
       "id": "pricing_panel_fixed_price_reject",
@@ -69,6 +83,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_updates_item_price"
+    },
+    {
+      "id": "pricing_panel_apply_single_by_default",
+      "name": "Pricing panel applies to only the active item by default",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_defaults_to_single_item"
+    },
+    {
+      "id": "pricing_panel_apply_matching",
+      "name": "Pricing panel can apply a used-item price to active matching copies",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_pricing_panel.gd::test_pricing_panel_apply_matching_updates_active_matching_items"
     },
     {
       "id": "pricing_panel_cancel",

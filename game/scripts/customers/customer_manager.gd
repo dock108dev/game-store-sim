@@ -1,0 +1,251 @@
+extends Node3D
+class_name CustomerManager
+
+@export var target_product_id: String = "used_star_trader"
+@export var register_queue_start: Vector3 = Vector3(1.65, 0.0, -3.55)
+@export var register_queue_spacing: Vector3 = Vector3(-0.7, 0.0, -0.2)
+@export var browse_start: Vector3 = Vector3(-2.15, 0.0, 4.25)
+@export var browse_spacing: Vector3 = Vector3(-0.5, 0.0, -0.7)
+@export var register_approach_offset: Vector3 = Vector3(-0.35, 0.0, 0.45)
+@export var customer_exit_position: Vector3 = Vector3(-5.6, 0.0, 4.8)
+@export var playable_min: Vector3 = Vector3(-6.6, 0.0, -5.6)
+@export var playable_max: Vector3 = Vector3(6.6, 0.0, 5.7)
+@export var minimum_queue_spacing_distance: float = 0.62
+@export var minimum_browse_spacing_distance: float = 0.48
+@export var display_slot_paths: Array[NodePath] = []
+
+
+func _ready() -> void:
+	assign_customer_path_points()
+
+
+func _process(_delta: float) -> void:
+	process_customer_claims()
+
+
+func process_customer_claims() -> void:
+	assign_customer_path_points()
+	_compact_register_queue()
+
+	for customer in get_customers():
+		if not _customer_can_claim(customer):
+			continue
+
+		var slot := _find_available_target_slot(customer)
+		if slot == null:
+			continue
+
+		var queue_position := _queue_position_for_index(get_register_bound_customers().size())
+		if is_position_inside_store(queue_position) and customer.begin_claim_from_slot(slot, queue_position):
+			_compact_register_queue()
+
+
+func get_customers() -> Array[SimpleBuyerCustomer]:
+	var customers: Array[SimpleBuyerCustomer] = []
+	for child in get_children():
+		var customer := child as SimpleBuyerCustomer
+		if customer != null:
+			customers.append(customer)
+	return customers
+
+
+func get_waiting_customers() -> Array[SimpleBuyerCustomer]:
+	var waiting: Array[SimpleBuyerCustomer] = []
+	for customer in get_customers():
+		if customer.is_waiting_for_register():
+			waiting.append(customer)
+	return waiting
+
+
+func get_register_bound_customers() -> Array[SimpleBuyerCustomer]:
+	var customers: Array[SimpleBuyerCustomer] = []
+	for customer in get_customers():
+		if (
+			customer.state == SimpleBuyerCustomer.STATE_MOVING_TO_ITEM
+			or customer.is_moving_to_register()
+			or customer.is_waiting_for_register()
+		):
+			customers.append(customer)
+	return customers
+
+
+func get_next_waiting_customer() -> SimpleBuyerCustomer:
+	var waiting := get_waiting_customers()
+	if waiting.is_empty():
+		return null
+
+	return waiting[0]
+
+
+func compact_after_sale() -> void:
+	_compact_register_queue()
+
+
+func assign_customer_path_points() -> void:
+	var customers := get_customers()
+	for index in range(customers.size()):
+		var customer := customers[index]
+		var queue_position := _queue_position_for_index(index)
+		customer.set_path_points(
+			_browse_position_for_index(index),
+			queue_position + register_approach_offset,
+			customer_exit_position
+		)
+		if customer.state == SimpleBuyerCustomer.STATE_BROWSING:
+			customer.set_queue_position(queue_position)
+
+
+func get_queue_lane_positions(count: int) -> Array[Vector3]:
+	var positions: Array[Vector3] = []
+	for index in range(count):
+		positions.append(_queue_position_for_index(index))
+	return positions
+
+
+func get_browse_positions(count: int) -> Array[Vector3]:
+	var positions: Array[Vector3] = []
+	for index in range(count):
+		positions.append(_browse_position_for_index(index))
+	return positions
+
+
+func is_position_inside_store(position: Vector3) -> bool:
+	return (
+		position.x >= playable_min.x
+		and position.x <= playable_max.x
+		and position.z >= playable_min.z
+		and position.z <= playable_max.z
+	)
+
+
+func validate_customer_paths() -> Array[String]:
+	var issues: Array[String] = []
+	var customers := get_customers()
+	for index in range(customers.size()):
+		var customer := customers[index]
+		if not is_position_inside_store(customer.global_position):
+			issues.append("customer_%d_position_outside_store" % index)
+
+		var queue_position := _queue_position_for_index(index)
+		if not is_position_inside_store(queue_position):
+			issues.append("queue_position_%d_outside_store" % index)
+
+		var browse_position := _browse_position_for_index(index)
+		if not is_position_inside_store(browse_position):
+			issues.append("browse_position_%d_outside_store" % index)
+
+		if index > 0:
+			var previous_queue_position := _queue_position_for_index(index - 1)
+			if previous_queue_position.distance_to(queue_position) < minimum_queue_spacing_distance:
+				issues.append("queue_spacing_%d_too_tight" % index)
+
+			var previous_browse_position := _browse_position_for_index(index - 1)
+			if previous_browse_position.distance_to(browse_position) < minimum_browse_spacing_distance:
+				issues.append("browse_spacing_%d_too_tight" % index)
+
+	if not is_position_inside_store(customer_exit_position):
+		issues.append("customer_exit_position_outside_store")
+
+	for slot_path in display_slot_paths:
+		var slot := get_node_or_null(slot_path) as Node3D
+		if slot == null:
+			issues.append("missing_display_slot:%s" % str(slot_path))
+			continue
+
+		if not is_position_inside_store(slot.global_position):
+			issues.append("display_slot_outside_store:%s" % str(slot_path))
+
+		for index in range(customers.size()):
+			var approach_position := _approach_position_for_customer(customers[index], slot)
+			if not is_position_inside_store(approach_position):
+				issues.append("customer_%d_approach_outside_store:%s" % [
+					index,
+					str(slot_path),
+				])
+
+	return issues
+
+
+func _customer_can_claim(customer: SimpleBuyerCustomer) -> bool:
+	return customer != null and customer.state == SimpleBuyerCustomer.STATE_BROWSING
+
+
+func _find_available_target_slot(customer: SimpleBuyerCustomer) -> Node:
+	var best_slot: Node = null
+	var best_price := 0
+	var cheapest_rejected_item: Node = null
+	var cheapest_rejected_price := 0
+
+	for slot_path in display_slot_paths:
+		var slot := get_node_or_null(slot_path)
+		if slot == null or not slot.has_method("get_occupied_item"):
+			continue
+		if _is_slot_claimed(slot):
+			continue
+
+		var item: Node = slot.get_occupied_item()
+		if not _customer_targets_item(customer, item):
+			continue
+
+		var item_price := customer.get_effective_price_cents_for_item(item)
+		if customer.is_item_affordable(item, false):
+			if best_slot == null or item_price < best_price:
+				best_slot = slot
+				best_price = item_price
+		elif cheapest_rejected_item == null or item_price < cheapest_rejected_price:
+			cheapest_rejected_item = item
+			cheapest_rejected_price = item_price
+
+	if best_slot != null:
+		customer.is_item_affordable(best_slot.get_occupied_item(), true)
+		return best_slot
+
+	if cheapest_rejected_item != null:
+		customer.report_item_too_expensive(cheapest_rejected_item)
+
+	return null
+
+
+func _customer_targets_item(customer: SimpleBuyerCustomer, item: Node) -> bool:
+	if item == null:
+		return false
+
+	if customer != null and customer.has_method("matches_target_product"):
+		return customer.matches_target_product(item)
+
+	var product := item.get("product") as ProductDefinition
+	return product != null and customer != null and product.product_id == customer.target_product_id
+
+
+func _compact_register_queue() -> void:
+	var index := 0
+	for customer in get_register_bound_customers():
+		customer.set_queue_position(_queue_position_for_index(index))
+		customer.register_approach_position = _queue_position_for_index(index) + register_approach_offset
+		index += 1
+
+
+func _queue_position_for_index(index: int) -> Vector3:
+	return register_queue_start + (register_queue_spacing * index)
+
+
+func _browse_position_for_index(index: int) -> Vector3:
+	return browse_start + (browse_spacing * index)
+
+
+func _approach_position_for_customer(customer: SimpleBuyerCustomer, slot: Node3D) -> Vector3:
+	var approach_offset := Vector3(0.0, 0.0, -0.85)
+	if customer != null:
+		approach_offset = customer.item_approach_offset
+
+	var position := slot.global_position + approach_offset
+	if customer != null:
+		position.y = customer.global_position.y
+	return position
+
+
+func _is_slot_claimed(slot: Node) -> bool:
+	for customer in get_customers():
+		if customer.is_claiming_slot(slot):
+			return true
+	return false

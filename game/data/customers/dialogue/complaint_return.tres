@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CustomerDialogueFlow" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_dialogue_flow.gd" id="1_dialogue_flow"]
+
+[resource]
+script = ExtResource("1_dialogue_flow")
+flow_id = "complaint_return"
+archetype_id = "return_customer"
+trigger = "complaint"
+opening_line = "This copy froze after ten minutes. I kept the receipt."
+player_options = Array[String](["Offer exchange", "Offer service check", "Refuse return"])
+response_lines = Array[String](["An exchange is fair.", "If you can test it, I will wait.", "That is disappointing."])
+consequence_key = "return_handled"
+tone_tag = "tense"
+staff_note = "Keep the customer at the register surface; do not route returns through the backroom computer."

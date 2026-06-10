@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SupplierLot" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/suppliers/supplier_lot.gd" id="1_supplier_lot"]
+
+[resource]
+script = ExtResource("1_supplier_lot")
+lot_id = "supplier_lot_used_games_001"
+supplier_id = "North Dock Wholesale"
+display_name = "Used Game Starter Lot"
+category_label = "Used games"
+cost_cents = 3000
+delivery_days = 1
+item_scene_path = "res://scenes/props/placeholder_used_game.tscn"
+product_paths = Array[String](["res://data/products/used_star_trader.tres", "res://data/products/used_moon_escape.tres", "res://data/products/used_neon_harbor.tres"])
+storage_requirement = "Receiving station intake, then display rack or backstock shelf"
+receiving_expectation = "Delivered as physical cases in the backroom receiving station for pickup, pricing, and stocking"
+order_note = "North Dock sends a mixed crate of recognizable used games for the first display rack."
+invoice_note = "Count three cases before pricing; variance should be caught while the box is still in receiving."
+shelf_plan = "Price the strongest title for the eye-level used wall and hold one backup case in backstock."

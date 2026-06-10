@@ -92,3 +92,18 @@ Start with stylized realism rather than hyperrealism:
 - Warm fluorescent retail lighting with neon accents.
 - Period retail clutter, but not so much that shelf state becomes unreadable.
 - Fictional brand names that evoke the era without legal dependency.
+
+## Production Polish Principles
+
+The next polish phase should translate the references into these concrete rules:
+
+- First viewport rule: the player should immediately understand sales floor, register, receiving/backroom, and display rack zones from normal standing height.
+- Backroom rule: the backroom must look operational. Use boxes, storage shelves, paperwork, service/repair surface, computer, and subtle suspicious artifacts as spatial cues.
+- Menu rule: supplier/order/report screens should be grouped by player task. Avoid long mixed lists when tabs, sections, or grouped panels would make repeated use faster.
+- Customer rule: every customer role needs a readable silhouette or prop cue before interaction. Buyer, trade-in seller, preorder customer, service customer, and suspicious customer should not rely only on prompt text.
+- Fixture rule: placement ghosts must remain visually different from real fixtures, and valid/invalid placement colors must be readable under the actual store lighting.
+- Product rule: used-game cases need readable cover/label cues at rack, hand, receiving, and customer-carry scale.
+- Clutter rule: retail clutter is allowed only when it improves store identity without hiding prompts, shelf slots, item cases, or customer paths.
+- Color rule: use warmth and accent lighting to make the store inviting, but keep UI panels, prompts, and product labels high contrast.
+- Brand rule: signage should feel like a fictional late-90s/2000s specialty game shop without using real game, console, retailer, or publisher names.
+- Hidden-thread rule: suspicious visuals should read as optional anomalies inside normal retail surfaces, not as quest markers.

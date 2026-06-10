@@ -1,5 +1,7 @@
 extends GutTest
 
+const UIComponents := preload("res://scripts/ui/ui_component_library.gd")
+
 var _panel: PricingPanel
 var _item: Node
 
@@ -14,6 +16,25 @@ func before_each() -> void:
 func test_pricing_panel_starts_hidden() -> void:
 	assert_false(_panel.visible)
 	assert_false(_panel.is_open())
+	assert_true(_panel.has_ui_component_language())
+	assert_true(UIComponents.audit_modal_accessibility(_panel.modal_root).get("passes"))
+
+
+func test_pricing_panel_alpha_layout_is_readable() -> void:
+	var panel_container := _panel.get_node("CenterContainer/PanelContainer") as Control
+	assert_gte(panel_container.custom_minimum_size.x, 620.0)
+	assert_gte(panel_container.custom_minimum_size.y, 440.0)
+	assert_gte(_font_size(_panel.title_label), 24)
+	assert_gte(_font_size(_panel.details_label), 18)
+	assert_gte(_font_size(_panel.guidance_label), 18)
+	assert_gte(_font_size(_panel.warning_label), 18)
+	assert_gte(_font_size(_panel.price_label), 24)
+	assert_gte(_panel.price_label.custom_minimum_size.x, 220.0)
+	assert_gte(_panel.price_label.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.apply_button.custom_minimum_size.x, 140.0)
+	assert_gte(_panel.apply_button.custom_minimum_size.y, 48.0)
+	assert_gte(_panel.cancel_button.custom_minimum_size.x, 140.0)
+	assert_gte(_panel.cancel_button.custom_minimum_size.y, 48.0)
 
 
 func test_pricing_panel_opens_with_product_fields() -> void:
@@ -27,7 +48,32 @@ func test_pricing_panel_opens_with_product_fields() -> void:
 	assert_string_contains(_panel.details_label.text, "Good")
 	assert_string_contains(_panel.details_label.text, "Cost: $9.00")
 	assert_string_contains(_panel.details_label.text, "Market: $24.99")
+	assert_string_contains(_panel.guidance_label.text, "Current: $21.99")
+	assert_string_contains(_panel.guidance_label.text, "Suggested range: $21.24-$26.24")
+	assert_string_contains(_panel.guidance_label.text, "Demand: Medium")
+	assert_string_contains(_panel.guidance_label.text, "Margin: $12.99")
+	assert_eq(_panel.warning_label.text, "Price is inside the suggested range.")
 	assert_eq(_panel.price_label.text, "$21.99")
+	assert_false(_panel.apply_matching_check_box.button_pressed)
+	assert_string_contains(_panel.apply_matching_check_box.text, "Star Trader")
+
+
+func test_pricing_panel_transition_controls_mouse_and_focus() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_true(_panel.open_for_item(_item))
+
+	assert_eq(_panel.get_transition_state(), "open")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_VISIBLE)
+	assert_true(_panel.has_modal_focus())
+	assert_eq(get_viewport().gui_get_focus_owner(), _panel.apply_button)
+
+	assert_true(_panel.cancel_price())
+
+	assert_eq(_panel.get_transition_state(), "closed")
+	assert_eq(_panel.get_requested_mouse_mode(), Input.MOUSE_MODE_CAPTURED)
+	assert_false(_panel.has_modal_focus())
 
 
 func test_pricing_panel_rejects_non_product_item() -> void:
@@ -84,6 +130,41 @@ func test_pricing_panel_apply_updates_item_price() -> void:
 	assert_false(_panel.is_open())
 
 
+func test_pricing_panel_apply_defaults_to_single_item() -> void:
+	var matching_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(matching_item)
+
+	_panel.open_for_item(_item)
+	_panel.increase_price()
+
+	assert_true(_panel.apply_price())
+	assert_eq(_item.get("current_price_cents"), 2299)
+	assert_eq(matching_item.get("current_price_cents"), 2199)
+
+
+func test_pricing_panel_apply_matching_updates_active_matching_items() -> void:
+	var matching_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var sold_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	var customer_item: Node = load("res://scenes/props/placeholder_used_game.tscn").instantiate()
+	add_child_autofree(matching_item)
+	add_child_autofree(sold_item)
+	add_child_autofree(customer_item)
+	sold_item.set("location_id", "sold")
+	customer_item.set("location_id", "customer:customer_001")
+
+	_panel.open_for_item(_item)
+	_panel.apply_matching_check_box.button_pressed = true
+	_panel.increase_price()
+
+	assert_eq(_panel.get_matching_priceable_items().size(), 2)
+	assert_string_contains(_panel.warning_label.text, "Batch price will apply to 2 active copies.")
+	assert_true(_panel.apply_price())
+	assert_eq(_item.get("current_price_cents"), 2299)
+	assert_eq(matching_item.get("current_price_cents"), 2299)
+	assert_eq(sold_item.get("current_price_cents"), 2199)
+	assert_eq(customer_item.get("current_price_cents"), 2199)
+
+
 func test_pricing_panel_cancel_keeps_original_item_price() -> void:
 	_panel.open_for_item(_item)
 	_panel.increase_price()
@@ -92,6 +173,21 @@ func test_pricing_panel_cancel_keeps_original_item_price() -> void:
 	assert_true(_panel.cancel_price())
 	assert_eq(_item.get("current_price_cents"), 2199)
 	assert_false(_panel.is_open())
+
+
+func test_pricing_panel_warns_for_high_and_below_cost_prices() -> void:
+	_item.set("current_price_cents", 4000)
+	assert_true(_panel.open_for_item(_item))
+
+	assert_string_contains(_panel.warning_label.text, "Above suggested range")
+	assert_string_contains(_panel.warning_label.text, "customers may reject")
+	assert_true(_panel.cancel_price())
+
+	_item.set("current_price_cents", 500)
+	assert_true(_panel.open_for_item(_item))
+
+	assert_string_contains(_panel.warning_label.text, "Below cost")
+	assert_string_contains(_panel.warning_label.text, "Below suggested range")
 
 
 func _make_fixed_price_item() -> Node:
@@ -110,3 +206,7 @@ func _make_fixed_price_item() -> Node:
 	item.set("product", product)
 	item.set("current_price_cents", 5999)
 	return item
+
+
+func _font_size(control: Control) -> int:
+	return int(control.get("theme_override_font_sizes/font_size"))

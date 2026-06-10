@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CustomerDialogueFlow" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_dialogue_flow.gd" id="1_dialogue_flow"]
+
+[resource]
+script = ExtResource("1_dialogue_flow")
+flow_id = "recommendation_request"
+archetype_id = "target_buyer"
+trigger = "recommendation"
+opening_line = "I want something like Star Trader, but I do not want to overpay."
+player_options = Array[String](["Recommend Star Trader", "Suggest waiting for a sale", "Show the new-release shelf"])
+response_lines = Array[String](["That is the one I came in for.", "I can wait if the price is too high.", "Maybe next week."])
+consequence_key = "recommendation_given"
+tone_tag = "price-aware"
+staff_note = "Use this customer to prove duplicate-copy pricing can still find the fair shelf item."

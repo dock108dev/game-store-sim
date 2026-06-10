@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="FixtureDefinition" format=3 uid="uid://db4f6fdmmg5v8"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
+
+[resource]
+script = ExtResource("1_fixture_definition")
+fixture_id = "fixture_backroom_rack"
+display_name = "Backroom Rack"
+category = "storage"
+cost_cents = 10000
+footprint_size = Vector2(2.0, 0.8)
+default_slot_category = "backstock"
+slot_count = 10
+accepted_product_categories = PackedStringArray("used_game", "hardware", "service_item", "backstock")
+placement_zone = "backroom_storage"
+gameplay_tags = PackedStringArray("storage_capacity", "receiving_support", "backroom_only")
+requires_upgrade_id = "upgrade_backroom_storage"
+scene_path = "res://scenes/props/placeholder_shelf.tscn"
+placeable = true
+description = "Backroom storage rack for expanded backstock and receiving flow once the storage upgrade is purchased."

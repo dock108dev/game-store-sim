@@ -1,40 +1,18 @@
 # Tech Stack And Architecture
 
-## Recommended Stack
+## Current Stack
 
-Engine: Godot 4.6.3 stable.
+Engine: Godot 4.6.3 stable target.
 
-Why:
+Validation currently runs successfully with `/Applications/Godot.app` at `4.6.2.stable.official.71f334935`. Keep the target on 4.6.3, but do not churn project metadata solely to chase the target version.
 
-- Strong fit for an indie first-person 3D sim.
-- Fast iteration without licensing friction.
-- GDScript is productive for data-heavy simulation.
-- Scenes/resources map well to fixtures, products, customers, and interactions.
-- Built-in UI is good enough for supplier ordering, register, pricing, trade-in, and management screens.
-- Export path is straightforward for desktop-first development.
+Primary language: GDScript.
 
-Input target: keyboard/mouse only for the first playable and early production slices. Controller support is intentionally out of scope until the core retail loop is proven.
+Primary platform: desktop keyboard/mouse.
 
-Supporting tools:
+Current input model: center-reticle targeting with left click as the primary interaction. The `interact` input action remains as a compatibility path, but prompts and manual validation should describe click-first play.
 
-- Blender for simple props, fixtures, boxes, shelves, signage, and store shells.
-- Krita, Affinity, or Aseprite for fictional box art, labels, posters, icons, and UI textures.
-- Git once the project is initialized.
-- Plain text data files or Godot resources for early content.
-- GUT or equivalent Godot test framework once systems stabilize.
-
-Avoid initially:
-
-- Networked multiplayer.
-- Controller-specific UI or input design.
-- Real-time backend services.
-- Procedural 3D asset generation.
-- Complex ECS frameworks.
-- Heavy plugin dependency before core interactions are proven.
-
-## Project Shape
-
-Target structure once implementation begins:
+## Current Project Shape
 
 ```text
 game/
@@ -42,7 +20,6 @@ game/
   scenes/
     world/
     player/
-    store/
     ui/
     customers/
     props/
@@ -53,113 +30,90 @@ game/
     customers/
     store_layout/
     save/
+    systems/
+    suppliers/
+    releases/
+    ui/
     narrative/
   data/
     products/
     fixtures/
-    customers/
-    dialogue/
     suppliers/
-    progression/
-  assets/
-    models/
-    materials/
-    textures/
-    audio/
+    releases/
   tests/
+    gut/
+    tools/
+    validation/
 ```
 
-The current repository is pre-code and only contains planning docs plus references. The `game/` folder should be created when we are ready to initialize the engine project.
+## Current Runtime Surface
+
+Implemented and validated:
+
+- First-person player controller.
+- Click-first interaction raycast, prompt, and reticle.
+- Product-backed item instances.
+- Receiving-box pickup, bounded carry stack, held-item pricing, and shelf stocking.
+- Used-game pricing with apply-to-matching.
+- Buyer customer manager, product selection, price tolerance, movement, and register queue.
+- Register sale, trade-in, preorder deposit, and service flows.
+- Transaction ledger and store-session accounting.
+- Backroom computer summary, daily report, recent activity, inventory, reorder suggestions, demand, market drift, supplier ordering, release calendar, allocation commitments, launch outcomes, and fixture controls.
+- Fixture order, ghost preview, valid/invalid material state, movement, rotation, snap, and placement confirmation.
+- Supplier order delivery into receiving.
+- New-release calendar, preorder deposit, allocation, launch fulfillment, and reputation consequence.
+- Hidden-thread infrastructure: event log, suspicious supplier note, mismatched serial item, optional suspicious customer, and evidence storage.
+- Codec-level save/load smoke tests.
+- Named screenshot validation and scenario coverage gates.
 
 ## Architecture Principles
 
 Data first:
 
-- Products, fixtures, customers, supplier offers, and events should be authored as data.
-- Code should interpret systems, not hard-code every content case.
+- Products, fixtures, supplier lots, releases, and future customer archetypes should be authored as data.
+- Code should interpret reusable systems, not hard-code each content case.
 
 Interaction first:
 
-- Build a small reusable interaction contract before making many objects.
-- Every object should expose what the player can do: inspect, pick up, place, scan, price, stock, buy, sell, repair, unlock, or read.
+- World objects expose prompts and action methods through the interaction contract.
+- Prompt text should describe the current click-first action.
+- Workstation panels should be opened from world objects and close cleanly back into first-person mouse capture.
 
 Simulation in layers:
 
-- Inventory layer tracks items and locations.
-- Economy layer calculates value, demand, margin, and price effects.
-- Customer layer decides goals and actions.
-- Store layout layer handles placement, visibility, pathing, and fixture slots.
-- Narrative layer observes events and sets flags without owning normal retail logic.
+- Inventory state lives on item instances and is summarized through store session queries.
+- Economy policy calculates demand, price tolerance, market drift, revenue, cost, and profit.
+- Customer systems decide goals and movement, then hand transactions to register/session systems.
+- Store layout owns fixture placement, shelf slots, ghost previews, and path/spacing validation.
+- Narrative systems observe suspicious triggers without owning the normal retail loop.
 
-Save early:
+Backroom owns management:
 
-- Even prototypes should have a minimal save model once inventory and layout exist.
-- Save format should preserve item identity, condition, price, location, store state, cash, day, and narrative flags.
+- Ordering, inventory summaries, reports, fixture placement, release planning, and future management tools belong on the backroom computer.
+- The register stays focused on sales, returns, trade-ins, preorders, and services.
+- Pricing belongs to held-item/item inspection workflows, not a standalone pricing terminal.
 
-## Core Runtime Systems
+## Validation Architecture
 
-Interaction controller:
+The mandatory local gate is:
 
-- Raycast from player camera.
-- Highlight target.
-- Show action prompt.
-- Route input to target action.
-- Support held objects and workstation transitions.
+```text
+scripts/validate_godot.sh
+```
 
-Inventory service:
+The gate runs whitespace checks, Godot load/smoke checks, GUT, validation coverage policy, product catalog checks, persistence smoke tests, named screenshot capture, screenshot sanity checks, and old-name scans.
 
-- Owns item instances.
-- Moves items between locations.
-- Creates items from suppliers or customer trades.
-- Retires items on sale, loss, disposal, or evidence handling.
+Scenario manifests live under `game/tests/validation/scenarios/`.
 
-Economy service:
+Script mapping lives at `game/tests/validation/script_coverage/production_scripts.json`.
 
-- Calculates market value.
-- Updates demand over time.
-- Suggests prices.
-- Applies event modifiers.
-- Records sales history.
+Manual-only checks are tracked in `game/tests/validation/scenarios/manual_checks.json` and mirrored in `docs/production/07-current-manual-playtest.md`.
 
-Customer director:
+## Current Technical Risks
 
-- Spawns customers based on time, reputation, events, and store appeal.
-- Assigns goals.
-- Tracks queue, patience, and satisfaction.
-- Emits transaction opportunities.
-
-Store layout service:
-
-- Places fixtures.
-- Validates collisions and paths.
-- Owns shelf slots.
-- Computes visibility and risk modifiers.
-
-Narrative flag service:
-
-- Watches for suspicious triggers.
-- Tracks evidence and involvement.
-- Unlocks hidden dialogue or documents.
-- Never blocks the normal retail loop unless the player chooses to engage or consequences escalate.
-
-## First Technical Risk List
-
-- First-person item handling can feel clumsy if object snapping and prompts are unclear.
-- Customer AI can become overbuilt before the retail loop is fun.
-- Inventory identity can get messy if item stacks and unique used items are not separated early.
-- Store layout can become expensive if pathing updates happen too often.
-- UI can sprawl unless workstation screens share components.
-- Hidden narrative can become brittle if it is written as one scripted path instead of flag-driven systemic events.
-
-## Recommended Implementation Order
-
-1. Minimal Godot project and first-person controller.
-2. Interaction raycast, prompts, inspectable objects.
-3. Item instance model and inventory locations.
-4. Shelf slot and manual stocking.
-5. Register scan and sale.
-6. One customer goal: buy a category from a shelf.
-7. End-of-day summary.
-8. Trade-in appraisal.
-9. Fixture placement.
-10. Save/load.
+- UI density: the backroom computer is now useful but crowded. The next phase must improve information architecture, grouping, and visual hierarchy.
+- Visual identity: graybox props prove the loop but do not yet communicate a compelling game store, backroom, or customer cast.
+- Customer readability: customer roles are mechanically distinct but need stronger silhouettes, placement, and interaction presentation.
+- Backroom identity: receiving, storage, management, repairs, paperwork, and hidden-thread cues need a coherent spatial pass.
+- Fixture placement UX: panel controls work, but the final presentation needs clearer placement language, stronger affordances, and better visual composition.
+- Manual validation load: the checklist is intentionally broad; future slices should keep it current while using automated screenshot coverage to catch regressions.

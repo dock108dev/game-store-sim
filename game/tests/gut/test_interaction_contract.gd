@@ -17,7 +17,7 @@ func test_backroom_computer_is_interactable() -> void:
 
 	assert_true(computer.has_method("get_interaction_prompt"))
 	assert_true(computer.has_method("interact"))
-	assert_eq(computer.get_interaction_prompt(), "E View Backroom Computer")
+	assert_eq(computer.get_interaction_prompt(), "Click View Backroom Computer")
 	assert_string_contains(computer.interact(), "unavailable")
 
 
@@ -60,7 +60,7 @@ func test_register_completes_waiting_customer_sale() -> void:
 	register.ledger_path = register.get_path_to(ledger)
 	register.store_session_path = register.get_path_to(session)
 
-	assert_eq(register.get_interaction_prompt(), "E Ring Up Star Trader")
+	assert_eq(register.get_interaction_prompt(), "Click Ring Up Star Trader")
 
 	var message := register.interact()
 	assert_string_contains(message, "Sold Star Trader")
@@ -72,6 +72,68 @@ func test_register_completes_waiting_customer_sale() -> void:
 	assert_eq(item.get("location_id"), "sold")
 	assert_false(item.visible)
 	assert_false(customer.is_waiting_for_register())
+
+
+func test_register_completes_waiting_service_customer() -> void:
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var customer: Node = load("res://scenes/customers/simple_service_customer.tscn").instantiate()
+	add_child_autofree(register)
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	register.service_customer_path = register.get_path_to(customer)
+	register.ledger_path = register.get_path_to(ledger)
+	register.store_session_path = register.get_path_to(session)
+
+	assert_eq(register.get_interaction_prompt(), "Click Complete Disc Resurfacing")
+
+	var message := register.interact()
+	assert_string_contains(message, "Completed Disc Resurfacing")
+	assert_string_contains(message, "Scratched Orbit Disc")
+	assert_eq(ledger.get_service_count(), 1)
+	assert_eq(session.get_service_count(), 1)
+	assert_eq(session.get_total_service_revenue_cents(), 599)
+	assert_eq(session.get_total_service_cost_cents(), 125)
+	assert_eq(session.get_total_service_profit_cents(), 474)
+	assert_eq(session.get_cash_cents(), 50599)
+	assert_false(customer.call("is_waiting_for_service"))
+
+
+func test_register_completes_waiting_return_customer() -> void:
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var receiving_box := Node3D.new()
+	var customer: SimpleReturnCustomer = load("res://scenes/customers/simple_return_customer.tscn").instantiate()
+	add_child_autofree(register)
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(receiving_box)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	register.return_customer_path = register.get_path_to(customer)
+	register.receiving_box_path = register.get_path_to(receiving_box)
+	register.ledger_path = register.get_path_to(ledger)
+	register.store_session_path = register.get_path_to(session)
+
+	assert_eq(register.get_interaction_prompt(), "Click Review Return Solar Ferry")
+
+	var message := register.interact()
+
+	assert_string_contains(message, "Returned Solar Ferry")
+	assert_string_contains(message, "$21.99 refund")
+	assert_eq(ledger.get_return_count(), 1)
+	assert_eq(ledger.get_total_return_refund_cents(), 2199)
+	assert_eq(session.get_return_count(), 1)
+	assert_eq(session.get_total_return_refund_cents(), 2199)
+	assert_eq(session.get_cash_cents(), 47801)
+	assert_eq(receiving_box.get_child_count(), 1)
+	assert_false(customer.is_waiting_for_return())
 
 
 func test_backroom_computer_opens_actor_summary_panel() -> void:
@@ -94,7 +156,7 @@ func test_interactable_base_returns_prompt_and_inspect_text() -> void:
 	interactable.inspect_text = "Inspection result"
 	add_child_autofree(interactable)
 
-	assert_eq(interactable.get_interaction_prompt(), "E Inspect Test Object")
+	assert_eq(interactable.get_interaction_prompt(), "Click Inspect Test Object")
 	assert_eq(interactable.interact(), "Inspection result")
 
 
@@ -102,12 +164,59 @@ func test_interaction_prompt_show_and_hide() -> void:
 	var prompt: Node = load("res://scenes/ui/interaction_prompt.tscn").instantiate()
 	add_child_autofree(prompt)
 
-	prompt.show_prompt("E Inspect Test")
+	var prompt_margin := prompt.get_node("MarginContainer") as MarginContainer
+	var prompt_panel := prompt.get_node("MarginContainer/PanelContainer") as PanelContainer
+	var panel_style := prompt_panel.get_theme_stylebox("panel") as StyleBoxFlat
+	assert_lte(prompt_margin.offset_left, -330.0)
+	assert_gte(prompt_margin.offset_right, 330.0)
+	assert_lte(prompt_margin.offset_top, -120.0)
+	assert_gte(prompt.label.custom_minimum_size.y, 48.0)
+	assert_gte(int(prompt.label.get("theme_override_font_sizes/font_size")), 22)
+	assert_gte(int(prompt.reticle.get("theme_override_font_sizes/font_size")), 36)
+	assert_gte(int(prompt.reticle.get("theme_override_constants/outline_size")), 5)
+	assert_eq(int(prompt.label.autowrap_mode), 3)
+	assert_not_null(panel_style)
+	assert_gte(panel_style.bg_color.a, 0.85)
+	assert_gte(panel_style.border_color.a, 0.7)
+
+	prompt.show_prompt("Click Inspect Test")
 	assert_true(prompt.visible)
-	assert_eq(prompt.label.text, "E Inspect Test")
+	assert_true(prompt.reticle.visible)
+	assert_eq(prompt.label.text, "Click Inspect Test")
+	assert_eq(prompt.get_prompt_action(), "Inspect")
+	assert_eq(prompt.get_prompt_subject(), "Test")
+	assert_eq(prompt.get_prompt_tone(), "action")
+	assert_eq(prompt.reticle.text, "+")
 
 	prompt.hide_prompt()
 	assert_false(prompt.visible)
+	assert_eq(prompt.get_prompt_action(), "")
+
+
+func test_interaction_prompt_parses_prompt_hierarchy_and_feedback_tones() -> void:
+	var prompt: Node = load("res://scenes/ui/interaction_prompt.tscn").instantiate()
+	add_child_autofree(prompt)
+
+	prompt.show_prompt("Click Stock Star Trader")
+	assert_eq(prompt.label.text, "Click Stock Star Trader")
+	assert_eq(prompt.get_prompt_action(), "Stock")
+	assert_eq(prompt.get_prompt_subject(), "Star Trader")
+	assert_eq(prompt.get_prompt_tone(), "action")
+	assert_eq(prompt.reticle.text, "+")
+
+	prompt.hide_prompt()
+	prompt.show_prompt("Fixed Price Item")
+	assert_eq(prompt.get_prompt_action(), "Blocked")
+	assert_eq(prompt.get_prompt_subject(), "Fixed Price Item")
+	assert_eq(prompt.get_prompt_tone(), "blocked")
+	assert_eq(prompt.reticle.text, "!")
+
+	prompt.hide_prompt()
+	prompt.show_message("Picked up Star Trader.")
+	assert_eq(prompt.get_prompt_action(), "Status")
+	assert_eq(prompt.get_prompt_subject(), "Picked up Star Trader.")
+	assert_eq(prompt.get_prompt_tone(), "message")
+	assert_eq(prompt.reticle.text, "!")
 
 
 func test_interaction_raycast_ignores_empty_interaction_messages() -> void:
@@ -130,6 +239,28 @@ func test_interaction_raycast_ignores_empty_interaction_messages() -> void:
 	assert_false(prompt.visible)
 
 
+func test_interaction_raycast_transfers_hover_feedback_between_targets() -> void:
+	var script: Script = load("res://scripts/interaction/interaction_raycast.gd")
+	var raycast: RayCast3D = script.new()
+	var first := _HoverInteractable.new()
+	var second := _HoverInteractable.new()
+	add_child_autofree(raycast)
+	add_child_autofree(first)
+	add_child_autofree(second)
+
+	raycast.call("_set_current_interactable", first)
+	assert_true(first.is_hovered)
+	assert_false(second.is_hovered)
+
+	raycast.call("_set_current_interactable", second)
+	assert_false(first.is_hovered)
+	assert_true(second.is_hovered)
+
+	raycast.call("_set_current_interactable", null)
+	assert_false(first.is_hovered)
+	assert_false(second.is_hovered)
+
+
 func test_interaction_raycast_uses_held_item_fallback_prompt() -> void:
 	var script: Script = load("res://scripts/interaction/interaction_raycast.gd")
 	var raycast: RayCast3D = script.new()
@@ -143,7 +274,8 @@ func test_interaction_raycast_uses_held_item_fallback_prompt() -> void:
 	raycast._physics_process(0.016)
 
 	assert_true(prompt.visible)
-	assert_eq(prompt.label.text, "E Price Star Trader")
+	assert_true(prompt.reticle.visible)
+	assert_eq(prompt.label.text, "Click Price Star Trader")
 
 	var event := InputEventAction.new()
 	event.action = "interact"
@@ -152,12 +284,19 @@ func test_interaction_raycast_uses_held_item_fallback_prompt() -> void:
 
 	assert_eq(actor.price_count, 1)
 
+	var click_event := InputEventMouseButton.new()
+	click_event.button_index = MOUSE_BUTTON_LEFT
+	click_event.pressed = true
+	raycast._unhandled_input(click_event)
+
+	assert_eq(actor.price_count, 2)
+
 
 class _SilentInteractable:
 	extends Node
 
 	func get_interaction_prompt() -> String:
-		return "E Silent"
+		return "Click Silent"
 
 	func interact() -> String:
 		return ""
@@ -172,11 +311,20 @@ class _HeldItemActor:
 		return true
 
 	func get_held_item_interaction_prompt() -> String:
-		return "E Price Star Trader"
+		return "Click Price Star Trader"
 
 	func interact_with_held_item() -> String:
 		price_count += 1
 		return ""
+
+
+class _HoverInteractable:
+	extends Node
+
+	var is_hovered: bool = false
+
+	func set_hovered(value: bool) -> void:
+		is_hovered = value
 
 
 class _SummaryActor:

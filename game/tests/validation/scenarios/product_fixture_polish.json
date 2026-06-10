@@ -1,0 +1,116 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "used_game_case_visual_cues",
+      "name": "Used-game case has spine, platform, and price-sticker cues",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_case_has_spine_platform_and_price_cues"
+    },
+    {
+      "id": "used_game_case_bounds",
+      "name": "Used-game case visual cues stay within compact case bounds",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_case_visual_cues_stay_inside_case_bounds"
+    },
+    {
+      "id": "used_game_hover_highlight",
+      "name": "Used-game product hover highlight toggles as a nonblocking visual cue",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_hover_highlight_toggles_visual_cue"
+    },
+    {
+      "id": "product_visual_variant_rules",
+      "name": "Product visual rules cover case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket variants",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_visual_rules.gd::test_product_visual_rules_support_required_variants"
+    },
+    {
+      "id": "product_item_visual_profile_application",
+      "name": "Product items apply visual variant profiles to generated cue meshes",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_uses_product_visual_profile; res://tests/gut/test_product_item.gd::test_product_item_rebuilds_visuals_for_loose_disc_profile"
+    },
+    {
+      "id": "product_condition_authenticity_cues",
+      "name": "Product visual rules and product items show condition and authenticity cues",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_visual_rules.gd::test_condition_cues_mark_wear_missing_manual_reseal_and_serial_risk; res://tests/gut/test_product_item.gd::test_product_item_applies_condition_and_authenticity_cue_meshes"
+    },
+    {
+      "id": "product_suspicious_serial_marker",
+      "name": "Product item shows a suspicious serial marker for serial mismatch risk",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_serial_mismatch_shows_suspicious_marker"
+    },
+    {
+      "id": "product_shelf_price_tag_label",
+      "name": "Product item shows compact category, platform, and price tag text",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_price_tag_label_shows_category_platform_and_price"
+    },
+    {
+      "id": "product_shelf_merchandising_badges",
+      "name": "Product item price tag supports sale, preorder, staff pick, and bargain badges",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_product_item.gd::test_product_item_price_tag_badges_cover_sale_preorder_staff_and_bargain"
+    },
+    {
+      "id": "rack_category_header",
+      "name": "Display rack has a readable used-game category header",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_readable_used_game_category_header"
+    },
+    {
+      "id": "rack_alpha_profile_cues",
+      "name": "Display rack has front-face and side-profile cues for angled alpha fixture screenshots",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_alpha_profile_cues_for_angled_fixture_screenshots"
+    },
+    {
+      "id": "rack_slot_category_rails",
+      "name": "Display rack slots have compact nonblocking category rails",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slots_have_compact_category_rails"
+    },
+    {
+      "id": "rack_slot_hover_highlight",
+      "name": "Display rack slot hover highlight toggles as a nonblocking visual cue",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_hover_highlight_toggles_nonblocking_frame"
+    },
+    {
+      "id": "carry_stack_fan",
+      "name": "Held item stack fans multiple cases while staying low and off-center",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_carry_stack_fans_items_without_blocking_center"
+    },
+    {
+      "id": "carry_stack_presentation_motion",
+      "name": "Held item presentation uses active focus, depth scaling, and bounded carry motion",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_carry_presentation_has_depth_active_focus_and_motion"
+    },
+    {
+      "id": "receiving_intake_lanes",
+      "name": "Receiving box has nonblocking intake lanes and a readable intake label",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_has_nonblocking_intake_lanes_and_label"
+    }
+  ]
+}

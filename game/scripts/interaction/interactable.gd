@@ -5,9 +5,8 @@ extends StaticBody3D
 
 
 func get_interaction_prompt() -> String:
-	return "E Inspect %s" % display_name
+	return "Click Inspect %s" % display_name
 
 
 func interact() -> String:
 	return inspect_text
-

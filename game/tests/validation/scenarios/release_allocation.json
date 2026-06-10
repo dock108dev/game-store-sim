@@ -1,0 +1,46 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "release_allocation_commitment",
+      "name": "Store session commits launch allocation and reserves cash",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_commits_release_allocation_and_reserves_cash"
+    },
+    {
+      "id": "release_allocation_limit",
+      "name": "Store session enforces launch allocation limit, cash, and closed-day rules",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_rejects_release_allocation_over_limit_without_cash_or_after_close"
+    },
+    {
+      "id": "release_allocation_backroom_action",
+      "name": "Backroom computer commits the first release allocation",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_commits_release_allocation_from_backroom_computer"
+    },
+    {
+      "id": "release_allocation_backroom_readout",
+      "name": "Backroom computer shows committed release allocations and allocation cost",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_commits_release_allocation_from_backroom_computer"
+    },
+    {
+      "id": "release_allocation_save_data",
+      "name": "Save data includes release allocation commitments",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_serializes_session_transactions_and_inventory"
+    },
+    {
+      "id": "release_allocation_save_restore",
+      "name": "Save codec restores release allocation commitments",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    }
+  ]
+}

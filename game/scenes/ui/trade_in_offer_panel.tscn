@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://bs2tradepanel"]
+
+[ext_resource type="Script" path="res://scripts/ui/trade_in_offer_panel.gd" id="1_trade_in_offer_panel"]
+
+[node name="TradeInOfferPanel" type="CanvasLayer"]
+script = ExtResource("1_trade_in_offer_panel")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(660, 500)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 22
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Trade-In Review"
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="DetailsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Trade-in details"
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+[node name="AppraisalLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Authenticity: Medium
+Market value: $0.00
+Projected margin: $0.00
+Demand: Medium"
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+[node name="RiskLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Risk notes: standard buyback risk"
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+[node name="OfferLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Cash offer"
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Review the offer."
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
+[node name="OfferAdjustRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="DecreaseOfferButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OfferAdjustRow"]
+custom_minimum_size = Vector2(110, 48)
+layout_mode = 2
+text = "- $1"
+theme_override_font_sizes/font_size = 18
+
+[node name="IncreaseOfferButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/OfferAdjustRow"]
+custom_minimum_size = Vector2(110, 48)
+layout_mode = 2
+text = "+ $1"
+theme_override_font_sizes/font_size = 18
+
+[node name="ActionRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="AcceptButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(136, 48)
+layout_mode = 2
+text = "Accept Cash"
+theme_override_font_sizes/font_size = 18
+
+[node name="StoreCreditButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(144, 48)
+layout_mode = 2
+text = "Store Credit"
+theme_override_font_sizes/font_size = 18
+
+[node name="DeclineButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(112, 48)
+layout_mode = 2
+text = "Decline"
+theme_override_font_sizes/font_size = 18
+
+[node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
+custom_minimum_size = Vector2(112, 48)
+layout_mode = 2
+text = "Close"
+theme_override_font_sizes/font_size = 18

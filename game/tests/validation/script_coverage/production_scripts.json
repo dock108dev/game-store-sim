@@ -1,6 +1,34 @@
 {
   "script_tests": [
     {
+      "script": "res://scripts/economy/category_demand.gd",
+      "tests": [
+        "res://tests/gut/test_category_demand.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/economy/alpha_balance_profile.gd",
+      "tests": [
+        "res://tests/gut/test_alpha_balance_profile.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/economy/daily_report.gd",
+      "tests": [
+        "res://tests/gut/test_daily_report.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/economy/market_drift.gd",
+      "tests": [
+        "res://tests/gut/test_market_drift.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/interaction/interactable.gd",
       "tests": [
         "res://tests/gut/test_interaction_contract.gd"
@@ -22,6 +50,62 @@
       "critical": true
     },
     {
+      "script": "res://scripts/narrative/suspicious_event_log.gd",
+      "tests": [
+        "res://tests/gut/test_suspicious_event_log.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/narrative/suspicion_rules.gd",
+      "tests": [
+        "res://tests/gut/test_suspicion_rules.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/narrative/clue_surface_catalog.gd",
+      "tests": [
+        "res://tests/gut/test_clue_surface_catalog.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/narrative/hidden_choice_catalog.gd",
+      "tests": [
+        "res://tests/gut/test_hidden_choice_catalog.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/narrative/hidden_consequence_rules.gd",
+      "tests": [
+        "res://tests/gut/test_hidden_consequence_rules.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/narrative/evidence_storage.gd",
+      "tests": [
+        "res://tests/gut/test_evidence_storage.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/narrative/supplier_message.gd",
+      "tests": [
+        "res://tests/gut/test_supplier_message.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/releases/new_release.gd",
+      "tests": [
+        "res://tests/gut/test_new_release.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/inventory/product_definition.gd",
       "tests": [
         "res://tests/gut/test_product_item.gd"
@@ -36,9 +120,94 @@
       "critical": true
     },
     {
+      "script": "res://scripts/inventory/product_visual_rules.gd",
+      "tests": [
+        "res://tests/gut/test_product_visual_rules.gd",
+        "res://tests/gut/test_product_item.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/simple_buyer_customer.gd",
       "tests": [
         "res://tests/gut/test_customer_sale_flow.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/customer_archetype.gd",
+      "tests": [
+        "res://tests/gut/test_customer_archetype.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/customer_dialogue_flow.gd",
+      "tests": [
+        "res://tests/gut/test_customer_dialogue_flow.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/customer_audio_profile.gd",
+      "tests": [
+        "res://tests/gut/test_customer_audio_profile.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/customer_pose_animator.gd",
+      "tests": [
+        "res://tests/gut/test_customer_pose_animator.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/customer_feedback_bubble.gd",
+      "tests": [
+        "res://tests/gut/test_customer_feedback_bubble.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/simple_preorder_customer.gd",
+      "tests": [
+        "res://tests/gut/test_preorder_customer.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/simple_service_customer.gd",
+      "tests": [
+        "res://tests/gut/test_service_customer.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/simple_return_customer.gd",
+      "tests": [
+        "res://tests/gut/test_return_customer.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/customer_manager.gd",
+      "tests": [
+        "res://tests/gut/test_customer_manager.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/simple_trade_in_customer.gd",
+      "tests": [
+        "res://tests/gut/test_trade_in_customer.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/customers/suspicious_customer.gd",
+      "tests": [
+        "res://tests/gut/test_suspicious_customer.gd"
       ],
       "critical": true
     },
@@ -50,9 +219,25 @@
       "critical": true
     },
     {
+      "script": "res://scripts/player/interaction_audio_feedback.gd",
+      "tests": [
+        "res://tests/gut/test_interaction_audio_feedback.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/player/presentation_microfeedback.gd",
+      "tests": [
+        "res://tests/gut/test_presentation_microfeedback.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/register_workstation.gd",
       "tests": [
-        "res://tests/gut/test_interaction_contract.gd"
+        "res://tests/gut/test_interaction_contract.gd",
+        "res://tests/gut/test_register_checkout_ui.gd",
+        "res://tests/gut/test_register_checkout_panel.gd"
       ],
       "critical": true
     },
@@ -64,9 +249,30 @@
       "critical": true
     },
     {
+      "script": "res://scripts/store_layout/fixture_definition.gd",
+      "tests": [
+        "res://tests/gut/test_fixture_catalog.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/store_layout/fixture_placement_manager.gd",
+      "tests": [
+        "res://tests/gut/test_fixture_placement_manager.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/store_layout/shelf_slot.gd",
       "tests": [
         "res://tests/gut/test_shelf_slot.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/suppliers/supplier_lot.gd",
+      "tests": [
+        "res://tests/gut/test_supplier_lot.gd"
       ],
       "critical": true
     },
@@ -78,9 +284,33 @@
       "critical": true
     },
     {
+      "script": "res://scripts/systems/store_ambience.gd",
+      "tests": [
+        "res://tests/gut/test_store_ambience.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/systems/transaction_ledger.gd",
       "tests": [
-        "res://tests/gut/test_customer_sale_flow.gd"
+        "res://tests/gut/test_customer_sale_flow.gd",
+        "res://tests/gut/test_return_customer.gd",
+        "res://tests/gut/test_service_customer.gd",
+        "res://tests/gut/test_store_save_codec.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/save/store_save_codec.gd",
+      "tests": [
+        "res://tests/gut/test_store_save_codec.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/save/save_slot_registry.gd",
+      "tests": [
+        "res://tests/gut/test_save_slot_registry.gd"
       ],
       "critical": true
     },
@@ -95,6 +325,55 @@
       "script": "res://scripts/ui/day_summary_panel.gd",
       "tests": [
         "res://tests/gut/test_day_summary_panel.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/trade_in_offer_panel.gd",
+      "tests": [
+        "res://tests/gut/test_trade_in_offer_panel.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/settings_panel.gd",
+      "tests": [
+        "res://tests/gut/test_settings_panel.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/save_slot_panel.gd",
+      "tests": [
+        "res://tests/gut/test_save_slot_panel.gd",
+        "res://tests/gut/test_player_controller.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/pause_menu_panel.gd",
+      "tests": [
+        "res://tests/gut/test_pause_menu_panel.gd",
+        "res://tests/gut/test_player_controller.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/register_checkout_panel.gd",
+      "tests": [
+        "res://tests/gut/test_register_checkout_panel.gd",
+        "res://tests/gut/test_player_controller.gd"
+      ],
+      "critical": true
+    },
+    {
+      "script": "res://scripts/ui/ui_component_library.gd",
+      "tests": [
+        "res://tests/gut/test_ui_component_library.gd",
+        "res://tests/gut/test_pricing_panel.gd",
+        "res://tests/gut/test_day_summary_panel.gd",
+        "res://tests/gut/test_trade_in_offer_panel.gd",
+        "res://tests/gut/test_register_checkout_panel.gd"
       ],
       "critical": true
     }

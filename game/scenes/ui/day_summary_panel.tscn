@@ -13,49 +13,415 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(430, 300)
+custom_minimum_size = Vector2(760, 660)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 16
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 6
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Backroom Computer"
 horizontal_alignment = 1
 
-[node name="SummaryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TabGrid" type="GridContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+columns = 5
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+
+[node name="DashboardTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Dashboard"
+
+[node name="InventoryTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Inventory"
+
+[node name="OrderingTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Ordering"
+
+[node name="ReleasesTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Releases"
+
+[node name="ReportsTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Reports"
+
+[node name="ServicesTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Services"
+
+[node name="StorageTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Storage"
+
+[node name="SuppliersTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Suppliers"
+
+[node name="SettingsTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Settings"
+
+[node name="RecordsTabButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/TabGrid"]
+custom_minimum_size = Vector2(118, 36)
+layout_mode = 2
+text = "Records"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(720, 276)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="ContentVBox" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DashboardHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Dashboard"
+
+[node name="SummaryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
 text = "Day summary"
+autowrap_mode = 3
 
-[node name="LastSaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ReportLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
 layout_mode = 2
-text = "Last sale: none"
+text = "Backroom report: day still open"
+autowrap_mode = 3
+
+[node name="ActivityHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Activity"
+
+[node name="LastSaleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Recent activity: none"
+autowrap_mode = 3
+
+[node name="ServicesLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Services: none"
+autowrap_mode = 3
+
+[node name="InventoryHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Inventory"
+
+[node name="InventoryLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Inventory: none"
+autowrap_mode = 3
+
+[node name="ReorderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Reorder suggestions: none"
+autowrap_mode = 3
+
+[node name="MarketHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Market"
+
+[node name="DemandLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Category demand: none"
+autowrap_mode = 3
+
+[node name="MarketDriftLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Market drift: none"
+autowrap_mode = 3
+
+[node name="ReleaseHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Releases"
+
+[node name="ReleaseCalendarLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Release calendar: none"
+autowrap_mode = 3
+
+[node name="OperationsHeader" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "Operations"
+
+[node name="SupplierOrderLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Supplier orders: none"
+autowrap_mode = 3
+
+[node name="FixtureLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Fixtures: none"
+autowrap_mode = 3
+
+[node name="SettingsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Settings: audio, display, controls, mouse, accessibility, and reset defaults are available from the pause/settings panel."
+autowrap_mode = 3
+
+[node name="ManagementDeskLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Management desk: no reviews."
+autowrap_mode = 3
+
+[node name="HiddenRecordsLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/ContentVBox"]
+layout_mode = 2
+text = "Hidden records: no active records."
+autowrap_mode = 3
 
 [node name="StatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Day open"
 horizontal_alignment = 1
 
-[node name="ActionRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ActionGroupRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 10
 alignment = 1
 
-[node name="EndDayButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(120, 44)
+[node name="SupplierActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SupplierActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions"]
+layout_mode = 2
+text = "Supplier"
+horizontal_alignment = 1
+
+[node name="OrderGamesButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions"]
+custom_minimum_size = Vector2(92, 40)
+layout_mode = 2
+text = "Order"
+
+[node name="ReceivingActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="OpenBoxButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+text = "Open Box"
+
+[node name="CheckInvoiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+text = "Invoice"
+
+[node name="SortReceivingButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/SupplierActions/ReceivingActionButtons"]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+text = "Sort"
+
+[node name="StorageActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="StorageActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions"]
+layout_mode = 2
+text = "Storage"
+horizontal_alignment = 1
+
+[node name="StorageActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="OrderRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Order Rack"
+
+[node name="PlaceRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Place Rack"
+
+[node name="AssignCategoryButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/StorageActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Category"
+
+[node name="BackstockActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StoreItemButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons"]
+custom_minimum_size = Vector2(88, 36)
+layout_mode = 2
+text = "Store"
+
+[node name="PullItemButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/StorageActions/BackstockActionButtons"]
+custom_minimum_size = Vector2(88, 36)
+layout_mode = 2
+text = "Pull"
+
+[node name="ServiceActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ServiceActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions"]
+layout_mode = 2
+text = "Service"
+horizontal_alignment = 1
+
+[node name="ServiceActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="StartServiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Start Job"
+
+[node name="WorkServiceButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ServiceActions/ServiceActionButtons"]
+custom_minimum_size = Vector2(88, 40)
+layout_mode = 2
+text = "Work Job"
+
+[node name="ReleaseActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ReleaseActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ReleaseActions"]
+layout_mode = 2
+text = "Release"
+horizontal_alignment = 1
+
+[node name="CommitAllocationButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/ReleaseActions"]
+custom_minimum_size = Vector2(122, 40)
+layout_mode = 2
+text = "Commit Release"
+
+[node name="DayActions" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="DayActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions"]
+layout_mode = 2
+text = "Day"
+horizontal_alignment = 1
+
+[node name="DayActionButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EndDayButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons"]
+custom_minimum_size = Vector2(82, 40)
 layout_mode = 2
 text = "End Day"
 
-[node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionRow"]
-custom_minimum_size = Vector2(120, 44)
+[node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/ActionGroupRow/DayActions/DayActionButtons"]
+custom_minimum_size = Vector2(82, 40)
 layout_mode = 2
 text = "Close"
+
+[node name="DeskGroup" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="DeskActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup"]
+layout_mode = 2
+text = "Management Desk"
+horizontal_alignment = 1
+
+[node name="DeskActionRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="ReviewDeskButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+text = "Review Desk"
+
+[node name="BuyUpgradeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+text = "Upgrade"
+
+[node name="ApplyDecorButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DeskGroup/DeskActionRow"]
+custom_minimum_size = Vector2(110, 36)
+layout_mode = 2
+text = "Apply Decor"
+
+[node name="PlacementGroup" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlacementActionLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup"]
+layout_mode = 2
+text = "Storage Placement"
+horizontal_alignment = 1
+
+[node name="PlacementRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="RackLeftButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Left"
+
+[node name="RackRightButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Right"
+
+[node name="RackForwardButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Fwd"
+
+[node name="RackBackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Back"
+
+[node name="RotateRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Rotate"
+
+[node name="SnapRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Snap"
+
+[node name="UndoRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Undo"
+
+[node name="CancelRackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/PlacementGroup/PlacementRow"]
+custom_minimum_size = Vector2(76, 36)
+layout_mode = 2
+text = "Cancel"

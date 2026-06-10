@@ -1,24 +1,49 @@
-[gd_scene load_steps=8 format=3 uid="uid://b4mvebgik4k2e"]
+[gd_scene load_steps=15 format=3 uid="uid://b4mvebgik4k2e"]
 
 [ext_resource type="Script" path="res://scripts/inventory/product_item.gd" id="1_product_item"]
 [ext_resource type="Resource" uid="uid://c7sb5i8ogb4uj" path="res://data/products/used_star_trader.tres" id="2_product"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_case"]
-albedo_color = Color(0.02, 0.09, 0.16, 1)
+albedo_color = Color(0.018, 0.05, 0.09, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cover"]
-albedo_color = Color(0.24, 0.68, 0.55, 1)
+albedo_color = Color(0.22, 0.74, 0.62, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spine"]
+albedo_color = Color(0.96, 0.82, 0.38, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_platform_band"]
+albedo_color = Color(0.16, 0.32, 0.92, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_price_sticker"]
+albedo_color = Color(0.98, 0.9, 0.62, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hover"]
+albedo_color = Color(1, 0.86, 0.24, 0.52)
+transparency = 1
 
 [sub_resource type="BoxMesh" id="BoxMesh_case"]
 material = SubResource("StandardMaterial3D_case")
-size = Vector3(0.46, 0.62, 0.06)
+size = Vector3(0.24, 0.34, 0.04)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cover"]
 material = SubResource("StandardMaterial3D_cover")
-size = Vector3(0.34, 0.46, 0.012)
+size = Vector3(0.18, 0.25, 0.01)
+
+[sub_resource type="BoxMesh" id="BoxMesh_spine"]
+material = SubResource("StandardMaterial3D_spine")
+size = Vector3(0.028, 0.3, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform_band"]
+material = SubResource("StandardMaterial3D_platform_band")
+size = Vector3(0.17, 0.026, 0.012)
+
+[sub_resource type="BoxMesh" id="BoxMesh_price_sticker"]
+material = SubResource("StandardMaterial3D_price_sticker")
+size = Vector3(0.052, 0.038, 0.012)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_case"]
-size = Vector3(0.48, 0.64, 0.08)
+size = Vector3(0.26, 0.36, 0.055)
 
 [node name="PlaceholderUsedGame" type="StaticBody3D"]
 script = ExtResource("1_product_item")
@@ -26,13 +51,32 @@ product = ExtResource("2_product")
 instance_id = "item_used_star_trader_001"
 
 [node name="CaseMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.31, 0)
+position = Vector3(0, 0.17, 0)
 mesh = SubResource("BoxMesh_case")
 
 [node name="CoverLabelMesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.34, -0.036)
+position = Vector3(0, 0.19, -0.024)
 mesh = SubResource("BoxMesh_cover")
 
+[node name="SpineStripeMesh" type="MeshInstance3D" parent="."]
+position = Vector3(-0.105, 0.19, -0.03)
+mesh = SubResource("BoxMesh_spine")
+
+[node name="PlatformBandMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0.012, 0.315, -0.031)
+mesh = SubResource("BoxMesh_platform_band")
+
+[node name="PriceStickerMesh" type="MeshInstance3D" parent="."]
+position = Vector3(0.067, 0.075, -0.032)
+mesh = SubResource("BoxMesh_price_sticker")
+
+[node name="HoverHighlight" type="CSGBox3D" parent="."]
+visible = false
+use_collision = false
+position = Vector3(0, 0.18, -0.002)
+size = Vector3(0.32, 0.42, 0.072)
+material = SubResource("StandardMaterial3D_hover")
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.32, 0)
+position = Vector3(0, 0.18, 0)
 shape = SubResource("BoxShape3D_case")

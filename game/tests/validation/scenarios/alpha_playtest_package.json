@@ -1,0 +1,11 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "alpha_playtest_package_validation_sync",
+      "name": "Alpha playtest package docs, manual checklist, known issues, feedback form, and rollback plan stay synced",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_alpha_playtest_package_validation_sync.gd::test_alpha_playtest_package_doc_covers_build_script_known_issues_feedback_and_rollback"
+    }
+  ]
+}

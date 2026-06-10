@@ -22,6 +22,13 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_used_game_starts_in_receiving_box"
     },
     {
+      "id": "receiving_box_multiple_items",
+      "name": "Receiving box starts with multiple used-game items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_box_has_multiple_items"
+    },
+    {
       "id": "used_game_product_data",
       "name": "Used-game item has product data",
       "status": "automated",
@@ -41,6 +48,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_product_item.gd::test_used_game_item_has_location"
+    },
+    {
+      "id": "used_game_compact_case_scale",
+      "name": "Used-game case is compact enough for racks, carried view, and receiving-box placement",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_product_item.gd::test_used_game_case_is_compact_for_display_racks"
     },
     {
       "id": "used_game_held_state",
@@ -65,7 +79,7 @@
     },
     {
       "id": "used_game_inspect_text",
-      "name": "Used-game inspect text includes product, price, market value, and location",
+      "name": "Used-game inspect text includes product, cost, price, market value, and location",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_product_item.gd::test_used_game_inspect_text_is_product_backed"
@@ -85,11 +99,39 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_exists"
     },
     {
+      "id": "shelf_has_three_display_slots",
+      "name": "Game display rack has three stocked-item slots",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_three_display_slots"
+    },
+    {
       "id": "shelf_slot_identity",
       "name": "Game display slot has ID and accepted category",
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_has_identity"
+    },
+    {
+      "id": "shelf_slot_category_assignment",
+      "name": "Game display slot can assign accepted category while empty",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_can_assign_category_when_empty"
+    },
+    {
+      "id": "shelf_slot_rejects_empty_category_assignment",
+      "name": "Game display slot rejects empty category assignment",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_rejects_empty_category_assignment"
+    },
+    {
+      "id": "shelf_slot_rejects_occupied_category_assignment",
+      "name": "Game display slot rejects category reassignment while occupied",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_rejects_category_assignment_when_occupied"
     },
     {
       "id": "shelf_slot_available",
@@ -104,6 +146,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_slot_starts_empty"
+    },
+    {
+      "id": "main_scene_display_has_three_slots",
+      "name": "Main-scene display rack has three slots",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_has_three_slots"
+    },
+    {
+      "id": "main_scene_display_slots_used_game_category",
+      "name": "Main-scene display rack slots are assigned used-game category",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_slots_are_assigned_used_game_category"
     },
     {
       "id": "slot_accepts_used_game",
@@ -134,6 +190,20 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_stock_prompt_uses_held_item_name"
     },
     {
+      "id": "slot_invalid_stock_feedback",
+      "name": "Display slot gives clear blocked feedback for incompatible held items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_rejects_wrong_category_with_clear_feedback"
+    },
+    {
+      "id": "slot_landing_confirmation",
+      "name": "Display slot confirms the stocked item and landing slot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_stocking_confirms_landing_slot"
+    },
+    {
       "id": "occupied_slot_inspect",
       "name": "Occupied display slot inspects the stocked item",
       "status": "automated",
@@ -155,11 +225,25 @@
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_can_pick_up_item"
     },
     {
+      "id": "player_multi_item_carry_capacity",
+      "name": "Player can carry a bounded stack of used games from receiving",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_can_hold_multiple_items_up_to_capacity"
+    },
+    {
       "id": "player_place_held_item",
       "name": "Player can place the held game into the display slot",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_player_controller.gd::test_player_places_held_item_in_display_slot"
+    },
+    {
+      "id": "player_stocks_active_carried_item_first",
+      "name": "Player stocks the active carried item while keeping remaining held games",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_places_top_held_item_and_keeps_remaining_stack"
     }
   ]
 }

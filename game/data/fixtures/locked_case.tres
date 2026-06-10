@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="FixtureDefinition" format=3 uid="uid://cgn4m7wri87px"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
+
+[resource]
+script = ExtResource("1_fixture_definition")
+fixture_id = "fixture_locked_case"
+display_name = "Locked Case"
+category = "security"
+cost_cents = 18000
+footprint_size = Vector2(1.8, 0.75)
+default_slot_category = "high_value"
+slot_count = 4
+accepted_product_categories = PackedStringArray("hardware", "rare_game", "collector_item", "high_value")
+placement_zone = "sales_floor_secure"
+gameplay_tags = PackedStringArray("theft_risk_placeholder", "high_value", "staff_assist")
+scene_path = "res://scenes/props/placeholder_shelf.tscn"
+placeable = true
+description = "Secured glass case placeholder for rare games, hardware, and later theft-risk logic."

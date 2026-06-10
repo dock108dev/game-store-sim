@@ -13,15 +13,126 @@ func record_sale(customer_id: String, item: Node) -> Dictionary:
 		return {}
 
 	var sale_price_cents := int(item.get("current_price_cents"))
+	var cost_basis_cents := int(item.get("cost_basis_cents"))
+	if cost_basis_cents <= 0:
+		cost_basis_cents = product.cost_basis_cents
 	var transaction := {
 		"transaction_id": "sale_%03d" % (_transactions.size() + 1),
+		"type": "sale",
 		"customer_id": customer_id,
 		"item_instance_id": str(item.get("instance_id")),
 		"product_id": product.product_id,
 		"display_name": product.display_name,
 		"sale_price_cents": sale_price_cents,
-		"cost_basis_cents": product.cost_basis_cents,
-		"profit_cents": sale_price_cents - product.cost_basis_cents,
+		"cost_basis_cents": cost_basis_cents,
+		"profit_cents": sale_price_cents - cost_basis_cents,
+	}
+	_transactions.append(transaction)
+	return transaction
+
+
+func record_trade_in(customer_id: String, item: Node, offer_cents: int, tender_type: String = "cash") -> Dictionary:
+	if item == null:
+		return {}
+
+	var product := item.get("product") as ProductDefinition
+	if product == null:
+		return {}
+
+	var normalized_tender := tender_type
+	if normalized_tender != "store_credit":
+		normalized_tender = "cash"
+	var cash_cents := offer_cents if normalized_tender == "cash" else 0
+	var credit_cents := offer_cents if normalized_tender == "store_credit" else 0
+	var transaction := {
+		"transaction_id": "trade_in_%03d" % (_transactions.size() + 1),
+		"type": "trade_in",
+		"customer_id": customer_id,
+		"item_instance_id": str(item.get("instance_id")),
+		"product_id": product.product_id,
+		"display_name": product.display_name,
+		"tender_type": normalized_tender,
+		"trade_in_cost_cents": offer_cents,
+		"trade_in_cash_cents": cash_cents,
+		"trade_in_credit_cents": credit_cents,
+	}
+	_transactions.append(transaction)
+	return transaction
+
+
+func record_preorder_deposit(customer_id: String, release: Resource, deposit_cents: int) -> Dictionary:
+	if release == null or deposit_cents <= 0:
+		return {}
+
+	var transaction := {
+		"transaction_id": "preorder_deposit_%03d" % (_transactions.size() + 1),
+		"type": "preorder_deposit",
+		"customer_id": customer_id,
+		"release_id": str(release.get("release_id")),
+		"product_name": str(release.get("product_name")),
+		"display_name": str(release.get("product_name")),
+		"platform": str(release.get("platform")),
+		"release_day": int(release.get("release_day")),
+		"deposit_cents": deposit_cents,
+	}
+	_transactions.append(transaction)
+	return transaction
+
+
+func record_service(customer: Node) -> Dictionary:
+	if (
+		customer == null
+		or not customer.has_method("is_waiting_for_service")
+		or not bool(customer.call("is_waiting_for_service"))
+	):
+		return {}
+
+	var price_cents := 0
+	if customer.has_method("get_price_cents"):
+		price_cents = int(customer.call("get_price_cents"))
+
+	var cost_cents := 0
+	if customer.has_method("get_cost_cents"):
+		cost_cents = int(customer.call("get_cost_cents"))
+
+	var turnaround_minutes := 0
+	if customer.has_method("get_turnaround_minutes"):
+		turnaround_minutes = int(customer.call("get_turnaround_minutes"))
+
+	var transaction := {
+		"transaction_id": "service_%03d" % (_transactions.size() + 1),
+		"type": "service",
+		"customer_id": str(customer.get("customer_id")),
+		"service_id": str(customer.get("service_id")),
+		"display_name": str(customer.get("service_name")),
+		"item_name": str(customer.get("item_name")),
+		"service_price_cents": price_cents,
+		"service_cost_cents": cost_cents,
+		"profit_cents": price_cents - cost_cents,
+		"turnaround_minutes": turnaround_minutes,
+	}
+	_transactions.append(transaction)
+	return transaction
+
+
+func record_return(customer: Node, item: Node, refund_cents: int, disposition: String = "inspect_restock") -> Dictionary:
+	if customer == null or item == null or refund_cents <= 0:
+		return {}
+
+	var product := item.get("product") as ProductDefinition
+	if product == null:
+		return {}
+
+	var transaction := {
+		"transaction_id": "return_%03d" % (_transactions.size() + 1),
+		"type": "return",
+		"customer_id": str(customer.get("customer_id")),
+		"item_instance_id": str(item.get("instance_id")),
+		"product_id": product.product_id,
+		"display_name": product.display_name,
+		"refund_cents": refund_cents,
+		"disposition": disposition,
+		"reason": str(customer.get("return_reason")),
 	}
 	_transactions.append(transaction)
 	return transaction
@@ -31,19 +142,128 @@ func get_transactions() -> Array[Dictionary]:
 	return _transactions.duplicate(true)
 
 
+func replace_transactions(transactions: Array) -> void:
+	_transactions.clear()
+	for transaction in transactions:
+		if typeof(transaction) == TYPE_DICTIONARY:
+			var row: Dictionary = transaction
+			_transactions.append(row.duplicate(true))
+
+
 func get_sale_count() -> int:
-	return _transactions.size()
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "sale")) == "sale":
+			total += 1
+	return total
+
+
+func get_trade_in_count() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "trade_in":
+			total += 1
+	return total
+
+
+func get_preorder_deposit_count() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "preorder_deposit":
+			total += 1
+	return total
+
+
+func get_service_count() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
+			total += 1
+	return total
+
+
+func get_return_count() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "return":
+			total += 1
+	return total
 
 
 func get_total_revenue_cents() -> int:
 	var total := 0
 	for transaction in _transactions:
-		total += int(transaction.get("sale_price_cents", 0))
+		var transaction_type := str(transaction.get("type", "sale"))
+		if transaction_type == "sale":
+			total += int(transaction.get("sale_price_cents", 0))
+		elif transaction_type == "service":
+			total += int(transaction.get("service_price_cents", 0))
 	return total
 
 
 func get_total_profit_cents() -> int:
 	var total := 0
 	for transaction in _transactions:
-		total += int(transaction.get("profit_cents", 0))
+		var transaction_type := str(transaction.get("type", "sale"))
+		if transaction_type == "sale" or transaction_type == "service":
+			total += int(transaction.get("profit_cents", 0))
+	return total
+
+
+func get_total_service_revenue_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
+			total += int(transaction.get("service_price_cents", 0))
+	return total
+
+
+func get_total_service_cost_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
+			total += int(transaction.get("service_cost_cents", 0))
+	return total
+
+
+func get_total_service_profit_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "service":
+			total += int(transaction.get("profit_cents", 0))
+	return total
+
+
+func get_total_preorder_deposit_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "preorder_deposit":
+			total += int(transaction.get("deposit_cents", 0))
+	return total
+
+
+func get_total_return_refund_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "return":
+			total += int(transaction.get("refund_cents", 0))
+	return total
+
+
+func get_total_trade_in_cost_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "trade_in":
+			total += int(transaction.get(
+				"trade_in_cash_cents",
+				transaction.get("trade_in_cost_cents", 0)
+			))
+	return total
+
+
+func get_total_trade_in_credit_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "trade_in":
+			total += int(transaction.get("trade_in_credit_cents", 0))
 	return total

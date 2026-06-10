@@ -1,10 +1,12 @@
-# Vertical Slice Plan
+# Historical Vertical Slice Plan
 
-## Slice Goal
+This file is retained as the completed first-playable record. It is not the active backlog. Current production work is tracked in `04-backlog.md`, and the game-completion phase is tracked in `11-game-completion-plan.md`.
+
+## Completed Slice Goal
 
 Build one playable day in a tiny game store where the player receives a box of used games, prices them, stocks a shelf, serves customers, completes register transactions, and closes the day.
 
-This is the first serious proof. It should be ugly but complete.
+This was the first serious proof. It is now validated as an ugly-but-complete playable loop.
 
 ## Slice Content
 
@@ -19,17 +21,18 @@ Store:
 
 Products:
 
-- 12 fictional used games.
-- 3 platforms.
-- 4 conditions.
-- 3 demand tiers.
-- No real names or real brands.
+- 12 fictional used games. Done in the data catalog.
+- 3 platforms. Done.
+- 4 conditions. Done.
+- 3 demand tiers. Done.
+- No real names or real brands. Enforced by catalog tests.
 
 Customers:
 
 - 1 browser.
-- 1 target buyer.
+- 2 target buyers for the current queue smoke.
 - 1 trade-in seller, if trade-ins are included in the first slice.
+- 1 service customer for the first register-handled service request.
 
 Workstations:
 
@@ -45,7 +48,7 @@ Workstations:
 - Inspect item.
 - Set item price.
 - Place item on shelf.
-- Interact with customer.
+- Click center-screen targets to interact with customers.
 - Scan item at register.
 - Complete sale.
 - Close store.
@@ -59,7 +62,7 @@ Functional:
 - Transaction records sale revenue and profit.
 - Stock decreases after sale.
 - Price affects recorded profit.
-- Customer gives basic feedback.
+- Customer gives basic feedback. Done for overpriced used-item refusal and checkout messages.
 
 Usability:
 
@@ -78,12 +81,12 @@ Technical:
 - Customer selection queries store inventory rather than hard-coded objects.
 - Day summary is derived from recorded transactions.
 
-## Explicit Non-Goals
+## Historical Non-Goals
 
 - No employees.
-- No full fixture or decoration ordering system.
+- No full fixture or decoration ordering system beyond the first storage-rack placement workflow.
 - No large store expansion.
-- No real save/load requirement until after the first loop works, unless implementation makes it cheap.
+- No player-facing save/load slot UI yet; only codec-level persistence smoke exists.
 - No complex hidden narrative scene.
 - No real-world game brands.
 - No polished art pass.
@@ -102,8 +105,38 @@ Technical:
 10. Add transaction log. Done for in-memory sale records.
 11. Add customer spawn and simple buy goal. Done for one deterministic in-store buyer.
 12. Add end-of-day summary. Done for in-memory cash, sales, revenue, cost, and profit via the backroom computer.
+13. Add simple customer queue. Done for two in-store buyers and three display slots.
+14. Add customer movement/path validation. Done with deterministic buyer movement to stocked items, queue movement, and in-store target checks.
+15. Add optional apply-to-matching used-item pricing. Done in the direct pricing panel for active matching copies.
+16. Add first trade-in seller. Done as a register-reviewed trade-in with condition/market/demand details, cash counteroffer adjustment, store-credit acceptance, decline, and accepted item movement into receiving inventory.
+17. Add first product catalog. Done with 12 fictional used games, three platforms, four conditions, three demand tiers, and automated catalog validation.
+18. Add first customer price sensitivity. Done with demand-based buyer refusal for overpriced matching used games.
+19. Add first persistence smoke. Done as a codec-level save/load roundtrip for session, ledger, active item state, and pending fixture orders.
+20. Add first fixture ordering interface. Done as a backroom-computer order action for a pending game display rack.
+21. Add first fixture ghost preview. Done as a translucent pending-rack preview after ordering.
+22. Add first fixture placement validity state. Done as green valid and red invalid translucent ghost states with bounds validation.
+23. Add first fixture rotate and snap controls. Done as backroom panel controls backed by manager-level fixed-step rotation and grid movement.
+24. Add shelf category assignment. Done as explicit slot category assignment and fixture order slot-category metadata for used-game display racks.
+25. Add basic customer path validation. Done for customer spawn bounds, queue spacing, display targets, and item approach positions.
+26. Add category demand. Done as a category-level demand policy that combines with product demand tiers for buyer price tolerance and backroom demand readouts.
+27. Add market drift. Done as deterministic day/category/tier market-value drift surfaced through the backroom computer for active inventory.
+28. Add daily report. Done as an explicit closed-day report with cash change, sales/trade-ins, revenue, cost, trade spend/credit, and gross profit.
+29. Add suspicious event flags. Done as a hidden, optional event log service with idempotent event flags and no visible normal-loop interruption.
+30. Add mismatched serial item. Done as one optional receiving-box copy with serial mismatch metadata and hidden event flag support.
+31. Add supplier message artifact. Done as an optional receiving-box note with supplier metadata, inspection text, hidden event flag support, and screenshot coverage.
+32. Add optional evidence storage. Done as hidden deduped clue storage for serial mismatch and supplier message records.
+33. Add one suspicious customer encounter. Done as an optional cash-buyer interaction that flags a hidden event, stores evidence, and stays out of normal sales queue progression.
+34. Add first player-facing fixture placement confirmation. Done as a `Place Storage Rack` backroom-computer action that turns the valid pending rack ghost into a real game display rack and clears pending storage placement.
+35. Add first supplier ordering and delivery delay. Done as a backroom `Order Stock` action that reserves cash, creates a pending due-day receiving order, and delivers used games into receiving when the next day starts.
+36. Add first new-release calendar. Done as fictional upcoming launch data surfaced on the backroom computer with countdown, wholesale cost, suggested price, allocation note, demand tier, and screenshot coverage.
+37. Add first preorder deposit. Done as one register preorder customer for `Neon Skyline`, with a fixed deposit tracked separately from sale revenue and profit.
+38. Add first launch allocation commitment. Done as a backroom `Commit Allocation` action for `Neon Skyline`, with immediate wholesale cash reservation, allocation-limit enforcement, persistence, and screenshot coverage.
+39. Add first launch-day fulfillment. Done as day-start resolution for `Neon Skyline` that fulfills pending preorders first, sells surplus allocations to launch queue demand, records launch cash/profit, marks allocations launched, and applies reputation penalties for missed demand.
+40. Add first register service request. Done as a `Disc Resurfacing` customer whose scratched-disc service is completed at the register and recorded as service revenue, cost, profit, recent activity, and daily report data.
+41. Add bounded multi-item carry. Done as a three-game carry stack where pricing and stocking use the active carried item and stocking one copy leaves the remaining carried games available.
+42. Tighten first-pass presentation polish. Done with smaller shared used-game case geometry, a clearer buyer queue lane, wider special-customer spacing, and a lower body-anchored trade-in item pose.
 
-## Slice Review Questions
+## Remaining Review Questions For Polish
 
 - Is it satisfying to physically stock and sell items?
 - Does price setting feel meaningful or busywork?

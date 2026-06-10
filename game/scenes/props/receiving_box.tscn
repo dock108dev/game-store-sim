@@ -1,12 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://ch8di53ltfvaf"]
+[gd_scene load_steps=8 format=3 uid="uid://ch8di53ltfvaf"]
 
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_used_game.tscn" id="1_used_game"]
+[ext_resource type="PackedScene" path="res://scenes/props/supplier_message.tscn" id="2_supplier_message"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_box"]
 albedo_color = Color(0.32, 0.24, 0.16, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_liner"]
 albedo_color = Color(0.18, 0.16, 0.13, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lane"]
+albedo_color = Color(0.94, 0.72, 0.32, 0.34)
+transparency = 1
 
 [sub_resource type="BoxMesh" id="BoxMesh_base"]
 material = SubResource("StandardMaterial3D_box")
@@ -50,6 +55,117 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, -0.03)
 size = Vector3(0.92, 0.02, 0.48)
 material = SubResource("StandardMaterial3D_liner")
 
+[node name="ReceivingLane001" type="CSGBox3D" parent="."]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 0.202, -0.04)
+size = Vector3(0.28, 0.012, 0.42)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="ReceivingLane002" type="CSGBox3D" parent="."]
+transform = Transform3D(0.996195, 0, -0.087156, 0, 1, 0, 0.087156, 0, 0.996195, 0.04, 0.202, -0.02)
+size = Vector3(0.28, 0.012, 0.42)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="ReceivingLane003" type="CSGBox3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.32, 0.202, 0.02)
+size = Vector3(0.28, 0.012, 0.42)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="IntakeTagPanel" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, -0.4)
+size = Vector3(0.46, 0.12, 0.026)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="IntakeTagLabel" type="Label3D" parent="IntakeTagPanel"]
+pixel_size = 0.0028
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+no_depth_test = true
+text = "INTAKE"
+font_size = 18
+
+[node name="OpenBoxFlapFront" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 0.906308, -0.422618, 0, 0.422618, 0.906308, 0, 0.31, -0.46)
+size = Vector3(0.86, 0.022, 0.24)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="OpenBoxFlapLeft" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -0.66, 0.31, -0.04)
+size = Vector3(0.22, 0.022, 0.58)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="OpenBoxFlapRight" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 0.66, 0.31, -0.02)
+size = Vector3(0.22, 0.022, 0.58)
+material = SubResource("StandardMaterial3D_box")
+
+[node name="OpenBoxStatePanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.36, 0.55, -0.56)
+size = Vector3(0.36, 0.11, 0.02)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="OpenBoxStateLabel" type="Label3D" parent="OpenBoxStatePanel"]
+pixel_size = 0.003
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "OPEN"
+font_size = 15
+
+[node name="InvoiceStatePanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -0.56)
+size = Vector3(0.36, 0.11, 0.02)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="InvoiceStateLabel" type="Label3D" parent="InvoiceStatePanel"]
+pixel_size = 0.003
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "CHECK"
+font_size = 15
+
+[node name="SortStatePanel" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 0.55, -0.56)
+size = Vector3(0.36, 0.11, 0.02)
+material = SubResource("StandardMaterial3D_lane")
+
+[node name="SortStateLabel" type="Label3D" parent="SortStatePanel"]
+pixel_size = 0.003
+modulate = Color(0.08, 0.07, 0.04, 1)
+outline_modulate = Color(0.95, 0.78, 0.36, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "SORT"
+font_size = 15
+
 [node name="PlaceholderUsedGame" parent="." instance=ExtResource("1_used_game")]
-transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.18, 0.2, -0.04)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 0.2, -0.04)
 location_id = "receiving_box_001"
+
+[node name="PlaceholderUsedGame002" parent="." instance=ExtResource("1_used_game")]
+transform = Transform3D(0.996195, 0, -0.087156, 0, 1, 0, 0.087156, 0, 0.996195, 0.04, 0.2, -0.02)
+instance_id = "item_used_star_trader_002"
+location_id = "receiving_box_001"
+
+[node name="PlaceholderUsedGame003" parent="." instance=ExtResource("1_used_game")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.32, 0.2, 0.02)
+instance_id = "item_used_star_trader_003"
+location_id = "receiving_box_001"
+serial_id = "GST-1047"
+expected_serial_id = "GST-003"
+suspicious_event_id = "serial_mismatch_item_used_star_trader_003"
+
+[node name="SupplierMessage001" parent="." instance=ExtResource("2_supplier_message")]
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, 1.55, 0.02, -0.55)

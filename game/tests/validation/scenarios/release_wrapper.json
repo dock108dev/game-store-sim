@@ -1,0 +1,35 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "release_wrapper_validation_sync_audit",
+      "name": "Release wrapper validation matrix, tool manifest, and docs stay synced",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_release_wrapper_validation_sync.gd::test_release_wrapper_validation_matrix_covers_build_and_save_load_review"
+    },
+    {
+      "id": "release_pack_artifact_review",
+      "name": "Exported desktop pack artifact is generated and reviewed from the local build verifier",
+      "status": "manual",
+      "critical": false,
+      "owner": "manual QA",
+      "reason": "The shell verifier creates and boots the pack automatically, but human QA still needs to inspect the artifact location and release handoff language."
+    },
+    {
+      "id": "release_binary_export_template_review",
+      "name": "Desktop binary export path communicates missing export templates or creates a runnable app",
+      "status": "manual",
+      "critical": false,
+      "owner": "manual QA",
+      "reason": "Local binary export depends on installed Godot export templates and macOS signing state, which are machine-specific release-environment checks."
+    },
+    {
+      "id": "release_from_build_save_load_review",
+      "name": "Release build start, save, quit, relaunch, and continue loop is reviewed outside the editor",
+      "status": "manual",
+      "critical": false,
+      "owner": "manual QA",
+      "reason": "The current automated pack smoke proves bootability; the full relaunch-and-continue feel check still needs a human-run desktop build once templates/signing are available."
+    }
+  ]
+}

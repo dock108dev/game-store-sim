@@ -1,0 +1,67 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "backroom_visual_zones_exist",
+      "name": "Backroom has distinct receiving, storage, management, service, and movement zone anchors",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backroom_visual_zones_exist_without_collision"
+    },
+    {
+      "id": "backroom_receiving_storage_props_exist",
+      "name": "Backroom receiving and storage prop set exists without blocking movement",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backroom_receiving_and_storage_props_exist"
+    },
+    {
+      "id": "backroom_management_service_props_exist",
+      "name": "Backroom management board and service bench prop set exists away from the register",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backroom_management_and_service_props_exist"
+    },
+    {
+      "id": "backroom_security_paperwork_cues",
+      "name": "Backroom has delivery, invoice, backstock, safe, security, and hidden-clue placeholders",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backroom_production_blockout_has_security_and_paperwork_cues"
+    },
+    {
+      "id": "backroom_computer_alpha_first_view_layout",
+      "name": "Backroom computer alpha layout keeps storage-placement controls in the first modal view",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_alpha_layout_keeps_storage_placement_in_first_view"
+    },
+    {
+      "id": "alpha_supplier_order_copy",
+      "name": "Supplier ordering copy explains crate contents, invoice check, shelf plan, and physical receiving next actions",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_supplier_lot.gd::test_supplier_lot_has_orderable_used_game_products"
+    },
+    {
+      "id": "alpha_release_planning_copy",
+      "name": "Release planning copy includes launch hooks, allocation notes, and backroom calendar planning lines",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_new_release.gd::test_new_release_formats_countdown_lines"
+    },
+    {
+      "id": "alpha_daily_report_readout_copy",
+      "name": "Daily report copy reads as an end-of-day backroom readout with cash, counter, margin, pressure, and tomorrow sections",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_closed_day_totals"
+    },
+    {
+      "id": "alpha_backroom_action_copy",
+      "name": "Backroom computer action labels avoid debug abbreviations for supplier, service, upgrade, and category controls",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
+    }
+  ]
+}

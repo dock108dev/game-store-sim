@@ -1,3 +1,4 @@
 .DS_Store
 artifacts/
+game/artifacts/
 game/.godot/

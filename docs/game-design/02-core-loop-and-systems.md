@@ -147,10 +147,11 @@ Minimum version:
 - Accept cash/card.
 - Calculate change.
 - Complete sale.
+- Review baseline returns, pay refunds, and route returned items to receiving review.
 
 Later:
 
-- Returns and exchanges.
+- Full exchanges, receipt/fraud policy, and multi-item return decisions.
 - Trade credit.
 - Store memberships.
 - Preorders and deposits.

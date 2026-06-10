@@ -16,13 +16,13 @@ func _physics_process(_delta: float) -> void:
 
 	var collider := get_collider()
 	if collider != null and collider.has_method("get_interaction_prompt"):
-		_current_interactable = collider
+		_set_current_interactable(collider)
 		_using_actor_fallback = false
 		if _prompt != null and _prompt.has_method("show_prompt"):
 			_prompt.show_prompt(_get_prompt_text(collider))
 		return
 
-	_current_interactable = null
+	_set_current_interactable(null)
 	if _show_actor_fallback_prompt():
 		return
 
@@ -31,7 +31,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event.is_action_pressed("interact"):
+	if not _is_primary_interaction_pressed(event):
 		return
 
 	var result := ""
@@ -48,6 +48,21 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if not result.is_empty() and _prompt != null and _prompt.has_method("show_message"):
 		_prompt.show_message(result)
+		var actor := _get_actor()
+		if actor != null and actor.has_method("play_interaction_audio_for_result"):
+			actor.play_interaction_audio_for_result(result)
+		if actor != null and actor.has_method("play_presentation_feedback_for_result"):
+			actor.play_presentation_feedback_for_result(result)
+
+
+func _is_primary_interaction_pressed(event: InputEvent) -> bool:
+	if event.is_action_pressed("interact"):
+		return true
+
+	var mouse_event := event as InputEventMouseButton
+	return mouse_event != null \
+		and mouse_event.pressed \
+		and mouse_event.button_index == MOUSE_BUTTON_LEFT
 
 
 func _get_prompt_text(interactable: Node) -> String:
@@ -65,6 +80,20 @@ func _get_actor() -> Node:
 		node = node.get_parent()
 
 	return null
+
+
+func _set_current_interactable(interactable: Node) -> void:
+	if _current_interactable == interactable:
+		return
+
+	_set_hovered(_current_interactable, false)
+	_current_interactable = interactable
+	_set_hovered(_current_interactable, true)
+
+
+func _set_hovered(interactable: Node, is_hovered: bool) -> void:
+	if interactable != null and interactable.has_method("set_hovered"):
+		interactable.set_hovered(is_hovered)
 
 
 func _show_actor_fallback_prompt() -> bool:

@@ -1,30 +1,38 @@
-[gd_scene load_steps=7 format=3 uid="uid://cag7fgl2cb7di"]
+[gd_scene load_steps=14 format=3 uid="uid://cag7fgl2cb7di"]
 
 [ext_resource type="Script" path="res://scripts/player/first_person_controller.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/interaction/interaction_raycast.gd" id="2_raycast"]
 [ext_resource type="PackedScene" path="res://scenes/ui/interaction_prompt.tscn" id="3_prompt"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pricing_panel.tscn" id="4_pricing_panel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/day_summary_panel.tscn" id="5_day_summary_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/trade_in_offer_panel.tscn" id="6_trade_in_offer_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="7_settings_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/register_checkout_panel.tscn" id="8_register_checkout_panel"]
+[ext_resource type="Script" path="res://scripts/player/interaction_audio_feedback.gd" id="9_interaction_audio"]
+[ext_resource type="Script" path="res://scripts/player/presentation_microfeedback.gd" id="10_microfeedback"]
+[ext_resource type="PackedScene" path="res://scenes/ui/save_slot_panel.tscn" id="11_save_slot_panel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu_panel.tscn" id="12_pause_menu_panel"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
 radius = 0.35
-height = 1.8
+height = 1.9
 
 [node name="PlayerController" type="CharacterBody3D"]
 script = ExtResource("1_player")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.9, 0)
+position = Vector3(0, 0.95, 0)
 shape = SubResource("CapsuleShape3D_player")
 
 [node name="Head" type="Node3D" parent="."]
-position = Vector3(0, 1.62, 0)
+position = Vector3(0, 1.7, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
 current = true
+near = 0.03
 
 [node name="HoldAnchor" type="Node3D" parent="Head/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.46, -0.46, -1.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, -0.62, -1.55)
 
 [node name="InteractionRaycast" type="RayCast3D" parent="Head/Camera3D"]
 enabled = true
@@ -35,6 +43,106 @@ prompt_path = NodePath("../../../InteractionPrompt")
 
 [node name="InteractionPrompt" parent="." instance=ExtResource("3_prompt")]
 
+[node name="InteractionAudioFeedback" type="Node3D" parent="."]
+script = ExtResource("9_interaction_audio")
+
+[node name="PickupPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -16.0
+
+[node name="PlacePlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -17.0
+
+[node name="StockPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -15.0
+
+[node name="ScanPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -15.0
+
+[node name="RegisterPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -16.0
+
+[node name="CashDrawerPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -14.0
+
+[node name="ComputerClickPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -18.0
+
+[node name="ButtonHoverPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -24.0
+
+[node name="ButtonClickPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -18.0
+
+[node name="BoxOpenPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -16.0
+
+[node name="ShelfBumpPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -18.0
+
+[node name="ErrorPlayer" type="AudioStreamPlayer" parent="InteractionAudioFeedback"]
+volume_db = -20.0
+
+[node name="PresentationMicrofeedback" type="Node3D" parent="."]
+script = ExtResource("10_microfeedback")
+
+[node name="TargetHighlightParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="ItemSettleParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="SaleConfirmationParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 10
+lifetime = 0.4
+one_shot = true
+emitting = false
+
+[node name="CashTickParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="ReputationTickParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 8
+lifetime = 0.35
+one_shot = true
+emitting = false
+
+[node name="DayTransitionParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 12
+lifetime = 0.45
+one_shot = true
+emitting = false
+
+[node name="DeliveryArrivalParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 10
+lifetime = 0.4
+one_shot = true
+emitting = false
+
+[node name="InvalidActionParticles" type="CPUParticles3D" parent="PresentationMicrofeedback"]
+amount = 6
+lifetime = 0.28
+one_shot = true
+emitting = false
+
 [node name="PricingPanel" parent="." instance=ExtResource("4_pricing_panel")]
 
+[node name="RegisterCheckoutPanel" parent="." instance=ExtResource("8_register_checkout_panel")]
+
 [node name="DaySummaryPanel" parent="." instance=ExtResource("5_day_summary_panel")]
+
+[node name="TradeInOfferPanel" parent="." instance=ExtResource("6_trade_in_offer_panel")]
+
+[node name="SettingsPanel" parent="." instance=ExtResource("7_settings_panel")]
+
+[node name="SaveSlotPanel" parent="." instance=ExtResource("11_save_slot_panel")]
+
+[node name="PauseMenuPanel" parent="." instance=ExtResource("12_pause_menu_panel")]

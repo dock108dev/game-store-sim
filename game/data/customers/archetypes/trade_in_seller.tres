@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CustomerArchetype" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/customers/customer_archetype.gd" id="1_customer_archetype"]
+
+[resource]
+script = ExtResource("1_customer_archetype")
+archetype_id = "trade_in_seller"
+display_name = "Trade-In Seller"
+role = "trade_in"
+preferred_categories = Array[String](["used_game"])
+price_sensitivity = 1.15
+patience_seconds = 8.0
+visual_cue = "carried game, trade tag"
+dialogue_style = "pushes for a better offer"
+dialogue_flow_ids = Array[String](["trade_in_pushback"])
+default_feedback = "The manual is inside, so I am not taking a bargain-bin offer."
+arrival_line = "They put the case forward first, watching the offer number more than the shelf."
+satisfaction_line = "A fair cash or credit offer creates sellable used stock."
+friction_line = "Lowballing condition-complete trade-ins sends them to another shop."

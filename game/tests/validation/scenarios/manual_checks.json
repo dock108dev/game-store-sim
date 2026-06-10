@@ -18,18 +18,34 @@
     },
     {
       "id": "mouse_capture_cycle",
-      "name": "Escape releases mouse capture and click recaptures it",
+      "name": "Escape opens settings and settings close returns to captured mouse",
       "status": "manual",
       "critical": false,
-      "reason": "Current automated input checks do not exercise OS-level mouse capture reliably.",
+      "reason": "Automated checks cover panel state and requested mouse mode; human review must confirm OS-level mouse capture and click feel in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "interaction_milestone_review",
+      "name": "Completed interaction polish pass feels readable across prompts, carry, placement, workstations, and settings",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human review of the full repeated first-person workflow after the Stop 3 interaction pass.",
       "owner": "manual QA"
     },
     {
       "id": "prompt_readability",
-      "name": "Prompt readability is acceptable in the actual window",
+      "name": "Click prompt hierarchy readability is acceptable in the actual window",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment beyond nonblank screenshot checks.",
+      "reason": "Requires human visual judgment that action, subject, blocked, hover, landing, and feedback prompt states stay readable across real player angles.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "center_reticle_readability",
+      "name": "Center reticle action and feedback readability is acceptable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment while aiming at receiving items, shelf slots, the register, the backroom computer, and blocked held-item actions.",
       "owner": "manual QA"
     },
     {
@@ -41,19 +57,83 @@
       "owner": "manual QA"
     },
     {
-      "id": "held_item_visibility",
-      "name": "Held item stays visible without blocking normal navigation",
+      "id": "store_lighting_readability",
+      "name": "Store lighting keeps sales floor, register, prompts, reticle, and backroom readable",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment while moving and looking around the actual window.",
+      "reason": "Automated tests verify lighting layers and screenshot sanity; human review must judge readability from the actual player camera.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "fictional_signage_readability",
+      "name": "Fictional store and zone signage is readable and not mistaken for real brands or interaction targets",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify label text and nonblocking placement; human review must confirm signs compose clearly in the game window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "retail_clutter_readability",
+      "name": "Retail posters, price tag, bargain bin, mat, and small display props add identity without hiding click targets",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify nonblocking placement and short callouts; human review must confirm clutter does not obscure prompts or product readability.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "held_item_visibility",
+      "name": "Held item stack pose and motion stay visible without blocking normal navigation",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify pose bounds and motion constraints; human review must confirm the carry stack feels natural while moving and looking around the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "multi_item_stocking_visual",
+      "name": "Stocking one carried game leaves the remaining carried games visible and usable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that the carry stack reads naturally during movement and after one item is stocked.",
       "owner": "manual QA"
     },
     {
       "id": "stocked_item_upright_visual",
-      "name": "Stocked game is visibly upright and intentional in the rack",
+      "name": "Stocked game is compact, upright, and intentional in the rack",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human visual judgment from several player angles.",
+      "reason": "Requires human visual judgment from several player angles; automated checks cover dimensions but not whether the case reads at the right scale in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "product_case_cue_readability",
+      "name": "Used-game case cue details read as boxed-game affordances without overwhelming prompts",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify cue existence and bounds; human review must judge visual clarity in receiving, rack, carry, and customer-held contexts.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "display_rack_category_readability",
+      "name": "Display rack reads as a used-game rack after category assignment changes",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that metadata changes did not make stocking behavior or visual intent confusing.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "rack_slot_affordance_readability",
+      "name": "Rack category header and slot rails clarify stocking affordance without reading as separate interactions",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify header and rail placement; human review must confirm the added affordances do not distract from shelf-slot prompts.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "receiving_intake_readability",
+      "name": "Receiving intake lanes and label organize physical stock without hiding starter items or optional artifacts",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify nonblocking lanes and label; human review must confirm item, note, and serial-mismatch readability from player angles.",
       "owner": "manual QA"
     },
     {
@@ -62,6 +142,14 @@
       "status": "manual",
       "critical": false,
       "reason": "Requires human judgment about UI readability and control clarity.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "pricing_apply_matching_readability",
+      "name": "Apply-to-matching pricing option is readable and understandable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether the batch-pricing option is clear in the actual window.",
       "owner": "manual QA"
     },
     {
@@ -81,11 +169,187 @@
       "owner": "manual QA"
     },
     {
-      "id": "buyer_register_wait_visual",
-      "name": "Buyer visibly waits at the register after stocking Star Trader",
+      "id": "production_graybox_gap_review",
+      "name": "Current screenshots are reviewed as prototype gaps before production art work begins",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment about buyer placement and readability in the actual window.",
+      "reason": "Requires human production-direction judgment; the current build can validate mechanically while still needing the larger game-completion phase.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_first_view_target_review",
+      "name": "First-view screenshot is reviewed against the production small-game-store target",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human composition judgment against the production target contract; automated screenshot checks only prove image presence and dimensions.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_art_direction_contract_review",
+      "name": "Visual target contract matches the intended stylized fictional game-store tone",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human art-direction judgment before production scene slices replace graybox surfaces.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_layout_contract_review",
+      "name": "Starter layout contract keeps storefront, sales floor, register, and backroom workflows physically readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human production review because automated layout checks cannot judge the intended small-store composition yet.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "environment_production_pass_review",
+      "name": "Completed environment pass reads as a small game store while preserving the current playable loop",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human review of storefront, sales floor, register, fixture, backroom, lighting, screenshot composition, and movement readability after the environment production pass.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_ui_contract_review",
+      "name": "Production UI contract covers prompt, pricing, register, trade-in, computer, ordering, release, and report decisions",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human UX review before replacing the current functional prototype panels with production UI.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_ui_accessibility_readability",
+      "name": "Production UI text size, contrast, keyboard/mouse focus, and 1280x720 panel fit are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the shared accessibility floor; human review must confirm perceived readability, focus behavior, and no clipping in the actual game window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_content_contract_review",
+      "name": "Production content contract is broad enough for several days of fictional data-driven play",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human product review to confirm the target catalog, customer, supplier, event, and unlock scope before implementation.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "product_schema_content_review",
+      "name": "Product schema metadata reads like useful game-store inventory data",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify field presence and coverage; human review should confirm category, platform family, format, condition, completeness, authenticity, rarity, demand, value, risk, and location choices feel coherent for fictional game-store products.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "product_visual_variant_readability",
+      "name": "Product visual variants read as distinct inventory forms without becoming clutter",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify variant-rule coverage and cue-node visibility; human review should confirm case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cues are readable at receiving, hand, shelf, customer, and register scale.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "starter_catalog_breadth_review",
+      "name": "Starter catalog breadth feels sufficient for several fictional store days",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify count and category coverage; human review should confirm the used-game, new-game, accessory, hardware, and service-ticket names/prices feel coherent and not repetitive.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "product_condition_authenticity_cue_readability",
+      "name": "Product condition and authenticity cues are readable but not noisy",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify scratches, missing manual, loose media, damaged label, reseal, and serial-risk cue meshes; human review should confirm they read clearly at gameplay scale without overwhelming product identity.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "product_shelf_price_tag_readability",
+      "name": "Product shelf labels and price tags are readable without cluttering interaction targets",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify compact category, platform, price, sale, preorder, staff-pick, and bargain text; human review should confirm world-space label scale and density work in receiving, hand, shelf, customer, and register contexts.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "product_pipeline_validation_review",
+      "name": "Product pipeline validation manifest matches the current content checker and manual review scope",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the manifest shape, command, covered paths, and requirements; human review should confirm it remains the right content-quality bar before adding more product resources.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "buyer_register_wait_visual",
+      "name": "Buyers visibly wait at the register after stocking Star Trader copies",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about queue placement and readability in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_queue_spacing_visual",
+      "name": "Multiple queued buyers have readable spacing and use a clear lane at the register",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks enforce spacing from special customers; human review confirms the queue reads naturally from the playable camera.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_movement_visual",
+      "name": "Buyers visibly walk from browsing to rack to register without clipping badly",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human visual judgment about movement readability and clipping while the graybox layout is changing.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_animation_pose_readability",
+      "name": "Customer idle, walk, browse, pickup, queue, talk, payment, handoff, leave, and impatient poses read clearly",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the pose-state contract; human review must confirm the placeholder motion reads naturally in the actual game window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_path_layout_readability",
+      "name": "Customer spawn, approach, and queue positions read naturally in the current layout",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about customer path composition beyond bounded automated path checks.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_browse_queue_recovery_leave_readability",
+      "name": "Customer browsing, register approach, blocked-path recovery, and leaving behavior read naturally",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify bounded path points and state transitions; human review must confirm the route reads naturally in the production store layout.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_feedback_bubble_readability",
+      "name": "Customer feedback bubbles for price refusal, purchase intent, impatience, trade-in, preorder, service, and suspicion are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify bubble presence and outcome tones; human review must confirm world-space text is readable without cluttering the player view.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_archetype_readability",
+      "name": "Customer archetypes feel distinct enough to support browser, buyer, parent, collector, trade-in, return, service, regular, and suspicious roles",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify data coverage and scene wiring; human review must judge whether the roles match the intended production customer mix.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_conversation_baseline_readability",
+      "name": "Customer help, recommendation, trade-in pushback, complaint, and hidden-thread probe dialogue feels useful and nonblocking",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify dialogue-flow data coverage; human review must judge tone, usefulness, and whether hidden-thread probes stay optional.",
       "owner": "manual QA"
     },
     {
@@ -97,11 +361,99 @@
       "owner": "manual QA"
     },
     {
+      "id": "register_checkout_panel_readability",
+      "name": "Register checkout receipt, tender/change, return review, refund due, and confirmation controls are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that the register checkout panel fits the game window and reads as a register surface during repeated sale, preorder, service, and return-review workflows.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "trade_in_seller_visual",
+      "name": "Trade-in seller and carried game are readable at the register without obvious floating or clipping",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated compact-anchor checks cover pose bounds; human review confirms the game appears held against the seller and does not clip through the register counter.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_cluster_visual_spacing",
+      "name": "Buyer, preorder, trade-in, service, return, and suspicious customers are visually separated enough to understand their roles",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated spacing catches obvious overlaps, but human review must confirm the register area reads naturally from the playable camera.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_modular_body_readability",
+      "name": "Customer torso, headwear, arms, legs, props, and role silhouettes read as people rather than capsules",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify the modular body kit exists; human review must confirm the stylized shapes read clearly from normal player angles.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "trade_in_register_message_readability",
+      "name": "Trade-in register prompt and completion message are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about prompt/message readability during the trade-in.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "trade_in_offer_panel_readability",
+      "name": "Trade-in offer panel condition, demand, market, and accept/decline controls are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about panel readability and whether the offer review is understandable.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "preorder_register_readability",
+      "name": "Preorder register prompt and completion message are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether the register flow clearly reads as a deposit rather than a sale.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "preorder_backroom_readability",
+      "name": "Backroom preorder count and deposit total are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether preorder obligation text fits comfortably in the management panel.",
+      "owner": "manual QA"
+    },
+    {
       "id": "backroom_computer_visual_placement",
       "name": "Backroom computer placement is readable and does not look like a second register",
       "status": "manual",
       "critical": false,
       "reason": "Requires human visual judgment about prop placement and terminal identity.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "backroom_zone_readability",
+      "name": "Backroom receiving, storage, management, service/paperwork, and movement zones are visually distinct",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human composition review from normal player angles after the backroom spatial polish pass.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "backroom_receiving_storage_readability",
+      "name": "Receiving pallet, delivery door, invoice clipboard, storage shelf, backstock overflow, and labels make delivered stock read as physical inventory",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that receiving, storage, supplier stock, and pending fixture identity add clarity without blocking interaction.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "backroom_service_paperwork_context",
+      "name": "Backroom service, management, safe, security, and evidence-locker props read as context, not new active terminals",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that service, management, and future hidden-thread placeholders support the theme while current register and hidden-thread behavior remain unchanged.",
       "owner": "manual QA"
     },
     {
@@ -113,11 +465,147 @@
       "owner": "manual QA"
     },
     {
-      "id": "day_summary_numbers_match_sale",
-      "name": "Backroom summary numbers match the completed sale",
+      "id": "backroom_computer_action_grouping",
+      "name": "Backroom computer actions are grouped as Supplier, Storage, Release, Day, and Storage Placement controls",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human confirmation after playing through the full pickup, price, stock, and sale loop.",
+      "reason": "Requires human judgment that grouped button labels, including fixture Cancel, read clearly in the actual game window and do not imply register work belongs on the backroom computer.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "expanded_fixture_catalog_readability",
+      "name": "Expanded fixture catalog entries are readable as store-building options in the backroom computer",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify fixture data, ordering locks, and panel text; human review must confirm the expanded list, slot counts, placement zones, and locked requirements fit the storage tab and read as planning work rather than register work.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "fixture_placement_ux_readability",
+      "name": "Fixture placement invalid feedback, undo, confirmation, and cancellation are readable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify footprint bounds, path clearance, overlap rejection, undo state, and confirmation behavior; human review must confirm the ghost, issue text, compact Undo button, and placement summary are understandable during real first-person placement.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "fixture_category_assignment_readability",
+      "name": "Fixture category assignment reads as store-building work and explains its demand effect",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated checks verify assignment state, slot updates, panel action, and demand tuning; human review must confirm Assign Cat, category summaries, and demand wording are understandable without feeling like a debug switch.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "backroom_computer_tabs_readability",
+      "name": "Backroom computer dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify tab existence and section visibility; human review must confirm the tab grid fits the actual window, communicates the computer information architecture, and keeps register work out of the backroom surface.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "category_demand_panel_readability",
+      "name": "Backroom category demand readout is readable and does not crowd the panel",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the demand text exists; the player must judge whether the expanded backroom panel is visually comfortable.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "market_drift_panel_readability",
+      "name": "Backroom market drift readout is readable and understandable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify market drift text exists; the player must judge whether current and drifted market values are readable.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "day_summary_numbers_match_sale",
+      "name": "Backroom summary numbers match completed single and multiple sales",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human confirmation after playing through single-sale and multi-sale loops.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "daily_report_readability",
+      "name": "Closed-day report cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations are readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify report text; human review must confirm the expanded end-of-day report fits the actual window and matches a played day.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_day_structure_readability",
+      "name": "Opening, setup, customer-hours, closing, report, and tomorrow-planning phases read as a store day",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the phase contract and report text; human review must confirm the wording makes the loop feel like owner/operator planning rather than debug state.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "cash_pressure_readability",
+      "name": "Operating expenses, reserved obligations, and bill language create clear but recoverable cash pressure",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify posted overhead and summary text; human review must confirm the report and backroom wording explain cash pressure without hiding item gross profit or making the day feel unrecoverable.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "reputation_feedback_readability",
+      "name": "Reputation changes read as understandable consequences of pricing, waits, preorder/service outcomes, returns, suspicious choices, and stock variety",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify reputation scoring hooks and clamping; human review must confirm the report and future UI wording make reputation changes understandable without feeling punitive or hidden.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "demand_tuning_readability",
+      "name": "Demand tuning makes shelf visibility, price, rarity, marketing, events, and customer archetypes understandable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify contextual demand math and backroom summaries; human review must confirm the wording helps explain demand without becoming opaque spreadsheet noise.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "upgrade_path_readability",
+      "name": "Upgrade path reads as fixture, category, service, computer, signage, storage, and expansion progression",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the catalog, purchase rules, expansion lock, backroom summary, and save/load persistence; human review must confirm the upgrade list feels like meaningful future work rather than a cash-only menu.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "owner_onboarding_readability",
+      "name": "Owner checklist teaches the first-day loop without feeling like debug tutorial text",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify checklist coverage and state-derived progress; human review must confirm the wording helps players learn receiving, pricing, stocking, checkout, trade-ins, backroom computer, ordering, and closing without breaking store immersion.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "economy_progression_playthrough_readability",
+      "name": "Several-day economy progression reads as cash, stock, reputation, obligations, upgrades, and next-day planning",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests cover the individual systems and cross-flow scenario evidence; human review must confirm several days of play make pressure, recovery, and goals understandable without needing external notes.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_balance_playthrough_feel",
+      "name": "Alpha balance pass feels recoverable across prices, buyer tolerance, overhead, supplier orders, services, releases, and upgrades",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify tuned targets and accounting; human review must confirm a fresh multi-day run is neither trivially profitable nor punishing, and that $10 overhead, $30 starter lots, $5.99 service work, launch allocations, and early upgrade costs feel understandable in play.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "backroom_inventory_summary_readability",
+      "name": "Backroom inventory summary is readable and matches visible active inventory",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human comparison between the summary panel and visible stocked/receiving items.",
       "owner": "manual QA"
     },
     {
@@ -126,6 +614,326 @@
       "status": "manual",
       "critical": false,
       "reason": "Requires human visual confirmation from normal player angles.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "fixture_ghost_valid_invalid_readability",
+      "name": "Fixture ghost valid and invalid states are visually readable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether translucent green and red placement previews are clear in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "fixture_rotate_snap_feel",
+      "name": "Fixture movement, rotate, snap, cancel, and placement controls feel predictable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment about whether backroom panel movement, fixed-step rotation, grid snap, cancel/refund, and placement confirmation feel understandable before placing a storage rack.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "decoration_clutter_budget_readability",
+      "name": "Decoration summary, Apply Decor action, and clutter budget read as store-building choices without hiding interactables",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify decoration catalog, purchase rules, panel action, and persistence; human review must confirm the decoration text fits the backroom computer and the resulting visual intent does not obscure prompts or stocked products.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "layout_effects_readability",
+      "name": "Layout effect summary makes fixture visibility, queue space, travel distance, impulse buys, and theft-risk placeholders understandable",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the layout-effect state and outcome hooks; human review must confirm the backroom demand text explains those effects without sounding like debug math or hiding the physical store decisions.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "store_expansion_readability",
+      "name": "Starter Store Expansion reads as a larger operational footprint with clearer placement, storage, queue, and travel choices",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify purchase rules, capacity, placement bounds, customer bounds, and persistence; human review must confirm the upgrade text and expanded layout implications feel like real store growth rather than an invisible stat boost.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "suspicion_rules_retail_tone",
+      "name": "Suspicion rules read as optional retail anomalies, not active quest objectives",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify rule IDs, scores, severity, metadata evaluation, node evaluation, and log event creation; human review should confirm the flagged concepts still feel like ordinary retail anomalies underneath normal play.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "hidden_clue_surface_readability",
+      "name": "Hidden clue surfaces are readable as optional invoices, notes, lookup, emails, comments, clips, and artifacts",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the clue surface catalog, context status, and Records-tab summary; human review should confirm those surfaces feel discoverable without becoming a quest list or blocking normal store work.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "hidden_choice_path_readability",
+      "name": "Hidden choice paths are readable as optional decisions routed through consequence rules",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify choice IDs, availability, recording, Records-tab display, and save/load; human review should confirm ignore, document, sell, isolate, report, cash, reject, and follow-up choices do not feel like forced quest buttons.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "hidden_consequence_readability",
+      "name": "Hidden consequences are readable across reputation, cash, supplier access, customer trust, inspection risk, and story state",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify consequence channels and persistence; human review should confirm the Records-tab consequence text is understandable without overwhelming normal retail accounting or implying the thread is mandatory.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "hidden_thread_flags_invisible",
+      "name": "Suspicious event flags do not visibly interrupt normal store progression",
+      "status": "manual",
+      "critical": false,
+      "reason": "The hidden-thread event log is intentionally infrastructure-only for now; human playtest should confirm no new visible story UI appeared.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "hidden_thread_optionality_guard",
+      "name": "Hidden-thread clues and choices can be ignored while the normal retail loop continues",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the session and Records-tab optionality guard; human review should confirm receiving, pricing, stocking, register, ordering, storage, services, reports, and day progression still feel available after ignoring all hidden-thread surfaces.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "mismatched_serial_discoverability",
+      "name": "Mismatched serial item is discoverable without blocking normal inventory flow",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human confirmation that the optional suspicious copy can still be picked up, priced, stocked, sold, and inspected without feeling like a required story step.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "supplier_message_readability",
+      "name": "Supplier message artifact is readable and clearly optional",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human judgment that the receiving note placement and text read as an optional clue rather than a blocking objective.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "supplier_ordering_ui_readability",
+      "name": "Supplier ordering card details are readable and make clear that orders arrive as physical receiving stock",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify category, cart, cost, delivery, storage, and receiving text; human review must confirm the backroom ordering tab fits the actual game window and does not imply instant inventory teleporting.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "receiving_workflow_readability",
+      "name": "Backroom receiving workflow clearly shows delivery point, box opening, invoice check, sorting, and pending state",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the receiving batch state machine and panel buttons; human review must confirm Open Box, Invoice, Sort, delivery-point text, invoice variance, and completed sorting read naturally in the actual backroom computer.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "storage_workflow_readability",
+      "name": "Backroom storage workflow clearly shows shelf capacity, overflow, Store/Pull controls, and backstock retrieval",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify receiving-to-backstock movement, retrieval, capacity text, and persistence; human review must confirm the storage workflow reads as physical backroom work and not an abstract inventory menu.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "service_bench_workflow_readability",
+      "name": "Backroom service bench workflow clearly shows service capabilities, parts, ticket progress, ready pickup, and register completion",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify service ticket states, Start Job/Work Job controls, save/load, and register pickup accounting; human review must confirm the bench workflow reads as physical service work while customer completion still belongs at the register.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "management_desk_workflow_readability",
+      "name": "Backroom management desk workflow clearly shows supplier messages, bills, inventory search, reports, preorder planning, and upgrade ordering",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify management desk task state, Review Desk and Upgrade controls, save/load, and upgrade ordering; human review must confirm the records tab reads as desk planning work and not a register or inventory teleport.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "security_safe_placeholder_readability",
+      "name": "Backroom security placeholders clearly show cash safe, high-value storage, suspicious goods isolation, and security footage as inactive future surfaces",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify placeholder state, records-tab summary, and StoreSession wiring; human review must confirm the safe/security/evidence text reads as future optional infrastructure and not an active objective, register action, or solved hidden-thread flow.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "evidence_storage_invisible",
+      "name": "Evidence storage remains hidden during normal play",
+      "status": "manual",
+      "critical": false,
+      "reason": "Requires human confirmation that hidden evidence infrastructure did not add a visible objective, warning, or panel before a deliberate UI slice.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "store_ambience_mix_readability",
+      "name": "Store ambience layers support the shop mood without masking prompts, UI, or player judgment",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the placeholder ambience catalog, scene players, and conservative mix levels; human review must confirm room tone, HVAC, storefront muffle, door chime, register bed, backroom bed, and closing quiet feel helpful rather than noisy in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "interaction_audio_readability",
+      "name": "Interaction sound cues make common actions readable without becoming noisy or misleading",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify cue catalog coverage, player wiring, and prompt-safe mix levels; human review must confirm pickup, place, stock, scan, register, cash drawer, computer, button, box, shelf bump, and error cues support understanding once audible playback assets are enabled.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "customer_audio_placeholder_readability",
+      "name": "Customer audio placeholders add presence without implying final voice acting or masking feedback",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify placeholder cue coverage and scene profile wiring; human review must confirm footsteps, mumbles, greetings, approval, annoyance, and leaving cues support customer state readability without making current placeholder customers feel overproduced.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "presentation_microfeedback_readability",
+      "name": "Presentation microfeedback supports actions and state changes without hiding prompts or implying false success",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify microfeedback effect coverage, player particle wiring, and result mapping; human review must confirm target highlights, item settle, sale confirmation, cash/reputation ticks, day transition, delivery arrival, and invalid-action feedback are subtle and semantically clear.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "camera_feel_motion_comfort",
+      "name": "Camera bob, FOV shift, held-item sway, and workstation settling feel comfortable in the actual window",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify bounded camera offsets, FOV limits, modal focus settling, and held-item sway; human review must confirm movement does not cause discomfort, hide the reticle, or make workstation transitions feel abrupt.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "presentation_milestone_11_review",
+      "name": "Completed audio, VFX, and camera-feel pass reads as a coherent presentation baseline",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify scenario/doc coverage through Stop 11.6; human review must confirm ambience, interaction sounds, customer audio placeholders, microfeedback, camera bob, FOV shift, held-item sway, and workstation settling work together without masking retail decisions.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "save_slot_ui_readability",
+      "name": "Save slot UI clearly supports new game, continue, overwrite, delete, and save metadata review",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify file-backed slot creation, continue data, overwrite/delete behavior, modal focus, and player-panel wiring; human review must confirm slot metadata, destructive overwrite/delete language, and mouse capture transitions are readable in the actual window.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "save_migration_failure_readability",
+      "name": "Save migration and failure handling reads as compatibility protection instead of silent data loss",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify version 1 migration defaults, current schema IDs, future-version rejection, and malformed-save failure state; human review must confirm any surfaced load failure copy is understandable and never implies a corrupted or incompatible save was loaded.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "settings_menu_readability",
+      "name": "Settings menu clearly groups audio, display, controls, mouse, accessibility, persistence, and reset defaults",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify section presence, value clamping, player preference application, JSON persistence, bindings reset, defaults reset, modal focus, and accessibility floor; human review must confirm the larger settings surface remains readable at 1280x720 and reset actions do not feel destructive or hidden.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "pause_main_menu_readability",
+      "name": "Pause and main menu clearly support resume, start game, settings, save/load, main menu, quit, and mouse capture recovery",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify pause/main-menu modes, button requests, resume/start transitions, modal focus, quit request state, and mouse capture recovery; human review must confirm the menu reads as a release wrapper and not a debug overlay.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_regression_queue_composition_review",
+      "name": "Alpha buyer queue and special register customers remain visually separated in screenshot review",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the visible buyer queue positions stay inside the store, preserve configured spacing, and remain clear of special customer roots; human review must confirm labels, props, bodies, and prompts do not pile up in customer_queue, register_counter, preorder_deposit, and service_request screenshots.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_regression_fixture_framing_review",
+      "name": "Alpha fixture placement screenshots show grounded ghost and placed rack states without camera-blocking framing",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify rotated placement bounds, placed-rack transform, and slot state; human review must confirm fixture_ghost, fixture_rotated_ghost, fixture_invalid_ghost, and fixture_placed screenshots frame the intended rack state clearly.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_regression_screenshot_subject_review",
+      "name": "Alpha screenshot scenarios frame their named P1 and P2 bug subjects clearly enough for human review",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify current alpha bug subjects are represented by named screenshot scenarios and the validation gate; human review must confirm the artifacts show the actual store, queue, fixture, release, launch, and backroom subjects instead of merely proving a nonblank render.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_scene_readability_content_review",
+      "name": "Alpha scene readability pass makes the store, queue, fixture, and backroom computer read more intentionally in screenshots",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify wall-detail props, sign placement, customer arc spacing, rack profile cues, placed-fixture framing, and first-view backroom controls; human review must confirm the latest screenshots actually read as a small specialty game shop instead of a graybox with labels.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_content_copy_review",
+      "name": "Alpha content and UI copy makes customers, supplier orders, releases, reports, and backroom controls understandable in play",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify seeded copy fields, report strings, release planning lines, supplier notes, and button labels; human review must confirm the copy improves clarity without becoming too dense or moving register work into the backroom computer.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "stockroom_production_screenshot_review",
+      "name": "Employees-only stockroom screenshots prove receiving, backstock, office computer, and service/security spaces read as physical operations",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the stockroom plan, doc pointers, staff boundary, route cues, receiving-station open/invoice/sort props, backstock shelf/pull-stage props, manager-office computer context, service/safe/records support props, and physical workflow copy; human review must confirm 43_stockroom_staff_threshold, 44_stockroom_route_to_sales_floor, 04_receiving_box_before_pickup, 32_open_box_invoice_sort, 45_receiving_intake_station, 46_backstock_shelving, 47_backstock_pull_stage, 48_manager_office_context, 20_service_bench_ticket, 49_service_safe_records_corner, and 50_storage_tab_physical_flow read as organized stockroom work instead of floor clutter or instant inventory.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_visual_overhaul_screenshot_review",
+      "name": "Production visual overhaul screenshots prove storefront, sales floor, register, catalog, build-mode, and upgrade cues read as one small specialty game shop",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the production visual baseline nodes for storefront/architecture, product-density/register transaction surfaces, catalog/design/build-mode/upgrade cues, and existing lighting/signage/navigation clearance; human review must confirm main_scene, customer_queue, register_counter, receiving_area, backroom_summary, fixture_ghost, fixture_invalid_ghost, fixture_rotated_ghost, and fixture_placed screenshots no longer read as graybox, label clutter, obstructed product paths, unreadable signage, or squeezed UI.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_playtest_package_artifact_review",
+      "name": "Alpha package artifacts are generated and reviewed before external handoff",
+      "status": "manual",
+      "critical": false,
+      "reason": "The local gate creates the pack, logs, screenshots, and performance artifacts; human QA still needs to confirm the handoff folder and any binary-template blocker before sharing with testers.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_external_playtest_run",
+      "name": "External alpha script is run from fresh start through feedback capture",
+      "status": "manual",
+      "critical": false,
+      "reason": "The script measures player understanding, economy feel, customer readability, menu comfort, and save/load confidence, which require human playtest judgment.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "alpha_feedback_triage_review",
+      "name": "External playtest feedback is triaged into the alpha bug list before follow-up implementation",
+      "status": "manual",
+      "critical": false,
+      "reason": "Feedback priority depends on tester notes, screenshots, reproduction steps, and release intent, so it must be reviewed by a human before implementation.",
       "owner": "manual QA"
     }
   ]

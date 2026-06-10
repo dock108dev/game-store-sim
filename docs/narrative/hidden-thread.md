@@ -114,3 +114,11 @@ The hidden thread should be flag-driven and event-driven:
 - The player discovers content through interactable artifacts and customer dialogue, not cutscenes.
 
 This keeps the thread scalable. New suspicious items, suppliers, documents, and customer encounters can be added as data without rewriting the whole story.
+
+## Current Implemented Cues
+
+- One receiving-box serial mismatch can be inspected and stored as hidden evidence.
+- One supplier note in the receiving area can be read as optional context.
+- One register-area cash buyer can be talked to as an optional suspicious customer encounter.
+
+These cues should remain optional until the game has a deliberate case-building or reporting system.

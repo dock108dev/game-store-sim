@@ -1,0 +1,88 @@
+{
+  "ui_scenarios": [
+    {
+      "id": "register_checkout_panel_exists",
+      "name": "Player has a hidden register checkout panel",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_register_checkout_panel_exists"
+    },
+    {
+      "id": "register_checkout_itemized_sale_totals",
+      "name": "Register checkout UI builds itemized sale subtotal, tax, total, tender, and change due",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_builds_itemized_sale_totals_and_tender"
+    },
+    {
+      "id": "register_checkout_sale_confirmation",
+      "name": "Register checkout UI records sale confirmation and transaction feedback",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_completion_records_confirmation_feedback"
+    },
+    {
+      "id": "register_checkout_preorder_deposit_line",
+      "name": "Register checkout UI includes a preorder deposit line separate from sale revenue",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_builds_preorder_deposit_line"
+    },
+    {
+      "id": "register_checkout_service_line",
+      "name": "Register checkout UI includes a service line with service cost and profit",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_builds_service_line_and_profit"
+    },
+    {
+      "id": "register_checkout_return_review",
+      "name": "Register checkout UI builds return review refund, disposition, and receiving-review state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_builds_return_review_line_and_refund"
+    },
+    {
+      "id": "register_checkout_return_scope_idle",
+      "name": "Register checkout idle state describes the returns baseline scope",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_idle_state_includes_return_scope"
+    },
+    {
+      "id": "register_checkout_panel_receipt_fields",
+      "name": "Register checkout panel opens with readable receipt, total, tender, change, return, and status fields",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_panel.gd::test_register_checkout_panel_opens_with_receipt_fields"
+    },
+    {
+      "id": "register_checkout_panel_modal_transition",
+      "name": "Register checkout panel opens with visible mouse and focus, then closes back to captured mouse",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_panel.gd::test_register_checkout_panel_transition_controls_mouse_and_focus"
+    },
+    {
+      "id": "register_checkout_panel_confirm_sale",
+      "name": "Register checkout panel confirm completes the sale and disables duplicate confirmation",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_panel.gd::test_register_checkout_panel_confirm_completes_sale_and_disables_action"
+    },
+    {
+      "id": "register_checkout_panel_confirm_return",
+      "name": "Register checkout panel confirm completes a return refund and disables duplicate confirmation",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_panel.gd::test_register_checkout_panel_confirms_return_and_disables_action"
+    },
+    {
+      "id": "player_opens_register_checkout",
+      "name": "Player opens the register checkout panel from a waiting sale",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_player_controller.gd::test_player_opens_register_checkout"
+    }
+  ]
+}

@@ -1,70 +1,273 @@
 # Backlog
 
-This backlog is intentionally coarse. Detailed tasks should be split when a slice is approved.
+This backlog is the active production view. The historical first-playable checklist remains in `01-vertical-slice-plan.md`.
 
-## Now
+## Current Phase
 
-- Add customer movement/path validation so buyers feel less scripted.
-- Expand from one deterministic target buyer to a small in-store customer queue.
-- Keep used-game pricing distinct from fixed-price new game/hardware rules.
-- Add optional "apply to all matching used items" pricing once multiple instances of the same product exist.
-- Keep validation coverage current as the sale loop changes.
+Production visual overhaul baseline implementation and screenshot review.
 
-## First Playable Counter Loop
+Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-- Pick up an item from a receiving box. Done.
-- Inspect product name, platform, condition, cost, and market value.
-- Set a sale price. Done for used items.
-- Place the item on a shelf/display rack. Done.
-- Spawn one target buyer customer. Done.
-- Let the customer find the item and queue at the register. Done, deterministic in-store claim.
-- Ring up the item at the register. Done.
-- Complete sale. Done.
-- Record transaction. Done.
-- Show end-of-day cash and profit summary. Done for in-memory sales via the backroom computer.
+Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, readability recovery implementation plus label depth-safety stabilization are complete, employees-only stockroom production is mechanically complete through Slice 8, the first post-stockroom returns baseline is implemented, and the production visual overhaul baseline is mechanically complete through Slice 14 in `18-production-visuals-plan.md`. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set, stockroom screenshot set, and production-visual review set in a real 1280x720 window.
 
-## Trade-In Slice
+Historical polish roadmap: `08-polish-roadmap.md`.
 
-- Add customer-carried used item.
-- Add condition inspection UI.
-- Add market value and demand lookup.
-- Add cash/store-credit offer.
-- Add accept/counter/decline customer response.
-- Add acquired item to inventory.
+Completed polish implementation plan: `10-polish-execution-plan.md`.
 
-## Store Layout Slice
+Current completion plan: `11-game-completion-plan.md`.
 
-- Add fixture and equipment ordering interface.
-- Add fixture ghost placement.
-- Add valid/invalid placement state.
-- Add rotate and snap controls.
-- Add shelf category assignment.
-- Add basic customer path validation.
+Completed recovery implementation plan: `16-playability-readability-recovery-plan.md`.
 
-## Economy Slice
+Active stockroom production plan: `17-stockroom-production-plan.md`.
 
-- Add demand per category.
-- Add price sensitivity.
-- Add sales history.
-- Add market drift.
-- Add daily report.
-- Add reorder suggestions.
+Completed production visuals baseline plan: `18-production-visuals-plan.md`.
 
-## Hidden Thread Slice
+## Current Rules
 
-- Add suspicious event flags.
-- Add mismatched serial item.
-- Add supplier message artifact.
-- Add optional evidence storage.
-- Add one suspicious customer encounter.
-- Keep all hidden-thread content optional and avoid blocking normal store progression.
+- Keep the game shippable after every slice.
+- Update `07-current-manual-playtest.md` and `game/tests/validation/scenarios/manual_checks.json` whenever a slice changes visual, UI, interaction, or manual validation expectations.
+- Run `scripts/validate_godot.sh` before every commit.
+- Commit and push each validated slice before starting another.
+- Keep click-first prompts, center-reticle interaction, and mouse-capture behavior consistent.
+- Keep the register focused on sales, returns, trade-ins, preorders, and services.
+- Keep the backroom computer focused on management, ordering, reports, inventory, releases, and fixture/storage work.
+- Do not add a standalone pricing terminal.
+- Keep hidden-thread content optional and nonblocking until a deliberate escalation phase.
 
-## Tooling
+## Priority Backlog
 
-- Maintain the mandatory local validation gate in `scripts/validate_godot.sh`.
-- Keep modular validation files under `game/tests/validation/` current as UI scenarios and scripts are added.
-- Report manual QA for held-item visibility, upright stocked item placement, pricing panel readability, day summary readability, prompt readability, mouse capture, and rack/register/backroom/receiving-box composition after every interaction-loop change.
-- Do not add a standalone pricing terminal. Pricing belongs on used-item inspection/held-item actions; terminals are reserved for register sales/returns/trade-ins and future backroom management.
-- Add debug test maps only when they are called by the validation gate or a documented manual checklist.
-- Extend product data validation inside the local gate as product resources become more complex.
-- Add save/load smoke tests to the local gate after persistence exists.
+1. Completion planning lock. Done in `11-game-completion-plan.md`.
+2. Production direction and target slice. Done in `12-production-target-contracts.md`.
+3. Store environment production pass. Done through Milestone 2.
+4. Interaction and game-feel production pass. Done through Milestone 3.
+5. Menu, register, and computer production UI. Done through Milestone 4.
+6. Customer production pass. Done through Milestone 5.
+7. Product and content pipeline. Done through Milestone 6.
+8. Economy, day loop, and progression. Done through Milestone 7.
+9. Backroom operations. Done through Milestone 8.
+10. Store building, decoration, and expansion. Done through Milestone 9.
+11. Hidden-thread production arc. Done through Milestone 10.
+12. Audio, VFX, and presentation feel. Done through Milestone 11.
+13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
+14. Alpha hardening. Complete through Stop 13.7; external playtest package exists but is paused by the June 9 manual readability blocker.
+15. Playability readability recovery. Implementation complete; owner screenshot validation remains required before external playtest.
+16. Employees-only stockroom production. Mechanically complete through Slice 8; owner screenshot validation remains required before external playtest.
+17. Returns/exchanges baseline. Complete for first-pass register refund, receiving-review routing, cash/reputation accounting, daily-report readout, scene wiring, validation coverage, and manual checklist updates.
+18. Production visual overhaul. Mechanically complete through Slice 14 in `18-production-visuals-plan.md`; automated coverage now protects storefront/architecture, sales-floor density, register transaction surfaces, product/catalog/build/customization cues, lighting/signage, and navigation clearance. Owner screenshot review remains required before external playtest.
+
+## Completed Polish Scope
+
+The following polish items remain valid historical checkpoints:
+
+1. Production polish planning reset. Done.
+2. Backroom spatial and visual identity pass. Done.
+3. Backroom computer/menu information architecture pass. Done.
+4. Customer readability and role silhouette pass. Done.
+5. Store lighting, materials, signage, and retail clutter pass. Done.
+6. Product and fixture presentation pass. Done.
+7. Validation/manual QA tightening for the full polish pass. Done.
+
+## Backroom Polish
+
+- Done: made the backroom visually distinct from the sales floor with explicit zone anchors.
+- Done: separated receiving, storage, management, service/repair, paperwork, and optional hidden-thread cues.
+- Done: added receiving pallet, box stacks, storage shelf, management board, service bench, disc mat, paperwork, and tool tray as graybox identity props.
+- Done: kept supplier-delivered stock placement readable as physical receiving, not UI inventory teleporting.
+- Done: kept storage fixture ordering and placement readable as a backroom/operations workflow.
+- Done: kept the backroom computer readable as a management terminal, not another register.
+- Done: added a receiving workflow state for supplier deliveries with delivery point, sealed/opened box state, invoice check, sorting destination, pending/completed status, backroom controls, save/load coverage, and manual validation coverage.
+- Done: added storage workflow state for receiving-to-backstock movement, backstock retrieval, shelf capacity, overflow summary, Store/Pull backroom controls, movement history, save/load coverage, and manual validation coverage.
+- Done: added service bench workflow state for disc resurfacing tickets, locked/placeholder future services, parts, queued/in-progress/ready/picked-up progress, Start Job/Work Job controls, register pickup integration, save/load coverage, and manual validation coverage.
+- Done: added management desk workflow state for supplier-message review, bills, inventory search, report review, preorder planning, upgrade ordering, Review Desk/Upgrade controls, save/load coverage, and manual validation coverage.
+- Done: added security/safe placeholder state for cash safe, high-value storage, suspicious goods isolation, security footage, Records tab readout, StoreSession/EvidenceStorage wiring, and manual validation coverage.
+- Done: synced the backroom operations validation snapshot, scenario matrix, manual checks, and milestone status after the Stop 8 pass.
+
+## Computer And Menu Polish
+
+- Done: split the backroom computer into dashboard, activity, inventory, market, releases, and operations sections.
+- Done: grouped actions as Supplier, Storage, Release, Day, and Storage Placement controls.
+- Done: shortened button labels while keeping grouped context clear.
+- Done: preserved current accounting and session behavior while changing presentation.
+- Remaining polish risk: dense text still uses the same source strings and can be improved further during later menu polish if tabs become necessary.
+
+## Customer Polish
+
+- Done: improved customer role readability with distinct colors and role props.
+- Done: added buyer shopping basket, trade-in tag/item, preorder slip, service disc/ticket, and suspicious note/cash cues.
+- Done: improved register-area special customer spacing into a readable arc away from the buyer queue lane.
+- Done: kept customers mechanically separated from hidden-thread infrastructure unless explicitly engaged.
+- Remaining polish risk: customer prompt and feedback copy can still be refined in a future copy pass.
+
+## Store Visual Polish
+
+- Done: established a warmer specialty-store lighting pass with separate sales/register and backroom light layers.
+- Done: added readable fictional `SAVE POINT GAMES` identity signage plus register, backroom, receiving, storage, and display rack labels.
+- Done: improved wall/floor/counter material contrast while preserving sales-floor/backroom zoning.
+- Done: added controlled retail clutter: posters, price sign, bargain bin, queue mat, and controller display props.
+- Done: kept clutter noninteractive and away from interaction hotspots, shelf slots, prompts, and navigation-critical spaces.
+- Remaining polish risk: human screenshot review should confirm the new signs and clutter compose well from normal player camera angles.
+
+## Store Building And Expansion
+
+- Done: expanded the fixture catalog with wall shelf, accessory peg wall, bargain bin, locked case, counter rack, demo kiosk placeholder, new-release wall, and backroom rack entries.
+- Done: added fixture metadata for slot count, accepted product categories, placement zone, gameplay tags, upgrade locks, placeholder status, and catalog summaries.
+- Done: kept the existing starter rack order/place flow intact while exposing locked future fixtures as planning options.
+- Done: improved placement UX with footprint-aware bounds, critical-path clearance anchors, overlap rejection against placed fixtures, adjustment undo, placement issue text, and compact Undo controls.
+- Done: added fixture category assignment with `Assign Cat` storage control, supported-category validation, placed fixture slot updates, category assignment summaries, and demand tuning effects for assigned shelf slots.
+- Done: added a decoration system baseline with wall paint, floor material, posters, signage, lights, display props, a safe clutter budget, backroom `Apply Decor` action, save/load coverage, and manual readability checks.
+- Done: added layout effects for fixture visibility, impulse fixtures, queue spacing, customer travel distance, theft-risk placeholder state, demand tuning, launch queue demand, and main-scene CustomerManager wiring.
+- Done: added a starter expansion baseline that unlocks after Backroom Storage Bay, increases storage capacity, widens placement bounds, expands customer playable/queue bounds, updates upgrade/storage summaries, and persists through save/restore.
+- Done: synced the final building validation snapshot, scenario matrix, manual checks, backlog state, and Milestone 9 status after the Stop 9 pass.
+- Remaining polish risk: the next production milestone is hidden-thread production; store-building art-visible remodel depth remains later expansion work beyond this baseline.
+
+## Hidden Thread Production
+
+- Done: added a data-first suspicion rules catalog for serial mismatch, suspicious supplier, cash buyer, impossible provenance, counterfeit goods, and hidden storage.
+- Done: added metadata and existing-node evaluation for product items, supplier messages, and suspicious customers without creating visible objectives.
+- Done: added event-log rule event creation so later clue surfaces and choices can reuse the same flagged anomaly data.
+- Done: added hidden clue surfaces for receiving invoices, supplier notes, serial lookup, supplier emails, customer comments, security clips, and backroom artifacts.
+- Done: surfaced available/waiting clue status in the backroom Records tab without activating hidden-thread objectives.
+- Done: added hidden choice paths for ignore, document, sell-as-normal, isolate, report, accept-cash, reject-goods, and supplier follow-up.
+- Done: StoreSession records/deduplicates hidden choices, Records shows available paths and recorded choices, and save/load preserves recorded choices.
+- Done: added hidden consequences for reputation, cash, supplier access, customer trust, inspection risk, and story state.
+- Done: StoreSession applies hidden consequences once per recorded choice, Records shows consequence summaries, and save/load preserves consequence events and hidden state scores.
+- Done: added an optionality guard that explicitly says hidden-thread progression is not required, the retail loop is not blocked, and normal work remains available.
+- Done: added a validation-sync GUT audit proving the scenario matrix and manual checklist cover flags, dedupe, persistence, optionality, and manual clue readability.
+- Done: synced hidden-thread scenario coverage, manual Hidden Thread Focus checks, validation baselines, backlog state, and Milestone 10 status for Stop 10.6.
+- Remaining polish risk: the next production milestone is audio, VFX, and presentation feel.
+
+## Audio, VFX, And Presentation Feel
+
+- Done: added a store ambience baseline catalog for room tone, HVAC, street muffle, door chime, register area ambience, backroom ambience, and closing quiet.
+- Done: wired conservative placeholder AudioStreamPlayer3D nodes into the main scene under `StoreAmbience`.
+- Done: synced presentation scenario coverage, script mapping, validation baselines, and manual ambience readability checks for Stop 11.1.
+- Done: added an interaction audio cue catalog and player-controller wiring for pickup, place, stock, scan, register, cash drawer, computer clicks, UI buttons, box open, shelf bump, and errors.
+- Done: synced presentation scenario coverage, script mapping, validation baselines, and manual interaction-audio readability checks for Stop 11.2.
+- Done: added customer audio placeholder profiles for buyer, trade-in, preorder, service, and suspicious customers, covering footstep, mumble, greeting, approval, annoyance, and leaving cues.
+- Done: synced presentation scenario coverage, script mapping, validation baselines, and manual customer-audio readability checks for Stop 11.3.
+- Done: added presentation microfeedback placeholders for target highlights, item settle, sale confirmation, cash/reputation ticks, day transition, delivery arrival, and invalid actions.
+- Done: synced presentation scenario coverage, script mapping, validation baselines, and manual microfeedback readability checks for Stop 11.4.
+- Done: tuned camera feel for subtle movement bob, held-item sway, workstation/modal settling, comfort FOV bounds, and motion comfort.
+- Done: synced presentation scenario coverage, validation baselines, and manual camera-feel readability checks for Stop 11.5.
+- Done: synced presentation validation coverage, validation baselines, manual milestone review checks, and production docs for Stop 11.6.
+- Remaining polish risk: the next production milestone is save/load, settings, and release wrapper.
+
+## Save, Load, Settings, And Release Wrapper
+
+- Done: added file-backed save slot registry with new game slot creation, continue data, overwrite/delete behavior, and save metadata.
+- Done: added save slot panel with New Game, Continue, Overwrite, Delete, slot list, metadata readout, modal focus, mouse capture transition, and player-controller wiring.
+- Done: synced persistence scenario coverage, script mapping, validation baselines, and manual save-slot UI readability checks for Stop 12.1.
+- Done: added save versioning, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed-save failure state, and migration/failure validation coverage for Stop 12.2.
+- Done: expanded the settings menu with audio, display, controls, mouse, accessibility, reset bindings, reset defaults, file-backed settings persistence, player preference application, and manual validation coverage for Stop 12.3.
+- Done: added pause/main-menu panel support with Resume, Start Game, Settings, Save/Load, Main Menu, Quit request state, pause/main menu modes, and safe mouse capture transitions for Stop 12.4.
+- Done: added the macOS desktop export preset, local pack export/boot smoke verifier, validation tool manifest, gate integration, and manual release-wrapper checks for Stop 12.5.
+- Done: synced release-wrapper validation coverage, docs coverage, desktop export tool manifest audit, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist for Stop 12.6.
+- Remaining polish risk: the next production milestone is alpha hardening.
+
+## Alpha Hardening
+
+- Done: created `13-alpha-bug-list.md` from the latest full gate, screenshot artifacts, current manual validation checklist, and release-wrapper limits for Stop 13.1.
+- Current P1 alpha risks: store still reads graybox, signage clips/loses hierarchy, customer roles remain placeholder-heavy, register queue composition is crowded, placed fixture framing can block the camera, and backroom computer screens are dense.
+- Done: added `scripts/measure_alpha_performance.sh`, the Godot performance metric collector, validation tool manifest, gate integration, and `14-alpha-performance-baseline.md` for Stop 13.2.
+- Current alpha performance baseline: main scene resource load 141 ms, instantiate 23 ms, 60-frame step 413 ms, UI panel cycle 43 ms, customer pathing 4 ms, screenshot capture 930 ms, and exported pack startup 413 ms.
+- Done: added regression coverage for rotated fixture placement bounds/history, visible buyer queue spacing against special register customers, and screenshot scenario coverage for current P1/P2 alpha bug subjects for Stop 13.3.
+- Done: added a Stop 13.4A alpha scene-readability pass for wall detail, sign framing, special-customer spacing, display-rack profile cues, placed-fixture screenshot framing, and backroom computer first-view controls.
+- Done: added a Stop 13.4B alpha content/copy pass for customer role copy, dialogue staff context, supplier order notes, release planning hooks, daily report readouts, register return-scope copy, and backroom action labels.
+- Done: added `15-alpha-playtest-package.md`, an alpha package scenario matrix, manual package checks, and validation-sync coverage for Stop 13.6.
+- Done: synced alpha validation docs, scenario matrix, manual checklist, bug list, backlog state, and full-gate evidence for Stop 13.7.
+- Remaining alpha-hardening work: owner recovery screenshot validation, then external playtest and feedback triage if the capture set passes.
+
+## Playability Readability Recovery
+
+- Complete: `16-playability-readability-recovery-plan.md` records the completed implementation sequence and the remaining owner screenshot validation gate.
+- Current blocker: the June 9 manual screenshots `intro_1.png`, `receiveing.png`, `intro_2.png`, and `pricing.png` triggered the recovery work; the implementation is complete, but the owner still needs to capture the recovery screenshot set before external playtest.
+- Reopen the external playtest package only after the recovery screenshot set is readable and the full gate passes.
+
+## Employees-Only Stockroom Production
+
+- Complete: `17-stockroom-production-plan.md` records the implemented stockroom sequence through Slice 8.
+- Goal: turn the functional backroom/receiving systems into a physical employees-only stockroom with receiving station, backstock shelves, manager office/computer, service bench, safe/security corner, and clear carry routes to the sales floor.
+- Done: Slice 1 adds an employees-only staff threshold, doorway frame, office/service cue signs, and a nonblocking floor route cue from receiving/backstock toward the sales floor.
+- Done: Slice 2 adds a more intentional receiving station with open-box flaps, state cards, intake table, invoice cue, and sorted-stock tray.
+- Done: Slice 3 adds categorized backstock shelf lanes, bins, overflow shelf, and a pull-stage surface for Store/Pull physical context.
+- Done: Slice 4 adds manager office context around the computer with chair, planning board label, file boxes, supplier note, bill stack, and office rug.
+- Done: Slice 5 adds service-ready shelf/parts cues plus safe, security, high-value shelf, hold tray, evidence locker, and records file cues.
+- Done: Slice 6 updates owner checklist, supplier lot, receiving, storage, Store/Pull, and status copy to name the receiving station, backstock shelf, pull stage, and physical carry work.
+- Done: Slice 7 adds cooler stockroom light-strip props, route tape, floor shadows, wall planner cards, and cardboard/paper material variation without adding collision blockers.
+- Done: Slice 8 syncs validation docs, keeps the alpha package paused, and records that owner recovery plus stockroom screenshot review are required before external playtest.
+- Do not reopen external playtest from this phase unless owner screenshot validation and stockroom screenshot review both pass.
+
+## Returns And Exchanges Baseline
+
+- Complete: added a return customer to the register arc with a carried returned item and role/archetype wiring.
+- Done: register checkout now opens a `Return Review` state with itemized negative refund line, refund due, disposition, and receiving-review copy.
+- Done: confirming the return records a ledger transaction, reduces cash, records fair-return reputation handling, moves the returned item to receiving review, and updates recent activity/daily report totals.
+- Done: validation scenarios, script mapping, main-scene spacing checks, and manual playtest docs now treat returns as a baseline flow instead of placeholder copy.
+- Remaining future scope: true exchange selection, policy adjudication, fraud/receipt checks, warranty routing, and multi-item return decisions.
+
+## Production Visual Overhaul
+
+- Active: `18-production-visuals-plan.md` converts all 42 `inspiration/` screenshots into a detailed multi-slice implementation plan.
+- Goal: move the current production-intent graybox into a believable stylized specialty game shop while preserving the validated retail loop.
+- Planned slices cover storefront/brand read, interior architecture and materials, sales-floor fixture density, register command center dressing, product visual production, signage/wayfinding, customer role kit, backroom/office/service dressing, fixture placement visual language, computer/catalog UI, transaction UI, lighting/effects, customization/upgrade visibility, and screenshot review.
+- Do not reopen external playtest from this phase unless owner recovery, stockroom, and production-visual screenshot review sets all pass.
+
+## Product And Fixture Polish
+
+- Done: made used-game cases more intentional with spine, platform, and price-sticker cues.
+- Done: kept products compact enough for rack, carry stack, and customer carry.
+- Done: added clearer display-rack category header and slot rails.
+- Done: added receiving-box intake lanes and label to make intake placement read as organized physical inventory.
+- Done: tuned carried item stack fanning so multiple held cases stay visible without blocking the center view.
+- Done: added data-driven product visual rules for case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cue variants.
+- Done: expanded the starter product catalog to 33 fictional products across used games, new games, accessories, hardware, and service tickets.
+- Done: added generated condition/authenticity cues for scratches, missing manual, loose media, damaged labels, reseals, and serial risk.
+- Done: added generated product label/price tag text for category, platform, price, sale, preorder, staff-pick, and bargain cues.
+- Done: added standalone product catalog content validation for IDs, fictional names, required fields, category coverage, pricing sanity, sellable depth, and visual variant coverage.
+- Done: synced the product/content pipeline validation manifest, manual review checklist, and milestone status after the Stop 6 pass.
+- Remaining polish risk: fixture ghost/placed fixture state can still get a dedicated art pass later, but the current automated checks preserve valid/invalid ghost distinction and placed-rack behavior.
+
+## Completed First-Playable Scope
+
+Compressed summary of completed validated systems:
+
+- First-person movement, click-first interaction, prompt, and reticle.
+- Receiving pickup, multi-item carry, held-item pricing, shelf stocking, and apply-to-matching pricing.
+- Product catalog, fictional product validation, multi-day starter product depth, item identity, category, platform family, format, price, cost basis, condition, completeness, authenticity, rarity, demand, market value, risk, default location, data-driven visual variant profile, generated condition/authenticity cue meshes, shelf/price tag text, serial metadata, and active inventory summary.
+- Buyer customer manager, buyer movement, price sensitivity, lower-priced copy selection, register queue, sale completion, and transaction ledger.
+- Trade-in seller, offer panel, cash/store-credit acceptance, counteroffer adjustment, decline, and acquired inventory.
+- Service customer and register-completed service accounting.
+- Return customer, register-reviewed refund, receiving-review item routing, cash/reputation accounting, and daily-report return totals.
+- Service bench ticket preparation with register-completed customer pickup/accounting.
+- Management desk reviews for supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering.
+- Security/safe placeholders for cash storage, high-value storage, suspicious goods isolation, and security footage without activating a hidden-thread objective.
+- Backroom computer summaries, daily report, recent activity, reorder suggestions, demand readout, market drift, supplier ordering, release calendar, allocation commitment, launch-day resolution, and fixture controls.
+- Fixture ordering, ghost preview, valid/invalid state, movement, rotation, snap, placement confirmation, and save-smoke coverage.
+- Supplier orders with due-day receiving-box delivery, pending receiving workflow, and backstock storage/retrieval for delivered inventory.
+- Preorder deposit and launch-day fulfillment/reputation outcome.
+- Hidden event log, mismatched serial item, supplier message, optional suspicious customer, and hidden evidence storage.
+- Mandatory validation gate, product content checker, validation tool manifest, GUT tests, validation scenario matrix, script mapping, persistence smoke, and named screenshots.
+
+## Economy, Day Loop, And Progression
+
+- Done: added production day structure phases for opening, setup, customer hours, closing, report, and tomorrow planning, with daily report, save/load, and validation coverage.
+- Done: added daily cash pressure with rent reserve, utilities/bills, prepaid supplier terms, payroll/repairs/shrinkage placeholders, reserved-obligation summaries, daily report accounting, save/load, and validation coverage.
+- Done: added reputation baseline events for pricing fairness, wait times, fulfilled/missed preorders, service success/failure, return handling, suspicious choices, stock variety, launch shortage integration, daily reports, save/load, and validation coverage.
+- Done: added contextual demand tuning for shelf visibility, price pressure, rarity, marketing, day events, and customer archetype signals, with active-inventory backroom summaries and validation coverage.
+- Done: added a baseline upgrade path for fixtures, category unlocks, service tools, computer tools, signage, storage, and starter expansion, with purchase rules, expansion prerequisite, backroom summary, save/load, and validation coverage.
+- Done: added owner onboarding checklist coverage for receiving, pricing, stocking, checkout, trade-ins, backroom computer, ordering, and closing, with dashboard presentation and validation coverage.
+- Done: synced economy/progression validation across day structure, cash pressure, reputation, demand, upgrades, onboarding, manual playtest, and milestone docs.
+
+## Not Current Scope
+
+These remain future phases unless explicitly selected:
+
+- Theft and shrinkage systems.
+- Full exchanges and advanced return-policy depth beyond the current baseline refund/receiving-review flow.
+- Final production art beyond the planned visual-overhaul baseline.
+- Stocking fixtures for every expanded starter category beyond the current used-game display rack.
+- Employees and staff assignment.
+- Larger store expansion.
+- Later expansion depth beyond the current starter expansion baseline, such as art-visible remodels, construction timing, and multi-room shop growth.
+- Complex hidden-thread consequences.
+- Final audio, animation, VFX, and art-production pass beyond the current placeholder/baseline presentation systems.

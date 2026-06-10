@@ -1,0 +1,82 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pause_menu_panel.gd" id="1_pause_menu"]
+
+[node name="PauseMenuPanel" type="CanvasLayer"]
+script = ExtResource("1_pause_menu")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(600, 500)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 22
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Paused"
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+
+[node name="ModeLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Game paused"
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+text = "Resume"
+theme_override_font_sizes/font_size = 18
+
+[node name="StartButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+text = "Start Game"
+theme_override_font_sizes/font_size = 18
+
+[node name="SettingsButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+text = "Settings"
+theme_override_font_sizes/font_size = 18
+
+[node name="SaveLoadButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+text = "Save / Load"
+theme_override_font_sizes/font_size = 18
+
+[node name="MainMenuButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+text = "Main Menu"
+theme_override_font_sizes/font_size = 18
+
+[node name="QuitButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+text = "Quit"
+theme_override_font_sizes/font_size = 18
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Mouse visible while menu is open"
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1

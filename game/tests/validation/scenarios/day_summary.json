@@ -15,11 +15,32 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_transaction_ledger"
     },
     {
+      "id": "store_session_inventory_root_wiring",
+      "name": "Store session is wired to the scene inventory root",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_store_session_is_wired_to_inventory_root"
+    },
+    {
       "id": "store_session_starting_cash",
       "name": "Store session starts with opening cash",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_starts_with_open_day_and_cash"
+    },
+    {
+      "id": "store_session_production_day_structure",
+      "name": "Store session exposes opening, setup, customer-hours, closing, report, and tomorrow-planning phases",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_exposes_production_day_structure"
+    },
+    {
+      "id": "store_session_day_phase_transitions",
+      "name": "Store session tracks phase transitions through customer hours, closing, report, tomorrow planning, and next-day setup",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_tracks_day_phase_through_close_and_next_day"
     },
     {
       "id": "register_updates_store_cash",
@@ -36,11 +57,67 @@
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_reads_ledger_totals"
     },
     {
+      "id": "store_session_inventory_summary",
+      "name": "Store session summarizes active inventory items",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_summarizes_active_inventory_items"
+    },
+    {
+      "id": "store_session_reorder_suggestions",
+      "name": "Store session suggests reorders for low active stock after sales",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_suggests_reorder_for_low_active_stock_after_sales"
+    },
+    {
+      "id": "store_session_recent_activity_history",
+      "name": "Store session formats recent sale and trade-in activity history",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_recent_activity_history"
+    },
+    {
+      "id": "store_session_store_credit_activity_history",
+      "name": "Store session formats store-credit trade-in activity history",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_store_credit_recent_activity"
+    },
+    {
       "id": "store_session_end_day",
       "name": "Store session can close the current day",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_store_session.gd::test_store_session_can_close_day"
+    },
+    {
+      "id": "daily_report_open_day_snapshot",
+      "name": "Daily report builds an open-day snapshot",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_builds_open_day_snapshot"
+    },
+    {
+      "id": "daily_report_closed_day_totals",
+      "name": "Daily report formats closed-day totals",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_closed_day_totals"
+    },
+    {
+      "id": "daily_report_production_sections",
+      "name": "Daily report formats launch activity, reputation, losses, bills, and tomorrow recommendations",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_daily_report.gd::test_daily_report_formats_launch_reputation_losses_and_tomorrow_plan"
+    },
+    {
+      "id": "store_session_daily_report",
+      "name": "Store session exposes a daily report after close",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_formats_daily_report_after_close"
     },
     {
       "id": "backroom_computer_exists",
@@ -78,11 +155,95 @@
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_opens_with_cash_and_sales_fields"
     },
     {
-      "id": "day_summary_panel_last_sale",
-      "name": "Day summary panel includes the last sale",
+      "id": "day_summary_panel_modal_transition",
+      "name": "Backroom computer panel opens with visible mouse and focus, then closes back to captured mouse",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_last_sale"
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_transition_controls_mouse_and_focus"
+    },
+    {
+      "id": "day_summary_panel_sectioned_readouts",
+      "name": "Backroom computer groups dashboard, activity, inventory, market, release, and operations readouts",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_groups_readouts_by_management_section"
+    },
+    {
+      "id": "day_summary_panel_grouped_actions",
+      "name": "Backroom computer groups supplier, storage, release, day, and placement actions",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_groups_actions_by_operation"
+    },
+    {
+      "id": "day_summary_panel_backroom_tabs",
+      "name": "Backroom computer exposes dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_exposes_backroom_computer_tabs"
+    },
+    {
+      "id": "day_summary_panel_tab_visibility",
+      "name": "Backroom computer tabs switch visible management sections without losing tab state",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_switches_backroom_tab_visibility"
+    },
+    {
+      "id": "management_desk_task_workflow",
+      "name": "Management desk reviews supplier messages, bills, inventory search, reports, preorder planning, and upgrade ordering tasks",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_session.gd::test_store_session_runs_management_desk_review_and_upgrade_ordering"
+    },
+    {
+      "id": "day_summary_panel_management_desk_controls",
+      "name": "Backroom computer exposes Review Desk and Upgrade controls for management desk work",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_runs_management_desk_workflow"
+    },
+    {
+      "id": "management_desk_persistence",
+      "name": "Save codec preserves management desk review history",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_store_save_codec.gd::test_store_save_codec_restores_session_ledger_and_existing_item_state"
+    },
+    {
+      "id": "day_summary_panel_recent_sale_activity",
+      "name": "Day summary panel includes recent sale activity",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_recent_sale_activity"
+    },
+    {
+      "id": "day_summary_panel_recent_trade_in_activity",
+      "name": "Day summary panel includes recent trade-in activity",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_recent_trade_in_activity"
+    },
+    {
+      "id": "day_summary_panel_store_credit_trade_in_activity",
+      "name": "Day summary panel includes store-credit trade-in activity",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_store_credit_trade_in_activity"
+    },
+    {
+      "id": "day_summary_panel_inventory_summary",
+      "name": "Day summary panel includes the active inventory summary",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_inventory_summary"
+    },
+    {
+      "id": "day_summary_panel_reorder_suggestions",
+      "name": "Day summary panel includes reorder suggestions",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_includes_reorder_suggestions"
     },
     {
       "id": "day_summary_panel_end_day",

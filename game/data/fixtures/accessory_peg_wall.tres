@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="FixtureDefinition" format=3 uid="uid://b0sx3365kc0vk"]
+
+[ext_resource type="Script" path="res://scripts/store_layout/fixture_definition.gd" id="1_fixture_definition"]
+
+[resource]
+script = ExtResource("1_fixture_definition")
+fixture_id = "fixture_accessory_peg_wall"
+display_name = "Accessory Peg Wall"
+category = "fixture"
+cost_cents = 8000
+footprint_size = Vector2(1.8, 0.35)
+default_slot_category = "accessory"
+slot_count = 6
+accepted_product_categories = PackedStringArray("accessory", "controller", "cable")
+placement_zone = "sales_floor_wall"
+gameplay_tags = PackedStringArray("accessory_unlock", "wall_visibility", "impulse_browse")
+requires_upgrade_id = "upgrade_fixture_peg_wall"
+scene_path = "res://scenes/props/placeholder_shelf.tscn"
+placeable = true
+description = "Peg wall for controllers, cables, and accessories once the accessory fixture upgrade is purchased."
