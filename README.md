@@ -2,7 +2,7 @@
 
 First-person specialty video game retail simulator. The player runs a small game shop by physically receiving stock, pricing used games, stocking fixtures, serving customers, handling trade-ins and services, planning launch allocations, and noticing optional suspicious activity under the normal retail loop.
 
-The first playable counter loop is implemented and validated. The first polish/readability pass, alpha hardening pass, readability recovery implementation, and stockroom production work through Slice 6 are also validated. External alpha playtest is still paused for owner screenshot review, and the active remaining build plan is the employees-only stockroom lighting/materials plus validation-sync closeout.
+The first playable counter loop is implemented and validated. The first polish/readability pass, alpha hardening pass, readability recovery implementation, and stockroom production work through Slice 7 are also validated. External alpha playtest is still paused for owner screenshot review, and the active remaining build plan is the employees-only stockroom validation-sync closeout.
 
 ## Current Playable State
 

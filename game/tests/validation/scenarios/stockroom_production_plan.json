@@ -125,6 +125,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_day_summary_panel.gd::test_day_summary_panel_moves_receiving_stock_to_backstock_and_back"
+    },
+    {
+      "id": "stockroom_lighting_material_density",
+      "name": "Stockroom lighting, material variation, floor markings, shadows, and wall detail add operations polish without blocking routes",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_stockroom_lighting_materials_and_density_cues_stay_nonblocking"
     }
   ]
 }

@@ -146,4 +146,4 @@ Rejected alternatives:
 
 Follow-up risk:
 
-- Stockroom polish can hide core interactions if prop density grows too fast. Slices 1-6 now establish shell, routes, receiving, backstock, office, service/security, and workflow copy; remaining Slice 7 work must improve lighting/material hierarchy without burying prompts, product labels, or the carry route.
+- Stockroom polish can hide core interactions if prop density grows too fast. Slices 1-7 now establish shell, routes, receiving, backstock, office, service/security, workflow copy, and lighting/material hierarchy; remaining Slice 8 work must keep validation and owner-screenshot gating explicit without reopening external playtest automatically.

@@ -46,8 +46,8 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 538 GUT tests.
-- UI scenario automation coverage is 494/613, above the 80% threshold.
+- `scripts/validate_godot.sh` passes with 539 GUT tests.
+- UI scenario automation coverage is 495/614, above the 80% threshold.
 - Production script mapping coverage is 51/51.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - Desktop pack export smoke passed and produced `artifacts/builds/desktop/game-store-sim.pck`.
@@ -96,6 +96,7 @@ Current production validation baseline:
 - Stockroom Slice 4 coverage verifies the backroom computer is framed by manager-office cues while staying distant from the register.
 - Stockroom Slice 5 coverage verifies service bench ready/parts/ticket cues and secondary safe/security/records/hold surfaces.
 - Stockroom Slice 6 coverage verifies supplier ordering and storage workflow copy names the physical receiving station, backstock shelf, pull stage, and carry work.
+- Stockroom Slice 7 coverage verifies cooler light-strip props, route tape, floor shadows, wall cards, and cardboard/paper material variation remain nonblocking and preserve the carry route.
 - Save slot UI coverage verifies the Stop 12.1 file-backed slot registry, new game slot creation, continue data, overwrite/delete behavior, save metadata, modal accessibility, and player-controller save-panel wiring.
 - Save migration coverage verifies the Stop 12.2 current save version, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed JSON failure state, and readable migration-policy summary text.
 - Settings menu coverage verifies the Stop 12.3 audio, display, controls, mouse, accessibility, persistence, bindings reset, default reset, modal focus, and player settings application surface.
@@ -278,7 +279,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/alpha_validation_sync.json`: alpha hardening validation-sync docs, gate snapshot, scenario matrix, and manual checklist coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
-- `scenarios/stockroom_production_plan.json`: active stockroom planning, implemented stockroom slices, workflow-copy evidence, and remaining Slice 7/8 validation-sync coverage.
+- `scenarios/stockroom_production_plan.json`: active stockroom planning, implemented stockroom slices, workflow-copy evidence, lighting/material-density evidence, and remaining Slice 8 validation-sync coverage.
 
 Script test mappings live in `script_coverage/production_scripts.json`, standalone tool manifests live in `tool_checks/*.json`, and thresholds live in `thresholds.json`.
 Standalone non-Godot validation tools live under `scripts/`; `scripts/check_product_catalog.py` is run by `scripts/validate_godot.sh` after scenario coverage and before screenshot capture.

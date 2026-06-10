@@ -24,10 +24,10 @@ func test_stockroom_plan_is_active_next_stage() -> void:
 	assert_string_contains(plan, "do not turn them into instant sales-floor inventory")
 	assert_string_contains(plan, "Docs Audit Result")
 	assert_string_contains(plan, "No production doc should be deleted in this pass")
-	assert_string_contains(plan, "implemented through Slice 6")
+	assert_string_contains(plan, "implemented through Slice 7")
 	assert_string_contains(readme, "Employees-Only Stockroom Production Plan")
 	assert_string_contains(backlog, "Employees-only stockroom production")
-	assert_string_contains(backlog, "Implemented through Slice 6")
+	assert_string_contains(backlog, "Implemented through Slice 7")
 	assert_string_contains(completion_plan, "17-stockroom-production-plan.md")
 	assert_string_contains(decision_log, "Employees-Only Stockroom Production")
 	assert_string_contains(package_doc, "stockroom screenshot set")
@@ -85,10 +85,11 @@ func test_stockroom_validation_scenarios_are_registered() -> void:
 		"stockroom_backstock_pull_stage",
 		"stockroom_manager_office_context",
 		"stockroom_service_bench_cues",
-		"stockroom_safe_records_corner",
-		"stockroom_supplier_physical_flow_copy",
-		"stockroom_storage_physical_flow_copy",
-	]
+			"stockroom_safe_records_corner",
+			"stockroom_supplier_physical_flow_copy",
+			"stockroom_storage_physical_flow_copy",
+			"stockroom_lighting_material_density",
+		]
 
 	for scenario_id in required_ids:
 		assert_true(scenarios.has(scenario_id), "missing stockroom scenario %s" % scenario_id)

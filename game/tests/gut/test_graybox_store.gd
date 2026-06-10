@@ -310,6 +310,60 @@ func test_production_lighting_accents_stay_readable_and_bounded() -> void:
 	assert_lte(sun_light.light_energy + sales_light.light_energy + register_light.light_energy + backroom_light.light_energy + total_accent_energy, 11.0)
 
 
+func test_stockroom_lighting_materials_and_density_cues_stay_nonblocking() -> void:
+	var cool_light_props := [
+		"StockroomCoolLightStripReceiving",
+		"StockroomCoolLightStripOffice",
+	]
+	for prop_path in cool_light_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision)
+		assert_gt(prop.global_position.y, 2.5)
+		var material := prop.material as StandardMaterial3D
+		assert_not_null(material)
+		assert_gt(material.albedo_color.b, material.albedo_color.r)
+
+	var carry_route := _store.get_node("StockroomCarryRoute") as CSGBox3D
+	for tape_path in ["StockroomRouteTapeA", "StockroomRouteTapeB", "StockroomRouteTapeC"]:
+		var tape := _store.get_node_or_null(tape_path) as CSGBox3D
+		assert_not_null(tape)
+		assert_false(tape.use_collision)
+		assert_lte(tape.size.y, 0.0061)
+		assert_lte(_flat_distance_xz(tape.global_position, carry_route.global_position), 4.0)
+		var tape_material := tape.material as StandardMaterial3D
+		assert_not_null(tape_material)
+		assert_eq(tape_material.transparency, BaseMaterial3D.TRANSPARENCY_ALPHA)
+
+	for shadow_path in ["ReceivingPalletShadow", "BackstockShelfShadow"]:
+		var shadow := _store.get_node_or_null(shadow_path) as CSGBox3D
+		assert_not_null(shadow)
+		assert_false(shadow.use_collision)
+		assert_lte(shadow.size.y, 0.0041)
+		assert_lte(shadow.global_position.y, 0.006)
+		var shadow_material := shadow.material as StandardMaterial3D
+		assert_not_null(shadow_material)
+		assert_eq(shadow_material.transparency, BaseMaterial3D.TRANSPARENCY_ALPHA)
+
+	var cardboard := (_store.get_node("ReceivingBoxStackA") as CSGBox3D).material as StandardMaterial3D
+	var cardboard_alt := (_store.get_node("ReceivingBoxStackB") as CSGBox3D).material as StandardMaterial3D
+	var paper := (_store.get_node("ReceivingInvoicePaper") as CSGBox3D).material as StandardMaterial3D
+	var blue_slip := (_store.get_node("ReceivingBlueSortSlip") as CSGBox3D).material as StandardMaterial3D
+	assert_not_null(cardboard)
+	assert_not_null(cardboard_alt)
+	assert_not_null(paper)
+	assert_not_null(blue_slip)
+	assert_gt(absf(cardboard_alt.albedo_color.r - cardboard.albedo_color.r), 0.05)
+	assert_gt(blue_slip.albedo_color.b, paper.albedo_color.b)
+
+	for wall_detail_path in ["ReceivingWallChecklist", "ReceivingWallBlueSlip", "OfficeWallPlannerCardA", "OfficeWallPlannerCardB"]:
+		var wall_detail := _store.get_node_or_null(wall_detail_path) as CSGBox3D
+		assert_not_null(wall_detail)
+		assert_false(wall_detail.use_collision)
+		assert_gt(wall_detail.global_position.y, 1.0)
+		assert_gt(wall_detail.global_position.z, 5.6)
+
+
 func test_sales_floor_has_merchandising_and_route_cues() -> void:
 	var route_mat := _store.get_node_or_null("SalesFloorRouteMat") as CSGBox3D
 	var new_release_endcap := _store.get_node_or_null("NewReleaseEndcap") as Node3D
@@ -947,20 +1001,32 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 		"ScannerBeamCue",
 		"CardReader",
 		"ReceiptPrinter",
-		"SleeveStack",
-		"CounterImpulseRack/ImpulseRackBase",
-		"CustomerCounterMat",
-		"RegisterQueueMat",
-		"BackroomReceivingZone",
-		"BackroomStorageZone",
-		"BackroomManagementZone",
-		"BackroomServiceZone",
-		"BackroomPathZone",
-		"BackroomDeliveryDoor",
-		"ReceivingInvoiceClipboard",
-		"BackstockOverflowCrateA",
-		"BackstockOverflowCrateB",
-		"ManagementDeskPad",
+			"SleeveStack",
+			"CounterImpulseRack/ImpulseRackBase",
+			"CustomerCounterMat",
+			"RegisterQueueMat",
+			"StockroomRouteTapeA",
+			"StockroomRouteTapeB",
+			"StockroomRouteTapeC",
+			"StockroomCoolLightStripReceiving",
+			"StockroomCoolLightStripOffice",
+			"BackroomReceivingZone",
+			"BackroomStorageZone",
+			"BackroomManagementZone",
+			"BackroomServiceZone",
+			"BackroomPathZone",
+			"ReceivingPalletShadow",
+			"BackroomDeliveryDoor",
+			"ReceivingWallChecklist",
+			"ReceivingWallBlueSlip",
+			"ReceivingInvoiceClipboard",
+			"ReceivingBlueSortSlip",
+			"BackstockOverflowCrateA",
+			"BackstockOverflowCrateB",
+			"BackstockShelfShadow",
+			"OfficeWallPlannerCardA",
+			"OfficeWallPlannerCardB",
+			"ManagementDeskPad",
 		"ManagementKeyboard",
 		"BackroomServiceBench/ServiceTicketPanel",
 		"BackroomSafePlaceholder/SafeBody",
