@@ -1083,6 +1083,10 @@ func test_production_visual_overhaul_storefront_and_architecture_cues_exist() ->
 		"StorefrontSignTrimTop",
 		"StorefrontSignTrimBottom",
 		"WindowDisplayConsoleBox",
+		"WindowDisplayShelfDeck",
+		"WindowDisplaySpotlightBar",
+		"WindowDisplayControllerA",
+		"WindowDisplayControllerB",
 		"WindowDisplayCaseA",
 		"WindowDisplayCaseB",
 		"WindowDisplayPosterPanel",
@@ -1096,9 +1100,13 @@ func test_production_visual_overhaul_storefront_and_architecture_cues_exist() ->
 		assert_lt(prop.global_position.z, -5.45, prop_path)
 
 	assert_eq((_store.get_node("WindowDisplayPosterPanel/WindowDisplayPosterLabel") as Label3D).text, "USED + NEW")
+	assert_eq((_store.get_node("WindowDisplayCaseA/WindowDisplayCaseALabel") as Label3D).text, "USED")
+	assert_eq((_store.get_node("WindowDisplayCaseB/WindowDisplayCaseBLabel") as Label3D).text, "SEALED")
 	assert_eq((_store.get_node("TradeServiceDecalPanel/TradeServiceDecalLabel") as Label3D).text, "TRADE / SERVICE")
 	assert_gt((_store.get_node("StorefrontSignTrimTop") as CSGBox3D).global_position.y, 2.4)
 	assert_lt((_store.get_node("WindowDisplayConsoleBox") as CSGBox3D).global_position.y, 0.7)
+	assert_lt((_store.get_node("WindowDisplayShelfDeck") as CSGBox3D).global_position.y, 0.5)
+	assert_gt((_store.get_node("WindowDisplaySpotlightBar") as CSGBox3D).global_position.y, 1.7)
 
 	var architecture_props := [
 		"SalesBaseboardFront",
