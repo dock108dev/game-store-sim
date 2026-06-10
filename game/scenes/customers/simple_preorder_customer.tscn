@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ctu3fc8qprgmd"]
+[gd_scene format=3 uid="uid://ctu3fc8qprgmd"]
 
 [ext_resource type="Script" path="res://scripts/customers/simple_preorder_customer.gd" id="1_preorder_customer"]
 [ext_resource type="Resource" path="res://data/releases/neon_skyline_launch.tres" id="2_release"]

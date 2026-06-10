@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bs2registercheckout"]
+[gd_scene format=3 uid="uid://iodaup4sfve6"]
 
 [ext_resource type="Script" path="res://scripts/ui/register_checkout_panel.gd" id="1_register_checkout_panel"]
 

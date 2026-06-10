@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://busdix6rxg8aj"]
+[gd_scene format=3 uid="uid://busdix6rxg8aj"]
 
 [ext_resource type="Script" path="res://scripts/customers/suspicious_customer.gd" id="1_suspicious_customer"]
 [ext_resource type="Script" path="res://scripts/customers/customer_pose_animator.gd" id="2_pose"]
