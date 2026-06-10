@@ -69,6 +69,13 @@ Make the backroom feel like the owner's working operations space: receiving, bac
 - Release and launch screenshots are scan-friendly.
 - Hidden-thread surfaces stay optional and secondary.
 
+## Implemented Evidence
+
+- Receiving station includes delivery/check/sort workflow cards on the intake surface.
+- Backstock has category lanes, overflow storage, and pull-stage labeling.
+- Floor arrows connect receiving to pull staging and backstock to sales-floor restock flow.
+- `test_graybox_store.gd` asserts all workflow cues are non-colliding and close to their intended route.
+
 ## Test
 
 - Run store session, day summary, hidden-thread, and scene tests.

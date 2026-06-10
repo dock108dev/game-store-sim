@@ -380,6 +380,12 @@ Acceptance checks:
 - Store/Pull workflow is physically grounded.
 - Carry path remains clear.
 
+Implemented evidence:
+
+- Added receiving workflow cards for delivery, check, and sort states beside the intake surface.
+- Added low floor arrows linking receiving to pull staging and backstock toward shelf-restock flow.
+- Expanded receiving/backstock tests to lock the workflow cards, carry arrows, pull stage, and non-colliding stockroom route.
+
 Validation:
 
 - Store session, day summary, scene tests.

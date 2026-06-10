@@ -30,6 +30,7 @@ Use this checklist to approve the opening store and backroom before full catalog
 ## Receiving And Stockroom
 
 - Receiving station shows box, invoice, sorted tray, products, and pickup path.
+- Delivery/check/sort workflow cards and pull/restock arrows explain stock movement physically.
 - Supplier delivery reads as physical stock arrival.
 - Backstock shelves show category lanes and capacity.
 - Pull/store flow reads as backroom work, not menu teleporting.

@@ -854,6 +854,9 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 		"ReceivingSortedTrayLaneA",
 		"ReceivingSortedTrayLaneB",
 		"ReceivingSortedTrayLaneC",
+		"ReceivingWorkflowCardDelivery",
+		"ReceivingWorkflowCardCheck",
+		"ReceivingWorkflowCardSort",
 	]
 	for prop_path in receiving_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -917,20 +920,28 @@ func test_backstock_pull_stage_connects_storage_to_carry_route() -> void:
 	var pull_slip := _store.get_node_or_null("BackstockPullStageSlip") as CSGBox3D
 	var pull_label := _store.get_node_or_null("BackstockPullStageLabelPanel/BackstockPullStageLabel") as Label3D
 	var overflow_shelf := _store.get_node_or_null("BackstockOverflowShelf") as CSGBox3D
+	var receiving_arrow := _store.get_node_or_null("ReceivingWorkflowArrowToPull") as CSGBox3D
+	var shelf_arrow := _store.get_node_or_null("BackstockWorkflowArrowToShelf") as CSGBox3D
 
 	assert_not_null(pull_stage)
 	assert_not_null(pull_slip)
 	assert_not_null(pull_label)
 	assert_not_null(overflow_shelf)
+	assert_not_null(receiving_arrow)
+	assert_not_null(shelf_arrow)
 	assert_false(pull_stage.use_collision)
 	assert_false(pull_slip.use_collision)
 	assert_false(overflow_shelf.use_collision)
+	assert_false(receiving_arrow.use_collision)
+	assert_false(shelf_arrow.use_collision)
 	assert_eq(pull_label.text, "PULL")
 	assert_true(pull_label.no_depth_test)
 	assert_eq(pull_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 	assert_lt(_flat_distance_xz(pull_stage.global_position, storage_shelf.global_position), 2.1)
 	assert_lt(_flat_distance_xz(pull_stage.global_position, receiving_box.global_position), 1.5)
 	assert_lt(_flat_distance_xz(pull_stage.global_position, carry_route.global_position), 3.0)
+	assert_lt(_flat_distance_xz(receiving_arrow.global_position, receiving_box.global_position), 1.8)
+	assert_lt(_flat_distance_xz(shelf_arrow.global_position, storage_shelf.global_position), 2.0)
 	assert_gt(pull_stage.global_position.y, 0.35)
 
 
@@ -939,6 +950,11 @@ func test_receiving_intake_station_reads_as_workflow_surface() -> void:
 	var intake_table := _store.get_node_or_null("ReceivingIntakeTableTop") as CSGBox3D
 	var sorted_tray := _store.get_node_or_null("ReceivingSortedTray") as CSGBox3D
 	var sorted_label := _store.get_node_or_null("ReceivingSortedTrayLabelPanel/ReceivingSortedTrayLabel") as Label3D
+	var workflow_cards := [
+		"ReceivingWorkflowCardDelivery",
+		"ReceivingWorkflowCardCheck",
+		"ReceivingWorkflowCardSort",
+	]
 
 	assert_not_null(intake_table)
 	assert_not_null(sorted_tray)
@@ -951,6 +967,12 @@ func test_receiving_intake_station_reads_as_workflow_surface() -> void:
 	assert_lt(_flat_distance_xz(intake_table.global_position, receiving_box.global_position), 0.9)
 	assert_lt(_flat_distance_xz(sorted_tray.global_position, receiving_box.global_position), 1.1)
 	assert_gt(sorted_tray.global_position.y, receiving_box.global_position.y + 0.35)
+	for card_path in workflow_cards:
+		var card := _store.get_node_or_null(card_path) as CSGBox3D
+		assert_not_null(card)
+		assert_false(card.use_collision)
+		assert_lt(_flat_distance_xz(card.global_position, receiving_box.global_position), 1.8)
+		assert_gt(card.global_position.y, 0.65)
 
 	for item_name in ["PlaceholderUsedGame", "PlaceholderUsedGame002", "PlaceholderUsedGame003"]:
 		var item := receiving_box.get_node(item_name) as Node3D

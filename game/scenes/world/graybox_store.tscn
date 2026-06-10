@@ -1201,6 +1201,31 @@ billboard = 1
 text = "SORTED"
 font_size = 16
 
+[node name="ReceivingWorkflowCardDelivery" type="CSGBox3D" parent="."]
+size = Vector3(0.38, 0.16, 0.018)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -5.02, 0.72, 3.04)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="ReceivingWorkflowCardCheck" type="CSGBox3D" parent="."]
+size = Vector3(0.38, 0.16, 0.018)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.58, 0.72, 3.12)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ReceivingWorkflowCardSort" type="CSGBox3D" parent="."]
+size = Vector3(0.38, 0.16, 0.018)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.14, 0.72, 3.2)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ReceivingWorkflowArrowToPull" type="CSGBox3D" parent="."]
+size = Vector3(0.72, 0.012, 0.055)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, -3.58, 0.066, 3.92)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
+[node name="BackstockWorkflowArrowToShelf" type="CSGBox3D" parent="."]
+size = Vector3(0.88, 0.012, 0.055)
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, -4.62, 0.066, 5.0)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
 [node name="BackstockOverflowCrateA" type="CSGBox3D" parent="."]
 size = Vector3(0.66, 0.36, 0.46)
 transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, -3.22, 0.18, 5.42)
