@@ -38,6 +38,7 @@ Implemented in the current branch:
 - Records/safe/security/evidence props are present as secondary optional surfaces.
 - Scene tests assert workflow cues are non-colliding and close to their intended routes.
 - Office tests assert cues stay near the computer, inside the store footprint, separated from register actions, and depth-safe for labels.
+- `StoreSession` now exposes a `get_stockroom_route_summary_text()` contract that ties receiving, invoice check, category backstock, pull staging, and sales-floor restock into one normal retail flow.
 
 This establishes the opening-store stockroom baseline. Future work can add richer supplier lots and service depth without changing the physical flow.
 

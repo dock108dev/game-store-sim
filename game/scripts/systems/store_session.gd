@@ -1353,6 +1353,7 @@ func get_storage_workflow_summary_text() -> String:
 		overflow,
 	])
 	lines.append("Sales floor fixtures: %d stocked" % int(counts.get("shelf", 0)))
+	lines.append("Route: receiving_box_001 -> %s -> stockroom_pull_stage -> sales_floor_fixtures" % STORAGE_LOCATION_ID)
 	if storage_movements.is_empty():
 		lines.append("Recent storage move: none")
 	else:
@@ -1363,6 +1364,23 @@ func get_storage_workflow_summary_text() -> String:
 			str(last_movement.get("from_location", "unknown")),
 			str(last_movement.get("to_location", "unknown")),
 		])
+	return "\n".join(lines)
+
+
+func get_stockroom_route_summary_text() -> String:
+	var counts := get_storage_status_counts()
+	var lines: Array[String] = ["Stockroom route:"]
+	lines.append("1. Receive: delivery cases land in receiving_box_001")
+	lines.append("2. Check: invoice clipboard and sort tray verify the batch")
+	lines.append("3. Store: overflow and category bins use %s" % STORAGE_LOCATION_ID)
+	lines.append("4. Pull: stockroom_pull_stage prepares cases for the floor")
+	lines.append("5. Restock: sales_floor_fixtures receive priced cases")
+	lines.append("Ready states: receiving %d / backstock %d / shelf %d" % [
+		int(counts.get("receiving", 0)),
+		int(counts.get("backstock", 0)),
+		int(counts.get("shelf", 0)),
+	])
+	lines.append("Core retail blocked by hidden records: no")
 	return "\n".join(lines)
 
 
