@@ -58,6 +58,13 @@ The player should understand within five seconds that they are in or entering a 
 - No storefront prop implies the player can leave if leaving is unsupported.
 - Path from entry to register, shelf, receiving, and backroom remains visible.
 
+## Implemented Evidence
+
+- `graybox_store.tscn` includes facade piers, door-frame segmentation, a threshold strip, and entry route stripes.
+- Window-display props include shelf deck, cases, controller props, poster card, console box, and platform stack.
+- `BackroomHintFromEntryPanel` keeps the office/stockroom route visible from the opening composition.
+- `test_graybox_store.gd` locks storefront cue presence and first-view landmarks.
+
 ## Test
 
 - Run focused scene tests if updated.

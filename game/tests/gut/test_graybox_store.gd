@@ -80,22 +80,26 @@ func test_storefront_entry_has_production_cues() -> void:
 	var left_glass := _store.get_node_or_null("StorefrontGlassLeft") as CSGBox3D
 	var right_glass := _store.get_node_or_null("StorefrontGlassRight") as CSGBox3D
 	var entry_cue := _store.get_node_or_null("EntrySidewalkCue") as CSGBox3D
+	var threshold_strip := _store.get_node_or_null("EntryThresholdInteriorStrip") as CSGBox3D
 	var open_label := _store.get_node_or_null("OpenSignPanel/OpenSignLabel") as Label3D
 	var hours_label := _store.get_node_or_null("HoursDecalPanel/HoursDecalLabel") as Label3D
 
 	assert_not_null(left_glass)
 	assert_not_null(right_glass)
 	assert_not_null(entry_cue)
+	assert_not_null(threshold_strip)
 	assert_not_null(open_label)
 	assert_not_null(hours_label)
 	assert_false(left_glass.use_collision)
 	assert_false(right_glass.use_collision)
 	assert_false(entry_cue.use_collision)
+	assert_false(threshold_strip.use_collision)
 	assert_eq(open_label.text, "OPEN")
 	assert_eq(hours_label.text, "11-8")
 	assert_lt(left_glass.global_position.z, -5.8)
 	assert_lt(right_glass.global_position.z, -5.8)
 	assert_lt(entry_cue.global_position.z, -5.8)
+	assert_lt(threshold_strip.global_position.z, -5.2)
 	assert_gt(left_glass.size.y, 1.6)
 	assert_gt(right_glass.size.y, 1.6)
 
@@ -103,6 +107,35 @@ func test_storefront_entry_has_production_cues() -> void:
 	assert_not_null(glass_material)
 	assert_lt(glass_material.albedo_color.a, 0.5)
 	assert_eq(glass_material.transparency, BaseMaterial3D.TRANSPARENCY_ALPHA)
+
+
+func test_opening_spawn_composition_has_first_view_landmarks() -> void:
+	var player := _store.get_node("PlayerController") as CharacterBody3D
+	var store_sign := _store.get_node_or_null("StoreIdentitySignPanel") as CSGBox3D
+	var register := _store.get_node_or_null("RegisterWorkstation") as Node3D
+	var display_rack := _store.get_node_or_null("GameDisplayRack") as Node3D
+	var backroom_hint := _store.get_node_or_null("BackroomHintFromEntryPanel") as CSGBox3D
+	var register_route := _store.get_node_or_null("EntryRouteStripeRegister") as CSGBox3D
+	var shelf_route := _store.get_node_or_null("EntryRouteStripeShelf") as CSGBox3D
+
+	assert_not_null(store_sign)
+	assert_not_null(register)
+	assert_not_null(display_rack)
+	assert_not_null(backroom_hint)
+	assert_not_null(register_route)
+	assert_not_null(shelf_route)
+	assert_false(backroom_hint.use_collision)
+	assert_false(register_route.use_collision)
+	assert_false(shelf_route.use_collision)
+	assert_lt(_flat_distance_xz(player.global_position, store_sign.global_position), 5.6)
+	assert_lt(_flat_distance_xz(player.global_position, register.global_position), 5.2)
+	assert_gt(display_rack.global_position.z, 5.4)
+	assert_gt(backroom_hint.global_position.z, 3.0)
+	assert_eq((_store.get_node("BackroomHintFromEntryPanel/BackroomHintFromEntryLabel") as Label3D).text, "OFFICE + STOCK")
+	assert_lt(register_route.global_position.z, -4.6)
+	assert_lt(shelf_route.global_position.z, -4.5)
+	assert_gt(register_route.global_position.x, 0.5)
+	assert_lt(shelf_route.global_position.x, -0.5)
 
 
 func test_receiving_box_exists() -> void:
@@ -1083,9 +1116,17 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 
 func test_production_visual_overhaul_storefront_and_architecture_cues_exist() -> void:
 	var storefront_props := [
+		"EntryThresholdInteriorStrip",
+		"EntryRouteStripeRegister",
+		"EntryRouteStripeShelf",
+		"StorefrontFacadePierLeft",
+		"StorefrontFacadePierRight",
+		"StorefrontCenterDoorFrameLeft",
+		"StorefrontCenterDoorFrameRight",
 		"StorefrontSignTrimTop",
 		"StorefrontSignTrimBottom",
 		"WindowDisplayConsoleBox",
+		"WindowDisplayPlatformStack",
 		"WindowDisplayShelfDeck",
 		"WindowDisplaySpotlightBar",
 		"WindowDisplayControllerA",
@@ -1100,7 +1141,7 @@ func test_production_visual_overhaul_storefront_and_architecture_cues_exist() ->
 		assert_not_null(prop)
 		assert_false(prop.use_collision, prop_path)
 		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
-		assert_lt(prop.global_position.z, -5.45, prop_path)
+		assert_lt(prop.global_position.z, -4.5, prop_path)
 
 	assert_eq((_store.get_node("WindowDisplayPosterPanel/WindowDisplayPosterLabel") as Label3D).text, "USED + NEW")
 	assert_eq((_store.get_node("WindowDisplayCaseA/WindowDisplayCaseALabel") as Label3D).text, "USED")
@@ -1110,6 +1151,8 @@ func test_production_visual_overhaul_storefront_and_architecture_cues_exist() ->
 	assert_lt((_store.get_node("WindowDisplayConsoleBox") as CSGBox3D).global_position.y, 0.7)
 	assert_lt((_store.get_node("WindowDisplayShelfDeck") as CSGBox3D).global_position.y, 0.5)
 	assert_gt((_store.get_node("WindowDisplaySpotlightBar") as CSGBox3D).global_position.y, 1.7)
+	assert_gt((_store.get_node("StorefrontFacadePierLeft") as CSGBox3D).size.y, 2.0)
+	assert_gt((_store.get_node("StorefrontCenterDoorFrameRight") as CSGBox3D).size.y, 2.0)
 
 	var architecture_props := [
 		"SalesBaseboardFront",

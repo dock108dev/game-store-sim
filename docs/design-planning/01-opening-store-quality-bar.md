@@ -145,6 +145,13 @@ Acceptance checks:
 - No prop implies an unsupported exit interaction.
 - Spawn composition does not hide shelf/register/backroom route.
 
+Implemented evidence:
+
+- Added facade piers, center door frames, and an interior threshold strip so the front wall reads as a framed shop entrance.
+- Added entry route stripes that split toward register and shelf zones from the spawn/threshold area.
+- Added a backroom hint panel visible through the first-store composition to communicate office/stock beyond the sales floor.
+- Added a window platform stack and expanded storefront scene tests to lock first-view landmarks.
+
 Validation:
 
 - Focused scene tests if added.

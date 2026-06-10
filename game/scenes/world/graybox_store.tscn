@@ -207,6 +207,41 @@ size = Vector3(3.9, 0.012, 0.62)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.026, -5.98)
 material = SubResource("StandardMaterial3D_backroom_path_zone")
 
+[node name="EntryThresholdInteriorStrip" type="CSGBox3D" parent="."]
+size = Vector3(3.72, 0.018, 0.14)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.038, -5.35)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="EntryRouteStripeRegister" type="CSGBox3D" parent="."]
+size = Vector3(1.35, 0.011, 0.055)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 1.22, 0.044, -4.86)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
+[node name="EntryRouteStripeShelf" type="CSGBox3D" parent="."]
+size = Vector3(1.25, 0.011, 0.055)
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, -1.08, 0.044, -4.78)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
+[node name="StorefrontFacadePierLeft" type="CSGBox3D" parent="."]
+size = Vector3(0.14, 2.24, 0.09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.04, 1.54, -5.82)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="StorefrontFacadePierRight" type="CSGBox3D" parent="."]
+size = Vector3(0.14, 2.24, 0.09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.04, 1.54, -5.82)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="StorefrontCenterDoorFrameLeft" type="CSGBox3D" parent="."]
+size = Vector3(0.08, 2.32, 0.07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.86, 1.44, -5.81)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="StorefrontCenterDoorFrameRight" type="CSGBox3D" parent="."]
+size = Vector3(0.08, 2.32, 0.07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.86, 1.44, -5.81)
+material = SubResource("StandardMaterial3D_door")
+
 [node name="StoreIdentitySignPanel" type="CSGBox3D" parent="."]
 size = Vector3(2.35, 0.34, 0.045)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.18, -5.86)
@@ -1485,6 +1520,11 @@ size = Vector3(0.26, 0.13, 0.012)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 0.035, -0.106)
 material = SubResource("StandardMaterial3D_door")
 
+[node name="WindowDisplayPlatformStack" type="CSGBox3D" parent="."]
+size = Vector3(0.22, 0.18, 0.16)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -3.26, 0.42, -5.48)
+material = SubResource("StandardMaterial3D_paper_blue")
+
 [node name="WindowDisplayShelfDeck" type="CSGBox3D" parent="."]
 size = Vector3(1.52, 0.055, 0.32)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.55, 0.34, -5.58)
@@ -1553,6 +1593,21 @@ double_sided = false
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 text = "USED + NEW"
 font_size = 15
+
+[node name="BackroomHintFromEntryPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.82, 0.18, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 1.18, 3.42)
+material = SubResource("StandardMaterial3D_backroom_management_zone")
+
+[node name="BackroomHintFromEntryLabel" type="Label3D" parent="BackroomHintFromEntryPanel"]
+pixel_size = 0.0025
+modulate = Color(0.9, 0.96, 1, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+text = "OFFICE + STOCK"
+font_size = 16
 
 [node name="TradeServiceDecalPanel" type="CSGBox3D" parent="."]
 size = Vector3(0.72, 0.18, 0.018)
