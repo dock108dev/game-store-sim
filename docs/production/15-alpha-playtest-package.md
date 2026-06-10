@@ -8,7 +8,7 @@ Paused pending owner recovery screenshot validation.
 
 The package remains useful as the intended external tester script, but it should not be handed to testers until the owner recovery screenshot set in `16-playability-readability-recovery-plan.md` passes. Readability recovery implementation is complete and the full automated gate is green; the remaining blocker is real-window human review, not a known automated failure.
 
-Before reopening this package, capture the recovery screenshot set listed in `16-playability-readability-recovery-plan.md`, keep `13-alpha-bug-list.md` current, rerun `scripts/validate_godot.sh`, and confirm the build can be read in a real 1280x720 window. If the stockroom production phase in `17-stockroom-production-plan.md` is implemented before handoff, also capture the stockroom screenshot set and keep the package paused if the employees-only receiving/backstock/office flow still reads as floor clutter or debug props.
+Before reopening this package, capture the recovery screenshot set listed in `16-playability-readability-recovery-plan.md`, capture the stockroom screenshot set listed in `17-stockroom-production-plan.md`, keep `13-alpha-bug-list.md` current, rerun `scripts/validate_godot.sh`, and confirm the build can be read in a real 1280x720 window. Keep the package paused if the employees-only receiving/backstock/office flow still reads as floor clutter, debug props, or instant inventory.
 
 ## Package Scope
 

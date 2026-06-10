@@ -244,7 +244,7 @@ Planning-only slices still need validation discipline:
 - Update `07-current-manual-playtest.md` when the planning decision changes how future manual validation should be interpreted.
 - Do not mark gameplay manual checks as performed when the slice only changed docs.
 
-The game-completion plan in `11-game-completion-plan.md` remains the production history, and `16-playability-readability-recovery-plan.md` is the active source of truth for the next recovery slices. Each implementation slice must keep automated validation, screenshot review, manual checklist updates, commit, and push in the same stop.
+The game-completion plan in `11-game-completion-plan.md` remains the production history, `16-playability-readability-recovery-plan.md` remains the completed recovery gate for owner screenshot approval, and `17-stockroom-production-plan.md` is the active source of truth for the remaining stockroom Slice 7 and Slice 8 work. Each implementation slice must keep automated validation, screenshot review, manual checklist updates, commit, and push in the same stop.
 
 ## Maintaining The Matrix
 
@@ -278,6 +278,7 @@ Scenario files are intentionally split by slice:
 - `scenarios/alpha_validation_sync.json`: alpha hardening validation-sync docs, gate snapshot, scenario matrix, and manual checklist coverage.
 - `scenarios/screenshots.json`: named screenshot capture and image sanity checks.
 - `scenarios/manual_checks.json`: manual-only checks with owner and reason.
+- `scenarios/stockroom_production_plan.json`: active stockroom planning, implemented stockroom slices, workflow-copy evidence, and remaining Slice 7/8 validation-sync coverage.
 
 Script test mappings live in `script_coverage/production_scripts.json`, standalone tool manifests live in `tool_checks/*.json`, and thresholds live in `thresholds.json`.
 Standalone non-Godot validation tools live under `scripts/`; `scripts/check_product_catalog.py` is run by `scripts/validate_godot.sh` after scenario coverage and before screenshot capture.

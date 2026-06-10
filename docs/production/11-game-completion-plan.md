@@ -699,7 +699,7 @@ The playability readability recovery phase in `16-playability-readability-recove
 7. Done: reran the automated gate and kept the external playtest package paused pending the owner recovery screenshot set.
 8. Done: stabilized angle-dependent label clipping for panel-backed signs and product price tags.
 
-The next active build plan is `17-stockroom-production-plan.md`: turn the current functional backroom into an employees-only stockroom and manager office with physical receiving, backstock shelving, service/security corners, computer office context, and clear stock movement to the sales floor.
+The active build plan is `17-stockroom-production-plan.md`: stockroom production is implemented through Slice 6 with employees-only boundary, physical receiving, backstock shelving, service/security corners, manager-office computer context, and workflow copy. The remaining stockroom work is Slice 7 lighting/material/prop-density polish and Slice 8 validation sync/external-package decision.
 
 Codex can keep the repo mechanically validated, but it cannot mark controller feel, OS window behavior, mouse-capture feel, economy feel, or long-form playtest readability as human-approved.
 

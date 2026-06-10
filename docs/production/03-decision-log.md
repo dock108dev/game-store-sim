@@ -129,7 +129,7 @@ Follow-up risk:
 Decision:
 
 - Keep external alpha playtest paused until owner screenshot validation passes.
-- Use `17-stockroom-production-plan.md` as the next implementation source of truth.
+- Use `17-stockroom-production-plan.md` as the stockroom implementation source of truth through Slice 8.
 - Turn the current working backroom/receiving mechanics into an actual employees-only stockroom and manager office.
 
 Reason:
@@ -146,4 +146,4 @@ Rejected alternatives:
 
 Follow-up risk:
 
-- Stockroom polish can hide core interactions if prop density grows too fast. Build the shell and routes first, then add receiving/backstock/office detail, and keep manual screenshots current after every visual slice.
+- Stockroom polish can hide core interactions if prop density grows too fast. Slices 1-6 now establish shell, routes, receiving, backstock, office, service/security, and workflow copy; remaining Slice 7 work must improve lighting/material hierarchy without burying prompts, product labels, or the carry route.

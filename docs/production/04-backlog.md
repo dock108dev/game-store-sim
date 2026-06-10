@@ -8,7 +8,7 @@ Employees-only stockroom production planning and implementation.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, and readability recovery implementation plus label depth-safety stabilization are complete. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set in a real 1280x720 window. The active next implementation plan is the employees-only stockroom and office pass in `17-stockroom-production-plan.md`.
+Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, readability recovery implementation plus label depth-safety stabilization are complete, and employees-only stockroom production is implemented through Slice 6. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set plus the stockroom screenshot set in a real 1280x720 window. The remaining active work is stockroom lighting/materials and final stockroom validation sync in `17-stockroom-production-plan.md`.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -49,7 +49,7 @@ Active stockroom production plan: `17-stockroom-production-plan.md`.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
 14. Alpha hardening. Complete through Stop 13.7; external playtest package exists but is paused by the June 9 manual readability blocker.
 15. Playability readability recovery. Implementation complete; owner screenshot validation remains required before external playtest.
-16. Employees-only stockroom production. Slice 6 workflow copy implemented; continue with stockroom lighting/materials and final validation sync in `17-stockroom-production-plan.md`.
+16. Employees-only stockroom production. Implemented through Slice 6; continue with stockroom lighting/materials and final validation sync in `17-stockroom-production-plan.md`.
 
 ## Completed Polish Scope
 
@@ -181,7 +181,7 @@ The following polish items remain valid historical checkpoints:
 
 ## Employees-Only Stockroom Production
 
-- Active: use `17-stockroom-production-plan.md` as the next implementation sequence.
+- Active: use `17-stockroom-production-plan.md` as the remaining implementation sequence through Slice 8.
 - Goal: turn the functional backroom/receiving systems into a physical employees-only stockroom with receiving station, backstock shelves, manager office/computer, service bench, safe/security corner, and clear carry routes to the sales floor.
 - Done: Slice 1 adds an employees-only staff threshold, doorway frame, office/service cue signs, and a nonblocking floor route cue from receiving/backstock toward the sales floor.
 - Done: Slice 2 adds a more intentional receiving station with open-box flaps, state cards, intake table, invoice cue, and sorted-stock tray.
@@ -189,7 +189,7 @@ The following polish items remain valid historical checkpoints:
 - Done: Slice 4 adds manager office context around the computer with chair, planning board label, file boxes, supplier note, bill stack, and office rug.
 - Done: Slice 5 adds service-ready shelf/parts cues plus safe, security, high-value shelf, hold tray, evidence locker, and records file cues.
 - Done: Slice 6 updates owner checklist, supplier lot, receiving, storage, Store/Pull, and status copy to name the receiving station, backstock shelf, pull stage, and physical carry work.
-- Do next: lighting/materials and validation sync.
+- Do next: Slice 7 lighting/material/prop-density polish, then Slice 8 validation sync and external-package decision.
 - Do not reopen external playtest from this phase unless owner screenshot validation and stockroom screenshot review both pass.
 
 ## Product And Fixture Polish

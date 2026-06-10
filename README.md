@@ -2,7 +2,7 @@
 
 First-person specialty video game retail simulator. The player runs a small game shop by physically receiving stock, pricing used games, stocking fixtures, serving customers, handling trade-ins and services, planning launch allocations, and noticing optional suspicious activity under the normal retail loop.
 
-The first playable counter loop is implemented and validated. The first polish/readability pass, alpha hardening pass, and readability recovery implementation are also validated. External alpha playtest is still paused for owner screenshot review, and the active next build plan is the employees-only stockroom and office production pass.
+The first playable counter loop is implemented and validated. The first polish/readability pass, alpha hardening pass, readability recovery implementation, and stockroom production work through Slice 6 are also validated. External alpha playtest is still paused for owner screenshot review, and the active remaining build plan is the employees-only stockroom lighting/materials plus validation-sync closeout.
 
 ## Current Playable State
 
@@ -10,7 +10,7 @@ The first playable counter loop is implemented and validated. The first polish/r
 - Current branch work targets keyboard/mouse desktop play.
 - The validated graybox includes receiving stock, multi-item carry, click-first interaction, used-game pricing, display stocking, buyer queueing, register sales, trade-ins, preorder deposits, service completion, supplier ordering, release allocation, launch-day resolution, fixture ordering/placement, hidden-thread clues, persistence smoke coverage, and named validation screenshots.
 - The local validation gate is `scripts/validate_godot.sh`.
-- The next planned implementation sequence is `docs/production/17-stockroom-production-plan.md`.
+- The remaining implementation sequence is `docs/production/17-stockroom-production-plan.md`.
 
 ## Current Inputs
 

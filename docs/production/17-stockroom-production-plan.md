@@ -1,8 +1,8 @@
 # Employees-Only Stockroom Production Plan
 
-This is the next active implementation plan after readability recovery. The goal is to turn the current working backroom/receiving mechanics into a believable employees-only stockroom and office: incoming stock should arrive in an organized operations space, the player should physically bring products out to the sales floor, and the computer should live in a small office/management zone instead of feeling like a debug terminal in a graybox room.
+This remains the next active implementation plan after readability recovery, and it is implemented through Slice 6. The goal is to turn the current working backroom/receiving mechanics into a believable employees-only stockroom and office: incoming stock should arrive in an organized operations space, the player should physically bring products out to the sales floor, and the computer should live in a small office/management zone instead of feeling like a debug terminal in a graybox room.
 
-External alpha playtest remains paused until the owner screenshot pass is readable. This plan is the next build direction, not a playtest reopen.
+External alpha playtest remains paused until the owner screenshot pass is readable. This plan is the current build direction, not a playtest reopen.
 
 ## Current Audit
 
@@ -11,13 +11,22 @@ What is working:
 - Supplier orders, receiving batches, invoice checks, sorting, backstock storage, shelf stocking, service tickets, management readouts, and the backroom computer are mechanically validated.
 - The click-first carry, pricing, stocking, register, and day-loop paths are protected by the full gate.
 - The readability recovery pass fixed the worst camera, prompt, modal, customer-label, and label-clipping blockers.
+- Stockroom Slices 1-6 now add the employees-only boundary, receiving station, backstock shelves, manager office context, service/security corners, and workflow copy for receiving station, backstock shelf, pull stage, and physical carry work.
 
 What still reads wrong:
 
-- Incoming stock still reads too much like objects placed in the room or on the floor, not like a controlled employees-only workflow.
-- The backroom is functional, but it is not yet a convincing stock room with receiving, sorting, backstock, office, service, safe/security, and staff-only boundaries.
-- The computer UI is task-grouped, but the computer's world context should read as a manager desk/office with paperwork, not a generic floating backroom terminal.
-- The sales-floor/backroom relationship is not yet strong enough: stock should clearly start behind the staff boundary and get physically brought to fixtures.
+- The supplier-delivery and receiving screenshots are mechanically useful but still need a lighting/material/prop-density pass so the stockroom reads as an intentional operations suite instead of a dense graybox cluster.
+- The backroom is now divided into staff threshold, receiving, backstock, office, service, safe/security, and records support zones, but those zones still need final visual hierarchy and screenshot review.
+- The sales-floor/backroom relationship is present through route cues and pull-stage context, but it still needs the Slice 7 readability pass before owner approval.
+
+## Docs Audit Result
+
+Current production docs are retained intentionally:
+
+- `01-vertical-slice-plan.md`, `08-polish-roadmap.md`, `09-backroom-polish-implementation-plan.md`, and `10-polish-execution-plan.md` are historical validated-slice records, not active backlog.
+- `11-game-completion-plan.md`, `12-production-target-contracts.md`, `16-playability-readability-recovery-plan.md`, and this plan are active or current-contract documents.
+- `04-backlog.md`, `06-validation.md`, `07-current-manual-playtest.md`, `13-alpha-bug-list.md`, and `15-alpha-playtest-package.md` remain live handoff/validation surfaces.
+- No production doc should be deleted in this pass; several are cited by automated validation and the rest preserve prior validated decisions that explain why the current stockroom phase exists.
 
 ## Source References
 
@@ -254,6 +263,8 @@ Commit target:
 
 ## Slice 7: Stockroom Lighting, Materials, And Prop Density
 
+Status: next implementation slice.
+
 Goal: make the stockroom visually richer while keeping the game readable.
 
 Work:
@@ -280,6 +291,8 @@ Commit target:
 - `Polish stockroom lighting and materials`
 
 ## Slice 8: Validation Sync And External Package Decision
+
+Status: final stockroom-phase closeout after Slice 7.
 
 Goal: close the stockroom phase without confusing it with external playtest approval.
 
@@ -310,7 +323,7 @@ Commit target:
 
 ## User Review Order
 
-Review these docs in this order before implementation starts:
+Review these docs in this order before starting or reviewing the remaining Slice 7 and Slice 8 work:
 
 1. `docs/production/17-stockroom-production-plan.md`
 2. `docs/production/12-production-target-contracts.md`
@@ -325,4 +338,4 @@ What to check:
 - Incoming supplier stock appears in receiving/backstock surfaces for the player to carry.
 - The computer belongs in an office/manager area.
 - Service, safe, records, and hidden-thread props support the stockroom without taking over.
-- The slice order starts with layout/sightlines before detailed prop density.
+- The remaining slice order is lighting/material/prop-density first, then validation sync and the external-package decision.

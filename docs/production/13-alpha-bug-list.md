@@ -44,7 +44,7 @@ Current gate state:
 - Core retail loop tests pass, including pickup, pricing, stocking, checkout, trade-ins, preorders, services, ordering, fixture placement, save/load codec, settings, pause/menu, hidden-thread optionality, screenshots, and export pack smoke.
 - AH-001 through AH-008 completed automated routing through the alpha regression, scene-readability, content/copy, and readability recovery slices, but owner screenshot validation still needs to confirm the real-window result before external playtest.
 - AH-011 remains the known human-feel checkpoint: multi-day economy balance is mechanically covered but still needs external playtest notes before alpha approval.
-- The next active production phase is `17-stockroom-production-plan.md`; it addresses stockroom/office believability without reopening external playtest by itself.
+- The active stockroom production phase in `17-stockroom-production-plan.md` is implemented through Slice 6; remaining lighting/materials and validation-sync work must not reopen external playtest by itself.
 
 ## Slice Routing
 
@@ -56,4 +56,4 @@ Current gate state:
 - Stop 13.6 external playtest package: done; addresses AH-009 and AH-010 with `15-alpha-playtest-package.md`, build artifact guidance, known issues, playtest script, feedback form, rollback plan, validation scenario entries, and manual package checks.
 - Stop 13.7 alpha validation sync: done; records the current full-gate, desktop pack smoke, scenario matrix, manual checklist, bug-list routing, backlog state, and playtest-package handoff before human external playtest.
 - Readability recovery: implementation complete through Slice 7; owner screenshot validation is next before external playtest can reopen.
-- Stockroom production planning: active next implementation plan in `17-stockroom-production-plan.md`; external playtest remains paused until owner recovery and stockroom screenshot reviews pass.
+- Stockroom production: implemented through Slice 6 in `17-stockroom-production-plan.md`; external playtest remains paused until owner recovery and stockroom screenshot reviews pass.
