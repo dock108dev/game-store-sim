@@ -28,8 +28,10 @@ Implemented in the current branch:
 - Fixture ordering and fixture unlocks already support upgrade-gated placement.
 - Save/load codec persists purchased upgrades and decorations.
 - Tests cover management upgrade purchase, decoration application, fixture ordering/placement, fixture unlocks, and save/load persistence.
+- Decoration catalog entries now declare visible scene node hooks, and `StoreSession` exposes decoration surface state/summary APIs for preview vs applied review.
+- Upgrade catalog entries now declare visible surfaces, and scene tests verify every decoration/upgrade hook resolves to a real world node.
 
-This is a mechanical foundation. The next implementation pass should make each decor/upgrade visibly affect the world and screenshots.
+This is now a functional world-state foundation. Future work can replace preview anchors with final art or dynamic material toggles without changing the catalog contract.
 
 ## Scope
 

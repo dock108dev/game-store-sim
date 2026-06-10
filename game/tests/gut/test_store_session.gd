@@ -173,12 +173,16 @@ func test_store_session_lists_upgrade_path_baseline() -> void:
 	assert_eq(available.size(), 6)
 	assert_false(session.can_purchase_upgrade("upgrade_store_expansion"))
 	assert_string_contains(summary, "Accessory Peg Wall $75.00 (fixture)")
+	assert_string_contains(summary, "visible FuturePegWallUnlockPanel")
 	assert_string_contains(summary, "Accessory Category License $50.00 (category)")
 	assert_string_contains(summary, "Service Cleaning Tools $90.00 (service_tool)")
 	assert_string_contains(summary, "Computer Analytics $75.00 (computer_tool)")
 	assert_string_contains(summary, "Staff Picks Signage $45.00 (signage)")
 	assert_string_contains(summary, "Backroom Storage Bay $90.00 (storage)")
 	assert_string_contains(summary, "Locked: Starter Store Expansion")
+	assert_eq(session.get_upgrade_surface_states().size(), 7)
+	assert_string_contains(session.get_upgrade_surface_summary_text(), "Accessory Peg Wall -> FuturePegWallUnlockPanel (available)")
+	assert_string_contains(session.get_upgrade_surface_summary_text(), "Starter Store Expansion -> ExpansionFootprintTapeA (locked)")
 
 
 func test_store_session_purchases_upgrades_and_unlocks_expansion_path() -> void:
@@ -893,7 +897,11 @@ func test_store_session_applies_decoration_baseline() -> void:
 	assert_eq(catalog.size(), 7)
 	assert_true(session.can_apply_decoration("decor_wall_paint_savepoint_blue"))
 	assert_string_contains(session.get_decoration_summary_text(), "Savepoint Blue Wall Paint $40.00")
+	assert_string_contains(session.get_decoration_summary_text(), "Visible surface: WallPaintSwatchStrip")
 	assert_string_contains(session.get_decoration_summary_text(), "Clutter budget: 0 used / 4 safe points")
+	assert_eq(session.get_decoration_surface_states().size(), 7)
+	assert_string_contains(session.get_decoration_surface_summary_text(), "Savepoint Blue Wall Paint -> WallPaintSwatchStrip (preview, clutter 0)")
+	assert_string_contains(session.get_decoration_surface_summary_text(), "Small Clutter Budget -> DesignSwatchStrip (preview, clutter -2)")
 
 	var decoration := session.apply_decoration("decor_wall_paint_savepoint_blue")
 
@@ -903,6 +911,7 @@ func test_store_session_applies_decoration_baseline() -> void:
 	assert_true(session.has_decoration("decor_wall_paint_savepoint_blue"))
 	assert_false(session.can_apply_decoration("decor_wall_paint_savepoint_blue"))
 	assert_string_contains(session.get_decoration_summary_text(), "Applied: Savepoint Blue Wall Paint")
+	assert_string_contains(session.get_decoration_surface_summary_text(), "Savepoint Blue Wall Paint -> WallPaintSwatchStrip (applied, clutter 0)")
 
 
 func test_store_session_lists_available_supplier_lots() -> void:

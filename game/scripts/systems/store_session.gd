@@ -116,6 +116,7 @@ const DECORATION_CATALOG := [
 		"cost_cents": 4000,
 		"clutter_points": 0,
 		"effect": "Strengthens store identity without adding floor clutter.",
+		"visible_node_path": "WallPaintSwatchStrip",
 	},
 	{
 		"decoration_id": "decor_floor_warm_wood",
@@ -125,6 +126,7 @@ const DECORATION_CATALOG := [
 		"cost_cents": 6500,
 		"clutter_points": 0,
 		"effect": "Warmer retail floor finish for the sales area.",
+		"visible_node_path": "FloorMaterialSamplePanel",
 	},
 	{
 		"decoration_id": "decor_poster_launch_set",
@@ -134,6 +136,7 @@ const DECORATION_CATALOG := [
 		"cost_cents": 2500,
 		"clutter_points": 1,
 		"effect": "Adds new-release flavor and a small featured-marketing hook.",
+		"visible_node_path": "NewThisWeekPosterPanel",
 	},
 	{
 		"decoration_id": "decor_signage_counter_refresh",
@@ -143,6 +146,7 @@ const DECORATION_CATALOG := [
 		"cost_cents": 3500,
 		"clutter_points": 1,
 		"effect": "Clarifies register identity without changing checkout rules.",
+		"visible_node_path": "RegisterWorkflowCard",
 	},
 	{
 		"decoration_id": "decor_light_track_warm",
@@ -152,6 +156,7 @@ const DECORATION_CATALOG := [
 		"cost_cents": 5000,
 		"clutter_points": 0,
 		"effect": "Improves fixture readability and store tone.",
+		"visible_node_path": "StoreLight",
 	},
 	{
 		"decoration_id": "decor_controller_display_prop",
@@ -161,6 +166,7 @@ const DECORATION_CATALOG := [
 		"cost_cents": 3000,
 		"clutter_points": 1,
 		"effect": "Adds accessory flavor near displays.",
+		"visible_node_path": "RightWallControllerPosterPanel",
 	},
 	{
 		"decoration_id": "decor_small_clutter_budget",
@@ -170,6 +176,7 @@ const DECORATION_CATALOG := [
 		"cost_cents": 1500,
 		"clutter_points": -2,
 		"effect": "Raises the safe prop budget for future small clutter.",
+		"visible_node_path": "DesignSwatchStrip",
 	},
 ]
 const BASE_CLUTTER_BUDGET_POINTS := 4
@@ -180,6 +187,7 @@ const UPGRADE_CATALOG := [
 		"category": "fixture",
 		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_fixture_peg_wall"],
 		"unlocks": "Accessory fixture orders",
+		"visible_surface": "FuturePegWallUnlockPanel",
 	},
 	{
 		"upgrade_id": "upgrade_category_accessories",
@@ -187,6 +195,7 @@ const UPGRADE_CATALOG := [
 		"category": "category",
 		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_category_accessories"],
 		"unlocks": "Accessory stocking and customer demand",
+		"visible_surface": "RightWallControllerPosterPanel",
 	},
 	{
 		"upgrade_id": "upgrade_service_cleaning_tools",
@@ -194,6 +203,7 @@ const UPGRADE_CATALOG := [
 		"category": "service_tool",
 		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_service_cleaning_tools"],
 		"unlocks": "Cartridge cleaning and controller testing",
+		"visible_surface": "BackroomServiceBench/ServicePartsBin",
 	},
 	{
 		"upgrade_id": "upgrade_computer_analytics",
@@ -201,6 +211,7 @@ const UPGRADE_CATALOG := [
 		"category": "computer_tool",
 		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_computer_analytics"],
 		"unlocks": "Advanced demand and margin views",
+		"visible_surface": "ManagementComputerTaskRail",
 	},
 	{
 		"upgrade_id": "upgrade_signage_staff_picks",
@@ -208,6 +219,7 @@ const UPGRADE_CATALOG := [
 		"category": "signage",
 		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_signage_staff_picks"],
 		"unlocks": "Featured shelf marketing",
+		"visible_surface": "StaffPicksStand",
 	},
 	{
 		"upgrade_id": "upgrade_backroom_storage",
@@ -215,6 +227,7 @@ const UPGRADE_CATALOG := [
 		"category": "storage",
 		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_backroom_storage"],
 		"unlocks": "More backstock and receiving capacity",
+		"visible_surface": "BackroomStorageShelf",
 	},
 	{
 		"upgrade_id": "upgrade_store_expansion",
@@ -223,6 +236,7 @@ const UPGRADE_CATALOG := [
 		"cost_cents": AlphaBalancePolicy.UPGRADE_COSTS["upgrade_store_expansion"],
 		"requires_upgrade_id": "upgrade_backroom_storage",
 		"unlocks": "Larger sales floor footprint",
+		"visible_surface": "ExpansionFootprintTapeA",
 	},
 ]
 const DAY_STRUCTURE := [
@@ -705,11 +719,12 @@ func get_upgrade_summary_text() -> String:
 	else:
 		lines.append("Available:")
 		for upgrade in available:
-			lines.append("%s %s (%s) unlocks %s" % [
+			lines.append("%s %s (%s) unlocks %s; visible %s" % [
 				str(upgrade.get("label", "Upgrade")),
 				format_money(int(upgrade.get("cost_cents", 0))),
 				str(upgrade.get("category", "upgrade")),
 				str(upgrade.get("unlocks", "new option")),
+				str(upgrade.get("visible_surface", "management UI")),
 			])
 
 	var locked: Array[String] = []
@@ -721,6 +736,34 @@ func get_upgrade_summary_text() -> String:
 	if not locked.is_empty():
 		lines.append("Locked: %s" % ", ".join(locked))
 	lines.append(get_store_expansion_summary_text())
+	return "\n".join(lines)
+
+
+func get_upgrade_surface_states() -> Array[Dictionary]:
+	var states: Array[Dictionary] = []
+	for upgrade in UPGRADE_CATALOG:
+		var upgrade_id := str(upgrade.get("upgrade_id", ""))
+		states.append({
+			"upgrade_id": upgrade_id,
+			"label": str(upgrade.get("label", "Upgrade")),
+			"category": str(upgrade.get("category", "upgrade")),
+			"visible_surface": str(upgrade.get("visible_surface", "management UI")),
+			"purchased": has_upgrade(upgrade_id),
+			"locked": not _upgrade_requirements_met(upgrade),
+			"unlocks": str(upgrade.get("unlocks", "new option")),
+		})
+	return states
+
+
+func get_upgrade_surface_summary_text() -> String:
+	var lines: Array[String] = ["Upgrade surfaces:"]
+	for state in get_upgrade_surface_states():
+		var status := "purchased" if bool(state.get("purchased", false)) else "locked" if bool(state.get("locked", false)) else "available"
+		lines.append("%s -> %s (%s)" % [
+			str(state.get("label", "Upgrade")),
+			str(state.get("visible_surface", "management UI")),
+			status,
+		])
 	return "\n".join(lines)
 
 
@@ -2687,6 +2730,35 @@ func get_decoration_summary_text() -> String:
 			int(decoration.get("clutter_points", 0)),
 			lock_text,
 			str(decoration.get("effect", "")),
+		])
+		lines.append("Visible surface: %s" % str(decoration.get("visible_node_path", "world preview")))
+	return "\n".join(lines)
+
+
+func get_decoration_surface_states() -> Array[Dictionary]:
+	var states: Array[Dictionary] = []
+	for decoration in DECORATION_CATALOG:
+		var decoration_id := str(decoration.get("decoration_id", ""))
+		states.append({
+			"decoration_id": decoration_id,
+			"label": str(decoration.get("label", "Decoration")),
+			"category": str(decoration.get("category", "decor")),
+			"surface": str(decoration.get("surface", "store")),
+			"visible_node_path": str(decoration.get("visible_node_path", "world preview")),
+			"applied": has_decoration(decoration_id),
+			"clutter_points": int(decoration.get("clutter_points", 0)),
+		})
+	return states
+
+
+func get_decoration_surface_summary_text() -> String:
+	var lines: Array[String] = ["Decoration surfaces:"]
+	for state in get_decoration_surface_states():
+		lines.append("%s -> %s (%s, clutter %d)" % [
+			str(state.get("label", "Decoration")),
+			str(state.get("visible_node_path", "world preview")),
+			"applied" if bool(state.get("applied", false)) else "preview",
+			int(state.get("clutter_points", 0)),
 		])
 	return "\n".join(lines)
 

@@ -1434,6 +1434,19 @@ func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> v
 	assert_lte((_store.get_node("ExpansionFootprintTapeA") as CSGBox3D).size.y, 0.0061)
 	assert_lte((_store.get_node("ExpansionFootprintTapeB") as CSGBox3D).size.y, 0.0061)
 
+	var session := _store.get_node("StoreSession") as StoreSession
+	for decoration_state in session.get_decoration_surface_states():
+		var visible_path := str(decoration_state.get("visible_node_path", ""))
+		var visible_node := _store.get_node_or_null(visible_path) as Node3D
+		assert_not_null(visible_node, visible_path)
+		if visible_node is CSGBox3D:
+			assert_false((visible_node as CSGBox3D).use_collision, visible_path)
+
+	for upgrade_state in session.get_upgrade_surface_states():
+		var visible_path := str(upgrade_state.get("visible_surface", ""))
+		var visible_node := _store.get_node_or_null(visible_path) as Node3D
+		assert_not_null(visible_node, visible_path)
+
 
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
