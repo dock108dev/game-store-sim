@@ -57,6 +57,13 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_store_sign_panels_are_nonblocking_and_zone_aligned"
     },
     {
+      "id": "screenshot_facing_world_label_orientation",
+      "name": "Screenshot-facing world labels use staff-side orientation instead of rendering backwards",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_screenshot_facing_world_labels_use_staff_side_orientation"
+    },
+    {
       "id": "alpha_wall_detail_breaks_up_blank_planes",
       "name": "Alpha wall-detail panels break up blank right-wall and back-wall graybox planes without blocking movement",
       "status": "automated",

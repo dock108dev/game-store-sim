@@ -541,6 +541,28 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 		assert_true(label.no_depth_test, label_path)
 
 
+func test_screenshot_facing_world_labels_use_staff_side_orientation() -> void:
+	var label_paths := [
+		"RegisterSignPanel/RegisterSignLabel",
+		"BackWallFeatureStripe/BackWallFeatureLabel",
+		"NewThisWeekPosterPanel/NewThisWeekPosterLabel",
+		"TradeBonusPosterPanel/TradeBonusPosterLabel",
+		"CounterDealTagPanel/CounterDealTagLabel",
+		"LockedCasePlaceholder/LockedCaseHeaderPanel/LockedCaseHeaderLabel",
+		"WindowDisplayPosterPanel/WindowDisplayPosterLabel",
+		"TradeServiceDecalPanel/TradeServiceDecalLabel",
+		"ShelfFacingDensityBand/ShelfFacingDensityLabel",
+	]
+
+	for label_path in label_paths:
+		var label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(label, label_path)
+		assert_eq(label.billboard, 0, label_path)
+		assert_false(label.double_sided, label_path)
+		assert_lte(label.transform.basis.x.x, -0.9, label_path)
+		assert_lte(label.transform.basis.z.z, -0.9, label_path)
+
+
 func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 	var label := _store.get_node_or_null("EmployeesOnlySignPanel/EmployeesOnlySignLabel") as Label3D
 	assert_not_null(label)

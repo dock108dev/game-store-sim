@@ -20,8 +20,8 @@ Completed baseline: Slice 0 through Slice 14 are mechanically implemented and va
 
 Validation snapshot:
 
-- `scripts/validate_godot.sh` passes with 551 GUT tests.
-- UI scenario automation coverage is 503/623.
+- `scripts/validate_godot.sh` passes with 552 GUT tests.
+- UI scenario automation coverage is 504/624.
 - Production script mapping coverage is 52/52.
 - Product catalog validation passes with 33 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot sanity, and old-name scan pass.

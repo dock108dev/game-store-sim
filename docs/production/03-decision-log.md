@@ -184,7 +184,7 @@ Reason:
 
 - The current repo standard favors shippable validated slices over an unbounded art rewrite.
 - The new baseline adds storefront/window dressing, architecture trim, shelf density, register return/trade/preorder/service surfaces, catalog/design/build-mode/upgrade cues, and scenario/manual coverage while preserving movement and interaction clearance.
-- The full local gate is green with 551 GUT tests, 503/623 UI scenario automation coverage, 52/52 production script mapping coverage, desktop pack smoke, alpha performance smoke, screenshot sanity, and old-name scan.
+- The full local gate is green with 552 GUT tests, 504/624 UI scenario automation coverage, 52/52 production script mapping coverage, desktop pack smoke, alpha performance smoke, screenshot sanity, and old-name scan.
 
 Rejected alternatives:
 
