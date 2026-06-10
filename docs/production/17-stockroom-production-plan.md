@@ -197,6 +197,8 @@ Commit target:
 
 ## Slice 5: Service, Safe, And Records Corners
 
+Status: implemented in `Build stockroom service and security corner`; pending owner screenshot validation.
+
 Goal: keep service and optional hidden-thread surfaces physically present but secondary.
 
 Work:
@@ -207,8 +209,8 @@ Work:
 
 Acceptance:
 
-- `20_service_bench_ticket.png` reads as a service bench, not a random table.
-- Safe/security/records cues are visible but do not look like active objectives.
+- `20_service_bench_ticket.png` reads as a service bench with disc mat, tools, parts bin, ticket, and ready shelf, not a random table.
+- Safe/security/records cues are visible through safe, high-value shelf, security monitor, hold tray, evidence locker, and records files, but do not look like active objectives.
 - Service flow remains understandable from computer to register pickup.
 
 Manual screenshots:

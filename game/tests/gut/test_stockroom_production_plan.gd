@@ -80,6 +80,8 @@ func test_stockroom_validation_scenarios_are_registered() -> void:
 		"stockroom_backstock_category_lanes",
 		"stockroom_backstock_pull_stage",
 		"stockroom_manager_office_context",
+		"stockroom_service_bench_cues",
+		"stockroom_safe_records_corner",
 	]
 
 	for scenario_id in required_ids:

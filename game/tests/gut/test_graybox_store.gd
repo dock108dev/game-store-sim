@@ -475,6 +475,8 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 		"BackroomServiceBench/ServiceTicketPanel/ServiceTicketLabel",
 		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel",
 		"SecurityMonitorPanel/SecurityMonitorLabel",
+		"SuspiciousGoodsTagPanel/SuspiciousGoodsTagLabel",
+		"RecordsFileLabelPanel/RecordsFileLabel",
 		"ReceivingBox/IntakeTagPanel/IntakeTagLabel",
 		"GameDisplayRack/CategoryHeaderPanel/CategoryHeaderLabel",
 	]
@@ -811,10 +813,33 @@ func test_backroom_management_and_service_props_exist() -> void:
 	assert_not_null(service_bench.get_node_or_null("ServiceDisc"))
 	assert_not_null(service_bench.get_node_or_null("PaperworkStack"))
 	assert_not_null(service_bench.get_node_or_null("ToolTray"))
+	assert_not_null(service_bench.get_node_or_null("ServicePartsBin"))
+	assert_not_null(service_bench.get_node_or_null("ServiceReadyShelf"))
+	assert_not_null(service_bench.get_node_or_null("ServiceReadyTicket"))
 	assert_not_null(service_bench.get_node_or_null("ServiceTicketPanel"))
 	assert_eq((service_bench.get_node("ServiceTicketPanel/ServiceTicketLabel") as Label3D).text, "SERVICE")
 	assert_gt(service_bench.global_position.z, 5.0)
 	assert_gt(_flat_distance_xz(service_bench.global_position, _store.get_node("RegisterWorkstation").global_position), 7.0)
+
+
+func test_service_bench_has_ready_parts_and_ticket_workflow_cues() -> void:
+	var service_bench := _store.get_node("BackroomServiceBench") as Node3D
+	var parts_bin := service_bench.get_node_or_null("ServicePartsBin") as CSGBox3D
+	var ready_shelf := service_bench.get_node_or_null("ServiceReadyShelf") as CSGBox3D
+	var ready_ticket := service_bench.get_node_or_null("ServiceReadyTicket") as CSGBox3D
+	var service_ticket := service_bench.get_node_or_null("ServiceTicketPanel") as CSGBox3D
+	var service_label := service_bench.get_node_or_null("ServiceTicketPanel/ServiceTicketLabel") as Label3D
+
+	for cue in [parts_bin, ready_shelf, ready_ticket, service_ticket]:
+		assert_not_null(cue)
+		assert_false(cue.use_collision)
+		assert_gt(cue.global_position.y, service_bench.global_position.y + 0.6)
+
+	assert_not_null(service_label)
+	assert_eq(service_label.text, "SERVICE")
+	assert_true(service_label.no_depth_test)
+	assert_lt(_flat_distance_xz(ready_shelf.global_position, service_ticket.global_position), 0.45)
+	assert_lt(_flat_distance_xz(parts_bin.global_position, _store.get_node("BackroomComputer").global_position), 4.1)
 
 
 func test_manager_office_frames_backroom_computer_without_register_actions() -> void:
@@ -853,6 +878,8 @@ func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void
 		"BackstockOverflowLabelPanel/BackstockOverflowLabel": "BACKSTOCK",
 		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel": "SAFE",
 		"SecurityMonitorPanel/SecurityMonitorLabel": "SECURITY",
+		"SuspiciousGoodsTagPanel/SuspiciousGoodsTagLabel": "HOLD",
+		"RecordsFileLabelPanel/RecordsFileLabel": "FILES",
 	}
 	for label_path in expected_labels:
 		var label := _store.get_node_or_null(label_path) as Label3D
@@ -862,15 +889,26 @@ func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void
 	var safe := _store.get_node_or_null("BackroomSafePlaceholder") as Node3D
 	var security_monitor := _store.get_node_or_null("SecurityMonitorPanel") as CSGBox3D
 	var evidence_locker := _store.get_node_or_null("EvidenceLockerPlaceholder") as CSGBox3D
+	var high_value_shelf := _store.get_node_or_null("HighValueShelf") as CSGBox3D
+	var suspicious_tray := _store.get_node_or_null("SuspiciousGoodsIsolationTray") as CSGBox3D
+	var records_box := _store.get_node_or_null("RecordsFileBox") as CSGBox3D
 	assert_not_null(safe)
 	assert_not_null(security_monitor)
 	assert_not_null(evidence_locker)
+	assert_not_null(high_value_shelf)
+	assert_not_null(suspicious_tray)
+	assert_not_null(records_box)
 	assert_true(_is_inside_store_floorprint(safe.global_position))
 	assert_true(_is_inside_store_floorprint(security_monitor.global_position))
 	assert_true(_is_inside_store_floorprint(evidence_locker.global_position))
+	assert_true(_is_inside_store_floorprint(high_value_shelf.global_position))
+	assert_true(_is_inside_store_floorprint(suspicious_tray.global_position))
+	assert_true(_is_inside_store_floorprint(records_box.global_position))
 	assert_gt(safe.global_position.x, 5.5)
 	assert_gt(security_monitor.global_position.x, 5.0)
 	assert_gt(evidence_locker.global_position.z, 4.0)
+	assert_lt(_flat_distance_xz(high_value_shelf.global_position, safe.global_position), 0.7)
+	assert_lt(_flat_distance_xz(suspicious_tray.global_position, evidence_locker.global_position), 0.8)
 
 	for cue_path in [
 		"BackroomSafePlaceholder/SafeBody",
@@ -880,6 +918,13 @@ func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void
 		"SecurityMonitorPanel",
 		"SecurityMonitorScreen",
 		"EvidenceLockerPlaceholder",
+		"HighValueShelf",
+		"HighValueCaseA",
+		"HighValueCaseB",
+		"SuspiciousGoodsIsolationTray",
+		"SuspiciousGoodsTagPanel",
+		"RecordsFileBox",
+		"RecordsFileLabelPanel",
 	]:
 		var cue := _store.get_node_or_null(cue_path) as CSGBox3D
 		assert_not_null(cue)

@@ -1217,6 +1217,21 @@ size = Vector3(0.36, 0.05, 0.12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34, 0.718, 0.17)
 material = SubResource("StandardMaterial3D_storage_metal")
 
+[node name="ServicePartsBin" type="CSGBox3D" parent="BackroomServiceBench"]
+size = Vector3(0.28, 0.08, 0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.742, -0.14)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="ServiceReadyShelf" type="CSGBox3D" parent="BackroomServiceBench"]
+size = Vector3(0.58, 0.06, 0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28, 0.98, -0.28)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="ServiceReadyTicket" type="CSGBox3D" parent="BackroomServiceBench"]
+size = Vector3(0.24, 0.014, 0.16)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -0.28, 1.025, -0.28)
+material = SubResource("StandardMaterial3D_paper")
+
 [node name="ServiceTicketPanel" type="CSGBox3D" parent="BackroomServiceBench"]
 size = Vector3(0.28, 0.2, 0.018)
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.02, 0.73, -0.18)
@@ -1285,10 +1300,65 @@ billboard = 1
 text = "SECURITY"
 font_size = 18
 
+[node name="HighValueShelf" type="CSGBox3D" parent="."]
+size = Vector3(0.86, 0.08, 0.32)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.06, 0.96, 4.78)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="HighValueCaseA" type="CSGBox3D" parent="."]
+size = Vector3(0.22, 0.28, 0.05)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.88, 1.13, 4.72)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="HighValueCaseB" type="CSGBox3D" parent="."]
+size = Vector3(0.22, 0.28, 0.05)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.2, 1.13, 4.86)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="SuspiciousGoodsIsolationTray" type="CSGBox3D" parent="."]
+size = Vector3(0.58, 0.06, 0.36)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.42, 0.52, 4.54)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="SuspiciousGoodsTagPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.42, 0.11, 0.018)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.42, 0.64, 4.26)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="SuspiciousGoodsTagLabel" type="Label3D" parent="SuspiciousGoodsTagPanel"]
+pixel_size = 0.0024
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "HOLD"
+font_size = 15
+
 [node name="EvidenceLockerPlaceholder" type="CSGBox3D" parent="."]
 size = Vector3(0.56, 0.92, 0.36)
 transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.04, 0.46, 4.42)
 material = SubResource("StandardMaterial3D_management_board")
+
+[node name="RecordsFileBox" type="CSGBox3D" parent="."]
+size = Vector3(0.42, 0.28, 0.32)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.46, 0.14, 5.24)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="RecordsFileLabelPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.34, 0.1, 0.016)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.37, 0.3, 5.05)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="RecordsFileLabel" type="Label3D" parent="RecordsFileLabelPanel"]
+pixel_size = 0.0022
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "FILES"
+font_size = 14
 
 [node name="BackroomComputer" parent="." instance=ExtResource("7_backroom_computer")]
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.65, 0, 4.35)
