@@ -782,9 +782,17 @@ func test_register_counter_has_command_center_props() -> void:
 		"CardReaderScreen",
 		"ReceiptPrinter",
 		"ReceiptSlip",
+		"SaleScanPad",
 		"SleeveStack",
 		"RegisterCounterWorkRail",
 		"CustomerCounterMat",
+		"CustomerApproachMarker",
+		"RegisterModeCueRail",
+		"RegisterModeSaleCue",
+		"RegisterModeReturnCue",
+		"RegisterModeTradeCue",
+		"RegisterModePreorderCue",
+		"RegisterModeServiceCue",
 		"CounterImpulseRack/ImpulseRackBase",
 		"CounterImpulseRack/ImpulseCaseA",
 		"CounterImpulseRack/ImpulseCaseB",
@@ -801,10 +809,13 @@ func test_register_counter_has_command_center_props() -> void:
 	assert_not_null(impulse_rack)
 	assert_lt(_flat_distance_xz(impulse_rack.global_position, register.global_position), 1.45)
 	assert_lte((_store.get_node("CustomerCounterMat") as CSGBox3D).size.y, 0.0121)
+	assert_lte((_store.get_node("CustomerApproachMarker") as CSGBox3D).size.y, 0.015)
 	assert_gt((_store.get_node("ReceiptSlip") as CSGBox3D).global_position.y, 1.2)
 	assert_gt((_store.get_node("SleeveStack") as CSGBox3D).global_position.x, register.global_position.x)
 	assert_eq((_store.get_node("CardReader/CardReaderLabel") as Label3D).text, "PAY")
 	assert_eq((_store.get_node("ReceiptSlip/ReceiptSlipLabel") as Label3D).text, "RECEIPT")
+	assert_eq((_store.get_node("SaleScanPad/SaleScanPadLabel") as Label3D).text, "SALE")
+	assert_eq((_store.get_node("SleeveStack/SleeveStackLabel") as Label3D).text, "BAGS")
 
 
 func test_backroom_visual_zones_exist_without_collision() -> void:
@@ -1273,6 +1284,13 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		"TradeInInspectionTray",
 		"PreorderSlipStack",
 		"ServicePickupMarker",
+		"SaleScanPad",
+		"RegisterModeCueRail",
+		"RegisterModeSaleCue",
+		"RegisterModeReturnCue",
+		"RegisterModeTradeCue",
+		"RegisterModePreorderCue",
+		"RegisterModeServiceCue",
 		"CashDrawerSlot",
 		"CashDrawerPull",
 		"PaymentStatusGlowPanel",
@@ -1293,6 +1311,8 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 	assert_eq((_store.get_node("TradeInInspectionTray/TradeInInspectionTrayLabel") as Label3D).text, "TRADE")
 	assert_eq((_store.get_node("PreorderSlipStack/PreorderSlipStackLabel") as Label3D).text, "PRE")
 	assert_eq((_store.get_node("ServicePickupMarker/ServicePickupMarkerLabel") as Label3D).text, "SVC")
+	assert_eq((_store.get_node("SaleScanPad/SaleScanPadLabel") as Label3D).text, "SALE")
+	assert_lt((_store.get_node("RegisterModeSaleCue") as CSGBox3D).global_position.x, (_store.get_node("RegisterModeServiceCue") as CSGBox3D).global_position.x)
 
 
 func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> void:

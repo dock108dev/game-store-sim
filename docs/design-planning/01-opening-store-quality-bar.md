@@ -322,6 +322,12 @@ Acceptance checks:
 - UI decision values are visible before confirm.
 - Props do not create fake interactions.
 
+Implemented evidence:
+
+- Added a sale scan pad, labeled sleeve/bag stack, and customer approach marker to complete the owner/customer-side read.
+- Added a compact register mode cue rail for sale, return, trade, preorder, and service so the physical counter matches supported workflows.
+- Expanded register scene tests to assert the new cues are non-colliding, near the single register interaction target, and label-aligned.
+
 Validation:
 
 - Register, return, trade-in, service, and preorder tests.

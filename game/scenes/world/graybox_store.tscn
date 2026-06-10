@@ -702,10 +702,37 @@ double_sided = false
 text = "RECEIPT"
 font_size = 9
 
+[node name="SaleScanPad" type="CSGBox3D" parent="."]
+size = Vector3(0.54, 0.018, 0.38)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.54, 1.305, -2.76)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="SaleScanPadLabel" type="Label3D" parent="SaleScanPad"]
+pixel_size = 0.0019
+modulate = Color(0.98, 0.9, 0.66, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "SALE"
+font_size = 10
+
 [node name="SleeveStack" type="CSGBox3D" parent="."]
 size = Vector3(0.48, 0.08, 0.34)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.42, 1.14, -2.22)
 material = SubResource("StandardMaterial3D_paper")
+
+[node name="SleeveStackLabel" type="Label3D" parent="SleeveStack"]
+pixel_size = 0.0016
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "BAGS"
+font_size = 8
 
 [node name="CounterImpulseRack" type="Node3D" parent="."]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.82, 1.08, -2.22)
@@ -734,6 +761,11 @@ material = SubResource("StandardMaterial3D_shipping_label")
 size = Vector3(1.55, 0.012, 0.58)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.35, 0.028, -3.12)
 material = SubResource("StandardMaterial3D_zone")
+
+[node name="CustomerApproachMarker" type="CSGBox3D" parent="."]
+size = Vector3(0.52, 0.014, 0.18)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.02, 0.048, -3.72)
+material = SubResource("StandardMaterial3D_shipping_label")
 
 [node name="RegisterQueueMat" type="CSGBox3D" parent="."]
 size = Vector3(2.2, 0.012, 1.05)
@@ -1878,6 +1910,36 @@ billboard = 1
 double_sided = false
 text = "SVC"
 font_size = 8
+
+[node name="RegisterModeCueRail" type="CSGBox3D" parent="."]
+size = Vector3(1.24, 0.035, 0.045)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.26, 1.382, -2.92)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="RegisterModeSaleCue" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.06, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.82, 1.43, -2.86)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="RegisterModeReturnCue" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.06, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.04, 1.43, -2.92)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="RegisterModeTradeCue" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.06, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.26, 1.43, -2.98)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="RegisterModePreorderCue" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.06, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.48, 1.43, -3.04)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="RegisterModeServiceCue" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.06, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.7, 1.43, -3.1)
+material = SubResource("StandardMaterial3D_door")
 
 [node name="CashDrawerSlot" type="CSGBox3D" parent="."]
 size = Vector3(0.52, 0.035, 0.05)

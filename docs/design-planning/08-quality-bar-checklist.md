@@ -23,6 +23,7 @@ Use this checklist to approve the opening store and backroom before full catalog
 
 - Counter reads as a checkout command center.
 - Sale, return, trade-in, preorder, and service surfaces are physically visible.
+- A customer approach marker, scan pad, payment terminal, receipt printer, cash drawer, and workflow cue rail are visible without adding extra interaction targets.
 - Register remains one clear interaction target.
 - Transaction UI decision points are readable before confirmation.
 

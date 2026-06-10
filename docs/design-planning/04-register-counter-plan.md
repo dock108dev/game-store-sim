@@ -61,6 +61,13 @@ Make the counter physically explain the supported transactions: sale, return, tr
 - Register remains one interaction target.
 - Physical props do not add fake buttons or unsupported interactions.
 
+## Implemented Evidence
+
+- Register counter includes scanner, scan pad, payment terminal, receipt printer/slip, cash drawer, sleeve stack, customer approach marker, impulse rack, and queue/customer mats.
+- Transaction-specific surfaces cover sale, return, trade-in, preorder, and service pickup.
+- `RegisterModeCueRail` gives the five workflow states a physical read without adding new interaction nodes.
+- `test_graybox_store.gd` locks the prop set, labels, proximity to the register, and non-colliding visual-only behavior.
+
 ## Test
 
 - Run register, trade-in, return, service, and preorder tests.
