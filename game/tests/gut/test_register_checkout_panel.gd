@@ -72,8 +72,8 @@ func test_register_checkout_panel_opens_with_receipt_fields() -> void:
 	assert_string_contains(_panel.totals_label.text, "Total $21.99")
 	assert_string_contains(_panel.tender_label.text, "Cash tendered $50.00")
 	assert_string_contains(_panel.tender_label.text, "Change due $28.01")
-	assert_string_contains(_panel.return_label.text, "Returns: register review is planned")
-	assert_string_contains(_panel.return_label.text, "alpha checkout handles sales")
+	assert_string_contains(_panel.return_label.text, "Returns: register review handles refund")
+	assert_string_contains(_panel.return_label.text, "receiving review")
 	assert_false(_panel.confirm_button.disabled)
 
 
@@ -108,6 +108,33 @@ func test_register_checkout_panel_confirm_completes_sale_and_disables_action() -
 	assert_eq(get_viewport().gui_get_focus_owner(), _panel.close_button)
 	assert_string_contains(_panel.status_label.text, "Sold Star Trader")
 	assert_string_contains(_panel.status_label.text, "Profit")
+
+
+func test_register_checkout_panel_confirms_return_and_disables_action() -> void:
+	var customer: SimpleReturnCustomer = load("res://scenes/customers/simple_return_customer.tscn").instantiate()
+	var receiving_box := Node3D.new()
+	add_child_autofree(customer)
+	add_child_autofree(receiving_box)
+	_register.customer_path = NodePath("")
+	_register.return_customer_path = _register.get_path_to(customer)
+	_register.receiving_box_path = _register.get_path_to(receiving_box)
+
+	assert_true(_panel.open_for_register(_register))
+	assert_string_contains(_panel.title_label.text, "Return Review")
+	assert_string_contains(_panel.cart_label.text, "Solar Ferry")
+	assert_string_contains(_panel.cart_label.text, "Return: Solar Ferry refund $21.99")
+	assert_string_contains(_panel.tender_label.text, "Refund due $21.99")
+	assert_string_contains(_panel.tender_label.text, "Disposition inspect_restock")
+
+	assert_true(_panel.confirm_checkout())
+
+	assert_eq(_ledger.get_return_count(), 1)
+	assert_eq(_ledger.get_total_return_refund_cents(), 2199)
+	assert_eq(_session.get_cash_cents(), 47801)
+	assert_eq(receiving_box.get_child_count(), 1)
+	assert_false(customer.is_waiting_for_return())
+	assert_true(_panel.confirm_button.disabled)
+	assert_string_contains(_panel.status_label.text, "Returned Solar Ferry")
 
 
 func _font_size(control: Control) -> int:

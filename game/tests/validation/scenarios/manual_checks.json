@@ -362,10 +362,10 @@
     },
     {
       "id": "register_checkout_panel_readability",
-      "name": "Register checkout receipt, tender, change due, return placeholder, and confirmation controls are readable in the actual window",
+      "name": "Register checkout receipt, tender/change, return review, refund due, and confirmation controls are readable in the actual window",
       "status": "manual",
       "critical": false,
-      "reason": "Requires human judgment that the new register checkout panel fits the game window and reads as a register surface during repeated sale, preorder, and service workflows.",
+      "reason": "Requires human judgment that the register checkout panel fits the game window and reads as a register surface during repeated sale, preorder, service, and return-review workflows.",
       "owner": "manual QA"
     },
     {
@@ -378,7 +378,7 @@
     },
     {
       "id": "customer_cluster_visual_spacing",
-      "name": "Buyer, preorder, trade-in, service, and suspicious customers are visually separated enough to understand their roles",
+      "name": "Buyer, preorder, trade-in, service, return, and suspicious customers are visually separated enough to understand their roles",
       "status": "manual",
       "critical": false,
       "reason": "Automated spacing catches obvious overlaps, but human review must confirm the register area reads naturally from the playable camera.",
@@ -902,6 +902,14 @@
       "status": "manual",
       "critical": false,
       "reason": "Automated tests verify the stockroom plan, doc pointers, staff boundary, route cues, receiving-station open/invoice/sort props, backstock shelf/pull-stage props, manager-office computer context, service/safe/records support props, and physical workflow copy; human review must confirm 43_stockroom_staff_threshold, 44_stockroom_route_to_sales_floor, 04_receiving_box_before_pickup, 32_open_box_invoice_sort, 45_receiving_intake_station, 46_backstock_shelving, 47_backstock_pull_stage, 48_manager_office_context, 20_service_bench_ticket, 49_service_safe_records_corner, and 50_storage_tab_physical_flow read as organized stockroom work instead of floor clutter or instant inventory.",
+      "owner": "manual QA"
+    },
+    {
+      "id": "production_visual_overhaul_screenshot_review",
+      "name": "Production visual overhaul screenshots prove storefront, sales floor, register, catalog, build-mode, and upgrade cues read as one small specialty game shop",
+      "status": "manual",
+      "critical": false,
+      "reason": "Automated tests verify the production visual baseline nodes for storefront/architecture, product-density/register transaction surfaces, catalog/design/build-mode/upgrade cues, and existing lighting/signage/navigation clearance; human review must confirm main_scene, customer_queue, register_counter, receiving_area, backroom_summary, fixture_ghost, fixture_invalid_ghost, fixture_rotated_ghost, and fixture_placed screenshots no longer read as graybox, label clutter, obstructed product paths, unreadable signage, or squeezed UI.",
       "owner": "manual QA"
     },
     {

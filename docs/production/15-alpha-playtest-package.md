@@ -4,11 +4,11 @@ This is the Stop 13.6 external playtest handoff. It is intentionally shorter tha
 
 ## Current Package State
 
-Paused pending owner recovery screenshot validation.
+Paused pending owner recovery screenshot validation, stockroom screenshot validation, and production-visual screenshot validation.
 
-The package remains useful as the intended external tester script, but it should not be handed to testers until the owner recovery screenshot set in `16-playability-readability-recovery-plan.md` and the stockroom screenshot set in `17-stockroom-production-plan.md` pass. Readability recovery and stockroom production implementation are complete and the full automated gate is green; the remaining blocker is real-window human review, not a known automated failure.
+The package remains useful as the intended external tester script, but it should not be handed to testers until the owner recovery screenshot set in `16-playability-readability-recovery-plan.md`, the stockroom screenshot set in `17-stockroom-production-plan.md`, and the production-visual review set in `18-production-visuals-plan.md` pass. Readability recovery, stockroom production, and production visual baseline implementation are complete and the full automated gate is green; the remaining blocker is real-window human review, not a known automated failure.
 
-Before reopening this package, capture the recovery screenshot set listed in `16-playability-readability-recovery-plan.md`, capture the stockroom screenshot set listed in `17-stockroom-production-plan.md`, keep `13-alpha-bug-list.md` current, rerun `scripts/validate_godot.sh`, and confirm the build can be read in a real 1280x720 window. Keep the package paused if the employees-only receiving/backstock/office flow still reads as floor clutter, debug props, or instant inventory.
+Before reopening this package, capture the recovery screenshot set listed in `16-playability-readability-recovery-plan.md`, capture the stockroom screenshot set listed in `17-stockroom-production-plan.md`, complete the production-visual review set in `18-production-visuals-plan.md`, keep `13-alpha-bug-list.md` current, rerun `scripts/validate_godot.sh`, and confirm the build can be read in a real 1280x720 window. Keep the package paused if the employees-only receiving/backstock/office flow still reads as floor clutter, debug props, or instant inventory, or if the store still reads as graybox after the production-visual pass.
 
 ## Package Scope
 
@@ -71,7 +71,7 @@ Recommended test duration: 25 to 45 minutes.
 - The current visuals are still alpha/graybox quality. Report readability problems, but do not expect final art, animation, or audio.
 - Desktop pack smoke is automated. Full binary app export and start-save-quit-relaunch-continue review still depend on local Godot export templates, macOS signing state, and a human desktop run.
 - Controller feel, OS window behavior, mouse capture feel, and long-form comfort are manual checks; Codex cannot mark those as human-approved.
-- Returns are represented as register scope/copy, not as a complete return/exchange system.
+- Returns have a baseline register refund flow with receiving-review routing, cash/reputation accounting, and daily-report totals. Full exchanges, receipt/fraud policy, and multi-item return decisions remain future scope.
 - Hidden-thread content remains optional and should not block normal store progression.
 - Expanded category fixtures, theft/shrinkage, final product art, and final customer animation are outside this alpha package unless explicitly selected for a later slice.
 

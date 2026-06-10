@@ -46,9 +46,9 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 
 Current production validation baseline:
 
-- `scripts/validate_godot.sh` passes with 539 GUT tests.
-- UI scenario automation coverage is 496/615, above the 80% threshold.
-- Production script mapping coverage is 51/51.
+- `scripts/validate_godot.sh` passes with 551 GUT tests.
+- UI scenario automation coverage is 503/623, above the 80% threshold.
+- Production script mapping coverage is 52/52.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - Desktop pack export smoke passed and produced `artifacts/builds/desktop/game-store-sim.pck`.
 - Product catalog content checks pass with 33 catalog products.
@@ -63,6 +63,7 @@ Current production validation baseline:
 - Store sessions expose production day structure phases for opening, setup, customer hours, closing, report, and tomorrow planning; daily reports and save/load preserve the current phase.
 - Daily cash pressure posts rent/utility operating expenses once at close, reports reserved obligations separately from gross profit, and keeps supplier terms/payroll/repairs/shrinkage visible as expandable pressure hooks.
 - Reputation events track pricing fairness, wait time, preorder outcomes, service outcomes, return handling, suspicious choices, stock variety, and launch shortage consequences with clamped score changes and save/load coverage.
+- Return baseline coverage verifies the return customer scene, register return-review UI, refund ledger transaction, receiving-review item routing, cash/reputation accounting, recent activity, daily report return totals, and main-scene special-customer spacing.
 - Demand tuning connects shelf visibility, price pressure, rarity, marketing, day events, and customer archetypes while preserving default category/tier customer-price behavior.
 - Upgrade path coverage verifies fixture, category, service-tool, computer-tool, signage, storage, and starter-expansion goals; purchase rules; the storage prerequisite for expansion; backroom summary text; and save/load persistence.
 - Owner onboarding coverage verifies the receiving, pricing, stocking, checkout, trade-in, backroom computer, ordering, and closing checklist; state-derived progress; and backroom dashboard presentation.
@@ -97,6 +98,7 @@ Current production validation baseline:
 - Stockroom Slice 5 coverage verifies service bench ready/parts/ticket cues and secondary safe/security/records/hold surfaces.
 - Stockroom Slice 6 coverage verifies supplier ordering and storage workflow copy names the physical receiving station, backstock shelf, pull stage, and carry work.
 - Stockroom Slice 7 coverage verifies cooler light-strip props, route tape, floor shadows, wall cards, and cardboard/paper material variation remain nonblocking and preserve the carry route.
+- Production visual overhaul baseline implementation is complete in `18-production-visuals-plan.md`; automated coverage now verifies storefront/architecture cues, product-density/register transaction surfaces, catalog/design/build-mode/upgrade cues, and the preexisting lighting/signage/navigation props while human screenshot review remains required before external playtest.
 - Save slot UI coverage verifies the Stop 12.1 file-backed slot registry, new game slot creation, continue data, overwrite/delete behavior, save metadata, modal accessibility, and player-controller save-panel wiring.
 - Save migration coverage verifies the Stop 12.2 current save version, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed JSON failure state, and readable migration-policy summary text.
 - Settings menu coverage verifies the Stop 12.3 audio, display, controls, mouse, accessibility, persistence, bindings reset, default reset, modal focus, and player settings application surface.
@@ -107,7 +109,7 @@ Current production validation baseline:
 - Alpha performance pass is complete through Stop 13.2; `scripts/measure_alpha_performance.sh` records scene load, frame stepping, modal UI, customer pathing, save codec, screenshot, and exported pack startup timing under broad alpha regression thresholds.
 - Alpha regression-test expansion is complete through Stop 13.3; automated checks now cover rotated fixture placement bounds, buyer queue spacing against special register customers, and screenshot scenario coverage for P1/P2 alpha bug subjects.
 - Alpha scene-readability content pass is complete as Stop 13.4A; automated checks now cover right-wall/back-wall detail props, smaller non-cropping register/backroom sign placement, wider special-customer depth separation, display-rack face/profile cues, placed-fixture screenshot framing, and first-view backroom placement controls.
-- Alpha content/copy pass is complete as Stop 13.4B; automated checks now cover customer role copy, customer dialogue staff context, supplier crate/invoice/shelf-plan copy, release planning hooks, daily report readout language, register return-scope copy, and non-abbreviated backroom action labels.
+- Alpha content/copy pass is complete as Stop 13.4B; automated checks cover customer role copy, customer dialogue staff context, supplier crate/invoice/shelf-plan copy, release planning hooks, daily report readout language, the original register return-scope copy, and non-abbreviated backroom action labels.
 - Alpha playtest package is complete through Stop 13.6; automated checks now audit the package runbook, build commands, artifact paths, concise external playtest script, known issues, feedback form, rollback plan, scenario matrix entries, and manual package checks.
 - Alpha validation sync is complete through Stop 13.7; automated checks now audit full-gate evidence, desktop pack smoke handoff, scenario/manual checklist sync, alpha bug-list routing, backlog state, and completion-plan status.
 - Playability readability recovery is active in `16-playability-readability-recovery-plan.md`; automated validation remains required, but external playtest is paused until manual screenshot review confirms the build is readable in a real window.
@@ -124,7 +126,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Remappable input binding data lists core movement, interaction, and pause/settings actions.
 - The completed interaction polish pass needs a manual repeated-workflow review across prompts, carry, placement, workstations, and settings.
 - Pricing, trade-in, and backroom computer modal surfaces share readable production UI button, modal, list, stat, alert, disabled, and selected-state language.
-- Register checkout uses a receipt-style panel with itemized sale, subtotal, tax, total, tender, change due, service line, preorder deposit line, return placeholder, and confirmation feedback.
+- Register checkout uses a receipt-style panel with itemized sale, subtotal, tax, total, tender, change due, service line, preorder deposit line, return review refund/disposition state, and confirmation feedback.
 - Trade-in appraisal shows condition, completeness, authenticity confidence, market value, demand, projected margin, cash/store-credit offer, counteroffer, and risk notes.
 - Pricing shows cost basis, market price, current price, suggested range, demand, projected margin, apply-to-matching batch scope, and outcome warnings.
 - Product visual variants for case, disc, cartridge, accessory, console, controller, box, sealed, loose, and service-ticket cues read clearly in receiving, hand, shelf, customer, and register contexts.
@@ -132,7 +134,7 @@ Automated checks do not replace player-feel review. For the current graybox stag
 - Product shelf labels and price tags are readable without crowding pickup, stocking, pricing, customer-held, or register-review contexts.
 - Backroom computer tabs split dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records into readable task sections.
 - Supplier ordering shows category, cart, cost, due day, delivery state, storage needs, and receiving expectations while keeping ordered stock physical.
-- Daily report shows end-of-day cash, sales, trade-ins, services, preorders, launch activity, reputation, losses, bills, and tomorrow recommendations.
+- Daily report shows end-of-day cash, sales, trade-ins, services, preorders, return refunds, launch activity, reputation, losses, bills, and tomorrow recommendations.
 - UI accessibility floors enforce readable text size, contrast, focusable controls, and modal fit at the 1280x720 target.
 - Menu, register, pricing, trade-in, backroom computer, supplier ordering, daily report, settings, accessibility, customer visual-kit, customer animation, customer pathing, customer feedback, customer archetype, customer dialogue, product content, day structure, cash pressure, reputation, demand-tuning, upgrade-path, owner-onboarding, economy-progression, receiving-workflow, storage-workflow, service-bench, management-desk, security-placeholder, backroom-operations, fixture-catalog, placement-UX, fixture-category, decoration-baseline, layout-effects, starter-expansion, building-validation, suspicion-rules, clue-surface, hidden-choice, hidden-consequence, hidden-optionality, hidden-thread validation sync, store-ambience validation, interaction-audio validation, customer-audio validation, microfeedback validation, camera-feel validation, presentation validation sync, save-slot UI validation, save migration validation, settings menu validation, pause/main-menu validation, desktop export validation, release-wrapper validation, alpha triage, alpha performance, alpha regression, scene-readability, content/copy, balance, playtest-package, and alpha validation sync are synced through Stop 13.7.
 - Upgrade path validation is synced through Stop 7.5; manual QA should confirm upgrade choices read as future work/progression goals rather than cash-only debug options.

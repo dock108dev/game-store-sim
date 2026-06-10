@@ -4,11 +4,11 @@ This backlog is the active production view. The historical first-playable checkl
 
 ## Current Phase
 
-Employees-only stockroom production planning and implementation.
+Production visual overhaul baseline implementation and screenshot review.
 
 Goal: turn the validated prototype into a production-directed game build without losing the protected retail loop.
 
-Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, readability recovery implementation plus label depth-safety stabilization are complete, and employees-only stockroom production is mechanically complete through Slice 8. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set plus the stockroom screenshot set in a real 1280x720 window.
+Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, readability recovery implementation plus label depth-safety stabilization are complete, employees-only stockroom production is mechanically complete through Slice 8, the first post-stockroom returns baseline is implemented, and the production visual overhaul baseline is mechanically complete through Slice 14 in `18-production-visuals-plan.md`. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set, stockroom screenshot set, and production-visual review set in a real 1280x720 window.
 
 Historical polish roadmap: `08-polish-roadmap.md`.
 
@@ -19,6 +19,8 @@ Current completion plan: `11-game-completion-plan.md`.
 Completed recovery implementation plan: `16-playability-readability-recovery-plan.md`.
 
 Active stockroom production plan: `17-stockroom-production-plan.md`.
+
+Completed production visuals baseline plan: `18-production-visuals-plan.md`.
 
 ## Current Rules
 
@@ -50,6 +52,8 @@ Active stockroom production plan: `17-stockroom-production-plan.md`.
 14. Alpha hardening. Complete through Stop 13.7; external playtest package exists but is paused by the June 9 manual readability blocker.
 15. Playability readability recovery. Implementation complete; owner screenshot validation remains required before external playtest.
 16. Employees-only stockroom production. Mechanically complete through Slice 8; owner screenshot validation remains required before external playtest.
+17. Returns/exchanges baseline. Complete for first-pass register refund, receiving-review routing, cash/reputation accounting, daily-report readout, scene wiring, validation coverage, and manual checklist updates.
+18. Production visual overhaul. Mechanically complete through Slice 14 in `18-production-visuals-plan.md`; automated coverage now protects storefront/architecture, sales-floor density, register transaction surfaces, product/catalog/build/customization cues, lighting/signage, and navigation clearance. Owner screenshot review remains required before external playtest.
 
 ## Completed Polish Scope
 
@@ -193,6 +197,21 @@ The following polish items remain valid historical checkpoints:
 - Done: Slice 8 syncs validation docs, keeps the alpha package paused, and records that owner recovery plus stockroom screenshot review are required before external playtest.
 - Do not reopen external playtest from this phase unless owner screenshot validation and stockroom screenshot review both pass.
 
+## Returns And Exchanges Baseline
+
+- Complete: added a return customer to the register arc with a carried returned item and role/archetype wiring.
+- Done: register checkout now opens a `Return Review` state with itemized negative refund line, refund due, disposition, and receiving-review copy.
+- Done: confirming the return records a ledger transaction, reduces cash, records fair-return reputation handling, moves the returned item to receiving review, and updates recent activity/daily report totals.
+- Done: validation scenarios, script mapping, main-scene spacing checks, and manual playtest docs now treat returns as a baseline flow instead of placeholder copy.
+- Remaining future scope: true exchange selection, policy adjudication, fraud/receipt checks, warranty routing, and multi-item return decisions.
+
+## Production Visual Overhaul
+
+- Active: `18-production-visuals-plan.md` converts all 42 `inspiration/` screenshots into a detailed multi-slice implementation plan.
+- Goal: move the current production-intent graybox into a believable stylized specialty game shop while preserving the validated retail loop.
+- Planned slices cover storefront/brand read, interior architecture and materials, sales-floor fixture density, register command center dressing, product visual production, signage/wayfinding, customer role kit, backroom/office/service dressing, fixture placement visual language, computer/catalog UI, transaction UI, lighting/effects, customization/upgrade visibility, and screenshot review.
+- Do not reopen external playtest from this phase unless owner recovery, stockroom, and production-visual screenshot review sets all pass.
+
 ## Product And Fixture Polish
 
 - Done: made used-game cases more intentional with spine, platform, and price-sticker cues.
@@ -218,6 +237,7 @@ Compressed summary of completed validated systems:
 - Buyer customer manager, buyer movement, price sensitivity, lower-priced copy selection, register queue, sale completion, and transaction ledger.
 - Trade-in seller, offer panel, cash/store-credit acceptance, counteroffer adjustment, decline, and acquired inventory.
 - Service customer and register-completed service accounting.
+- Return customer, register-reviewed refund, receiving-review item routing, cash/reputation accounting, and daily-report return totals.
 - Service bench ticket preparation with register-completed customer pickup/accounting.
 - Management desk reviews for supplier messages, bills, inventory search, report review, preorder planning, and upgrade ordering.
 - Security/safe placeholders for cash storage, high-value storage, suspicious goods isolation, and security footage without activating a hidden-thread objective.
@@ -243,8 +263,8 @@ Compressed summary of completed validated systems:
 These remain future phases unless explicitly selected:
 
 - Theft and shrinkage systems.
-- Returns and exchanges.
-- Final production art beyond the current production-intent graybox, generated product variants, visual cue meshes, and alpha readability pass.
+- Full exchanges and advanced return-policy depth beyond the current baseline refund/receiving-review flow.
+- Final production art beyond the planned visual-overhaul baseline.
 - Stocking fixtures for every expanded starter category beyond the current used-game display rack.
 - Employees and staff assignment.
 - Larger store expansion.

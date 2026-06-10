@@ -6,6 +6,7 @@ class_name RegisterWorkstation
 @export var trade_in_customer_path: NodePath
 @export var preorder_customer_path: NodePath
 @export var service_customer_path: NodePath
+@export var return_customer_path: NodePath
 @export var receiving_box_path: NodePath
 @export var ledger_path: NodePath
 @export var store_session_path: NodePath
@@ -34,6 +35,11 @@ func get_interaction_prompt() -> String:
 	var service_customer := _get_waiting_service_customer()
 	if service_customer != null:
 		return "Click Complete %s" % str(service_customer.get("service_name"))
+
+	var return_customer := _get_waiting_return_customer()
+	if return_customer != null:
+		var return_item: Node = return_customer.get_returned_item()
+		return "Click Review Return %s" % _get_item_display_name(return_item)
 
 	return "Register Workstation"
 
@@ -65,6 +71,10 @@ func interact_with_actor(_actor: Node) -> String:
 	if service_customer != null and _actor != null and _actor.has_method("open_register_checkout"):
 		return str(_actor.open_register_checkout(self))
 
+	var return_customer := _get_waiting_return_customer()
+	if return_customer != null and _actor != null and _actor.has_method("open_register_checkout"):
+		return str(_actor.open_register_checkout(self))
+
 	return _complete_waiting_sale()
 
 
@@ -73,7 +83,8 @@ func has_active_checkout() -> bool:
 	var transaction_type := str(state.get("transaction_type", "idle"))
 	return transaction_type == "sale" \
 		or transaction_type == "preorder_deposit" \
-		or transaction_type == "service"
+		or transaction_type == "service" \
+		or transaction_type == "return"
 
 
 func get_checkout_ui_state() -> Dictionary:
@@ -92,6 +103,10 @@ func get_checkout_ui_state() -> Dictionary:
 	var service_customer := _get_waiting_service_customer()
 	if service_customer != null:
 		return _build_service_checkout_state(service_customer)
+
+	var return_customer := _get_waiting_return_customer()
+	if return_customer != null:
+		return _build_return_checkout_state(return_customer)
 
 	if not _last_checkout_ui_state.is_empty():
 		return _last_checkout_ui_state.duplicate(true)
@@ -115,6 +130,10 @@ func complete_active_checkout() -> String:
 	var service_customer := _get_waiting_service_customer()
 	if service_customer != null:
 		return _complete_service(service_customer)
+
+	var return_customer := _get_waiting_return_customer()
+	if return_customer != null:
+		return _complete_return(return_customer)
 
 	return "No checkout waiting at the register."
 
@@ -269,7 +288,7 @@ func _complete_preorder(customer: SimplePreorderCustomer) -> String:
 func _complete_waiting_service() -> String:
 	var customer := _get_waiting_service_customer()
 	if customer == null:
-		return "No customer waiting at the register."
+		return _complete_waiting_return()
 
 	return _complete_service(customer)
 
@@ -296,6 +315,63 @@ func _complete_service(customer: Node) -> String:
 	]
 	_store_completed_checkout_state(state, message)
 	return message
+
+
+func _complete_waiting_return() -> String:
+	var customer := _get_waiting_return_customer()
+	if customer == null:
+		return "No customer waiting at the register."
+
+	return _complete_return(customer)
+
+
+func _complete_return(customer: SimpleReturnCustomer) -> String:
+	var state := _build_return_checkout_state(customer)
+	var ledger := _get_ledger()
+	var receiving_box := _get_receiving_box()
+	var item: Node = customer.get_returned_item()
+	if ledger == null or receiving_box == null or item == null:
+		return "Register is not ready to complete a return."
+
+	var refund_cents := customer.get_refund_cents()
+	var transaction := ledger.record_return(
+		customer,
+		item,
+		refund_cents,
+		str(customer.get("return_disposition"))
+	)
+	if transaction.is_empty():
+		return "Register could not record the return."
+
+	var returned_item := customer.complete_return(receiving_box)
+	if returned_item == null:
+		return "Register could not receive the returned item."
+
+	var store_session := _get_store_session()
+	if store_session != null and store_session.has_method("apply_return"):
+		store_session.apply_return(transaction)
+
+	var message := "Returned %s for %s refund; item moved to receiving review." % [
+		str(transaction.get("display_name", "item")),
+		"$%0.2f" % (refund_cents / 100.0),
+	]
+	_store_completed_checkout_state(state, message)
+	return message
+
+
+func refuse_return(customer: SimpleReturnCustomer) -> String:
+	if customer == null or not customer.is_waiting_for_return():
+		return "No return waiting at the register."
+
+	var item_name := _get_item_display_name(customer.get_returned_item())
+	if not customer.refuse_return():
+		return "Could not refuse return."
+
+	var store_session := _get_store_session()
+	if store_session != null and store_session.has_method("record_return_handling"):
+		store_session.record_return_handling("rejected_unfairly")
+
+	return "Refused %s return." % item_name
 
 
 func _build_sale_checkout_state(customer: SimpleBuyerCustomer) -> Dictionary:
@@ -376,6 +452,44 @@ func _build_service_checkout_state(customer: Node) -> Dictionary:
 	})
 
 
+func _build_return_checkout_state(customer: SimpleReturnCustomer) -> Dictionary:
+	var item: Node = customer.get_returned_item()
+	var display_name := _get_item_display_name(item)
+	var refund_cents := customer.get_refund_cents()
+	var state := _build_checkout_state({
+		"transaction_type": "return",
+		"title": "Return Review",
+		"customer_id": str(customer.get("customer_id")),
+		"cart_lines": [
+			{
+				"line_type": "return",
+				"label": display_name,
+				"quantity": 1,
+				"unit_price_cents": -refund_cents,
+				"line_total_cents": -refund_cents,
+				"refund_cents": refund_cents,
+			},
+		],
+		"subtotal_cents": -refund_cents,
+		"return_line": "%s refund %s; %s" % [
+			display_name,
+			"$%0.2f" % (refund_cents / 100.0),
+			str(customer.get("return_reason")),
+		],
+		"return_disposition": str(customer.get("return_disposition")),
+		"refund_due_cents": refund_cents,
+		"confirmation": "Ready to accept return and move item to receiving review.",
+		"sale_confirmation": "Return refund will reduce cash and protect reputation.",
+	})
+	state["tender_method"] = "Cash refund"
+	state["tendered_cents"] = 0
+	state["change_due_cents"] = 0
+	state["return_placeholder"] = "Return: refund %s, route item to receiving for inspection/restock." % (
+		"$%0.2f" % (refund_cents / 100.0)
+	)
+	return state
+
+
 func _build_trade_in_referral_state(customer: SimpleTradeInCustomer) -> Dictionary:
 	var item: Node = customer.get_trade_item()
 	return _build_checkout_state({
@@ -417,7 +531,7 @@ func _build_checkout_state(input: Dictionary) -> Dictionary:
 	state["tender_method"] = tender_method
 	state["tendered_cents"] = tendered_cents
 	state["change_due_cents"] = maxi(0, tendered_cents - total_cents)
-	state["return_placeholder"] = "Returns: register review is planned; alpha checkout handles sales, trade-ins, preorders, and service pickups."
+	state["return_placeholder"] = "Returns: register review handles refund, exchange/service disposition, and receiving review."
 	state["transaction_feedback"] = str(state.get("confirmation", ""))
 	state["completed"] = false
 	state["has_active_checkout"] = has_checkout_type(str(state.get("transaction_type", "")))
@@ -427,7 +541,8 @@ func _build_checkout_state(input: Dictionary) -> Dictionary:
 func has_checkout_type(transaction_type: String) -> bool:
 	return transaction_type == "sale" \
 		or transaction_type == "preorder_deposit" \
-		or transaction_type == "service"
+		or transaction_type == "service" \
+		or transaction_type == "return"
 
 
 func _store_completed_checkout_state(state: Dictionary, message: String) -> void:
@@ -489,6 +604,17 @@ func _get_waiting_service_customer() -> Node:
 		and customer.has_method("is_waiting_for_service")
 		and bool(customer.call("is_waiting_for_service"))
 	):
+		return customer
+
+	return null
+
+
+func _get_waiting_return_customer() -> SimpleReturnCustomer:
+	if return_customer_path.is_empty():
+		return null
+
+	var customer := get_node_or_null(return_customer_path) as SimpleReturnCustomer
+	if customer != null and customer.has_method("is_waiting_for_return") and customer.is_waiting_for_return():
 		return customer
 
 	return null

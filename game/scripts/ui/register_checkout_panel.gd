@@ -147,6 +147,11 @@ func _update_labels() -> void:
 		_format_money(int(_state.get("tendered_cents", 0))),
 		_format_money(int(_state.get("change_due_cents", 0))),
 	]
+	if str(_state.get("transaction_type", "")) == "return":
+		tender_label.text = "Refund due %s\nDisposition %s" % [
+			_format_money(int(_state.get("refund_due_cents", 0))),
+			str(_state.get("return_disposition", "receiving review")),
+		]
 	return_label.text = str(_state.get("return_placeholder", "Returns: not available in this build."))
 	status_label.text = str(_state.get("transaction_feedback", "Awaiting checkout confirmation."))
 
@@ -169,6 +174,10 @@ func _format_cart_lines() -> String:
 	if not preorder_line.is_empty():
 		rows.append("Preorder: %s" % preorder_line)
 
+	var return_line := str(_state.get("return_line", ""))
+	if not return_line.is_empty():
+		rows.append("Return: %s" % return_line)
+
 	if rows.is_empty():
 		rows.append("No checkout lines.")
 
@@ -176,4 +185,6 @@ func _format_cart_lines() -> String:
 
 
 func _format_money(cents: int) -> String:
+	if cents < 0:
+		return "-$%0.2f" % (abs(cents) / 100.0)
 	return "$%0.2f" % (cents / 100.0)

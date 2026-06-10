@@ -90,6 +90,27 @@
       "status": "automated",
       "critical": false,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_production_environment_props_preserve_core_navigation_clearance"
+    },
+    {
+      "id": "production_visual_overhaul_storefront_architecture",
+      "name": "Production visual overhaul storefront, window dressing, trim, ceiling, floor, and counter cues exist",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_production_visual_overhaul_storefront_and_architecture_cues_exist"
+    },
+    {
+      "id": "production_visual_overhaul_product_transaction_surfaces",
+      "name": "Production visual overhaul product-density and register transaction surfaces exist near their systems",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_production_visual_overhaul_product_density_and_transaction_surfaces_exist"
+    },
+    {
+      "id": "production_visual_overhaul_catalog_build_upgrade_cues",
+      "name": "Production visual overhaul catalog, design, build-mode, and upgrade visibility cues exist and stay bounded",
+      "status": "automated",
+      "critical": false,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist"
     }
   ]
 }

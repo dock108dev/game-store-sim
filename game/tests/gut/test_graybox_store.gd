@@ -1056,6 +1056,138 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 	assert_true(_is_inside_store_floorprint(fixture_manager.get("default_ghost_position")))
 
 
+func test_production_visual_overhaul_storefront_and_architecture_cues_exist() -> void:
+	var storefront_props := [
+		"StorefrontSignTrimTop",
+		"StorefrontSignTrimBottom",
+		"WindowDisplayConsoleBox",
+		"WindowDisplayCaseA",
+		"WindowDisplayCaseB",
+		"WindowDisplayPosterPanel",
+		"TradeServiceDecalPanel",
+	]
+	for prop_path in storefront_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+		assert_lt(prop.global_position.z, -5.45, prop_path)
+
+	assert_eq((_store.get_node("WindowDisplayPosterPanel/WindowDisplayPosterLabel") as Label3D).text, "USED + NEW")
+	assert_eq((_store.get_node("TradeServiceDecalPanel/TradeServiceDecalLabel") as Label3D).text, "TRADE / SERVICE")
+	assert_gt((_store.get_node("StorefrontSignTrimTop") as CSGBox3D).global_position.y, 2.4)
+	assert_lt((_store.get_node("WindowDisplayConsoleBox") as CSGBox3D).global_position.y, 0.7)
+
+	var architecture_props := [
+		"SalesBaseboardFront",
+		"SalesBaseboardBack",
+		"SalesBaseboardLeft",
+		"SalesBaseboardRight",
+		"SalesCeilingPanelA",
+		"SalesCeilingPanelB",
+		"FloorTransitionStripSalesBack",
+		"CounterFrontTrim",
+	]
+	for prop_path in architecture_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+
+	assert_lte((_store.get_node("FloorTransitionStripSalesBack") as CSGBox3D).size.y, 0.0061)
+	assert_gt((_store.get_node("SalesCeilingPanelA") as CSGBox3D).global_position.y, 2.6)
+	assert_gt((_store.get_node("SalesCeilingPanelB") as CSGBox3D).global_position.y, 2.6)
+
+
+func test_production_visual_overhaul_product_density_and_transaction_surfaces_exist() -> void:
+	var rack := _store.get_node("GameDisplayRack") as Node3D
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var density_props := [
+		"ShelfFacingDensityBand",
+		"ShelfPriceTagA",
+		"ShelfPriceTagB",
+		"ShelfPriceTagC",
+	]
+	for prop_path in density_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_lt(_flat_distance_xz(prop.global_position, rack.global_position), 0.95, prop_path)
+
+	assert_eq((_store.get_node("ShelfFacingDensityBand/ShelfFacingDensityLabel") as Label3D).text, "USED GAMES")
+
+	var transaction_props := [
+		"ReturnReviewTray",
+		"TradeInInspectionTray",
+		"PreorderSlipStack",
+		"ServicePickupMarker",
+		"CashDrawerSlot",
+		"PaymentStatusGlowPanel",
+	]
+	for prop_path in transaction_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_lt(_flat_distance_xz(prop.global_position, register.global_position), 1.15, prop_path)
+		assert_gt(prop.global_position.y, 1.15, prop_path)
+
+	var return_material := (_store.get_node("ReturnReviewTray") as CSGBox3D).material as StandardMaterial3D
+	var trade_material := (_store.get_node("TradeInInspectionTray") as CSGBox3D).material as StandardMaterial3D
+	assert_not_null(return_material)
+	assert_not_null(trade_material)
+	assert_gt(return_material.albedo_color.b, trade_material.albedo_color.b)
+
+
+func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> void:
+	var computer := _store.get_node("BackroomComputer") as Node3D
+	for prop_path in [
+		"BackroomCatalogCardA",
+		"BackroomCatalogCardB",
+		"BackroomCartSummaryPanel",
+		"DesignSwatchStrip",
+		"DesignSwatchTeal",
+		"DesignSwatchYellow",
+		"DesignSwatchDark",
+	]:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_lt(_flat_distance_xz(prop.global_position, computer.global_position), 1.25, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+
+	var ghost := _store.get_node("FixturePlacementManager/GhostRackPreview") as Node3D
+	assert_false(ghost.visible)
+	for prop_path in [
+		"FixturePlacementManager/GhostRackPreview/FixtureGhostFootprintA",
+		"FixturePlacementManager/GhostRackPreview/FixtureGhostFootprintB",
+		"FixturePlacementManager/GhostRackPreview/FixtureGhostFootprintC",
+		"FixturePlacementManager/GhostRackPreview/FixtureGhostFootprintD",
+	]:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_lte(prop.size.y, 0.026, prop_path)
+
+	var upgrade_props := [
+		"FixturePlacementInstructionPanel",
+		"WallPaintSwatchStrip",
+		"FloorMaterialSamplePanel",
+		"UpgradePreviewRackCard",
+		"ExpansionFootprintTapeA",
+		"ExpansionFootprintTapeB",
+	]
+	for prop_path in upgrade_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+
+	assert_eq((_store.get_node("FixturePlacementInstructionPanel/FixturePlacementInstructionLabel") as Label3D).text, "VALID FOOTPRINT")
+	assert_eq((_store.get_node("UpgradePreviewRackCard/UpgradePreviewRackLabel") as Label3D).text, "UPGRADE")
+	assert_lte((_store.get_node("ExpansionFootprintTapeA") as CSGBox3D).size.y, 0.0061)
+	assert_lte((_store.get_node("ExpansionFootprintTapeB") as CSGBox3D).size.y, 0.0061)
+
+
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
@@ -1318,6 +1450,7 @@ func test_register_area_customer_positions_are_spaced_for_readability() -> void:
 		_store.get_node("TradeInCustomer") as Node3D,
 		_store.get_node("PreorderCustomer") as Node3D,
 		_store.get_node("ServiceCustomer") as Node3D,
+		_store.get_node("ReturnCustomer") as Node3D,
 		_store.get_node("SuspiciousCustomer") as Node3D,
 	]
 
@@ -1335,6 +1468,7 @@ func test_register_area_customer_positions_are_spaced_for_readability() -> void:
 	assert_lt((_store.get_node("TradeInCustomer") as Node3D).global_position.x, 0.0)
 	assert_lt((_store.get_node("PreorderCustomer") as Node3D).global_position.x, -1.0)
 	assert_lt((_store.get_node("ServiceCustomer") as Node3D).global_position.x, -2.0)
+	assert_lt((_store.get_node("ReturnCustomer") as Node3D).global_position.x, -3.0)
 	assert_lt((_store.get_node("SuspiciousCustomer") as Node3D).global_position.x, -3.5)
 
 
@@ -1344,6 +1478,7 @@ func test_buyer_queue_lane_stays_clear_of_special_customers() -> void:
 		_store.get_node("TradeInCustomer") as Node3D,
 		_store.get_node("PreorderCustomer") as Node3D,
 		_store.get_node("ServiceCustomer") as Node3D,
+		_store.get_node("ReturnCustomer") as Node3D,
 		_store.get_node("SuspiciousCustomer") as Node3D,
 	]
 
@@ -1358,13 +1493,16 @@ func test_alpha_special_customer_arc_has_readable_depth_separation() -> void:
 	var trade_in := _store.get_node("TradeInCustomer") as Node3D
 	var preorder := _store.get_node("PreorderCustomer") as Node3D
 	var service := _store.get_node("ServiceCustomer") as Node3D
+	var return_customer := _store.get_node("ReturnCustomer") as Node3D
 	var suspicious := _store.get_node("SuspiciousCustomer") as Node3D
 
 	assert_lt(preorder.global_position.z, trade_in.global_position.z - 0.5)
 	assert_lt(service.global_position.x, preorder.global_position.x - 1.0)
-	assert_lt(suspicious.global_position.x, service.global_position.x - 1.0)
+	assert_lt(return_customer.global_position.x, service.global_position.x - 0.5)
+	assert_lt(suspicious.global_position.x, return_customer.global_position.x - 0.5)
 	assert_gte(_flat_distance_xz(preorder.global_position, service.global_position), 1.25)
-	assert_gte(_flat_distance_xz(service.global_position, suspicious.global_position), 1.35)
+	assert_gte(_flat_distance_xz(service.global_position, return_customer.global_position), 1.0)
+	assert_gte(_flat_distance_xz(return_customer.global_position, suspicious.global_position), 1.0)
 
 
 func test_alpha_customer_queue_lane_keeps_internal_spacing_contract() -> void:
@@ -1386,6 +1524,7 @@ func test_alpha_customer_queue_lane_keeps_internal_spacing_contract() -> void:
 		_store.get_node("TradeInCustomer") as Node3D,
 		_store.get_node("PreorderCustomer") as Node3D,
 		_store.get_node("ServiceCustomer") as Node3D,
+		_store.get_node("ReturnCustomer") as Node3D,
 		_store.get_node("SuspiciousCustomer") as Node3D,
 	]
 	for queue_position in queue_positions:

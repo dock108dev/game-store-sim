@@ -36,11 +36,18 @@
       "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_builds_service_line_and_profit"
     },
     {
-      "id": "register_checkout_return_placeholder",
-      "name": "Register checkout UI includes a return placeholder when no return flow exists",
+      "id": "register_checkout_return_review",
+      "name": "Register checkout UI builds return review refund, disposition, and receiving-review state",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_idle_state_includes_return_placeholder"
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_builds_return_review_line_and_refund"
+    },
+    {
+      "id": "register_checkout_return_scope_idle",
+      "name": "Register checkout idle state describes the returns baseline scope",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_ui.gd::test_register_checkout_ui_idle_state_includes_return_scope"
     },
     {
       "id": "register_checkout_panel_receipt_fields",
@@ -62,6 +69,13 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_register_checkout_panel.gd::test_register_checkout_panel_confirm_completes_sale_and_disables_action"
+    },
+    {
+      "id": "register_checkout_panel_confirm_return",
+      "name": "Register checkout panel confirm completes a return refund and disables duplicate confirmation",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_register_checkout_panel.gd::test_register_checkout_panel_confirms_return_and_disables_action"
     },
     {
       "id": "player_opens_register_checkout",

@@ -243,7 +243,7 @@ Goal: replace prototype panels with a coherent production UI system.
 Stops:
 
 - Stop 4.1: UI component language. Done in `Add UI component language`: added a shared UI component library, reusable modal/button/list/stat/receipt/tooltip/alert/disabled/selected tokens, surface accents, and applied the language to pricing, trade-in, and backroom computer panels with automated validation coverage.
-- Stop 4.2: Register checkout UI. Done in `Add register checkout UI`: added a register checkout panel, itemized sale cart, subtotal/tax/total, cash tender/change due, sale confirmation, service line, preorder deposit line, return placeholder, transaction feedback, player modal access, and automated/manual validation coverage.
+- Stop 4.2: Register checkout UI. Done in `Add register checkout UI`: added a register checkout panel, itemized sale cart, subtotal/tax/total, cash tender/change due, sale confirmation, service line, preorder deposit line, original return-scope placeholder, transaction feedback, player modal access, and automated/manual validation coverage.
 - Stop 4.3: Trade-in appraisal UI. Done in `Polish trade-in appraisal UI`: trade-in appraisal now shows condition, completeness, authenticity confidence, market value, demand, projected margin, cash/store-credit offer, counteroffer-updated margin, and risk notes with automated/manual validation coverage.
 - Stop 4.4: Pricing UI. Done in `Polish pricing decision UI`: pricing now shows cost basis, market price, current price, suggested range, projected margin, demand, apply-to-matching batch scope, and outcome warnings for above-range, below-cost, below-range, and batch-price decisions.
 - Stop 4.5: Backroom computer tabs. Done in `Polish backroom computer tabs`: the backroom computer now splits dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records into task tabs with automated/manual validation coverage.
@@ -637,7 +637,7 @@ Validation snapshot:
 - Focused GUT coverage passes for the Stop 12.4 pause menu, resume transition, main-menu mode, start-game transition, settings/save-load routing, quit request state, and mouse capture recovery.
 - Desktop export pipeline coverage passes for the Stop 12.5 macOS export preset, template-free `.pck` export, pack boot smoke, binary-export fallback message, and release-wrapper manual scenario entries.
 - Release wrapper validation sync passes for the Stop 12.6 scenario matrix, desktop export tool manifest, docs coverage, pack-smoke handoff, binary-template fallback, and manual build save/load review checklist.
-- Full validation snapshot is `scripts/validate_godot.sh` passing with 539 GUT tests, UI scenario automation coverage 496/615, production script mapping coverage 51/51, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
+- Full validation snapshot is `scripts/validate_godot.sh` passing with 551 GUT tests, UI scenario automation coverage 503/623, production script mapping coverage 52/52, 3 active validation tools, 33 catalog products, desktop pack smoke, alpha performance smoke, screenshot sanity checks, and old-name scan.
 
 ## Milestone 13: Alpha Hardening
 
@@ -700,6 +700,8 @@ The playability readability recovery phase in `16-playability-readability-recove
 8. Done: stabilized angle-dependent label clipping for panel-backed signs and product price tags.
 
 The stockroom build plan in `17-stockroom-production-plan.md` is mechanically complete through Slice 8 with employees-only boundary, physical receiving, backstock shelving, service/security corners, manager-office computer context, workflow copy, cooler light/material hierarchy, route tape, floor shadows, wall cards, box/paper material variation, validation sync, and external-package gating. External playtest remains paused until owner recovery and stockroom screenshot approval pass.
+
+The first post-stockroom production slice is also mechanically complete: return customers now reach a register `Return Review`, refunds reduce cash, fair handling affects reputation, returned items route to receiving review, daily reports show return refunds, and the validation matrix/script mapping covers the flow. Remaining return/exchange depth is policy/fraud/exchange selection, not the baseline refund loop.
 
 Codex can keep the repo mechanically validated, but it cannot mark controller feel, OS window behavior, mouse-capture feel, economy feel, or long-form playtest readability as human-approved.
 

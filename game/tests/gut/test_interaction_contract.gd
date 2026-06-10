@@ -103,6 +103,39 @@ func test_register_completes_waiting_service_customer() -> void:
 	assert_false(customer.call("is_waiting_for_service"))
 
 
+func test_register_completes_waiting_return_customer() -> void:
+	var register: RegisterWorkstation = load("res://scenes/props/register_workstation.tscn").instantiate()
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var receiving_box := Node3D.new()
+	var customer: SimpleReturnCustomer = load("res://scenes/customers/simple_return_customer.tscn").instantiate()
+	add_child_autofree(register)
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(receiving_box)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	register.return_customer_path = register.get_path_to(customer)
+	register.receiving_box_path = register.get_path_to(receiving_box)
+	register.ledger_path = register.get_path_to(ledger)
+	register.store_session_path = register.get_path_to(session)
+
+	assert_eq(register.get_interaction_prompt(), "Click Review Return Solar Ferry")
+
+	var message := register.interact()
+
+	assert_string_contains(message, "Returned Solar Ferry")
+	assert_string_contains(message, "$21.99 refund")
+	assert_eq(ledger.get_return_count(), 1)
+	assert_eq(ledger.get_total_return_refund_cents(), 2199)
+	assert_eq(session.get_return_count(), 1)
+	assert_eq(session.get_total_return_refund_cents(), 2199)
+	assert_eq(session.get_cash_cents(), 47801)
+	assert_eq(receiving_box.get_child_count(), 1)
+	assert_false(customer.is_waiting_for_return())
+
+
 func test_backroom_computer_opens_actor_summary_panel() -> void:
 	var computer: Node = load("res://scenes/props/backroom_computer.tscn").instantiate()
 	var session: Node = load("res://scripts/systems/store_session.gd").new()

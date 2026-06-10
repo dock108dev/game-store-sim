@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening/stockroom pass: `scripts/validate_godot.sh` passes with 539 GUT tests, UI scenario automation coverage at 496/615, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening/stockroom/returns/production-visuals pass: `scripts/validate_godot.sh` passes with 551 GUT tests, UI scenario automation coverage at 503/623, production script mapping coverage at 52/52, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -16,7 +16,7 @@ Current automated baseline:
 - Input/settings baseline is implemented through Stop 3.6, the expanded settings menu is implemented through Stop 12.3, and pause/main menu is implemented through Stop 12.4; manual QA should confirm Escape opens pause; Resume, Settings, Save/Load, Main Menu, Start Game, and Quit requests are readable; settings still works; and closing menus returns to captured first-person control.
 - Interaction validation sync is implemented through Stop 3.7; manual QA should run the Interaction Polish Focus section as one full repeated-workflow review.
 - UI component language is implemented through Stop 4.1; manual QA should confirm pricing, trade-in, and backroom computer modals now feel like one production UI family with readable button, panel, disabled, selected, alert, list, stat, and receipt states.
-- Register checkout UI is implemented through Stop 4.2; manual QA should confirm sale, preorder, and service checkout panels show itemized lines, subtotal, tax, total, tender, change due, return placeholder, and confirmation feedback before the transaction completes.
+- Register checkout UI is implemented through Stop 4.2 and extended by the returns baseline; manual QA should confirm sale, preorder, service, and return-review panels show itemized lines, subtotal, tax, total/refund due, tender/change where applicable, disposition, and confirmation feedback before the transaction completes.
 - Trade-in appraisal UI is implemented through Stop 4.3; manual QA should confirm condition, completeness, authenticity confidence, market value, demand, projected margin, cash/store-credit offer, counteroffer, and risk notes remain readable.
 - Pricing UI is implemented through Stop 4.4; manual QA should confirm cost basis, market price, current price, suggested range, demand, projected margin, apply-to-matching batch scope, and outcome warnings remain readable.
 - Backroom computer tabs are implemented through Stop 4.5; manual QA should confirm dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records tabs are readable and do not hide required actions.
@@ -62,12 +62,13 @@ Current automated baseline:
 - Alpha performance pass is implemented through Stop 13.2; manual QA should review `14-alpha-performance-baseline.md` after content-heavy changes and rerun `scripts/measure_alpha_performance.sh --full` before packaging an external playtest.
 - Alpha regression-test expansion is implemented through Stop 13.3; automated checks now protect rotated fixture placement bounds, visible buyer-queue spacing, and screenshot scenario coverage for the current alpha P1/P2 bug subjects.
 - Alpha scene-readability content pass is implemented as Stop 13.4A; manual QA should review the refreshed screenshot set for store read, sign cropping, special-customer separation, placed-rack framing, and backroom computer first-view controls.
-- Alpha content/copy pass is implemented as Stop 13.4B; manual QA should review customer role text, dialogue staff context, supplier order notes, release planning, daily report wording, register return-scope copy, and backroom action labels before treating the alpha copy pass as human-approved.
+- Alpha content/copy pass is implemented as Stop 13.4B; manual QA should review customer role text, dialogue staff context, supplier order notes, release planning, daily report wording, the register return-review baseline, and backroom action labels before treating the alpha copy pass as human-approved.
 - Alpha economy balance pass is implemented as Stop 13.5; manual QA should review the tuned $500 starting cash, $10 daily overhead, $30 one-day starter supplier lot, $5.99 disc resurfacing service, buyer tolerance/pricing range, launch allocation, and early upgrade-cost feel before treating balance as human-approved.
 - Alpha playtest package is implemented through Stop 13.6 but remains paused until the owner recovery screenshot set passes; manual QA should use `15-alpha-playtest-package.md` only after that owner capture is approved.
 - Alpha validation sync is implemented through Stop 13.7; manual QA should treat the gate, pack smoke, package doc, alpha bug list, and this checklist as mechanically current, then run the owner recovery screenshot pass before external playtest.
 - Playability readability recovery implementation is complete in `16-playability-readability-recovery-plan.md`; manual QA should review the recovery focus and capture list before approving any new external playtest package.
 - Employees-only stockroom production is mechanically complete through Slice 8 in `17-stockroom-production-plan.md`; manual QA should use the Stockroom Production Focus before approving the stockroom screenshot pass or reopening external playtest.
+- Production visual overhaul baseline implementation is complete in `18-production-visuals-plan.md`; manual QA should use the Production Visuals Focus before approving the visual screenshot set or reopening external playtest.
 - Readability recovery Slice 1 is implemented; manual QA should confirm the fresh spawn, sales-floor route, and backroom entry screenshots now benefit from the wider comfort FOV, taller eye line, farther spawn, and lower/right held-item anchor before moving deeper into signage and UI work.
 - Readability recovery Slice 2 is implemented; manual QA should confirm receiving, register, rack, backroom, storage, and retail-callout signs are fixed in-world, compact, and no longer cover starter products or normal register/rack sightlines before moving into interaction and modal legibility.
 - Readability recovery Slice 3 is implemented; manual QA should confirm the bottom prompt, center reticle, product hover highlight, shelf slot hover highlight, pickup, pricing-entry, stocking, and lower-priced-copy sale checks are readable before moving into modal/menu legibility.
@@ -84,6 +85,7 @@ Current automated baseline:
 - Stockroom Slice 6 is implemented; manual QA should confirm the backroom computer copy names receiving station, backstock shelf, pull stage, and physical carry work without adding register-facing actions.
 - Stockroom Slice 7 is implemented; manual QA should confirm cooler light strips, route tape, shelf/pallet shadows, wall planner cards, and varied box/paper materials improve operations-space readability without hiding prompts, product labels, or carry routes.
 - Stockroom Slice 8 is implemented; manual QA should confirm the repo is mechanically green but external playtest remains paused until owner recovery and stockroom screenshot approval both pass.
+- Returns baseline is implemented; manual QA should confirm the return customer, return review panel, refund due/disposition copy, cash/reputation accounting, and receiving-review item routing read as register work rather than a placeholder.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 - Every implementation summary should say whether these were checked, skipped, or not relevant.
@@ -101,7 +103,7 @@ Current automated baseline:
 9. Confirm one buyer walks to the rack, picks up the game, then queues at the register.
 10. Price and stock the next carried `Star Trader`.
 11. Confirm a second buyer walks to the rack and queues with readable spacing.
-12. Aim at the register, click to open checkout, review itemized line, subtotal, tax, total, tender, change due, return placeholder, and click Confirm to ring up the first buyer.
+12. Aim at the register, click to open checkout, review itemized line, subtotal, tax, total, tender, change due, return baseline copy, and click Confirm to ring up the first buyer.
 13. Aim at the register, click to open checkout, review the same receipt fields, and click Confirm to ring up the second buyer.
 14. Confirm sold items are gone from the rack and no longer inspectable.
 15. Click the register when no buyer is queued and review the seller trade-in offer.
@@ -512,7 +514,7 @@ Run these first when manually checking the completed Stop 4.1 through Stop 4.9 m
 - Confirm button sizes, font sizes, modal frames, disabled controls, hover/pressed/selected states, alert tones, list text, stat headers, and receipt-like readouts remain readable at 1280x720.
 - Confirm the shared UI styling does not clip existing pricing, trade-in, fixture placement, release allocation, supplier ordering, or day-summary controls.
 - Confirm the register checkout panel reads as the register surface, not the backroom computer, and that Confirm/Close focus returns cleanly to first-person control.
-- Confirm sale, preorder, and service checkout variants keep their itemized lines, totals, tender/change, return placeholder, and confirmation feedback readable without clipped text.
+- Confirm sale, preorder, service, and return-review checkout variants keep their itemized lines, totals/refund due, tender/change where applicable, disposition, and confirmation feedback readable without clipped text.
 - Confirm the trade-in appraisal panel communicates authenticity confidence, projected margin, and risk notes clearly while the counteroffer buttons update the projected margin.
 - Confirm the pricing panel communicates current price, suggested range, margin, demand, and warning outcomes clearly while `+ $1`, `- $1`, and apply-to-matching update the decision text.
 - Confirm the backroom computer tabs switch cleanly between dashboard, inventory, ordering, releases, reports, services, storage, suppliers, settings, and records without clipping text or making register work look like a backroom action.
@@ -614,7 +616,7 @@ Run these first when manually checking the completed Stop 13.4B content/copy pas
 - Confirm supplier ordering explains crate contents, invoice check, shelf plan, receiving box work, and next physical actions without implying instant inventory teleporting.
 - Confirm release calendar/planning text makes launch hooks, allocation limits, and new-release wall work clear at 1280x720.
 - Confirm daily report sections read as an end-of-day owner readout, with cash drawer, counter work, margin, operating pressure, launch activity, reputation, bills, and tomorrow plan easy to scan.
-- Confirm register return-scope copy is clear and does not imply returns are fully implemented.
+- Confirm register return-review copy is clear about the baseline: refund, receiving review, and reputation impact are implemented; full exchange selection and policy/fraud depth remain future scope.
 - Confirm `Order`, `Invoice`, `Category`, `Start Job`, `Work Job`, `Upgrade`, and related backroom controls are readable in the actual window and do not overflow their buttons.
 
 ## Alpha Balance Focus
@@ -643,7 +645,7 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 539 GUT tests, 496/615 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 551 GUT tests, 503/623 UI scenario automation coverage, 52/52 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
 - Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and keeps AH-006/AH-012/AH-013/AH-014/AH-015 routed to owner recovery screenshot validation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
@@ -684,6 +686,27 @@ Run these first when manually checking the mechanically complete employees-only 
 - Capture `50_storage_tab_physical_flow.png` and confirm the computer copy names the receiving station, backstock shelf, pull stage, and physical carry action.
 - Confirm stockroom lighting/materials stay cooler and operational while preserving prompt, reticle, product-label, world-sign, and computer readability at 1280x720 from normal standing angles.
 - Keep `15-alpha-playtest-package.md` paused if any stockroom screenshot still reads as floor clutter, debug props, instant inventory, dense label noise, or angle-dependent reversed/partially hidden signage.
+
+## Production Visuals Focus
+
+Run these first when manually checking the completed production visual overhaul baseline:
+
+- Review `docs/production/18-production-visuals-plan.md` and confirm the implementation status, inspiration groups, required screenshots, acceptance criteria, and validation command match the current build.
+- Confirm the slice ignores stream overlays, facecams, creator branding, video controls, and exact third-party names/logos from `inspiration/`.
+- For storefront work, compare `main_scene.png` against `inspiration/IMG_1033.PNG`, `IMG_1035.PNG`, `IMG_1038.PNG`, `IMG_1054.PNG`, and `IMG_1055.PNG`; pass only if the first view reads as a real small game shop with a bounded readable `SAVE POINT GAMES` sign.
+- For interior architecture/material work, confirm walls, floor, counter, trim, glass, cardboard, metal shelving, and paper signs read as different materials without turning the whole screen into one color family.
+- For sales-floor fixture work, confirm `main_scene.png` and `customer_queue.png` show used games, new releases/preorders, accessories, services/trade-ins, and a readable queue/path without crowding interaction targets.
+- For register work, confirm `register_counter.png` reads as a command center with scanner/payment/receipt/cash/return/trade-in/preorder/service cues while preserving the single register interaction target.
+- For product visual work, confirm `carry_stack.png`, `receiving_area.png`, and shelf views make cases/cards/accessories look like inventory rather than blocks, with price/condition/risk tags readable only at appropriate distance.
+- For signage work, confirm category signs, policy cards, decals, and shelf talkers are short, fictional, physically attached, depth-safe, and not replacing prompts.
+- For customer visual work, confirm `customer_queue.png` distinguishes buyer, trade-in, preorder/service, return, regular/browser, and suspicious roles through silhouette, clothing, prop, and posture before reading label text.
+- For stockroom/office/service dressing, confirm receiving, backstock, pull stage, manager office, service bench, safe/security, and records areas remain operational and do not become decorative clutter.
+- For build-mode work, confirm `fixture_ghost.png`, `fixture_invalid_ghost.png`, `fixture_rotated_ghost.png`, and `fixture_placed.png` use distinct valid/invalid/preview/real-fixture language under the current lighting.
+- For computer/catalog UI work, confirm item cards, categories, cart/order summary, cost, due day, locked state, and action buttons are faster to scan than long text rows.
+- For pricing/register/trade-in/return/payment UI work, confirm the decision point is visible before confirmation: cost, market, sale/refund/offer, profit/margin, risk, reason, disposition, and consequence.
+- For lighting/effects work, confirm sales floor warmth, stockroom coolness, register/service/computer task lights, and confirmation/invalid feedback effects improve readability without bloom or noise.
+- For customization/upgrade visibility, confirm decor and upgrade changes are visible in the world and still preserve movement, prompts, product labels, and UI contrast.
+- Keep `15-alpha-playtest-package.md` paused if any production-visual screenshot still reads as graybox, streamer-reference copy, hidden interaction clutter, unreadable signage, obstructed product paths, or UI text squeezed into the frame.
 
 ## Automated Screenshot Artifacts
 

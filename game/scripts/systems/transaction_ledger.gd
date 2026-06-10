@@ -115,6 +115,29 @@ func record_service(customer: Node) -> Dictionary:
 	return transaction
 
 
+func record_return(customer: Node, item: Node, refund_cents: int, disposition: String = "inspect_restock") -> Dictionary:
+	if customer == null or item == null or refund_cents <= 0:
+		return {}
+
+	var product := item.get("product") as ProductDefinition
+	if product == null:
+		return {}
+
+	var transaction := {
+		"transaction_id": "return_%03d" % (_transactions.size() + 1),
+		"type": "return",
+		"customer_id": str(customer.get("customer_id")),
+		"item_instance_id": str(item.get("instance_id")),
+		"product_id": product.product_id,
+		"display_name": product.display_name,
+		"refund_cents": refund_cents,
+		"disposition": disposition,
+		"reason": str(customer.get("return_reason")),
+	}
+	_transactions.append(transaction)
+	return transaction
+
+
 func get_transactions() -> Array[Dictionary]:
 	return _transactions.duplicate(true)
 
@@ -155,6 +178,14 @@ func get_service_count() -> int:
 	var total := 0
 	for transaction in _transactions:
 		if str(transaction.get("type", "")) == "service":
+			total += 1
+	return total
+
+
+func get_return_count() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "return":
 			total += 1
 	return total
 
@@ -208,6 +239,14 @@ func get_total_preorder_deposit_cents() -> int:
 	for transaction in _transactions:
 		if str(transaction.get("type", "")) == "preorder_deposit":
 			total += int(transaction.get("deposit_cents", 0))
+	return total
+
+
+func get_total_return_refund_cents() -> int:
+	var total := 0
+	for transaction in _transactions:
+		if str(transaction.get("type", "")) == "return":
+			total += int(transaction.get("refund_cents", 0))
 	return total
 
 

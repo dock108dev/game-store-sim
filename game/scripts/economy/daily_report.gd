@@ -19,6 +19,7 @@ static func build_report(session: StoreSession) -> Dictionary:
 		"trade_ins": session.get_trade_in_count(),
 		"preorders": session.get_preorder_deposit_count(),
 		"services": session.get_service_count(),
+		"returns": session.get_return_count(),
 		"revenue_cents": session.get_total_revenue_cents(),
 		"cost_cents": session.get_total_cost_cents(),
 		"service_revenue_cents": session.get_total_service_revenue_cents(),
@@ -27,6 +28,7 @@ static func build_report(session: StoreSession) -> Dictionary:
 		"trade_cash_cents": session.get_total_trade_in_cost_cents(),
 		"trade_credit_cents": session.get_total_trade_in_credit_cents(),
 		"preorder_deposits_cents": session.get_total_preorder_deposit_cents(),
+		"return_refunds_cents": session.get_total_return_refund_cents(),
 		"gross_profit_cents": session.get_total_profit_cents(),
 		"launch_events": session.get_launch_event_count(),
 		"launch_revenue_cents": session.get_total_launch_revenue_cents(),
@@ -52,7 +54,7 @@ static func format_report(session: StoreSession) -> String:
 	if not bool(report.get("is_closed", false)):
 		return "Backroom report: day still open - finish customer hours, clear receiving, and close from the register before final totals post."
 
-	return "Daily report day %d:\nEnd-of-day readout\nPhase: %s\nDay plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning\nCash drawer: opening %s / closing %s / net %s\nCounter work: sales %d / trade-ins %d / services %d / preorders %d\nMerch margin: revenue %s / cost %s / gross profit %s\nOperating pressure: expenses %s / reserved obligations %s\nTrade-ins: cash paid %s / store credit issued %s\nService bench: %d completed / revenue %s / parts cost %s / profit %s\nPreorders: %d deposits / cash held %s\nLaunch activity: %d events / launch cash %s / launch profit %s / missed demand %d\nReputation: %d / events %d\nLosses: %s\nBills: %s\nTomorrow plan: %s" % [
+	return "Daily report day %d:\nEnd-of-day readout\nPhase: %s\nDay plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning\nCash drawer: opening %s / closing %s / net %s\nCounter work: sales %d / trade-ins %d / services %d / preorders %d / returns %d\nMerch margin: revenue %s / cost %s / gross profit %s\nOperating pressure: expenses %s / reserved obligations %s\nTrade-ins: cash paid %s / store credit issued %s\nReturns: refunds %s\nService bench: %d completed / revenue %s / parts cost %s / profit %s\nPreorders: %d deposits / cash held %s\nLaunch activity: %d events / launch cash %s / launch profit %s / missed demand %d\nReputation: %d / events %d\nLosses: %s\nBills: %s\nTomorrow plan: %s" % [
 		int(report.get("day_number", 0)),
 		str(report.get("day_phase_label", "Report")),
 		_format_money(int(report.get("opening_cash_cents", 0))),
@@ -62,6 +64,7 @@ static func format_report(session: StoreSession) -> String:
 		int(report.get("trade_ins", 0)),
 		int(report.get("services", 0)),
 		int(report.get("preorders", 0)),
+		int(report.get("returns", 0)),
 		_format_money(int(report.get("revenue_cents", 0))),
 		_format_money(int(report.get("cost_cents", 0))),
 		_format_money(int(report.get("gross_profit_cents", 0))),
@@ -69,6 +72,7 @@ static func format_report(session: StoreSession) -> String:
 		_format_money(int(report.get("reserved_obligations_cents", 0))),
 		_format_money(int(report.get("trade_cash_cents", 0))),
 		_format_money(int(report.get("trade_credit_cents", 0))),
+		_format_money(int(report.get("return_refunds_cents", 0))),
 		int(report.get("services", 0)),
 		_format_money(int(report.get("service_revenue_cents", 0))),
 		_format_money(int(report.get("service_cost_cents", 0))),

@@ -52,6 +52,8 @@ func test_daily_report_formats_closed_day_totals() -> void:
 	assert_eq(report.get("net_cash_change_cents"), 1038)
 	assert_eq(report.get("services"), 1)
 	assert_eq(report.get("preorders"), 0)
+	assert_eq(report.get("returns"), 0)
+	assert_eq(report.get("return_refunds_cents"), 0)
 	assert_eq(report.get("service_revenue_cents"), 599)
 	assert_eq(report.get("service_cost_cents"), 125)
 	assert_eq(report.get("service_profit_cents"), 474)
@@ -67,8 +69,9 @@ func test_daily_report_formats_closed_day_totals() -> void:
 	assert_string_contains(text, "Phase: Report")
 	assert_string_contains(text, "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
 	assert_string_contains(text, "Cash drawer: opening $500.00 / closing $510.38 / net +$10.38")
-	assert_string_contains(text, "Counter work: sales 1 / trade-ins 1 / services 1 / preorders 0")
+	assert_string_contains(text, "Counter work: sales 1 / trade-ins 1 / services 1 / preorders 0 / returns 0")
 	assert_string_contains(text, "Service bench: 1 completed / revenue $5.99 / parts cost $1.25 / profit $4.74")
+	assert_string_contains(text, "Returns: refunds $0.00")
 	assert_string_contains(text, "Merch margin: revenue $27.98 / cost $10.25 / gross profit $17.73")
 	assert_string_contains(text, "Operating pressure: expenses $10.00 / reserved obligations $0.00")
 	assert_string_contains(text, "Preorders: 0 deposits / cash held $0.00")
@@ -110,3 +113,32 @@ func test_daily_report_formats_launch_reputation_losses_and_tomorrow_plan() -> v
 	assert_string_contains(text, "Losses: $10.00")
 	assert_string_contains(text, "Day plan: Opening > Setup > Customer hours > Closing > Report > Tomorrow planning")
 	assert_string_contains(text, "Tomorrow plan: Prepare Pocket Farm DX launch allocation")
+
+
+func test_daily_report_formats_return_refunds() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var customer: SimpleReturnCustomer = load("res://scenes/customers/simple_return_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var transaction := ledger.record_return(
+		customer,
+		customer.get_returned_item(),
+		customer.get_refund_cents(),
+		customer.return_disposition
+	)
+	session.apply_return(transaction)
+	session.end_day()
+
+	var report := DailyReportPolicy.build_report(session)
+	var text := DailyReportPolicy.format_report(session)
+
+	assert_eq(report.get("closing_cash_cents"), 46801)
+	assert_eq(report.get("net_cash_change_cents"), -3199)
+	assert_eq(report.get("returns"), 1)
+	assert_eq(report.get("return_refunds_cents"), 2199)
+	assert_string_contains(text, "Counter work: sales 0 / trade-ins 0 / services 0 / preorders 0 / returns 1")
+	assert_string_contains(text, "Returns: refunds $21.99")

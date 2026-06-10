@@ -141,6 +141,13 @@
       "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_completes_waiting_customer_sale"
     },
     {
+      "id": "register_completes_return",
+      "name": "Register completes a waiting return customer refund and moves the item to receiving review",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_interaction_contract.gd::test_register_completes_waiting_return_customer"
+    },
+    {
       "id": "register_completes_multiple_sales",
       "name": "Register completes multiple queued customer sales",
       "status": "automated",
@@ -155,8 +162,15 @@
       "evidence": "res://tests/gut/test_customer_sale_flow.gd::test_transaction_ledger_records_sale_totals"
     },
     {
+      "id": "transaction_ledger_records_return",
+      "name": "Transaction ledger records return refunds without counting them as sale revenue",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_return_customer.gd::test_ledger_records_return_transaction"
+    },
+    {
       "id": "register_area_customer_spacing",
-      "name": "Register-area buyer, trade-in, preorder, service, and suspicious customers keep readable spacing",
+      "name": "Register-area buyer, trade-in, preorder, service, return, and suspicious customers keep readable spacing",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_register_area_customer_positions_are_spaced_for_readability"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=45 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" path="res://scenes/customers/simple_preorder_customer.tscn" id="15_preorder_customer"]
 [ext_resource type="PackedScene" path="res://scenes/customers/simple_service_customer.tscn" id="16_service_customer"]
 [ext_resource type="Script" path="res://scripts/systems/store_ambience.gd" id="17_store_ambience"]
+[ext_resource type="PackedScene" path="res://scenes/customers/simple_return_customer.tscn" id="18_return_customer"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.32, 0.3, 0.27, 1)
@@ -1424,6 +1425,274 @@ billboard = 1
 text = "FILES"
 font_size = 14
 
+[node name="StorefrontSignTrimTop" type="CSGBox3D" parent="."]
+size = Vector3(5.45, 0.08, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 2.72, -5.86)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="StorefrontSignTrimBottom" type="CSGBox3D" parent="."]
+size = Vector3(5.45, 0.08, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 2.16, -5.86)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="WindowDisplayConsoleBox" type="CSGBox3D" parent="."]
+size = Vector3(0.46, 0.28, 0.2)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -2.92, 0.48, -5.56)
+material = SubResource("StandardMaterial3D_cardboard_alt")
+
+[node name="WindowDisplayCaseA" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.26, 0.04)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -2.46, 0.62, -5.58)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="WindowDisplayCaseB" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.26, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -2.18, 0.62, -5.56)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="WindowDisplayPosterPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.64, 0.42, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.88, 1.22, -5.72)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="WindowDisplayPosterLabel" type="Label3D" parent="WindowDisplayPosterPanel"]
+pixel_size = 0.0026
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+text = "USED + NEW"
+font_size = 15
+
+[node name="TradeServiceDecalPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.72, 0.18, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.9, -5.73)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="TradeServiceDecalLabel" type="Label3D" parent="TradeServiceDecalPanel"]
+pixel_size = 0.0024
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+text = "TRADE / SERVICE"
+font_size = 14
+
+[node name="SalesBaseboardFront" type="CSGBox3D" parent="."]
+size = Vector3(13.55, 0.16, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, -5.72)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="SalesBaseboardBack" type="CSGBox3D" parent="."]
+size = Vector3(13.55, 0.16, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, 2.82)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="SalesBaseboardLeft" type="CSGBox3D" parent="."]
+size = Vector3(0.05, 0.16, 8.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.78, 0.16, -1.45)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="SalesBaseboardRight" type="CSGBox3D" parent="."]
+size = Vector3(0.05, 0.16, 8.55)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.78, 0.16, -1.45)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="SalesCeilingPanelA" type="CSGBox3D" parent="."]
+size = Vector3(2.15, 0.035, 1.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 2.84, -2.3)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="SalesCeilingPanelB" type="CSGBox3D" parent="."]
+size = Vector3(2.15, 0.035, 1.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.45, 2.84, -1.45)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="FloorTransitionStripSalesBack" type="CSGBox3D" parent="."]
+size = Vector3(10.8, 0.006, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.052, 2.62)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
+[node name="CounterFrontTrim" type="CSGBox3D" parent="."]
+size = Vector3(2.42, 0.08, 0.05)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.05, 1.26, -2.92)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ShelfFacingDensityBand" type="CSGBox3D" parent="."]
+size = Vector3(2.2, 0.18, 0.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 1.38, 5.18)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ShelfFacingDensityLabel" type="Label3D" parent="ShelfFacingDensityBand"]
+pixel_size = 0.0028
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+text = "USED GAMES"
+font_size = 16
+
+[node name="ShelfPriceTagA" type="CSGBox3D" parent="."]
+size = Vector3(0.28, 0.1, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.82, 0.82, 5.18)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ShelfPriceTagB" type="CSGBox3D" parent="."]
+size = Vector3(0.28, 0.1, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 0.82, 5.18)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ShelfPriceTagC" type="CSGBox3D" parent="."]
+size = Vector3(0.28, 0.1, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 0.82, 5.18)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ReturnReviewTray" type="CSGBox3D" parent="."]
+size = Vector3(0.46, 0.05, 0.34)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.9, 1.28, -2.42)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="TradeInInspectionTray" type="CSGBox3D" parent="."]
+size = Vector3(0.42, 0.05, 0.32)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.45, 1.29, -2.58)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="PreorderSlipStack" type="CSGBox3D" parent="."]
+size = Vector3(0.24, 0.08, 0.18)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.72, 1.32, -2.35)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ServicePickupMarker" type="CSGBox3D" parent="."]
+size = Vector3(0.28, 0.14, 0.12)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.42, 1.34, -2.1)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CashDrawerSlot" type="CSGBox3D" parent="."]
+size = Vector3(0.52, 0.035, 0.05)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.24, 1.18, -2.82)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="PaymentStatusGlowPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.11, 0.018)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.68, 1.48, -2.24)
+material = SubResource("StandardMaterial3D_fixture_ghost_valid")
+
+[node name="BackroomCatalogCardA" type="CSGBox3D" parent="."]
+size = Vector3(0.38, 0.46, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.08, 1.12, 4.02)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="BackroomCatalogCardB" type="CSGBox3D" parent="."]
+size = Vector3(0.38, 0.46, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.44, 1.13, 3.88)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="BackroomCartSummaryPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.52, 0.18, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.82, 1.02, 3.77)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="DesignSwatchStrip" type="CSGBox3D" parent="."]
+size = Vector3(0.82, 0.12, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.05, 0.82, 4.02)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="DesignSwatchTeal" type="CSGBox3D" parent="."]
+size = Vector3(0.12, 0.12, 0.024)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.82, 0.83, 4.1)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="DesignSwatchYellow" type="CSGBox3D" parent="."]
+size = Vector3(0.12, 0.12, 0.024)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.04, 0.83, 4.02)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="DesignSwatchDark" type="CSGBox3D" parent="."]
+size = Vector3(0.12, 0.12, 0.024)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.26, 0.83, 3.94)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="FixtureGhostFootprintA" type="CSGBox3D" parent="FixturePlacementManager/GhostRackPreview"]
+size = Vector3(1.95, 0.025, 0.055)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, -0.28)
+material = SubResource("StandardMaterial3D_fixture_ghost_valid")
+
+[node name="FixtureGhostFootprintB" type="CSGBox3D" parent="FixturePlacementManager/GhostRackPreview"]
+size = Vector3(1.95, 0.025, 0.055)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0.52)
+material = SubResource("StandardMaterial3D_fixture_ghost_valid")
+
+[node name="FixtureGhostFootprintC" type="CSGBox3D" parent="FixturePlacementManager/GhostRackPreview"]
+size = Vector3(0.055, 0.025, 0.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.08, 0.12)
+material = SubResource("StandardMaterial3D_fixture_ghost_valid")
+
+[node name="FixtureGhostFootprintD" type="CSGBox3D" parent="FixturePlacementManager/GhostRackPreview"]
+size = Vector3(0.055, 0.025, 0.82)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.08, 0.12)
+material = SubResource("StandardMaterial3D_fixture_ghost_valid")
+
+[node name="FixturePlacementInstructionPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.86, 0.18, 0.018)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.62, 0.18, 1.62)
+material = SubResource("StandardMaterial3D_fixture_ghost_valid")
+
+[node name="FixturePlacementInstructionLabel" type="Label3D" parent="FixturePlacementInstructionPanel"]
+pixel_size = 0.0024
+modulate = Color(0.04, 0.12, 0.08, 1)
+outline_modulate = Color(0.82, 1, 0.84, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "VALID FOOTPRINT"
+font_size = 14
+
+[node name="WallPaintSwatchStrip" type="CSGBox3D" parent="."]
+size = Vector3(0.92, 0.16, 0.018)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.16, 1.62, 0.72)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="FloorMaterialSamplePanel" type="CSGBox3D" parent="."]
+size = Vector3(0.48, 0.012, 0.36)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.82, 0.058, 0.94)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="UpgradePreviewRackCard" type="CSGBox3D" parent="."]
+size = Vector3(0.64, 0.28, 0.018)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.98, 1.18, 1.28)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="UpgradePreviewRackLabel" type="Label3D" parent="UpgradePreviewRackCard"]
+pixel_size = 0.0025
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.86, 0.95, 1, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "UPGRADE"
+font_size = 14
+
+[node name="ExpansionFootprintTapeA" type="CSGBox3D" parent="."]
+size = Vector3(1.4, 0.006, 0.06)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 5.85, 0.052, 1.62)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
+[node name="ExpansionFootprintTapeB" type="CSGBox3D" parent="."]
+size = Vector3(0.06, 0.006, 0.92)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.48, 0.054, 1.9)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
 [node name="OfficeWallPlannerCardA" type="CSGBox3D" parent="."]
 size = Vector3(0.34, 0.42, 0.012)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.94, 1.42, 5.83)
@@ -1444,6 +1713,7 @@ customer_manager_path = NodePath("../CustomerManager")
 trade_in_customer_path = NodePath("../TradeInCustomer")
 preorder_customer_path = NodePath("../PreorderCustomer")
 service_customer_path = NodePath("../ServiceCustomer")
+return_customer_path = NodePath("../ReturnCustomer")
 receiving_box_path = NodePath("../ReceivingBox")
 ledger_path = NodePath("../TransactionLedger")
 store_session_path = NodePath("../StoreSession")
@@ -1472,8 +1742,11 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 [node name="ServiceCustomer" parent="." instance=ExtResource("16_service_customer")]
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.15, 0, -4.18)
 
+[node name="ReturnCustomer" parent="." instance=ExtResource("18_return_customer")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -4.18, 0, -4.8)
+
 [node name="SuspiciousCustomer" parent="." instance=ExtResource("14_suspicious_customer")]
-transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -4.55, 0, -2.65)
+transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -5.35, 0, -2.68)
 event_log_path = NodePath("../SuspiciousEventLog")
 evidence_storage_path = NodePath("../EvidenceStorage")
 

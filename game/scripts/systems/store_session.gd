@@ -384,6 +384,11 @@ func apply_service(transaction: Dictionary) -> void:
 	_mark_service_ticket_picked_up(transaction)
 
 
+func apply_return(transaction: Dictionary) -> void:
+	cash_cents -= int(transaction.get("refund_cents", 0))
+	record_return_handling("accepted_fairly")
+
+
 func end_day() -> void:
 	if is_day_closed:
 		return
@@ -807,6 +812,14 @@ func get_service_count() -> int:
 	return ledger.get_service_count()
 
 
+func get_return_count() -> int:
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_return_count"):
+		return 0
+
+	return ledger.get_return_count()
+
+
 func get_total_service_revenue_cents() -> int:
 	var ledger := _get_ledger()
 	if ledger == null or not ledger.has_method("get_total_service_revenue_cents"):
@@ -1204,6 +1217,14 @@ func get_total_preorder_deposit_cents() -> int:
 		return 0
 
 	return ledger.get_total_preorder_deposit_cents()
+
+
+func get_total_return_refund_cents() -> int:
+	var ledger := _get_ledger()
+	if ledger == null or not ledger.has_method("get_total_return_refund_cents"):
+		return 0
+
+	return ledger.get_total_return_refund_cents()
 
 
 func get_transactions() -> Array[Dictionary]:
@@ -2826,6 +2847,12 @@ func format_money(cents: int) -> String:
 func _format_transaction_line(transaction: Dictionary) -> String:
 	var display_name := str(transaction.get("display_name", "item"))
 	match str(transaction.get("type", "sale")):
+		"return":
+			return "Return %s refund %s (%s)" % [
+				display_name,
+				format_money(int(transaction.get("refund_cents", 0))),
+				str(transaction.get("disposition", "review")),
+			]
 		"trade_in":
 			var tender_type := str(transaction.get("tender_type", "cash"))
 			if tender_type == "store_credit":

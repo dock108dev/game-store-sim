@@ -147,3 +147,51 @@ Rejected alternatives:
 Follow-up risk:
 
 - Stockroom polish can hide core interactions if prop density grows too fast. Slices 1-8 now establish shell, routes, receiving, backstock, office, service/security, workflow copy, lighting/material hierarchy, validation sync, and owner-screenshot gating without reopening external playtest automatically.
+
+## 2026-06-09: Production Visual Overhaul Plan
+
+Decision:
+
+- Use `18-production-visuals-plan.md` as the active source of truth for the next large production-visuals phase.
+- Translate every useful `inspiration/` reference group into ordered implementation slices instead of doing an unbounded art pass.
+- Keep external alpha playtest paused until owner recovery, stockroom, and production-visual screenshot review sets all pass in a real `1280x720` window.
+
+Reason:
+
+- The current build is mechanically broad, but it still reads as production-intent graybox rather than a convincing specialty game store.
+- The inspiration folder strongly points to storefront identity, fixture density, register/payment UI, supplier/catalog UI, design/material tools, product handling, customer traffic, and backroom/office operations.
+- A slice plan keeps visual work from breaking the validated retail loop, interaction targets, UI legibility, and screenshot validation.
+
+Rejected alternatives:
+
+- Continue adding mechanics while the store still lacks a production visual identity.
+- Replace visuals in one large unvalidated scene-art pass.
+- Copy reference brands, logos, products, streamer overlays, or exact UI chrome from the screenshots.
+
+Follow-up risk:
+
+- Visual density can obscure prompts, products, shelf slots, customer roles, and paths. Each visual slice must include automated validation where practical, manual checklist updates where human judgment is required, and full gate validation before commit.
+
+## 2026-06-09: Production Visual Overhaul Baseline Complete
+
+Decision:
+
+- Treat `18-production-visuals-plan.md` as the completed production-blockout baseline record through Slice 14.
+- Keep the implementation additive and validation-oriented: root-level CSG/Label scene dressing, no new interaction target competing with the existing register/computer/rack/receiving systems, and no copied third-party brands.
+- Keep external alpha playtest paused until owner screenshot review approves the recovery, stockroom, and production-visual screenshot sets in a real `1280x720` window.
+
+Reason:
+
+- The current repo standard favors shippable validated slices over an unbounded art rewrite.
+- The new baseline adds storefront/window dressing, architecture trim, shelf density, register return/trade/preorder/service surfaces, catalog/design/build-mode/upgrade cues, and scenario/manual coverage while preserving movement and interaction clearance.
+- The full local gate is green with 551 GUT tests, 503/623 UI scenario automation coverage, 52/52 production script mapping coverage, desktop pack smoke, alpha performance smoke, screenshot sanity, and old-name scan.
+
+Rejected alternatives:
+
+- Replace the store with final art assets before the screenshot review proves the current composition.
+- Add new standalone transaction or design workstations instead of visually supporting the existing register and backroom computer surfaces.
+- Reopen external playtest solely because the automated gate is green.
+
+Follow-up risk:
+
+- The baseline is still primitive production blockout, not final art. The next goals are owner screenshot review, targeted art replacement for the highest-impact prop clusters, screenshot camera retuning only where needed, and then an external alpha reopen decision.

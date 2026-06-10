@@ -122,6 +122,31 @@ func test_store_session_records_reputation_events_for_core_pressure_sources() ->
 	assert_string_contains(summary, "Low stock variety -2 (stock_variety)")
 
 
+func test_store_session_applies_return_refund_and_recent_activity() -> void:
+	var ledger := TransactionLedger.new()
+	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
+	var customer: SimpleReturnCustomer = load("res://scenes/customers/simple_return_customer.tscn").instantiate()
+	add_child_autofree(ledger)
+	add_child_autofree(session)
+	add_child_autofree(customer)
+
+	session.ledger_path = session.get_path_to(ledger)
+	var transaction := ledger.record_return(
+		customer,
+		customer.get_returned_item(),
+		customer.get_refund_cents(),
+		customer.return_disposition
+	)
+	session.apply_return(transaction)
+
+	assert_eq(session.get_cash_cents(), 47801)
+	assert_eq(session.get_return_count(), 1)
+	assert_eq(session.get_total_return_refund_cents(), 2199)
+	assert_eq(session.get_reputation_score(), 100)
+	assert_string_contains(session.get_recent_activity_text(), "Return Solar Ferry refund $21.99")
+	assert_string_contains(session.get_reputation_summary_text(), "Fair return accepted +2")
+
+
 func test_store_session_reputation_events_are_idempotent_and_clamped() -> void:
 	var session: StoreSession = load("res://scripts/systems/store_session.gd").new()
 	add_child_autofree(session)
