@@ -17,6 +17,86 @@ FORBIDDEN_REAL_NAMES = {
     "sega",
 }
 
+PLATFORM_FAMILY_RULES = {
+    "nova_disc": {
+        "platforms": {"Nova Cube"},
+        "formats": {"disc", "accessory", "controller"},
+    },
+    "orbit_classic": {
+        "platforms": {"Orbit 64"},
+        "formats": {"cartridge", "accessory", "console"},
+    },
+    "pocket_handheld": {
+        "platforms": {"Pocket Star"},
+        "formats": {"cartridge", "accessory", "console"},
+    },
+    "service_bench": {
+        "platforms": {"Service Bench"},
+        "formats": {"service_ticket"},
+    },
+}
+
+ALLOWED_CATEGORIES = {
+    "used_game",
+    "new_game",
+    "accessory",
+    "hardware",
+    "service",
+}
+
+ALLOWED_CONDITIONS = {
+    "new",
+    "excellent",
+    "good",
+    "fair",
+    "poor",
+    "refurbished",
+    "service",
+}
+
+ALLOWED_COMPLETENESS = {
+    "sealed",
+    "complete",
+    "box_only",
+    "manual_missing",
+    "loose",
+    "ticket",
+}
+
+ALLOWED_AUTHENTICITY = {
+    "verified",
+    "trusted",
+    "uncertain",
+    "needs_review",
+}
+
+ALLOWED_RARITY = {
+    "common",
+    "uncommon",
+    "rare",
+    "collector",
+    "standard",
+    "launch",
+}
+
+ALLOWED_DEMAND_TIERS = {
+    "low",
+    "medium",
+    "high",
+}
+
+ALLOWED_RISK_LEVELS = {
+    "low",
+    "medium",
+    "high",
+}
+
+ALLOWED_SERVICE_NAMES = {
+    "Cartridge Cleaning Ticket",
+    "Controller Test Ticket",
+    "Disc Resurfacing Ticket",
+}
+
 REQUIRED_FIELDS = {
     "product_id",
     "display_name",
@@ -137,6 +217,10 @@ def validate_products(products: list[tuple[Path, dict]]) -> list[str]:
         display_name = str(product.get("display_name", "")).strip()
         if not display_name:
             failures.append(f"{relative_path} has empty display_name")
+        if len(display_name) > 28:
+            failures.append(f"{relative_path} display_name is too long for tags and receipts: {display_name}")
+        if ":" in display_name:
+            failures.append(f"{relative_path} display_name should avoid subtitle punctuation: {display_name}")
         lowered_name = display_name.lower()
         for forbidden in FORBIDDEN_REAL_NAMES:
             if forbidden in lowered_name:
@@ -145,6 +229,49 @@ def validate_products(products: list[tuple[Path, dict]]) -> list[str]:
         category = str(product.get("category", "")).strip()
         if category:
             categories.add(category)
+        if category and category not in ALLOWED_CATEGORIES:
+            failures.append(f"{relative_path} uses unknown category: {category}")
+
+        platform = str(product.get("platform", "")).strip()
+        platform_family = str(product.get("platform_family", "")).strip()
+        product_format = str(product.get("format", "")).strip()
+        family_rules = PLATFORM_FAMILY_RULES.get(platform_family)
+        if family_rules == None:
+            failures.append(f"{relative_path} uses unknown platform_family: {platform_family}")
+        else:
+            if platform not in family_rules["platforms"]:
+                failures.append(
+                    f"{relative_path} platform {platform} does not match platform_family {platform_family}"
+                )
+            if product_format not in family_rules["formats"]:
+                failures.append(
+                    f"{relative_path} format {product_format} does not match platform_family {platform_family}"
+                )
+        for forbidden in FORBIDDEN_REAL_NAMES:
+            if forbidden in platform.lower():
+                failures.append(f"{relative_path} uses forbidden real-world platform fragment: {forbidden}")
+
+        condition = str(product.get("condition", "")).strip()
+        completeness = str(product.get("completeness", "")).strip()
+        authenticity = str(product.get("authenticity", "")).strip()
+        rarity = str(product.get("rarity", "")).strip()
+        demand_tier = str(product.get("demand_tier", "")).strip()
+        risk_level = str(product.get("risk_level", "")).strip()
+        if condition and condition not in ALLOWED_CONDITIONS:
+            failures.append(f"{relative_path} uses unknown condition: {condition}")
+        if completeness and completeness not in ALLOWED_COMPLETENESS:
+            failures.append(f"{relative_path} uses unknown completeness: {completeness}")
+        if authenticity and authenticity not in ALLOWED_AUTHENTICITY:
+            failures.append(f"{relative_path} uses unknown authenticity: {authenticity}")
+        if rarity and rarity not in ALLOWED_RARITY:
+            failures.append(f"{relative_path} uses unknown rarity: {rarity}")
+        if demand_tier and demand_tier not in ALLOWED_DEMAND_TIERS:
+            failures.append(f"{relative_path} uses unknown demand_tier: {demand_tier}")
+        if risk_level and risk_level not in ALLOWED_RISK_LEVELS:
+            failures.append(f"{relative_path} uses unknown risk_level: {risk_level}")
+        if category == "service" and display_name not in ALLOWED_SERVICE_NAMES:
+            failures.append(f"{relative_path} service name is outside the service naming set: {display_name}")
+
         variants.update(visual_variants(product))
 
         market_value_cents = int(product.get("market_value_cents", 0) or 0)

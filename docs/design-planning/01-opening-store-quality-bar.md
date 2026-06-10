@@ -495,6 +495,13 @@ Acceptance checks:
 - No real IP leakage.
 - Tags, receipts, pricing, trade-in, supplier, and release UI remain readable.
 
+Implemented evidence:
+
+- Locked platform-family mappings for Nova Cube, Orbit 64, Pocket Star, and Service Bench in the catalog checker and GUT tests.
+- Locked product taxonomy values for category, format, condition, completeness, authenticity, rarity, demand, and risk.
+- Added title constraints for short tag/receipt-safe names and service-ticket naming.
+- Expanded the catalog identity plan with supplier lanes and rules for future full-catalog additions.
+
 Validation:
 
 - `python3 scripts/check_product_catalog.py`

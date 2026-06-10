@@ -46,6 +46,7 @@ Use this checklist to approve the opening store and backroom before full catalog
 ## Catalog Foundation
 
 - Product and platform names are fictional and coherent.
+- Platform families, title rules, supplier lanes, and taxonomy values are documented and test-enforced.
 - Starter products support the store identity.
 - Categories and condition/risk language fit receipts, tags, and panels.
 
