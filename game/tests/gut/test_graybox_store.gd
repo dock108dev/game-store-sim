@@ -696,6 +696,7 @@ func test_register_counter_has_command_center_props() -> void:
 		"ReceiptPrinter",
 		"ReceiptSlip",
 		"SleeveStack",
+		"RegisterCounterWorkRail",
 		"CustomerCounterMat",
 		"CounterImpulseRack/ImpulseRackBase",
 		"CounterImpulseRack/ImpulseCaseA",
@@ -715,6 +716,8 @@ func test_register_counter_has_command_center_props() -> void:
 	assert_lte((_store.get_node("CustomerCounterMat") as CSGBox3D).size.y, 0.0121)
 	assert_gt((_store.get_node("ReceiptSlip") as CSGBox3D).global_position.y, 1.2)
 	assert_gt((_store.get_node("SleeveStack") as CSGBox3D).global_position.x, register.global_position.x)
+	assert_eq((_store.get_node("CardReader/CardReaderLabel") as Label3D).text, "PAY")
+	assert_eq((_store.get_node("ReceiptSlip/ReceiptSlipLabel") as Label3D).text, "RECEIPT")
 
 
 func test_backroom_visual_zones_exist_without_collision() -> void:
@@ -1152,6 +1155,7 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		"PreorderSlipStack",
 		"ServicePickupMarker",
 		"CashDrawerSlot",
+		"CashDrawerPull",
 		"PaymentStatusGlowPanel",
 	]
 	for prop_path in transaction_props:
@@ -1166,6 +1170,10 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 	assert_not_null(return_material)
 	assert_not_null(trade_material)
 	assert_gt(return_material.albedo_color.b, trade_material.albedo_color.b)
+	assert_eq((_store.get_node("ReturnReviewTray/ReturnReviewTrayLabel") as Label3D).text, "RETURNS")
+	assert_eq((_store.get_node("TradeInInspectionTray/TradeInInspectionTrayLabel") as Label3D).text, "TRADE")
+	assert_eq((_store.get_node("PreorderSlipStack/PreorderSlipStackLabel") as Label3D).text, "PRE")
+	assert_eq((_store.get_node("ServicePickupMarker/ServicePickupMarkerLabel") as Label3D).text, "SVC")
 
 
 func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> void:
