@@ -874,6 +874,21 @@ size = Vector3(0.22, 0.32, 0.035)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.62, -0.1)
 material = SubResource("StandardMaterial3D_paper")
 
+[node name="FuturePegWallUnlockPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.82, 0.18, 0.024)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 6.7, 1.96, 1.05)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
+[node name="FuturePegWallUnlockLabel" type="Label3D" parent="FuturePegWallUnlockPanel"]
+pixel_size = 0.0026
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "PEG UPGRADE"
+font_size = 16
+
 [node name="LockedCasePlaceholder" type="Node3D" parent="."]
 transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 5.45, 0, -0.95)
 
@@ -1611,6 +1626,21 @@ font_size = 15
 size = Vector3(0.56, 0.92, 0.36)
 transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.04, 0.46, 4.42)
 material = SubResource("StandardMaterial3D_management_board")
+
+[node name="FutureBackroomRackUnlockPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.86, 0.16, 0.024)
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.1, 1.04, 4.05)
+material = SubResource("StandardMaterial3D_stockroom_tape")
+
+[node name="FutureBackroomRackUnlockLabel" type="Label3D" parent="FutureBackroomRackUnlockPanel"]
+pixel_size = 0.0024
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "STORAGE UPGRADE"
+font_size = 14
 
 [node name="RecordsFileBox" type="CSGBox3D" parent="."]
 size = Vector3(0.42, 0.28, 0.32)

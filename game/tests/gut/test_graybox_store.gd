@@ -498,13 +498,19 @@ func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
 	var locked_case := _store.get_node_or_null("LockedCasePlaceholder") as Node3D
 	var peg_label := _store.get_node_or_null("AccessoryPegWall/PegWallHeaderPanel/PegWallHeaderLabel") as Label3D
 	var locked_label := _store.get_node_or_null("LockedCasePlaceholder/LockedCaseHeaderPanel/LockedCaseHeaderLabel") as Label3D
+	var peg_unlock_label := _store.get_node_or_null("FuturePegWallUnlockPanel/FuturePegWallUnlockLabel") as Label3D
+	var storage_unlock_label := _store.get_node_or_null("FutureBackroomRackUnlockPanel/FutureBackroomRackUnlockLabel") as Label3D
 
 	assert_not_null(peg_wall)
 	assert_not_null(locked_case)
 	assert_not_null(peg_label)
 	assert_not_null(locked_label)
+	assert_not_null(peg_unlock_label)
+	assert_not_null(storage_unlock_label)
 	assert_eq(peg_label.text, "ACCESSORIES")
 	assert_eq(locked_label.text, "LOCKED CASE")
+	assert_eq(peg_unlock_label.text, "PEG UPGRADE")
+	assert_eq(storage_unlock_label.text, "STORAGE UPGRADE")
 	assert_true(_is_inside_store_floorprint(peg_wall.global_position))
 	assert_true(_is_inside_store_floorprint(locked_case.global_position))
 	assert_gt(peg_wall.global_position.x, 6.0)
@@ -520,6 +526,8 @@ func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
 		"AccessoryPegWall/PegAccessoryCardA",
 		"AccessoryPegWall/PegAccessoryCardB",
 		"AccessoryPegWall/PegAccessoryCardC",
+		"FuturePegWallUnlockPanel",
+		"FutureBackroomRackUnlockPanel",
 		"LockedCasePlaceholder/LockedCaseBase",
 		"LockedCasePlaceholder/LockedCaseGlass",
 		"LockedCasePlaceholder/LockedCaseHeaderPanel",
@@ -533,6 +541,10 @@ func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
 	var glass_material := (_store.get_node("LockedCasePlaceholder/LockedCaseGlass") as CSGBox3D).material as StandardMaterial3D
 	assert_not_null(glass_material)
 	assert_lt(glass_material.albedo_color.a, 0.5)
+	assert_true(peg_unlock_label.no_depth_test)
+	assert_true(storage_unlock_label.no_depth_test)
+	assert_gt((_store.get_node("FuturePegWallUnlockPanel") as CSGBox3D).global_position.x, 6.0)
+	assert_gt((_store.get_node("FutureBackroomRackUnlockPanel") as CSGBox3D).global_position.z, 3.8)
 
 
 func test_store_signage_uses_fictional_world_labels() -> void:

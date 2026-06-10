@@ -34,6 +34,7 @@ Implemented in the current branch:
 - Used-game wall has repeated spine rows, price tags, category band, and shelf talker.
 - Sales floor zones include used wall, new-release endcap, staff picks, accessory peg wall, bargain bin, preorder wall, and register impulse area.
 - Fixture system includes ghost, invalid ghost, rotated ghost, and placed fixture screenshot coverage.
+- Upgrade-locked fixture goals have physical noninteractive panels for the accessory peg-wall and backroom storage upgrades.
 - Scene tests assert density props are non-colliding, near intended zones, and inside the store floorprint.
 
 This establishes the opening-store merchandising baseline. The full catalog pass should add breadth without weakening these route and readability contracts.
