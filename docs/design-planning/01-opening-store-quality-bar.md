@@ -201,6 +201,12 @@ Acceptance checks:
 - Prompt and UI contrast remains strong.
 - Navigation clearance remains unchanged.
 
+Implemented evidence:
+
+- Added sales-floor chair rails, back-corner trim, ceiling grid strips, and low-profile rubber mats at entry/register.
+- Kept all finish props non-colliding and bounded inside the existing floorprint.
+- Expanded scene tests to assert trim/material cues, ceiling finish height, mat thinness, and material contrast.
+
 Validation:
 
 - Scene/material tests.

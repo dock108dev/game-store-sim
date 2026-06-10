@@ -271,6 +271,43 @@ func test_store_materials_use_readable_floor_wall_counter_contrast() -> void:
 	assert_gt(wall_material.albedo_color.b, floor_material.albedo_color.b)
 
 
+func test_finished_shell_trim_and_material_cues_are_nonblocking() -> void:
+	var finish_props := [
+		"SalesChairRailBack",
+		"SalesChairRailLeft",
+		"SalesChairRailRight",
+		"SalesCornerTrimBackLeft",
+		"SalesCornerTrimBackRight",
+		"SalesCeilingGridLong",
+		"SalesCeilingGridCross",
+		"EntryRubberMat",
+		"RegisterRubberMat",
+	]
+	for prop_path in finish_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+
+	var chair_rail := _store.get_node("SalesChairRailBack") as CSGBox3D
+	var corner_trim := _store.get_node("SalesCornerTrimBackLeft") as CSGBox3D
+	var ceiling_grid := _store.get_node("SalesCeilingGridLong") as CSGBox3D
+	var entry_mat := _store.get_node("EntryRubberMat") as CSGBox3D
+	var register_mat := _store.get_node("RegisterRubberMat") as CSGBox3D
+	var wall_material := (_store.get_node("BackWall") as CSGBox3D).material as StandardMaterial3D
+	var rail_material := chair_rail.material as StandardMaterial3D
+	var mat_material := entry_mat.material as StandardMaterial3D
+
+	assert_not_null(rail_material)
+	assert_not_null(mat_material)
+	assert_gt(_color_luma(rail_material.albedo_color), _color_luma(wall_material.albedo_color) - 0.2)
+	assert_lt(_color_luma(mat_material.albedo_color), 0.25)
+	assert_gt(corner_trim.size.y, 2.2)
+	assert_gt(ceiling_grid.global_position.y, 2.8)
+	assert_lte(entry_mat.size.y, 0.015)
+	assert_lte(register_mat.size.y, 0.015)
+
+
 func test_store_lighting_has_warm_sales_and_cool_backroom_layers() -> void:
 	var sun_light := _store.get_node_or_null("SunLight") as DirectionalLight3D
 	var sales_light := _store.get_node_or_null("StoreLight") as OmniLight3D
@@ -1159,9 +1196,18 @@ func test_production_visual_overhaul_storefront_and_architecture_cues_exist() ->
 		"SalesBaseboardBack",
 		"SalesBaseboardLeft",
 		"SalesBaseboardRight",
+		"SalesChairRailBack",
+		"SalesChairRailLeft",
+		"SalesChairRailRight",
+		"SalesCornerTrimBackLeft",
+		"SalesCornerTrimBackRight",
 		"SalesCeilingPanelA",
 		"SalesCeilingPanelB",
+		"SalesCeilingGridLong",
+		"SalesCeilingGridCross",
 		"FloorTransitionStripSalesBack",
+		"EntryRubberMat",
+		"RegisterRubberMat",
 		"CounterFrontTrim",
 	]
 	for prop_path in architecture_props:

@@ -8,6 +8,7 @@ Use this checklist to approve the opening store and backroom before full catalog
 - Spawn view shows shop identity, register, shelf zone, and backroom hint.
 - Ceiling/floor/walls no longer dominate as empty planes.
 - Glass, door, threshold, and signage read as a shop entrance.
+- Wall trim, ceiling grid, threshold, and rubber mats separate finished surfaces from raw blockout planes.
 
 ## Sales Floor
 
