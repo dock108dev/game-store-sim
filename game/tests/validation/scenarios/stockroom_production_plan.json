@@ -76,6 +76,20 @@
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/gut/test_graybox_store.gd::test_receiving_intake_station_reads_as_workflow_surface"
+    },
+    {
+      "id": "stockroom_backstock_category_lanes",
+      "name": "Backstock shelf has category lanes, bin labels, and nonblocking storage bins",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backstock_shelving_has_category_lanes_and_bins"
+    },
+    {
+      "id": "stockroom_backstock_pull_stage",
+      "name": "Backstock pull stage connects storage to receiving and the carry route for physical Store/Pull context",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_backstock_pull_stage_connects_storage_to_carry_route"
     }
   ]
 }

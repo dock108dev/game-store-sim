@@ -4,7 +4,7 @@ Use this checklist after `scripts/validate_godot.sh` passes.
 
 Current automated baseline:
 
-- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 534 GUT tests, UI scenario automation coverage at 487/606, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
+- Last full gate in this save/load/settings/menu/release-wrapper/alpha-hardening pass: `scripts/validate_godot.sh` passes with 536 GUT tests, UI scenario automation coverage at 489/608, production script mapping coverage at 51/51, 3 active standalone validation tools, and 33 catalog products.
 - June 9 manual screenshot review found P0 readability blockers in the actual game window. Treat the alpha package as paused until `16-playability-readability-recovery-plan.md` exits.
 - Manual controller/window validation is not performed by Codex; every item below remains a human playtest checklist item until manually checked.
 - Store environment production pass is implemented through Stop 2.8; manual QA should now review the full storefront, sales floor, register, fixture, backroom, lighting, screenshot, and navigation composition as one pass.
@@ -78,6 +78,7 @@ Current automated baseline:
 - Stockroom planning is implemented; manual QA should confirm future stockroom screenshots prove stock starts behind an employees-only boundary, moves through receiving/backstock, and reaches sales-floor fixtures physically instead of appearing as floor clutter or instant inventory.
 - Stockroom Slice 1 is implemented; manual QA should confirm the employees-only threshold, doorway frame, office/service cues, and route floor cue read clearly without blocking carry paths.
 - Stockroom Slice 2 is implemented; manual QA should confirm receiving stock sits inside an intentional open-box, invoice, and sorted-tray workflow station rather than reading as products scattered on the floor.
+- Stockroom Slice 3 is implemented; manual QA should confirm backstock reads as categorized shelf/bin storage with a pull-stage surface for retrieving products before carrying them to fixtures.
 - Current production state: this checklist validates the current prototype/polish build. The June 7 screenshot review shows the build still needs a larger game-completion phase before it reads as production quality; that planning is tracked in `11-game-completion-plan.md`.
 - Planning-only docs changes do not add new manual gameplay steps. Any future implementation slice that changes visuals, UI, interaction, customer behavior, scene composition, hidden-thread behavior, or player workflow must update this checklist before commit.
 - Every implementation summary should say whether these were checked, skipped, or not relevant.
@@ -637,7 +638,7 @@ Run these first when manually checking the completed Stop 13.6 external playtest
 
 Run these first when manually checking the completed Stop 13.7 alpha validation sync:
 
-- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 534 GUT tests, 487/606 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
+- Confirm `scripts/validate_godot.sh` is green for the current branch and reports 536 GUT tests, 489/608 UI scenario automation coverage, 51/51 production script mapping coverage, 3 active standalone validation tools, and 33 catalog products.
 - Confirm the latest desktop pack smoke created `artifacts/builds/desktop/game-store-sim.pck` and that `15-alpha-playtest-package.md` still names the same artifact path and known binary-template/signing limits.
 - Confirm `13-alpha-bug-list.md` routes AH-009 and AH-010 as done, keeps AH-011 tied to human balance feel, and keeps AH-006/AH-012/AH-013/AH-014/AH-015 routed to owner recovery screenshot validation.
 - Confirm this manual checklist includes Alpha Bug Triage, Performance, Regression, Scene Readability, Content Copy, Balance, Playtest Package, and Validation Sync focus sections.
@@ -670,8 +671,8 @@ Run these first when manually checking the upcoming employees-only stockroom imp
 - Capture `45_receiving_intake_station.png` and confirm delivered stock appears in an intentional delivery/pallet/intake station with open-box flaps, invoice cue, and sorted tray, not loose on the floor.
 - Capture `04_receiving_box_before_pickup.png` and confirm the starter products are visible inside the receiving box with the compact open/invoice/sort state cards readable from a normal standing angle.
 - Capture `32_open_box_invoice_sort.png` and confirm the computer receiving workflow visually matches the world station: open box, invoice clipboard, and sorted destination are all understandable.
-- Capture `46_backstock_shelving.png` and confirm stored products read as backstock on shelves, bins, or staging surfaces, with clear store/pull context.
-- Capture `47_backstock_pull_stage.png` and confirm pulled stock has an obvious staging place before the player carries it to sales-floor fixtures.
+- Capture `46_backstock_shelving.png` and confirm stored products read as categorized backstock on shelves, bins, and overflow shelf, not as floor storage.
+- Capture `47_backstock_pull_stage.png` and confirm pulled stock has an obvious `PULL` staging surface between the shelf and carry route before the player carries it to sales-floor fixtures.
 - Capture `48_manager_office_context.png` and confirm the computer reads as a manager office workstation with desk, paperwork, board, and supplier context.
 - Capture `49_service_safe_records_corner.png` and confirm service, safe, security, and records props remain secondary and do not look like mandatory objectives.
 - Capture `50_storage_tab_physical_flow.png` and confirm the computer copy explains where stock appears and what physical action the player should take next.

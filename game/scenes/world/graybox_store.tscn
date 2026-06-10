@@ -831,6 +831,66 @@ size = Vector3(1.55, 0.08, 0.58)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, -0.02)
 material = SubResource("StandardMaterial3D_storage_metal")
 
+[node name="TopShelf" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(1.55, 0.08, 0.58)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.28, -0.02)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="StorageLaneDividerA" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.035, 0.78, 0.46)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24, 0.84, -0.02)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="StorageLaneDividerB" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.035, 0.78, 0.46)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28, 0.84, -0.02)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BackstockUsedGamesLabelPanel" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.42, 0.12, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, 1.42, -0.36)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BackstockUsedGamesLabel" type="Label3D" parent="BackroomStorageShelf/BackstockUsedGamesLabelPanel"]
+pixel_size = 0.0025
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "USED"
+font_size = 16
+
+[node name="BackstockAccessoryLabelPanel" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.42, 0.12, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42, -0.36)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BackstockAccessoryLabel" type="Label3D" parent="BackroomStorageShelf/BackstockAccessoryLabelPanel"]
+pixel_size = 0.0025
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "ACCESS"
+font_size = 16
+
+[node name="BackstockHardwareLabelPanel" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.42, 0.12, 0.02)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 1.42, -0.36)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BackstockHardwareLabel" type="Label3D" parent="BackroomStorageShelf/BackstockHardwareLabelPanel"]
+pixel_size = 0.0025
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "HW"
+font_size = 16
+
 [node name="StorageBoxA" type="CSGBox3D" parent="BackroomStorageShelf"]
 size = Vector3(0.48, 0.32, 0.34)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.58, -0.05)
@@ -839,6 +899,21 @@ material = SubResource("StandardMaterial3D_cardboard")
 [node name="StorageBoxB" type="CSGBox3D" parent="BackroomStorageShelf"]
 size = Vector3(0.5, 0.28, 0.34)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.36, 1.1, -0.04)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="StorageBinUsedGames" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.42, 0.18, 0.34)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, 1.04, -0.05)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="StorageBinAccessories" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.42, 0.2, 0.34)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.56, -0.05)
+material = SubResource("StandardMaterial3D_cardboard")
+
+[node name="StorageBinHardware" type="CSGBox3D" parent="BackroomStorageShelf"]
+size = Vector3(0.42, 0.24, 0.34)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.62, -0.05)
 material = SubResource("StandardMaterial3D_cardboard")
 
 [node name="ReceivingBox" parent="." instance=ExtResource("3_receiving_box")]
@@ -969,6 +1044,11 @@ size = Vector3(0.54, 0.3, 0.4)
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -2.58, 0.15, 5.62)
 material = SubResource("StandardMaterial3D_cardboard")
 
+[node name="BackstockOverflowShelf" type="CSGBox3D" parent="."]
+size = Vector3(1.28, 0.08, 0.48)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -2.92, 0.42, 5.58)
+material = SubResource("StandardMaterial3D_storage_metal")
+
 [node name="BackstockOverflowLabelPanel" type="CSGBox3D" parent="."]
 size = Vector3(0.68, 0.18, 0.025)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.92, 0.62, 5.82)
@@ -983,6 +1063,31 @@ no_depth_test = true
 billboard = 1
 text = "BACKSTOCK"
 font_size = 18
+
+[node name="BackstockPullStageSurface" type="CSGBox3D" parent="."]
+size = Vector3(0.95, 0.08, 0.5)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.0, 0.44, 4.82)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="BackstockPullStageSlip" type="CSGBox3D" parent="."]
+size = Vector3(0.36, 0.018, 0.26)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.92, 0.49, 4.78)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="BackstockPullStageLabelPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.5, 0.12, 0.02)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.0, 0.64, 4.55)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BackstockPullStageLabel" type="Label3D" parent="BackstockPullStageLabelPanel"]
+pixel_size = 0.0026
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 1
+text = "PULL"
+font_size = 17
 
 [node name="BackroomManagementBoard" type="CSGBox3D" parent="."]
 size = Vector3(1.35, 0.72, 0.04)

@@ -137,6 +137,8 @@ Commit target:
 
 ## Slice 3: Backstock Shelving And Pull/Store Flow
 
+Status: implemented in `Build stockroom backstock shelves`; pending owner screenshot validation.
+
 Goal: make backstock look like stored inventory that the player can pull from and bring to the sales floor.
 
 Work:
@@ -149,7 +151,7 @@ Work:
 Acceptance:
 
 - Backstock count and storage movement are readable in the computer and supported by world shelves.
-- Pulling stock implies "go get it from the stockroom" rather than instant sales-floor inventory.
+- Pulling stock implies "go get it from the stockroom" rather than instant sales-floor inventory through category lanes, bins, overflow shelf, and pull-stage cues.
 - `10_stocked_rack_readability.png` still reads after moving stockroom surfaces.
 
 Manual screenshots:

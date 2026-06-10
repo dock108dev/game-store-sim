@@ -467,6 +467,10 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 		"BackroomDeliveryDoor/DeliveryDoorLabel",
 		"ReceivingInvoiceClipboard/ReceivingInvoiceLabel",
 		"BackstockOverflowLabelPanel/BackstockOverflowLabel",
+		"BackroomStorageShelf/BackstockUsedGamesLabelPanel/BackstockUsedGamesLabel",
+		"BackroomStorageShelf/BackstockAccessoryLabelPanel/BackstockAccessoryLabel",
+		"BackroomStorageShelf/BackstockHardwareLabelPanel/BackstockHardwareLabel",
+		"BackstockPullStageLabelPanel/BackstockPullStageLabel",
 		"BackroomServiceBench/ServiceTicketPanel/ServiceTicketLabel",
 		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel",
 		"SecurityMonitorPanel/SecurityMonitorLabel",
@@ -681,13 +685,73 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 	assert_not_null(storage_shelf)
 	assert_not_null(storage_shelf.get_node_or_null("LowerShelf"))
 	assert_not_null(storage_shelf.get_node_or_null("UpperShelf"))
+	assert_not_null(storage_shelf.get_node_or_null("TopShelf"))
 	assert_not_null(storage_shelf.get_node_or_null("StorageBoxA"))
 	assert_not_null(storage_shelf.get_node_or_null("StorageBoxB"))
+	assert_not_null(storage_shelf.get_node_or_null("StorageBinUsedGames"))
+	assert_not_null(storage_shelf.get_node_or_null("StorageBinAccessories"))
+	assert_not_null(storage_shelf.get_node_or_null("StorageBinHardware"))
 	assert_not_null(_store.get_node_or_null("BackstockOverflowCrateA"))
 	assert_not_null(_store.get_node_or_null("BackstockOverflowCrateB"))
+	assert_not_null(_store.get_node_or_null("BackstockOverflowShelf"))
 	assert_not_null(_store.get_node_or_null("BackstockOverflowLabelPanel/BackstockOverflowLabel"))
 	assert_lt(storage_shelf.global_position.x, _store.get_node("ReceivingBox").global_position.x)
 	assert_gt(storage_shelf.global_position.z, 5.0)
+
+
+func test_backstock_shelving_has_category_lanes_and_bins() -> void:
+	var storage_shelf := _store.get_node("BackroomStorageShelf") as Node3D
+	var expected_labels := {
+		"BackstockUsedGamesLabelPanel/BackstockUsedGamesLabel": "USED",
+		"BackstockAccessoryLabelPanel/BackstockAccessoryLabel": "ACCESS",
+		"BackstockHardwareLabelPanel/BackstockHardwareLabel": "HW",
+	}
+
+	for label_path in expected_labels:
+		var label := storage_shelf.get_node_or_null(label_path) as Label3D
+		assert_not_null(label)
+		assert_eq(label.text, expected_labels[label_path])
+		assert_true(label.no_depth_test)
+		assert_eq(label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
+		assert_lte(label.pixel_size, 0.0027)
+
+	for divider_path in ["StorageLaneDividerA", "StorageLaneDividerB"]:
+		var divider := storage_shelf.get_node_or_null(divider_path) as CSGBox3D
+		assert_not_null(divider)
+		assert_false(divider.use_collision)
+		assert_gt(divider.size.y, 0.7)
+
+	for bin_path in ["StorageBinUsedGames", "StorageBinAccessories", "StorageBinHardware"]:
+		var bin := storage_shelf.get_node_or_null(bin_path) as CSGBox3D
+		assert_not_null(bin)
+		assert_false(bin.use_collision)
+		assert_gt(bin.global_position.y, 0.5)
+		assert_lt(absf(bin.position.x), 0.7)
+
+
+func test_backstock_pull_stage_connects_storage_to_carry_route() -> void:
+	var receiving_box := _store.get_node("ReceivingBox") as Node3D
+	var storage_shelf := _store.get_node("BackroomStorageShelf") as Node3D
+	var carry_route := _store.get_node("StockroomCarryRoute") as CSGBox3D
+	var pull_stage := _store.get_node_or_null("BackstockPullStageSurface") as CSGBox3D
+	var pull_slip := _store.get_node_or_null("BackstockPullStageSlip") as CSGBox3D
+	var pull_label := _store.get_node_or_null("BackstockPullStageLabelPanel/BackstockPullStageLabel") as Label3D
+	var overflow_shelf := _store.get_node_or_null("BackstockOverflowShelf") as CSGBox3D
+
+	assert_not_null(pull_stage)
+	assert_not_null(pull_slip)
+	assert_not_null(pull_label)
+	assert_not_null(overflow_shelf)
+	assert_false(pull_stage.use_collision)
+	assert_false(pull_slip.use_collision)
+	assert_false(overflow_shelf.use_collision)
+	assert_eq(pull_label.text, "PULL")
+	assert_true(pull_label.no_depth_test)
+	assert_eq(pull_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
+	assert_lt(_flat_distance_xz(pull_stage.global_position, storage_shelf.global_position), 2.1)
+	assert_lt(_flat_distance_xz(pull_stage.global_position, receiving_box.global_position), 1.5)
+	assert_lt(_flat_distance_xz(pull_stage.global_position, carry_route.global_position), 3.0)
+	assert_gt(pull_stage.global_position.y, 0.35)
 
 
 func test_receiving_intake_station_reads_as_workflow_surface() -> void:
