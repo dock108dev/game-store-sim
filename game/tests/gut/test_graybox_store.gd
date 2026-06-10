@@ -440,15 +440,21 @@ func test_sales_floor_has_merchandising_and_route_cues() -> void:
 	var staff_picks_stand := _store.get_node_or_null("StaffPicksStand") as Node3D
 	var new_release_label := _store.get_node_or_null("NewReleaseEndcap/EndcapHeaderPanel/EndcapHeaderLabel") as Label3D
 	var staff_picks_label := _store.get_node_or_null("StaffPicksStand/StaffPicksHeaderPanel/StaffPicksHeaderLabel") as Label3D
+	var used_talker_label := _store.get_node_or_null("UsedShelfTalkerPanel/UsedShelfTalkerLabel") as Label3D
+	var preorder_label := _store.get_node_or_null("PreorderWallHeaderPanel/PreorderWallHeaderLabel") as Label3D
 
 	assert_not_null(route_mat)
 	assert_not_null(new_release_endcap)
 	assert_not_null(staff_picks_stand)
 	assert_not_null(new_release_label)
 	assert_not_null(staff_picks_label)
+	assert_not_null(used_talker_label)
+	assert_not_null(preorder_label)
 	assert_false(route_mat.use_collision)
 	assert_eq(new_release_label.text, "NEW RELEASES")
 	assert_eq(staff_picks_label.text, "STAFF PICKS")
+	assert_eq(used_talker_label.text, "TESTED")
+	assert_eq(preorder_label.text, "PREORDERS")
 	assert_lte(route_mat.size.y, 0.0121)
 	assert_true(_is_inside_store_floorprint(route_mat.global_position))
 	assert_true(_is_inside_store_floorprint(new_release_endcap.global_position))
@@ -465,6 +471,15 @@ func test_sales_floor_has_merchandising_and_route_cues() -> void:
 		"StaffPicksStand/StaffPicksHeaderPanel",
 		"StaffPicksStand/StaffPickCaseA",
 		"StaffPicksStand/StaffPickCaseB",
+		"UsedSpineRowTop",
+		"UsedSpineRowMiddle",
+		"UsedSpineRowBottom",
+		"UsedShelfTalkerPanel",
+		"PreorderWallPanel",
+		"PreorderWallHeaderPanel",
+		"PreorderCaseStackA",
+		"PreorderCaseStackB",
+		"PreorderCaseStackC",
 	]:
 		var cue := _store.get_node_or_null(cue_path) as CSGBox3D
 		assert_not_null(cue)
@@ -474,6 +489,8 @@ func test_sales_floor_has_merchandising_and_route_cues() -> void:
 	var rack := _store.get_node("GameDisplayRack") as Node3D
 	assert_gt(_flat_distance_xz(new_release_endcap.global_position, register.global_position), 3.0)
 	assert_gt(_flat_distance_xz(staff_picks_stand.global_position, rack.global_position), 4.0)
+	assert_lt(_flat_distance_xz((_store.get_node("UsedSpineRowTop") as CSGBox3D).global_position, rack.global_position), 1.0)
+	assert_gt((_store.get_node("PreorderWallPanel") as CSGBox3D).global_position.x, 6.6)
 
 
 func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
@@ -1229,6 +1246,10 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		"ShelfPriceTagA",
 		"ShelfPriceTagB",
 		"ShelfPriceTagC",
+		"UsedSpineRowTop",
+		"UsedSpineRowMiddle",
+		"UsedSpineRowBottom",
+		"UsedShelfTalkerPanel",
 	]
 	for prop_path in density_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -1237,6 +1258,15 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		assert_lt(_flat_distance_xz(prop.global_position, rack.global_position), 0.95, prop_path)
 
 	assert_eq((_store.get_node("ShelfFacingDensityBand/ShelfFacingDensityLabel") as Label3D).text, "USED GAMES")
+	assert_eq((_store.get_node("UsedShelfTalkerPanel/UsedShelfTalkerLabel") as Label3D).text, "TESTED")
+
+	for preorder_path in ["PreorderWallPanel", "PreorderWallHeaderPanel", "PreorderCaseStackA", "PreorderCaseStackB", "PreorderCaseStackC"]:
+		var preorder_prop := _store.get_node_or_null(preorder_path) as CSGBox3D
+		assert_not_null(preorder_prop)
+		assert_false(preorder_prop.use_collision, preorder_path)
+		assert_true(_is_inside_store_floorprint(preorder_prop.global_position), preorder_path)
+		assert_gt(preorder_prop.global_position.x, 6.5, preorder_path)
+	assert_eq((_store.get_node("PreorderWallHeaderPanel/PreorderWallHeaderLabel") as Label3D).text, "PREORDERS")
 
 	var transaction_props := [
 		"ReturnReviewTray",

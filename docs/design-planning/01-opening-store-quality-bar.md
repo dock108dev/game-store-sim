@@ -261,6 +261,12 @@ Acceptance checks:
 - Player can identify where to stock used games.
 - Density comes from products and fixtures, not huge signs.
 
+Implemented evidence:
+
+- Added repeated used-game spine rows and a small shelf talker to make the stocked used wall read as product density.
+- Added a preorder wall with header and case-stack cues on the right wall, separate from the interactive register flow.
+- Expanded sales-floor tests to lock the used shelf, preorder wall, endcap, staff picks, accessory, bargain, and route-cue composition.
+
 Validation:
 
 - Shelf and scene tests.

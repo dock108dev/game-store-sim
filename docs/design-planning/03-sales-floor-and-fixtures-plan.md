@@ -57,6 +57,12 @@ Make the sales floor feel stocked, navigable, and intentionally merchandised bef
 - `fixture_placed.png` shows a grounded placed fixture, not a camera-blocking slab.
 - No density hides prompts, product labels, shelf slots, or customer paths.
 
+## Implemented Evidence
+
+- Used-game wall now has repeated spine rows, price tags, a category band, and a tested shelf talker.
+- Sales floor zones now include used wall, new-release endcap, staff picks, accessory peg wall, bargain bin, preorder wall, and register impulse area.
+- `test_graybox_store.gd` asserts density props are non-colliding, near their intended zone, and inside the store floorprint.
+
 ## Test
 
 - Run relevant GUT tests for scene, shelf slot, fixture placement, and customer manager.

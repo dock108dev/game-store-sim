@@ -13,6 +13,7 @@ Use this checklist to approve the opening store and backroom before full catalog
 ## Sales Floor
 
 - Used-game shelving has visible product density.
+- Preorder, staff-pick, new-release, accessory, bargain, and impulse zones are readable as separate retail beats.
 - Category signs are short and readable.
 - Entry, register, shelf, receiving, and backroom routes remain clear.
 - Products look like inventory, not blocks.
