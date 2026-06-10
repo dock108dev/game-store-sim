@@ -47,7 +47,7 @@ Script coverage is measured as tested-script mapping, not true line coverage. Go
 Current production validation baseline:
 
 - `scripts/validate_godot.sh` passes with 538 GUT tests.
-- UI scenario automation coverage is 492/611, above the 80% threshold.
+- UI scenario automation coverage is 494/613, above the 80% threshold.
 - Production script mapping coverage is 51/51.
 - There are 3 active standalone validation tool manifests: product catalog content checking, desktop export pack smoke, and alpha performance smoke.
 - Desktop pack export smoke passed and produced `artifacts/builds/desktop/game-store-sim.pck`.
@@ -95,6 +95,7 @@ Current production validation baseline:
 - Stockroom Slice 3 coverage verifies categorized backstock lanes, storage bins, overflow shelf, and the pull-stage surface connecting storage to receiving and the carry route.
 - Stockroom Slice 4 coverage verifies the backroom computer is framed by manager-office cues while staying distant from the register.
 - Stockroom Slice 5 coverage verifies service bench ready/parts/ticket cues and secondary safe/security/records/hold surfaces.
+- Stockroom Slice 6 coverage verifies supplier ordering and storage workflow copy names the physical receiving station, backstock shelf, pull stage, and carry work.
 - Save slot UI coverage verifies the Stop 12.1 file-backed slot registry, new game slot creation, continue data, overwrite/delete behavior, save metadata, modal accessibility, and player-controller save-panel wiring.
 - Save migration coverage verifies the Stop 12.2 current save version, schema ID, version 1 migration defaults, migration history, future-version rejection, malformed JSON failure state, and readable migration-policy summary text.
 - Settings menu coverage verifies the Stop 12.3 audio, display, controls, mouse, accessibility, persistence, bindings reset, default reset, modal focus, and player settings application surface.

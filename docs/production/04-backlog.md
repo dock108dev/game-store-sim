@@ -49,7 +49,7 @@ Active stockroom production plan: `17-stockroom-production-plan.md`.
 13. Save/load, settings, and release wrapper. Complete through Stop 12.6.
 14. Alpha hardening. Complete through Stop 13.7; external playtest package exists but is paused by the June 9 manual readability blocker.
 15. Playability readability recovery. Implementation complete; owner screenshot validation remains required before external playtest.
-16. Employees-only stockroom production. Slice 5 service/safe/records corners implemented; continue with stockroom workflow copy in `17-stockroom-production-plan.md`.
+16. Employees-only stockroom production. Slice 6 workflow copy implemented; continue with stockroom lighting/materials and final validation sync in `17-stockroom-production-plan.md`.
 
 ## Completed Polish Scope
 
@@ -188,7 +188,8 @@ The following polish items remain valid historical checkpoints:
 - Done: Slice 3 adds categorized backstock shelf lanes, bins, overflow shelf, and a pull-stage surface for Store/Pull physical context.
 - Done: Slice 4 adds manager office context around the computer with chair, planning board label, file boxes, supplier note, bill stack, and office rug.
 - Done: Slice 5 adds service-ready shelf/parts cues plus safe, security, high-value shelf, hold tray, evidence locker, and records file cues.
-- Do next: workflow copy, lighting/materials, and validation sync.
+- Done: Slice 6 updates owner checklist, supplier lot, receiving, storage, Store/Pull, and status copy to name the receiving station, backstock shelf, pull stage, and physical carry work.
+- Do next: lighting/materials and validation sync.
 - Do not reopen external playtest from this phase unless owner screenshot validation and stockroom screenshot review both pass.
 
 ## Product And Fixture Polish

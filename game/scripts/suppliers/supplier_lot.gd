@@ -31,14 +31,14 @@ func get_storage_requirement() -> String:
 	if not storage_requirement.strip_edges().is_empty():
 		return storage_requirement.strip_edges()
 
-	return "Receiving box intake before floor placement"
+	return "Receiving station intake before floor placement"
 
 
 func get_receiving_expectation() -> String:
 	if not receiving_expectation.strip_edges().is_empty():
 		return receiving_expectation.strip_edges()
 
-	return "Physical stock appears in receiving for pickup and placement"
+	return "Physical stock appears in the backroom receiving station for pickup and placement"
 
 
 func get_order_note() -> String:

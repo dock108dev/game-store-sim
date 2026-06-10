@@ -6,7 +6,7 @@ const CLUE_SURFACES := [
 		"surface_id": "receiving_invoice",
 		"label": "Receiving invoice",
 		"type": "invoice",
-		"location": "Backroom receiving mat",
+		"location": "Backroom receiving station",
 		"signal": "has_receiving_batch",
 		"rules": ["suspicious_supplier", "serial_mismatch"],
 		"summary": "Invoice count, variance, and serial notes can point to a receiving anomaly.",

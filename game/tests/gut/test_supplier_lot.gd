@@ -12,10 +12,10 @@ func test_supplier_lot_has_orderable_used_game_products() -> void:
 	assert_eq(lot.get("cost_cents"), 3000)
 	assert_eq(lot.get("delivery_days"), 1)
 	assert_eq(lot.call("get_item_count"), 3)
-	assert_eq(lot.call("get_storage_requirement"), "Receiving box intake, then display rack or backstock")
+	assert_eq(lot.call("get_storage_requirement"), "Receiving station intake, then display rack or backstock shelf")
 	assert_string_contains(
 		lot.call("get_receiving_expectation"),
-		"physical cases in the receiving box"
+		"physical cases in the backroom receiving station"
 	)
 	assert_string_contains(lot.call("get_order_note"), "mixed crate")
 	assert_string_contains(lot.call("get_invoice_note"), "Count three cases")

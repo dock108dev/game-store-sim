@@ -261,7 +261,7 @@ const ONBOARDING_STEPS := [
 	{
 		"step_id": "receiving",
 		"label": "Receiving",
-		"instruction": "Pick up incoming games from receiving before serving the rush.",
+		"instruction": "Bring incoming games from the stockroom receiving station before serving the rush.",
 	},
 	{
 		"step_id": "pricing",
@@ -1319,18 +1319,19 @@ func get_storage_workflow_summary_text() -> String:
 	var capacity := get_storage_capacity()
 	var overflow := maxi(0, backstock_count - capacity)
 	var lines: Array[String] = ["Storage workflow:"]
-	lines.append("Storage shelf: Backroom backstock shelf / %s" % STORAGE_LOCATION_ID)
+	lines.append("Backstock shelf: Categorized bins / %s" % STORAGE_LOCATION_ID)
+	lines.append("Pull stage: retrieve cases here before carrying them to sales-floor fixtures")
 	lines.append("Capacity: %d cases%s" % [
 		capacity,
 		" (store expansion)" if has_store_expansion() else " (expanded)" if has_upgrade("upgrade_backroom_storage") else "",
 	])
-	lines.append("Receiving ready: %d" % int(counts.get("receiving", 0)))
+	lines.append("Receiving station ready: %d cases" % int(counts.get("receiving", 0)))
 	lines.append("Backstock: %d stored / %d capacity / %d overflow" % [
 		backstock_count,
 		capacity,
 		overflow,
 	])
-	lines.append("Sales floor shelf: %d" % int(counts.get("shelf", 0)))
+	lines.append("Sales floor fixtures: %d stocked" % int(counts.get("shelf", 0)))
 	if storage_movements.is_empty():
 		lines.append("Recent storage move: none")
 	else:
@@ -2115,7 +2116,7 @@ func get_supplier_order_summary_text() -> String:
 		if lot.has_method("get_item_count"):
 			item_count = int(lot.call("get_item_count"))
 		var delivery_days := maxi(1, int(lot.get("delivery_days")))
-		lines.append("Order %s %s (%d items to receiving, day +%d)" % [
+		lines.append("Order %s %s (%d cases to receiving station, day +%d)" % [
 			str(lot.get("display_name")),
 			format_money(int(lot.get("cost_cents"))),
 			item_count,
@@ -2131,7 +2132,7 @@ func get_supplier_order_summary_text() -> String:
 			delivery_days,
 		])
 		lines.append("Storage: %s" % _get_supplier_lot_storage_requirement(lot))
-		lines.append("Receiving: %s" % _get_supplier_lot_receiving_expectation(lot))
+		lines.append("Receiving station: %s" % _get_supplier_lot_receiving_expectation(lot))
 		if lot.has_method("get_invoice_note"):
 			lines.append("Invoice: %s" % str(lot.call("get_invoice_note")))
 		if lot.has_method("get_shelf_plan"):
@@ -2143,28 +2144,28 @@ func get_supplier_order_summary_text() -> String:
 	else:
 		lines.append("Pending receiving:")
 		for order in pending:
-			lines.append("%s due to receiving day %d (%d items)" % [
+			lines.append("%s due to receiving station day %d (%d cases)" % [
 				str(order.get("display_name", "Supplier lot")),
 				int(order.get("due_day", day_number + 1)),
 				int(order.get("item_count", 0)),
 			])
 			lines.append("Delivery state: pending delivery")
 			lines.append("Cost reserved: %s" % format_money(int(order.get("cost_cents", 0))))
-			lines.append("Storage needed: %s" % str(order.get("storage_requirement", "Receiving box intake")))
-			lines.append("Receiving expectation: %s" % str(order.get("receiving_expectation", "Physical stock appears in receiving")))
-			lines.append("Next action: open the receiving box, check the invoice, then sort cases for pricing")
+			lines.append("Storage needed: receiving station, then display rack or backstock shelf")
+			lines.append("Receiving expectation: physical cases appear in the backroom receiving station")
+			lines.append("Next action: open the box, check invoice, then sort cases on the receiving station")
 
 	var delivered := get_delivered_supplier_orders()
 	if not delivered.is_empty():
 		lines.append("Receiving box:")
 		for order in delivered:
-			lines.append("%s delivered to receiving day %d" % [
+			lines.append("%s delivered to receiving station day %d" % [
 				str(order.get("display_name", "Supplier lot")),
 				int(order.get("delivered_day", day_number)),
 			])
 			lines.append("Delivery state: delivered")
-			lines.append("%d items ready for pickup, pricing, and stocking" % int(order.get("item_count", 0)))
-			lines.append("Next action: physically pick up cases from receiving before placing them on fixtures")
+			lines.append("%d cases ready for pickup, pricing, and stocking" % int(order.get("item_count", 0)))
+			lines.append("Next action: physically pick up cases from the receiving station before placing them on fixtures")
 
 	lines.append(get_receiving_workflow_summary_text())
 	return "\n".join(lines)
@@ -2172,8 +2173,9 @@ func get_supplier_order_summary_text() -> String:
 
 func get_receiving_workflow_summary_text() -> String:
 	var lines: Array[String] = ["Receiving workflow:"]
-	lines.append("Delivery point: Backroom receiving mat / receiving_box_001")
-	lines.append("Sort lanes: price, stock, storage")
+	lines.append("Delivery point: Backroom receiving station / receiving_box_001")
+	lines.append("World cues: open box, invoice clipboard, sorted tray")
+	lines.append("Sort lanes: price, stock, backstock shelf")
 	if receiving_batches.is_empty():
 		lines.append("Pending receiving work: none")
 		return "\n".join(lines)
@@ -2207,7 +2209,7 @@ func _get_supplier_lot_category_label(lot: Resource) -> String:
 func _get_supplier_lot_storage_requirement(lot: Resource) -> String:
 	if lot != null and lot.has_method("get_storage_requirement"):
 		return str(lot.call("get_storage_requirement"))
-	return "Receiving box intake before floor placement"
+	return "Receiving station intake before floor placement"
 
 
 func _get_supplier_lot_receiving_expectation(lot: Resource) -> String:

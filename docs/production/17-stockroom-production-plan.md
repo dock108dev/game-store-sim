@@ -224,6 +224,8 @@ Commit target:
 
 ## Slice 6: Stockroom Computer Workflow Copy And Controls
 
+Status: implemented in `Polish stockroom workflow copy`; pending owner screenshot validation.
+
 Goal: make the computer language match the new physical stockroom.
 
 Work:
@@ -235,8 +237,8 @@ Work:
 
 Acceptance:
 
-- Ordering and storage tabs clearly say when work happens in receiving/backstock.
-- The owner checklist teaches "bring stock from the stockroom" without debug phrasing.
+- Ordering and storage tabs clearly say when work happens at the receiving station, backstock shelf, and pull stage.
+- The owner checklist teaches "bring stock from the stockroom receiving station" without debug phrasing.
 - Manual QA can understand the flow without reading code or chat.
 
 Manual screenshots:

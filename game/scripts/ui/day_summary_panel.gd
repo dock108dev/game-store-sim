@@ -277,7 +277,7 @@ func order_used_game_lot() -> bool:
 		status_label.text = "Could not order games."
 		return false
 
-	status_label.text = "Ordered %s to receiving." % str(order.get("display_name", "supplier lot"))
+	status_label.text = "Ordered %s to the backroom receiving station." % str(order.get("display_name", "supplier lot"))
 	return true
 
 
@@ -293,7 +293,7 @@ func open_receiving_box() -> bool:
 		status_label.text = "Could not open receiving box."
 		return false
 
-	status_label.text = "Opened %s receiving box." % str(opened.get("display_name", "supplier lot"))
+	status_label.text = "Opened %s at the receiving station." % str(opened.get("display_name", "supplier lot"))
 	return true
 
 
@@ -328,7 +328,7 @@ func sort_receiving_batch() -> bool:
 		status_label.text = "Could not sort receiving batch."
 		return false
 
-	status_label.text = "Sorted %s for pricing and stocking." % str(sorted.get("display_name", "supplier lot"))
+	status_label.text = "Sorted %s onto the receiving station tray for pricing, stocking, or backstock." % str(sorted.get("display_name", "supplier lot"))
 	return true
 
 
@@ -387,7 +387,7 @@ func store_receiving_item() -> bool:
 		status_label.text = "No receiving item ready for backstock."
 		return false
 
-	status_label.text = "Stored %s in backstock." % str(movement.get("display_name", "item"))
+	status_label.text = "Stored %s on the backstock shelf." % str(movement.get("display_name", "item"))
 	return true
 
 
@@ -401,7 +401,7 @@ func pull_backstock_item() -> bool:
 		status_label.text = "No backstock item ready to pull."
 		return false
 
-	status_label.text = "Pulled %s to receiving." % str(movement.get("display_name", "item"))
+	status_label.text = "Pulled %s to the stockroom pull stage." % str(movement.get("display_name", "item"))
 	return true
 
 
