@@ -1376,6 +1376,81 @@ size = Vector3(0.34, 0.05, 0.22)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.12, 0.8, 4.28)
 material = SubResource("StandardMaterial3D_paper")
 
+[node name="OfficeCalendarCard" type="CSGBox3D" parent="."]
+size = Vector3(0.3, 0.2, 0.014)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.52, 0.82, 4.02)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="OfficeRecordsShelf" type="CSGBox3D" parent="."]
+size = Vector3(0.56, 0.08, 0.22)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.48, 0.72, 4.36)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="OfficeTaskLampBase" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.035, 0.18)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.95, 0.79, 4.1)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="OfficeTaskLampArm" type="CSGBox3D" parent="."]
+size = Vector3(0.045, 0.46, 0.045)
+transform = Transform3D(0.906308, 0.241845, -0.346189, 0, 0.819152, 0.573576, 0.422618, -0.519837, 0.742404, 4.88, 1.02, 4.08)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="OfficeTaskLampShade" type="CSGBox3D" parent="."]
+size = Vector3(0.26, 0.1, 0.18)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.78, 1.18, 4.0)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ManagementComputerTaskRail" type="CSGBox3D" parent="."]
+size = Vector3(0.82, 0.08, 0.025)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.48, 1.03, 4.08)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="ManagementTabDashboard" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.08, 0.028)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.24, 1.035, 4.0)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="ManagementTabDashboardLabel" type="Label3D" parent="ManagementTabDashboard"]
+pixel_size = 0.0016
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "DASH"
+font_size = 12
+
+[node name="ManagementTabOrders" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.08, 0.028)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.48, 1.035, 4.09)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="ManagementTabOrdersLabel" type="Label3D" parent="ManagementTabOrders"]
+pixel_size = 0.0016
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "ORD"
+font_size = 12
+
+[node name="ManagementTabReleases" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 0.08, 0.028)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.72, 1.035, 4.17)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="ManagementTabReleasesLabel" type="Label3D" parent="ManagementTabReleases"]
+pixel_size = 0.0016
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "REL"
+font_size = 12
+
 [node name="BackroomServiceBench" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 0, 5.45)
 

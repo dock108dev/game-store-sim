@@ -442,6 +442,12 @@ Acceptance checks:
 - Main controls are visible at 1280x720.
 - Hidden-thread content does not look required.
 
+Implemented evidence:
+
+- Added office calendar, records shelf, and task lamp cues around the backroom computer so it reads as an owner workstation.
+- Added compact dashboard/orders/releases task tabs on the computer framing to make management modes glanceable from scene screenshots.
+- Expanded scene tests to lock the office cues, short tab labels, non-colliding props, and register separation.
+
 Validation:
 
 - Day summary, store session, hidden-thread, scene tests.

@@ -998,6 +998,15 @@ func test_backroom_management_and_service_props_exist() -> void:
 		"OfficeFileBoxB",
 		"OfficeSupplierNote",
 		"OfficeBillStack",
+		"OfficeCalendarCard",
+		"OfficeRecordsShelf",
+		"OfficeTaskLampBase",
+		"OfficeTaskLampArm",
+		"OfficeTaskLampShade",
+		"ManagementComputerTaskRail",
+		"ManagementTabDashboard",
+		"ManagementTabOrders",
+		"ManagementTabReleases",
 	]
 	for prop_path in management_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -1048,22 +1057,42 @@ func test_manager_office_frames_backroom_computer_without_register_actions() -> 
 	var file_box := _store.get_node_or_null("OfficeFileBoxA") as CSGBox3D
 	var supplier_note := _store.get_node_or_null("OfficeSupplierNote") as CSGBox3D
 	var bill_stack := _store.get_node_or_null("OfficeBillStack") as CSGBox3D
+	var calendar := _store.get_node_or_null("OfficeCalendarCard") as CSGBox3D
+	var records_shelf := _store.get_node_or_null("OfficeRecordsShelf") as CSGBox3D
+	var task_lamp := _store.get_node_or_null("OfficeTaskLampShade") as CSGBox3D
+	var task_rail := _store.get_node_or_null("ManagementComputerTaskRail") as CSGBox3D
 	var board_label := _store.get_node_or_null("ManagementBoardLabelPanel/ManagementBoardLabel") as Label3D
+	var task_labels := {
+		"ManagementTabDashboard/ManagementTabDashboardLabel": "DASH",
+		"ManagementTabOrders/ManagementTabOrdersLabel": "ORD",
+		"ManagementTabReleases/ManagementTabReleasesLabel": "REL",
+	}
 
 	assert_not_null(office_rug)
 	assert_not_null(chair)
 	assert_not_null(file_box)
 	assert_not_null(supplier_note)
 	assert_not_null(bill_stack)
+	assert_not_null(calendar)
+	assert_not_null(records_shelf)
+	assert_not_null(task_lamp)
+	assert_not_null(task_rail)
 	assert_not_null(board_label)
 	assert_eq(board_label.text, "PLAN")
 	assert_true(board_label.no_depth_test)
 	assert_eq(board_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 
-	for cue in [office_rug, chair, file_box, supplier_note, bill_stack]:
+	for cue in [office_rug, chair, file_box, supplier_note, bill_stack, calendar, records_shelf, task_lamp, task_rail]:
 		assert_false(cue.use_collision)
-		assert_lt(_flat_distance_xz(cue.global_position, computer.global_position), 1.4)
+		assert_lt(_flat_distance_xz(cue.global_position, computer.global_position), 1.55)
 		assert_true(_is_inside_store_floorprint(cue.global_position))
+
+	for label_path in task_labels:
+		var task_label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(task_label)
+		assert_eq(task_label.text, task_labels[label_path])
+		assert_true(task_label.no_depth_test)
+		assert_eq(task_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 
 	assert_gt(_flat_distance_xz(computer.global_position, _store.get_node("RegisterWorkstation").global_position), 7.0)
 	assert_gt(computer.global_position.x, 4.0)

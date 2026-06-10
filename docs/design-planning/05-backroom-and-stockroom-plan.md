@@ -74,7 +74,9 @@ Make the backroom feel like the owner's working operations space: receiving, bac
 - Receiving station includes delivery/check/sort workflow cards on the intake surface.
 - Backstock has category lanes, overflow storage, and pull-stage labeling.
 - Floor arrows connect receiving to pull staging and backstock to sales-floor restock flow.
+- Manager office now frames the computer with calendar, records shelf, task lighting, and short management task tabs.
 - `test_graybox_store.gd` asserts all workflow cues are non-colliding and close to their intended route.
+- `test_graybox_store.gd` asserts office cues stay near the computer, inside the store footprint, separated from register actions, and depth-safe for labels.
 
 ## Test
 

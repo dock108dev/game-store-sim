@@ -38,6 +38,7 @@ Use this checklist to approve the opening store and backroom before full catalog
 ## Backroom Office
 
 - Computer reads as manager workstation.
+- Computer framing includes calendar, records, task lighting, and short dashboard/order/release cues.
 - Dashboard, ordering, releases, services, storage, settings, and records are scan-friendly.
 - Service bench and records/safe/security surfaces are readable but secondary.
 - Hidden-thread cues remain optional.
