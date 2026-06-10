@@ -1,5 +1,7 @@
 # Production Visuals Plan
 
+Historical record. This production-visual baseline plan is mechanically complete and retained for source-reference context. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/screenshot-review.md` for the current review workflow.
+
 This is the implementation record for the large production-visuals phase. It supersedes small isolated polish work and turns the `inspiration/` folder into an ordered implementation sequence. The goal is not "make it pretty" in one pass. The goal is to replace the remaining graybox read with a believable specialty game store while preserving the already validated retail loop.
 
 External alpha playtest remains paused until the owner recovery screenshot set, stockroom screenshot set, and this visual-overhaul review set are readable in a real `1280x720` window.

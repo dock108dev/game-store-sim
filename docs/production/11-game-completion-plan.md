@@ -1,5 +1,7 @@
 # Game Completion Plan
 
+Historical record. This file is retained because validation history and tests reference it, but it is not the active next-step source. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/*.md` for the current build and review workflow.
+
 This plan starts from the current validated prototype and defines the work needed to turn it into an actual buildable game.
 
 The current build has useful systems: first-person movement, click-first interaction, receiving, pricing, stocking, sales, trade-ins, preorders, services, ordering, release allocation, fixture placement, hidden-thread hooks, persistence smoke coverage, and a strong automated validation gate. The screenshots from June 7, 2026 show the gap clearly: the project is still visually and experientially a graybox prototype. This document is the production plan for closing that gap without losing the validated loop.

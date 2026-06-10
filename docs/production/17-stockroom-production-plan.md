@@ -1,5 +1,7 @@
 # Employees-Only Stockroom Production Plan
 
+Historical record. This stockroom plan is mechanically complete and retained for review context. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/screenshot-review.md` for the current review workflow.
+
 This stockroom production plan is mechanically implemented through Slice 8. The goal was to turn the current working backroom/receiving mechanics into a believable employees-only stockroom and office: incoming stock should arrive in an organized operations space, the player should physically bring products out to the sales floor, and the computer should live in a small office/management zone instead of feeling like a debug terminal in a graybox room.
 
 External alpha playtest remains paused until the owner recovery screenshot pass and stockroom screenshot pass are readable. This plan is complete as repo-side production work, not a playtest reopen.

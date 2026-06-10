@@ -1,5 +1,7 @@
 # Production Target Contracts
 
+Historical/reference record. These contracts guided the production-blockout and visual pass. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/screenshot-review.md` for the current review workflow.
+
 This document turns the game-completion plan into concrete production targets. It is intentionally stricter than the broad roadmap: future implementation slices should be able to point here and decide whether a scene, UI, customer, or content change is moving toward the actual game.
 
 ## Status

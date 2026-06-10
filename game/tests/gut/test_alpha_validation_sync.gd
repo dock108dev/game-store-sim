@@ -7,6 +7,7 @@ const COMPLETION_PLAN_PATH := "res://../docs/production/11-game-completion-plan.
 const BUG_LIST_PATH := "res://../docs/production/13-alpha-bug-list.md"
 const BACKLOG_PATH := "res://../docs/production/04-backlog.md"
 const PACKAGE_DOC_PATH := "res://../docs/production/15-alpha-playtest-package.md"
+const STATUS_PATH := "res://../docs/status.json"
 
 
 func test_alpha_validation_sync_scenario_matrix_is_automated() -> void:
@@ -40,20 +41,21 @@ func test_alpha_validation_sync_docs_name_stop_13_7() -> void:
 
 
 func test_alpha_validation_snapshot_records_current_gate_outputs() -> void:
+	var status := _load_json(STATUS_PATH)
 	var validation_doc := FileAccess.get_file_as_string(VALIDATION_DOC_PATH)
-	var manual_doc := FileAccess.get_file_as_string(MANUAL_DOC_PATH)
-	var completion_plan := FileAccess.get_file_as_string(COMPLETION_PLAN_PATH)
-	var bug_list := FileAccess.get_file_as_string(BUG_LIST_PATH)
+	var validation: Dictionary = status.get("validation", {})
+	var ui: Dictionary = validation.get("ui_automation", {})
+	var scripts: Dictionary = validation.get("script_test_mapping", {})
 
-	for doc in [validation_doc, manual_doc, completion_plan, bug_list]:
-		assert_string_contains(doc, "553 GUT tests")
-		assert_string_contains(doc, "508/628")
-		assert_string_contains(doc, "52/52")
-		assert_string_contains(doc, "3 active")
-		assert_string_contains(doc, "33 catalog products")
-
+	assert_eq(int(validation.get("gut_tests")), 553)
+	assert_eq(int(ui.get("automated")), 508)
+	assert_eq(int(ui.get("total")), 628)
+	assert_eq(int(scripts.get("covered")), 52)
+	assert_eq(int(scripts.get("total")), 52)
+	assert_eq(int(validation.get("active_validation_tools")), 3)
+	assert_eq(int(validation.get("catalog_products")), 33)
 	assert_string_contains(validation_doc, "Desktop pack export smoke passed")
-	assert_string_contains(completion_plan, "desktop pack smoke")
+	assert_eq(validation.get("desktop_pack_smoke"), "passed")
 
 
 func test_completion_handoff_points_to_readability_recovery_not_finished_milestones() -> void:
@@ -91,6 +93,8 @@ func test_alpha_bug_list_points_remaining_work_to_readability_recovery() -> void
 func test_alpha_manual_checklist_covers_all_alpha_focus_sections() -> void:
 	var manual_doc := FileAccess.get_file_as_string(MANUAL_DOC_PATH)
 	var package_doc := FileAccess.get_file_as_string(PACKAGE_DOC_PATH)
+	var status := _load_json(STATUS_PATH)
+	var active_docs: Array = status.get("active_docs", [])
 
 	var required_sections := [
 		"Alpha Bug Triage Focus",
@@ -109,6 +113,9 @@ func test_alpha_manual_checklist_covers_all_alpha_focus_sections() -> void:
 	assert_string_contains(package_doc, "scripts/validate_godot.sh")
 	assert_string_contains(package_doc, "Feedback Form")
 	assert_string_contains(manual_doc, "Every implementation summary should say whether these were checked, skipped, or not relevant.")
+	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
+	assert_true(active_docs.has("docs/qa/screenshot-review.md"))
+	assert_true(active_docs.has("docs/qa/release-package-check.md"))
 
 
 func _scenario_map(path: String) -> Dictionary:

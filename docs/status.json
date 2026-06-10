@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "project": "game-store-sim",
+  "status_date": "2026-06-10",
+  "current_phase": "production_visual_screenshot_review",
+  "playtest_state": "paused_pending_owner_review",
+  "playable_state": {
+    "summary": "Broad validated first-person retail loop with production-blockout visuals.",
+    "implemented_systems": [
+      "first_person_movement",
+      "click_first_interaction",
+      "receiving",
+      "carry_stack",
+      "pricing",
+      "stocking",
+      "register_sales",
+      "returns",
+      "trade_ins",
+      "preorders",
+      "services",
+      "supplier_ordering",
+      "release_allocation",
+      "launch_day_resolution",
+      "fixture_placement",
+      "save_load",
+      "settings_pause_menu",
+      "stockroom_backroom_workflows",
+      "hidden_thread_hooks"
+    ],
+    "visual_read": "production_blockout",
+    "human_review_required": true
+  },
+  "validation": {
+    "command": "scripts/validate_godot.sh",
+    "artifact_root": "artifacts/validation/latest",
+    "gut_tests": 553,
+    "gut_asserts": 7064,
+    "ui_automation": {
+      "automated": 508,
+      "total": 628,
+      "percent": 80.9,
+      "threshold_percent": 80
+    },
+    "script_test_mapping": {
+      "covered": 52,
+      "total": 52,
+      "percent": 100.0,
+      "threshold_percent": 80
+    },
+    "active_validation_tools": 3,
+    "catalog_products": 33,
+    "desktop_pack_smoke": "passed",
+    "alpha_performance_smoke": "passed",
+    "screenshot_sanity": "passed",
+    "old_name_scan": "passed"
+  },
+  "blocking_reviews": [
+    "owner_recovery_screenshot_review",
+    "owner_stockroom_screenshot_review",
+    "owner_production_visual_screenshot_review",
+    "manual_real_window_1280x720_review"
+  ],
+  "next_decision": {
+    "question": "Do the current screenshots read clearly enough to reopen the external alpha playtest package?",
+    "approve_path": "rerun validation, run release-package check, then reopen the alpha playtest package",
+    "reject_path": "fix only the failed screenshot/readability surfaces, then rerun validation and screenshot review"
+  },
+  "active_docs": [
+    "docs/CURRENT_STATE.md",
+    "docs/production/04-backlog.md",
+    "docs/production/06-validation.md",
+    "docs/production/13-alpha-bug-list.md",
+    "docs/production/15-alpha-playtest-package.md",
+    "docs/qa/smoke-playtest.md",
+    "docs/qa/full-day-playtest.md",
+    "docs/qa/screenshot-review.md",
+    "docs/qa/release-package-check.md"
+  ],
+  "historical_docs": [
+    "docs/production/01-vertical-slice-plan.md",
+    "docs/production/08-polish-roadmap.md",
+    "docs/production/09-backroom-polish-implementation-plan.md",
+    "docs/production/10-polish-execution-plan.md",
+    "docs/production/11-game-completion-plan.md",
+    "docs/production/12-production-target-contracts.md",
+    "docs/production/16-playability-readability-recovery-plan.md",
+    "docs/production/17-stockroom-production-plan.md",
+    "docs/production/18-production-visuals-plan.md"
+  ],
+  "validation_data_shape": {
+    "thresholds": "game/tests/validation/thresholds.json",
+    "scenario_manifests": "game/tests/validation/scenarios/*.json",
+    "script_mapping": "game/tests/validation/script_coverage/production_scripts.json",
+    "tool_manifests": "game/tests/validation/tool_checks/*.json"
+  }
+}

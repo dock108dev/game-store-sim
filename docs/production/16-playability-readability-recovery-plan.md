@@ -1,5 +1,7 @@
 # Playability Readability Recovery Plan
 
+Historical record. This recovery plan is implemented and retained for screenshot-review context. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/screenshot-review.md` for the current review workflow.
+
 This is the completed implementation plan after the June 9 manual screenshot review. Slices 1-7 and the label depth-safety stabilization are implemented; owner screenshot validation is the next gate before external playtest can reopen.
 
 The automated alpha gate is still valuable: movement, pickup, pricing, stocking, customers, register flows, services, ordering, storage, fixture placement, save/load, and package smoke remain mechanically protected. The manual evidence changes the release state: the build is not ready for external playtest because a player cannot reliably read the room, signs, prompts, customer roles, or pricing UI from normal play angles.

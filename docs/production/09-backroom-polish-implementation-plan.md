@@ -1,5 +1,7 @@
 # Backroom Polish Implementation Plan
 
+Historical record. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/*.md` for the current build and review workflow.
+
 This is the implementation plan for priority backlog item 2: backroom spatial and visual identity.
 
 The intent is to make the backroom read as a working retail operations space while preserving the validated first playable loop. This is a visual and spatial pass, not a computer UI rewrite.

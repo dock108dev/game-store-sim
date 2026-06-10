@@ -1,5 +1,7 @@
 # Polish Roadmap
 
+Historical record. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/*.md` for the current build and review workflow.
+
 This phase turns the validated graybox into a readable, appealing first production pass. The goal is not final art. The goal is visual clarity, better menus, stronger store identity, and a manual checklist that matches what the player actually sees.
 
 Active execution plan: `10-polish-execution-plan.md`.

@@ -1,5 +1,7 @@
 # Production Polish Execution Plan
 
+Historical record. Use `docs/CURRENT_STATE.md`, `docs/status.json`, and `docs/qa/*.md` for the current build and review workflow.
+
 This is the completed execution plan for the first production polish pass after the backroom spatial pass. It is retained as historical slice evidence. Current completion work is tracked in `11-game-completion-plan.md`.
 
 Every slice follows the same rule:
