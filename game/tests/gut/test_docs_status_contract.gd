@@ -8,7 +8,7 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_current_review_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "production_visual_screenshot_review")
+	assert_eq(status.get("current_phase"), "opening_store_quality_bar_design_planning")
 	assert_eq(status.get("playtest_state"), "paused_pending_owner_review")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
@@ -42,6 +42,9 @@ func test_docs_status_contract_points_to_active_docs() -> void:
 		assert_true(FileAccess.file_exists("res://../%s" % path), str(path))
 
 	assert_true(active_docs.has("docs/CURRENT_STATE.md"))
+	assert_true(active_docs.has("docs/design-planning/README.md"))
+	assert_true(active_docs.has("docs/design-planning/01-opening-store-quality-bar.md"))
+	assert_true(active_docs.has("docs/design-planning/08-quality-bar-checklist.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/full-day-playtest.md"))
 	assert_true(active_docs.has("docs/qa/screenshot-review.md"))

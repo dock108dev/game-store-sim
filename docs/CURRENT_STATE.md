@@ -50,15 +50,20 @@ Current visual risk areas:
 - Placeholder customer body/prop language.
 - Fixture and screenshot compositions that may still read as blockout from some angles.
 
+## Current Design Planning
+
+The active planning program is [Design Planning](design-planning/README.md). The first milestone is [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md): make the opening store, sales floor, receiving/stockroom, and backroom office good enough to become the quality bar for catalog, decoration, platform, and multi-day playtest work.
+
 ## Next Decision
 
 Review [Screenshot Review](qa/screenshot-review.md).
 
 If the screenshot set passes:
 
-1. Rerun `scripts/validate_godot.sh`.
-2. Run [Release Package Check](qa/release-package-check.md).
-3. Reopen [Alpha Playtest Package](production/15-alpha-playtest-package.md).
+1. Use [Opening Store Quality Bar](design-planning/01-opening-store-quality-bar.md) to decide whether the first store/backroom quality target is met.
+2. Rerun `scripts/validate_godot.sh`.
+3. Run [Release Package Check](qa/release-package-check.md) if the target is good enough for external alpha.
+4. Reopen [Alpha Playtest Package](production/15-alpha-playtest-package.md) only after the quality bar passes.
 
 If any screenshot fails:
 
@@ -70,6 +75,7 @@ If any screenshot fails:
 ## Active Documentation
 
 - [Validation](production/06-validation.md)
+- [Design Planning](design-planning/README.md)
 - [Backlog](production/04-backlog.md)
 - [Alpha Bug List](production/13-alpha-bug-list.md)
 - [Alpha Playtest Package](production/15-alpha-playtest-package.md)

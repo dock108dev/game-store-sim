@@ -30,6 +30,7 @@ Current validated baseline:
 ## Active Docs
 
 - [Current State](docs/CURRENT_STATE.md): source of truth for current status and next review decision.
+- [Design Planning](docs/design-planning/README.md): active opening-store quality-bar implementation planning.
 - [Validation](docs/production/06-validation.md): local gate, scenario manifests, thresholds, and artifacts.
 - [Smoke Playtest](docs/qa/smoke-playtest.md): short playable sanity run.
 - [Full-Day Playtest](docs/qa/full-day-playtest.md): internal full retail-loop QA.

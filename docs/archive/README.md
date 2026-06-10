@@ -24,6 +24,7 @@ Use these first:
 - `docs/production/06-validation.md`
 - `docs/production/13-alpha-bug-list.md`
 - `docs/production/15-alpha-playtest-package.md`
+- `docs/design-planning/*.md`
 - `docs/qa/*.md`
 
 ## Rule

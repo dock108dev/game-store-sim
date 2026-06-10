@@ -2,7 +2,7 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-10",
-  "current_phase": "production_visual_screenshot_review",
+  "current_phase": "opening_store_quality_bar_design_planning",
   "playtest_state": "paused_pending_owner_review",
   "playable_state": {
     "summary": "Broad validated first-person retail loop with production-blockout visuals.",
@@ -61,12 +61,17 @@
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Do the current screenshots read clearly enough to reopen the external alpha playtest package?",
-    "approve_path": "rerun validation, run release-package check, then reopen the alpha playtest package",
-    "reject_path": "fix only the failed screenshot/readability surfaces, then rerun validation and screenshot review"
+    "question": "Does the opening store, sales floor, receiving/stockroom, and backroom office meet the quality bar for future catalog and multi-day playtest work?",
+    "approve_path": "lock the opening-store quality bar, then start full catalog, platform, decoration, and multi-day playtest implementation",
+    "reject_path": "implement only the failed opening-store/backroom quality-bar slices, then rerun validation and screenshot review"
   },
   "active_docs": [
     "docs/CURRENT_STATE.md",
+    "docs/design-planning/README.md",
+    "docs/design-planning/00-inspiration-review.md",
+    "docs/design-planning/01-opening-store-quality-bar.md",
+    "docs/design-planning/08-quality-bar-checklist.md",
+    "docs/design-planning/09-testing-plan.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",

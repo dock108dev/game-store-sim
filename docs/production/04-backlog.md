@@ -4,18 +4,19 @@ This is the active production backlog. For current status, validation numbers, a
 
 ## Current Phase
 
-Production visual screenshot review.
+Opening store quality-bar design planning.
 
-Goal: decide whether the mechanically validated production-blockout build is readable enough to reopen the external alpha playtest package.
+Goal: make the opening store, sales floor, receiving/stockroom, and backroom office good enough to become the quality bar for full catalog, platform, decoration, and multi-day playtest work.
 
 Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, readability recovery implementation plus label depth-safety stabilization are complete, employees-only stockroom production is mechanically complete through Slice 8, the first post-stockroom returns baseline is implemented, and the production visual overhaul baseline is mechanically complete through Slice 14 in `18-production-visuals-plan.md`. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set, stockroom screenshot set, and production-visual review set in a real 1280x720 window.
 
 ## Next Decision
 
 1. Run `scripts/validate_godot.sh`.
-2. Review `artifacts/validation/latest/screenshots/` using `docs/qa/screenshot-review.md`.
-3. If screenshots pass, run `docs/qa/release-package-check.md` and reopen `15-alpha-playtest-package.md`.
-4. If screenshots fail, add the smallest actionable issue to `13-alpha-bug-list.md`, fix only that surface, and rerun the gate.
+2. Use `docs/design-planning/01-opening-store-quality-bar.md` as the implementation plan.
+3. Review `artifacts/validation/latest/screenshots/` using `docs/qa/screenshot-review.md` and `docs/design-planning/08-quality-bar-checklist.md`.
+4. If the quality bar passes, begin full catalog/platform/decor planning and multi-day playtest work.
+5. If the quality bar fails, add the smallest actionable issue to `13-alpha-bug-list.md`, fix only that surface, and rerun the gate.
 
 ## Current Rules
 
@@ -29,9 +30,10 @@ Status: the prototype and first polish pass are validated, Alpha hardening is co
 
 ## Active Work
 
-1. Screenshot review: owner recovery, stockroom, and production-visual screenshot sets.
-2. Release package check: pack smoke plus manual build/save/load relaunch review.
-3. External alpha playtest: paused until the above pass.
+1. Opening store quality-bar implementation planning.
+2. Screenshot review: owner recovery, stockroom, and production-visual screenshot sets.
+3. Full catalog, platform, decoration, and multi-day playtest work after the quality bar passes.
+4. External alpha playtest: paused until quality bar, screenshot review, and release-package check pass.
 
 ## Completed Baselines
 
