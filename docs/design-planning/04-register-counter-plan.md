@@ -35,6 +35,7 @@ Implemented in the current branch:
 - Register counter includes scanner, scan pad, payment terminal, receipt printer/slip, cash drawer, sleeve stack, customer approach marker, impulse rack, and queue/customer mats.
 - Transaction-specific surfaces cover sale, return, trade-in, preorder, and service pickup.
 - `RegisterModeCueRail` gives the five workflow states a physical read without adding extra interaction nodes.
+- `RegisterWorkflowCard` ties sale equipment together with a compact `SCAN PAY BAG` counter workflow cue.
 - Scene tests lock the prop set, labels, proximity to the register, and non-colliding visual-only behavior.
 
 This is the opening-store command-center baseline. Future work should improve art, animation, and UI polish while preserving the single-register interaction contract.

@@ -2086,6 +2086,22 @@ size = Vector3(0.18, 0.11, 0.018)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.68, 1.48, -2.24)
 material = SubResource("StandardMaterial3D_fixture_ghost_valid")
 
+[node name="RegisterWorkflowCard" type="CSGBox3D" parent="."]
+size = Vector3(0.5, 0.15, 0.018)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.04, 1.53, -2.34)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="RegisterWorkflowCardLabel" type="Label3D" parent="RegisterWorkflowCard"]
+pixel_size = 0.0019
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "SCAN PAY BAG"
+font_size = 10
+
 [node name="BackroomCatalogCardA" type="CSGBox3D" parent="."]
 size = Vector3(0.38, 0.46, 0.018)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.08, 1.12, 4.02)

@@ -1357,6 +1357,7 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		"CashDrawerSlot",
 		"CashDrawerPull",
 		"PaymentStatusGlowPanel",
+		"RegisterWorkflowCard",
 	]
 	for prop_path in transaction_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -1375,6 +1376,8 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 	assert_eq((_store.get_node("PreorderSlipStack/PreorderSlipStackLabel") as Label3D).text, "PRE")
 	assert_eq((_store.get_node("ServicePickupMarker/ServicePickupMarkerLabel") as Label3D).text, "SVC")
 	assert_eq((_store.get_node("SaleScanPad/SaleScanPadLabel") as Label3D).text, "SALE")
+	assert_eq((_store.get_node("RegisterWorkflowCard/RegisterWorkflowCardLabel") as Label3D).text, "SCAN PAY BAG")
+	assert_true((_store.get_node("RegisterWorkflowCard/RegisterWorkflowCardLabel") as Label3D).no_depth_test)
 	assert_lt((_store.get_node("RegisterModeSaleCue") as CSGBox3D).global_position.x, (_store.get_node("RegisterModeServiceCue") as CSGBox3D).global_position.x)
 
 
