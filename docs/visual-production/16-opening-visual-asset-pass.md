@@ -4,7 +4,22 @@
 
 Turn the improved mall-entry composition into the first real art benchmark.
 
-This is the next implementation cycle. It should happen before broader sales-floor, catalog, customer, decoration, or multi-day work. The current scene proves the route and framing, but too many visible objects still read as boxes with labels. This pass replaces that visible blockout language on the opening route with authored modular assets.
+This is the current owner-validation cycle. It happens before broader sales-floor, catalog, customer, decoration, or multi-day work. The implemented scene proves the route and framing and now includes the first authored modular asset pass for the visible mall/storefront/opening route. Owner review still needs to decide whether it clears enough of the previous box-label read to become the benchmark for the rest of the shop.
+
+## Implementation Status
+
+Implemented for review on June 12, 2026:
+
+- Mall shell: tile panels, grout seams, round rail posts, rail highlight, shutter slats, planter foliage, and directory map cues.
+- Storefront: additional mullions, mid-rails, threshold lip, open-door rails, sign glow backer, cartridge/disc icon details, and reduced sign-label scale.
+- Starter product set: two new-game cases, one console box, one accessory/controller box, cover strips, stickers, price tags, and display supports.
+- First interior benchmark corner: slatwall rails, new-release shelf, console display plinth, accessory peg, and packaged accessory detail.
+- Tests: `game/tests/gut/test_graybox_store.gd` now asserts the authored route modules, starter product kit, and first benchmark corner.
+
+Still pending:
+
+- Owner review of `main_scene.png`, `storefront_entry.png`, the latest contact sheet, and a real 1280x720 walk-in.
+- Corrections to any opening-route objects that still read as raw boxes, labels, or oversized debug signage.
 
 ## Slice Boundary
 
@@ -85,12 +100,12 @@ The player should still start outside the store on the second-floor mall concour
 
 ## Implementation Order
 
-1. Replace mall floor, wall edges, railing, planter, and neighbor-store blocks with a modular mall shell kit.
-2. Replace storefront frame, sign band, glass, door, handle, and threshold with authored pieces.
-3. Replace window/interior box stacks with the starter product/display kit.
-4. Rebuild the first interior corner so register/front shelf/new-release read by shape and material.
-5. Reduce oversized label panels to believable signage, decals, shelf talkers, tags, and packaging.
-6. Re-run scene tests, full validation, and screenshot review.
+1. Replace mall floor, wall edges, railing, planter, and neighbor-store blocks with a modular mall shell kit. Done.
+2. Replace storefront frame, sign band, glass, door, handle, and threshold with authored pieces. Done.
+3. Replace window/interior box stacks with the starter product/display kit. Done.
+4. Rebuild the first interior corner so register/front shelf/new-release read by shape and material. Done.
+5. Reduce oversized label panels to believable signage, decals, shelf talkers, tags, and packaging. First pass done; owner review may require further reduction.
+6. Re-run scene tests, full validation, and screenshot review. Automated validation required before signoff; owner screenshot review remains the final gate.
 
 ## Validation
 

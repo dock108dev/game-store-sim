@@ -5,13 +5,13 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 565 GUT tests, 9721 asserts, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, and 60 catalog products.
+- Latest full gate passes with 567 GUT tests, 9868 asserts, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, and 60 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - All 23 required screenshot files are present, screenshot sanity passes, and `artifacts/validation/latest/screenshot-contact-sheet.png` is ready for owner review.
 - Manual controller/window/playtest validation still needs a human pass.
 - June 9 manual screenshots found P0 readability blockers in the actual game window. Readability recovery implementation is complete, but external playtest is paused until the owner recovery screenshot set passes.
 - June 9 follow-up reports angle-dependent label clipping on panel-backed signs and product labels; label depth-safety stabilization is implemented and must be verified during owner screenshot validation.
-- June 12 owner review rejected the first phase 0-4 visual pass as too blockout/label-driven. The second-floor mall opening/storefront reset is directionally better, but the active P1 visual target is now the opening visual asset pass: replace visible blockout/box-label graphics on the mall spawn, storefront, threshold, and first interior view before broader store work.
+- June 12 owner review rejected the first phase 0-4 visual pass as too blockout/label-driven. The second-floor mall opening/storefront reset is directionally better, and the active P1 visual target now has a first implemented asset pass replacing key blockout/box-label graphics on the mall spawn, storefront, threshold, and first interior view before broader store work.
 
 ## Priority Key
 
@@ -24,7 +24,7 @@ Current gate state:
 
 | ID | Priority | Area | Evidence | Problem | Target Slice | Acceptance |
 | --- | --- | --- | --- | --- | --- | --- |
-| AH-001 | P1 | Store visual read | `main_scene.png`, `storefront_entry.png`, `customer_queue.png`, `fixture_placed.png` | The first broad phase 0-4 pass still read as a graybox from normal angles: large blank planes, low material variation, flat ceiling/floor, sparse merchandising density, and too many labels carrying identity. The mall-entry reset improves composition but still exposes box graphics and label-driven props. | Opening visual asset pass | Main scene starts on a second-floor mall concourse, reads as a branded game shop before text, lets the player walk in, and the first interior corner reads as a shop without raw box/label graphics. |
+| AH-001 | P1 | Store visual read | `main_scene.png`, `storefront_entry.png`, `customer_queue.png`, `fixture_placed.png` | The first broad phase 0-4 pass still read as a graybox from normal angles: large blank planes, low material variation, flat ceiling/floor, sparse merchandising density, and too many labels carrying identity. The mall-entry reset and opening asset pass improve composition and replace key route blockout pieces, but owner screenshot validation still needs to approve whether the result clears the box-label read. | Opening visual asset pass implemented; owner review next | Main scene starts on a second-floor mall concourse, reads as a branded game shop before text, lets the player walk in, and the first interior corner reads as a shop without raw box/label graphics. |
 | AH-002 | P1 | Signage and hierarchy | `main_scene.png`, `customer_queue.png`, `fixture_placed.png`, `receiving_area.png` | Several signs are cropped, occluded, or weakly framed from player angles, including register/backroom/display/fixture signage. | Stop 13.4 content pass | Key signs are readable, fictional, and framed without clipping from screenshot viewpoints. |
 | AH-003 | P1 | Customer readability | `customer_queue.png`, `suspicious_customer.png`, `trade_in_offer.png` | Customer roles are still carried mostly by floating labels, colors, and large props; bodies remain placeholder-like and props can visually collide with heads/torso. | Stop 13.4 content pass | Buyer, trade-in, preorder, service, and suspicious customers read by silhouette/prop placement before prompt text. |
 | AH-004 | P1 | Queue and register composition | `customer_queue.png`, `register_counter.png`, `preorder_deposit.png`, `service_request.png` | Register-side roles crowd the same visual lane, with overlapping labels/props and weak separation between buyer queue and special customers. | Stop 13.3 regression tests, Stop 13.4 content pass | Customer queue, special-customer arc, and register prompt remain readable with no label pileup in the screenshot set. |
@@ -46,7 +46,7 @@ Current gate state:
 - Core retail loop tests pass, including pickup, pricing, stocking, checkout, trade-ins, preorders, services, ordering, fixture placement, save/load codec, settings, pause/menu, hidden-thread optionality, screenshots, and export pack smoke.
 - AH-001 through AH-008 completed automated routing through the alpha regression, scene-readability, content/copy, and readability recovery slices, but owner screenshot validation still needs to confirm the real-window result before external playtest.
 - AH-011 remains the known human-feel checkpoint: multi-day economy balance is mechanically covered but still needs external playtest notes before alpha approval.
-- Opening-store quality-bar slices 1 through 8, including full first-catalog and decoration/upgrade surface hooks, are mechanically complete as prototype systems. The latest owner visual review reset the art target, so the current gate is `docs/visual-production/16-opening-visual-asset-pass.md` before multi-day playtest work.
+- Opening-store quality-bar slices 1 through 8, including full first-catalog and decoration/upgrade surface hooks, are mechanically complete as prototype systems. The latest owner visual review reset the art target, and the implemented opening asset pass in `docs/visual-production/16-opening-visual-asset-pass.md` now needs owner validation before multi-day playtest work.
 - The stockroom production phase in `17-stockroom-production-plan.md` is mechanically complete through Slice 8, and the production-visual baseline in `18-production-visuals-plan.md` is mechanically complete through Slice 14; neither phase reopens external playtest by itself without owner screenshot review.
 
 ## Slice Routing

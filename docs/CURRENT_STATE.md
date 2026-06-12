@@ -4,7 +4,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 ## Playable Build
 
-The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. That composition is directionally better, but it is still visibly built from blockout boxes and label-driven props. The first-person retail loop includes:
+The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented for owner review: the mall shell, storefront, starter products, and first interior benchmark corner now use authored modular pieces instead of relying only on raw blockout boxes and large labels. The first-person retail loop includes:
 
 - Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
@@ -20,7 +20,7 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 565 GUT tests and 9721 asserts pass.
+- 567 GUT tests and 9868 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 52/52, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
@@ -32,7 +32,7 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new opening composition is improved, but the next gate is not more layout breadth. The next gate is the opening visual asset pass: replace visible blockout/box-label graphics on the `mall spawn -> storefront -> threshold -> first interior view` route with authored modular assets.
+External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new opening composition and first asset pass are implemented, but the next gate is not more layout breadth. The next gate is owner validation of the opening asset pass on the `mall spawn -> storefront -> threshold -> first interior view` route.
 
 Required reviews:
 
@@ -45,14 +45,14 @@ Required reviews:
 
 ## Visual Read
 
-The current scene is still pending owner art approval. The accepted direction is now narrower: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state. The immediate visual problem is that too many visible objects still read as boxes with labels rather than authored retail assets.
+The current scene is still pending owner art approval. The accepted direction is narrow: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state. The first asset pass adds tile panels, rail posts, shutter details, planter foliage, storefront mullions, threshold pieces, starter product packaging, and a first interior benchmark corner. Owner review still needs to decide whether this clears enough of the box-label read to become the style benchmark.
 
 Current visual risk areas:
 
-- Opening route objects still read as Godot blockout boxes from player views.
+- Opening route blockout read is reduced, but screenshots still need owner approval.
 - Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
-- CSG primitives are being used as visual stand-ins beyond their useful prototype role.
-- First interior view needs one polished benchmark corner before the rest of the shop expands.
+- CSG primitives are still the implementation medium for this pass, so shape/material quality needs screenshot review.
+- The first interior benchmark corner exists, but it needs approval before the rest of the shop expands.
 - Dense backroom computer screens.
 - Some UI panels and labels needing real-window readability approval.
 - Customer body/prop language is mechanically present but intentionally hidden for the opening state.
@@ -81,19 +81,18 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review [Opening Visual Asset Pass](visual-production/16-opening-visual-asset-pass.md) and agree on the implement -> validate cycle before more scene work.
+Review the implemented [Opening Visual Asset Pass](visual-production/16-opening-visual-asset-pass.md), the latest contact sheet, and a real-window 1280x720 walk-in before more scene work.
 
-If the opening asset pass plan passes:
+If the opening asset pass passes owner review:
 
-1. Replace visible CSG/box-label graphics on the opening route with authored modular assets.
-2. Rebuild the first interior corner with the same material, lighting, trim, and prop language.
-3. Use [Visual QA Checklist](visual-production/13-visual-qa-checklist.md) for the opening screenshots first, then restore all 23 screenshot approvals after the slice is approved.
-4. Keep catalog/unlock/receiving rules as a hard progression constraint.
+1. Use this pass as the style benchmark for product/fixture and broader sales-floor replacement.
+2. Use [Visual QA Checklist](visual-production/13-visual-qa-checklist.md) for the opening screenshots first, then restore all 23 screenshot approvals after the next slice.
+3. Keep catalog/unlock/receiving rules as a hard progression constraint.
 
-If the opening asset pass plan fails:
+If the opening asset pass fails owner review:
 
 1. Revise the visual-production docs.
-2. Patch the rejected mall/storefront asset targets or visual rules.
+2. Patch the rejected mall shell, storefront, starter product, or first interior benchmark asset targets.
 3. Keep external alpha playtest paused.
 
 ## Active Documentation

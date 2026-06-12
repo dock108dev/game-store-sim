@@ -121,6 +121,113 @@ func test_storefront_entry_has_production_cues() -> void:
 	assert_eq(glass_material.transparency, BaseMaterial3D.TRANSPARENCY_ALPHA)
 
 
+func test_opening_visual_asset_pass_has_authored_route_modules() -> void:
+	var mall_shell_boxes := [
+		"SecondFloorMallConcourse/MallTilePanelNearLeft",
+		"SecondFloorMallConcourse/MallTilePanelNearRight",
+		"SecondFloorMallConcourse/MallTilePanelFarLeft",
+		"SecondFloorMallConcourse/MallTilePanelFarRight",
+		"SecondFloorMallConcourse/MallRailTopHighlight",
+		"SecondFloorMallConcourse/NeighborStoreLeftShutterSlatA",
+		"SecondFloorMallConcourse/NeighborStoreRightShutterSlatA",
+		"SecondFloorMallConcourse/MallDirectoryMapLineA",
+		"SecondFloorMallConcourse/MallDirectoryMapDot",
+	]
+	for prop_path in mall_shell_boxes:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+
+	for prop_path in [
+		"SecondFloorMallConcourse/MallRailPostRoundA",
+		"SecondFloorMallConcourse/MallRailPostRoundB",
+		"SecondFloorMallConcourse/MallPlanterLeftLeafA",
+		"SecondFloorMallConcourse/MallPlanterRightLeafA",
+		"StoreIdentitySignDiscIcon",
+	]:
+		var prop := _store.get_node_or_null(prop_path) as CSGCylinder3D
+		assert_not_null(prop, prop_path)
+		assert_gte(prop.sides, 7, prop_path)
+
+	var storefront_modules := [
+		"StorefrontGlassLeftMullionVerticalA",
+		"StorefrontGlassLeftMullionMidRail",
+		"StorefrontGlassRightMullionVerticalA",
+		"StorefrontGlassRightMullionMidRail",
+		"StoreIdentitySignGlowBacker",
+		"StoreIdentitySignCartridgeIcon",
+		"StoreIdentitySignCartridgeNotch",
+		"StorefrontOpenDoorTopRail",
+		"StorefrontOpenDoorBottomRail",
+		"StorefrontThresholdMetalLip",
+		"StorefrontThresholdRubberInset",
+	]
+	for prop_path in storefront_modules:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+		assert_lt(prop.global_position.z, -5.0, prop_path)
+
+	var sign_label := _store.get_node("StoreIdentitySignPanel/StoreIdentitySignLabel") as Label3D
+	var setup_label := _store.get_node("OpenSignPanel/OpenSignLabel") as Label3D
+	var hours_label := _store.get_node("HoursDecalPanel/HoursDecalLabel") as Label3D
+	assert_lte(sign_label.pixel_size, 0.0041)
+	assert_lte(setup_label.pixel_size, 0.0028)
+	assert_lte(hours_label.pixel_size, 0.0027)
+
+
+func test_opening_visual_asset_pass_has_starter_products_and_first_corner() -> void:
+	var starter_product_boxes := [
+		"StarterNewGameCaseA",
+		"StarterNewGameCaseA/StarterNewGameCaseACoverStripe",
+		"StarterNewGameCaseA/StarterNewGameCaseAPriceTag",
+		"StarterNewGameCaseB",
+		"StarterNewGameCaseB/StarterNewGameCaseBCoverStripe",
+		"StarterNewGameCaseB/StarterNewGameCaseBPlatformBand",
+		"StarterConsoleBox",
+		"StarterConsoleBox/StarterConsoleBoxHandle",
+		"StarterConsoleBox/StarterConsoleBoxScreenGraphic",
+		"StarterAccessoryBox",
+		"StarterAccessoryBox/StarterAccessoryControllerSilhouette",
+		"StarterAccessoryBox/StarterAccessoryButtonDotA",
+		"StarterAccessoryBox/StarterAccessoryButtonDotB",
+		"WindowDisplayCaseA/WindowDisplayCaseACoverBand",
+		"WindowDisplayCaseA/WindowDisplayCaseASpineStrip",
+		"WindowDisplayCaseB/WindowDisplayCaseBPlatformBand",
+		"WindowDisplayCaseB/WindowDisplayCaseBSealSticker",
+	]
+	for prop_path in starter_product_boxes:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+
+	var first_corner_boxes := [
+		"FirstInteriorBenchmarkSlatwall",
+		"FirstInteriorSlatRailA",
+		"FirstInteriorSlatRailB",
+		"FirstInteriorSlatRailC",
+		"FirstInteriorNewReleaseShelf",
+		"FirstInteriorConsoleDisplayPlinth",
+		"FirstInteriorConsoleDisplayBox",
+		"FirstInteriorConsoleDisplayBox/FirstInteriorConsoleDisplayGraphic",
+		"FirstInteriorAccessoryPegA",
+		"FirstInteriorAccessoryPackA",
+		"FirstInteriorAccessoryPackA/FirstInteriorAccessoryPackAIcon",
+	]
+	for prop_path in first_corner_boxes:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+		assert_lt(prop.global_position.z, -4.0, prop_path)
+
+	assert_lt((_store.get_node("FirstInteriorNewReleaseShelf") as CSGBox3D).global_position.z, -4.5)
+	assert_gt((_store.get_node("FirstInteriorBenchmarkSlatwall") as CSGBox3D).size.x, 2.0)
+	assert_gt((_store.get_node("FirstInteriorConsoleDisplayBox") as CSGBox3D).size.y, 0.2)
+	assert_lt((_store.get_node("StarterNewGameCaseA") as CSGBox3D).size.x, 0.24)
+	assert_lt((_store.get_node("StarterNewGameCaseB") as CSGBox3D).size.x, 0.24)
+
+
 func test_opening_spawn_composition_has_first_view_landmarks() -> void:
 	var player := _store.get_node("PlayerController") as CharacterBody3D
 	var store_sign := _store.get_node_or_null("StoreIdentitySignPanel") as CSGBox3D

@@ -55,7 +55,7 @@ Exit criteria:
 
 ## Phase 1A: Opening Visual Asset Pass
 
-Status: planned next; ready for implementation discussion.
+Status: implemented; ready for owner screenshot and real-window walk-in review.
 
 Scope:
 
@@ -67,15 +67,15 @@ Scope:
 
 Deliverables:
 
-- Authored mall/storefront shell kit.
-- Authored signage/decal treatment that supports identity without carrying it alone.
-- Authored starter product/display props for 2 games, 1 console, and 1 accessory.
-- Beveled/trimmed store shell, floor, ceiling, rail, planter, and window details.
-- Updated scene tests and screenshot review notes.
+- Authored mall/storefront shell kit. Implemented as tile panels, grout seams, round rail posts, shutter slats, planters, directory detail, storefront mullions, threshold pieces, and sign treatment.
+- Authored signage/decal treatment that supports identity without carrying it alone. Implemented with smaller decals, sign icons, and storefront module details.
+- Authored starter product/display props for 2 games, 1 console, and 1 accessory. Implemented in the window/entry route with case, console, accessory, cover, sticker, and price-tag modules.
+- Beveled/trimmed store shell, floor, ceiling, rail, planter, and window details. Implemented as the first modular CSG asset pass.
+- Updated scene tests and screenshot review notes. Implemented; owner approval remains pending.
 
 Exit criteria:
 
-- `main_scene.png` and `storefront_entry.png` do not read as box graphics with labels.
+- `main_scene.png` and `storefront_entry.png` do not read as box graphics with labels after owner review.
 - The route reads as a mall game shop before small text is read.
 - The first interior corner becomes the style benchmark for the rest of the store.
 - The player can still walk from spawn through the storefront without new blockers.
@@ -83,7 +83,7 @@ Exit criteria:
 
 ## Phase 2: Product And Fixture Kit
 
-Status: mechanically present; paused until Phase 1A is approved.
+Status: mechanically present; paused until Phase 1A owner review is approved.
 
 Scope:
 
@@ -100,7 +100,7 @@ Exit criteria:
 
 ## Phase 3: Backroom Operations Kit
 
-Status: mechanically present; paused until Phase 1A is approved.
+Status: mechanically present; paused until Phase 1A owner review is approved.
 
 Scope:
 
@@ -115,7 +115,7 @@ Exit criteria:
 
 ## Phase 4: Customer Role Visuals
 
-Status: mechanically present; hidden during the pre-open slice and paused until Phase 1A is approved.
+Status: mechanically present; hidden during the pre-open slice and paused until Phase 1A owner review is approved.
 
 Scope:
 

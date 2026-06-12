@@ -1,6 +1,6 @@
 # Screenshot Review
 
-Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, but the active review target is now the opening visual asset pass.
+Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the active review target is now the implemented opening visual asset pass.
 
 ## Generate
 
@@ -22,12 +22,12 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 565 GUT tests and 9721 asserts.
+- Full validation passed with 567 GUT tests and 9868 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
-- Current visual evidence is not art-approved. It is the baseline for replacing visible blockout/box-label graphics on the opening route.
+- Current visual evidence is not art-approved. It is the first implemented pass at replacing visible blockout/box-label graphics on the opening route.
 
 ## Required Screenshots
 
