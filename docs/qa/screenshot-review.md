@@ -1,6 +1,6 @@
 # Screenshot Review
 
-Use this to approve or reject the current production-blockout visuals before reopening external alpha playtest.
+Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest.
 
 ## Generate
 
@@ -20,9 +20,9 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 ## Latest Automated Lock
 
-Generated on June 10, 2026 from `scripts/validate_godot.sh`.
+Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 563 GUT tests and 9607 asserts.
+- Full validation passed with 563 GUT tests and 9630 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.

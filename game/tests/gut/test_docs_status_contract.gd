@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_current_review_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "opening_store_catalog_decor_quality_bar_ready_for_owner_review")
-	assert_eq(status.get("playtest_state"), "paused_pending_owner_review")
+	assert_eq(status.get("current_phase"), "visual_production_reset_ready_for_owner_review")
+	assert_eq(status.get("playtest_state"), "paused_pending_visual_reset_review")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "production_blockout")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "prototype_blockout_visuals")
 
 
 func test_docs_status_contract_records_validation_baseline() -> void:
@@ -22,7 +22,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 563)
-	assert_eq(int(validation.get("gut_asserts")), 9607)
+	assert_eq(int(validation.get("gut_asserts")), 9630)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 52)
@@ -44,6 +44,12 @@ func test_docs_status_contract_points_to_active_docs() -> void:
 		assert_true(FileAccess.file_exists("res://../%s" % path), str(path))
 
 	assert_true(active_docs.has("docs/CURRENT_STATE.md"))
+	assert_true(active_docs.has("docs/visual-production/README.md"))
+	assert_true(active_docs.has("docs/visual-production/00-visual-reset.md"))
+	assert_true(active_docs.has("docs/visual-production/01-art-direction-target.md"))
+	assert_true(active_docs.has("docs/visual-production/12-implementation-roadmap.md"))
+	assert_true(active_docs.has("docs/visual-production/13-visual-qa-checklist.md"))
+	assert_true(active_docs.has("docs/visual-production/15-day-one-stock-and-unlocks.md"))
 	assert_true(active_docs.has("docs/design-planning/README.md"))
 	assert_true(active_docs.has("docs/design-planning/01-opening-store-quality-bar.md"))
 	assert_true(active_docs.has("docs/design-planning/08-quality-bar-checklist.md"))

@@ -1,6 +1,8 @@
 # Design Planning
 
-This folder is the active planning space for turning the first store and backroom from a functional blockout into the quality bar for the rest of the game.
+This folder is the completed planning record for the opening-store quality-bar attempt.
+
+The current active visual direction has moved to [Visual Production](../visual-production/README.md). Use that folder for final art direction, asset-pipeline planning, visual slice implementation, and visual QA.
 
 Every file should have one clear job:
 
@@ -9,11 +11,11 @@ Every file should have one clear job:
 - Checklist docs define pass/fail review.
 - Testing docs define validation and playtest coverage.
 
-## Current Program
+## Current Status
 
-Start with [Opening Store Quality Bar](01-opening-store-quality-bar.md).
+The docs in this folder still matter for mechanics, zone intent, screenshot names, nonblocking path/prompt rules, and catalog/decor language. They no longer define the final visual bar.
 
-The immediate goal is not more economy depth. The goal is to make the first store, stockroom, and backroom feel intentional enough that later catalog, decoration, console, and day-loop work has a concrete quality target.
+Start visual work with [Visual Production](../visual-production/README.md), not another CSG/label-heavy polish pass.
 
 ## Planning Docs
 

@@ -6,6 +6,8 @@ First-person specialty video game retail simulator. The player runs a small game
 
 Read [Current State](docs/CURRENT_STATE.md) first. It is the authoritative human-readable handoff for what is playable, what is validated, what remains blocked by human review, and which docs are active.
 
+Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current scene is a functional prototype/blockout, not the final visual bar.
+
 Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
 
 ## Validate
@@ -30,6 +32,7 @@ Current validated baseline:
 ## Active Docs
 
 - [Current State](docs/CURRENT_STATE.md): source of truth for current status and next review decision.
+- [Visual Production](docs/visual-production/README.md): active visual reset, art direction, asset pipeline, and visual QA plan.
 - [Design Planning](docs/design-planning/README.md): active opening-store quality-bar implementation planning.
 - [Validation](docs/production/06-validation.md): local gate, scenario manifests, thresholds, and artifacts.
 - [Smoke Playtest](docs/qa/smoke-playtest.md): short playable sanity run.
