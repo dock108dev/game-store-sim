@@ -1,6 +1,6 @@
 # Screenshot Review
 
-Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the active review target is now the implemented opening visual asset pass.
+Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the scene architecture is accepted as infrastructure. Visual quality is still not approved. The active review target is now the prototype visual language cleanup pass.
 
 ## Generate
 
@@ -22,12 +22,12 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 570 GUT tests and 9959 asserts.
+- Full validation passed with 570 GUT tests and 9961 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
-- Current visual evidence is not art-approved. It is the first implemented pass at replacing visible blockout/box-label graphics on the opening route, now captured from the promoted `store_world.tscn` production scene.
+- Current visual evidence is not art-approved. It is captured from the promoted `store_world.tscn` production scene, but still has too many labels, debug-like callouts, random clutter, and a weak backroom boundary.
 
 ## Required Screenshots
 
@@ -63,6 +63,8 @@ Pass only if:
 - The opening screenshot starts outside the shop on a second-floor mall concourse and the entry route is walkable.
 - The opening state has no visible customers or employees before business begins.
 - `main_scene.png` and `storefront_entry.png` do not read as raw boxes with labels.
+- `register_counter.png`, `receiving_area.png`, and `backroom_summary.png` do not read as label-driven prototype staging.
+- The backroom reads as a staff-only room or threshold, not a floor line.
 - Storefront, sales floor, register, receiving, stockroom, and backroom zones are distinguishable without reading docs.
 - Prompt, reticle, product label, shelf label, and modal text are readable at 1280x720.
 - Customers read by silhouette, role prop, queue position, and compact marker before relying on long labels.
@@ -75,13 +77,16 @@ Fail if:
 
 - The screenshot still reads mainly as graybox.
 - Opening-route objects still look like blockout boxes unless they are intentionally cardboard boxes.
+- The store still depends on labels or debug-like signs to explain most objects.
+- The backroom is still separated only by a line, marker, or label.
+- Boxes, papers, and props look randomly dumped instead of staged for receiving, sorting, display, or backstock.
 - A player would need a doc explanation to understand the current action.
 - Text is too small, clipped, low contrast, or crowded.
 - A prop, sign, customer, fixture, or modal competes with the action target.
 
 ## Routing
 
-Before broadening visual work beyond the opening route, review `docs/visual-production/17-scene-architecture-modularization.md` and confirm the implemented `store_world.tscn` plus reusable module-manifest baseline is approved. If the boundaries fail review, revise them before adding product, fixture, or customer visual breadth.
+Before broadening visual work beyond the opening route, review `docs/visual-production/18-prototype-visual-language-cleanup.md` and confirm the cleanup pass has removed the label/debug/clutter/backroom-line read. If cleanup fails review, keep iterating there before adding product, fixture, or customer visual breadth.
 
 If all screenshots pass, run `docs/qa/release-package-check.md` and consider reopening `docs/production/15-alpha-playtest-package.md`.
 

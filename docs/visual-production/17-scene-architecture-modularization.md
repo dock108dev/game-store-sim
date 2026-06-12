@@ -12,11 +12,11 @@ This implementation pass creates a modular production scene architecture while p
 
 Do not delete `graybox_store.tscn` during the first modularization pass.
 
-Use it as the legacy compatibility wrapper until the production world is owner-approved. The new production path has been introduced, validated, and promoted after the player route, interaction targets, screenshot capture, and tests stayed green.
+Use it as the legacy compatibility wrapper during the next cleanup pass. The new production path has been introduced, validated, promoted, and accepted as the infrastructure baseline after the player route, interaction targets, screenshot capture, and tests stayed green.
 
 ## Implementation Status
 
-Implemented for review on June 12, 2026:
+Implemented and accepted as infrastructure on June 12, 2026:
 
 - `game/scenes/world/store_world.tscn` is the production main scene.
 - `game/scenes/world/graybox_store.tscn` is retained as a thin compatibility wrapper around `store_world.tscn`.
@@ -24,7 +24,7 @@ Implemented for review on June 12, 2026:
 - `game/scripts/world/visual_module_manifest.gd` records `module_id`, responsibility, and owned node names, with tests verifying every owned node resolves in the production world.
 - `game/project.godot`, screenshot capture tools, performance tooling, and main-scene tests now target `store_world.tscn`.
 
-The implementation is intentionally conservative: visual and gameplay nodes keep their validated runtime placement while manifests and production anchors define ownership. Do not do a deeper physical child-node move until owner validation confirms the module boundaries are right.
+The implementation is intentionally conservative: visual and gameplay nodes keep their validated runtime placement while manifests and production anchors define ownership. Do not do a deeper physical child-node move unless the prototype visual language cleanup pass needs it.
 
 ## Target Outcome
 
@@ -174,7 +174,7 @@ Exit criteria:
 
 ### Slice 2: Opening Route Module Extraction
 
-Status: implemented as ownership manifests and production anchors; physical child extraction is deferred until owner validation.
+Status: implemented as ownership manifests and production anchors; physical child extraction is deferred until a cleanup or visual-breadth slice needs it.
 
 Goal: extract only the approved opening route first.
 
@@ -219,7 +219,7 @@ Exit criteria:
 
 ### Slice 4: Fixture And Backroom Module Extraction
 
-Status: implemented as ownership manifests for counter, fixtures, receiving, and backroom surfaces; deeper physical extraction remains a follow-up after boundary validation.
+Status: implemented as ownership manifests for counter, fixtures, receiving, and backroom surfaces; deeper physical extraction remains a follow-up when a cleanup or visual-breadth slice needs it.
 
 Goal: split the rest of the currently validated store without broad visual redesign.
 
@@ -262,7 +262,7 @@ Exit criteria:
 
 ### Slice 6: Legacy Scene Retirement
 
-Status: not started; intentionally deferred until owner validation and at least one more visual implementation cycle proves the wrapper is no longer useful.
+Status: not started; intentionally deferred until at least one more visual implementation cycle proves the wrapper is no longer useful.
 
 Goal: stop editing `graybox_store.tscn` for production visuals.
 
@@ -356,9 +356,8 @@ This modularization phase passes when:
 - The screenshot harness captures the production scene.
 - Active docs no longer imply that the long-term game world is `graybox_store.tscn`.
 
-Current owner validation questions:
+Next implementation questions:
 
-- Do the module boundaries match how future implementation should be divided?
-- Is the manifest-first extraction enough for the next product/fixture visual pass, or should any module physically own child nodes before that work begins?
-- Should `graybox_store.tscn` remain as a compatibility wrapper for one more visual cycle?
-- Are `main_scene.png`, `storefront_entry.png`, and the contact sheet acceptable evidence for continuing into product/fixture art breadth?
+- Does the cleanup pass need deeper physical child-node extraction inside any module?
+- Can the compatibility wrapper remain untouched while cleanup work happens in `store_world.tscn`?
+- Do label removal, backroom threshold work, and clutter cleanup preserve the stable interaction targets named in this document?

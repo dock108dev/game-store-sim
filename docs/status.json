@@ -2,10 +2,10 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-12",
-  "current_phase": "scene_architecture_modularization_implemented_ready_for_owner_validation",
-  "playtest_state": "paused_pending_modular_scene_owner_review",
+  "current_phase": "prototype_visual_language_cleanup_ready_for_implementation",
+  "playtest_state": "paused_pending_visual_cleanup_owner_review",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice now starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. Scene architecture modularization is now implemented for review: store_world.tscn is the production main scene, graybox_store.tscn is a compatibility wrapper, reusable module manifests define visual/system ownership, and screenshot/tools now target the production scene before broader product or fixture visuals continue.",
+    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. Scene architecture modularization is accepted as infrastructure: store_world.tscn is the production main scene, graybox_store.tscn is a compatibility wrapper, and reusable module manifests define visual/system ownership. Visual quality is not approved yet; the next implementation pass is prototype visual language cleanup before product, fixture, catalog, customer, or decoration breadth.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "opening_visual_asset_pass_review_ready",
+    "visual_read": "prototype_visual_language_cleanup_required",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 9959,
+    "gut_asserts": 9961,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -60,7 +60,7 @@
   },
   "blocking_reviews": [
     "owner_opening_visual_asset_pass_signoff",
-    "owner_scene_architecture_modularization_validation",
+    "owner_prototype_visual_language_cleanup_signoff",
     "owner_opening_mall_storefront_screenshot_review",
     "owner_walk_in_empty_store_review",
     "owner_day_one_stock_flow_review",
@@ -68,9 +68,9 @@
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Does the implemented store_world scene architecture pass owner validation as the baseline for the next visual implementation cycle?",
-    "approve_path": "continue with product and fixture visual-kit implementation on top of store_world.tscn and its module ownership boundaries",
-    "reject_path": "revise module boundaries, ownership manifests, or promotion strategy before adding more visual breadth"
+    "question": "Does the next cleanup pass remove enough labels, random clutter, and backroom line-divider read to make the store interior worth using as the visual baseline?",
+    "approve_path": "implement product and fixture visual-kit breadth on top of the cleaned store_world baseline",
+    "reject_path": "continue prototype-language cleanup or revise the store/backroom composition before adding broader catalog visuals"
   },
   "active_docs": [
     "docs/CURRENT_STATE.md",
@@ -93,6 +93,7 @@
     "docs/visual-production/15-day-one-stock-and-unlocks.md",
     "docs/visual-production/16-opening-visual-asset-pass.md",
     "docs/visual-production/17-scene-architecture-modularization.md",
+    "docs/visual-production/18-prototype-visual-language-cleanup.md",
     "docs/design-planning/README.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",

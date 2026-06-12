@@ -13,7 +13,7 @@ Use this order:
 Current automated baseline:
 
 - 570 GUT tests.
-- 9959 GUT asserts.
+- 9961 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping coverage: 53/53.
 - 3 active standalone validation tools.

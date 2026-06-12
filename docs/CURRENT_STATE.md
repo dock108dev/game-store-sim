@@ -4,7 +4,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 ## Playable Build
 
-The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented for owner review: the mall shell, storefront, starter products, and first interior benchmark corner now use authored modular pieces instead of relying only on raw blockout boxes and large labels. Scene architecture modularization is also implemented: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. The first-person retail loop includes:
+The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented, and scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. Visual quality is not approved yet. The next implementation pass is prototype visual language cleanup: remove label/debug reads, replace the backroom line divider with a real staff threshold, clean random clutter, and prove one believable front-store benchmark before product/fixture breadth. The first-person retail loop includes:
 
 - Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
@@ -20,7 +20,7 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 570 GUT tests and 9959 asserts pass.
+- 570 GUT tests and 9961 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 53/53, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
@@ -32,12 +32,12 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new opening composition, first asset pass, and production-scene/module architecture are implemented. The next gate is owner validation of the `store_world.tscn` boundaries and screenshots before more product, fixture, backroom, or customer visuals are added.
+External alpha playtest remains paused. The repo is mechanically green, but the visual read still fails the owner bar. The opening composition and modular production scene are directionally better, but the store still relies too much on labels, debug-like callouts, random clutter, and a weak backroom boundary. The next gate is implementation and owner validation of [Prototype Visual Language Cleanup](visual-production/18-prototype-visual-language-cleanup.md).
 
 Required reviews:
 
 - Owner opening visual asset pass signoff.
-- Owner scene architecture modularization validation.
+- Owner prototype visual language cleanup signoff.
 - Owner opening mall/storefront screenshot review.
 - Owner walk-in empty-store review.
 - Owner day-one owned-stock flow review.
@@ -50,8 +50,11 @@ The current scene is still pending owner art approval. The accepted direction is
 
 Current visual risk areas:
 
-- Opening route blockout read is reduced, but screenshots still need owner approval.
-- The new module boundaries are manifest-based and conservative; deeper physical extraction should wait until owner validation confirms the boundaries are right.
+- Opening route blockout read is reduced, but screenshots still do not clear the owner art bar.
+- Too many labels and debug-like callouts still carry object and zone identity.
+- The backroom line divider does not read as a real staff-only room.
+- Random clutter still makes several store views feel like prototype staging instead of authored shop operations.
+- The new module boundaries are accepted as infrastructure; deeper physical extraction should happen only when it helps the cleanup pass.
 - Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
 - CSG primitives are still the implementation medium for this pass, so shape/material quality needs screenshot review.
 - The first interior benchmark corner exists, but it needs approval before the rest of the shop expands.
@@ -84,19 +87,19 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review [Scene Architecture Modularization](visual-production/17-scene-architecture-modularization.md) before more scene work. The production scene/module structure is implemented and needs owner validation before broader visual work continues.
+Review [Prototype Visual Language Cleanup](visual-production/18-prototype-visual-language-cleanup.md) before more scene work. The production scene/module structure is accepted as the infrastructure baseline, but the visual language needs cleanup before broader visual work continues.
 
-If the scene architecture validation passes:
+If the cleanup pass validates:
 
-1. Continue product and fixture visual-kit implementation on top of `store_world.tscn`.
+1. Continue product and fixture visual-kit implementation on top of the cleaned `store_world.tscn`.
 2. Keep `graybox_store.tscn` as a compatibility wrapper for one more review cycle.
-3. Move deeper child-node extraction into modules only when the approved boundaries need it.
+3. Move deeper child-node extraction into modules only where approved boundaries need it.
 4. Preserve stable interaction targets and screenshot subjects during each visual slice.
 
-If the scene architecture validation fails:
+If the cleanup pass fails:
 
 1. Revise the visual-production docs.
-2. Clarify scene/module ownership boundaries before adding product or fixture breadth.
+2. Continue label/backroom/clutter cleanup before adding product or fixture breadth.
 3. Keep external alpha playtest paused.
 
 ## Active Documentation

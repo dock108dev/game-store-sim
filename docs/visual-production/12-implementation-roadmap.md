@@ -83,7 +83,7 @@ Exit criteria:
 
 ## Phase 1B: Scene Architecture Modularization
 
-Status: implemented; ready for owner architecture and screenshot validation.
+Status: implemented; accepted as infrastructure, not as visual-quality approval.
 
 Scope:
 
@@ -107,11 +107,37 @@ Exit criteria:
 - Production scene loads and preserves the mall spawn, storefront threshold, core systems, and key interaction targets.
 - Screenshot capture targets the production scene after promotion.
 - Active docs no longer treat `graybox_store.tscn` as the future visual production surface.
-- Owner confirms the manifest/module boundaries are the right baseline before product and fixture visual breadth.
+- Owner confirms the manifest/module boundaries are good enough infrastructure for the next cleanup pass.
+
+## Phase 1C: Prototype Visual Language Cleanup
+
+Status: active next implementation pass.
+
+Scope:
+
+- Label purge: remove or convert oversized prototype labels into believable signage, tags, decals, and packaging.
+- Backroom threshold: replace the floor-line boundary with a real staff-only transition.
+- Front sales-floor benchmark: make one entrance/register-facing interior view coherent and believable.
+- Receiving and stock clutter cleanup: group boxes, invoices, sorted stock, and backstock into readable workflows.
+- Screenshot QA: validate `main_scene.png`, `storefront_entry.png`, `register_counter.png`, `receiving_area.png`, `backroom_summary.png`, and the contact sheet.
+
+Deliverables:
+
+- Updated `store_world.tscn` and relevant module manifests.
+- Reduced prototype/debug visual language in the primary screenshots.
+- Updated scene tests for any removed labels or new threshold props.
+- Updated status, backlog, bug list, and screenshot review docs.
+
+Exit criteria:
+
+- `scripts/validate_godot.sh` passes.
+- The five priority screenshots no longer read primarily as labels, box graphics, zone lines, or random prop dumps.
+- The backroom reads as an employees-only space before text is read.
+- Owner approves the cleaned interior as the baseline for product and fixture breadth.
 
 ## Phase 2: Product And Fixture Kit
 
-Status: mechanically present; paused until Phase 1B owner validation passes.
+Status: mechanically present; paused until Phase 1C cleanup validation passes.
 
 Scope:
 
@@ -128,7 +154,7 @@ Exit criteria:
 
 ## Phase 3: Backroom Operations Kit
 
-Status: mechanically present; paused until Phase 1B owner validation passes.
+Status: mechanically present; paused until Phase 1C cleanup validation passes.
 
 Scope:
 
@@ -143,7 +169,7 @@ Exit criteria:
 
 ## Phase 4: Customer Role Visuals
 
-Status: mechanically present; hidden during the pre-open slice and paused until Phase 1B owner validation passes.
+Status: mechanically present; hidden during the pre-open slice and paused until Phase 1C cleanup validation passes.
 
 Scope:
 

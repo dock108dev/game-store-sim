@@ -34,12 +34,18 @@ Pass only if:
 - Fictional names avoid real IP leakage.
 - The screenshot does not read as CSG blockout.
 - Visible opening-route assets are not raw boxes unless they are intentionally cardboard boxes.
+- Backroom boundaries read as real architecture, not only floor lines, color zones, or signs.
+- Labels are secondary details, not the primary way to understand the store.
+- Clutter is grouped into believable retail workflows.
 
 ## Global Fail Criteria
 
 Fail if:
 
 - The scene relies on text labels for identity.
+- Giant signs, floating labels, or debug callouts explain objects that should be readable by shape.
+- The backroom is separated only by a line or flat marker.
+- Props look randomly dumped instead of staged for display, receiving, sorting, or backstock.
 - The main read is flat wall/floor/counter primitives.
 - Mall, storefront, product, fixture, or signage identity is carried by box graphics with labels.
 - Objects look randomly scaled.
@@ -71,3 +77,15 @@ For each changed screenshot, answer:
 ## Approval Rule
 
 Do not approve a visual phase because it has more objects. Approve it only when the screenshot looks closer to the target art direction.
+
+## Current Cleanup Priority
+
+The next implementation pass must be judged against these five screenshots first:
+
+- `main_scene.png`
+- `storefront_entry.png`
+- `register_counter.png`
+- `receiving_area.png`
+- `backroom_summary.png`
+
+For this pass, fail any screenshot where the main read is still labels, debug-like signs, random clutter, or a line pretending to be room architecture.

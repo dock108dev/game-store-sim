@@ -6,7 +6,7 @@ First-person specialty video game retail simulator. The player runs a small game
 
 Read [Current State](docs/CURRENT_STATE.md) first. It is the authoritative human-readable handoff for what is playable, what is validated, what remains blocked by human review, and which docs are active.
 
-Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current build now uses `store_world.tscn` as the production main scene, with reusable module manifests under `game/scenes/world/modules/` and `graybox_store.tscn` retained only as a compatibility wrapper. The next review is owner validation of those module boundaries and the latest screenshots before broader product or fixture visuals continue.
+Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current build now uses `store_world.tscn` as the production main scene, with reusable module manifests under `game/scenes/world/modules/` and `graybox_store.tscn` retained only as a compatibility wrapper. That architecture is accepted as infrastructure, but the visuals are not approved. The next implementation pass is [Prototype Visual Language Cleanup](docs/visual-production/18-prototype-visual-language-cleanup.md): remove label/debug reads, replace the backroom line with a real threshold, clean random clutter, and prove one believable front-store benchmark before product/fixture breadth.
 
 Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
 
@@ -23,7 +23,7 @@ The gate writes logs and screenshots to `artifacts/validation/latest/`.
 Current validated baseline:
 
 - 570 GUT tests.
-- 9959 GUT asserts.
+- 9961 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.
@@ -42,6 +42,7 @@ Current validated baseline:
 - [Release Package Check](docs/qa/release-package-check.md): pack smoke and external handoff readiness.
 - [Backlog](docs/production/04-backlog.md): short current backlog and next decision.
 - [Scene Architecture Modularization](docs/visual-production/17-scene-architecture-modularization.md): implemented production-scene/module split and next owner validation checklist.
+- [Prototype Visual Language Cleanup](docs/visual-production/18-prototype-visual-language-cleanup.md): active next implementation pass before broader product/fixture visuals.
 - [Alpha Bug List](docs/production/13-alpha-bug-list.md): current issue priorities.
 - [Alpha Playtest Package](docs/production/15-alpha-playtest-package.md): paused external tester handoff.
 

@@ -28,7 +28,7 @@ The gate runs:
 Current validated baseline:
 
 - 570 GUT tests.
-- 9959 GUT asserts.
+- 9961 GUT asserts.
 - UI scenario automation coverage: 508/628, or 80.9%.
 - Production script mapping coverage: 53/53, or 100.0%.
 - 3 active standalone validation tools.
@@ -62,7 +62,7 @@ The checker is `scripts/check_validation_coverage.py`.
 
 The gate captures 23 screenshots under `artifacts/validation/latest/screenshots/`. Use `docs/qa/screenshot-review.md` for human approval.
 
-Screenshot sanity confirms dimensions and nonblank image diversity. It does not prove art quality, composition, label readability, or game feel. For the current visual cycle, screenshot capture targets `store_world.tscn`; `main_scene.png`, `storefront_entry.png`, and real-window walk-in screenshots are the first review artifacts for the opening visual asset pass and scene architecture validation.
+Screenshot sanity confirms dimensions and nonblank image diversity. It does not prove art quality, composition, label readability, or game feel. For the current visual cycle, screenshot capture targets `store_world.tscn`; `main_scene.png`, `storefront_entry.png`, `register_counter.png`, `receiving_area.png`, `backroom_summary.png`, and real-window walk-in screenshots are the first review artifacts for prototype visual language cleanup.
 
 ## Manual Review
 
