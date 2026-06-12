@@ -1,5 +1,9 @@
 # Backroom Receiving Slice
 
+## Implementation Status
+
+Implemented for owner review. Current scene surfaces include receiving pallet/table, invoice/clipboard/sort cues, paid-arrivals lane, owned starter-stock crate, backstock shelf/bin lanes, pull route, service bench, office computer, and catalog planning cards.
+
 ## Goal
 
 Make receiving and backstock feel like real physical retail operations.

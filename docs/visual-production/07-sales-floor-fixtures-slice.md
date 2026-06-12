@@ -1,5 +1,9 @@
 # Sales Floor Fixtures Slice
 
+## Implementation Status
+
+Implemented for owner review. Current scene surfaces include wall shelf facing, restrained day-one shelf capacity, accessory peg wall, locked/glass case cue, empty growth space, and fixture-placement footprint cues.
+
 ## Goal
 
 Make the sales floor feel stocked and browsable.

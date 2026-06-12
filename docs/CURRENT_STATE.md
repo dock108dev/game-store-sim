@@ -4,7 +4,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 ## Playable Build
 
-The current Godot game is a broad validated mechanical prototype with blockout/prototype visuals, not a final-art alpha. The first-person retail loop includes:
+The current Godot game is a broad validated mechanical prototype with visual phases 0-4 implemented for owner review. It is not a final-art alpha until the owner screenshot pass approves the new target. The first-person retail loop includes:
 
 - Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
@@ -20,7 +20,7 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 563 GUT tests and 9630 asserts pass.
+- 565 GUT tests and 9694 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 52/52, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
@@ -32,22 +32,22 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but the latest owner screenshot review rejected the current visual direction as not close enough to the intended indie-game art bar. Visual production has been reset for owner review before more scene or day-loop implementation.
+External alpha playtest remains paused. The repo is mechanically green, and visual phases 0-4 are implemented for owner validation, but they still need screenshot/signoff review before the store can be treated as the approved visual baseline.
 
 Required reviews:
 
-- Owner visual reset review.
-- Owner art-direction review.
-- Owner first visual slice selection.
+- Owner visual phases 0-4 screenshot review.
+- Owner day-one owned-stock flow review.
+- Owner catalog/unlock/receiving flow review.
 - Manual 1280x720 readability pass for prompts, UI panels, product labels, customers, and screenshot composition.
 
 ## Visual Read
 
-The current scene is a functional prototype/blockout. It proves store mechanics, routes, interactions, screenshot coverage, catalog rules, and validation discipline, but it does not meet the target visual bar. The current CSG-heavy, label-heavy presentation should not be treated as the visual baseline for the final store.
+The current scene is still pending owner art approval, but phases 0-4 now have concrete review surfaces: target storefront/register/shelf slice, restrained day-one owned starter stock, catalog/design planning surfaces for locked inventory, paid-arrivals receiving lane, backroom operations props, and customer role silhouettes.
 
 Current visual risk areas:
 
-- The current store still reads as a Godot blockout from editor and player views.
+- Some areas may still read as a Godot blockout from editor and player views until Phase 5 lighting/polish.
 - Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
 - CSG primitives are being used as visual stand-ins beyond their useful prototype role.
 - Dense backroom computer screens.
@@ -57,7 +57,7 @@ Current visual risk areas:
 
 ## Current Visual Planning
 
-The active visual direction is [Visual Production](visual-production/README.md). It resets the target to a 2005-2007 independent strip-mall used game shop with stylized semi-realistic indie-sim assets. The next implementation should build one final-quality visual slice before broadening the rest of the store.
+The active visual direction is [Visual Production](visual-production/README.md). It targets a 2005-2007 independent strip-mall used game shop with stylized semi-realistic indie-sim assets. Phases 0-4 are implemented and ready for owner review before Phase 5 lighting/polish and broader all-screenshot approval.
 
 Owner note: the opening store should be restrained. Day one should start with a small owned assortment, likely 2 new games, 1 console, and 1 accessory, with starter stock staged in the stockroom for the player to place before opening. Future products should live in catalogs, store-design surfaces, supplier/release planning, or trade-in opportunities until purchased/unlocked; then they arrive through receiving or customer intake.
 
@@ -77,19 +77,19 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review [Visual Production](visual-production/README.md).
+Review [Visual Production](visual-production/README.md) and the latest screenshot artifacts.
 
-If the visual reset passes:
+If visual phases 0-4 pass:
 
-1. Lock or revise the default target: 2005-2007 independent used game shop.
-2. Choose the first implementation slice from [Implementation Roadmap](visual-production/12-implementation-roadmap.md).
-3. Build the first final-quality visual slice before more broad store or day-loop work.
-4. Use [Visual QA Checklist](visual-production/13-visual-qa-checklist.md) for screenshot approval.
+1. Lock phases 0-4 as the first approved visual baseline.
+2. Continue to Phase 5 lighting/material/camera polish.
+3. Use [Visual QA Checklist](visual-production/13-visual-qa-checklist.md) for all 23 screenshot approvals.
+4. Keep catalog/unlock/receiving rules as a hard progression constraint.
 
-If the visual reset fails:
+If any phase fails:
 
 1. Revise the visual-production docs.
-2. Do not make scene or asset changes until the direction is approved.
+2. Patch the rejected scene surfaces or visual rules.
 3. Keep external alpha playtest paused.
 
 ## Active Documentation

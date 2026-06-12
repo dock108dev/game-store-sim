@@ -547,6 +547,88 @@ func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
 	assert_gt((_store.get_node("FutureBackroomRackUnlockPanel") as CSGBox3D).global_position.z, 3.8)
 
 
+func test_day_one_owned_starter_stock_is_physical_and_limited() -> void:
+	var starter_crate := _store.get_node_or_null("DayOneStarterStockCrate") as Node3D
+	var starter_label := _store.get_node_or_null("DayOneStarterStockCrate/StarterStockTicketPanel/StarterStockTicketLabel") as Label3D
+	var checklist := _store.get_node_or_null("FirstOpenChecklistPanel/FirstOpenChecklistLabel") as Label3D
+	var empty_capacity_label := _store.get_node_or_null("DayOneEmptyShelfTagPanel/DayOneEmptyShelfTagLabel") as Label3D
+
+	assert_not_null(starter_crate)
+	assert_not_null(starter_label)
+	assert_not_null(checklist)
+	assert_not_null(empty_capacity_label)
+	assert_eq(starter_label.text, "OWNED STARTER")
+	assert_eq(checklist.text, "PLACE THEN OPEN")
+	assert_eq(empty_capacity_label.text, "ROOM TO GROW")
+	assert_gt(starter_crate.global_position.z, 3.8)
+	assert_lt(starter_crate.global_position.x, -3.8)
+	assert_true(_is_inside_store_floorprint(starter_crate.global_position))
+	assert_lt((_store.get_node("DayOneEmptyShelfTagPanel") as CSGBox3D).global_position.z, 5.3)
+
+	var starter_items := [
+		"DayOneStarterStockCrate/StarterNewGameCaseA",
+		"DayOneStarterStockCrate/StarterNewGameCaseB",
+		"DayOneStarterStockCrate/StarterConsoleBox",
+		"DayOneStarterStockCrate/StarterAccessoryController",
+	]
+	for item_path in starter_items:
+		var item := _store.get_node_or_null(item_path) as CSGBox3D
+		assert_not_null(item, item_path)
+		assert_false(item.use_collision, item_path)
+		assert_lt(_flat_distance_xz(item.global_position, starter_crate.global_position), 0.55)
+
+	for empty_capacity_path in ["DayOneEmptyCapacityRailA", "DayOneEmptyCapacityRailB", "DayOneEmptyShelfTagPanel"]:
+		var cue := _store.get_node_or_null(empty_capacity_path) as CSGBox3D
+		assert_not_null(cue, empty_capacity_path)
+		assert_false(cue.use_collision, empty_capacity_path)
+
+
+func test_future_inventory_is_catalog_planning_until_paid_or_received() -> void:
+	var future_catalog_label := _store.get_node_or_null("FutureProductCatalogPanel/FutureProductCatalogLabel") as Label3D
+	var design_catalog_label := _store.get_node_or_null("StoreDesignCatalogPanel/StoreDesignCatalogLabel") as Label3D
+	var cost_rule_label := _store.get_node_or_null("CatalogCostRulePanel/CatalogCostRuleLabel") as Label3D
+	var paid_arrival_label := _store.get_node_or_null("PaidOrderReceivingLabelPanel/PaidOrderReceivingLabel") as Label3D
+	var paid_arrival_lane := _store.get_node_or_null("PaidOrderReceivingLane") as CSGBox3D
+
+	assert_not_null(future_catalog_label)
+	assert_not_null(design_catalog_label)
+	assert_not_null(cost_rule_label)
+	assert_not_null(paid_arrival_label)
+	assert_not_null(paid_arrival_lane)
+	assert_eq(future_catalog_label.text, "ORDER CATALOG")
+	assert_eq(design_catalog_label.text, "STORE DESIGN")
+	assert_eq(cost_rule_label.text, "BUY -> RECEIVING")
+	assert_eq(paid_arrival_label.text, "PAID ARRIVALS")
+	assert_false(paid_arrival_lane.use_collision)
+	assert_gt(paid_arrival_lane.global_position.z, 3.0)
+	assert_lt(_flat_distance_xz(paid_arrival_lane.global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 1.0)
+
+	var catalog_surfaces := [
+		"FutureProductCatalogPanel",
+		"StoreDesignCatalogPanel",
+		"CatalogCostRulePanel",
+		"BackroomCatalogCardA",
+		"BackroomCatalogCardB",
+		"BackroomCartSummaryPanel",
+		"FuturePegWallUnlockPanel",
+		"FutureBackroomRackUnlockPanel",
+		"UpgradePreviewRackCard",
+	]
+	for surface_path in catalog_surfaces:
+		var surface := _store.get_node_or_null(surface_path) as CSGBox3D
+		assert_not_null(surface, surface_path)
+		assert_false(surface.use_collision, surface_path)
+
+	for forbidden_path in [
+		"BackroomStorageShelf/FutureProductStock",
+		"BackroomStorageShelf/LockedFutureInventory",
+		"BackroomStorageShelf/UnownedCatalogStock",
+		"DayOneStarterStockCrate/FutureProductStock",
+		"DayOneStarterStockCrate/LockedFutureInventory",
+	]:
+		assert_null(_store.get_node_or_null(forbidden_path), forbidden_path)
+
+
 func test_store_signage_uses_fictional_world_labels() -> void:
 	var expected_labels := {
 		"StoreIdentitySignPanel/StoreIdentitySignLabel": "SAVE POINT GAMES",

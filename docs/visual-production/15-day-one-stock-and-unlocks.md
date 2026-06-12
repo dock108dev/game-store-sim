@@ -6,6 +6,10 @@ Keep the opening store visually restrained and progression-friendly.
 
 The full catalog can exist in data, but the day-one store should not look like a fully built game shop. It should feel like a new owner setting up the first small selection before opening for business.
 
+## Implementation Status
+
+Implemented for owner review. Current scene surfaces separate owned starter stock from future catalog/design/supplier inventory and route paid/order inventory through receiving instead of preloading it into the stockroom.
+
 ## Day-One Sales Floor Rule
 
 Start with a small sellable assortment:

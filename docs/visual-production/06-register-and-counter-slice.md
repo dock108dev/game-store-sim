@@ -1,5 +1,9 @@
 # Register And Counter Slice
 
+## Implementation Status
+
+Implemented for owner review. Current scene surfaces include register counter trim, workflow rail, transaction trays, cash drawer cues, preorder/service/return/trade-in counter props, and first-open checklist cue.
+
 ## Goal
 
 Make the register counter a final-quality visual anchor.

@@ -6,6 +6,10 @@ Make the first standing view look like an authored mid-00s independent game shop
 
 This slice should be reviewed before replacing the whole store.
 
+## Implementation Status
+
+Implemented for owner review. Current scene surfaces include storefront glass/frame depth, sign trim, window display products, entry/threshold cues, first-view register/shelf/backroom sightlines, and day-one empty-capacity cues.
+
 ## Scope
 
 In scope:

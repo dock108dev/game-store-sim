@@ -6,6 +6,10 @@ Define how products look in hand, on shelves, in receiving, and at checkout.
 
 The product language must support progression. The full family list is the eventual vocabulary, not the day-one shelf state.
 
+## Implementation Status
+
+Implemented for owner review. Current scene surfaces include two starter new-game cases, one console/refurb hardware box, one starter accessory/controller, used-case shelf facings, price tags, catalog-only future-product planning, and paid-arrivals receiving cue.
+
 ## Product Families
 
 Required families:

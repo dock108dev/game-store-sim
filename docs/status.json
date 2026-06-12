@@ -2,10 +2,10 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-12",
-  "current_phase": "visual_production_reset_ready_for_owner_review",
-  "playtest_state": "paused_pending_visual_reset_review",
+  "current_phase": "visual_production_phases_0_4_ready_for_owner_validation",
+  "playtest_state": "paused_pending_visual_phase_0_4_owner_validation",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with prototype/blockout visuals. Visual production has been reset for a mid-00s independent game shop art pass.",
+    "summary": "Broad validated first-person retail loop with first-pass visual phases 0-4 implemented for owner validation. The store now has restrained day-one owned stock, catalog/planning surfaces for future inventory, receiving-arrival cues, backroom operations cues, and customer role silhouettes.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "prototype_blockout_visuals",
+    "visual_read": "visual_phases_0_4_review_ready",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 563,
-    "gut_asserts": 9630,
+    "gut_tests": 565,
+    "gut_asserts": 9694,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -59,15 +59,15 @@
     "old_name_scan": "passed"
   },
   "blocking_reviews": [
-    "owner_visual_reset_review",
-    "owner_art_direction_review",
-    "owner_first_visual_slice_selection",
+    "owner_visual_phase_0_4_screenshot_review",
+    "owner_day_one_stock_flow_review",
+    "owner_catalog_unlock_flow_review",
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Does the visual reset correctly define the mid-00s independent game shop target, restrained day-one owned-stock rules, catalog/unlock/receiving flow, deprecated visual assumptions, asset pipeline, and first visual slice?",
-    "approve_path": "lock the visual-production direction, then implement the first final-quality visual slice before more day-loop tuning",
-    "reject_path": "revise the visual-production docs before making scene or asset changes"
+    "question": "Do visual phases 0-4 pass owner review: target slice, product/fixture kit, backroom operations kit, customer role visuals, restrained day-one owned stock, and catalog/unlock/receiving flow?",
+    "approve_path": "lock phases 0-4 as the first approved visual baseline, then continue to Phase 5 lighting/polish and all-screenshot visual QA",
+    "reject_path": "revise the rejected phase docs and scene surfaces before broadening visual work"
   },
   "active_docs": [
     "docs/CURRENT_STATE.md",

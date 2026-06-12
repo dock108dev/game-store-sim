@@ -4,19 +4,19 @@ This is the active production backlog. For current status, validation numbers, a
 
 ## Current Phase
 
-Visual production reset.
+Visual production phases 0-4 owner validation.
 
-Goal: reset the visual direction around a mid-00s independent game shop, then build one final-quality visual slice before more broad store or day-loop work.
+Goal: validate the first five visual phases before Phase 5 lighting/polish and all-screenshot approval.
 
-Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, readability recovery implementation plus label depth-safety stabilization are complete, employees-only stockroom production is mechanically complete through Slice 8, the first post-stockroom returns baseline is implemented, and the production visual overhaul baseline is mechanically complete through Slice 14 in `18-production-visuals-plan.md`. The latest visual review rejected the CSG/label-heavy blockout as the wrong production bar. External alpha playtest remains paused until the visual reset and first final-quality visual slice are approved.
+Status: Alpha hardening is complete through Stop 13.7, and visual phases 0-4 are implemented for owner review: visual reset planning, target storefront/register/shelf slice, product/fixture kit cues, backroom operations kit cues, and customer role silhouettes. The latest implementation adds owned starter stock, catalog/design planning surfaces for locked inventory, paid-arrivals receiving lane, and explicit empty-capacity shelf cues. External alpha playtest remains paused until owner screenshot validation and Phase 5 polish pass.
 
 ## Next Decision
 
 1. Run `scripts/validate_godot.sh`.
-2. Review `docs/visual-production/README.md`.
-3. Approve or revise the visual reset, art direction, inventory checklist, asset pipeline, and first-slice roadmap.
-4. If the visual reset passes, implement the first final-quality visual slice.
-5. If the visual reset fails, revise docs before scene or asset changes.
+2. Review `docs/visual-production/README.md` and the latest screenshot contact sheet.
+3. Approve or revise phases 0-4: target slice, day-one stock, catalog/unlock/receiving, products/fixtures, backroom operations, and customer role visuals.
+4. If phases 0-4 pass, continue to Phase 5 lighting/material/camera polish.
+5. If a phase fails, patch that phase before broadening visual work.
 
 ## Current Rules
 
@@ -30,10 +30,10 @@ Status: the prototype and first polish pass are validated, Alpha hardening is co
 
 ## Active Work
 
-1. Visual production reset review.
-2. First final-quality visual slice selection.
-3. Screenshot review after the first visual slice exists.
-4. External alpha playtest: paused until the visual reset, first final-quality visual slice, screenshot review, and release-package check pass.
+1. Owner visual phases 0-4 screenshot review.
+2. Owner day-one owned-stock and catalog/unlock/receiving review.
+3. Phase 5 lighting/material/camera polish after approval.
+4. External alpha playtest: paused until phase review, Phase 5 polish, screenshot review, and release-package check pass.
 
 ## Completed Baselines
 

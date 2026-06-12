@@ -1078,6 +1078,49 @@ size = Vector3(0.42, 0.24, 0.34)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.62, -0.05)
 material = SubResource("StandardMaterial3D_cardboard")
 
+[node name="DayOneStarterStockCrate" type="Node3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.95, 0, 4.64)
+
+[node name="StarterCrateBase" type="CSGBox3D" parent="DayOneStarterStockCrate"]
+size = Vector3(0.88, 0.18, 0.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.16, 0)
+material = SubResource("StandardMaterial3D_cardboard_alt")
+
+[node name="StarterNewGameCaseA" type="CSGBox3D" parent="DayOneStarterStockCrate"]
+size = Vector3(0.17, 0.28, 0.035)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.26, 0.36, -0.08)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="StarterNewGameCaseB" type="CSGBox3D" parent="DayOneStarterStockCrate"]
+size = Vector3(0.17, 0.28, 0.035)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.08, 0.36, -0.06)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="StarterConsoleBox" type="CSGBox3D" parent="DayOneStarterStockCrate"]
+size = Vector3(0.34, 0.2, 0.22)
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, 0.18, 0.31, 0.03)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="StarterAccessoryController" type="CSGBox3D" parent="DayOneStarterStockCrate"]
+size = Vector3(0.22, 0.055, 0.12)
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 0.32, 0.46, -0.13)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="StarterStockTicketPanel" type="CSGBox3D" parent="DayOneStarterStockCrate"]
+size = Vector3(0.52, 0.12, 0.016)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.52, -0.28)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="StarterStockTicketLabel" type="Label3D" parent="DayOneStarterStockCrate/StarterStockTicketPanel"]
+pixel_size = 0.0021
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "OWNED STARTER"
+font_size = 12
+
 [node name="ReceivingBox" parent="." instance=ExtResource("3_receiving_box")]
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.65, 0, 3.85)
 
@@ -1170,6 +1213,26 @@ material = SubResource("StandardMaterial3D_paper")
 size = Vector3(0.22, 0.014, 0.16)
 transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.24, 0.825, 3.24)
 material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="PaidOrderReceivingLane" type="CSGBox3D" parent="."]
+size = Vector3(0.96, 0.012, 0.34)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.92, 0.062, 3.72)
+material = SubResource("StandardMaterial3D_fixture_ghost_valid")
+
+[node name="PaidOrderReceivingLabelPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.58, 0.12, 0.018)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -3.76, 0.32, 3.46)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="PaidOrderReceivingLabel" type="Label3D" parent="PaidOrderReceivingLabelPanel"]
+pixel_size = 0.0022
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+text = "PAID ARRIVALS"
+font_size = 12
 
 [node name="ReceivingInvoiceLabel" type="Label3D" parent="ReceivingInvoiceClipboard"]
 pixel_size = 0.0028
@@ -1910,6 +1973,33 @@ size = Vector3(0.28, 0.1, 0.018)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 0.82, 5.18)
 material = SubResource("StandardMaterial3D_paper")
 
+[node name="DayOneEmptyCapacityRailA" type="CSGBox3D" parent="."]
+size = Vector3(0.72, 0.045, 0.025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.86, 1.12, 5.13)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="DayOneEmptyCapacityRailB" type="CSGBox3D" parent="."]
+size = Vector3(0.74, 0.045, 0.025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.43, 1.12, 5.13)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="DayOneEmptyShelfTagPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.62, 0.12, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.48, 1.28, 5.14)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="DayOneEmptyShelfTagLabel" type="Label3D" parent="DayOneEmptyShelfTagPanel"]
+pixel_size = 0.0022
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
+text = "ROOM TO GROW"
+font_size = 12
+
 [node name="UsedSpineRowTop" type="CSGBox3D" parent="."]
 size = Vector3(1.94, 0.11, 0.035)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.16, 1.18, 5.16)
@@ -2149,6 +2239,70 @@ billboard = 1
 double_sided = false
 text = "CART"
 font_size = 12
+
+[node name="FutureProductCatalogPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.48, 0.58, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 3.74, 1.14, 4.16)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="FutureProductCatalogLabel" type="Label3D" parent="FutureProductCatalogPanel"]
+pixel_size = 0.0023
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "ORDER CATALOG"
+font_size = 12
+
+[node name="StoreDesignCatalogPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.48, 0.58, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.62, 1.32, 3.78)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="StoreDesignCatalogLabel" type="Label3D" parent="StoreDesignCatalogPanel"]
+pixel_size = 0.0023
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.86, 0.95, 1, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "STORE DESIGN"
+font_size = 12
+
+[node name="CatalogCostRulePanel" type="CSGBox3D" parent="."]
+size = Vector3(0.78, 0.14, 0.018)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.24, 0.72, 4.02)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CatalogCostRuleLabel" type="Label3D" parent="CatalogCostRulePanel"]
+pixel_size = 0.002
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "BUY -> RECEIVING"
+font_size = 11
+
+[node name="FirstOpenChecklistPanel" type="CSGBox3D" parent="."]
+size = Vector3(0.74, 0.18, 0.018)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 1.26, 1.52, -2.06)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="FirstOpenChecklistLabel" type="Label3D" parent="FirstOpenChecklistPanel"]
+pixel_size = 0.002
+modulate = Color(0.08, 0.1, 0.12, 1)
+outline_modulate = Color(0.98, 0.9, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 1
+double_sided = false
+text = "PLACE THEN OPEN"
+font_size = 11
 
 [node name="DesignSwatchStrip" type="CSGBox3D" parent="."]
 size = Vector3(0.82, 0.12, 0.018)

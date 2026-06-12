@@ -8,7 +8,7 @@ Build one final-quality visual slice, review it, then propagate its asset/style 
 
 ## Phase 0: Visual Reset Planning
 
-Status: ready for owner review.
+Status: complete; ready for owner review.
 
 Deliverables:
 
@@ -23,6 +23,8 @@ Exit criteria:
 - Owner approves or revises the day-one stock rule: 2 new games, 1 console, 1 accessory, trade-ins as early growth, future products visible through catalogs/planning surfaces, and physical stock arriving only after purchase/order/unlock.
 
 ## Phase 1: Target Slice Prototype
+
+Status: implemented; ready for owner screenshot review.
 
 Recommended scope:
 
@@ -47,6 +49,8 @@ Exit criteria:
 
 ## Phase 2: Product And Fixture Kit
 
+Status: implemented; ready for owner screenshot review.
+
 Scope:
 
 - Product case/box/cartridge/sleeve language.
@@ -62,6 +66,8 @@ Exit criteria:
 
 ## Phase 3: Backroom Operations Kit
 
+Status: implemented; ready for owner screenshot review.
+
 Scope:
 
 - Receiving station.
@@ -74,6 +80,8 @@ Exit criteria:
 - `receiving_area.png`, `supplier_delivery.png`, and `backroom_summary.png` pass visual QA.
 
 ## Phase 4: Customer Role Visuals
+
+Status: implemented; ready for owner screenshot review.
 
 Scope:
 

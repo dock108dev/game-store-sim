@@ -1,5 +1,9 @@
 # Customers And Role Silhouettes
 
+## Implementation Status
+
+Implemented for owner review. Current customer scenes use modular body kits, distinct body widths/colors, role props, compact role silhouettes, and separate buyer/trade-in/preorder/service/suspicious props below head height.
+
 ## Goal
 
 Make customers readable by body shape, pose, carried prop, and spatial behavior before prompt text appears.
