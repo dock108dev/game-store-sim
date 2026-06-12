@@ -20,7 +20,7 @@ Still pending:
 
 - Owner review of `main_scene.png`, `storefront_entry.png`, the latest contact sheet, and a real 1280x720 walk-in.
 - Corrections to any opening-route objects that still read as raw boxes, labels, or oversized debug signage.
-- Scene architecture modularization before broadening visual work; see [Scene Architecture Modularization](17-scene-architecture-modularization.md).
+- Owner validation of the implemented scene architecture modularization before broadening visual work; see [Scene Architecture Modularization](17-scene-architecture-modularization.md).
 
 ## Slice Boundary
 
@@ -88,9 +88,9 @@ The player should still start outside the store on the second-floor mall concour
 
 ## Files Expected To Change
 
-- `game/scenes/world/graybox_store.tscn` for the already-implemented pass and as the legacy integration reference.
-- `game/scenes/world/store_world.tscn` for the next production scene.
-- `game/scenes/world/modules/*` for extracted production modules.
+- `game/scenes/world/store_world.tscn` as the production scene and active screenshot/tool target.
+- `game/scenes/world/graybox_store.tscn` as the legacy compatibility wrapper.
+- `game/scenes/world/modules/*` for production module manifests and future physical extraction.
 - future `game/assets/visual/materials/*`
 - future `game/assets/visual/meshes/store_shell/*`
 - future `game/assets/visual/meshes/fixtures/*`
@@ -155,4 +155,4 @@ Required screenshots:
 - Stop if the pass requires new gameplay systems.
 - Stop if imported assets introduce real-world brands, logos, product names, or recognizable trade dress.
 - Stop if screenshot review still fails `main_scene.png` or `storefront_entry.png`; do not broaden scope until those are fixed.
-- Stop broadening `graybox_store.tscn`; future production visual breadth should happen through the modular production scene plan.
+- Stop broadening `graybox_store.tscn`; future production visual breadth should happen through `store_world.tscn` and the approved module boundaries.

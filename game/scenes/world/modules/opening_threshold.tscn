@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/visual_module_manifest.gd" id="1_manifest"]
+
+[node name="OpeningThresholdModule" type="Node3D"]
+script = ExtResource("1_manifest")
+module_id = "opening_threshold"
+responsibility = "Walkable open doorway, threshold lip, door-frame rails, entry cue, and disabled blocker compatibility."
+owned_node_names = PackedStringArray("FrontDoorBlocker", "EntrySidewalkCue", "EntryThresholdInteriorStrip", "EntryRouteStripeRegister", "EntryRouteStripeShelf", "StorefrontOpenDoorTopRail", "StorefrontOpenDoorBottomRail", "StorefrontThresholdMetalLip", "StorefrontThresholdRubberInset")

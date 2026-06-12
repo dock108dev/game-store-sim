@@ -1,6 +1,7 @@
 extends GutTest
 
-const MAIN_SCENE := "res://scenes/world/graybox_store.tscn"
+const MAIN_SCENE := "res://scenes/world/store_world.tscn"
+const LEGACY_SCENE := "res://scenes/world/graybox_store.tscn"
 
 var _store: Node3D
 
@@ -10,13 +11,72 @@ func before_each() -> void:
 	add_child_autofree(_store)
 
 
-func test_main_scene_loads_graybox_store() -> void:
+func test_main_scene_loads_store_world() -> void:
 	assert_not_null(_store)
 	assert_true(_store is Node3D)
 
 
 func test_main_scene_has_expected_root_name() -> void:
-	assert_eq(_store.name, "GrayboxStore")
+	assert_eq(_store.name, "StoreWorld")
+
+
+func test_legacy_graybox_store_wraps_store_world_for_compatibility() -> void:
+	var legacy: Node3D = load(LEGACY_SCENE).instantiate()
+	add_child_autofree(legacy)
+
+	assert_eq(legacy.name, "GrayboxStore")
+	assert_not_null(legacy.get_node_or_null("PlayerController"))
+	assert_not_null(legacy.get_node_or_null("StoreSession"))
+	assert_not_null(legacy.get_node_or_null("WorldModules"))
+	assert_not_null(legacy.get_node_or_null("Systems"))
+
+
+func test_store_world_has_modular_production_anchors() -> void:
+	var world_modules := _store.get_node_or_null("WorldModules")
+	var systems := _store.get_node_or_null("Systems")
+	var lighting := _store.get_node_or_null("Lighting")
+	var screenshot_anchors := _store.get_node_or_null("ScreenshotAnchors")
+
+	assert_not_null(world_modules)
+	assert_not_null(systems)
+	assert_not_null(lighting)
+	assert_not_null(screenshot_anchors)
+
+	var expected_modules := [
+		"WorldModules/MallConcourseModule",
+		"WorldModules/StorefrontShellModule",
+		"WorldModules/OpeningThresholdModule",
+		"WorldModules/StoreInteriorShellModule",
+		"WorldModules/FrontCounterZoneModule",
+		"WorldModules/StarterProductDisplayModule",
+		"WorldModules/SalesFloorFixturesModule",
+		"WorldModules/ReceivingAreaModule",
+		"WorldModules/BackroomShellModule",
+		"Systems/StoreSystemsModule",
+	]
+	for module_path in expected_modules:
+		var module := _store.get_node_or_null(module_path)
+		assert_not_null(module, module_path)
+		assert_true(module.has_method("missing_owned_node_names"), module_path)
+		assert_false(str(module.get("module_id")).is_empty(), module_path)
+		assert_false(str(module.get("responsibility")).is_empty(), module_path)
+		assert_gt((module.get("owned_node_names") as PackedStringArray).size(), 0, module_path)
+
+
+func test_store_world_module_manifests_resolve_owned_nodes() -> void:
+	var manifests: Array[Node] = []
+	manifests.append_array(_store.get_node("WorldModules").get_children())
+	manifests.append(_store.get_node("Systems/StoreSystemsModule"))
+
+	for manifest_node in manifests:
+		var manifest := manifest_node
+		assert_not_null(manifest, str(manifest_node.name))
+		assert_true(manifest.has_method("missing_owned_node_names"), str(manifest_node.name))
+		assert_eq(
+			(manifest.call("missing_owned_node_names", _store) as PackedStringArray).size(),
+			0,
+			"%s missing owned production nodes" % str(manifest.get("module_id"))
+		)
 
 
 func test_player_controller_exists() -> void:

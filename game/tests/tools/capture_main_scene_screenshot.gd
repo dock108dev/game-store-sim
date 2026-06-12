@@ -2,7 +2,7 @@ extends SceneTree
 
 const DEFAULT_WIDTH := 1280
 const DEFAULT_HEIGHT := 720
-const MAIN_SCENE := "res://scenes/world/graybox_store.tscn"
+const MAIN_SCENE := "res://scenes/world/store_world.tscn"
 
 
 func _init() -> void:

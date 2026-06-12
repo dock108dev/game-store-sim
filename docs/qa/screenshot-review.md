@@ -22,12 +22,12 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 567 GUT tests and 9870 asserts.
+- Full validation passed with 570 GUT tests and 9959 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
-- Current visual evidence is not art-approved. It is the first implemented pass at replacing visible blockout/box-label graphics on the opening route.
+- Current visual evidence is not art-approved. It is the first implemented pass at replacing visible blockout/box-label graphics on the opening route, now captured from the promoted `store_world.tscn` production scene.
 
 ## Required Screenshots
 
@@ -81,7 +81,7 @@ Fail if:
 
 ## Routing
 
-Before broadening visual work beyond the opening route, review `docs/visual-production/17-scene-architecture-modularization.md` and confirm the next implementation pass is moving toward `store_world.tscn` plus reusable modules rather than continuing to grow `graybox_store.tscn`.
+Before broadening visual work beyond the opening route, review `docs/visual-production/17-scene-architecture-modularization.md` and confirm the implemented `store_world.tscn` plus reusable module-manifest baseline is approved. If the boundaries fail review, revise them before adding product, fixture, or customer visual breadth.
 
 If all screenshots pass, run `docs/qa/release-package-check.md` and consider reopening `docs/production/15-alpha-playtest-package.md`.
 

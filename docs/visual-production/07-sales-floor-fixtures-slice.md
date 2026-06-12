@@ -44,7 +44,9 @@ Out of scope:
 
 Likely affected:
 
-- `game/scenes/world/graybox_store.tscn`
+- `game/scenes/world/store_world.tscn`
+- `game/scenes/world/modules/sales_floor_fixtures.tscn`
+- `game/scenes/world/modules/starter_product_display.tscn`
 - `game/scenes/store_layout/display_rack.tscn`
 - `game/scenes/store_layout/shelf_slot.tscn`
 - `game/scripts/inventory/product_item.gd`

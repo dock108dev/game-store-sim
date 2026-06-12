@@ -55,7 +55,10 @@ Out of scope:
 
 Likely affected:
 
-- `game/scenes/world/graybox_store.tscn`
+- `game/scenes/world/store_world.tscn`
+- `game/scenes/world/modules/mall_concourse.tscn`
+- `game/scenes/world/modules/storefront_shell.tscn`
+- `game/scenes/world/modules/opening_threshold.tscn`
 - future `game/assets/visual/meshes/store_shell/*`
 - future `game/assets/visual/textures/posters/*`
 - `game/tests/gut/test_graybox_store.gd`

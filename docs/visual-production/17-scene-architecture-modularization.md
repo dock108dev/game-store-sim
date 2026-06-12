@@ -6,23 +6,35 @@ Stop treating `graybox_store.tscn` as the long-term production world.
 
 The current scene is valuable because it proves the retail loop, screenshot harness, validation gate, interaction wiring, and first opening visual pass. It is not a healthy production surface for continued art work. It mixes prototype layout, production-intent visual pieces, gameplay managers, interaction targets, screenshot anchors, and legacy documentation assumptions in one large scene.
 
-The next implementation pass should create a modular production scene architecture while preserving the validated game behavior.
+This implementation pass creates a modular production scene architecture while preserving the validated game behavior.
 
 ## Decision
 
 Do not delete `graybox_store.tscn` during the first modularization pass.
 
-Use it as the legacy integration reference until the production world reaches parity. The new production path should be introduced alongside it, validated, then promoted only after the player route, interaction targets, screenshot capture, and tests are green.
+Use it as the legacy compatibility wrapper until the production world is owner-approved. The new production path has been introduced, validated, and promoted after the player route, interaction targets, screenshot capture, and tests stayed green.
+
+## Implementation Status
+
+Implemented for review on June 12, 2026:
+
+- `game/scenes/world/store_world.tscn` is the production main scene.
+- `game/scenes/world/graybox_store.tscn` is retained as a thin compatibility wrapper around `store_world.tscn`.
+- `game/scenes/world/modules/` contains module manifests for mall concourse, storefront shell, opening threshold, store interior shell, front counter, starter product display, sales-floor fixtures, receiving area, backroom shell, and systems ownership.
+- `game/scripts/world/visual_module_manifest.gd` records `module_id`, responsibility, and owned node names, with tests verifying every owned node resolves in the production world.
+- `game/project.godot`, screenshot capture tools, performance tooling, and main-scene tests now target `store_world.tscn`.
+
+The implementation is intentionally conservative: visual and gameplay nodes keep their validated runtime placement while manifests and production anchors define ownership. Do not do a deeper physical child-node move until owner validation confirms the module boundaries are right.
 
 ## Target Outcome
 
-After this pass, the repo should have:
+After this pass, the repo has:
 
 - A production world scene with a production name, not `graybox_store`.
-- Modular subscenes for the mall shell, storefront, threshold, first interior view, counter, sales fixtures, receiving/backroom, and system managers.
+- Modular manifest subscenes for the mall shell, storefront, threshold, first interior view, counter, sales fixtures, receiving/backroom, and system managers.
 - Clear separation between visual modules, collision/navigation modules, interaction targets, and gameplay state managers.
 - Tests proving the new production world loads and preserves the existing player route and core interaction contracts.
-- `graybox_store.tscn` retained only as a legacy reference or compatibility harness until it can be safely archived.
+- `graybox_store.tscn` retained only as a compatibility harness until it can be safely archived.
 
 ## Naming Target
 
@@ -137,6 +149,8 @@ Decorative trim, labels, small product props, stickers, and signs should remain 
 
 ### Slice 1: Production World Skeleton
 
+Status: implemented.
+
 Goal: create `store_world.tscn` without changing player-facing behavior.
 
 Implementation:
@@ -159,6 +173,8 @@ Exit criteria:
 - New tests prove the production scene has the same critical anchors.
 
 ### Slice 2: Opening Route Module Extraction
+
+Status: implemented as ownership manifests and production anchors; physical child extraction is deferred until owner validation.
 
 Goal: extract only the approved opening route first.
 
@@ -183,6 +199,8 @@ Exit criteria:
 
 ### Slice 3: Systems And Interaction Wiring
 
+Status: implemented as a systems manifest while preserving existing system node paths.
+
 Goal: separate gameplay managers from visual modules.
 
 Implementation:
@@ -200,6 +218,8 @@ Exit criteria:
 - No gameplay state is stored in visual-only modules.
 
 ### Slice 4: Fixture And Backroom Module Extraction
+
+Status: implemented as ownership manifests for counter, fixtures, receiving, and backroom surfaces; deeper physical extraction remains a follow-up after boundary validation.
 
 Goal: split the rest of the currently validated store without broad visual redesign.
 
@@ -223,6 +243,8 @@ Exit criteria:
 
 ### Slice 5: Main Scene Promotion
 
+Status: implemented.
+
 Goal: make the production scene the primary game scene only after parity.
 
 Implementation:
@@ -239,6 +261,8 @@ Exit criteria:
 - Docs and tests no longer describe `graybox_store.tscn` as the production target.
 
 ### Slice 6: Legacy Scene Retirement
+
+Status: not started; intentionally deferred until owner validation and at least one more visual implementation cycle proves the wrapper is no longer useful.
 
 Goal: stop editing `graybox_store.tscn` for production visuals.
 
@@ -267,8 +291,9 @@ Add or update GUT coverage for:
 - Decorative visual details stay non-colliding.
 - Screenshot anchors exist and point at the production scene.
 - `graybox_store.tscn` is not used as the long-term production scene after promotion.
+- `graybox_store.tscn` still loads as a compatibility wrapper during the review cycle.
 
-Do not remove current `graybox_store` tests until production-world tests cover the same behavior.
+Do not remove current `graybox_store` tests until production-world tests cover the same behavior. For now the test filename remains `test_graybox_store.gd` for continuity, but its main scene target is `store_world.tscn`.
 
 ## Documentation Required During Implementation
 
@@ -331,3 +356,9 @@ This modularization phase passes when:
 - The screenshot harness captures the production scene.
 - Active docs no longer imply that the long-term game world is `graybox_store.tscn`.
 
+Current owner validation questions:
+
+- Do the module boundaries match how future implementation should be divided?
+- Is the manifest-first extraction enough for the next product/fixture visual pass, or should any module physically own child nodes before that work begins?
+- Should `graybox_store.tscn` remain as a compatibility wrapper for one more visual cycle?
+- Are `main_scene.png`, `storefront_entry.png`, and the contact sheet acceptable evidence for continuing into product/fixture art breadth?

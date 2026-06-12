@@ -4,7 +4,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 ## Playable Build
 
-The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented for owner review: the mall shell, storefront, starter products, and first interior benchmark corner now use authored modular pieces instead of relying only on raw blockout boxes and large labels. The first-person retail loop includes:
+The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented for owner review: the mall shell, storefront, starter products, and first interior benchmark corner now use authored modular pieces instead of relying only on raw blockout boxes and large labels. Scene architecture modularization is also implemented: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. The first-person retail loop includes:
 
 - Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
@@ -20,9 +20,9 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 567 GUT tests and 9870 asserts pass.
+- 570 GUT tests and 9959 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
-- Production script mapping is 52/52, or 100.0%, against an 80% threshold.
+- Production script mapping is 53/53, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
 - Product catalog validation passes with 60 products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, and old-name scan pass.
@@ -32,12 +32,12 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new opening composition and first asset pass are implemented, but the next gate is not more layout breadth. The next implementation pass is scene architecture modularization: create a production-named store world, extract reusable modules, keep `graybox_store.tscn` as a legacy integration reference until parity is proven, and preserve the validated route/systems before broadening visuals.
+External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new opening composition, first asset pass, and production-scene/module architecture are implemented. The next gate is owner validation of the `store_world.tscn` boundaries and screenshots before more product, fixture, backroom, or customer visuals are added.
 
 Required reviews:
 
 - Owner opening visual asset pass signoff.
-- Owner scene architecture modularization plan signoff.
+- Owner scene architecture modularization validation.
 - Owner opening mall/storefront screenshot review.
 - Owner walk-in empty-store review.
 - Owner day-one owned-stock flow review.
@@ -51,6 +51,7 @@ The current scene is still pending owner art approval. The accepted direction is
 Current visual risk areas:
 
 - Opening route blockout read is reduced, but screenshots still need owner approval.
+- The new module boundaries are manifest-based and conservative; deeper physical extraction should wait until owner validation confirms the boundaries are right.
 - Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
 - CSG primitives are still the implementation medium for this pass, so shape/material quality needs screenshot review.
 - The first interior benchmark corner exists, but it needs approval before the rest of the shop expands.
@@ -83,20 +84,19 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review [Scene Architecture Modularization](visual-production/17-scene-architecture-modularization.md) before more scene work. The goal of the next implementation pass is to stop broadening `graybox_store.tscn` and introduce a production scene/module structure without breaking the validated game.
+Review [Scene Architecture Modularization](visual-production/17-scene-architecture-modularization.md) before more scene work. The production scene/module structure is implemented and needs owner validation before broader visual work continues.
 
-If the scene architecture plan passes:
+If the scene architecture validation passes:
 
-1. Create `game/scenes/world/store_world.tscn` as the production scene.
-2. Extract the opening route into `game/scenes/world/modules/`.
-3. Separate visual modules from gameplay systems while preserving stable interaction targets.
-4. Validate parity with `scripts/validate_godot.sh`.
-5. Promote the production scene only after screenshot and interaction parity pass.
+1. Continue product and fixture visual-kit implementation on top of `store_world.tscn`.
+2. Keep `graybox_store.tscn` as a compatibility wrapper for one more review cycle.
+3. Move deeper child-node extraction into modules only when the approved boundaries need it.
+4. Preserve stable interaction targets and screenshot subjects during each visual slice.
 
-If the scene architecture plan fails:
+If the scene architecture validation fails:
 
 1. Revise the visual-production docs.
-2. Clarify scene/module ownership boundaries before extracting `graybox_store.tscn`.
+2. Clarify scene/module ownership boundaries before adding product or fixture breadth.
 3. Keep external alpha playtest paused.
 
 ## Active Documentation

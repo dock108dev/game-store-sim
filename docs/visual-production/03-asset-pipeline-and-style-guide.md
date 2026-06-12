@@ -48,7 +48,7 @@ game/scenes/world/modules/receiving_area.tscn
 game/scenes/world/modules/store_systems.tscn
 ```
 
-`graybox_store.tscn` is a legacy integration reference once `store_world.tscn` exists. Do not keep broadening it as the production scene.
+`graybox_store.tscn` is a legacy compatibility wrapper now that `store_world.tscn` exists. Do not keep broadening it as the production scene.
 
 ## Naming
 

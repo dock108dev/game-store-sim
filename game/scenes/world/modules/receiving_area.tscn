@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/visual_module_manifest.gd" id="1_manifest"]
+
+[node name="ReceivingAreaModule" type="Node3D"]
+script = ExtResource("1_manifest")
+module_id = "receiving_area"
+responsibility = "Receiving box, delivery staging, invoice/sort/check surfaces, intake lanes, and supplier stock flow."
+owned_node_names = PackedStringArray("ReceivingBox", "ReceivingPallet", "ReceivingIntakeTableTop", "ReceivingInvoiceClipboard", "ReceivingInvoicePaper", "ReceivingSortedTray", "ReceivingSortedTrayLaneA", "ReceivingSortedTrayLaneB", "ReceivingWorkflowCardDelivery", "ReceivingWorkLight")

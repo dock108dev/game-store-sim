@@ -6,17 +6,17 @@ This is the active production backlog. For current status, validation numbers, a
 
 Scene architecture modularization.
 
-Goal: stop broadening `graybox_store.tscn` as the production world by introducing a production scene and reusable modules before the next visual-content pass.
+Goal: validate the new production scene/module baseline before the next visual-content pass.
 
-Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 visual pass failed owner screenshot review. The active implementation resets the opening composition: the player starts on a second-floor mall concourse, faces a branded glass storefront, walks through an open threshold, and enters an empty pre-open shop with customer actors hidden but still mechanically wired. The first opening visual asset pass now replaces key blockout/box-label graphics on that route with authored modular mall, storefront, starter-product, and first-corner pieces. The next implementation pass is architectural: create `store_world.tscn`, extract reusable modules, separate systems from visual modules, and keep `graybox_store.tscn` as a legacy reference until parity is validated.
+Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 visual pass failed owner screenshot review. The active implementation resets the opening composition: the player starts on a second-floor mall concourse, faces a branded glass storefront, walks through an open threshold, and enters an empty pre-open shop with customer actors hidden but still mechanically wired. The first opening visual asset pass now replaces key blockout/box-label graphics on that route with authored modular mall, storefront, starter-product, and first-corner pieces. Scene architecture modularization is implemented: `store_world.tscn` is the production main scene, module manifests exist under `game/scenes/world/modules/`, screenshot/tools target the production scene, and `graybox_store.tscn` remains as a compatibility wrapper.
 
 ## Next Decision
 
 1. Run `scripts/validate_godot.sh`.
 2. Review `docs/visual-production/17-scene-architecture-modularization.md`.
-3. Approve or revise the production scene/module boundaries.
-4. If the plan passes, implement Phase 1B before product/fixture or broader sales-floor work.
-5. If the plan fails, revise ownership boundaries before changing scene assets.
+3. Approve or revise the implemented production scene/module boundaries.
+4. If the architecture passes, implement product/fixture visual-kit work on top of `store_world.tscn`.
+5. If the architecture fails, revise ownership boundaries before changing scene assets.
 
 ## Current Rules
 
@@ -30,13 +30,12 @@ Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 v
 
 ## Active Work
 
-1. Owner scene architecture modularization plan signoff.
-2. Production world skeleton implementation.
-3. Opening-route module extraction.
-4. Systems/interaction wiring separation.
-5. Main-scene promotion after parity validation.
-6. Product/fixture and broader sales-floor rebuild after production scene promotion.
-7. External alpha playtest: paused until opening review, interior rebuild, screenshot review, and release-package check pass.
+1. Owner scene architecture modularization validation.
+2. Owner latest screenshot/contact-sheet review for the promoted production scene.
+3. Product/fixture visual-kit implementation after architecture validation.
+4. Broader sales-floor rebuild after product/fixture visual-kit approval.
+5. Deeper module child-node extraction only after owner validation confirms boundaries.
+6. External alpha playtest: paused until opening review, interior rebuild, screenshot review, and release-package check pass.
 
 ## Completed Baselines
 
@@ -51,6 +50,7 @@ Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 v
 - Employees-only stockroom production. Mechanically complete through Slice 8; owner screenshot validation remains required before external playtest.
 - Returns/exchanges baseline. Complete for first-pass register refund, receiving-review routing, cash/reputation accounting, daily-report readout, scene wiring, validation coverage, and manual checklist updates.
 - Production visual overhaul. Mechanically complete through Slice 14 in `18-production-visuals-plan.md`; owner screenshot review remains required before external playtest.
+- Scene architecture modularization. Implemented with `store_world.tscn`, module manifests, production-scene promotion, validation/tool reference updates, and legacy `graybox_store.tscn` compatibility wrapper; owner validation remains required before visual breadth continues.
 
 ## Historical Plans
 

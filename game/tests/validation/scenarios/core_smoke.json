@@ -2,10 +2,10 @@
   "ui_scenarios": [
     {
       "id": "main_scene_loads",
-      "name": "Main scene loads and instantiates GrayboxStore",
+      "name": "Main scene loads and instantiates StoreWorld",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_main_scene_loads_graybox_store"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_main_scene_loads_store_world"
     },
     {
       "id": "main_scene_identity",

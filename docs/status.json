@@ -2,10 +2,10 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-12",
-  "current_phase": "scene_architecture_modularization_ready_for_implementation",
-  "playtest_state": "paused_pending_scene_architecture_and_visual_owner_review",
+  "current_phase": "scene_architecture_modularization_implemented_ready_for_owner_validation",
+  "playtest_state": "paused_pending_modular_scene_owner_review",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice now starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. The next implementation gate is scene architecture modularization: introduce a production-named store world, extract reusable modules, keep graybox_store as a legacy integration reference, and preserve the validated route and systems before broadening visuals.",
+    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice now starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. Scene architecture modularization is now implemented for review: store_world.tscn is the production main scene, graybox_store.tscn is a compatibility wrapper, reusable module manifests define visual/system ownership, and screenshot/tools now target the production scene before broader product or fixture visuals continue.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -35,8 +35,8 @@
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 567,
-    "gut_asserts": 9870,
+    "gut_tests": 570,
+    "gut_asserts": 9959,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -44,8 +44,8 @@
       "threshold_percent": 80
     },
     "script_test_mapping": {
-      "covered": 52,
-      "total": 52,
+      "covered": 53,
+      "total": 53,
       "percent": 100.0,
       "threshold_percent": 80
     },
@@ -60,7 +60,7 @@
   },
   "blocking_reviews": [
     "owner_opening_visual_asset_pass_signoff",
-    "owner_scene_architecture_modularization_plan_signoff",
+    "owner_scene_architecture_modularization_validation",
     "owner_opening_mall_storefront_screenshot_review",
     "owner_walk_in_empty_store_review",
     "owner_day_one_stock_flow_review",
@@ -68,9 +68,9 @@
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Is the scene architecture modularization plan approved as the next implementation pass before adding more visual breadth?",
-    "approve_path": "create store_world.tscn, extract the opening route into reusable modules, separate systems from visuals, validate parity, then promote the production scene",
-    "reject_path": "revise the scene/module boundaries before extracting graybox_store.tscn"
+    "question": "Does the implemented store_world scene architecture pass owner validation as the baseline for the next visual implementation cycle?",
+    "approve_path": "continue with product and fixture visual-kit implementation on top of store_world.tscn and its module ownership boundaries",
+    "reject_path": "revise module boundaries, ownership manifests, or promotion strategy before adding more visual breadth"
   },
   "active_docs": [
     "docs/CURRENT_STATE.md",

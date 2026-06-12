@@ -2,7 +2,7 @@
 
 This folder is the active visual reset and implementation planning space.
 
-The current Godot scene is a functional prototype and layout proof. It is useful for mechanics, validation, collision, route testing, and interaction coverage, but it is not the final visual target and should not be used as proof that the game has reached an indie-release art bar. The mall-entry composition is directionally approved as a better premise, and the first opening visual asset pass is implemented for owner review before it becomes the broader visual baseline.
+The current Godot scene is a functional prototype and layout proof. It is useful for mechanics, validation, collision, route testing, and interaction coverage, but it is not the final visual target and should not be used as proof that the game has reached an indie-release art bar. The mall-entry composition is directionally approved as a better premise, the first opening visual asset pass is implemented for owner review, and `store_world.tscn` is now the production main scene for future visual work.
 
 ## Default Direction
 
@@ -14,7 +14,7 @@ Until owner review changes it, plan against this target:
 - Tone: warm local-shop nostalgia on the surface, dry retail stress underneath, with optional suspicious details kept secondary.
 - Visual priority: first-person shop operation, not tycoon overview or debug readability.
 - Opening density: less is more. Day one starts with a small unlocked assortment, with more products unlocked, traded in, ordered, or released over time.
-- Current implementation target: modularize the production scene architecture before broadening visual work, so the opening route can move out of `graybox_store.tscn` without losing validated behavior.
+- Current implementation target: validate the implemented production scene/module architecture before broadening visual work. `graybox_store.tscn` is a compatibility wrapper, not the production art surface.
 
 ## Planning Docs
 
@@ -35,7 +35,7 @@ Until owner review changes it, plan against this target:
 - [Deprecated Visual Docs](14-deprecated-visual-docs.md): older docs that should be treated as historical for visuals.
 - [Day One Stock And Unlocks](15-day-one-stock-and-unlocks.md): restrained starter assortment, catalog unlocks, receiving flow, and progression rules.
 - [Opening Visual Asset Pass](16-opening-visual-asset-pass.md): implemented first pass for replacing visible blockout graphics on the opening route.
-- [Scene Architecture Modularization](17-scene-architecture-modularization.md): next implementation pass for replacing the monolithic `graybox_store.tscn` workflow with a production scene and reusable modules.
+- [Scene Architecture Modularization](17-scene-architecture-modularization.md): implemented production scene/module baseline and owner validation checklist.
 
 ## Rule
 

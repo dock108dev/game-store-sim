@@ -5,13 +5,13 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 567 GUT tests, 9870 asserts, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, and 60 catalog products.
+- Latest full gate passes with 570 GUT tests, 9959 asserts, UI scenario automation coverage 508/628, production script mapping coverage 53/53, 3 active validation tools, and 60 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - All 23 required screenshot files are present, screenshot sanity passes, and `artifacts/validation/latest/screenshot-contact-sheet.png` is ready for owner review.
 - Manual controller/window/playtest validation still needs a human pass.
 - June 9 manual screenshots found P0 readability blockers in the actual game window. Readability recovery implementation is complete, but external playtest is paused until the owner recovery screenshot set passes.
 - June 9 follow-up reports angle-dependent label clipping on panel-backed signs and product labels; label depth-safety stabilization is implemented and must be verified during owner screenshot validation.
-- June 12 owner review rejected the first phase 0-4 visual pass as too blockout/label-driven. The second-floor mall opening/storefront reset is directionally better, and the active P1 visual target now has a first implemented asset pass replacing key blockout/box-label graphics on the mall spawn, storefront, threshold, and first interior view. Before broader store work, the next gate is scene architecture modularization so production visuals move out of the monolithic `graybox_store.tscn` workflow.
+- June 12 owner review rejected the first phase 0-4 visual pass as too blockout/label-driven. The second-floor mall opening/storefront reset is directionally better, and the active P1 visual target now has a first implemented asset pass replacing key blockout/box-label graphics on the mall spawn, storefront, threshold, and first interior view. Scene architecture modularization is implemented so production visuals now target `store_world.tscn`; owner validation of the boundaries and screenshots is required before broader store work.
 
 ## Priority Key
 
@@ -46,7 +46,7 @@ Current gate state:
 - Core retail loop tests pass, including pickup, pricing, stocking, checkout, trade-ins, preorders, services, ordering, fixture placement, save/load codec, settings, pause/menu, hidden-thread optionality, screenshots, and export pack smoke.
 - AH-001 through AH-008 completed automated routing through the alpha regression, scene-readability, content/copy, and readability recovery slices, but owner screenshot validation still needs to confirm the real-window result before external playtest.
 - AH-011 remains the known human-feel checkpoint: multi-day economy balance is mechanically covered but still needs external playtest notes before alpha approval.
-- Opening-store quality-bar slices 1 through 8, including full first-catalog and decoration/upgrade surface hooks, are mechanically complete as prototype systems. The latest owner visual review reset the art target, the implemented opening asset pass in `docs/visual-production/16-opening-visual-asset-pass.md` needs owner validation, and the next implementation gate is `docs/visual-production/17-scene-architecture-modularization.md` before multi-day playtest work or broader visual breadth.
+- Opening-store quality-bar slices 1 through 8, including full first-catalog and decoration/upgrade surface hooks, are mechanically complete as prototype systems. The latest owner visual review reset the art target, the implemented opening asset pass in `docs/visual-production/16-opening-visual-asset-pass.md` needs owner validation, and the implemented scene architecture in `docs/visual-production/17-scene-architecture-modularization.md` needs owner validation before multi-day playtest work or broader visual breadth.
 - The stockroom production phase in `17-stockroom-production-plan.md` is mechanically complete through Slice 8, and the production-visual baseline in `18-production-visuals-plan.md` is mechanically complete through Slice 14; neither phase reopens external playtest by itself without owner screenshot review.
 
 ## Slice Routing

@@ -46,7 +46,8 @@ Out of scope:
 
 Likely affected:
 
-- `game/scenes/world/graybox_store.tscn`
+- `game/scenes/world/store_world.tscn`
+- `game/scenes/world/modules/front_counter_zone.tscn`
 - `game/scenes/store_layout/register_workstation.tscn`
 - `game/scripts/store_layout/register_workstation.gd` only if node paths change.
 - `game/tests/gut/test_graybox_store.gd`

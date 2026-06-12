@@ -46,7 +46,9 @@ Out of scope:
 
 Likely affected:
 
-- `game/scenes/world/graybox_store.tscn`
+- `game/scenes/world/store_world.tscn`
+- `game/scenes/world/modules/receiving_area.tscn`
+- `game/scenes/world/modules/backroom_shell.tscn`
 - `game/scenes/props/receiving_box.tscn`
 - `game/scripts/systems/store_session.gd` if visible states are exposed.
 - `game/tests/gut/test_graybox_store.gd`

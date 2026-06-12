@@ -83,23 +83,23 @@ Exit criteria:
 
 ## Phase 1B: Scene Architecture Modularization
 
-Status: planned next; ready for implementation.
+Status: implemented; ready for owner architecture and screenshot validation.
 
 Scope:
 
-- Create a production scene, preferably `game/scenes/world/store_world.tscn`.
-- Keep `graybox_store.tscn` as the legacy integration reference until parity is proven.
-- Extract the opening route into reusable modules.
-- Separate visual modules from gameplay managers.
+- Create a production scene, `game/scenes/world/store_world.tscn`.
+- Keep `graybox_store.tscn` as a compatibility wrapper while owner validation is pending.
+- Add reusable module manifests for the opening route and current store zones.
+- Separate visual/system ownership through manifests and anchors while preserving existing runtime node paths.
 - Preserve screenshot anchors, interaction targets, and validation behavior.
 
 Deliverables:
 
-- `store_world.tscn` production root.
-- `game/scenes/world/modules/` with opening-route modules first.
-- `store_systems.tscn` or equivalent systems grouping.
-- Tests proving both legacy and production scenes load until promotion.
-- Updated screenshot/tooling references once the production scene is promoted.
+- `store_world.tscn` production root. Implemented and promoted as the project main scene.
+- `game/scenes/world/modules/` with mall, storefront, threshold, interior, counter, starter display, sales fixture, receiving, backroom, and systems manifests. Implemented.
+- `store_systems.tscn` equivalent manifest for system-manager ownership. Implemented as `game/scenes/world/modules/store_systems.tscn`.
+- Tests proving both legacy and production scenes load. Implemented.
+- Updated screenshot/tooling references after production-scene promotion. Implemented.
 
 Exit criteria:
 
@@ -107,10 +107,11 @@ Exit criteria:
 - Production scene loads and preserves the mall spawn, storefront threshold, core systems, and key interaction targets.
 - Screenshot capture targets the production scene after promotion.
 - Active docs no longer treat `graybox_store.tscn` as the future visual production surface.
+- Owner confirms the manifest/module boundaries are the right baseline before product and fixture visual breadth.
 
 ## Phase 2: Product And Fixture Kit
 
-Status: mechanically present; paused until Phase 1B is implemented and validated.
+Status: mechanically present; paused until Phase 1B owner validation passes.
 
 Scope:
 
@@ -127,7 +128,7 @@ Exit criteria:
 
 ## Phase 3: Backroom Operations Kit
 
-Status: mechanically present; paused until Phase 1B is implemented and validated.
+Status: mechanically present; paused until Phase 1B owner validation passes.
 
 Scope:
 
@@ -142,7 +143,7 @@ Exit criteria:
 
 ## Phase 4: Customer Role Visuals
 
-Status: mechanically present; hidden during the pre-open slice and paused until Phase 1B is implemented and validated.
+Status: mechanically present; hidden during the pre-open slice and paused until Phase 1B owner validation passes.
 
 Scope:
 

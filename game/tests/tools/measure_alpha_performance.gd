@@ -1,6 +1,6 @@
 extends SceneTree
 
-const MAIN_SCENE := "res://scenes/world/graybox_store.tscn"
+const MAIN_SCENE := "res://scenes/world/store_world.tscn"
 const THRESHOLDS_MS := {
 	"main_scene_resource_load_ms": 5000,
 	"main_scene_instantiate_ms": 5000,

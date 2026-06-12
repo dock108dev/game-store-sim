@@ -553,7 +553,7 @@ func test_store_session_surfaces_security_safe_placeholders() -> void:
 
 
 func test_store_session_surfaces_hidden_clue_surfaces() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
@@ -571,7 +571,7 @@ func test_store_session_surfaces_hidden_clue_surfaces() -> void:
 
 
 func test_store_session_records_hidden_thread_choice_paths() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
@@ -613,7 +613,7 @@ func test_store_session_records_hidden_thread_choice_paths() -> void:
 
 
 func test_store_session_applies_hidden_cash_and_risk_consequences() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
@@ -633,7 +633,7 @@ func test_store_session_applies_hidden_cash_and_risk_consequences() -> void:
 
 
 func test_store_session_hidden_thread_can_be_ignored_for_retail_progression() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
