@@ -24,7 +24,7 @@ Implemented and accepted as infrastructure on June 12, 2026:
 - `game/scripts/world/visual_module_manifest.gd` records `module_id`, responsibility, and owned node names, with tests verifying every owned node resolves in the production world.
 - `game/project.godot`, screenshot capture tools, performance tooling, and main-scene tests now target `store_world.tscn`.
 
-The implementation is intentionally conservative: visual and gameplay nodes keep their validated runtime placement while manifests and production anchors define ownership. Do not do a deeper physical child-node move unless the prototype visual language cleanup pass needs it.
+The implementation is intentionally conservative: visual and gameplay nodes keep their validated runtime placement while manifests and production anchors define ownership. Do not do a deeper physical child-node move unless the hard visual benchmark rebuild needs it.
 
 ## Target Outcome
 

@@ -2,7 +2,7 @@
 
 This folder is the active visual reset and implementation planning space.
 
-The current Godot scene is a functional prototype and layout proof. It is useful for mechanics, validation, collision, route testing, and interaction coverage, but it is not the final visual target and should not be used as proof that the game has reached an indie-release art bar. The mall-entry composition is directionally better, and `store_world.tscn` is now the production main scene for future visual work. Visual quality is still not approved: labels, debug-like callouts, random clutter, and the weak backroom boundary must be cleaned up before broader product or fixture visuals.
+The current Godot scene is a functional prototype and layout proof. It is useful for mechanics, validation, collision, route testing, and interaction coverage, but it is not the final visual target and should not be used as proof that the game has reached an indie-release art bar. The mall-entry composition is directionally better, and `store_world.tscn` is now the production main scene for future visual work. Visual quality is still not approved: the prototype visual language cleanup was too conservative, and the active next pass is a hard visual benchmark rebuild for the mall entry, register/sales-floor view, label suppression, fixture silhouettes, physical details, ceiling/material/lighting pass, and backroom architecture.
 
 ## Default Direction
 
@@ -14,7 +14,7 @@ Until owner review changes it, plan against this target:
 - Tone: warm local-shop nostalgia on the surface, dry retail stress underneath, with optional suspicious details kept secondary.
 - Visual priority: first-person shop operation, not tycoon overview or debug readability.
 - Opening density: less is more. Day one starts with a small unlocked assortment, with more products unlocked, traded in, ordered, or released over time.
-- Current implementation target: prototype visual language cleanup. The production scene/module architecture is accepted as infrastructure, but not as visual-quality approval. `graybox_store.tscn` is a compatibility wrapper, not the production art surface.
+- Current implementation target: hard visual benchmark rebuild. The production scene/module architecture is accepted as infrastructure, but not as visual-quality approval. `graybox_store.tscn` is a compatibility wrapper, not the production art surface.
 
 ## Planning Docs
 
@@ -36,7 +36,8 @@ Until owner review changes it, plan against this target:
 - [Day One Stock And Unlocks](15-day-one-stock-and-unlocks.md): restrained starter assortment, catalog unlocks, receiving flow, and progression rules.
 - [Opening Visual Asset Pass](16-opening-visual-asset-pass.md): implemented first pass for replacing visible blockout graphics on the opening route.
 - [Scene Architecture Modularization](17-scene-architecture-modularization.md): implemented production scene/module baseline and owner validation checklist.
-- [Prototype Visual Language Cleanup](18-prototype-visual-language-cleanup.md): active next implementation pass for removing label/debug reads, replacing the backroom line, and proving one believable interior benchmark.
+- [Prototype Visual Language Cleanup](18-prototype-visual-language-cleanup.md): implemented but visually insufficient cleanup record.
+- [Hard Visual Benchmark Rebuild](19-hard-visual-benchmark-rebuild.md): active next implementation plan for the six-part benchmark rebuild before broader product/fixture/catalog visual breadth.
 
 ## Rule
 

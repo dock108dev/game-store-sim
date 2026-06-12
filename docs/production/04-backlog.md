@@ -4,18 +4,20 @@ This is the active production backlog. For current status, validation numbers, a
 
 ## Current Phase
 
-Prototype visual language cleanup.
+Hard visual benchmark rebuild.
 
-Goal: remove the remaining prototype visual language before the next visual-content breadth pass.
+Goal: rebuild one approved mall-entry/register/sales-floor visual benchmark before the next visual-content breadth pass.
 
-Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 visual pass failed owner screenshot review. The active implementation resets the opening composition: the player starts on a second-floor mall concourse, faces a branded glass storefront, walks through an open threshold, and enters an empty pre-open shop with customer actors hidden but still mechanically wired. Scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, module manifests exist under `game/scenes/world/modules/`, screenshot/tools target the production scene, and `graybox_store.tscn` remains as a compatibility wrapper. Prototype visual language cleanup is implemented for owner validation: oversized interior labels are reduced, right-wall signs have product silhouettes, the backroom has a staff threshold, and receiving clutter is staged into a workflow. Visual quality is not approved until owner review accepts the cleaned screenshot set.
+Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 visual pass failed owner screenshot review. The active implementation resets the opening composition: the player starts on a second-floor mall concourse, faces a branded glass storefront, walks through an open threshold, and enters an empty pre-open shop with customer actors hidden but still mechanically wired. Scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, module manifests exist under `game/scenes/world/modules/`, screenshot/tools target the production scene, and `graybox_store.tscn` remains as a compatibility wrapper. Prototype visual language cleanup is implemented but visually insufficient. The next implementation source is `docs/visual-production/19-hard-visual-benchmark-rebuild.md`.
 
 ## Next Decision
 
-1. Review the latest screenshot set and contact sheet from `artifacts/validation/latest/`.
-2. Review `docs/visual-production/18-prototype-visual-language-cleanup.md`.
-3. If the cleanup screenshots pass owner review, implement product/fixture visual-kit work on top of `store_world.tscn`.
-4. If the cleanup screenshots fail, continue cleanup before adding broader catalog visuals.
+1. Review `docs/visual-production/19-hard-visual-benchmark-rebuild.md`.
+2. Implement Phase 0 through Phase 6 in order.
+3. Run `scripts/validate_godot.sh` and regenerate the contact sheet.
+4. Owner reviews `main_scene.png`, `storefront_entry.png`, `register_counter.png`, `receiving_area.png`, `backroom_summary.png`, and a manual real-window walkthrough.
+5. If the hard benchmark passes owner review, implement product/fixture visual-kit breadth on top of it.
+6. If the hard benchmark fails, correct the benchmark before adding broader catalog visuals.
 
 ## Current Rules
 
@@ -29,9 +31,9 @@ Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 v
 
 ## Active Work
 
-1. Owner latest screenshot/contact-sheet review for the cleanup pass.
-2. Product/fixture visual-kit implementation after cleanup validation.
-3. Prototype-language correction pass if owner rejects the latest cleanup screenshots.
+1. Hard visual benchmark rebuild implementation.
+2. Owner latest screenshot/contact-sheet review for the hard benchmark pass.
+3. Product/fixture visual-kit implementation after benchmark validation.
 4. Broader sales-floor rebuild after product/fixture visual-kit approval.
 5. Deeper module child-node extraction only where the cleanup pass needs it.
 6. External alpha playtest: paused until opening review, interior rebuild, screenshot review, and release-package check pass.

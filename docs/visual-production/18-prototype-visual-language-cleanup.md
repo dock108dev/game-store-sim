@@ -10,7 +10,7 @@ This pass should make the existing opening store read more like a believable mid
 
 ## Implementation Status
 
-Implemented on June 12, 2026 and ready for owner validation.
+Implemented on June 12, 2026. Owner live review found the change too conservative to accept as a visual baseline. This document is now an implementation record; active next work moved to [Hard Visual Benchmark Rebuild](19-hard-visual-benchmark-rebuild.md).
 
 Validation evidence:
 
@@ -28,11 +28,12 @@ Implemented changes:
 - Receiving gained strapped boxes, staged cart, cart handle/wheels, and updated receiving module ownership.
 - GUT coverage now asserts smaller surface-bound signage, physical wall-poster details, nonblocking staff threshold architecture, and staged receiving workflow props.
 
-Known owner-review risks:
+Owner-review result:
 
+- The live view still reads as labeled blockout.
 - Tiny label speckle remains visible from some storefront/interior screenshot angles.
 - Receiving is more coherent, but still label-dense and not final product art.
-- The broader store still needs product/fixture visual-kit work before it can clear a true art bar.
+- The broader store needs a hard visual benchmark rebuild before product/fixture breadth.
 
 ## Owner Validation Notes
 

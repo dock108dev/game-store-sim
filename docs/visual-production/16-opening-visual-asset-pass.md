@@ -20,7 +20,7 @@ Still pending:
 
 - Owner review of `main_scene.png`, `storefront_entry.png`, the latest contact sheet, and a real 1280x720 walk-in.
 - Corrections to any opening-route objects that still read as raw boxes, labels, or oversized debug signage.
-- Prototype visual language cleanup before broadening visual work; see [Prototype Visual Language Cleanup](18-prototype-visual-language-cleanup.md).
+- Hard visual benchmark rebuild before broadening visual work; see [Hard Visual Benchmark Rebuild](19-hard-visual-benchmark-rebuild.md).
 
 ## Slice Boundary
 
