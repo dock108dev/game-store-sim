@@ -23,9 +23,9 @@ Exit criteria:
 - Owner revised the opening target toward a second-floor mall walk-in scene with no customers or employees visible before opening.
 - Owner approves or revises the day-one stock rule: 2 new games, 1 console, 1 accessory, trade-ins as early growth, future products visible through catalogs/planning surfaces, and physical stock arriving only after purchase/order/unlock.
 
-## Phase 1: Target Slice Prototype
+## Phase 1: Opening Composition Reset
 
-Status: reset implemented; ready for owner screenshot review.
+Status: composition reset implemented; directionally better, but not an approved art baseline.
 
 Recommended scope:
 
@@ -38,7 +38,9 @@ Recommended scope:
 
 Deliverables:
 
-- Authored mesh/material kit for this slice.
+- Second-floor mall entry layout.
+- Walkable storefront threshold.
+- Empty pre-open store state.
 - First-person screenshots.
 - Updated scene tests for required visual anchors.
 - QA checklist pass/fail notes.
@@ -46,15 +48,42 @@ Deliverables:
 
 Exit criteria:
 
-- Screenshots look like an indie game target, not blockout.
 - Opening screenshots show the player outside the shop, walking in from a mall concourse.
 - Opening screenshots show no visible customers or employees before business begins.
 - Screenshots show a restrained newly opening shop, not a fully stocked endpoint.
+- Owner confirms the premise is worth turning into the first visual asset pass.
+
+## Phase 1A: Opening Visual Asset Pass
+
+Status: planned next; ready for implementation discussion.
+
+Scope:
+
+- Mall spawn.
+- Storefront approach.
+- Glass threshold and door.
+- First interior view from the doorway.
+- One polished interior benchmark corner.
+
+Deliverables:
+
+- Authored mall/storefront shell kit.
+- Authored signage/decal treatment that supports identity without carrying it alone.
+- Authored starter product/display props for 2 games, 1 console, and 1 accessory.
+- Beveled/trimmed store shell, floor, ceiling, rail, planter, and window details.
+- Updated scene tests and screenshot review notes.
+
+Exit criteria:
+
+- `main_scene.png` and `storefront_entry.png` do not read as box graphics with labels.
+- The route reads as a mall game shop before small text is read.
+- The first interior corner becomes the style benchmark for the rest of the store.
+- The player can still walk from spawn through the storefront without new blockers.
 - Owner approves style before broader replacement.
 
 ## Phase 2: Product And Fixture Kit
 
-Status: implemented; ready for owner screenshot review.
+Status: mechanically present; paused until Phase 1A is approved.
 
 Scope:
 
@@ -71,7 +100,7 @@ Exit criteria:
 
 ## Phase 3: Backroom Operations Kit
 
-Status: implemented; ready for owner screenshot review.
+Status: mechanically present; paused until Phase 1A is approved.
 
 Scope:
 
@@ -86,7 +115,7 @@ Exit criteria:
 
 ## Phase 4: Customer Role Visuals
 
-Status: implemented; ready for owner screenshot review.
+Status: mechanically present; hidden during the pre-open slice and paused until Phase 1A is approved.
 
 Scope:
 

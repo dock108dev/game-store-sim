@@ -2,10 +2,10 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-12",
-  "current_phase": "opening_mall_storefront_reset_ready_for_owner_validation",
-  "playtest_state": "paused_pending_opening_mall_storefront_review",
+  "current_phase": "opening_visual_asset_pass_ready_for_implementation_discussion",
+  "playtest_state": "paused_pending_opening_visual_asset_pass",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice now resets the opening: the player spawns on a second-floor mall concourse, walks into an empty pre-open game shop, and customer actors remain wired but hidden until business begins.",
+    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice now resets the opening: the player spawns on a second-floor mall concourse, walks into an empty pre-open game shop, and customer actors remain wired but hidden until business begins. The next gate is replacing visible blockout/box-label graphics on that opening route with authored modular assets before broadening the store.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "opening_mall_storefront_reset_review_ready",
+    "visual_read": "opening_visual_asset_pass_planned",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 565,
-    "gut_asserts": 9723,
+    "gut_asserts": 9721,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -59,6 +59,7 @@
     "old_name_scan": "passed"
   },
   "blocking_reviews": [
+    "owner_opening_visual_asset_pass_signoff",
     "owner_opening_mall_storefront_screenshot_review",
     "owner_walk_in_empty_store_review",
     "owner_day_one_stock_flow_review",
@@ -66,9 +67,9 @@
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Does the new opening read better: second-floor mall approach, branded glass storefront, walkable threshold, empty pre-open store, and no customers or employees visible before opening?",
-    "approve_path": "lock the second-floor mall opening as the first approved composition, then rebuild the first interior corner with the same style language before restoring customer-day screenshots",
-    "reject_path": "revise the opening mall/storefront composition before broadening interior products, fixtures, lighting, or customer visuals"
+    "question": "Is the opening visual asset pass scope approved: replace visible blockout boxes and label-driven graphics on the mall spawn, storefront, threshold, and first interior view before any broader store expansion?",
+    "approve_path": "implement the opening visual asset pass, validate with scripts/validate_godot.sh, then review main_scene.png, storefront_entry.png, and real-window walk-in screenshots",
+    "reject_path": "revise the visual asset pass scope before changing scene assets"
   },
   "active_docs": [
     "docs/CURRENT_STATE.md",
@@ -89,11 +90,8 @@
     "docs/visual-production/13-visual-qa-checklist.md",
     "docs/visual-production/14-deprecated-visual-docs.md",
     "docs/visual-production/15-day-one-stock-and-unlocks.md",
+    "docs/visual-production/16-opening-visual-asset-pass.md",
     "docs/design-planning/README.md",
-    "docs/design-planning/00-inspiration-review.md",
-    "docs/design-planning/01-opening-store-quality-bar.md",
-    "docs/design-planning/08-quality-bar-checklist.md",
-    "docs/design-planning/09-testing-plan.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",
@@ -112,7 +110,11 @@
     "docs/production/12-production-target-contracts.md",
     "docs/production/16-playability-readability-recovery-plan.md",
     "docs/production/17-stockroom-production-plan.md",
-    "docs/production/18-production-visuals-plan.md"
+    "docs/production/18-production-visuals-plan.md",
+    "docs/design-planning/00-inspiration-review.md",
+    "docs/design-planning/01-opening-store-quality-bar.md",
+    "docs/design-planning/08-quality-bar-checklist.md",
+    "docs/design-planning/09-testing-plan.md"
   ],
   "validation_data_shape": {
     "thresholds": "game/tests/validation/thresholds.json",

@@ -33,6 +33,7 @@ Pass only if:
 - Gameplay prompts and routes remain clear.
 - Fictional names avoid real IP leakage.
 - The screenshot does not read as CSG blockout.
+- Visible opening-route assets are not raw boxes unless they are intentionally cardboard boxes.
 
 ## Global Fail Criteria
 
@@ -40,6 +41,7 @@ Fail if:
 
 - The scene relies on text labels for identity.
 - The main read is flat wall/floor/counter primitives.
+- Mall, storefront, product, fixture, or signage identity is carried by box graphics with labels.
 - Objects look randomly scaled.
 - Props hide prompts, products, customers, or UI.
 - Lighting is editor-flat or visually noisy.

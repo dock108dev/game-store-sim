@@ -13,7 +13,7 @@ Every file should have one clear job:
 
 ## Current Status
 
-The docs in this folder still matter for mechanics, zone intent, screenshot names, nonblocking path/prompt rules, and catalog/decor language. They no longer define the final visual bar.
+The docs in this folder still matter for mechanics, zone intent, screenshot names, nonblocking path/prompt rules, and catalog/decor language. They no longer define the final visual bar and should not be used to justify more visible CSG/label-heavy scene work.
 
 Start visual work with [Visual Production](../visual-production/README.md), not another CSG/label-heavy polish pass.
 

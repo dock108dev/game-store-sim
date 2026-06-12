@@ -6,7 +6,7 @@ First-person specialty video game retail simulator. The player runs a small game
 
 Read [Current State](docs/CURRENT_STATE.md) first. It is the authoritative human-readable handoff for what is playable, what is validated, what remains blocked by human review, and which docs are active.
 
-Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current scene is a functional prototype/blockout, not the final visual bar.
+Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current scene is a functional prototype/blockout with an improved mall-entry composition, not the final visual bar.
 
 Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
 
@@ -23,7 +23,7 @@ The gate writes logs and screenshots to `artifacts/validation/latest/`.
 Current validated baseline:
 
 - 565 GUT tests.
-- 9723 GUT asserts.
+- 9721 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 52/52.
 - 3 active standalone validation tools.
@@ -33,8 +33,8 @@ Current validated baseline:
 ## Active Docs
 
 - [Current State](docs/CURRENT_STATE.md): source of truth for current status and next review decision.
-- [Visual Production](docs/visual-production/README.md): active visual reset, art direction, asset pipeline, and visual QA plan.
-- [Design Planning](docs/design-planning/README.md): active opening-store quality-bar implementation planning.
+- [Visual Production](docs/visual-production/README.md): active visual reset, art direction, opening asset pass, asset pipeline, and visual QA plan.
+- [Design Planning](docs/design-planning/README.md): historical opening-store quality-bar planning record.
 - [Validation](docs/production/06-validation.md): local gate, scenario manifests, thresholds, and artifacts.
 - [Smoke Playtest](docs/qa/smoke-playtest.md): short playable sanity run.
 - [Full-Day Playtest](docs/qa/full-day-playtest.md): internal full retail-loop QA.

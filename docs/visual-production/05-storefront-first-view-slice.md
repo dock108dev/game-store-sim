@@ -8,7 +8,7 @@ This slice should be reviewed before replacing the whole store.
 
 ## Implementation Status
 
-First phase 0-4 pass failed owner screenshot review. Current reset implementation starts the player on a second-floor mall concourse facing the branded storefront, with neon/glass framing, a walkable open door, neighboring closed shopfront cues, planters, railings, and no visible customers or employees before opening.
+First phase 0-4 pass failed owner screenshot review. Current reset implementation starts the player on a second-floor mall concourse facing the branded storefront, with neon/glass framing, a walkable open door, neighboring closed shopfront cues, planters, railings, and no visible customers or employees before opening. This is a better composition, not a finished visual baseline. The follow-up implementation must replace visible box/label graphics on this route with authored assets before adding breadth.
 
 ## Scope
 
@@ -49,6 +49,7 @@ Out of scope:
 - Boxed products for display.
 - Entry mat.
 - Floor/wall/trim materials.
+- Authored replacements for visible CSG blockout forms on the opening route.
 
 ## Implementation Files
 
@@ -72,6 +73,7 @@ Likely affected:
 - Player can identify the store as a game shop before reading small labels.
 - Storefront has real frame/glass/display depth.
 - Storefront reads through silhouette, glass, trim, neon, and display props, not just a floating label.
+- Mall, storefront, threshold, and first interior objects no longer read as raw boxes with labels.
 - Posters and display products feel fictional but era-appropriate.
 - First view has authored composition.
 - The opening state is quiet and pre-open: no customers or employees visible.
@@ -82,6 +84,7 @@ Likely affected:
 ## Fail Criteria
 
 - View still reads as white walls plus labels.
+- View still reads as box graphics with labels.
 - Store identity depends on a floating sign only.
 - Window display is sparse or random.
 - First view implies the full catalog is already available on day one.

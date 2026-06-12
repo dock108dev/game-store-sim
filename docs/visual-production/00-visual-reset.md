@@ -6,7 +6,7 @@ Reset expectations for the game's visuals before more implementation work.
 
 The project has a broad, validated first-person retail loop. That is a strong mechanical foundation. The current store visuals, however, are still a prototype/blockout. They rely heavily on CSG primitives, floating labels, flat material planes, and validation screenshots that prove readability more than art direction.
 
-June 12 owner review rejected the first broad phase 0-4 visual pass. The immediate reset target is now the opening approach: the player starts on a quiet second-floor mall concourse, faces the new store, walks through a branded glass storefront, and enters before customers or employees are present.
+June 12 owner review rejected the first broad phase 0-4 visual pass. The immediate reset target is now the opening approach: the player starts on a quiet second-floor mall concourse, faces the new store, walks through a branded glass storefront, and enters before customers or employees are present. The mall-entry premise is better, but the next pass must replace visible blockout boxes and label-driven props before broader store expansion.
 
 ## New Visual Truth
 
@@ -20,6 +20,7 @@ Current scene status:
 - Not close enough to compare favorably with polished indie shop sims.
 - Not the visual baseline for future production.
 - Current active review surface is only the second-floor mall storefront opening slice.
+- Next implementation cycle is the opening visual asset pass, not another broad layout pass.
 
 ## Deprecated Expectations
 
@@ -31,6 +32,7 @@ Stop treating these as sufficient visual progress:
 - "Tests pass" as proof that the store looks good.
 - Screenshot nonblank/sanity checks as art approval.
 - Full-store broadening before one final-quality slice exists.
+- Treating mall-entry composition approval as final art approval.
 - Production-blockout language as a release-facing visual target.
 
 ## What Stays Useful

@@ -2,18 +2,19 @@
 
 This folder is the active visual reset and implementation planning space.
 
-The current Godot scene is a functional prototype and layout proof. It is useful for mechanics, validation, collision, route testing, and interaction coverage, but it is not the final visual target and should not be used as proof that the game has reached an indie-release art bar.
+The current Godot scene is a functional prototype and layout proof. It is useful for mechanics, validation, collision, route testing, and interaction coverage, but it is not the final visual target and should not be used as proof that the game has reached an indie-release art bar. The mall-entry composition is directionally approved as a better premise, but visible blockout boxes and label-driven props are not acceptable as the next visual baseline.
 
 ## Default Direction
 
 Until owner review changes it, plan against this target:
 
 - Era: 2005-2007.
-- Store type: independent strip-mall used video game shop.
+- Store type: independent used video game shop in a small mall or retail strip.
 - Style: stylized semi-realistic indie sim with authored low-poly/modular assets, bevels, warm retail lighting, fictional labels, and dense but readable merchandise.
 - Tone: warm local-shop nostalgia on the surface, dry retail stress underneath, with optional suspicious details kept secondary.
 - Visual priority: first-person shop operation, not tycoon overview or debug readability.
 - Opening density: less is more. Day one starts with a small unlocked assortment, with more products unlocked, traded in, ordered, or released over time.
+- Next implementation target: the opening route only, from mall spawn to storefront, threshold, and first interior view.
 
 ## Planning Docs
 
@@ -33,6 +34,7 @@ Until owner review changes it, plan against this target:
 - [Visual QA Checklist](13-visual-qa-checklist.md): pass/fail review protocol.
 - [Deprecated Visual Docs](14-deprecated-visual-docs.md): older docs that should be treated as historical for visuals.
 - [Day One Stock And Unlocks](15-day-one-stock-and-unlocks.md): restrained starter assortment, catalog unlocks, receiving flow, and progression rules.
+- [Opening Visual Asset Pass](16-opening-visual-asset-pass.md): next implementation cycle for replacing visible blockout graphics on the opening route.
 
 ## Rule
 

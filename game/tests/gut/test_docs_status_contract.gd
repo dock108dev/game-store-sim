@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_current_review_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "opening_mall_storefront_reset_ready_for_owner_validation")
-	assert_eq(status.get("playtest_state"), "paused_pending_opening_mall_storefront_review")
+	assert_eq(status.get("current_phase"), "opening_visual_asset_pass_ready_for_implementation_discussion")
+	assert_eq(status.get("playtest_state"), "paused_pending_opening_visual_asset_pass")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "opening_mall_storefront_reset_review_ready")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "opening_visual_asset_pass_planned")
 
 
 func test_docs_status_contract_records_validation_baseline() -> void:
@@ -22,7 +22,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 565)
-	assert_eq(int(validation.get("gut_asserts")), 9723)
+	assert_eq(int(validation.get("gut_asserts")), 9721)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 52)
@@ -50,15 +50,16 @@ func test_docs_status_contract_points_to_active_docs() -> void:
 	assert_true(active_docs.has("docs/visual-production/12-implementation-roadmap.md"))
 	assert_true(active_docs.has("docs/visual-production/13-visual-qa-checklist.md"))
 	assert_true(active_docs.has("docs/visual-production/15-day-one-stock-and-unlocks.md"))
+	assert_true(active_docs.has("docs/visual-production/16-opening-visual-asset-pass.md"))
 	assert_true(active_docs.has("docs/design-planning/README.md"))
-	assert_true(active_docs.has("docs/design-planning/01-opening-store-quality-bar.md"))
-	assert_true(active_docs.has("docs/design-planning/08-quality-bar-checklist.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/full-day-playtest.md"))
 	assert_true(active_docs.has("docs/qa/screenshot-review.md"))
 	assert_true(active_docs.has("docs/qa/release-package-check.md"))
 	assert_true(historical_docs.has("docs/production/11-game-completion-plan.md"))
 	assert_true(historical_docs.has("docs/production/18-production-visuals-plan.md"))
+	assert_true(historical_docs.has("docs/design-planning/01-opening-store-quality-bar.md"))
+	assert_true(historical_docs.has("docs/design-planning/08-quality-bar-checklist.md"))
 
 
 func test_current_state_and_readme_point_to_status_contract() -> void:
