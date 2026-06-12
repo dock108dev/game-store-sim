@@ -818,11 +818,11 @@ func test_future_inventory_is_catalog_planning_until_paid_or_received() -> void:
 func test_store_signage_uses_fictional_world_labels() -> void:
 	var expected_labels := {
 		"StoreIdentitySignPanel/StoreIdentitySignLabel": "SAVE POINT GAMES",
-		"DisplaySignPanel/DisplaySignLabel": "DISPLAY RACKS",
+		"DisplaySignPanel/DisplaySignLabel": "RACKS",
 		"RegisterSignPanel/RegisterSignLabel": "REGISTER",
-		"BackroomSignPanel/BackroomSignLabel": "BACKROOM",
-		"ReceivingSignPanel/ReceivingSignLabel": "RECEIVING",
-		"StorageSignPanel/StorageSignLabel": "STORAGE",
+		"BackroomSignPanel/BackroomSignLabel": "STAFF",
+		"ReceivingSignPanel/ReceivingSignLabel": "RECV",
+		"StorageSignPanel/StorageSignLabel": "STOCK",
 	}
 	var banned_terms := ["GAMESTOP", "NINTENDO", "PLAYSTATION", "XBOX", "SEGA", "ATARI"]
 
@@ -830,8 +830,11 @@ func test_store_signage_uses_fictional_world_labels() -> void:
 		var label := _store.get_node_or_null(label_path) as Label3D
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
-		assert_gte(label.font_size, 30)
-		assert_lte(label.pixel_size, 0.0048)
+		assert_gte(label.font_size, 20)
+		if label_path == "StoreIdentitySignPanel/StoreIdentitySignLabel":
+			assert_lte(label.pixel_size, 0.0041)
+		else:
+			assert_lte(label.pixel_size, 0.003)
 		assert_eq(label.billboard, 0)
 		for banned_term in banned_terms:
 			assert_false(label.text.contains(banned_term))
@@ -935,7 +938,7 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 	var label := _store.get_node_or_null("EmployeesOnlySignPanel/EmployeesOnlySignLabel") as Label3D
 	assert_not_null(label)
 	assert_eq(label.text, "EMPLOYEES ONLY")
-	assert_lte(label.pixel_size, 0.0032)
+	assert_lte(label.pixel_size, 0.0025)
 	assert_true(label.no_depth_test)
 
 	for path in [
@@ -943,6 +946,13 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 		"StaffDoorFrameLeft",
 		"StaffDoorFrameRight",
 		"EmployeesOnlySignPanel",
+		"StaffThresholdHeaderBeam",
+		"StaffThresholdHeaderInset",
+		"StaffThresholdLeftReturnWall",
+		"StaffThresholdRightReturnWall",
+		"StaffThresholdBackroomFloorPanel",
+		"StaffThresholdDoorStopLeft",
+		"StaffThresholdDoorStopRight",
 	]:
 		var marker := _store.get_node_or_null(path) as CSGBox3D
 		assert_not_null(marker, path)
@@ -953,6 +963,16 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 	assert_almost_eq(threshold.global_position.z, 3.34, 0.01)
 	assert_gte(threshold.size.x, 2.2)
 	assert_lte(threshold.size.z, 0.75)
+
+	var header := _store.get_node("StaffThresholdHeaderBeam") as CSGBox3D
+	var floor_panel := _store.get_node("StaffThresholdBackroomFloorPanel") as CSGBox3D
+	var left_return := _store.get_node("StaffThresholdLeftReturnWall") as CSGBox3D
+	var right_return := _store.get_node("StaffThresholdRightReturnWall") as CSGBox3D
+	assert_gt(header.global_position.y, 1.8)
+	assert_gt(floor_panel.global_position.z, threshold.global_position.z)
+	assert_gte(floor_panel.size.x, 3.0)
+	assert_lt(left_return.global_position.x, (_store.get_node("StaffDoorFrameLeft") as CSGBox3D).global_position.x)
+	assert_gt(right_return.global_position.x, (_store.get_node("StaffDoorFrameRight") as CSGBox3D).global_position.x)
 
 
 func test_stockroom_shell_has_office_service_and_carry_route_cues() -> void:
@@ -982,8 +1002,8 @@ func test_stockroom_shell_has_office_service_and_carry_route_cues() -> void:
 
 func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 	var expected_labels := {
-		"RightWallUsedPosterPanel/RightWallUsedPosterLabel": "USED WALL",
-		"RightWallControllerPosterPanel/RightWallControllerPosterLabel": "CONTROLLERS",
+		"RightWallUsedPosterPanel/RightWallUsedPosterLabel": "USED",
+		"RightWallControllerPosterPanel/RightWallControllerPosterLabel": "PADS",
 		"BackWallFeatureStripe/BackWallFeatureLabel": "BUY  SELL  REPAIR",
 	}
 
@@ -991,13 +1011,17 @@ func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 		var label := _store.get_node_or_null(label_path) as Label3D
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
-		assert_lte(label.pixel_size, 0.0042)
+		assert_lte(label.pixel_size, 0.0027)
 
 	for panel_path in [
 		"RightWallMerchBand",
 		"RightWallUsedPosterPanel",
 		"RightWallControllerPosterPanel",
 		"BackWallFeatureStripe",
+		"RightWallUsedPosterCaseA",
+		"RightWallUsedPosterCaseB",
+		"RightWallControllerPosterPadA",
+		"RightWallControllerPosterPadB",
 	]:
 		var panel := _store.get_node_or_null(panel_path) as CSGBox3D
 		assert_not_null(panel)
@@ -1010,9 +1034,9 @@ func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 
 func test_retail_clutter_uses_short_fictional_callouts() -> void:
 	var expected_labels := {
-		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel": "WEEKLY PICKS",
-		"NewThisWeekPosterPanel/NewThisWeekPosterLabel": "NEW THIS WEEK",
-		"TradeBonusPosterPanel/TradeBonusPosterLabel": "TRADE BONUS",
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel": "PICKS",
+		"NewThisWeekPosterPanel/NewThisWeekPosterLabel": "NEW",
+		"TradeBonusPosterPanel/TradeBonusPosterLabel": "TRADE",
 		"CounterDealTagPanel/CounterDealTagLabel": "$9+ USED",
 		"BargainBin/BinFrontTag/BinFrontLabel": "BARGAIN BIN",
 	}
@@ -1022,7 +1046,7 @@ func test_retail_clutter_uses_short_fictional_callouts() -> void:
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
 		assert_lte(label.text.length(), 13)
-		assert_lte(label.pixel_size, 0.0049)
+		assert_lte(label.pixel_size, 0.0039)
 
 
 func test_retail_clutter_is_nonblocking_and_away_from_interaction_hotspots() -> void:
@@ -1125,7 +1149,11 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 		"ReceivingIntakeTableLegB",
 		"ReceivingBoxStackA",
 		"ReceivingBoxStackALabel",
+		"ReceivingBoxStackATapeA",
+		"ReceivingBoxStackATapeB",
 		"ReceivingBoxStackB",
+		"ReceivingStagedCartBase",
+		"ReceivingStagedCartHandle",
 		"BackroomDeliveryDoor",
 		"DeliveryDoorSlatA",
 		"DeliveryDoorSlatB",
@@ -1144,6 +1172,12 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 		assert_not_null(prop)
 		assert_false(prop.use_collision)
 		assert_lt(_flat_distance_xz(prop.global_position, _store.get_node("ReceivingBox").global_position), 2.25)
+
+	for wheel_path in ["ReceivingStagedCartWheelA", "ReceivingStagedCartWheelB"]:
+		var wheel := _store.get_node_or_null(wheel_path) as CSGCylinder3D
+		assert_not_null(wheel, wheel_path)
+		assert_false(wheel.use_collision, wheel_path)
+		assert_lt(_flat_distance_xz(wheel.global_position, _store.get_node("ReceivingBox").global_position), 1.7)
 
 	var storage_shelf := _store.get_node_or_null("BackroomStorageShelf") as Node3D
 	assert_not_null(storage_shelf)
@@ -1231,6 +1265,9 @@ func test_receiving_intake_station_reads_as_workflow_surface() -> void:
 	var intake_table := _store.get_node_or_null("ReceivingIntakeTableTop") as CSGBox3D
 	var sorted_tray := _store.get_node_or_null("ReceivingSortedTray") as CSGBox3D
 	var sorted_label := _store.get_node_or_null("ReceivingSortedTrayLabelPanel/ReceivingSortedTrayLabel") as Label3D
+	var staged_cart := _store.get_node_or_null("ReceivingStagedCartBase") as CSGBox3D
+	var carton_tape_a := _store.get_node_or_null("ReceivingBoxStackATapeA") as CSGBox3D
+	var carton_tape_b := _store.get_node_or_null("ReceivingBoxStackATapeB") as CSGBox3D
 	var workflow_cards := [
 		"ReceivingWorkflowCardDelivery",
 		"ReceivingWorkflowCardCheck",
@@ -1240,14 +1277,23 @@ func test_receiving_intake_station_reads_as_workflow_surface() -> void:
 	assert_not_null(intake_table)
 	assert_not_null(sorted_tray)
 	assert_not_null(sorted_label)
+	assert_not_null(staged_cart)
+	assert_not_null(carton_tape_a)
+	assert_not_null(carton_tape_b)
 	assert_false(intake_table.use_collision)
 	assert_false(sorted_tray.use_collision)
+	assert_false(staged_cart.use_collision)
+	assert_false(carton_tape_a.use_collision)
+	assert_false(carton_tape_b.use_collision)
 	assert_eq(sorted_label.text, "SORTED")
 	assert_true(sorted_label.no_depth_test)
 	assert_eq(sorted_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 	assert_lt(_flat_distance_xz(intake_table.global_position, receiving_box.global_position), 0.9)
 	assert_lt(_flat_distance_xz(sorted_tray.global_position, receiving_box.global_position), 1.1)
+	assert_lt(_flat_distance_xz(staged_cart.global_position, receiving_box.global_position), 0.85)
 	assert_gt(sorted_tray.global_position.y, receiving_box.global_position.y + 0.35)
+	assert_gt(carton_tape_a.global_position.y, (_store.get_node("ReceivingBoxStackA") as CSGBox3D).global_position.y)
+	assert_gt(carton_tape_b.global_position.y, (_store.get_node("ReceivingBoxStackA") as CSGBox3D).global_position.y)
 	for card_path in workflow_cards:
 		var card := _store.get_node_or_null(card_path) as CSGBox3D
 		assert_not_null(card)
@@ -1382,7 +1428,7 @@ func test_manager_office_frames_backroom_computer_without_register_actions() -> 
 
 func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void:
 	var expected_labels := {
-		"BackroomDeliveryDoor/DeliveryDoorLabel": "DELIVERIES",
+		"BackroomDeliveryDoor/DeliveryDoorLabel": "DROP",
 		"ReceivingInvoiceClipboard/ReceivingInvoiceLabel": "INVOICE",
 		"BackstockOverflowLabelPanel/BackstockOverflowLabel": "BACKSTOCK",
 		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel": "SAFE",

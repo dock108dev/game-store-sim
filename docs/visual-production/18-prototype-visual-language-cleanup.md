@@ -8,6 +8,32 @@ The scene architecture pass is accepted as infrastructure: `store_world.tscn` is
 
 This pass should make the existing opening store read more like a believable mid-00s mall game shop from first-person screenshots.
 
+## Implementation Status
+
+Implemented on June 12, 2026 and ready for owner validation.
+
+Validation evidence:
+
+- `scripts/validate_godot.sh` passed.
+- 570 GUT tests and 10026 asserts passed.
+- UI automation coverage remains 508/628, or 80.9%, against the 80% threshold.
+- Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, and old-name scan passed.
+- Latest screenshots and contact sheet are in `artifacts/validation/latest/`.
+
+Implemented changes:
+
+- Oversized interior label panels were reduced or shortened so the exterior store identity remains prominent while interior zone text is secondary.
+- Right-wall used/controller posters gained small physical product silhouettes so they are no longer only text blocks.
+- The backroom divider gained doorway/header/inset/return-wall/floor/door-stop cues and module ownership.
+- Receiving gained strapped boxes, staged cart, cart handle/wheels, and updated receiving module ownership.
+- GUT coverage now asserts smaller surface-bound signage, physical wall-poster details, nonblocking staff threshold architecture, and staged receiving workflow props.
+
+Known owner-review risks:
+
+- Tiny label speckle remains visible from some storefront/interior screenshot angles.
+- Receiving is more coherent, but still label-dense and not final product art.
+- The broader store still needs product/fixture visual-kit work before it can clear a true art bar.
+
 ## Owner Validation Notes
 
 Accepted:

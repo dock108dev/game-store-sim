@@ -6,4 +6,4 @@
 script = ExtResource("1_manifest")
 module_id = "receiving_area"
 responsibility = "Receiving box, delivery staging, invoice/sort/check surfaces, intake lanes, and supplier stock flow."
-owned_node_names = PackedStringArray("ReceivingBox", "ReceivingPallet", "ReceivingIntakeTableTop", "ReceivingInvoiceClipboard", "ReceivingInvoicePaper", "ReceivingSortedTray", "ReceivingSortedTrayLaneA", "ReceivingSortedTrayLaneB", "ReceivingWorkflowCardDelivery", "ReceivingWorkLight")
+owned_node_names = PackedStringArray("ReceivingBox", "ReceivingPallet", "ReceivingIntakeTableTop", "ReceivingBoxStackA", "ReceivingBoxStackB", "ReceivingBoxStackATapeA", "ReceivingBoxStackATapeB", "ReceivingStagedCartBase", "ReceivingStagedCartHandle", "ReceivingStagedCartWheelA", "ReceivingStagedCartWheelB", "ReceivingInvoiceClipboard", "ReceivingInvoicePaper", "ReceivingSortedTray", "ReceivingSortedTrayLaneA", "ReceivingSortedTrayLaneB", "ReceivingWorkflowCardDelivery", "ReceivingWorkLight")

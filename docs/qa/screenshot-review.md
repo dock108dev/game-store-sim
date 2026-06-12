@@ -1,6 +1,6 @@
 # Screenshot Review
 
-Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the scene architecture is accepted as infrastructure. Visual quality is still not approved. The active review target is now the prototype visual language cleanup pass.
+Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the scene architecture is accepted as infrastructure. Prototype visual language cleanup is implemented and pending owner validation. Visual quality is still not approved until the latest screenshot set is accepted.
 
 ## Generate
 
@@ -22,12 +22,12 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 570 GUT tests and 9961 asserts.
+- Full validation passed with 570 GUT tests and 10026 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
-- Current visual evidence is not art-approved. It is captured from the promoted `store_world.tscn` production scene, but still has too many labels, debug-like callouts, random clutter, and a weak backroom boundary.
+- Current visual evidence is not art-approved. It is captured from the promoted `store_world.tscn` production scene after prototype-language cleanup. The latest set reduces oversized interior labels, adds a staff threshold, and stages receiving clutter, but still needs owner review for tiny label speckle, receiving label density, and whether the cleaned baseline is good enough for product/fixture visual-kit work.
 
 ## Required Screenshots
 
@@ -86,7 +86,7 @@ Fail if:
 
 ## Routing
 
-Before broadening visual work beyond the opening route, review `docs/visual-production/18-prototype-visual-language-cleanup.md` and confirm the cleanup pass has removed the label/debug/clutter/backroom-line read. If cleanup fails review, keep iterating there before adding product, fixture, or customer visual breadth.
+Before broadening visual work beyond the opening route, review `docs/visual-production/18-prototype-visual-language-cleanup.md` and confirm the cleanup pass has removed enough label/debug/clutter/backroom-line read. If cleanup fails review, keep iterating there before adding product, fixture, or customer visual breadth.
 
 If all screenshots pass, run `docs/qa/release-package-check.md` and consider reopening `docs/production/15-alpha-playtest-package.md`.
 

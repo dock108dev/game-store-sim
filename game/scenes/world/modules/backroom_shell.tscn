@@ -6,4 +6,4 @@
 script = ExtResource("1_manifest")
 module_id = "backroom_shell"
 responsibility = "Employees-only backroom, backstock lanes, manager office, service/security corners, and utility lighting."
-owned_node_names = PackedStringArray("BackroomComputer", "BackroomZone", "BackroomSignPanel", "BackroomStorageShelf", "BackstockPullStageSurface", "BackroomManagementBoard", "ManagementDeskPad", "BackroomServiceBench", "BackroomSafePlaceholder", "BackroomUtilityLight", "BackroomDeskLight")
+owned_node_names = PackedStringArray("BackroomComputer", "BackroomZone", "BackroomSignPanel", "StaffThresholdHeaderBeam", "StaffThresholdHeaderInset", "StaffThresholdLeftReturnWall", "StaffThresholdRightReturnWall", "StaffThresholdBackroomFloorPanel", "StaffThresholdDoorStopLeft", "StaffThresholdDoorStopRight", "BackroomStorageShelf", "BackstockPullStageSurface", "BackroomManagementBoard", "ManagementDeskPad", "BackroomServiceBench", "BackroomSafePlaceholder", "BackroomUtilityLight", "BackroomDeskLight")

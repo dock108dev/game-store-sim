@@ -4,7 +4,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 ## Playable Build
 
-The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented, and scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. Visual quality is not approved yet. The next implementation pass is prototype visual language cleanup: remove label/debug reads, replace the backroom line divider with a real staff threshold, clean random clutter, and prove one believable front-store benchmark before product/fixture breadth. The first-person retail loop includes:
+The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented, and scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. Prototype visual language cleanup is now implemented for owner validation: oversized interior labels were reduced, right-wall posters gained small physical product silhouettes, the staff/backroom boundary now has doorway/header/return-wall/floor cues, and receiving has staged-cart/strapped-box workflow cues. Visual quality is not approved yet; the next decision is whether this cleaned baseline is good enough for the product/fixture visual-kit pass. The first-person retail loop includes:
 
 - Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
@@ -20,7 +20,7 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 570 GUT tests and 9961 asserts pass.
+- 570 GUT tests and 10026 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 53/53, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
@@ -32,7 +32,7 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but the visual read still fails the owner bar. The opening composition and modular production scene are directionally better, but the store still relies too much on labels, debug-like callouts, random clutter, and a weak backroom boundary. The next gate is implementation and owner validation of [Prototype Visual Language Cleanup](visual-production/18-prototype-visual-language-cleanup.md).
+External alpha playtest remains paused. The repo is mechanically green, but the visual read still needs owner approval. The opening composition and modular production scene are directionally better, and the cleanup pass reduced oversized interior labels, added a real staff threshold, and staged receiving clutter. Remaining owner-review risks are the still-visible tiny label speckle through storefront/interior views, receiving label density, and the broader lack of true product/fixture art. The next gate is owner validation of [Prototype Visual Language Cleanup](visual-production/18-prototype-visual-language-cleanup.md).
 
 Required reviews:
 
@@ -46,14 +46,14 @@ Required reviews:
 
 ## Visual Read
 
-The current scene is still pending owner art approval. The accepted direction is narrow: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state. The first asset pass adds tile panels, rail posts, shutter details, planter foliage, storefront mullions, threshold pieces, starter product packaging, and a first interior benchmark corner. Owner review still needs to decide whether this clears enough of the box-label read to become the style benchmark.
+The current scene is still pending owner art approval. The accepted direction is narrow: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state. The first asset pass adds tile panels, rail posts, shutter details, planter foliage, storefront mullions, threshold pieces, starter product packaging, and a first interior benchmark corner. The prototype-language cleanup pass adds smaller physical signage, right-wall poster product silhouettes, a staffed doorway/threshold, and receiving staging. Owner review still needs to decide whether this clears enough of the box-label read to become the style benchmark.
 
 Current visual risk areas:
 
 - Opening route blockout read is reduced, but screenshots still do not clear the owner art bar.
-- Too many labels and debug-like callouts still carry object and zone identity.
-- The backroom line divider does not read as a real staff-only room.
-- Random clutter still makes several store views feel like prototype staging instead of authored shop operations.
+- Tiny label speckle is still visible from some storefront/interior screenshots, especially through glass and across the far wall.
+- Receiving is more staged, but still has dense labels/tags and needs product/fixture art before it can read as finished.
+- The backroom now has a staff threshold, but the broader backroom still needs real room treatment and material depth.
 - The new module boundaries are accepted as infrastructure; deeper physical extraction should happen only when it helps the cleanup pass.
 - Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
 - CSG primitives are still the implementation medium for this pass, so shape/material quality needs screenshot review.
@@ -87,7 +87,7 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review [Prototype Visual Language Cleanup](visual-production/18-prototype-visual-language-cleanup.md) before more scene work. The production scene/module structure is accepted as the infrastructure baseline, but the visual language needs cleanup before broader visual work continues.
+Review [Prototype Visual Language Cleanup](visual-production/18-prototype-visual-language-cleanup.md) before more scene work. The production scene/module structure is accepted as the infrastructure baseline, and the cleanup pass is implemented for owner validation. Broader visual work should wait until the cleanup screenshots are accepted or corrected.
 
 If the cleanup pass validates:
 

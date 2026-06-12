@@ -2,10 +2,10 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-12",
-  "current_phase": "prototype_visual_language_cleanup_ready_for_implementation",
+  "current_phase": "prototype_visual_language_cleanup_implemented_pending_owner_validation",
   "playtest_state": "paused_pending_visual_cleanup_owner_review",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. Scene architecture modularization is accepted as infrastructure: store_world.tscn is the production main scene, graybox_store.tscn is a compatibility wrapper, and reusable module manifests define visual/system ownership. Visual quality is not approved yet; the next implementation pass is prototype visual language cleanup before product, fixture, catalog, customer, or decoration breadth.",
+    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. Scene architecture modularization is accepted as infrastructure: store_world.tscn is the production main scene, graybox_store.tscn is a compatibility wrapper, and reusable module manifests define visual/system ownership. Prototype visual language cleanup is implemented for owner validation: oversized interior signs were reduced, the staff/backroom boundary has doorway architecture, and receiving clutter has staged-cart/strapped-box workflow cues. Visual quality is still not owner-approved; the next decision is whether this cleaned baseline is good enough for the product and fixture visual-kit pass.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "prototype_visual_language_cleanup_required",
+    "visual_read": "prototype_visual_language_cleanup_implemented_pending_owner_validation",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 9961,
+    "gut_asserts": 10026,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -68,7 +68,7 @@
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Does the next cleanup pass remove enough labels, random clutter, and backroom line-divider read to make the store interior worth using as the visual baseline?",
+    "question": "Does the implemented cleanup remove enough labels, random clutter, and backroom line-divider read to make the store interior worth using as the visual baseline?",
     "approve_path": "implement product and fixture visual-kit breadth on top of the cleaned store_world baseline",
     "reject_path": "continue prototype-language cleanup or revise the store/backroom composition before adding broader catalog visuals"
   },
