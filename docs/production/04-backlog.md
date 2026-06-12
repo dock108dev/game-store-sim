@@ -4,20 +4,19 @@ This is the active production backlog. For current status, validation numbers, a
 
 ## Current Phase
 
-Opening visual asset pass owner validation.
+Scene architecture modularization.
 
-Goal: approve or correct the implemented opening asset-replacement slice before broadening the interior visual rebuild.
+Goal: stop broadening `graybox_store.tscn` as the production world by introducing a production scene and reusable modules before the next visual-content pass.
 
-Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 visual pass failed owner screenshot review. The active implementation resets the opening composition: the player starts on a second-floor mall concourse, faces a branded glass storefront, walks through an open threshold, and enters an empty pre-open shop with customer actors hidden but still mechanically wired. The first opening visual asset pass now replaces key blockout/box-label graphics on that route with authored modular mall, storefront, starter-product, and first-corner pieces. External alpha playtest remains paused until owner screenshot validation and the follow-up interior visual rebuild pass.
+Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 visual pass failed owner screenshot review. The active implementation resets the opening composition: the player starts on a second-floor mall concourse, faces a branded glass storefront, walks through an open threshold, and enters an empty pre-open shop with customer actors hidden but still mechanically wired. The first opening visual asset pass now replaces key blockout/box-label graphics on that route with authored modular mall, storefront, starter-product, and first-corner pieces. The next implementation pass is architectural: create `store_world.tscn`, extract reusable modules, separate systems from visual modules, and keep `graybox_store.tscn` as a legacy reference until parity is validated.
 
 ## Next Decision
 
 1. Run `scripts/validate_godot.sh`.
-2. Review `docs/visual-production/README.md` and the latest screenshot contact sheet.
-3. Review `docs/visual-production/16-opening-visual-asset-pass.md`.
-4. Approve or revise the implemented opening route: mall spawn, storefront, threshold, first interior view.
-5. If the asset pass passes, use it as the benchmark for product/fixture and sales-floor work.
-6. If the asset pass fails, revise the rejected route pieces before changing broader scene assets.
+2. Review `docs/visual-production/17-scene-architecture-modularization.md`.
+3. Approve or revise the production scene/module boundaries.
+4. If the plan passes, implement Phase 1B before product/fixture or broader sales-floor work.
+5. If the plan fails, revise ownership boundaries before changing scene assets.
 
 ## Current Rules
 
@@ -31,12 +30,13 @@ Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 v
 
 ## Active Work
 
-1. Owner opening visual asset pass signoff.
-2. Owner opening mall/storefront screenshot review.
-3. Owner walk-in empty-store review.
-4. Owner day-one owned-stock and catalog/unlock/receiving review.
-5. Product/fixture and broader sales-floor rebuild after opening asset pass signoff.
-6. External alpha playtest: paused until opening review, interior rebuild, screenshot review, and release-package check pass.
+1. Owner scene architecture modularization plan signoff.
+2. Production world skeleton implementation.
+3. Opening-route module extraction.
+4. Systems/interaction wiring separation.
+5. Main-scene promotion after parity validation.
+6. Product/fixture and broader sales-floor rebuild after production scene promotion.
+7. External alpha playtest: paused until opening review, interior rebuild, screenshot review, and release-package check pass.
 
 ## Completed Baselines
 

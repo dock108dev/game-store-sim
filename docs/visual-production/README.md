@@ -14,7 +14,7 @@ Until owner review changes it, plan against this target:
 - Tone: warm local-shop nostalgia on the surface, dry retail stress underneath, with optional suspicious details kept secondary.
 - Visual priority: first-person shop operation, not tycoon overview or debug readability.
 - Opening density: less is more. Day one starts with a small unlocked assortment, with more products unlocked, traded in, ordered, or released over time.
-- Current implementation target: validate or correct the opening route only, from mall spawn to storefront, threshold, and first interior view.
+- Current implementation target: modularize the production scene architecture before broadening visual work, so the opening route can move out of `graybox_store.tscn` without losing validated behavior.
 
 ## Planning Docs
 
@@ -35,6 +35,7 @@ Until owner review changes it, plan against this target:
 - [Deprecated Visual Docs](14-deprecated-visual-docs.md): older docs that should be treated as historical for visuals.
 - [Day One Stock And Unlocks](15-day-one-stock-and-unlocks.md): restrained starter assortment, catalog unlocks, receiving flow, and progression rules.
 - [Opening Visual Asset Pass](16-opening-visual-asset-pass.md): implemented first pass for replacing visible blockout graphics on the opening route.
+- [Scene Architecture Modularization](17-scene-architecture-modularization.md): next implementation pass for replacing the monolithic `graybox_store.tscn` workflow with a production scene and reusable modules.
 
 ## Rule
 

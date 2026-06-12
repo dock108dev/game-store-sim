@@ -22,7 +22,7 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 567 GUT tests and 9868 asserts.
+- Full validation passed with 567 GUT tests and 9870 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
@@ -80,6 +80,8 @@ Fail if:
 - A prop, sign, customer, fixture, or modal competes with the action target.
 
 ## Routing
+
+Before broadening visual work beyond the opening route, review `docs/visual-production/17-scene-architecture-modularization.md` and confirm the next implementation pass is moving toward `store_world.tscn` plus reusable modules rather than continuing to grow `graybox_store.tscn`.
 
 If all screenshots pass, run `docs/qa/release-package-check.md` and consider reopening `docs/production/15-alpha-playtest-package.md`.
 

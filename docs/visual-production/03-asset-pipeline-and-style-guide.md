@@ -32,6 +32,24 @@ game/assets/visual/textures/posters/
 game/scenes/visual_slices/
 ```
 
+Production world scene organization:
+
+```text
+game/scenes/world/store_world.tscn
+game/scenes/world/modules/
+game/scenes/world/modules/mall_concourse.tscn
+game/scenes/world/modules/storefront_shell.tscn
+game/scenes/world/modules/opening_threshold.tscn
+game/scenes/world/modules/store_interior_shell.tscn
+game/scenes/world/modules/front_counter_zone.tscn
+game/scenes/world/modules/starter_product_display.tscn
+game/scenes/world/modules/backroom_shell.tscn
+game/scenes/world/modules/receiving_area.tscn
+game/scenes/world/modules/store_systems.tscn
+```
+
+`graybox_store.tscn` is a legacy integration reference once `store_world.tscn` exists. Do not keep broadening it as the production scene.
+
 ## Naming
 
 Use direct retail names:

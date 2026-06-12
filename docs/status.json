@@ -2,10 +2,10 @@
   "schema": 1,
   "project": "game-store-sim",
   "status_date": "2026-06-12",
-  "current_phase": "opening_visual_asset_pass_implemented_ready_for_owner_validation",
-  "playtest_state": "paused_pending_opening_visual_asset_pass_owner_review",
+  "current_phase": "scene_architecture_modularization_ready_for_implementation",
+  "playtest_state": "paused_pending_scene_architecture_and_visual_owner_review",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice now starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. The next gate is owner screenshot and real-window validation before broadening the store.",
+    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice now starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. The next implementation gate is scene architecture modularization: introduce a production-named store world, extract reusable modules, keep graybox_store as a legacy integration reference, and preserve the validated route and systems before broadening visuals.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -36,7 +36,7 @@
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 567,
-    "gut_asserts": 9868,
+    "gut_asserts": 9870,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -60,6 +60,7 @@
   },
   "blocking_reviews": [
     "owner_opening_visual_asset_pass_signoff",
+    "owner_scene_architecture_modularization_plan_signoff",
     "owner_opening_mall_storefront_screenshot_review",
     "owner_walk_in_empty_store_review",
     "owner_day_one_stock_flow_review",
@@ -67,9 +68,9 @@
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Does the implemented opening visual asset pass now clear enough of the box-label read on the mall spawn, storefront, threshold, and first interior view to become the approved style benchmark?",
-    "approve_path": "use the opening pass as the style benchmark, then proceed to the product/fixture kit and broader sales-floor replacement",
-    "reject_path": "revise the mall shell, storefront modules, starter products, or first interior benchmark corner before broadening scene work"
+    "question": "Is the scene architecture modularization plan approved as the next implementation pass before adding more visual breadth?",
+    "approve_path": "create store_world.tscn, extract the opening route into reusable modules, separate systems from visuals, validate parity, then promote the production scene",
+    "reject_path": "revise the scene/module boundaries before extracting graybox_store.tscn"
   },
   "active_docs": [
     "docs/CURRENT_STATE.md",
@@ -91,6 +92,7 @@
     "docs/visual-production/14-deprecated-visual-docs.md",
     "docs/visual-production/15-day-one-stock-and-unlocks.md",
     "docs/visual-production/16-opening-visual-asset-pass.md",
+    "docs/visual-production/17-scene-architecture-modularization.md",
     "docs/design-planning/README.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",

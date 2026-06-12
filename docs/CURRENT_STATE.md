@@ -20,7 +20,7 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 567 GUT tests and 9868 asserts pass.
+- 567 GUT tests and 9870 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 52/52, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
@@ -32,11 +32,12 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new opening composition and first asset pass are implemented, but the next gate is not more layout breadth. The next gate is owner validation of the opening asset pass on the `mall spawn -> storefront -> threshold -> first interior view` route.
+External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new opening composition and first asset pass are implemented, but the next gate is not more layout breadth. The next implementation pass is scene architecture modularization: create a production-named store world, extract reusable modules, keep `graybox_store.tscn` as a legacy integration reference until parity is proven, and preserve the validated route/systems before broadening visuals.
 
 Required reviews:
 
 - Owner opening visual asset pass signoff.
+- Owner scene architecture modularization plan signoff.
 - Owner opening mall/storefront screenshot review.
 - Owner walk-in empty-store review.
 - Owner day-one owned-stock flow review.
@@ -66,6 +67,7 @@ Owner note: the opening store should be restrained. Day one should start with a 
 
 Start review with:
 
+- [Scene Architecture Modularization](visual-production/17-scene-architecture-modularization.md)
 - [Visual Reset](visual-production/00-visual-reset.md)
 - [Art Direction Target](visual-production/01-art-direction-target.md)
 - [Opening Visual Asset Pass](visual-production/16-opening-visual-asset-pass.md)
@@ -81,18 +83,20 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review the implemented [Opening Visual Asset Pass](visual-production/16-opening-visual-asset-pass.md), the latest contact sheet, and a real-window 1280x720 walk-in before more scene work.
+Review [Scene Architecture Modularization](visual-production/17-scene-architecture-modularization.md) before more scene work. The goal of the next implementation pass is to stop broadening `graybox_store.tscn` and introduce a production scene/module structure without breaking the validated game.
 
-If the opening asset pass passes owner review:
+If the scene architecture plan passes:
 
-1. Use this pass as the style benchmark for product/fixture and broader sales-floor replacement.
-2. Use [Visual QA Checklist](visual-production/13-visual-qa-checklist.md) for the opening screenshots first, then restore all 23 screenshot approvals after the next slice.
-3. Keep catalog/unlock/receiving rules as a hard progression constraint.
+1. Create `game/scenes/world/store_world.tscn` as the production scene.
+2. Extract the opening route into `game/scenes/world/modules/`.
+3. Separate visual modules from gameplay systems while preserving stable interaction targets.
+4. Validate parity with `scripts/validate_godot.sh`.
+5. Promote the production scene only after screenshot and interaction parity pass.
 
-If the opening asset pass fails owner review:
+If the scene architecture plan fails:
 
 1. Revise the visual-production docs.
-2. Patch the rejected mall shell, storefront, starter product, or first interior benchmark asset targets.
+2. Clarify scene/module ownership boundaries before extracting `graybox_store.tscn`.
 3. Keep external alpha playtest paused.
 
 ## Active Documentation

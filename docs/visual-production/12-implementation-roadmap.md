@@ -81,9 +81,36 @@ Exit criteria:
 - The player can still walk from spawn through the storefront without new blockers.
 - Owner approves style before broader replacement.
 
+## Phase 1B: Scene Architecture Modularization
+
+Status: planned next; ready for implementation.
+
+Scope:
+
+- Create a production scene, preferably `game/scenes/world/store_world.tscn`.
+- Keep `graybox_store.tscn` as the legacy integration reference until parity is proven.
+- Extract the opening route into reusable modules.
+- Separate visual modules from gameplay managers.
+- Preserve screenshot anchors, interaction targets, and validation behavior.
+
+Deliverables:
+
+- `store_world.tscn` production root.
+- `game/scenes/world/modules/` with opening-route modules first.
+- `store_systems.tscn` or equivalent systems grouping.
+- Tests proving both legacy and production scenes load until promotion.
+- Updated screenshot/tooling references once the production scene is promoted.
+
+Exit criteria:
+
+- `scripts/validate_godot.sh` passes.
+- Production scene loads and preserves the mall spawn, storefront threshold, core systems, and key interaction targets.
+- Screenshot capture targets the production scene after promotion.
+- Active docs no longer treat `graybox_store.tscn` as the future visual production surface.
+
 ## Phase 2: Product And Fixture Kit
 
-Status: mechanically present; paused until Phase 1A owner review is approved.
+Status: mechanically present; paused until Phase 1B is implemented and validated.
 
 Scope:
 
@@ -100,7 +127,7 @@ Exit criteria:
 
 ## Phase 3: Backroom Operations Kit
 
-Status: mechanically present; paused until Phase 1A owner review is approved.
+Status: mechanically present; paused until Phase 1B is implemented and validated.
 
 Scope:
 
@@ -115,7 +142,7 @@ Exit criteria:
 
 ## Phase 4: Customer Role Visuals
 
-Status: mechanically present; hidden during the pre-open slice and paused until Phase 1A owner review is approved.
+Status: mechanically present; hidden during the pre-open slice and paused until Phase 1B is implemented and validated.
 
 Scope:
 

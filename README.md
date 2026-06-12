@@ -6,7 +6,7 @@ First-person specialty video game retail simulator. The player runs a small game
 
 Read [Current State](docs/CURRENT_STATE.md) first. It is the authoritative human-readable handoff for what is playable, what is validated, what remains blocked by human review, and which docs are active.
 
-Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current scene has the first opening visual asset pass for the mall-entry route, but it still needs owner screenshot and real-window approval before it becomes the broader visual bar.
+Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current scene has the first opening visual asset pass for the mall-entry route, but the next implementation pass is scene architecture modularization: introduce a production-named store world and reusable modules instead of broadening `graybox_store.tscn`.
 
 Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
 
@@ -23,7 +23,7 @@ The gate writes logs and screenshots to `artifacts/validation/latest/`.
 Current validated baseline:
 
 - 567 GUT tests.
-- 9868 GUT asserts.
+- 9870 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 52/52.
 - 3 active standalone validation tools.
@@ -41,6 +41,7 @@ Current validated baseline:
 - [Screenshot Review](docs/qa/screenshot-review.md): review the 23 validation screenshots.
 - [Release Package Check](docs/qa/release-package-check.md): pack smoke and external handoff readiness.
 - [Backlog](docs/production/04-backlog.md): short current backlog and next decision.
+- [Scene Architecture Modularization](docs/visual-production/17-scene-architecture-modularization.md): next implementation plan for splitting the monolithic scene into production modules.
 - [Alpha Bug List](docs/production/13-alpha-bug-list.md): current issue priorities.
 - [Alpha Playtest Package](docs/production/15-alpha-playtest-package.md): paused external tester handoff.
 

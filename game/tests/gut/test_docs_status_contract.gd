@@ -8,8 +8,8 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_current_review_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "opening_visual_asset_pass_implemented_ready_for_owner_validation")
-	assert_eq(status.get("playtest_state"), "paused_pending_opening_visual_asset_pass_owner_review")
+	assert_eq(status.get("current_phase"), "scene_architecture_modularization_ready_for_implementation")
+	assert_eq(status.get("playtest_state"), "paused_pending_scene_architecture_and_visual_owner_review")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
 	assert_eq(status.get("playable_state", {}).get("visual_read"), "opening_visual_asset_pass_review_ready")
@@ -22,7 +22,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 567)
-	assert_eq(int(validation.get("gut_asserts")), 9868)
+	assert_eq(int(validation.get("gut_asserts")), 9870)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 52)
@@ -51,6 +51,7 @@ func test_docs_status_contract_points_to_active_docs() -> void:
 	assert_true(active_docs.has("docs/visual-production/13-visual-qa-checklist.md"))
 	assert_true(active_docs.has("docs/visual-production/15-day-one-stock-and-unlocks.md"))
 	assert_true(active_docs.has("docs/visual-production/16-opening-visual-asset-pass.md"))
+	assert_true(active_docs.has("docs/visual-production/17-scene-architecture-modularization.md"))
 	assert_true(active_docs.has("docs/design-planning/README.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/full-day-playtest.md"))
