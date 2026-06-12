@@ -2,9 +2,11 @@
 
 ## Target
 
-The store should feel like a small independent used video game shop in a strip mall around 2005-2007.
+The store should feel like a small independent used video game shop in a small mall or retail strip around 2005-2007.
 
 It should not feel like a sterile big-box retailer, a modern esports store, or a pure retro museum. It should feel operational: the owner is receiving used stock, pricing cases, handling trade-ins, managing preorders, and trying to make rent.
+
+The opening composition currently targets a second-floor mall setting: quiet concourse, atrium railing, neighboring shuttered storefronts, planters, glass entry, neon trim, and a branded facade visible before the player enters.
 
 ## Style
 
@@ -37,6 +39,7 @@ Use era cues carefully:
 - CRT/demo station or early LCD display.
 - Beige/black office computer, landline phone, printer, invoice clipboard.
 - Fluorescent ceiling fixtures, acoustic tiles, scuffed carpet/laminate, slatwall or pegboard.
+- Mall-concourse tile, railing, shuttered neighbors, planter boxes, and glass storefront framing for the opening approach.
 
 Do not use real console names, real publishers, real game titles, real retailer names, or recognizable logos.
 

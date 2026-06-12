@@ -104,7 +104,7 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 			_hide_node(scene, "ReturnCustomer")
 			_hide_node(scene, "SuspiciousCustomer")
 			_hide_node(scene, "PlayerController")
-			_set_camera(scene, Vector3(0.0, 1.14, -1.45), Vector3(0.0, 1.42, -5.86))
+			_set_camera(scene, Vector3(-2.65, 1.48, -11.65), Vector3(0.0, 1.45, -5.86))
 		"stocked_aisle":
 			_prepare_customer_queue(scene)
 			_hide_node(scene, "PlayerController")
@@ -142,7 +142,7 @@ func _prepare_scenario(scene: Node, scenario: String) -> void:
 			_prepare_fixture_placed(scene)
 			_set_camera(scene, Vector3(-2.8, 1.55, 0.75), Vector3(-0.8, 0.82, 2.15))
 		_:
-			_set_camera(scene, Vector3(4.85, 1.7, -5.18), Vector3(-1.0, 1.02, 2.15))
+			_set_camera(scene, Vector3(-2.65, 1.62, -11.25), Vector3(0.0, 1.45, -5.86))
 
 
 func _prepare_customer_queue(scene: Node) -> void:

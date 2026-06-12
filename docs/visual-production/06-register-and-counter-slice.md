@@ -2,7 +2,7 @@
 
 ## Implementation Status
 
-Implemented for owner review. Current scene surfaces include register counter trim, workflow rail, transaction trays, cash drawer cues, preorder/service/return/trade-in counter props, and first-open checklist cue.
+Mechanically present, but superseded for visual approval by the opening mall/storefront reset. Current scene surfaces include register counter trim, workflow rail, transaction trays, cash drawer cues, preorder/service/return/trade-in counter props, and first-open checklist cue; these should be rebuilt or re-framed after the opening composition passes.
 
 ## Goal
 

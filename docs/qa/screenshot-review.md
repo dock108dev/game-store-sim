@@ -1,6 +1,6 @@
 # Screenshot Review
 
-Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest.
+Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the active review target is now the second-floor mall opening/storefront reset.
 
 ## Generate
 
@@ -22,7 +22,7 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 
-- Full validation passed with 565 GUT tests and 9694 asserts.
+- Full validation passed with 565 GUT tests and 9723 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
@@ -59,6 +59,8 @@ Generated on June 12, 2026 from `scripts/validate_godot.sh`.
 Pass only if:
 
 - The first view reads as a small specialty game shop.
+- The opening screenshot starts outside the shop on a second-floor mall concourse and the entry route is walkable.
+- The opening state has no visible customers or employees before business begins.
 - Storefront, sales floor, register, receiving, stockroom, and backroom zones are distinguishable without reading docs.
 - Prompt, reticle, product label, shelf label, and modal text are readable at 1280x720.
 - Customers read by silhouette, role prop, queue position, and compact marker before relying on long labels.

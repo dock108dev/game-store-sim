@@ -34,21 +34,19 @@ func test_player_spawn_has_recovery_view_budget() -> void:
 	var camera := player.get_node_or_null("Head/Camera3D") as Camera3D
 	var hold_anchor := player.get_node_or_null("Head/Camera3D/HoldAnchor") as Node3D
 	var register := _store.get_node("RegisterWorkstation") as Node3D
-	var trade_in_customer := _store.get_node("TradeInCustomer") as Node3D
 
 	assert_not_null(head)
 	assert_not_null(camera)
 	assert_not_null(hold_anchor)
-	assert_lt(player.global_position.z, -5.0)
-	assert_gt(player.global_position.x, 4.4)
-	assert_lt(player.global_position.x, 5.3)
+	assert_lt(player.global_position.z, -10.0)
+	assert_gt(player.global_position.x, -3.0)
+	assert_lt(player.global_position.x, -2.2)
 	assert_gt(head.position.y, 1.65)
 	assert_gte(camera.fov, 78.0)
 	assert_lte(camera.near, 0.04)
-	assert_gt(-player.global_transform.basis.z.x, 0.45)
-	assert_gt(-player.global_transform.basis.z.z, 0.55)
-	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 3.4)
-	assert_gt(_flat_distance_xz(player.global_position, trade_in_customer.global_position), 1.7)
+	assert_gt(-player.global_transform.basis.z.x, 0.35)
+	assert_gt(-player.global_transform.basis.z.z, 0.9)
+	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 7.0)
 	assert_gt(hold_anchor.position.x, 0.55)
 	assert_lt(hold_anchor.position.y, -0.55)
 	assert_lt(hold_anchor.position.z, -1.45)
@@ -59,7 +57,7 @@ func test_floor_collision_is_enabled() -> void:
 	assert_true(floor.use_collision)
 
 
-func test_front_door_opening_is_blocked_for_now() -> void:
+func test_front_door_opening_is_walkable_from_mall_concourse() -> void:
 	var blocker := _store.get_node_or_null("FrontDoorBlocker") as StaticBody3D
 	assert_not_null(blocker)
 	assert_false(blocker.visible)
@@ -67,7 +65,7 @@ func test_front_door_opening_is_blocked_for_now() -> void:
 
 	var collision_shape := blocker.get_node_or_null("CollisionShape3D") as CollisionShape3D
 	assert_not_null(collision_shape)
-	assert_false(collision_shape.disabled)
+	assert_true(collision_shape.disabled)
 
 	var shape := collision_shape.shape as BoxShape3D
 	assert_not_null(shape)
@@ -81,6 +79,10 @@ func test_storefront_entry_has_production_cues() -> void:
 	var right_glass := _store.get_node_or_null("StorefrontGlassRight") as CSGBox3D
 	var entry_cue := _store.get_node_or_null("EntrySidewalkCue") as CSGBox3D
 	var threshold_strip := _store.get_node_or_null("EntryThresholdInteriorStrip") as CSGBox3D
+	var concourse_floor := _store.get_node_or_null("SecondFloorMallConcourse/MallConcourseFloor") as CSGBox3D
+	var railing := _store.get_node_or_null("SecondFloorMallConcourse/MallAtriumRailingTop") as CSGBox3D
+	var open_door := _store.get_node_or_null("StorefrontOpenGlassDoor") as CSGBox3D
+	var neon_top := _store.get_node_or_null("StorefrontNeonTopRail") as CSGBox3D
 	var open_label := _store.get_node_or_null("OpenSignPanel/OpenSignLabel") as Label3D
 	var hours_label := _store.get_node_or_null("HoursDecalPanel/HoursDecalLabel") as Label3D
 
@@ -88,16 +90,26 @@ func test_storefront_entry_has_production_cues() -> void:
 	assert_not_null(right_glass)
 	assert_not_null(entry_cue)
 	assert_not_null(threshold_strip)
+	assert_not_null(concourse_floor)
+	assert_not_null(railing)
+	assert_not_null(open_door)
+	assert_not_null(neon_top)
 	assert_not_null(open_label)
 	assert_not_null(hours_label)
 	assert_false(left_glass.use_collision)
 	assert_false(right_glass.use_collision)
 	assert_false(entry_cue.use_collision)
 	assert_false(threshold_strip.use_collision)
-	assert_eq(open_label.text, "OPEN")
+	assert_true(concourse_floor.use_collision)
+	assert_true(railing.use_collision)
+	assert_eq(open_label.text, "SETUP")
 	assert_eq(hours_label.text, "11-8")
 	assert_lt(left_glass.global_position.z, -5.8)
 	assert_lt(right_glass.global_position.z, -5.8)
+	assert_lt(concourse_floor.global_position.z, -8.5)
+	assert_lt(railing.global_position.z, -13.0)
+	assert_lt(open_door.global_position.z, -6.1)
+	assert_gt(neon_top.global_position.y, 2.5)
 	assert_lt(entry_cue.global_position.z, -5.8)
 	assert_lt(threshold_strip.global_position.z, -5.2)
 	assert_gt(left_glass.size.y, 1.6)
@@ -115,6 +127,8 @@ func test_opening_spawn_composition_has_first_view_landmarks() -> void:
 	var register := _store.get_node_or_null("RegisterWorkstation") as Node3D
 	var display_rack := _store.get_node_or_null("GameDisplayRack") as Node3D
 	var backroom_hint := _store.get_node_or_null("BackroomHintFromEntryPanel") as CSGBox3D
+	var concourse_sightline := _store.get_node_or_null("SecondFloorMallConcourse/OpeningSpawnSightline") as CSGBox3D
+	var mall_directory := _store.get_node_or_null("SecondFloorMallConcourse/MallDirectoryPanel") as CSGBox3D
 	var register_route := _store.get_node_or_null("EntryRouteStripeRegister") as CSGBox3D
 	var shelf_route := _store.get_node_or_null("EntryRouteStripeShelf") as CSGBox3D
 
@@ -122,16 +136,21 @@ func test_opening_spawn_composition_has_first_view_landmarks() -> void:
 	assert_not_null(register)
 	assert_not_null(display_rack)
 	assert_not_null(backroom_hint)
+	assert_not_null(concourse_sightline)
+	assert_not_null(mall_directory)
 	assert_not_null(register_route)
 	assert_not_null(shelf_route)
 	assert_false(backroom_hint.use_collision)
+	assert_false(concourse_sightline.use_collision)
 	assert_false(register_route.use_collision)
 	assert_false(shelf_route.use_collision)
-	assert_lt(_flat_distance_xz(player.global_position, store_sign.global_position), 5.6)
-	assert_lt(_flat_distance_xz(player.global_position, register.global_position), 5.2)
+	assert_lt(_flat_distance_xz(player.global_position, store_sign.global_position), 6.4)
+	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 7.0)
 	assert_gt(display_rack.global_position.z, 5.4)
 	assert_gt(backroom_hint.global_position.z, 3.0)
 	assert_eq((_store.get_node("BackroomHintFromEntryPanel/BackroomHintFromEntryLabel") as Label3D).text, "OFFICE + STOCK")
+	assert_lt(concourse_sightline.global_position.z, -8.0)
+	assert_lt(mall_directory.global_position.z, -11.0)
 	assert_lt(register_route.global_position.z, -4.6)
 	assert_lt(shelf_route.global_position.z, -4.5)
 	assert_gt(register_route.global_position.x, 0.5)
@@ -724,6 +743,7 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 
 func test_screenshot_facing_world_labels_use_staff_side_orientation() -> void:
 	var label_paths := [
+		"StoreIdentitySignPanel/StoreIdentitySignLabel",
 		"RegisterSignPanel/RegisterSignLabel",
 		"BackWallFeatureStripe/BackWallFeatureLabel",
 		"NewThisWeekPosterPanel/NewThisWeekPosterLabel",
@@ -1314,7 +1334,9 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 	var fixture_manager := _store.get_node("FixturePlacementManager")
 	var ghost := fixture_manager.get_node("GhostRackPreview") as Node3D
 
-	assert_lt(_flat_distance_xz(player.global_position, register.global_position), 5.2)
+	assert_lt(player.global_position.z, -10.0)
+	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 7.0)
+	assert_true((_store.get_node("SecondFloorMallConcourse/MallConcourseFloor") as CSGBox3D).use_collision)
 	assert_lt(_flat_distance_xz(register.global_position, rack.global_position), 10.0)
 	assert_lt(_flat_distance_xz(rack.global_position, receiving_box.global_position), 2.4)
 	assert_lt(_flat_distance_xz(receiving_box.global_position, storage_shelf.global_position), 2.4)
@@ -1535,12 +1557,17 @@ func test_register_workstation_exists() -> void:
 
 
 func test_customer_manager_exists() -> void:
-	assert_not_null(_store.get_node_or_null("CustomerManager"))
+	var manager := _store.get_node_or_null("CustomerManager") as Node3D
+	assert_not_null(manager)
+	assert_false(manager.visible)
+	assert_false(manager.is_visible_in_tree())
 
 
 func test_customer_manager_has_two_buyers() -> void:
 	var manager := _store.get_node("CustomerManager")
 	assert_eq(manager.get_customers().size(), 2)
+	for customer in manager.get_customers():
+		assert_false((customer as Node3D).is_visible_in_tree())
 
 
 func test_suspicious_customer_exists_as_optional_encounter() -> void:
@@ -1549,6 +1576,7 @@ func test_suspicious_customer_exists_as_optional_encounter() -> void:
 	var storage := _store.get_node("EvidenceStorage")
 
 	assert_not_null(customer)
+	assert_false(customer.visible)
 	assert_string_contains(customer.get_interaction_prompt(), "Talk To")
 	assert_eq(event_log.get_event_count(), 0)
 	assert_eq(storage.get_evidence_count(), 0)
@@ -1572,6 +1600,7 @@ func test_suspicious_customer_does_not_join_sales_customer_queue() -> void:
 func test_trade_in_customer_exists_with_item() -> void:
 	var customer := _store.get_node_or_null("TradeInCustomer") as SimpleTradeInCustomer
 	assert_not_null(customer)
+	assert_false(customer.visible)
 	assert_not_null(customer.get_trade_item())
 
 
@@ -1579,6 +1608,7 @@ func test_service_customer_exists_with_disc_resurfacing_request() -> void:
 	var customer := _store.get_node_or_null("ServiceCustomer")
 
 	assert_not_null(customer)
+	assert_false((customer as Node3D).visible)
 	assert_true(customer.call("is_waiting_for_service"))
 	assert_eq(customer.get("service_name"), "Disc Resurfacing")
 	assert_eq(customer.get("item_name"), "Scratched Orbit Disc")
@@ -1641,6 +1671,7 @@ func test_preorder_customer_exists_and_targets_upcoming_release() -> void:
 	var customer := _store.get_node_or_null("PreorderCustomer") as SimplePreorderCustomer
 
 	assert_not_null(customer)
+	assert_false(customer.visible)
 	assert_true(customer.is_waiting_for_preorder())
 	assert_eq(customer.get_release_name(), "Neon Skyline")
 	assert_eq(customer.get_deposit_cents(), 500)

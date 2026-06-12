@@ -2,7 +2,7 @@
 
 ## Implementation Status
 
-Implemented for owner review. Current scene surfaces include wall shelf facing, restrained day-one shelf capacity, accessory peg wall, locked/glass case cue, empty growth space, and fixture-placement footprint cues.
+Mechanically present, but superseded for visual approval by the opening mall/storefront reset. Current scene surfaces include wall shelf facing, restrained day-one shelf capacity, accessory peg wall, locked/glass case cue, empty growth space, and fixture-placement footprint cues; these should be rebuilt or re-framed after the opening composition passes.
 
 ## Goal
 

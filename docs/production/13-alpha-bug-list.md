@@ -5,12 +5,13 @@ This is the Stop 13.1 alpha triage board. It is built from the latest passing `s
 Current gate state:
 
 - Automated validation has no open failures.
-- Latest full gate passes with 565 GUT tests, 9694 asserts, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, and 60 catalog products.
+- Latest full gate passes with 565 GUT tests, 9723 asserts, UI scenario automation coverage 508/628, production script mapping coverage 52/52, 3 active validation tools, and 60 catalog products.
 - Desktop pack smoke passes through `scripts/verify_desktop_export.sh --pack-smoke`.
 - All 23 required screenshot files are present, screenshot sanity passes, and `artifacts/validation/latest/screenshot-contact-sheet.png` is ready for owner review.
 - Manual controller/window/playtest validation still needs a human pass.
 - June 9 manual screenshots found P0 readability blockers in the actual game window. Readability recovery implementation is complete, but external playtest is paused until the owner recovery screenshot set passes.
 - June 9 follow-up reports angle-dependent label clipping on panel-backed signs and product labels; label depth-safety stabilization is implemented and must be verified during owner screenshot validation.
+- June 12 owner review rejected the first phase 0-4 visual pass as too blockout/label-driven. The active P1 visual target is the second-floor mall opening/storefront reset plus follow-up first-interior-corner rebuild.
 
 ## Priority Key
 
@@ -23,7 +24,7 @@ Current gate state:
 
 | ID | Priority | Area | Evidence | Problem | Target Slice | Acceptance |
 | --- | --- | --- | --- | --- | --- | --- |
-| AH-001 | P1 | Store visual read | `main_scene.png`, `customer_queue.png`, `fixture_placed.png` | The store still reads as a graybox from normal angles: large blank planes, low material variation, flat ceiling/floor, and sparse merchandising density. | Stop 13.4 content pass | Main scene and customer-queue screenshots read as a small specialty game shop without relying on docs to explain the space. |
+| AH-001 | P1 | Store visual read | `main_scene.png`, `storefront_entry.png`, `customer_queue.png`, `fixture_placed.png` | The first broad phase 0-4 pass still read as a graybox from normal angles: large blank planes, low material variation, flat ceiling/floor, sparse merchandising density, and too many labels carrying identity. | Opening mall/storefront reset, then first interior-corner rebuild | Main scene starts on a second-floor mall concourse, reads as a branded game shop before text, lets the player walk in, and the first interior corner reads as a shop without docs. |
 | AH-002 | P1 | Signage and hierarchy | `main_scene.png`, `customer_queue.png`, `fixture_placed.png`, `receiving_area.png` | Several signs are cropped, occluded, or weakly framed from player angles, including register/backroom/display/fixture signage. | Stop 13.4 content pass | Key signs are readable, fictional, and framed without clipping from screenshot viewpoints. |
 | AH-003 | P1 | Customer readability | `customer_queue.png`, `suspicious_customer.png`, `trade_in_offer.png` | Customer roles are still carried mostly by floating labels, colors, and large props; bodies remain placeholder-like and props can visually collide with heads/torso. | Stop 13.4 content pass | Buyer, trade-in, preorder, service, and suspicious customers read by silhouette/prop placement before prompt text. |
 | AH-004 | P1 | Queue and register composition | `customer_queue.png`, `register_counter.png`, `preorder_deposit.png`, `service_request.png` | Register-side roles crowd the same visual lane, with overlapping labels/props and weak separation between buyer queue and special customers. | Stop 13.3 regression tests, Stop 13.4 content pass | Customer queue, special-customer arc, and register prompt remain readable with no label pileup in the screenshot set. |

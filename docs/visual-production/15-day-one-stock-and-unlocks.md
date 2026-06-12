@@ -8,7 +8,7 @@ The full catalog can exist in data, but the day-one store should not look like a
 
 ## Implementation Status
 
-Implemented for owner review. Current scene surfaces separate owned starter stock from future catalog/design/supplier inventory and route paid/order inventory through receiving instead of preloading it into the stockroom.
+Mechanically present, but superseded for visual approval by the opening mall/storefront reset. Current scene surfaces separate owned starter stock from future catalog/design/supplier inventory and route paid/order inventory through receiving instead of preloading it into the stockroom; these flow rules remain active while the opening composition is reviewed.
 
 ## Day-One Sales Floor Rule
 

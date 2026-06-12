@@ -37,10 +37,10 @@
     },
     {
       "id": "front_door_boundary",
-      "name": "Front door opening is blocked until exits are implemented",
+      "name": "Front door opening is walkable from the second-floor mall concourse",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_front_door_opening_is_blocked_for_now"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_front_door_opening_is_walkable_from_mall_concourse"
     },
     {
       "id": "player_collision_shape",

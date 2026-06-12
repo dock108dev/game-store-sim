@@ -2,7 +2,7 @@
 
 ## Implementation Status
 
-Implemented for owner review. Current customer scenes use modular body kits, distinct body widths/colors, role props, compact role silhouettes, and separate buyer/trade-in/preorder/service/suspicious props below head height.
+Mechanically present, but superseded for visual approval by the opening mall/storefront reset. Current customer scenes use modular body kits, distinct body widths/colors, role props, compact role silhouettes, and separate buyer/trade-in/preorder/service/suspicious props below head height; main-scene customer actors are hidden for the pre-open opening state until business begins.
 
 ## Goal
 

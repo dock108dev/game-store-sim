@@ -8,7 +8,7 @@ The product language must support progression. The full family list is the event
 
 ## Implementation Status
 
-Implemented for owner review. Current scene surfaces include two starter new-game cases, one console/refurb hardware box, one starter accessory/controller, used-case shelf facings, price tags, catalog-only future-product planning, and paid-arrivals receiving cue.
+Mechanically present, but superseded for visual approval by the opening mall/storefront reset. Current scene surfaces include two starter new-game cases, one console/refurb hardware box, one starter accessory/controller, used-case shelf facings, price tags, catalog-only future-product planning, and paid-arrivals receiving cue; these should be rebuilt or re-framed after the opening composition passes.
 
 ## Product Families
 

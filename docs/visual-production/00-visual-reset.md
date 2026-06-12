@@ -6,6 +6,8 @@ Reset expectations for the game's visuals before more implementation work.
 
 The project has a broad, validated first-person retail loop. That is a strong mechanical foundation. The current store visuals, however, are still a prototype/blockout. They rely heavily on CSG primitives, floating labels, flat material planes, and validation screenshots that prove readability more than art direction.
 
+June 12 owner review rejected the first broad phase 0-4 visual pass. The immediate reset target is now the opening approach: the player starts on a quiet second-floor mall concourse, faces the new store, walks through a branded glass storefront, and enters before customers or employees are present.
+
 ## New Visual Truth
 
 Current scene status:
@@ -17,6 +19,7 @@ Current scene status:
 - Not a final-art alpha.
 - Not close enough to compare favorably with polished indie shop sims.
 - Not the visual baseline for future production.
+- Current active review surface is only the second-floor mall storefront opening slice.
 
 ## Deprecated Expectations
 
@@ -45,7 +48,7 @@ Keep these from the current implementation:
 
 Visual production now starts from authored visual slices:
 
-1. Pick a specific mid-00s independent game shop look.
+1. Pick a specific mid-00s independent game shop look in a small mall/retail strip context.
 2. Build a small final-quality scene slice.
 3. Validate screenshots against art direction, not only mechanical readability.
 4. Replace blockout visuals zone by zone.

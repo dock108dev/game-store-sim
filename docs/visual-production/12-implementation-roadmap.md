@@ -8,7 +8,7 @@ Build one final-quality visual slice, review it, then propagate its asset/style 
 
 ## Phase 0: Visual Reset Planning
 
-Status: complete; ready for owner review.
+Status: complete, with revision from owner review.
 
 Deliverables:
 
@@ -19,16 +19,19 @@ Deliverables:
 
 Exit criteria:
 
-- Owner approves or revises the era, store type, style, clutter level, and first visual slice.
+- Owner rejected the first phase 0-4 visual screenshot pass as too blockout/label-driven.
+- Owner revised the opening target toward a second-floor mall walk-in scene with no customers or employees visible before opening.
 - Owner approves or revises the day-one stock rule: 2 new games, 1 console, 1 accessory, trade-ins as early growth, future products visible through catalogs/planning surfaces, and physical stock arriving only after purchase/order/unlock.
 
 ## Phase 1: Target Slice Prototype
 
-Status: implemented; ready for owner screenshot review.
+Status: reset implemented; ready for owner screenshot review.
 
 Recommended scope:
 
-- Storefront first view.
+- Second-floor mall concourse spawn.
+- Branded glass storefront first view.
+- Walkable threshold into an empty pre-open store.
 - Register counter.
 - One adjacent sales-floor shelf/aisle.
 - Owned starter-stock staging for the opening setup fantasy.
@@ -44,6 +47,8 @@ Deliverables:
 Exit criteria:
 
 - Screenshots look like an indie game target, not blockout.
+- Opening screenshots show the player outside the shop, walking in from a mall concourse.
+- Opening screenshots show no visible customers or employees before business begins.
 - Screenshots show a restrained newly opening shop, not a fully stocked endpoint.
 - Owner approves style before broader replacement.
 

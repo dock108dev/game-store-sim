@@ -2,7 +2,7 @@
 
 ## Implementation Status
 
-Implemented for owner review. Current scene surfaces include receiving pallet/table, invoice/clipboard/sort cues, paid-arrivals lane, owned starter-stock crate, backstock shelf/bin lanes, pull route, service bench, office computer, and catalog planning cards.
+Mechanically present, but superseded for visual approval by the opening mall/storefront reset. Current scene surfaces include receiving pallet/table, invoice/clipboard/sort cues, paid-arrivals lane, owned starter-stock crate, backstock shelf/bin lanes, pull route, service bench, office computer, and catalog planning cards; these should be rebuilt or re-framed after the opening composition passes.
 
 ## Goal
 

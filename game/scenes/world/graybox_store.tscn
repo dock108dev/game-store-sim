@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://ckm1map1erebr"]
+[gd_scene load_steps=52 format=3 uid="uid://ckm1map1erebr"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -24,6 +24,40 @@ albedo_color = Color(0.32, 0.3, 0.27, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
 albedo_color = Color(0.74, 0.76, 0.73, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mall_tile"]
+albedo_color = Color(0.48, 0.46, 0.41, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mall_trim"]
+albedo_color = Color(0.24, 0.25, 0.25, 1)
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mall_rail"]
+albedo_color = Color(0.04, 0.06, 0.07, 1)
+metallic = 0.25
+roughness = 0.32
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_neighbor_shutter"]
+albedo_color = Color(0.12, 0.16, 0.18, 1)
+metallic = 0.1
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_neon_blue"]
+albedo_color = Color(0.38, 0.78, 1, 1)
+emission_enabled = true
+emission = Color(0.38, 0.78, 1, 1)
+emission_energy_multiplier = 1.45
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_neon_magenta"]
+albedo_color = Color(0.95, 0.36, 0.78, 1)
+emission_enabled = true
+emission = Color(0.95, 0.36, 0.78, 1)
+emission_energy_multiplier = 1.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_planter_green"]
+albedo_color = Color(0.16, 0.32, 0.18, 1)
+roughness = 0.8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_backroom"]
 albedo_color = Color(0.22, 0.28, 0.34, 0.22)
@@ -118,6 +152,149 @@ use_collision = true
 size = Vector3(14, 0.2, 12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 material = SubResource("StandardMaterial3D_floor")
+
+[node name="SecondFloorMallConcourse" type="Node3D" parent="."]
+
+[node name="MallConcourseFloor" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(18.4, 0.18, 8.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, -9.62)
+material = SubResource("StandardMaterial3D_mall_tile")
+
+[node name="MallConcourseStorefrontWalkway" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(17.4, 0.014, 1.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014, -6.38)
+material = SubResource("StandardMaterial3D_mall_trim")
+
+[node name="MallConcourseTileLineA" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(17.6, 0.012, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -8.22)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="MallConcourseTileLineB" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(17.6, 0.012, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -10.62)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="MallConcourseTileLineC" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(0.035, 0.012, 7.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0.026, -9.76)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="MallConcourseTileLineD" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(0.035, 0.012, 7.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6, 0.026, -9.76)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="MallAtriumRailingTop" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(14.8, 0.1, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16, -13.55)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="MallAtriumRailingMid" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(14.8, 0.055, 0.06)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.68, -13.56)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="MallAtriumPostA" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.1, 1.25, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8, 0.63, -13.55)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="MallAtriumPostB" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.1, 1.25, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0.63, -13.55)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="MallAtriumPostC" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.1, 1.25, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0.63, -13.55)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="MallAtriumPostD" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.1, 1.25, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8, 0.63, -13.55)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="MallAtriumLowerVoid" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(16.5, 0.08, 0.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42, -14.08)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="NeighborStoreLeftFacade" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(4.2, 2.65, 0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.12, 1.32, -6.04)
+material = SubResource("StandardMaterial3D_neighbor_shutter")
+
+[node name="NeighborStoreLeftTrim" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(3.7, 0.16, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.12, 2.26, -6.14)
+material = SubResource("StandardMaterial3D_neon_magenta")
+
+[node name="NeighborStoreRightFacade" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(4.2, 2.65, 0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.12, 1.32, -6.04)
+material = SubResource("StandardMaterial3D_neighbor_shutter")
+
+[node name="NeighborStoreRightTrim" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(3.7, 0.16, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.12, 2.26, -6.14)
+material = SubResource("StandardMaterial3D_neon_blue")
+
+[node name="MallPlanterLeft" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.92, 0.48, 0.62)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35, 0.24, -8.6)
+material = SubResource("StandardMaterial3D_cardboard_alt")
+
+[node name="MallPlanterLeftGreenery" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(0.78, 0.34, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35, 0.65, -8.6)
+material = SubResource("StandardMaterial3D_planter_green")
+
+[node name="MallPlanterRight" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.92, 0.48, 0.62)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.35, 0.24, -8.95)
+material = SubResource("StandardMaterial3D_cardboard_alt")
+
+[node name="MallPlanterRightGreenery" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(0.78, 0.34, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.35, 0.65, -8.95)
+material = SubResource("StandardMaterial3D_planter_green")
+
+[node name="MallDirectoryPanel" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.75, 1.05, 0.08)
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -4.92, 0.92, -11.45)
+material = SubResource("StandardMaterial3D_mall_trim")
+
+[node name="MallDirectoryHeader" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(0.68, 0.16, 0.035)
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -4.88, 1.36, -11.43)
+material = SubResource("StandardMaterial3D_neon_blue")
+
+[node name="MallCafeTable" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.92, 0.08, 0.92)
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, 5.12, 0.72, -11.65)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="MallCafeTablePost" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+use_collision = true
+size = Vector3(0.1, 0.72, 0.1)
+transform = Transform3D(0.819152, 0, -0.573576, 0, 1, 0, 0.573576, 0, 0.819152, 5.12, 0.36, -11.65)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="OpeningSpawnSightline" type="CSGBox3D" parent="SecondFloorMallConcourse"]
+size = Vector3(2.2, 0.01, 0.07)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.036, -8.12)
+material = SubResource("StandardMaterial3D_stockroom_tape")
 
 [node name="BackWall" type="CSGBox3D" parent="."]
 use_collision = true
@@ -253,8 +430,41 @@ modulate = Color(0.98, 0.88, 0.58, 1)
 outline_modulate = Color(0.02, 0.03, 0.04, 1)
 outline_size = 4
 no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 text = "SAVE POINT GAMES"
 font_size = 42
+
+[node name="StorefrontMallAwning" type="CSGBox3D" parent="."]
+size = Vector3(7.25, 0.18, 0.72)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.54, -6.14)
+material = SubResource("StandardMaterial3D_mall_trim")
+
+[node name="StorefrontNeonTopRail" type="CSGBox3D" parent="."]
+size = Vector3(7.65, 0.055, 0.04)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.68, -6.49)
+material = SubResource("StandardMaterial3D_neon_blue")
+
+[node name="StorefrontNeonWindowLeft" type="CSGBox3D" parent="."]
+size = Vector3(2.7, 0.045, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35, 2.36, -5.94)
+material = SubResource("StandardMaterial3D_neon_blue")
+
+[node name="StorefrontNeonWindowRight" type="CSGBox3D" parent="."]
+size = Vector3(2.7, 0.045, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35, 2.36, -5.94)
+material = SubResource("StandardMaterial3D_neon_blue")
+
+[node name="StorefrontOpenGlassDoor" type="CSGBox3D" parent="."]
+size = Vector3(0.055, 1.92, 0.88)
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -1.42, 1.05, -6.42)
+material = SubResource("StandardMaterial3D_storefront_glass")
+
+[node name="StorefrontOpenDoorHandle" type="CSGBox3D" parent="."]
+size = Vector3(0.045, 0.46, 0.055)
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -1.18, 1.06, -6.16)
+material = SubResource("StandardMaterial3D_shipping_label")
 
 [node name="OpenSignPanel" type="CSGBox3D" parent="."]
 size = Vector3(0.72, 0.32, 0.03)
@@ -267,7 +477,7 @@ modulate = Color(0.04, 0.18, 0.15, 1)
 outline_modulate = Color(0.92, 1, 0.78, 1)
 outline_size = 2
 no_depth_test = true
-text = "OPEN"
+text = "SETUP"
 font_size = 28
 
 [node name="HoursDecalPanel" type="CSGBox3D" parent="."]
@@ -303,6 +513,7 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -6)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FrontDoorBlocker"]
+disabled = true
 shape = SubResource("BoxShape3D_front_door_blocker")
 
 [node name="CounterBase" type="CSGBox3D" parent="."]
@@ -2433,6 +2644,7 @@ ledger_path = NodePath("../TransactionLedger")
 store_session_path = NodePath("../StoreSession")
 
 [node name="CustomerManager" type="Node3D" parent="."]
+visible = false
 script = ExtResource("9_customer_manager")
 register_queue_start = Vector3(2.25, 0, -3.55)
 register_queue_spacing = Vector3(0, 0, -0.82)
@@ -2448,24 +2660,29 @@ transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 
 customer_id = "customer_002"
 
 [node name="TradeInCustomer" parent="." instance=ExtResource("10_trade_customer")]
+visible = false
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.55, 0, -3.95)
 
 [node name="PreorderCustomer" parent="." instance=ExtResource("15_preorder_customer")]
+visible = false
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -1.9, 0, -4.62)
 
 [node name="ServiceCustomer" parent="." instance=ExtResource("16_service_customer")]
+visible = false
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -3.15, 0, -4.18)
 
 [node name="ReturnCustomer" parent="." instance=ExtResource("18_return_customer")]
+visible = false
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -4.18, 0, -4.8)
 
 [node name="SuspiciousCustomer" parent="." instance=ExtResource("14_suspicious_customer")]
+visible = false
 transform = Transform3D(0.866025, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866025, -5.35, 0, -2.68)
 event_log_path = NodePath("../SuspiciousEventLog")
 evidence_storage_path = NodePath("../EvidenceStorage")
 
 [node name="PlayerController" parent="." instance=ExtResource("1_player")]
-transform = Transform3D(-0.78, 0, -0.63, 0, 1, 0, 0.63, 0, -0.78, 4.85, 0, -5.18)
+transform = Transform3D(-0.909, 0, -0.416, 0, 1, 0, 0.416, 0, -0.909, -2.65, 0, -11.25)
 
 [node name="TransactionLedger" type="Node" parent="."]
 script = ExtResource("6_transaction_ledger")
@@ -2526,6 +2743,18 @@ max_distance = 12.0
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)
 light_energy = 0.75
+
+[node name="MallConcourseLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, -9.4)
+light_color = Color(0.86, 0.92, 1, 1)
+light_energy = 1.65
+omni_range = 7.5
+
+[node name="StorefrontNeonGlow" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -6.62)
+light_color = Color(0.42, 0.78, 1, 1)
+light_energy = 1.25
+omni_range = 4.3
 
 [node name="StoreLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.7, -0.15)

@@ -8,20 +8,23 @@ This slice should be reviewed before replacing the whole store.
 
 ## Implementation Status
 
-Implemented for owner review. Current scene surfaces include storefront glass/frame depth, sign trim, window display products, entry/threshold cues, first-view register/shelf/backroom sightlines, and day-one empty-capacity cues.
+First phase 0-4 pass failed owner screenshot review. Current reset implementation starts the player on a second-floor mall concourse facing the branded storefront, with neon/glass framing, a walkable open door, neighboring closed shopfront cues, planters, railings, and no visible customers or employees before opening.
 
 ## Scope
 
 In scope:
 
+- Second-floor mall concourse spawn.
 - Storefront wall.
 - Glass door/window.
 - Sign band.
 - Window display.
 - Entry mat and threshold.
-- Initial sightline to register, shelf wall, and backroom hint.
+- Walkable route from concourse into the store.
+- Initial outside-in sightline to the storefront; register/shelf/backroom detail becomes the next interior-corner slice.
 - Lighting visible from spawn.
 - Day-one restraint: visible merchandise should suggest a newly opening shop, not a mature full-catalog store.
+- Pre-open restraint: no customers or employees visible in the opening scene.
 
 Out of scope:
 
@@ -36,6 +39,10 @@ Out of scope:
 - Modular storefront frame.
 - Glass material.
 - Door frame and handle.
+- Mall concourse tile kit.
+- Atrium railing/posts.
+- Closed neighboring shopfront/shutter kit.
+- Planter/cafe/directory props.
 - Store sign mesh/decal.
 - Window poster set.
 - Window display shelf.
@@ -61,11 +68,14 @@ Likely affected:
 
 ## Pass Criteria
 
+- Player starts outside the store on a second-floor mall concourse and can walk in.
 - Player can identify the store as a game shop before reading small labels.
 - Storefront has real frame/glass/display depth.
+- Storefront reads through silhouette, glass, trim, neon, and display props, not just a floating label.
 - Posters and display products feel fictional but era-appropriate.
 - First view has authored composition.
-- Register and shelf route remain legible.
+- The opening state is quiet and pre-open: no customers or employees visible.
+- Register and shelf route become legible after entering, without dominating the initial exterior frame.
 - Empty or lightly stocked areas read as intentional early-shop capacity.
 - No unsupported exterior interaction is implied.
 

@@ -4,7 +4,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 ## Playable Build
 
-The current Godot game is a broad validated mechanical prototype with visual phases 0-4 implemented for owner review. It is not a final-art alpha until the owner screenshot pass approves the new target. The first-person retail loop includes:
+The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first-person retail loop includes:
 
 - Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
@@ -20,7 +20,7 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 565 GUT tests and 9694 asserts pass.
+- 565 GUT tests and 9723 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 52/52, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
@@ -32,32 +32,33 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, and visual phases 0-4 are implemented for owner validation, but they still need screenshot/signoff review before the store can be treated as the approved visual baseline.
+External alpha playtest remains paused. The repo is mechanically green, but the previous visual phase 0-4 pass failed owner screenshot review. The new review target is the opening walk-in slice: second-floor mall approach, branded storefront, open threshold, and empty pre-open shop.
 
 Required reviews:
 
-- Owner visual phases 0-4 screenshot review.
+- Owner opening mall/storefront screenshot review.
+- Owner walk-in empty-store review.
 - Owner day-one owned-stock flow review.
 - Owner catalog/unlock/receiving flow review.
 - Manual 1280x720 readability pass for prompts, UI panels, product labels, customers, and screenshot composition.
 
 ## Visual Read
 
-The current scene is still pending owner art approval, but phases 0-4 now have concrete review surfaces: target storefront/register/shelf slice, restrained day-one owned starter stock, catalog/design planning surfaces for locked inventory, paid-arrivals receiving lane, backroom operations props, and customer role silhouettes.
+The current scene is still pending owner art approval. The accepted direction is now narrower: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state.
 
 Current visual risk areas:
 
-- Some areas may still read as a Godot blockout from editor and player views until Phase 5 lighting/polish.
+- Interior areas may still read as a Godot blockout from player views until the first interior corner is rebuilt.
 - Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
 - CSG primitives are being used as visual stand-ins beyond their useful prototype role.
 - Dense backroom computer screens.
 - Some UI panels and labels needing real-window readability approval.
-- Placeholder customer body/prop language.
+- Customer body/prop language is mechanically present but intentionally hidden for the opening state.
 - Fixture and screenshot compositions that may still read as blockout from some angles.
 
 ## Current Visual Planning
 
-The active visual direction is [Visual Production](visual-production/README.md). It targets a 2005-2007 independent strip-mall used game shop with stylized semi-realistic indie-sim assets. Phases 0-4 are implemented and ready for owner review before Phase 5 lighting/polish and broader all-screenshot approval.
+The active visual direction is [Visual Production](visual-production/README.md). It targets a 2005-2007 independent game shop with stylized semi-realistic indie-sim assets. The exterior/entry direction has shifted from a simple strip-mall storefront to a second-floor mall concourse approach inspired by neon-framed retail facades, glass storefronts, quiet pre-open corridors, planters, railings, shuttered neighboring shops, and a clear walk-in threshold.
 
 Owner note: the opening store should be restrained. Day one should start with a small owned assortment, likely 2 new games, 1 console, and 1 accessory, with starter stock staged in the stockroom for the player to place before opening. Future products should live in catalogs, store-design surfaces, supplier/release planning, or trade-in opportunities until purchased/unlocked; then they arrive through receiving or customer intake.
 
@@ -77,19 +78,19 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review [Visual Production](visual-production/README.md) and the latest screenshot artifacts.
+Review the opening mall/storefront reset in the latest screenshot artifacts.
 
-If visual phases 0-4 pass:
+If the opening mall/storefront reset passes:
 
-1. Lock phases 0-4 as the first approved visual baseline.
-2. Continue to Phase 5 lighting/material/camera polish.
-3. Use [Visual QA Checklist](visual-production/13-visual-qa-checklist.md) for all 23 screenshot approvals.
+1. Lock the second-floor mall approach as the approved opening composition.
+2. Rebuild the first interior corner with the same material, lighting, trim, and prop language.
+3. Use [Visual QA Checklist](visual-production/13-visual-qa-checklist.md) for the opening screenshots first, then restore all 23 screenshot approvals.
 4. Keep catalog/unlock/receiving rules as a hard progression constraint.
 
-If any phase fails:
+If the opening reset fails:
 
 1. Revise the visual-production docs.
-2. Patch the rejected scene surfaces or visual rules.
+2. Patch the rejected mall/storefront scene surfaces or visual rules.
 3. Keep external alpha playtest paused.
 
 ## Active Documentation
