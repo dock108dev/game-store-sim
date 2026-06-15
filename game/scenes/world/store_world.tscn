@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3]
+[gd_scene load_steps=78 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -28,6 +28,14 @@
 [ext_resource type="PackedScene" path="res://scenes/world/modules/receiving_area.tscn" id="26_receiving_area"]
 [ext_resource type="PackedScene" path="res://scenes/world/modules/backroom_shell.tscn" id="27_backroom_shell"]
 [ext_resource type="PackedScene" path="res://scenes/world/modules/store_systems.tscn" id="28_store_systems"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/mall_concourse_slice.tscn" id="29_art_mall"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/storefront_facade_bay.tscn" id="30_art_facade"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/storefront_glass_door_open.tscn" id="31_art_door"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/interior/register_counter_kit.tscn" id="32_art_register"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/fixtures/wall_shelf_bay_kit.tscn" id="33_art_shelf"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/products/product_day_one_set.tscn" id="34_art_products"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/receiving_intake_kit.tscn" id="35_art_receiving"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/backroom_staff_threshold_kit.tscn" id="36_art_backroom"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.32, 0.3, 0.27, 1)
@@ -210,6 +218,32 @@ size = Vector3(3.7, 2.7, 0.2)
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="ScreenshotAnchors" type="Node3D" parent="."]
+
+[node name="ApprovedArtKitRoute" type="Node3D" parent="."]
+
+[node name="ArtMallConcourseSlice" parent="ApprovedArtKitRoute" instance=ExtResource("29_art_mall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -9.55)
+
+[node name="ArtStorefrontFacadeBay" parent="ApprovedArtKitRoute" instance=ExtResource("30_art_facade")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -6.06)
+
+[node name="ArtStorefrontGlassDoorOpen" parent="ApprovedArtKitRoute" instance=ExtResource("31_art_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0.02, -6.1)
+
+[node name="ArtRegisterCounterKit" parent="ApprovedArtKitRoute" instance=ExtResource("32_art_register")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 2.18, 0.02, -2.42)
+
+[node name="ArtWallShelfBayKit" parent="ApprovedArtKitRoute" instance=ExtResource("33_art_shelf")]
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, -3.05, 0.02, -4.35)
+
+[node name="ArtDayOneProductSet" parent="ApprovedArtKitRoute" instance=ExtResource("34_art_products")]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 1.32, 1.06, -2.55)
+
+[node name="ArtReceivingIntakeKit" parent="ApprovedArtKitRoute" instance=ExtResource("35_art_receiving")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -4.25, 0.02, 3.32)
+
+[node name="ArtBackroomStaffThresholdKit" parent="ApprovedArtKitRoute" instance=ExtResource("36_art_backroom")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.02, 3.34)
 
 
 [node name="Floor" type="CSGBox3D" parent="."]

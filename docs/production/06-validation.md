@@ -26,10 +26,10 @@ The gate runs:
 - screenshot contact-sheet generation
 - old-name scan
 
-Current validated baseline after the docs overhaul:
+Current validated baseline after the first art-kit implementation:
 
-- 566 GUT tests.
-- 10705 GUT asserts.
+- 570 GUT tests.
+- 10791 GUT asserts.
 - UI scenario automation coverage: 508/628, or 80.9%.
 - Production script mapping coverage: 53/53, or 100.0%.
 - 3 active standalone validation tools.
@@ -52,6 +52,7 @@ Required evidence:
 - regenerated contact sheet
 - manual 1280x720 walk-in review from mall spawn to register view
 - screenshot review against `docs/qa/screenshot-review.md`
+- optional sandbox capture through `game/tests/tools/capture_art_benchmark_screenshot.gd`
 
 ## Validation Data Shape
 

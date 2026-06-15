@@ -1,0 +1,116 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/retail/dark_laminate.tres" id="1_dark"]
+[ext_resource type="Material" path="res://assets/materials/retail/cream_counter.tres" id="2_cream"]
+[ext_resource type="Material" path="res://assets/materials/retail/storefront_dark_metal.tres" id="3_metal"]
+[ext_resource type="Material" path="res://assets/materials/retail/product_cover_blue.tres" id="4_blue"]
+[ext_resource type="Material" path="res://assets/materials/retail/poster_paper.tres" id="5_paper"]
+[ext_resource type="Material" path="res://assets/materials/retail/sticker_price.tres" id="6_sticker"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_counter_body"]
+size = Vector3(3.75, 0.86, 0.78)
+
+[sub_resource type="BoxMesh" id="BoxMesh_counter_top"]
+size = Vector3(3.95, 0.12, 0.96)
+
+[sub_resource type="BoxMesh" id="BoxMesh_kick"]
+size = Vector3(3.5, 0.16, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_display_face"]
+size = Vector3(1.32, 0.52, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_monitor"]
+size = Vector3(0.5, 0.34, 0.07)
+
+[sub_resource type="BoxMesh" id="BoxMesh_stand"]
+size = Vector3(0.08, 0.26, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_device"]
+size = Vector3(0.34, 0.1, 0.26)
+
+[sub_resource type="BoxMesh" id="BoxMesh_paper"]
+size = Vector3(0.42, 0.018, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bag"]
+size = Vector3(0.16, 0.38, 0.04)
+
+[sub_resource type="BoxMesh" id="BoxMesh_impulse"]
+size = Vector3(0.82, 0.11, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_small_case"]
+size = Vector3(0.16, 0.22, 0.035)
+
+[node name="RegisterCounterKit" type="Node3D"]
+
+[node name="RegisterCounterBody" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47, 0)
+mesh = SubResource("BoxMesh_counter_body")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="RegisterCounterTopSlab" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+mesh = SubResource("BoxMesh_counter_top")
+surface_material_override/0 = ExtResource("2_cream")
+
+[node name="RegisterCounterKickPanel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, -0.43)
+mesh = SubResource("BoxMesh_kick")
+surface_material_override/0 = ExtResource("3_metal")
+
+[node name="RegisterDisplayCaseFace" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0.54, -0.43)
+mesh = SubResource("BoxMesh_display_face")
+surface_material_override/0 = ExtResource("4_blue")
+
+[node name="RegisterEquipmentCluster" type="Node3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 0.88, 1.02, -0.06)
+
+[node name="PosMonitorBody" type="MeshInstance3D" parent="RegisterEquipmentCluster"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0.34, 0)
+mesh = SubResource("BoxMesh_monitor")
+surface_material_override/0 = ExtResource("3_metal")
+
+[node name="PosMonitorScreenTint" type="MeshInstance3D" parent="RegisterEquipmentCluster"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 0.34, -0.042)
+mesh = SubResource("BoxMesh_monitor")
+surface_material_override/0 = ExtResource("4_blue")
+
+[node name="PosMonitorStand" type="MeshInstance3D" parent="RegisterEquipmentCluster"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0.03)
+mesh = SubResource("BoxMesh_stand")
+surface_material_override/0 = ExtResource("3_metal")
+
+[node name="CardReader" type="MeshInstance3D" parent="RegisterEquipmentCluster"]
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -0.42, 0.03, -0.16)
+mesh = SubResource("BoxMesh_device")
+surface_material_override/0 = ExtResource("3_metal")
+
+[node name="ReceiptSlip" type="MeshInstance3D" parent="RegisterEquipmentCluster"]
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -0.74, 0.04, 0.13)
+mesh = SubResource("BoxMesh_paper")
+surface_material_override/0 = ExtResource("5_paper")
+
+[node name="BagSleeveStackA" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 1.72, 1.2, 0.16)
+mesh = SubResource("BoxMesh_bag")
+surface_material_override/0 = ExtResource("5_paper")
+
+[node name="BagSleeveStackB" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 1.55, 1.19, 0.16)
+mesh = SubResource("BoxMesh_bag")
+surface_material_override/0 = ExtResource("5_paper")
+
+[node name="ImpulseTrayBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 1.04, 0.2)
+mesh = SubResource("BoxMesh_impulse")
+surface_material_override/0 = ExtResource("3_metal")
+
+[node name="ImpulseCaseA" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -1.56, 1.22, 0.18)
+mesh = SubResource("BoxMesh_small_case")
+surface_material_override/0 = ExtResource("6_sticker")
+
+[node name="ImpulseCaseB" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -1.34, 1.22, 0.18)
+mesh = SubResource("BoxMesh_small_case")
+surface_material_override/0 = ExtResource("4_blue")

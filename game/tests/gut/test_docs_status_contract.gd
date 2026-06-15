@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_art_language_rebuild_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "art_language_rebuild_ready_for_implementation")
+	assert_eq(status.get("current_phase"), "art_language_rebuild_kit_integrated_for_validation")
 	assert_eq(status.get("playtest_state"), "paused_until_visual_baseline_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "cube_language_rejected_art_kit_required")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "modular_art_kit_integrated_pending_owner_review")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
 
 
@@ -22,8 +22,8 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 	var scripts: Dictionary = _dictionary(validation.get("script_test_mapping"))
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
-	assert_eq(int(validation.get("gut_tests")), 566)
-	assert_eq(int(validation.get("gut_asserts")), 10705)
+	assert_eq(int(validation.get("gut_tests")), 570)
+	assert_eq(int(validation.get("gut_asserts")), 10791)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 53)

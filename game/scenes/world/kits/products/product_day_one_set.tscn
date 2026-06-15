@@ -1,0 +1,76 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/retail/product_case_dark.tres" id="1_case"]
+[ext_resource type="Material" path="res://assets/materials/retail/product_cover_blue.tres" id="2_blue"]
+[ext_resource type="Material" path="res://assets/materials/retail/product_cover_red.tres" id="3_red"]
+[ext_resource type="Material" path="res://assets/materials/retail/product_cover_gold.tres" id="4_gold"]
+[ext_resource type="Material" path="res://assets/materials/retail/product_cover_green.tres" id="5_green"]
+[ext_resource type="Material" path="res://assets/materials/retail/sticker_price.tres" id="6_sticker"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_game_case"]
+size = Vector3(0.18, 0.32, 0.026)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cover_strip"]
+size = Vector3(0.14, 0.045, 0.03)
+
+[sub_resource type="BoxMesh" id="BoxMesh_console_box"]
+size = Vector3(0.62, 0.42, 0.22)
+
+[sub_resource type="BoxMesh" id="BoxMesh_controller_pack"]
+size = Vector3(0.32, 0.38, 0.055)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sticker"]
+size = Vector3(0.08, 0.04, 0.032)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_disc"]
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.018
+radial_segments = 16
+
+[node name="DayOneProductSet" type="Node3D"]
+
+[node name="NewGameCaseA" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.46, 0.18, 0)
+mesh = SubResource("BoxMesh_game_case")
+surface_material_override/0 = ExtResource("2_blue")
+
+[node name="NewGameCaseACoverBand" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.46, 0.25, -0.018)
+mesh = SubResource("BoxMesh_cover_strip")
+surface_material_override/0 = ExtResource("6_sticker")
+
+[node name="NewGameCaseB" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.22, 0.18, 0.02)
+mesh = SubResource("BoxMesh_game_case")
+surface_material_override/0 = ExtResource("3_red")
+
+[node name="NewGameCaseBCoverBand" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.22, 0.25, 0.002)
+mesh = SubResource("BoxMesh_cover_strip")
+surface_material_override/0 = ExtResource("1_case")
+
+[node name="DayOneConsoleBox" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, 0.2, 0.22, 0.02)
+mesh = SubResource("BoxMesh_console_box")
+surface_material_override/0 = ExtResource("4_gold")
+
+[node name="ConsoleBoxPlatformStripe" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, 0.2, 0.34, -0.1)
+mesh = SubResource("BoxMesh_cover_strip")
+surface_material_override/0 = ExtResource("2_blue")
+
+[node name="DayOneControllerPack" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.66, 0.21, 0.05)
+mesh = SubResource("BoxMesh_controller_pack")
+surface_material_override/0 = ExtResource("5_green")
+
+[node name="ControllerPriceSticker" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.7, 0.31, 0.018)
+mesh = SubResource("BoxMesh_sticker")
+surface_material_override/0 = ExtResource("6_sticker")
+
+[node name="LooseDemoDisc" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0.86, 0.04, -0.18)
+mesh = SubResource("CylinderMesh_disc")
+surface_material_override/0 = ExtResource("1_case")

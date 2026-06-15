@@ -1,0 +1,103 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/retail/backroom_cool_wall.tres" id="1_wall"]
+[ext_resource type="Material" path="res://assets/materials/retail/storefront_dark_metal.tres" id="2_metal"]
+[ext_resource type="Material" path="res://assets/materials/retail/utility_floor.tres" id="3_floor"]
+[ext_resource type="Material" path="res://assets/materials/retail/neon_cyan.tres" id="4_light"]
+[ext_resource type="Material" path="res://assets/materials/retail/poster_paper.tres" id="5_paper"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_jamb"]
+size = Vector3(0.14, 1.9, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_header"]
+size = Vector3(2.4, 0.2, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_return"]
+size = Vector3(0.52, 1.5, 0.34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hallwall"]
+size = Vector3(0.14, 1.9, 1.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_soffit"]
+size = Vector3(2.5, 0.18, 1.18)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(2.45, 0.02, 1.35)
+
+[sub_resource type="BoxMesh" id="BoxMesh_light"]
+size = Vector3(1.2, 0.055, 0.045)
+
+[sub_resource type="BoxMesh" id="BoxMesh_notice"]
+size = Vector3(0.52, 0.34, 0.025)
+
+[sub_resource type="BoxMesh" id="BoxMesh_door_stop"]
+size = Vector3(0.07, 0.82, 0.12)
+
+[node name="BackroomStaffThresholdKit" type="Node3D"]
+
+[node name="BackroomThresholdFrame" type="Node3D" parent="."]
+
+[node name="BackroomThresholdLeftJamb" type="MeshInstance3D" parent="BackroomThresholdFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13, 0.95, 0)
+mesh = SubResource("BoxMesh_jamb")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomThresholdRightJamb" type="MeshInstance3D" parent="BackroomThresholdFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.13, 0.95, 0)
+mesh = SubResource("BoxMesh_jamb")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomThresholdHeader" type="MeshInstance3D" parent="BackroomThresholdFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.92, 0)
+mesh = SubResource("BoxMesh_header")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomThresholdLeftReturn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.52, 0.75, 0.1)
+mesh = SubResource("BoxMesh_return")
+surface_material_override/0 = ExtResource("1_wall")
+
+[node name="BackroomThresholdRightReturn" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.52, 0.75, 0.1)
+mesh = SubResource("BoxMesh_return")
+surface_material_override/0 = ExtResource("1_wall")
+
+[node name="BackroomShortHallLeftWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.16, 0.95, 0.68)
+mesh = SubResource("BoxMesh_hallwall")
+surface_material_override/0 = ExtResource("1_wall")
+
+[node name="BackroomShortHallRightWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.16, 0.95, 0.68)
+mesh = SubResource("BoxMesh_hallwall")
+surface_material_override/0 = ExtResource("1_wall")
+
+[node name="BackroomSoffit" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.98, 0.68)
+mesh = SubResource("BoxMesh_soffit")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomUtilityFloorInset" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.68)
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = ExtResource("3_floor")
+
+[node name="BackroomCoolLightBar" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.06, 0.08)
+mesh = SubResource("BoxMesh_light")
+surface_material_override/0 = ExtResource("4_light")
+
+[node name="BackroomSmallNoticeCard" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42, -0.085)
+mesh = SubResource("BoxMesh_notice")
+surface_material_override/0 = ExtResource("5_paper")
+
+[node name="BackroomLeftDoorStop" type="MeshInstance3D" parent="BackroomThresholdFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.52, -0.07)
+mesh = SubResource("BoxMesh_door_stop")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomRightDoorStop" type="MeshInstance3D" parent="BackroomThresholdFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.52, -0.07)
+mesh = SubResource("BoxMesh_door_stop")
+surface_material_override/0 = ExtResource("2_metal")

@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-15",
-  "current_phase": "art_language_rebuild_ready_for_implementation",
+  "current_phase": "art_language_rebuild_kit_integrated_for_validation",
   "playtest_state": "paused_until_visual_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working, but the latest visual benchmark is rejected as cube/label language. The next pass must build a modular art-kit benchmark before broad catalog, customer, decoration, or external-playtest work resumes.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working, and the first modular art-kit route is now implemented in both an isolated benchmark scene and store_world.tscn. Owner screenshot/walk-in review is still required before broad catalog, customer, decoration, or external-playtest work resumes.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "cube_language_rejected_art_kit_required",
+    "visual_read": "modular_art_kit_integrated_pending_owner_review",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 566,
-    "gut_asserts": 10705,
+    "gut_tests": 570,
+    "gut_asserts": 10791,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -64,9 +64,9 @@
     "manual_real_window_1280x720_walk_in_review"
   ],
   "next_decision": {
-    "question": "Can the modular art-kit benchmark make the opening route read as a simple mid-00s game shop instead of cube geometry with labels?",
-    "approve_path": "integrate the approved kit into the production route, then expand product and fixture breadth",
-    "reject_path": "continue sandbox kit work before touching broader store visuals"
+    "question": "Does the integrated modular art-kit route now read as a simple mid-00s game shop instead of cube geometry with labels?",
+    "approve_path": "use the approved kit as the baseline, then expand product and fixture breadth",
+    "reject_path": "continue kit work in the sandbox and production route before broadening store visuals"
   },
   "active_docs": [
     "README.md",

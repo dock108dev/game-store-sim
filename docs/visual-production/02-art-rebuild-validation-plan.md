@@ -106,7 +106,7 @@ Record:
 
 Documentation/status:
 
-- active phase is `art_language_rebuild_ready_for_implementation`
+- active phase is `art_language_rebuild_kit_integrated_for_validation`
 - active docs include the three art rebuild docs
 - current state points to the new plan
 
