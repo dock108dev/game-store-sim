@@ -4,7 +4,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 ## Playable Build
 
-The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented, and scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. Prototype visual language cleanup was implemented but did not change the live visual impression enough to become the baseline. The active next source is [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md): benchmark composition, label suppression, fixture silhouettes, physical detail replacement, ceiling/material/lighting treatment, and real backroom architecture before broader product/fixture/catalog visual breadth. The first-person retail loop includes:
+The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented, and scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. Prototype visual language cleanup was implemented but did not change the live visual impression enough to become the baseline. [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md) is now implemented in the production scene: benchmark fixture/product silhouettes, hidden explanatory sign cards, checkout-counter detail, ceiling/material/lighting treatment, and a deeper staff backroom threshold are ready for owner screenshot validation before broader product/fixture/catalog visual breadth. The first-person retail loop includes:
 
 - Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
 - Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
@@ -20,7 +20,7 @@ Current gate: `scripts/validate_godot.sh`.
 
 Latest verified baseline:
 
-- 570 GUT tests and 10028 asserts pass.
+- 573 GUT tests and 10904 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
 - Production script mapping is 53/53, or 100.0%, against an 80% threshold.
 - 3 standalone validation tools are active.
@@ -32,7 +32,7 @@ Validation artifacts are written to `artifacts/validation/latest/`. The importan
 
 ## Current Blocker
 
-External alpha playtest remains paused. The repo is mechanically green, but the visual read is still rejected as a baseline. The opening composition and modular production scene are directionally better, but owner review shows the live scene still reads as labeled blockout: flat planes, sign cards, primitive props, weak materials, weak lighting, and shallow backroom architecture. The next gate is implementation and owner validation of [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md).
+External alpha playtest remains paused. The repo is mechanically green, and the hard visual benchmark implementation is ready for owner validation. The opening composition and modular production scene now include a first-pass physical benchmark kit, but owner review still has to decide whether the generated screenshots clear the labeled-blockout read. The next gate is owner validation of [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md).
 
 Required reviews:
 
@@ -46,18 +46,17 @@ Required reviews:
 
 ## Visual Read
 
-The current scene is still pending owner art approval. The accepted direction is narrow: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state. The first asset pass adds tile panels, rail posts, shutter details, planter foliage, storefront mullions, threshold pieces, starter product packaging, and a first interior benchmark corner. The prototype-language cleanup pass adds smaller physical signage, right-wall poster product silhouettes, a staffed doorway/threshold, and receiving staging, but owner review shows this still does not clear the blockout read. The next pass must create one hard visual benchmark from the mall-entry/register/sales-floor route.
+The current scene is still pending owner art approval. The accepted direction is narrow: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state. The hard benchmark pass adds a front wall-shelf kit, day-one product/console/controller silhouettes, checkout monitor/bag/sleeve props, additional ceiling panels and fluorescent bars, suppressed large explanatory sign cards, and a deeper staff-only backroom threshold. Owner validation now needs to judge the refreshed screenshot set rather than another implementation plan.
 
 Current visual risk areas:
 
-- Opening route blockout read is reduced, but screenshots still do not clear the owner art bar.
-- The previous cleanup delta is too small to be meaningful in the live editor/game view.
-- The active next work is not broad catalog art; it is one hard benchmark route.
-- Tiny label speckle is still visible from some storefront/interior screenshots, especially through glass and across the far wall.
-- Receiving is more staged, but still has dense labels/tags and needs product/fixture art before it can read as finished.
-- The backroom now has a staff threshold, but the broader backroom still needs real room treatment and material depth.
-- The new module boundaries are accepted as infrastructure; deeper physical extraction should happen only when it helps the cleanup pass.
-- Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
+- Owner may still reject the hard benchmark screenshots if the CSG fixture/product kit is not visually strong enough.
+- The active next work is owner review/correction of one hard benchmark route, not broad catalog art.
+- Some tiny product, receipt, and catalog labels remain as secondary details and need real-window readability review.
+- Receiving is more staged, but still needs owner validation for whether it reads as workflow instead of clutter.
+- The backroom threshold now has depth, but the broader backroom still needs owner judgment before visual breadth continues.
+- The new module boundaries are accepted as infrastructure; deeper physical extraction should happen only where it improves approved benchmark work.
+- Store identity should now be carried more by meshes/materials/lighting/product density than by labels, but screenshots must confirm it.
 - CSG primitives are still the implementation medium for this pass, so shape/material quality needs screenshot review.
 - The first interior benchmark corner exists, but it needs approval before the rest of the shop expands.
 - Dense backroom computer screens.
@@ -90,7 +89,7 @@ The prior planning program in [Design Planning](design-planning/README.md) remai
 
 ## Next Decision
 
-Review [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md) before more scene work. The production scene/module structure is accepted as the infrastructure baseline, but the previous cleanup is not enough. Broader visual work should wait until the hard benchmark screenshots are accepted or corrected.
+Review the latest [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md) screenshots before more scene work. The production scene/module structure is accepted as the infrastructure baseline, and the hard benchmark is now implemented. Broader visual work should wait until the hard benchmark screenshots are accepted or corrected.
 
 If the hard benchmark validates:
 

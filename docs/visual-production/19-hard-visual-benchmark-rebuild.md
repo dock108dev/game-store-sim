@@ -6,6 +6,10 @@ Replace the current label-heavy blockout read with one credible first-person vis
 
 Owner review after the prototype visual language cleanup is rejected as a visual baseline. The implementation did make small scene/test/doc improvements, but the live view still reads as a graybox with signs and primitive props. This plan supersedes `18-prototype-visual-language-cleanup.md` as the active next visual implementation source.
 
+## Implementation Status
+
+Implemented on June 15, 2026 and pending owner screenshot validation. The pass adds a production-scene benchmark fixture kit, starter product/console/controller silhouettes, checkout-counter physical props, additional ceiling/light/material cues, suppression of large explanatory sign cards, and a deeper staff-only backroom threshold. The next decision is owner approval or screenshot-specific correction, not additional broad implementation.
+
 ## Target
 
 Build one approved benchmark route:

@@ -6,4 +6,4 @@
 script = ExtResource("1_manifest")
 module_id = "store_interior_shell"
 responsibility = "Primary store shell, walls, base trims, lighting, first interior benchmark wall, and navigation floor."
-owned_node_names = PackedStringArray("Floor", "BackWall", "LeftWall", "RightWall", "RightWallMerchBand", "FrontWallLeft", "FrontWallRight", "FrontDoorHeader", "FirstInteriorBenchmarkSlatwall", "FirstInteriorSlatRailA", "FirstInteriorSlatRailB", "FirstInteriorSlatRailC", "StoreLight", "RegisterTaskLight", "StorefrontAccentLight", "ShelfAccentLight")
+owned_node_names = PackedStringArray("Floor", "BackWall", "LeftWall", "RightWall", "RightWallMerchBand", "FrontWallLeft", "FrontWallRight", "FrontDoorHeader", "FirstInteriorBenchmarkSlatwall", "FirstInteriorSlatRailA", "FirstInteriorSlatRailB", "FirstInteriorSlatRailC", "BenchmarkWallShelfKit", "BenchmarkCeilingPanelFrontLeft", "BenchmarkCeilingPanelFrontRight", "BenchmarkCeilingGridFront", "BenchmarkFluorescentBarEntry", "BenchmarkFluorescentBarRegister", "StoreLight", "RegisterTaskLight", "StorefrontAccentLight", "ShelfAccentLight")

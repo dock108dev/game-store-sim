@@ -109,15 +109,15 @@ Exit criteria:
 - Active docs no longer treat `graybox_store.tscn` as the future visual production surface.
 - Owner confirms the manifest/module boundaries are good enough infrastructure for the next cleanup pass.
 
-## Phase 1C: Prototype Visual Language Cleanup
+## Phase 1C: Hard Visual Benchmark
 
-Status: active next implementation pass.
+Status: implemented; owner screenshot validation pending.
 
 Scope:
 
-- Label purge: remove or convert oversized prototype labels into believable signage, tags, decals, and packaging.
-- Backroom threshold: replace the floor-line boundary with a real staff-only transition.
-- Front sales-floor benchmark: make one entrance/register-facing interior view coherent and believable.
+- Label suppression: hide oversized prototype labels and keep text secondary to physical details.
+- Backroom threshold: replace the floor-line boundary with a deeper staff-only transition.
+- Front sales-floor benchmark: make one entrance/register-facing interior view coherent and believable through fixtures/products/counter props.
 - Receiving and stock clutter cleanup: group boxes, invoices, sorted stock, and backstock into readable workflows.
 - Screenshot QA: validate `main_scene.png`, `storefront_entry.png`, `register_counter.png`, `receiving_area.png`, `backroom_summary.png`, and the contact sheet.
 

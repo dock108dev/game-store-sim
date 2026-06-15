@@ -6,4 +6,4 @@
 script = ExtResource("1_manifest")
 module_id = "sales_floor_fixtures"
 responsibility = "Current display rack, shelf slots, fixture placement preview, category cues, and sales-floor merchandising anchors."
-owned_node_names = PackedStringArray("GameDisplayRack", "FixturePlacementManager", "GhostRackPreview", "FixtureGhostFootprintA", "FixtureGhostFootprintB", "FixtureGhostFootprintC", "FixtureGhostFootprintD", "UsedShelfTalkerPanel", "NewThisWeekPosterPanel", "LockedCaseHeaderLabel")
+owned_node_names = PackedStringArray("GameDisplayRack", "FixturePlacementManager", "GhostRackPreview", "FixtureGhostFootprintA", "FixtureGhostFootprintB", "FixtureGhostFootprintC", "FixtureGhostFootprintD", "BenchmarkShelfBackPanel", "BenchmarkShelfDeckTop", "BenchmarkShelfDeckMiddle", "BenchmarkShelfDeckBottom", "BenchmarkNewGameFacingA", "BenchmarkNewGameFacingB", "BenchmarkConsoleBoxFacing", "BenchmarkControllerPack", "UsedShelfTalkerPanel", "NewThisWeekPosterPanel", "LockedCaseHeaderLabel")

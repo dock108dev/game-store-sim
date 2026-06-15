@@ -6,6 +6,7 @@ GAME_DIR="$REPO_ROOT/game"
 GODOT_BIN="${GODOT_BIN:-/Applications/Godot.app/Contents/MacOS/Godot}"
 ARTIFACT_DIR="$REPO_ROOT/artifacts/validation/latest"
 SCREENSHOT_DIR="$ARTIFACT_DIR/screenshots"
+CONTACT_SHEET="$ARTIFACT_DIR/screenshot-contact-sheet.png"
 SCREENSHOT_SCENARIOS=(
   main_scene
   carry_stack
@@ -124,6 +125,26 @@ if rg -n "SCRIPT ERROR|ERROR:" "$SCREENSHOT_CHECK_LOG"; then
   echo "Screenshot sanity check emitted script errors." >&2
   exit 1
 fi
+
+echo "== Screenshot contact sheet =="
+if ! command -v magick >/dev/null 2>&1; then
+  echo "ImageMagick 'magick' command not found; install ImageMagick or add it to PATH." >&2
+  exit 1
+fi
+
+CONTACT_INPUTS=()
+for scenario in "${SCREENSHOT_SCENARIOS[@]}"; do
+  CONTACT_INPUTS+=("$SCREENSHOT_DIR/$scenario.png")
+done
+
+magick montage "${CONTACT_INPUTS[@]}" \
+  -thumbnail 320x180 \
+  -label '%t' \
+  -background '#1f2328' \
+  -fill white \
+  -pointsize 18 \
+  -geometry 320x220+8+8 \
+  "$CONTACT_SHEET"
 
 echo "== Old-name scan =="
 if rg -n "Mallcore|Mallcore Sim|Mall Sim|mall-sim|mallcore-sim" . \

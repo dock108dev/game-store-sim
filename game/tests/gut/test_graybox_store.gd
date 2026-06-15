@@ -830,10 +830,12 @@ func test_store_signage_uses_fictional_world_labels() -> void:
 		var label := _store.get_node_or_null(label_path) as Label3D
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
-		assert_gte(label.font_size, 20)
 		if label_path == "StoreIdentitySignPanel/StoreIdentitySignLabel":
+			assert_true(label.is_visible_in_tree(), label_path)
+			assert_gte(label.font_size, 20)
 			assert_lte(label.pixel_size, 0.0041)
 		else:
+			assert_false(label.is_visible_in_tree(), "%s should no longer explain the benchmark route" % label_path)
 			assert_lte(label.pixel_size, 0.003)
 		assert_eq(label.billboard, 0)
 		for banned_term in banned_terms:
@@ -953,6 +955,13 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 		"StaffThresholdBackroomFloorPanel",
 		"StaffThresholdDoorStopLeft",
 		"StaffThresholdDoorStopRight",
+		"StaffShortHallLeftWall",
+		"StaffShortHallRightWall",
+		"StaffShortHallCeilingSoffit",
+		"StaffDoorJambDepthLeft",
+		"StaffDoorJambDepthRight",
+		"StaffUtilityFloorInset",
+		"StaffThresholdCoolLightBar",
 	]:
 		var marker := _store.get_node_or_null(path) as CSGBox3D
 		assert_not_null(marker, path)
@@ -968,11 +977,18 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 	var floor_panel := _store.get_node("StaffThresholdBackroomFloorPanel") as CSGBox3D
 	var left_return := _store.get_node("StaffThresholdLeftReturnWall") as CSGBox3D
 	var right_return := _store.get_node("StaffThresholdRightReturnWall") as CSGBox3D
+	var hall_left := _store.get_node("StaffShortHallLeftWall") as CSGBox3D
+	var hall_right := _store.get_node("StaffShortHallRightWall") as CSGBox3D
+	var soffit := _store.get_node("StaffShortHallCeilingSoffit") as CSGBox3D
 	assert_gt(header.global_position.y, 1.8)
 	assert_gt(floor_panel.global_position.z, threshold.global_position.z)
 	assert_gte(floor_panel.size.x, 3.0)
 	assert_lt(left_return.global_position.x, (_store.get_node("StaffDoorFrameLeft") as CSGBox3D).global_position.x)
 	assert_gt(right_return.global_position.x, (_store.get_node("StaffDoorFrameRight") as CSGBox3D).global_position.x)
+	assert_gt(hall_left.size.z, 1.0)
+	assert_gt(hall_right.size.z, 1.0)
+	assert_gt(soffit.global_position.y, header.global_position.y)
+	assert_gt(soffit.global_position.z, threshold.global_position.z)
 
 
 func test_stockroom_shell_has_office_service_and_carry_route_cues() -> void:
@@ -1765,6 +1781,128 @@ func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> v
 		assert_not_null(visible_node, visible_path)
 
 
+func test_hard_visual_benchmark_route_has_physical_game_shop_anchors() -> void:
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var shelf_kit := _store.get_node_or_null("BenchmarkWallShelfKit") as Node3D
+	assert_not_null(shelf_kit)
+	assert_true(_is_inside_store_floorprint(shelf_kit.global_position))
+	assert_lt(shelf_kit.global_position.z, -4.0)
+	assert_lt(_flat_distance_xz(shelf_kit.global_position, register.global_position), 5.6)
+
+	for prop_path in [
+		"BenchmarkWallShelfKit/BenchmarkShelfBackPanel",
+		"BenchmarkWallShelfKit/BenchmarkShelfLeftUpright",
+		"BenchmarkWallShelfKit/BenchmarkShelfRightUpright",
+		"BenchmarkWallShelfKit/BenchmarkShelfDeckTop",
+		"BenchmarkWallShelfKit/BenchmarkShelfDeckMiddle",
+		"BenchmarkWallShelfKit/BenchmarkShelfDeckBottom",
+		"BenchmarkWallShelfKit/BenchmarkShelfLipTop",
+		"BenchmarkWallShelfKit/BenchmarkShelfLipMiddle",
+		"BenchmarkWallShelfKit/BenchmarkShelfLipBottom",
+		"BenchmarkWallShelfKit/BenchmarkNewGameFacingA",
+		"BenchmarkWallShelfKit/BenchmarkNewGameFacingB",
+		"BenchmarkWallShelfKit/BenchmarkConsoleBoxFacing",
+		"BenchmarkWallShelfKit/BenchmarkUsedGameSpineRowA",
+		"BenchmarkWallShelfKit/BenchmarkUsedGameSpineRowB",
+		"BenchmarkWallShelfKit/BenchmarkAccessoryPegboard",
+		"BenchmarkWallShelfKit/BenchmarkAccessoryHookA",
+		"BenchmarkWallShelfKit/BenchmarkAccessoryHookB",
+		"BenchmarkWallShelfKit/BenchmarkControllerPack",
+		"RegisterCounterMonitorBody",
+		"RegisterCounterMonitorScreen",
+		"RegisterCounterMonitorStand",
+		"RegisterBagHookRail",
+		"RegisterBagSleeveA",
+		"RegisterBagSleeveB",
+		"BenchmarkCeilingPanelFrontLeft",
+		"BenchmarkCeilingPanelFrontRight",
+		"BenchmarkCeilingGridFront",
+		"BenchmarkFluorescentBarEntry",
+		"BenchmarkFluorescentBarRegister",
+	]:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+
+	assert_gt((_store.get_node("BenchmarkWallShelfKit/BenchmarkShelfBackPanel") as CSGBox3D).size.y, 1.0)
+	assert_gt((_store.get_node("BenchmarkWallShelfKit/BenchmarkShelfDeckTop") as CSGBox3D).size.x, 1.7)
+	assert_gt((_store.get_node("BenchmarkWallShelfKit/BenchmarkConsoleBoxFacing") as CSGBox3D).size.x, 0.45)
+	assert_gt((_store.get_node("RegisterCounterMonitorBody") as CSGBox3D).global_position.y, 1.35)
+	assert_lt(_flat_distance_xz((_store.get_node("RegisterCounterMonitorBody") as CSGBox3D).global_position, register.global_position), 0.55)
+	assert_gt((_store.get_node("BenchmarkFluorescentBarRegister") as CSGBox3D).global_position.y, 2.6)
+
+
+func test_hard_visual_benchmark_suppresses_explanatory_label_cards() -> void:
+	for hidden_panel_path in [
+		"DisplaySignPanel",
+		"RegisterSignPanel",
+		"BackroomSignPanel",
+		"ReceivingSignPanel",
+		"StorageSignPanel",
+		"OfficeSignPanel",
+		"ServiceSignPanel",
+		"NewReleaseEndcap/EndcapHeaderPanel",
+		"StaffPicksStand/StaffPicksHeaderPanel",
+		"AccessoryPegWall/PegWallHeaderPanel",
+		"FuturePegWallUnlockPanel",
+		"LockedCasePlaceholder/LockedCaseHeaderPanel",
+		"FutureBackroomRackUnlockPanel",
+		"BackroomHintFromEntryPanel",
+		"ShelfFacingDensityBand",
+		"PreorderWallHeaderPanel",
+		"RegisterWorkflowCard",
+		"CatalogCostRulePanel",
+	]:
+		var panel := _store.get_node_or_null(hidden_panel_path) as Node3D
+		assert_not_null(panel, hidden_panel_path)
+		assert_false(panel.is_visible_in_tree(), hidden_panel_path)
+
+	var visible_labels: Array[Label3D] = []
+	_collect_visible_labels(_store, visible_labels)
+	var banned_visible_terms := [
+		"RACKS",
+		"REGISTER",
+		"BACKROOM",
+		"RECEIVING",
+		"STORAGE",
+		"USED WALL",
+		"CONTROLLERS",
+		"ACCESSORIES",
+		"LOCKED CASE",
+		"PREORDERS",
+		"SCAN PAY BAG",
+	]
+	for label in visible_labels:
+		for banned_term in banned_visible_terms:
+			assert_false(label.text.contains(banned_term), "%s should not be visible in %s" % [banned_term, label.get_path()])
+
+
+func test_hard_visual_benchmark_backroom_threshold_has_depth() -> void:
+	var threshold := _store.get_node("StaffThresholdMat") as CSGBox3D
+	var left_hall := _store.get_node("StaffShortHallLeftWall") as CSGBox3D
+	var right_hall := _store.get_node("StaffShortHallRightWall") as CSGBox3D
+	var soffit := _store.get_node("StaffShortHallCeilingSoffit") as CSGBox3D
+	var inset := _store.get_node("StaffUtilityFloorInset") as CSGBox3D
+	var light_bar := _store.get_node("StaffThresholdCoolLightBar") as CSGBox3D
+	var receiving := _store.get_node("ReceivingBox") as Node3D
+	var computer := _store.get_node("BackroomComputer") as Node3D
+
+	assert_gt(left_hall.global_position.z, threshold.global_position.z)
+	assert_gt(right_hall.global_position.z, threshold.global_position.z)
+	assert_gt(inset.global_position.z, threshold.global_position.z)
+	assert_gt(left_hall.size.z, threshold.size.z)
+	assert_gt(right_hall.size.z, threshold.size.z)
+	assert_gt(soffit.size.z, 1.0)
+	assert_gt(light_bar.global_position.y, 2.0)
+	assert_lt(left_hall.global_position.x, threshold.global_position.x)
+	assert_gt(right_hall.global_position.x, threshold.global_position.x)
+	assert_gt(_flat_distance_xz(threshold.global_position, receiving.global_position), 3.0)
+	assert_gt(_flat_distance_xz(threshold.global_position, computer.global_position), 3.0)
+	assert_true(_is_inside_store_floorprint(left_hall.global_position))
+	assert_true(_is_inside_store_floorprint(right_hall.global_position))
+
+
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
@@ -2139,6 +2277,13 @@ func _flat_distance_xz(first: Vector3, second: Vector3) -> float:
 
 func _color_luma(color: Color) -> float:
 	return color.r * 0.2126 + color.g * 0.7152 + color.b * 0.0722
+
+
+func _collect_visible_labels(node: Node, labels: Array[Label3D]) -> void:
+	if node is Label3D and (node as Label3D).is_visible_in_tree():
+		labels.append(node as Label3D)
+	for child in node.get_children():
+		_collect_visible_labels(child, labels)
 
 
 func _is_inside_store_floorprint(position: Vector3) -> bool:

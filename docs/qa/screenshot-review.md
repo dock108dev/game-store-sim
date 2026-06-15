@@ -1,6 +1,6 @@
 # Screenshot Review
 
-Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the scene architecture is accepted as infrastructure. Prototype visual language cleanup is implemented but visually insufficient. The active review target is now the hard visual benchmark rebuild in `docs/visual-production/19-hard-visual-benchmark-rebuild.md`.
+Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the scene architecture is accepted as infrastructure. Prototype visual language cleanup is implemented but visually insufficient. The hard visual benchmark rebuild in `docs/visual-production/19-hard-visual-benchmark-rebuild.md` is implemented and is now the active owner review target.
 
 ## Generate
 
@@ -20,14 +20,14 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 
 ## Latest Automated Lock
 
-Generated on June 12, 2026 from `scripts/validate_godot.sh`.
+Generated on June 15, 2026 from the hard benchmark implementation pass.
 
-- Full validation passed with 570 GUT tests and 10028 asserts.
+- Latest full validation gate is green with 573 GUT tests and 10904 asserts.
 - All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
 - Screenshot sanity and old-name scan passed.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
-- Current visual evidence is not art-approved. It is captured from the promoted `store_world.tscn` production scene after prototype-language cleanup. The latest live owner screenshots show the cleanup did not change the overall read enough. The next accepted screenshot set must come from the hard visual benchmark rebuild: benchmark composition, label suppression, fixture silhouettes, physical detail replacement, ceiling/material/lighting treatment, and real backroom architecture.
+- Current visual evidence is not owner-approved yet. It is captured from the promoted `store_world.tscn` production scene after the hard visual benchmark implementation: benchmark composition, label suppression, fixture silhouettes, physical detail replacement, ceiling/material/lighting treatment, and real backroom architecture.
 
 ## Required Screenshots
 
@@ -88,7 +88,7 @@ Fail if:
 
 ## Routing
 
-Before broadening visual work beyond the opening route, review `docs/visual-production/19-hard-visual-benchmark-rebuild.md` and confirm the hard benchmark has removed enough label/debug/clutter/backroom-line read. If the benchmark fails review, keep iterating there before adding product, fixture, or customer visual breadth.
+Before broadening visual work beyond the opening route, review the latest hard benchmark screenshots and confirm the pass has removed enough label/debug/clutter/backroom-line read. If the benchmark fails review, keep iterating there before adding product, fixture, or customer visual breadth.
 
 If all screenshots pass, run `docs/qa/release-package-check.md` and consider reopening `docs/production/15-alpha-playtest-package.md`.
 

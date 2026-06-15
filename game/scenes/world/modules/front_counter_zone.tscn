@@ -6,4 +6,4 @@
 script = ExtResource("1_manifest")
 module_id = "front_counter_zone"
 responsibility = "Register, counter work surface, checkout props, register-side composition, and customer transaction anchor."
-owned_node_names = PackedStringArray("RegisterWorkstation", "CounterBase", "CounterTop", "CounterFrontTrim", "RegisterScanner", "ReceiptPrinter", "ReceiptSlip", "TradeInInspectionTray", "RegisterWorkflowCard", "RegisterTaskLight")
+owned_node_names = PackedStringArray("RegisterWorkstation", "CounterBase", "CounterTop", "CounterFrontTrim", "RegisterScanner", "ReceiptPrinter", "ReceiptSlip", "TradeInInspectionTray", "RegisterWorkflowCard", "RegisterCounterMonitorBody", "RegisterCounterMonitorScreen", "RegisterCounterMonitorStand", "RegisterBagHookRail", "RegisterBagSleeveA", "RegisterBagSleeveB", "RegisterTaskLight")

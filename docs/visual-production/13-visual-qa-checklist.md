@@ -80,7 +80,7 @@ Do not approve a visual phase because it has more objects. Approve it only when 
 
 ## Current Cleanup Priority
 
-The next implementation pass must be judged against these five screenshots first:
+The implemented hard benchmark must be judged against these five screenshots first:
 
 - `main_scene.png`
 - `storefront_entry.png`

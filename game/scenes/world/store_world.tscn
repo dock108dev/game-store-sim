@@ -785,6 +785,7 @@ text = "11-8"
 font_size = 24
 
 [node name="DisplaySignPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(1.5, 0.24, 0.035)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.18, 1.98, 5.82)
 material = SubResource("StandardMaterial3D_door")
@@ -819,6 +820,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.06, -2.4)
 material = SubResource("StandardMaterial3D_wall")
 
 [node name="RegisterSignPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.98, 0.2, 0.035)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.55, 1.38, -2.92)
 material = SubResource("StandardMaterial3D_door")
@@ -836,6 +838,7 @@ text = "REGISTER"
 font_size = 22
 
 [node name="BackroomSignPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(1.25, 0.22, 0.035)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 1.78, 3.36)
 material = SubResource("StandardMaterial3D_storage_metal")
@@ -912,6 +915,41 @@ material = SubResource("StandardMaterial3D_storage_metal")
 size = Vector3(0.08, 0.88, 0.12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32, 0.52, 3.25)
 material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="StaffShortHallLeftWall" type="CSGBox3D" parent="."]
+size = Vector3(0.16, 1.86, 1.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34, 0.93, 3.94)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="StaffShortHallRightWall" type="CSGBox3D" parent="."]
+size = Vector3(0.16, 1.86, 1.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.74, 0.93, 3.94)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="StaffShortHallCeilingSoffit" type="CSGBox3D" parent="."]
+size = Vector3(3.24, 0.18, 1.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 2.16, 3.94)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="StaffDoorJambDepthLeft" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 1.72, 0.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.04, 0.86, 3.72)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="StaffDoorJambDepthRight" type="CSGBox3D" parent="."]
+size = Vector3(0.18, 1.72, 0.52)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.44, 0.86, 3.72)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="StaffUtilityFloorInset" type="CSGBox3D" parent="."]
+size = Vector3(2.38, 0.018, 1.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.066, 3.96)
+material = SubResource("StandardMaterial3D_mall_trim")
+
+[node name="StaffThresholdCoolLightBar" type="CSGBox3D" parent="."]
+size = Vector3(1.68, 0.045, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 2.06, 3.42)
+material = SubResource("StandardMaterial3D_paper_blue")
 
 [node name="BackroomZone" type="CSGBox3D" parent="."]
 size = Vector3(12.4, 0.012, 2.35)
@@ -991,6 +1029,7 @@ transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.
 material = SubResource("StandardMaterial3D_paper_blue")
 
 [node name="ReceivingSignPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.92, 0.18, 0.028)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.28, 1.72, 5.84)
 material = SubResource("StandardMaterial3D_cardboard")
@@ -1005,6 +1044,7 @@ text = "RECV"
 font_size = 22
 
 [node name="StorageSignPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.92, 0.2, 0.03)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.85, 1.52, 4.78)
 material = SubResource("StandardMaterial3D_storage_metal")
@@ -1019,6 +1059,7 @@ text = "STOCK"
 font_size = 22
 
 [node name="OfficeSignPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.72, 0.16, 0.026)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.62, 1.18, 5.84)
 material = SubResource("StandardMaterial3D_management_board")
@@ -1033,6 +1074,7 @@ text = "OFFICE"
 font_size = 22
 
 [node name="ServiceSignPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.78, 0.16, 0.026)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.05, 1.18, 5.84)
 material = SubResource("StandardMaterial3D_service_mat")
@@ -1065,6 +1107,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
 material = SubResource("StandardMaterial3D_counter")
 
 [node name="EndcapHeaderPanel" type="CSGBox3D" parent="NewReleaseEndcap"]
+visible = false
 size = Vector3(0.86, 0.22, 0.026)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, -0.26)
 material = SubResource("StandardMaterial3D_door")
@@ -1098,6 +1141,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, 0)
 material = SubResource("StandardMaterial3D_storage_metal")
 
 [node name="StaffPicksHeaderPanel" type="CSGBox3D" parent="StaffPicksStand"]
+visible = false
 size = Vector3(0.68, 0.18, 0.024)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, -0.22)
 material = SubResource("StandardMaterial3D_shipping_label")
@@ -1367,6 +1411,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
 material = SubResource("StandardMaterial3D_storage_metal")
 
 [node name="PegWallHeaderPanel" type="CSGBox3D" parent="AccessoryPegWall"]
+visible = false
 size = Vector3(1.45, 0.22, 0.035)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68, -0.04)
 material = SubResource("StandardMaterial3D_door")
@@ -1411,6 +1456,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.62, -0.1)
 material = SubResource("StandardMaterial3D_paper")
 
 [node name="FuturePegWallUnlockPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.82, 0.18, 0.024)
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 6.7, 1.96, 1.05)
 material = SubResource("StandardMaterial3D_stockroom_tape")
@@ -1439,6 +1485,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.78, 0)
 material = SubResource("StandardMaterial3D_storefront_glass")
 
 [node name="LockedCaseHeaderPanel" type="CSGBox3D" parent="LockedCasePlaceholder"]
+visible = false
 size = Vector3(0.94, 0.2, 0.028)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -0.24)
 material = SubResource("StandardMaterial3D_door")
@@ -2261,6 +2308,7 @@ transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 
 material = SubResource("StandardMaterial3D_management_board")
 
 [node name="FutureBackroomRackUnlockPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.86, 0.16, 0.024)
 transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 6.1, 1.04, 4.05)
 material = SubResource("StandardMaterial3D_stockroom_tape")
@@ -2475,6 +2523,7 @@ text = "USED + NEW"
 font_size = 15
 
 [node name="BackroomHintFromEntryPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.82, 0.18, 0.018)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.58, 1.18, 3.42)
 material = SubResource("StandardMaterial3D_backroom_management_zone")
@@ -2571,6 +2620,31 @@ size = Vector3(5.4, 0.04, 0.055)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.878, -2.96)
 material = SubResource("StandardMaterial3D_storage_metal")
 
+[node name="BenchmarkCeilingPanelFrontLeft" type="CSGBox3D" parent="."]
+size = Vector3(2.0, 0.032, 1.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55, 2.82, -4.12)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="BenchmarkCeilingPanelFrontRight" type="CSGBox3D" parent="."]
+size = Vector3(2.0, 0.032, 1.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.55, 2.82, -4.12)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="BenchmarkCeilingGridFront" type="CSGBox3D" parent="."]
+size = Vector3(10.7, 0.035, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0, 2.875, -4.72)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="BenchmarkFluorescentBarEntry" type="CSGBox3D" parent="."]
+size = Vector3(1.75, 0.045, 0.09)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55, 2.77, -4.52)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="BenchmarkFluorescentBarRegister" type="CSGBox3D" parent="."]
+size = Vector3(1.55, 0.045, 0.09)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.28, 2.72, -2.92)
+material = SubResource("StandardMaterial3D_shipping_label")
+
 [node name="FloorTransitionStripSalesBack" type="CSGBox3D" parent="."]
 size = Vector3(10.8, 0.006, 0.08)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.052, 2.62)
@@ -2641,6 +2715,154 @@ size = Vector3(0.12, 0.04, 0.014)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, -0.031)
 material = SubResource("StandardMaterial3D_product_green")
 
+[node name="BenchmarkWallShelfKit" type="Node3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -2.64, 0, -4.62)
+
+[node name="BenchmarkShelfBackPanel" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.92, 1.08, 0.055)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18, 0)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="BenchmarkShelfLeftUpright" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.08, 1.2, 0.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.96, 0.94, -0.02)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="BenchmarkShelfRightUpright" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.08, 1.2, 0.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.96, 0.94, -0.02)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="BenchmarkShelfDeckTop" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.82, 0.07, 0.36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, -0.12)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="BenchmarkShelfDeckMiddle" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.82, 0.07, 0.36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08, -0.12)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="BenchmarkShelfDeckBottom" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.82, 0.07, 0.36)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.76, -0.12)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="BenchmarkShelfLipTop" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.72, 0.035, 0.045)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.47, -0.31)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BenchmarkShelfLipMiddle" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.72, 0.035, 0.045)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, -0.31)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BenchmarkShelfLipBottom" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.72, 0.035, 0.045)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.83, -0.31)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BenchmarkNewGameFacingA" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.18, 0.3, 0.045)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.58, 1.58, -0.28)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="BenchmarkNewGameFacingACoverBand" type="CSGBox3D" parent="BenchmarkWallShelfKit/BenchmarkNewGameFacingA"]
+size = Vector3(0.155, 0.07, 0.014)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, -0.032)
+material = SubResource("StandardMaterial3D_product_red")
+
+[node name="BenchmarkNewGameFacingAPriceDot" type="CSGBox3D" parent="BenchmarkWallShelfKit/BenchmarkNewGameFacingA"]
+size = Vector3(0.05, 0.04, 0.016)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.052, -0.09, -0.033)
+material = SubResource("StandardMaterial3D_sign_gold")
+
+[node name="BenchmarkNewGameFacingB" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.18, 0.3, 0.045)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.34, 1.58, -0.28)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="BenchmarkNewGameFacingBCoverBand" type="CSGBox3D" parent="BenchmarkWallShelfKit/BenchmarkNewGameFacingB"]
+size = Vector3(0.155, 0.07, 0.014)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, -0.032)
+material = SubResource("StandardMaterial3D_product_green")
+
+[node name="BenchmarkConsoleBoxFacing" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.5, 0.26, 0.22)
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 0.42, 1.52, -0.24)
+material = SubResource("StandardMaterial3D_cardboard_alt")
+
+[node name="BenchmarkConsoleScreenGraphic" type="CSGBox3D" parent="BenchmarkWallShelfKit/BenchmarkConsoleBoxFacing"]
+size = Vector3(0.25, 0.11, 0.014)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.03, 0.028, -0.116)
+material = SubResource("StandardMaterial3D_product_blue")
+
+[node name="BenchmarkUsedGameSpineRowA" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(1.2, 0.1, 0.038)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18, 1.2, -0.31)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="BenchmarkUsedGameSpineRowB" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.9, 0.1, 0.038)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34, 0.88, -0.31)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="BenchmarkAccessoryPegboard" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.52, 0.48, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 0.94, -0.32)
+material = SubResource("StandardMaterial3D_management_board")
+
+[node name="BenchmarkAccessoryHookA" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.24, 0.025, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 1.04, -0.38)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BenchmarkAccessoryHookB" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.24, 0.025, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.76, 0.84, -0.38)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BenchmarkControllerPack" type="CSGBox3D" parent="BenchmarkWallShelfKit"]
+size = Vector3(0.18, 0.24, 0.045)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0.52, 0.92, -0.42)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="BenchmarkControllerPackIcon" type="CSGBox3D" parent="BenchmarkWallShelfKit/BenchmarkControllerPack"]
+size = Vector3(0.12, 0.038, 0.014)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -0.032)
+material = SubResource("StandardMaterial3D_product_green")
+
+[node name="RegisterCounterMonitorBody" type="CSGBox3D" parent="."]
+size = Vector3(0.44, 0.3, 0.08)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.22, 1.5, -2.2)
+material = SubResource("StandardMaterial3D_counter")
+
+[node name="RegisterCounterMonitorScreen" type="CSGBox3D" parent="."]
+size = Vector3(0.34, 0.2, 0.018)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.22, 1.5, -2.245)
+material = SubResource("StandardMaterial3D_service_mat")
+
+[node name="RegisterCounterMonitorStand" type="CSGBox3D" parent="."]
+size = Vector3(0.08, 0.26, 0.08)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.22, 1.31, -2.18)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="RegisterBagHookRail" type="CSGBox3D" parent="."]
+size = Vector3(0.62, 0.04, 0.04)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.28, 1.32, -2.72)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="RegisterBagSleeveA" type="CSGBox3D" parent="."]
+size = Vector3(0.22, 0.24, 0.025)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.12, 1.18, -2.78)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="RegisterBagSleeveB" type="CSGBox3D" parent="."]
+size = Vector3(0.22, 0.24, 0.025)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.38, 1.18, -2.72)
+material = SubResource("StandardMaterial3D_paper_blue")
+
 [node name="CounterFrontTrim" type="CSGBox3D" parent="."]
 size = Vector3(2.42, 0.08, 0.05)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.05, 1.26, -2.92)
@@ -2652,6 +2874,7 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 material = SubResource("StandardMaterial3D_shipping_label")
 
 [node name="ShelfFacingDensityBand" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(2.2, 0.18, 0.04)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.15, 1.38, 5.18)
 material = SubResource("StandardMaterial3D_shipping_label")
@@ -2748,6 +2971,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.84, 1.28, 2.12)
 material = SubResource("StandardMaterial3D_management_board")
 
 [node name="PreorderWallHeaderPanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.06, 0.18, 1.02)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.8, 1.82, 2.12)
 material = SubResource("StandardMaterial3D_shipping_label")
@@ -2887,6 +3111,7 @@ transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 
 material = SubResource("StandardMaterial3D_fixture_ghost_valid")
 
 [node name="RegisterWorkflowCard" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.5, 0.15, 0.018)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.04, 1.53, -2.34)
 material = SubResource("StandardMaterial3D_paper")
@@ -2983,6 +3208,7 @@ text = "STORE DESIGN"
 font_size = 12
 
 [node name="CatalogCostRulePanel" type="CSGBox3D" parent="."]
+visible = false
 size = Vector3(0.78, 0.14, 0.018)
 transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 4.24, 0.72, 4.02)
 material = SubResource("StandardMaterial3D_shipping_label")
