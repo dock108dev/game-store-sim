@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_current_review_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "production_visual_screenshot_review")
-	assert_eq(status.get("playtest_state"), "paused_pending_owner_review")
+	assert_eq(status.get("current_phase"), "hard_visual_benchmark_rebuild_ready_for_implementation")
+	assert_eq(status.get("playtest_state"), "paused_pending_visual_cleanup_owner_review")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "production_blockout")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "hard_visual_benchmark_rebuild_required")
 
 
 func test_docs_status_contract_records_validation_baseline() -> void:
@@ -21,16 +21,18 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 	var scripts: Dictionary = _dictionary(validation.get("script_test_mapping"))
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
-	assert_eq(int(validation.get("gut_tests")), 553)
-	assert_eq(int(validation.get("gut_asserts")), 7064)
+	assert_eq(int(validation.get("gut_tests")), 570)
+	assert_eq(int(validation.get("gut_asserts")), 10028)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
-	assert_eq(int(scripts.get("covered")), 52)
-	assert_eq(int(scripts.get("total")), 52)
+	assert_eq(int(scripts.get("covered")), 53)
+	assert_eq(int(scripts.get("total")), 53)
 	assert_eq(int(validation.get("active_validation_tools")), 3)
-	assert_eq(int(validation.get("catalog_products")), 33)
+	assert_eq(int(validation.get("catalog_products")), 60)
 	assert_eq(validation.get("desktop_pack_smoke"), "passed")
 	assert_eq(validation.get("screenshot_sanity"), "passed")
+	assert_eq(int(validation.get("screenshot_count")), 23)
+	assert_eq(validation.get("screenshot_contact_sheet"), "artifacts/validation/latest/screenshot-contact-sheet.png")
 
 
 func test_docs_status_contract_points_to_active_docs() -> void:
@@ -42,12 +44,25 @@ func test_docs_status_contract_points_to_active_docs() -> void:
 		assert_true(FileAccess.file_exists("res://../%s" % path), str(path))
 
 	assert_true(active_docs.has("docs/CURRENT_STATE.md"))
+	assert_true(active_docs.has("docs/visual-production/README.md"))
+	assert_true(active_docs.has("docs/visual-production/00-visual-reset.md"))
+	assert_true(active_docs.has("docs/visual-production/01-art-direction-target.md"))
+	assert_true(active_docs.has("docs/visual-production/12-implementation-roadmap.md"))
+	assert_true(active_docs.has("docs/visual-production/13-visual-qa-checklist.md"))
+	assert_true(active_docs.has("docs/visual-production/15-day-one-stock-and-unlocks.md"))
+	assert_true(active_docs.has("docs/visual-production/16-opening-visual-asset-pass.md"))
+	assert_true(active_docs.has("docs/visual-production/17-scene-architecture-modularization.md"))
+	assert_true(active_docs.has("docs/visual-production/18-prototype-visual-language-cleanup.md"))
+	assert_true(active_docs.has("docs/visual-production/19-hard-visual-benchmark-rebuild.md"))
+	assert_true(active_docs.has("docs/design-planning/README.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/full-day-playtest.md"))
 	assert_true(active_docs.has("docs/qa/screenshot-review.md"))
 	assert_true(active_docs.has("docs/qa/release-package-check.md"))
 	assert_true(historical_docs.has("docs/production/11-game-completion-plan.md"))
 	assert_true(historical_docs.has("docs/production/18-production-visuals-plan.md"))
+	assert_true(historical_docs.has("docs/design-planning/01-opening-store-quality-bar.md"))
+	assert_true(historical_docs.has("docs/design-planning/08-quality-bar-checklist.md"))
 
 
 func test_current_state_and_readme_point_to_status_contract() -> void:

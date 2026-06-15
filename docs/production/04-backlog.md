@@ -4,18 +4,20 @@ This is the active production backlog. For current status, validation numbers, a
 
 ## Current Phase
 
-Production visual screenshot review.
+Hard visual benchmark rebuild.
 
-Goal: decide whether the mechanically validated production-blockout build is readable enough to reopen the external alpha playtest package.
+Goal: rebuild one approved mall-entry/register/sales-floor visual benchmark before the next visual-content breadth pass.
 
-Status: the prototype and first polish pass are validated, Alpha hardening is complete through Stop 13.7 as a mechanical gate, readability recovery implementation plus label depth-safety stabilization are complete, employees-only stockroom production is mechanically complete through Slice 8, the first post-stockroom returns baseline is implemented, and the production visual overhaul baseline is mechanically complete through Slice 14 in `18-production-visuals-plan.md`. External alpha playtest remains paused until the owner captures and reviews the recovery screenshot set, stockroom screenshot set, and production-visual review set in a real 1280x720 window.
+Status: Alpha hardening is complete through Stop 13.7, and the first phase 0-4 visual pass failed owner screenshot review. The active implementation resets the opening composition: the player starts on a second-floor mall concourse, faces a branded glass storefront, walks through an open threshold, and enters an empty pre-open shop with customer actors hidden but still mechanically wired. Scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, module manifests exist under `game/scenes/world/modules/`, screenshot/tools target the production scene, and `graybox_store.tscn` remains as a compatibility wrapper. Prototype visual language cleanup is implemented but visually insufficient. The next implementation source is `docs/visual-production/19-hard-visual-benchmark-rebuild.md`.
 
 ## Next Decision
 
-1. Run `scripts/validate_godot.sh`.
-2. Review `artifacts/validation/latest/screenshots/` using `docs/qa/screenshot-review.md`.
-3. If screenshots pass, run `docs/qa/release-package-check.md` and reopen `15-alpha-playtest-package.md`.
-4. If screenshots fail, add the smallest actionable issue to `13-alpha-bug-list.md`, fix only that surface, and rerun the gate.
+1. Review `docs/visual-production/19-hard-visual-benchmark-rebuild.md`.
+2. Implement Phase 0 through Phase 6 in order.
+3. Run `scripts/validate_godot.sh` and regenerate the contact sheet.
+4. Owner reviews `main_scene.png`, `storefront_entry.png`, `register_counter.png`, `receiving_area.png`, `backroom_summary.png`, and a manual real-window walkthrough.
+5. If the hard benchmark passes owner review, implement product/fixture visual-kit breadth on top of it.
+6. If the hard benchmark fails, correct the benchmark before adding broader catalog visuals.
 
 ## Current Rules
 
@@ -29,9 +31,12 @@ Status: the prototype and first polish pass are validated, Alpha hardening is co
 
 ## Active Work
 
-1. Screenshot review: owner recovery, stockroom, and production-visual screenshot sets.
-2. Release package check: pack smoke plus manual build/save/load relaunch review.
-3. External alpha playtest: paused until the above pass.
+1. Hard visual benchmark rebuild implementation.
+2. Owner latest screenshot/contact-sheet review for the hard benchmark pass.
+3. Product/fixture visual-kit implementation after benchmark validation.
+4. Broader sales-floor rebuild after product/fixture visual-kit approval.
+5. Deeper module child-node extraction only where the cleanup pass needs it.
+6. External alpha playtest: paused until opening review, interior rebuild, screenshot review, and release-package check pass.
 
 ## Completed Baselines
 
@@ -46,6 +51,7 @@ Status: the prototype and first polish pass are validated, Alpha hardening is co
 - Employees-only stockroom production. Mechanically complete through Slice 8; owner screenshot validation remains required before external playtest.
 - Returns/exchanges baseline. Complete for first-pass register refund, receiving-review routing, cash/reputation accounting, daily-report readout, scene wiring, validation coverage, and manual checklist updates.
 - Production visual overhaul. Mechanically complete through Slice 14 in `18-production-visuals-plan.md`; owner screenshot review remains required before external playtest.
+- Scene architecture modularization. Implemented with `store_world.tscn`, module manifests, production-scene promotion, validation/tool reference updates, and legacy `graybox_store.tscn` compatibility wrapper; accepted as infrastructure for the cleanup pass.
 
 ## Historical Plans
 

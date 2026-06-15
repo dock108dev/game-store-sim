@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/visual_module_manifest.gd" id="1_manifest"]
+
+[node name="StorefrontShellModule" type="Node3D"]
+script = ExtResource("1_manifest")
+module_id = "storefront_shell"
+responsibility = "Branded glass storefront, sign band, neon trim, mullions, door panels, decals, and first-view identity."
+owned_node_names = PackedStringArray("StorefrontGlassLeft", "StorefrontGlassRight", "StorefrontGlassLeftMullionVerticalA", "StorefrontGlassLeftMullionVerticalB", "StorefrontGlassLeftMullionMidRail", "StorefrontGlassRightMullionVerticalA", "StorefrontGlassRightMullionVerticalB", "StorefrontGlassRightMullionMidRail", "StoreIdentitySignGlowBacker", "StoreIdentitySignLabel", "StoreIdentitySignCartridgeIcon", "StoreIdentitySignCartridgeNotch", "StoreIdentitySignDiscIcon", "StoreIdentitySignDiscHole", "OpenSignPanel", "OpenSignLabel", "HoursDecalPanel", "HoursDecalLabel", "StorefrontNeonGlow")

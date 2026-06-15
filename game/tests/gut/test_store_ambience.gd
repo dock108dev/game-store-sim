@@ -30,8 +30,8 @@ func test_store_ambience_uses_conservative_mix_levels() -> void:
 		assert_gte(float(entry.get("max_distance", 0.0)), 4.5, str(entry.get("id", "")))
 
 
-func test_graybox_store_contains_configured_ambience_players() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+func test_store_world_contains_configured_ambience_players() -> void:
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var ambience: Node = scene.get_node("StoreAmbience")
 

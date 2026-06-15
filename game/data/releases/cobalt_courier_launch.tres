@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="NewRelease" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/releases/new_release.gd" id="1_new_release"]
+
+[resource]
+script = ExtResource("1_new_release")
+release_id = "release_cobalt_courier"
+product_name = "Cobalt Courier"
+platform = "Nova Cube"
+category = "new_game"
+release_day = 6
+wholesale_cost_cents = 3000
+suggested_price_cents = 4999
+allocation_limit = 4
+demand_tier = "high"
+tagline = "Fast delivery platformer with bright shelf-read cover art."
+buyer_hook = "Action buyers notice it when the new-release wall has a clean platform row"
+allocation_note = "Reserve conservatively unless cash is strong; missed launch demand hurts reputation."

@@ -173,12 +173,16 @@ func test_store_session_lists_upgrade_path_baseline() -> void:
 	assert_eq(available.size(), 6)
 	assert_false(session.can_purchase_upgrade("upgrade_store_expansion"))
 	assert_string_contains(summary, "Accessory Peg Wall $75.00 (fixture)")
+	assert_string_contains(summary, "visible FuturePegWallUnlockPanel")
 	assert_string_contains(summary, "Accessory Category License $50.00 (category)")
 	assert_string_contains(summary, "Service Cleaning Tools $90.00 (service_tool)")
 	assert_string_contains(summary, "Computer Analytics $75.00 (computer_tool)")
 	assert_string_contains(summary, "Staff Picks Signage $45.00 (signage)")
 	assert_string_contains(summary, "Backroom Storage Bay $90.00 (storage)")
 	assert_string_contains(summary, "Locked: Starter Store Expansion")
+	assert_eq(session.get_upgrade_surface_states().size(), 7)
+	assert_string_contains(session.get_upgrade_surface_summary_text(), "Accessory Peg Wall -> FuturePegWallUnlockPanel (available)")
+	assert_string_contains(session.get_upgrade_surface_summary_text(), "Starter Store Expansion -> ExpansionFootprintTapeA (locked)")
 
 
 func test_store_session_purchases_upgrades_and_unlocks_expansion_path() -> void:
@@ -549,7 +553,7 @@ func test_store_session_surfaces_security_safe_placeholders() -> void:
 
 
 func test_store_session_surfaces_hidden_clue_surfaces() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
@@ -567,7 +571,7 @@ func test_store_session_surfaces_hidden_clue_surfaces() -> void:
 
 
 func test_store_session_records_hidden_thread_choice_paths() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
@@ -609,7 +613,7 @@ func test_store_session_records_hidden_thread_choice_paths() -> void:
 
 
 func test_store_session_applies_hidden_cash_and_risk_consequences() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
@@ -629,7 +633,7 @@ func test_store_session_applies_hidden_cash_and_risk_consequences() -> void:
 
 
 func test_store_session_hidden_thread_can_be_ignored_for_retail_progression() -> void:
-	var scene: Node = load("res://scenes/world/graybox_store.tscn").instantiate()
+	var scene: Node = load("res://scenes/world/store_world.tscn").instantiate()
 	add_child_autofree(scene)
 	var session: StoreSession = scene.get_node("StoreSession")
 
@@ -893,7 +897,11 @@ func test_store_session_applies_decoration_baseline() -> void:
 	assert_eq(catalog.size(), 7)
 	assert_true(session.can_apply_decoration("decor_wall_paint_savepoint_blue"))
 	assert_string_contains(session.get_decoration_summary_text(), "Savepoint Blue Wall Paint $40.00")
+	assert_string_contains(session.get_decoration_summary_text(), "Visible surface: WallPaintSwatchStrip")
 	assert_string_contains(session.get_decoration_summary_text(), "Clutter budget: 0 used / 4 safe points")
+	assert_eq(session.get_decoration_surface_states().size(), 7)
+	assert_string_contains(session.get_decoration_surface_summary_text(), "Savepoint Blue Wall Paint -> WallPaintSwatchStrip (preview, clutter 0)")
+	assert_string_contains(session.get_decoration_surface_summary_text(), "Small Clutter Budget -> DesignSwatchStrip (preview, clutter -2)")
 
 	var decoration := session.apply_decoration("decor_wall_paint_savepoint_blue")
 
@@ -903,6 +911,7 @@ func test_store_session_applies_decoration_baseline() -> void:
 	assert_true(session.has_decoration("decor_wall_paint_savepoint_blue"))
 	assert_false(session.can_apply_decoration("decor_wall_paint_savepoint_blue"))
 	assert_string_contains(session.get_decoration_summary_text(), "Applied: Savepoint Blue Wall Paint")
+	assert_string_contains(session.get_decoration_surface_summary_text(), "Savepoint Blue Wall Paint -> WallPaintSwatchStrip (applied, clutter 0)")
 
 
 func test_store_session_lists_available_supplier_lots() -> void:
@@ -911,11 +920,17 @@ func test_store_session_lists_available_supplier_lots() -> void:
 
 	var lots := session.get_available_supplier_lots()
 
-	assert_eq(lots.size(), 1)
+	assert_eq(lots.size(), 4)
 	assert_eq(lots[0].get("lot_id"), "supplier_lot_used_games_001")
+	assert_eq(lots[1].get("lot_id"), "supplier_lot_new_release_sampler")
+	assert_eq(lots[2].get("lot_id"), "supplier_lot_accessory_counter")
+	assert_eq(lots[3].get("lot_id"), "supplier_lot_backstock_used_depth")
 	assert_true(session.can_order_supplier_lot("supplier_lot_used_games_001"))
+	assert_true(session.can_order_supplier_lot("supplier_lot_accessory_counter"))
 	assert_string_contains(session.get_supplier_order_summary_text(), "Receiving orders:")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Order Used Game Starter Lot $30.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Order New Release Sampler Lot $78.00")
+	assert_string_contains(session.get_supplier_order_summary_text(), "Order Accessory Counter Lot $26.50")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Category: Used games")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Cart: 1 lot / 3 items")
 	assert_string_contains(session.get_supplier_order_summary_text(), "Cost: $30.00 reserved on order")
@@ -949,13 +964,20 @@ func test_store_session_lists_release_calendar_sorted_by_launch_day() -> void:
 
 	var releases := session.get_release_calendar()
 
-	assert_eq(releases.size(), 3)
+	assert_eq(releases.size(), 9)
 	assert_eq(releases[0].get("product_name"), "Neon Skyline")
-	assert_eq(releases[1].get("product_name"), "Pocket Farm DX")
-	assert_eq(releases[2].get("product_name"), "Skycart Grand Prix")
+	assert_eq(releases[1].get("product_name"), "Moonlight Menders")
+	assert_eq(releases[2].get("product_name"), "Pocket Farm DX")
+	assert_eq(releases[3].get("product_name"), "Cobalt Courier")
+	assert_eq(releases[4].get("product_name"), "Dream Dock")
+	assert_eq(releases[5].get("product_name"), "Skycart Grand Prix")
+	assert_eq(releases[6].get("product_name"), "Lunar Lanterns")
+	assert_eq(releases[7].get("product_name"), "Turbo Tome")
+	assert_eq(releases[8].get("product_name"), "Velvet Voltage")
 	assert_eq(releases[0].get("release_day"), 3)
-	assert_eq(releases[1].get("release_day"), 5)
-	assert_eq(releases[2].get("release_day"), 8)
+	assert_eq(releases[1].get("release_day"), 4)
+	assert_eq(releases[2].get("release_day"), 5)
+	assert_eq(releases[8].get("release_day"), 12)
 
 
 func test_store_session_formats_upcoming_release_calendar() -> void:
@@ -1107,9 +1129,12 @@ func test_store_session_filters_released_calendar_entries() -> void:
 	var upcoming := session.get_upcoming_releases()
 	var summary: String = session.get_release_calendar_text()
 
-	assert_eq(upcoming.size(), 2)
-	assert_eq(upcoming[0].get("product_name"), "Pocket Farm DX")
+	assert_eq(upcoming.size(), 8)
+	assert_eq(upcoming[0].get("product_name"), "Moonlight Menders")
+	assert_eq(upcoming[1].get("product_name"), "Pocket Farm DX")
+	assert_eq(upcoming[7].get("product_name"), "Velvet Voltage")
 	assert_eq(summary.find("Neon Skyline"), -1)
+	assert_string_contains(summary, "Day 4 (today): Moonlight Menders")
 	assert_string_contains(summary, "Day 5 (tomorrow): Pocket Farm DX")
 
 
@@ -1242,6 +1267,11 @@ func test_store_session_moves_receiving_items_to_backstock_and_retrieves_them() 
 	assert_string_contains(session.get_storage_workflow_summary_text(), "Pull stage: retrieve cases here before carrying them to sales-floor fixtures")
 	assert_string_contains(session.get_storage_workflow_summary_text(), "Capacity: 6 cases")
 	assert_string_contains(session.get_storage_workflow_summary_text(), "Backstock: 1 stored / 6 capacity / 0 overflow")
+	assert_string_contains(session.get_storage_workflow_summary_text(), "Route: receiving_box_001 -> backstock_shelf_001 -> stockroom_pull_stage -> sales_floor_fixtures")
+	assert_string_contains(session.get_stockroom_route_summary_text(), "1. Receive: delivery cases land in receiving_box_001")
+	assert_string_contains(session.get_stockroom_route_summary_text(), "3. Store: overflow and category bins use backstock_shelf_001")
+	assert_string_contains(session.get_stockroom_route_summary_text(), "Ready states: receiving 5 / backstock 1 / shelf 0")
+	assert_string_contains(session.get_stockroom_route_summary_text(), "Core retail blocked by hidden records: no")
 	assert_string_contains(session.get_storage_workflow_summary_text(), "Recent storage move: stored")
 	assert_not_null(root.get_node_or_null("BackstockShelf"))
 	assert_true(session.can_retrieve_backstock_item())

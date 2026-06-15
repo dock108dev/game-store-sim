@@ -9,7 +9,7 @@
       "covered_paths": [
         "game/tests/tools/measure_alpha_performance.gd",
         "scripts/measure_alpha_performance.sh",
-        "game/scenes/world/graybox_store.tscn",
+        "game/scenes/world/store_world.tscn",
         "game/tests/tools/capture_main_scene_screenshot.gd",
         "scripts/verify_desktop_export.sh"
       ],

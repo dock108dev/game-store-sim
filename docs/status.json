@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "project": "game-store-sim",
-  "status_date": "2026-06-10",
-  "current_phase": "production_visual_screenshot_review",
-  "playtest_state": "paused_pending_owner_review",
+  "status_date": "2026-06-12",
+  "current_phase": "hard_visual_benchmark_rebuild_ready_for_implementation",
+  "playtest_state": "paused_pending_visual_cleanup_owner_review",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with production-blockout visuals.",
+    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. Scene architecture modularization is accepted as infrastructure: store_world.tscn is the production main scene, graybox_store.tscn is a compatibility wrapper, and reusable module manifests define visual/system ownership. Prototype visual language cleanup is implemented but visually insufficient. The active next pass is the hard visual benchmark rebuild: benchmark composition, label suppression, fixture silhouettes, physical detail replacement, ceiling/material/lighting treatment, and real backroom architecture before broader product or fixture breadth.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -25,16 +25,18 @@
       "save_load",
       "settings_pause_menu",
       "stockroom_backroom_workflows",
+      "full_first_catalog",
+      "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "production_blockout",
+    "visual_read": "hard_visual_benchmark_rebuild_required",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 553,
-    "gut_asserts": 7064,
+    "gut_tests": 570,
+    "gut_asserts": 10028,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -42,31 +44,58 @@
       "threshold_percent": 80
     },
     "script_test_mapping": {
-      "covered": 52,
-      "total": 52,
+      "covered": 53,
+      "total": 53,
       "percent": 100.0,
       "threshold_percent": 80
     },
     "active_validation_tools": 3,
-    "catalog_products": 33,
+    "catalog_products": 60,
     "desktop_pack_smoke": "passed",
     "alpha_performance_smoke": "passed",
     "screenshot_sanity": "passed",
+    "screenshot_count": 23,
+    "screenshot_contact_sheet": "artifacts/validation/latest/screenshot-contact-sheet.png",
     "old_name_scan": "passed"
   },
   "blocking_reviews": [
-    "owner_recovery_screenshot_review",
-    "owner_stockroom_screenshot_review",
-    "owner_production_visual_screenshot_review",
+    "owner_opening_visual_asset_pass_signoff",
+    "owner_hard_visual_benchmark_signoff",
+    "owner_opening_mall_storefront_screenshot_review",
+    "owner_walk_in_empty_store_review",
+    "owner_day_one_stock_flow_review",
+    "owner_catalog_unlock_flow_review",
     "manual_real_window_1280x720_review"
   ],
   "next_decision": {
-    "question": "Do the current screenshots read clearly enough to reopen the external alpha playtest package?",
-    "approve_path": "rerun validation, run release-package check, then reopen the alpha playtest package",
-    "reject_path": "fix only the failed screenshot/readability surfaces, then rerun validation and screenshot review"
+    "question": "Can the hard visual benchmark rebuild make the mall-entry, register/sales-floor, receiving, and backroom-threshold screenshots read as a mid-00s game shop before labels?",
+    "approve_path": "use the approved benchmark as the baseline for broader product and fixture visual-kit breadth",
+    "reject_path": "continue benchmark corrections before adding broader catalog, decoration, customer, or multi-day visual work"
   },
   "active_docs": [
     "docs/CURRENT_STATE.md",
+    "docs/visual-production/README.md",
+    "docs/visual-production/00-visual-reset.md",
+    "docs/visual-production/01-art-direction-target.md",
+    "docs/visual-production/02-mid-00s-game-shop-inventory.md",
+    "docs/visual-production/03-asset-pipeline-and-style-guide.md",
+    "docs/visual-production/04-store-layout-visual-zones.md",
+    "docs/visual-production/05-storefront-first-view-slice.md",
+    "docs/visual-production/06-register-and-counter-slice.md",
+    "docs/visual-production/07-sales-floor-fixtures-slice.md",
+    "docs/visual-production/08-product-visual-language.md",
+    "docs/visual-production/09-backroom-receiving-slice.md",
+    "docs/visual-production/10-customers-and-role-silhouettes.md",
+    "docs/visual-production/11-lighting-materials-camera.md",
+    "docs/visual-production/12-implementation-roadmap.md",
+    "docs/visual-production/13-visual-qa-checklist.md",
+    "docs/visual-production/14-deprecated-visual-docs.md",
+    "docs/visual-production/15-day-one-stock-and-unlocks.md",
+    "docs/visual-production/16-opening-visual-asset-pass.md",
+    "docs/visual-production/17-scene-architecture-modularization.md",
+    "docs/visual-production/18-prototype-visual-language-cleanup.md",
+    "docs/visual-production/19-hard-visual-benchmark-rebuild.md",
+    "docs/design-planning/README.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",
@@ -85,7 +114,11 @@
     "docs/production/12-production-target-contracts.md",
     "docs/production/16-playability-readability-recovery-plan.md",
     "docs/production/17-stockroom-production-plan.md",
-    "docs/production/18-production-visuals-plan.md"
+    "docs/production/18-production-visuals-plan.md",
+    "docs/design-planning/00-inspiration-review.md",
+    "docs/design-planning/01-opening-store-quality-bar.md",
+    "docs/design-planning/08-quality-bar-checklist.md",
+    "docs/design-planning/09-testing-plan.md"
   ],
   "validation_data_shape": {
     "thresholds": "game/tests/validation/thresholds.json",

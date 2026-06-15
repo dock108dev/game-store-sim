@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Game Store Sim"
 config/description="First-person retro video game retail simulator."
-run/main_scene="res://scenes/world/graybox_store.tscn"
+run/main_scene="res://scenes/world/store_world.tscn"
 config/features=PackedStringArray("4.6")
 
 [input]

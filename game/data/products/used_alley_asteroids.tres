@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ProductDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "used_alley_asteroids"
+display_name = "Alley Asteroids"
+category = "used_game"
+platform = "Nova Cube"
+platform_family = "nova_disc"
+condition = "good"
+completeness = "complete"
+format = "disc"
+authenticity = "verified"
+rarity = "common"
+demand_tier = "medium"
+cost_basis_cents = 700
+market_value_cents = 1999
+suggested_price_cents = 1799
+risk_level = "low"
+risk_tags = Array[String]([])
+default_location_id = "receiving_box_001"
+player_priceable = true

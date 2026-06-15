@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ProductDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "used_cobalt_cavern"
+display_name = "Cobalt Cavern"
+category = "used_game"
+platform = "Orbit 64"
+platform_family = "orbit_classic"
+condition = "fair"
+completeness = "manual_missing"
+format = "cartridge"
+authenticity = "trusted"
+rarity = "common"
+demand_tier = "medium"
+cost_basis_cents = 500
+market_value_cents = 1699
+suggested_price_cents = 1499
+risk_level = "medium"
+risk_tags = Array[String](["manual_missing"])
+default_location_id = "receiving_box_001"
+player_priceable = true

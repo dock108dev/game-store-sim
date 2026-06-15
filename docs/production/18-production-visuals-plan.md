@@ -32,7 +32,7 @@ Validation snapshot:
 - `scripts/validate_godot.sh` passes with 553 GUT tests.
 - UI scenario automation coverage is 508/628.
 - Production script mapping coverage is 52/52.
-- Product catalog validation passes with 33 catalog products.
+- Product catalog validation passes with 60 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot sanity, and old-name scan pass.
 
 Implemented scene surfaces:

@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/visual_module_manifest.gd" id="1_manifest"]
+
+[node name="StarterProductDisplayModule" type="Node3D"]
+script = ExtResource("1_manifest")
+module_id = "starter_product_display"
+responsibility = "Restrained day-one product read: two new-game cases, one console box, one accessory, and first interior product benchmark."
+owned_node_names = PackedStringArray("WindowDisplayCaseA", "WindowDisplayCaseACoverBand", "WindowDisplayCaseASpineStrip", "WindowDisplayCaseB", "WindowDisplayCaseBPlatformBand", "WindowDisplayCaseBSealSticker", "StarterNewGameCaseA", "StarterNewGameCaseACoverStripe", "StarterNewGameCaseAPriceTag", "StarterNewGameCaseB", "StarterNewGameCaseBCoverStripe", "StarterNewGameCaseBPlatformBand", "StarterConsoleBox", "StarterConsoleBoxHandle", "StarterConsoleBoxScreenGraphic", "StarterAccessoryBox", "StarterAccessoryControllerSilhouette", "FirstInteriorNewReleaseShelf", "FirstInteriorConsoleDisplayPlinth", "FirstInteriorConsoleDisplayBox", "FirstInteriorConsoleDisplayGraphic", "FirstInteriorAccessoryPegA", "FirstInteriorAccessoryPackA", "FirstInteriorAccessoryPackAIcon")

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="NewRelease" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/releases/new_release.gd" id="1_new_release"]
+
+[resource]
+script = ExtResource("1_new_release")
+release_id = "release_lunar_lanterns"
+product_name = "Lunar Lanterns"
+platform = "Orbit 64"
+category = "new_game"
+release_day = 9
+wholesale_cost_cents = 2800
+suggested_price_cents = 4999
+allocation_limit = 3
+demand_tier = "high"
+tagline = "Collector-leaning cartridge launch with strong preorder pressure."
+buyer_hook = "Retro regulars ask before launch if Orbit 64 stock has a clear counter card"
+allocation_note = "Small limit means every committed copy needs a visible launch-day home."

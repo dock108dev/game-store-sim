@@ -1,6 +1,7 @@
 extends GutTest
 
-const MAIN_SCENE := "res://scenes/world/graybox_store.tscn"
+const MAIN_SCENE := "res://scenes/world/store_world.tscn"
+const LEGACY_SCENE := "res://scenes/world/graybox_store.tscn"
 
 var _store: Node3D
 
@@ -10,13 +11,72 @@ func before_each() -> void:
 	add_child_autofree(_store)
 
 
-func test_main_scene_loads_graybox_store() -> void:
+func test_main_scene_loads_store_world() -> void:
 	assert_not_null(_store)
 	assert_true(_store is Node3D)
 
 
 func test_main_scene_has_expected_root_name() -> void:
-	assert_eq(_store.name, "GrayboxStore")
+	assert_eq(_store.name, "StoreWorld")
+
+
+func test_legacy_graybox_store_wraps_store_world_for_compatibility() -> void:
+	var legacy: Node3D = load(LEGACY_SCENE).instantiate()
+	add_child_autofree(legacy)
+
+	assert_eq(legacy.name, "GrayboxStore")
+	assert_not_null(legacy.get_node_or_null("PlayerController"))
+	assert_not_null(legacy.get_node_or_null("StoreSession"))
+	assert_not_null(legacy.get_node_or_null("WorldModules"))
+	assert_not_null(legacy.get_node_or_null("Systems"))
+
+
+func test_store_world_has_modular_production_anchors() -> void:
+	var world_modules := _store.get_node_or_null("WorldModules")
+	var systems := _store.get_node_or_null("Systems")
+	var lighting := _store.get_node_or_null("Lighting")
+	var screenshot_anchors := _store.get_node_or_null("ScreenshotAnchors")
+
+	assert_not_null(world_modules)
+	assert_not_null(systems)
+	assert_not_null(lighting)
+	assert_not_null(screenshot_anchors)
+
+	var expected_modules := [
+		"WorldModules/MallConcourseModule",
+		"WorldModules/StorefrontShellModule",
+		"WorldModules/OpeningThresholdModule",
+		"WorldModules/StoreInteriorShellModule",
+		"WorldModules/FrontCounterZoneModule",
+		"WorldModules/StarterProductDisplayModule",
+		"WorldModules/SalesFloorFixturesModule",
+		"WorldModules/ReceivingAreaModule",
+		"WorldModules/BackroomShellModule",
+		"Systems/StoreSystemsModule",
+	]
+	for module_path in expected_modules:
+		var module := _store.get_node_or_null(module_path)
+		assert_not_null(module, module_path)
+		assert_true(module.has_method("missing_owned_node_names"), module_path)
+		assert_false(str(module.get("module_id")).is_empty(), module_path)
+		assert_false(str(module.get("responsibility")).is_empty(), module_path)
+		assert_gt((module.get("owned_node_names") as PackedStringArray).size(), 0, module_path)
+
+
+func test_store_world_module_manifests_resolve_owned_nodes() -> void:
+	var manifests: Array[Node] = []
+	manifests.append_array(_store.get_node("WorldModules").get_children())
+	manifests.append(_store.get_node("Systems/StoreSystemsModule"))
+
+	for manifest_node in manifests:
+		var manifest := manifest_node
+		assert_not_null(manifest, str(manifest_node.name))
+		assert_true(manifest.has_method("missing_owned_node_names"), str(manifest_node.name))
+		assert_eq(
+			(manifest.call("missing_owned_node_names", _store) as PackedStringArray).size(),
+			0,
+			"%s missing owned production nodes" % str(manifest.get("module_id"))
+		)
 
 
 func test_player_controller_exists() -> void:
@@ -34,21 +94,19 @@ func test_player_spawn_has_recovery_view_budget() -> void:
 	var camera := player.get_node_or_null("Head/Camera3D") as Camera3D
 	var hold_anchor := player.get_node_or_null("Head/Camera3D/HoldAnchor") as Node3D
 	var register := _store.get_node("RegisterWorkstation") as Node3D
-	var trade_in_customer := _store.get_node("TradeInCustomer") as Node3D
 
 	assert_not_null(head)
 	assert_not_null(camera)
 	assert_not_null(hold_anchor)
-	assert_lt(player.global_position.z, -5.0)
-	assert_gt(player.global_position.x, 4.4)
-	assert_lt(player.global_position.x, 5.3)
+	assert_lt(player.global_position.z, -10.0)
+	assert_gt(player.global_position.x, -3.0)
+	assert_lt(player.global_position.x, -2.2)
 	assert_gt(head.position.y, 1.65)
 	assert_gte(camera.fov, 78.0)
 	assert_lte(camera.near, 0.04)
-	assert_gt(-player.global_transform.basis.z.x, 0.45)
-	assert_gt(-player.global_transform.basis.z.z, 0.55)
-	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 3.4)
-	assert_gt(_flat_distance_xz(player.global_position, trade_in_customer.global_position), 1.7)
+	assert_gt(-player.global_transform.basis.z.x, 0.35)
+	assert_gt(-player.global_transform.basis.z.z, 0.9)
+	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 7.0)
 	assert_gt(hold_anchor.position.x, 0.55)
 	assert_lt(hold_anchor.position.y, -0.55)
 	assert_lt(hold_anchor.position.z, -1.45)
@@ -59,7 +117,7 @@ func test_floor_collision_is_enabled() -> void:
 	assert_true(floor.use_collision)
 
 
-func test_front_door_opening_is_blocked_for_now() -> void:
+func test_front_door_opening_is_walkable_from_mall_concourse() -> void:
 	var blocker := _store.get_node_or_null("FrontDoorBlocker") as StaticBody3D
 	assert_not_null(blocker)
 	assert_false(blocker.visible)
@@ -67,7 +125,7 @@ func test_front_door_opening_is_blocked_for_now() -> void:
 
 	var collision_shape := blocker.get_node_or_null("CollisionShape3D") as CollisionShape3D
 	assert_not_null(collision_shape)
-	assert_false(collision_shape.disabled)
+	assert_true(collision_shape.disabled)
 
 	var shape := collision_shape.shape as BoxShape3D
 	assert_not_null(shape)
@@ -80,22 +138,40 @@ func test_storefront_entry_has_production_cues() -> void:
 	var left_glass := _store.get_node_or_null("StorefrontGlassLeft") as CSGBox3D
 	var right_glass := _store.get_node_or_null("StorefrontGlassRight") as CSGBox3D
 	var entry_cue := _store.get_node_or_null("EntrySidewalkCue") as CSGBox3D
+	var threshold_strip := _store.get_node_or_null("EntryThresholdInteriorStrip") as CSGBox3D
+	var concourse_floor := _store.get_node_or_null("SecondFloorMallConcourse/MallConcourseFloor") as CSGBox3D
+	var railing := _store.get_node_or_null("SecondFloorMallConcourse/MallAtriumRailingTop") as CSGBox3D
+	var open_door := _store.get_node_or_null("StorefrontOpenGlassDoor") as CSGBox3D
+	var neon_top := _store.get_node_or_null("StorefrontNeonTopRail") as CSGBox3D
 	var open_label := _store.get_node_or_null("OpenSignPanel/OpenSignLabel") as Label3D
 	var hours_label := _store.get_node_or_null("HoursDecalPanel/HoursDecalLabel") as Label3D
 
 	assert_not_null(left_glass)
 	assert_not_null(right_glass)
 	assert_not_null(entry_cue)
+	assert_not_null(threshold_strip)
+	assert_not_null(concourse_floor)
+	assert_not_null(railing)
+	assert_not_null(open_door)
+	assert_not_null(neon_top)
 	assert_not_null(open_label)
 	assert_not_null(hours_label)
 	assert_false(left_glass.use_collision)
 	assert_false(right_glass.use_collision)
 	assert_false(entry_cue.use_collision)
-	assert_eq(open_label.text, "OPEN")
+	assert_false(threshold_strip.use_collision)
+	assert_true(concourse_floor.use_collision)
+	assert_true(railing.use_collision)
+	assert_eq(open_label.text, "SETUP")
 	assert_eq(hours_label.text, "11-8")
 	assert_lt(left_glass.global_position.z, -5.8)
 	assert_lt(right_glass.global_position.z, -5.8)
+	assert_lt(concourse_floor.global_position.z, -8.5)
+	assert_lt(railing.global_position.z, -13.0)
+	assert_lt(open_door.global_position.z, -6.1)
+	assert_gt(neon_top.global_position.y, 2.5)
 	assert_lt(entry_cue.global_position.z, -5.8)
+	assert_lt(threshold_strip.global_position.z, -5.2)
 	assert_gt(left_glass.size.y, 1.6)
 	assert_gt(right_glass.size.y, 1.6)
 
@@ -103,6 +179,149 @@ func test_storefront_entry_has_production_cues() -> void:
 	assert_not_null(glass_material)
 	assert_lt(glass_material.albedo_color.a, 0.5)
 	assert_eq(glass_material.transparency, BaseMaterial3D.TRANSPARENCY_ALPHA)
+
+
+func test_opening_visual_asset_pass_has_authored_route_modules() -> void:
+	var mall_shell_boxes := [
+		"SecondFloorMallConcourse/MallTilePanelNearLeft",
+		"SecondFloorMallConcourse/MallTilePanelNearRight",
+		"SecondFloorMallConcourse/MallTilePanelFarLeft",
+		"SecondFloorMallConcourse/MallTilePanelFarRight",
+		"SecondFloorMallConcourse/MallRailTopHighlight",
+		"SecondFloorMallConcourse/NeighborStoreLeftShutterSlatA",
+		"SecondFloorMallConcourse/NeighborStoreRightShutterSlatA",
+		"SecondFloorMallConcourse/MallDirectoryMapLineA",
+		"SecondFloorMallConcourse/MallDirectoryMapDot",
+	]
+	for prop_path in mall_shell_boxes:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+
+	for prop_path in [
+		"SecondFloorMallConcourse/MallRailPostRoundA",
+		"SecondFloorMallConcourse/MallRailPostRoundB",
+		"SecondFloorMallConcourse/MallPlanterLeftLeafA",
+		"SecondFloorMallConcourse/MallPlanterRightLeafA",
+		"StoreIdentitySignDiscIcon",
+	]:
+		var prop := _store.get_node_or_null(prop_path) as CSGCylinder3D
+		assert_not_null(prop, prop_path)
+		assert_gte(prop.sides, 7, prop_path)
+
+	var storefront_modules := [
+		"StorefrontGlassLeftMullionVerticalA",
+		"StorefrontGlassLeftMullionMidRail",
+		"StorefrontGlassRightMullionVerticalA",
+		"StorefrontGlassRightMullionMidRail",
+		"StoreIdentitySignGlowBacker",
+		"StoreIdentitySignCartridgeIcon",
+		"StoreIdentitySignCartridgeNotch",
+		"StorefrontOpenDoorTopRail",
+		"StorefrontOpenDoorBottomRail",
+		"StorefrontThresholdMetalLip",
+		"StorefrontThresholdRubberInset",
+	]
+	for prop_path in storefront_modules:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+		assert_lt(prop.global_position.z, -5.0, prop_path)
+
+	var sign_label := _store.get_node("StoreIdentitySignPanel/StoreIdentitySignLabel") as Label3D
+	var setup_label := _store.get_node("OpenSignPanel/OpenSignLabel") as Label3D
+	var hours_label := _store.get_node("HoursDecalPanel/HoursDecalLabel") as Label3D
+	assert_lte(sign_label.pixel_size, 0.0041)
+	assert_lte(setup_label.pixel_size, 0.0028)
+	assert_lte(hours_label.pixel_size, 0.0027)
+
+
+func test_opening_visual_asset_pass_has_starter_products_and_first_corner() -> void:
+	var starter_product_boxes := [
+		"StarterNewGameCaseA",
+		"StarterNewGameCaseA/StarterNewGameCaseACoverStripe",
+		"StarterNewGameCaseA/StarterNewGameCaseAPriceTag",
+		"StarterNewGameCaseB",
+		"StarterNewGameCaseB/StarterNewGameCaseBCoverStripe",
+		"StarterNewGameCaseB/StarterNewGameCaseBPlatformBand",
+		"StarterConsoleBox",
+		"StarterConsoleBox/StarterConsoleBoxHandle",
+		"StarterConsoleBox/StarterConsoleBoxScreenGraphic",
+		"StarterAccessoryBox",
+		"StarterAccessoryBox/StarterAccessoryControllerSilhouette",
+		"StarterAccessoryBox/StarterAccessoryButtonDotA",
+		"StarterAccessoryBox/StarterAccessoryButtonDotB",
+		"WindowDisplayCaseA/WindowDisplayCaseACoverBand",
+		"WindowDisplayCaseA/WindowDisplayCaseASpineStrip",
+		"WindowDisplayCaseB/WindowDisplayCaseBPlatformBand",
+		"WindowDisplayCaseB/WindowDisplayCaseBSealSticker",
+	]
+	for prop_path in starter_product_boxes:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+
+	var first_corner_boxes := [
+		"FirstInteriorBenchmarkSlatwall",
+		"FirstInteriorSlatRailA",
+		"FirstInteriorSlatRailB",
+		"FirstInteriorSlatRailC",
+		"FirstInteriorNewReleaseShelf",
+		"FirstInteriorConsoleDisplayPlinth",
+		"FirstInteriorConsoleDisplayBox",
+		"FirstInteriorConsoleDisplayBox/FirstInteriorConsoleDisplayGraphic",
+		"FirstInteriorAccessoryPegA",
+		"FirstInteriorAccessoryPackA",
+		"FirstInteriorAccessoryPackA/FirstInteriorAccessoryPackAIcon",
+	]
+	for prop_path in first_corner_boxes:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+		assert_lt(prop.global_position.z, -4.0, prop_path)
+
+	assert_lt((_store.get_node("FirstInteriorNewReleaseShelf") as CSGBox3D).global_position.z, -4.5)
+	assert_gt((_store.get_node("FirstInteriorBenchmarkSlatwall") as CSGBox3D).size.x, 2.0)
+	assert_gt((_store.get_node("FirstInteriorConsoleDisplayBox") as CSGBox3D).size.y, 0.2)
+	assert_lt((_store.get_node("StarterNewGameCaseA") as CSGBox3D).size.x, 0.24)
+	assert_lt((_store.get_node("StarterNewGameCaseB") as CSGBox3D).size.x, 0.24)
+
+
+func test_opening_spawn_composition_has_first_view_landmarks() -> void:
+	var player := _store.get_node("PlayerController") as CharacterBody3D
+	var store_sign := _store.get_node_or_null("StoreIdentitySignPanel") as CSGBox3D
+	var register := _store.get_node_or_null("RegisterWorkstation") as Node3D
+	var display_rack := _store.get_node_or_null("GameDisplayRack") as Node3D
+	var backroom_hint := _store.get_node_or_null("BackroomHintFromEntryPanel") as CSGBox3D
+	var concourse_sightline := _store.get_node_or_null("SecondFloorMallConcourse/OpeningSpawnSightline") as CSGBox3D
+	var mall_directory := _store.get_node_or_null("SecondFloorMallConcourse/MallDirectoryPanel") as CSGBox3D
+	var register_route := _store.get_node_or_null("EntryRouteStripeRegister") as CSGBox3D
+	var shelf_route := _store.get_node_or_null("EntryRouteStripeShelf") as CSGBox3D
+
+	assert_not_null(store_sign)
+	assert_not_null(register)
+	assert_not_null(display_rack)
+	assert_not_null(backroom_hint)
+	assert_not_null(concourse_sightline)
+	assert_not_null(mall_directory)
+	assert_not_null(register_route)
+	assert_not_null(shelf_route)
+	assert_false(backroom_hint.use_collision)
+	assert_false(concourse_sightline.use_collision)
+	assert_false(register_route.use_collision)
+	assert_false(shelf_route.use_collision)
+	assert_lt(_flat_distance_xz(player.global_position, store_sign.global_position), 6.4)
+	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 7.0)
+	assert_gt(display_rack.global_position.z, 5.4)
+	assert_gt(backroom_hint.global_position.z, 3.0)
+	assert_eq((_store.get_node("BackroomHintFromEntryPanel/BackroomHintFromEntryLabel") as Label3D).text, "OFFICE + STOCK")
+	assert_lt(concourse_sightline.global_position.z, -8.0)
+	assert_lt(mall_directory.global_position.z, -11.0)
+	assert_lt(register_route.global_position.z, -4.6)
+	assert_lt(shelf_route.global_position.z, -4.5)
+	assert_gt(register_route.global_position.x, 0.5)
+	assert_lt(shelf_route.global_position.x, -0.5)
 
 
 func test_receiving_box_exists() -> void:
@@ -238,6 +457,43 @@ func test_store_materials_use_readable_floor_wall_counter_contrast() -> void:
 	assert_gt(wall_material.albedo_color.b, floor_material.albedo_color.b)
 
 
+func test_finished_shell_trim_and_material_cues_are_nonblocking() -> void:
+	var finish_props := [
+		"SalesChairRailBack",
+		"SalesChairRailLeft",
+		"SalesChairRailRight",
+		"SalesCornerTrimBackLeft",
+		"SalesCornerTrimBackRight",
+		"SalesCeilingGridLong",
+		"SalesCeilingGridCross",
+		"EntryRubberMat",
+		"RegisterRubberMat",
+	]
+	for prop_path in finish_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop)
+		assert_false(prop.use_collision, prop_path)
+		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
+
+	var chair_rail := _store.get_node("SalesChairRailBack") as CSGBox3D
+	var corner_trim := _store.get_node("SalesCornerTrimBackLeft") as CSGBox3D
+	var ceiling_grid := _store.get_node("SalesCeilingGridLong") as CSGBox3D
+	var entry_mat := _store.get_node("EntryRubberMat") as CSGBox3D
+	var register_mat := _store.get_node("RegisterRubberMat") as CSGBox3D
+	var wall_material := (_store.get_node("BackWall") as CSGBox3D).material as StandardMaterial3D
+	var rail_material := chair_rail.material as StandardMaterial3D
+	var mat_material := entry_mat.material as StandardMaterial3D
+
+	assert_not_null(rail_material)
+	assert_not_null(mat_material)
+	assert_gt(_color_luma(rail_material.albedo_color), _color_luma(wall_material.albedo_color) - 0.2)
+	assert_lt(_color_luma(mat_material.albedo_color), 0.25)
+	assert_gt(corner_trim.size.y, 2.2)
+	assert_gt(ceiling_grid.global_position.y, 2.8)
+	assert_lte(entry_mat.size.y, 0.015)
+	assert_lte(register_mat.size.y, 0.015)
+
+
 func test_store_lighting_has_warm_sales_and_cool_backroom_layers() -> void:
 	var sun_light := _store.get_node_or_null("SunLight") as DirectionalLight3D
 	var sales_light := _store.get_node_or_null("StoreLight") as OmniLight3D
@@ -370,15 +626,21 @@ func test_sales_floor_has_merchandising_and_route_cues() -> void:
 	var staff_picks_stand := _store.get_node_or_null("StaffPicksStand") as Node3D
 	var new_release_label := _store.get_node_or_null("NewReleaseEndcap/EndcapHeaderPanel/EndcapHeaderLabel") as Label3D
 	var staff_picks_label := _store.get_node_or_null("StaffPicksStand/StaffPicksHeaderPanel/StaffPicksHeaderLabel") as Label3D
+	var used_talker_label := _store.get_node_or_null("UsedShelfTalkerPanel/UsedShelfTalkerLabel") as Label3D
+	var preorder_label := _store.get_node_or_null("PreorderWallHeaderPanel/PreorderWallHeaderLabel") as Label3D
 
 	assert_not_null(route_mat)
 	assert_not_null(new_release_endcap)
 	assert_not_null(staff_picks_stand)
 	assert_not_null(new_release_label)
 	assert_not_null(staff_picks_label)
+	assert_not_null(used_talker_label)
+	assert_not_null(preorder_label)
 	assert_false(route_mat.use_collision)
 	assert_eq(new_release_label.text, "NEW RELEASES")
 	assert_eq(staff_picks_label.text, "STAFF PICKS")
+	assert_eq(used_talker_label.text, "TESTED")
+	assert_eq(preorder_label.text, "PREORDERS")
 	assert_lte(route_mat.size.y, 0.0121)
 	assert_true(_is_inside_store_floorprint(route_mat.global_position))
 	assert_true(_is_inside_store_floorprint(new_release_endcap.global_position))
@@ -395,6 +657,15 @@ func test_sales_floor_has_merchandising_and_route_cues() -> void:
 		"StaffPicksStand/StaffPicksHeaderPanel",
 		"StaffPicksStand/StaffPickCaseA",
 		"StaffPicksStand/StaffPickCaseB",
+		"UsedSpineRowTop",
+		"UsedSpineRowMiddle",
+		"UsedSpineRowBottom",
+		"UsedShelfTalkerPanel",
+		"PreorderWallPanel",
+		"PreorderWallHeaderPanel",
+		"PreorderCaseStackA",
+		"PreorderCaseStackB",
+		"PreorderCaseStackC",
 	]:
 		var cue := _store.get_node_or_null(cue_path) as CSGBox3D
 		assert_not_null(cue)
@@ -404,6 +675,8 @@ func test_sales_floor_has_merchandising_and_route_cues() -> void:
 	var rack := _store.get_node("GameDisplayRack") as Node3D
 	assert_gt(_flat_distance_xz(new_release_endcap.global_position, register.global_position), 3.0)
 	assert_gt(_flat_distance_xz(staff_picks_stand.global_position, rack.global_position), 4.0)
+	assert_lt(_flat_distance_xz((_store.get_node("UsedSpineRowTop") as CSGBox3D).global_position, rack.global_position), 1.0)
+	assert_gt((_store.get_node("PreorderWallPanel") as CSGBox3D).global_position.x, 6.6)
 
 
 func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
@@ -411,13 +684,19 @@ func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
 	var locked_case := _store.get_node_or_null("LockedCasePlaceholder") as Node3D
 	var peg_label := _store.get_node_or_null("AccessoryPegWall/PegWallHeaderPanel/PegWallHeaderLabel") as Label3D
 	var locked_label := _store.get_node_or_null("LockedCasePlaceholder/LockedCaseHeaderPanel/LockedCaseHeaderLabel") as Label3D
+	var peg_unlock_label := _store.get_node_or_null("FuturePegWallUnlockPanel/FuturePegWallUnlockLabel") as Label3D
+	var storage_unlock_label := _store.get_node_or_null("FutureBackroomRackUnlockPanel/FutureBackroomRackUnlockLabel") as Label3D
 
 	assert_not_null(peg_wall)
 	assert_not_null(locked_case)
 	assert_not_null(peg_label)
 	assert_not_null(locked_label)
+	assert_not_null(peg_unlock_label)
+	assert_not_null(storage_unlock_label)
 	assert_eq(peg_label.text, "ACCESSORIES")
 	assert_eq(locked_label.text, "LOCKED CASE")
+	assert_eq(peg_unlock_label.text, "PEG UPGRADE")
+	assert_eq(storage_unlock_label.text, "STORAGE UPGRADE")
 	assert_true(_is_inside_store_floorprint(peg_wall.global_position))
 	assert_true(_is_inside_store_floorprint(locked_case.global_position))
 	assert_gt(peg_wall.global_position.x, 6.0)
@@ -433,6 +712,8 @@ func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
 		"AccessoryPegWall/PegAccessoryCardA",
 		"AccessoryPegWall/PegAccessoryCardB",
 		"AccessoryPegWall/PegAccessoryCardC",
+		"FuturePegWallUnlockPanel",
+		"FutureBackroomRackUnlockPanel",
 		"LockedCasePlaceholder/LockedCaseBase",
 		"LockedCasePlaceholder/LockedCaseGlass",
 		"LockedCasePlaceholder/LockedCaseHeaderPanel",
@@ -446,16 +727,102 @@ func test_fixture_kit_has_accessory_and_locked_case_cues() -> void:
 	var glass_material := (_store.get_node("LockedCasePlaceholder/LockedCaseGlass") as CSGBox3D).material as StandardMaterial3D
 	assert_not_null(glass_material)
 	assert_lt(glass_material.albedo_color.a, 0.5)
+	assert_true(peg_unlock_label.no_depth_test)
+	assert_true(storage_unlock_label.no_depth_test)
+	assert_gt((_store.get_node("FuturePegWallUnlockPanel") as CSGBox3D).global_position.x, 6.0)
+	assert_gt((_store.get_node("FutureBackroomRackUnlockPanel") as CSGBox3D).global_position.z, 3.8)
+
+
+func test_day_one_owned_starter_stock_is_physical_and_limited() -> void:
+	var starter_crate := _store.get_node_or_null("DayOneStarterStockCrate") as Node3D
+	var starter_label := _store.get_node_or_null("DayOneStarterStockCrate/StarterStockTicketPanel/StarterStockTicketLabel") as Label3D
+	var checklist := _store.get_node_or_null("FirstOpenChecklistPanel/FirstOpenChecklistLabel") as Label3D
+	var empty_capacity_label := _store.get_node_or_null("DayOneEmptyShelfTagPanel/DayOneEmptyShelfTagLabel") as Label3D
+
+	assert_not_null(starter_crate)
+	assert_not_null(starter_label)
+	assert_not_null(checklist)
+	assert_not_null(empty_capacity_label)
+	assert_eq(starter_label.text, "OWNED STARTER")
+	assert_eq(checklist.text, "PLACE THEN OPEN")
+	assert_eq(empty_capacity_label.text, "ROOM TO GROW")
+	assert_gt(starter_crate.global_position.z, 3.8)
+	assert_lt(starter_crate.global_position.x, -3.8)
+	assert_true(_is_inside_store_floorprint(starter_crate.global_position))
+	assert_lt((_store.get_node("DayOneEmptyShelfTagPanel") as CSGBox3D).global_position.z, 5.3)
+
+	var starter_items := [
+		"DayOneStarterStockCrate/StarterNewGameCaseA",
+		"DayOneStarterStockCrate/StarterNewGameCaseB",
+		"DayOneStarterStockCrate/StarterConsoleBox",
+		"DayOneStarterStockCrate/StarterAccessoryController",
+	]
+	for item_path in starter_items:
+		var item := _store.get_node_or_null(item_path) as CSGBox3D
+		assert_not_null(item, item_path)
+		assert_false(item.use_collision, item_path)
+		assert_lt(_flat_distance_xz(item.global_position, starter_crate.global_position), 0.55)
+
+	for empty_capacity_path in ["DayOneEmptyCapacityRailA", "DayOneEmptyCapacityRailB", "DayOneEmptyShelfTagPanel"]:
+		var cue := _store.get_node_or_null(empty_capacity_path) as CSGBox3D
+		assert_not_null(cue, empty_capacity_path)
+		assert_false(cue.use_collision, empty_capacity_path)
+
+
+func test_future_inventory_is_catalog_planning_until_paid_or_received() -> void:
+	var future_catalog_label := _store.get_node_or_null("FutureProductCatalogPanel/FutureProductCatalogLabel") as Label3D
+	var design_catalog_label := _store.get_node_or_null("StoreDesignCatalogPanel/StoreDesignCatalogLabel") as Label3D
+	var cost_rule_label := _store.get_node_or_null("CatalogCostRulePanel/CatalogCostRuleLabel") as Label3D
+	var paid_arrival_label := _store.get_node_or_null("PaidOrderReceivingLabelPanel/PaidOrderReceivingLabel") as Label3D
+	var paid_arrival_lane := _store.get_node_or_null("PaidOrderReceivingLane") as CSGBox3D
+
+	assert_not_null(future_catalog_label)
+	assert_not_null(design_catalog_label)
+	assert_not_null(cost_rule_label)
+	assert_not_null(paid_arrival_label)
+	assert_not_null(paid_arrival_lane)
+	assert_eq(future_catalog_label.text, "ORDER CATALOG")
+	assert_eq(design_catalog_label.text, "STORE DESIGN")
+	assert_eq(cost_rule_label.text, "BUY -> RECEIVING")
+	assert_eq(paid_arrival_label.text, "PAID ARRIVALS")
+	assert_false(paid_arrival_lane.use_collision)
+	assert_gt(paid_arrival_lane.global_position.z, 3.0)
+	assert_lt(_flat_distance_xz(paid_arrival_lane.global_position, (_store.get_node("ReceivingBox") as Node3D).global_position), 1.0)
+
+	var catalog_surfaces := [
+		"FutureProductCatalogPanel",
+		"StoreDesignCatalogPanel",
+		"CatalogCostRulePanel",
+		"BackroomCatalogCardA",
+		"BackroomCatalogCardB",
+		"BackroomCartSummaryPanel",
+		"FuturePegWallUnlockPanel",
+		"FutureBackroomRackUnlockPanel",
+		"UpgradePreviewRackCard",
+	]
+	for surface_path in catalog_surfaces:
+		var surface := _store.get_node_or_null(surface_path) as CSGBox3D
+		assert_not_null(surface, surface_path)
+		assert_false(surface.use_collision, surface_path)
+
+	for forbidden_path in [
+		"BackroomStorageShelf/FutureProductStock",
+		"BackroomStorageShelf/LockedFutureInventory",
+		"BackroomStorageShelf/UnownedCatalogStock",
+		"DayOneStarterStockCrate/FutureProductStock",
+		"DayOneStarterStockCrate/LockedFutureInventory",
+	]:
+		assert_null(_store.get_node_or_null(forbidden_path), forbidden_path)
 
 
 func test_store_signage_uses_fictional_world_labels() -> void:
 	var expected_labels := {
 		"StoreIdentitySignPanel/StoreIdentitySignLabel": "SAVE POINT GAMES",
-		"DisplaySignPanel/DisplaySignLabel": "DISPLAY RACKS",
+		"DisplaySignPanel/DisplaySignLabel": "RACKS",
 		"RegisterSignPanel/RegisterSignLabel": "REGISTER",
-		"BackroomSignPanel/BackroomSignLabel": "BACKROOM",
-		"ReceivingSignPanel/ReceivingSignLabel": "RECEIVING",
-		"StorageSignPanel/StorageSignLabel": "STORAGE",
+		"BackroomSignPanel/BackroomSignLabel": "STAFF",
+		"ReceivingSignPanel/ReceivingSignLabel": "RECV",
+		"StorageSignPanel/StorageSignLabel": "STOCK",
 	}
 	var banned_terms := ["GAMESTOP", "NINTENDO", "PLAYSTATION", "XBOX", "SEGA", "ATARI"]
 
@@ -463,8 +830,11 @@ func test_store_signage_uses_fictional_world_labels() -> void:
 		var label := _store.get_node_or_null(label_path) as Label3D
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
-		assert_gte(label.font_size, 30)
-		assert_lte(label.pixel_size, 0.0048)
+		assert_gte(label.font_size, 20)
+		if label_path == "StoreIdentitySignPanel/StoreIdentitySignLabel":
+			assert_lte(label.pixel_size, 0.0041)
+		else:
+			assert_lte(label.pixel_size, 0.003)
 		assert_eq(label.billboard, 0)
 		for banned_term in banned_terms:
 			assert_false(label.text.contains(banned_term))
@@ -543,6 +913,7 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 
 func test_screenshot_facing_world_labels_use_staff_side_orientation() -> void:
 	var label_paths := [
+		"StoreIdentitySignPanel/StoreIdentitySignLabel",
 		"RegisterSignPanel/RegisterSignLabel",
 		"BackWallFeatureStripe/BackWallFeatureLabel",
 		"NewThisWeekPosterPanel/NewThisWeekPosterLabel",
@@ -567,7 +938,7 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 	var label := _store.get_node_or_null("EmployeesOnlySignPanel/EmployeesOnlySignLabel") as Label3D
 	assert_not_null(label)
 	assert_eq(label.text, "EMPLOYEES ONLY")
-	assert_lte(label.pixel_size, 0.0032)
+	assert_lte(label.pixel_size, 0.0025)
 	assert_true(label.no_depth_test)
 
 	for path in [
@@ -575,6 +946,13 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 		"StaffDoorFrameLeft",
 		"StaffDoorFrameRight",
 		"EmployeesOnlySignPanel",
+		"StaffThresholdHeaderBeam",
+		"StaffThresholdHeaderInset",
+		"StaffThresholdLeftReturnWall",
+		"StaffThresholdRightReturnWall",
+		"StaffThresholdBackroomFloorPanel",
+		"StaffThresholdDoorStopLeft",
+		"StaffThresholdDoorStopRight",
 	]:
 		var marker := _store.get_node_or_null(path) as CSGBox3D
 		assert_not_null(marker, path)
@@ -585,6 +963,16 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 	assert_almost_eq(threshold.global_position.z, 3.34, 0.01)
 	assert_gte(threshold.size.x, 2.2)
 	assert_lte(threshold.size.z, 0.75)
+
+	var header := _store.get_node("StaffThresholdHeaderBeam") as CSGBox3D
+	var floor_panel := _store.get_node("StaffThresholdBackroomFloorPanel") as CSGBox3D
+	var left_return := _store.get_node("StaffThresholdLeftReturnWall") as CSGBox3D
+	var right_return := _store.get_node("StaffThresholdRightReturnWall") as CSGBox3D
+	assert_gt(header.global_position.y, 1.8)
+	assert_gt(floor_panel.global_position.z, threshold.global_position.z)
+	assert_gte(floor_panel.size.x, 3.0)
+	assert_lt(left_return.global_position.x, (_store.get_node("StaffDoorFrameLeft") as CSGBox3D).global_position.x)
+	assert_gt(right_return.global_position.x, (_store.get_node("StaffDoorFrameRight") as CSGBox3D).global_position.x)
 
 
 func test_stockroom_shell_has_office_service_and_carry_route_cues() -> void:
@@ -614,8 +1002,8 @@ func test_stockroom_shell_has_office_service_and_carry_route_cues() -> void:
 
 func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 	var expected_labels := {
-		"RightWallUsedPosterPanel/RightWallUsedPosterLabel": "USED WALL",
-		"RightWallControllerPosterPanel/RightWallControllerPosterLabel": "CONTROLLERS",
+		"RightWallUsedPosterPanel/RightWallUsedPosterLabel": "USED",
+		"RightWallControllerPosterPanel/RightWallControllerPosterLabel": "PADS",
 		"BackWallFeatureStripe/BackWallFeatureLabel": "BUY  SELL  REPAIR",
 	}
 
@@ -623,13 +1011,17 @@ func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 		var label := _store.get_node_or_null(label_path) as Label3D
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
-		assert_lte(label.pixel_size, 0.0042)
+		assert_lte(label.pixel_size, 0.0027)
 
 	for panel_path in [
 		"RightWallMerchBand",
 		"RightWallUsedPosterPanel",
 		"RightWallControllerPosterPanel",
 		"BackWallFeatureStripe",
+		"RightWallUsedPosterCaseA",
+		"RightWallUsedPosterCaseB",
+		"RightWallControllerPosterPadA",
+		"RightWallControllerPosterPadB",
 	]:
 		var panel := _store.get_node_or_null(panel_path) as CSGBox3D
 		assert_not_null(panel)
@@ -642,9 +1034,9 @@ func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 
 func test_retail_clutter_uses_short_fictional_callouts() -> void:
 	var expected_labels := {
-		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel": "WEEKLY PICKS",
-		"NewThisWeekPosterPanel/NewThisWeekPosterLabel": "NEW THIS WEEK",
-		"TradeBonusPosterPanel/TradeBonusPosterLabel": "TRADE BONUS",
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel": "PICKS",
+		"NewThisWeekPosterPanel/NewThisWeekPosterLabel": "NEW",
+		"TradeBonusPosterPanel/TradeBonusPosterLabel": "TRADE",
 		"CounterDealTagPanel/CounterDealTagLabel": "$9+ USED",
 		"BargainBin/BinFrontTag/BinFrontLabel": "BARGAIN BIN",
 	}
@@ -654,7 +1046,7 @@ func test_retail_clutter_uses_short_fictional_callouts() -> void:
 		assert_not_null(label)
 		assert_eq(label.text, expected_labels[label_path])
 		assert_lte(label.text.length(), 13)
-		assert_lte(label.pixel_size, 0.0049)
+		assert_lte(label.pixel_size, 0.0039)
 
 
 func test_retail_clutter_is_nonblocking_and_away_from_interaction_hotspots() -> void:
@@ -695,9 +1087,17 @@ func test_register_counter_has_command_center_props() -> void:
 		"CardReaderScreen",
 		"ReceiptPrinter",
 		"ReceiptSlip",
+		"SaleScanPad",
 		"SleeveStack",
 		"RegisterCounterWorkRail",
 		"CustomerCounterMat",
+		"CustomerApproachMarker",
+		"RegisterModeCueRail",
+		"RegisterModeSaleCue",
+		"RegisterModeReturnCue",
+		"RegisterModeTradeCue",
+		"RegisterModePreorderCue",
+		"RegisterModeServiceCue",
 		"CounterImpulseRack/ImpulseRackBase",
 		"CounterImpulseRack/ImpulseCaseA",
 		"CounterImpulseRack/ImpulseCaseB",
@@ -714,10 +1114,13 @@ func test_register_counter_has_command_center_props() -> void:
 	assert_not_null(impulse_rack)
 	assert_lt(_flat_distance_xz(impulse_rack.global_position, register.global_position), 1.45)
 	assert_lte((_store.get_node("CustomerCounterMat") as CSGBox3D).size.y, 0.0121)
+	assert_lte((_store.get_node("CustomerApproachMarker") as CSGBox3D).size.y, 0.015)
 	assert_gt((_store.get_node("ReceiptSlip") as CSGBox3D).global_position.y, 1.2)
 	assert_gt((_store.get_node("SleeveStack") as CSGBox3D).global_position.x, register.global_position.x)
 	assert_eq((_store.get_node("CardReader/CardReaderLabel") as Label3D).text, "PAY")
 	assert_eq((_store.get_node("ReceiptSlip/ReceiptSlipLabel") as Label3D).text, "RECEIPT")
+	assert_eq((_store.get_node("SaleScanPad/SaleScanPadLabel") as Label3D).text, "SALE")
+	assert_eq((_store.get_node("SleeveStack/SleeveStackLabel") as Label3D).text, "BAGS")
 
 
 func test_backroom_visual_zones_exist_without_collision() -> void:
@@ -746,7 +1149,11 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 		"ReceivingIntakeTableLegB",
 		"ReceivingBoxStackA",
 		"ReceivingBoxStackALabel",
+		"ReceivingBoxStackATapeA",
+		"ReceivingBoxStackATapeB",
 		"ReceivingBoxStackB",
+		"ReceivingStagedCartBase",
+		"ReceivingStagedCartHandle",
 		"BackroomDeliveryDoor",
 		"DeliveryDoorSlatA",
 		"DeliveryDoorSlatB",
@@ -756,12 +1163,21 @@ func test_backroom_receiving_and_storage_props_exist() -> void:
 		"ReceivingSortedTrayLaneA",
 		"ReceivingSortedTrayLaneB",
 		"ReceivingSortedTrayLaneC",
+		"ReceivingWorkflowCardDelivery",
+		"ReceivingWorkflowCardCheck",
+		"ReceivingWorkflowCardSort",
 	]
 	for prop_path in receiving_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
 		assert_not_null(prop)
 		assert_false(prop.use_collision)
 		assert_lt(_flat_distance_xz(prop.global_position, _store.get_node("ReceivingBox").global_position), 2.25)
+
+	for wheel_path in ["ReceivingStagedCartWheelA", "ReceivingStagedCartWheelB"]:
+		var wheel := _store.get_node_or_null(wheel_path) as CSGCylinder3D
+		assert_not_null(wheel, wheel_path)
+		assert_false(wheel.use_collision, wheel_path)
+		assert_lt(_flat_distance_xz(wheel.global_position, _store.get_node("ReceivingBox").global_position), 1.7)
 
 	var storage_shelf := _store.get_node_or_null("BackroomStorageShelf") as Node3D
 	assert_not_null(storage_shelf)
@@ -819,20 +1235,28 @@ func test_backstock_pull_stage_connects_storage_to_carry_route() -> void:
 	var pull_slip := _store.get_node_or_null("BackstockPullStageSlip") as CSGBox3D
 	var pull_label := _store.get_node_or_null("BackstockPullStageLabelPanel/BackstockPullStageLabel") as Label3D
 	var overflow_shelf := _store.get_node_or_null("BackstockOverflowShelf") as CSGBox3D
+	var receiving_arrow := _store.get_node_or_null("ReceivingWorkflowArrowToPull") as CSGBox3D
+	var shelf_arrow := _store.get_node_or_null("BackstockWorkflowArrowToShelf") as CSGBox3D
 
 	assert_not_null(pull_stage)
 	assert_not_null(pull_slip)
 	assert_not_null(pull_label)
 	assert_not_null(overflow_shelf)
+	assert_not_null(receiving_arrow)
+	assert_not_null(shelf_arrow)
 	assert_false(pull_stage.use_collision)
 	assert_false(pull_slip.use_collision)
 	assert_false(overflow_shelf.use_collision)
+	assert_false(receiving_arrow.use_collision)
+	assert_false(shelf_arrow.use_collision)
 	assert_eq(pull_label.text, "PULL")
 	assert_true(pull_label.no_depth_test)
 	assert_eq(pull_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 	assert_lt(_flat_distance_xz(pull_stage.global_position, storage_shelf.global_position), 2.1)
 	assert_lt(_flat_distance_xz(pull_stage.global_position, receiving_box.global_position), 1.5)
 	assert_lt(_flat_distance_xz(pull_stage.global_position, carry_route.global_position), 3.0)
+	assert_lt(_flat_distance_xz(receiving_arrow.global_position, receiving_box.global_position), 1.8)
+	assert_lt(_flat_distance_xz(shelf_arrow.global_position, storage_shelf.global_position), 2.0)
 	assert_gt(pull_stage.global_position.y, 0.35)
 
 
@@ -841,18 +1265,41 @@ func test_receiving_intake_station_reads_as_workflow_surface() -> void:
 	var intake_table := _store.get_node_or_null("ReceivingIntakeTableTop") as CSGBox3D
 	var sorted_tray := _store.get_node_or_null("ReceivingSortedTray") as CSGBox3D
 	var sorted_label := _store.get_node_or_null("ReceivingSortedTrayLabelPanel/ReceivingSortedTrayLabel") as Label3D
+	var staged_cart := _store.get_node_or_null("ReceivingStagedCartBase") as CSGBox3D
+	var carton_tape_a := _store.get_node_or_null("ReceivingBoxStackATapeA") as CSGBox3D
+	var carton_tape_b := _store.get_node_or_null("ReceivingBoxStackATapeB") as CSGBox3D
+	var workflow_cards := [
+		"ReceivingWorkflowCardDelivery",
+		"ReceivingWorkflowCardCheck",
+		"ReceivingWorkflowCardSort",
+	]
 
 	assert_not_null(intake_table)
 	assert_not_null(sorted_tray)
 	assert_not_null(sorted_label)
+	assert_not_null(staged_cart)
+	assert_not_null(carton_tape_a)
+	assert_not_null(carton_tape_b)
 	assert_false(intake_table.use_collision)
 	assert_false(sorted_tray.use_collision)
+	assert_false(staged_cart.use_collision)
+	assert_false(carton_tape_a.use_collision)
+	assert_false(carton_tape_b.use_collision)
 	assert_eq(sorted_label.text, "SORTED")
 	assert_true(sorted_label.no_depth_test)
 	assert_eq(sorted_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 	assert_lt(_flat_distance_xz(intake_table.global_position, receiving_box.global_position), 0.9)
 	assert_lt(_flat_distance_xz(sorted_tray.global_position, receiving_box.global_position), 1.1)
+	assert_lt(_flat_distance_xz(staged_cart.global_position, receiving_box.global_position), 0.85)
 	assert_gt(sorted_tray.global_position.y, receiving_box.global_position.y + 0.35)
+	assert_gt(carton_tape_a.global_position.y, (_store.get_node("ReceivingBoxStackA") as CSGBox3D).global_position.y)
+	assert_gt(carton_tape_b.global_position.y, (_store.get_node("ReceivingBoxStackA") as CSGBox3D).global_position.y)
+	for card_path in workflow_cards:
+		var card := _store.get_node_or_null(card_path) as CSGBox3D
+		assert_not_null(card)
+		assert_false(card.use_collision)
+		assert_lt(_flat_distance_xz(card.global_position, receiving_box.global_position), 1.8)
+		assert_gt(card.global_position.y, 0.65)
 
 	for item_name in ["PlaceholderUsedGame", "PlaceholderUsedGame002", "PlaceholderUsedGame003"]:
 		var item := receiving_box.get_node(item_name) as Node3D
@@ -878,6 +1325,15 @@ func test_backroom_management_and_service_props_exist() -> void:
 		"OfficeFileBoxB",
 		"OfficeSupplierNote",
 		"OfficeBillStack",
+		"OfficeCalendarCard",
+		"OfficeRecordsShelf",
+		"OfficeTaskLampBase",
+		"OfficeTaskLampArm",
+		"OfficeTaskLampShade",
+		"ManagementComputerTaskRail",
+		"ManagementTabDashboard",
+		"ManagementTabOrders",
+		"ManagementTabReleases",
 	]
 	for prop_path in management_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -928,22 +1384,42 @@ func test_manager_office_frames_backroom_computer_without_register_actions() -> 
 	var file_box := _store.get_node_or_null("OfficeFileBoxA") as CSGBox3D
 	var supplier_note := _store.get_node_or_null("OfficeSupplierNote") as CSGBox3D
 	var bill_stack := _store.get_node_or_null("OfficeBillStack") as CSGBox3D
+	var calendar := _store.get_node_or_null("OfficeCalendarCard") as CSGBox3D
+	var records_shelf := _store.get_node_or_null("OfficeRecordsShelf") as CSGBox3D
+	var task_lamp := _store.get_node_or_null("OfficeTaskLampShade") as CSGBox3D
+	var task_rail := _store.get_node_or_null("ManagementComputerTaskRail") as CSGBox3D
 	var board_label := _store.get_node_or_null("ManagementBoardLabelPanel/ManagementBoardLabel") as Label3D
+	var task_labels := {
+		"ManagementTabDashboard/ManagementTabDashboardLabel": "DASH",
+		"ManagementTabOrders/ManagementTabOrdersLabel": "ORD",
+		"ManagementTabReleases/ManagementTabReleasesLabel": "REL",
+	}
 
 	assert_not_null(office_rug)
 	assert_not_null(chair)
 	assert_not_null(file_box)
 	assert_not_null(supplier_note)
 	assert_not_null(bill_stack)
+	assert_not_null(calendar)
+	assert_not_null(records_shelf)
+	assert_not_null(task_lamp)
+	assert_not_null(task_rail)
 	assert_not_null(board_label)
 	assert_eq(board_label.text, "PLAN")
 	assert_true(board_label.no_depth_test)
 	assert_eq(board_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 
-	for cue in [office_rug, chair, file_box, supplier_note, bill_stack]:
+	for cue in [office_rug, chair, file_box, supplier_note, bill_stack, calendar, records_shelf, task_lamp, task_rail]:
 		assert_false(cue.use_collision)
-		assert_lt(_flat_distance_xz(cue.global_position, computer.global_position), 1.4)
+		assert_lt(_flat_distance_xz(cue.global_position, computer.global_position), 1.55)
 		assert_true(_is_inside_store_floorprint(cue.global_position))
+
+	for label_path in task_labels:
+		var task_label := _store.get_node_or_null(label_path) as Label3D
+		assert_not_null(task_label)
+		assert_eq(task_label.text, task_labels[label_path])
+		assert_true(task_label.no_depth_test)
+		assert_eq(task_label.billboard, BaseMaterial3D.BILLBOARD_ENABLED)
 
 	assert_gt(_flat_distance_xz(computer.global_position, _store.get_node("RegisterWorkstation").global_position), 7.0)
 	assert_gt(computer.global_position.x, 4.0)
@@ -952,7 +1428,7 @@ func test_manager_office_frames_backroom_computer_without_register_actions() -> 
 
 func test_backroom_production_blockout_has_security_and_paperwork_cues() -> void:
 	var expected_labels := {
-		"BackroomDeliveryDoor/DeliveryDoorLabel": "DELIVERIES",
+		"BackroomDeliveryDoor/DeliveryDoorLabel": "DROP",
 		"ReceivingInvoiceClipboard/ReceivingInvoiceLabel": "INVOICE",
 		"BackstockOverflowLabelPanel/BackstockOverflowLabel": "BACKSTOCK",
 		"BackroomSafePlaceholder/SafeLabelPanel/SafeLabel": "SAFE",
@@ -1071,7 +1547,9 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 	var fixture_manager := _store.get_node("FixturePlacementManager")
 	var ghost := fixture_manager.get_node("GhostRackPreview") as Node3D
 
-	assert_lt(_flat_distance_xz(player.global_position, register.global_position), 5.2)
+	assert_lt(player.global_position.z, -10.0)
+	assert_gt(_flat_distance_xz(player.global_position, register.global_position), 7.0)
+	assert_true((_store.get_node("SecondFloorMallConcourse/MallConcourseFloor") as CSGBox3D).use_collision)
 	assert_lt(_flat_distance_xz(register.global_position, rack.global_position), 10.0)
 	assert_lt(_flat_distance_xz(rack.global_position, receiving_box.global_position), 2.4)
 	assert_lt(_flat_distance_xz(receiving_box.global_position, storage_shelf.global_position), 2.4)
@@ -1083,9 +1561,17 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 
 func test_production_visual_overhaul_storefront_and_architecture_cues_exist() -> void:
 	var storefront_props := [
+		"EntryThresholdInteriorStrip",
+		"EntryRouteStripeRegister",
+		"EntryRouteStripeShelf",
+		"StorefrontFacadePierLeft",
+		"StorefrontFacadePierRight",
+		"StorefrontCenterDoorFrameLeft",
+		"StorefrontCenterDoorFrameRight",
 		"StorefrontSignTrimTop",
 		"StorefrontSignTrimBottom",
 		"WindowDisplayConsoleBox",
+		"WindowDisplayPlatformStack",
 		"WindowDisplayShelfDeck",
 		"WindowDisplaySpotlightBar",
 		"WindowDisplayControllerA",
@@ -1100,7 +1586,7 @@ func test_production_visual_overhaul_storefront_and_architecture_cues_exist() ->
 		assert_not_null(prop)
 		assert_false(prop.use_collision, prop_path)
 		assert_true(_is_inside_store_floorprint(prop.global_position), prop_path)
-		assert_lt(prop.global_position.z, -5.45, prop_path)
+		assert_lt(prop.global_position.z, -4.5, prop_path)
 
 	assert_eq((_store.get_node("WindowDisplayPosterPanel/WindowDisplayPosterLabel") as Label3D).text, "USED + NEW")
 	assert_eq((_store.get_node("WindowDisplayCaseA/WindowDisplayCaseALabel") as Label3D).text, "USED")
@@ -1110,15 +1596,26 @@ func test_production_visual_overhaul_storefront_and_architecture_cues_exist() ->
 	assert_lt((_store.get_node("WindowDisplayConsoleBox") as CSGBox3D).global_position.y, 0.7)
 	assert_lt((_store.get_node("WindowDisplayShelfDeck") as CSGBox3D).global_position.y, 0.5)
 	assert_gt((_store.get_node("WindowDisplaySpotlightBar") as CSGBox3D).global_position.y, 1.7)
+	assert_gt((_store.get_node("StorefrontFacadePierLeft") as CSGBox3D).size.y, 2.0)
+	assert_gt((_store.get_node("StorefrontCenterDoorFrameRight") as CSGBox3D).size.y, 2.0)
 
 	var architecture_props := [
 		"SalesBaseboardFront",
 		"SalesBaseboardBack",
 		"SalesBaseboardLeft",
 		"SalesBaseboardRight",
+		"SalesChairRailBack",
+		"SalesChairRailLeft",
+		"SalesChairRailRight",
+		"SalesCornerTrimBackLeft",
+		"SalesCornerTrimBackRight",
 		"SalesCeilingPanelA",
 		"SalesCeilingPanelB",
+		"SalesCeilingGridLong",
+		"SalesCeilingGridCross",
 		"FloorTransitionStripSalesBack",
+		"EntryRubberMat",
+		"RegisterRubberMat",
 		"CounterFrontTrim",
 	]
 	for prop_path in architecture_props:
@@ -1140,6 +1637,10 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		"ShelfPriceTagA",
 		"ShelfPriceTagB",
 		"ShelfPriceTagC",
+		"UsedSpineRowTop",
+		"UsedSpineRowMiddle",
+		"UsedSpineRowBottom",
+		"UsedShelfTalkerPanel",
 	]
 	for prop_path in density_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -1148,15 +1649,32 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		assert_lt(_flat_distance_xz(prop.global_position, rack.global_position), 0.95, prop_path)
 
 	assert_eq((_store.get_node("ShelfFacingDensityBand/ShelfFacingDensityLabel") as Label3D).text, "USED GAMES")
+	assert_eq((_store.get_node("UsedShelfTalkerPanel/UsedShelfTalkerLabel") as Label3D).text, "TESTED")
+
+	for preorder_path in ["PreorderWallPanel", "PreorderWallHeaderPanel", "PreorderCaseStackA", "PreorderCaseStackB", "PreorderCaseStackC"]:
+		var preorder_prop := _store.get_node_or_null(preorder_path) as CSGBox3D
+		assert_not_null(preorder_prop)
+		assert_false(preorder_prop.use_collision, preorder_path)
+		assert_true(_is_inside_store_floorprint(preorder_prop.global_position), preorder_path)
+		assert_gt(preorder_prop.global_position.x, 6.5, preorder_path)
+	assert_eq((_store.get_node("PreorderWallHeaderPanel/PreorderWallHeaderLabel") as Label3D).text, "PREORDERS")
 
 	var transaction_props := [
 		"ReturnReviewTray",
 		"TradeInInspectionTray",
 		"PreorderSlipStack",
 		"ServicePickupMarker",
+		"SaleScanPad",
+		"RegisterModeCueRail",
+		"RegisterModeSaleCue",
+		"RegisterModeReturnCue",
+		"RegisterModeTradeCue",
+		"RegisterModePreorderCue",
+		"RegisterModeServiceCue",
 		"CashDrawerSlot",
 		"CashDrawerPull",
 		"PaymentStatusGlowPanel",
+		"RegisterWorkflowCard",
 	]
 	for prop_path in transaction_props:
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
@@ -1174,6 +1692,10 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 	assert_eq((_store.get_node("TradeInInspectionTray/TradeInInspectionTrayLabel") as Label3D).text, "TRADE")
 	assert_eq((_store.get_node("PreorderSlipStack/PreorderSlipStackLabel") as Label3D).text, "PRE")
 	assert_eq((_store.get_node("ServicePickupMarker/ServicePickupMarkerLabel") as Label3D).text, "SVC")
+	assert_eq((_store.get_node("SaleScanPad/SaleScanPadLabel") as Label3D).text, "SALE")
+	assert_eq((_store.get_node("RegisterWorkflowCard/RegisterWorkflowCardLabel") as Label3D).text, "SCAN PAY BAG")
+	assert_true((_store.get_node("RegisterWorkflowCard/RegisterWorkflowCardLabel") as Label3D).no_depth_test)
+	assert_lt((_store.get_node("RegisterModeSaleCue") as CSGBox3D).global_position.x, (_store.get_node("RegisterModeServiceCue") as CSGBox3D).global_position.x)
 
 
 func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> void:
@@ -1229,18 +1751,36 @@ func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> v
 	assert_lte((_store.get_node("ExpansionFootprintTapeA") as CSGBox3D).size.y, 0.0061)
 	assert_lte((_store.get_node("ExpansionFootprintTapeB") as CSGBox3D).size.y, 0.0061)
 
+	var session := _store.get_node("StoreSession") as StoreSession
+	for decoration_state in session.get_decoration_surface_states():
+		var visible_path := str(decoration_state.get("visible_node_path", ""))
+		var visible_node := _store.get_node_or_null(visible_path) as Node3D
+		assert_not_null(visible_node, visible_path)
+		if visible_node is CSGBox3D:
+			assert_false((visible_node as CSGBox3D).use_collision, visible_path)
+
+	for upgrade_state in session.get_upgrade_surface_states():
+		var visible_path := str(upgrade_state.get("visible_surface", ""))
+		var visible_node := _store.get_node_or_null(visible_path) as Node3D
+		assert_not_null(visible_node, visible_path)
+
 
 func test_register_workstation_exists() -> void:
 	assert_not_null(_store.get_node_or_null("RegisterWorkstation"))
 
 
 func test_customer_manager_exists() -> void:
-	assert_not_null(_store.get_node_or_null("CustomerManager"))
+	var manager := _store.get_node_or_null("CustomerManager") as Node3D
+	assert_not_null(manager)
+	assert_false(manager.visible)
+	assert_false(manager.is_visible_in_tree())
 
 
 func test_customer_manager_has_two_buyers() -> void:
 	var manager := _store.get_node("CustomerManager")
 	assert_eq(manager.get_customers().size(), 2)
+	for customer in manager.get_customers():
+		assert_false((customer as Node3D).is_visible_in_tree())
 
 
 func test_suspicious_customer_exists_as_optional_encounter() -> void:
@@ -1249,6 +1789,7 @@ func test_suspicious_customer_exists_as_optional_encounter() -> void:
 	var storage := _store.get_node("EvidenceStorage")
 
 	assert_not_null(customer)
+	assert_false(customer.visible)
 	assert_string_contains(customer.get_interaction_prompt(), "Talk To")
 	assert_eq(event_log.get_event_count(), 0)
 	assert_eq(storage.get_evidence_count(), 0)
@@ -1272,6 +1813,7 @@ func test_suspicious_customer_does_not_join_sales_customer_queue() -> void:
 func test_trade_in_customer_exists_with_item() -> void:
 	var customer := _store.get_node_or_null("TradeInCustomer") as SimpleTradeInCustomer
 	assert_not_null(customer)
+	assert_false(customer.visible)
 	assert_not_null(customer.get_trade_item())
 
 
@@ -1279,6 +1821,7 @@ func test_service_customer_exists_with_disc_resurfacing_request() -> void:
 	var customer := _store.get_node_or_null("ServiceCustomer")
 
 	assert_not_null(customer)
+	assert_false((customer as Node3D).visible)
 	assert_true(customer.call("is_waiting_for_service"))
 	assert_eq(customer.get("service_name"), "Disc Resurfacing")
 	assert_eq(customer.get("item_name"), "Scratched Orbit Disc")
@@ -1341,6 +1884,7 @@ func test_preorder_customer_exists_and_targets_upcoming_release() -> void:
 	var customer := _store.get_node_or_null("PreorderCustomer") as SimplePreorderCustomer
 
 	assert_not_null(customer)
+	assert_false(customer.visible)
 	assert_true(customer.is_waiting_for_preorder())
 	assert_eq(customer.get_release_name(), "Neon Skyline")
 	assert_eq(customer.get_deposit_cents(), 500)

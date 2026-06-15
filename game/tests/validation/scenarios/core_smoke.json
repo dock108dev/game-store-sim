@@ -2,10 +2,10 @@
   "ui_scenarios": [
     {
       "id": "main_scene_loads",
-      "name": "Main scene loads and instantiates GrayboxStore",
+      "name": "Main scene loads and instantiates StoreWorld",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_main_scene_loads_graybox_store"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_main_scene_loads_store_world"
     },
     {
       "id": "main_scene_identity",
@@ -37,10 +37,10 @@
     },
     {
       "id": "front_door_boundary",
-      "name": "Front door opening is blocked until exits are implemented",
+      "name": "Front door opening is walkable from the second-floor mall concourse",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_front_door_opening_is_blocked_for_now"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_front_door_opening_is_walkable_from_mall_concourse"
     },
     {
       "id": "player_collision_shape",

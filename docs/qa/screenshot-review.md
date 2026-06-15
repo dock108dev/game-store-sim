@@ -1,6 +1,6 @@
 # Screenshot Review
 
-Use this to approve or reject the current production-blockout visuals before reopening external alpha playtest.
+Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the scene architecture is accepted as infrastructure. Prototype visual language cleanup is implemented but visually insufficient. The active review target is now the hard visual benchmark rebuild in `docs/visual-production/19-hard-visual-benchmark-rebuild.md`.
 
 ## Generate
 
@@ -17,6 +17,17 @@ Optional contact sheet:
 ```text
 magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 -label '%t' -background '#1f2328' -fill white -pointsize 18 -geometry 320x220+8+8 artifacts/validation/latest/screenshot-contact-sheet.png
 ```
+
+## Latest Automated Lock
+
+Generated on June 12, 2026 from `scripts/validate_godot.sh`.
+
+- Full validation passed with 570 GUT tests and 10028 asserts.
+- All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
+- Screenshot sanity and old-name scan passed.
+- Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
+- Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
+- Current visual evidence is not art-approved. It is captured from the promoted `store_world.tscn` production scene after prototype-language cleanup. The latest live owner screenshots show the cleanup did not change the overall read enough. The next accepted screenshot set must come from the hard visual benchmark rebuild: benchmark composition, label suppression, fixture silhouettes, physical detail replacement, ceiling/material/lighting treatment, and real backroom architecture.
 
 ## Required Screenshots
 
@@ -49,6 +60,13 @@ magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 
 Pass only if:
 
 - The first view reads as a small specialty game shop.
+- The opening screenshot starts outside the shop on a second-floor mall concourse and the entry route is walkable.
+- The opening state has no visible customers or employees before business begins.
+- `main_scene.png`, `storefront_entry.png`, and `register_counter.png` show the hard benchmark route and read as a shop before labels.
+- `main_scene.png` and `storefront_entry.png` do not read as raw boxes with labels.
+- `register_counter.png`, `receiving_area.png`, and `backroom_summary.png` do not read as label-driven prototype staging.
+- Fixture silhouettes, product rows, counter props, ceiling treatment, wall/floor material breaks, and lighting carry the read.
+- The backroom reads as a staff-only room or threshold, not a floor line.
 - Storefront, sales floor, register, receiving, stockroom, and backroom zones are distinguishable without reading docs.
 - Prompt, reticle, product label, shelf label, and modal text are readable at 1280x720.
 - Customers read by silhouette, role prop, queue position, and compact marker before relying on long labels.
@@ -60,11 +78,17 @@ Pass only if:
 Fail if:
 
 - The screenshot still reads mainly as graybox.
+- Opening-route objects still look like blockout boxes unless they are intentionally cardboard boxes.
+- The store still depends on labels or debug-like signs to explain most objects.
+- The backroom is still separated only by a line, marker, or label.
+- Boxes, papers, and props look randomly dumped instead of staged for receiving, sorting, display, or backstock.
 - A player would need a doc explanation to understand the current action.
 - Text is too small, clipped, low contrast, or crowded.
 - A prop, sign, customer, fixture, or modal competes with the action target.
 
 ## Routing
+
+Before broadening visual work beyond the opening route, review `docs/visual-production/19-hard-visual-benchmark-rebuild.md` and confirm the hard benchmark has removed enough label/debug/clutter/backroom-line read. If the benchmark fails review, keep iterating there before adding product, fixture, or customer visual breadth.
 
 If all screenshots pass, run `docs/qa/release-package-check.md` and consider reopening `docs/production/15-alpha-playtest-package.md`.
 
