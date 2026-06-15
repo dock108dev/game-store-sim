@@ -1,44 +1,19 @@
 # Visual Production
 
-This folder is the active visual reset and implementation planning space.
+This folder is the active visual plan.
 
-The current Godot scene is a functional prototype and layout proof. It is useful for mechanics, validation, collision, route testing, and interaction coverage, but it is not the final visual target and should not be used as proof that the game has reached an indie-release art bar. The mall-entry composition is directionally better, and `store_world.tscn` is now the production main scene for future visual work. Visual quality is still not owner-approved: the prototype visual language cleanup was too conservative, and the hard visual benchmark rebuild has now been implemented for the mall entry, register/sales-floor view, label suppression, fixture silhouettes, physical details, ceiling/material/lighting pass, and backroom architecture. The active next step is owner screenshot validation.
+The current production scene is mechanically useful but visually rejected. The old docs attempted to refine the graybox through more CSG blocks, labels, and broad production checklists. That path is closed. The new direction is to build a small modular art kit, approve it in isolation, then integrate it into `store_world.tscn`.
 
-## Default Direction
+## Active Docs
 
-Until owner review changes it, plan against this target:
+- [Art Language Rebuild Plan](00-art-language-rebuild-plan.md): complete phased implementation plan.
+- [Modular Asset Kit Spec](01-modular-asset-kit-spec.md): folder structure, naming, materials, module rules, and acceptance bar.
+- [Art Rebuild Validation Plan](02-art-rebuild-validation-plan.md): screenshot, automated, and owner-review gates.
 
-- Era: 2005-2007.
-- Store type: independent used video game shop in a small mall or retail strip.
-- Style: stylized semi-realistic indie sim with authored low-poly/modular assets, bevels, warm retail lighting, fictional labels, and dense but readable merchandise.
-- Tone: warm local-shop nostalgia on the surface, dry retail stress underneath, with optional suspicious details kept secondary.
-- Visual priority: first-person shop operation, not tycoon overview or debug readability.
-- Opening density: less is more. Day one starts with a small unlocked assortment, with more products unlocked, traded in, ordered, or released over time.
-- Current validation target: hard visual benchmark rebuild. The production scene/module architecture is accepted as infrastructure, but not as visual-quality approval. `graybox_store.tscn` is a compatibility wrapper, not the production art surface.
+## Rules
 
-## Planning Docs
-
-- [Visual Reset](00-visual-reset.md): what changes about expectations and what current visual work is deprecated.
-- [Art Direction Target](01-art-direction-target.md): style, mood, references, materials, and screenshot bar.
-- [Mid-00s Game Shop Inventory](02-mid-00s-game-shop-inventory.md): required visual objects and store-world details.
-- [Asset Pipeline And Style Guide](03-asset-pipeline-and-style-guide.md): how assets should be built, named, imported, and validated.
-- [Store Layout Visual Zones](04-store-layout-visual-zones.md): zone-by-zone visual requirements and priorities.
-- [Storefront First View Slice](05-storefront-first-view-slice.md): first visual vertical slice for entrance and initial read.
-- [Register And Counter Slice](06-register-and-counter-slice.md): final-quality counter, checkout, trade-in, preorder, and service read.
-- [Sales Floor Fixtures Slice](07-sales-floor-fixtures-slice.md): shelves, aisle composition, product density, and fixture language.
-- [Product Visual Language](08-product-visual-language.md): game cases, boxes, cartridges, discs, tags, platform colors, and condition cues.
-- [Backroom Receiving Slice](09-backroom-receiving-slice.md): receiving, storage, invoice, backstock, and operations visuals.
-- [Customers And Role Silhouettes](10-customers-and-role-silhouettes.md): role readability without giant labels.
-- [Lighting Materials Camera](11-lighting-materials-camera.md): lighting, postprocess, materials, and first-person screenshot acceptance.
-- [Implementation Roadmap](12-implementation-roadmap.md): planned phase order and gates.
-- [Visual QA Checklist](13-visual-qa-checklist.md): pass/fail review protocol.
-- [Deprecated Visual Docs](14-deprecated-visual-docs.md): older docs that should be treated as historical for visuals.
-- [Day One Stock And Unlocks](15-day-one-stock-and-unlocks.md): restrained starter assortment, catalog unlocks, receiving flow, and progression rules.
-- [Opening Visual Asset Pass](16-opening-visual-asset-pass.md): implemented first pass for replacing visible blockout graphics on the opening route.
-- [Scene Architecture Modularization](17-scene-architecture-modularization.md): implemented production scene/module baseline and owner validation checklist.
-- [Prototype Visual Language Cleanup](18-prototype-visual-language-cleanup.md): implemented but visually insufficient cleanup record.
-- [Hard Visual Benchmark Rebuild](19-hard-visual-benchmark-rebuild.md): implemented six-part benchmark rebuild; active owner validation target before broader product/fixture/catalog visual breadth.
-
-## Rule
-
-Every visual plan must name the scene/resource/test/screenshot it affects. Broad visual opinions belong here only if they produce a concrete implementation slice, asset list, or QA gate.
+- Do not add broad visual content until the art-kit route is approved.
+- Do not use visible raw CSG boxes as the final art language.
+- Do not restore large explanatory labels as object identity.
+- Build one storefront/register/shelf/receiving/backroom-threshold route first.
+- Keep mechanics stable while replacing the visual surface.

@@ -1,14 +1,22 @@
 # Game Store Sim
 
-First-person specialty video game retail simulator. The player runs a small game shop by receiving stock, pricing used games, stocking fixtures, serving customers, handling returns/trade-ins/services/preorders, planning supplier and launch allocations, and optionally noticing suspicious activity under the normal retail loop.
+First-person specialty video game retail simulator. The mechanical prototype is broad and validated; the visual baseline is not approved.
 
-## Current State
+## Start Here
 
-Read [Current State](docs/CURRENT_STATE.md) first. It is the authoritative human-readable handoff for what is playable, what is validated, what remains blocked by human review, and which docs are active.
+Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first. Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
 
-Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current build now uses `store_world.tscn` as the production main scene, with reusable module manifests under `game/scenes/world/modules/` and `graybox_store.tscn` retained only as a compatibility wrapper. That architecture is accepted as infrastructure, but the visuals are not approved. The next implementation pass is [Prototype Visual Language Cleanup](docs/visual-production/18-prototype-visual-language-cleanup.md): remove label/debug reads, replace the backroom line with a real threshold, clean random clutter, and prove one believable front-store benchmark before product/fixture breadth.
+The current visual direction is the [Art Language Rebuild](docs/visual-production/00-art-language-rebuild-plan.md). The old graybox, beta, broad-production, and hard-benchmark docs were removed because they kept routing work back toward cube-based scenes, label panels, and external-playtest readiness before the shop looks right.
 
-Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
+## Current Rule
+
+Do not expand catalog visuals, customers, decorations, or external playtest packaging until the opening route has an approved modular art-kit baseline.
+
+The next implementation pass starts with:
+
+- [Art Language Rebuild Plan](docs/visual-production/00-art-language-rebuild-plan.md)
+- [Modular Asset Kit Spec](docs/visual-production/01-modular-asset-kit-spec.md)
+- [Art Rebuild Validation Plan](docs/visual-production/02-art-rebuild-validation-plan.md)
 
 ## Validate
 
@@ -18,36 +26,24 @@ Run the full local gate from the repository root:
 scripts/validate_godot.sh
 ```
 
-The gate writes logs and screenshots to `artifacts/validation/latest/`.
+The gate writes logs, screenshots, and the contact sheet to `artifacts/validation/latest/`.
 
-Current validated baseline:
+Current validated baseline after the docs overhaul:
 
-- 570 GUT tests.
-- 9961 GUT asserts.
+- 566 GUT tests.
+- 10705 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.
 - 60 catalog products.
-- Desktop pack smoke, alpha performance smoke, screenshot capture/sanity, old-name scan, and 23 required screenshots pass.
+- Desktop pack smoke, alpha performance smoke, screenshot capture/sanity, contact sheet, old-name scan, and 23 required screenshots pass.
 
 ## Active Docs
 
-- [Current State](docs/CURRENT_STATE.md): source of truth for current status and next review decision.
-- [Visual Production](docs/visual-production/README.md): active visual reset, art direction, opening asset pass, asset pipeline, and visual QA plan.
-- [Design Planning](docs/design-planning/README.md): historical opening-store quality-bar planning record.
-- [Validation](docs/production/06-validation.md): local gate, scenario manifests, thresholds, and artifacts.
-- [Smoke Playtest](docs/qa/smoke-playtest.md): short playable sanity run.
-- [Full-Day Playtest](docs/qa/full-day-playtest.md): internal full retail-loop QA.
-- [Screenshot Review](docs/qa/screenshot-review.md): review the 23 validation screenshots.
-- [Release Package Check](docs/qa/release-package-check.md): pack smoke and external handoff readiness.
-- [Backlog](docs/production/04-backlog.md): short current backlog and next decision.
-- [Scene Architecture Modularization](docs/visual-production/17-scene-architecture-modularization.md): implemented production-scene/module split and next owner validation checklist.
-- [Prototype Visual Language Cleanup](docs/visual-production/18-prototype-visual-language-cleanup.md): active next implementation pass before broader product/fixture visuals.
-- [Alpha Bug List](docs/production/13-alpha-bug-list.md): current issue priorities.
-- [Alpha Playtest Package](docs/production/15-alpha-playtest-package.md): paused external tester handoff.
-
-## Reference Docs
-
-Long production plans are retained as historical slice records, not active instructions. See [Archive Index](docs/archive/README.md) for the current classification.
-
-The Employees-Only Stockroom Production Plan remains available as a completed historical record for the physical stockroom, receiving, backstock, office computer, service/security corners, and validation sync.
+- [Docs Index](docs/README.md)
+- [Current State](docs/CURRENT_STATE.md)
+- [Visual Production](docs/visual-production/README.md)
+- [Backlog](docs/production/04-backlog.md)
+- [Validation](docs/production/06-validation.md)
+- [Visual Bug List](docs/production/13-alpha-bug-list.md)
+- [QA](docs/qa/README.md)

@@ -5,7 +5,7 @@ const CAPTURE_TOOL_PATH := "res://tests/tools/capture_main_scene_screenshot.gd"
 const VALIDATION_GATE_PATH := "res://../scripts/validate_godot.sh"
 
 
-func test_alpha_screenshot_scenarios_cover_p1_bug_subjects() -> void:
+func test_screenshot_scenarios_cover_current_visual_blockers() -> void:
 	var alpha_bug_list := FileAccess.get_file_as_string(ALPHA_BUG_LIST_PATH)
 	var capture_tool := FileAccess.get_file_as_string(CAPTURE_TOOL_PATH)
 	var validation_gate := FileAccess.get_file_as_string(VALIDATION_GATE_PATH)
@@ -13,7 +13,7 @@ func test_alpha_screenshot_scenarios_cover_p1_bug_subjects() -> void:
 	assert_false(capture_tool.is_empty())
 	assert_false(validation_gate.is_empty())
 
-	for issue_id in ["AH-001", "AH-002", "AH-003", "AH-004", "AH-005", "AH-006", "AH-008"]:
+	for issue_id in ["VIS-001", "VIS-002", "VIS-003", "VIS-004"]:
 		assert_string_contains(alpha_bug_list, issue_id)
 
 	var required_scenarios := [

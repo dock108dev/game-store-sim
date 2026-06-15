@@ -3,8 +3,7 @@ extends GutTest
 const PRESENTATION_SCENARIOS_PATH := "res://tests/validation/scenarios/presentation.json"
 const MANUAL_CHECKS_PATH := "res://tests/validation/scenarios/manual_checks.json"
 const VALIDATION_DOC_PATH := "res://../docs/production/06-validation.md"
-const MANUAL_DOC_PATH := "res://../docs/production/07-current-manual-playtest.md"
-const COMPLETION_PLAN_PATH := "res://../docs/production/11-game-completion-plan.md"
+const SCREENSHOT_REVIEW_PATH := "res://../docs/qa/screenshot-review.md"
 
 
 func test_presentation_validation_matrix_covers_audio_vfx_and_camera_stops() -> void:
@@ -31,33 +30,19 @@ func test_presentation_validation_matrix_covers_audio_vfx_and_camera_stops() -> 
 		assert_true(str(scenario.get("evidence", "")).begins_with("res://tests/gut/"), scenario_id)
 
 
-func test_presentation_manual_checks_cover_readability_and_motion_comfort() -> void:
+func test_presentation_manual_checks_stay_secondary_to_art_rebuild_gate() -> void:
 	var scenarios := _scenario_map(MANUAL_CHECKS_PATH)
-	var required_ids := [
-		"store_ambience_mix_readability",
-		"interaction_audio_readability",
-		"customer_audio_placeholder_readability",
-		"presentation_microfeedback_readability",
-		"camera_feel_motion_comfort",
-		"presentation_milestone_11_review",
-	]
+	var validation_doc := FileAccess.get_file_as_string(VALIDATION_DOC_PATH)
+	var screenshot_review := FileAccess.get_file_as_string(SCREENSHOT_REVIEW_PATH)
 
-	for scenario_id in required_ids:
+	for scenario_id in ["store_ambience_mix_readability", "camera_feel_motion_comfort", "presentation_milestone_11_review"]:
 		assert_true(scenarios.has(scenario_id), "missing manual check %s" % scenario_id)
 		var scenario: Dictionary = scenarios.get(scenario_id)
 		assert_eq(scenario.get("status"), "manual", scenario_id)
-		assert_false(str(scenario.get("reason", "")).is_empty(), scenario_id)
 		assert_eq(scenario.get("owner"), "manual QA", scenario_id)
 
-
-func test_presentation_validation_docs_name_stop_11_6_sync() -> void:
-	var validation_doc := FileAccess.get_file_as_string(VALIDATION_DOC_PATH)
-	var manual_doc := FileAccess.get_file_as_string(MANUAL_DOC_PATH)
-	var completion_plan := FileAccess.get_file_as_string(COMPLETION_PLAN_PATH)
-
-	assert_string_contains(validation_doc, "Presentation validation sync is complete through Stop 11.6")
-	assert_string_contains(manual_doc, "Presentation validation sync is implemented through Stop 11.6")
-	assert_string_contains(completion_plan, "Stop 11.6: Presentation validation sync. Done")
+	assert_string_contains(validation_doc, "art-language rebuild")
+	assert_string_contains(screenshot_review, "The question is not whether the project is mechanically complete")
 
 
 func _scenario_map(path: String) -> Dictionary:

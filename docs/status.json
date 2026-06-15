@@ -1,11 +1,11 @@
 {
-  "schema": 1,
+  "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-15",
-  "current_phase": "hard_visual_benchmark_rebuild_pending_owner_validation",
-  "playtest_state": "paused_pending_visual_cleanup_owner_review",
+  "current_phase": "art_language_rebuild_ready_for_implementation",
+  "playtest_state": "paused_until_visual_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail loop with the first phase 0-4 visual pass rejected by owner review. The active review slice starts the player on a second-floor mall concourse, walks into an empty pre-open game shop, keeps customer actors wired but hidden until business begins, and includes the first authored opening visual asset pass for the mall shell, storefront, starter products, and first interior benchmark corner. Scene architecture modularization is accepted as infrastructure: store_world.tscn is the production main scene, graybox_store.tscn is a compatibility wrapper, and reusable module manifests define visual/system ownership. Prototype visual language cleanup is implemented but visually insufficient. The hard visual benchmark rebuild is implemented in the production scene: benchmark fixture/product silhouettes, suppressed explanatory label cards, checkout-counter detail, ceiling/material/lighting treatment, and a deeper staff backroom threshold are ready for owner screenshot validation before broader product or fixture breadth.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working, but the latest visual benchmark is rejected as cube/label language. The next pass must build a modular art-kit benchmark before broad catalog, customer, decoration, or external-playtest work resumes.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "hard_visual_benchmark_implemented_pending_owner_validation",
+    "visual_read": "cube_language_rejected_art_kit_required",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 573,
-    "gut_asserts": 10904,
+    "gut_tests": 566,
+    "gut_asserts": 10705,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -59,67 +59,32 @@
     "old_name_scan": "passed"
   },
   "blocking_reviews": [
-    "owner_opening_visual_asset_pass_signoff",
-    "owner_hard_visual_benchmark_signoff",
-    "owner_opening_mall_storefront_screenshot_review",
-    "owner_walk_in_empty_store_review",
-    "owner_day_one_stock_flow_review",
-    "owner_catalog_unlock_flow_review",
-    "manual_real_window_1280x720_review"
+    "owner_art_language_rebuild_signoff",
+    "owner_opening_route_visual_signoff",
+    "manual_real_window_1280x720_walk_in_review"
   ],
   "next_decision": {
-    "question": "Do the hard benchmark screenshots now make the mall-entry, register/sales-floor, receiving, and backroom-threshold route read as a mid-00s game shop before labels?",
-    "approve_path": "use the approved benchmark as the baseline for broader product and fixture visual-kit breadth",
-    "reject_path": "continue benchmark corrections before adding broader catalog, decoration, customer, or multi-day visual work"
+    "question": "Can the modular art-kit benchmark make the opening route read as a simple mid-00s game shop instead of cube geometry with labels?",
+    "approve_path": "integrate the approved kit into the production route, then expand product and fixture breadth",
+    "reject_path": "continue sandbox kit work before touching broader store visuals"
   },
   "active_docs": [
+    "README.md",
+    "docs/README.md",
     "docs/CURRENT_STATE.md",
+    "docs/status.json",
     "docs/visual-production/README.md",
-    "docs/visual-production/00-visual-reset.md",
-    "docs/visual-production/01-art-direction-target.md",
-    "docs/visual-production/02-mid-00s-game-shop-inventory.md",
-    "docs/visual-production/03-asset-pipeline-and-style-guide.md",
-    "docs/visual-production/04-store-layout-visual-zones.md",
-    "docs/visual-production/05-storefront-first-view-slice.md",
-    "docs/visual-production/06-register-and-counter-slice.md",
-    "docs/visual-production/07-sales-floor-fixtures-slice.md",
-    "docs/visual-production/08-product-visual-language.md",
-    "docs/visual-production/09-backroom-receiving-slice.md",
-    "docs/visual-production/10-customers-and-role-silhouettes.md",
-    "docs/visual-production/11-lighting-materials-camera.md",
-    "docs/visual-production/12-implementation-roadmap.md",
-    "docs/visual-production/13-visual-qa-checklist.md",
-    "docs/visual-production/14-deprecated-visual-docs.md",
-    "docs/visual-production/15-day-one-stock-and-unlocks.md",
-    "docs/visual-production/16-opening-visual-asset-pass.md",
-    "docs/visual-production/17-scene-architecture-modularization.md",
-    "docs/visual-production/18-prototype-visual-language-cleanup.md",
-    "docs/visual-production/19-hard-visual-benchmark-rebuild.md",
-    "docs/design-planning/README.md",
+    "docs/visual-production/00-art-language-rebuild-plan.md",
+    "docs/visual-production/01-modular-asset-kit-spec.md",
+    "docs/visual-production/02-art-rebuild-validation-plan.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",
-    "docs/production/15-alpha-playtest-package.md",
+    "docs/qa/README.md",
     "docs/qa/smoke-playtest.md",
-    "docs/qa/full-day-playtest.md",
-    "docs/qa/screenshot-review.md",
-    "docs/qa/release-package-check.md"
+    "docs/qa/screenshot-review.md"
   ],
-  "historical_docs": [
-    "docs/production/01-vertical-slice-plan.md",
-    "docs/production/08-polish-roadmap.md",
-    "docs/production/09-backroom-polish-implementation-plan.md",
-    "docs/production/10-polish-execution-plan.md",
-    "docs/production/11-game-completion-plan.md",
-    "docs/production/12-production-target-contracts.md",
-    "docs/production/16-playability-readability-recovery-plan.md",
-    "docs/production/17-stockroom-production-plan.md",
-    "docs/production/18-production-visuals-plan.md",
-    "docs/design-planning/00-inspiration-review.md",
-    "docs/design-planning/01-opening-store-quality-bar.md",
-    "docs/design-planning/08-quality-bar-checklist.md",
-    "docs/design-planning/09-testing-plan.md"
-  ],
+  "removed_doc_policy": "Older design-planning, game-design, broad production, beta playtest package, stockroom production, and graybox visual docs were deleted from the active tree because they contradicted the art-language rebuild goal.",
   "validation_data_shape": {
     "thresholds": "game/tests/validation/thresholds.json",
     "scenario_manifests": "game/tests/validation/scenarios/*.json",

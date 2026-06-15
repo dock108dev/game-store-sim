@@ -1,8 +1,8 @@
-# QA Runbooks
+# QA
 
-Use these instead of the old monolithic manual checklist.
+Current QA supports the art-language rebuild.
 
-- [Smoke Playtest](smoke-playtest.md): short playable sanity check.
-- [Full-Day Playtest](full-day-playtest.md): full internal retail-loop QA.
-- [Screenshot Review](screenshot-review.md): production-blockout visual approval.
-- [Release Package Check](release-package-check.md): export and external handoff readiness.
+- [Smoke Playtest](smoke-playtest.md): short mechanical sanity check.
+- [Screenshot Review](screenshot-review.md): current visual approval gate.
+
+External playtest and release-package checks are intentionally not active until the visual baseline is approved.

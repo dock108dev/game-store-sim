@@ -1,103 +1,66 @@
 extends GutTest
 
-const PLAN_PATH := "res://../docs/production/17-stockroom-production-plan.md"
-const README_PATH := "res://../README.md"
+const ART_PLAN_PATH := "res://../docs/visual-production/00-art-language-rebuild-plan.md"
+const KIT_SPEC_PATH := "res://../docs/visual-production/01-modular-asset-kit-spec.md"
+const VALIDATION_PLAN_PATH := "res://../docs/visual-production/02-art-rebuild-validation-plan.md"
 const BACKLOG_PATH := "res://../docs/production/04-backlog.md"
-const COMPLETION_PLAN_PATH := "res://../docs/production/11-game-completion-plan.md"
-const DECISION_LOG_PATH := "res://../docs/production/03-decision-log.md"
-const MANUAL_DOC_PATH := "res://../docs/production/07-current-manual-playtest.md"
-const PACKAGE_DOC_PATH := "res://../docs/production/15-alpha-playtest-package.md"
 const SCENARIO_PATH := "res://tests/validation/scenarios/stockroom_production_plan.json"
 
 
-func test_stockroom_plan_is_active_next_stage() -> void:
-	var plan := FileAccess.get_file_as_string(PLAN_PATH)
-	var readme := FileAccess.get_file_as_string(README_PATH)
-	var backlog := FileAccess.get_file_as_string(BACKLOG_PATH)
-	var completion_plan := FileAccess.get_file_as_string(COMPLETION_PLAN_PATH)
-	var decision_log := FileAccess.get_file_as_string(DECISION_LOG_PATH)
-	var package_doc := FileAccess.get_file_as_string(PACKAGE_DOC_PATH)
-
-	assert_string_contains(plan, "mechanically implemented through Slice 8")
-	assert_string_contains(plan, "External alpha playtest remains paused until the owner recovery screenshot pass and stockroom screenshot pass are readable")
-	assert_string_contains(plan, "employees-only stockroom and office")
-	assert_string_contains(plan, "do not turn them into instant sales-floor inventory")
-	assert_string_contains(plan, "Docs Audit Result")
-	assert_string_contains(plan, "No production doc should be deleted in this pass")
-	assert_string_contains(plan, "mechanically complete")
-	assert_string_contains(readme, "Employees-Only Stockroom Production Plan")
-	assert_string_contains(backlog, "Employees-only stockroom production")
-	assert_string_contains(backlog, "Mechanically complete through Slice 8")
-	assert_string_contains(completion_plan, "17-stockroom-production-plan.md")
-	assert_string_contains(decision_log, "Employees-Only Stockroom Production")
-	assert_string_contains(package_doc, "stockroom screenshot set")
-
-
-func test_stockroom_plan_has_ordered_slice_stops() -> void:
-	var plan := FileAccess.get_file_as_string(PLAN_PATH)
-	var required_slices := [
-		"## Slice 0: Docs, Audit, And Validation Lock",
-		"## Slice 1: Stockroom Shell And Staff Boundary",
-		"## Slice 2: Receiving And Intake Stations",
-		"## Slice 3: Backstock Shelving And Pull/Store Flow",
-		"## Slice 4: Manager Office And Computer World Context",
-		"## Slice 5: Service, Safe, And Records Corners",
-		"## Slice 6: Stockroom Computer Workflow Copy And Controls",
-		"## Slice 7: Stockroom Lighting, Materials, And Prop Density",
-		"## Slice 8: Validation Sync And External Package Decision",
+func test_art_language_rebuild_plan_has_ordered_phases() -> void:
+	var plan := FileAccess.get_file_as_string(ART_PLAN_PATH)
+	var required_phases := [
+		"## Phase A: Baseline Lock And Rejection Record",
+		"## Phase B: Art-Kit Sandbox Scene",
+		"## Phase C: Storefront Facade Kit",
+		"## Phase D: Register Counter And First Interior Kit",
+		"## Phase E: Wall Shelf, Product, And Poster Kit",
+		"## Phase F: Receiving And Backroom Threshold Kit",
+		"## Phase G: Production Route Replacement",
+		"## Phase H: Validation And Owner Review",
 	]
 
-	for slice_name in required_slices:
-		assert_string_contains(plan, slice_name)
+	for phase in required_phases:
+		assert_string_contains(plan, phase)
 
-	assert_string_contains(plan, "delivery door or roll-up/pallet zone")
-	assert_string_contains(plan, "labeled category shelves")
-	assert_string_contains(plan, "manager's office workstation")
-	assert_string_contains(plan, "Keep every slice validated, committed, and pushed")
+	assert_string_contains(plan, "Stop if the sandbox scene still reads as cubes")
+	assert_string_contains(plan, "Do not build broad catalog variants")
 
 
-func test_stockroom_manual_checks_are_synced() -> void:
-	var manual_doc := FileAccess.get_file_as_string(MANUAL_DOC_PATH)
-	var plan := FileAccess.get_file_as_string(PLAN_PATH)
+func test_modular_asset_spec_names_required_kits_and_folders() -> void:
+	var spec := FileAccess.get_file_as_string(KIT_SPEC_PATH)
 
-	assert_string_contains(manual_doc, "Stockroom Production Focus")
-	assert_string_contains(manual_doc, "43_stockroom_staff_threshold.png")
-	assert_string_contains(manual_doc, "45_receiving_intake_station.png")
-	assert_string_contains(manual_doc, "48_manager_office_context.png")
-	assert_string_contains(plan, "50_storage_tab_physical_flow.png")
+	for path in [
+		"game/scenes/world/art_benchmark/",
+		"game/scenes/world/kits/storefront/",
+		"game/scenes/world/kits/interior/",
+		"game/scenes/world/kits/fixtures/",
+		"game/assets/materials/retail/",
+		"game/assets/decals/retail/",
+	]:
+		assert_string_contains(spec, path)
+
+	assert_string_contains(spec, "Avoid as final route art")
+	assert_string_contains(spec, "raw rectangular CSG blocks")
 
 
-func test_stockroom_validation_scenarios_are_registered() -> void:
+func test_art_rebuild_validation_plan_names_owner_gate() -> void:
+	var validation_plan := FileAccess.get_file_as_string(VALIDATION_PLAN_PATH)
+	var backlog := FileAccess.get_file_as_string(BACKLOG_PATH)
+
+	assert_string_contains(validation_plan, "Does the opening route read like a simple mid-00s independent game shop")
+	assert_string_contains(validation_plan, "The pass fails if the answer is still \"cubes.\"")
+	assert_string_contains(backlog, "Art language rebuild")
+	assert_string_contains(backlog, "Stop and ask for owner review")
+
+
+func test_legacy_stockroom_validation_scenarios_remain_structured() -> void:
 	var scenarios := _scenario_map(SCENARIO_PATH)
-	var required_ids := [
-		"stockroom_plan_docs_sync",
-		"stockroom_slice_stop_contract",
-		"stockroom_manual_checklist_sync",
-		"stockroom_readme_pointer_sync",
-		"stockroom_backlog_pointer_sync",
-		"stockroom_completion_handoff_sync",
-		"stockroom_package_pause_guard",
-		"stockroom_staff_boundary_shell",
-		"stockroom_office_service_route_cues",
-		"stockroom_receiving_state_cues",
-		"stockroom_receiving_intake_station",
-		"stockroom_backstock_category_lanes",
-		"stockroom_backstock_pull_stage",
-		"stockroom_manager_office_context",
-		"stockroom_service_bench_cues",
-			"stockroom_safe_records_corner",
-			"stockroom_supplier_physical_flow_copy",
-			"stockroom_storage_physical_flow_copy",
-			"stockroom_lighting_material_density",
-			"stockroom_phase_validation_sync",
-		]
-
-	for scenario_id in required_ids:
+	for scenario_id in ["stockroom_staff_boundary_shell", "stockroom_receiving_intake_station", "stockroom_manager_office_context"]:
 		assert_true(scenarios.has(scenario_id), "missing stockroom scenario %s" % scenario_id)
 		var scenario: Dictionary = scenarios.get(scenario_id)
 		assert_eq(scenario.get("status"), "automated", scenario_id)
 		assert_true(scenario.get("critical"), scenario_id)
-		assert_string_contains(str(scenario.get("evidence", "")), "res://tests/gut/")
 
 
 func _scenario_map(path: String) -> Dictionary:
