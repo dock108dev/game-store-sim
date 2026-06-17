@@ -1,8 +1,8 @@
 # Screenshot Review
 
-This is the current visual approval gate.
+This is the current design/visual approval gate.
 
-The question is not whether the project is mechanically complete. The question is whether the opening route reads as a simple authored game shop instead of a collection of cubes with labels.
+The question is not whether the project is mechanically complete. The question is whether the opening route reads as a small, underfunded, functional 2002-2004 independent game store with visible growth potential.
 
 ## Generate
 
@@ -22,37 +22,40 @@ artifacts/validation/latest/screenshot-contact-sheet.png
 
 ## Primary Review Targets
 
-- `main_scene.png`
-- `storefront_entry.png`
-- `register_counter.png`
-- `receiving_area.png`
-- `backroom_summary.png`
+- `main_scene.png`: storefront/entrance first read
+- `storefront_entry.png`: entering the store and seeing interior promise
+- `register_counter.png`: checkout plus trade-in center
+- `stocked_aisle.png`: platform/game browsing density
+- `receiving_area.png`: shipments and intake
+- `backroom_summary.png`: management support without becoming the main fantasy
 
 ## Pass Criteria
 
 Pass only if:
 
-- the first view reads as a game shop before labels
-- storefront identity comes from facade, glass, trim, sign housing, and mall context
-- register/counter reads from silhouette, equipment, material, and grouped props
-- shelf/product identity comes from rows, cases, boxes, stickers, posters, and fixture design
-- receiving reads as staged workflow, not dumped blocks
-- backroom threshold reads as staff architecture, not a line or sign
-- large explanatory labels are gone from the visual read
-- flat gray walls/floors/ceilings no longer dominate the route
-- the 1280x720 real-window walk-in does not expose stale cube-heavy angles
+- the first view reads as a 2002-2004 specialty game store
+- the store feels new, underfunded, understocked, promising, and operational
+- storefront identity comes from facade, glass, trim, sign housing, mall context, and fictional store branding
+- register/counter reads from silhouette, equipment, material, grouped props, and trade-in staging
+- used games, new releases, platform sections, demo, bargain, guides/media, checkout, and receiving support are understandable
+- product/fixture identity comes from rows, cases, boxes, stickers, posters, signs, and fixture design
+- opening density is limited but intentional: 25-40% wall occupancy and 30-50% floor occupancy
+- future growth is visible without future inventory physically sitting in the store
+- large debug labels are not required to understand primary objects
+- the 1280x720 real-window walk-in does not expose a prototype-heavy angle
 
 ## Fail Criteria
 
 Fail if:
 
-- the scene still reads as raw CSG/cube geometry
+- the scene reads as modern, sterile, empty, corporate, or abandoned
+- the store does not communicate early-2000s game retail
 - text labels are required to understand primary objects
-- props look like scattered rectangles
+- props look like scattered primitive clutter
 - product/fixture identity is not readable before labels
-- the route still feels like a debug blockout
+- future inventory appears physically staged before it is purchased, unlocked, received, released, or traded in
 - a visual module blocks movement or interaction
 
 ## Routing
 
-If the review fails, keep work inside the art-language rebuild. Do not expand catalog, customer, decoration, or external-playtest work.
+If the review fails, keep work inside the design-source implementation roadmap. Do not expand catalog, customer, decoration, hidden narrative, later-era, or external-playtest work to compensate for a weak opening store.

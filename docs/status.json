@@ -1,11 +1,11 @@
 {
   "schema": 2,
   "project": "game-store-sim",
-  "status_date": "2026-06-15",
-  "current_phase": "art_language_rebuild_kit_integrated_for_validation",
-  "playtest_state": "paused_until_visual_baseline_approved",
+  "status_date": "2026-06-17",
+  "current_phase": "design_reset_source_of_truth_adopted",
+  "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working, and the first modular art-kit route is now implemented in both an isolated benchmark scene and store_world.tscn. Owner screenshot/walk-in review is still required before broad catalog, customer, decoration, or external-playtest work resumes.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the owner-provided brief, vertical slice spec, and 300-object asset inventory as the new source of truth.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "modular_art_kit_integrated_pending_owner_review",
+    "visual_read": "design_reset_required_source_of_truth_adopted",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 10791,
+    "gut_asserts": 10795,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -58,25 +58,32 @@
     "screenshot_contact_sheet": "artifacts/validation/latest/screenshot-contact-sheet.png",
     "old_name_scan": "passed"
   },
+  "source_inputs": [
+    "Store Design & World Building Brief v1.0",
+    "Vertical Slice Build Specification v4.0",
+    "game_store_sim_300_object_asset_inventory.xlsx"
+  ],
   "blocking_reviews": [
-    "owner_art_language_rebuild_signoff",
-    "owner_opening_route_visual_signoff",
+    "owner_design_source_of_truth_signoff",
+    "owner_opening_store_design_signoff",
     "manual_real_window_1280x720_walk_in_review"
   ],
   "next_decision": {
-    "question": "Does the integrated modular art-kit route now read as a simple mid-00s game shop instead of cube geometry with labels?",
-    "approve_path": "use the approved kit as the baseline, then expand product and fixture breadth",
-    "reject_path": "continue kit work in the sandbox and production route before broadening store visuals"
+    "question": "Does the next implementation pass make the opening store read as a small, underfunded, functional 2002-2004 independent game store with growth potential?",
+    "approve_path": "continue through the design-source asset roadmap phases until vertical-slice review is ready",
+    "reject_path": "correct the opening store first-read before broadening catalog, customer, decoration, hidden-narrative, or external-playtest work"
   },
   "active_docs": [
     "README.md",
     "docs/README.md",
     "docs/CURRENT_STATE.md",
     "docs/status.json",
-    "docs/visual-production/README.md",
-    "docs/visual-production/00-art-language-rebuild-plan.md",
-    "docs/visual-production/01-modular-asset-kit-spec.md",
-    "docs/visual-production/02-art-rebuild-validation-plan.md",
+    "docs/design-source-of-truth/README.md",
+    "docs/design-source-of-truth/00-master-design-source-of-truth.md",
+    "docs/design-source-of-truth/01-vertical-slice-spec.md",
+    "docs/design-source-of-truth/02-store-design-world-building.md",
+    "docs/design-source-of-truth/03-asset-inventory-roadmap.md",
+    "docs/design-source-of-truth/04-validation-and-signoff.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",
@@ -84,7 +91,7 @@
     "docs/qa/smoke-playtest.md",
     "docs/qa/screenshot-review.md"
   ],
-  "removed_doc_policy": "Older design-planning, game-design, broad production, beta playtest package, stockroom production, and graybox visual docs were deleted from the active tree because they contradicted the art-language rebuild goal.",
+  "removed_doc_policy": "Older design-planning, game-design, broad production, beta playtest package, stockroom production, graybox visual, hard-benchmark, and visual-production docs were deleted from the active tree when they contradicted the design reset.",
   "validation_data_shape": {
     "thresholds": "game/tests/validation/thresholds.json",
     "scenario_manifests": "game/tests/validation/scenarios/*.json",

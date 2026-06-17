@@ -1,56 +1,59 @@
 extends GutTest
 
-const ART_PLAN_PATH := "res://../docs/visual-production/00-art-language-rebuild-plan.md"
-const KIT_SPEC_PATH := "res://../docs/visual-production/01-modular-asset-kit-spec.md"
-const VALIDATION_PLAN_PATH := "res://../docs/visual-production/02-art-rebuild-validation-plan.md"
+const MASTER_PATH := "res://../docs/design-source-of-truth/00-master-design-source-of-truth.md"
+const SLICE_PATH := "res://../docs/design-source-of-truth/01-vertical-slice-spec.md"
+const WORLD_PATH := "res://../docs/design-source-of-truth/02-store-design-world-building.md"
+const ASSET_ROADMAP_PATH := "res://../docs/design-source-of-truth/03-asset-inventory-roadmap.md"
+const VALIDATION_PLAN_PATH := "res://../docs/design-source-of-truth/04-validation-and-signoff.md"
 const BACKLOG_PATH := "res://../docs/production/04-backlog.md"
 const SCENARIO_PATH := "res://tests/validation/scenarios/stockroom_production_plan.json"
 
 
-func test_art_language_rebuild_plan_has_ordered_phases() -> void:
-	var plan := FileAccess.get_file_as_string(ART_PLAN_PATH)
-	var required_phases := [
-		"## Phase A: Baseline Lock And Rejection Record",
-		"## Phase B: Art-Kit Sandbox Scene",
-		"## Phase C: Storefront Facade Kit",
-		"## Phase D: Register Counter And First Interior Kit",
-		"## Phase E: Wall Shelf, Product, And Poster Kit",
-		"## Phase F: Receiving And Backroom Threshold Kit",
-		"## Phase G: Production Route Replacement",
-		"## Phase H: Validation And Owner Review",
+func test_design_source_names_core_slice_constraints() -> void:
+	var master := FileAccess.get_file_as_string(MASTER_PATH)
+	var slice := FileAccess.get_file_as_string(SLICE_PATH)
+	var world := FileAccess.get_file_as_string(WORLD_PATH)
+	var required_terms := [
+		"2002-2004",
+		"Nova",
+		"Vertex",
+		"Prism",
+		"Pocket",
+		"underfunded",
+		"15-25%",
+		"40-60 games",
 	]
 
-	for phase in required_phases:
-		assert_string_contains(plan, phase)
+	for term in required_terms:
+		assert_true(master.contains(term) or slice.contains(term) or world.contains(term), term)
 
-	assert_string_contains(plan, "Stop if the sandbox scene still reads as cubes")
-	assert_string_contains(plan, "Do not build broad catalog variants")
+	assert_string_contains(master, "Current mechanics stay stable")
+	assert_string_contains(world, "The store remains game-first.")
 
 
-func test_modular_asset_spec_names_required_kits_and_folders() -> void:
-	var spec := FileAccess.get_file_as_string(KIT_SPEC_PATH)
+func test_asset_roadmap_names_required_counts_and_phases() -> void:
+	var roadmap := FileAccess.get_file_as_string(ASSET_ROADMAP_PATH)
 
-	for path in [
-		"game/scenes/world/art_benchmark/",
-		"game/scenes/world/kits/storefront/",
-		"game/scenes/world/kits/interior/",
-		"game/scenes/world/kits/fixtures/",
-		"game/assets/materials/retail/",
-		"game/assets/decals/retail/",
+	for term in [
+		"total objects: 300",
+		"MVP objects: 77",
+		"OBJ-001 Narrow storefront glass door",
+		"OBJ-057 Double-sided gondola shelf",
+		"Phase 1: Store Shell And First Read",
+		"Phase 5: Demo, Bargain, Guides, And Hardware",
 	]:
-		assert_string_contains(spec, path)
+		assert_string_contains(roadmap, term)
 
-	assert_string_contains(spec, "Avoid as final route art")
-	assert_string_contains(spec, "raw rectangular CSG blocks")
+	assert_string_contains(roadmap, "Do not build all 300 objects as loose props")
 
 
-func test_art_rebuild_validation_plan_names_owner_gate() -> void:
+func test_design_reset_validation_plan_names_owner_gate() -> void:
 	var validation_plan := FileAccess.get_file_as_string(VALIDATION_PLAN_PATH)
 	var backlog := FileAccess.get_file_as_string(BACKLOG_PATH)
 
-	assert_string_contains(validation_plan, "Does the opening route read like a simple mid-00s independent game shop")
-	assert_string_contains(validation_plan, "The pass fails if the answer is still \"cubes.\"")
-	assert_string_contains(backlog, "Art language rebuild")
+	assert_string_contains(validation_plan, "Does the current build deliver the fantasy")
+	assert_string_contains(validation_plan, "small early-2000s independent game store")
+	assert_string_contains(backlog, "Design reset")
 	assert_string_contains(backlog, "Stop and ask for owner review")
 
 

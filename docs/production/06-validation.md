@@ -26,10 +26,10 @@ The gate runs:
 - screenshot contact-sheet generation
 - old-name scan
 
-Current validated baseline after the first art-kit implementation:
+Latest validated baseline:
 
 - 570 GUT tests.
-- 10791 GUT asserts.
+- 10795 GUT asserts.
 - UI scenario automation coverage: 508/628, or 80.9%.
 - Production script mapping coverage: 53/53, or 100.0%.
 - 3 active standalone validation tools.
@@ -41,18 +41,18 @@ Current validated baseline after the first art-kit implementation:
 - Screenshot contact sheet generated at `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Old-name scan passed.
 
-## Visual-Rebuild Validation
+## Design-Reset Validation
 
-For the current art-language rebuild, automated validation is necessary but insufficient. The pass is not approved unless the owner review confirms that the opening route no longer reads as cubes with labels.
+For the current design reset, automated validation is necessary but insufficient. The pass is not approved unless owner review confirms that the opening store delivers the fantasy documented in `docs/design-source-of-truth/`.
 
 Required evidence:
 
 - focused tests for changed scene/doc contracts
 - full `scripts/validate_godot.sh` for production-route integration
 - regenerated contact sheet
-- manual 1280x720 walk-in review from mall spawn to register view
+- manual 1280x720 walk-in review from entrance to checkout
 - screenshot review against `docs/qa/screenshot-review.md`
-- optional sandbox capture through `game/tests/tools/capture_art_benchmark_screenshot.gd`
+- source-of-truth checklist review against `docs/design-source-of-truth/04-validation-and-signoff.md`
 
 ## Validation Data Shape
 

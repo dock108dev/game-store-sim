@@ -5,14 +5,14 @@ const CURRENT_STATE_PATH := "res://../docs/CURRENT_STATE.md"
 const README_PATH := "res://../README.md"
 
 
-func test_docs_status_contract_names_art_language_rebuild_gate() -> void:
+func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "art_language_rebuild_kit_integrated_for_validation")
-	assert_eq(status.get("playtest_state"), "paused_until_visual_baseline_approved")
+	assert_eq(status.get("current_phase"), "design_reset_source_of_truth_adopted")
+	assert_eq(status.get("playtest_state"), "paused_until_design_source_of_truth_baseline_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "modular_art_kit_integrated_pending_owner_review")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "design_reset_required_source_of_truth_adopted")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
 
 
@@ -23,7 +23,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 570)
-	assert_eq(int(validation.get("gut_asserts")), 10791)
+	assert_eq(int(validation.get("gut_asserts")), 10795)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 53)
@@ -45,16 +45,19 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 
 	assert_true(active_docs.has("docs/README.md"))
 	assert_true(active_docs.has("docs/CURRENT_STATE.md"))
-	assert_true(active_docs.has("docs/visual-production/README.md"))
-	assert_true(active_docs.has("docs/visual-production/00-art-language-rebuild-plan.md"))
-	assert_true(active_docs.has("docs/visual-production/01-modular-asset-kit-spec.md"))
-	assert_true(active_docs.has("docs/visual-production/02-art-rebuild-validation-plan.md"))
+	assert_true(active_docs.has("docs/design-source-of-truth/README.md"))
+	assert_true(active_docs.has("docs/design-source-of-truth/00-master-design-source-of-truth.md"))
+	assert_true(active_docs.has("docs/design-source-of-truth/01-vertical-slice-spec.md"))
+	assert_true(active_docs.has("docs/design-source-of-truth/02-store-design-world-building.md"))
+	assert_true(active_docs.has("docs/design-source-of-truth/03-asset-inventory-roadmap.md"))
+	assert_true(active_docs.has("docs/design-source-of-truth/04-validation-and-signoff.md"))
 	assert_true(active_docs.has("docs/production/04-backlog.md"))
 	assert_true(active_docs.has("docs/production/06-validation.md"))
 	assert_true(active_docs.has("docs/production/13-alpha-bug-list.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/screenshot-review.md"))
 	assert_false(active_docs.has("docs/design-planning/README.md"))
+	assert_false(active_docs.has("docs/visual-production/00-art-language-rebuild-plan.md"))
 	assert_false(active_docs.has("docs/visual-production/19-hard-visual-benchmark-rebuild.md"))
 	assert_false(active_docs.has("docs/production/15-alpha-playtest-package.md"))
 
@@ -64,10 +67,10 @@ func test_current_state_and_readme_point_to_new_plan() -> void:
 	var readme := FileAccess.get_file_as_string(README_PATH)
 
 	assert_string_contains(current_state, "docs/status.json")
-	assert_string_contains(current_state, "Art Language Rebuild Plan")
-	assert_string_contains(current_state, "cube")
+	assert_string_contains(current_state, "Design Source Of Truth")
+	assert_string_contains(current_state, "2002-2004")
 	assert_string_contains(readme, "docs/status.json")
-	assert_string_contains(readme, "Art Language Rebuild")
+	assert_string_contains(readme, "Design Source Of Truth")
 	assert_false(readme.contains("Prototype Visual Language Cleanup"))
 
 

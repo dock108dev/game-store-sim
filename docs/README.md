@@ -2,25 +2,27 @@
 
 This repo intentionally keeps a small active documentation set.
 
-The previous design-planning, broad production, beta/playtest-package, stockroom-production, and graybox visual docs were removed from the active tree because they contradicted the current goal: replacing the cube/label art language with a modular, approved game-shop visual kit.
+The previous broad production, beta/playtest-package, stockroom-production, graybox visual, hard-benchmark, and art-kit docs are no longer the active target when they conflict with the new design reset. The source of truth is now the design-source folder plus `docs/status.json`.
 
 ## Source Of Truth
 
 - [Current State](CURRENT_STATE.md): current build, blocker, validation snapshot, and next decision.
 - [Status JSON](status.json): machine-readable status contract used by tests.
+- [Design Source Of Truth](design-source-of-truth/README.md): active design authority.
 
-## Current Visual Plan
+## Design Source Docs
 
-- [Visual Production](visual-production/README.md): current visual direction and doc routing.
-- [Art Language Rebuild Plan](visual-production/00-art-language-rebuild-plan.md): phase-by-phase implementation plan.
-- [Modular Asset Kit Spec](visual-production/01-modular-asset-kit-spec.md): required folders, modules, materials, naming, and asset rules.
-- [Art Rebuild Validation Plan](visual-production/02-art-rebuild-validation-plan.md): automated and owner-review gates.
+- [Master Design Source Of Truth](design-source-of-truth/00-master-design-source-of-truth.md): core fantasy, non-negotiables, era, product rules, and design pillars.
+- [Vertical Slice Specification](design-source-of-truth/01-vertical-slice-spec.md): first validated slice, starting inventory, day loop, required systems, and out-of-scope boundaries.
+- [Store Design And World Building](design-source-of-truth/02-store-design-world-building.md): store personality, layout, density, zones, storytelling, customers, and hidden narrative boundaries.
+- [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md): implementation phases seeded from the 300-object asset inventory.
+- [Validation And Signoff](design-source-of-truth/04-validation-and-signoff.md): owner review, screenshot checks, and implementation cycle.
 
 ## Current Production Docs
 
 - [Backlog](production/04-backlog.md): current work queue and stop conditions.
 - [Validation](production/06-validation.md): full local gate and artifact policy.
-- [Visual Bug List](production/13-alpha-bug-list.md): current visual blockers.
+- [Visual Bug List](production/13-alpha-bug-list.md): current design/visual blockers.
 
 ## Current QA
 

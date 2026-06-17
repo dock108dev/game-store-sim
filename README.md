@@ -1,22 +1,31 @@
 # Game Store Sim
 
-First-person specialty video game retail simulator. The mechanical prototype is broad and validated; the visual baseline is not approved.
+First-person specialty video game retail simulator. The mechanical prototype is broad and validated; the active reset is design, world-building, visual quality, and store-read authenticity.
 
 ## Start Here
 
 Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first. Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
 
-The current visual direction is the [Art Language Rebuild](docs/visual-production/00-art-language-rebuild-plan.md). The old graybox, beta, broad-production, and hard-benchmark docs were removed because they kept routing work back toward cube-based scenes, label panels, and external-playtest readiness before the shop looks right.
+The active design authority is [Design Source Of Truth](docs/design-source-of-truth/README.md). It consolidates the owner-provided store/world brief, vertical slice spec, and 300-object asset inventory into repo-owned implementation docs.
+
+Older graybox, broad-production, beta, stockroom-production, hard-benchmark, and art-kit docs are not the active target if they disagree with the design source of truth.
 
 ## Current Rule
 
-Do not expand catalog visuals, customers, decorations, or external playtest packaging until the opening route has an approved modular art-kit baseline.
+Do not expand broad catalog visuals, customers, decoration breadth, hidden narrative, late-era content, or external playtest packaging until the opening store satisfies the design source of truth:
+
+- a small independent 2002-2004 game store
+- underfunded but functional
+- game-first, with visible used/new/platform sections
+- limited starting inventory with a clear growth path
+- fictional products and platforms that read without real brands
 
 The next implementation pass starts with:
 
-- [Art Language Rebuild Plan](docs/visual-production/00-art-language-rebuild-plan.md)
-- [Modular Asset Kit Spec](docs/visual-production/01-modular-asset-kit-spec.md)
-- [Art Rebuild Validation Plan](docs/visual-production/02-art-rebuild-validation-plan.md)
+- [Master Design Source Of Truth](docs/design-source-of-truth/00-master-design-source-of-truth.md)
+- [Vertical Slice Specification](docs/design-source-of-truth/01-vertical-slice-spec.md)
+- [Asset Inventory Roadmap](docs/design-source-of-truth/03-asset-inventory-roadmap.md)
+- [Validation And Signoff](docs/design-source-of-truth/04-validation-and-signoff.md)
 
 ## Validate
 
@@ -28,10 +37,10 @@ scripts/validate_godot.sh
 
 The gate writes logs, screenshots, and the contact sheet to `artifacts/validation/latest/`.
 
-Current validated baseline after the docs overhaul:
+Latest validated baseline:
 
-- 566 GUT tests.
-- 10705 GUT asserts.
+- 570 GUT tests.
+- 10795 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.
@@ -42,7 +51,7 @@ Current validated baseline after the docs overhaul:
 
 - [Docs Index](docs/README.md)
 - [Current State](docs/CURRENT_STATE.md)
-- [Visual Production](docs/visual-production/README.md)
+- [Design Source Of Truth](docs/design-source-of-truth/README.md)
 - [Backlog](docs/production/04-backlog.md)
 - [Validation](docs/production/06-validation.md)
 - [Visual Bug List](docs/production/13-alpha-bug-list.md)

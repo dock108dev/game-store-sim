@@ -30,7 +30,7 @@ func test_presentation_validation_matrix_covers_audio_vfx_and_camera_stops() -> 
 		assert_true(str(scenario.get("evidence", "")).begins_with("res://tests/gut/"), scenario_id)
 
 
-func test_presentation_manual_checks_stay_secondary_to_art_rebuild_gate() -> void:
+func test_presentation_manual_checks_stay_secondary_to_design_reset_gate() -> void:
 	var scenarios := _scenario_map(MANUAL_CHECKS_PATH)
 	var validation_doc := FileAccess.get_file_as_string(VALIDATION_DOC_PATH)
 	var screenshot_review := FileAccess.get_file_as_string(SCREENSHOT_REVIEW_PATH)
@@ -41,7 +41,7 @@ func test_presentation_manual_checks_stay_secondary_to_art_rebuild_gate() -> voi
 		assert_eq(scenario.get("status"), "manual", scenario_id)
 		assert_eq(scenario.get("owner"), "manual QA", scenario_id)
 
-	assert_string_contains(validation_doc, "art-language rebuild")
+	assert_string_contains(validation_doc, "design reset")
 	assert_string_contains(screenshot_review, "The question is not whether the project is mechanically complete")
 
 
