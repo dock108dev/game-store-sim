@@ -28,7 +28,7 @@ The gate runs:
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 570 GUT tests and 10823 GUT asserts.
+- Current doc-contract expectation: 570 GUT tests and 10825 GUT asserts.
 - UI scenario automation coverage: 508/628, or 80.9%.
 - Production script mapping coverage: 53/53, or 100.0%.
 - 3 active standalone validation tools.
@@ -42,7 +42,7 @@ Current validation snapshot:
 
 ## Design-Reset Validation
 
-For the current design reset, automated validation is necessary but insufficient. The pass is not approved unless owner review confirms that the opening store delivers the fantasy documented in `docs/design-source-of-truth/`.
+For the current design reset, automated validation is necessary but insufficient. The pass is not approved unless owner review confirms that the opening store delivers the fantasy documented in `docs/design-source-of-truth/` and the evidence requested by `docs/design-implementation/12-validation-and-screenshot-checklist.md`.
 
 Required evidence:
 
@@ -50,6 +50,7 @@ Required evidence:
 - full `scripts/validate_godot.sh` for production-route integration
 - regenerated contact sheet
 - manual 1280x720 walk-in review from entrance to checkout
+- implementation evidence review against `docs/design-implementation/12-validation-and-screenshot-checklist.md`
 - screenshot review against `docs/qa/screenshot-review.md`
 - source-of-truth checklist review against `docs/design-source-of-truth/04-validation-and-signoff.md`
 

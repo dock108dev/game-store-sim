@@ -5,7 +5,7 @@
   "current_phase": "design_reset_source_of_truth_adopted",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the owner-provided brief, vertical slice spec, and 300-object asset inventory as the new source of truth.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the design source of truth as canon and design-implementation docs as the execution plan.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -36,7 +36,7 @@
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 10823,
+    "gut_asserts": 10825,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -70,7 +70,7 @@
   ],
   "next_decision": {
     "question": "Does the next implementation pass make the opening store read as a small, underfunded, functional 2002-2004 independent game store with growth potential?",
-    "approve_path": "continue through the design-source asset roadmap phases until vertical-slice review is ready",
+    "approve_path": "continue through the design-implementation roadmap phases until vertical-slice review is ready",
     "reject_path": "correct the opening store first-read before broadening catalog, customer, decoration, hidden-narrative, or external-playtest work"
   },
   "active_docs": [

@@ -4,6 +4,8 @@ Use this after focused implementation work when you need a short playable sanity
 
 Target time: 10 to 15 minutes.
 
+This is evidence support for implementation packets. It does not define the next work item; start from `docs/design-implementation/README.md` for execution order.
+
 ## Setup
 
 1. Run `scripts/validate_godot.sh` if the production scene changed.

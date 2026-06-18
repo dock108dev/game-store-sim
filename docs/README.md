@@ -2,13 +2,27 @@
 
 This repo intentionally keeps a small active documentation set.
 
-The previous broad production, beta/playtest-package, stockroom-production, graybox visual, hard-benchmark, and art-kit docs are no longer the active target when they conflict with the new design reset. The source of truth is now the design-source folder plus `docs/status.json`.
+The previous broad production, beta/playtest-package, stockroom-production, graybox visual, hard-benchmark, and art-kit docs are no longer the active target when they conflict with the new design reset.
+
+## Routing Rules
+
+Agents start implementation work at [Design Implementation Index](design-implementation/README.md).
+
+The documentation hierarchy is:
+
+1. `docs/design-source-of-truth/`: design canon, owner decisions, era, fantasy, and quality bar.
+2. `docs/design-implementation/`: active execution plan, work slices, implementation roadmap, agent packet rules, and validation handoff.
+3. `docs/production/`: current status, validation baseline, and visual blocker tracking.
+4. `docs/qa/`: evidence procedures used when an implementation packet asks for screenshots, smoke checks, or owner review.
+
+If implementation instructions conflict, follow `docs/design-implementation/` unless it violates `docs/design-source-of-truth/`. If status or validation numbers conflict, `docs/status.json` and `docs/CURRENT_STATE.md` win.
 
 ## Source Of Truth
 
 - [Current State](CURRENT_STATE.md): current build, blocker, validation snapshot, and next decision.
 - [Status JSON](status.json): machine-readable status contract used by tests.
-- [Design Source Of Truth](design-source-of-truth/README.md): active design authority.
+- [Design Source Of Truth](design-source-of-truth/README.md): design canon and owner-decision authority.
+- [Design Implementation Index](design-implementation/README.md): active agent execution entrypoint.
 
 ## Design Source Docs
 

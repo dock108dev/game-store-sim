@@ -23,7 +23,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 570)
-	assert_eq(int(validation.get("gut_asserts")), 10823)
+	assert_eq(int(validation.get("gut_asserts")), 10825)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 53)
@@ -82,9 +82,11 @@ func test_current_state_and_readme_point_to_new_plan() -> void:
 
 	assert_string_contains(current_state, "docs/status.json")
 	assert_string_contains(current_state, "Design Source Of Truth")
+	assert_string_contains(current_state, "Design Implementation Index")
 	assert_string_contains(current_state, "2002-2004")
 	assert_string_contains(readme, "docs/status.json")
 	assert_string_contains(readme, "Design Source Of Truth")
+	assert_string_contains(readme, "Design Implementation Index")
 	assert_false(readme.contains("Prototype Visual Language Cleanup"))
 
 

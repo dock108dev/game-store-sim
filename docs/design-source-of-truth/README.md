@@ -1,10 +1,14 @@
 # Design Source Of Truth
 
-This folder is now the active design authority for the game.
+This folder is the design canon for the game.
 
-The current gameplay functionality is broadly useful. The reset is about design, world-building, visual goals, asset priorities, and validation criteria. If another doc disagrees with this folder or `docs/status.json`, update the older doc or treat it as historical.
+The current gameplay functionality is broadly useful. The reset is about design, world-building, visual goals, asset priorities, and validation criteria.
 
-## Active Docs
+Use this folder to understand what the game must feel like and what owner decisions are locked. Do not use this folder as the day-to-day implementation queue. Active execution starts in `docs/design-implementation/README.md`, which slices this canon into agent-ready implementation work.
+
+If another doc disagrees with this folder on fantasy, era, store identity, product rules, or quality bar, update the older doc or treat it as historical. If implementation sequencing disagrees, follow `docs/design-implementation/` unless it violates this canon.
+
+## Canon Docs
 
 - [Master Design Source Of Truth](00-master-design-source-of-truth.md): core fantasy, non-negotiables, era, product rules, and design pillars.
 - [Vertical Slice Specification](01-vertical-slice-spec.md): what the first validated slice must prove and what stays out of scope.

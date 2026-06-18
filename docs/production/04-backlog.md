@@ -4,19 +4,21 @@ For current status and validation numbers, read `docs/CURRENT_STATE.md` and `doc
 
 ## Current Phase
 
-Design reset source of truth adopted.
+Design reset implementation planning is complete.
 
 Goal: turn the owner-provided store/world brief, vertical slice spec, and 300-object asset inventory into implementation work that makes the opening store read as a small, independent, underfunded but functional 2002-2004 game store.
 
 ## Active Work
 
-1. Keep `docs/design-source-of-truth/` as the active authority.
-2. Implement [Asset Inventory Roadmap](../design-source-of-truth/03-asset-inventory-roadmap.md) Phase 1: store shell and first read.
-3. Preserve the existing gameplay mechanics while replacing the visual/design surface.
-4. Run focused source-of-truth tests after docs or contract changes.
-5. Run `scripts/validate_godot.sh` before completion.
-6. Review `main_scene.png`, `storefront_entry.png`, `register_counter.png`, `stocked_aisle.png`, `receiving_area.png`, and `backroom_summary.png` against [Screenshot Review](../qa/screenshot-review.md).
-7. Capture owner corrections before moving to Phase 2.
+1. Start implementation work from [Design Implementation Index](../design-implementation/README.md).
+2. Assemble concrete implementation packets using [Agent Work Packet Template](../design-implementation/13-agent-work-packet-template.md).
+3. Follow [Phase Implementation Roadmap](../design-implementation/14-phase-implementation-roadmap.md) until validation fails, a blocker appears, or owner input is required.
+4. Preserve existing gameplay mechanics while replacing the visual/design surface.
+5. Keep `docs/design-source-of-truth/` as the design canon for owner decisions and quality bar.
+6. Run focused tests for changed scene/doc contracts during implementation.
+7. Run `scripts/validate_godot.sh` before implementation completion.
+8. Review required screenshots against [Validation And Screenshot Checklist](../design-implementation/12-validation-and-screenshot-checklist.md) and [Screenshot Review](../qa/screenshot-review.md).
+9. Capture owner corrections before moving to tester/beta readiness.
 
 ## Paused Work
 
@@ -28,7 +30,7 @@ Goal: turn the owner-provided store/world brief, vertical slice spec, and 300-ob
 - Multi-day visual playtest.
 - External alpha/beta packaging.
 
-These resume only after the opening store satisfies the design source of truth and the owner approves the next implementation stage.
+These resume only after the opening store satisfies the design source of truth, completes the implementation roadmap review package, and the owner approves the next stage.
 
 ## Stop Conditions
 
@@ -50,3 +52,4 @@ Every implementation pass must keep:
 - `docs/status.json` and `docs/CURRENT_STATE.md` current
 - `docs/production/13-alpha-bug-list.md` current for design/visual blockers
 - `docs/design-source-of-truth/` updated when the owner makes a design decision
+- `docs/design-implementation/` updated when execution scope, phase order, evidence, or agent packet rules change

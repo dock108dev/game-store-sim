@@ -1,8 +1,10 @@
 # Screenshot Review
 
-This is the current design/visual approval gate.
+This is the screenshot evidence procedure for the current design/visual approval gate.
 
 The question is not whether the project is mechanically complete. The question is whether the opening route reads as a small, underfunded, functional 2002-2004 independent game store with visible growth potential.
+
+Use this after an implementation packet or [Validation And Screenshot Checklist](../design-implementation/12-validation-and-screenshot-checklist.md) calls for screenshots. Do not use this file as an independent implementation roadmap.
 
 ## Generate
 
@@ -58,4 +60,4 @@ Fail if:
 
 ## Routing
 
-If the review fails, keep work inside the design-source implementation roadmap. Do not expand catalog, customer, decoration, hidden narrative, later-era, or external-playtest work to compensate for a weak opening store.
+If the review fails, keep work inside [Phase Implementation Roadmap](../design-implementation/14-phase-implementation-roadmap.md). Do not expand catalog, customer, decoration, hidden narrative, later-era, or external-playtest work to compensate for a weak opening store.

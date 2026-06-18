@@ -1,12 +1,12 @@
 # Current State
 
-This is the authoritative handoff for the repo. If another doc disagrees with this page, `docs/status.json`, or `docs/design-source-of-truth/`, update or remove the older doc.
+This is the authoritative handoff for the repo. If another doc disagrees with this page, `docs/status.json`, `docs/design-source-of-truth/`, or `docs/design-implementation/`, update or remove the older doc.
 
 ## Build State
 
 The game is a broad validated first-person retail prototype. Core mechanics are working: movement, click-first interaction, receiving, carrying, pricing, stocking, register sales, returns, trade-ins, preorders, services, supplier ordering, release allocation, fixture placement, backroom computer workflows, save/load, settings, pause/menu, and optional hidden-thread hooks.
 
-The design and visual target is being reset. The owner-provided store/world brief, vertical slice spec, and 300-object asset inventory are now consolidated into [Design Source Of Truth](design-source-of-truth/README.md).
+The design and visual target is being reset. The owner-provided store/world brief, vertical slice spec, and 300-object asset inventory are consolidated into [Design Source Of Truth](design-source-of-truth/README.md). Active execution is sliced in [Design Implementation Index](design-implementation/README.md).
 
 ## Current Blocker
 
@@ -14,13 +14,19 @@ External playtest and broad visual expansion are paused.
 
 The active blocker is: rebuild the opening store so it reads as a small, independent, underfunded but functional 2002-2004 specialty game store with visible growth potential.
 
-Start with:
+For design intent, read:
 
 - [Master Design Source Of Truth](design-source-of-truth/00-master-design-source-of-truth.md)
 - [Vertical Slice Specification](design-source-of-truth/01-vertical-slice-spec.md)
 - [Store Design And World Building](design-source-of-truth/02-store-design-world-building.md)
 - [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md)
 - [Validation And Signoff](design-source-of-truth/04-validation-and-signoff.md)
+
+For implementation, start with:
+
+- [Design Implementation Index](design-implementation/README.md)
+- [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md)
+- [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md)
 
 ## Validation Snapshot
 
@@ -32,7 +38,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 570 GUT tests and 10823 asserts.
+- Current doc-contract expectation is 570 GUT tests and 10825 asserts.
 - UI scenario automation coverage is 508/628, or 80.9%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.
@@ -65,16 +71,14 @@ Rejected path:
 
 ## Next Implementation Pass
 
-Use [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md) Phase 1 as the next build target:
+Use [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md) as the next build target. The next step is packet assembly using [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md), then implementation proceeds through the roadmap phases:
 
-1. Storefront glass door.
-2. Front window poster bay.
-3. Configurable fictional logo sign.
-4. Low-pile carpet material.
-5. Fluorescent light bank.
-6. Cash wrap wall panel.
-7. Slatwall modules.
-8. Preserve movement, entrance, counter reachability, receiving, trade-ins, ordering, stocking, and register workflows.
+1. Visual module foundation.
+2. Store shell, mall entrance, and real stockroom layout.
+3. Fixtures, checkout, and day-one setup loop.
+4. Product, platform, signage, and promotions.
+5. Lighting, materials, density, and integration polish.
+6. Review package, owner correction loop, then tester readiness only after approval.
 
 Stop if the implementation would change core mechanics instead of replacing the visual/design surface.
 
@@ -84,12 +88,14 @@ Stop if the implementation would change core mechanics instead of replacing the 
 2. Run `scripts/validate_godot.sh`.
 3. Review the regenerated production contact sheet.
 4. Do a real-window 1280x720 walk-in from entrance to checkout.
-5. Decide whether Phase 1 makes the store read as a small early-2000s independent game store, or whether it needs corrections before Phase 2.
+5. Review against [Validation And Screenshot Checklist](design-implementation/12-validation-and-screenshot-checklist.md).
+6. Decide whether the implementation roadmap phase makes the store read as a small early-2000s independent game store, or whether it needs corrections before proceeding.
 
 ## Active Documentation
 
 - [Documentation Index](README.md)
 - [Design Source Of Truth](design-source-of-truth/README.md)
+- [Design Implementation Index](design-implementation/README.md)
 - [Backlog](production/04-backlog.md)
 - [Validation](production/06-validation.md)
 - [Visual Bug List](production/13-alpha-bug-list.md)
