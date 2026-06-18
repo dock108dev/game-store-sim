@@ -2,9 +2,9 @@
 
 ## Goal
 
-Define the first playable store layout without redesigning the full footprint.
+Define the first playable store layout while preserving proven mechanics.
 
-The current proof of concept established working mechanics. This slice keeps the broad footprint and functional flow, but the visual layout must stop reading as a strange half-wall back area and become a believable small game store with a real stockroom, clear sales floor, and configurable player-placed merchandising.
+The current proof of concept established working mechanics. This slice may keep, adjust, or redesign the footprint and world placement if that produces a stronger store. The visual layout must stop reading as a strange half-wall back area and become a believable small game store with a real stockroom, clear sales floor, and configurable player-placed merchandising.
 
 ## Player-Facing Result
 
@@ -21,8 +21,7 @@ The store should feel underfunded and ready to set up, not empty because art is 
 
 ## Owner Decisions Captured
 
-- Do not redesign the whole footprint.
-- Keep the proof-of-concept functionality, but visually redesign the space.
+- Preserve proof-of-concept functionality, but allow the footprint, storefront side, world placement, or store size to change if that materially improves the visual target.
 - The store needs a real stockroom, not a half-wall with objects behind it.
 - Checkout should be near the middle of the room against the left or right wall, which matches common small game-store layouts.
 - Used games wall placement should be customizable by the player.
@@ -66,7 +65,7 @@ Feeds:
 
 ## In Scope
 
-- Keep existing broad store footprint.
+- Preserve the existing gameplay flows and store systems.
 - Define sales floor, checkout wall, and stockroom relationship.
 - Replace half-wall backroom read with real stockroom architecture.
 - Define backroom door/doorway location in a back corner.
@@ -77,32 +76,39 @@ Feeds:
 
 ## Out Of Scope
 
-- Full floorplan redesign.
 - Multiple stores.
-- Exterior architecture beyond the entrance slice.
+- Broad exterior/mall architecture beyond what is needed to fit the store well in the world.
 - Final mature store density.
 - Employees.
 - Customers before opening.
 - Fixed permanent category zones that prevent player customization.
 - Full stockroom production art pass beyond the architectural requirement that it is a real room.
 
-## Footprint Rule
+## Footprint And World-Fit Rule
 
-Implementation should preserve the broad footprint unless a small adjustment is required for navigation, doorway clarity, or stockroom believability.
+Implementation may preserve, adjust, or redesign the store footprint if that produces a better game-store read.
 
-Allowed footprint changes:
+Allowed changes:
 
+- change store size class if the result better fits a small independent shop
+- move the storefront to another side
+- redesign the sales floor footprint
+- create or adjust the surrounding world/global space so the store fits naturally
+- change how the store is added into the world
 - add a proper stockroom wall/door/doorframe
 - move/remove the half-wall that currently makes the backroom feel fake
 - adjust local wall segments for entry/stockroom readability
 - move existing placeholder fixtures to support the layout
 
-Not allowed without owner review:
+Hard requirements:
 
-- changing the store into a different size class
-- moving the storefront to a different side
-- removing the stockroom/backroom function
-- redesigning the whole shop into a new footprint
+- preserve the functioning retail loop
+- preserve player movement and interaction
+- preserve receiving, stocking, pricing, register, and customer-flow compatibility
+- include a real stockroom/backroom function
+- keep sales floor zones player-driven through fixture placement
+
+The goal is not to protect the old footprint. The goal is to protect working gameplay while allowing the store shape to become visually credible.
 
 ## Sales Floor Zones
 
@@ -240,7 +246,7 @@ Avoid changing register, stocking, receiving, or customer-sale core mechanics un
 
 Future implementation should add or update focused tests for:
 
-- store retains broad footprint while replacing the back half-wall read
+- store footprint/world placement supports a believable small game shop
 - stockroom has a back-corner door/doorway
 - stockroom reads as staff-only architecture
 - checkout is against a side wall near middle store depth
@@ -271,7 +277,7 @@ Manual review:
 
 Pass only if:
 
-- current footprint is mostly preserved
+- footprint and world placement support the store fantasy
 - stockroom reads as a real room
 - backroom door/doorway is in a back corner
 - sales floor is clearly separate from stockroom
@@ -287,7 +293,7 @@ Pass only if:
 
 Fail if:
 
-- implementation redesigns the whole footprint without owner approval
+- implementation preserves the old footprint even though it prevents a believable store
 - stockroom is still a half-wall or exposed back corner with clutter
 - used/new/demo/guides/bargain zones are fixed in a way that blocks player store-design control
 - opening stock looks mature or falsely full
@@ -299,7 +305,7 @@ Fail if:
 
 Stop and ask if:
 
-- preserving the current footprint prevents a believable stockroom
+- footprint or world placement changes would break proven mechanics
 - checkout placement cannot work on either side wall without route problems
 - fixture customization conflicts with current stocking/category mechanics
 - customer off-world spawn requires a broader simulation decision
