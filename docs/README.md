@@ -18,6 +18,10 @@ The previous broad production, beta/playtest-package, stockroom-production, gray
 - [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md): implementation phases seeded from the 300-object asset inventory.
 - [Validation And Signoff](design-source-of-truth/04-validation-and-signoff.md): owner review, screenshot checks, and implementation cycle.
 
+## Design Implementation Docs
+
+- [Design Implementation Index](design-implementation/README.md): agent operating rules, running document list, dependency model, and slice completion definition.
+
 ## Current Production Docs
 
 - [Backlog](production/04-backlog.md): current work queue and stop conditions.
