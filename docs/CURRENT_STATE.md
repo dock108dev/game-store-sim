@@ -32,7 +32,7 @@ scripts/validate_godot.sh
 
 Latest validated baseline:
 
-- 570 GUT tests and 10799 asserts pass.
+- 570 GUT tests and 10801 asserts pass.
 - UI scenario automation coverage is 508/628, or 80.9%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.

@@ -36,7 +36,7 @@
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 10799,
+    "gut_asserts": 10801,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -86,6 +86,7 @@
     "docs/design-source-of-truth/04-validation-and-signoff.md",
     "docs/design-implementation/README.md",
     "docs/design-implementation/02-visual-module-system-spec.md",
+    "docs/design-implementation/03-store-shell-and-mall-entrance-slice.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",

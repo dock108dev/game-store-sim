@@ -22,6 +22,7 @@ The previous broad production, beta/playtest-package, stockroom-production, gray
 
 - [Design Implementation Index](design-implementation/README.md): agent operating rules, running document list, dependency model, and slice completion definition.
 - [Visual Module System Spec](design-implementation/02-visual-module-system-spec.md): reusable module system, asset workflow, grid, collision, texture, material, and upgradeability rules.
+- [Store Shell And Mall Entrance Slice](design-implementation/03-store-shell-and-mall-entrance-slice.md): opening spawn, retail corridor, `Games4U` storefront, open door, and no-NPC first read.
 
 ## Current Production Docs
 
