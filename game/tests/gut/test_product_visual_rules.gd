@@ -28,6 +28,10 @@ func test_used_disc_game_profile_uses_case_disc_and_box_variants() -> void:
 	assert_eq(profile.get("state_variant"), ProductVisualRules.VARIANT_BOX)
 	assert_true((profile.get("variant_keys") as Array).has(ProductVisualRules.VARIANT_DISC))
 	assert_true(profile.get("show_spine"))
+	assert_true(profile.has("platform_color"))
+	assert_true(profile.has("genre_color"))
+	assert_true(profile.get("show_genre_accent"))
+	assert_true(profile.get("show_used_sticker"))
 
 
 func test_loose_cartridge_profile_uses_loose_and_cartridge_variants() -> void:
@@ -42,11 +46,29 @@ func test_loose_cartridge_profile_uses_loose_and_cartridge_variants() -> void:
 
 
 func test_sealed_disc_profile_marks_seal_variant() -> void:
-	var product := _make_product("used_game", "disc", "sealed")
+	var product := _make_product("new_game", "disc", "sealed")
 	var profile := ProductVisualRules.build_profile(product)
 
 	assert_eq(profile.get("state_variant"), ProductVisualRules.VARIANT_SEALED)
 	assert_true((profile.get("variant_keys") as Array).has(ProductVisualRules.VARIANT_SEALED))
+	assert_false(profile.get("show_used_sticker"))
+
+
+func test_platform_and_genre_colors_are_distinct_visual_signals() -> void:
+	var sports := _make_product("new_game", "disc", "sealed")
+	sports.platform_family = "nova_disc"
+	sports.genre_id = "sports"
+	var adventure := _make_product("new_game", "cartridge", "sealed")
+	adventure.platform_family = "pocket_handheld"
+	adventure.genre_id = "rpg_adventure"
+
+	var sports_profile := ProductVisualRules.build_profile(sports)
+	var adventure_profile := ProductVisualRules.build_profile(adventure)
+
+	assert_ne(sports_profile.get("platform_color"), sports_profile.get("genre_color"))
+	assert_ne(adventure_profile.get("platform_color"), adventure_profile.get("genre_color"))
+	assert_ne(sports_profile.get("genre_color"), adventure_profile.get("genre_color"))
+	assert_ne(sports_profile.get("platform_color"), adventure_profile.get("platform_color"))
 
 
 func test_hardware_profiles_choose_boxed_device_variants() -> void:

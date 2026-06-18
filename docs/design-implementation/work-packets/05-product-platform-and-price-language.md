@@ -1,6 +1,6 @@
 # Work Packet: Product Platform And Price Language
 
-Status: Not started
+Status: Complete
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/07-product-and-platform-visual-language-spec.md`
@@ -150,6 +150,8 @@ Required final screenshots:
 | Decision | Reason | Owner/Lead Needed? | Follow-up |
 | --- | --- | --- | --- |
 | Starter product set stays small. | Owner wants day one to start with two games, one console, and one accessory, then unlock more. | No | Expansion comes after opening baseline approval. |
+| `Footy 2002` and `Aether Quest` are working implementation names, not cleared ship names. | The owner approved using working names for planning/implementation, but legal/name clearance is still a later review step. | No | Keep name-clearance review before final ship packaging. |
+| Platform naming preserves current code schema. | Current data and tests use `Nova Cube`, `Orbit 64`, `Pocket Star`, and `Service Bench`; renaming to the broader planning labels would be a larger taxonomy migration. | No | Later taxonomy pass can align display aliases if needed. |
 
 ## Stop Conditions
 
@@ -175,3 +177,27 @@ Required final screenshots:
 - Starter product names and visual mappings
 - Known residual issues
 - Owner/lead decisions needed
+
+## Completion Notes
+
+Completed implementation:
+
+- Added `franchise_id` and `genre_id` product metadata with safe inference for existing catalog entries.
+- Added day-one starter product definitions for `Footy 2002` and `Aether Quest`.
+- Added data-driven platform and genre color rules to `ProductVisualRules`.
+- Updated `ProductItem` so case body, cover panel, platform band, genre accent, cover-detail marks, used sticker, title, and case price label render from product data.
+- Updated the authored day-one display cases in `store_world.tscn` so the starter sports/RPG cases have physical title and price cues.
+- Preserved catalog, pricing, stocking, trade-in, receiving, and sale mechanics.
+- Added coverage for starter catalog metadata, platform/genre color separation, new/used sticker behavior, case price labels, and day-one display labels.
+
+Validation evidence:
+
+- Focused/full GUT command: `"$GODOT_BIN" --headless --path game --script res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json -gexit`
+- Result before full gate: 578/578 tests passed, 11582 asserts.
+- Full production gate passed with regenerated screenshot artifacts before commit.
+
+Residual issues:
+
+- Cover art is still code-authored blockout geometry, not final bitmap cover art.
+- The starter product names are implementation placeholders pending name/legal review.
+- The broader store still contains several sign/label surfaces that packet 06 must convert from utility labels into believable retail signage.

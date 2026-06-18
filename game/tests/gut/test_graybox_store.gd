@@ -241,9 +241,12 @@ func test_opening_visual_asset_pass_has_starter_products_and_first_corner() -> v
 		"StarterNewGameCaseA",
 		"StarterNewGameCaseA/StarterNewGameCaseACoverStripe",
 		"StarterNewGameCaseA/StarterNewGameCaseAPriceTag",
+		"StarterNewGameCaseA/StarterNewGameCaseAGenreBadge",
 		"StarterNewGameCaseB",
 		"StarterNewGameCaseB/StarterNewGameCaseBCoverStripe",
 		"StarterNewGameCaseB/StarterNewGameCaseBPlatformBand",
+		"StarterNewGameCaseB/StarterNewGameCaseBQuestSigil",
+		"StarterNewGameCaseB/StarterNewGameCaseBPriceTag",
 		"StarterConsoleBox",
 		"StarterConsoleBox/StarterConsoleBoxHandle",
 		"StarterConsoleBox/StarterConsoleBoxScreenGraphic",
@@ -260,6 +263,11 @@ func test_opening_visual_asset_pass_has_starter_products_and_first_corner() -> v
 		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
 		assert_not_null(prop, prop_path)
 		assert_false(prop.use_collision, prop_path)
+
+	assert_eq((_store.get_node("StarterNewGameCaseA/StarterNewGameCaseATitleLabel") as Label3D).text, "FOOTY 2002")
+	assert_eq((_store.get_node("StarterNewGameCaseA/StarterNewGameCaseAPriceLabel") as Label3D).text, "New $49.99")
+	assert_eq((_store.get_node("StarterNewGameCaseB/StarterNewGameCaseBTitleLabel") as Label3D).text, "AETHER QUEST")
+	assert_eq((_store.get_node("StarterNewGameCaseB/StarterNewGameCaseBPriceLabel") as Label3D).text, "New $39.99")
 
 	var first_corner_boxes := [
 		"FirstInteriorBenchmarkSlatwall",

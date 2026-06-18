@@ -4,6 +4,8 @@ class_name ProductDefinition
 @export var product_id: String = ""
 @export var display_name: String = ""
 @export var category: String = "used_game"
+@export var franchise_id: String = ""
+@export var genre_id: String = ""
 @export var platform: String = ""
 @export var platform_family: String = ""
 @export var condition: String = "good"
@@ -24,6 +26,7 @@ class_name ProductDefinition
 func describe() -> String:
 	var details := [
 		display_name,
+		get_genre_id(),
 		platform,
 		get_platform_family(),
 		condition.capitalize(),
@@ -41,6 +44,36 @@ func get_platform_family() -> String:
 	if not platform_family.strip_edges().is_empty():
 		return platform_family.strip_edges()
 	return platform.strip_edges()
+
+
+func get_franchise_id() -> String:
+	if not franchise_id.strip_edges().is_empty():
+		return franchise_id.strip_edges()
+	return product_id.strip_edges()
+
+
+func get_genre_id() -> String:
+	if not genre_id.strip_edges().is_empty():
+		return genre_id.strip_edges()
+
+	var normalized := display_name.to_lower()
+	if normalized.contains("footy") or normalized.contains("rodeo") or normalized.contains("rally") or normalized.contains("rival"):
+		return "sports"
+	if normalized.contains("prix") or normalized.contains("drift") or normalized.contains("turbo"):
+		return "racing"
+	if normalized.contains("aether") or normalized.contains("quest") or normalized.contains("fable") or normalized.contains("dungeon"):
+		return "rpg_adventure"
+	if normalized.contains("garden") or normalized.contains("farm") or normalized.contains("bubble"):
+		return "family"
+	if category == "hardware":
+		return "hardware"
+	if category == "accessory":
+		return "accessory"
+	if category == "service":
+		return "service"
+	if demand_tier == "high":
+		return "action"
+	return "general"
 
 
 func get_risk_summary() -> String:
@@ -79,6 +112,8 @@ func get_schema_summary() -> Dictionary:
 		"product_id": product_id,
 		"display_name": display_name,
 		"category": category,
+		"franchise_id": get_franchise_id(),
+		"genre_id": get_genre_id(),
 		"platform": platform,
 		"platform_family": get_platform_family(),
 		"format": format,

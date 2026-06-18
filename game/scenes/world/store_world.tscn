@@ -2578,6 +2578,32 @@ size = Vector3(0.052, 0.042, 0.014)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.052, -0.095, -0.03)
 material = SubResource("StandardMaterial3D_sign_gold")
 
+[node name="StarterNewGameCaseAGenreBadge" type="CSGBox3D" parent="StarterNewGameCaseA"]
+use_collision = false
+size = Vector3(0.11, 0.035, 0.014)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.015, -0.03, -0.034)
+material = SubResource("StandardMaterial3D_product_green")
+
+[node name="StarterNewGameCaseATitleLabel" type="Label3D" parent="StarterNewGameCaseA"]
+pixel_size = 0.00145
+modulate = Color(0.98, 0.96, 0.84, 1)
+outline_modulate = Color(0.02, 0.025, 0.03, 1)
+outline_size = 1
+no_depth_test = true
+text = "FOOTY 2002"
+font_size = 9
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.006, 0.118, -0.043)
+
+[node name="StarterNewGameCaseAPriceLabel" type="Label3D" parent="StarterNewGameCaseA"]
+pixel_size = 0.0012
+modulate = Color(0.04, 0.045, 0.04, 1)
+outline_modulate = Color(0.98, 0.9, 0.62, 1)
+outline_size = 1
+no_depth_test = true
+text = "New $49.99"
+font_size = 7
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.052, -0.095, -0.045)
+
 [node name="StarterNewGameCaseB" type="CSGBox3D" parent="."]
 size = Vector3(0.19, 0.31, 0.045)
 transform = Transform3D(0.819152, 0, 0.573576, 0, 1, 0, -0.573576, 0, 0.819152, -0.35, 1.0, -4.22)
@@ -2592,6 +2618,38 @@ material = SubResource("StandardMaterial3D_product_green")
 size = Vector3(0.034, 0.28, 0.014)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.072, 0, -0.031)
 material = SubResource("StandardMaterial3D_door")
+
+[node name="StarterNewGameCaseBQuestSigil" type="CSGBox3D" parent="StarterNewGameCaseB"]
+use_collision = false
+size = Vector3(0.075, 0.075, 0.014)
+transform = Transform3D(0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0, 1, -0.012, 0.01, -0.034)
+material = SubResource("StandardMaterial3D_sign_gold")
+
+[node name="StarterNewGameCaseBTitleLabel" type="Label3D" parent="StarterNewGameCaseB"]
+pixel_size = 0.0014
+modulate = Color(0.98, 0.96, 0.84, 1)
+outline_modulate = Color(0.02, 0.025, 0.03, 1)
+outline_size = 1
+no_depth_test = true
+text = "AETHER QUEST"
+font_size = 9
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.004, 0.118, -0.043)
+
+[node name="StarterNewGameCaseBPriceTag" type="CSGBox3D" parent="StarterNewGameCaseB"]
+use_collision = false
+size = Vector3(0.052, 0.042, 0.014)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.052, -0.095, -0.03)
+material = SubResource("StandardMaterial3D_sign_gold")
+
+[node name="StarterNewGameCaseBPriceLabel" type="Label3D" parent="StarterNewGameCaseB"]
+pixel_size = 0.0012
+modulate = Color(0.04, 0.045, 0.04, 1)
+outline_modulate = Color(0.98, 0.9, 0.62, 1)
+outline_size = 1
+no_depth_test = true
+text = "New $39.99"
+font_size = 7
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.052, -0.095, -0.045)
 
 [node name="StarterConsoleBox" type="CSGBox3D" parent="."]
 size = Vector3(0.58, 0.32, 0.22)

@@ -52,10 +52,16 @@ func apply_product_visuals() -> void:
 	_set_node_visible("SpineStripeMesh", bool(_visual_profile.get("show_spine", true)))
 	_set_node_visible("PlatformBandMesh", bool(_visual_profile.get("show_platform_band", true)))
 	_set_node_visible("PriceStickerMesh", bool(_visual_profile.get("show_price_sticker", true)))
+	_apply_mesh_material("CaseMesh", _visual_profile.get("case_body_color", Color(0.035, 0.055, 0.07, 1.0)))
+	_apply_mesh_material("CoverLabelMesh", _visual_profile.get("cover_base_color", Color(0.22, 0.74, 0.62, 1.0)))
+	_apply_mesh_material("SpineStripeMesh", _visual_profile.get("platform_color", Color(0.96, 0.82, 0.38, 1.0)))
+	_apply_mesh_material("PlatformBandMesh", _visual_profile.get("platform_color", Color(0.16, 0.32, 0.92, 1.0)))
+	_apply_mesh_material("PriceStickerMesh", _visual_profile.get("price_sticker_color", Color(0.98, 0.9, 0.62, 1.0)))
 
 	var container_variant := str(_visual_profile.get("container_variant", ""))
 	var media_variant := str(_visual_profile.get("media_variant", ""))
 	var state_variant := str(_visual_profile.get("state_variant", ""))
+	var show_cover_detail := bool(_visual_profile.get("show_cover", true))
 
 	_set_variant_box(
 		"MediaVariantMesh",
@@ -91,6 +97,41 @@ func apply_product_visuals() -> void:
 		_visual_profile.get("service_ticket_size", Vector3(0.18, 0.24, 0.012)),
 		_visual_profile.get("service_ticket_position", Vector3(0.0, 0.18, -0.04)),
 		Color(0.98, 0.93, 0.72, 1.0)
+	)
+	_set_variant_box(
+		"GenreAccentMesh",
+		bool(_visual_profile.get("show_genre_accent", true)),
+		Vector3(0.165, 0.035, 0.014),
+		Vector3(0.006, 0.09, -0.056),
+		_visual_profile.get("genre_color", Color(0.72, 0.62, 0.5, 1.0))
+	)
+	_set_variant_box(
+		"CoverHeroShapeMesh",
+		show_cover_detail,
+		Vector3(0.078, 0.078, 0.014),
+		Vector3(-0.042, 0.208, -0.058),
+		_visual_profile.get("genre_accent_color", Color(0.88, 0.8, 0.62, 1.0))
+	)
+	_set_variant_box(
+		"CoverDetailLineA",
+		show_cover_detail,
+		Vector3(0.118, 0.012, 0.014),
+		Vector3(0.022, 0.248, -0.059),
+		_visual_profile.get("platform_accent_color", Color(0.78, 0.92, 1.0, 1.0))
+	)
+	_set_variant_box(
+		"CoverDetailLineB",
+		show_cover_detail,
+		Vector3(0.088, 0.012, 0.014),
+		Vector3(0.036, 0.152, -0.059),
+		_visual_profile.get("platform_accent_color", Color(0.78, 0.92, 1.0, 1.0))
+	)
+	_set_variant_box(
+		"UsedStickerMesh",
+		bool(_visual_profile.get("show_used_sticker", false)),
+		Vector3(0.086, 0.036, 0.016),
+		Vector3(-0.044, 0.074, -0.061),
+		_visual_profile.get("used_sticker_color", Color(0.98, 0.82, 0.36, 1.0))
 	)
 
 	var condition_cues := _visual_profile.get("condition_cues", []) as Array
@@ -136,6 +177,9 @@ func apply_product_visuals() -> void:
 		Vector3(0.082, 0.075, -0.058),
 		Color(0.95, 0.28, 0.18, 1.0)
 	)
+	_apply_case_title_label()
+	_apply_case_price_label()
+	_apply_used_sticker_label()
 	_apply_price_tag_label()
 
 
@@ -152,6 +196,12 @@ func get_price_tag_lines() -> Array[String]:
 		lines.append(" ".join(badges))
 
 	return lines
+
+
+func get_case_price_label_text() -> String:
+	if product == null:
+		return ""
+	return "%s $%0.2f" % [_get_condition_label(), current_price_cents / 100.0]
 
 
 func get_interaction_prompt() -> String:
@@ -196,6 +246,8 @@ func set_sold() -> void:
 func set_hovered(is_hovered: bool) -> void:
 	_is_hovered = is_hovered
 	_set_hover_highlight_visible(_is_hovered)
+	if product != null:
+		_apply_price_tag_label()
 
 
 func is_hovered() -> bool:
@@ -294,6 +346,20 @@ func _apply_box_mesh_size(node_name: String, size: Vector3) -> void:
 	node.mesh = local_mesh
 
 
+func _apply_mesh_material(node_name: String, color: Color) -> void:
+	var node := get_node_or_null(node_name) as MeshInstance3D
+	if node == null:
+		return
+
+	var mesh := node.mesh as BoxMesh
+	if mesh == null:
+		return
+
+	var local_mesh := mesh.duplicate() as BoxMesh
+	local_mesh.material = _make_material(color)
+	node.mesh = local_mesh
+
+
 func _set_variant_box(
 	node_name: String,
 	is_visible: bool,
@@ -321,10 +387,87 @@ func _set_condition_cue_box(
 	_set_variant_box(node_name, is_visible, size, position, color)
 
 
+func _apply_case_title_label() -> void:
+	if product == null:
+		return
+
+	var title := product.display_name
+	if title.length() > 18:
+		title = title.substr(0, 18)
+	_apply_case_label(
+		"CaseTitleLabel",
+		title.to_upper(),
+		bool(_visual_profile.get("show_cover", true)),
+		Vector3(0.0, 0.292, -0.073),
+		0.00155,
+		9,
+		Color(0.98, 0.96, 0.84, 1.0)
+	)
+
+
+func _apply_case_price_label() -> void:
+	_apply_case_label(
+		"CasePriceLabel",
+		get_case_price_label_text(),
+		bool(_visual_profile.get("show_price_sticker", true)),
+		Vector3(0.065, 0.075, -0.074),
+		0.00132,
+		7,
+		Color(0.05, 0.06, 0.065, 1.0)
+	)
+
+
+func _apply_used_sticker_label() -> void:
+	_apply_case_label(
+		"UsedStickerLabel",
+		"USED",
+		bool(_visual_profile.get("show_used_sticker", false)),
+		Vector3(-0.044, 0.074, -0.076),
+		0.0014,
+		8,
+		Color(0.05, 0.055, 0.04, 1.0)
+	)
+
+
+func _apply_case_label(
+	node_name: String,
+	text: String,
+	is_visible: bool,
+	position: Vector3,
+	pixel_size: float,
+	font_size: int,
+	color: Color
+) -> void:
+	var label := _get_or_create_case_label(node_name)
+	label.visible = is_visible and not text.strip_edges().is_empty()
+	label.text = text
+	label.position = position
+	label.rotation = Vector3.ZERO
+	label.pixel_size = pixel_size
+	label.font_size = font_size
+	label.billboard = BaseMaterial3D.BILLBOARD_DISABLED
+	label.no_depth_test = true
+	label.modulate = color
+	label.outline_size = 1
+	label.outline_modulate = Color(0.0, 0.0, 0.0, 1.0)
+
+
+func _get_or_create_case_label(node_name: String) -> Label3D:
+	var existing := get_node_or_null(node_name) as Label3D
+	if existing != null:
+		return existing
+
+	var label := Label3D.new()
+	label.name = node_name
+	label.visible = false
+	add_child(label)
+	return label
+
+
 func _apply_price_tag_label() -> void:
 	var label := _get_or_create_price_tag_label()
 	var lines := get_price_tag_lines()
-	label.visible = not lines.is_empty()
+	label.visible = _is_hovered and not lines.is_empty()
 	label.text = "\n".join(lines)
 	label.position = Vector3(0.0, 0.372, -0.07)
 	label.rotation = Vector3.ZERO
@@ -339,7 +482,7 @@ func _apply_price_tag_label() -> void:
 
 
 func _apply_price_tag_card(lines: Array[String]) -> void:
-	var is_visible := not lines.is_empty()
+	var is_visible := _is_hovered and not lines.is_empty()
 	var extra_lines: int = maxi(0, lines.size() - 2)
 	var card_height := 0.104 + float(extra_lines) * 0.032
 
@@ -413,6 +556,20 @@ func _get_price_tag_stripe_color() -> Color:
 			return Color(0.88, 0.7, 0.36, 1.0)
 		_:
 			return Color(0.98, 0.9, 0.62, 1.0)
+
+
+func _get_condition_label() -> String:
+	if product == null:
+		return ""
+	if product.category == "new_game" or product.condition == "new":
+		return "New"
+	if product.category == "used_game":
+		return "Used"
+	if product.condition == "refurbished":
+		return "Refurb"
+	if product.category == "hardware" or product.category == "accessory":
+		return "Used"
+	return product.condition.strip_edges().capitalize()
 
 
 func _get_category_label(category: String) -> String:
