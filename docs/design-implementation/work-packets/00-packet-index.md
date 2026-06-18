@@ -28,8 +28,8 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 1 | `01-visual-module-foundation.md` | Complete | Establish reusable materials, modules, anchors, naming, and no-raw-cube visual foundation. |
 | 2 | `02-store-shell-mall-entrance-stockroom.md` | Complete | Build the mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout. |
 | 3 | `03-fixtures-and-placement-systems.md` | Complete | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
-| 4 | `04-checkout-trade-in-and-day-one-setup.md` | Next | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
-| 5 | `05-product-platform-and-price-language.md` | Not started | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
+| 4 | `04-checkout-trade-in-and-day-one-setup.md` | Complete | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
+| 5 | `05-product-platform-and-price-language.md` | Next | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
 | 6 | `06-signage-promotions-and-required-zones.md` | Not started | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
 | 7 | `07-lighting-density-and-integration-polish.md` | Not started | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
 | 8 | `08-review-package-and-owner-validation.md` | Not started | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
@@ -103,6 +103,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Start packet 04: `04-checkout-trade-in-and-day-one-setup.md`.
+Start packet 05: `05-product-platform-and-price-language.md`.
 
-Packet 03 completed the first fixture-read pass: starter display racks now carry laminate shelf edges, three physical ledges, visible empty-slot backdrops, and nonblocking capacity ticks while preserving stocking and snap placement. Packet 04 owns the next visible blocker: making the checkout/trade-in counter and day-one setup flow read as a real operating store instead of a black counter with loose props.
+Packet 04 completed the first checkout/trade-in counter pass: the counter now has laminate edge detail, a customer-side kick panel, trade-in inspection cues, and a restrained behind-counter intake/hold shelf while preserving all register and trade-in mechanics. Packet 05 owns the next visible blocker: fictional product cases, platform/genre language, price/condition stickers, starter titles, and replacing product read that still depends too much on plain box geometry.

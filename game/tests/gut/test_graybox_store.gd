@@ -1139,6 +1139,45 @@ func test_register_counter_has_command_center_props() -> void:
 	assert_eq((_store.get_node("SleeveStack/SleeveStackLabel") as Label3D).text, "BAGS")
 
 
+func test_checkout_counter_reads_as_clean_trade_in_workstation() -> void:
+	var register := _store.get_node("RegisterWorkstation") as Node3D
+	var counter_top := _store.get_node("CounterTop") as CSGBox3D
+
+	for edge_path in [
+		"CounterTopFrontLaminateEdge",
+		"CounterTopBackLaminateEdge",
+		"CounterLeftLaminateEdge",
+		"CounterRightLaminateEdge",
+		"CounterCustomerKickPanel",
+	]:
+		var edge := _store.get_node_or_null(edge_path) as CSGBox3D
+		assert_not_null(edge, edge_path)
+		assert_false(edge.use_collision, edge_path)
+		assert_true(_is_inside_store_floorprint(edge.global_position), edge_path)
+
+	assert_gt((_store.get_node("CounterTopFrontLaminateEdge") as CSGBox3D).global_position.y, counter_top.global_position.y)
+	assert_gt((_store.get_node("CounterTopBackLaminateEdge") as CSGBox3D).global_position.y, counter_top.global_position.y)
+	assert_lt((_store.get_node("CounterTopFrontLaminateEdge") as CSGBox3D).global_position.z, register.global_position.z)
+	assert_gt((_store.get_node("CounterTopBackLaminateEdge") as CSGBox3D).global_position.z, register.global_position.z)
+
+	for intake_path in [
+		"TradeInInspectionTrayFrontLip",
+		"TradeInInspectionItemCue",
+		"BehindCounterIntakeShelf",
+		"BehindCounterTradeInCaseCue",
+		"BehindCounterHoldConsoleBox",
+		"BehindCounterHoldTag",
+	]:
+		var prop := _store.get_node_or_null(intake_path) as CSGBox3D
+		assert_not_null(prop, intake_path)
+		assert_false(prop.use_collision, intake_path)
+		assert_lt(_flat_distance_xz(prop.global_position, register.global_position), 1.35, intake_path)
+
+	assert_gt((_store.get_node("BehindCounterIntakeShelf") as CSGBox3D).global_position.z, register.global_position.z)
+	assert_gt((_store.get_node("BehindCounterHoldConsoleBox") as CSGBox3D).global_position.z, register.global_position.z)
+	assert_gt((_store.get_node("TradeInInspectionItemCue") as CSGBox3D).global_position.y, 1.3)
+
+
 func test_backroom_visual_zones_exist_without_collision() -> void:
 	var expected_zones := {
 		"BackroomReceivingZone": Vector3(-4.65, 0.028, 3.82),

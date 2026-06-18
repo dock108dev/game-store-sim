@@ -853,6 +853,36 @@ size = Vector3(4.2, 0.12, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.06, -2.4)
 material = SubResource("StandardMaterial3D_wall")
 
+[node name="CounterTopFrontLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(4.24, 0.055, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.155, -2.92)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CounterTopBackLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(4.24, 0.055, 0.05)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.155, -1.88)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CounterLeftLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.055, 0.055, 1.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 1.155, -2.4)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CounterRightLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.055, 0.055, 1.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.32, 1.155, -2.4)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="CounterCustomerKickPanel" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(3.45, 0.18, 0.035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.28, 0.26, -2.83)
+material = SubResource("StandardMaterial3D_storage_metal")
+
 [node name="RegisterSignPanel" type="CSGBox3D" parent="."]
 visible = false
 size = Vector3(0.98, 0.2, 0.035)
@@ -3115,6 +3145,18 @@ size = Vector3(0.42, 0.05, 0.32)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.45, 1.29, -2.58)
 material = SubResource("StandardMaterial3D_service_mat")
 
+[node name="TradeInInspectionTrayFrontLip" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.46, 0.035, 0.028)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.43, 1.335, -2.76)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="TradeInInspectionItemCue" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.2, 0.12, 0.035)
+transform = Transform3D(0.906308, 0, -0.422618, 0, 1, 0, 0.422618, 0, 0.906308, 2.38, 1.37, -2.56)
+material = SubResource("StandardMaterial3D_paper")
+
 [node name="TradeInInspectionTrayLabel" type="Label3D" parent="TradeInInspectionTray"]
 pixel_size = 0.0018
 modulate = Color(0.98, 0.9, 0.66, 1)
@@ -3196,6 +3238,30 @@ material = SubResource("StandardMaterial3D_storage_metal")
 [node name="CashDrawerPull" type="CSGBox3D" parent="."]
 size = Vector3(0.22, 0.035, 0.025)
 transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 2.24, 1.205, -2.87)
+material = SubResource("StandardMaterial3D_shipping_label")
+
+[node name="BehindCounterIntakeShelf" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(1.05, 0.08, 0.34)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.22, 0.82, -1.92)
+material = SubResource("StandardMaterial3D_storage_metal")
+
+[node name="BehindCounterTradeInCaseCue" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.2, 0.28, 0.04)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 2.96, 0.98, -1.94)
+material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="BehindCounterHoldConsoleBox" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.34, 0.22, 0.2)
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, 3.28, 0.97, -1.86)
+material = SubResource("StandardMaterial3D_cardboard_alt")
+
+[node name="BehindCounterHoldTag" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.22, 0.075, 0.018)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, 3.42, 1.12, -1.94)
 material = SubResource("StandardMaterial3D_shipping_label")
 
 [node name="PaymentStatusGlowPanel" type="CSGBox3D" parent="."]

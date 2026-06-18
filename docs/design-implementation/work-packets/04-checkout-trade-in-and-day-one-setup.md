@@ -1,6 +1,6 @@
 # Work Packet: Checkout Trade-In And Day-One Setup
 
-Status: Not started
+Status: Complete
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/06-checkout-and-trade-in-counter-slice.md`
@@ -151,6 +151,8 @@ Required final screenshots:
 | Decision | Reason | Owner/Lead Needed? | Follow-up |
 | --- | --- | --- | --- |
 | Checkout and trade-in remain one station. | Owner wanted shared register/trade-in function with clean counter setup. | No | Expand only with later employee/second-register upgrade. |
+| Packet 04 keeps trade-in intake visual-only. | Current mechanics correctly route accepted trade-ins into receiving; moving that destination would be a larger save/load and flow change. | No | Later packet can add persistent behind-counter intake if it becomes gameplay-critical. |
+| Behind-counter hold/intake reads as a small shelf with one case, one hold box, and a tag. | This gives the employee-side purpose without adding random clutter or future locked inventory. | No | Product art can replace the cues later. |
 
 ## Stop Conditions
 
@@ -176,3 +178,27 @@ Required final screenshots:
 - Setup task summary
 - Known residual issues
 - Owner/lead decisions needed
+
+## Completion Notes
+
+Completed implementation:
+
+- Added nonblocking laminate edge strips and a customer-side kick panel to `CounterTop`/`CounterBase` so checkout reads as a modest cash wrap rather than a raw block.
+- Added a nonblocking trade-in tray lip and trade-in item cue on the counter inspection surface.
+- Added a nonblocking behind-counter intake/hold shelf with a processed case cue, hold console box, and hold tag.
+- Updated `game/scenes/world/modules/front_counter_zone.tscn` so the front counter module owns the new visual nodes.
+- Preserved the existing register, trade-in, return, preorder, service, queue, receiving, and save/load mechanics.
+- Added focused counter-read coverage in `game/tests/gut/test_graybox_store.gd`.
+- Updated validation baseline to 574 GUT tests and 11059 asserts.
+
+Validation evidence:
+
+- Focused/full GUT command: `"$GODOT_BIN" --headless --path game --script res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json -gexit`
+- Result before full gate: 574/574 tests passed, 11059 asserts.
+- Full production gate passed with regenerated screenshot artifacts before commit.
+
+Residual issues:
+
+- The counter is still CSG-authored placeholder geometry, not a modeled final counter asset.
+- Day-one setup still relies on existing receiving/starter crate props rather than a new persisted setup task state.
+- Product/cover art and broader signage polish still belong to packets 05 and 06.

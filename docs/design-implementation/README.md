@@ -66,8 +66,8 @@ Implementation packet assembly is complete under `work-packets/`.
 | 1 | `work-packets/01-visual-module-foundation.md` | Complete | Reusable materials, modules, anchors, naming, collision, and no-raw-cube foundation. |
 | 2 | `work-packets/02-store-shell-mall-entrance-stockroom.md` | Complete | Mall approach, storefront, open entrance, sales floor shell, real stockroom, receiving position, and first-read route. |
 | 3 | `work-packets/03-fixtures-and-placement-systems.md` | Complete | Starter shelves/racks, snap placement visuals, capacity slots, fixture labels, and empty/stocked states. |
-| 4 | `work-packets/04-checkout-trade-in-and-day-one-setup.md` | Next | Checkout/trade-in counter, queue support, behind-counter intake, and day-one receiving/setup tasks. |
-| 5 | `work-packets/05-product-platform-and-price-language.md` | Not started | Fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter products. |
+| 4 | `work-packets/04-checkout-trade-in-and-day-one-setup.md` | Complete | Checkout/trade-in counter, queue support, behind-counter intake, and day-one receiving/setup tasks. |
+| 5 | `work-packets/05-product-platform-and-price-language.md` | Next | Fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter products. |
 | 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Not started | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
 | 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Not started | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
 | 8 | `work-packets/08-review-package-and-owner-validation.md` | Not started | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
