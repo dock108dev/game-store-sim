@@ -46,7 +46,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 3 | `03-store-shell-and-mall-entrance-slice.md` | Complete | Opening spawn, mall concourse, storefront, entrance, and first read. |
 | 4 | `04-starting-store-layout-spec.md` | Complete | Exact floor plan, zone placement, backroom relationship, and day-one density. |
 | 5 | `05-fixture-grid-slice.md` | Complete | Starter wall shelves/racks, movable purchasable fixtures, labels, visible capacity, and snap placement rules. |
-| 6 | `06-checkout-and-trade-in-counter-slice.md` | Not started | Register, trade-in station, behind-counter storage, and counter clutter. |
+| 6 | `06-checkout-and-trade-in-counter-slice.md` | Complete | Shared checkout/trade-in station, clean register setup, one-line queue, and behind-counter hold/intake storage. |
 | 7 | `07-product-and-platform-visual-language-spec.md` | Not started | Fictional product cases, platform identity, price strips, stickers, and readable facings. |
 | 8 | `08-required-zones-slice.md` | Not started | New releases, used games, demo, bargain, guides/media, hardware, and receiving support. |
 | 9 | `09-density-and-clutter-rules.md` | Not started | Day-one occupancy, acceptable mess, object purpose, and anti-spam rules. |
@@ -106,6 +106,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Write `06-checkout-and-trade-in-counter-slice.md`.
+Write `07-product-and-platform-visual-language-spec.md`.
 
-That doc must define register, trade-in station, behind-counter storage, operational anchors, and counter clutter.
+That doc must define fictional game cases, platform identity, covers, spines, stickers, price strips, and readable shelf facings.

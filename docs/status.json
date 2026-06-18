@@ -36,7 +36,7 @@
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 10805,
+    "gut_asserts": 10807,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -89,6 +89,7 @@
     "docs/design-implementation/03-store-shell-and-mall-entrance-slice.md",
     "docs/design-implementation/04-starting-store-layout-spec.md",
     "docs/design-implementation/05-fixture-grid-slice.md",
+    "docs/design-implementation/06-checkout-and-trade-in-counter-slice.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",

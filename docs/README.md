@@ -25,6 +25,7 @@ The previous broad production, beta/playtest-package, stockroom-production, gray
 - [Store Shell And Mall Entrance Slice](design-implementation/03-store-shell-and-mall-entrance-slice.md): opening spawn, retail corridor, `Games4U` storefront, open door, and no-NPC first read.
 - [Starting Store Layout Spec](design-implementation/04-starting-store-layout-spec.md): footprint flexibility, real stockroom, side-wall checkout, player-driven zones, and minimal starter stock.
 - [Fixture Grid Slice](design-implementation/05-fixture-grid-slice.md): starter wall shelves, movable purchasable fixtures, labels, visible capacity slots, and snap placement rules.
+- [Checkout And Trade-In Counter Slice](design-implementation/06-checkout-and-trade-in-counter-slice.md): shared sales/trade-in station, clean register setup, one-line queue, and behind-counter hold/intake storage.
 
 ## Current Production Docs
 
