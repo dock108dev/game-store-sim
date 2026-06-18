@@ -48,7 +48,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 5 | `05-fixture-grid-slice.md` | Complete | Starter wall shelves/racks, movable purchasable fixtures, labels, visible capacity, and snap placement rules. |
 | 6 | `06-checkout-and-trade-in-counter-slice.md` | Complete | Shared checkout/trade-in station, clean register setup, one-line queue, and behind-counter hold/intake storage. |
 | 7 | `07-product-and-platform-visual-language-spec.md` | Complete | Legal-safe fictional platforms, two-tone case language, cover art, stickers, prices, and starter titles. |
-| 8 | `08-required-zones-slice.md` | Not started | New releases, used games, demo, bargain, guides/media, hardware, and receiving support. |
+| 8 | `08-required-zones-slice.md` | Complete | Inventory-source zones, player labels, demo placement, hardware/receiving rules, and first-use guidance. |
 | 9 | `09-density-and-clutter-rules.md` | Not started | Day-one occupancy, acceptable mess, object purpose, and anti-spam rules. |
 | 10 | `10-signage-branding-and-store-identity-spec.md` | Not started | Store name, brand tone, signs, posters, headers, and copy style. |
 | 11 | `11-lighting-materials-and-color-palette-spec.md` | Not started | Retail mood, contrast, flooring, fixtures, materials, and palette. |
@@ -106,6 +106,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Write `08-required-zones-slice.md`.
+Write `09-density-and-clutter-rules.md`.
 
-That doc must define new releases, used games, demo, bargain, guides/media, hardware, receiving support, and how those zones emerge from player-placed fixtures.
+That doc must define day-one occupancy, acceptable mess, purposeful props, anti-spam rules, and how the store avoids becoming a pile of unrelated objects.
