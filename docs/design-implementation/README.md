@@ -55,7 +55,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 12 | `12-validation-and-screenshot-checklist.md` | Complete | Screenshot-first validation, final game-window review, detailed notes, fail language, and docs-only skip rules. |
 | 13 | `13-agent-work-packet-template.md` | Complete | Strict implementation packet template with read-first docs, scope, evidence, validation, decision log, and handoff rules. |
 | 14 | `14-phase-implementation-roadmap.md` | Complete | Master roadmap from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness. |
-| 15 | `15-art-direction-reset-and-spike-plan.md` | Active | Block current primitive visual method, freeze mechanics prototype, and define the Blender/bitmap/asset art spike. |
+| 15 | `15-art-direction-reset-and-spike-plan.md` | Active, awaiting review | Block current primitive visual method, freeze mechanics prototype, and define the Blender/bitmap/asset art spike. |
 
 ## Active Work Packets
 
@@ -72,7 +72,7 @@ Implementation packet assembly is complete under `work-packets/`.
 | 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Complete | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
 | 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Complete | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
 | 8 | `work-packets/08-review-package-and-owner-validation.md` | Complete | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `work-packets/09-art-direction-spike.md` | Ready | Reference extraction, Blender/bitmap asset workflow, isolated inside-looking-out spike, and owner handoff. |
+| 9 | `work-packets/09-art-direction-spike.md` | Implemented, awaiting owner review | Reference extraction, Blender/bitmap asset workflow, isolated inside-looking-out spike, and owner handoff. |
 
 ## Dependency Model
 
@@ -124,6 +124,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Start `work-packets/09-art-direction-spike.md`.
+Review `work-packets/09-art-direction-spike.md` and `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
 
-Packets 01-08 are implemented and validated. The owner selected the block path: the current visual direction is not the art baseline. Packet 09 must prove the replacement visual method before full-store rebuild or beta/tester packaging.
+Packets 01-08 are implemented and validated. Packet 09 is implemented as an isolated art spike. The next step is owner visual review: approve the method for playable-store rebuild, request specific spike revisions, or block and change the art-production approach again.

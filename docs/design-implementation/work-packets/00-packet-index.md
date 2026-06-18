@@ -33,7 +33,7 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
 | 7 | `07-lighting-density-and-integration-polish.md` | Complete | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
 | 8 | `08-review-package-and-owner-validation.md` | Complete | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `09-art-direction-spike.md` | Ready | Prove the replacement Blender/bitmap/sourced-asset visual method with an inside-looking-out small-chain store spike. |
+| 9 | `09-art-direction-spike.md` | Implemented, awaiting owner review | Prove the replacement Blender/bitmap/sourced-asset visual method with an inside-looking-out small-chain store spike. |
 
 ## Dependency Model
 
@@ -105,6 +105,14 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Packet 08 is complete and the owner selected the block path. Start packet 09: `09-art-direction-spike.md`.
+Packet 09 is implemented and awaits owner visual review.
 
-Packet 07 completed the lighting/material/screenshot evidence pass: the store is brighter, the mall approach is warmer, commercial-carpet and wall-panel cues are in the active scene, product and stockroom doorway screenshot targets are corrected, and the validation gate now captures 27 screenshots. Packet 08 packaged final screenshot notes and owner decision options. The current direction is blocked; the next work must prove a replacement art workflow before full-store rebuild.
+Review:
+
+- `docs/design-implementation/work-packets/09-art-direction-spike.md`
+- `artifacts/validation/latest/packet-09-art-spike-review-board.png`
+- `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`
+- `artifacts/validation/latest/screenshots/packet_09_shelf_density.png`
+- `artifacts/validation/latest/screenshots/packet_09_storefront_frame.png`
+
+The next decision is approve, revise, or block the Packet 09 art method. Do not rebuild the playable store visuals or resume beta/tester packaging until that decision is made.

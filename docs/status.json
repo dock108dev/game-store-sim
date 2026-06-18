@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-18",
-  "current_phase": "visual_direction_blocked_art_spike_required",
+  "current_phase": "packet_09_art_spike_ready_for_owner_review",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype while a separate art-direction spike proves the new Blender/bitmap/asset workflow.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype. Packet 09 now provides a separate inside-looking-out art spike for owner visual review before any playable store rebuild.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "blocked_current_visual_method_art_spike_required",
+    "visual_read": "packet_09_art_spike_ready_for_owner_review",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 581,
-    "gut_asserts": 11818,
+    "gut_tests": 586,
+    "gut_asserts": 11859,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -44,8 +44,8 @@
       "threshold_percent": 80
     },
     "script_test_mapping": {
-      "covered": 53,
-      "total": 53,
+      "covered": 54,
+      "total": 54,
       "percent": 100.0,
       "threshold_percent": 80
     },
@@ -56,6 +56,14 @@
     "screenshot_sanity": "passed",
     "screenshot_count": 27,
     "screenshot_contact_sheet": "artifacts/validation/latest/screenshot-contact-sheet.png",
+    "packet_09_art_spike_scene": "game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn",
+    "packet_09_art_spike_capture_tool": "game/tests/tools/capture_packet_09_art_spike_screenshot.gd",
+    "packet_09_art_spike_review_board": "artifacts/validation/latest/packet-09-art-spike-review-board.png",
+    "packet_09_art_spike_screenshots": [
+      "artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png",
+      "artifacts/validation/latest/screenshots/packet_09_shelf_density.png",
+      "artifacts/validation/latest/screenshots/packet_09_storefront_frame.png"
+    ],
     "old_name_scan": "passed"
   },
   "source_inputs": [

@@ -1,11 +1,31 @@
 # Work Packet: Art Direction Spike
 
-Status: Ready
+Status: Implemented, awaiting owner visual review
 Owner decision required: Yes
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/15-art-direction-reset-and-spike-plan.md`
 Dependencies: `docs/production/14-owner-visual-review-package.md`, `docs/design-source-of-truth/`, `inspiration/`, `new_real_inspiration/`
-Expected commit scope: reference extraction, asset workflow plan, isolated art-spike scene/assets if implementation starts, screenshot review board, and owner handoff
+Expected commit scope: reference extraction, asset workflow plan, isolated art-spike scene/assets, screenshot review board, and owner handoff
+
+## Implementation Result
+
+Packet 09 is implemented as a separate, non-playable visual proof scene. It does not modify `store_world.tscn` or the current mechanics prototype.
+
+Implemented files:
+
+- `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`
+- `game/scripts/world/packet_09_art_spike_scene.gd`
+- `game/tests/tools/capture_packet_09_art_spike_screenshot.gd`
+- `game/tests/gut/test_packet_09_art_spike.gd`
+
+Review artifacts:
+
+- `artifacts/validation/latest/packet-09-art-spike-review-board.png`
+- `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`
+- `artifacts/validation/latest/screenshots/packet_09_shelf_density.png`
+- `artifacts/validation/latest/screenshots/packet_09_storefront_frame.png`
+
+Owner decision needed: approve, revise, or block the Packet 09 visual method before rebuilding the playable store visuals.
 
 ## Read First
 
@@ -61,11 +81,11 @@ Expected commit scope: reference extraction, asset workflow plan, isolated art-s
 
 ## Deliverables
 
-1. Reference extraction notes from `inspiration/`.
-2. Period retail extraction notes from `new_real_inspiration/`.
-3. Asset workflow notes: custom Blender modules, allowed packs, texture approach.
-4. Isolated spike scene or mockup.
-5. Owner-facing screenshot/review board.
+1. Reference extraction notes from `inspiration/`: storefront glass rhythm, mall corridor framing, fascia/sign proportion, small-chain storefront composition.
+2. Period retail extraction notes from `new_real_inspiration/`: drop ceiling, slatwall, dense rows of case facings, yellow price stickers, acrylic/glass display surfaces, commercial tile/carpet.
+3. Asset workflow notes: procedural Godot proof with bitmap-like generated textures; next approved production pass should convert this into authored reusable modules/assets rather than expanding the current primitive store scene.
+4. Isolated spike scene or mockup: `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`.
+5. Owner-facing screenshot/review board: `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
 6. Decision handoff: approve, revise, or block.
 
 ## Target Shot
@@ -96,6 +116,15 @@ Optional if implemented in Godot:
 
 Full gameplay validation is not required until the approved art kit is integrated into the playable store.
 
+Packet 09 validation commands:
+
+```text
+/Applications/Godot.app/Contents/MacOS/Godot --headless --path game --script res://addons/gut/gut_cmdln.gd -gtest=res://tests/gut/test_packet_09_art_spike.gd -gexit
+/Applications/Godot.app/Contents/MacOS/Godot --path game --resolution 1280x720 --fixed-fps 1 --disable-vsync --quiet --script res://tests/tools/capture_packet_09_art_spike_screenshot.gd -- --output /Users/michaelfuscoletti/Desktop/game-store-sim/artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png --width 1280 --height 720 --view inside_out
+```
+
+Screenshot sanity is checked with `res://tests/tools/check_png.gd`; broader regression is still `scripts/validate_godot.sh`.
+
 ## Stop Conditions
 
 - Reference extraction cannot produce a coherent small-chain visual target.
@@ -106,11 +135,11 @@ Full gameplay validation is not required until the approved art kit is integrate
 
 ## Final Handoff Requirements
 
-- Reference board path or notes
-- Real-life reference notes
-- Spike scene/mockup path
-- Screenshot path
-- Asset source/licensing notes
-- What improved versus current
-- What still fails
-- Recommendation: approve, revise, or block
+- Reference board path or notes: this document plus `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
+- Real-life reference notes: extracted from `new_real_inspiration/` into dense shelving, drop ceiling, store tile/carpet, price stickers, and glass display counter choices.
+- Spike scene/mockup path: `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`.
+- Screenshot path: `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`.
+- Asset source/licensing notes: no third-party art pack used in this spike; the proof uses generated Godot geometry/materials and generated bitmap-like textures.
+- What improved versus current: cleaner storefront rhythm, stronger ceiling/material read, denser product facings, attached signs instead of debug labels, and an isolated scene that avoids touching mechanics.
+- What still fails: still not a finished production art kit; signage and product art are proof-level, not final authored assets; playable store has not been rebuilt around this method.
+- Recommendation: owner review. Approve this method for playable-store rebuild, request specific revisions to the spike, or block and change the art-production approach again.

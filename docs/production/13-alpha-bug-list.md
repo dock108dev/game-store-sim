@@ -5,10 +5,10 @@ This is no longer an alpha/beta readiness board. It tracks current blockers that
 ## Current Gate State
 
 - Automated validation has no open failure from the last full run.
-- Current doc-contract expectation is 581 GUT tests and 11818 asserts. Latest full validation gate is green with UI scenario automation coverage 512/632, production script mapping coverage 53/53, 3 active validation tools, and 62 catalog products.
+- Current doc-contract expectation is 586 GUT tests and 11859 asserts. Latest full validation gate is green with UI scenario automation coverage 512/632, production script mapping coverage 54/54, 3 active validation tools, and 62 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, contact-sheet generation, and old-name scan passed.
 - All 27 required screenshot files were present, screenshot sanity passed, and `artifacts/validation/latest/screenshot-contact-sheet.png` was generated.
-- The owner blocked the current visual direction after review. The current scene is frozen as a mechanics prototype while `docs/design-implementation/15-art-direction-reset-and-spike-plan.md` defines the replacement art workflow.
+- The owner blocked the current visual direction after review. The current scene is frozen as a mechanics prototype. Packet 09 now provides an isolated art-direction spike and review board for the next owner decision.
 - External beta/tester packaging remains blocked.
 
 ## Priority Key
@@ -28,7 +28,7 @@ This is no longer an alpha/beta readiness board. It tracks current blockers that
 | VIS-008 | P1 | Mall approach depth | `main_scene.png`, `storefront_entry.png`, `lighting_materials_mall.png` | Mall approach and storefront facade are functional but still sparse, flat, and geometric. | Targeted revision packet | Mall route has believable floor, ceiling, railing/edge, neighboring storefront hints, facade depth, and trim. |
 | VIS-009 | P1 | Review evidence format | `screenshot-contact-sheet.png` | The generated contact sheet is useful for regression but too small and mixed-purpose for owner-facing art approval. | Targeted revision packet | Visual review board or larger contact sheet groups the route into mall, storefront, interior, counter, product, and stockroom panels. |
 | VIS-010 | P1 | Receiving/shelf prop language | `receiving_area.png`, `stocked_aisle.png` | Receiving and browsing still lean on labels and simple blocks instead of enough object silhouette. | Targeted revision packet | Receiving station, shelf modules, product rows, and label placement communicate function before text. |
-| VIS-012 | P0 | Art-production method | owner review, `inspiration/`, `new_real_inspiration/`, `docs/design-implementation/15-art-direction-reset-and-spike-plan.md` | The current method still produces primitive assembled geometry and should not be extended as the visual source. | Art Direction Spike | A separate inside-looking-out art spike proves a Blender/bitmap/asset workflow before full-store rebuild. |
+| VIS-012 | P0 | Art-production method | owner review, `inspiration/`, `new_real_inspiration/`, `docs/design-implementation/15-art-direction-reset-and-spike-plan.md`, `artifacts/validation/latest/packet-09-art-spike-review-board.png` | The current method still produces primitive assembled geometry and should not be extended as the visual source. Packet 09 provides a candidate replacement method for owner review. | Owner art-spike review | Owner approves, requests revisions to, or blocks the Packet 09 art method before full-store rebuild. |
 
 ## Resolved Routing Notes
 
@@ -41,4 +41,4 @@ This is no longer an alpha/beta readiness board. It tracks current blockers that
 
 ## Routing
 
-Do not add broad catalog, customer, decoration, hidden narrative, later-era, or external alpha/beta package work while VIS-012 is open.
+Do not add broad catalog, customer, decoration, hidden narrative, later-era, playable-store rebuild, or external alpha/beta package work while VIS-012 is awaiting owner decision.

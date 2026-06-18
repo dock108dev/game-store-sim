@@ -322,6 +322,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/world/packet_09_art_spike_scene.gd",
+      "tests": [
+        "res://tests/gut/test_packet_09_art_spike.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/ui/pricing_panel.gd",
       "tests": [
         "res://tests/gut/test_pricing_panel.gd"

@@ -1,26 +1,62 @@
 # Owner Visual Review Package
 
-Status: Owner blocked current visual direction
-Recommendation: Block current primitive visual method and run art-direction spike
+Status: Packet 09 art spike awaiting owner visual review
+Recommendation: Review Packet 09 and decide approve, revise, or block
 Branch: `codex/hard-visual-benchmark-implementation`
-Commit range: `94f7bef6..f87e7260`
-Latest visual scene implementation commit: `f87e7260 Complete lighting density polish packet`
+Commit range: `94f7bef6..HEAD`
+Latest visual scene implementation commit: pending current Packet 09 commit
 
 ## Purpose
 
-This package is the Packet 08 handoff for the visual reset. It collects the current screenshots, validation output, known visual risks, and owner decision path in one place.
+This package started as the Packet 08 handoff for the visual reset. It now includes the Packet 09 art-spike review gate.
 
 This is not a beta-readiness package. It is the owner review package for deciding whether the opening store baseline is approved, needs targeted revision, or needs a deeper visual reset.
 
 ## Review Position
 
-Owner decision: **block and deepen the art reset**.
+Owner decision so far: **block and deepen the art reset**.
 
 The current scene is materially stronger than the original graybox: the player starts from a mall approach, the storefront has a readable `Games4U` identity, the store has a real entrance, checkout, product displays, stockroom doorway, receiving area, day-one product language, lighting contrast, and early store setup support.
 
 The remaining problem is also clear: fixtures, counters, ceiling pieces, some prop groups, and parts of the mall shell still read as assembled primitive geometry. The store has the right functional anchors, but the art production method is not strong enough to keep polishing as the visual baseline.
 
-Current decision: freeze this scene as the mechanics prototype and prove a new art method in `docs/design-implementation/15-art-direction-reset-and-spike-plan.md` using both `inspiration/` and `new_real_inspiration/`.
+Current decision: freeze this scene as the mechanics prototype. Packet 09 has implemented a separate candidate art method using both `inspiration/` and `new_real_inspiration/`.
+
+## Packet 09 Review
+
+Review board:
+
+```text
+artifacts/validation/latest/packet-09-art-spike-review-board.png
+```
+
+Individual Packet 09 screenshots:
+
+```text
+artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png
+artifacts/validation/latest/screenshots/packet_09_shelf_density.png
+artifacts/validation/latest/screenshots/packet_09_storefront_frame.png
+```
+
+Implemented Packet 09 scene and tool:
+
+```text
+game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn
+game/tests/tools/capture_packet_09_art_spike_screenshot.gd
+```
+
+What changed versus Packet 08:
+
+- The spike is isolated from `store_world.tscn`; the playable scene remains a mechanics prototype.
+- The hero view is inside-looking-out through glass storefront framing.
+- The scene uses storefront mullions, door frame, fascia, mall corridor, drop ceiling grid, fluorescent panels, dense product rows, attached signage, price stickers, and a glass display counter.
+- The spike uses generated bitmap-like material textures and dense repeated facings instead of floating debug labels.
+
+What still needs owner judgment:
+
+- Whether this direction is visually strong enough to become the production method.
+- Whether the store should be rebuilt around this style or the spike needs another revision first.
+- Whether a stronger asset/Blender/third-party-pack workflow is required before rebuilding the playable store.
 
 ## Validation Evidence
 
@@ -32,15 +68,16 @@ scripts/validate_godot.sh
 
 Current recorded result:
 
-- GUT: 581 tests, 11818 asserts, all passing.
+- GUT: 586 tests, 11859 asserts, all passing.
 - UI scenario automation: 512/632, or 81.0%.
-- Production script mapping: 53/53, or 100.0%.
+- Production script mapping: 54/54, or 100.0%.
 - Validation tools: 3 active standalone tools.
 - Product catalog: 62 products.
 - Desktop pack smoke: passed.
 - Alpha performance smoke: passed.
 - Screenshot capture, screenshot sanity, contact sheet, and old-name scan: passed.
 - Screenshot count: 27.
+- Packet 09 review board and three Packet 09 screenshots were captured outside the main contact-sheet gate.
 
 Artifact root:
 
@@ -97,6 +134,7 @@ Implementation commits in the active visual-reset range:
 | `ae728ad8` | Complete product visual language packet |
 | `6a4f1e46` | Complete signage and promotions packet |
 | `f87e7260` | Complete lighting density polish packet |
+| pending | Implement Packet 09 art direction spike |
 
 ## Screenshot Review
 
@@ -141,33 +179,32 @@ These are the issues that should block external beta/tester packaging unless the
 
 ## Owner Decision Options
 
-Choose one:
+Choose one for Packet 09:
 
-1. **Approve opening baseline for beta prep.**
-   - Use only if the current visual read is good enough for testers despite primitive residuals.
-   - Next step: assemble beta/tester package and manual walkthrough instructions.
+1. **Approve Packet 09 method for playable-store rebuild.**
+   - Use only if the isolated art spike is directionally strong enough.
+   - Next step: rebuild the playable store visuals around this method while preserving current mechanics.
 
-2. **Revise targeted visual modules before beta.**
-   - Superseded by owner block decision.
-   - Scope: fixture/counter module pass, mall corridor/facade pass, receiving station pass, and visual-review board/contact-sheet overhaul.
-   - Next step: create and implement a focused revision packet without broad catalog/customer/decor expansion.
+2. **Revise Packet 09 before playable-store rebuild.**
+   - Use if the spike is close but still misses composition, signage, materials, product density, scale, or store identity.
+   - Next step: apply targeted corrections to the isolated spike and recapture the review board.
 
-3. **Block and deepen the art reset.**
-   - Selected owner path.
-   - Scope: replace the visual construction approach, keep current mechanics, use `inspiration/` and `new_real_inspiration/` as primary input, prove a Blender/bitmap/asset workflow in a separate inside-looking-out art spike, and stop incremental primitive-scene polishing.
+3. **Block Packet 09 and change production approach again.**
+   - Use if the spike still proves the current Godot/procedural approach cannot reach the target.
+   - Next step: switch to a heavier Blender/authored-asset or third-party-pack approach before any playable-store rebuild.
 
 ## Signoff Questions
 
 Please answer these during review:
 
-1. Is the storefront direction acceptable enough to refine, or should the mall/storefront concept change again?
-2. Is the store interior layout acceptable enough to keep while improving modules, or should the footprint be redesigned?
-3. Are the product case and fictional platform visual rules acceptable for the next pass?
-4. Should the next implementation pass focus on targeted module revision, or should we step back and change the art-production method?
-5. Is external beta/testing still blocked until the visual revision pass is complete?
+1. Does the Packet 09 inside-looking-out shot finally point in the right visual direction?
+2. Are the storefront glass/fascia/sign, mall corridor, ceiling, and counter directions acceptable enough to turn into production modules?
+3. Is the dense product-wall language acceptable, or should shelves/cases/product art change before rebuilding?
+4. Should the next implementation pass rebuild the playable store from this method, revise the spike, or block the method?
+5. Is external beta/testing still blocked until the playable store is rebuilt from an approved visual method?
 
 ## Final Recommendation
 
-Proceed with **Option 3: Block and deepen the art reset**.
+Proceed with **owner review of Packet 09**.
 
-The current build remains valuable as a mechanics prototype. It is not the visual baseline. Next work starts with [Art Direction Reset And Spike Plan](../design-implementation/15-art-direction-reset-and-spike-plan.md).
+The current build remains valuable as a mechanics prototype. It is not the visual baseline. Packet 09 is the current candidate visual method. Do not rebuild the playable store until the owner approves, revises, or blocks that method.

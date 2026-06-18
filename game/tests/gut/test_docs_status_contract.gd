@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "visual_direction_blocked_art_spike_required")
+	assert_eq(status.get("current_phase"), "packet_09_art_spike_ready_for_owner_review")
 	assert_eq(status.get("playtest_state"), "paused_until_design_source_of_truth_baseline_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "blocked_current_visual_method_art_spike_required")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "packet_09_art_spike_ready_for_owner_review")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
 
 
@@ -22,18 +22,22 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 	var scripts: Dictionary = _dictionary(validation.get("script_test_mapping"))
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
-	assert_eq(int(validation.get("gut_tests")), 581)
-	assert_eq(int(validation.get("gut_asserts")), 11818)
+	assert_eq(int(validation.get("gut_tests")), 586)
+	assert_eq(int(validation.get("gut_asserts")), 11859)
 	assert_eq(int(ui.get("automated")), 512)
 	assert_eq(int(ui.get("total")), 632)
-	assert_eq(int(scripts.get("covered")), 53)
-	assert_eq(int(scripts.get("total")), 53)
+	assert_eq(int(scripts.get("covered")), 54)
+	assert_eq(int(scripts.get("total")), 54)
 	assert_eq(int(validation.get("active_validation_tools")), 3)
 	assert_eq(int(validation.get("catalog_products")), 62)
 	assert_eq(validation.get("desktop_pack_smoke"), "passed")
 	assert_eq(validation.get("screenshot_sanity"), "passed")
 	assert_eq(int(validation.get("screenshot_count")), 27)
 	assert_eq(validation.get("screenshot_contact_sheet"), "artifacts/validation/latest/screenshot-contact-sheet.png")
+	assert_eq(validation.get("packet_09_art_spike_scene"), "game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn")
+	assert_eq(validation.get("packet_09_art_spike_capture_tool"), "game/tests/tools/capture_packet_09_art_spike_screenshot.gd")
+	assert_eq(validation.get("packet_09_art_spike_review_board"), "artifacts/validation/latest/packet-09-art-spike-review-board.png")
+	assert_true((validation.get("packet_09_art_spike_screenshots", []) as Array).has("artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png"))
 
 
 func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
