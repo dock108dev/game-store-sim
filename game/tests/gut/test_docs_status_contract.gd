@@ -23,7 +23,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 570)
-	assert_eq(int(validation.get("gut_asserts")), 10819)
+	assert_eq(int(validation.get("gut_asserts")), 10821)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 53)
@@ -63,6 +63,7 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 	assert_true(active_docs.has("docs/design-implementation/10-signage-branding-and-store-identity-spec.md"))
 	assert_true(active_docs.has("docs/design-implementation/11-lighting-materials-and-color-palette-spec.md"))
 	assert_true(active_docs.has("docs/design-implementation/12-validation-and-screenshot-checklist.md"))
+	assert_true(active_docs.has("docs/design-implementation/13-agent-work-packet-template.md"))
 	assert_true(active_docs.has("docs/production/04-backlog.md"))
 	assert_true(active_docs.has("docs/production/06-validation.md"))
 	assert_true(active_docs.has("docs/production/13-alpha-bug-list.md"))

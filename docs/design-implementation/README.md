@@ -53,7 +53,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 10 | `10-signage-branding-and-store-identity-spec.md` | Complete | Editable store name, early-2000s mall signage, shelf labels, posters, neighboring signs, and copy tone. |
 | 11 | `11-lighting-materials-and-color-palette-spec.md` | Complete | Bright store lighting, warmer mall lighting, commercial carpet, editable panels, fixture materials, and palette rules. |
 | 12 | `12-validation-and-screenshot-checklist.md` | Complete | Screenshot-first validation, final game-window review, detailed notes, fail language, and docs-only skip rules. |
-| 13 | `13-agent-work-packet-template.md` | Not started | Standard template for every implementation packet. |
+| 13 | `13-agent-work-packet-template.md` | Complete | Strict implementation packet template with read-first docs, scope, evidence, validation, decision log, and handoff rules. |
 | 14 | `14-phase-implementation-roadmap.md` | Not started | Master dependency map from planning through owner validation. |
 
 ## Dependency Model
@@ -106,6 +106,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Write `13-agent-work-packet-template.md`.
+Write `14-phase-implementation-roadmap.md`.
 
-That doc must define the standard work packet format implementation agents should use for each future code/asset pass.
+That doc must define the master dependency map from planning through implementation, validation, owner review, and beta/tester readiness.
