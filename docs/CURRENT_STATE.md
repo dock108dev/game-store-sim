@@ -32,7 +32,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 570 GUT tests and 10803 asserts.
+- Current doc-contract expectation is 570 GUT tests and 10805 asserts.
 - UI scenario automation coverage is 508/628, or 80.9%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.
