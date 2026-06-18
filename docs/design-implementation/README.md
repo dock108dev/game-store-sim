@@ -51,7 +51,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 8 | `08-required-zones-slice.md` | Complete | Inventory-source zones, player labels, demo placement, hardware/receiving rules, and first-use guidance. |
 | 9 | `09-density-and-clutter-rules.md` | Complete | Empty-promising day-one density, setup clutter, stockroom planning desk, console box stacks, and visual-review rules. |
 | 10 | `10-signage-branding-and-store-identity-spec.md` | Complete | Editable store name, early-2000s mall signage, shelf labels, posters, neighboring signs, and copy tone. |
-| 11 | `11-lighting-materials-and-color-palette-spec.md` | Not started | Retail mood, contrast, flooring, fixtures, materials, and palette. |
+| 11 | `11-lighting-materials-and-color-palette-spec.md` | Complete | Bright store lighting, warmer mall lighting, commercial carpet, editable panels, fixture materials, and palette rules. |
 | 12 | `12-validation-and-screenshot-checklist.md` | Not started | Per-slice screenshot gates, review form, binary pass/fail language. |
 | 13 | `13-agent-work-packet-template.md` | Not started | Standard template for every implementation packet. |
 | 14 | `14-phase-implementation-roadmap.md` | Not started | Master dependency map from planning through owner validation. |
@@ -106,6 +106,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Write `11-lighting-materials-and-color-palette-spec.md`.
+Write `12-validation-and-screenshot-checklist.md`.
 
-That doc must define mall/store lighting, material palette, contrast, flooring, fixtures, and color restraint.
+That doc must define owner review screenshots, pass/fail language, validation artifacts, and the implementation-to-validation cycle.

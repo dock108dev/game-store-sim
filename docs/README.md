@@ -30,6 +30,7 @@ The previous broad production, beta/playtest-package, stockroom-production, gray
 - [Required Zones Slice](design-implementation/08-required-zones-slice.md): inventory-source new/used rules, player-organized labels, demo placement, hardware/receiving roles, and first-use guidance.
 - [Density And Clutter Rules](design-implementation/09-density-and-clutter-rules.md): empty-promising day-one density, setup clutter, stockroom planning desk, console box stacks, mall atmosphere, and visual-review rules.
 - [Signage Branding And Store Identity Spec](design-implementation/10-signage-branding-and-store-identity-spec.md): editable store name, mall storefront signage, shelf labels, posters, neighboring signs, and copy tone.
+- [Lighting Materials And Color Palette Spec](design-implementation/11-lighting-materials-and-color-palette-spec.md): bright retail lighting, warmer mall contrast, commercial carpet, editable color panels, fixture materials, and palette rules.
 
 ## Current Production Docs
 
