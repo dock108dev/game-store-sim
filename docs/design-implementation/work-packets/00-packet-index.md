@@ -33,7 +33,7 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
 | 7 | `07-lighting-density-and-integration-polish.md` | Complete | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
 | 8 | `08-review-package-and-owner-validation.md` | Complete | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `09-art-direction-spike.md` | Implemented, awaiting owner review | Prove the replacement Blender/bitmap/sourced-asset visual method with an inside-looking-out small-chain store spike. |
+| 9 | `09-art-direction-spike.md` | Implemented, awaiting owner review | Prove the replacement bitmap/material visual method with a revised inside-looking-out small-chain store spike. |
 
 ## Dependency Model
 
@@ -105,7 +105,7 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Packet 09 is implemented and awaits owner visual review.
+Packet 09 is implemented and awaits owner visual review. Revision 2 addresses owner feedback on weird text, wall clutter, over-saturated color, and graybox read.
 
 Review:
 

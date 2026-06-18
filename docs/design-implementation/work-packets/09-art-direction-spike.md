@@ -9,7 +9,7 @@ Expected commit scope: reference extraction, asset workflow plan, isolated art-s
 
 ## Implementation Result
 
-Packet 09 is implemented as a separate, non-playable visual proof scene. It does not modify `store_world.tscn` or the current mechanics prototype.
+Packet 09 is implemented as a separate, non-playable visual proof scene. It does not modify `store_world.tscn` or the current mechanics prototype. Revision 2 incorporates owner feedback that the first spike had weird text, cluttered walls, too much color, and still read too much like a graybox.
 
 Implemented files:
 
@@ -83,7 +83,7 @@ Owner decision needed: approve, revise, or block the Packet 09 visual method bef
 
 1. Reference extraction notes from `inspiration/`: storefront glass rhythm, mall corridor framing, fascia/sign proportion, small-chain storefront composition.
 2. Period retail extraction notes from `new_real_inspiration/`: drop ceiling, slatwall, dense rows of case facings, yellow price stickers, acrylic/glass display surfaces, commercial tile/carpet.
-3. Asset workflow notes: procedural Godot proof with bitmap-like generated textures; next approved production pass should convert this into authored reusable modules/assets rather than expanding the current primitive store scene.
+3. Asset workflow notes: procedural Godot proof with bitmap-like generated textures; loose `TextMesh` signage and random wall promo cards are removed; next approved production pass should convert this into authored reusable modules/assets rather than expanding the current primitive store scene.
 4. Isolated spike scene or mockup: `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`.
 5. Owner-facing screenshot/review board: `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
 6. Decision handoff: approve, revise, or block.
@@ -99,6 +99,8 @@ Inside looking out:
 - one counter or shelf anchor is visible
 - no customers or employees
 - no debug labels
+- minimal text, limited to flat bitmap sign panels
+- walls read as shopfit/slatwall architecture rather than random decoration
 
 ## Validation Required
 
@@ -107,6 +109,8 @@ Minimum:
 - screenshot proves the art direction better than current visual baseline
 - screenshot notes cite the `inspiration/` and `new_real_inspiration/` rules used
 - no major primitive-cube read in the hero view
+- no loose 3D text/sign labels as the main readability mechanism
+- no random promo wall panels filling empty space
 - owner can judge the look without reading implementation chat
 
 Optional if implemented in Godot:
@@ -140,6 +144,6 @@ Screenshot sanity is checked with `res://tests/tools/check_png.gd`; broader regr
 - Spike scene/mockup path: `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`.
 - Screenshot path: `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`.
 - Asset source/licensing notes: no third-party art pack used in this spike; the proof uses generated Godot geometry/materials and generated bitmap-like textures.
-- What improved versus current: cleaner storefront rhythm, stronger ceiling/material read, denser product facings, attached signs instead of debug labels, and an isolated scene that avoids touching mechanics.
-- What still fails: still not a finished production art kit; signage and product art are proof-level, not final authored assets; playable store has not been rebuilt around this method.
+- What improved versus current: cleaner storefront rhythm, stronger ceiling/material read, denser but more orderly product facings, flat bitmap sign panels instead of loose 3D text, calmer color palette, clean slatwall instead of random wall clutter, and an isolated scene that avoids touching mechanics.
+- What still fails: still not a finished production art kit; signage and product art are proof-level, not final authored assets; playable store has not been rebuilt around this method; owner may still decide the procedural/low-poly method is not enough.
 - Recommendation: owner review. Approve this method for playable-store rebuild, request specific revisions to the spike, or block and change the art-production approach again.

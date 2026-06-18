@@ -72,7 +72,7 @@ Implementation packet assembly is complete under `work-packets/`.
 | 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Complete | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
 | 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Complete | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
 | 8 | `work-packets/08-review-package-and-owner-validation.md` | Complete | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `work-packets/09-art-direction-spike.md` | Implemented, awaiting owner review | Reference extraction, Blender/bitmap asset workflow, isolated inside-looking-out spike, and owner handoff. |
+| 9 | `work-packets/09-art-direction-spike.md` | Implemented, awaiting owner review | Reference extraction, bitmap sign/material workflow, isolated inside-looking-out spike revision, and owner handoff. |
 
 ## Dependency Model
 
@@ -126,4 +126,4 @@ Each future slice doc should include:
 
 Review `work-packets/09-art-direction-spike.md` and `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
 
-Packets 01-08 are implemented and validated. Packet 09 is implemented as an isolated art spike. The next step is owner visual review: approve the method for playable-store rebuild, request specific spike revisions, or block and change the art-production approach again.
+Packets 01-08 are implemented and validated. Packet 09 is implemented as an isolated art spike, and revision 2 incorporates owner feedback on weird text, wall clutter, color noise, and graybox read. The next step is owner visual review: approve the method for playable-store rebuild, request specific spike revisions, or block and change the art-production approach again.

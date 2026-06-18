@@ -40,22 +40,40 @@ func test_packet_09_spike_records_reference_sources_and_rules() -> void:
 	assert_true(source_folders.has("inspiration"))
 	assert_true(source_folders.has("new_real_inspiration"))
 	assert_string_contains(" ".join(rules), "drop ceiling")
-	assert_string_contains(" ".join(rules), "dense case rows")
+	assert_string_contains(" ".join(rules), "orderly case rows")
+	assert_string_contains(" ".join(rules), "less text")
 	assert_string_contains(" ".join(rules), "inside-looking-out")
 
 
-func test_packet_09_spike_uses_attached_signage_not_label3d_debug_cards() -> void:
+func test_packet_09_spike_uses_bitmap_signs_not_loose_3d_text() -> void:
 	var scene := _instantiate_scene(PACKET_09_SCENE)
 	add_child_autofree(scene)
 	await get_tree().process_frame
 
 	var labels: Array[Label3D] = []
 	var text_meshes: Array[MeshInstance3D] = []
+	var bitmap_signs: Array[Node] = []
 	_collect_labels(scene, labels)
 	_collect_text_mesh_instances(scene, text_meshes)
+	_collect_name_contains(scene, "Bitmap", bitmap_signs)
 
 	assert_eq(labels.size(), 0)
-	assert_gte(text_meshes.size(), 6)
+	assert_eq(text_meshes.size(), 0)
+	assert_gte(bitmap_signs.size(), 8)
+
+
+func test_packet_09_spike_keeps_walls_clean_of_random_promo_clutter() -> void:
+	var scene := _instantiate_scene(PACKET_09_SCENE)
+	add_child_autofree(scene)
+	await get_tree().process_frame
+
+	var random_promo_panels: Array[Node] = []
+	var window_decals: Array[Node] = []
+	_collect_name_contains(scene, "PromoWallPanel", random_promo_panels)
+	_collect_name_contains(scene, "WindowDecal", window_decals)
+
+	assert_eq(random_promo_panels.size(), 0)
+	assert_lte(window_decals.size(), 2)
 
 
 func test_packet_09_spike_has_retail_density_and_material_breaks() -> void:

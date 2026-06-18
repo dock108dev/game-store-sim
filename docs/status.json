@@ -5,7 +5,7 @@
   "current_phase": "packet_09_art_spike_ready_for_owner_review",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype. Packet 09 now provides a separate inside-looking-out art spike for owner visual review before any playable store rebuild.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype. Packet 09 now provides a revised separate inside-looking-out art spike for owner visual review before any playable store rebuild.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -35,8 +35,8 @@
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 586,
-    "gut_asserts": 11859,
+    "gut_tests": 587,
+    "gut_asserts": 11865,
     "ui_automation": {
       "automated": 512,
       "total": 632,

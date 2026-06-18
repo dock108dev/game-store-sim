@@ -14,7 +14,7 @@ External playtest and broad visual expansion are paused.
 
 The owner selected the block path for the current visual direction. The current Godot scene is frozen as a mechanics prototype, not the visual baseline.
 
-Packet 09 now provides a separate inside-looking-out art spike for review. It uses `inspiration/` for stylized scaffold and `new_real_inspiration/` for real period retail construction: storefront glass rhythm, mall corridor, drop ceiling, dense case rows, attached signage, price-sticker language, and a glass display counter. The spike may still need visual correction, but the next decision is owner review of this direction before the playable store is rebuilt.
+Packet 09 now provides a separate inside-looking-out art spike for review. Revision 2 incorporates owner feedback that the first spike had weird text, cluttered walls, too much color, and still read as a graybox. It uses `inspiration/` for stylized scaffold and `new_real_inspiration/` for real period retail construction: storefront glass rhythm, mall corridor, drop ceiling, quieter walls, orderly slatwall case rows, flat bitmap sign panels, restrained price-sticker language, and a glass display counter. The spike may still need visual correction, but the next decision is owner review of this direction before the playable store is rebuilt.
 
 Packet 09 artifacts:
 
@@ -48,7 +48,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 586 GUT tests and 11859 asserts.
+- Current doc-contract expectation is 587 GUT tests and 11865 asserts.
 - UI scenario automation coverage is 512/632, or 81.0%.
 - Production script mapping is 54/54, or 100.0%.
 - 3 standalone validation tools are active.
@@ -86,7 +86,7 @@ Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) a
 
 The next implementation pass is blocked on owner review:
 
-1. Review [Art Direction Spike Packet](design-implementation/work-packets/09-art-direction-spike.md) and the Packet 09 review board.
+1. Review [Art Direction Spike Packet](design-implementation/work-packets/09-art-direction-spike.md) and the revised Packet 09 review board.
 2. Decide whether the spike direction is approved, needs revision, or is blocked.
 3. If approved, rebuild the playable store visuals around the Packet 09 method while preserving current mechanics.
 4. If revised or blocked, update the spike first before touching the playable store.

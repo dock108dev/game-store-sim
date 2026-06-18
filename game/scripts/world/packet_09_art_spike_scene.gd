@@ -20,7 +20,8 @@ func _ready() -> void:
 func reference_rules() -> PackedStringArray:
 	return PackedStringArray([
 		"inspiration: small-chain mall storefront, glass rhythm, fascia, corridor frame",
-		"new_real_inspiration: drop ceiling, slatwall, dense case rows, yellow price stickers",
+		"new_real_inspiration: quiet walls, drop ceiling, slatwall, dense but orderly case rows",
+		"owner_review: less text, less color, no random wall clutter, stronger shopfit materials",
 		"packet_09: inside-looking-out proof shot, no customers, no debug labels",
 	])
 
@@ -52,24 +53,24 @@ func _build_lighting(root: Node3D) -> void:
 	world.name = "WorldEnvironment"
 	var environment := Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color(0.33, 0.35, 0.35)
+	environment.background_color = Color(0.55, 0.57, 0.55)
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color(0.62, 0.65, 0.62)
-	environment.ambient_light_energy = 0.82
+	environment.ambient_light_color = Color(0.72, 0.73, 0.69)
+	environment.ambient_light_energy = 0.96
 	world.environment = environment
 	root.add_child(world)
 
 	var store_light := DirectionalLight3D.new()
 	store_light.name = "SoftStoreDirectionLight"
-	store_light.light_energy = 0.62
+	store_light.light_energy = 0.48
 	store_light.rotation_degrees = Vector3(-48.0, -20.0, 0.0)
 	root.add_child(store_light)
 
 	for index in range(4):
 		var light := OmniLight3D.new()
 		light.name = "WarmFluorescentFill%02d" % [index + 1]
-		light.light_color = Color(1.0, 0.9, 0.7)
-		light.light_energy = 0.95
+		light.light_color = Color(1.0, 0.93, 0.78)
+		light.light_energy = 0.72
 		light.omni_range = 4.8
 		light.position = Vector3(-2.7 + float(index) * 1.8, 2.35, -0.8 + float(index % 2) * 2.2)
 		root.add_child(light)
@@ -89,18 +90,18 @@ func _build_shell(root: Node3D) -> void:
 
 	_box(shell, "LeftPaintedWall", Vector3(-3.76, 1.28, 1.08), Vector3(0.10, 2.56, 6.72), _materials.wall_warm)
 	_box(shell, "RightPaintedWall", Vector3(3.76, 1.28, 1.08), Vector3(0.10, 2.56, 6.72), _materials.wall_warm)
-	_box(shell, "BackSlatwallBase", Vector3(0.0, 1.24, 4.46), Vector3(7.45, 2.48, 0.11), _materials.wall_panel)
+	_box(shell, "BackSlatwallBase", Vector3(0.0, 1.24, 4.46), Vector3(7.45, 2.48, 0.11), _materials.slatwall)
+	_box(shell, "BackWallBaseboard", Vector3(0.0, 0.19, 4.34), Vector3(7.45, 0.22, 0.09), _materials.dark_laminate)
+	_box(shell, "LeftWallBaseboard", Vector3(-3.69, 0.19, 1.0), Vector3(0.09, 0.22, 6.4), _materials.dark_laminate)
+	_box(shell, "RightWallBaseboard", Vector3(3.69, 0.19, 1.0), Vector3(0.09, 0.22, 6.4), _materials.dark_laminate)
 
-	for y in [0.72, 1.18, 1.64, 2.10]:
-		_box(shell, "StoreTrimRailY%03d" % int(y * 100.0), Vector3(0.0, y, 4.38), Vector3(7.35, 0.045, 0.08), _materials.dark_metal)
-		_box(shell, "LeftWallTrimRailY%03d" % int(y * 100.0), Vector3(-3.69, y, 1.0), Vector3(0.08, 0.045, 6.25), _materials.dark_metal)
-		_box(shell, "RightWallTrimRailY%03d" % int(y * 100.0), Vector3(3.69, y, 1.0), Vector3(0.08, 0.045, 6.25), _materials.dark_metal)
+	for y in [0.54, 0.74, 0.94, 1.14, 1.34, 1.54, 1.74, 1.94, 2.14]:
+		_box(shell, "BackSlatwallHorizontalGroove%03d" % int(y * 100.0), Vector3(0.0, y, 4.385), Vector3(7.35, 0.022, 0.05), _materials.slat_shadow)
+		_box(shell, "LeftWallShopfitRail%03d" % int(y * 100.0), Vector3(-3.69, y, 1.0), Vector3(0.07, 0.025, 6.25), _materials.slat_shadow)
+		_box(shell, "RightWallShopfitRail%03d" % int(y * 100.0), Vector3(3.69, y, 1.0), Vector3(0.07, 0.025, 6.25), _materials.slat_shadow)
 
 	for x in [-2.8, -1.4, 0.0, 1.4, 2.8]:
 		_box(shell, "BackWallSlatSeam%02d" % int((x + 2.8) * 10.0), Vector3(x, 1.24, 4.315), Vector3(0.035, 2.1, 0.06), _materials.slat_shadow)
-
-	for x in [-2.2, 0.2, 2.5]:
-		_poster(shell, "PromoWallPanel%02d" % int((x + 3.0) * 10.0), Vector3(x, 1.72, 4.25), Vector3(0.72, 0.52, 0.035), _pick_promo_material(x))
 
 
 func _build_mall_corridor(root: Node3D) -> void:
@@ -117,13 +118,13 @@ func _build_mall_corridor(root: Node3D) -> void:
 	_box(mall, "OppositeMallWall", Vector3(0.0, 1.32, -8.95), Vector3(10.6, 2.65, 0.12), _materials.mall_wall)
 	_box(mall, "NeighborStoreLeftVoid", Vector3(-4.15, 1.05, -6.55), Vector3(1.4, 2.1, 0.12), _materials.black_glass)
 	_box(mall, "NeighborStoreRightVoid", Vector3(4.15, 1.05, -6.55), Vector3(1.4, 2.1, 0.12), _materials.black_glass)
-	_box(mall, "NeighborLeftNeonStrip", Vector3(-4.15, 2.18, -6.48), Vector3(1.45, 0.08, 0.08), _materials.cyan_light)
-	_box(mall, "NeighborRightPinkStrip", Vector3(4.15, 2.18, -6.48), Vector3(1.45, 0.08, 0.08), _materials.magenta_light)
+	_box(mall, "NeighborLeftLightboxStrip", Vector3(-4.15, 2.18, -6.48), Vector3(1.45, 0.08, 0.08), _materials.warm_lightbox)
+	_box(mall, "NeighborRightLightboxStrip", Vector3(4.15, 2.18, -6.48), Vector3(1.45, 0.08, 0.08), _materials.warm_lightbox)
 	_box(mall, "MallBenchSeat", Vector3(-2.2, 0.42, -6.1), Vector3(1.22, 0.14, 0.36), _materials.wood)
 	_box(mall, "MallBenchLeftLeg", Vector3(-2.72, 0.22, -6.1), Vector3(0.12, 0.42, 0.12), _materials.dark_metal)
 	_box(mall, "MallBenchRightLeg", Vector3(-1.68, 0.22, -6.1), Vector3(0.12, 0.42, 0.12), _materials.dark_metal)
 	_box(mall, "MallDirectoryKiosk", Vector3(2.0, 0.82, -5.78), Vector3(0.38, 1.65, 0.18), _materials.directory_blue)
-	_box(mall, "MallDirectoryScreen", Vector3(2.0, 1.18, -5.66), Vector3(0.32, 0.54, 0.035), _materials.cyan_light)
+	_box(mall, "MallDirectoryScreen", Vector3(2.0, 1.18, -5.66), Vector3(0.32, 0.54, 0.035), _materials.warm_lightbox)
 
 
 func _build_storefront(root: Node3D) -> void:
@@ -132,12 +133,11 @@ func _build_storefront(root: Node3D) -> void:
 	root.add_child(storefront)
 
 	_box(storefront, "ChunkyStorefrontFascia", Vector3(0.0, 2.48, -2.2), Vector3(7.78, 0.36, 0.30), _materials.dark_blue)
-	_box(storefront, "BacklitGames4UFasciaPanel", Vector3(0.0, 2.49, -2.39), Vector3(2.65, 0.44, 0.055), _materials.sign_gold)
-	_box(storefront, "InteriorFacingGames4USignPanel", Vector3(0.0, 2.48, -2.04), Vector3(2.85, 0.46, 0.04), _materials.sign_gold)
-	_block_text(storefront, "Games4UBlockSign", "GAMES4U", Vector3(-1.18, 2.61, -1.995), 0.052, _materials.dark_text)
-	_block_text(storefront, "G4UBlockLogo", "G4U", Vector3(-0.62, 2.52, -1.965), 0.09, _materials.dark_blue)
-	_text(storefront, "Games4USignTextMesh", "Games4U", Vector3(-1.17, 2.37, -2.435), Vector3(-90.0, 0.0, 0.0), 42, _materials.sign_text)
-	_box(storefront, "CyanStorefrontTrim", Vector3(0.0, 2.75, -2.36), Vector3(7.65, 0.045, 0.055), _materials.cyan_light)
+	_box(storefront, "BacklitGames4UFasciaPanel", Vector3(0.0, 2.49, -2.39), Vector3(2.65, 0.44, 0.055), _materials.sign_cream)
+	_sign_panel(storefront, "ExteriorGames4USignBitmap", "GAMES4U", Vector3(0.0, 2.49, -2.435), Vector3(0.0, 0.0, 0.0), Vector2(2.25, 0.32), _materials.sign_cream, _materials.dark_blue)
+	_box(storefront, "InteriorFacingGames4USignPanel", Vector3(0.0, 2.48, -2.04), Vector3(2.85, 0.46, 0.04), _materials.sign_cream)
+	_sign_panel(storefront, "InteriorGames4USignBitmap", "GAMES4U", Vector3(0.0, 2.48, -1.995), Vector3(0.0, 0.0, 0.0), Vector2(2.35, 0.32), _materials.sign_cream, _materials.dark_blue)
+	_box(storefront, "StorefrontWarmTrim", Vector3(0.0, 2.75, -2.36), Vector3(7.65, 0.045, 0.055), _materials.warm_lightbox)
 	_box(storefront, "LowerStorefrontKickPlate", Vector3(0.0, 0.18, -2.2), Vector3(7.74, 0.36, 0.22), _materials.dark_metal)
 
 	for x in [-3.72, -2.24, -0.74, 0.74, 2.24, 3.72]:
@@ -160,9 +160,8 @@ func _build_storefront(root: Node3D) -> void:
 	_box(door, "OpenDoorRightRail", Vector3(0.56, 1.23, -0.02), Vector3(0.08, 1.86, 0.09), _materials.dark_metal)
 	_box(door, "OpenDoorPullHandle", Vector3(0.42, 1.13, -0.085), Vector3(0.06, 0.72, 0.075), _materials.handle_metal)
 
-	_box(storefront, "OpenSignPanelAttachedToDoor", Vector3(0.58, 1.64, -2.43), Vector3(0.58, 0.24, 0.035), _materials.store_open)
-	_block_text(storefront, "OpenBlockSign", "OPEN", Vector3(0.36, 1.72, -2.392), 0.025, _materials.dark_text)
-	_text(storefront, "OpenSignTextMesh", "OPEN", Vector3(0.36, 1.57, -2.465), Vector3(-90.0, 0.0, 0.0), 18, _materials.sign_text)
+	_box(storefront, "SmallOpenPlacardOnDoor", Vector3(0.58, 1.64, -2.43), Vector3(0.42, 0.18, 0.035), _materials.sign_cream)
+	_sign_panel(storefront, "OpenSignBitmap", "OPEN", Vector3(0.58, 1.64, -2.47), Vector3(0.0, 0.0, 0.0), Vector2(0.34, 0.10), _materials.sign_cream, _materials.dark_blue)
 
 
 func _build_drop_ceiling(root: Node3D) -> void:
@@ -189,26 +188,30 @@ func _build_slatwall_product_bay(root: Node3D) -> void:
 	root.add_child(bay)
 
 	_box(bay, "RightWallSlatwallPanel", Vector3(3.66, 1.34, 0.85), Vector3(0.08, 2.18, 4.5), _materials.slatwall)
+	for rail in range(11):
+		var y := 0.42 + float(rail) * 0.17
+		_box(bay, "RightWallSlatwallGroove%02d" % [rail + 1], Vector3(3.565, y, 0.85), Vector3(0.07, 0.018, 4.35), _materials.slat_shadow)
 	for z_index in range(9):
 		var z := -1.08 + float(z_index) * 0.48
-		_box(bay, "RightWallShelfRail%02d" % [z_index + 1], Vector3(3.57, 0.68 + float(z_index % 4) * 0.37, z), Vector3(0.18, 0.045, 1.58), _materials.dark_metal)
+		_box(bay, "RightWallShelfBracket%02dA" % [z_index + 1], Vector3(3.42, 0.64 + float(z_index % 4) * 0.37, z - 0.64), Vector3(0.28, 0.035, 0.04), _materials.dark_metal)
+		_box(bay, "RightWallShelfBracket%02dB" % [z_index + 1], Vector3(3.42, 0.64 + float(z_index % 4) * 0.37, z + 0.64), Vector3(0.28, 0.035, 0.04), _materials.dark_metal)
 
 	for shelf in range(4):
 		var y := 0.72 + float(shelf) * 0.38
 		_box(bay, "RightWallAcrylicShelf%02d" % [shelf + 1], Vector3(3.35, y, -0.05 + float(shelf) * 0.18), Vector3(0.42, 0.04, 3.25), _materials.acrylic)
-		_box(bay, "RightWallShelfHeader%02d" % [shelf + 1], Vector3(3.28, y + 0.19, -1.62), Vector3(0.08, 0.22, 0.78), _platform_header_material(shelf))
-		_text(bay, "PlatformHeaderText%02d" % [shelf + 1], _platform_name(shelf), Vector3(3.215, y + 0.09, -1.96), Vector3(0.0, -90.0, 0.0), 10, _materials.small_text)
+		_box(bay, "RightWallShelfHeaderRail%02d" % [shelf + 1], Vector3(3.15, y + 0.19, -0.06 + float(shelf) * 0.18), Vector3(0.08, 0.09, 3.05), _materials.shelf_label_rail)
+		_sign_panel(bay, "ShelfHeaderBitmap%02d" % [shelf + 1], _platform_name(shelf), Vector3(3.105, y + 0.235, -1.25 + float(shelf) * 0.18), Vector3(0.0, -90.0, 0.0), Vector2(0.5, 0.13), _materials.shelf_label_rail, _materials.sign_text)
 
 	for shelf in range(4):
 		for row in range(2):
-			for slot in range(11):
+			for slot in range(10):
 				var y := 0.83 + float(shelf) * 0.38 + float(row) * 0.115
-				var z := -1.23 + float(slot) * 0.26
-				var mat := _cover_materials[(shelf * 22 + row * 11 + slot) % _cover_materials.size()]
-				var game := _box(bay, "DenseCaseFacingS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.12, y, z), Vector3(0.055, 0.24, 0.17), mat)
-				game.rotation_degrees = Vector3(0.0, -2.0 + float(slot % 4), 0.0)
-				if slot % 3 == 0:
-					_box(bay, "YellowPriceStickerS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.078, y - 0.055, z + 0.045), Vector3(0.018, 0.045, 0.055), _materials.price_yellow)
+				var z := -1.17 + float(slot) * 0.265
+				var mat := _cover_materials[(shelf * 20 + row * 10 + slot) % _cover_materials.size()]
+				var game := _box(bay, "DenseCaseFacingS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.12, y, z), Vector3(0.052, 0.23, 0.16), mat)
+				game.rotation_degrees = Vector3(0.0, -0.7 + float(slot % 3) * 0.35, 0.0)
+				if slot % 4 == 0:
+					_box(bay, "YellowPriceStickerS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.078, y - 0.055, z + 0.045), Vector3(0.016, 0.034, 0.046), _materials.price_yellow)
 
 	var left_gondola := Node3D.new()
 	left_gondola.name = "LowGondolaCaseRun"
@@ -220,7 +223,7 @@ func _build_slatwall_product_bay(root: Node3D) -> void:
 	for slot in range(10):
 		var z := -0.92 + float(slot) * 0.2
 		_box(left_gondola, "GondolaGameCase%02d" % [slot + 1], Vector3(-0.32 + float(slot % 2) * 0.55, 1.0, z), Vector3(0.38, 0.25, 0.05), _cover_materials[slot % _cover_materials.size()])
-	_box(left_gondola, "BargainBinLip", Vector3(0.0, 0.77, -1.22), Vector3(1.5, 0.16, 0.08), _materials.sign_red)
+	_box(left_gondola, "LowGondolaPriceRail", Vector3(0.0, 0.77, -1.22), Vector3(1.5, 0.10, 0.08), _materials.shelf_label_rail)
 
 
 func _build_counter_display_case(root: Node3D) -> void:
@@ -251,15 +254,13 @@ func _build_attached_signage(root: Node3D) -> void:
 	signage.name = "AttachedRetailSignageAndPriceLanguage"
 	root.add_child(signage)
 
-	_box(signage, "NewReleaseHeaderAttached", Vector3(3.28, 2.02, -0.42), Vector3(0.08, 0.28, 1.62), _materials.dark_blue)
-	_block_text(signage, "NewBlockHeader", "NEW", Vector3(3.225, 2.11, -0.86), 0.026, _materials.sign_text)
-	_text(signage, "NewReleaseHeaderText", "NEW RELEASES", Vector3(3.205, 1.9, -0.97), Vector3(0.0, -90.0, 0.0), 12, _materials.sign_text)
-	_box(signage, "UsedGamesHeaderAttached", Vector3(3.28, 1.82, 1.25), Vector3(0.08, 0.25, 1.42), _materials.sign_gold)
-	_block_text(signage, "UsedBlockHeader", "USED", Vector3(3.225, 1.9, 0.9), 0.024, _materials.dark_text)
-	_text(signage, "UsedGamesHeaderText", "USED GAMES", Vector3(3.205, 1.72, 0.78), Vector3(0.0, -90.0, 0.0), 12, _materials.dark_text)
-	_box(signage, "TradeDealWindowDecal", Vector3(-2.72, 1.46, -2.43), Vector3(0.95, 0.42, 0.028), _materials.sign_red)
-	_text(signage, "TradeDealWindowText", "TRADE BONUS", Vector3(-3.08, 1.34, -2.468), Vector3(-90.0, 0.0, 0.0), 13, _materials.sign_text)
-	_box(signage, "SaleStickerSheetOnCounter", Vector3(-0.1, 1.31, -0.55), Vector3(0.48, 0.025, 0.26), _materials.price_yellow)
+	_box(signage, "NewReleaseShelfRailAttached", Vector3(3.24, 1.96, -0.42), Vector3(0.07, 0.12, 1.42), _materials.shelf_label_rail)
+	_sign_panel(signage, "NewReleaseShelfLabelBitmap", "NEW", Vector3(3.198, 2.02, -0.74), Vector3(0.0, -90.0, 0.0), Vector2(0.42, 0.11), _materials.shelf_label_rail, _materials.sign_text)
+	_box(signage, "UsedGamesShelfRailAttached", Vector3(3.24, 1.76, 1.25), Vector3(0.07, 0.12, 1.22), _materials.shelf_label_rail)
+	_sign_panel(signage, "UsedShelfLabelBitmap", "USED", Vector3(3.198, 1.82, 1.02), Vector3(0.0, -90.0, 0.0), Vector2(0.48, 0.11), _materials.shelf_label_rail, _materials.sign_text)
+	_box(signage, "QuietTradeWindowDecal", Vector3(-2.72, 1.46, -2.43), Vector3(0.78, 0.30, 0.028), _materials.window_decal)
+	_sign_panel(signage, "TradeWindowDecalBitmap", "TRADE", Vector3(-3.02, 1.55, -2.468), Vector3(-90.0, 0.0, 0.0), Vector2(0.5, 0.12), _materials.window_decal, _materials.sign_text)
+	_box(signage, "SmallSaleStickerSheetOnCounter", Vector3(-0.1, 1.31, -0.55), Vector3(0.36, 0.02, 0.18), _materials.price_yellow)
 
 
 func _build_cameras(root: Node3D) -> void:
@@ -292,55 +293,54 @@ func _build_cameras(root: Node3D) -> void:
 
 func _build_materials() -> void:
 	_materials = {
-		"carpet": _mat("carpet", Color(0.39, 0.39, 0.35), 0.88, 0.0, _noise_texture(Color(0.34, 0.35, 0.32), Color(0.48, 0.47, 0.4), 32)),
-		"store_tile": _mat("store_tile", Color(0.62, 0.62, 0.56), 0.72),
-		"mall_tile": _mat("mall_tile", Color(0.54, 0.53, 0.48), 0.7, 0.0, _checker_texture(Color(0.48, 0.48, 0.43), Color(0.62, 0.61, 0.55), 48)),
-		"grout": _mat("grout", Color(0.82, 0.76, 0.58), 0.94),
-		"wall_warm": _mat("wall_warm", Color(0.72, 0.74, 0.68), 0.82, 0.0, _noise_texture(Color(0.64, 0.67, 0.63), Color(0.78, 0.79, 0.71), 24)),
-		"wall_panel": _mat("wall_panel", Color(0.55, 0.65, 0.65), 0.84),
-		"slatwall": _mat("slatwall", Color(0.68, 0.7, 0.64), 0.86),
-		"slat_shadow": _mat("slat_shadow", Color(0.23, 0.27, 0.27), 0.9),
-		"mall_wall": _mat("mall_wall", Color(0.42, 0.44, 0.42), 0.9),
-		"dark_metal": _mat("dark_metal", Color(0.02, 0.06, 0.08), 0.46, 0.15),
-		"handle_metal": _mat("handle_metal", Color(0.75, 0.66, 0.47), 0.35, 0.25),
-		"dark_blue": _mat("dark_blue", Color(0.03, 0.18, 0.24), 0.62),
-		"sign_gold": _mat("sign_gold", Color(0.88, 0.68, 0.36), 0.48),
-		"sign_red": _mat("sign_red", Color(0.68, 0.1, 0.08), 0.6),
+		"carpet": _mat("carpet", Color(0.31, 0.32, 0.29), 0.9, 0.0, _noise_texture(Color(0.24, 0.26, 0.24), Color(0.43, 0.42, 0.36), 32)),
+		"store_tile": _mat("store_tile", Color(0.58, 0.57, 0.52), 0.74),
+		"mall_tile": _mat("mall_tile", Color(0.56, 0.55, 0.50), 0.72, 0.0, _checker_texture(Color(0.49, 0.49, 0.44), Color(0.63, 0.62, 0.56), 48)),
+		"grout": _mat("grout", Color(0.77, 0.72, 0.58), 0.94),
+		"wall_warm": _mat("wall_warm", Color(0.77, 0.78, 0.72), 0.86, 0.0, _noise_texture(Color(0.69, 0.71, 0.66), Color(0.84, 0.84, 0.76), 24)),
+		"wall_panel": _mat("wall_panel", Color(0.68, 0.70, 0.64), 0.86),
+		"slatwall": _mat("slatwall", Color(0.74, 0.75, 0.68), 0.88),
+		"slat_shadow": _mat("slat_shadow", Color(0.38, 0.40, 0.37), 0.92),
+		"mall_wall": _mat("mall_wall", Color(0.57, 0.58, 0.55), 0.9),
+		"dark_metal": _mat("dark_metal", Color(0.03, 0.05, 0.055), 0.48, 0.12),
+		"handle_metal": _mat("handle_metal", Color(0.70, 0.64, 0.48), 0.38, 0.2),
+		"dark_blue": _mat("dark_blue", Color(0.04, 0.16, 0.21), 0.66),
+		"sign_cream": _mat("sign_cream", Color(0.88, 0.80, 0.62), 0.58),
+		"window_decal": _mat("window_decal", Color(0.42, 0.18, 0.13), 0.65),
 		"sign_text": _mat("sign_text", Color(0.97, 0.93, 0.76), 0.5),
 		"small_text": _mat("small_text", Color(0.95, 0.96, 0.88), 0.5),
 		"dark_text": _mat("dark_text", Color(0.02, 0.12, 0.13), 0.6),
-		"store_open": _mat("store_open", Color(0.24, 0.76, 0.42), 0.5),
-		"cyan_light": _emissive_mat("cyan_light", Color(0.24, 0.95, 1.0), 0.75),
-		"magenta_light": _emissive_mat("magenta_light", Color(1.0, 0.28, 0.78), 0.7),
-		"glass": _glass_mat("glass", Color(0.58, 0.82, 0.92, 0.34)),
+		"warm_lightbox": _emissive_mat("warm_lightbox", Color(0.93, 0.82, 0.58), 0.5),
+		"glass": _glass_mat("glass", Color(0.62, 0.78, 0.84, 0.28)),
 		"black_glass": _glass_mat("black_glass", Color(0.0, 0.02, 0.025, 0.92)),
-		"acrylic": _glass_mat("acrylic", Color(0.82, 0.95, 1.0, 0.28)),
-		"ceiling_tile": _mat("ceiling_tile", Color(0.62, 0.62, 0.59), 0.92, 0.0, _checker_texture(Color(0.56, 0.56, 0.54), Color(0.68, 0.68, 0.64), 16)),
-		"ceiling_grid": _mat("ceiling_grid", Color(0.24, 0.25, 0.25), 0.55),
-		"fluorescent": _emissive_mat("fluorescent", Color(1.0, 0.9, 0.68), 0.45),
+		"acrylic": _glass_mat("acrylic", Color(0.82, 0.93, 0.95, 0.22)),
+		"ceiling_tile": _mat("ceiling_tile", Color(0.68, 0.67, 0.63), 0.92, 0.0, _checker_texture(Color(0.62, 0.62, 0.59), Color(0.74, 0.73, 0.69), 16)),
+		"ceiling_grid": _mat("ceiling_grid", Color(0.30, 0.31, 0.30), 0.58),
+		"fluorescent": _emissive_mat("fluorescent", Color(1.0, 0.92, 0.72), 0.38),
 		"dark_laminate": _mat("dark_laminate", Color(0.09, 0.07, 0.055), 0.5),
 		"wood": _mat("wood", Color(0.42, 0.26, 0.12), 0.62),
-		"directory_blue": _mat("directory_blue", Color(0.32, 0.38, 0.42), 0.58),
-		"price_yellow": _mat("price_yellow", Color(0.96, 0.78, 0.32), 0.55),
+		"directory_blue": _mat("directory_blue", Color(0.36, 0.40, 0.40), 0.6),
+		"price_yellow": _mat("price_yellow", Color(0.82, 0.68, 0.36), 0.58),
+		"shelf_label_rail": _mat("shelf_label_rail", Color(0.09, 0.18, 0.20), 0.65),
 		"register_gray": _mat("register_gray", Color(0.3, 0.34, 0.35), 0.55),
 		"paper": _mat("paper", Color(0.86, 0.82, 0.68), 0.92),
 		"paper_blue": _mat("paper_blue", Color(0.62, 0.78, 0.84), 0.86),
 		"controller_dark": _mat("controller_dark", Color(0.02, 0.04, 0.05), 0.58),
-		"controller_blue": _mat("controller_blue", Color(0.08, 0.27, 0.38), 0.58),
-		"platform_blue": _mat("platform_blue", Color(0.08, 0.22, 0.62), 0.6),
-		"platform_green": _mat("platform_green", Color(0.08, 0.42, 0.28), 0.6),
-		"platform_red": _mat("platform_red", Color(0.62, 0.12, 0.12), 0.6),
-		"platform_purple": _mat("platform_purple", Color(0.28, 0.16, 0.52), 0.6),
+		"controller_blue": _mat("controller_blue", Color(0.07, 0.20, 0.25), 0.6),
+		"platform_blue": _mat("platform_blue", Color(0.12, 0.22, 0.30), 0.66),
+		"platform_green": _mat("platform_green", Color(0.18, 0.27, 0.22), 0.66),
+		"platform_red": _mat("platform_red", Color(0.33, 0.17, 0.14), 0.66),
+		"platform_purple": _mat("platform_purple", Color(0.22, 0.18, 0.28), 0.66),
 	}
 
 	_cover_materials.clear()
 	var cover_colors: Array[Color] = [
-		Color(0.1, 0.23, 0.62),
-		Color(0.74, 0.18, 0.14),
-		Color(0.1, 0.48, 0.31),
-		Color(0.82, 0.62, 0.16),
-		Color(0.43, 0.22, 0.65),
-		Color(0.04, 0.45, 0.62),
+		Color(0.16, 0.24, 0.38),
+		Color(0.38, 0.20, 0.16),
+		Color(0.18, 0.32, 0.24),
+		Color(0.52, 0.42, 0.22),
+		Color(0.28, 0.22, 0.36),
+		Color(0.14, 0.34, 0.38),
 	]
 	for index in range(18):
 		var base := cover_colors[index % cover_colors.size()]
@@ -365,56 +365,47 @@ func _box(parent: Node3D, node_name: String, position_value: Vector3, size: Vect
 	return node
 
 
-func _poster(parent: Node3D, node_name: String, position_value: Vector3, size: Vector3, material: StandardMaterial3D) -> void:
-	var poster := _box(parent, node_name, position_value, size, material)
-	poster.rotation_degrees = Vector3(0.0, 0.0, 0.0)
-	_box(parent, "%sBottomTag" % node_name, position_value + Vector3(0.0, -0.28, -0.025), Vector3(size.x * 0.62, 0.08, 0.04), _materials.price_yellow)
-
-
-func _text(parent: Node3D, node_name: String, text: String, position_value: Vector3, rotation_value: Vector3, font_size: int, material: StandardMaterial3D) -> MeshInstance3D:
-	var mesh := TextMesh.new()
-	mesh.text = text
-	mesh.font_size = font_size
-	mesh.depth = 0.008
+func _sign_panel(
+	parent: Node3D,
+	node_name: String,
+	text: String,
+	position_value: Vector3,
+	rotation_value: Vector3,
+	size: Vector2,
+	background_material: StandardMaterial3D,
+	foreground_material: StandardMaterial3D
+) -> MeshInstance3D:
+	var mesh := QuadMesh.new()
+	mesh.size = size
 	var node := MeshInstance3D.new()
 	node.name = node_name
 	node.mesh = mesh
 	node.position = position_value
 	node.rotation_degrees = rotation_value
-	node.scale = Vector3(0.01, 0.01, 0.01)
-	node.material_override = material
+	node.material_override = _sign_bitmap_material(
+		"%sMaterial" % node_name,
+		background_material.albedo_color,
+		foreground_material.albedo_color,
+		text
+	)
 	parent.add_child(node)
 	return node
 
 
-func _block_text(parent: Node3D, node_name: String, text: String, origin: Vector3, pixel: float, material: StandardMaterial3D) -> Node3D:
-	var holder := Node3D.new()
-	holder.name = node_name
-	parent.add_child(holder)
-
-	var cursor_x := 0.0
-	for letter in text:
-		var rows := _glyph_rows(letter)
-		for row in range(rows.size()):
-			var row_text := rows[row]
-			for column in range(row_text.length()):
-				if row_text.substr(column, 1) != "#":
-					continue
-				_box(holder, "%s_%s_%02d_%02d" % [node_name, letter, row, column],
-					origin + Vector3(cursor_x + float(column) * pixel, -float(row) * pixel, 0.0),
-					Vector3(pixel * 0.78, pixel * 0.78, 0.024),
-					material
-				)
-		cursor_x += pixel * 4.6
-	return holder
-
-
 func _glyph_rows(letter: String) -> PackedStringArray:
 	match letter.to_upper():
+		"B":
+			return PackedStringArray(["###.", "#..#", "###.", "#..#", "###."])
+		"C":
+			return PackedStringArray(["####", "#...", "#...", "#...", "####"])
+		"D":
+			return PackedStringArray(["###.", "#..#", "#..#", "#..#", "###."])
 		"G":
 			return PackedStringArray(["####", "#...", "#.##", "#..#", "####"])
 		"A":
 			return PackedStringArray([".##.", "#..#", "####", "#..#", "#..#"])
+		"I":
+			return PackedStringArray(["####", ".##.", ".##.", ".##.", "####"])
 		"M":
 			return PackedStringArray(["#..#", "####", "####", "#..#", "#..#"])
 		"E":
@@ -429,12 +420,16 @@ func _glyph_rows(letter: String) -> PackedStringArray:
 			return PackedStringArray(["####", "#..#", "#..#", "#..#", "####"])
 		"P":
 			return PackedStringArray(["####", "#..#", "####", "#...", "#..."])
+		"R":
+			return PackedStringArray(["###.", "#..#", "###.", "#.#.", "#..#"])
+		"T":
+			return PackedStringArray(["####", ".##.", ".##.", ".##.", ".##."])
 		"N":
 			return PackedStringArray(["#..#", "##.#", "#.##", "#..#", "#..#"])
 		"W":
 			return PackedStringArray(["#..#", "#..#", "####", "####", "#..#"])
-		"D":
-			return PackedStringArray(["###.", "#..#", "#..#", "#..#", "###."])
+		"L":
+			return PackedStringArray(["#...", "#...", "#...", "#...", "####"])
 		_:
 			return PackedStringArray(["....", "....", "....", "....", "...."])
 
@@ -466,6 +461,12 @@ func _emissive_mat(name: String, color: Color, energy: float) -> StandardMateria
 	return material
 
 
+func _sign_bitmap_material(name: String, background: Color, foreground: Color, text: String) -> StandardMaterial3D:
+	var material := _mat(name, background, 0.72, 0.0, _sign_texture(background, foreground, text))
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return material
+
+
 func _checker_texture(a: Color, b: Color, cell_size: int) -> ImageTexture:
 	var image := Image.create(128, 128, false, Image.FORMAT_RGBA8)
 	for y in range(128):
@@ -482,6 +483,46 @@ func _noise_texture(a: Color, b: Color, cell_size: int) -> ImageTexture:
 			var band := float(((x * 17 + y * 31) % cell_size)) / float(maxi(1, cell_size))
 			image.set_pixel(x, y, a.lerp(b, band))
 	return ImageTexture.create_from_image(image)
+
+
+func _sign_texture(background: Color, foreground: Color, text: String) -> ImageTexture:
+	var image := Image.create(256, 64, false, Image.FORMAT_RGBA8)
+	for y in range(64):
+		for x in range(256):
+			var vignette: float = 0.94 + 0.06 * (1.0 - abs(float(x) - 128.0) / 128.0)
+			image.set_pixel(x, y, background * vignette)
+
+	var glyph_width := 4
+	var glyph_height := 5
+	var pixel := 7
+	var gap := 4
+	var total_width := 0
+	for letter in text:
+		if letter == " ":
+			total_width += pixel * 2
+		else:
+			total_width += glyph_width * pixel + gap
+	var cursor_x := maxi(8, int((256 - total_width) / 2.0))
+	var origin_y := int((64 - glyph_height * pixel) / 2.0)
+	for letter in text:
+		if letter == " ":
+			cursor_x += pixel * 2
+			continue
+		var rows := _glyph_rows(letter)
+		for row in range(rows.size()):
+			var row_text := rows[row]
+			for column in range(row_text.length()):
+				if row_text.substr(column, 1) != "#":
+					continue
+				_fill_rect(image, cursor_x + column * pixel, origin_y + row * pixel, pixel - 1, pixel - 1, foreground)
+		cursor_x += glyph_width * pixel + gap
+	return ImageTexture.create_from_image(image)
+
+
+func _fill_rect(image: Image, x0: int, y0: int, width: int, height: int, color: Color) -> void:
+	for y in range(y0, mini(image.get_height(), y0 + height)):
+		for x in range(x0, mini(image.get_width(), x0 + width)):
+			image.set_pixel(x, y, color)
 
 
 func _cover_texture(base: Color, accent: Color, index: int) -> ImageTexture:
@@ -501,18 +542,6 @@ func _cover_texture(base: Color, accent: Color, index: int) -> ImageTexture:
 	return ImageTexture.create_from_image(image)
 
 
-func _platform_header_material(index: int) -> StandardMaterial3D:
-	match index:
-		0:
-			return _materials.platform_blue
-		1:
-			return _materials.platform_green
-		2:
-			return _materials.platform_red
-		_:
-			return _materials.platform_purple
-
-
 func _platform_name(index: int) -> String:
 	match index:
 		0:
@@ -523,11 +552,3 @@ func _platform_name(index: int) -> String:
 			return "POCKET"
 		_:
 			return "USED"
-
-
-func _pick_promo_material(x: float) -> StandardMaterial3D:
-	if x < -1.0:
-		return _materials.sign_red
-	if x < 1.0:
-		return _materials.platform_blue
-	return _materials.platform_green
