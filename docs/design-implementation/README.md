@@ -54,7 +54,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 11 | `11-lighting-materials-and-color-palette-spec.md` | Complete | Bright store lighting, warmer mall lighting, commercial carpet, editable panels, fixture materials, and palette rules. |
 | 12 | `12-validation-and-screenshot-checklist.md` | Complete | Screenshot-first validation, final game-window review, detailed notes, fail language, and docs-only skip rules. |
 | 13 | `13-agent-work-packet-template.md` | Complete | Strict implementation packet template with read-first docs, scope, evidence, validation, decision log, and handoff rules. |
-| 14 | `14-phase-implementation-roadmap.md` | Not started | Master dependency map from planning through owner validation. |
+| 14 | `14-phase-implementation-roadmap.md` | Complete | Master roadmap from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness. |
 
 ## Dependency Model
 
@@ -106,6 +106,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Write `14-phase-implementation-roadmap.md`.
+Begin implementation packet assembly from `14-phase-implementation-roadmap.md`.
 
-That doc must define the master dependency map from planning through implementation, validation, owner review, and beta/tester readiness.
+Use `13-agent-work-packet-template.md` to create concrete implementation packets for the next code/asset pass, then proceed through the roadmap until validation fails, a blocker appears, or owner input is required.

@@ -33,6 +33,7 @@ The previous broad production, beta/playtest-package, stockroom-production, gray
 - [Lighting Materials And Color Palette Spec](design-implementation/11-lighting-materials-and-color-palette-spec.md): bright retail lighting, warmer mall contrast, commercial carpet, editable color panels, fixture materials, and palette rules.
 - [Validation And Screenshot Checklist](design-implementation/12-validation-and-screenshot-checklist.md): screenshot-first review, final game-window artifacts, detailed notes, explicit fail language, and docs-only skip rules.
 - [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md): strict implementation packet format with read-first docs, scope, validation evidence, decision log, final handoff, and parallel-work rules.
+- [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md): master path from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness.
 
 ## Current Production Docs
 
