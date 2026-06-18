@@ -5,6 +5,7 @@ const VALIDATION_DOC_PATH := "res://../docs/production/06-validation.md"
 const BACKLOG_PATH := "res://../docs/production/04-backlog.md"
 const BUG_LIST_PATH := "res://../docs/production/13-alpha-bug-list.md"
 const SCREENSHOT_REVIEW_PATH := "res://../docs/qa/screenshot-review.md"
+const OWNER_REVIEW_PATH := "res://../docs/production/14-owner-visual-review-package.md"
 
 
 func test_validation_snapshot_records_current_gate_outputs() -> void:
@@ -28,11 +29,15 @@ func test_docs_name_design_reset_as_current_gate() -> void:
 	var backlog := FileAccess.get_file_as_string(BACKLOG_PATH)
 	var bug_list := FileAccess.get_file_as_string(BUG_LIST_PATH)
 	var screenshot_review := FileAccess.get_file_as_string(SCREENSHOT_REVIEW_PATH)
+	var owner_review := FileAccess.get_file_as_string(OWNER_REVIEW_PATH)
 
 	assert_string_contains(validation_doc, "design reset")
 	assert_string_contains(backlog, "Design reset")
 	assert_string_contains(bug_list, "VIS-001")
 	assert_string_contains(screenshot_review, "2002-2004")
+	assert_string_contains(owner_review, "Revise before beta")
+	assert_string_contains(owner_review, "validate_godot.sh")
+	assert_string_contains(owner_review, "regression evidence only")
 	assert_false(backlog.contains("external alpha"))
 
 

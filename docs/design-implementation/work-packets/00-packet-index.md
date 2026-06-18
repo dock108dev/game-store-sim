@@ -32,7 +32,7 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 5 | `05-product-platform-and-price-language.md` | Complete | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
 | 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
 | 7 | `07-lighting-density-and-integration-polish.md` | Complete | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
-| 8 | `08-review-package-and-owner-validation.md` | Next | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
+| 8 | `08-review-package-and-owner-validation.md` | Complete | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
 
 ## Dependency Model
 
@@ -103,6 +103,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Start packet 08: `08-review-package-and-owner-validation.md`.
+Packet 08 is complete. Review `../../production/14-owner-visual-review-package.md` for the owner approve/revise/block decision.
 
-Packet 07 completed the lighting/material/screenshot evidence pass: the store is brighter, the mall approach is warmer, commercial-carpet and wall-panel cues are in the active scene, product and stockroom doorway screenshot targets are corrected, and the validation gate now captures 27 screenshots. Packet 08 owns the review package and owner validation decision.
+Packet 07 completed the lighting/material/screenshot evidence pass: the store is brighter, the mall approach is warmer, commercial-carpet and wall-panel cues are in the active scene, product and stockroom doorway screenshot targets are corrected, and the validation gate now captures 27 screenshots. Packet 08 packaged final screenshot notes and owner decision options. The lead recommendation is targeted visual revision before beta/tester packaging.

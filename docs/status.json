@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-18",
-  "current_phase": "implementation_packets_ready",
+  "current_phase": "owner_visual_review_ready",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the design source of truth as canon and design-implementation work packets as the execution queue.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the design source of truth as canon. Packet 08 is packaged for owner visual review before beta/tester readiness.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "design_reset_required_source_of_truth_adopted",
+    "visual_read": "owner_visual_review_ready_revision_recommended",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 581,
-    "gut_asserts": 11799,
+    "gut_asserts": 11809,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -69,9 +69,9 @@
     "manual_real_window_1280x720_walk_in_review"
   ],
   "next_decision": {
-    "question": "Does the next implementation pass make the opening store read as a small, underfunded, functional 2002-2004 independent game store with growth potential?",
-    "approve_path": "continue through the design-implementation work packets until vertical-slice review is ready",
-    "reject_path": "correct the opening store first-read before broadening catalog, customer, decoration, hidden-narrative, or external-playtest work"
+    "question": "Does the owner approve, revise, or block the current opening-store visual baseline?",
+    "approve_path": "assemble beta/tester readiness package and manual walkthrough instructions",
+    "reject_path": "run a focused visual revision packet for fixture/counter modules, mall corridor/facade, receiving station, and review-board/contact-sheet overhaul"
   },
   "active_docs": [
     "README.md",
@@ -110,6 +110,7 @@
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",
+    "docs/production/14-owner-visual-review-package.md",
     "docs/qa/README.md",
     "docs/qa/smoke-playtest.md",
     "docs/qa/screenshot-review.md"

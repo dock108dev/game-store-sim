@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "implementation_packets_ready")
+	assert_eq(status.get("current_phase"), "owner_visual_review_ready")
 	assert_eq(status.get("playtest_state"), "paused_until_design_source_of_truth_baseline_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "design_reset_required_source_of_truth_adopted")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "owner_visual_review_ready_revision_recommended")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
 
 
@@ -23,7 +23,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 581)
-	assert_eq(int(validation.get("gut_asserts")), 11799)
+	assert_eq(int(validation.get("gut_asserts")), 11809)
 	assert_eq(int(ui.get("automated")), 512)
 	assert_eq(int(ui.get("total")), 632)
 	assert_eq(int(scripts.get("covered")), 53)
@@ -77,6 +77,7 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 	assert_true(active_docs.has("docs/production/04-backlog.md"))
 	assert_true(active_docs.has("docs/production/06-validation.md"))
 	assert_true(active_docs.has("docs/production/13-alpha-bug-list.md"))
+	assert_true(active_docs.has("docs/production/14-owner-visual-review-package.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/screenshot-review.md"))
 	assert_false(active_docs.has("docs/design-planning/README.md"))
@@ -92,6 +93,7 @@ func test_current_state_and_readme_point_to_new_plan() -> void:
 	assert_string_contains(current_state, "docs/status.json")
 	assert_string_contains(current_state, "Design Source Of Truth")
 	assert_string_contains(current_state, "Design Implementation Index")
+	assert_string_contains(current_state, "Owner Visual Review Package")
 	assert_string_contains(current_state, "2002-2004")
 	assert_string_contains(readme, "docs/status.json")
 	assert_string_contains(readme, "Design Source Of Truth")

@@ -63,6 +63,7 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 - [Backlog](production/04-backlog.md): current work queue and stop conditions.
 - [Validation](production/06-validation.md): full local gate and artifact policy.
 - [Visual Bug List](production/13-alpha-bug-list.md): current design/visual blockers.
+- [Owner Visual Review Package](production/14-owner-visual-review-package.md): Packet 08 screenshot notes, validation evidence, residual risks, and owner approve/revise/block decision path.
 
 ## Current QA
 

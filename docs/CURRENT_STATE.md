@@ -12,7 +12,7 @@ The design and visual target is being reset. The owner-provided store/world brie
 
 External playtest and broad visual expansion are paused.
 
-The active blocker is: rebuild the opening store so it reads as a small, independent, underfunded but functional 2002-2004 specialty game store with visible growth potential.
+The active blocker is: owner review of the opening store visual baseline. The current build is packaged for owner review, but the lead recommendation is targeted visual revision before beta/tester packaging because fixture, counter, receiving, and mall-corridor elements still read too primitive.
 
 For design intent, read:
 
@@ -38,7 +38,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 581 GUT tests and 11799 asserts.
+- Current doc-contract expectation is 581 GUT tests and 11809 asserts.
 - UI scenario automation coverage is 512/632, or 81.0%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.
@@ -71,24 +71,30 @@ Rejected path:
 
 ## Next Implementation Pass
 
-Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the next build queue. Packet assembly is complete. Packets 01-07 are implemented and validated. Packet 08 is the active implementation pass for final review packaging and owner validation, then implementation proceeds through the remaining packet phases:
+Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the build queue history. Packet assembly is complete. Packets 01-08 are implemented and validated. Packet 08 produced the [Owner Visual Review Package](production/14-owner-visual-review-package.md).
 
-1. Review package, owner correction loop, then tester readiness only after approval.
+The next implementation pass depends on owner choice:
+
+1. Approve opening baseline, then assemble beta/tester readiness.
+2. Revise targeted visual modules before beta. This is the lead recommendation.
+3. Block and deepen the art reset if the current direction still fundamentally misses the target.
 
 Packet 06 added editable `Games4U` identity data, changed the day-one door sign to `CLOSED`, replaced the fake used-wall shelf default with attached `Potpourri` mixed-shelf labeling, and added fictional new-release, trade-in, coming-soon, and now-on-sale poster support.
 
-Packet 07 added brighter clean store lighting, warmer mall approach lighting, firm commercial-carpet cues, attached wall color panels, fixed product/stockroom doorway screenshot targets, and expanded visual-review screenshot evidence. The contact sheet and `scripts/validate_godot.sh` remain regression evidence, not design approval by themselves.
+Packet 07 added brighter clean store lighting, warmer mall approach lighting, firm commercial-carpet cues, attached wall color panels, fixed product/stockroom doorway screenshot targets, and expanded visual-review screenshot evidence. Packet 08 packaged the final screenshot notes, known residual risks, validation evidence, and approve/revise/block owner decision path.
+
+The contact sheet and `scripts/validate_godot.sh` remain regression evidence, not design approval by themselves.
 
 Stop if the implementation would change core mechanics instead of replacing the visual/design surface.
 
 ## Next Validation Pass
 
-1. Run focused doc/source-of-truth tests.
-2. Run `scripts/validate_godot.sh`.
-3. Review the regenerated production contact sheet.
-4. Do a real-window 1280x720 walk-in from entrance to checkout.
-5. Review against [Validation And Screenshot Checklist](design-implementation/12-validation-and-screenshot-checklist.md).
-6. Decide whether the implementation roadmap phase makes the store read as a small early-2000s independent game store, or whether it needs corrections before proceeding.
+1. Review [Owner Visual Review Package](production/14-owner-visual-review-package.md).
+2. Inspect the referenced screenshots in `artifacts/validation/latest/screenshots/`.
+3. Treat `scripts/validate_godot.sh` and the contact sheet as regression evidence, not design approval.
+4. Do a real-window 1280x720 walk-in from entrance to checkout if owner approval is being considered.
+5. Choose approve, revise, or block.
+6. If revising, keep scope focused on fixture/counter modules, mall corridor/facade, receiving station, and visual-review-board/contact-sheet overhaul before beta prep.
 
 ## Active Documentation
 
@@ -99,6 +105,7 @@ Stop if the implementation would change core mechanics instead of replacing the 
 - [Backlog](production/04-backlog.md)
 - [Validation](production/06-validation.md)
 - [Visual Bug List](production/13-alpha-bug-list.md)
+- [Owner Visual Review Package](production/14-owner-visual-review-package.md)
 - [QA Index](qa/README.md)
 - [Screenshot Review](qa/screenshot-review.md)
 - [Smoke Playtest](qa/smoke-playtest.md)

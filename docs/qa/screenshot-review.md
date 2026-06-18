@@ -24,6 +24,8 @@ Contact sheet:
 artifacts/validation/latest/screenshot-contact-sheet.png
 ```
 
+For the current owner decision package, read [Owner Visual Review Package](../production/14-owner-visual-review-package.md). That doc is the active Packet 08 review summary; this QA file only defines the screenshot procedure.
+
 ## Primary Review Targets
 
 - `main_scene.png`: storefront/entrance first read
@@ -52,6 +54,7 @@ Pass only if:
 - large debug labels are not required to understand primary objects
 - the 1280x720 real-window walk-in does not expose a prototype-heavy angle
 - Packet 06 signage should show `Games4U` as the storefront default, a real closed/open sign state, attached shelf labels, and fictional promo posters without reviving debug label cards.
+- Owner approval is based on screenshot-level notes and/or a real-window walk-in, not the contact sheet alone.
 
 ## Fail Criteria
 

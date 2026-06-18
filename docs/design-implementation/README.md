@@ -70,7 +70,7 @@ Implementation packet assembly is complete under `work-packets/`.
 | 5 | `work-packets/05-product-platform-and-price-language.md` | Complete | Fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter products. |
 | 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Complete | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
 | 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Complete | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
-| 8 | `work-packets/08-review-package-and-owner-validation.md` | Next | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
+| 8 | `work-packets/08-review-package-and-owner-validation.md` | Complete | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
 
 ## Dependency Model
 
@@ -122,6 +122,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Start implementation with `work-packets/08-review-package-and-owner-validation.md`.
+Review `../production/14-owner-visual-review-package.md` for the owner approve/revise/block decision.
 
-Packets 01-07 are implemented and validated. The next implementation pass should package Packet 08 evidence, commit and push, then continue only if the review package identifies no owner decision/blocker.
+Packets 01-08 are implemented and validated. The lead recommendation is targeted visual revision before beta/tester packaging.
