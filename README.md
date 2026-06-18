@@ -40,7 +40,7 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 Latest validated baseline:
 
 - 570 GUT tests.
-- 10796 GUT asserts.
+- 10799 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.

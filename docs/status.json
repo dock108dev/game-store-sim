@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "project": "game-store-sim",
-  "status_date": "2026-06-17",
+  "status_date": "2026-06-18",
   "current_phase": "design_reset_source_of_truth_adopted",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
@@ -36,7 +36,7 @@
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 10796,
+    "gut_asserts": 10799,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -85,6 +85,7 @@
     "docs/design-source-of-truth/03-asset-inventory-roadmap.md",
     "docs/design-source-of-truth/04-validation-and-signoff.md",
     "docs/design-implementation/README.md",
+    "docs/design-implementation/02-visual-module-system-spec.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",

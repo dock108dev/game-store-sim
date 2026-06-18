@@ -21,6 +21,7 @@ The previous broad production, beta/playtest-package, stockroom-production, gray
 ## Design Implementation Docs
 
 - [Design Implementation Index](design-implementation/README.md): agent operating rules, running document list, dependency model, and slice completion definition.
+- [Visual Module System Spec](design-implementation/02-visual-module-system-spec.md): reusable module system, asset workflow, grid, collision, texture, material, and upgradeability rules.
 
 ## Current Production Docs
 

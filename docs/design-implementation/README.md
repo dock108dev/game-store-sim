@@ -42,7 +42,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | Order | Document | Status | Purpose |
 | ---: | --- | --- | --- |
 | 1 | `README.md` | Complete | Implementation index, operating rules, slice order, and dependency policy. |
-| 2 | `02-visual-module-system-spec.md` | Needs owner answers | Reusable build pieces, material rules, collision rules, and scene organization. |
+| 2 | `02-visual-module-system-spec.md` | Complete | Reusable build pieces, material rules, collision rules, and scene organization. |
 | 3 | `03-store-shell-and-mall-entrance-slice.md` | Not started | Opening spawn, mall concourse, storefront, entrance, and first read. |
 | 4 | `04-starting-store-layout-spec.md` | Not started | Exact floor plan, zone placement, backroom relationship, and day-one density. |
 | 5 | `05-fixture-grid-slice.md` | Not started | Wall shelves, gondolas, endcaps, slatwall, browse paths, and stockable fixture rules. |
@@ -106,6 +106,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Write `02-visual-module-system-spec.md`.
+Write `03-store-shell-and-mall-entrance-slice.md`.
 
-That doc must define the actual reusable construction language before heavy scene implementation resumes.
+That doc must define the opening spawn, mall concourse, storefront, entrance, and first-read requirements.
