@@ -25,8 +25,8 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 
 | Order | Packet | Status | Purpose |
 | ---: | --- | --- | --- |
-| 1 | `01-visual-module-foundation.md` | Not started | Establish reusable materials, modules, anchors, naming, and no-raw-cube visual foundation. |
-| 2 | `02-store-shell-mall-entrance-stockroom.md` | Not started | Build the mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout. |
+| 1 | `01-visual-module-foundation.md` | Complete | Establish reusable materials, modules, anchors, naming, and no-raw-cube visual foundation. |
+| 2 | `02-store-shell-mall-entrance-stockroom.md` | Next | Build the mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout. |
 | 3 | `03-fixtures-and-placement-systems.md` | Not started | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
 | 4 | `04-checkout-trade-in-and-day-one-setup.md` | Not started | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
 | 5 | `05-product-platform-and-price-language.md` | Not started | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
@@ -103,6 +103,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Start packet 01: `01-visual-module-foundation.md`.
+Start packet 02: `02-store-shell-mall-entrance-stockroom.md`.
 
-Do not begin broad store shell work until packet 01 has established the module/material rules and file structure needed to avoid another raw primitive rebuild.
+Packet 01 established the module/material contracts needed to avoid another raw primitive rebuild. Packet 02 owns the first visible shell pass: mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout.

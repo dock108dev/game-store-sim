@@ -12,6 +12,17 @@ const KIT_SCENES := [
 	"res://scenes/world/kits/backroom/receiving_intake_kit.tscn",
 	"res://scenes/world/kits/backroom/backroom_staff_threshold_kit.tscn",
 ]
+const WORLD_VISUAL_MODULE_PATHS := [
+	"WorldModules/MallConcourseModule",
+	"WorldModules/StorefrontShellModule",
+	"WorldModules/OpeningThresholdModule",
+	"WorldModules/StoreInteriorShellModule",
+	"WorldModules/FrontCounterZoneModule",
+	"WorldModules/StarterProductDisplayModule",
+	"WorldModules/SalesFloorFixturesModule",
+	"WorldModules/ReceivingAreaModule",
+	"WorldModules/BackroomShellModule",
+]
 
 
 func test_art_benchmark_scene_loads_with_required_kit_instances() -> void:
@@ -114,6 +125,21 @@ func test_store_world_instances_first_art_kit_route_without_replacing_mechanics(
 	_collect_labels(route, labels)
 	assert_eq(visible_csg.size(), 0)
 	assert_eq(labels.size(), 0)
+
+
+func test_store_world_visual_modules_publish_implementation_contracts() -> void:
+	var store := _instantiate_scene(STORE_WORLD_SCENE)
+	add_child_autofree(store)
+
+	for module_path in WORLD_VISUAL_MODULE_PATHS:
+		var module := store.get_node_or_null(module_path)
+		assert_not_null(module, module_path)
+		assert_true(module.call("has_visual_contract"), module_path)
+		assert_eq(module.call("missing_owned_node_names", store).size(), 0, "%s owned nodes" % module_path)
+		assert_eq(module.call("missing_visual_node_names", store).size(), 0, "%s visual nodes" % module_path)
+		assert_eq(module.call("missing_collision_node_names", store).size(), 0, "%s collision nodes" % module_path)
+		assert_eq(module.call("missing_anchor_node_names", store).size(), 0, "%s anchors" % module_path)
+		assert_eq(module.call("missing_material_resource_paths").size(), 0, "%s materials" % module_path)
 
 
 func _instantiate_scene(scene_path: String) -> Node:

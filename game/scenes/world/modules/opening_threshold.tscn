@@ -7,3 +7,7 @@ script = ExtResource("1_manifest")
 module_id = "opening_threshold"
 responsibility = "Walkable open doorway, threshold lip, door-frame rails, entry cue, and disabled blocker compatibility."
 owned_node_names = PackedStringArray("FrontDoorBlocker", "EntrySidewalkCue", "EntryThresholdInteriorStrip", "EntryRouteStripeRegister", "EntryRouteStripeShelf", "StorefrontOpenDoorTopRail", "StorefrontOpenDoorBottomRail", "StorefrontThresholdMetalLip", "StorefrontThresholdRubberInset")
+visual_node_names = PackedStringArray("EntrySidewalkCue", "EntryThresholdInteriorStrip", "EntryRouteStripeRegister", "EntryRouteStripeShelf", "StorefrontOpenDoorTopRail", "StorefrontOpenDoorBottomRail", "StorefrontThresholdMetalLip", "StorefrontThresholdRubberInset")
+collision_node_names = PackedStringArray("FrontDoorBlocker", "StorefrontThresholdMetalLip", "StorefrontThresholdRubberInset")
+anchor_node_names = PackedStringArray("EntrySidewalkCue", "EntryRouteStripeRegister", "EntryRouteStripeShelf")
+material_resource_paths = PackedStringArray("res://assets/materials/retail/storefront_dark_metal.tres", "res://assets/materials/retail/storefront_glass.tres", "res://assets/materials/retail/utility_floor.tres", "res://assets/materials/retail/neon_cyan.tres")

@@ -7,3 +7,7 @@ script = ExtResource("1_manifest")
 module_id = "front_counter_zone"
 responsibility = "Register, counter work surface, checkout props, register-side composition, and customer transaction anchor."
 owned_node_names = PackedStringArray("RegisterWorkstation", "CounterBase", "CounterTop", "CounterFrontTrim", "RegisterScanner", "ReceiptPrinter", "ReceiptSlip", "TradeInInspectionTray", "RegisterWorkflowCard", "RegisterCounterMonitorBody", "RegisterCounterMonitorScreen", "RegisterCounterMonitorStand", "RegisterBagHookRail", "RegisterBagSleeveA", "RegisterBagSleeveB", "RegisterTaskLight")
+visual_node_names = PackedStringArray("CounterBase", "CounterTop", "CounterFrontTrim", "RegisterScanner", "ReceiptPrinter", "ReceiptSlip", "TradeInInspectionTray", "RegisterWorkflowCard", "RegisterCounterMonitorBody", "RegisterCounterMonitorScreen", "RegisterBagHookRail", "RegisterBagSleeveA", "RegisterBagSleeveB")
+collision_node_names = PackedStringArray("CounterBase", "CounterTop", "TradeInInspectionTray", "RegisterCounterMonitorBody")
+anchor_node_names = PackedStringArray("RegisterWorkstation", "RegisterScanner", "TradeInInspectionTray", "RegisterWorkflowCard")
+material_resource_paths = PackedStringArray("res://assets/materials/retail/cream_counter.tres", "res://assets/materials/retail/dark_laminate.tres", "res://assets/materials/retail/sticker_price.tres", "res://assets/materials/retail/poster_paper.tres")

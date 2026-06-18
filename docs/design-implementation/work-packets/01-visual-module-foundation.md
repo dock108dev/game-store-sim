@@ -1,6 +1,6 @@
 # Work Packet: Visual Module Foundation
 
-Status: Not started
+Status: Complete
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/02-visual-module-system-spec.md`
@@ -141,6 +141,9 @@ Use game-window screenshots unless editor mode is needed to show anchors/collisi
 | Decision | Reason | Owner/Lead Needed? | Follow-up |
 | --- | --- | --- | --- |
 | Main store integration stays sequential. | Module assets can be built alone, but the store scene is shared and high-risk. | No | Packet 02 integrates shell modules. |
+| Visual module manifests now declare owned visuals, collision nodes, anchors, and material resources. | Future scene edits need a testable implementation contract, not just a loose module name. | No | Packet 02 must keep these manifests current while reshaping the shell. |
+| Store systems module remains a nonvisual ownership wrapper. | Gameplay managers should stay separable from visual module contracts. | No | Keep it out of visual-quality assertions unless systems gain visible debug surfaces. |
+| Validation baseline moved to 571 GUT tests and 10908 asserts. | The packet added a visual-module implementation contract test. | No | Full production gate still required after visible scene integration. |
 
 ## Stop Conditions
 
@@ -156,6 +159,13 @@ Use game-window screenshots unless editor mode is needed to show anchors/collisi
 - Existing mechanics remain preserved.
 - Store/mall materials and lights are ready for shell assembly.
 - Any visual shortcomings are fixable in packet 02 or 07 without owner decision.
+
+Current result:
+
+- Visual module manifest script exposes module, visual, collision, anchor, and material dependency checks.
+- Main world visual modules publish explicit implementation contracts against current scene nodes.
+- GUT passes with 571 tests and 10908 asserts.
+- Full `scripts/validate_godot.sh` remains required after Packet 02 visible shell integration.
 
 ## Final Handoff Requirements
 

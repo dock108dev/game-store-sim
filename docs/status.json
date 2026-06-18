@@ -35,8 +35,8 @@
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 570,
-    "gut_asserts": 10834,
+    "gut_tests": 571,
+    "gut_asserts": 10908,
     "ui_automation": {
       "automated": 508,
       "total": 628,
