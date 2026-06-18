@@ -13,7 +13,7 @@ func test_screenshot_scenarios_cover_current_visual_blockers() -> void:
 	assert_false(capture_tool.is_empty())
 	assert_false(validation_gate.is_empty())
 
-	for issue_id in ["VIS-001", "VIS-002", "VIS-003", "VIS-004", "VIS-007", "VIS-008", "VIS-009", "VIS-010"]:
+	for issue_id in ["VIS-001", "VIS-002", "VIS-003", "VIS-004", "VIS-007", "VIS-008", "VIS-009", "VIS-010", "VIS-012"]:
 		assert_string_contains(alpha_bug_list, issue_id)
 
 	var required_scenarios := [

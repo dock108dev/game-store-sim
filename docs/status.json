@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-18",
-  "current_phase": "owner_visual_review_ready",
+  "current_phase": "visual_direction_blocked_art_spike_required",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the design source of truth as canon. Packet 08 is packaged for owner visual review before beta/tester readiness.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype while a separate art-direction spike proves the new Blender/bitmap/asset workflow.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "owner_visual_review_ready_revision_recommended",
+    "visual_read": "blocked_current_visual_method_art_spike_required",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 581,
-    "gut_asserts": 11809,
+    "gut_asserts": 11818,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -61,7 +61,9 @@
   "source_inputs": [
     "Store Design & World Building Brief v1.0",
     "Vertical Slice Build Specification v4.0",
-    "game_store_sim_300_object_asset_inventory.xlsx"
+    "game_store_sim_300_object_asset_inventory.xlsx",
+    "inspiration/",
+    "new_real_inspiration/"
   ],
   "blocking_reviews": [
     "owner_design_source_of_truth_signoff",
@@ -69,9 +71,9 @@
     "manual_real_window_1280x720_walk_in_review"
   ],
   "next_decision": {
-    "question": "Does the owner approve, revise, or block the current opening-store visual baseline?",
-    "approve_path": "assemble beta/tester readiness package and manual walkthrough instructions",
-    "reject_path": "run a focused visual revision packet for fixture/counter modules, mall corridor/facade, receiving station, and review-board/contact-sheet overhaul"
+    "question": "Does the art-direction spike prove a stronger small-chain game store visual method than the current primitive scene?",
+    "approve_path": "use the approved art spike kit to rebuild the playable store visuals around existing mechanics",
+    "reject_path": "change art workflow, asset source, or engine only if the spike proves the current Godot/Blender pipeline cannot reach the target"
   },
   "active_docs": [
     "README.md",
@@ -98,6 +100,7 @@
     "docs/design-implementation/12-validation-and-screenshot-checklist.md",
     "docs/design-implementation/13-agent-work-packet-template.md",
     "docs/design-implementation/14-phase-implementation-roadmap.md",
+    "docs/design-implementation/15-art-direction-reset-and-spike-plan.md",
     "docs/design-implementation/work-packets/00-packet-index.md",
     "docs/design-implementation/work-packets/01-visual-module-foundation.md",
     "docs/design-implementation/work-packets/02-store-shell-mall-entrance-stockroom.md",
@@ -107,6 +110,8 @@
     "docs/design-implementation/work-packets/06-signage-promotions-and-required-zones.md",
     "docs/design-implementation/work-packets/07-lighting-density-and-integration-polish.md",
     "docs/design-implementation/work-packets/08-review-package-and-owner-validation.md",
+    "docs/design-implementation/work-packets/09-art-direction-spike.md",
+    "new_real_inspiration/README.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",

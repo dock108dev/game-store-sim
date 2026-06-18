@@ -48,6 +48,8 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 - [Validation And Screenshot Checklist](design-implementation/12-validation-and-screenshot-checklist.md): screenshot-first review, final game-window artifacts, detailed notes, explicit fail language, and docs-only skip rules.
 - [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md): strict implementation packet format with read-first docs, scope, validation evidence, decision log, final handoff, and parallel-work rules.
 - [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md): master path from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness.
+- [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md): owner block decision, frozen mechanics prototype boundary, inspiration extraction, and replacement art workflow.
+- [Real Period Retail Inspiration](../new_real_inspiration/README.md): owner-added early-2000s retail references for shelves, products, counters, and store density.
 - [Work Packet Index](design-implementation/work-packets/00-packet-index.md): active packet queue for implementation agents.
 - [Visual Module Foundation Packet](design-implementation/work-packets/01-visual-module-foundation.md): reusable materials, modules, collision/anchors, and no-raw-cube foundation.
 - [Store Shell Mall Entrance Stockroom Packet](design-implementation/work-packets/02-store-shell-mall-entrance-stockroom.md): mall approach, storefront, open entrance, real stockroom, receiving area, and first-read route.
@@ -57,6 +59,7 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 - [Signage Promotions And Required Zones Packet](design-implementation/work-packets/06-signage-promotions-and-required-zones.md): store identity, shelf labels, posters, required signs, and zone readability without debug labels.
 - [Lighting Density And Integration Polish Packet](design-implementation/work-packets/07-lighting-density-and-integration-polish.md): final lighting, material, density, clutter, route, and screenshot polish.
 - [Review Package And Owner Validation Packet](design-implementation/work-packets/08-review-package-and-owner-validation.md): final evidence package, validation, blocker list, and owner approve/revise/block path.
+- [Art Direction Spike Packet](design-implementation/work-packets/09-art-direction-spike.md): reference extraction, asset workflow, inside-looking-out proof shot, and owner handoff.
 
 ## Current Production Docs
 

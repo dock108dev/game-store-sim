@@ -12,7 +12,9 @@ The design and visual target is being reset. The owner-provided store/world brie
 
 External playtest and broad visual expansion are paused.
 
-The active blocker is: owner review of the opening store visual baseline. The current build is packaged for owner review, but the lead recommendation is targeted visual revision before beta/tester packaging because fixture, counter, receiving, and mall-corridor elements still read too primitive.
+The owner selected the block path for the current visual direction. The current Godot scene is now frozen as a mechanics prototype, not the visual baseline. The next work is a separate art-direction spike using `inspiration/` for stylized scaffold, `new_real_inspiration/` for real period retail construction, Blender-authored modular assets, bitmap textures, and legally clean asset packs/custom assets as needed.
+
+The first proof target is an inside-looking-out shot for a small-chain game store. The spike may redesign the footprint, storefront, facade, and world placement heavily.
 
 For design intent, read:
 
@@ -26,7 +28,8 @@ For implementation, start with:
 
 - [Design Implementation Index](design-implementation/README.md)
 - [Work Packet Index](design-implementation/work-packets/00-packet-index.md)
-- [Visual Module Foundation Packet](design-implementation/work-packets/01-visual-module-foundation.md)
+- [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md)
+- [Art Direction Spike Packet](design-implementation/work-packets/09-art-direction-spike.md)
 
 ## Validation Snapshot
 
@@ -38,7 +41,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 581 GUT tests and 11809 asserts.
+- Current doc-contract expectation is 581 GUT tests and 11818 asserts.
 - UI scenario automation coverage is 512/632, or 81.0%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.
@@ -71,17 +74,17 @@ Rejected path:
 
 ## Next Implementation Pass
 
-Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the build queue history. Packet assembly is complete. Packets 01-08 are implemented and validated. Packet 08 produced the [Owner Visual Review Package](production/14-owner-visual-review-package.md).
+Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the build queue history. Packet assembly is complete. Packets 01-08 are implemented and validated. Packet 08 produced the [Owner Visual Review Package](production/14-owner-visual-review-package.md), and the owner chose the block path.
 
-The next implementation pass depends on owner choice:
+The next implementation pass is:
 
-1. Approve opening baseline, then assemble beta/tester readiness.
-2. Revise targeted visual modules before beta. This is the lead recommendation.
-3. Block and deepen the art reset if the current direction still fundamentally misses the target.
+1. Execute [Art Direction Spike Packet](design-implementation/work-packets/09-art-direction-spike.md).
+2. Use `inspiration/` and `new_real_inspiration/` as primary reference input.
+3. Prove an inside-looking-out small-chain store shot before rebuilding the full playable store.
 
 Packet 06 added editable `Games4U` identity data, changed the day-one door sign to `CLOSED`, replaced the fake used-wall shelf default with attached `Potpourri` mixed-shelf labeling, and added fictional new-release, trade-in, coming-soon, and now-on-sale poster support.
 
-Packet 07 added brighter clean store lighting, warmer mall approach lighting, firm commercial-carpet cues, attached wall color panels, fixed product/stockroom doorway screenshot targets, and expanded visual-review screenshot evidence. Packet 08 packaged the final screenshot notes, known residual risks, validation evidence, and approve/revise/block owner decision path.
+Packet 07 added brighter clean store lighting, warmer mall approach lighting, firm commercial-carpet cues, attached wall color panels, fixed product/stockroom doorway screenshot targets, and expanded visual-review screenshot evidence. Packet 08 packaged the final screenshot notes, known residual risks, validation evidence, and approve/revise/block owner decision path. The current outcome is block: stop trying to polish the current scene as the visual source.
 
 The contact sheet and `scripts/validate_godot.sh` remain regression evidence, not design approval by themselves.
 
@@ -89,18 +92,19 @@ Stop if the implementation would change core mechanics instead of replacing the 
 
 ## Next Validation Pass
 
-1. Review [Owner Visual Review Package](production/14-owner-visual-review-package.md).
-2. Inspect the referenced screenshots in `artifacts/validation/latest/screenshots/`.
-3. Treat `scripts/validate_godot.sh` and the contact sheet as regression evidence, not design approval.
-4. Do a real-window 1280x720 walk-in from entrance to checkout if owner approval is being considered.
-5. Choose approve, revise, or block.
-6. If revising, keep scope focused on fixture/counter modules, mall corridor/facade, receiving station, and visual-review-board/contact-sheet overhaul before beta prep.
+1. Extract visual rules from `inspiration/` and `new_real_inspiration/`.
+2. Build or mock one inside-looking-out art-direction spike.
+3. Compare the art spike against the current screenshot baseline.
+4. Treat `scripts/validate_godot.sh` and the old contact sheet as mechanics/regression evidence only.
+5. Owner decides approve, revise, or block the art spike.
 
 ## Active Documentation
 
 - [Documentation Index](README.md)
 - [Design Source Of Truth](design-source-of-truth/README.md)
 - [Design Implementation Index](design-implementation/README.md)
+- [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md)
+- [Real Period Retail Inspiration](../new_real_inspiration/README.md)
 - [Work Packet Index](design-implementation/work-packets/00-packet-index.md)
 - [Backlog](production/04-backlog.md)
 - [Validation](production/06-validation.md)

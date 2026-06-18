@@ -22,13 +22,16 @@ Do not expand broad catalog visuals, customers, decoration breadth, hidden narra
 - limited starting inventory with a clear growth path
 - fictional products and platforms that read without real brands
 
-Current owner-review entrypoints:
+Current art-reset entrypoints:
 
 - [Design Implementation Index](docs/design-implementation/README.md)
 - [Work Packet Index](docs/design-implementation/work-packets/00-packet-index.md)
-- [Owner Visual Review Package](docs/production/14-owner-visual-review-package.md)
+- [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
+- [Art Direction Spike Packet](docs/design-implementation/work-packets/09-art-direction-spike.md)
 
 Use [Design Source Of Truth](docs/design-source-of-truth/README.md) when a packet needs design intent, owner decisions, or quality-bar context.
+
+Use `inspiration/` for stylized game-world scaffold and `new_real_inspiration/` for real early-2000s retail fixture, shelf, product-density, and counter reference.
 
 ## Validate
 
@@ -42,7 +45,7 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 581 GUT tests and 11809 GUT asserts.
+- Current doc-contract expectation: 581 GUT tests and 11818 GUT asserts.
 - UI scenario automation coverage: 512/632.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.
@@ -55,6 +58,7 @@ Current validation snapshot:
 - [Current State](docs/CURRENT_STATE.md)
 - [Design Source Of Truth](docs/design-source-of-truth/README.md)
 - [Design Implementation Index](docs/design-implementation/README.md)
+- [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
 - [Backlog](docs/production/04-backlog.md)
 - [Validation](docs/production/06-validation.md)
 - [Visual Bug List](docs/production/13-alpha-bug-list.md)

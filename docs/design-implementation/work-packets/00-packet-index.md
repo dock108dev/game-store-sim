@@ -33,6 +33,7 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
 | 7 | `07-lighting-density-and-integration-polish.md` | Complete | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
 | 8 | `08-review-package-and-owner-validation.md` | Complete | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
+| 9 | `09-art-direction-spike.md` | Ready | Prove the replacement Blender/bitmap/sourced-asset visual method with an inside-looking-out small-chain store spike. |
 
 ## Dependency Model
 
@@ -46,6 +47,7 @@ Sequential dependencies:
 6. Packet 06 depends on packet 02 storefront/stockroom, packet 03 fixture labels, and packet 05 product language.
 7. Packet 07 depends on packets 01-06.
 8. Packet 08 depends on packet 07.
+9. Packet 09 depends on owner block decision from packet 08.
 
 Parallel-safe work:
 
@@ -103,6 +105,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Packet 08 is complete. Review `../../production/14-owner-visual-review-package.md` for the owner approve/revise/block decision.
+Packet 08 is complete and the owner selected the block path. Start packet 09: `09-art-direction-spike.md`.
 
-Packet 07 completed the lighting/material/screenshot evidence pass: the store is brighter, the mall approach is warmer, commercial-carpet and wall-panel cues are in the active scene, product and stockroom doorway screenshot targets are corrected, and the validation gate now captures 27 screenshots. Packet 08 packaged final screenshot notes and owner decision options. The lead recommendation is targeted visual revision before beta/tester packaging.
+Packet 07 completed the lighting/material/screenshot evidence pass: the store is brighter, the mall approach is warmer, commercial-carpet and wall-panel cues are in the active scene, product and stockroom doorway screenshot targets are corrected, and the validation gate now captures 27 screenshots. Packet 08 packaged final screenshot notes and owner decision options. The current direction is blocked; the next work must prove a replacement art workflow before full-store rebuild.

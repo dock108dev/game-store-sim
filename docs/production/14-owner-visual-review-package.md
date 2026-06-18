@@ -1,7 +1,7 @@
 # Owner Visual Review Package
 
-Status: Ready for owner review
-Recommendation: Revise before beta/tester package
+Status: Owner blocked current visual direction
+Recommendation: Block current primitive visual method and run art-direction spike
 Branch: `codex/hard-visual-benchmark-implementation`
 Commit range: `94f7bef6..f87e7260`
 Latest visual scene implementation commit: `f87e7260 Complete lighting density polish packet`
@@ -14,11 +14,13 @@ This is not a beta-readiness package. It is the owner review package for decidin
 
 ## Review Position
 
-Lead recommendation: **revise before beta/tester package**.
+Owner decision: **block and deepen the art reset**.
 
 The current scene is materially stronger than the original graybox: the player starts from a mall approach, the storefront has a readable `Games4U` identity, the store has a real entrance, checkout, product displays, stockroom doorway, receiving area, day-one product language, lighting contrast, and early store setup support.
 
-The remaining problem is also clear: fixtures, counters, ceiling pieces, some prop groups, and parts of the mall shell still read as assembled primitive geometry. The store has the right functional anchors, but the art language is not yet strong enough to hand to beta testers as the visual bar.
+The remaining problem is also clear: fixtures, counters, ceiling pieces, some prop groups, and parts of the mall shell still read as assembled primitive geometry. The store has the right functional anchors, but the art production method is not strong enough to keep polishing as the visual baseline.
+
+Current decision: freeze this scene as the mechanics prototype and prove a new art method in `docs/design-implementation/15-art-direction-reset-and-spike-plan.md` using both `inspiration/` and `new_real_inspiration/`.
 
 ## Validation Evidence
 
@@ -30,7 +32,7 @@ scripts/validate_godot.sh
 
 Current recorded result:
 
-- GUT: 581 tests, 11809 asserts, all passing.
+- GUT: 581 tests, 11818 asserts, all passing.
 - UI scenario automation: 512/632, or 81.0%.
 - Production script mapping: 53/53, or 100.0%.
 - Validation tools: 3 active standalone tools.
@@ -146,13 +148,13 @@ Choose one:
    - Next step: assemble beta/tester package and manual walkthrough instructions.
 
 2. **Revise targeted visual modules before beta.**
-   - Lead recommendation.
+   - Superseded by owner block decision.
    - Scope: fixture/counter module pass, mall corridor/facade pass, receiving station pass, and visual-review board/contact-sheet overhaul.
    - Next step: create and implement a focused revision packet without broad catalog/customer/decor expansion.
 
 3. **Block and deepen the art reset.**
-   - Use if the current route still fundamentally misses the intended style.
-   - Scope: replace core store construction approach, possibly change engine/asset workflow, and stop incremental module work until a stronger art pipeline is chosen.
+   - Selected owner path.
+   - Scope: replace the visual construction approach, keep current mechanics, use `inspiration/` and `new_real_inspiration/` as primary input, prove a Blender/bitmap/asset workflow in a separate inside-looking-out art spike, and stop incremental primitive-scene polishing.
 
 ## Signoff Questions
 
@@ -166,6 +168,6 @@ Please answer these during review:
 
 ## Final Recommendation
 
-Proceed with **Option 2: Revise targeted visual modules before beta**.
+Proceed with **Option 3: Block and deepen the art reset**.
 
-The current build is ready for owner review and correction notes. It is not ready for external beta/testing as the visual baseline.
+The current build remains valuable as a mechanics prototype. It is not the visual baseline. Next work starts with [Art Direction Reset And Spike Plan](../design-implementation/15-art-direction-reset-and-spike-plan.md).

@@ -141,6 +141,7 @@ Required final screenshots:
 | Owner approval is required before tester/beta readiness prep. | Owner must judge whether the visual reset meets the game-store fantasy. | Yes | Ask for approve, revise, or block after package is ready. |
 | Packet 08 recommends targeted revision, not beta readiness. | Screenshots show a stronger opening route, but fixture/counter/mall/receiving silhouettes still read too primitive for the intended visual bar. | Yes | Owner should choose approve, revise, or block. |
 | `scripts/validate_godot.sh` and the contact sheet remain regression evidence only. | The graybox-era gate proves the build and screenshot contracts, not final art approval. | No | Use screenshot notes and a real-window walkthrough for design approval. |
+| Owner selected block after Packet 08 review. | The current visual method still reads like arranged primitives after multiple passes. | Yes | Packet 09 starts a separate art-direction spike and freezes the current scene as mechanics prototype. |
 
 ## Implementation Notes
 
@@ -148,7 +149,7 @@ Required final screenshots:
 - Recorded branch, commit range, latest implementation commit, validation output, artifact paths, screenshot-level notes, open residual risks, resolved improvements, and owner decision options.
 - Updated `docs/status.json`, current state, doc indexes, visual bug list, QA screenshot review, and doc status tests.
 - Marked Packet 08 complete and set the current phase to owner visual review.
-- Lead recommendation is targeted visual revision before beta/tester packaging.
+- Owner later selected the block path; Packet 09 supersedes targeted revision with a separate art-direction spike.
 
 ## Stop Conditions
 
@@ -160,10 +161,10 @@ Required final screenshots:
 
 ## Continue Conditions
 
-- Owner approves the opening-store baseline.
-- Validation is current.
+- Owner approves a later art-direction spike.
+- Validation is current for mechanics when integrating the approved kit.
 - Known issues are documented.
-- Next work can move to tester/beta readiness or owner-specified corrections.
+- Next work can move to playable visual rebuild only after the spike is approved.
 
 ## Final Handoff Requirements
 
@@ -184,7 +185,7 @@ Required final screenshots:
 - Review package: `docs/production/14-owner-visual-review-package.md`.
 - Screenshot folder: `artifacts/validation/latest/screenshots/`.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
-- Validation command/result: `scripts/validate_godot.sh` passed in the current implementation pass with 581 tests and 11809 asserts.
+- Validation command/result: `scripts/validate_godot.sh` passed in the current implementation pass with 581 tests and 11818 asserts.
 - Known residual issues: primitive fixture/counter silhouettes, sparse mall approach/facade, receiving station still label-heavy, and current contact sheet too small/mixed-purpose for final visual approval.
-- Recommendation: revise before beta/tester package.
-- Owner decisions needed: approve, revise, or block the current opening-store visual baseline.
+- Recommendation after owner review: block current primitive visual method and run Packet 09 art-direction spike.
+- Owner decisions needed next: approve, revise, or block the art spike.
