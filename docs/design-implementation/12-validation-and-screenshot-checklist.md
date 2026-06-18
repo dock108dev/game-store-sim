@@ -141,6 +141,7 @@ Start with automated script screenshots. Ensure coverage can answer these views:
 - stockroom receiving area
 - stockroom desk/planning area
 - lighting/materials read
+- warmer mall versus brighter store lighting read
 - signage/product label read
 
 If the automated set already covers these, do not duplicate. If it misses one, add a targeted final screenshot.

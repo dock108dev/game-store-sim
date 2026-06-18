@@ -50,7 +50,11 @@ func test_production_visual_screenshot_scenarios_have_named_compositions() -> vo
 	var validation_gate := FileAccess.get_file_as_string(VALIDATION_GATE_PATH)
 	var required_scenarios := [
 		"storefront_entry",
+		"lighting_materials_store",
+		"lighting_materials_mall",
 		"stocked_aisle",
+		"product_closeup",
+		"stockroom_doorway",
 		"catalog_design_cues",
 		"upgrade_preview",
 	]

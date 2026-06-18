@@ -5,9 +5,9 @@ This is no longer an alpha/beta readiness board. It tracks current blockers that
 ## Current Gate State
 
 - Automated validation has no open failure from the last full run.
-- Current doc-contract expectation is 580 GUT tests and 11717 asserts. Latest full validation gate is green with UI scenario automation coverage 508/628, production script mapping coverage 53/53, 3 active validation tools, and 62 catalog products.
+- Current doc-contract expectation is 581 GUT tests and 11799 asserts. Latest full validation gate is green with UI scenario automation coverage 512/632, production script mapping coverage 53/53, 3 active validation tools, and 62 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, contact-sheet generation, and old-name scan passed.
-- All 23 required screenshot files were present, screenshot sanity passed, and `artifacts/validation/latest/screenshot-contact-sheet.png` was generated.
+- All 27 required screenshot files were present, screenshot sanity passed, and `artifacts/validation/latest/screenshot-contact-sheet.png` was generated.
 - The visual/design result is not yet approved against the design source of truth or implementation roadmap.
 
 ## Priority Key
@@ -30,6 +30,7 @@ This is no longer an alpha/beta readiness board. It tracks current blockers that
 | --- | --- | --- |
 | VIS-001 | Documentation routing | Design canon remains in `docs/design-source-of-truth/`; active agent execution starts in `docs/design-implementation/`; production and QA docs support status/evidence only. |
 | VIS-005 | Packet 06 signage reset | Store identity data now keeps `Games4U` as editable default, the entry sign reads as a real closed state instead of setup/debug text, the default shelf label is attached `Potpourri`, and fictional promo categories cover new, trade-in, coming-soon, and sale messaging. |
+| VIS-006 | Packet 07 visual evidence reset | Validation now captures 27 screenshots including lighting/material store, warmer mall contrast, product closeup, and stockroom doorway review views; these remain review evidence, not automatic design approval. |
 
 ## Routing
 

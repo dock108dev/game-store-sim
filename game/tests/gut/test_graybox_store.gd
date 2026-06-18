@@ -464,6 +464,8 @@ func test_store_materials_use_readable_floor_wall_counter_contrast() -> void:
 	assert_gt(_color_luma(wall_material.albedo_color), _color_luma(floor_material.albedo_color) + 0.28)
 	assert_gt(_color_luma(floor_material.albedo_color), _color_luma(counter_material.albedo_color) + 0.14)
 	assert_gt(wall_material.albedo_color.b, floor_material.albedo_color.b)
+	assert_gte(floor_material.roughness, 0.9)
+	assert_gte(wall_material.roughness, 0.65)
 
 
 func test_finished_shell_trim_and_material_cues_are_nonblocking() -> void:
@@ -503,22 +505,27 @@ func test_finished_shell_trim_and_material_cues_are_nonblocking() -> void:
 	assert_lte(register_mat.size.y, 0.015)
 
 
-func test_store_lighting_has_warm_sales_and_cool_backroom_layers() -> void:
+func test_store_lighting_has_bright_store_warm_mall_and_cool_backroom_layers() -> void:
 	var sun_light := _store.get_node_or_null("SunLight") as DirectionalLight3D
+	var mall_light := _store.get_node_or_null("MallConcourseLight") as OmniLight3D
 	var sales_light := _store.get_node_or_null("StoreLight") as OmniLight3D
 	var register_light := _store.get_node_or_null("RegisterTaskLight") as OmniLight3D
 	var backroom_light := _store.get_node_or_null("BackroomUtilityLight") as OmniLight3D
 
 	assert_not_null(sun_light)
+	assert_not_null(mall_light)
 	assert_not_null(sales_light)
 	assert_not_null(register_light)
 	assert_not_null(backroom_light)
 	assert_lte(sun_light.light_energy, 1.0)
 	assert_gt(sales_light.light_energy, backroom_light.light_energy)
+	assert_gt(sales_light.light_energy, mall_light.light_energy)
 	assert_gt(register_light.light_energy, 1.5)
-	assert_gt(sales_light.light_color.r, sales_light.light_color.b)
+	assert_gt(mall_light.light_color.r, mall_light.light_color.b)
+	assert_gt(sales_light.light_color.b, sales_light.light_color.r)
 	assert_gt(register_light.light_color.r, register_light.light_color.b)
 	assert_gt(backroom_light.light_color.b, backroom_light.light_color.r)
+	assert_gt(mall_light.omni_range, 8.0)
 	assert_lt(sales_light.global_position.z, 1.0)
 	assert_gt(backroom_light.global_position.z, 4.0)
 
@@ -572,7 +579,43 @@ func test_production_lighting_accents_stay_readable_and_bounded() -> void:
 	var sales_light := _store.get_node("StoreLight") as OmniLight3D
 	var register_light := _store.get_node("RegisterTaskLight") as OmniLight3D
 	var backroom_light := _store.get_node("BackroomUtilityLight") as OmniLight3D
-	assert_lte(sun_light.light_energy + sales_light.light_energy + register_light.light_energy + backroom_light.light_energy + total_accent_energy, 11.0)
+	assert_lte(sun_light.light_energy + sales_light.light_energy + register_light.light_energy + backroom_light.light_energy + total_accent_energy, 12.25)
+
+
+func test_packet_seven_material_polish_has_attached_carpet_and_wall_cues() -> void:
+	for fleck_path in [
+		"CommercialCarpetFleckA",
+		"CommercialCarpetFleckB",
+		"CommercialCarpetFleckC",
+		"CommercialCarpetFleckD",
+		"CommercialCarpetFleckE",
+		"CommercialCarpetFleckF",
+	]:
+		var fleck := _store.get_node_or_null(fleck_path) as CSGBox3D
+		assert_not_null(fleck, fleck_path)
+		assert_false(fleck.use_collision, fleck_path)
+		assert_lte(fleck.size.y, 0.0061, fleck_path)
+		assert_true(_is_inside_store_floorprint(fleck.global_position), fleck_path)
+
+	for panel_path in [
+		"SalesWallColorPanelBackLeft",
+		"SalesWallColorPanelBackRight",
+		"SalesWallColorPanelLeftFront",
+		"SalesWallColorPanelRightFront",
+	]:
+		var panel := _store.get_node_or_null(panel_path) as CSGBox3D
+		assert_not_null(panel, panel_path)
+		assert_false(panel.use_collision, panel_path)
+		assert_true(_is_inside_store_floorprint(panel.global_position), panel_path)
+		assert_gt(panel.global_position.y, 1.0, panel_path)
+
+	var mall_material := (_store.get_node("SecondFloorMallConcourse/MallConcourseFloor") as CSGBox3D).material as StandardMaterial3D
+	var wall_panel_material := (_store.get_node("SalesWallColorPanelBackLeft") as CSGBox3D).material as StandardMaterial3D
+	var wall_material := (_store.get_node("BackWall") as CSGBox3D).material as StandardMaterial3D
+	assert_not_null(mall_material)
+	assert_not_null(wall_panel_material)
+	assert_gt(mall_material.albedo_color.r, mall_material.albedo_color.b)
+	assert_gt(absf(_color_luma(wall_material.albedo_color) - _color_luma(wall_panel_material.albedo_color)), 0.08)
 
 
 func test_stockroom_lighting_materials_and_density_cues_stay_nonblocking() -> void:
@@ -960,6 +1003,10 @@ func test_stockroom_staff_boundary_reads_as_employees_only() -> void:
 	assert_eq(label.text, "EMPLOYEES ONLY")
 	assert_lte(label.pixel_size, 0.0025)
 	assert_true(label.no_depth_test)
+	assert_eq(label.billboard, 0)
+	assert_false(label.double_sided)
+	assert_lte(label.transform.basis.x.x, -0.9)
+	assert_lte(label.transform.basis.z.z, -0.9)
 
 	for path in [
 		"StaffThresholdMat",
@@ -1603,6 +1650,16 @@ func test_production_environment_props_preserve_core_navigation_clearance() -> v
 		"StorefrontGlassLeft",
 		"StorefrontGlassRight",
 		"EntrySidewalkCue",
+		"CommercialCarpetFleckA",
+		"CommercialCarpetFleckB",
+		"CommercialCarpetFleckC",
+		"CommercialCarpetFleckD",
+		"CommercialCarpetFleckE",
+		"CommercialCarpetFleckF",
+		"SalesWallColorPanelBackLeft",
+		"SalesWallColorPanelBackRight",
+		"SalesWallColorPanelLeftFront",
+		"SalesWallColorPanelRightFront",
 		"SalesFloorRouteMat",
 		"NewReleaseEndcap/EndcapBase",
 		"NewReleaseEndcap/EndcapHeaderPanel",

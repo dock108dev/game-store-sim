@@ -24,7 +24,11 @@ SCREENSHOT_SCENARIOS=(
   launch_day
   supplier_delivery
   storefront_entry
+  lighting_materials_store
+  lighting_materials_mall
   stocked_aisle
+  product_closeup
+  stockroom_doorway
   catalog_design_cues
   upgrade_preview
   fixture_ghost

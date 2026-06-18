@@ -13,9 +13,9 @@ func test_validation_snapshot_records_current_gate_outputs() -> void:
 	var ui: Dictionary = validation.get("ui_automation", {})
 	var scripts: Dictionary = validation.get("script_test_mapping", {})
 
-	assert_eq(int(validation.get("gut_tests")), 580)
-	assert_eq(int(ui.get("automated")), 508)
-	assert_eq(int(ui.get("total")), 628)
+	assert_eq(int(validation.get("gut_tests")), 581)
+	assert_eq(int(ui.get("automated")), 512)
+	assert_eq(int(ui.get("total")), 632)
 	assert_eq(int(scripts.get("covered")), 53)
 	assert_eq(int(scripts.get("total")), 53)
 	assert_eq(int(validation.get("active_validation_tools")), 3)

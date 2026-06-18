@@ -28,21 +28,23 @@ The gate runs:
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 580 GUT tests and 11717 GUT asserts.
-- UI scenario automation coverage: 508/628, or 80.9%.
+- Current doc-contract expectation: 581 GUT tests and 11799 GUT asserts.
+- UI scenario automation coverage: 512/632, or 81.0%.
 - Production script mapping coverage: 53/53, or 100.0%.
 - 3 active standalone validation tools.
 - 62 catalog products.
 - Desktop pack export smoke passed.
 - Alpha performance smoke passed.
 - Screenshot sanity passed.
-- 23 required screenshots captured.
+- 27 required screenshots captured.
 - Screenshot contact sheet generated at `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Old-name scan passed.
 
 ## Design-Reset Validation
 
 For the current design reset, automated validation is necessary but insufficient. The pass is not approved unless owner review confirms that the opening store delivers the fantasy documented in `docs/design-source-of-truth/` and the evidence requested by `docs/design-implementation/12-validation-and-screenshot-checklist.md`.
+
+`scripts/validate_godot.sh` and the generated contact sheet are regression evidence. They do not approve the design reset by themselves because the previous screenshot set and pass/fail logic were created for graybox-era checks.
 
 Required evidence:
 

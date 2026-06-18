@@ -69,8 +69,8 @@ Implementation packet assembly is complete under `work-packets/`.
 | 4 | `work-packets/04-checkout-trade-in-and-day-one-setup.md` | Complete | Checkout/trade-in counter, queue support, behind-counter intake, and day-one receiving/setup tasks. |
 | 5 | `work-packets/05-product-platform-and-price-language.md` | Complete | Fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter products. |
 | 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Complete | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
-| 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Next | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
-| 8 | `work-packets/08-review-package-and-owner-validation.md` | Not started | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
+| 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Complete | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
+| 8 | `work-packets/08-review-package-and-owner-validation.md` | Next | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
 
 ## Dependency Model
 
@@ -122,6 +122,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Start implementation with `work-packets/07-lighting-density-and-integration-polish.md`.
+Start implementation with `work-packets/08-review-package-and-owner-validation.md`.
 
-Packets 01-06 are implemented and validated. The next implementation pass should complete packet 07, commit and push, then continue to packet 08 unless validation fails, a blocker appears, or owner input is required.
+Packets 01-07 are implemented and validated. The next implementation pass should package Packet 08 evidence, commit and push, then continue only if the review package identifies no owner decision/blocker.

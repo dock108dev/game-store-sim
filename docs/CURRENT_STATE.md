@@ -38,13 +38,13 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 580 GUT tests and 11717 asserts.
-- UI scenario automation coverage is 508/628, or 80.9%.
+- Current doc-contract expectation is 581 GUT tests and 11799 asserts.
+- UI scenario automation coverage is 512/632, or 81.0%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.
 - Product catalog validation passes with 62 products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, contact-sheet generation, and old-name scan pass.
-- All 23 required screenshots are present in `artifacts/validation/latest/screenshots/`.
+- All 27 required screenshots are present in `artifacts/validation/latest/screenshots/`.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 
 ## Current Design Direction
@@ -71,12 +71,13 @@ Rejected path:
 
 ## Next Implementation Pass
 
-Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the next build queue. Packet assembly is complete. Packets 01-06 are implemented and validated. The next implementation pass starts with [Lighting Density And Integration Polish Packet](design-implementation/work-packets/07-lighting-density-and-integration-polish.md), then implementation proceeds through the remaining packet phases:
+Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the next build queue. Packet assembly is complete. Packets 01-07 are implemented and validated. Packet 08 is the active implementation pass for final review packaging and owner validation, then implementation proceeds through the remaining packet phases:
 
-1. Lighting, materials, density, and integration polish.
-2. Review package, owner correction loop, then tester readiness only after approval.
+1. Review package, owner correction loop, then tester readiness only after approval.
 
 Packet 06 added editable `Games4U` identity data, changed the day-one door sign to `CLOSED`, replaced the fake used-wall shelf default with attached `Potpourri` mixed-shelf labeling, and added fictional new-release, trade-in, coming-soon, and now-on-sale poster support.
+
+Packet 07 added brighter clean store lighting, warmer mall approach lighting, firm commercial-carpet cues, attached wall color panels, fixed product/stockroom doorway screenshot targets, and expanded visual-review screenshot evidence. The contact sheet and `scripts/validate_godot.sh` remain regression evidence, not design approval by themselves.
 
 Stop if the implementation would change core mechanics instead of replacing the visual/design surface.
 

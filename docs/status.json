@@ -35,12 +35,12 @@
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 580,
-    "gut_asserts": 11717,
+    "gut_tests": 581,
+    "gut_asserts": 11799,
     "ui_automation": {
-      "automated": 508,
-      "total": 628,
-      "percent": 80.9,
+      "automated": 512,
+      "total": 632,
+      "percent": 81.0,
       "threshold_percent": 80
     },
     "script_test_mapping": {
@@ -54,7 +54,7 @@
     "desktop_pack_smoke": "passed",
     "alpha_performance_smoke": "passed",
     "screenshot_sanity": "passed",
-    "screenshot_count": 23,
+    "screenshot_count": 27,
     "screenshot_contact_sheet": "artifacts/validation/latest/screenshot-contact-sheet.png",
     "old_name_scan": "passed"
   },

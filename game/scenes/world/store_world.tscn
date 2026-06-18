@@ -38,21 +38,35 @@
 [ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/backroom_staff_threshold_kit.tscn" id="36_art_backroom"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.32, 0.3, 0.27, 1)
+albedo_color = Color(0.38, 0.4, 0.36, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_carpet_fleck_light"]
+albedo_color = Color(0.52, 0.55, 0.5, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_carpet_fleck_dark"]
+albedo_color = Color(0.24, 0.27, 0.25, 1)
+roughness = 0.95
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.74, 0.76, 0.73, 1)
+albedo_color = Color(0.82, 0.84, 0.79, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall_accent_panel"]
+albedo_color = Color(0.58, 0.68, 0.66, 1)
+roughness = 0.74
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mall_tile"]
-albedo_color = Color(0.48, 0.46, 0.41, 1)
+albedo_color = Color(0.64, 0.59, 0.49, 1)
 roughness = 0.72
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mall_trim"]
-albedo_color = Color(0.24, 0.25, 0.25, 1)
+albedo_color = Color(0.36, 0.34, 0.3, 1)
 roughness = 0.48
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mall_grout"]
-albedo_color = Color(0.68, 0.64, 0.52, 1)
+albedo_color = Color(0.82, 0.76, 0.58, 1)
 roughness = 0.86
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mall_rail"]
@@ -105,7 +119,8 @@ metallic = 0.05
 roughness = 0.18
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_counter"]
-albedo_color = Color(0.12, 0.13, 0.14, 1)
+albedo_color = Color(0.11, 0.12, 0.13, 1)
+roughness = 0.62
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_zone"]
 albedo_color = Color(0.18, 0.34, 0.28, 0.18)
@@ -251,6 +266,36 @@ use_collision = true
 size = Vector3(14, 0.2, 12)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 material = SubResource("StandardMaterial3D_floor")
+
+[node name="CommercialCarpetFleckA" type="CSGBox3D" parent="."]
+size = Vector3(1.55, 0.006, 0.028)
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, -5.15, 0.018, -4.18)
+material = SubResource("StandardMaterial3D_carpet_fleck_light")
+
+[node name="CommercialCarpetFleckB" type="CSGBox3D" parent="."]
+size = Vector3(1.1, 0.006, 0.026)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -2.2, 0.019, -3.52)
+material = SubResource("StandardMaterial3D_carpet_fleck_dark")
+
+[node name="CommercialCarpetFleckC" type="CSGBox3D" parent="."]
+size = Vector3(1.34, 0.006, 0.028)
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, 2.8, 0.018, -3.92)
+material = SubResource("StandardMaterial3D_carpet_fleck_light")
+
+[node name="CommercialCarpetFleckD" type="CSGBox3D" parent="."]
+size = Vector3(1.62, 0.006, 0.026)
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 5.12, 0.019, -1.35)
+material = SubResource("StandardMaterial3D_carpet_fleck_dark")
+
+[node name="CommercialCarpetFleckE" type="CSGBox3D" parent="."]
+size = Vector3(1.3, 0.006, 0.028)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -4.2, 0.018, 1.55)
+material = SubResource("StandardMaterial3D_carpet_fleck_light")
+
+[node name="CommercialCarpetFleckF" type="CSGBox3D" parent="."]
+size = Vector3(1.44, 0.006, 0.026)
+transform = Transform3D(0.996195, 0, -0.087156, 0, 1, 0, 0.087156, 0, 0.996195, 3.92, 0.019, 1.72)
+material = SubResource("StandardMaterial3D_carpet_fleck_dark")
 
 [node name="SecondFloorMallConcourse" type="Node3D" parent="."]
 
@@ -591,6 +636,26 @@ material = SubResource("StandardMaterial3D_paper")
 size = Vector3(0.032, 0.15, 0.2)
 transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 6.815, 1.48, 0.22)
 material = SubResource("StandardMaterial3D_door")
+
+[node name="SalesWallColorPanelBackLeft" type="CSGBox3D" parent="."]
+size = Vector3(2.35, 0.64, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 1.46, 5.84)
+material = SubResource("StandardMaterial3D_wall_accent_panel")
+
+[node name="SalesWallColorPanelBackRight" type="CSGBox3D" parent="."]
+size = Vector3(2.35, 0.64, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.15, 1.46, 5.84)
+material = SubResource("StandardMaterial3D_wall_accent_panel")
+
+[node name="SalesWallColorPanelLeftFront" type="CSGBox3D" parent="."]
+size = Vector3(0.032, 0.6, 1.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.84, 1.38, -4.0)
+material = SubResource("StandardMaterial3D_wall_accent_panel")
+
+[node name="SalesWallColorPanelRightFront" type="CSGBox3D" parent="."]
+size = Vector3(0.032, 0.6, 1.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.84, 1.38, -4.0)
+material = SubResource("StandardMaterial3D_wall_accent_panel")
 
 [node name="FrontWallLeft" type="CSGBox3D" parent="."]
 use_collision = true
@@ -960,6 +1025,9 @@ modulate = Color(0.08, 0.1, 0.12, 1)
 outline_modulate = Color(0.98, 0.9, 0.66, 1)
 outline_size = 2
 no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 text = "EMPLOYEES ONLY"
 font_size = 18
 
@@ -3801,36 +3869,36 @@ max_distance = 12.0
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 5, 0)
-light_energy = 0.75
+light_energy = 0.85
 
 [node name="MallConcourseLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, -9.4)
-light_color = Color(0.86, 0.92, 1, 1)
-light_energy = 1.65
-omni_range = 7.5
+light_color = Color(1, 0.86, 0.64, 1)
+light_energy = 2.05
+omni_range = 8.2
 
 [node name="StorefrontNeonGlow" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -6.62)
 light_color = Color(0.42, 0.78, 1, 1)
-light_energy = 1.25
+light_energy = 0.9
 omni_range = 4.3
 
 [node name="StoreLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 2.7, -0.15)
-light_color = Color(1, 0.92, 0.78, 1)
-light_energy = 2.35
-omni_range = 6.8
+light_color = Color(0.9, 0.96, 1, 1)
+light_energy = 2.9
+omni_range = 7.2
 
 [node name="RegisterTaskLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.35, -2.75)
-light_color = Color(1, 0.86, 0.68, 1)
-light_energy = 2.05
-omni_range = 3.8
+light_color = Color(0.98, 0.93, 0.82, 1)
+light_energy = 2.2
+omni_range = 4.0
 
 [node name="BackroomUtilityLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 2.45, 4.95)
 light_color = Color(0.78, 0.9, 1, 1)
-light_energy = 1.45
+light_energy = 1.55
 omni_range = 5.0
 
 [node name="StorefrontAccentLight" type="OmniLight3D" parent="."]

@@ -1,6 +1,6 @@
 # Work Packet: Lighting Density And Integration Polish
 
-Status: Not started
+Status: Complete
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/09-density-and-clutter-rules.md`
@@ -145,11 +145,23 @@ Required final screenshots:
 - Update validation docs only if screenshot evidence requirements change.
 - Prepare notes for packet 08 review package.
 
+## Implementation Notes
+
+- Tuned active scene materials so the sales floor reads as rough commercial carpet, walls read as brighter painted retail surfaces, and mall tile/grout reads warmer than the store interior.
+- Added low-profile commercial-carpet fleck geometry and attached wall color panels to break up raw slab surfaces without adding loose clutter.
+- Retuned active lighting so the mall approach is warmer, the store is brighter/cleaner, and the backroom remains a cooler utility layer.
+- Added Packet 07 screenshot targets: `lighting_materials_store.png`, `lighting_materials_mall.png`, `product_closeup.png`, and `stockroom_doorway.png`.
+- Fixed `product_closeup.png` composition so it frames starter product cases instead of clipping into a shelf.
+- Fixed the employee-only stockroom sign orientation so it reads correctly from the sales-floor doorway.
+- Updated screenshot manifests, validation docs, QA screenshot-review targets, and status contracts for 27 required screenshots.
+
 ## Decision Log
 
 | Decision | Reason | Owner/Lead Needed? | Follow-up |
 | --- | --- | --- | --- |
 | Screenshot review happens before full validation. | Owner approval depends on visual read, not just green tests. | No | Packet 08 packages final screenshots and validation. |
+| Treat `scripts/validate_godot.sh` and contact sheet as regression evidence only. | The older gate and contact sheet were written for graybox-era assumptions and cannot approve design quality by themselves. | No | Packet 08 must present screenshot notes and owner review language. |
+| Complete Packet 07 without broad prop/catalog/customer expansion. | The visual read improved through lighting/material/screenshot composition while preserving scope and mechanics. | No | Packet 08 should decide whether residual primitive fixture/counter read blocks owner signoff. |
 
 ## Stop Conditions
 
@@ -175,3 +187,14 @@ Required final screenshots:
 - Screenshot notes summary
 - Known residual issues
 - Owner/lead decisions needed
+
+## Final Handoff
+
+- Branch: `codex/hard-visual-benchmark-implementation`
+- Validation command/result: `scripts/validate_godot.sh` passed.
+- GUT result: 581 tests, 11799 asserts.
+- UI automation coverage: 512/632, or 81.0%.
+- Screenshot/contact-sheet paths: `artifacts/validation/latest/screenshots/`, `artifacts/validation/latest/screenshot-contact-sheet.png`.
+- Screenshot notes summary: mall/store lighting contrast is improved, sales floor is brighter, carpet/wall material read is clearer, product closeup and stockroom doorway evidence now frame the intended subjects.
+- Known residual issues: fixture/counter/shelf silhouettes still contain obvious primitive geometry; contact-sheet thumbnails remain too small for final art approval; Packet 08 must package these risks for owner validation instead of treating the gate as approval.
+- Owner/lead decisions needed: none before Packet 08 packaging; owner signoff is still required before external beta/tester readiness.

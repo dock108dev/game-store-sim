@@ -22,17 +22,17 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 	var scripts: Dictionary = _dictionary(validation.get("script_test_mapping"))
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
-	assert_eq(int(validation.get("gut_tests")), 580)
-	assert_eq(int(validation.get("gut_asserts")), 11717)
-	assert_eq(int(ui.get("automated")), 508)
-	assert_eq(int(ui.get("total")), 628)
+	assert_eq(int(validation.get("gut_tests")), 581)
+	assert_eq(int(validation.get("gut_asserts")), 11799)
+	assert_eq(int(ui.get("automated")), 512)
+	assert_eq(int(ui.get("total")), 632)
 	assert_eq(int(scripts.get("covered")), 53)
 	assert_eq(int(scripts.get("total")), 53)
 	assert_eq(int(validation.get("active_validation_tools")), 3)
 	assert_eq(int(validation.get("catalog_products")), 62)
 	assert_eq(validation.get("desktop_pack_smoke"), "passed")
 	assert_eq(validation.get("screenshot_sanity"), "passed")
-	assert_eq(int(validation.get("screenshot_count")), 23)
+	assert_eq(int(validation.get("screenshot_count")), 27)
 	assert_eq(validation.get("screenshot_contact_sheet"), "artifacts/validation/latest/screenshot-contact-sheet.png")
 
 

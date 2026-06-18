@@ -28,8 +28,12 @@ artifacts/validation/latest/screenshot-contact-sheet.png
 
 - `main_scene.png`: storefront/entrance first read
 - `storefront_entry.png`: entering the store and seeing interior promise
+- `lighting_materials_store.png`: bright store lighting, commercial carpet, wall panels, and fixture material read
+- `lighting_materials_mall.png`: warmer mall approach contrasted against the brighter store
 - `register_counter.png`: checkout plus trade-in center
 - `stocked_aisle.png`: platform/game browsing density
+- `product_closeup.png`: case/box/platform/price language at player inspection distance
+- `stockroom_doorway.png`: stockroom threshold, employee-only read, and backroom depth from sales floor
 - `receiving_area.png`: shipments and intake
 - `backroom_summary.png`: management support without becoming the main fantasy
 

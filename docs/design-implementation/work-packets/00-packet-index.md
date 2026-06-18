@@ -31,8 +31,8 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 4 | `04-checkout-trade-in-and-day-one-setup.md` | Complete | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
 | 5 | `05-product-platform-and-price-language.md` | Complete | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
 | 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
-| 7 | `07-lighting-density-and-integration-polish.md` | Next | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
-| 8 | `08-review-package-and-owner-validation.md` | Not started | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
+| 7 | `07-lighting-density-and-integration-polish.md` | Complete | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
+| 8 | `08-review-package-and-owner-validation.md` | Next | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
 
 ## Dependency Model
 
@@ -103,6 +103,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Start packet 07: `07-lighting-density-and-integration-polish.md`.
+Start packet 08: `08-review-package-and-owner-validation.md`.
 
-Packet 06 completed the first signage/promotions pass: `Games4U` now has editable default identity data, the front door sign reads as closed/open state instead of setup debug language, shelf labeling defaults to attached `Potpourri` mixed-shelf language instead of a fake used wall, and fictional new, trade-in, coming-soon, and sale poster categories have physical poster details. Packet 07 owns the remaining visual blocker: integrated lighting, material polish, density, clutter reduction, and screenshot composition.
+Packet 07 completed the lighting/material/screenshot evidence pass: the store is brighter, the mall approach is warmer, commercial-carpet and wall-panel cues are in the active scene, product and stockroom doorway screenshot targets are corrected, and the validation gate now captures 27 screenshots. Packet 08 owns the review package and owner validation decision.
