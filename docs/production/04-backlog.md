@@ -10,9 +10,9 @@ Goal: turn the owner-provided store/world brief, vertical slice spec, and 300-ob
 
 ## Active Work
 
-1. Start implementation work from [Design Implementation Index](../design-implementation/README.md).
-2. Assemble concrete implementation packets using [Agent Work Packet Template](../design-implementation/13-agent-work-packet-template.md).
-3. Follow [Phase Implementation Roadmap](../design-implementation/14-phase-implementation-roadmap.md) until validation fails, a blocker appears, or owner input is required.
+1. Start implementation work from [Work Packet Index](../design-implementation/work-packets/00-packet-index.md).
+2. Complete [Visual Module Foundation Packet](../design-implementation/work-packets/01-visual-module-foundation.md).
+3. Continue through packets 02-08 until validation fails, a blocker appears, or owner input is required.
 4. Preserve existing gameplay mechanics while replacing the visual/design surface.
 5. Keep `docs/design-source-of-truth/` as the design canon for owner decisions and quality bar.
 6. Run focused tests for changed scene/doc contracts during implementation.

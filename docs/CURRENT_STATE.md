@@ -25,8 +25,8 @@ For design intent, read:
 For implementation, start with:
 
 - [Design Implementation Index](design-implementation/README.md)
-- [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md)
-- [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md)
+- [Work Packet Index](design-implementation/work-packets/00-packet-index.md)
+- [Visual Module Foundation Packet](design-implementation/work-packets/01-visual-module-foundation.md)
 
 ## Validation Snapshot
 
@@ -38,7 +38,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 570 GUT tests and 10825 asserts.
+- Current doc-contract expectation is 570 GUT tests and 10834 asserts.
 - UI scenario automation coverage is 508/628, or 80.9%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.
@@ -71,7 +71,7 @@ Rejected path:
 
 ## Next Implementation Pass
 
-Use [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md) as the next build target. The next step is packet assembly using [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md), then implementation proceeds through the roadmap phases:
+Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the next build queue. Packet assembly is complete. The next implementation pass starts with [Visual Module Foundation Packet](design-implementation/work-packets/01-visual-module-foundation.md), then implementation proceeds through the packet phases:
 
 1. Visual module foundation.
 2. Store shell, mall entrance, and real stockroom layout.
@@ -96,6 +96,7 @@ Stop if the implementation would change core mechanics instead of replacing the 
 - [Documentation Index](README.md)
 - [Design Source Of Truth](design-source-of-truth/README.md)
 - [Design Implementation Index](design-implementation/README.md)
+- [Work Packet Index](design-implementation/work-packets/00-packet-index.md)
 - [Backlog](production/04-backlog.md)
 - [Validation](production/06-validation.md)
 - [Visual Bug List](production/13-alpha-bug-list.md)

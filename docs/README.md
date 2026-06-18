@@ -48,6 +48,15 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 - [Validation And Screenshot Checklist](design-implementation/12-validation-and-screenshot-checklist.md): screenshot-first review, final game-window artifacts, detailed notes, explicit fail language, and docs-only skip rules.
 - [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md): strict implementation packet format with read-first docs, scope, validation evidence, decision log, final handoff, and parallel-work rules.
 - [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md): master path from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness.
+- [Work Packet Index](design-implementation/work-packets/00-packet-index.md): active packet queue for implementation agents.
+- [Visual Module Foundation Packet](design-implementation/work-packets/01-visual-module-foundation.md): reusable materials, modules, collision/anchors, and no-raw-cube foundation.
+- [Store Shell Mall Entrance Stockroom Packet](design-implementation/work-packets/02-store-shell-mall-entrance-stockroom.md): mall approach, storefront, open entrance, real stockroom, receiving area, and first-read route.
+- [Fixtures And Placement Systems Packet](design-implementation/work-packets/03-fixtures-and-placement-systems.md): starter fixtures, snap placement, labels, slots, and empty/stocked states.
+- [Checkout Trade-In And Day-One Setup Packet](design-implementation/work-packets/04-checkout-trade-in-and-day-one-setup.md): checkout/trade-in station, queue support, setup boxes, and first pre-open tasks.
+- [Product Platform And Price Language Packet](design-implementation/work-packets/05-product-platform-and-price-language.md): legal-safe cases, platform/genre signals, cover art, used stickers, prices, and starter products.
+- [Signage Promotions And Required Zones Packet](design-implementation/work-packets/06-signage-promotions-and-required-zones.md): store identity, shelf labels, posters, required signs, and zone readability without debug labels.
+- [Lighting Density And Integration Polish Packet](design-implementation/work-packets/07-lighting-density-and-integration-polish.md): final lighting, material, density, clutter, route, and screenshot polish.
+- [Review Package And Owner Validation Packet](design-implementation/work-packets/08-review-package-and-owner-validation.md): final evidence package, validation, blocker list, and owner approve/revise/block path.
 
 ## Current Production Docs
 

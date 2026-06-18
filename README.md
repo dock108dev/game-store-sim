@@ -25,8 +25,8 @@ Do not expand broad catalog visuals, customers, decoration breadth, hidden narra
 The next implementation pass starts with:
 
 - [Design Implementation Index](docs/design-implementation/README.md)
-- [Agent Work Packet Template](docs/design-implementation/13-agent-work-packet-template.md)
-- [Phase Implementation Roadmap](docs/design-implementation/14-phase-implementation-roadmap.md)
+- [Work Packet Index](docs/design-implementation/work-packets/00-packet-index.md)
+- [Visual Module Foundation Packet](docs/design-implementation/work-packets/01-visual-module-foundation.md)
 
 Use [Design Source Of Truth](docs/design-source-of-truth/README.md) when a packet needs design intent, owner decisions, or quality-bar context.
 
@@ -42,7 +42,7 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 570 GUT tests and 10825 GUT asserts.
+- Current doc-contract expectation: 570 GUT tests and 10834 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.

@@ -56,6 +56,22 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 13 | `13-agent-work-packet-template.md` | Complete | Strict implementation packet template with read-first docs, scope, evidence, validation, decision log, and handoff rules. |
 | 14 | `14-phase-implementation-roadmap.md` | Complete | Master roadmap from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness. |
 
+## Active Work Packets
+
+Implementation packet assembly is complete under `work-packets/`.
+
+| Order | Packet | Status | Purpose |
+| ---: | --- | --- | --- |
+| 0 | `work-packets/00-packet-index.md` | Ready for review | Packet queue, dependency order, ownership rules, and current next step. |
+| 1 | `work-packets/01-visual-module-foundation.md` | Not started | Reusable materials, modules, anchors, naming, collision, and no-raw-cube foundation. |
+| 2 | `work-packets/02-store-shell-mall-entrance-stockroom.md` | Not started | Mall approach, storefront, open entrance, sales floor shell, real stockroom, receiving position, and first-read route. |
+| 3 | `work-packets/03-fixtures-and-placement-systems.md` | Not started | Starter shelves/racks, snap placement visuals, capacity slots, fixture labels, and empty/stocked states. |
+| 4 | `work-packets/04-checkout-trade-in-and-day-one-setup.md` | Not started | Checkout/trade-in counter, queue support, behind-counter intake, and day-one receiving/setup tasks. |
+| 5 | `work-packets/05-product-platform-and-price-language.md` | Not started | Fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter products. |
+| 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Not started | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
+| 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Not started | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
+| 8 | `work-packets/08-review-package-and-owner-validation.md` | Not started | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
+
 ## Dependency Model
 
 Slices should generally follow this order:
@@ -106,6 +122,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Begin implementation packet assembly from `14-phase-implementation-roadmap.md`.
+Start implementation with `work-packets/01-visual-module-foundation.md`.
 
-Use `13-agent-work-packet-template.md` to create concrete implementation packets for the next code/asset pass, then proceed through the roadmap until validation fails, a blocker appears, or owner input is required.
+Packet assembly is done. The next implementation pass should follow `work-packets/00-packet-index.md`, complete packet 01, commit and push, then continue sequentially until validation fails, a blocker appears, or owner input is required.

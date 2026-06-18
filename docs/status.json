@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-18",
-  "current_phase": "design_reset_source_of_truth_adopted",
+  "current_phase": "implementation_packets_ready",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the design source of truth as canon and design-implementation docs as the execution plan.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The active reset is design, world-building, visual quality, and store-read authenticity using the design source of truth as canon and design-implementation work packets as the execution queue.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -36,7 +36,7 @@
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 10825,
+    "gut_asserts": 10834,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -70,7 +70,7 @@
   ],
   "next_decision": {
     "question": "Does the next implementation pass make the opening store read as a small, underfunded, functional 2002-2004 independent game store with growth potential?",
-    "approve_path": "continue through the design-implementation roadmap phases until vertical-slice review is ready",
+    "approve_path": "continue through the design-implementation work packets until vertical-slice review is ready",
     "reject_path": "correct the opening store first-read before broadening catalog, customer, decoration, hidden-narrative, or external-playtest work"
   },
   "active_docs": [
@@ -98,6 +98,15 @@
     "docs/design-implementation/12-validation-and-screenshot-checklist.md",
     "docs/design-implementation/13-agent-work-packet-template.md",
     "docs/design-implementation/14-phase-implementation-roadmap.md",
+    "docs/design-implementation/work-packets/00-packet-index.md",
+    "docs/design-implementation/work-packets/01-visual-module-foundation.md",
+    "docs/design-implementation/work-packets/02-store-shell-mall-entrance-stockroom.md",
+    "docs/design-implementation/work-packets/03-fixtures-and-placement-systems.md",
+    "docs/design-implementation/work-packets/04-checkout-trade-in-and-day-one-setup.md",
+    "docs/design-implementation/work-packets/05-product-platform-and-price-language.md",
+    "docs/design-implementation/work-packets/06-signage-promotions-and-required-zones.md",
+    "docs/design-implementation/work-packets/07-lighting-density-and-integration-polish.md",
+    "docs/design-implementation/work-packets/08-review-package-and-owner-validation.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",

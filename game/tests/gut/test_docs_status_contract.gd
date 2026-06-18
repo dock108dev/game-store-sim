@@ -8,7 +8,7 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "design_reset_source_of_truth_adopted")
+	assert_eq(status.get("current_phase"), "implementation_packets_ready")
 	assert_eq(status.get("playtest_state"), "paused_until_design_source_of_truth_baseline_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
@@ -23,7 +23,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 570)
-	assert_eq(int(validation.get("gut_asserts")), 10825)
+	assert_eq(int(validation.get("gut_asserts")), 10834)
 	assert_eq(int(ui.get("automated")), 508)
 	assert_eq(int(ui.get("total")), 628)
 	assert_eq(int(scripts.get("covered")), 53)
@@ -65,6 +65,15 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 	assert_true(active_docs.has("docs/design-implementation/12-validation-and-screenshot-checklist.md"))
 	assert_true(active_docs.has("docs/design-implementation/13-agent-work-packet-template.md"))
 	assert_true(active_docs.has("docs/design-implementation/14-phase-implementation-roadmap.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/00-packet-index.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/01-visual-module-foundation.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/02-store-shell-mall-entrance-stockroom.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/03-fixtures-and-placement-systems.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/04-checkout-trade-in-and-day-one-setup.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/05-product-platform-and-price-language.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/06-signage-promotions-and-required-zones.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/07-lighting-density-and-integration-polish.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/08-review-package-and-owner-validation.md"))
 	assert_true(active_docs.has("docs/production/04-backlog.md"))
 	assert_true(active_docs.has("docs/production/06-validation.md"))
 	assert_true(active_docs.has("docs/production/13-alpha-bug-list.md"))
