@@ -37,10 +37,9 @@ scripts/validate_godot.sh
 
 The gate writes logs, screenshots, and the contact sheet to `artifacts/validation/latest/`.
 
-Latest validated baseline:
+Current validation snapshot:
 
-- 570 GUT tests.
-- 10801 GUT asserts.
+- Current doc-contract expectation: 570 GUT tests and 10803 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.
