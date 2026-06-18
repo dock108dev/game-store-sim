@@ -801,8 +801,26 @@ modulate = Color(0.04, 0.18, 0.15, 1)
 outline_modulate = Color(0.92, 1, 0.78, 1)
 outline_size = 2
 no_depth_test = true
-text = "SETUP"
+text = "CLOSED"
 font_size = 28
+
+[node name="OpenSignHangerTop" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.7, 0.018, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 1.69, -5.835)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="OpenSignHangerLeft" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.018, 0.13, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 1.625, -5.835)
+material = SubResource("StandardMaterial3D_mall_rail")
+
+[node name="OpenSignHangerRight" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.018, 0.13, 0.018)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.32, 1.625, -5.835)
+material = SubResource("StandardMaterial3D_mall_rail")
 
 [node name="HoursDecalPanel" type="CSGBox3D" parent="."]
 size = Vector3(0.5, 0.22, 0.024)
@@ -1269,8 +1287,23 @@ modulate = Color(0.1, 0.12, 0.13, 1)
 outline_modulate = Color(0.96, 0.88, 0.66, 1)
 outline_size = 2
 no_depth_test = true
-text = "PICKS"
+text = "SALE"
 font_size = 20
+
+[node name="WeeklyPicksPosterSubLabel" type="Label3D" parent="WeeklyPicksPosterPanel"]
+pixel_size = 0.0017
+modulate = Color(0.1, 0.12, 0.13, 1)
+outline_modulate = Color(0.96, 0.88, 0.66, 1)
+outline_size = 1
+no_depth_test = true
+text = "NOW ON SALE"
+font_size = 10
+
+[node name="WeeklyPicksPosterAccent" type="CSGBox3D" parent="WeeklyPicksPosterPanel"]
+use_collision = false
+size = Vector3(0.78, 0.045, 0.014)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.22, 0.012)
+material = SubResource("StandardMaterial3D_door")
 
 [node name="NewThisWeekPosterPanel" type="CSGBox3D" parent="."]
 size = Vector3(1.08, 0.62, 0.035)
@@ -1289,6 +1322,66 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 text = "NEW"
 font_size = 20
 
+[node name="NewThisWeekPosterSubLabel" type="Label3D" parent="NewThisWeekPosterPanel"]
+pixel_size = 0.0017
+modulate = Color(0.88, 0.96, 1, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, -0.16, 0.012)
+text = "THIS WEEK"
+font_size = 10
+
+[node name="NewThisWeekPosterCaseIconA" type="CSGBox3D" parent="NewThisWeekPosterPanel"]
+use_collision = false
+size = Vector3(0.16, 0.22, 0.014)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.22, 0.12, 0.014)
+material = SubResource("StandardMaterial3D_product_blue")
+
+[node name="NewThisWeekPosterCaseIconB" type="CSGBox3D" parent="NewThisWeekPosterPanel"]
+use_collision = false
+size = Vector3(0.16, 0.22, 0.014)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.22, 0.12, 0.014)
+material = SubResource("StandardMaterial3D_product_green")
+
+[node name="ComingSoonPosterPanel" type="CSGBox3D" parent="."]
+use_collision = false
+size = Vector3(0.9, 0.58, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.42, 5.86)
+material = SubResource("StandardMaterial3D_door")
+
+[node name="ComingSoonPosterLabel" type="Label3D" parent="ComingSoonPosterPanel"]
+pixel_size = 0.0024
+modulate = Color(0.95, 0.9, 0.7, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 2
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0.08, 0.012)
+text = "COMING SOON"
+font_size = 15
+
+[node name="ComingSoonPosterDateLabel" type="Label3D" parent="ComingSoonPosterPanel"]
+pixel_size = 0.0018
+modulate = Color(0.95, 0.9, 0.7, 1)
+outline_modulate = Color(0.02, 0.03, 0.04, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, -0.16, 0.012)
+text = "NEXT MONTH"
+font_size = 10
+
+[node name="ComingSoonPosterSilhouette" type="CSGBox3D" parent="ComingSoonPosterPanel"]
+use_collision = false
+size = Vector3(0.2, 0.22, 0.014)
+transform = Transform3D(0.939693, 0, 0.34202, 0, 1, 0, -0.34202, 0, 0.939693, -0.28, 0.08, 0.014)
+material = SubResource("StandardMaterial3D_sign_gold")
+
 [node name="TradeBonusPosterPanel" type="CSGBox3D" parent="."]
 size = Vector3(1.0, 0.62, 0.035)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.35, 1.42, 5.86)
@@ -1305,6 +1398,30 @@ double_sided = false
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
 text = "TRADE"
 font_size = 20
+
+[node name="TradeBonusPosterSubLabel" type="Label3D" parent="TradeBonusPosterPanel"]
+pixel_size = 0.0017
+modulate = Color(1, 0.92, 0.72, 1)
+outline_modulate = Color(0.08, 0.04, 0.02, 1)
+outline_size = 1
+no_depth_test = true
+billboard = 0
+double_sided = false
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, -0.16, 0.012)
+text = "BONUS"
+font_size = 10
+
+[node name="TradeBonusPosterTicketA" type="CSGBox3D" parent="TradeBonusPosterPanel"]
+use_collision = false
+size = Vector3(0.3, 0.09, 0.014)
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.18, 0.16, 0.014)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="TradeBonusPosterTicketB" type="CSGBox3D" parent="TradeBonusPosterPanel"]
+use_collision = false
+size = Vector3(0.3, 0.09, 0.014)
+transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 0.18, 0.08, 0.014)
+material = SubResource("StandardMaterial3D_paper_blue")
 
 [node name="CounterDealTagPanel" type="CSGBox3D" parent="."]
 size = Vector3(0.58, 0.16, 0.025)
@@ -3069,7 +3186,7 @@ no_depth_test = true
 billboard = 0
 double_sided = false
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
-text = "USED GAMES"
+text = "Potpourri"
 font_size = 16
 
 [node name="ShelfPriceTagA" type="CSGBox3D" parent="."]

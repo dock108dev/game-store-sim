@@ -1,6 +1,6 @@
 # Work Packet: Signage Promotions And Required Zones
 
-Status: Not started
+Status: Complete
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/10-signage-branding-and-store-identity-spec.md`
@@ -149,6 +149,30 @@ Required final screenshots:
 | Decision | Reason | Owner/Lead Needed? | Follow-up |
 | --- | --- | --- | --- |
 | `Games4U` remains default but editable. | Owner selected the name but wanted signs/customization to remain flexible. | No | Keep store-name persistence tested if implemented. |
+| Day-one door sign reads `CLOSED` instead of `SETUP`. | The player starts pre-open; a real retail status sign is more believable than setup/debug language. | No | Later open/close interaction should toggle this state. |
+| Starter shelf default label is `Potpourri`. | Owner wanted player organization; this avoids faking a used wall before trade-ins while still supporting a mixed default shelf. | No | Player-facing label editing can rename it when fixture customization is implemented. |
+| Promo posters cover new, trade-in, coming-soon, and sale categories. | These are the day-one poster categories from the sign spec without adding real-brand/legal risk. | No | Packet 07 should judge poster readability in final lighting/composition. |
+
+## Implementation Notes
+
+- Added `game/data/store_identity/default_store_identity.json` with editable `Games4U` default identity, sign binding ids, default shelf labels, and poster template categories.
+- Updated the storefront open/closed panel to read `CLOSED` for the pre-opening day-one state and added small physical hanger props.
+- Replaced the starter shelf/category default from `USED GAMES` to attached `Potpourri` mixed-shelf language so the opening store does not fake used inventory before trade-ins.
+- Added fictional poster details for now-on-sale, new-this-week, coming-soon, and trade-bonus categories.
+- Kept older hidden utility route panels hidden; the packet adds believable retail signage instead of reviving debug label cards.
+
+## Validation Result
+
+- Focused GUT after final shelf-label edit: 580/580 tests passed, 11717 asserts.
+- Full validation command: `scripts/validate_godot.sh`
+- Full validation result: passed.
+- Artifacts: `artifacts/validation/latest/`
+- Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`
+
+## Known Residual Issues
+
+- The signage pass improves retail language and removes the fake used-wall default, but the opening store still needs Packet 07 lighting, material, density, and camera-composition polish before owner visual signoff.
+- Cover/poster visuals remain authored from simple in-engine shapes rather than final bitmap artwork.
 
 ## Stop Conditions
 

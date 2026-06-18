@@ -30,8 +30,8 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 3 | `03-fixtures-and-placement-systems.md` | Complete | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
 | 4 | `04-checkout-trade-in-and-day-one-setup.md` | Complete | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
 | 5 | `05-product-platform-and-price-language.md` | Complete | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
-| 6 | `06-signage-promotions-and-required-zones.md` | Next | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
-| 7 | `07-lighting-density-and-integration-polish.md` | Not started | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
+| 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
+| 7 | `07-lighting-density-and-integration-polish.md` | Next | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
 | 8 | `08-review-package-and-owner-validation.md` | Not started | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
 
 ## Dependency Model
@@ -103,6 +103,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Start packet 06: `06-signage-promotions-and-required-zones.md`.
+Start packet 07: `07-lighting-density-and-integration-polish.md`.
 
-Packet 05 completed the first product/platform visual-language pass: product definitions now carry franchise/genre metadata, `Footy 2002` and `Aether Quest` exist as day-one starter products, product items generate platform and genre visual cues from catalog data, used/new case stickers render on the case, and the authored day-one display names the starter cases. Packet 06 owns the next visible blocker: store identity, promotions, required-zone signs, and reducing remaining debug-like labels.
+Packet 06 completed the first signage/promotions pass: `Games4U` now has editable default identity data, the front door sign reads as closed/open state instead of setup debug language, shelf labeling defaults to attached `Potpourri` mixed-shelf language instead of a fake used wall, and fictional new, trade-in, coming-soon, and sale poster categories have physical poster details. Packet 07 owns the remaining visual blocker: integrated lighting, material polish, density, clutter reduction, and screenshot composition.

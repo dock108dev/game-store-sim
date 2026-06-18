@@ -197,8 +197,9 @@ modulate = Color(0.9, 0.98, 0.9, 1)
 outline_modulate = Color(0.02, 0.03, 0.04, 1)
 outline_size = 4
 no_depth_test = true
-billboard = 1
-text = "USED GAMES"
+billboard = 0
+double_sided = false
+text = "Potpourri"
 font_size = 30
 
 [node name="ShelfSlot001" type="Area3D" parent="."]

@@ -6,6 +6,8 @@ The question is not whether the project is mechanically complete. The question i
 
 Use this after an implementation packet or [Validation And Screenshot Checklist](../design-implementation/12-validation-and-screenshot-checklist.md) calls for screenshots. Do not use this file as an independent implementation roadmap.
 
+The current automated screenshot/contact-sheet set is provisional regression evidence. It was built during the graybox era, so a passing contact sheet or green `validate_godot.sh` run does not approve the design reset. Packet 07/08 may replace or expand screenshot targets when needed to judge the actual opening-store visual bar.
+
 ## Generate
 
 Run:
@@ -45,6 +47,7 @@ Pass only if:
 - future growth is visible without future inventory physically sitting in the store
 - large debug labels are not required to understand primary objects
 - the 1280x720 real-window walk-in does not expose a prototype-heavy angle
+- Packet 06 signage should show `Games4U` as the storefront default, a real closed/open sign state, attached shelf labels, and fictional promo posters without reviving debug label cards.
 
 ## Fail Criteria
 

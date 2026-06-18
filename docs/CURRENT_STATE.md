@@ -38,11 +38,11 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 578 GUT tests and 11582 asserts.
+- Current doc-contract expectation is 580 GUT tests and 11717 asserts.
 - UI scenario automation coverage is 508/628, or 80.9%.
 - Production script mapping is 53/53, or 100.0%.
 - 3 standalone validation tools are active.
-- Product catalog validation passes with 60 products.
+- Product catalog validation passes with 62 products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, contact-sheet generation, and old-name scan pass.
 - All 23 required screenshots are present in `artifacts/validation/latest/screenshots/`.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
@@ -71,14 +71,12 @@ Rejected path:
 
 ## Next Implementation Pass
 
-Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the next build queue. Packet assembly is complete. The next implementation pass starts with [Visual Module Foundation Packet](design-implementation/work-packets/01-visual-module-foundation.md), then implementation proceeds through the packet phases:
+Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the next build queue. Packet assembly is complete. Packets 01-06 are implemented and validated. The next implementation pass starts with [Lighting Density And Integration Polish Packet](design-implementation/work-packets/07-lighting-density-and-integration-polish.md), then implementation proceeds through the remaining packet phases:
 
-1. Visual module foundation.
-2. Store shell, mall entrance, and real stockroom layout.
-3. Fixtures, checkout, and day-one setup loop.
-4. Product, platform, signage, and promotions.
-5. Lighting, materials, density, and integration polish.
-6. Review package, owner correction loop, then tester readiness only after approval.
+1. Lighting, materials, density, and integration polish.
+2. Review package, owner correction loop, then tester readiness only after approval.
+
+Packet 06 added editable `Games4U` identity data, changed the day-one door sign to `CLOSED`, replaced the fake used-wall shelf default with attached `Potpourri` mixed-shelf labeling, and added fictional new-release, trade-in, coming-soon, and now-on-sale poster support.
 
 Stop if the implementation would change core mechanics instead of replacing the visual/design surface.
 

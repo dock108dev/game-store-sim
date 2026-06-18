@@ -42,11 +42,11 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 570 GUT tests and 10834 GUT asserts.
+- Current doc-contract expectation: 580 GUT tests and 11717 GUT asserts.
 - UI scenario automation coverage: 508/628.
 - Production script mapping: 53/53.
 - 3 active standalone validation tools.
-- 60 catalog products.
+- 62 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture/sanity, contact sheet, old-name scan, and 23 required screenshots pass.
 
 ## Active Docs

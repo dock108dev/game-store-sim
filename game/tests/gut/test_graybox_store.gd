@@ -162,7 +162,7 @@ func test_storefront_entry_has_production_cues() -> void:
 	assert_false(threshold_strip.use_collision)
 	assert_true(concourse_floor.use_collision)
 	assert_true(railing.use_collision)
-	assert_eq(open_label.text, "SETUP")
+	assert_eq(open_label.text, "CLOSED")
 	assert_eq(hours_label.text, "11-8")
 	assert_lt(left_glass.global_position.z, -5.8)
 	assert_lt(right_glass.global_position.z, -5.8)
@@ -233,6 +233,7 @@ func test_opening_visual_asset_pass_has_authored_route_modules() -> void:
 	var hours_label := _store.get_node("HoursDecalPanel/HoursDecalLabel") as Label3D
 	assert_lte(sign_label.pixel_size, 0.0041)
 	assert_lte(setup_label.pixel_size, 0.0028)
+	assert_eq(setup_label.text, "CLOSED")
 	assert_lte(hours_label.pixel_size, 0.0027)
 
 
@@ -893,7 +894,12 @@ func test_panel_backed_labels_are_depth_safe_from_oblique_angles() -> void:
 		"StaffPicksStand/StaffPicksHeaderPanel/StaffPicksHeaderLabel",
 		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel",
 		"NewThisWeekPosterPanel/NewThisWeekPosterLabel",
+		"NewThisWeekPosterPanel/NewThisWeekPosterSubLabel",
+		"ComingSoonPosterPanel/ComingSoonPosterLabel",
+		"ComingSoonPosterPanel/ComingSoonPosterDateLabel",
 		"TradeBonusPosterPanel/TradeBonusPosterLabel",
+		"TradeBonusPosterPanel/TradeBonusPosterSubLabel",
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterSubLabel",
 		"CounterDealTagPanel/CounterDealTagLabel",
 		"BargainBin/BinFrontTag/BinFrontLabel",
 		"AccessoryPegWall/PegWallHeaderPanel/PegWallHeaderLabel",
@@ -927,7 +933,11 @@ func test_screenshot_facing_world_labels_use_staff_side_orientation() -> void:
 		"RegisterSignPanel/RegisterSignLabel",
 		"BackWallFeatureStripe/BackWallFeatureLabel",
 		"NewThisWeekPosterPanel/NewThisWeekPosterLabel",
+		"NewThisWeekPosterPanel/NewThisWeekPosterSubLabel",
+		"ComingSoonPosterPanel/ComingSoonPosterLabel",
+		"ComingSoonPosterPanel/ComingSoonPosterDateLabel",
 		"TradeBonusPosterPanel/TradeBonusPosterLabel",
+		"TradeBonusPosterPanel/TradeBonusPosterSubLabel",
 		"CounterDealTagPanel/CounterDealTagLabel",
 		"LockedCasePlaceholder/LockedCaseHeaderPanel/LockedCaseHeaderLabel",
 		"WindowDisplayPosterPanel/WindowDisplayPosterLabel",
@@ -1058,9 +1068,13 @@ func test_alpha_wall_detail_breaks_up_blank_graybox_planes() -> void:
 
 func test_retail_clutter_uses_short_fictional_callouts() -> void:
 	var expected_labels := {
-		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel": "PICKS",
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterLabel": "SALE",
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterSubLabel": "NOW ON SALE",
 		"NewThisWeekPosterPanel/NewThisWeekPosterLabel": "NEW",
+		"NewThisWeekPosterPanel/NewThisWeekPosterSubLabel": "THIS WEEK",
+		"ComingSoonPosterPanel/ComingSoonPosterLabel": "COMING SOON",
 		"TradeBonusPosterPanel/TradeBonusPosterLabel": "TRADE",
+		"TradeBonusPosterPanel/TradeBonusPosterSubLabel": "BONUS",
 		"CounterDealTagPanel/CounterDealTagLabel": "$9+ USED",
 		"BargainBin/BinFrontTag/BinFrontLabel": "BARGAIN BIN",
 	}
@@ -1073,10 +1087,45 @@ func test_retail_clutter_uses_short_fictional_callouts() -> void:
 		assert_lte(label.pixel_size, 0.0039)
 
 
+func test_store_identity_data_keeps_games4u_editable() -> void:
+	var text := FileAccess.get_file_as_string("res://data/store_identity/default_store_identity.json")
+	assert_false(text.is_empty())
+	var parsed = JSON.parse_string(text)
+	assert_true(parsed is Dictionary)
+	var identity := parsed as Dictionary
+	assert_eq(identity.get("store_display_name"), "Games4U")
+	assert_true(bool(identity.get("editable")))
+	assert_true((identity.get("default_shelf_labels") as Array).has("Potpourri"))
+	assert_true((identity.get("poster_templates") as Array).has("upcoming_releases"))
+
+
+func test_packet_six_signage_uses_attached_retail_detail_not_debug_cards() -> void:
+	var retail_props := [
+		"OpenSignHangerTop",
+		"OpenSignHangerLeft",
+		"OpenSignHangerRight",
+		"NewThisWeekPosterPanel/NewThisWeekPosterCaseIconA",
+		"NewThisWeekPosterPanel/NewThisWeekPosterCaseIconB",
+		"ComingSoonPosterPanel",
+		"ComingSoonPosterPanel/ComingSoonPosterSilhouette",
+		"TradeBonusPosterPanel/TradeBonusPosterTicketA",
+		"TradeBonusPosterPanel/TradeBonusPosterTicketB",
+		"WeeklyPicksPosterPanel/WeeklyPicksPosterAccent",
+	]
+	for prop_path in retail_props:
+		var prop := _store.get_node_or_null(prop_path) as CSGBox3D
+		assert_not_null(prop, prop_path)
+		assert_false(prop.use_collision, prop_path)
+
+	assert_eq((_store.get_node("GameDisplayRack/CategoryHeaderPanel/CategoryHeaderLabel") as Label3D).text, "Potpourri")
+	assert_eq((_store.get_node("ShelfFacingDensityBand/ShelfFacingDensityLabel") as Label3D).text, "Potpourri")
+
+
 func test_retail_clutter_is_nonblocking_and_away_from_interaction_hotspots() -> void:
 	var clutter_boxes := [
 		"WeeklyPicksPosterPanel",
 		"NewThisWeekPosterPanel",
+		"ComingSoonPosterPanel",
 		"TradeBonusPosterPanel",
 		"CounterDealTagPanel",
 		"RegisterQueueMat",
@@ -1711,7 +1760,7 @@ func test_production_visual_overhaul_product_density_and_transaction_surfaces_ex
 		assert_false(prop.use_collision, prop_path)
 		assert_lt(_flat_distance_xz(prop.global_position, rack.global_position), 0.95, prop_path)
 
-	assert_eq((_store.get_node("ShelfFacingDensityBand/ShelfFacingDensityLabel") as Label3D).text, "USED GAMES")
+	assert_eq((_store.get_node("ShelfFacingDensityBand/ShelfFacingDensityLabel") as Label3D).text, "Potpourri")
 	assert_eq((_store.get_node("UsedShelfTalkerPanel/UsedShelfTalkerLabel") as Label3D).text, "TESTED")
 
 	for preorder_path in ["PreorderWallPanel", "PreorderWallHeaderPanel", "PreorderCaseStackA", "PreorderCaseStackB", "PreorderCaseStackC"]:

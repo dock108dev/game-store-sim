@@ -57,14 +57,16 @@ func test_shelf_slot_marker_is_upright_display_bay() -> void:
 	assert_gt(marker.size.y, marker.size.z * 10.0)
 
 
-func test_shelf_has_readable_used_game_category_header() -> void:
+func test_shelf_has_readable_mixed_category_header() -> void:
 	var header_panel := _shelf.get_node_or_null("CategoryHeaderPanel") as CSGBox3D
 	var header_label := _shelf.get_node_or_null("CategoryHeaderPanel/CategoryHeaderLabel") as Label3D
 
 	assert_not_null(header_panel)
 	assert_not_null(header_label)
 	assert_false(header_panel.use_collision)
-	assert_eq(header_label.text, "USED GAMES")
+	assert_eq(header_label.text, "Potpourri")
+	assert_eq(header_label.billboard, 0)
+	assert_false(header_label.double_sided)
 	assert_gte(header_label.font_size, 30)
 	assert_lt(header_panel.global_position.y, 1.7)
 

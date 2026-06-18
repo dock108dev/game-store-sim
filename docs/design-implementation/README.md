@@ -68,8 +68,8 @@ Implementation packet assembly is complete under `work-packets/`.
 | 3 | `work-packets/03-fixtures-and-placement-systems.md` | Complete | Starter shelves/racks, snap placement visuals, capacity slots, fixture labels, and empty/stocked states. |
 | 4 | `work-packets/04-checkout-trade-in-and-day-one-setup.md` | Complete | Checkout/trade-in counter, queue support, behind-counter intake, and day-one receiving/setup tasks. |
 | 5 | `work-packets/05-product-platform-and-price-language.md` | Complete | Fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter products. |
-| 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Next | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
-| 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Not started | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
+| 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Complete | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
+| 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Next | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
 | 8 | `work-packets/08-review-package-and-owner-validation.md` | Not started | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
 
 ## Dependency Model
@@ -122,6 +122,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Start implementation with `work-packets/01-visual-module-foundation.md`.
+Start implementation with `work-packets/07-lighting-density-and-integration-polish.md`.
 
-Packet assembly is done. The next implementation pass should follow `work-packets/00-packet-index.md`, complete packet 01, commit and push, then continue sequentially until validation fails, a blocker appears, or owner input is required.
+Packets 01-06 are implemented and validated. The next implementation pass should complete packet 07, commit and push, then continue to packet 08 unless validation fails, a blocker appears, or owner input is required.
