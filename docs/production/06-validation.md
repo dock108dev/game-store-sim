@@ -28,7 +28,7 @@ The gate runs:
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 570 GUT tests and 10813 GUT asserts.
+- Current doc-contract expectation: 570 GUT tests and 10815 GUT asserts.
 - UI scenario automation coverage: 508/628, or 80.9%.
 - Production script mapping coverage: 53/53, or 100.0%.
 - 3 active standalone validation tools.
