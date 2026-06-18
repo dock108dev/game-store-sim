@@ -817,7 +817,7 @@ func test_future_inventory_is_catalog_planning_until_paid_or_received() -> void:
 
 func test_store_signage_uses_fictional_world_labels() -> void:
 	var expected_labels := {
-		"StoreIdentitySignPanel/StoreIdentitySignLabel": "SAVE POINT GAMES",
+		"StoreIdentitySignPanel/StoreIdentitySignLabel": "Games4U",
 		"DisplaySignPanel/DisplaySignLabel": "RACKS",
 		"RegisterSignPanel/RegisterSignLabel": "REGISTER",
 		"BackroomSignPanel/BackroomSignLabel": "STAFF",
@@ -1887,6 +1887,11 @@ func test_hard_visual_benchmark_backroom_threshold_has_depth() -> void:
 	var light_bar := _store.get_node("StaffThresholdCoolLightBar") as CSGBox3D
 	var receiving := _store.get_node("ReceivingBox") as Node3D
 	var computer := _store.get_node("BackroomComputer") as Node3D
+	var separation_left := _store.get_node("StockroomSalesSeparationLeft") as CSGBox3D
+	var separation_right := _store.get_node("StockroomSalesSeparationRight") as CSGBox3D
+	var receiving_privacy := _store.get_node("StockroomReceivingPrivacyWall") as CSGBox3D
+	var office_privacy := _store.get_node("StockroomOfficePrivacyReturn") as CSGBox3D
+	var pocket_shadow := _store.get_node("StockroomDoorPocketShadow") as CSGBox3D
 
 	assert_gt(left_hall.global_position.z, threshold.global_position.z)
 	assert_gt(right_hall.global_position.z, threshold.global_position.z)
@@ -1901,6 +1906,22 @@ func test_hard_visual_benchmark_backroom_threshold_has_depth() -> void:
 	assert_gt(_flat_distance_xz(threshold.global_position, computer.global_position), 3.0)
 	assert_true(_is_inside_store_floorprint(left_hall.global_position))
 	assert_true(_is_inside_store_floorprint(right_hall.global_position))
+	assert_true(separation_left.use_collision)
+	assert_true(separation_right.use_collision)
+	assert_true(receiving_privacy.use_collision)
+	assert_true(office_privacy.use_collision)
+	assert_false(pocket_shadow.use_collision)
+	assert_lt(separation_left.global_position.x, threshold.global_position.x)
+	assert_gt(separation_right.global_position.x, threshold.global_position.x)
+	assert_almost_eq(separation_left.global_position.z, threshold.global_position.z, 0.05)
+	assert_almost_eq(separation_right.global_position.z, threshold.global_position.z, 0.05)
+	assert_gt(separation_left.size.y, 2.0)
+	assert_gt(separation_right.size.y, 2.0)
+	assert_gt(receiving_privacy.global_position.z, threshold.global_position.z)
+	assert_gt(receiving_privacy.global_position.x, receiving.global_position.x)
+	assert_lt(receiving_privacy.global_position.x, threshold.global_position.x)
+	assert_lt(_flat_distance_xz(receiving_privacy.global_position, receiving.global_position), 2.6)
+	assert_gt(office_privacy.global_position.z, threshold.global_position.z)
 
 
 func test_register_workstation_exists() -> void:

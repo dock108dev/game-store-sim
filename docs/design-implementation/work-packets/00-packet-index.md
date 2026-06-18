@@ -26,8 +26,8 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | Order | Packet | Status | Purpose |
 | ---: | --- | --- | --- |
 | 1 | `01-visual-module-foundation.md` | Complete | Establish reusable materials, modules, anchors, naming, and no-raw-cube visual foundation. |
-| 2 | `02-store-shell-mall-entrance-stockroom.md` | Next | Build the mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout. |
-| 3 | `03-fixtures-and-placement-systems.md` | Not started | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
+| 2 | `02-store-shell-mall-entrance-stockroom.md` | Complete | Build the mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout. |
+| 3 | `03-fixtures-and-placement-systems.md` | Next | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
 | 4 | `04-checkout-trade-in-and-day-one-setup.md` | Not started | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
 | 5 | `05-product-platform-and-price-language.md` | Not started | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
 | 6 | `06-signage-promotions-and-required-zones.md` | Not started | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
@@ -103,6 +103,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Start packet 02: `02-store-shell-mall-entrance-stockroom.md`.
+Start packet 03: `03-fixtures-and-placement-systems.md`.
 
-Packet 01 established the module/material contracts needed to avoid another raw primitive rebuild. Packet 02 owns the first visible shell pass: mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout.
+Packet 02 established the mall-facing storefront identity, open threshold, and real stockroom separation. Packet 03 owns the next visible blocker: starter fixtures, placement surfaces, shelf labels, capacity slots, and empty/stocked states without reverting to loose debug blocks.

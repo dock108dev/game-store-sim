@@ -1,6 +1,6 @@
 # Work Packet: Store Shell Mall Entrance Stockroom
 
-Status: Not started
+Status: Complete
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/03-store-shell-and-mall-entrance-slice.md`
@@ -145,6 +145,9 @@ Required final screenshots:
 | Decision | Reason | Owner/Lead Needed? | Follow-up |
 | --- | --- | --- | --- |
 | Store footprint may change if needed to satisfy the first read. | Owner explicitly allowed store/world redesign if it improves the visual target. | No | Record final footprint in docs if changed. |
+| Keep the current footprint for this packet and harden the stockroom boundary instead of moving gameplay anchors. | This improved stockroom separation while preserving receiving, register, stocking, customer paths, screenshot automation, and save/session paths. | No | Packet 07 can revisit footprint only if owner review still rejects the opening read. |
+| Storefront default name changed from `SAVE POINT GAMES` to `Games4U`. | Active implementation docs and owner answers identify `Games4U` as the temporary editable default. | No | Packet 06 should make the name editable/customizable rather than hard-coded final identity. |
+| Receiving is hidden from the sales-floor side by stockroom separation and privacy walls, but product-label clutter remains for later packets. | Packet 02 owns shell/stockroom architecture; product/signage cleanup belongs to Packets 05-07. | No | Packet 05/06 must reduce label clutter and improve object art. |
 
 ## Stop Conditions
 
@@ -161,6 +164,15 @@ Required final screenshots:
 - Receiving is hidden from sales floor.
 - Checkout/demo/fixture anchors can fit without route conflict.
 - Next packet can place fixtures without redesigning the shell.
+
+Current result:
+
+- Storefront sign uses `Games4U`.
+- Stockroom boundary has side separation walls, a doorway pocket, and privacy returns.
+- Receiving remains in the stockroom and is screened from the sales-floor doorway.
+- Existing mechanics and screenshot automation remain green.
+- Full `scripts/validate_godot.sh` passed and regenerated `artifacts/validation/latest/screenshot-contact-sheet.png`.
+- Remaining visual risks: receiving/product label clutter, primitive fixture read, and screenshot variety.
 
 ## Final Handoff Requirements
 

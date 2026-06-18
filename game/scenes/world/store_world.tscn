@@ -708,7 +708,7 @@ no_depth_test = true
 billboard = 0
 double_sided = false
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 0)
-text = "SAVE POINT GAMES"
+text = "Games4U"
 font_size = 42
 
 [node name="StoreIdentitySignGlowBacker" type="CSGBox3D" parent="."]
@@ -984,6 +984,35 @@ material = SubResource("StandardMaterial3D_mall_trim")
 size = Vector3(1.68, 0.045, 0.08)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 2.06, 3.42)
 material = SubResource("StandardMaterial3D_paper_blue")
+
+[node name="StockroomSalesSeparationLeft" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(5.15, 2.38, 0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.42, 1.19, 3.36)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="StockroomSalesSeparationRight" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(5.0, 2.38, 0.22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.47, 1.19, 3.36)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="StockroomReceivingPrivacyWall" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(0.18, 2.08, 2.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.65, 1.04, 4.66)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="StockroomOfficePrivacyReturn" type="CSGBox3D" parent="."]
+use_collision = true
+size = Vector3(0.16, 1.82, 1.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.72, 0.91, 4.92)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="StockroomDoorPocketShadow" type="CSGBox3D" parent="."]
+size = Vector3(2.25, 0.012, 0.24)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.072, 3.2)
+material = SubResource("StandardMaterial3D_stockroom_shadow")
 
 [node name="BackroomZone" type="CSGBox3D" parent="."]
 size = Vector3(12.4, 0.012, 2.35)
