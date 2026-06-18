@@ -47,7 +47,7 @@ Do not use visible debug labels, loose primitive clutter, or future inventory st
 | 4 | `04-starting-store-layout-spec.md` | Complete | Exact floor plan, zone placement, backroom relationship, and day-one density. |
 | 5 | `05-fixture-grid-slice.md` | Complete | Starter wall shelves/racks, movable purchasable fixtures, labels, visible capacity, and snap placement rules. |
 | 6 | `06-checkout-and-trade-in-counter-slice.md` | Complete | Shared checkout/trade-in station, clean register setup, one-line queue, and behind-counter hold/intake storage. |
-| 7 | `07-product-and-platform-visual-language-spec.md` | Not started | Fictional product cases, platform identity, price strips, stickers, and readable facings. |
+| 7 | `07-product-and-platform-visual-language-spec.md` | Complete | Legal-safe fictional platforms, two-tone case language, cover art, stickers, prices, and starter titles. |
 | 8 | `08-required-zones-slice.md` | Not started | New releases, used games, demo, bargain, guides/media, hardware, and receiving support. |
 | 9 | `09-density-and-clutter-rules.md` | Not started | Day-one occupancy, acceptable mess, object purpose, and anti-spam rules. |
 | 10 | `10-signage-branding-and-store-identity-spec.md` | Not started | Store name, brand tone, signs, posters, headers, and copy style. |
@@ -106,6 +106,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Write `07-product-and-platform-visual-language-spec.md`.
+Write `08-required-zones-slice.md`.
 
-That doc must define fictional game cases, platform identity, covers, spines, stickers, price strips, and readable shelf facings.
+That doc must define new releases, used games, demo, bargain, guides/media, hardware, receiving support, and how those zones emerge from player-placed fixtures.
