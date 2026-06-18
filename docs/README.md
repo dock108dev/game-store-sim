@@ -28,6 +28,7 @@ The previous broad production, beta/playtest-package, stockroom-production, gray
 - [Checkout And Trade-In Counter Slice](design-implementation/06-checkout-and-trade-in-counter-slice.md): shared sales/trade-in station, clean register setup, one-line queue, and behind-counter hold/intake storage.
 - [Product And Platform Visual Language Spec](design-implementation/07-product-and-platform-visual-language-spec.md): fictional platform/product language, two-tone case signals, cover art, used stickers, case prices, and starter titles.
 - [Required Zones Slice](design-implementation/08-required-zones-slice.md): inventory-source new/used rules, player-organized labels, demo placement, hardware/receiving roles, and first-use guidance.
+- [Density And Clutter Rules](design-implementation/09-density-and-clutter-rules.md): empty-promising day-one density, setup clutter, stockroom planning desk, console box stacks, mall atmosphere, and visual-review rules.
 
 ## Current Production Docs
 
