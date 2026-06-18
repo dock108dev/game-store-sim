@@ -1744,6 +1744,17 @@ func test_production_visual_overhaul_catalog_build_and_upgrade_cues_exist() -> v
 		assert_false(prop.use_collision, prop_path)
 		assert_lte(prop.size.y, 0.026, prop_path)
 
+	for ghost_detail_path in [
+		"FixturePlacementManager/GhostRackPreview/MiddleLedge",
+		"FixturePlacementManager/GhostRackPreview/TopLedge",
+		"FixturePlacementManager/GhostRackPreview/GhostSlotTickA",
+		"FixturePlacementManager/GhostRackPreview/GhostSlotTickB",
+		"FixturePlacementManager/GhostRackPreview/GhostSlotTickC",
+	]:
+		var detail := _store.get_node_or_null(ghost_detail_path) as CSGBox3D
+		assert_not_null(detail)
+		assert_false(detail.use_collision, ghost_detail_path)
+
 	var upgrade_props := [
 		"FixturePlacementInstructionPanel",
 		"WallPaintSwatchStrip",

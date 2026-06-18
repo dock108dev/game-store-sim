@@ -1,6 +1,6 @@
 # Work Packet: Fixtures And Placement Systems
 
-Status: Not started
+Status: Complete
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/05-fixture-grid-slice.md`
@@ -146,6 +146,8 @@ Required final screenshots:
 | Decision | Reason | Owner/Lead Needed? | Follow-up |
 | --- | --- | --- | --- |
 | Starter fixture set favors wall shelves/racks. | Owner preferred shelves first, bins/tables later as unlocks. | No | Add bins/tables only in later expansion packet. |
+| Starter shelf uses cheap laminate edges, dark supports, three ledges, and visible empty capacity ticks. | This improves fixture read without changing stocking, placement, save/load, or product catalog behavior. | No | Product packet can replace placeholder product art while keeping the same slots. |
+| Capacity cues are nonblocking visual children under each shelf slot. | Slot geometry should explain stockable space without creating collision or route problems. | No | Keep this pattern for later bins, wall racks, and tables. |
 
 ## Stop Conditions
 
@@ -171,3 +173,27 @@ Required final screenshots:
 - Fixture paths/config names
 - Known residual issues
 - Owner/lead decisions needed
+
+## Completion Notes
+
+Completed implementation:
+
+- Updated `game/scenes/props/placeholder_shelf.tscn` so the starter `GameDisplayRack` reads as a cheap laminate retail fixture instead of only raw box panels.
+- Added `TopLedge`, `BackPanelLaminateEdge`, `BottomLaminateEdge`, `MiddleLaminateEdge`, and `TopLaminateEdge`.
+- Added `SlotEmptyBackdrop` plus `SlotCapacityTickA`, `SlotCapacityTickB`, and `SlotCapacityTickC` to each starter shelf slot.
+- Updated the placement ghost with matching ledges and slot ticks so the snap preview reads like the placed starter fixture.
+- Preserved the existing three `ShelfSlot` nodes, stocking API, placement footprint, slot category behavior, and hover frame behavior.
+- Added focused fixture tests in `game/tests/gut/test_shelf_slot.gd`.
+- Updated validation baseline to 573 GUT tests and 11019 asserts.
+
+Validation evidence:
+
+- Focused/full GUT command: `"$GODOT_BIN" --headless --path game --script res://addons/gut/gut_cmdln.gd -gconfig=res://.gutconfig.json -gexit`
+- Result: 573/573 tests passed, 11019 asserts.
+- Full production gate: `scripts/validate_godot.sh` passed and regenerated screenshot artifacts at `artifacts/validation/latest/`.
+
+Residual issues:
+
+- The starter shelf is still a CSG-authored placeholder asset, not a final modeled asset.
+- Product cover/price visual quality still belongs to packet 05.
+- Checkout/counter prop cleanup still belongs to packet 04.

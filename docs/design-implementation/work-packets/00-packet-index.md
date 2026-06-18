@@ -27,8 +27,8 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | ---: | --- | --- | --- |
 | 1 | `01-visual-module-foundation.md` | Complete | Establish reusable materials, modules, anchors, naming, and no-raw-cube visual foundation. |
 | 2 | `02-store-shell-mall-entrance-stockroom.md` | Complete | Build the mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout. |
-| 3 | `03-fixtures-and-placement-systems.md` | Next | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
-| 4 | `04-checkout-trade-in-and-day-one-setup.md` | Not started | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
+| 3 | `03-fixtures-and-placement-systems.md` | Complete | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
+| 4 | `04-checkout-trade-in-and-day-one-setup.md` | Next | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
 | 5 | `05-product-platform-and-price-language.md` | Not started | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
 | 6 | `06-signage-promotions-and-required-zones.md` | Not started | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
 | 7 | `07-lighting-density-and-integration-polish.md` | Not started | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
@@ -103,6 +103,6 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Start packet 03: `03-fixtures-and-placement-systems.md`.
+Start packet 04: `04-checkout-trade-in-and-day-one-setup.md`.
 
-Packet 02 established the mall-facing storefront identity, open threshold, and real stockroom separation. Packet 03 owns the next visible blocker: starter fixtures, placement surfaces, shelf labels, capacity slots, and empty/stocked states without reverting to loose debug blocks.
+Packet 03 completed the first fixture-read pass: starter display racks now carry laminate shelf edges, three physical ledges, visible empty-slot backdrops, and nonblocking capacity ticks while preserving stocking and snap placement. Packet 04 owns the next visible blocker: making the checkout/trade-in counter and day-one setup flow read as a real operating store instead of a black counter with loose props.

@@ -5,7 +5,7 @@ This is no longer an alpha/beta readiness board. It tracks current blockers that
 ## Current Gate State
 
 - Automated validation has no open failure from the last full run.
-- Current doc-contract expectation is 571 GUT tests and 10924 asserts. Latest full validation gate is green with UI scenario automation coverage 508/628, production script mapping coverage 53/53, 3 active validation tools, and 60 catalog products.
+- Current doc-contract expectation is 573 GUT tests and 11019 asserts. Latest full validation gate is green with UI scenario automation coverage 508/628, production script mapping coverage 53/53, 3 active validation tools, and 60 catalog products.
 - Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, contact-sheet generation, and old-name scan passed.
 - All 23 required screenshot files were present, screenshot sanity passed, and `artifacts/validation/latest/screenshot-contact-sheet.png` was generated.
 - The visual/design result is not yet approved against the design source of truth or implementation roadmap.

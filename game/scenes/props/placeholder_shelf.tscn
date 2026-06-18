@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dxowl2h2n2bti"]
+[gd_scene load_steps=12 format=3 uid="uid://dxowl2h2n2bti"]
 
 [ext_resource type="Script" path="res://scripts/store_layout/shelf_slot.gd" id="1_shelf_slot"]
 
@@ -14,6 +14,14 @@ transparency = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_rail"]
 albedo_color = Color(0.95, 0.78, 0.36, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_laminate_edge"]
+albedo_color = Color(0.62, 0.48, 0.32, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_empty_slot_shadow"]
+albedo_color = Color(0.04, 0.045, 0.05, 0.34)
+transparency = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_hover"]
 albedo_color = Color(1, 0.86, 0.24, 0.58)
@@ -47,6 +55,12 @@ use_collision = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0.24)
 size = Vector3(1.9, 1.25, 0.08)
 material = SubResource("StandardMaterial3D_shelf")
+
+[node name="BackPanelLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.46, 0.19)
+size = Vector3(1.82, 0.045, 0.06)
+material = SubResource("StandardMaterial3D_laminate_edge")
 
 [node name="FrontFaceCue" type="CSGBox3D" parent="."]
 use_collision = false
@@ -142,11 +156,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, -0.08)
 size = Vector3(1.75, 0.1, 0.12)
 material = SubResource("StandardMaterial3D_shelf")
 
+[node name="BottomLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, -0.16)
+size = Vector3(1.75, 0.04, 0.04)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
 [node name="MiddleLedge" type="CSGBox3D" parent="."]
 use_collision = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, -0.08)
 size = Vector3(1.75, 0.08, 0.1)
 material = SubResource("StandardMaterial3D_shelf")
+
+[node name="MiddleLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, -0.155)
+size = Vector3(1.75, 0.035, 0.04)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="TopLedge" type="CSGBox3D" parent="."]
+use_collision = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -0.08)
+size = Vector3(1.75, 0.08, 0.1)
+material = SubResource("StandardMaterial3D_shelf")
+
+[node name="TopLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.31, -0.155)
+size = Vector3(1.75, 0.035, 0.04)
+material = SubResource("StandardMaterial3D_laminate_edge")
 
 [node name="CategoryHeaderPanel" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.09)
@@ -176,10 +214,34 @@ position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")
 
+[node name="SlotEmptyBackdrop" type="CSGBox3D" parent="ShelfSlot001"]
+use_collision = false
+position = Vector3(0, 0.36, 0.02)
+size = Vector3(0.5, 0.62, 0.014)
+material = SubResource("StandardMaterial3D_empty_slot_shadow")
+
 [node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot001"]
 position = Vector3(0, 0.065, 0.01)
 size = Vector3(0.5, 0.04, 0.035)
 material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotCapacityTickA" type="CSGBox3D" parent="ShelfSlot001"]
+use_collision = false
+position = Vector3(-0.18, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="SlotCapacityTickB" type="CSGBox3D" parent="ShelfSlot001"]
+use_collision = false
+position = Vector3(0, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotCapacityTickC" type="CSGBox3D" parent="ShelfSlot001"]
+use_collision = false
+position = Vector3(0.18, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_paper")
 
 [node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot001"]
 visible = false
@@ -202,10 +264,34 @@ position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")
 
+[node name="SlotEmptyBackdrop" type="CSGBox3D" parent="ShelfSlot002"]
+use_collision = false
+position = Vector3(0, 0.36, 0.02)
+size = Vector3(0.5, 0.62, 0.014)
+material = SubResource("StandardMaterial3D_empty_slot_shadow")
+
 [node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot002"]
 position = Vector3(0, 0.065, 0.01)
 size = Vector3(0.5, 0.04, 0.035)
 material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotCapacityTickA" type="CSGBox3D" parent="ShelfSlot002"]
+use_collision = false
+position = Vector3(-0.18, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="SlotCapacityTickB" type="CSGBox3D" parent="ShelfSlot002"]
+use_collision = false
+position = Vector3(0, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotCapacityTickC" type="CSGBox3D" parent="ShelfSlot002"]
+use_collision = false
+position = Vector3(0.18, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_paper")
 
 [node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot002"]
 visible = false
@@ -228,10 +314,34 @@ position = Vector3(0, 0.36, 0.035)
 size = Vector3(0.58, 0.72, 0.03)
 material = SubResource("StandardMaterial3D_slot")
 
+[node name="SlotEmptyBackdrop" type="CSGBox3D" parent="ShelfSlot003"]
+use_collision = false
+position = Vector3(0, 0.36, 0.02)
+size = Vector3(0.5, 0.62, 0.014)
+material = SubResource("StandardMaterial3D_empty_slot_shadow")
+
 [node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot003"]
 position = Vector3(0, 0.065, 0.01)
 size = Vector3(0.5, 0.04, 0.035)
 material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotCapacityTickA" type="CSGBox3D" parent="ShelfSlot003"]
+use_collision = false
+position = Vector3(-0.18, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_paper")
+
+[node name="SlotCapacityTickB" type="CSGBox3D" parent="ShelfSlot003"]
+use_collision = false
+position = Vector3(0, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_slot_rail")
+
+[node name="SlotCapacityTickC" type="CSGBox3D" parent="ShelfSlot003"]
+use_collision = false
+position = Vector3(0.18, 0.135, 0.045)
+size = Vector3(0.05, 0.055, 0.025)
+material = SubResource("StandardMaterial3D_paper")
 
 [node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot003"]
 visible = false

@@ -107,6 +107,27 @@ func test_shelf_has_alpha_profile_cues_for_angled_fixture_screenshots() -> void:
 		assert_lte(spine.size.x, 0.08)
 
 
+func test_starter_fixture_has_laminate_edges_and_three_physical_ledges() -> void:
+	for ledge_name in ["BottomLedge", "MiddleLedge", "TopLedge"]:
+		var ledge := _shelf.get_node_or_null(ledge_name) as CSGBox3D
+		assert_not_null(ledge)
+		assert_true(ledge.use_collision)
+		assert_gt(ledge.size.x, 1.6)
+		assert_lte(ledge.size.y, 0.11)
+
+	for edge_name in [
+		"BackPanelLaminateEdge",
+		"BottomLaminateEdge",
+		"MiddleLaminateEdge",
+		"TopLaminateEdge",
+	]:
+		var edge := _shelf.get_node_or_null(edge_name) as CSGBox3D
+		assert_not_null(edge)
+		assert_false(edge.use_collision)
+		assert_gt(edge.size.x, 1.6)
+		assert_lte(edge.size.y, 0.05)
+
+
 func test_shelf_slots_have_compact_category_rails() -> void:
 	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
 		var slot := _shelf.get_node(slot_name) as Area3D
@@ -118,6 +139,25 @@ func test_shelf_slots_have_compact_category_rails() -> void:
 		assert_lt(rail.size.x, marker.size.x)
 		assert_lte(rail.size.y, 0.04)
 		assert_lte(absf(rail.position.x) + rail.size.x / 2.0, marker.size.x / 2.0)
+
+
+func test_shelf_slots_show_empty_capacity_without_blocking_stocking() -> void:
+	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
+		var slot := _shelf.get_node(slot_name) as Area3D
+		var marker := slot.get_node("SlotMarker") as CSGBox3D
+		var backdrop := slot.get_node_or_null("SlotEmptyBackdrop") as CSGBox3D
+		assert_not_null(backdrop)
+		assert_false(backdrop.use_collision)
+		assert_lt(backdrop.size.x, marker.size.x)
+		assert_lt(backdrop.size.y, marker.size.y)
+
+		for tick_name in ["SlotCapacityTickA", "SlotCapacityTickB", "SlotCapacityTickC"]:
+			var tick := slot.get_node_or_null(tick_name) as CSGBox3D
+			assert_not_null(tick)
+			assert_false(tick.use_collision)
+			assert_lt(tick.size.x, 0.08)
+			assert_lt(tick.size.y, 0.08)
+			assert_lte(absf(tick.position.x) + tick.size.x / 2.0, marker.size.x / 2.0)
 
 
 func test_shelf_slot_hover_highlight_toggles_nonblocking_frame() -> void:
