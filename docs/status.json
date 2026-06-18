@@ -36,7 +36,7 @@
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 570,
-    "gut_asserts": 10817,
+    "gut_asserts": 10819,
     "ui_automation": {
       "automated": 508,
       "total": 628,
@@ -95,6 +95,7 @@
     "docs/design-implementation/09-density-and-clutter-rules.md",
     "docs/design-implementation/10-signage-branding-and-store-identity-spec.md",
     "docs/design-implementation/11-lighting-materials-and-color-palette-spec.md",
+    "docs/design-implementation/12-validation-and-screenshot-checklist.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-alpha-bug-list.md",
