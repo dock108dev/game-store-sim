@@ -7,7 +7,13 @@ This is not an alpha or beta bug list. It tracks blockers that prevent the openi
 
 ## Current Gate
 
-Owner review blocked the first Visual Bible object-family implementation pass. Automated validation is green, but the screenshots still read as primitive Godot box geometry and do not meet the target inspiration.
+Owner review blocked the first Visual Bible object-family implementation pass and the first procedural hero art slice. Automated validation is green, but those screenshots still read as primitive Godot box geometry and do not meet the target inspiration.
+
+A replacement authored-art proof is now ready for owner review:
+
+- runtime scene: `game/scenes/world/art_benchmark/hero_art_slice.tscn`
+- review board: `docs/production/images/hero_art_slice_review_board.png`
+- integration boundary: `docs/production/17-authored-art-proof-integration-plan.md`
 
 The active target is:
 
@@ -15,14 +21,14 @@ The active target is:
 - `docs/visual-bible/`
 - `docs/design-implementation/work-packets/00-packet-index.md`
 
-External beta/tester packaging remains blocked until a strict isolated hero art slice produces an approved screenshot.
+External beta/tester packaging and production integration remain blocked until owner review approves the authored proof.
 
 ## Open Blockers
 
 | ID | Priority | Area | Problem | Required Resolution |
 | --- | --- | --- | --- | --- |
 | VIS-020 | P0 | Failed visual validation | The integrated object-family pass is technically present but visually rejected; it still reads boxy, primitive, and label-dependent. | Treat this pass as a failed visual validation and stop broad implementation. |
-| VIS-021 | P0 | Hero art slice missing | The project does not yet have one screenshot that proves the desired art-production method. | Build one isolated hero art slice before any more broad mechanics, docs, or playable-store work. |
+| VIS-021 | P0 | Hero art proof pending owner review | The authored proof board exists, but it is not approved as a production baseline. | Owner approves or rejects `docs/production/images/hero_art_slice_review_board.png`. |
 
 ## Resolved Or Demoted
 
@@ -40,9 +46,10 @@ External beta/tester packaging remains blocked until a strict isolated hero art 
 | VIS-017 | Stockroom/receiving | Implemented technically, but not accepted as visual baseline. Future backroom work must be proven only after hero slice approval. |
 | VIS-018 | Signage | Implemented technically, but not accepted as visual baseline. Signage cannot carry object readability. |
 | VIS-019 | Owner visual review | Completed: owner rejected the object-family pass and ordered a hero art slice pivot. |
+| VIS-022 | Procedural hero slice rejection | Completed: owner rejected the first hero proof for inverted text, shaking/z-fighting read, and not being close enough. Replacement proof uses baked bitmap assets. |
 
 ## Stop Conditions
 
-Do not start broad catalog, customer visuals, employee visuals, decoration breadth, hidden narrative, later-era, beta/tester work, playable-store polish, or broad mechanics work while VIS-020 and VIS-021 are open.
+Do not start broad catalog, customer visuals, employee visuals, decoration breadth, hidden narrative, later-era, beta/tester work, playable-store polish, production integration, or broad mechanics work while VIS-020 and VIS-021 are open.
 
 Do not use a passing `scripts/validate_godot.sh` run as art approval or visual progress. It is regression evidence only.

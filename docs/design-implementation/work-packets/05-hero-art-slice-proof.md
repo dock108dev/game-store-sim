@@ -1,11 +1,12 @@
 # Work Packet: Hero Art Slice Proof
 
-Status: Implemented, pending owner screenshot validation
+Status: Authored replacement proof implemented, pending owner review
 Owner decision required: Yes
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary docs: `docs/production/15-failed-visual-validation.md`, `docs/visual-bible/08-art-production-pipeline.md`
 Expected commit scope: one isolated visual proof scene and minimal capture/test support only
 Implemented scene: `game/scenes/world/art_benchmark/hero_art_slice.tscn`
+Review board: `docs/production/images/hero_art_slice_review_board.png`
 Owner review note: `docs/production/16-hero-art-slice-review.md`
 
 ## Goal
@@ -38,7 +39,7 @@ This is not a gameplay slice. This is not a full-store rebuild. This is the new 
 
 Create one isolated art-proof scene, separate from the playable mechanics scene.
 
-Implementation note: this scene now exists as `res://scenes/world/art_benchmark/hero_art_slice.tscn`. The next action is owner visual validation of the screenshot, not broad implementation.
+Implementation note: the first procedural version of this scene was rejected. The active replacement now uses repo-local baked bitmap assets, no live Godot text panels, and an isolated authored-art scene/review board.
 
 The screenshot must include:
 
@@ -70,6 +71,17 @@ Required:
 - short notes listing what is authored mesh, bitmap texture, or temporary placeholder
 - explicit owner review question: “Does this screenshot prove the visual method?”
 
+Current proof artifact:
+
+- `docs/production/images/hero_art_slice_review_board.png`
+
+Current asset-production notes:
+
+- `tools/generate_hero_art_proof_assets.py` generates legal-safe bitmap art for signage, starter covers, console packaging, accessory packaging, carpet, and mall tile.
+- `game/scripts/world/hero_art_slice_scene.gd` loads the generated images directly via `Image.load()`/`ImageTexture` so the proof does not depend on editor import cache.
+- `tools/render_hero_art_review_board.py` renders a deterministic proof board for owner review when local Godot GUI capture is unavailable.
+- The scene remains isolated from gameplay and sets `integration_state=future_integration_only`.
+
 ## Stop Conditions
 
 Stop before implementation expands if:
@@ -90,3 +102,9 @@ This packet is complete only when:
 - no broad mechanics/playable-store changes were made
 
 It is not complete because `validate_godot.sh` passes.
+
+## Rejection Result
+
+Owner rejected the first procedural version of this slice because it was not close enough, text appeared inverted, and the view read like the screen was shaking. Treat that as evidence that visible procedural Godot boxes/quads/text panels are not the right proof method.
+
+The replacement authored proof is ready for owner review. It is not approved for production integration yet.

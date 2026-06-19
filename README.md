@@ -12,13 +12,13 @@ The active object-family art target is [Visual Bible](docs/visual-bible/README.m
 
 The active implementation entrypoint is [Design Implementation Index](docs/design-implementation/README.md). Agents should start there for execution order, packet rules, validation evidence, and handoff expectations.
 
-Current visual status: the first Visual Bible object-family pass is blocked as a failed visual validation. The isolated [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md) now exists and is pending owner review through [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md), backed by [Failed Visual Validation](docs/production/15-failed-visual-validation.md).
+Current visual status: the first Visual Bible object-family pass and the first procedural [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md) were blocked as failed visual validations. A replacement authored-art proof is now ready for owner review. [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md) records the proof and [Authored Art Proof Integration Plan](docs/production/17-authored-art-proof-integration-plan.md) defines what happens after approval or rejection.
 
 Older graybox, broad-production, beta, stockroom-production, hard-benchmark, old slice, and Packet 01-09 docs were removed from active routing when they conflicted with the Visual Bible reset.
 
 ## Current Rule
 
-Do not expand broad catalog visuals, customers, decoration breadth, hidden narrative, late-era content, external playtest packaging, mechanics, or playable-store polish until the hero art slice screenshot is approved:
+Do not expand broad catalog visuals, customers, decoration breadth, hidden narrative, late-era content, external playtest packaging, mechanics, playable-store polish, or production integration until the authored visual proof is approved:
 
 - a small independent 2002-2004 game store
 - underfunded but functional
@@ -34,9 +34,10 @@ Current art-reset entrypoints:
 - [MVP Object Implementation Checklist](docs/visual-bible/09-mvp-object-implementation-checklist.md)
 - [Design Implementation Index](docs/design-implementation/README.md)
 - [Work Packet Index](docs/design-implementation/work-packets/00-packet-index.md)
-- [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md)
+- [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md) authored proof ready for owner review
 - [Failed Visual Validation](docs/production/15-failed-visual-validation.md)
 - [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md)
+- [Authored Art Proof Integration Plan](docs/production/17-authored-art-proof-integration-plan.md)
 - [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
 
 Use [Design Source Of Truth](docs/design-source-of-truth/README.md) when a packet needs design intent, owner decisions, or quality-bar context.
@@ -55,7 +56,7 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 594 GUT tests and 12286 GUT asserts.
+- Current doc-contract expectation: 595 GUT tests and 12306 GUT asserts.
 - UI scenario automation coverage: 512/632.
 - Production script mapping: 55/55.
 - 3 active standalone validation tools.
@@ -76,4 +77,5 @@ Current validation snapshot:
 - [Visual Bible Implementation Review](docs/production/14-visual-bible-implementation-review.md)
 - [Failed Visual Validation](docs/production/15-failed-visual-validation.md)
 - [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md)
+- [Authored Art Proof Integration Plan](docs/production/17-authored-art-proof-integration-plan.md)
 - [QA](docs/qa/README.md)

@@ -70,7 +70,7 @@ Latest full gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12273 asserts, 55/55 production script mappings, and 62 catalog products.
+Result: passed with 595 GUT tests, 12306 asserts, 55/55 production script mappings, and 62 catalog products.
 
 Owner visual signoff failed. This product work is regression/mechanics context only and must not be treated as the accepted visual baseline.
 

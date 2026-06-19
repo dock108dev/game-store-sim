@@ -8,14 +8,14 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "hero_art_slice_implemented_pending_owner_visual_validation")
+	assert_eq(status.get("current_phase"), "authored_hero_art_proof_ready_for_owner_review")
 	assert_eq(status.get("playtest_state"), "paused_until_hero_art_slice_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "object_family_pass_rejected_still_graybox_read")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "authored_hero_art_proof_ready_for_owner_review")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
-	assert_eq(_dictionary(status.get("visual_validation", {})).get("status"), "failed")
-	assert_eq(_dictionary(status.get("visual_validation", {})).get("next_allowed_work"), "owner_visual_validation_of_isolated_hero_art_slice")
+	assert_eq(_dictionary(status.get("visual_validation", {})).get("status"), "pending_owner_review")
+	assert_eq(_dictionary(status.get("visual_validation", {})).get("next_allowed_work"), "owner_review_authored_hero_art_proof_then_constrained_integration_packets_if_approved")
 
 
 func test_docs_status_contract_records_validation_baseline() -> void:
@@ -24,8 +24,8 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 	var scripts: Dictionary = _dictionary(validation.get("script_test_mapping"))
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
-	assert_eq(int(validation.get("gut_tests")), 594)
-	assert_eq(int(validation.get("gut_asserts")), 12286)
+	assert_eq(int(validation.get("gut_tests")), 595)
+	assert_eq(int(validation.get("gut_asserts")), 12306)
 	assert_eq(int(ui.get("automated")), 512)
 	assert_eq(int(ui.get("total")), 632)
 	assert_eq(int(scripts.get("covered")), 55)
@@ -42,7 +42,11 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 	assert_true((validation.get("packet_09_art_spike_screenshots", []) as Array).has("artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png"))
 	assert_eq(validation.get("hero_art_slice_scene"), "game/scenes/world/art_benchmark/hero_art_slice.tscn")
 	assert_eq(validation.get("hero_art_slice_capture_tool"), "game/tests/tools/capture_hero_art_slice_screenshot.gd")
-	assert_eq(validation.get("hero_art_slice_screenshot"), "pending local GUI capture")
+	assert_eq(validation.get("hero_art_slice_screenshot"), "docs/production/images/hero_art_slice_review_board.png")
+	assert_eq(validation.get("hero_art_slice_review_board"), "docs/production/images/hero_art_slice_review_board.png")
+	assert_eq(validation.get("hero_art_slice_generated_review_board"), "artifacts/validation/latest/screenshots/hero_art_slice_review_board.png")
+	assert_eq(validation.get("hero_art_slice_asset_generator"), "tools/generate_hero_art_proof_assets.py")
+	assert_eq(validation.get("hero_art_slice_review_board_renderer"), "tools/render_hero_art_review_board.py")
 
 
 func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
@@ -88,6 +92,7 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 	assert_true(active_docs.has("docs/production/14-visual-bible-implementation-review.md"))
 	assert_true(active_docs.has("docs/production/15-failed-visual-validation.md"))
 	assert_true(active_docs.has("docs/production/16-hero-art-slice-review.md"))
+	assert_true(active_docs.has("docs/production/17-authored-art-proof-integration-plan.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/screenshot-review.md"))
 	assert_false(active_docs.has("docs/design-implementation/03-store-shell-and-mall-entrance-slice.md"))

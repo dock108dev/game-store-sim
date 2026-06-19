@@ -55,7 +55,7 @@ Do not use visible debug labels, loose primitive clutter, old graybox geometry, 
 | `work-packets/02-mvp-fixture-display-kit.md` | Visually rejected | Fixture/display assets, capacity language, and stocking validation. |
 | `work-packets/03-shell-counter-backroom-kit.md` | Visually rejected | Shell, counter, register, trade-in, stockroom, receiving, and office modules. |
 | `work-packets/04-playable-store-integration-review.md` | Visually rejected | Final integration and owner review evidence. |
-| `work-packets/05-hero-art-slice-proof.md` | Active next implementation | One isolated screenshot-first art slice proving the visual method. |
+| `work-packets/05-hero-art-slice-proof.md` | Pending owner review | Isolated authored-art proof scene and review board proving or rejecting the replacement visual method. |
 
 Deleted legacy docs:
 

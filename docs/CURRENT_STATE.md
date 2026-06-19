@@ -14,7 +14,9 @@ The first Visual Bible object-family implementation pass is now integrated and v
 
 The playable scene remains a mechanics prototype. It is not the visual baseline.
 
-An isolated hero art slice now exists at `game/scenes/world/art_benchmark/hero_art_slice.tscn`. It is pending owner screenshot validation.
+A replacement authored-art proof now exists at `game/scenes/world/art_benchmark/hero_art_slice.tscn`. It uses repo-local baked bitmap assets from `game/assets/art_proof/generated/`, avoids live Godot text panels, and remains isolated from the playable mechanics scene.
+
+The owner-facing review artifact is `docs/production/images/hero_art_slice_review_board.png`.
 
 The active visual target is now:
 
@@ -25,7 +27,7 @@ The active visual target is now:
 
 ## Current Decision
 
-Block the current MVP object-family pass and validate the strict hero art slice before any more broad implementation. The store still targets a 2002-2004 independent specialty game shop, with legal-safe fictional products and visible room to grow.
+Block the current MVP object-family pass and the first procedural hero art slice before any broad implementation. The store still targets a 2002-2004 independent specialty game shop, with legal-safe fictional products and visible room to grow.
 
 Visually failed implementation packets:
 
@@ -36,12 +38,12 @@ Visually failed implementation packets:
 
 Current checkpoint:
 
-1. Review the isolated hero art slice scene.
-2. Capture one screenshot that looks like the inspiration.
-3. Ask owner if the screenshot proves the visual method.
-4. Only then plan a constrained rebuild/integration path.
+1. Review the authored proof board: `docs/production/images/hero_art_slice_review_board.png`.
+2. Decide whether this art-production method is approved enough to turn into constrained production integration packets.
+3. If approved, follow [Authored Art Proof Integration Plan](production/17-authored-art-proof-integration-plan.md).
+4. If rejected, do not integrate; change production method again before touching the playable scene.
 
-Do not broaden catalog visuals, customers, employees, decoration breadth, hidden narrative, later-era content, beta/tester packaging, or mechanics work until the hero art slice is visually approved.
+Do not broaden catalog visuals, customers, employees, decoration breadth, hidden narrative, later-era content, beta/tester packaging, mechanics work, or production integration until the authored visual proof is approved.
 
 ## Validation Snapshot
 
@@ -53,7 +55,7 @@ scripts/validate_godot.sh
 
 Current doc-contract expectation:
 
-- GUT: 594 tests, 12286 asserts.
+- GUT: 595 tests, 12306 asserts.
 - UI automation: 512/632, or 81.0%.
 - Production script mapping: 55/55, or 100.0%.
 - Active validation tools: 3.
@@ -70,7 +72,7 @@ Read [Visual Blockers](production/13-visual-blockers.md).
 Primary blockers:
 
 - VIS-020: the integrated object-family pass is visually rejected.
-- VIS-021: no more broad work until one hero art slice screenshot looks like the target inspiration.
+- VIS-021: the authored hero proof is ready, but broad work remains blocked until owner review approves it.
 
 ## Review Plan
 
@@ -78,7 +80,7 @@ Read [Failed Visual Validation](production/15-failed-visual-validation.md) and [
 
 Next review focus:
 
-- one isolated hero art slice screenshot from `game/scenes/world/art_benchmark/hero_art_slice.tscn`
+- the authored proof board at `docs/production/images/hero_art_slice_review_board.png`
 - storefront/concourse read
 - first 15-20 feet of shop interior
 - one believable fixture
@@ -97,5 +99,6 @@ Old Packet 01-09 implementation docs, old slice specs, and old alpha/owner revie
 - `docs/production/14-visual-bible-implementation-review.md`
 - `docs/production/15-failed-visual-validation.md`
 - `docs/production/16-hero-art-slice-review.md`
+- `docs/production/17-authored-art-proof-integration-plan.md`
 
 Do not use deleted packet names as implementation instructions.

@@ -16,17 +16,26 @@ func _arg_value(args: PackedStringArray, name: String, fallback: String) -> Stri
 	return args[index + 1]
 
 
+func _has_arg(args: PackedStringArray, name: String) -> bool:
+	return args.has(name)
+
+
 func _capture() -> void:
 	var args := OS.get_cmdline_user_args()
 	var output := _arg_value(args, "--output", "res://../artifacts/validation/latest/screenshots/hero_art_slice.png")
 	var width := _arg_value(args, "--width", str(DEFAULT_WIDTH)).to_int()
 	var height := _arg_value(args, "--height", str(DEFAULT_HEIGHT)).to_int()
+	var keep_open := _has_arg(args, "--keep-open")
 
 	DisplayServer.window_set_size(Vector2i(width, height))
 	root.size = Vector2i(width, height)
 
 	var scene: Node = load(HERO_SCENE).instantiate()
 	root.add_child(scene)
+
+	if keep_open:
+		print("Hero art slice review window is open. Close the Godot window when finished.")
+		return
 
 	await process_frame
 	await process_frame

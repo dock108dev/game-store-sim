@@ -32,7 +32,7 @@ Latest full gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12273 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+Result: passed with 595 GUT tests, 12306 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
 
 Visual result: failed. Passing validation is regression stability only.
 

@@ -30,7 +30,7 @@ Latest full gate passed:
 scripts/validate_godot.sh
 ```
 
-Baseline: 592 GUT tests, 12273 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet, and old-name scan.
+Baseline: 595 GUT tests, 12306 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet, and old-name scan.
 
 That gate did not approve art quality.
 

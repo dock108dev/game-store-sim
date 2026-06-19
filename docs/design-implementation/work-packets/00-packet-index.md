@@ -36,7 +36,7 @@ Hard lessons carried forward:
 - Do not add random wall clutter to hide blankness.
 - Do not stage locked/future inventory as if it already exists.
 - Do not let `scripts/validate_godot.sh` or the contact sheet approve art quality.
-- Build one isolated hero art slice first, then decide whether the method is worth integrating.
+- Review one isolated authored hero art proof first, then decide whether the method is worth integrating.
 
 ## Current Packet Queue
 
@@ -46,7 +46,7 @@ Hard lessons carried forward:
 | 2 | `02-mvp-fixture-display-kit.md` | Visually rejected | `02-fixtures-and-displays.md`, `09-mvp-object-implementation-checklist.md` | Technically implemented, but not accepted as visual baseline. |
 | 3 | `03-shell-counter-backroom-kit.md` | Visually rejected | `01-store-shell-architecture.md`, `05-counter-register-and-trade-in.md`, `06-stockroom-receiving-office.md`, `07-signage-marketing-and-store-identity.md` | Technically implemented, but not accepted as visual baseline. |
 | 4 | `04-playable-store-integration-review.md` | Visually rejected | All Visual Bible docs and production/QA docs | Proved regression stability, but failed visual validation. |
-| 5 | `05-hero-art-slice-proof.md` | Active next implementation | `15-failed-visual-validation.md`, Visual Bible art docs | One isolated screenshot-first art slice that proves the visual method before broad implementation. |
+| 5 | `05-hero-art-slice-proof.md` | Implemented, pending owner review | `15-failed-visual-validation.md`, Visual Bible art docs | Isolated authored-art scene plus review board prove or reject the replacement visual method before broad implementation. |
 
 ## Packet Creation Rules
 
@@ -81,10 +81,10 @@ Latest implementation gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12273 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+Result: passed with 595 GUT tests, 12306 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
 
 Visual result: failed. Do not use this passing gate as evidence of visual progress.
 
 ## Current Stop Rule
 
-No broad agents, mechanics changes, playable-store polish, or extra docs expansion until `05-hero-art-slice-proof.md` produces one owner-approved screenshot.
+No broad agents, mechanics changes, playable-store polish, production integration, or extra docs expansion until owner review approves `docs/production/images/hero_art_slice_review_board.png`.

@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-19",
-  "current_phase": "hero_art_slice_implemented_pending_owner_visual_validation",
+  "current_phase": "authored_hero_art_proof_ready_for_owner_review",
   "playtest_state": "paused_until_hero_art_slice_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype with working mechanics. The first Visual Bible object-family implementation pass is integrated but visually rejected: latest screenshots still read as primitive Godot box geometry instead of a convincing early-2000s game shop. The playable scene remains a mechanics prototype. An isolated hero art slice now exists and is pending owner screenshot validation before any broad mechanics or playable-store polish resumes.",
+    "summary": "Broad validated first-person retail prototype with working mechanics. The first Visual Bible object-family implementation pass and the first procedural Godot hero art slice were visually rejected. A replacement authored-art proof now exists as an isolated runtime scene plus deterministic review board; the playable scene remains a mechanics prototype until owner approval.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -31,17 +31,19 @@
       "visual_bible_product_art_kit",
       "visual_bible_fixture_display_kit",
       "visual_bible_shell_counter_backroom_kit",
-      "isolated_hero_art_slice_scene"
+      "isolated_hero_art_slice_scene",
+      "authored_hero_art_proof_assets",
+      "authored_hero_art_review_board"
     ],
-    "visual_read": "object_family_pass_rejected_still_graybox_read",
+    "visual_read": "authored_hero_art_proof_ready_for_owner_review",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "role": "regression_only_not_visual_progress",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 594,
-    "gut_asserts": 12286,
+    "gut_tests": 595,
+    "gut_asserts": 12306,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -72,14 +74,19 @@
     "old_name_scan": "passed",
     "hero_art_slice_scene": "game/scenes/world/art_benchmark/hero_art_slice.tscn",
     "hero_art_slice_capture_tool": "game/tests/tools/capture_hero_art_slice_screenshot.gd",
-    "hero_art_slice_screenshot": "pending local GUI capture"
+    "hero_art_slice_screenshot": "docs/production/images/hero_art_slice_review_board.png",
+    "hero_art_slice_review_board": "docs/production/images/hero_art_slice_review_board.png",
+    "hero_art_slice_asset_generator": "tools/generate_hero_art_proof_assets.py",
+    "hero_art_slice_review_board_renderer": "tools/render_hero_art_review_board.py",
+    "hero_art_slice_assets": "game/assets/art_proof/generated/",
+    "hero_art_slice_generated_review_board": "artifacts/validation/latest/screenshots/hero_art_slice_review_board.png"
   },
   "visual_validation": {
-    "status": "failed",
-    "failed_pass": "mvp_visual_bible_object_family_pass",
+    "status": "pending_owner_review",
+    "failed_pass": "mvp_visual_bible_object_family_pass_and_first_procedural_hero_art_slice",
     "review_date": "2026-06-19",
-    "owner_summary": "The pass is technically integrated but still does not meaningfully solve the visual problem. It remains boxy, primitive, label-dependent, and far from the inspiration target.",
-    "decision": "block_current_pass_and_build_hero_art_slice_first",
+    "owner_summary": "The previous procedural hero art slice was rejected for inverted text, shaking/z-fighting read, and not being close enough. The active replacement proof uses repo-local baked bitmap assets, no live Godot text panels, and an isolated authored-art scene/review board for owner validation.",
+    "decision": "owner_review_required_for_authored_art_proof",
     "blocked_from": [
       "beta_tester_preparation",
       "broad_catalog_visuals",
@@ -87,9 +94,10 @@
       "employee_visuals",
       "hidden_narrative_visuals",
       "playable_store_polish",
-      "more_broad_agent_passes"
+      "more_broad_agent_passes",
+      "production_integration_before_owner_art_proof_approval"
     ],
-    "next_allowed_work": "owner_visual_validation_of_isolated_hero_art_slice"
+    "next_allowed_work": "owner_review_authored_hero_art_proof_then_constrained_integration_packets_if_approved"
   },
   "source_inputs": [
     "Store Design & World Building Brief v1.0",
@@ -100,12 +108,12 @@
     "docs/visual-bible/"
   ],
   "blocking_reviews": [
-    "owner_hero_art_slice_visual_approval"
+    "owner_authored_hero_art_proof_review"
   ],
   "next_decision": {
-    "question": "Does the isolated hero art slice screenshot prove the visual method enough to continue into production integration?",
-    "approve_path": "only after the hero art slice screenshot is approved, plan a constrained rebuild/integration path from the proven art method",
-    "reject_path": "change art-production method, asset workflow, or engine/tooling before touching the playable mechanics prototype"
+    "question": "Does docs/production/images/hero_art_slice_review_board.png prove the art-production method enough to create constrained production integration packets?",
+    "approve_path": "create constrained product, fixture, storefront/shell, counter, and integration packets using the approved authored-art method",
+    "reject_path": "do not integrate; change production method to real Blender .glb modules, licensed asset packs, or different tooling before touching the playable mechanics prototype"
   },
   "active_docs": [
     "README.md",
@@ -146,6 +154,7 @@
     "docs/production/14-visual-bible-implementation-review.md",
     "docs/production/15-failed-visual-validation.md",
     "docs/production/16-hero-art-slice-review.md",
+    "docs/production/17-authored-art-proof-integration-plan.md",
     "docs/qa/README.md",
     "docs/qa/smoke-playtest.md",
     "docs/qa/screenshot-review.md"

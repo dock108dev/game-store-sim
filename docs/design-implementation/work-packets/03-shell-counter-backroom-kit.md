@@ -72,7 +72,7 @@ Latest full gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12273 asserts, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+Result: passed with 595 GUT tests, 12306 asserts, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
 
 Owner visual signoff failed. This shell/counter/backroom work is regression/mechanics context only and must not be treated as the accepted visual baseline.
 
