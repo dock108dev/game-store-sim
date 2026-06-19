@@ -55,16 +55,23 @@ Future-era content is not part of the first vertical slice unless explicitly nee
 
 ## Store Personality
 
-The store is:
+The mature store is:
 
 - enthusiast-owned
 - merchandise heavy
-- colorful
-- busy
+- colorful through products and packaging
+- busy once the player grows inventory
 - imperfect
-- slightly crowded
 - full of personality
 - built by gamers for gamers
+
+The opening store is cleaner and more understocked:
+
+- new and promising
+- lightly set up before day-one opening
+- mostly empty fixture capacity
+- starter products placed by the player
+- modest rather than flashy
 
 The store is not:
 
@@ -98,15 +105,16 @@ The focus remains games. Hardware, accessories, guides, media, and collectibles 
 
 ## Current Implementation Stance
 
-The current art-kit route is not the design target by itself. It is an implementation attempt that helped separate visible art-kit instances from raw graybox work.
+The current art-kit route is not the design target. It is a mechanics prototype and implementation attempt that helped separate visible art-kit instances from raw graybox work, but owner review still rates the look around 4.5/10.
 
 Going forward, implementation should be judged against this design source of truth:
 
 - 2002-2004 independent specialty game store.
 - underfunded but functional opening condition.
-- dense period-authentic merchandising over empty showroom space.
+- empty-ish day-one setup with visible growth capacity, then denser period-authentic merchandising as the store develops.
 - fictional platforms and products.
 - visible growth path.
 - asset roadmap driven by the 300-object inventory.
+- `docs/visual-bible/` object-family quality bar, targeting 7.5/10 before beta/tester expansion.
 
 Do not broaden customer visuals, decoration breadth, hidden narrative, multi-era catalog visuals, or external playtest packaging until the opening store loop and first environment read meet this source of truth.

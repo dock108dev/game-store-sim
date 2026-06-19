@@ -20,7 +20,7 @@ The gate runs:
 - coverage policy
 - product catalog content checks
 - desktop pack smoke
-- alpha performance smoke
+- alpha performance smoke, retained as a legacy performance label in the current script
 - screenshot capture
 - screenshot sanity checks
 - screenshot contact-sheet generation
@@ -28,7 +28,7 @@ The gate runs:
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 587 GUT tests and 11891 GUT asserts.
+- Current doc-contract expectation: 587 GUT tests and 11859 GUT asserts.
 - UI scenario automation coverage: 512/632, or 81.0%.
 - Production script mapping coverage: 54/54, or 100.0%.
 - 3 active standalone validation tools.
@@ -42,7 +42,7 @@ Current validation snapshot:
 
 ## Design-Reset Validation
 
-For the current design reset, automated validation is necessary but insufficient. The pass is not approved unless owner review confirms that the opening store delivers the fantasy documented in `docs/design-source-of-truth/` and the evidence requested by `docs/design-implementation/12-validation-and-screenshot-checklist.md`.
+For the current design reset, automated validation is necessary but insufficient. The pass is not approved unless owner review confirms that the opening store delivers the fantasy documented in `docs/design-source-of-truth/` and the object-family quality documented in `docs/visual-bible/`.
 
 `scripts/validate_godot.sh` and the generated contact sheet are regression evidence. They do not approve the design reset by themselves because the previous screenshot set and pass/fail logic were created for graybox-era checks.
 
@@ -50,9 +50,9 @@ Required evidence:
 
 - focused tests for changed scene/doc contracts
 - full `scripts/validate_godot.sh` for production-route integration
-- regenerated contact sheet
+- regenerated contact sheet or replacement review board for changed visual routes
 - manual 1280x720 walk-in review from entrance to checkout
-- implementation evidence review against `docs/design-implementation/12-validation-and-screenshot-checklist.md`
+- implementation evidence review against `docs/production/14-visual-bible-implementation-review.md`
 - screenshot review against `docs/qa/screenshot-review.md`
 - source-of-truth checklist review against `docs/design-source-of-truth/04-validation-and-signoff.md`
 

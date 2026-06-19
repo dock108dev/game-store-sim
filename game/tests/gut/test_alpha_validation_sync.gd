@@ -3,9 +3,9 @@ extends GutTest
 const STATUS_PATH := "res://../docs/status.json"
 const VALIDATION_DOC_PATH := "res://../docs/production/06-validation.md"
 const BACKLOG_PATH := "res://../docs/production/04-backlog.md"
-const BUG_LIST_PATH := "res://../docs/production/13-alpha-bug-list.md"
+const BUG_LIST_PATH := "res://../docs/production/13-visual-blockers.md"
 const SCREENSHOT_REVIEW_PATH := "res://../docs/qa/screenshot-review.md"
-const OWNER_REVIEW_PATH := "res://../docs/production/14-owner-visual-review-package.md"
+const OWNER_REVIEW_PATH := "res://../docs/production/14-visual-bible-implementation-review.md"
 
 
 func test_validation_snapshot_records_current_gate_outputs() -> void:
@@ -33,13 +33,13 @@ func test_docs_name_design_reset_as_current_gate() -> void:
 
 	assert_string_contains(validation_doc, "design reset")
 	assert_string_contains(backlog, "Design reset")
-	assert_string_contains(bug_list, "VIS-001")
+	assert_string_contains(bug_list, "VIS-012")
 	assert_string_contains(screenshot_review, "2002-2004")
 	assert_string_contains(owner_review, "validate_godot.sh")
-	assert_string_contains(owner_review, "regression evidence only")
-	assert_string_contains(owner_review, "Packet 09")
-	assert_string_contains(owner_review, "packet-09-art-spike-review-board.png")
-	assert_string_contains(owner_review, "new_real_inspiration")
+	assert_string_contains(owner_review, "regression evidence")
+	assert_string_contains(owner_review, "Visual Bible")
+	assert_string_contains(owner_review, "7.5/10")
+	assert_string_contains(owner_review, "product close-up")
 	assert_false(backlog.contains("external alpha"))
 
 

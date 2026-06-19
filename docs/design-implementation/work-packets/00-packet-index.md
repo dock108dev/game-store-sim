@@ -1,119 +1,77 @@
 # Work Packet Index
 
-Status: Ready for review
+Status: Active
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
-Primary doc: `docs/design-implementation/14-phase-implementation-roadmap.md`
-Dependencies: `docs/design-implementation/13-agent-work-packet-template.md`
-Expected commit scope: docs-only implementation packet assembly
 
 ## Purpose
 
-This folder is the implementation packet queue for the visual reset.
+This file is the current packet queue for the Visual Bible rebuild.
 
-Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-implementation/README.md`. Each packet converts the design implementation docs into a concrete, reviewable work unit with scope, likely files, validation, screenshot evidence, and stop conditions.
+The old Packet 01-09 files were deleted from the active tree because they described the rejected graybox/art-kit/polish sequence. The useful lessons from those packets are now summarized here and in the Visual Bible. Agents should not recreate the old sequence or treat deleted packet names as the next work.
 
-## Execution Rules
-
-- Complete packets in dependency order unless the packet index says parallel work is safe.
-- Commit and push after each completed implementation packet.
-- Keep main scene/layout integration lead-owned and sequential.
-- Do not treat standalone asset exploration as complete until it is integrated and reviewed in final game-window screenshots.
-- Do not broaden into catalog breadth, customer visuals, hidden narrative, later-era content, or beta packaging until packet 08 approves the opening-store baseline.
-
-## Packet Queue
-
-| Order | Packet | Status | Purpose |
-| ---: | --- | --- | --- |
-| 1 | `01-visual-module-foundation.md` | Complete | Establish reusable materials, modules, anchors, naming, and no-raw-cube visual foundation. |
-| 2 | `02-store-shell-mall-entrance-stockroom.md` | Complete | Build the mall approach, storefront, entrance, real stockroom, receiving area, and first-read layout. |
-| 3 | `03-fixtures-and-placement-systems.md` | Complete | Build starter fixtures, snap/placement visuals, shelf labels, capacity slots, and empty/stocked states. |
-| 4 | `04-checkout-trade-in-and-day-one-setup.md` | Complete | Build the checkout/trade-in counter, queue support, behind-counter intake, and day-one setup tasks. |
-| 5 | `05-product-platform-and-price-language.md` | Complete | Build fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter titles. |
-| 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
-| 7 | `07-lighting-density-and-integration-polish.md` | Complete | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
-| 8 | `08-review-package-and-owner-validation.md` | Complete | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `09-art-direction-spike.md` | Implemented, reference only | Prove a replacement bitmap/material visual method with a revised inside-looking-out small-chain store spike; superseded by Visual Bible planning for production rebuild. |
-
-## Dependency Model
-
-Sequential dependencies:
-
-1. Packet 01 must finish before broad store assembly.
-2. Packet 02 must finish before fixtures and checkout placement are final.
-3. Packet 03 must finish before product placement can be validated.
-4. Packet 04 depends on packet 02 layout and packet 03 fixture scale.
-5. Packet 05 depends on packet 03 stocking surfaces and packet 04 day-one setup flow.
-6. Packet 06 depends on packet 02 storefront/stockroom, packet 03 fixture labels, and packet 05 product language.
-7. Packet 07 depends on packets 01-06.
-8. Packet 08 depends on packet 07.
-9. Packet 09 depends on owner block decision from packet 08.
-
-Parallel-safe work:
-
-- bitmap cover/poster drafts after packet 05 rules are read
-- standalone material tests after packet 01 rules are read
-- review-note templates for packet 08
-- small prop modules that do not touch the main store scene
-
-Not parallel-safe without a lead merge plan:
-
-- main store scene edits
-- store footprint/layout
-- stockroom placement
-- product/catalog data edits
-- validation/status contract edits
-- final screenshot/review package
-
-## Lead-Owned Files And Decisions
-
-The lead implementer owns:
-
-- active scene integration
-- layout/footprint decisions
-- store shell and stockroom relationship
-- product catalog data
-- `docs/status.json`
-- doc status contract tests
-- final validation notes
-- commit ordering
-
-## Docs To Read Before Any Packet
+## Required Read Order
 
 1. `docs/CURRENT_STATE.md`
 2. `docs/design-source-of-truth/README.md`
 3. `docs/visual-bible/README.md`
-4. `docs/design-implementation/README.md`
-5. `docs/design-implementation/13-agent-work-packet-template.md`
-6. `docs/design-implementation/14-phase-implementation-roadmap.md`
-7. Current packet
-8. Packet-specific dependencies
+4. `docs/visual-bible/09-mvp-object-implementation-checklist.md`
+5. `docs/design-implementation/README.md`
+6. `docs/design-implementation/13-agent-work-packet-template.md`
+7. This packet index
 
-## Packet Completion Definition
+## Legacy Packet Outcome
 
-A packet is complete when:
+| Legacy packet group | Outcome |
+| --- | --- |
+| Packet 01-08 | Implemented enough to prove mechanics and store anchors, but not enough for the target visual bar. Deleted as active instructions. |
+| Packet 09 | Improved the direction but still rated around 4.5/10 by owner review. Deleted as active instruction and retained only as reference evidence in current state/production notes. |
 
-- implementation scope is done
-- mechanics touched by the packet still work
-- docs/tests/status are updated if behavior changed
-- required screenshots exist for implementation work
-- focused tests for changed contracts pass
-- `scripts/validate_godot.sh` passes for implementation work
-- a commit is created and pushed
-- residual issues and decisions are logged
+Hard lessons carried forward:
 
-Docs-only packet assembly does not require `scripts/validate_godot.sh`.
+- Do not polish the existing primitive store as the final visual source.
+- Do not rely on labels to make objects understandable.
+- Do not add random wall clutter to hide blankness.
+- Do not stage locked/future inventory as if it already exists.
+- Do not let `scripts/validate_godot.sh` or the contact sheet approve art quality.
+- Build authored object families first, then integrate.
 
-## Current Next Step
+## Current Packet Queue
 
-Packet 09 is implemented and remains useful evidence, but owner feedback after revision 3 still rated the result as too primitive for production. The next queue item should be a new Visual Bible implementation packet set, not another blind Packet 09 polish pass.
+| Order | Packet to create | Primary Visual Bible docs | Result |
+| ---: | --- | --- | --- |
+| 1 | MVP product art kit | `03-product-art-and-packaging.md`, `04-fictional-platforms-and-games.md`, `09-mvp-object-implementation-checklist.md` | Starter DVD cases, cover art, console/accessory packages, price stickers, stack language, close-up screenshot. |
+| 2 | MVP fixture and display kit | `02-fixtures-and-displays.md`, `09-mvp-object-implementation-checklist.md` | Shelves/racks/displays with 10-30 item capacity, empty slots, authored silhouettes, stocking compatibility. |
+| 3 | Store shell and mall interior kit | `01-store-shell-architecture.md`, `07-signage-marketing-and-store-identity.md` | Clean mall storefront, drywall, carpet, ceiling, storefront trim, modest neighboring context. |
+| 4 | Counter/register/trade-in kit | `05-counter-register-and-trade-in.md` | Straight counter, POS, scanner, bags, cash drawer, trade-in/intake staging, one queue route. |
+| 5 | Stockroom/receiving/office kit | `06-stockroom-receiving-office.md` | Real backroom, receiving area, clean storage racks, office desk/computer/calendar, day-one delivery state. |
+| 6 | Minimal signage/store identity kit | `07-signage-marketing-and-store-identity.md`, `04-fictional-platforms-and-games.md` | `Games4U`, grand-opening sign, shelf labels, legal-safe promos, readable but restrained copy. |
+| 7 | Playable store integration | All Visual Bible docs | Replace primitive visible objects in the playable route while preserving current mechanics. |
+| 8 | Owner review package | `08-art-production-pipeline.md`, production/QA docs | Screenshots, notes, validation, blocker update, approve/revise/block path. |
 
-Reference:
+## Packet Creation Rules
 
-- `docs/design-implementation/work-packets/09-art-direction-spike.md`
-- `artifacts/validation/latest/packet-09-art-spike-review-board.png`
-- `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`
-- `artifacts/validation/latest/screenshots/packet_09_starter_setup_fixture.png`
-- `artifacts/validation/latest/screenshots/packet_09_storefront_frame.png`
+Use `docs/design-implementation/13-agent-work-packet-template.md`.
 
-The next step is to assemble new implementation packets from `docs/visual-bible/`, starting with MVP product art and physical fixture/display assets. Do not rebuild the playable store visuals or resume beta/tester packaging until the MVP visual object-family targets are implemented and reviewed against the 7.5/10 bar.
+Each packet must include:
+
+- exact Visual Bible docs to read
+- files likely to change
+- asset authoring requirements
+- tests to add/update
+- screenshot evidence
+- acceptance checklist
+- stop/ask-owner conditions
+- commit expectation
+
+## Validation Rule
+
+Docs-only packet assembly can use focused doc/status tests.
+
+Implementation packets must run:
+
+```text
+scripts/validate_godot.sh
+```
+
+The gate proves regression stability only. Owner visual review proves whether the 7.5/10 art target is met.

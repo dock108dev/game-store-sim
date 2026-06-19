@@ -36,11 +36,11 @@ func test_asset_roadmap_names_required_counts_and_phases() -> void:
 
 	for term in [
 		"total objects: 300",
-		"MVP objects: 77",
-		"OBJ-001 Narrow storefront glass door",
-		"OBJ-057 Double-sided gondola shelf",
-		"Phase 1: Store Shell And First Read",
-		"Phase 5: Demo, Bargain, Guides, And Hardware",
+		"Product: 67",
+		"Phase 1: MVP Product Art Kit",
+		"Phase 2: MVP Fixture And Display Kit",
+		"Phase 5: Stockroom/Receiving/Office Kit",
+		"Phase 7: Playable Store Integration",
 	]:
 		assert_string_contains(roadmap, term)
 

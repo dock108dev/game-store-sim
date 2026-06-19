@@ -2,24 +2,26 @@
 
 ## Purpose
 
-This folder turns `docs/design-source-of-truth/` into agent-ready implementation work.
+This folder turns the design source of truth and Visual Bible into agent-ready implementation work.
 
-The source-of-truth docs define the target. This folder defines how work is sliced, sequenced, validated, and handed off so multiple implementation passes can move quickly without drifting back into graybox, art-kit-only, or broad-content work.
+The old Packet 01-09 sequence was completed and then blocked by owner visual review. It is not the current implementation queue. The current queue starts from `docs/visual-bible/` and rebuilds MVP object families with authored assets before reintegrating them into the playable store.
 
 ## Authority
 
 If this folder conflicts with `docs/design-source-of-truth/`, the design source of truth wins.
 
+If this folder conflicts with `docs/visual-bible/` on visible object quality, fixture/product shape, art production method, or MVP object requirements, the Visual Bible wins.
+
 If a slice cannot satisfy the design source of truth without changing a core gameplay mechanic, stop and record the decision point before continuing.
 
 ## Implementation Policy
 
+- Start work only from current Visual Bible packets, not deleted legacy packets.
 - Work may start on a slice once its dependencies are complete.
-- Work does not need final owner signoff before the next dependent slice starts, but every slice must end in a reviewable state.
+- Work does not need final owner signoff before the next non-conflicting dependent slice starts, but every slice must end in a reviewable state.
 - Commit after each completed slice for tracking.
-- Keep working through the roadmap until a validation failure, design decision, or implementation blocker requires owner input.
 - Preserve existing mechanics while replacing the visual/design surface.
-- Do not broaden catalog visuals, customers, decoration breadth, hidden narrative, later-era content, or external playtest packaging until the opening store baseline is reviewable against the design source of truth.
+- Do not broaden catalog visuals, customers, decoration breadth, hidden narrative, later-era content, or external playtest packaging until the MVP opening-store visual pass reaches owner review.
 
 ## Agent Operating Rules
 
@@ -29,102 +31,63 @@ Every implementation agent should:
 2. Read `docs/design-source-of-truth/README.md`.
 3. Read `docs/visual-bible/README.md`.
 4. Read this index.
-5. Read the current slice packet and all dependency packets.
-6. Make only the changes required for the current slice.
-7. Update docs/tests that describe changed behavior or validation.
-8. Run focused tests for changed contracts.
-9. Run `scripts/validate_godot.sh` before marking the slice complete.
-10. Commit the completed slice.
+5. Read `docs/design-implementation/work-packets/00-packet-index.md`.
+6. Read the current Visual Bible family doc and `docs/visual-bible/09-mvp-object-implementation-checklist.md`.
+7. Make only the changes required for the current slice.
+8. Update docs/tests that describe changed behavior or validation.
+9. Run focused tests for changed contracts.
+10. Run `scripts/validate_godot.sh` before marking an implementation slice complete.
+11. Commit the completed slice.
 
-Do not use visible debug labels, loose primitive clutter, or future inventory staging as a shortcut for store readability.
+Do not use visible debug labels, loose primitive clutter, old graybox geometry, or future inventory staging as shortcuts for store readability.
 
-## Running Document List
+## Active Implementation Docs
 
-| Order | Document | Status | Purpose |
-| ---: | --- | --- | --- |
-| 1 | `README.md` | Complete | Implementation index, operating rules, slice order, and dependency policy. |
-| 2 | `02-visual-module-system-spec.md` | Complete | Reusable build pieces, material rules, collision rules, and scene organization. |
-| 3 | `03-store-shell-and-mall-entrance-slice.md` | Complete | Opening spawn, mall concourse, storefront, entrance, and first read. |
-| 4 | `04-starting-store-layout-spec.md` | Complete | Exact floor plan, zone placement, backroom relationship, and day-one density. |
-| 5 | `05-fixture-grid-slice.md` | Complete | Starter wall shelves/racks, movable purchasable fixtures, labels, visible capacity, and snap placement rules. |
-| 6 | `06-checkout-and-trade-in-counter-slice.md` | Complete | Shared checkout/trade-in station, clean register setup, one-line queue, and behind-counter hold/intake storage. |
-| 7 | `07-product-and-platform-visual-language-spec.md` | Complete | Legal-safe fictional platforms, two-tone case language, cover art, stickers, prices, and starter titles. |
-| 8 | `08-required-zones-slice.md` | Complete | Inventory-source zones, player labels, demo placement, hardware/receiving rules, and first-use guidance. |
-| 9 | `09-density-and-clutter-rules.md` | Complete | Empty-promising day-one density, setup clutter, stockroom planning desk, console box stacks, and visual-review rules. |
-| 10 | `10-signage-branding-and-store-identity-spec.md` | Complete | Editable store name, early-2000s mall signage, shelf labels, posters, neighboring signs, and copy tone. |
-| 11 | `11-lighting-materials-and-color-palette-spec.md` | Complete | Bright store lighting, warmer mall lighting, commercial carpet, editable panels, fixture materials, and palette rules. |
-| 12 | `12-validation-and-screenshot-checklist.md` | Complete | Screenshot-first validation, final game-window review, detailed notes, fail language, and docs-only skip rules. |
-| 13 | `13-agent-work-packet-template.md` | Complete | Strict implementation packet template with read-first docs, scope, evidence, validation, decision log, and handoff rules. |
-| 14 | `14-phase-implementation-roadmap.md` | Complete | Master roadmap from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness. |
-| 15 | `15-art-direction-reset-and-spike-plan.md` | Active, awaiting review | Block current primitive visual method, freeze mechanics prototype, and define the Blender/bitmap/asset art spike. |
+| Document | Status | Purpose |
+| --- | --- | --- |
+| `README.md` | Active | Implementation index and agent operating rules. |
+| `02-visual-module-system-spec.md` | Active reference | Grid, module, collision, and replacement rules; Visual Bible wins on art quality. |
+| `13-agent-work-packet-template.md` | Active | Packet format for new implementation slices. |
+| `14-phase-implementation-roadmap.md` | Active | Roadmap from Visual Bible packets to owner validation. |
+| `15-art-direction-reset-and-spike-plan.md` | Historical reference | Captures why the prior primitive route was blocked. |
+| `work-packets/00-packet-index.md` | Active | Current packet queue and legacy packet deletion policy. |
 
-## Active Work Packets
+Deleted legacy docs:
 
-Implementation packet assembly is complete under `work-packets/`.
+- Old slice specs `03` through `12`.
+- Old work packets `01` through `09`.
+- Old alpha/owner review package names under `docs/production/`.
 
-| Order | Packet | Status | Purpose |
-| ---: | --- | --- | --- |
-| 0 | `work-packets/00-packet-index.md` | Ready for review | Packet queue, dependency order, ownership rules, and current next step. |
-| 1 | `work-packets/01-visual-module-foundation.md` | Complete | Reusable materials, modules, anchors, naming, collision, and no-raw-cube foundation. |
-| 2 | `work-packets/02-store-shell-mall-entrance-stockroom.md` | Complete | Mall approach, storefront, open entrance, sales floor shell, real stockroom, receiving position, and first-read route. |
-| 3 | `work-packets/03-fixtures-and-placement-systems.md` | Complete | Starter shelves/racks, snap placement visuals, capacity slots, fixture labels, and empty/stocked states. |
-| 4 | `work-packets/04-checkout-trade-in-and-day-one-setup.md` | Complete | Checkout/trade-in counter, queue support, behind-counter intake, and day-one receiving/setup tasks. |
-| 5 | `work-packets/05-product-platform-and-price-language.md` | Complete | Fictional product cases, platform/genre signals, cover art, price/condition stickers, and starter products. |
-| 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Complete | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
-| 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Complete | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
-| 8 | `work-packets/08-review-package-and-owner-validation.md` | Complete | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `work-packets/09-art-direction-spike.md` | Implemented, reference only | Reference extraction, bitmap sign/material workflow, isolated inside-looking-out spike revision, and evidence for Visual Bible planning. |
+Their useful decisions were consolidated into `docs/design-source-of-truth/`, `docs/visual-bible/`, `docs/production/13-visual-blockers.md`, and `docs/production/14-visual-bible-implementation-review.md`.
 
-## Dependency Model
+## Next Packet Set
 
-Slices should generally follow this order:
+Create and implement new packets from the Visual Bible in this order:
 
-1. Visual module system.
-2. Store shell and mall entrance.
-3. Starting store layout.
-4. Fixture grid.
-5. Checkout and trade-in counter.
-6. Product and platform visual language.
-7. Required zones.
-8. Density, clutter, signage, lighting, and validation polish.
-
-Later slices may start when their dependencies are complete. For example, product visual language can begin once fixture scale and platform-section rules are stable; it does not need to wait for every checkout prop.
+1. MVP product art kit.
+2. MVP fixture and display kit.
+3. Store shell and mall interior kit.
+4. Counter, register, and trade-in kit.
+5. Stockroom, receiving, and office kit.
+6. Minimal signage and store identity kit.
+7. Playable store integration and route validation.
+8. Owner review package.
 
 ## Slice Completion Definition
 
 A slice is complete when:
 
-- the requested assets/scenes/code are implemented
+- requested assets/scenes/code are implemented
 - mechanics touched by the slice still work
-- docs reflect the current behavior
+- docs reflect current behavior
 - focused tests pass
 - full `scripts/validate_godot.sh` passes
-- screenshots/contact sheet are regenerated
+- screenshot/review evidence is regenerated where relevant
 - the slice is committed
-- any owner decision points are documented clearly
+- owner decision points are documented clearly
 
 Owner signoff can happen after the slice is complete. Approval is not required to continue non-conflicting dependent work, but rejected visuals must be corrected before broadening scope.
 
-## Standard Slice Packet Sections
-
-Each future slice doc should include:
-
-- Goal
-- Player-facing result
-- Dependencies
-- In scope
-- Out of scope
-- Required assets/modules
-- Likely scene files
-- Likely script files
-- Tests to add or update
-- Screenshot targets
-- Acceptance checklist
-- Stop/ask-owner conditions
-- Commit expectation
-
 ## Current Next Step
 
-Use `docs/visual-bible/` to assemble the next implementation packet set.
-
-Packets 01-08 are implemented and validated. Packet 09 is implemented as an isolated art spike and remains useful reference, but owner review still rates the result as too primitive. The next step is not another blind Packet 09 polish pass; it is MVP object-family rebuild planning from the Visual Bible, starting with product art, fixtures/displays, store shell, counter/register, stockroom/receiving, and minimal signage.
+Assemble the first Visual Bible implementation packet: MVP product art kit. The packet should produce authored DVD cases, recognizable legal-safe starter cover art, console/accessory packaging, price stickers, duplicate-stack language, and first-person close-up screenshot evidence before any broad playable-store rebuild.

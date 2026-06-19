@@ -33,4 +33,4 @@ This is evidence support for implementation packets. It does not define the next
 
 ## Fail
 
-Record the exact area and screenshot name in `docs/production/13-alpha-bug-list.md`.
+Record the exact area and screenshot name in `docs/production/13-visual-blockers.md`.

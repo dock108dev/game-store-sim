@@ -8,7 +8,7 @@ Primary IDs: OBJ-042, OBJ-056 through OBJ-079, OBJ-063 through OBJ-071, OBJ-076,
 
 Fixtures are the main reason the current scene still reads primitive. The next pass must treat fixtures as actual retail objects, not as panels with a few cubes on them.
 
-The store should use physical shelves, racks, bins, cases, and counters that can hold meaningful quantities of product. Product should not live primarily on wall hooks. Slatwall may exist as background infrastructure, but day-one product display should be carried by store fixtures that look bought, placed, and useful.
+The store should use physical shelves, racks, bins, cases, and counters that can hold meaningful quantities of product. Product should not live primarily on wall hooks. The MVP store walls are drywall; product display should be carried by fixtures that look bought, placed, and useful.
 
 ## Locked Decisions
 
@@ -29,11 +29,11 @@ The store should use physical shelves, racks, bins, cases, and counters that can
 | OBJ-058 | Narrow endcap display | Promotional fixture with sign topper and stocked/empty states. |
 | OBJ-059 | Tall used-game wall bay | Later/used-focused fixture; should hold many DVD cases with dividers and used stickers. |
 | OBJ-060 | New release slat shelf bay | Clean front-facing display for hero releases; should make cover art obvious from player distance. |
-| OBJ-062 | Wire accessory pegboard | Accessory-specific only; not the main game display solution. |
+| OBJ-062 | Accessory rack concept | Convert any pegboard-style spreadsheet intent into a physical packaged-accessory rack for MVP; not a main game display solution. |
 | OBJ-067 | Bargain dump bin | Physical bin with internal volume and visible loose cases when stocked. |
 | OBJ-068 | Portable game case rack | Smaller-scale fixture for handheld boxes/cases. |
 | OBJ-076 | Controller hanging rail | Accessory fixture; hanging rail/cards are okay for packaged accessories. |
-| OBJ-077 | Memory card peg rail | Small packaged accessory fixture, not a game shelf substitute. |
+| OBJ-077 | Memory card/accessory shelf strip | Small packaged accessory fixture, not a game shelf substitute. |
 
 ## Display Families
 

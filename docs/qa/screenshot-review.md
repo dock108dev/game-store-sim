@@ -4,9 +4,9 @@ This is the screenshot evidence procedure for the current design/visual approval
 
 The question is not whether the project is mechanically complete. The question is whether the opening route reads as a small, underfunded, functional 2002-2004 independent game store with visible growth potential.
 
-Use this after an implementation packet or [Validation And Screenshot Checklist](../design-implementation/12-validation-and-screenshot-checklist.md) calls for screenshots. Do not use this file as an independent implementation roadmap.
+Use this after a Visual Bible implementation packet calls for screenshots. Do not use this file as an independent implementation roadmap.
 
-The current automated screenshot/contact-sheet set is provisional regression evidence. It was built during the graybox era, so a passing contact sheet or green `validate_godot.sh` run does not approve the design reset. Packet 07/08 may replace or expand screenshot targets when needed to judge the actual opening-store visual bar.
+The current automated screenshot/contact-sheet set is provisional regression evidence. It was built during the graybox era, so a passing contact sheet or green `validate_godot.sh` run does not approve the design reset. Visual Bible packets may replace or expand screenshot targets when needed to judge the actual opening-store visual bar.
 
 ## Generate
 
@@ -24,7 +24,7 @@ Contact sheet:
 artifacts/validation/latest/screenshot-contact-sheet.png
 ```
 
-For the current owner decision package, read [Owner Visual Review Package](../production/14-owner-visual-review-package.md). That doc is the active Packet 08 review summary; this QA file only defines the screenshot procedure.
+For the current owner decision package, read [Visual Bible Implementation Review](../production/14-visual-bible-implementation-review.md). This QA file only defines the screenshot procedure.
 
 ## Primary Review Targets
 
@@ -38,6 +38,8 @@ For the current owner decision package, read [Owner Visual Review Package](../pr
 - `stockroom_doorway.png`: stockroom threshold, employee-only read, and backroom depth from sales floor
 - `receiving_area.png`: shipments and intake
 - `backroom_summary.png`: management support without becoming the main fantasy
+- product-kit close-up screenshots added by the current packet
+- fixture empty/stocked capacity screenshots added by the current packet
 
 ## Pass Criteria
 
@@ -49,11 +51,11 @@ Pass only if:
 - register/counter reads from silhouette, equipment, material, grouped props, and trade-in staging
 - used games, new releases, platform sections, demo, bargain, guides/media, checkout, and receiving support are understandable
 - product/fixture identity comes from rows, cases, boxes, stickers, posters, signs, and fixture design
-- opening density is limited but intentional: 25-40% wall occupancy and 30-50% floor occupancy
+- opening density is limited but intentional: pre-day-one can be very sparse, while the first validated slice grows toward 25-40% wall occupancy and 30-50% floor occupancy
 - future growth is visible without future inventory physically sitting in the store
 - large debug labels are not required to understand primary objects
 - the 1280x720 real-window walk-in does not expose a prototype-heavy angle
-- Packet 06 signage should show `Games4U` as the storefront default, a real closed/open sign state, attached shelf labels, and fictional promo posters without reviving debug label cards.
+- signage should show `Games4U` as the storefront default, a real closed/open sign state, attached shelf labels, and fictional promo posters without reviving debug label cards.
 - Owner approval is based on screenshot-level notes and/or a real-window walk-in, not the contact sheet alone.
 
 ## Fail Criteria

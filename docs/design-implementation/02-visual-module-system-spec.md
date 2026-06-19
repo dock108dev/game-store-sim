@@ -19,7 +19,7 @@ The historical visual target was late-PS2-era 3D retail:
 - modest polygon budgets
 - bitmap texture detail
 - stylized but grounded proportions
-- visible material changes between carpet, slatwall, glass, metal, laminate, plastic, paper, and cardboard
+- visible material changes between carpet, drywall, glass, metal, laminate, plastic, paper, and cardboard
 - dense enough to feel like a real early-2000s game store
 - clean enough that player movement and interaction remain reliable
 
@@ -135,8 +135,8 @@ Needed for the first-read pass:
 - threshold mat
 - low-pile carpet floor tile
 - ceiling tile/light grid
-- slatwall back wall bay
-- slatwall side wall bay
+- drywall-backed wall shelf bay
+- drywall-backed side wall fixture bay
 - cash wrap wall panel
 - backroom doorway/frame
 
@@ -149,13 +149,13 @@ Needed for floor and wall merchandising:
 - narrow endcap display
 - used-game wall bay
 - new-release shelf bay
-- wire accessory pegboard
+- accessory rack or small packaged-accessory display
 - glass hardware case
 - strategy guide rack
 - bargain dump bin
 - portable game case rack
 - controller hanging rail
-- memory card peg rail
+- memory card/accessory shelf strip
 - clearance shelf
 
 ### Counter Modules
@@ -227,7 +227,7 @@ Bitmap textures are preferred for the visual reset.
 Use bitmaps for:
 
 - carpet pattern
-- slatwall grooves
+- subtle wall panel seams and shelf mounting rails
 - laminate counter surfaces
 - worn shelf edges
 - product covers and spines
@@ -260,7 +260,7 @@ Every visible module should use a named material or texture set.
 Material families:
 
 - `retail_carpet_*`
-- `retail_slatwall_*`
+- `retail_wall_panel_*`
 - `retail_laminate_*`
 - `retail_black_metal_*`
 - `retail_plastic_*`
@@ -314,7 +314,7 @@ game/assets/materials/retail/
 Scene naming:
 
 - `module_storefront_glass_door.tscn`
-- `module_wall_slatwall_bay.tscn`
+- `module_wall_shelf_bay.tscn`
 - `module_fixture_gondola_basic.tscn`
 - `module_counter_checkout_basic.tscn`
 - `module_product_game_case_nova.tscn`
@@ -398,6 +398,6 @@ Stop and ask for owner or lead review if:
 - a module requires changing core mechanics rather than replacing visuals
 - the late-PS2 visual target is not achievable with the current asset approach
 
-## Open Follow-Up
+## Current Follow-Up
 
-The next document, `03-store-shell-and-mall-entrance-slice.md`, should decide how the player first sees the store, how the mall concourse frames it, and what the storefront must communicate before the player enters.
+Use `docs/visual-bible/` for object-family art direction and `docs/design-implementation/work-packets/00-packet-index.md` for the next implementation packet order.

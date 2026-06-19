@@ -4,13 +4,15 @@
 
 Validation answers one question:
 
-Does the current build deliver the fantasy of opening and operating a small early-2000s independent game store?
+Does the current build deliver the fantasy of opening and operating a small early-2000s independent game store at the quality bar documented in the Visual Bible?
 
 Automated tests prove stability. Owner review proves design success.
 
 ## Current Validation Stance
 
-The mechanics are broadly functional. The design reset is not complete until the store read, layout, product language, density, and progression hooks match the source of truth.
+The mechanics are broadly functional. The design reset is not complete until the store read, layout, product language, fixture quality, density, and progression hooks match the source of truth and `docs/visual-bible/`.
+
+Current owner review blocks beta/tester expansion: the latest direction is useful reference but still around 4.5/10 visually. The next approval target is a Visual Bible implementation pass that can plausibly reach 7.5/10.
 
 ## Required Evidence
 
@@ -19,7 +21,7 @@ Every implementation pass should produce:
 - focused GUT tests for changed contracts
 - full `scripts/validate_godot.sh` before completion
 - updated screenshots/contact sheet
-- owner screenshot review against this folder
+- owner screenshot review against this folder and `docs/visual-bible/`
 - manual 1280x720 walk-in from entrance to checkout
 - notes on what changed and what still violates the source of truth
 
@@ -30,9 +32,9 @@ Review these first:
 - `main_scene.png`: storefront/entrance first read
 - `storefront_entry.png`: entering the store and seeing interior promise
 - `register_counter.png`: checkout plus trade-in center
-- `stocked_aisle.png`: platform/game browsing density
-- `receiving_area.png`: shipments and intake
-- `backroom_summary.png`: management support without becoming the main fantasy
+- product close-up: starter cases, console/accessory packaging, cover art, and price stickers
+- fixture capacity: empty and stocked shelf/rack/display states
+- stockroom/receiving/office: operational backroom read
 
 ## Source-Of-Truth Checklist
 
@@ -46,6 +48,7 @@ A pass is not ready if any of these fail:
 - the store has no obvious growth path
 - money appears to unlock everything
 - the environment relies on debug labels instead of fixtures, signage, and products
+- product cases, shelves, displays, counters, and receiving props still read as primitive assembled geometry
 - customer routes do not encourage browsing
 
 ## Vertical Slice Approval

@@ -1,22 +1,28 @@
 # Documentation Index
 
-This repo intentionally keeps a small active documentation set.
+This repo now uses a compact active documentation set for the visual reset.
 
-The previous broad production, beta/playtest-package, stockroom-production, graybox visual, hard-benchmark, and art-kit docs are no longer the active target when they conflict with the new design reset.
+The broad graybox, art-kit, hard-benchmark, old alpha/beta, and Packet 01-09 implementation docs are no longer active. Those docs were removed when their decisions were either superseded by the Visual Bible or already captured in current status. Do not reconstruct implementation direction from deleted packet history.
 
 ## Routing Rules
 
-Agents start implementation work at [Design Implementation Index](design-implementation/README.md).
+Agents start here:
 
-The documentation hierarchy is:
+1. `docs/CURRENT_STATE.md`
+2. `docs/design-source-of-truth/README.md`
+3. `docs/visual-bible/README.md`
+4. `docs/design-implementation/README.md`
+5. `docs/design-implementation/work-packets/00-packet-index.md`
 
-1. `docs/design-source-of-truth/`: design canon, owner decisions, era, fantasy, and quality bar.
-2. `docs/visual-bible/`: object-family visual production rules for the MVP + first-store rebuild.
-3. `docs/design-implementation/`: active execution plan, work slices, implementation roadmap, agent packet rules, and validation handoff.
-4. `docs/production/`: current status, validation baseline, and visual blocker tracking.
-5. `docs/qa/`: evidence procedures used when an implementation packet asks for screenshots, smoke checks, or owner review.
+Authority order:
 
-If implementation instructions conflict, follow `docs/design-implementation/` unless it violates `docs/design-source-of-truth/`. If status or validation numbers conflict, `docs/status.json` and `docs/CURRENT_STATE.md` win.
+1. `docs/design-source-of-truth/`: game fantasy, era, scope, and owner decisions.
+2. `docs/visual-bible/`: active object-family art direction and MVP asset quality bar.
+3. `docs/design-implementation/`: implementation packet rules and next-work assembly.
+4. `docs/production/`: current blockers, validation baseline, and review package.
+5. `docs/qa/`: evidence procedures only.
+
+If status or validation numbers conflict, `docs/status.json` and `docs/CURRENT_STATE.md` win.
 
 ## Source Of Truth
 
@@ -29,9 +35,9 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 ## Design Source Docs
 
 - [Master Design Source Of Truth](design-source-of-truth/00-master-design-source-of-truth.md): core fantasy, non-negotiables, era, product rules, and design pillars.
-- [Vertical Slice Specification](design-source-of-truth/01-vertical-slice-spec.md): first validated slice, starting inventory, day loop, required systems, and out-of-scope boundaries.
+- [Vertical Slice Specification](design-source-of-truth/01-vertical-slice-spec.md): first validated slice, starter state, day loop, required systems, and out-of-scope boundaries.
 - [Store Design And World Building](design-source-of-truth/02-store-design-world-building.md): store personality, layout, density, zones, storytelling, customers, and hidden narrative boundaries.
-- [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md): implementation phases seeded from the 300-object asset inventory.
+- [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md): implementation phases seeded from the 300-object asset inventory and Visual Bible.
 - [Validation And Signoff](design-source-of-truth/04-validation-and-signoff.md): owner review, screenshot checks, and implementation cycle.
 
 ## Visual Bible Docs
@@ -49,39 +55,19 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 
 ## Design Implementation Docs
 
-- [Design Implementation Index](design-implementation/README.md): agent operating rules, running document list, dependency model, and slice completion definition.
-- [Visual Module System Spec](design-implementation/02-visual-module-system-spec.md): reusable module system, asset workflow, grid, collision, texture, material, and upgradeability rules.
-- [Store Shell And Mall Entrance Slice](design-implementation/03-store-shell-and-mall-entrance-slice.md): opening spawn, retail corridor, `Games4U` storefront, open door, and no-NPC first read.
-- [Starting Store Layout Spec](design-implementation/04-starting-store-layout-spec.md): footprint flexibility, real stockroom, side-wall checkout, player-driven zones, and minimal starter stock.
-- [Fixture Grid Slice](design-implementation/05-fixture-grid-slice.md): starter wall shelves, movable purchasable fixtures, labels, visible capacity slots, and snap placement rules.
-- [Checkout And Trade-In Counter Slice](design-implementation/06-checkout-and-trade-in-counter-slice.md): shared sales/trade-in station, clean register setup, one-line queue, and behind-counter hold/intake storage.
-- [Product And Platform Visual Language Spec](design-implementation/07-product-and-platform-visual-language-spec.md): fictional platform/product language, two-tone case signals, cover art, used stickers, case prices, and starter titles.
-- [Required Zones Slice](design-implementation/08-required-zones-slice.md): inventory-source new/used rules, player-organized labels, demo placement, hardware/receiving roles, and first-use guidance.
-- [Density And Clutter Rules](design-implementation/09-density-and-clutter-rules.md): empty-promising day-one density, setup clutter, stockroom planning desk, console box stacks, mall atmosphere, and visual-review rules.
-- [Signage Branding And Store Identity Spec](design-implementation/10-signage-branding-and-store-identity-spec.md): editable store name, mall storefront signage, shelf labels, posters, neighboring signs, and copy tone.
-- [Lighting Materials And Color Palette Spec](design-implementation/11-lighting-materials-and-color-palette-spec.md): bright retail lighting, warmer mall contrast, commercial carpet, editable color panels, fixture materials, and palette rules.
-- [Validation And Screenshot Checklist](design-implementation/12-validation-and-screenshot-checklist.md): screenshot-first review, final game-window artifacts, detailed notes, explicit fail language, and docs-only skip rules.
-- [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md): strict implementation packet format with read-first docs, scope, validation evidence, decision log, final handoff, and parallel-work rules.
-- [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md): master path from planning lock through implementation phases, validation, owner review, correction loop, and tester readiness.
-- [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md): owner block decision, frozen mechanics prototype boundary, inspiration extraction, and replacement art workflow.
-- [Real Period Retail Inspiration](../new_real_inspiration/README.md): owner-added early-2000s retail references for shelves, products, counters, and store density.
-- [Work Packet Index](design-implementation/work-packets/00-packet-index.md): active packet queue for implementation agents.
-- [Visual Module Foundation Packet](design-implementation/work-packets/01-visual-module-foundation.md): reusable materials, modules, collision/anchors, and no-raw-cube foundation.
-- [Store Shell Mall Entrance Stockroom Packet](design-implementation/work-packets/02-store-shell-mall-entrance-stockroom.md): mall approach, storefront, open entrance, real stockroom, receiving area, and first-read route.
-- [Fixtures And Placement Systems Packet](design-implementation/work-packets/03-fixtures-and-placement-systems.md): starter fixtures, snap placement, labels, slots, and empty/stocked states.
-- [Checkout Trade-In And Day-One Setup Packet](design-implementation/work-packets/04-checkout-trade-in-and-day-one-setup.md): checkout/trade-in station, queue support, setup boxes, and first pre-open tasks.
-- [Product Platform And Price Language Packet](design-implementation/work-packets/05-product-platform-and-price-language.md): legal-safe cases, platform/genre signals, cover art, used stickers, prices, and starter products.
-- [Signage Promotions And Required Zones Packet](design-implementation/work-packets/06-signage-promotions-and-required-zones.md): store identity, shelf labels, posters, required signs, and zone readability without debug labels.
-- [Lighting Density And Integration Polish Packet](design-implementation/work-packets/07-lighting-density-and-integration-polish.md): final lighting, material, density, clutter, route, and screenshot polish.
-- [Review Package And Owner Validation Packet](design-implementation/work-packets/08-review-package-and-owner-validation.md): final evidence package, validation, blocker list, and owner approve/revise/block path.
-- [Art Direction Spike Packet](design-implementation/work-packets/09-art-direction-spike.md): reference extraction, asset workflow, inside-looking-out proof shot, and owner handoff.
+- [Design Implementation Index](design-implementation/README.md): agent operating rules, packet assembly policy, completion definition, and current next step.
+- [Visual Module System Spec](design-implementation/02-visual-module-system-spec.md): retained module/grid/collision rules; superseded by the Visual Bible for visible object quality.
+- [Agent Work Packet Template](design-implementation/13-agent-work-packet-template.md): strict implementation packet format.
+- [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md): current path from Visual Bible packet assembly through validation and owner review.
+- [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md): historical block decision and why Packet 09 is reference only.
+- [Work Packet Index](design-implementation/work-packets/00-packet-index.md): current Visual Bible packet queue and deleted legacy packet policy.
 
 ## Current Production Docs
 
 - [Backlog](production/04-backlog.md): current work queue and stop conditions.
 - [Validation](production/06-validation.md): full local gate and artifact policy.
-- [Visual Bug List](production/13-alpha-bug-list.md): current design/visual blockers.
-- [Owner Visual Review Package](production/14-owner-visual-review-package.md): Packet 08 screenshot notes, validation evidence, residual risks, and owner approve/revise/block decision path.
+- [Visual Blockers](production/13-visual-blockers.md): current design/visual blockers.
+- [Visual Bible Implementation Review](production/14-visual-bible-implementation-review.md): review plan for the next implementation pass.
 
 ## Current QA
 

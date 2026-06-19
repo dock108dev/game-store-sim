@@ -22,7 +22,19 @@ The slice should establish a foundation for the full game rather than attempt to
 
 ## Starting Store
 
-The starting store is:
+The starting store progression has two visual states.
+
+Pre-day-one setup starts with:
+
+- one location
+- owner-operated
+- clean and new
+- mostly empty fixture capacity
+- a receiving/setup task flow
+- a starter pack of roughly two unique games, one console, and one accessory
+- no customers and no employees until the player opens the store
+
+The first validated store state grows toward:
 
 - a single location
 - owner-operated
@@ -32,7 +44,12 @@ The starting store is:
 - visibly understocked
 - promising rather than empty
 
-Opening environment targets:
+Pre-day-one environment targets:
+
+- walls: 5-15% occupied
+- floor: 15-30% occupied
+
+First validated slice environment targets:
 
 - walls: 25-40% occupied
 - floor: 30-50% occupied
@@ -46,7 +63,7 @@ Open space should primarily exist for customer movement. Blank wall and floor ar
 
 ## Required Store Areas
 
-The vertical slice store must include:
+The first-store design must support these areas, but the player does not need all of them fully stocked or fully unlocked on the first morning:
 
 - entrance display
 - new releases
@@ -64,7 +81,7 @@ The mature store can later expand these areas, but the starting store must alrea
 
 The player should not have access to the full catalog at game start.
 
-Starting catalog target:
+Starting catalog target after the initial setup:
 
 - 15-25% of total catalog available
 - primarily common games
@@ -85,9 +102,17 @@ Money alone should not unlock everything.
 
 ## Starting Visible Inventory
 
-The opening store should be intentionally limited, not bare.
+The opening store should be intentionally limited, not bare because art is missing.
 
-Visible inventory target:
+Pre-day-one starter pack:
+
+- about two unique game titles
+- one console
+- one accessory/controller
+- one demo/display unit if the implementation packet includes it
+- a few setup/receiving boxes
+
+First validated slice target after early receiving and stocking:
 
 - 40-60 games
 - 5-10 accessories
@@ -97,7 +122,14 @@ This target can be achieved through lightweight visual facings and stocked item 
 
 ## Required Fixtures
 
-Minimum vertical-slice fixtures:
+Pre-day-one starter fixtures:
+
+- at least one product shelf/rack with visible empty capacity
+- one checkout/trade-in counter
+- one receiving/setup area
+- one demo/display position if included in starter tasks
+
+First validated slice fixture targets:
 
 - 6 wall shelving units
 - 4 gondola shelving units
@@ -106,7 +138,7 @@ Minimum vertical-slice fixtures:
 - 1 demo kiosk
 - 1 bargain bin
 
-Minimum vertical-slice decorations:
+First validated slice decoration targets:
 
 - 8 posters
 - 4 promotional signs

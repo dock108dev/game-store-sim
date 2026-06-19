@@ -2,306 +2,201 @@
 
 ## Purpose
 
-This roadmap turns the 300-object asset inventory workbook into implementation phases. It is not a mandate to build all 300 objects immediately. It is a production map for resetting the store design around a believable early-2000s specialty game shop.
+This roadmap turns the 300-object asset inventory workbook into implementation phases. It is not a mandate to build all 300 objects immediately.
+
+The active art direction is now the Visual Bible. The workbook is an inventory source; `docs/visual-bible/` is the object-family quality bar.
 
 ## Inventory Summary
 
 Workbook totals:
 
 - total objects: 300
-- MVP objects: 77
-- Must priority: 67
-- High priority: 81
-- Medium priority: 73
-- Low priority: 79
+- Product: 67
+- Marketing: 49
+- Display: 25
+- Hidden Narrative: 25
+- Architecture: 22
+- Signage: 22
+- Electronics: 16
+- Clutter: 15
+- Storage: 13
+- Paper Goods: 10
+- Shelving: 8
+- Utility: 8
+- Equipment: 7
+- Demo: 6
+- Counter: 5
+- Furniture: 2
 
-Category counts:
+## Current MVP Rule
 
-| Category | Count |
-| --- | ---: |
-| Product | 67 |
-| Marketing | 49 |
-| Display | 25 |
-| Hidden Narrative | 25 |
-| Architecture | 22 |
-| Signage | 22 |
-| Electronics | 16 |
-| Clutter | 15 |
-| Storage | 13 |
-| Paper Goods | 10 |
-| Shelving | 8 |
-| Utility | 8 |
-| Equipment | 7 |
-| Demo | 6 |
-| Counter | 5 |
-| Furniture | 2 |
+Build object families first, not all spreadsheet rows.
 
-Interaction counts:
+Do not build all 300 objects as loose props.
 
-| Interaction Type | Count |
-| --- | ---: |
-| Decorative | 165 |
-| Stockable Item | 63 |
-| Stocking Surface | 27 |
-| Hidden/Optional | 25 |
-| Interactable | 12 |
-| Animated Prop | 4 |
-| Interactive Prop | 3 |
-| Lighting | 1 |
+MVP + first-store work is limited to:
 
-## MVP Asset Groups
+- product art and packaging
+- fixtures and displays
+- store shell and mall interior
+- counter/register/trade-in
+- stockroom/receiving/office
+- minimal signage and store identity
 
-### Architecture
+Broad marketing, decorations, hidden narrative props, mature catalog breadth, later platforms, customer visuals, employee visuals, and beta/tester package assets stay out of scope until the first-store object-family pass is reviewable.
 
-- OBJ-001 Narrow storefront glass door
-- OBJ-002 Front window poster bay
-- OBJ-003 Storefront logo sign placeholder
-- OBJ-004 Low-pile carpet flooring
-- OBJ-005 Back wall slatwall system
-- OBJ-006 Side wall slatwall system
-- OBJ-009 Fluorescent ceiling light bank
-- OBJ-012 Cash wrap wall panel
+## Starter Product Direction
 
-### Checkout And Trade-In
+Use legally safe fictional products only.
 
-- OBJ-026 Main checkout counter module
-- OBJ-027 Trade-in intake counter module
-- OBJ-028 Corner counter connector
-- OBJ-029 Register terminal
-- OBJ-030 Receipt printer
-- OBJ-031 Barcode scanner
-- OBJ-034 Behind-counter game drawer bank
-- OBJ-035 Used game sleeve box
-- OBJ-036 Trade-in inspection pad
-- OBJ-042 Counter impulse rack
-- OBJ-048 Trade-in plastic tote
+Opening starter pack:
 
-### Core Shelving And Displays
+- `Footy 2002`
+- one sequel-ready adventure/RPG franchise title with a better working name than prior drafts
+- one starter console
+- one starter accessory/controller
 
-- OBJ-056 Single-sided wall game shelf
-- OBJ-057 Double-sided gondola shelf
-- OBJ-058 Narrow endcap display
-- OBJ-059 Tall used-game wall bay
-- OBJ-060 New release slat shelf bay
-- OBJ-062 Wire accessory pegboard
-- OBJ-063 Glass hardware display case
-- OBJ-065 Strategy guide floor rack
-- OBJ-067 Bargain dump bin
-- OBJ-068 Portable game case rack
-- OBJ-071 Poster snap frame
-- OBJ-076 Controller hanging rail
-- OBJ-077 Memory card peg rail
-- OBJ-079 Clearance wall shelf
+Rejected as source-of-truth starter title names:
 
-### Platform, Signage, And Marketing
+- `Space Marines 2`
+- `Blue Alive and Thriving`
 
-- OBJ-061 Platform header sign rail
-- OBJ-073 Small shelf price strip
-- OBJ-084 Coming soon board
-- OBJ-096 Nova platform section header
-- OBJ-101 Vertex platform section header
-- OBJ-106 Prism platform section header
-- OBJ-111 Pocket platform section header
-- OBJ-116 Pocket Advance platform section header
-- OBJ-121 Horizon platform section header
-- OBJ-126 Pulse platform section header
-- OBJ-131 Arc platform section header
-- OBJ-160 New release poster template
-- OBJ-161 Preorder now poster template
-- OBJ-171 Clearance orange tag set
-- OBJ-172 Used copy sticker set
-- OBJ-174 Platform color divider set
-- OBJ-190 Age rating parody label set
-- OBJ-203 Fictional platform logo sheet
-- OBJ-204 Store brand icon sheet
+The exact RPG title can be changed during product-art implementation, but it must be funny/recognizable without copying real games, publishers, logos, or packaging.
 
-### Product Language
+## Phase 0: Documentation Cleanup
 
-- OBJ-097 Nova standard game case
-- OBJ-098 Nova used game case variant
-- OBJ-102 Vertex standard game case
-- OBJ-103 Vertex used game case variant
-- OBJ-107 Prism standard game case
-- OBJ-108 Prism used game case variant
-- OBJ-112 Pocket standard game case
-- OBJ-113 Pocket used game case variant
-- OBJ-117 Pocket Advance standard game case
-- OBJ-118 Pocket Advance used game case variant
-- OBJ-122 Horizon standard game case
-- OBJ-123 Horizon used game case variant
-- OBJ-127 Pulse standard game case
-- OBJ-128 Pulse used game case variant
-- OBJ-132 Arc standard game case
-- OBJ-133 Arc used game case variant
-- OBJ-136 Space Marines 2 case art
-- OBJ-137 Blue Alive and Thriving case art
-- OBJ-156 Memory expansion card package
-- OBJ-222 Used controller loose item
-
-### Demo And Receiving
-
-- OBJ-210 CRT demo television
-- OBJ-212 Early platform demo kiosk
-- OBJ-217 Kiosk game loop screen texture
-- OBJ-246 Shipment cardboard box
-- OBJ-247 Opened shipment box
-
-## Implementation Phases
-
-### Phase 0: Documentation And Target Lock
-
-Goal: make this design source of truth active and demote previous art-kit docs to historical implementation context.
+Goal: make the new source of truth active and remove docs that route agents back to the rejected packet sequence.
 
 Deliverables:
 
-- active docs/status point here
-- validation docs describe design-reset review
-- backlog is organized around the source-of-truth phases
+- active docs/status point to design source, Visual Bible, implementation index, current blockers, and QA evidence
+- stale alpha/beta and Packet 01-09 docs removed from active routing
+- validation docs state that automated gates are regression evidence, not art approval
 
-### Phase 1: Store Shell And First Read
+## Phase 1: MVP Product Art Kit
 
-Goal: rebuild the opening store read around period-authentic architecture.
-
-Build:
-
-- storefront glass door
-- front window poster bay
-- configurable fictional logo sign
-- low-pile carpet material
-- fluorescent light bank
-- cash wrap wall panel
-- slatwall modules
-
-Acceptance:
-
-- first screenshot reads as a small independent game store
-- walls and floors no longer feel like blank prototype planes
-- player can still enter, move, and reach the counter
-
-### Phase 2: Core Fixture Grid
-
-Goal: make the store sell games through fixtures, not labels.
+Goal: make product close-ups look like actual legally safe video game merchandise.
 
 Build:
 
-- wall game shelves
-- double-sided gondola shelves
-- new release slat shelf bay
-- used-game wall bay
-- endcap display
-- platform sign rail
-- price strips
+- DVD-style game case mesh with bevels, spine, cover insert, back panel suggestion, plastic sheen, and price sticker
+- used/new sticker variants
+- two-tone platform/genre visual language
+- starter cover art for `Footy 2002`
+- starter cover art for one adventure/RPG franchise title
+- starter console box
+- starter accessory/controller box
+- duplicate stack visual language
 
 Acceptance:
 
-- launch store reaches 25-40% wall occupancy and 30-50% floor occupancy
-- fixtures are modular and stockable where gameplay needs it
-- the route still supports customer movement
+- products read before floating labels
+- cover art is recognizable at first-person distance
+- legal safety is prioritized over parody closeness
+- day-one stock remains limited
 
-### Phase 3: Checkout And Trade-In Counter
+## Phase 2: MVP Fixture And Display Kit
 
-Goal: make the counter the operational center of the store.
+Goal: replace primitive shelf/rack geometry with authored retail fixtures that can hold real capacity.
 
 Build:
 
-- main checkout counter module
-- trade-in intake counter module
-- L-shaped/corner connector
-- register terminal
-- receipt printer
-- barcode scanner
-- trade-in inspection pad
-- used game sleeve box
-- trade-in tote
-- behind-counter drawer bank
-- counter impulse rack
+- starter wall shelf/rack
+- optional small freestanding display
+- empty capacity slots
+- shelf label strip
+- stocked and empty states
+- collision/interaction anchors compatible with current mechanics
 
 Acceptance:
 
-- checkout, trade-in, and stocking flows still work
-- counter reads as busy and lived-in
-- trade-in area is visually distinct without relying on large labels
+- fixture holds roughly 10-30 items depending on size
+- empty slots are visibly intentional
+- fixture does not read as rectangles plus rods
+- stocking still works
 
-### Phase 4: Product And Platform Visual Language
+## Phase 3: Store Shell And Mall Interior Kit
 
-Goal: make products and fictional platforms recognizable without real brands.
+Goal: make the store and mall approach read as a clean early/mid-2000s retail location.
 
 Build:
 
-- standard and used case variants for Nova, Vertex, Prism, and Pocket
-- platform section headers
-- platform color dividers
-- shelf price strips
-- used copy stickers
-- age-rating parody labels
-- fictional platform logo sheet
-- store brand icon sheet
+- storefront glass rhythm
+- door/threshold details
+- sign housing
+- drywall wall language
+- low-pile carpet
+- quiet ceiling/drop-panel treatment
+- modest neighboring mall context
 
 Acceptance:
 
-- product walls read as game inventory at 1280x720
-- used/new condition reads visually
-- platform sections are understandable without licensed marks
+- first read is a small game store, not a graybox room
+- walls are not cluttered with random panels
+- mall context supports the store without becoming a mall simulation
 
-### Phase 5: Demo, Bargain, Guides, And Hardware
+## Phase 4: Counter/Register/Trade-In Kit
 
-Goal: add period authenticity and browsing hooks.
+Goal: make checkout and trade-in read as a real small-store workstation.
 
 Build:
 
-- CRT demo television
-- early platform demo kiosk
-- kiosk loop screen texture
-- glass hardware display case
-- strategy guide floor rack
-- bargain dump bin
-- portable game case rack
-- controller hanging rail
-- memory card peg rail
-- clearance wall shelf
+- straight counter/cash wrap
+- register/POS
+- scanner
+- cash drawer/receipt/bags
+- trade-in intake surface
+- behind-counter hold/intake storage
 
 Acceptance:
 
-- store supports the required vertical-slice zones
-- customers have obvious browse targets
-- the store feels more like a specialty shop than a generic retail room
+- counter reads from shape and props, not labels
+- one customer line remains supported
+- trade-in and checkout are one station
 
-### Phase 6: Marketing And Environmental Storytelling
+## Phase 5: Stockroom/Receiving/Office Kit
 
-Goal: make the store feel active, period-specific, and owner-operated.
+Goal: make the backroom a real operational space.
 
 Build:
 
-- poster templates
-- preorder posters
-- coming soon board
-- clearance tags
-- employee/customer notice surfaces
-- rotating promotional surfaces
+- receiving area
+- clean storage racks
+- setup boxes
+- office desk/computer/calendar
+- door/sign/threshold from sales floor
 
 Acceptance:
 
-- signage supports the world rather than explaining debug zones
-- environmental storytelling is visible but not noisy
-- the opening store still feels underfunded, not fully mature
+- backroom reads as office + storage
+- starter delivery/setup flow is visible
+- receiving is far enough from the sales-floor door to feel like a work area
 
-### Phase 7: Later-Era And Hidden Objects
+## Phase 6: Minimal Signage And Identity
 
-Goal: prepare future growth without distracting from the slice.
+Goal: add readable store support without using text as the whole visual solution.
 
-Build only after vertical-slice approval:
+Build:
 
-- later-era platform headers and packaging
-- rare/hidden narrative objects
-- advanced promotional campaigns
-- larger used inventory variation
-- special opportunity props
+- editable `Games4U` storefront sign
+- grand-opening sign
+- open/closed sign support
+- shelf labels
+- restrained legal-safe promo posters
 
 Acceptance:
 
-- hidden/narrative objects remain optional
-- future platforms are locked, previewed, or roadmap-only until progression reaches them
+- signs are readable and restrained
+- product/fixture/shell objects still communicate without text
+- signage does not clutter clean walls
 
-## Production Rule
+## Phase 7: Playable Store Integration
 
-Do not build all 300 objects as loose props. Build small reusable kits that satisfy the phase acceptance criteria, then expand breadth only after the store read passes owner review.
+Goal: replace the primitive visible objects in the playable store while preserving mechanics.
+
+Acceptance:
+
+- player can enter, receive, carry, stock, price, sell, trade in, and use backroom computer
+- new object families are visible in the real route
+- screenshots support owner review against the 7.5/10 target
+- `scripts/validate_godot.sh` passes

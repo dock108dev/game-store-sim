@@ -12,7 +12,7 @@ The active object-family art target is [Visual Bible](docs/visual-bible/README.m
 
 The active implementation entrypoint is [Design Implementation Index](docs/design-implementation/README.md). Agents should start there for execution order, packet rules, validation evidence, and handoff expectations.
 
-Older graybox, broad-production, beta, stockroom-production, hard-benchmark, and art-kit docs are not the active target if they disagree with the design source of truth or design implementation docs.
+Older graybox, broad-production, beta, stockroom-production, hard-benchmark, old slice, and Packet 01-09 docs were removed from active routing when they conflicted with the Visual Bible reset.
 
 ## Current Rule
 
@@ -31,7 +31,6 @@ Current art-reset entrypoints:
 - [Design Implementation Index](docs/design-implementation/README.md)
 - [Work Packet Index](docs/design-implementation/work-packets/00-packet-index.md)
 - [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
-- [Art Direction Spike Packet](docs/design-implementation/work-packets/09-art-direction-spike.md)
 
 Use [Design Source Of Truth](docs/design-source-of-truth/README.md) when a packet needs design intent, owner decisions, or quality-bar context.
 
@@ -49,7 +48,7 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 587 GUT tests and 11891 GUT asserts.
+- Current doc-contract expectation: 587 GUT tests and 11859 GUT asserts.
 - UI scenario automation coverage: 512/632.
 - Production script mapping: 54/54.
 - 3 active standalone validation tools.
@@ -66,6 +65,6 @@ Current validation snapshot:
 - [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
 - [Backlog](docs/production/04-backlog.md)
 - [Validation](docs/production/06-validation.md)
-- [Visual Bug List](docs/production/13-alpha-bug-list.md)
-- [Owner Visual Review Package](docs/production/14-owner-visual-review-package.md)
+- [Visual Blockers](docs/production/13-visual-blockers.md)
+- [Visual Bible Implementation Review](docs/production/14-visual-bible-implementation-review.md)
 - [QA](docs/qa/README.md)

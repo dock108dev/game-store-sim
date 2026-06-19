@@ -58,26 +58,27 @@ Minimum required:
 
 1. `docs/CURRENT_STATE.md`
 2. `docs/design-source-of-truth/README.md`
-3. `docs/design-implementation/README.md`
-4. Current packet primary doc
-5. All dependency docs listed below
+3. `docs/visual-bible/README.md`
+4. `docs/design-implementation/README.md`
+5. `docs/design-implementation/work-packets/00-packet-index.md`
+6. Current packet primary doc
+7. All dependency docs listed below
 ```
 
 Packet-specific dependencies should be explicit. Do not say “read all docs” when only some are required, but include all docs whose rules affect the work.
 
-For broad opening-store implementation passes, include:
+For Visual Bible implementation passes, include the relevant family docs:
 
 - `docs/design-implementation/02-visual-module-system-spec.md`
-- `docs/design-implementation/03-store-shell-and-mall-entrance-slice.md`
-- `docs/design-implementation/04-starting-store-layout-spec.md`
-- `docs/design-implementation/05-fixture-grid-slice.md`
-- `docs/design-implementation/06-checkout-and-trade-in-counter-slice.md`
-- `docs/design-implementation/07-product-and-platform-visual-language-spec.md`
-- `docs/design-implementation/08-required-zones-slice.md`
-- `docs/design-implementation/09-density-and-clutter-rules.md`
-- `docs/design-implementation/10-signage-branding-and-store-identity-spec.md`
-- `docs/design-implementation/11-lighting-materials-and-color-palette-spec.md`
-- `docs/design-implementation/12-validation-and-screenshot-checklist.md`
+- `docs/visual-bible/01-store-shell-architecture.md`
+- `docs/visual-bible/02-fixtures-and-displays.md`
+- `docs/visual-bible/03-product-art-and-packaging.md`
+- `docs/visual-bible/04-fictional-platforms-and-games.md`
+- `docs/visual-bible/05-counter-register-and-trade-in.md`
+- `docs/visual-bible/06-stockroom-receiving-office.md`
+- `docs/visual-bible/07-signage-marketing-and-store-identity.md`
+- `docs/visual-bible/08-art-production-pipeline.md`
+- `docs/visual-bible/09-mvp-object-implementation-checklist.md`
 
 ## Required Context Section
 
@@ -211,7 +212,7 @@ Implementation packet:
 - Confirm artifacts under `artifacts/validation/latest/`.
 ```
 
-Validation order follows [Validation And Screenshot Checklist](12-validation-and-screenshot-checklist.md):
+Validation order follows `docs/production/14-visual-bible-implementation-review.md`:
 
 1. Final game-window screenshots.
 2. Detailed screenshot notes.
