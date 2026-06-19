@@ -1,0 +1,150 @@
+[gd_scene load_steps=21 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/retail/dark_laminate.tres" id="1_dark"]
+[ext_resource type="Material" path="res://assets/materials/retail/cream_counter.tres" id="2_cream"]
+[ext_resource type="Material" path="res://assets/materials/retail/cardboard.tres" id="3_cardboard"]
+[ext_resource type="Material" path="res://assets/materials/retail/poster_paper.tres" id="4_paper"]
+[ext_resource type="Material" path="res://assets/materials/retail/sticker_price.tres" id="5_tape"]
+[ext_resource type="Material" path="res://assets/materials/retail/utility_floor.tres" id="6_floor"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_surface"]
+size = Vector3(2.0, 0.12, 0.95)
+
+[sub_resource type="BoxMesh" id="BoxMesh_leg"]
+size = Vector3(0.08, 0.72, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_carton"]
+size = Vector3(0.64, 0.38, 0.44)
+
+[sub_resource type="BoxMesh" id="BoxMesh_flap"]
+size = Vector3(0.58, 0.035, 0.32)
+
+[sub_resource type="BoxMesh" id="BoxMesh_paper"]
+size = Vector3(0.42, 0.018, 0.28)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tape"]
+size = Vector3(0.58, 0.022, 0.055)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bin"]
+size = Vector3(0.55, 0.18, 0.36)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(2.35, 0.018, 1.35)
+
+[sub_resource type="BoxMesh" id="BoxMesh_table_edge"]
+size = Vector3(2.08, 0.055, 0.045)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rack_post"]
+size = Vector3(0.06, 1.05, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rack_shelf"]
+size = Vector3(1.0, 0.06, 0.42)
+
+[sub_resource type="BoxMesh" id="BoxMesh_carton_label"]
+size = Vector3(0.3, 0.16, 0.014)
+
+[sub_resource type="BoxMesh" id="BoxMesh_carton_flap_side"]
+size = Vector3(0.27, 0.035, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_clip"]
+size = Vector3(0.16, 0.024, 0.035)
+
+[node name="ReceivingIntakeKit" type="Node3D"]
+
+[node name="ReceivingIntakeFloorInset" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 0)
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = ExtResource("6_floor")
+
+[node name="ReceivingIntakeSurface" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0)
+mesh = SubResource("BoxMesh_surface")
+surface_material_override/0 = ExtResource("2_cream")
+
+[node name="ReceivingIntakeFrontEdgeBand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -0.5)
+mesh = SubResource("BoxMesh_table_edge")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="ReceivingIntakeBackEdgeBand" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0.5)
+mesh = SubResource("BoxMesh_table_edge")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="ReceivingTableLegA" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85, 0.42, -0.35)
+mesh = SubResource("BoxMesh_leg")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="ReceivingTableLegB" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85, 0.42, -0.35)
+mesh = SubResource("BoxMesh_leg")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="OpenReceivingCarton" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.38, 1.12, 0.05)
+mesh = SubResource("BoxMesh_carton")
+surface_material_override/0 = ExtResource("3_cardboard")
+
+[node name="OpenCartonFrontFlap" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 0.34202, -0.939693, 0.059391, 0.925417, 0.336824, -0.36, 1.04, -0.28)
+mesh = SubResource("BoxMesh_flap")
+surface_material_override/0 = ExtResource("3_cardboard")
+
+[node name="OpenCartonLeftFlap" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.254887, 0.296198, -0.920505, -0.948841, 0.300626, -0.095292, 0.248515, 0.906457, 0.341293, -0.66, 1.19, 0.0)
+mesh = SubResource("BoxMesh_carton_flap_side")
+surface_material_override/0 = ExtResource("3_cardboard")
+
+[node name="OpenCartonRightFlap" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.254887, -0.296198, -0.920505, 0.948841, 0.300626, 0.095292, 0.248515, -0.906457, 0.341293, -0.08, 1.19, 0.0)
+mesh = SubResource("BoxMesh_carton_flap_side")
+surface_material_override/0 = ExtResource("3_cardboard")
+
+[node name="CartonTapeStripe" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.38, 1.33, 0.05)
+mesh = SubResource("BoxMesh_tape")
+surface_material_override/0 = ExtResource("5_tape")
+
+[node name="ReceivingCartonSmallLabel" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.66, 1.18, -0.19)
+mesh = SubResource("BoxMesh_carton_label")
+surface_material_override/0 = ExtResource("4_paper")
+
+[node name="InvoicePaperStack" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, 0.34, 0.91, -0.18)
+mesh = SubResource("BoxMesh_paper")
+surface_material_override/0 = ExtResource("4_paper")
+
+[node name="InvoiceClipboardClip" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.996195, 0, 0.087156, 0, 1, 0, -0.087156, 0, 0.996195, 0.19, 0.93, -0.31)
+mesh = SubResource("BoxMesh_clip")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="CheckedBin" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0.55, 0.98, 0.2)
+mesh = SubResource("BoxMesh_bin")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="ReceivingRackFrame" type="Node3D" parent="."]
+transform = Transform3D(0.984808, 0, 0.173648, 0, 1, 0, -0.173648, 0, 0.984808, 0.86, 0, -0.36)
+
+[node name="ReceivingRackPostA" type="MeshInstance3D" parent="ReceivingRackFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.47, 0.54, -0.2)
+mesh = SubResource("BoxMesh_rack_post")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="ReceivingRackPostB" type="MeshInstance3D" parent="ReceivingRackFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.47, 0.54, -0.2)
+mesh = SubResource("BoxMesh_rack_post")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="ReceivingRackLowerShelf" type="MeshInstance3D" parent="ReceivingRackFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, -0.02)
+mesh = SubResource("BoxMesh_rack_shelf")
+surface_material_override/0 = ExtResource("1_dark")
+
+[node name="ReceivingRackUpperShelf" type="MeshInstance3D" parent="ReceivingRackFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, -0.02)
+mesh = SubResource("BoxMesh_rack_shelf")
+surface_material_override/0 = ExtResource("1_dark")

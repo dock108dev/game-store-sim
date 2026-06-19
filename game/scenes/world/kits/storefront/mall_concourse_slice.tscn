@@ -1,0 +1,104 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/retail/mall_tile.tres" id="1_tile"]
+[ext_resource type="Material" path="res://assets/materials/retail/mall_grout.tres" id="2_grout"]
+[ext_resource type="Material" path="res://assets/materials/retail/mall_wall_panel.tres" id="3_wall"]
+[ext_resource type="Material" path="res://assets/materials/retail/storefront_dark_metal.tres" id="4_metal"]
+[ext_resource type="Material" path="res://assets/materials/retail/neon_cyan.tres" id="5_neon"]
+[ext_resource type="Material" path="res://assets/materials/retail/plant_green.tres" id="6_plant"]
+[ext_resource type="Material" path="res://assets/materials/retail/wood_trim.tres" id="7_wood"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(10.8, 0.08, 5.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tile_line_x"]
+size = Vector3(10.2, 0.012, 0.035)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tile_line_z"]
+size = Vector3(0.035, 0.012, 5.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rail"]
+size = Vector3(9.4, 0.08, 0.08)
+
+[sub_resource type="BoxMesh" id="BoxMesh_post"]
+size = Vector3(0.09, 1.18, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_neighbor"]
+size = Vector3(2.4, 2.65, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_planter"]
+size = Vector3(0.86, 0.34, 0.46)
+
+[sub_resource type="BoxMesh" id="BoxMesh_plant"]
+size = Vector3(0.68, 0.36, 0.32)
+
+[node name="MallConcourseSlice" type="Node3D"]
+
+[node name="MallConcourseFloorTileField" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = ExtResource("1_tile")
+
+[node name="MallConcourseTileSeamA" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.052, -1.35)
+mesh = SubResource("BoxMesh_tile_line_x")
+surface_material_override/0 = ExtResource("2_grout")
+
+[node name="MallConcourseTileSeamB" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.052, 1.35)
+mesh = SubResource("BoxMesh_tile_line_x")
+surface_material_override/0 = ExtResource("2_grout")
+
+[node name="MallConcourseTileSeamC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 0.053, 0)
+mesh = SubResource("BoxMesh_tile_line_z")
+surface_material_override/0 = ExtResource("2_grout")
+
+[node name="MallConcourseTileSeamD" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 0.053, 0)
+mesh = SubResource("BoxMesh_tile_line_z")
+surface_material_override/0 = ExtResource("2_grout")
+
+[node name="MallAtriumRailTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14, -2.75)
+mesh = SubResource("BoxMesh_rail")
+surface_material_override/0 = ExtResource("4_metal")
+
+[node name="MallAtriumRailMid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.67, -2.75)
+mesh = SubResource("BoxMesh_rail")
+surface_material_override/0 = ExtResource("4_metal")
+
+[node name="MallRailPostA" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.35, 0.58, -2.75)
+mesh = SubResource("BoxMesh_post")
+surface_material_override/0 = ExtResource("4_metal")
+
+[node name="MallRailPostB" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, -2.75)
+mesh = SubResource("BoxMesh_post")
+surface_material_override/0 = ExtResource("4_metal")
+
+[node name="MallRailPostC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.35, 0.58, -2.75)
+mesh = SubResource("BoxMesh_post")
+surface_material_override/0 = ExtResource("4_metal")
+
+[node name="MallNeighborStorePanelLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 1.32, 2.78)
+mesh = SubResource("BoxMesh_neighbor")
+surface_material_override/0 = ExtResource("3_wall")
+
+[node name="MallNeighborStorePanelLeftNeon" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 2.42, 2.68)
+mesh = SubResource("BoxMesh_rail")
+surface_material_override/0 = ExtResource("5_neon")
+
+[node name="MallPlanterBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.55, 0.21, 1.42)
+mesh = SubResource("BoxMesh_planter")
+surface_material_override/0 = ExtResource("7_wood")
+
+[node name="MallPlanterGreenery" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.55, 0.56, 1.42)
+mesh = SubResource("BoxMesh_plant")
+surface_material_override/0 = ExtResource("6_plant")

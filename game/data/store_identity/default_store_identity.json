@@ -1,0 +1,44 @@
+{
+  "store_display_name": "Games4U",
+  "editable": true,
+  "default_name": "Games4U",
+  "sign_text_binding_ids": [
+    "storefront_primary",
+    "hours_door_decal"
+  ],
+  "signs": [
+    {
+      "sign_id": "storefront_primary",
+      "category": "store_name",
+      "text_source": "store_display_name",
+      "editable": true,
+      "placement_role": "storefront_mall_approach",
+      "visibility": "day_one",
+      "readability_tier": "mall_approach"
+    },
+    {
+      "sign_id": "front_door_open_closed",
+      "category": "open_closed",
+      "text_source": "store_open_state",
+      "editable": false,
+      "placement_role": "front_door_glass",
+      "visibility": "day_one",
+      "readability_tier": "entry_close"
+    }
+  ],
+  "default_shelf_labels": [
+    "Potpourri",
+    "New Releases",
+    "Used Games",
+    "Hardware",
+    "Demo",
+    "Accessories",
+    "Custom"
+  ],
+  "poster_templates": [
+    "new_releases",
+    "trade_in_deals",
+    "upcoming_releases",
+    "now_on_sale"
+  ]
+}

@@ -1,110 +1,167 @@
-[gd_scene load_steps=10 format=3 uid="uid://dxowl2h2n2bti"]
+[gd_scene load_steps=9 format=3 uid="uid://dxowl2h2n2bti"]
 
-[ext_resource type="Script" path="res://scripts/store_layout/shelf_slot.gd" id="1_shelf_slot"]
+[ext_resource type="PackedScene" path="res://scenes/objects/shelf_slot.tscn" id="1_slot_scene"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shelf"]
 albedo_color = Color(0.28, 0.28, 0.3, 1)
+roughness = 0.78
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trim"]
 albedo_color = Color(0.08, 0.08, 0.09, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot"]
-albedo_color = Color(0.1, 0.28, 0.24, 0.2)
-transparency = 1
+metallic = 0.1
+roughness = 0.45
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_rail"]
 albedo_color = Color(0.95, 0.78, 0.36, 1)
+roughness = 0.58
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slot_hover"]
-albedo_color = Color(1, 0.86, 0.24, 0.58)
-transparency = 1
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_laminate_edge"]
+albedo_color = Color(0.62, 0.48, 0.32, 1)
+roughness = 0.82
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_header"]
 albedo_color = Color(0.07, 0.18, 0.26, 1)
+roughness = 0.5
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_paper"]
 albedo_color = Color(0.9, 0.86, 0.72, 1)
+roughness = 0.92
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_slot"]
-size = Vector3(0.58, 0.72, 0.12)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shadow"]
+albedo_color = Color(0.03, 0.035, 0.04, 1)
+roughness = 0.85
 
 [node name="GameDisplayRack" type="Node3D"]
 
+[node name="BasePlinth" type="CSGBox3D" parent="."]
+use_collision = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0.04)
+size = Vector3(2.08, 0.16, 0.42)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="ToeKickShadow" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.105, -0.2)
+size = Vector3(1.74, 0.08, 0.06)
+material = SubResource("StandardMaterial3D_shadow")
+
 [node name="LeftSide" type="CSGBox3D" parent="."]
 use_collision = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.92, 0.78, 0.12)
-size = Vector3(0.08, 1.5, 0.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.04, 0.86, 0.1)
+size = Vector3(0.1, 1.56, 0.38)
 material = SubResource("StandardMaterial3D_trim")
 
 [node name="RightSide" type="CSGBox3D" parent="."]
 use_collision = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92, 0.78, 0.12)
-size = Vector3(0.08, 1.5, 0.28)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.04, 0.86, 0.1)
+size = Vector3(0.1, 1.56, 0.38)
 material = SubResource("StandardMaterial3D_trim")
+
+[node name="LeftSideLaminateFace" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.095, 0.86, -0.02)
+size = Vector3(0.035, 1.4, 0.26)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="RightSideLaminateFace" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.095, 0.86, -0.02)
+size = Vector3(0.035, 1.4, 0.26)
+material = SubResource("StandardMaterial3D_laminate_edge")
 
 [node name="BackPanel" type="CSGBox3D" parent="."]
 use_collision = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0.24)
-size = Vector3(1.9, 1.25, 0.08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0.25)
+size = Vector3(2.02, 1.34, 0.08)
 material = SubResource("StandardMaterial3D_shelf")
+
+[node name="BackPanelLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.57, 0.19)
+size = Vector3(1.92, 0.045, 0.06)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="TopCap" type="CSGBox3D" parent="."]
+use_collision = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62, 0.02)
+size = Vector3(2.08, 0.1, 0.44)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="RearMountRailBottom" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, 0.18)
+size = Vector3(1.82, 0.035, 0.055)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="RearMountRailMiddle" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0.18)
+size = Vector3(1.82, 0.035, 0.055)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="RearMountRailTop" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.43, 0.18)
+size = Vector3(1.82, 0.035, 0.055)
+material = SubResource("StandardMaterial3D_trim")
 
 [node name="FrontFaceCue" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, -0.155)
-size = Vector3(1.52, 0.68, 0.025)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94, -0.205)
+size = Vector3(1.66, 0.78, 0.025)
 material = SubResource("StandardMaterial3D_header")
 
 [node name="LeftProfileStripe" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.98, 0.92, -0.02)
-size = Vector3(0.035, 0.96, 0.16)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11, 0.92, -0.02)
+size = Vector3(0.035, 1.08, 0.2)
 material = SubResource("StandardMaterial3D_slot_rail")
 
 [node name="RightProfileStripe" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.98, 0.92, -0.02)
-size = Vector3(0.035, 0.96, 0.16)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11, 0.92, -0.02)
+size = Vector3(0.035, 1.08, 0.2)
 material = SubResource("StandardMaterial3D_slot_rail")
 
 [node name="ShelfFacingSpineA" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74, 0.58, -0.17)
-size = Vector3(0.07, 0.36, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82, 0.45, -0.23)
+size = Vector3(0.055, 0.28, 0.032)
 material = SubResource("StandardMaterial3D_paper")
 
 [node name="ShelfFacingSpineB" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.64, 0.6, -0.17)
-size = Vector3(0.07, 0.4, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.74, 0.46, -0.23)
+size = Vector3(0.055, 0.3, 0.032)
 material = SubResource("StandardMaterial3D_slot_rail")
 
 [node name="ShelfFacingSpineC" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.54, 0.57, -0.17)
-size = Vector3(0.07, 0.34, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.66, 0.445, -0.23)
+size = Vector3(0.055, 0.27, 0.032)
 material = SubResource("StandardMaterial3D_header")
 
 [node name="ShelfFacingSpineD" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 1.04, -0.17)
-size = Vector3(0.075, 0.34, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.91, -0.23)
+size = Vector3(0.06, 0.27, 0.032)
 material = SubResource("StandardMaterial3D_paper")
 
 [node name="ShelfFacingSpineE" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51, 1.06, -0.17)
-size = Vector3(0.075, 0.39, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.61, 0.925, -0.23)
+size = Vector3(0.06, 0.31, 0.032)
 material = SubResource("StandardMaterial3D_slot_rail")
 
 [node name="ShelfFacingSpineF" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 1.03, -0.17)
-size = Vector3(0.075, 0.33, 0.032)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7, 0.905, -0.23)
+size = Vector3(0.06, 0.26, 0.032)
 material = SubResource("StandardMaterial3D_header")
 
 [node name="ShelfUsedTalkerPanel" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, 0.18, -0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52, 0.2, -0.25)
 size = Vector3(0.36, 0.1, 0.035)
 material = SubResource("StandardMaterial3D_slot_rail")
 
@@ -121,7 +178,7 @@ font_size = 11
 
 [node name="ShelfStaffTalkerPanel" type="CSGBox3D" parent="."]
 use_collision = false
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.68, -0.18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52, 0.66, -0.25)
 size = Vector3(0.38, 0.1, 0.035)
 material = SubResource("StandardMaterial3D_paper")
 
@@ -138,19 +195,116 @@ font_size = 10
 
 [node name="BottomLedge" type="CSGBox3D" parent="."]
 use_collision = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, -0.08)
-size = Vector3(1.75, 0.1, 0.12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, -0.08)
+size = Vector3(1.88, 0.1, 0.22)
 material = SubResource("StandardMaterial3D_shelf")
+
+[node name="BottomLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, -0.22)
+size = Vector3(1.88, 0.04, 0.04)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="BottomFrontLip" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, -0.285)
+size = Vector3(1.82, 0.08, 0.045)
+material = SubResource("StandardMaterial3D_trim")
 
 [node name="MiddleLedge" type="CSGBox3D" parent="."]
 use_collision = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, -0.08)
-size = Vector3(1.75, 0.08, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, -0.08)
+size = Vector3(1.88, 0.08, 0.2)
 material = SubResource("StandardMaterial3D_shelf")
 
+[node name="MiddleLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -0.22)
+size = Vector3(1.88, 0.035, 0.04)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="MiddleFrontLip" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79, -0.285)
+size = Vector3(1.82, 0.07, 0.045)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="TopLedge" type="CSGBox3D" parent="."]
+use_collision = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.18, -0.08)
+size = Vector3(1.88, 0.08, 0.2)
+material = SubResource("StandardMaterial3D_shelf")
+
+[node name="TopLaminateEdge" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.24, -0.22)
+size = Vector3(1.88, 0.035, 0.04)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="TopFrontLip" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.23, -0.285)
+size = Vector3(1.82, 0.07, 0.045)
+material = SubResource("StandardMaterial3D_trim")
+
+[node name="BottomShelfDividerA" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.47, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="BottomShelfDividerB" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="BottomShelfDividerC" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.47, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="MiddleShelfDividerA" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.91, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="MiddleShelfDividerB" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="MiddleShelfDividerC" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.91, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="TopShelfDividerA" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 1.35, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="TopShelfDividerB" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
+[node name="TopShelfDividerC" type="CSGBox3D" parent="."]
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1.35, -0.19)
+size = Vector3(0.035, 0.34, 0.12)
+material = SubResource("StandardMaterial3D_laminate_edge")
+
 [node name="CategoryHeaderPanel" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.09)
-size = Vector3(1.64, 0.24, 0.045)
+use_collision = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49, -0.11)
+size = Vector3(1.64, 0.22, 0.045)
 material = SubResource("StandardMaterial3D_header")
 
 [node name="CategoryHeaderLabel" type="Label3D" parent="CategoryHeaderPanel"]
@@ -159,83 +313,54 @@ modulate = Color(0.9, 0.98, 0.9, 1)
 outline_modulate = Color(0.02, 0.03, 0.04, 1)
 outline_size = 4
 no_depth_test = true
-billboard = 1
-text = "USED GAMES"
+billboard = 0
+double_sided = false
+text = "Potpourri"
 font_size = 30
 
-[node name="ShelfSlot001" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.55, 0.38, -0.13)
-script = ExtResource("1_shelf_slot")
-accepted_category = "used_game"
+[node name="ShelfSlot001" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.675, 0.28, -0.205)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot001"]
-shape = SubResource("BoxShape3D_slot")
-
-[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot001"]
-position = Vector3(0, 0.36, 0.035)
-size = Vector3(0.58, 0.72, 0.03)
-material = SubResource("StandardMaterial3D_slot")
-
-[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot001"]
-position = Vector3(0, 0.065, 0.01)
-size = Vector3(0.5, 0.04, 0.035)
-material = SubResource("StandardMaterial3D_slot_rail")
-
-[node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot001"]
-visible = false
-use_collision = false
-position = Vector3(0, 0.36, 0.055)
-size = Vector3(0.66, 0.8, 0.028)
-material = SubResource("StandardMaterial3D_slot_hover")
-
-[node name="ShelfSlot002" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, -0.13)
-script = ExtResource("1_shelf_slot")
+[node name="ShelfSlot002" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 0.28, -0.205)
 slot_id = "shelf_slot_002"
-accepted_category = "used_game"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot002"]
-shape = SubResource("BoxShape3D_slot")
-
-[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot002"]
-position = Vector3(0, 0.36, 0.035)
-size = Vector3(0.58, 0.72, 0.03)
-material = SubResource("StandardMaterial3D_slot")
-
-[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot002"]
-position = Vector3(0, 0.065, 0.01)
-size = Vector3(0.5, 0.04, 0.035)
-material = SubResource("StandardMaterial3D_slot_rail")
-
-[node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot002"]
-visible = false
-use_collision = false
-position = Vector3(0, 0.36, 0.055)
-size = Vector3(0.66, 0.8, 0.028)
-material = SubResource("StandardMaterial3D_slot_hover")
-
-[node name="ShelfSlot003" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.55, 0.38, -0.13)
-script = ExtResource("1_shelf_slot")
+[node name="ShelfSlot003" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.28, -0.205)
 slot_id = "shelf_slot_003"
-accepted_category = "used_game"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ShelfSlot003"]
-shape = SubResource("BoxShape3D_slot")
+[node name="ShelfSlot004" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.675, 0.28, -0.205)
+slot_id = "shelf_slot_004"
 
-[node name="SlotMarker" type="CSGBox3D" parent="ShelfSlot003"]
-position = Vector3(0, 0.36, 0.035)
-size = Vector3(0.58, 0.72, 0.03)
-material = SubResource("StandardMaterial3D_slot")
+[node name="ShelfSlot005" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.675, 0.72, -0.205)
+slot_id = "shelf_slot_005"
 
-[node name="SlotCategoryRail" type="CSGBox3D" parent="ShelfSlot003"]
-position = Vector3(0, 0.065, 0.01)
-size = Vector3(0.5, 0.04, 0.035)
-material = SubResource("StandardMaterial3D_slot_rail")
+[node name="ShelfSlot006" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 0.72, -0.205)
+slot_id = "shelf_slot_006"
 
-[node name="SlotHoverFrame" type="CSGBox3D" parent="ShelfSlot003"]
-visible = false
-use_collision = false
-position = Vector3(0, 0.36, 0.055)
-size = Vector3(0.66, 0.8, 0.028)
-material = SubResource("StandardMaterial3D_slot_hover")
+[node name="ShelfSlot007" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.72, -0.205)
+slot_id = "shelf_slot_007"
+
+[node name="ShelfSlot008" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.675, 0.72, -0.205)
+slot_id = "shelf_slot_008"
+
+[node name="ShelfSlot009" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.675, 1.16, -0.205)
+slot_id = "shelf_slot_009"
+
+[node name="ShelfSlot010" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 1.16, -0.205)
+slot_id = "shelf_slot_010"
+
+[node name="ShelfSlot011" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 1.16, -0.205)
+slot_id = "shelf_slot_011"
+
+[node name="ShelfSlot012" parent="." instance=ExtResource("1_slot_scene")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.675, 1.16, -0.205)
+slot_id = "shelf_slot_012"

@@ -11,6 +11,10 @@ const FORBIDDEN_REAL_NAMES := [
 	"sega",
 ]
 const PLATFORM_FAMILY_RULES := {
+	"vortex": {
+		"platforms": ["Vortex"],
+		"formats": ["disc", "accessory", "console", "controller"],
+	},
 	"nova_disc": {
 		"platforms": ["Nova Cube"],
 		"formats": ["disc", "accessory", "controller"],
@@ -202,6 +206,35 @@ func test_product_catalog_names_fit_tags_receipts_and_catalog_cards() -> void:
 		assert_lte(product.display_name.length(), 28)
 		assert_eq(product.display_name.find(":"), -1)
 		assert_false(product.display_name.begins_with("The "))
+
+
+func test_product_catalog_contains_day_one_starter_titles_and_visual_metadata() -> void:
+	var by_id := {}
+	for product in _load_products():
+		by_id[product.product_id] = product
+		assert_false(product.get_genre_id().strip_edges().is_empty(), product.product_id)
+		assert_false(product.get_franchise_id().strip_edges().is_empty(), product.product_id)
+		assert_true(product.get_schema_summary().has("genre_id"), product.product_id)
+		assert_true(product.get_schema_summary().has("franchise_id"), product.product_id)
+
+	assert_true(by_id.has("new_footy_2002"))
+	assert_true(by_id.has("new_critter_quest_ii"))
+
+	var footy := by_id["new_footy_2002"] as ProductDefinition
+	assert_eq(footy.display_name, "Footy 2002")
+	assert_eq(footy.get_genre_id(), "sports")
+	assert_eq(footy.get_franchise_id(), "footy_series")
+	assert_eq(footy.platform, "Vortex")
+	assert_eq(footy.get_platform_family(), "vortex")
+	assert_eq(footy.suggested_price_cents, 4999)
+
+	var critter := by_id["new_critter_quest_ii"] as ProductDefinition
+	assert_eq(critter.display_name, "Critter Quest II")
+	assert_eq(critter.get_genre_id(), "rpg_adventure")
+	assert_eq(critter.get_franchise_id(), "critter_quest")
+	assert_eq(critter.platform, "Vortex")
+	assert_eq(critter.get_platform_family(), "vortex")
+	assert_eq(critter.suggested_price_cents, 3999)
 
 
 func _load_products() -> Array[ProductDefinition]:

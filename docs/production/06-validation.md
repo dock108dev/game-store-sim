@@ -8,41 +8,64 @@ scripts/validate_godot.sh
 
 The gate writes artifacts to `artifacts/validation/latest/`.
 
+Important: this gate is regression evidence only. It does not define visual progress, approve art quality, or unblock beta/tester work.
+
 ## Current Gate
 
 The gate runs:
 
-- First-party whitespace checks.
-- Godot editor import/load smoke.
-- Godot runtime quit smoke.
-- Godot main-scene boot smoke.
-- GUT tests.
-- Coverage policy.
-- Product catalog content checks.
-- Desktop pack smoke.
-- Alpha performance smoke.
-- Screenshot capture.
-- Screenshot sanity checks.
-- Old-name scan.
+- whitespace checks
+- Godot editor import/load smoke
+- Godot runtime quit smoke
+- Godot main-scene boot smoke
+- GUT tests
+- coverage policy
+- product catalog content checks
+- desktop pack smoke
+- alpha performance smoke, retained as a legacy performance label in the current script
+- screenshot capture
+- screenshot sanity checks
+- screenshot contact-sheet generation
+- old-name scan
 
-Current validated baseline:
+Current validation snapshot:
 
-- 570 GUT tests.
-- 10028 GUT asserts.
-- UI scenario automation coverage: 508/628, or 80.9%.
-- Production script mapping coverage: 53/53, or 100.0%.
+- Current doc-contract expectation: 594 GUT tests and 12286 GUT asserts.
+- UI scenario automation coverage: 512/632, or 81.0%.
+- Production script mapping coverage: 55/55, or 100.0%.
 - 3 active standalone validation tools.
-- 60 catalog products.
+- 62 catalog products.
 - Desktop pack export smoke passed.
 - Alpha performance smoke passed.
 - Screenshot sanity passed.
-- 23 required screenshots captured.
+- 27 required screenshots captured.
 - Screenshot contact sheet generated at `artifacts/validation/latest/screenshot-contact-sheet.png`.
 - Old-name scan passed.
 
-## Validation Data Shape
+## Design-Reset Validation
 
-The validation matrix is split across structured manifests. There is no single active `validation_matrix.json` file.
+For the current design reset, automated validation is necessary but insufficient. The last object-family pass passed automation and still failed visual review. The pass is not approved unless owner review confirms that the opening store delivers the fantasy documented in `docs/design-source-of-truth/` and the object-family quality documented in `docs/visual-bible/`.
+
+`scripts/validate_godot.sh` and the generated contact sheet are regression evidence. They do not approve the design reset by themselves because the previous screenshot set and pass/fail logic were created for graybox-era checks.
+
+Current visual approval gate:
+
+- build one isolated hero art slice
+- capture one screenshot at 1280x720 or larger
+- review it against `docs/production/15-failed-visual-validation.md`
+- owner explicitly approves or rejects the visual method
+
+Required evidence:
+
+- focused tests for changed scene/doc contracts
+- full `scripts/validate_godot.sh` for production-route integration only when the production route changes
+- regenerated contact sheet or replacement review board for changed visual routes
+- manual 1280x720 walk-in review from entrance to checkout
+- implementation evidence review against `docs/production/14-visual-bible-implementation-review.md`
+- screenshot review against `docs/qa/screenshot-review.md`
+- source-of-truth checklist review against `docs/design-source-of-truth/04-validation-and-signoff.md`
+
+## Validation Data Shape
 
 - Thresholds: `game/tests/validation/thresholds.json`
 - UI scenarios: `game/tests/validation/scenarios/*.json`
@@ -50,35 +73,3 @@ The validation matrix is split across structured manifests. There is no single a
 - Standalone tool manifests: `game/tests/validation/tool_checks/*.json`
 
 The checker is `scripts/check_validation_coverage.py`.
-
-## Thresholds
-
-- UI validation automation coverage must stay at or above 80% for active scenarios.
-- Script test mapping coverage must stay at or above 80% for production scripts.
-- Critical scenarios must be automated.
-- Manual scenarios must include both `reason` and `owner`.
-
-## Screenshot Artifacts
-
-The gate captures 23 screenshots under `artifacts/validation/latest/screenshots/`. Use `docs/qa/screenshot-review.md` for human approval.
-
-Screenshot sanity confirms dimensions and nonblank image diversity. It does not prove art quality, composition, label readability, or game feel. For the current visual cycle, screenshot capture targets `store_world.tscn`; `main_scene.png`, `storefront_entry.png`, `register_counter.png`, `receiving_area.png`, `backroom_summary.png`, and real-window walk-in screenshots are the first review artifacts for the hard visual benchmark rebuild.
-
-## Manual Review
-
-Manual review is now split into QA runbooks:
-
-- `docs/qa/smoke-playtest.md`
-- `docs/qa/full-day-playtest.md`
-- `docs/qa/screenshot-review.md`
-- `docs/qa/release-package-check.md`
-
-## Completed Validation Sync Markers
-
-These markers remain for historical scenario compatibility:
-
-- Hidden-thread validation sync is complete through Stop 10.6.
-- Presentation validation sync is complete through Stop 11.6.
-- Release wrapper validation sync is complete through Stop 12.6.
-- Alpha playtest package is complete through Stop 13.6.
-- Alpha validation sync is complete through Stop 13.7.

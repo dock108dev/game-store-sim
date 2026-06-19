@@ -1,14 +1,48 @@
 # Game Store Sim
 
-First-person specialty video game retail simulator. The player runs a small game shop by receiving stock, pricing used games, stocking fixtures, serving customers, handling returns/trade-ins/services/preorders, planning supplier and launch allocations, and optionally noticing suspicious activity under the normal retail loop.
+First-person specialty video game retail simulator. The mechanical prototype is broad and validated; the active reset is visual quality and store-read authenticity.
 
-## Current State
+## Start Here
 
-Read [Current State](docs/CURRENT_STATE.md) first. It is the authoritative human-readable handoff for what is playable, what is validated, what remains blocked by human review, and which docs are active.
+Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first. Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
 
-Visual production is currently reset in [Visual Production](docs/visual-production/README.md). The current build now uses `store_world.tscn` as the production main scene, with reusable module manifests under `game/scenes/world/modules/` and `graybox_store.tscn` retained only as a compatibility wrapper. That architecture is accepted as infrastructure, but the visuals are not approved. The next implementation pass is [Prototype Visual Language Cleanup](docs/visual-production/18-prototype-visual-language-cleanup.md): remove label/debug reads, replace the backroom line with a real threshold, clean random clutter, and prove one believable front-store benchmark before product/fixture breadth.
+The design canon is [Design Source Of Truth](docs/design-source-of-truth/README.md). It consolidates the owner-provided store/world brief, vertical slice spec, and 300-object asset inventory into repo-owned target docs.
 
-Machine-readable status lives in [docs/status.json](docs/status.json). Tests should assert that status contract instead of depending on long production-plan prose.
+The active object-family art target is [Visual Bible](docs/visual-bible/README.md). It translates the asset inventory and owner answers into MVP + first-store visual rules: Blender-authored meshes, physical fixtures, recognizable product art, readable signage, and a 7.5/10 owner quality bar.
+
+The active implementation entrypoint is [Design Implementation Index](docs/design-implementation/README.md). Agents should start there for execution order, packet rules, validation evidence, and handoff expectations.
+
+Current visual status: the first Visual Bible object-family pass and the first procedural [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md) were blocked as failed visual validations. A replacement authored-art proof is now ready for owner review. [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md) records the proof and [Authored Art Proof Integration Plan](docs/production/17-authored-art-proof-integration-plan.md) defines what happens after approval or rejection.
+
+Older graybox, broad-production, beta, stockroom-production, hard-benchmark, old slice, and Packet 01-09 docs were removed from active routing when they conflicted with the Visual Bible reset.
+
+## Current Rule
+
+Do not expand broad catalog visuals, customers, decoration breadth, hidden narrative, late-era content, external playtest packaging, mechanics, playable-store polish, or production integration until the authored visual proof is approved:
+
+- a small independent 2002-2004 game store
+- underfunded but functional
+- game-first, with visible used/new/platform sections
+- limited starting inventory with a clear growth path
+- fictional products and platforms that read without real brands
+
+`scripts/validate_godot.sh` is regression evidence only. It does not define visual progress or approve art quality.
+
+Current art-reset entrypoints:
+
+- [Visual Bible](docs/visual-bible/README.md)
+- [MVP Object Implementation Checklist](docs/visual-bible/09-mvp-object-implementation-checklist.md)
+- [Design Implementation Index](docs/design-implementation/README.md)
+- [Work Packet Index](docs/design-implementation/work-packets/00-packet-index.md)
+- [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md) authored proof ready for owner review
+- [Failed Visual Validation](docs/production/15-failed-visual-validation.md)
+- [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md)
+- [Authored Art Proof Integration Plan](docs/production/17-authored-art-proof-integration-plan.md)
+- [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
+
+Use [Design Source Of Truth](docs/design-source-of-truth/README.md) when a packet needs design intent, owner decisions, or quality-bar context.
+
+Use `inspiration/` for stylized game-world scaffold and `new_real_inspiration/` for real early-2000s retail fixture, shelf, product-density, and counter reference.
 
 ## Validate
 
@@ -18,36 +52,30 @@ Run the full local gate from the repository root:
 scripts/validate_godot.sh
 ```
 
-The gate writes logs and screenshots to `artifacts/validation/latest/`.
+The gate writes logs, screenshots, and the contact sheet to `artifacts/validation/latest/`.
 
-Current validated baseline:
+Current validation snapshot:
 
-- 570 GUT tests.
-- 9961 GUT asserts.
-- UI scenario automation coverage: 508/628.
-- Production script mapping: 53/53.
+- Current doc-contract expectation: 595 GUT tests and 12306 GUT asserts.
+- UI scenario automation coverage: 512/632.
+- Production script mapping: 55/55.
 - 3 active standalone validation tools.
-- 60 catalog products.
-- Desktop pack smoke, alpha performance smoke, screenshot capture/sanity, old-name scan, and 23 required screenshots pass.
+- 62 catalog products.
+- Desktop pack smoke, alpha performance smoke, screenshot capture/sanity, contact sheet, old-name scan, and 27 required screenshots pass.
 
 ## Active Docs
 
-- [Current State](docs/CURRENT_STATE.md): source of truth for current status and next review decision.
-- [Visual Production](docs/visual-production/README.md): active visual reset, art direction, opening asset pass, asset pipeline, and visual QA plan.
-- [Design Planning](docs/design-planning/README.md): historical opening-store quality-bar planning record.
-- [Validation](docs/production/06-validation.md): local gate, scenario manifests, thresholds, and artifacts.
-- [Smoke Playtest](docs/qa/smoke-playtest.md): short playable sanity run.
-- [Full-Day Playtest](docs/qa/full-day-playtest.md): internal full retail-loop QA.
-- [Screenshot Review](docs/qa/screenshot-review.md): review the 23 validation screenshots.
-- [Release Package Check](docs/qa/release-package-check.md): pack smoke and external handoff readiness.
-- [Backlog](docs/production/04-backlog.md): short current backlog and next decision.
-- [Scene Architecture Modularization](docs/visual-production/17-scene-architecture-modularization.md): implemented production-scene/module split and next owner validation checklist.
-- [Prototype Visual Language Cleanup](docs/visual-production/18-prototype-visual-language-cleanup.md): active next implementation pass before broader product/fixture visuals.
-- [Alpha Bug List](docs/production/13-alpha-bug-list.md): current issue priorities.
-- [Alpha Playtest Package](docs/production/15-alpha-playtest-package.md): paused external tester handoff.
-
-## Reference Docs
-
-Long production plans are retained as historical slice records, not active instructions. See [Archive Index](docs/archive/README.md) for the current classification.
-
-The Employees-Only Stockroom Production Plan remains available as a completed historical record for the physical stockroom, receiving, backstock, office computer, service/security corners, and validation sync.
+- [Docs Index](docs/README.md)
+- [Current State](docs/CURRENT_STATE.md)
+- [Design Source Of Truth](docs/design-source-of-truth/README.md)
+- [Visual Bible](docs/visual-bible/README.md)
+- [Design Implementation Index](docs/design-implementation/README.md)
+- [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
+- [Backlog](docs/production/04-backlog.md)
+- [Validation](docs/production/06-validation.md)
+- [Visual Blockers](docs/production/13-visual-blockers.md)
+- [Visual Bible Implementation Review](docs/production/14-visual-bible-implementation-review.md)
+- [Failed Visual Validation](docs/production/15-failed-visual-validation.md)
+- [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md)
+- [Authored Art Proof Integration Plan](docs/production/17-authored-art-proof-integration-plan.md)
+- [QA](docs/qa/README.md)

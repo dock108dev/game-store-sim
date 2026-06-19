@@ -29,7 +29,7 @@ func test_fixture_catalog_contains_game_display_rack() -> void:
 	assert_eq(fixture.get("category"), "display")
 	assert_eq(fixture.get("default_slot_category"), "used_game")
 	assert_eq(fixture.get("cost_cents"), 12500)
-	assert_eq(fixture.get("slot_count"), 3)
+	assert_eq(fixture.get("slot_count"), 12)
 	assert_eq(fixture.get("placement_zone"), "sales_floor")
 	assert_true((fixture.get("accepted_product_categories") as PackedStringArray).has("used_game"))
 	assert_true((fixture.get("gameplay_tags") as PackedStringArray).has("starter_fixture"))
@@ -40,7 +40,8 @@ func test_fixture_catalog_contains_game_display_rack() -> void:
 	assert_not_null(load(str(fixture.get("scene_path"))) as PackedScene)
 	assert_string_contains(fixture.call("describe"), "Game Display Rack")
 	assert_string_contains(fixture.call("describe"), "$125.00")
-	assert_string_contains(fixture.call("describe"), "3 slots")
+	assert_string_contains(fixture.call("describe"), "12 slots")
+	assert_string_contains(str(fixture.get("description")), "visible empty capacity")
 
 
 func test_fixture_catalog_has_fixture_specific_metadata() -> void:

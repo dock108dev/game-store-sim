@@ -1,39 +1,36 @@
 # Smoke Playtest
 
-Use this after `scripts/validate_godot.sh` passes when you need a short playable sanity check.
+Use this after focused implementation work when you need a short playable sanity check.
 
-Target time: 15 to 20 minutes.
+Target time: 10 to 15 minutes.
+
+This is evidence support for implementation packets. It does not define the next work item; start from `docs/design-implementation/README.md` for execution order.
 
 ## Setup
 
-1. Launch the Godot project from `game/project.godot`.
-2. Use keyboard/mouse desktop play.
-3. Confirm the window is readable at 1280x720 or larger.
-4. Confirm Escape releases or opens pause, and clicking returns to captured first-person control.
+1. Run `scripts/validate_godot.sh` if the production scene changed.
+2. Launch the Godot project from `game/project.godot`.
+3. Use keyboard/mouse desktop play.
+4. Confirm the window is readable at 1280x720 or larger.
 
 ## Flow
 
-1. Start a fresh game and look from spawn.
-2. Confirm the space reads as `SAVE POINT GAMES`, not a blank debug room.
-3. Pick up products from receiving.
-4. Open the pricing panel for a used game.
-5. Set a fair price and apply it.
-6. Stock the item on the used-game rack.
-7. Let a buyer select an item and queue at the register.
-8. Complete one sale at the register.
-9. Complete one return, trade-in, preorder deposit, or service checkout if the relevant customer is waiting.
-10. Open the backroom computer.
-11. Review dashboard, inventory, ordering, releases, records, and settings tabs for readable text.
-12. Close the day and confirm the day report is readable.
-13. Open pause, settings, save/load, and return to play.
+1. Start at the mall/storefront spawn.
+2. Walk through the storefront threshold.
+3. Pick up a product from receiving or starter stock.
+4. Open pricing for a used game.
+5. Stock an item on a shelf/rack.
+6. Complete one register transaction if a customer is present for the tested state.
+7. Open the backroom computer.
+8. Confirm pause/settings/save/load still work.
 
 ## Pass
 
-- The loop can be completed without confusion or broken controls.
-- Prompts and UI are readable in the real window.
-- No path, product, customer, or modal blocks the main loop.
-- Any issue can be described by screenshot name and short failure reason.
+- Controls, prompts, and core interactions work.
+- The player can move through the opening route.
+- Register, receiving, and backroom computer remain interactable.
+- No new visual module blocks the core route.
 
 ## Fail
 
-File the issue in `docs/production/13-alpha-bug-list.md` if a player cannot understand or complete the loop without prior repo knowledge.
+Record the exact area and screenshot name in `docs/production/13-visual-blockers.md`.

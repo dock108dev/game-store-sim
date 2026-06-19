@@ -1,123 +1,104 @@
 # Current State
 
-This is the authoritative handoff for the repo. If another doc disagrees with this page or `docs/status.json`, update the older doc or treat it as historical.
+Status date: 2026-06-19
 
-## Playable Build
+Machine-readable status lives in `docs/status.json`.
 
-The current Godot game is a broad validated mechanical prototype with the first phase 0-4 visual pass rejected by owner review. It is not a final-art alpha. The active visual reset slice now starts the player outside the shop on a second-floor mall concourse, with a walkable glass storefront entry and no visible customers or employees before opening. The first opening visual asset pass is implemented, and scene architecture modularization is accepted as infrastructure: `store_world.tscn` is the production main scene, `graybox_store.tscn` is a compatibility wrapper, and module manifests define ownership for the mall, storefront, threshold, interior shell, counter, starter display, sales fixtures, receiving, backroom, and systems surfaces. Prototype visual language cleanup was implemented but did not change the live visual impression enough to become the baseline. The active next source is [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md): benchmark composition, label suppression, fixture silhouettes, physical detail replacement, ceiling/material/lighting treatment, and real backroom architecture before broader product/fixture/catalog visual breadth. The first-person retail loop includes:
+## Summary
 
-- Movement, click-first targeting, prompts, hover feedback, and mouse capture recovery.
-- Receiving, multi-item carry, pricing, stocking, buyer queueing, and register sales.
-- Returns, trade-ins, preorder deposits, service tickets, and daily reports.
-- Supplier ordering, physical receiving, backstock storage, stock pulls, fixture orders, fixture placement, and category assignment.
-- Release calendar, launch allocation, launch-day resolution, market/demand summaries, upgrades, decoration surface hooks, save/load, settings, pause/main menu, and desktop pack smoke.
-- Full first-catalog data with 60 fictional products, 9 release-calendar entries, and 4 supplier lots.
-- Optional hidden-thread infrastructure for suspicious items, supplier notes, suspicious customer cues, records, choices, and nonblocking consequences.
+The project has a broad validated first-person retail prototype with working core mechanics: movement, interaction, receiving, carrying, pricing, stocking, register sales, returns, trade-ins, supplier ordering, fixture placement, save/load, pause/settings, and backroom workflows.
+
+The prototype also retains optional hidden-thread hooks, but hidden narrative content is not part of the current visual rebuild scope.
+
+The first Visual Bible object-family implementation pass is now integrated and visually rejected. Starter product art, fixture/display capacity, shell/storefront/counter, receiving, and backroom kits are technically present, but latest screenshots still read as primitive Godot box geometry rather than a convincing early-2000s game shop.
+
+The playable scene remains a mechanics prototype. It is not the visual baseline.
+
+A replacement authored-art proof now exists at `game/scenes/world/art_benchmark/hero_art_slice.tscn`. It uses repo-local baked bitmap assets from `game/assets/art_proof/generated/`, avoids live Godot text panels, and remains isolated from the playable mechanics scene.
+
+The owner-facing review artifact is `docs/production/images/hero_art_slice_review_board.png`.
+
+The active visual target is now:
+
+- [Design Source Of Truth](design-source-of-truth/README.md)
+- [Visual Bible](visual-bible/README.md)
+- [Design Implementation Index](design-implementation/README.md)
+- [Work Packet Index](design-implementation/work-packets/00-packet-index.md)
+
+## Current Decision
+
+Block the current MVP object-family pass and the first procedural hero art slice before any broad implementation. The store still targets a 2002-2004 independent specialty game shop, with legal-safe fictional products and visible room to grow.
+
+Visually failed implementation packets:
+
+1. MVP product art kit.
+2. MVP fixture and display kit.
+3. Store shell, counter, receiving, and backroom kit.
+4. Playable store integration review.
+
+Current checkpoint:
+
+1. Review the authored proof board: `docs/production/images/hero_art_slice_review_board.png`.
+2. Decide whether this art-production method is approved enough to turn into constrained production integration packets.
+3. If approved, follow [Authored Art Proof Integration Plan](production/17-authored-art-proof-integration-plan.md).
+4. If rejected, do not integrate; change production method again before touching the playable scene.
+
+Do not broaden catalog visuals, customers, employees, decoration breadth, hidden narrative, later-era content, beta/tester packaging, mechanics work, or production integration until the authored visual proof is approved.
 
 ## Validation Snapshot
 
-Current gate: `scripts/validate_godot.sh`.
+Latest recorded gate:
 
-Latest verified baseline:
+```text
+scripts/validate_godot.sh
+```
 
-- 570 GUT tests and 10028 asserts pass.
-- UI scenario automation coverage is 508/628, or 80.9%, against an 80% threshold.
-- Production script mapping is 53/53, or 100.0%, against an 80% threshold.
-- 3 standalone validation tools are active.
-- Product catalog validation passes with 60 products.
-- Desktop pack smoke, alpha performance smoke, screenshot capture, screenshot sanity, and old-name scan pass.
-- All 23 required screenshots are present, and the latest contact sheet is `artifacts/validation/latest/screenshot-contact-sheet.png`.
+Current doc-contract expectation:
 
-Validation artifacts are written to `artifacts/validation/latest/`. The important screenshots are listed in [Screenshot Review](qa/screenshot-review.md) (`docs/qa/screenshot-review.md`).
+- GUT: 595 tests, 12306 asserts.
+- UI automation: 512/632, or 81.0%.
+- Production script mapping: 55/55, or 100.0%.
+- Active validation tools: 3.
+- Catalog products: 62.
+- Screenshot count: 27.
+- Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 
-## Current Blocker
+Important: validation and contact sheets are regression evidence only. They do not approve art quality or define visual progress.
 
-External alpha playtest remains paused. The repo is mechanically green, but the visual read is still rejected as a baseline. The opening composition and modular production scene are directionally better, but owner review shows the live scene still reads as labeled blockout: flat planes, sign cards, primitive props, weak materials, weak lighting, and shallow backroom architecture. The next gate is implementation and owner validation of [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md).
+## Blockers
 
-Required reviews:
+Read [Visual Blockers](production/13-visual-blockers.md).
 
-- Owner opening visual asset pass signoff.
-- Owner hard visual benchmark rebuild signoff.
-- Owner opening mall/storefront screenshot review.
-- Owner walk-in empty-store review.
-- Owner day-one owned-stock flow review.
-- Owner catalog/unlock/receiving flow review.
-- Manual 1280x720 readability pass for prompts, UI panels, product labels, customers, and screenshot composition.
+Primary blockers:
 
-## Visual Read
+- VIS-020: the integrated object-family pass is visually rejected.
+- VIS-021: the authored hero proof is ready, but broad work remains blocked until owner review approves it.
 
-The current scene is still pending owner art approval. The accepted direction is narrow: prove the opening approach first. The player spawns in a quiet second-floor mall concourse, faces a branded glass storefront, can walk through the open door, and sees an empty pre-open shop. Customer nodes remain present and mechanically wired for later systems, but they are hidden for the opening state. The first asset pass adds tile panels, rail posts, shutter details, planter foliage, storefront mullions, threshold pieces, starter product packaging, and a first interior benchmark corner. The prototype-language cleanup pass adds smaller physical signage, right-wall poster product silhouettes, a staffed doorway/threshold, and receiving staging, but owner review shows this still does not clear the blockout read. The next pass must create one hard visual benchmark from the mall-entry/register/sales-floor route.
+## Review Plan
 
-Current visual risk areas:
+Read [Failed Visual Validation](production/15-failed-visual-validation.md) and [Hero Art Slice Review](production/16-hero-art-slice-review.md).
 
-- Opening route blockout read is reduced, but screenshots still do not clear the owner art bar.
-- The previous cleanup delta is too small to be meaningful in the live editor/game view.
-- The active next work is not broad catalog art; it is one hard benchmark route.
-- Tiny label speckle is still visible from some storefront/interior screenshots, especially through glass and across the far wall.
-- Receiving is more staged, but still has dense labels/tags and needs product/fixture art before it can read as finished.
-- The backroom now has a staff threshold, but the broader backroom still needs real room treatment and material depth.
-- The new module boundaries are accepted as infrastructure; deeper physical extraction should happen only when it helps the cleanup pass.
-- Store identity depends too much on labels instead of authored meshes, materials, lighting, and product density.
-- CSG primitives are still the implementation medium for this pass, so shape/material quality needs screenshot review.
-- The first interior benchmark corner exists, but it needs approval before the rest of the shop expands.
-- Dense backroom computer screens.
-- Some UI panels and labels needing real-window readability approval.
-- Customer body/prop language is mechanically present but intentionally hidden for the opening state.
-- Fixture and screenshot compositions that may still read as blockout from some angles.
+Next review focus:
 
-## Current Visual Planning
+- the authored proof board at `docs/production/images/hero_art_slice_review_board.png`
+- storefront/concourse read
+- first 15-20 feet of shop interior
+- one believable fixture
+- one believable counter
+- 2-3 believable product objects
+- whether the asset production method is good enough to rebuild from
 
-The active visual direction is [Visual Production](visual-production/README.md). It targets a 2005-2007 independent game shop with stylized semi-realistic indie-sim assets. The exterior/entry direction has shifted from a simple strip-mall storefront to a second-floor mall concourse approach inspired by neon-framed retail facades, glass storefronts, quiet pre-open corridors, planters, railings, shuttered neighboring shops, and a clear walk-in threshold.
+## Removed Docs Policy
 
-Owner note: the opening store should be restrained. Day one should start with a small owned assortment, likely 2 new games, 1 console, and 1 accessory, with starter stock staged in the stockroom for the player to place before opening. Future products should live in catalogs, store-design surfaces, supplier/release planning, or trade-in opportunities until purchased/unlocked; then they arrive through receiving or customer intake.
+Old Packet 01-09 implementation docs, old slice specs, and old alpha/owner review docs were removed from the active tree. Their useful decisions were consolidated into:
 
-Start review with:
+- `docs/design-source-of-truth/`
+- `docs/visual-bible/`
+- `docs/design-implementation/`
+- `docs/production/13-visual-blockers.md`
+- `docs/production/14-visual-bible-implementation-review.md`
+- `docs/production/15-failed-visual-validation.md`
+- `docs/production/16-hero-art-slice-review.md`
+- `docs/production/17-authored-art-proof-integration-plan.md`
 
-- [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md)
-- [Scene Architecture Modularization](visual-production/17-scene-architecture-modularization.md)
-- [Visual Reset](visual-production/00-visual-reset.md)
-- [Art Direction Target](visual-production/01-art-direction-target.md)
-- [Opening Visual Asset Pass](visual-production/16-opening-visual-asset-pass.md)
-- [Mid-00s Game Shop Inventory](visual-production/02-mid-00s-game-shop-inventory.md)
-- [Implementation Roadmap](visual-production/12-implementation-roadmap.md)
-- [Visual QA Checklist](visual-production/13-visual-qa-checklist.md)
-- [Deprecated Visual Docs](visual-production/14-deprecated-visual-docs.md)
-- [Day One Stock And Unlocks](visual-production/15-day-one-stock-and-unlocks.md)
-
-## Prior Design Planning
-
-The prior planning program in [Design Planning](design-planning/README.md) remains useful for zone intent, interaction responsibilities, screenshot names, catalog rules, and nonblocking path/prompt constraints. It is now historical for final visual direction.
-
-## Next Decision
-
-Review [Hard Visual Benchmark Rebuild](visual-production/19-hard-visual-benchmark-rebuild.md) before more scene work. The production scene/module structure is accepted as the infrastructure baseline, but the previous cleanup is not enough. Broader visual work should wait until the hard benchmark screenshots are accepted or corrected.
-
-If the hard benchmark validates:
-
-1. Continue product and fixture visual-kit implementation on top of the approved `store_world.tscn` benchmark.
-2. Keep `graybox_store.tscn` as a compatibility wrapper for one more review cycle.
-3. Move deeper child-node extraction into modules only where approved boundaries need it.
-4. Preserve stable interaction targets and screenshot subjects during each visual slice.
-
-If the hard benchmark fails:
-
-1. Revise the visual-production docs.
-2. Continue benchmark corrections before adding product or fixture breadth.
-3. Keep external alpha playtest paused.
-
-## Active Documentation
-
-- [Validation](production/06-validation.md)
-- [Visual Production](visual-production/README.md)
-- [Design Planning](design-planning/README.md)
-- [Backlog](production/04-backlog.md)
-- [Alpha Bug List](production/13-alpha-bug-list.md)
-- [Alpha Playtest Package](production/15-alpha-playtest-package.md)
-- [Smoke Playtest](qa/smoke-playtest.md)
-- [Full-Day Playtest](qa/full-day-playtest.md)
-- [Screenshot Review](qa/screenshot-review.md)
-- [Release Package Check](qa/release-package-check.md)
-
-## Historical Documentation
-
-Long production plans are retained as implementation records. They explain how the current build got here, but they are not the active next-step source. See [Archive Index](archive/README.md).
+Do not use deleted packet names as implementation instructions.

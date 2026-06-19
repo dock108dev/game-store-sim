@@ -1,6 +1,12 @@
 # Screenshot Review
 
-Use this to approve or reject the current prototype/blockout visuals before reopening external alpha playtest. The first phase 0-4 visual pass was rejected on June 12, 2026; the second-floor mall opening/storefront reset is directionally better, and the scene architecture is accepted as infrastructure. Prototype visual language cleanup is implemented but visually insufficient. The active review target is now the hard visual benchmark rebuild in `docs/visual-production/19-hard-visual-benchmark-rebuild.md`.
+This is the screenshot evidence procedure for the current design/visual approval gate.
+
+The question is not whether the project is mechanically complete. The question is whether the opening route reads as a small, underfunded, functional 2002-2004 independent game store with visible growth potential.
+
+Use this after a Visual Bible implementation packet calls for screenshots. Do not use this file as an independent implementation roadmap.
+
+The current automated screenshot/contact-sheet set is provisional regression evidence. It was built during the graybox era, so a passing contact sheet or green `validate_godot.sh` run does not approve the design reset. Visual Bible packets may replace or expand screenshot targets when needed to judge the actual opening-store visual bar.
 
 ## Generate
 
@@ -12,84 +18,58 @@ scripts/validate_godot.sh
 
 Screenshots are written to `artifacts/validation/latest/screenshots/`.
 
-Optional contact sheet:
+Contact sheet:
 
 ```text
-magick montage artifacts/validation/latest/screenshots/*.png -thumbnail 320x180 -label '%t' -background '#1f2328' -fill white -pointsize 18 -geometry 320x220+8+8 artifacts/validation/latest/screenshot-contact-sheet.png
+artifacts/validation/latest/screenshot-contact-sheet.png
 ```
 
-## Latest Automated Lock
+For the current owner decision package, read [Visual Bible Implementation Review](../production/14-visual-bible-implementation-review.md). This QA file only defines the screenshot procedure.
 
-Generated on June 12, 2026 from `scripts/validate_godot.sh`.
+## Primary Review Targets
 
-- Full validation passed with 570 GUT tests and 10028 asserts.
-- All 23 required screenshot files are present in `artifacts/validation/latest/screenshots/`.
-- Screenshot sanity and old-name scan passed.
-- Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
-- Automated evidence is ready for owner review; it does not replace the required real-window readability pass.
-- Current visual evidence is not art-approved. It is captured from the promoted `store_world.tscn` production scene after prototype-language cleanup. The latest live owner screenshots show the cleanup did not change the overall read enough. The next accepted screenshot set must come from the hard visual benchmark rebuild: benchmark composition, label suppression, fixture silhouettes, physical detail replacement, ceiling/material/lighting treatment, and real backroom architecture.
+- `main_scene.png`: storefront/entrance first read
+- `storefront_entry.png`: entering the store and seeing interior promise
+- `lighting_materials_store.png`: bright store lighting, commercial carpet, wall panels, and fixture material read
+- `lighting_materials_mall.png`: warmer mall approach contrasted against the brighter store
+- `register_counter.png`: checkout plus trade-in center
+- `stocked_aisle.png`: platform/game browsing density
+- `product_closeup.png`: case/box/platform/price language at player inspection distance
+- `stockroom_doorway.png`: stockroom threshold, employee-only read, and backroom depth from sales floor
+- `receiving_area.png`: shipments and intake
+- `backroom_summary.png`: management support without becoming the main fantasy
+- product-kit close-up screenshots added by the current packet
+- fixture empty/stocked capacity screenshots added by the current packet
 
-## Required Screenshots
-
-- `main_scene.png`
-- `storefront_entry.png`
-- `stocked_aisle.png`
-- `carry_stack.png`
-- `receiving_area.png`
-- `supplier_message.png`
-- `suspicious_customer.png`
-- `register_counter.png`
-- `customer_queue.png`
-- `trade_in_offer.png`
-- `preorder_deposit.png`
-- `service_request.png`
-- `backroom_summary.png`
-- `catalog_design_cues.png`
-- `upgrade_preview.png`
-- `release_calendar.png`
-- `release_allocation.png`
-- `launch_day.png`
-- `supplier_delivery.png`
-- `fixture_ghost.png`
-- `fixture_invalid_ghost.png`
-- `fixture_rotated_ghost.png`
-- `fixture_placed.png`
-
-## Review Criteria
+## Pass Criteria
 
 Pass only if:
 
-- The first view reads as a small specialty game shop.
-- The opening screenshot starts outside the shop on a second-floor mall concourse and the entry route is walkable.
-- The opening state has no visible customers or employees before business begins.
-- `main_scene.png`, `storefront_entry.png`, and `register_counter.png` show the hard benchmark route and read as a shop before labels.
-- `main_scene.png` and `storefront_entry.png` do not read as raw boxes with labels.
-- `register_counter.png`, `receiving_area.png`, and `backroom_summary.png` do not read as label-driven prototype staging.
-- Fixture silhouettes, product rows, counter props, ceiling treatment, wall/floor material breaks, and lighting carry the read.
-- The backroom reads as a staff-only room or threshold, not a floor line.
-- Storefront, sales floor, register, receiving, stockroom, and backroom zones are distinguishable without reading docs.
-- Prompt, reticle, product label, shelf label, and modal text are readable at 1280x720.
-- Customers read by silhouette, role prop, queue position, and compact marker before relying on long labels.
-- Register, return, trade-in, preorder, and service screenshots show the decision point before confirmation.
-- Fixture ghosts clearly distinguish valid, invalid, rotated, and placed states.
-- Backroom computer screenshots show tab purpose, primary controls, and current business state without hiding actions below the frame.
-- No screenshot has blocked product paths, hidden interaction targets, streamer-reference copy, third-party branding, or unreadable signage.
+- the first view reads as a 2002-2004 specialty game store
+- the store feels new, underfunded, understocked, promising, and operational
+- storefront identity comes from facade, glass, trim, sign housing, mall context, and fictional store branding
+- register/counter reads from silhouette, equipment, material, grouped props, and trade-in staging
+- used games, new releases, platform sections, demo, bargain, guides/media, checkout, and receiving support are understandable
+- product/fixture identity comes from rows, cases, boxes, stickers, posters, signs, and fixture design
+- opening density is limited but intentional: pre-day-one can be very sparse, while the first validated slice grows toward 25-40% wall occupancy and 30-50% floor occupancy
+- future growth is visible without future inventory physically sitting in the store
+- large debug labels are not required to understand primary objects
+- the 1280x720 real-window walk-in does not expose a prototype-heavy angle
+- signage should show `Games4U` as the storefront default, a real closed/open sign state, attached shelf labels, and fictional promo posters without reviving debug label cards.
+- Owner approval is based on screenshot-level notes and/or a real-window walk-in, not the contact sheet alone.
+
+## Fail Criteria
 
 Fail if:
 
-- The screenshot still reads mainly as graybox.
-- Opening-route objects still look like blockout boxes unless they are intentionally cardboard boxes.
-- The store still depends on labels or debug-like signs to explain most objects.
-- The backroom is still separated only by a line, marker, or label.
-- Boxes, papers, and props look randomly dumped instead of staged for receiving, sorting, display, or backstock.
-- A player would need a doc explanation to understand the current action.
-- Text is too small, clipped, low contrast, or crowded.
-- A prop, sign, customer, fixture, or modal competes with the action target.
+- the scene reads as modern, sterile, empty, corporate, or abandoned
+- the store does not communicate early-2000s game retail
+- text labels are required to understand primary objects
+- props look like scattered primitive clutter
+- product/fixture identity is not readable before labels
+- future inventory appears physically staged before it is purchased, unlocked, received, released, or traded in
+- a visual module blocks movement or interaction
 
 ## Routing
 
-Before broadening visual work beyond the opening route, review `docs/visual-production/19-hard-visual-benchmark-rebuild.md` and confirm the hard benchmark has removed enough label/debug/clutter/backroom-line read. If the benchmark fails review, keep iterating there before adding product, fixture, or customer visual breadth.
-
-If all screenshots pass, run `docs/qa/release-package-check.md` and consider reopening `docs/production/15-alpha-playtest-package.md`.
-
-If any screenshot fails, add an entry to `docs/production/13-alpha-bug-list.md` with the screenshot name, priority, failure reason, and acceptance check.
+If the review fails, keep work inside [Phase Implementation Roadmap](../design-implementation/14-phase-implementation-roadmap.md). Do not expand catalog, customer, decoration, hidden narrative, later-era, or external-playtest work to compensate for a weak opening store.

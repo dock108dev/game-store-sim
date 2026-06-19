@@ -127,8 +127,36 @@
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
     },
     {
+      "id": "lighting_materials_store_screenshot",
+      "name": "Store lighting and material-read screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "lighting_materials_mall_screenshot",
+      "name": "Warmer mall and brighter store contrast screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
       "id": "stocked_aisle_screenshot",
       "name": "Stocked-aisle production visual screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "product_closeup_screenshot",
+      "name": "Product closeup production visual screenshot is captured and checked",
+      "status": "automated",
+      "critical": true,
+      "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"
+    },
+    {
+      "id": "stockroom_doorway_screenshot",
+      "name": "Stockroom doorway production visual screenshot is captured and checked",
       "status": "automated",
       "critical": true,
       "evidence": "res://tests/tools/capture_main_scene_screenshot.gd"

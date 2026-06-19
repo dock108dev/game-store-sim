@@ -18,6 +18,10 @@ FORBIDDEN_REAL_NAMES = {
 }
 
 PLATFORM_FAMILY_RULES = {
+    "vortex": {
+        "platforms": {"Vortex"},
+        "formats": {"disc", "accessory", "console", "controller"},
+    },
     "nova_disc": {
         "platforms": {"Nova Cube"},
         "formats": {"disc", "accessory", "controller"},

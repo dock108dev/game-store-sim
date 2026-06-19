@@ -1296,7 +1296,7 @@ func test_store_session_orders_fixture_and_reserves_cash() -> void:
 	assert_eq(order.get("fixture_id"), "fixture_game_display_rack")
 	assert_eq(order.get("status"), "pending_placement")
 	assert_eq(order.get("slot_category"), "used_game")
-	assert_eq(order.get("slot_count"), 3)
+	assert_eq(order.get("slot_count"), 12)
 	assert_eq(order.get("placement_zone"), "sales_floor")
 	assert_eq(order.get("footprint_size"), Vector2(2.4, 0.6))
 	assert_true((order.get("gameplay_tags") as Array).has("starter_fixture"))
@@ -1306,7 +1306,7 @@ func test_store_session_orders_fixture_and_reserves_cash() -> void:
 	assert_string_contains(session.get_fixture_order_summary_text(), "Pending storage placement:")
 	assert_string_contains(session.get_fixture_order_summary_text(), "Game Display Rack $125.00")
 	assert_string_contains(session.get_fixture_order_summary_text(), "slots:used_game")
-	assert_string_contains(session.get_fixture_order_summary_text(), "count:3")
+	assert_string_contains(session.get_fixture_order_summary_text(), "count:12")
 	assert_string_contains(session.get_fixture_order_summary_text(), "zone:sales_floor")
 
 

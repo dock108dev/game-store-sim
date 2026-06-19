@@ -277,6 +277,7 @@ func test_fixture_placement_manager_records_rotated_footprint_bounds_for_regress
 	assert_not_null(placed.get_node_or_null("ShelfSlot001"))
 	assert_not_null(placed.get_node_or_null("ShelfSlot002"))
 	assert_not_null(placed.get_node_or_null("ShelfSlot003"))
+	assert_not_null(placed.get_node_or_null("ShelfSlot012"))
 	assert_string_contains(manager.get_placement_summary_text(), "Last placed")
 
 

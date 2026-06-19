@@ -28,6 +28,10 @@ func test_used_disc_game_profile_uses_case_disc_and_box_variants() -> void:
 	assert_eq(profile.get("state_variant"), ProductVisualRules.VARIANT_BOX)
 	assert_true((profile.get("variant_keys") as Array).has(ProductVisualRules.VARIANT_DISC))
 	assert_true(profile.get("show_spine"))
+	assert_true(profile.has("platform_color"))
+	assert_true(profile.has("genre_color"))
+	assert_true(profile.get("show_genre_accent"))
+	assert_true(profile.get("show_used_sticker"))
 
 
 func test_loose_cartridge_profile_uses_loose_and_cartridge_variants() -> void:
@@ -42,11 +46,48 @@ func test_loose_cartridge_profile_uses_loose_and_cartridge_variants() -> void:
 
 
 func test_sealed_disc_profile_marks_seal_variant() -> void:
-	var product := _make_product("used_game", "disc", "sealed")
+	var product := _make_product("new_game", "disc", "sealed")
 	var profile := ProductVisualRules.build_profile(product)
 
 	assert_eq(profile.get("state_variant"), ProductVisualRules.VARIANT_SEALED)
 	assert_true((profile.get("variant_keys") as Array).has(ProductVisualRules.VARIANT_SEALED))
+	assert_false(profile.get("show_used_sticker"))
+
+
+func test_platform_and_genre_colors_are_distinct_visual_signals() -> void:
+	var sports := _make_product("new_game", "disc", "sealed")
+	sports.platform_family = "vortex"
+	sports.genre_id = "sports"
+	var adventure := _make_product("new_game", "cartridge", "sealed")
+	adventure.platform_family = "pocket_handheld"
+	adventure.genre_id = "rpg_adventure"
+
+	var sports_profile := ProductVisualRules.build_profile(sports)
+	var adventure_profile := ProductVisualRules.build_profile(adventure)
+
+	assert_ne(sports_profile.get("platform_color"), sports_profile.get("genre_color"))
+	assert_ne(adventure_profile.get("platform_color"), adventure_profile.get("genre_color"))
+	assert_ne(sports_profile.get("genre_color"), adventure_profile.get("genre_color"))
+	assert_ne(sports_profile.get("platform_color"), adventure_profile.get("platform_color"))
+
+
+func test_vortex_starter_profiles_expose_product_art_keys_and_packaging_scale() -> void:
+	var footy := load("res://data/products/new_footy_2002.tres") as ProductDefinition
+	var critter := load("res://data/products/new_critter_quest_ii.tres") as ProductDefinition
+	var console := load("res://data/products/hardware_vortex_console.tres") as ProductDefinition
+	var controller := load("res://data/products/hardware_vortex_controller.tres") as ProductDefinition
+
+	var footy_profile := ProductVisualRules.build_profile(footy)
+	var critter_profile := ProductVisualRules.build_profile(critter)
+	var console_profile := ProductVisualRules.build_profile(console)
+	var controller_profile := ProductVisualRules.build_profile(controller)
+
+	assert_eq(footy_profile.get("product_art_key"), "footy_2002")
+	assert_eq(critter_profile.get("product_art_key"), "critter_quest_ii")
+	assert_eq(console_profile.get("product_art_key"), "vortex_console_box")
+	assert_eq(controller_profile.get("product_art_key"), "vortex_controller_box")
+	assert_gt((console_profile.get("case_size") as Vector3).x, (footy_profile.get("case_size") as Vector3).x * 2.0)
+	assert_gt((controller_profile.get("case_size") as Vector3).y, (footy_profile.get("case_size") as Vector3).y * 0.9)
 
 
 func test_hardware_profiles_choose_boxed_device_variants() -> void:

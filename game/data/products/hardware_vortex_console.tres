@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ProductDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/inventory/product_definition.gd" id="1_product_definition"]
+
+[resource]
+script = ExtResource("1_product_definition")
+product_id = "hardware_vortex_console"
+display_name = "Vortex Console"
+category = "hardware"
+platform = "Vortex"
+platform_family = "vortex"
+condition = "new"
+completeness = "complete"
+format = "console"
+authenticity = "verified"
+rarity = "launch"
+demand_tier = "medium"
+cost_basis_cents = 4500
+market_value_cents = 8999
+suggested_price_cents = 7999
+risk_level = "low"
+risk_tags = Array[String]([])
+default_location_id = "receiving_box_001"
+player_priceable = true

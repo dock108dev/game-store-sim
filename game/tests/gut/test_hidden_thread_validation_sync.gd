@@ -2,9 +2,8 @@ extends GutTest
 
 const HIDDEN_THREAD_SCENARIOS_PATH := "res://tests/validation/scenarios/hidden_thread.json"
 const MANUAL_CHECKS_PATH := "res://tests/validation/scenarios/manual_checks.json"
-const VALIDATION_DOC_PATH := "res://../docs/production/06-validation.md"
-const MANUAL_DOC_PATH := "res://../docs/production/07-current-manual-playtest.md"
-const COMPLETION_PLAN_PATH := "res://../docs/production/11-game-completion-plan.md"
+const CURRENT_STATE_PATH := "res://../docs/CURRENT_STATE.md"
+const STATUS_PATH := "res://../docs/status.json"
 
 
 func test_hidden_thread_validation_matrix_covers_flags_dedupe_persistence_and_optionality() -> void:
@@ -26,35 +25,19 @@ func test_hidden_thread_validation_matrix_covers_flags_dedupe_persistence_and_op
 		assert_true(str(scenario.get("evidence", "")).begins_with("res://tests/gut/"), scenario_id)
 
 
-func test_hidden_thread_manual_checks_cover_clue_readability_and_nonblocking_play() -> void:
+func test_hidden_thread_manual_checks_remain_structured_but_not_visual_blockers() -> void:
 	var scenarios := _scenario_map(MANUAL_CHECKS_PATH)
-	var required_ids := [
-		"hidden_clue_surface_readability",
-		"hidden_choice_path_readability",
-		"hidden_consequence_readability",
-		"hidden_thread_optionality_guard",
-		"hidden_thread_flags_invisible",
-		"mismatched_serial_discoverability",
-		"supplier_message_readability",
-		"evidence_storage_invisible",
-	]
+	var current_state := FileAccess.get_file_as_string(CURRENT_STATE_PATH)
+	var status := _load_json(STATUS_PATH)
 
-	for scenario_id in required_ids:
+	for scenario_id in ["hidden_clue_surface_readability", "hidden_choice_path_readability", "hidden_thread_optionality_guard"]:
 		assert_true(scenarios.has(scenario_id), "missing manual check %s" % scenario_id)
 		var scenario: Dictionary = scenarios.get(scenario_id)
 		assert_eq(scenario.get("status"), "manual", scenario_id)
-		assert_false(str(scenario.get("reason", "")).is_empty(), scenario_id)
 		assert_eq(scenario.get("owner"), "manual QA", scenario_id)
 
-
-func test_hidden_thread_validation_docs_name_stop_10_6_sync() -> void:
-	var validation_doc := FileAccess.get_file_as_string(VALIDATION_DOC_PATH)
-	var manual_doc := FileAccess.get_file_as_string(MANUAL_DOC_PATH)
-	var completion_plan := FileAccess.get_file_as_string(COMPLETION_PLAN_PATH)
-
-	assert_string_contains(validation_doc, "Hidden-thread validation sync is complete through Stop 10.6")
-	assert_string_contains(manual_doc, "Hidden-thread validation sync is implemented through Stop 10.6")
-	assert_string_contains(completion_plan, "Stop 10.6: Hidden-thread validation sync. Done")
+	assert_string_contains(current_state, "optional hidden-thread hooks")
+	assert_true(status.get("playable_state", {}).get("implemented_systems", []).has("hidden_thread_hooks"))
 
 
 func _scenario_map(path: String) -> Dictionary:

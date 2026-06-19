@@ -1,20 +1,20 @@
 extends GutTest
 
-const ALPHA_BUG_LIST_PATH := "res://../docs/production/13-alpha-bug-list.md"
+const VISUAL_BLOCKERS_PATH := "res://../docs/production/13-visual-blockers.md"
 const CAPTURE_TOOL_PATH := "res://tests/tools/capture_main_scene_screenshot.gd"
 const VALIDATION_GATE_PATH := "res://../scripts/validate_godot.sh"
 
 
-func test_alpha_screenshot_scenarios_cover_p1_bug_subjects() -> void:
-	var alpha_bug_list := FileAccess.get_file_as_string(ALPHA_BUG_LIST_PATH)
+func test_screenshot_scenarios_cover_current_visual_blockers() -> void:
+	var visual_blockers := FileAccess.get_file_as_string(VISUAL_BLOCKERS_PATH)
 	var capture_tool := FileAccess.get_file_as_string(CAPTURE_TOOL_PATH)
 	var validation_gate := FileAccess.get_file_as_string(VALIDATION_GATE_PATH)
-	assert_false(alpha_bug_list.is_empty())
+	assert_false(visual_blockers.is_empty())
 	assert_false(capture_tool.is_empty())
 	assert_false(validation_gate.is_empty())
 
-	for issue_id in ["AH-001", "AH-002", "AH-003", "AH-004", "AH-005", "AH-006", "AH-008"]:
-		assert_string_contains(alpha_bug_list, issue_id)
+	for issue_id in ["VIS-001", "VIS-011", "VIS-012", "VIS-013", "VIS-014", "VIS-015", "VIS-016", "VIS-017", "VIS-018"]:
+		assert_string_contains(visual_blockers, issue_id)
 
 	var required_scenarios := [
 		"main_scene",
@@ -50,7 +50,11 @@ func test_production_visual_screenshot_scenarios_have_named_compositions() -> vo
 	var validation_gate := FileAccess.get_file_as_string(VALIDATION_GATE_PATH)
 	var required_scenarios := [
 		"storefront_entry",
+		"lighting_materials_store",
+		"lighting_materials_mall",
 		"stocked_aisle",
+		"product_closeup",
+		"stockroom_doorway",
 		"catalog_design_cues",
 		"upgrade_preview",
 	]

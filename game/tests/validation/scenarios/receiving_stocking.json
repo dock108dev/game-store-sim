@@ -99,11 +99,11 @@
       "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_slot_exists"
     },
     {
-      "id": "shelf_has_three_display_slots",
-      "name": "Game display rack has three stocked-item slots",
+      "id": "shelf_has_twelve_display_slots",
+      "name": "Game display rack has twelve stocked-item slots",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_three_display_slots"
+      "evidence": "res://tests/gut/test_shelf_slot.gd::test_shelf_has_twelve_display_slots"
     },
     {
       "id": "shelf_slot_identity",
@@ -148,11 +148,11 @@
       "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_slot_starts_empty"
     },
     {
-      "id": "main_scene_display_has_three_slots",
-      "name": "Main-scene display rack has three slots",
+      "id": "main_scene_display_has_twelve_slots",
+      "name": "Main-scene display rack has twelve slots",
       "status": "automated",
       "critical": true,
-      "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_has_three_slots"
+      "evidence": "res://tests/gut/test_graybox_store.gd::test_display_rack_has_twelve_stockable_slots"
     },
     {
       "id": "main_scene_display_slots_used_game_category",

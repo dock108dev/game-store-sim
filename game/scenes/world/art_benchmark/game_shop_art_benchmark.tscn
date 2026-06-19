@@ -1,0 +1,111 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/mall_concourse_slice.tscn" id="1_concourse"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/storefront_facade_bay.tscn" id="2_facade"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/storefront_glass_door_open.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/interior/register_counter_kit.tscn" id="4_register"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/fixtures/wall_shelf_bay_kit.tscn" id="5_shelf"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/products/product_day_one_set.tscn" id="6_products"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/receiving_intake_kit.tscn" id="7_receiving"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/backroom_staff_threshold_kit.tscn" id="8_backroom"]
+[ext_resource type="Material" path="res://assets/materials/retail/warm_wall.tres" id="9_wall"]
+[ext_resource type="Material" path="res://assets/materials/retail/utility_floor.tres" id="10_floor"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/interior/store_shell_finish_kit.tscn" id="11_shell_finish"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_store_floor"]
+size = Vector3(8.4, 0.08, 6.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back_wall"]
+size = Vector3(8.4, 2.75, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side_wall"]
+size = Vector3(0.12, 2.75, 6.0)
+
+[sub_resource type="Environment" id="Environment_benchmark"]
+background_mode = 1
+background_color = Color(0.34, 0.36, 0.36, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.64, 0.66, 0.62, 1)
+ambient_light_energy = 0.7
+
+[node name="GameShopArtBenchmark" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_benchmark")
+
+[node name="MallConcourseSlice" parent="." instance=ExtResource("1_concourse")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.35)
+
+[node name="StoreShellFloor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.015, 1.05)
+mesh = SubResource("BoxMesh_store_floor")
+surface_material_override/0 = ExtResource("10_floor")
+
+[node name="StoreShellBackWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.38, 4.1)
+mesh = SubResource("BoxMesh_back_wall")
+surface_material_override/0 = ExtResource("9_wall")
+
+[node name="StoreShellLeftWall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 1.38, 1.05)
+mesh = SubResource("BoxMesh_side_wall")
+surface_material_override/0 = ExtResource("9_wall")
+
+[node name="StoreShellFinishKit" parent="." instance=ExtResource("11_shell_finish")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 1.02)
+
+[node name="StorefrontFacadeBay" parent="." instance=ExtResource("2_facade")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7)
+
+[node name="StorefrontGlassDoorOpen" parent="." instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0, -1.78)
+
+[node name="RegisterCounterKit" parent="." instance=ExtResource("4_register")]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, 1.55, 0, 0.6)
+
+[node name="WallShelfBayKit" parent="." instance=ExtResource("5_shelf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, 3.95)
+
+[node name="DayOneProductSet" parent="." instance=ExtResource("6_products")]
+transform = Transform3D(0.965926, 0, 0.258819, 0, 1, 0, -0.258819, 0, 0.965926, -0.62, 0.95, 0.55)
+
+[node name="ReceivingIntakeKit" parent="." instance=ExtResource("7_receiving")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, -2.85, 0, 1.85)
+
+[node name="BackroomStaffThresholdKit" parent="." instance=ExtResource("8_backroom")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 3.82)
+
+[node name="BenchmarkLights" type="Node3D" parent="."]
+
+[node name="StorefrontAccentLight" type="OmniLight3D" parent="BenchmarkLights"]
+light_color = Color(0.55, 0.94, 1, 1)
+light_energy = 1.5
+omni_range = 4.5
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2.25, -2.35)
+
+[node name="RegisterWarmLight" type="OmniLight3D" parent="BenchmarkLights"]
+light_color = Color(1, 0.84, 0.55, 1)
+light_energy = 1.75
+omni_range = 5.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 2.25, 0.85)
+
+[node name="BackroomCoolLight" type="OmniLight3D" parent="BenchmarkLights"]
+light_color = Color(0.62, 0.82, 1, 1)
+light_energy = 0.9
+omni_range = 3.5
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.1, 3.35)
+
+[node name="BenchmarkCameras" type="Node3D" parent="."]
+
+[node name="StorefrontReviewCamera" type="Camera3D" parent="BenchmarkCameras"]
+current = true
+fov = 65.0
+transform = Transform3D(0.95668, 0.03621, -0.28888, 0, 0.99225, 0.12429, 0.29113, -0.11891, 0.94927, -2.85, 1.46, -7.25)
+
+[node name="RegisterReviewCamera" type="Camera3D" parent="BenchmarkCameras"]
+fov = 66.0
+transform = Transform3D(0.8013, -0.08582, 0.59201, 0, 0.98965, 0.1435, -0.59819, -0.115, 0.793, -2.15, 1.42, -1.15)
+
+[node name="ThresholdReviewCamera" type="Camera3D" parent="BenchmarkCameras"]
+fov = 64.0
+transform = Transform3D(0.99756, 0.008, -0.0693, 0, 0.9934, 0.11475, 0.06976, -0.11447, 0.99098, 0.72, 1.34, -2.85)
