@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "packet_09_art_spike_ready_for_owner_review")
+	assert_eq(status.get("current_phase"), "visual_bible_ready_for_mvp_art_rebuild_planning")
 	assert_eq(status.get("playtest_state"), "paused_until_design_source_of_truth_baseline_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "packet_09_art_spike_ready_for_owner_review")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "visual_bible_ready_for_mvp_art_rebuild")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
 
 
@@ -23,7 +23,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 587)
-	assert_eq(int(validation.get("gut_asserts")), 11870)
+	assert_eq(int(validation.get("gut_asserts")), 11891)
 	assert_eq(int(ui.get("automated")), 512)
 	assert_eq(int(ui.get("total")), 632)
 	assert_eq(int(scripts.get("covered")), 54)
@@ -55,6 +55,16 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 	assert_true(active_docs.has("docs/design-source-of-truth/02-store-design-world-building.md"))
 	assert_true(active_docs.has("docs/design-source-of-truth/03-asset-inventory-roadmap.md"))
 	assert_true(active_docs.has("docs/design-source-of-truth/04-validation-and-signoff.md"))
+	assert_true(active_docs.has("docs/visual-bible/README.md"))
+	assert_true(active_docs.has("docs/visual-bible/01-store-shell-architecture.md"))
+	assert_true(active_docs.has("docs/visual-bible/02-fixtures-and-displays.md"))
+	assert_true(active_docs.has("docs/visual-bible/03-product-art-and-packaging.md"))
+	assert_true(active_docs.has("docs/visual-bible/04-fictional-platforms-and-games.md"))
+	assert_true(active_docs.has("docs/visual-bible/05-counter-register-and-trade-in.md"))
+	assert_true(active_docs.has("docs/visual-bible/06-stockroom-receiving-office.md"))
+	assert_true(active_docs.has("docs/visual-bible/07-signage-marketing-and-store-identity.md"))
+	assert_true(active_docs.has("docs/visual-bible/08-art-production-pipeline.md"))
+	assert_true(active_docs.has("docs/visual-bible/09-mvp-object-implementation-checklist.md"))
 	assert_true(active_docs.has("docs/design-implementation/README.md"))
 	assert_true(active_docs.has("docs/design-implementation/02-visual-module-system-spec.md"))
 	assert_true(active_docs.has("docs/design-implementation/03-store-shell-and-mall-entrance-slice.md"))
@@ -99,6 +109,7 @@ func test_current_state_and_readme_point_to_new_plan() -> void:
 
 	assert_string_contains(current_state, "docs/status.json")
 	assert_string_contains(current_state, "Design Source Of Truth")
+	assert_string_contains(current_state, "Visual Bible")
 	assert_string_contains(current_state, "Design Implementation Index")
 	assert_string_contains(current_state, "Owner Visual Review Package")
 	assert_string_contains(current_state, "Art Direction Reset And Spike Plan")

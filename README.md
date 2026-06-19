@@ -8,6 +8,8 @@ Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md) first. Machine-readable stat
 
 The design canon is [Design Source Of Truth](docs/design-source-of-truth/README.md). It consolidates the owner-provided store/world brief, vertical slice spec, and 300-object asset inventory into repo-owned target docs.
 
+The active object-family art target is [Visual Bible](docs/visual-bible/README.md). It translates the asset inventory and owner answers into MVP + first-store visual rules: Blender-authored meshes, physical fixtures, recognizable product art, readable signage, and a 7.5/10 owner quality bar.
+
 The active implementation entrypoint is [Design Implementation Index](docs/design-implementation/README.md). Agents should start there for execution order, packet rules, validation evidence, and handoff expectations.
 
 Older graybox, broad-production, beta, stockroom-production, hard-benchmark, and art-kit docs are not the active target if they disagree with the design source of truth or design implementation docs.
@@ -24,6 +26,8 @@ Do not expand broad catalog visuals, customers, decoration breadth, hidden narra
 
 Current art-reset entrypoints:
 
+- [Visual Bible](docs/visual-bible/README.md)
+- [MVP Object Implementation Checklist](docs/visual-bible/09-mvp-object-implementation-checklist.md)
 - [Design Implementation Index](docs/design-implementation/README.md)
 - [Work Packet Index](docs/design-implementation/work-packets/00-packet-index.md)
 - [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
@@ -45,7 +49,7 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 587 GUT tests and 11870 GUT asserts.
+- Current doc-contract expectation: 587 GUT tests and 11891 GUT asserts.
 - UI scenario automation coverage: 512/632.
 - Production script mapping: 54/54.
 - 3 active standalone validation tools.
@@ -57,6 +61,7 @@ Current validation snapshot:
 - [Docs Index](docs/README.md)
 - [Current State](docs/CURRENT_STATE.md)
 - [Design Source Of Truth](docs/design-source-of-truth/README.md)
+- [Visual Bible](docs/visual-bible/README.md)
 - [Design Implementation Index](docs/design-implementation/README.md)
 - [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
 - [Backlog](docs/production/04-backlog.md)

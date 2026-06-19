@@ -4,11 +4,15 @@
 
 This spec defines the reusable construction language for the design reset.
 
+Current note: `docs/visual-bible/` supersedes this spec wherever art quality, object-family detail, or production-method expectations conflict.
+
 The goal is a major visual increase. We are not constrained to Godot-native primitives if another workflow produces a stronger result. Godot remains the runtime and integration surface, but authored meshes, Blender-made assets, bitmap textures, and imported modular kits are allowed when they improve the store read.
 
 ## Target Read
 
-The visual target is late-PS2-era 3D retail:
+Original packet target language is retained for history. Current target is polished stylized indie with early/mid-2000s retail inspiration and Blender-authored MVP assets.
+
+The historical visual target was late-PS2-era 3D retail:
 
 - simple geometry with intentional silhouettes
 - strong readable shapes

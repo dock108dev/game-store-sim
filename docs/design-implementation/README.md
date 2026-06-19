@@ -27,13 +27,14 @@ Every implementation agent should:
 
 1. Read `docs/CURRENT_STATE.md`.
 2. Read `docs/design-source-of-truth/README.md`.
-3. Read this index.
-4. Read the current slice packet and all dependency packets.
-5. Make only the changes required for the current slice.
-6. Update docs/tests that describe changed behavior or validation.
-7. Run focused tests for changed contracts.
-8. Run `scripts/validate_godot.sh` before marking the slice complete.
-9. Commit the completed slice.
+3. Read `docs/visual-bible/README.md`.
+4. Read this index.
+5. Read the current slice packet and all dependency packets.
+6. Make only the changes required for the current slice.
+7. Update docs/tests that describe changed behavior or validation.
+8. Run focused tests for changed contracts.
+9. Run `scripts/validate_godot.sh` before marking the slice complete.
+10. Commit the completed slice.
 
 Do not use visible debug labels, loose primitive clutter, or future inventory staging as a shortcut for store readability.
 
@@ -72,7 +73,7 @@ Implementation packet assembly is complete under `work-packets/`.
 | 6 | `work-packets/06-signage-promotions-and-required-zones.md` | Complete | Editable store identity, required signs, posters, shelf labels, and non-debug zone readability. |
 | 7 | `work-packets/07-lighting-density-and-integration-polish.md` | Complete | Integrated lighting, materials, density, clutter, route cleanup, and screenshot composition. |
 | 8 | `work-packets/08-review-package-and-owner-validation.md` | Complete | Final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `work-packets/09-art-direction-spike.md` | Implemented, awaiting owner review | Reference extraction, bitmap sign/material workflow, isolated inside-looking-out spike revision, and owner handoff. |
+| 9 | `work-packets/09-art-direction-spike.md` | Implemented, reference only | Reference extraction, bitmap sign/material workflow, isolated inside-looking-out spike revision, and evidence for Visual Bible planning. |
 
 ## Dependency Model
 
@@ -124,6 +125,6 @@ Each future slice doc should include:
 
 ## Current Next Step
 
-Review `work-packets/09-art-direction-spike.md` and `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
+Use `docs/visual-bible/` to assemble the next implementation packet set.
 
-Packets 01-08 are implemented and validated. Packet 09 is implemented as an isolated art spike, and revision 2 incorporates owner feedback on weird text, wall clutter, color noise, and graybox read. The next step is owner visual review: approve the method for playable-store rebuild, request specific spike revisions, or block and change the art-production approach again.
+Packets 01-08 are implemented and validated. Packet 09 is implemented as an isolated art spike and remains useful reference, but owner review still rates the result as too primitive. The next step is not another blind Packet 09 polish pass; it is MVP object-family rebuild planning from the Visual Bible, starting with product art, fixtures/displays, store shell, counter/register, stockroom/receiving, and minimal signage.

@@ -1,6 +1,6 @@
 # Art Direction Reset And Spike Plan
 
-Status: Active
+Status: Superseded by Visual Bible for next implementation planning
 Owner decision: block current visual direction
 Runtime target: Godot remains the integration/runtime unless the art spike proves it cannot support the target
 Art workflow target: Blender-authored modular assets, bitmap textures, and legally clean asset packs/custom authored pieces
@@ -15,13 +15,14 @@ The next work is a separate art-direction spike that proves the look before rebu
 
 Locked owner answers for this reset:
 
-- Style target: late-PS2 / early low-poly 3D with bitmap textures.
+- Style target: polished stylized indie. Late-PS2 memory is inspiration only, not a strict fidelity ceiling.
 - Godot primitives are not the primary art-production method.
 - Blender-authored modular assets are allowed and expected.
 - First proof shot: inside looking out.
 - Store vibe: small chain game store.
 - Third-party asset packs are allowed if legally clean.
 - Store footprint, facade, layout, and world placement may change heavily.
+- Target owner visual score for the next implementation pass is 7.5/10.
 
 ## Why The Current Direction Is Blocked
 
@@ -140,7 +141,7 @@ The spike passes only if:
 - the image has real authored geometry: trims, bevels, frames, panels, props, and material breaks
 - bitmap detail does meaningful work
 - it avoids the current primitive cube-store read
-- it feels like a plausible late-PS2 / early low-poly game environment
+- it feels like a polished stylized indie game store with early/mid-2000s retail inspiration
 - it is simple enough to expand into the actual playable store
 
 ## Validation
@@ -156,8 +157,10 @@ The full `scripts/validate_godot.sh` gate is still useful only after the spike i
 
 ## Next Implementation Packet
 
-Create and execute a new packet:
+Packet 09 was created and executed. Owner feedback after Packet 09 still rated the result as too primitive, so future implementation must use:
 
-- `docs/design-implementation/work-packets/09-art-direction-spike.md`
+- `docs/visual-bible/README.md`
+- `docs/visual-bible/08-art-production-pipeline.md`
+- `docs/visual-bible/09-mvp-object-implementation-checklist.md`
 
-That packet owns the reference extraction, asset sourcing, Blender/Godot spike scene, screenshot review board, and owner approve/revise/block handoff.
+Packet 09 remains reference evidence, not production approval.

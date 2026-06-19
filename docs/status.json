@@ -1,11 +1,11 @@
 {
   "schema": 2,
   "project": "game-store-sim",
-  "status_date": "2026-06-18",
-  "current_phase": "packet_09_art_spike_ready_for_owner_review",
+  "status_date": "2026-06-19",
+  "current_phase": "visual_bible_ready_for_mvp_art_rebuild_planning",
   "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype. Packet 09 now provides a revised separate inside-looking-out pre-day-1 starter setup art spike for owner visual review before any playable store rebuild.",
+    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype. Packet 09 remains useful reference, but owner feedback still rates it around 4.5/10. The active next step is MVP + first-store object-family rebuild planning from the Visual Bible.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -29,14 +29,14 @@
       "decoration_upgrade_surface_hooks",
       "hidden_thread_hooks"
     ],
-    "visual_read": "packet_09_art_spike_ready_for_owner_review",
+    "visual_read": "visual_bible_ready_for_mvp_art_rebuild",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 587,
-    "gut_asserts": 11870,
+    "gut_asserts": 11891,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -71,7 +71,8 @@
     "Vertical Slice Build Specification v4.0",
     "game_store_sim_300_object_asset_inventory.xlsx",
     "inspiration/",
-    "new_real_inspiration/"
+    "new_real_inspiration/",
+    "docs/visual-bible/"
   ],
   "blocking_reviews": [
     "owner_design_source_of_truth_signoff",
@@ -79,9 +80,9 @@
     "manual_real_window_1280x720_walk_in_review"
   ],
   "next_decision": {
-    "question": "Does the art-direction spike prove a stronger small-chain game store visual method than the current primitive scene?",
-    "approve_path": "use the approved art spike kit to rebuild the playable store visuals around existing mechanics",
-    "reject_path": "change art workflow, asset source, or engine only if the spike proves the current Godot/Blender pipeline cannot reach the target"
+    "question": "Which Visual Bible implementation packet should be built first to move the store from primitive 4.5/10 toward the 7.5/10 MVP target?",
+    "approve_path": "assemble and implement MVP object-family packets in the Visual Bible order while preserving current mechanics",
+    "reject_path": "revise the Visual Bible family docs before implementing if any object-family target is wrong"
   },
   "active_docs": [
     "README.md",
@@ -94,6 +95,16 @@
     "docs/design-source-of-truth/02-store-design-world-building.md",
     "docs/design-source-of-truth/03-asset-inventory-roadmap.md",
     "docs/design-source-of-truth/04-validation-and-signoff.md",
+    "docs/visual-bible/README.md",
+    "docs/visual-bible/01-store-shell-architecture.md",
+    "docs/visual-bible/02-fixtures-and-displays.md",
+    "docs/visual-bible/03-product-art-and-packaging.md",
+    "docs/visual-bible/04-fictional-platforms-and-games.md",
+    "docs/visual-bible/05-counter-register-and-trade-in.md",
+    "docs/visual-bible/06-stockroom-receiving-office.md",
+    "docs/visual-bible/07-signage-marketing-and-store-identity.md",
+    "docs/visual-bible/08-art-production-pipeline.md",
+    "docs/visual-bible/09-mvp-object-implementation-checklist.md",
     "docs/design-implementation/README.md",
     "docs/design-implementation/02-visual-module-system-spec.md",
     "docs/design-implementation/03-store-shell-and-mall-entrance-slice.md",

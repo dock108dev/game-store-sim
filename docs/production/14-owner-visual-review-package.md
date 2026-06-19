@@ -1,14 +1,14 @@
 # Owner Visual Review Package
 
-Status: Packet 09 art spike awaiting owner visual review
-Recommendation: Review Packet 09 and decide approve, revise, or block
+Status: Packet 09 reviewed as reference, Visual Bible now active
+Recommendation: Assemble MVP object-family implementation packets from `docs/visual-bible/`
 Branch: `codex/hard-visual-benchmark-implementation`
 Commit range: `94f7bef6..HEAD`
 Latest visual scene implementation commit: pending current Packet 09 commit
 
 ## Purpose
 
-This package started as the Packet 08 handoff for the visual reset. It now includes the Packet 09 art-spike review gate.
+This package started as the Packet 08 handoff for the visual reset. It now records the Packet 09 art-spike review outcome and points future implementation to the Visual Bible.
 
 This is not a beta-readiness package. It is the owner review package for deciding whether the opening store baseline is approved, needs targeted revision, or needs a deeper visual reset.
 
@@ -21,6 +21,8 @@ The current scene is materially stronger than the original graybox: the player s
 The remaining problem is also clear: fixtures, counters, ceiling pieces, some prop groups, and parts of the mall shell still read as assembled primitive geometry. The store has the right functional anchors, but the art production method is not strong enough to keep polishing as the visual baseline.
 
 Current decision: freeze this scene as the mechanics prototype. Packet 09 has implemented a separate candidate art method using both `inspiration/` and `new_real_inspiration/`. Revision 2 addressed owner feedback that the first spike had weird text, cluttered walls, too much color, and still felt too graybox. Revision 3 clarifies that the review board is a pre-day-1 starter setup state, not a future/current fully stocked wall.
+
+Owner review after revision 3: Packet 09 is better but still too primitive, around 4.5/10. It is not approved as production quality. The active next step is the Visual Bible: MVP object-family docs for store shell, fixtures/displays, product packaging, fictional platforms/games, counter/register/trade-in, stockroom/receiving/office, signage, and art pipeline.
 
 ## Packet 09 Review
 
@@ -72,7 +74,7 @@ scripts/validate_godot.sh
 
 Current recorded result:
 
-- GUT: 587 tests, 11870 asserts, all passing.
+- GUT: 587 tests, 11891 asserts, all passing.
 - UI scenario automation: 512/632, or 81.0%.
 - Production script mapping: 54/54, or 100.0%.
 - Validation tools: 3 active standalone tools.
@@ -181,34 +183,28 @@ These are the issues that should block external beta/tester packaging unless the
 - Lighting now separates warmer mall from brighter store.
 - The screenshot set now includes explicit material, product closeup, and stockroom doorway review views.
 
-## Owner Decision Options
+## Owner Decision Outcome
 
-Choose one for Packet 09:
+Packet 09 outcome:
 
-1. **Approve Packet 09 method for playable-store rebuild.**
-   - Use only if the isolated art spike is directionally strong enough.
-   - Next step: rebuild the playable store visuals around this method while preserving current mechanics.
+1. Packet 09 is reference evidence only.
+2. The current production target is `docs/visual-bible/`.
+3. The next implementation work should assemble new MVP object-family packets from the Visual Bible.
+4. Do not touch broad catalog/customers/decorations/beta packaging until the MVP visual object-family pass is reviewable.
 
-2. **Revise Packet 09 before playable-store rebuild.**
-   - Use if the spike is close but still misses composition, signage, materials, product density, scale, or store identity.
-   - Next step: apply targeted corrections to the isolated spike and recapture the review board.
+## Next Signoff Questions
 
-3. **Block Packet 09 and change production approach again.**
-   - Use if the spike still proves the current Godot/procedural approach cannot reach the target.
-   - Next step: switch to a heavier Blender/authored-asset or third-party-pack approach before any playable-store rebuild.
+Use these questions for the next review:
 
-## Signoff Questions
-
-Please answer these during review:
-
-1. Does the Packet 09 inside-looking-out shot finally point in the right visual direction?
-2. Are the storefront glass/fascia/sign, mall corridor, ceiling, and counter directions acceptable enough to turn into production modules?
-3. Is the cleaner empty slatwall/starter-stock language acceptable, or should shelves/cases/product art change before rebuilding?
-4. Should the next implementation pass rebuild the playable store from this method, revise the spike, or block the method?
-5. Is external beta/testing still blocked until the playable store is rebuilt from an approved visual method?
+1. Do the new MVP product cases/boxes read as real store goods?
+2. Do fixtures/displays stop reading as primitive rectangles/rods?
+3. Does the clean/open mall store shell feel like a store before labels?
+4. Does the combined counter/register/trade-in station look functional?
+5. Is the stockroom/receiving/office clear enough to support day-one setup?
+6. Does the assembled review board reach the 7.5/10 target?
 
 ## Final Recommendation
 
-Proceed with **owner review of Packet 09**.
+Proceed with **Visual Bible implementation packet assembly**.
 
-The current build remains valuable as a mechanics prototype. It is not the visual baseline. Packet 09 is the current candidate visual method. Do not rebuild the playable store until the owner approves, revises, or blocks that method.
+The current build remains valuable as a mechanics prototype. It is not the visual baseline. Packet 09 is not production approval; it is reference evidence for what still needs a deeper asset-production reset. Do not rebuild the playable store broadly until MVP object-family assets from the Visual Bible are implemented and reviewed.

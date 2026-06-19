@@ -33,7 +33,7 @@ Agents start here after reading `docs/CURRENT_STATE.md` and `docs/design-impleme
 | 6 | `06-signage-promotions-and-required-zones.md` | Complete | Build store identity, required signs, posters, shelf labels, and zone readability without debug labels. |
 | 7 | `07-lighting-density-and-integration-polish.md` | Complete | Integrate lighting, materials, density, clutter rules, route cleanup, and screenshot composition. |
 | 8 | `08-review-package-and-owner-validation.md` | Complete | Package final screenshots, validation, notes, blockers, and owner approve/revise/block path. |
-| 9 | `09-art-direction-spike.md` | Implemented, awaiting owner review | Prove the replacement bitmap/material visual method with a revised inside-looking-out small-chain store spike. |
+| 9 | `09-art-direction-spike.md` | Implemented, reference only | Prove a replacement bitmap/material visual method with a revised inside-looking-out small-chain store spike; superseded by Visual Bible planning for production rebuild. |
 
 ## Dependency Model
 
@@ -82,11 +82,12 @@ The lead implementer owns:
 
 1. `docs/CURRENT_STATE.md`
 2. `docs/design-source-of-truth/README.md`
-3. `docs/design-implementation/README.md`
-4. `docs/design-implementation/13-agent-work-packet-template.md`
-5. `docs/design-implementation/14-phase-implementation-roadmap.md`
-6. Current packet
-7. Packet-specific dependencies
+3. `docs/visual-bible/README.md`
+4. `docs/design-implementation/README.md`
+5. `docs/design-implementation/13-agent-work-packet-template.md`
+6. `docs/design-implementation/14-phase-implementation-roadmap.md`
+7. Current packet
+8. Packet-specific dependencies
 
 ## Packet Completion Definition
 
@@ -105,9 +106,9 @@ Docs-only packet assembly does not require `scripts/validate_godot.sh`.
 
 ## Current Next Step
 
-Packet 09 is implemented and awaits owner visual review. Revision 2 addresses owner feedback on weird text, wall clutter, over-saturated color, and graybox read.
+Packet 09 is implemented and remains useful evidence, but owner feedback after revision 3 still rated the result as too primitive for production. The next queue item should be a new Visual Bible implementation packet set, not another blind Packet 09 polish pass.
 
-Review:
+Reference:
 
 - `docs/design-implementation/work-packets/09-art-direction-spike.md`
 - `artifacts/validation/latest/packet-09-art-spike-review-board.png`
@@ -115,4 +116,4 @@ Review:
 - `artifacts/validation/latest/screenshots/packet_09_starter_setup_fixture.png`
 - `artifacts/validation/latest/screenshots/packet_09_storefront_frame.png`
 
-The next decision is approve, revise, or block the Packet 09 art method. Do not rebuild the playable store visuals or resume beta/tester packaging until that decision is made.
+The next step is to assemble new implementation packets from `docs/visual-bible/`, starting with MVP product art and physical fixture/display assets. Do not rebuild the playable store visuals or resume beta/tester packaging until the MVP visual object-family targets are implemented and reviewed against the 7.5/10 bar.

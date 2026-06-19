@@ -11,9 +11,10 @@ Agents start implementation work at [Design Implementation Index](design-impleme
 The documentation hierarchy is:
 
 1. `docs/design-source-of-truth/`: design canon, owner decisions, era, fantasy, and quality bar.
-2. `docs/design-implementation/`: active execution plan, work slices, implementation roadmap, agent packet rules, and validation handoff.
-3. `docs/production/`: current status, validation baseline, and visual blocker tracking.
-4. `docs/qa/`: evidence procedures used when an implementation packet asks for screenshots, smoke checks, or owner review.
+2. `docs/visual-bible/`: object-family visual production rules for the MVP + first-store rebuild.
+3. `docs/design-implementation/`: active execution plan, work slices, implementation roadmap, agent packet rules, and validation handoff.
+4. `docs/production/`: current status, validation baseline, and visual blocker tracking.
+5. `docs/qa/`: evidence procedures used when an implementation packet asks for screenshots, smoke checks, or owner review.
 
 If implementation instructions conflict, follow `docs/design-implementation/` unless it violates `docs/design-source-of-truth/`. If status or validation numbers conflict, `docs/status.json` and `docs/CURRENT_STATE.md` win.
 
@@ -22,6 +23,7 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 - [Current State](CURRENT_STATE.md): current build, blocker, validation snapshot, and next decision.
 - [Status JSON](status.json): machine-readable status contract used by tests.
 - [Design Source Of Truth](design-source-of-truth/README.md): design canon and owner-decision authority.
+- [Visual Bible](visual-bible/README.md): active object-family visual production bar.
 - [Design Implementation Index](design-implementation/README.md): active agent execution entrypoint.
 
 ## Design Source Docs
@@ -31,6 +33,19 @@ If implementation instructions conflict, follow `docs/design-implementation/` un
 - [Store Design And World Building](design-source-of-truth/02-store-design-world-building.md): store personality, layout, density, zones, storytelling, customers, and hidden narrative boundaries.
 - [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md): implementation phases seeded from the 300-object asset inventory.
 - [Validation And Signoff](design-source-of-truth/04-validation-and-signoff.md): owner review, screenshot checks, and implementation cycle.
+
+## Visual Bible Docs
+
+- [Visual Bible Index](visual-bible/README.md): locked visual reset, target quality, agent usage, and global do/don't rules.
+- [Store Shell And Architecture](visual-bible/01-store-shell-architecture.md): mall interior shell, clean drywall, carpet, quiet ceiling, storefront, and fixed structural rules.
+- [Fixtures And Displays](visual-bible/02-fixtures-and-displays.md): physical shelves, racks, bins, display cases, capacity rules, and anti-primitive fixture requirements.
+- [Product Art And Packaging](visual-bible/03-product-art-and-packaging.md): DVD cases, console boxes, accessory packaging, duplicate stacks, price stickers, and product fidelity.
+- [Fictional Platforms And Games](visual-bible/04-fictional-platforms-and-games.md): legal-safe platform/game identity, starter titles, art direction, and naming expectations.
+- [Counter Register And Trade-In](visual-bible/05-counter-register-and-trade-in.md): straight counter, combined checkout/trade-in station, POS/scanner detail, and behind-counter emptiness.
+- [Stockroom Receiving Office](visual-bible/06-stockroom-receiving-office.md): clean receiving area, office/storage backroom, stockroom racks, and starter delivery state.
+- [Signage Marketing And Store Identity](visual-bible/07-signage-marketing-and-store-identity.md): minimal readable signage, grand-opening restraint, editable identity, and poster/marketing rules.
+- [Art Production Pipeline](visual-bible/08-art-production-pipeline.md): Blender/asset-pack/texture workflow, mesh quality bar, import expectations, and validation output.
+- [MVP Object Implementation Checklist](visual-bible/09-mvp-object-implementation-checklist.md): MVP + first-store object checklist mapped to spreadsheet IDs and validation needs.
 
 ## Design Implementation Docs
 

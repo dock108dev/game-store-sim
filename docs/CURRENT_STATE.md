@@ -6,7 +6,7 @@ This is the authoritative handoff for the repo. If another doc disagrees with th
 
 The game is a broad validated first-person retail prototype. Core mechanics are working: movement, click-first interaction, receiving, carrying, pricing, stocking, register sales, returns, trade-ins, preorders, services, supplier ordering, release allocation, fixture placement, backroom computer workflows, save/load, settings, pause/menu, and optional hidden-thread hooks.
 
-The design and visual target is being reset. The owner-provided store/world brief, vertical slice spec, and 300-object asset inventory are consolidated into [Design Source Of Truth](design-source-of-truth/README.md). Active execution is sliced in [Design Implementation Index](design-implementation/README.md).
+The design and visual target is being reset. The owner-provided store/world brief, vertical slice spec, and 300-object asset inventory are consolidated into [Design Source Of Truth](design-source-of-truth/README.md). Object-family visual production rules are now consolidated in [Visual Bible](visual-bible/README.md). Active execution is sliced in [Design Implementation Index](design-implementation/README.md).
 
 ## Current Blocker
 
@@ -15,6 +15,8 @@ External playtest and broad visual expansion are paused.
 The owner selected the block path for the current visual direction. The current Godot scene is frozen as a mechanics prototype, not the visual baseline.
 
 Packet 09 now provides a separate inside-looking-out art spike for review. Revision 3 keeps the improved architecture/material direction but clarifies the screenshot as a pre-day-1 starter setup state, not a future fully stocked store. It uses `inspiration/` for stylized scaffold and `new_real_inspiration/` for real period retail construction: storefront glass rhythm, mall corridor, drop ceiling, quieter walls, mostly empty slatwall capacity, two upgraded starter game cases, one starter console box, one accessory box, flat bitmap sign panels, restrained price-sticker language, and a glass display counter. The spike may still need visual correction, but the next decision is owner review of this direction before the playable store is rebuilt.
+
+Owner feedback after Packet 09: the direction is improving but still reads about 4.5/10 visually because fixtures, displays, walls, and products still feel primitive. The next implementation pass should follow the Visual Bible, not the Packet 09 primitive/procedural shortcut. The target is 7.5/10, with Blender-authored MVP assets, physical fixtures that hold real capacity, recognizable product art, mostly drywall walls, a clean/open mall interior, and minimal day-one signage.
 
 Packet 09 artifacts:
 
@@ -30,9 +32,14 @@ For design intent, read:
 - [Store Design And World Building](design-source-of-truth/02-store-design-world-building.md)
 - [Asset Inventory Roadmap](design-source-of-truth/03-asset-inventory-roadmap.md)
 - [Validation And Signoff](design-source-of-truth/04-validation-and-signoff.md)
+- [Visual Bible](visual-bible/README.md)
+- [MVP Object Implementation Checklist](visual-bible/09-mvp-object-implementation-checklist.md)
 
 For implementation, start with:
 
+- [Visual Bible](visual-bible/README.md)
+- [Art Production Pipeline](visual-bible/08-art-production-pipeline.md)
+- [MVP Object Implementation Checklist](visual-bible/09-mvp-object-implementation-checklist.md)
 - [Design Implementation Index](design-implementation/README.md)
 - [Work Packet Index](design-implementation/work-packets/00-packet-index.md)
 - [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md)
@@ -48,7 +55,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 587 GUT tests and 11870 asserts.
+- Current doc-contract expectation is 587 GUT tests and 11891 asserts.
 - UI scenario automation coverage is 512/632, or 81.0%.
 - Production script mapping is 54/54, or 100.0%.
 - 3 standalone validation tools are active.
@@ -82,14 +89,17 @@ Rejected path:
 
 ## Next Implementation Pass
 
-Use [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as the build queue history. Packet assembly is complete. Packets 01-08 are implemented and validated. Packet 08 produced the [Owner Visual Review Package](production/14-owner-visual-review-package.md), and the owner chose the block path.
+Use [Visual Bible](visual-bible/README.md) as the art-production authority and [Work Packet Index](design-implementation/work-packets/00-packet-index.md) as build queue history. Packet assembly is complete. Packets 01-08 are implemented and validated. Packet 09 is useful reference only, not production-quality approval.
 
-The next implementation pass is blocked on owner review:
+The next implementation pass should create new work packets from the visual bible in this order:
 
-1. Review [Art Direction Spike Packet](design-implementation/work-packets/09-art-direction-spike.md) and the revised Packet 09 review board.
-2. Decide whether the spike direction is approved, needs revision, or is blocked.
-3. If approved, rebuild the playable store visuals around the Packet 09 method while preserving current mechanics.
-4. If revised or blocked, update the spike first before touching the playable store.
+1. MVP product art kit: starter DVD cases, `Footy 2002`, adventure RPG starter title, starter console box, starter accessory package.
+2. MVP fixture kit: physical starter shelf/rack/display holding 10-30 items with visible empty capacity.
+3. Store shell kit: mall interior, drywall, carpet, quiet ceiling, storefront/sign.
+4. Counter/register/trade-in kit: straight combined counter with detailed POS/scanner/intake.
+5. Stockroom/receiving/office kit: receiving boxes, storage racks, backroom office.
+6. Minimal signage/store identity kit: readable `Games4U`, grand-opening restraint, editable future hooks.
+7. Playable store integration preserving current mechanics.
 
 Packet 06 added editable `Games4U` identity data, changed the day-one door sign to `CLOSED`, replaced the fake used-wall shelf default with attached `Potpourri` mixed-shelf labeling, and added fictional new-release, trade-in, coming-soon, and now-on-sale poster support.
 
@@ -101,15 +111,18 @@ Stop if the implementation would change core mechanics instead of replacing the 
 
 ## Next Validation Pass
 
-1. Inspect `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
-2. Compare the art spike against the current screenshot baseline.
-3. Treat `scripts/validate_godot.sh` and the old contact sheet as mechanics/regression evidence only.
-4. Owner decides approve, revise, or block the art spike.
+1. Assemble Visual Bible implementation packets.
+2. Implement MVP object-family assets in the recommended order.
+3. Capture family-specific screenshots plus a new owner-facing review board.
+4. Treat `scripts/validate_godot.sh` and the old contact sheet as mechanics/regression evidence only.
+5. Owner reviews the new MVP object-family pass against the 7.5/10 target.
 
 ## Active Documentation
 
 - [Documentation Index](README.md)
 - [Design Source Of Truth](design-source-of-truth/README.md)
+- [Visual Bible](visual-bible/README.md)
+- [MVP Object Implementation Checklist](visual-bible/09-mvp-object-implementation-checklist.md)
 - [Design Implementation Index](design-implementation/README.md)
 - [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md)
 - [Real Period Retail Inspiration](../new_real_inspiration/README.md)

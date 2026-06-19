@@ -1,7 +1,7 @@
 # Work Packet: Art Direction Spike
 
-Status: Implemented, awaiting owner visual review
-Owner decision required: Yes
+Status: Implemented, superseded by Visual Bible planning
+Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/design-implementation/15-art-direction-reset-and-spike-plan.md`
 Dependencies: `docs/production/14-owner-visual-review-package.md`, `docs/design-source-of-truth/`, `inspiration/`, `new_real_inspiration/`
@@ -10,6 +10,8 @@ Expected commit scope: reference extraction, asset workflow plan, isolated art-s
 ## Implementation Result
 
 Packet 09 is implemented as a separate, non-playable visual proof scene. It does not modify `store_world.tscn` or the current mechanics prototype. Revision 2 incorporates owner feedback that the first spike had weird text, cluttered walls, too much color, and still read too much like a graybox. Revision 3 clarifies screenshot intention: this is a pre-day-1 starter setup state, not a future/current fully stocked store.
+
+Owner feedback after revision 3: the direction is improving but still reads around 4.5/10 and remains too primitive. Packet 09 is now reference evidence only. The active next step is the Visual Bible object-family rebuild plan in `docs/visual-bible/`.
 
 Implemented files:
 
@@ -25,7 +27,7 @@ Review artifacts:
 - `artifacts/validation/latest/screenshots/packet_09_starter_setup_fixture.png`
 - `artifacts/validation/latest/screenshots/packet_09_storefront_frame.png`
 
-Owner decision needed: approve, revise, or block the Packet 09 visual method before rebuilding the playable store visuals.
+Owner decision outcome: do not approve Packet 09 as production quality. Use it only as evidence while rebuilding MVP object families from the Visual Bible.
 
 ## Read First
 
@@ -43,7 +45,7 @@ Owner decision needed: approve, revise, or block the Packet 09 visual method bef
 - Godot remains the runtime and mechanics integration target for now.
 - The current playable scene is frozen as a mechanics prototype, not the visual baseline.
 - The next proof must be an art-direction spike, not another graybox polish pass.
-- The target is late-PS2 / early low-poly 3D with bitmap textures.
+- The target is polished stylized indie with legally safe bitmap/product art detail.
 - Blender-authored modular assets and legally clean third-party packs are allowed.
 - The first proof shot is inside looking out.
 - The vibe is small chain game store.
