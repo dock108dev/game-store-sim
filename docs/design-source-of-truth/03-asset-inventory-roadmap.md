@@ -43,7 +43,7 @@ MVP + first-store work is limited to:
 - stockroom/receiving/office
 - minimal signage and store identity
 
-Broad marketing, decorations, hidden narrative props, mature catalog breadth, later platforms, customer visuals, employee visuals, and beta/tester package assets stay out of scope until the first-store object-family pass is reviewable.
+Broad marketing, decorations, hidden narrative props, mature catalog breadth, later platforms, customer visuals, employee visuals, mechanics work, playable-store polish, and beta/tester package assets stay out of scope until the isolated hero art slice screenshot is approved.
 
 ## Starter Product Direction
 

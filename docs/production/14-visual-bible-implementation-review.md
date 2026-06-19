@@ -1,19 +1,21 @@
 # Visual Bible Implementation Review
 
-Status: Active
-Purpose: Review plan for the implemented MVP object-family pass
+Status: Historical failed review
+Purpose: Record why the implemented MVP object-family pass is not the current path forward
 
 ## Current Position
 
-The current playable store is a mechanics prototype with the first Visual Bible object-family pass integrated. Product, fixture, shell, counter, receiving, and stockroom kits are ready for owner review.
+The current playable store is a mechanics prototype with the first Visual Bible object-family pass integrated. Product, fixture, shell, counter, receiving, and stockroom kits exist, but the owner rejected the pass visually.
 
-The review goal is not beta readiness. The review goal is to answer:
+This review is closed. The answer was no:
 
-> Does the MVP object-family pass move the store far enough from the primitive 4.5/10 read toward the 7.5/10 Visual Bible target to continue into targeted polish and beta/tester preparation?
+> Does the MVP object-family pass move the store far enough from the primitive 4.5/10 read toward the 7.5/10 Visual Bible target?
+
+It does not. The pass is blocked by `docs/production/15-failed-visual-validation.md`.
 
 ## Required Implementation Evidence
 
-Each Visual Bible packet produced:
+Each Visual Bible packet produced regression-useful assets and tests:
 
 - changed files summary
 - focused tests for changed contracts
@@ -28,7 +30,9 @@ Latest full gate passed:
 scripts/validate_godot.sh
 ```
 
-Baseline: 592 GUT tests, 12263 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet, and old-name scan.
+Baseline: 592 GUT tests, 12273 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet, and old-name scan.
+
+That gate did not approve art quality.
 
 ## Required Review Screenshots
 
@@ -64,14 +68,15 @@ Fail if:
 - day-one stock looks like a future-state full store
 - the playable store becomes less usable while improving screenshots
 
-## Owner Decision Options
+## Owner Decision
 
-After this Visual Bible implementation pass:
+Owner decision:
 
-1. Approve the object-family direction and continue integration.
-2. Request targeted revisions to one or more object families.
-3. Block the method again and change art-production approach before more integration.
+1. Block this pass.
+2. Stop using `validate_godot.sh` as visual progress.
+3. Build one isolated hero art slice first.
+4. Do not allow broad mechanics/docs/agent passes until one screenshot looks like the inspiration.
 
 ## Current Next Review
 
-The first review should focus on whether product art, fixture/display quality, shell/counter/backroom readability, and first-person store impression are now strong enough to continue. If those still fail, beta/tester prep remains paused and the next pass should target the weak object family directly.
+The next review is not this object-family pass. The next review is one hero art slice screenshot from `docs/design-implementation/work-packets/05-hero-art-slice-proof.md`.

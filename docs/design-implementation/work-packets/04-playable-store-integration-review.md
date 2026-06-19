@@ -1,6 +1,6 @@
 # Work Packet: Playable Store Integration Review
 
-Status: Ready for owner review
+Status: Visually rejected
 Owner decision required: Yes
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/production/14-visual-bible-implementation-review.md`
@@ -11,7 +11,7 @@ Expected commit scope: integrate accepted object-family work into the playable r
 
 After the object-family packets land, integrate them into the playable store route without losing mechanics.
 
-Status update: the first Visual Bible object-family pass is integrated into the playable route and the full validation gate passes. The remaining step is owner visual review.
+Status update: the first Visual Bible object-family pass is integrated into the playable route and the full validation gate passes. Owner visual review rejected it because it still reads as primitive box geometry.
 
 ## Required Evidence
 
@@ -32,11 +32,13 @@ Latest full gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12263 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+Result: passed with 592 GUT tests, 12273 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+
+Visual result: failed. Passing validation is regression stability only.
 
 ## Owner Review Question
 
-Does the first object-family pass improve the game-store read enough to continue into targeted polish and beta/tester preparation, or should product/fixture/shell objects receive another focused art-production cycle first?
+Closed decision: no. The first object-family pass does not improve the game-store read enough. Next work is `05-hero-art-slice-proof.md`, not targeted polish or beta/tester preparation.
 
 ## Stop Conditions
 

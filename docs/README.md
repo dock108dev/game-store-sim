@@ -2,6 +2,8 @@
 
 This repo now uses a compact active documentation set for the visual reset.
 
+Current visual status: the first Visual Bible object-family implementation pass is visually rejected. The next allowed implementation is one isolated hero art slice proof, not broad mechanics or playable-store work.
+
 The broad graybox, art-kit, hard-benchmark, old alpha/beta, and Packet 01-09 implementation docs are no longer active. Those docs were removed when their decisions were either superseded by the Visual Bible or already captured in current status. Do not reconstruct implementation direction from deleted packet history.
 
 ## Routing Rules
@@ -11,8 +13,10 @@ Agents start here:
 1. `docs/CURRENT_STATE.md`
 2. `docs/design-source-of-truth/README.md`
 3. `docs/visual-bible/README.md`
-4. `docs/design-implementation/README.md`
-5. `docs/design-implementation/work-packets/00-packet-index.md`
+4. `docs/production/15-failed-visual-validation.md`
+5. `docs/design-implementation/README.md`
+6. `docs/design-implementation/work-packets/00-packet-index.md`
+7. `docs/design-implementation/work-packets/05-hero-art-slice-proof.md`
 
 Authority order:
 
@@ -31,6 +35,7 @@ If status or validation numbers conflict, `docs/status.json` and `docs/CURRENT_S
 - [Design Source Of Truth](design-source-of-truth/README.md): design canon and owner-decision authority.
 - [Visual Bible](visual-bible/README.md): active object-family visual production bar.
 - [Design Implementation Index](design-implementation/README.md): active agent execution entrypoint.
+- [Failed Visual Validation](production/15-failed-visual-validation.md): active blocker and hero-slice pivot.
 
 ## Design Source Docs
 
@@ -64,14 +69,16 @@ If status or validation numbers conflict, `docs/status.json` and `docs/CURRENT_S
 - [MVP Product Art Kit](design-implementation/work-packets/01-mvp-product-art-kit.md): starter products, cover art, packaging, prices, and legal-safe names.
 - [MVP Fixture And Display Kit](design-implementation/work-packets/02-mvp-fixture-display-kit.md): shelves/racks/displays, capacity, and stocking compatibility.
 - [Store Shell Counter Backroom Kit](design-implementation/work-packets/03-shell-counter-backroom-kit.md): shell, counter, register/trade-in, stockroom, receiving, and office modules.
-- [Playable Store Integration Review](design-implementation/work-packets/04-playable-store-integration-review.md): integration evidence and owner review prep.
+- [Playable Store Integration Review](design-implementation/work-packets/04-playable-store-integration-review.md): failed integration evidence and owner review record.
+- [Hero Art Slice Proof](design-implementation/work-packets/05-hero-art-slice-proof.md): active next implementation packet.
 
 ## Current Production Docs
 
 - [Backlog](production/04-backlog.md): current work queue and stop conditions.
 - [Validation](production/06-validation.md): full local gate and artifact policy.
 - [Visual Blockers](production/13-visual-blockers.md): current design/visual blockers.
-- [Visual Bible Implementation Review](production/14-visual-bible-implementation-review.md): review plan for the implemented object-family pass.
+- [Visual Bible Implementation Review](production/14-visual-bible-implementation-review.md): failed object-family review record.
+- [Failed Visual Validation](production/15-failed-visual-validation.md): active failed-pass record and hero-slice pivot.
 
 ## Current QA
 

@@ -7,4 +7,4 @@ Do not treat this folder as an implementation plan. Agents should start from `do
 - [Smoke Playtest](smoke-playtest.md): short mechanical sanity check.
 - [Screenshot Review](screenshot-review.md): current design/visual approval gate.
 
-External playtest and release-package checks are intentionally not active until owner visual review approves the MVP object-family pass.
+External playtest and release-package checks are intentionally not active until owner visual review approves the hero art slice and a constrained integration plan exists.

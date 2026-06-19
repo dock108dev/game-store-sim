@@ -33,13 +33,13 @@ func test_docs_name_design_reset_as_current_gate() -> void:
 
 	assert_string_contains(validation_doc, "design reset")
 	assert_string_contains(backlog, "Design reset")
-	assert_string_contains(bug_list, "VIS-012")
+	assert_string_contains(bug_list, "VIS-020")
 	assert_string_contains(screenshot_review, "2002-2004")
 	assert_string_contains(owner_review, "validate_godot.sh")
 	assert_string_contains(owner_review, "regression evidence")
 	assert_string_contains(owner_review, "Visual Bible")
 	assert_string_contains(owner_review, "7.5/10")
-	assert_string_contains(owner_review, "product close-up")
+	assert_string_contains(owner_review, "hero art slice")
 	assert_false(backlog.contains("external alpha"))
 
 

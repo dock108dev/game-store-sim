@@ -3,13 +3,13 @@
 Status: Active
 Source inventory: `docs/design-implementation/game_store_sim_300_object_asset_inventory.xlsx`
 Scope: MVP + first-store visual rebuild
-Target quality: 7.5/10 owner visual read before beta/playtest expansion
+Target quality: one approved hero art slice screenshot, then 7.5/10 owner visual read before beta/playtest expansion
 
 ## Purpose
 
 This folder is the visual production bible for the reset after Packet 09. The previous implementation docs proved mechanics and some layout direction, but the owner review still reads the store as too primitive. These docs replace vague object descriptions like "shelf," "box," or "poster" with family-level art rules and implementation recipes.
 
-The goal is not to document every one of the 300 inventory rows in full immediately. The goal is to define the MVP + first-store object families strongly enough that agents can build a store that reads as a real, clean, open, early/mid-2000s video game shop instead of a collection of cubes, rods, and labels.
+The goal is not to document every one of the 300 inventory rows in full immediately. The first Visual Bible object-family pass still read as cubes, rods, and labels, so the current goal is narrower: prove one hero art slice screenshot before any broad rebuild continues.
 
 ## Authority
 
@@ -21,7 +21,7 @@ If this folder conflicts with core gameplay mechanics, preserve the mechanics an
 
 - Use Markdown docs as the source of truth for art direction.
 - Cover MVP + first-store assets first; do not detail all 300 rows before implementation.
-- Target owner visual score is 7.5/10 before broad playtest/beta expansion.
+- Target owner visual score is 7.5/10 before broad playtest/beta expansion, but the immediate gate is one approved hero art slice screenshot.
 - Blender-authored meshes are expected for close-camera objects.
 - Legally safe third-party low-poly/stylized asset packs are allowed when they match the art direction.
 - Runtime can remain Godot; the issue is current asset production quality, not proven engine failure.
@@ -54,7 +54,7 @@ If this folder conflicts with core gameplay mechanics, preserve the mechanics an
 2. Read this index.
 3. Read the object-family doc for the slice being implemented.
 4. Read `09-mvp-object-implementation-checklist.md` for IDs and acceptance rules.
-5. Build assets from the family bible first, not from old graybox object shapes.
+5. Build the hero art slice from the family bible first, not from old graybox object shapes.
 6. Update screenshots and validation docs when the visual target changes.
 
 ## Global Do/Don't Rules
@@ -76,3 +76,4 @@ Do not:
 - Fill the day-one store with future inventory.
 - Overdecorate walls before the store has real inventory.
 - Treat validation scripts or contact sheets as art approval by themselves.
+- Continue broad implementation before one hero art slice screenshot is accepted.

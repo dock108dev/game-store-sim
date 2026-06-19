@@ -1,6 +1,6 @@
 # Work Packet: MVP Fixture And Display Kit
 
-Status: Ready for owner review
+Status: Visually rejected as baseline
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/visual-bible/02-fixtures-and-displays.md`
@@ -68,9 +68,11 @@ Latest full gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12263 asserts, and screenshot sanity.
+Result: passed with 592 GUT tests, 12273 asserts, and screenshot sanity.
 
-Owner visual signoff is still required before treating this as art-approved.
+Owner visual signoff failed. This fixture work is regression/mechanics context only and must not be treated as the accepted visual baseline.
+
+Future fixture art must be proven inside `05-hero-art-slice-proof.md` before broad integration.
 
 ## Stop Conditions
 

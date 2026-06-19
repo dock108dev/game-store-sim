@@ -1,6 +1,6 @@
 # Work Packet: Store Shell, Counter, And Backroom Kit
 
-Status: Ready for owner review
+Status: Visually rejected as baseline
 Owner decision required: No
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary doc: `docs/visual-bible/01-store-shell-architecture.md`
@@ -72,9 +72,11 @@ Latest full gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12263 asserts, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+Result: passed with 592 GUT tests, 12273 asserts, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
 
-Owner visual signoff is still required before treating this as art-approved.
+Owner visual signoff failed. This shell/counter/backroom work is regression/mechanics context only and must not be treated as the accepted visual baseline.
+
+Future shell, counter, and backroom art must be proven through the hero art slice before broad integration.
 
 ## Stop Conditions
 

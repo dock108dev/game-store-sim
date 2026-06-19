@@ -12,18 +12,20 @@ Automated tests prove stability. Owner review proves design success.
 
 The mechanics are broadly functional. The design reset is not complete until the store read, layout, product language, fixture quality, density, and progression hooks match the source of truth and `docs/visual-bible/`.
 
-Current owner review blocks beta/tester expansion: the latest direction is useful reference but still around 4.5/10 visually. The next approval target is a Visual Bible implementation pass that can plausibly reach 7.5/10.
+Current owner review blocks beta/tester expansion: the integrated Visual Bible object-family pass is technically present but visually rejected. The next approval target is one isolated hero art slice screenshot that proves the art-production method can reach the target inspiration.
 
 ## Required Evidence
 
-Every implementation pass should produce:
+Every production-route implementation pass should produce:
 
 - focused GUT tests for changed contracts
-- full `scripts/validate_godot.sh` before completion
+- full `scripts/validate_godot.sh` when production-route mechanics or scenes change
 - updated screenshots/contact sheet
 - owner screenshot review against this folder and `docs/visual-bible/`
 - manual 1280x720 walk-in from entrance to checkout
 - notes on what changed and what still violates the source of truth
+
+The current hero art slice proof is different: it should produce one owner-facing screenshot first. Passing automation is not visual approval.
 
 ## Primary Review Screenshots
 
@@ -74,17 +76,17 @@ If review fails, classify the failure:
 - interaction regression
 - asset quality problem
 
-Then make the smallest implementation pass that directly addresses that class. Do not broaden catalog, customers, hidden narrative, or late-era content to compensate for a weak opening store.
+Then make the smallest implementation pass that directly addresses that class. For the current failure, that means a single isolated hero art slice. Do not broaden catalog, customers, hidden narrative, mechanics, docs, or late-era content to compensate for a weak opening store.
 
 ## Implementation Cycle
 
 Use this cycle:
 
-1. Pick one source-of-truth phase.
-2. Implement only the assets and scene changes required for that phase.
-3. Update tests and docs.
-4. Run focused tests.
-5. Run full validation.
+1. Pick the smallest visual proof needed.
+2. Implement only the assets and scene changes required for that proof.
+3. Capture owner-facing screenshots.
+4. Run focused scene/doc tests.
+5. Run full validation only if the production route changed.
 6. Review screenshots.
 7. Ask for owner corrections/signoff.
 

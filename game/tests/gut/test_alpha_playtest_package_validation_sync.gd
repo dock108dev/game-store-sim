@@ -7,14 +7,14 @@ const PACKAGE_SCENARIOS_PATH := "res://tests/validation/scenarios/alpha_playtest
 const MANUAL_CHECKS_PATH := "res://tests/validation/scenarios/manual_checks.json"
 
 
-func test_external_package_docs_are_removed_until_owner_visual_review_approves() -> void:
+func test_external_package_docs_are_removed_until_hero_art_slice_is_approved() -> void:
 	var status := _load_json(STATUS_PATH)
 	var backlog := FileAccess.get_file_as_string(BACKLOG_PATH)
 	var qa_readme := FileAccess.get_file_as_string(QA_README_PATH)
 
-	assert_eq(status.get("playtest_state"), "paused_until_owner_visual_review")
+	assert_eq(status.get("playtest_state"), "paused_until_hero_art_slice_approved")
 	assert_string_contains(backlog, "External alpha/beta packaging")
-	assert_string_contains(qa_readme, "not active until owner visual review approves")
+	assert_string_contains(qa_readme, "not active until owner visual review approves the hero art slice")
 	assert_false(FileAccess.file_exists("res://../docs/production/15-alpha-playtest-package.md"))
 	assert_false(FileAccess.file_exists("res://../docs/qa/release-package-check.md"))
 

@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-19",
-  "current_phase": "visual_bible_mvp_object_family_pass_ready_for_owner_review",
-  "playtest_state": "paused_until_owner_visual_review",
+  "current_phase": "visual_validation_failed_hero_art_slice_required",
+  "playtest_state": "paused_until_hero_art_slice_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype with the first Visual Bible object-family implementation pass integrated. Core mechanics are working. Product art, fixture/display, shell, counter, receiving, and backroom kits have moved beyond the rejected graybox packet route and are ready for owner visual review before beta/tester prep.",
+    "summary": "Broad validated first-person retail prototype with working mechanics. The first Visual Bible object-family implementation pass is integrated but visually rejected: latest screenshots still read as primitive Godot box geometry instead of a convincing early-2000s game shop. The playable scene remains a mechanics prototype. Next work is a strict isolated hero art slice, not broad mechanics or playable-store polish.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -32,14 +32,15 @@
       "visual_bible_fixture_display_kit",
       "visual_bible_shell_counter_backroom_kit"
     ],
-    "visual_read": "mvp_object_family_pass_integrated_pending_owner_review",
+    "visual_read": "object_family_pass_rejected_still_graybox_read",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
+    "role": "regression_only_not_visual_progress",
     "artifact_root": "artifacts/validation/latest",
     "gut_tests": 592,
-    "gut_asserts": 12263,
+    "gut_asserts": 12273,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -69,6 +70,23 @@
     ],
     "old_name_scan": "passed"
   },
+  "visual_validation": {
+    "status": "failed",
+    "failed_pass": "mvp_visual_bible_object_family_pass",
+    "review_date": "2026-06-19",
+    "owner_summary": "The pass is technically integrated but still does not meaningfully solve the visual problem. It remains boxy, primitive, label-dependent, and far from the inspiration target.",
+    "decision": "block_current_pass_and_build_hero_art_slice_first",
+    "blocked_from": [
+      "beta_tester_preparation",
+      "broad_catalog_visuals",
+      "customer_visuals",
+      "employee_visuals",
+      "hidden_narrative_visuals",
+      "playable_store_polish",
+      "more_broad_agent_passes"
+    ],
+    "next_allowed_work": "isolated_hero_art_slice"
+  },
   "source_inputs": [
     "Store Design & World Building Brief v1.0",
     "Vertical Slice Build Specification v4.0",
@@ -78,13 +96,12 @@
     "docs/visual-bible/"
   ],
   "blocking_reviews": [
-    "owner_mvp_object_family_visual_review",
-    "manual_real_window_1280x720_walk_in_review"
+    "owner_hero_art_slice_visual_approval"
   ],
   "next_decision": {
-    "question": "Review whether the first Visual Bible object-family pass is good enough to continue into beta-facing polish, or whether product/fixture/shell objects need another art pass.",
-    "approve_path": "continue from playable-store integration review into owner-directed polish and beta/tester preparation",
-    "reject_path": "revise the object-family packet docs and run another focused art-production pass before beta/tester work"
+    "question": "Can one isolated hero art slice produce a screenshot that actually looks like the target inspiration before any broad implementation continues?",
+    "approve_path": "only after the hero art slice screenshot is approved, plan a constrained rebuild/integration path from the proven art method",
+    "reject_path": "change art-production method, asset workflow, or engine/tooling before touching the playable mechanics prototype"
   },
   "active_docs": [
     "README.md",
@@ -117,11 +134,13 @@
     "docs/design-implementation/work-packets/02-mvp-fixture-display-kit.md",
     "docs/design-implementation/work-packets/03-shell-counter-backroom-kit.md",
     "docs/design-implementation/work-packets/04-playable-store-integration-review.md",
+    "docs/design-implementation/work-packets/05-hero-art-slice-proof.md",
     "new_real_inspiration/README.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",
     "docs/production/13-visual-blockers.md",
     "docs/production/14-visual-bible-implementation-review.md",
+    "docs/production/15-failed-visual-validation.md",
     "docs/qa/README.md",
     "docs/qa/smoke-playtest.md",
     "docs/qa/screenshot-review.md"

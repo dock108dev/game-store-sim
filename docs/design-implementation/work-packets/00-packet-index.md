@@ -8,6 +8,8 @@ Target branch: `codex/hard-visual-benchmark-implementation`
 
 This file is the current packet queue for the Visual Bible rebuild.
 
+The first Visual Bible object-family pass was implemented and visually rejected. It remains useful as mechanics/regression context, but it is not a visual baseline.
+
 The old Packet 01-09 files were deleted from the active tree because they described the rejected graybox/art-kit/polish sequence. The useful lessons from those packets are now summarized here and in the Visual Bible. Agents should not recreate the old sequence or treat deleted packet names as the next work.
 
 ## Required Read Order
@@ -34,16 +36,17 @@ Hard lessons carried forward:
 - Do not add random wall clutter to hide blankness.
 - Do not stage locked/future inventory as if it already exists.
 - Do not let `scripts/validate_godot.sh` or the contact sheet approve art quality.
-- Build authored object families first, then integrate.
+- Build one isolated hero art slice first, then decide whether the method is worth integrating.
 
 ## Current Packet Queue
 
 | Order | Packet | Status | Primary Visual Bible docs | Result |
 | ---: | --- | --- | --- | --- |
-| 1 | `01-mvp-product-art-kit.md` | Ready for owner review | `03-product-art-and-packaging.md`, `04-fictional-platforms-and-games.md`, `09-mvp-object-implementation-checklist.md` | Starter DVD cases, cover art, console/accessory packages, price stickers, stack language, close-up screenshot. |
-| 2 | `02-mvp-fixture-display-kit.md` | Ready for owner review | `02-fixtures-and-displays.md`, `09-mvp-object-implementation-checklist.md` | Shelves/racks/displays with 10-30 item capacity, empty slots, authored silhouettes, stocking compatibility. |
-| 3 | `03-shell-counter-backroom-kit.md` | Ready for owner review | `01-store-shell-architecture.md`, `05-counter-register-and-trade-in.md`, `06-stockroom-receiving-office.md`, `07-signage-marketing-and-store-identity.md` | Shell, storefront, counter, register, trade-in, stockroom, receiving, office, and minimal sign module improvements. |
-| 4 | `04-playable-store-integration-review.md` | Ready for owner review | All Visual Bible docs and production/QA docs | Replaced first-pass object-family work in the playable route, preserved mechanics, and prepared owner review evidence. |
+| 1 | `01-mvp-product-art-kit.md` | Visually rejected | `03-product-art-and-packaging.md`, `04-fictional-platforms-and-games.md`, `09-mvp-object-implementation-checklist.md` | Technically implemented, but not accepted as visual baseline. |
+| 2 | `02-mvp-fixture-display-kit.md` | Visually rejected | `02-fixtures-and-displays.md`, `09-mvp-object-implementation-checklist.md` | Technically implemented, but not accepted as visual baseline. |
+| 3 | `03-shell-counter-backroom-kit.md` | Visually rejected | `01-store-shell-architecture.md`, `05-counter-register-and-trade-in.md`, `06-stockroom-receiving-office.md`, `07-signage-marketing-and-store-identity.md` | Technically implemented, but not accepted as visual baseline. |
+| 4 | `04-playable-store-integration-review.md` | Visually rejected | All Visual Bible docs and production/QA docs | Proved regression stability, but failed visual validation. |
+| 5 | `05-hero-art-slice-proof.md` | Active next implementation | `15-failed-visual-validation.md`, Visual Bible art docs | One isolated screenshot-first art slice that proves the visual method before broad implementation. |
 
 ## Packet Creation Rules
 
@@ -64,7 +67,7 @@ Each packet must include:
 
 Docs-only packet assembly can use focused doc/status tests.
 
-Implementation packets must run:
+Implementation packets that touch the production route must run:
 
 ```text
 scripts/validate_godot.sh
@@ -78,4 +81,10 @@ Latest implementation gate:
 scripts/validate_godot.sh
 ```
 
-Result: passed with 592 GUT tests, 12263 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+Result: passed with 592 GUT tests, 12273 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.
+
+Visual result: failed. Do not use this passing gate as evidence of visual progress.
+
+## Current Stop Rule
+
+No broad agents, mechanics changes, playable-store polish, or extra docs expansion until `05-hero-art-slice-proof.md` produces one owner-approved screenshot.

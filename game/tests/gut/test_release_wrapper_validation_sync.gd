@@ -18,7 +18,7 @@ func test_release_wrapper_validation_matrix_remains_structured_but_external_rele
 		assert_eq(scenario.get("owner"), "manual QA", scenario_id)
 
 	assert_true(scenarios.has("release_wrapper_validation_sync_audit"))
-	assert_eq(status.get("playtest_state"), "paused_until_owner_visual_review")
+	assert_eq(status.get("playtest_state"), "paused_until_hero_art_slice_approved")
 	assert_string_contains(qa_readme, "External playtest and release-package checks are intentionally not active")
 
 

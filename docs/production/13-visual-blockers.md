@@ -7,7 +7,7 @@ This is not an alpha or beta bug list. It tracks blockers that prevent the openi
 
 ## Current Gate
 
-Owner review previously rated the pre-Visual-Bible direction around 4.5/10. The first object-family implementation pass is now integrated and ready for owner review. Automated validation is green, but owner review still decides whether this pass is good enough to continue toward beta/tester preparation.
+Owner review blocked the first Visual Bible object-family implementation pass. Automated validation is green, but the screenshots still read as primitive Godot box geometry and do not meet the target inspiration.
 
 The active target is:
 
@@ -15,13 +15,14 @@ The active target is:
 - `docs/visual-bible/`
 - `docs/design-implementation/work-packets/00-packet-index.md`
 
-External beta/tester packaging remains blocked until a Visual Bible implementation pass is reviewable against the 7.5/10 target.
+External beta/tester packaging remains blocked until a strict isolated hero art slice produces an approved screenshot.
 
 ## Open Blockers
 
 | ID | Priority | Area | Problem | Required Resolution |
 | --- | --- | --- | --- | --- |
-| VIS-019 | P0 | Owner visual review | The first Visual Bible object-family pass is implemented, but not owner-approved. | Review product, fixture, shell, counter, receiving, stockroom, and storefront screenshots against the 7.5/10 target. |
+| VIS-020 | P0 | Failed visual validation | The integrated object-family pass is technically present but visually rejected; it still reads boxy, primitive, and label-dependent. | Treat this pass as a failed visual validation and stop broad implementation. |
+| VIS-021 | P0 | Hero art slice missing | The project does not yet have one screenshot that proves the desired art-production method. | Build one isolated hero art slice before any more broad mechanics, docs, or playable-store work. |
 
 ## Resolved Or Demoted
 
@@ -31,16 +32,17 @@ External beta/tester packaging remains blocked until a Visual Bible implementati
 | VIS-005 | Store identity | `Games4U` remains editable default; legal-safe branding rules are documented in the Visual Bible. |
 | VIS-006 | Screenshot evidence | Existing contact sheet remains regression evidence only, not art approval. |
 | VIS-011 | Packet 08/09 review | Old packet docs were deleted from the active tree; their outcome is summarized as reference evidence only. |
-| VIS-012 | Art-production method | MVP object families were implemented and integrated into the playable route; pending owner review decides whether the method is accepted. |
-| VIS-013 | Product art | Starter DVD cases, cover variants, platform/genre language, price stickers, stack language, and console/accessory packaging are implemented for review. |
-| VIS-014 | Fixtures/displays | Twelve-slot stockable fixture language, empty capacity, rails, dividers, trim, and stocking compatibility are implemented for review. |
-| VIS-015 | Store shell | Storefront, drywall/carpet/ceiling, glass, trim, and quiet wall treatment are implemented for review. |
-| VIS-016 | Counter/trade-in | Register counter, scanner, cash drawer, bags, trade-in tray, and clean queue support are implemented for review. |
-| VIS-017 | Stockroom/receiving | Receiving intake, racks, office desk/computer/calendar, storage, and staff threshold cues are implemented for review. |
-| VIS-018 | Signage | Minimal signage/store identity support is implemented for review as part of the shell/counter/backroom pass. |
+| VIS-012 | Art-production method | Prior primitive/art-kit method was blocked; the follow-up object-family pass also failed visual validation. |
+| VIS-013 | Product art | Implemented technically, but not accepted as visual baseline. Future product work must be proven inside the hero art slice first. |
+| VIS-014 | Fixtures/displays | Implemented technically, but not accepted as visual baseline. Future fixture work must be proven inside the hero art slice first. |
+| VIS-015 | Store shell | Implemented technically, but not accepted as visual baseline. Future shell work must be proven inside the hero art slice first. |
+| VIS-016 | Counter/trade-in | Implemented technically, but not accepted as visual baseline. Future counter work must be proven inside the hero art slice first. |
+| VIS-017 | Stockroom/receiving | Implemented technically, but not accepted as visual baseline. Future backroom work must be proven only after hero slice approval. |
+| VIS-018 | Signage | Implemented technically, but not accepted as visual baseline. Signage cannot carry object readability. |
+| VIS-019 | Owner visual review | Completed: owner rejected the object-family pass and ordered a hero art slice pivot. |
 
 ## Stop Conditions
 
-Do not start broad catalog, customer visuals, employee visuals, decoration breadth, hidden narrative, later-era, or beta/tester work while VIS-019 is open.
+Do not start broad catalog, customer visuals, employee visuals, decoration breadth, hidden narrative, later-era, beta/tester work, playable-store polish, or broad mechanics work while VIS-020 and VIS-021 are open.
 
-Do not use a passing `scripts/validate_godot.sh` run as art approval. It is regression evidence only.
+Do not use a passing `scripts/validate_godot.sh` run as art approval or visual progress. It is regression evidence only.

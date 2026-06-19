@@ -1,10 +1,12 @@
 # Phase Implementation Roadmap
 
-Status: Active
+Status: Superseded by the failed visual validation and hero art slice pivot
+
+Current routing: do not implement this phased roadmap. The first object-family pass was completed and rejected as still reading like graybox geometry. The only active next implementation target is [05-hero-art-slice-proof.md](work-packets/05-hero-art-slice-proof.md), and no broad agents, mechanics work, playable-store polish, or phase continuation should resume until that hero screenshot is approved.
 
 ## Purpose
 
-This roadmap defines the current path from Visual Bible planning to owner validation. It replaces the old Packet 01-09 implementation sequence.
+This roadmap records the previous path from Visual Bible planning to owner validation. It replaced the old Packet 01-09 implementation sequence, but it is no longer the active queue after the visual validation failure.
 
 ## Phase 0: Docs And Routing Cleanup
 

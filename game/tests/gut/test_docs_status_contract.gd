@@ -8,12 +8,14 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "visual_bible_mvp_object_family_pass_ready_for_owner_review")
-	assert_eq(status.get("playtest_state"), "paused_until_owner_visual_review")
+	assert_eq(status.get("current_phase"), "visual_validation_failed_hero_art_slice_required")
+	assert_eq(status.get("playtest_state"), "paused_until_hero_art_slice_approved")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "mvp_object_family_pass_integrated_pending_owner_review")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "object_family_pass_rejected_still_graybox_read")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
+	assert_eq(_dictionary(status.get("visual_validation", {})).get("status"), "failed")
+	assert_eq(_dictionary(status.get("visual_validation", {})).get("next_allowed_work"), "isolated_hero_art_slice")
 
 
 func test_docs_status_contract_records_validation_baseline() -> void:
@@ -23,7 +25,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 592)
-	assert_eq(int(validation.get("gut_asserts")), 12263)
+	assert_eq(int(validation.get("gut_asserts")), 12273)
 	assert_eq(int(ui.get("automated")), 512)
 	assert_eq(int(ui.get("total")), 632)
 	assert_eq(int(scripts.get("covered")), 55)
@@ -75,11 +77,13 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 	assert_true(active_docs.has("docs/design-implementation/work-packets/02-mvp-fixture-display-kit.md"))
 	assert_true(active_docs.has("docs/design-implementation/work-packets/03-shell-counter-backroom-kit.md"))
 	assert_true(active_docs.has("docs/design-implementation/work-packets/04-playable-store-integration-review.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/05-hero-art-slice-proof.md"))
 	assert_true(active_docs.has("new_real_inspiration/README.md"))
 	assert_true(active_docs.has("docs/production/04-backlog.md"))
 	assert_true(active_docs.has("docs/production/06-validation.md"))
 	assert_true(active_docs.has("docs/production/13-visual-blockers.md"))
 	assert_true(active_docs.has("docs/production/14-visual-bible-implementation-review.md"))
+	assert_true(active_docs.has("docs/production/15-failed-visual-validation.md"))
 	assert_true(active_docs.has("docs/qa/smoke-playtest.md"))
 	assert_true(active_docs.has("docs/qa/screenshot-review.md"))
 	assert_false(active_docs.has("docs/design-implementation/03-store-shell-and-mall-entrance-slice.md"))
@@ -102,12 +106,14 @@ func test_current_state_and_readme_point_to_new_plan() -> void:
 	assert_string_contains(current_state, "Design Source Of Truth")
 	assert_string_contains(current_state, "Visual Bible")
 	assert_string_contains(current_state, "Design Implementation Index")
-	assert_string_contains(current_state, "Visual Bible Implementation Review")
+	assert_string_contains(current_state, "Failed Visual Validation")
 	assert_string_contains(current_state, "Visual Blockers")
+	assert_string_contains(current_state, "hero art slice")
 	assert_string_contains(current_state, "2002-2004")
 	assert_string_contains(readme, "docs/status.json")
 	assert_string_contains(readme, "Design Source Of Truth")
 	assert_string_contains(readme, "Design Implementation Index")
+	assert_string_contains(readme, "Hero Art Slice Proof")
 	assert_false(readme.contains("Prototype Visual Language Cleanup"))
 
 

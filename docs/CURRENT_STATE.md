@@ -10,7 +10,9 @@ The project has a broad validated first-person retail prototype with working cor
 
 The prototype also retains optional hidden-thread hooks, but hidden narrative content is not part of the current visual rebuild scope.
 
-The first Visual Bible object-family implementation pass is now integrated. Starter product art, fixture/display capacity, shell/storefront/counter, receiving, and backroom kits have been rebuilt away from the rejected graybox packet route. This is ready for owner visual review, not beta/tester release.
+The first Visual Bible object-family implementation pass is now integrated and visually rejected. Starter product art, fixture/display capacity, shell/storefront/counter, receiving, and backroom kits are technically present, but latest screenshots still read as primitive Godot box geometry rather than a convincing early-2000s game shop.
+
+The playable scene remains a mechanics prototype. It is not the visual baseline.
 
 The active visual target is now:
 
@@ -21,21 +23,23 @@ The active visual target is now:
 
 ## Current Decision
 
-Review the first MVP object-family pass before beta/tester prep. The store still targets a 2002-2004 independent specialty game shop, with legal-safe fictional products and visible room to grow.
+Block the current MVP object-family pass and pivot to one strict hero art slice before any more broad implementation. The store still targets a 2002-2004 independent specialty game shop, with legal-safe fictional products and visible room to grow.
 
-Completed implementation packets:
+Visually failed implementation packets:
 
 1. MVP product art kit.
 2. MVP fixture and display kit.
 3. Store shell, counter, receiving, and backroom kit.
+4. Playable store integration review.
 
 Current checkpoint:
 
-1. Playable store integration review.
-2. Owner visual review.
-3. Targeted corrections or beta/tester preparation based on owner feedback.
+1. Build one isolated hero art slice.
+2. Capture one screenshot that looks like the inspiration.
+3. Ask owner if the screenshot proves the visual method.
+4. Only then plan a constrained rebuild/integration path.
 
-Do not broaden catalog visuals, customers, employees, decoration breadth, hidden narrative, later-era content, or beta/tester packaging until the MVP visual pass is reviewable.
+Do not broaden catalog visuals, customers, employees, decoration breadth, hidden narrative, later-era content, beta/tester packaging, or mechanics work until the hero art slice is visually approved.
 
 ## Validation Snapshot
 
@@ -47,7 +51,7 @@ scripts/validate_godot.sh
 
 Current doc-contract expectation:
 
-- GUT: 592 tests, 12263 asserts.
+- GUT: 592 tests, 12273 asserts.
 - UI automation: 512/632, or 81.0%.
 - Production script mapping: 55/55, or 100.0%.
 - Active validation tools: 3.
@@ -55,28 +59,30 @@ Current doc-contract expectation:
 - Screenshot count: 27.
 - Contact sheet: `artifacts/validation/latest/screenshot-contact-sheet.png`.
 
-Important: validation and contact sheets are regression evidence only. They do not approve art quality.
+Important: validation and contact sheets are regression evidence only. They do not approve art quality or define visual progress.
 
 ## Blockers
 
 Read [Visual Blockers](production/13-visual-blockers.md).
 
-Primary blocker:
+Primary blockers:
 
-- VIS-012: prior art-production method still produces a primitive 4.5/10 read.
+- VIS-020: the integrated object-family pass is visually rejected.
+- VIS-021: no more broad work until one hero art slice screenshot looks like the target inspiration.
 
 ## Review Plan
 
-Read [Visual Bible Implementation Review](production/14-visual-bible-implementation-review.md).
+Read [Failed Visual Validation](production/15-failed-visual-validation.md).
 
-First review focus:
+Next review focus:
 
-- product close-up quality from `artifacts/validation/latest/screenshots/product_closeup.png`
-- fixture/display capacity and silhouette from `artifacts/validation/latest/screenshots/stocked_aisle.png`
-- storefront first read from `artifacts/validation/latest/screenshots/storefront_entry.png`
-- register/counter read from `artifacts/validation/latest/screenshots/register_counter.png`
-- stockroom/receiving read from `artifacts/validation/latest/screenshots/receiving_area.png` and `artifacts/validation/latest/screenshots/stockroom_doorway.png`
-- whether this object-family method can plausibly reach the 7.5/10 Visual Bible target with targeted corrections
+- one isolated hero art slice screenshot
+- storefront/concourse read
+- first 15-20 feet of shop interior
+- one believable fixture
+- one believable counter
+- 2-3 believable product objects
+- whether the asset production method is good enough to rebuild from
 
 ## Removed Docs Policy
 
@@ -87,5 +93,6 @@ Old Packet 01-09 implementation docs, old slice specs, and old alpha/owner revie
 - `docs/design-implementation/`
 - `docs/production/13-visual-blockers.md`
 - `docs/production/14-visual-bible-implementation-review.md`
+- `docs/production/15-failed-visual-validation.md`
 
 Do not use deleted packet names as implementation instructions.
