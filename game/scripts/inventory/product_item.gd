@@ -48,6 +48,8 @@ func apply_product_visuals() -> void:
 	_visual_profile = ProductVisualRulesScript.build_profile(product)
 
 	_apply_box_mesh_size("CaseMesh", _visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04)))
+	_apply_collision_size(_visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04)))
+	_apply_cover_panel_geometry()
 	_set_node_visible("CoverLabelMesh", bool(_visual_profile.get("show_cover", true)))
 	_set_node_visible("SpineStripeMesh", bool(_visual_profile.get("show_spine", true)))
 	_set_node_visible("PlatformBandMesh", bool(_visual_profile.get("show_platform_band", true)))
@@ -57,6 +59,7 @@ func apply_product_visuals() -> void:
 	_apply_mesh_material("SpineStripeMesh", _visual_profile.get("platform_color", Color(0.96, 0.82, 0.38, 1.0)))
 	_apply_mesh_material("PlatformBandMesh", _visual_profile.get("platform_color", Color(0.16, 0.32, 0.92, 1.0)))
 	_apply_mesh_material("PriceStickerMesh", _visual_profile.get("price_sticker_color", Color(0.98, 0.9, 0.62, 1.0)))
+	_apply_base_packaging_layers()
 
 	var container_variant := str(_visual_profile.get("container_variant", ""))
 	var media_variant := str(_visual_profile.get("media_variant", ""))
@@ -133,6 +136,9 @@ func apply_product_visuals() -> void:
 		Vector3(-0.044, 0.074, -0.061),
 		_visual_profile.get("used_sticker_color", Color(0.98, 0.82, 0.36, 1.0))
 	)
+	_apply_cover_art_layers()
+	_apply_retail_box_layers()
+	_apply_duplicate_stack_layers()
 
 	var condition_cues := _visual_profile.get("condition_cues", []) as Array
 	_set_condition_cue_box(
@@ -344,6 +350,81 @@ func _apply_box_mesh_size(node_name: String, size: Vector3) -> void:
 	var local_mesh := box_mesh.duplicate() as BoxMesh
 	local_mesh.size = size
 	node.mesh = local_mesh
+	node.position.y = size.y / 2.0
+
+
+func _apply_collision_size(size: Vector3) -> void:
+	var collision_shape := get_node_or_null("CollisionShape3D") as CollisionShape3D
+	if collision_shape == null:
+		return
+
+	var box_shape := collision_shape.shape as BoxShape3D
+	if box_shape == null:
+		return
+
+	var local_shape := box_shape.duplicate() as BoxShape3D
+	local_shape.size = Vector3(size.x + 0.02, size.y + 0.02, size.z + 0.015)
+	collision_shape.shape = local_shape
+	collision_shape.position.y = local_shape.size.y / 2.0
+
+
+func _apply_cover_panel_geometry() -> void:
+	var case_size: Vector3 = _visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04))
+	var container_variant := str(_visual_profile.get("container_variant", ""))
+	var cover_size := Vector3(case_size.x * 0.74, case_size.y * 0.74, 0.01)
+	var cover_position := Vector3(0.0, case_size.y * 0.56, _front_z(0.006))
+
+	if container_variant == ProductVisualRulesScript.VARIANT_BOX:
+		cover_size = Vector3(case_size.x * 0.72, case_size.y * 0.62, 0.012)
+		cover_position = Vector3(0.0, case_size.y * 0.55, _front_z(0.008))
+	elif container_variant == ProductVisualRulesScript.VARIANT_LOOSE:
+		cover_size = Vector3(case_size.x * 0.7, case_size.y * 0.7, 0.008)
+		cover_position = Vector3(0.0, case_size.y * 0.55, _front_z(0.005))
+
+	_set_mesh_box_geometry("CoverLabelMesh", cover_size, cover_position)
+
+	if container_variant == ProductVisualRulesScript.VARIANT_CASE:
+		_set_mesh_box_geometry(
+			"SpineStripeMesh",
+			Vector3(case_size.x * 0.115, case_size.y * 0.88, 0.012),
+			Vector3(-case_size.x * 0.43, case_size.y * 0.56, _front_z(0.011))
+		)
+		_set_mesh_box_geometry(
+			"PlatformBandMesh",
+			Vector3(case_size.x * 0.68, case_size.y * 0.078, 0.012),
+			Vector3(case_size.x * 0.05, case_size.y * 0.92, _front_z(0.012))
+		)
+		_set_mesh_box_geometry(
+			"PriceStickerMesh",
+			Vector3(case_size.x * 0.22, case_size.y * 0.112, 0.012),
+			Vector3(case_size.x * 0.28, case_size.y * 0.22, _front_z(0.014))
+		)
+	elif container_variant == ProductVisualRulesScript.VARIANT_BOX:
+		_set_mesh_box_geometry(
+			"PlatformBandMesh",
+			Vector3(case_size.x * 0.82, case_size.y * 0.095, 0.012),
+			Vector3(0.0, case_size.y * 0.88, _front_z(0.014))
+		)
+		_set_mesh_box_geometry(
+			"PriceStickerMesh",
+			Vector3(case_size.x * 0.2, case_size.y * 0.13, 0.012),
+			Vector3(case_size.x * 0.31, case_size.y * 0.2, _front_z(0.016))
+		)
+
+
+func _set_mesh_box_geometry(node_name: String, size: Vector3, position: Vector3) -> void:
+	var node := get_node_or_null(node_name) as MeshInstance3D
+	if node == null:
+		return
+
+	var box_mesh := node.mesh as BoxMesh
+	if box_mesh == null:
+		return
+
+	var local_mesh := box_mesh.duplicate() as BoxMesh
+	local_mesh.size = size
+	node.mesh = local_mesh
+	node.position = position
 
 
 func _apply_mesh_material(node_name: String, color: Color) -> void:
@@ -377,6 +458,28 @@ func _set_variant_box(
 	node.mesh = mesh
 
 
+func _set_variant_disc(
+	node_name: String,
+	is_visible: bool,
+	radius: float,
+	height: float,
+	position: Vector3,
+	color: Color
+) -> void:
+	var node := _get_or_create_variant_node(node_name)
+	node.visible = is_visible
+	node.position = position
+	node.rotation_degrees = Vector3(90.0, 0.0, 0.0)
+
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = radius
+	mesh.bottom_radius = radius
+	mesh.height = height
+	mesh.radial_segments = 24
+	mesh.material = _make_material(color)
+	node.mesh = mesh
+
+
 func _set_condition_cue_box(
 	node_name: String,
 	is_visible: bool,
@@ -385,6 +488,274 @@ func _set_condition_cue_box(
 	color: Color
 ) -> void:
 	_set_variant_box(node_name, is_visible, size, position, color)
+
+
+func _apply_base_packaging_layers() -> void:
+	var container_variant := str(_visual_profile.get("container_variant", ""))
+	var is_case := container_variant == ProductVisualRulesScript.VARIANT_CASE
+	var is_box := container_variant == ProductVisualRulesScript.VARIANT_BOX
+	var case_size: Vector3 = _visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04))
+	var edge_color: Color = _visual_profile.get("platform_accent_color", Color(0.86, 0.9, 0.92, 1.0))
+	var shadow_color := Color(0.01, 0.014, 0.018, 1.0)
+
+	_set_variant_box(
+		"CaseTopBevelMesh",
+		is_case,
+		Vector3(case_size.x * 0.9, 0.012, 0.013),
+		Vector3(0.0, case_size.y - 0.012, _front_z(0.015)),
+		edge_color
+	)
+	_set_variant_box(
+		"CaseBottomBevelMesh",
+		is_case,
+		Vector3(case_size.x * 0.9, 0.01, 0.013),
+		Vector3(0.0, 0.013, _front_z(0.015)),
+		shadow_color
+	)
+	_set_variant_box(
+		"CaseRightBevelMesh",
+		is_case,
+		Vector3(0.012, case_size.y * 0.84, 0.013),
+		Vector3(case_size.x * 0.45, case_size.y * 0.52, _front_z(0.015)),
+		edge_color.darkened(0.18)
+	)
+	_set_variant_box(
+		"CaseSpineHingeMesh",
+		is_case,
+		Vector3(0.012, case_size.y * 0.86, 0.014),
+		Vector3(-case_size.x * 0.49, case_size.y * 0.54, _front_z(0.017)),
+		shadow_color
+	)
+	_set_variant_box(
+		"CaseInnerCoverPanelMesh",
+		is_case,
+		Vector3(case_size.x * 0.64, case_size.y * 0.61, 0.012),
+		Vector3(case_size.x * 0.06, case_size.y * 0.51, _front_z(0.018)),
+		_visual_profile.get("cover_base_color", Color(0.2, 0.5, 0.6, 1.0)).darkened(0.12)
+	)
+	_set_variant_box(
+		"BoxSidePanelMesh",
+		is_box,
+		Vector3(case_size.x * 0.08, case_size.y * 0.86, 0.014),
+		Vector3(-case_size.x * 0.45, case_size.y * 0.52, _front_z(0.018)),
+		_visual_profile.get("platform_color", Color(0.02, 0.43, 0.42, 1.0))
+	)
+	_set_variant_box(
+		"BoxTopFlapMesh",
+		is_box,
+		Vector3(case_size.x * 0.76, 0.014, 0.014),
+		Vector3(case_size.x * 0.04, case_size.y * 0.96, _front_z(0.018)),
+		edge_color
+	)
+
+
+func _apply_cover_art_layers() -> void:
+	var container_variant := str(_visual_profile.get("container_variant", ""))
+	var is_case := container_variant == ProductVisualRulesScript.VARIANT_CASE
+	var art_key := str(_visual_profile.get("product_art_key", ""))
+	var genre_id := str(_visual_profile.get("genre_id", ""))
+	var case_size: Vector3 = _visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04))
+	var front_z := _front_z(0.03)
+	var sports := is_case and (art_key == "footy_2002" or genre_id == ProductVisualRulesScript.GENRE_SPORTS)
+	var adventure := is_case and (art_key == "critter_quest_ii" or genre_id == ProductVisualRulesScript.GENRE_RPG_ADVENTURE)
+	var platform_accent: Color = _visual_profile.get("platform_accent_color", Color(0.98, 0.9, 0.72, 1.0))
+
+	_set_variant_box(
+		"CoverFieldStripeA",
+		sports,
+		Vector3(case_size.x * 0.58, 0.01, 0.012),
+		Vector3(case_size.x * 0.05, case_size.y * 0.6, front_z),
+		Color(0.92, 0.98, 0.9, 1.0)
+	)
+	_set_variant_box(
+		"CoverFieldStripeB",
+		sports,
+		Vector3(0.01, case_size.y * 0.36, 0.012),
+		Vector3(case_size.x * 0.07, case_size.y * 0.5, front_z - 0.001),
+		Color(0.92, 0.98, 0.9, 1.0)
+	)
+	_set_variant_disc(
+		"CoverSportsBallMesh",
+		sports,
+		case_size.x * 0.085,
+		0.01,
+		Vector3(case_size.x * 0.18, case_size.y * 0.58, front_z - 0.002),
+		Color(0.96, 0.96, 0.92, 1.0)
+	)
+	_set_variant_box(
+		"CoverSportsPlayerBodyMesh",
+		sports,
+		Vector3(case_size.x * 0.11, case_size.y * 0.24, 0.012),
+		Vector3(-case_size.x * 0.1, case_size.y * 0.52, front_z - 0.003),
+		Color(0.045, 0.06, 0.055, 1.0)
+	)
+	_set_variant_disc(
+		"CoverSportsPlayerHeadMesh",
+		sports,
+		case_size.x * 0.046,
+		0.01,
+		Vector3(-case_size.x * 0.1, case_size.y * 0.68, front_z - 0.004),
+		Color(0.045, 0.06, 0.055, 1.0)
+	)
+	_set_variant_box(
+		"CoverAdventureHorizonMesh",
+		adventure,
+		Vector3(case_size.x * 0.58, case_size.y * 0.09, 0.012),
+		Vector3(case_size.x * 0.04, case_size.y * 0.4, front_z),
+		Color(0.22, 0.18, 0.34, 1.0)
+	)
+	_set_variant_disc(
+		"CoverCritterBodyMesh",
+		adventure,
+		case_size.x * 0.13,
+		0.012,
+		Vector3(-case_size.x * 0.06, case_size.y * 0.58, front_z - 0.003),
+		Color(0.98, 0.72, 0.32, 1.0)
+	)
+	_set_variant_box(
+		"CoverCritterEarA",
+		adventure,
+		Vector3(case_size.x * 0.048, case_size.y * 0.105, 0.012),
+		Vector3(-case_size.x * 0.14, case_size.y * 0.72, front_z - 0.004),
+		Color(0.98, 0.72, 0.32, 1.0)
+	)
+	_set_variant_box(
+		"CoverCritterEarB",
+		adventure,
+		Vector3(case_size.x * 0.048, case_size.y * 0.105, 0.012),
+		Vector3(case_size.x * 0.02, case_size.y * 0.72, front_z - 0.004),
+		Color(0.98, 0.72, 0.32, 1.0)
+	)
+	_set_variant_box(
+		"CoverQuestGemMesh",
+		adventure,
+		Vector3(case_size.x * 0.12, case_size.y * 0.12, 0.012),
+		Vector3(case_size.x * 0.2, case_size.y * 0.57, front_z - 0.004),
+		platform_accent
+	)
+	_set_variant_box(
+		"CoverSequelMarkerMesh",
+		art_key == "critter_quest_ii",
+		Vector3(case_size.x * 0.16, case_size.y * 0.055, 0.012),
+		Vector3(case_size.x * 0.22, case_size.y * 0.78, front_z - 0.005),
+		Color(0.98, 0.94, 0.52, 1.0)
+	)
+
+
+func _apply_retail_box_layers() -> void:
+	var container_variant := str(_visual_profile.get("container_variant", ""))
+	var media_variant := str(_visual_profile.get("media_variant", ""))
+	var is_box := container_variant == ProductVisualRulesScript.VARIANT_BOX
+	var is_console := is_box and media_variant == ProductVisualRulesScript.VARIANT_CONSOLE
+	var is_controller := is_box and media_variant == ProductVisualRulesScript.VARIANT_CONTROLLER
+	var is_accessory := is_box and media_variant == ProductVisualRulesScript.VARIANT_ACCESSORY
+	var case_size: Vector3 = _visual_profile.get("case_size", Vector3(0.26, 0.18, 0.07))
+	var front_z := _front_z(0.034)
+	var platform_color: Color = _visual_profile.get("platform_color", Color(0.02, 0.43, 0.42, 1.0))
+	var platform_accent: Color = _visual_profile.get("platform_accent_color", Color(0.98, 0.9, 0.72, 1.0))
+
+	_set_variant_box(
+		"RetailBoxFrontPanelMesh",
+		is_box,
+		Vector3(case_size.x * 0.64, case_size.y * 0.5, 0.012),
+		Vector3(case_size.x * 0.06, case_size.y * 0.51, front_z),
+		Color(0.94, 0.86, 0.68, 1.0)
+	)
+	_set_variant_box(
+		"RetailBoxHandleMesh",
+		is_console,
+		Vector3(case_size.x * 0.28, case_size.y * 0.04, 0.012),
+		Vector3(0.0, case_size.y * 1.03, front_z - 0.004),
+		platform_accent.darkened(0.12)
+	)
+	_set_variant_box(
+		"ConsoleRenderBodyMesh",
+		is_console,
+		Vector3(case_size.x * 0.36, case_size.y * 0.13, 0.016),
+		Vector3(-case_size.x * 0.08, case_size.y * 0.54, front_z - 0.006),
+		Color(0.05, 0.07, 0.075, 1.0)
+	)
+	_set_variant_disc(
+		"ConsoleRenderLensMesh",
+		is_console,
+		case_size.x * 0.045,
+		0.012,
+		Vector3(case_size.x * 0.11, case_size.y * 0.55, front_z - 0.009),
+		platform_color
+	)
+	_set_variant_box(
+		"ControllerRenderGripA",
+		is_controller,
+		Vector3(case_size.x * 0.16, case_size.y * 0.22, 0.014),
+		Vector3(-case_size.x * 0.16, case_size.y * 0.5, front_z - 0.006),
+		Color(0.05, 0.07, 0.085, 1.0)
+	)
+	_set_variant_box(
+		"ControllerRenderGripB",
+		is_controller,
+		Vector3(case_size.x * 0.16, case_size.y * 0.22, 0.014),
+		Vector3(case_size.x * 0.16, case_size.y * 0.5, front_z - 0.006),
+		Color(0.05, 0.07, 0.085, 1.0)
+	)
+	_set_variant_box(
+		"ControllerRenderBridge",
+		is_controller,
+		Vector3(case_size.x * 0.36, case_size.y * 0.12, 0.014),
+		Vector3(0.0, case_size.y * 0.55, front_z - 0.008),
+		Color(0.05, 0.07, 0.085, 1.0)
+	)
+	_set_variant_box(
+		"AccessoryCableLoopA",
+		is_accessory,
+		Vector3(case_size.x * 0.38, case_size.y * 0.055, 0.012),
+		Vector3(0.0, case_size.y * 0.6, front_z - 0.006),
+		Color(0.06, 0.07, 0.075, 1.0)
+	)
+	_set_variant_box(
+		"AccessoryCablePlugA",
+		is_accessory,
+		Vector3(case_size.x * 0.1, case_size.y * 0.12, 0.014),
+		Vector3(-case_size.x * 0.18, case_size.y * 0.48, front_z - 0.008),
+		platform_color.darkened(0.2)
+	)
+	_set_variant_box(
+		"AccessoryCablePlugB",
+		is_accessory,
+		Vector3(case_size.x * 0.1, case_size.y * 0.12, 0.014),
+		Vector3(case_size.x * 0.18, case_size.y * 0.48, front_z - 0.008),
+		platform_color.darkened(0.2)
+	)
+
+
+func _apply_duplicate_stack_layers() -> void:
+	var container_variant := str(_visual_profile.get("container_variant", ""))
+	var is_starter_launch := product != null \
+		and (product.product_id == "new_footy_2002" or product.product_id == "new_critter_quest_ii")
+	var show_stack := container_variant == ProductVisualRulesScript.VARIANT_CASE and is_starter_launch
+	var case_size: Vector3 = _visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04))
+	var body_color: Color = _visual_profile.get("case_body_color", Color(0.04, 0.05, 0.06, 1.0))
+
+	_set_variant_box(
+		"DuplicateCaseBackA",
+		show_stack,
+		case_size,
+		Vector3(0.018, case_size.y / 2.0 + 0.006, 0.035),
+		body_color.darkened(0.08)
+	)
+	_set_variant_box(
+		"DuplicateCaseBackB",
+		show_stack,
+		case_size,
+		Vector3(0.036, case_size.y / 2.0 + 0.012, 0.07),
+		body_color.darkened(0.16)
+	)
+	_set_variant_box(
+		"DuplicateStackSpineStripe",
+		show_stack,
+		Vector3(case_size.x * 0.1, case_size.y * 0.82, 0.012),
+		Vector3(-case_size.x * 0.43 + 0.036, case_size.y * 0.54 + 0.012, 0.047),
+		_visual_profile.get("platform_color", Color(0.02, 0.43, 0.42, 1.0))
+	)
 
 
 func _apply_case_title_label() -> void:
@@ -586,6 +957,11 @@ func _get_or_create_variant_node(node_name: String) -> MeshInstance3D:
 	node.visible = false
 	add_child(node)
 	return node
+
+
+func _front_z(offset: float) -> float:
+	var case_size: Vector3 = _visual_profile.get("case_size", Vector3(0.24, 0.34, 0.04))
+	return -case_size.z / 2.0 - offset
 
 
 func _make_material(color: Color) -> StandardMaterial3D:

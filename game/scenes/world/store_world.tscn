@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3]
+[gd_scene load_steps=79 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player_controller.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://scenes/props/placeholder_shelf.tscn" id="2_shelf"]
@@ -36,6 +36,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/kits/products/product_day_one_set.tscn" id="34_art_products"]
 [ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/receiving_intake_kit.tscn" id="35_art_receiving"]
 [ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/backroom_staff_threshold_kit.tscn" id="36_art_backroom"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/interior/store_shell_finish_kit.tscn" id="37_art_shell_finish"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.38, 0.4, 0.36, 1)
@@ -244,6 +245,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -6.06)
 
 [node name="ArtStorefrontGlassDoorOpen" parent="ApprovedArtKitRoute" instance=ExtResource("31_art_door")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 0.02, -6.1)
+
+[node name="ArtStoreShellFinishKit" parent="ApprovedArtKitRoute" instance=ExtResource("37_art_shell_finish")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -2.85)
 
 [node name="ArtRegisterCounterKit" parent="ApprovedArtKitRoute" instance=ExtResource("32_art_register")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, 2.18, 0.02, -2.42)
@@ -3776,7 +3780,7 @@ script = ExtResource("9_customer_manager")
 register_queue_start = Vector3(2.25, 0, -3.55)
 register_queue_spacing = Vector3(0, 0, -0.82)
 minimum_queue_spacing_distance = 0.8
-display_slot_paths = Array[NodePath]([NodePath("../GameDisplayRack/ShelfSlot001"), NodePath("../GameDisplayRack/ShelfSlot002"), NodePath("../GameDisplayRack/ShelfSlot003")])
+display_slot_paths = Array[NodePath]([NodePath("../GameDisplayRack/ShelfSlot001"), NodePath("../GameDisplayRack/ShelfSlot002"), NodePath("../GameDisplayRack/ShelfSlot003"), NodePath("../GameDisplayRack/ShelfSlot004"), NodePath("../GameDisplayRack/ShelfSlot005"), NodePath("../GameDisplayRack/ShelfSlot006"), NodePath("../GameDisplayRack/ShelfSlot007"), NodePath("../GameDisplayRack/ShelfSlot008"), NodePath("../GameDisplayRack/ShelfSlot009"), NodePath("../GameDisplayRack/ShelfSlot010"), NodePath("../GameDisplayRack/ShelfSlot011"), NodePath("../GameDisplayRack/ShelfSlot012")])
 
 [node name="BuyerCustomer001" parent="CustomerManager" instance=ExtResource("5_customer")]
 transform = Transform3D(0.965926, 0, -0.258819, 0, 1, 0, 0.258819, 0, 0.965926, -2.15, 0, 4.25)

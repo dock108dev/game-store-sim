@@ -17,10 +17,10 @@ func test_shelf_slot_exists() -> void:
 	assert_not_null(_slot)
 
 
-func test_shelf_has_three_display_slots() -> void:
-	assert_not_null(_shelf.get_node_or_null("ShelfSlot001"))
-	assert_not_null(_shelf.get_node_or_null("ShelfSlot002"))
-	assert_not_null(_shelf.get_node_or_null("ShelfSlot003"))
+func test_shelf_has_twelve_display_slots() -> void:
+	assert_eq(_slot_names().size(), 12)
+	for slot_name in _slot_names():
+		assert_not_null(_shelf.get_node_or_null(slot_name))
 
 
 func test_shelf_slot_has_identity() -> void:
@@ -130,8 +130,43 @@ func test_starter_fixture_has_laminate_edges_and_three_physical_ledges() -> void
 		assert_lte(edge.size.y, 0.05)
 
 
+func test_starter_fixture_has_base_plinth_top_cap_and_slot_dividers() -> void:
+	for structure_name in [
+		"BasePlinth",
+		"ToeKickShadow",
+		"TopCap",
+		"RearMountRailBottom",
+		"RearMountRailMiddle",
+		"RearMountRailTop",
+	]:
+		var structure := _shelf.get_node_or_null(structure_name) as CSGBox3D
+		assert_not_null(structure, structure_name)
+		assert_gt(structure.size.x, 1.7, structure_name)
+
+	for divider_name in [
+		"BottomShelfDividerA",
+		"BottomShelfDividerB",
+		"BottomShelfDividerC",
+		"MiddleShelfDividerA",
+		"MiddleShelfDividerB",
+		"MiddleShelfDividerC",
+		"TopShelfDividerA",
+		"TopShelfDividerB",
+		"TopShelfDividerC",
+	]:
+		var divider := _shelf.get_node_or_null(divider_name) as CSGBox3D
+		assert_not_null(divider, divider_name)
+		assert_false(divider.use_collision, divider_name)
+		assert_gt(divider.size.y, 0.25, divider_name)
+
+
+func test_starter_fixture_uses_shelf_slots_not_wall_hook_nodes() -> void:
+	assert_null(_shelf.find_child("*Hook*", true, false))
+	assert_null(_shelf.find_child("*Peg*", true, false))
+
+
 func test_shelf_slots_have_compact_category_rails() -> void:
-	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
+	for slot_name in _slot_names():
 		var slot := _shelf.get_node(slot_name) as Area3D
 		var marker := slot.get_node("SlotMarker") as CSGBox3D
 		var rail := slot.get_node_or_null("SlotCategoryRail") as CSGBox3D
@@ -144,7 +179,7 @@ func test_shelf_slots_have_compact_category_rails() -> void:
 
 
 func test_shelf_slots_show_empty_capacity_without_blocking_stocking() -> void:
-	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
+	for slot_name in _slot_names():
 		var slot := _shelf.get_node(slot_name) as Area3D
 		var marker := slot.get_node("SlotMarker") as CSGBox3D
 		var backdrop := slot.get_node_or_null("SlotEmptyBackdrop") as CSGBox3D
@@ -168,8 +203,8 @@ func test_shelf_slot_hover_highlight_toggles_nonblocking_frame() -> void:
 	assert_not_null(frame)
 	assert_false(frame.use_collision)
 	assert_false(frame.visible)
-	assert_gte(frame.size.x, 0.66)
-	assert_gte(frame.size.y, 0.8)
+	assert_gte(frame.size.x, 0.4)
+	assert_gte(frame.size.y, 0.45)
 	var frame_material := frame.material as StandardMaterial3D
 	assert_not_null(frame_material)
 	assert_gte(frame_material.albedo_color.a, 0.55)
@@ -269,6 +304,13 @@ func _make_item_with_category(display_name: String, category: String) -> Node3D:
 	item.set("product", product)
 	add_child_autofree(item)
 	return item
+
+
+func _slot_names() -> Array[String]:
+	var names: Array[String] = []
+	for slot_index in range(1, 13):
+		names.append("ShelfSlot%03d" % slot_index)
+	return names
 
 
 class _HeldActor:

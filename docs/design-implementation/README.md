@@ -51,6 +51,10 @@ Do not use visible debug labels, loose primitive clutter, old graybox geometry, 
 | `14-phase-implementation-roadmap.md` | Active | Roadmap from Visual Bible packets to owner validation. |
 | `15-art-direction-reset-and-spike-plan.md` | Historical reference | Captures why the prior primitive route was blocked. |
 | `work-packets/00-packet-index.md` | Active | Current packet queue and legacy packet deletion policy. |
+| `work-packets/01-mvp-product-art-kit.md` | Ready for owner review | Starter product art, legal-safe packaging, and product validation. |
+| `work-packets/02-mvp-fixture-display-kit.md` | Ready for owner review | Fixture/display assets, capacity language, and stocking validation. |
+| `work-packets/03-shell-counter-backroom-kit.md` | Ready for owner review | Shell, counter, register, trade-in, stockroom, receiving, and office modules. |
+| `work-packets/04-playable-store-integration-review.md` | Ready for owner review | Final integration and owner review evidence. |
 
 Deleted legacy docs:
 
@@ -60,9 +64,7 @@ Deleted legacy docs:
 
 Their useful decisions were consolidated into `docs/design-source-of-truth/`, `docs/visual-bible/`, `docs/production/13-visual-blockers.md`, and `docs/production/14-visual-bible-implementation-review.md`.
 
-## Next Packet Set
-
-Create and implement new packets from the Visual Bible in this order:
+## Packet Set
 
 1. MVP product art kit.
 2. MVP fixture and display kit.
@@ -90,4 +92,6 @@ Owner signoff can happen after the slice is complete. Approval is not required t
 
 ## Current Next Step
 
-Assemble the first Visual Bible implementation packet: MVP product art kit. The packet should produce authored DVD cases, recognizable legal-safe starter cover art, console/accessory packaging, price stickers, duplicate-stack language, and first-person close-up screenshot evidence before any broad playable-store rebuild.
+Owner review of the first Visual Bible object-family pass. Use the generated screenshots in `artifacts/validation/latest/screenshots/` and the criteria in `docs/production/14-visual-bible-implementation-review.md`.
+
+If approved, continue into owner-directed polish and beta/tester preparation. If rejected, revise the affected work packet docs and run another focused object-family art pass before broadening scope.

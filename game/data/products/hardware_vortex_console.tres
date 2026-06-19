@@ -4,20 +4,21 @@
 
 [resource]
 script = ExtResource("1_product_definition")
-product_id = "accessory_orbit_link_cable"
-display_name = "Orbit Link Cable"
-category = "accessory"
-platform = "Orbit 64"
-platform_family = "orbit_classic"
+product_id = "hardware_vortex_console"
+display_name = "Vortex Console"
+category = "hardware"
+platform = "Vortex"
+platform_family = "vortex"
 condition = "new"
-completeness = "sealed"
-format = "accessory"
+completeness = "complete"
+format = "console"
 authenticity = "verified"
-rarity = "common"
+rarity = "launch"
 demand_tier = "medium"
-cost_basis_cents = 400
-market_value_cents = 999
-suggested_price_cents = 899
+cost_basis_cents = 4500
+market_value_cents = 8999
+suggested_price_cents = 7999
 risk_level = "low"
+risk_tags = Array[String]([])
 default_location_id = "receiving_box_001"
 player_priceable = true

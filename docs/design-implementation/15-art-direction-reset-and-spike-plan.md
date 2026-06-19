@@ -1,6 +1,6 @@
 # Art Direction Reset And Spike Plan
 
-Status: Superseded by Visual Bible for next implementation planning
+Status: Historical reference, superseded by Visual Bible and current work packets
 Owner decision: block current visual direction
 Runtime target: Godot remains the integration/runtime unless the art spike proves it cannot support the target
 Art workflow target: Blender-authored modular assets, bitmap textures, and legally clean asset packs/custom authored pieces
@@ -9,7 +9,7 @@ Art workflow target: Blender-authored modular assets, bitmap textures, and legal
 
 The current Godot store scene is frozen as a mechanics prototype. It proves interactions, inventory, receiving, checkout, stockroom systems, save/load, and validation coverage. It does not prove the final visual direction.
 
-The next work is a separate art-direction spike that proves the look before rebuilding the full store.
+This doc records the block decision that led to the Visual Bible. It is not the active work queue. Current implementation state lives in `docs/CURRENT_STATE.md` and `docs/design-implementation/work-packets/00-packet-index.md`.
 
 ## Owner Answers
 
@@ -22,7 +22,7 @@ Locked owner answers for this reset:
 - Store vibe: small chain game store.
 - Third-party asset packs are allowed if legally clean.
 - Store footprint, facade, layout, and world placement may change heavily.
-- Target owner visual score for the next implementation pass is 7.5/10.
+- Target owner visual score for Visual Bible implementation passes is 7.5/10.
 
 ## Why The Current Direction Is Blocked
 

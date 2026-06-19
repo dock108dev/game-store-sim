@@ -128,6 +128,13 @@
       "critical": true
     },
     {
+      "script": "res://scripts/inventory/product_day_one_set.gd",
+      "tests": [
+        "res://tests/gut/test_art_language_rebuild.gd"
+      ],
+      "critical": true
+    },
+    {
       "script": "res://scripts/customers/simple_buyer_customer.gd",
       "tests": [
         "res://tests/gut/test_customer_sale_flow.gd"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/mall_concourse_slice.tscn" id="1_concourse"]
 [ext_resource type="PackedScene" path="res://scenes/world/kits/storefront/storefront_facade_bay.tscn" id="2_facade"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/kits/backroom/backroom_staff_threshold_kit.tscn" id="8_backroom"]
 [ext_resource type="Material" path="res://assets/materials/retail/warm_wall.tres" id="9_wall"]
 [ext_resource type="Material" path="res://assets/materials/retail/utility_floor.tres" id="10_floor"]
+[ext_resource type="PackedScene" path="res://scenes/world/kits/interior/store_shell_finish_kit.tscn" id="11_shell_finish"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_store_floor"]
 size = Vector3(8.4, 0.08, 6.0)
@@ -49,6 +50,9 @@ surface_material_override/0 = ExtResource("9_wall")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 1.38, 1.05)
 mesh = SubResource("BoxMesh_side_wall")
 surface_material_override/0 = ExtResource("9_wall")
+
+[node name="StoreShellFinishKit" parent="." instance=ExtResource("11_shell_finish")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 1.02)
 
 [node name="StorefrontFacadeBay" parent="." instance=ExtResource("2_facade")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7)

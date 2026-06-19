@@ -280,17 +280,49 @@ func test_new_starter_cases_render_new_price_without_used_sticker() -> void:
 	assert_false((_item.get_node("UsedStickerMesh") as MeshInstance3D).visible)
 	assert_false((_item.get_node("UsedStickerLabel") as Label3D).visible)
 	assert_eq(_item.get_visual_profile().get("genre_id"), "sports")
-	assert_eq(_item.get_visual_profile().get("platform_family"), "nova_disc")
+	assert_eq(_item.get_visual_profile().get("platform_family"), "vortex")
+	assert_true((_item.get_node("CoverSportsBallMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("CoverSportsPlayerBodyMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("DuplicateCaseBackA") as MeshInstance3D).visible)
 
-	var aether := load("res://data/products/new_aether_quest.tres") as ProductDefinition
-	_item.set("product", aether)
-	_item.current_price_cents = aether.suggested_price_cents
+	var critter := load("res://data/products/new_critter_quest_ii.tres") as ProductDefinition
+	_item.set("product", critter)
+	_item.current_price_cents = critter.suggested_price_cents
 	_item.apply_product_visuals()
 
 	assert_eq(_item.get_case_price_label_text(), "New $39.99")
-	assert_eq((_item.get_node("CaseTitleLabel") as Label3D).text, "AETHER QUEST")
+	assert_eq((_item.get_node("CaseTitleLabel") as Label3D).text, "CRITTER QUEST II")
 	assert_eq(_item.get_visual_profile().get("genre_id"), "rpg_adventure")
-	assert_eq(_item.get_visual_profile().get("platform_family"), "pocket_handheld")
+	assert_eq(_item.get_visual_profile().get("platform_family"), "vortex")
+	assert_true((_item.get_node("CoverCritterBodyMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("CoverQuestGemMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("CoverSequelMarkerMesh") as MeshInstance3D).visible)
+
+
+func test_vortex_hardware_and_accessories_render_retail_box_language() -> void:
+	var console := load("res://data/products/hardware_vortex_console.tres") as ProductDefinition
+	_item.set("product", console)
+	_item.current_price_cents = console.suggested_price_cents
+	_item.apply_product_visuals()
+
+	var console_case := _item.get_node("CaseMesh") as MeshInstance3D
+	assert_eq(_item.get_visual_profile().get("container_variant"), ProductVisualRules.VARIANT_BOX)
+	assert_eq(_item.get_visual_profile().get("media_variant"), ProductVisualRules.VARIANT_CONSOLE)
+	assert_gt(console_case.mesh.size.x, 0.5)
+	assert_true((_item.get_node("RetailBoxFrontPanelMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("RetailBoxHandleMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("ConsoleRenderBodyMesh") as MeshInstance3D).visible)
+
+	var controller := load("res://data/products/hardware_vortex_controller.tres") as ProductDefinition
+	_item.set("product", controller)
+	_item.current_price_cents = controller.suggested_price_cents
+	_item.apply_product_visuals()
+
+	assert_eq(_item.get_visual_profile().get("media_variant"), ProductVisualRules.VARIANT_CONTROLLER)
+	assert_true((_item.get_node("RetailBoxFrontPanelMesh") as MeshInstance3D).visible)
+	assert_true((_item.get_node("ControllerRenderGripA") as MeshInstance3D).visible)
+	assert_true((_item.get_node("ControllerRenderBridge") as MeshInstance3D).visible)
+	assert_false((_item.get_node("RetailBoxHandleMesh") as MeshInstance3D).visible)
 
 
 func test_used_game_hover_highlight_toggles_visual_cue() -> void:

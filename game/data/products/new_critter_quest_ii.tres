@@ -4,11 +4,11 @@
 
 [resource]
 script = ExtResource("1_product_definition")
-product_id = "new_footy_2002"
-display_name = "Footy 2002"
+product_id = "new_critter_quest_ii"
+display_name = "Critter Quest II"
 category = "new_game"
-franchise_id = "footy_series"
-genre_id = "sports"
+franchise_id = "critter_quest"
+genre_id = "rpg_adventure"
 platform = "Vortex"
 platform_family = "vortex"
 condition = "new"
@@ -16,10 +16,10 @@ completeness = "sealed"
 format = "disc"
 authenticity = "verified"
 rarity = "launch"
-demand_tier = "medium"
-cost_basis_cents = 2800
-market_value_cents = 4999
-suggested_price_cents = 4999
+demand_tier = "high"
+cost_basis_cents = 2600
+market_value_cents = 3999
+suggested_price_cents = 3999
 risk_level = "low"
 default_location_id = "receiving_box_001"
 player_priceable = true

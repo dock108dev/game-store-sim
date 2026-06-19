@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Material" path="res://assets/materials/retail/storefront_dark_metal.tres" id="1_metal"]
 [ext_resource type="Material" path="res://assets/materials/retail/storefront_glass.tres" id="2_glass"]
@@ -24,6 +24,12 @@ size = Vector3(0.066, 0.24, 0.78)
 
 [sub_resource type="BoxMesh" id="BoxMesh_shadow"]
 size = Vector3(1.04, 0.014, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_closer"]
+size = Vector3(0.36, 0.055, 0.07)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side_gasket"]
+size = Vector3(0.034, 1.7, 0.055)
 
 [node name="StorefrontGlassDoorOpen" type="Node3D"]
 
@@ -51,6 +57,21 @@ surface_material_override/0 = ExtResource("1_metal")
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -0.48, 1.08, -0.5)
 mesh = SubResource("CylinderMesh_handle")
 surface_material_override/0 = ExtResource("3_handle")
+
+[node name="OpenDoorInteriorPullBar" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -0.22, 1.08, -0.24)
+mesh = SubResource("CylinderMesh_handle")
+surface_material_override/0 = ExtResource("3_handle")
+
+[node name="OpenDoorCloserBlock" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -0.24, 1.83, -0.3)
+mesh = SubResource("BoxMesh_closer")
+surface_material_override/0 = ExtResource("1_metal")
+
+[node name="OpenDoorGlassSideGasket" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -0.02, 1.05, -0.08)
+mesh = SubResource("BoxMesh_side_gasket")
+surface_material_override/0 = ExtResource("1_metal")
 
 [node name="OpenDoorKickPlate" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.642788, 0, -0.766044, 0, 1, 0, 0.766044, 0, 0.642788, -0.28, 0.32, -0.34)

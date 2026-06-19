@@ -61,13 +61,17 @@ If status or validation numbers conflict, `docs/status.json` and `docs/CURRENT_S
 - [Phase Implementation Roadmap](design-implementation/14-phase-implementation-roadmap.md): current path from Visual Bible packet assembly through validation and owner review.
 - [Art Direction Reset And Spike Plan](design-implementation/15-art-direction-reset-and-spike-plan.md): historical block decision and why Packet 09 is reference only.
 - [Work Packet Index](design-implementation/work-packets/00-packet-index.md): current Visual Bible packet queue and deleted legacy packet policy.
+- [MVP Product Art Kit](design-implementation/work-packets/01-mvp-product-art-kit.md): starter products, cover art, packaging, prices, and legal-safe names.
+- [MVP Fixture And Display Kit](design-implementation/work-packets/02-mvp-fixture-display-kit.md): shelves/racks/displays, capacity, and stocking compatibility.
+- [Store Shell Counter Backroom Kit](design-implementation/work-packets/03-shell-counter-backroom-kit.md): shell, counter, register/trade-in, stockroom, receiving, and office modules.
+- [Playable Store Integration Review](design-implementation/work-packets/04-playable-store-integration-review.md): integration evidence and owner review prep.
 
 ## Current Production Docs
 
 - [Backlog](production/04-backlog.md): current work queue and stop conditions.
 - [Validation](production/06-validation.md): full local gate and artifact policy.
 - [Visual Blockers](production/13-visual-blockers.md): current design/visual blockers.
-- [Visual Bible Implementation Review](production/14-visual-bible-implementation-review.md): review plan for the next implementation pass.
+- [Visual Bible Implementation Review](production/14-visual-bible-implementation-review.md): review plan for the implemented object-family pass.
 
 ## Current QA
 

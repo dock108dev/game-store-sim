@@ -11,6 +11,10 @@ const FORBIDDEN_REAL_NAMES := [
 	"sega",
 ]
 const PLATFORM_FAMILY_RULES := {
+	"vortex": {
+		"platforms": ["Vortex"],
+		"formats": ["disc", "accessory", "console", "controller"],
+	},
 	"nova_disc": {
 		"platforms": ["Nova Cube"],
 		"formats": ["disc", "accessory", "controller"],
@@ -214,19 +218,23 @@ func test_product_catalog_contains_day_one_starter_titles_and_visual_metadata() 
 		assert_true(product.get_schema_summary().has("franchise_id"), product.product_id)
 
 	assert_true(by_id.has("new_footy_2002"))
-	assert_true(by_id.has("new_aether_quest"))
+	assert_true(by_id.has("new_critter_quest_ii"))
 
 	var footy := by_id["new_footy_2002"] as ProductDefinition
 	assert_eq(footy.display_name, "Footy 2002")
 	assert_eq(footy.get_genre_id(), "sports")
 	assert_eq(footy.get_franchise_id(), "footy_series")
+	assert_eq(footy.platform, "Vortex")
+	assert_eq(footy.get_platform_family(), "vortex")
 	assert_eq(footy.suggested_price_cents, 4999)
 
-	var aether := by_id["new_aether_quest"] as ProductDefinition
-	assert_eq(aether.display_name, "Aether Quest")
-	assert_eq(aether.get_genre_id(), "rpg_adventure")
-	assert_eq(aether.get_franchise_id(), "aether_quest")
-	assert_eq(aether.suggested_price_cents, 3999)
+	var critter := by_id["new_critter_quest_ii"] as ProductDefinition
+	assert_eq(critter.display_name, "Critter Quest II")
+	assert_eq(critter.get_genre_id(), "rpg_adventure")
+	assert_eq(critter.get_franchise_id(), "critter_quest")
+	assert_eq(critter.platform, "Vortex")
+	assert_eq(critter.get_platform_family(), "vortex")
+	assert_eq(critter.suggested_price_cents, 3999)
 
 
 func _load_products() -> Array[ProductDefinition]:

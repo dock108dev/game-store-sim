@@ -4,21 +4,21 @@
 
 [resource]
 script = ExtResource("1_product_definition")
-product_id = "hardware_nova_cube_controller"
-display_name = "Nova Cube Controller"
+product_id = "hardware_vortex_controller"
+display_name = "Vortex Controller"
 category = "hardware"
-platform = "Nova Cube"
-platform_family = "nova_disc"
-condition = "good"
-completeness = "loose"
+platform = "Vortex"
+platform_family = "vortex"
+condition = "new"
+completeness = "sealed"
 format = "controller"
-authenticity = "trusted"
-rarity = "uncommon"
+authenticity = "verified"
+rarity = "launch"
 demand_tier = "medium"
 cost_basis_cents = 1200
 market_value_cents = 2999
 suggested_price_cents = 2499
-risk_level = "medium"
-risk_tags = Array[String](["stick_drift_check", "loose_hardware"])
+risk_level = "low"
+risk_tags = Array[String]([])
 default_location_id = "receiving_box_001"
 player_priceable = true

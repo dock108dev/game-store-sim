@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Material" path="res://assets/materials/retail/backroom_cool_wall.tres" id="1_wall"]
 [ext_resource type="Material" path="res://assets/materials/retail/storefront_dark_metal.tres" id="2_metal"]
@@ -33,6 +33,27 @@ size = Vector3(0.52, 0.34, 0.025)
 [sub_resource type="BoxMesh" id="BoxMesh_door_stop"]
 size = Vector3(0.07, 0.82, 0.12)
 
+[sub_resource type="BoxMesh" id="BoxMesh_base_trim"]
+size = Vector3(2.45, 0.12, 0.055)
+
+[sub_resource type="BoxMesh" id="BoxMesh_office_desk"]
+size = Vector3(1.12, 0.1, 0.58)
+
+[sub_resource type="BoxMesh" id="BoxMesh_monitor"]
+size = Vector3(0.32, 0.24, 0.045)
+
+[sub_resource type="BoxMesh" id="BoxMesh_keyboard"]
+size = Vector3(0.34, 0.025, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_calendar"]
+size = Vector3(0.42, 0.34, 0.024)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rack_shelf"]
+size = Vector3(0.9, 0.06, 0.44)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rack_post"]
+size = Vector3(0.055, 0.9, 0.055)
+
 [node name="BackroomStaffThresholdKit" type="Node3D"]
 
 [node name="BackroomThresholdFrame" type="Node3D" parent="."]
@@ -50,6 +71,11 @@ surface_material_override/0 = ExtResource("2_metal")
 [node name="BackroomThresholdHeader" type="MeshInstance3D" parent="BackroomThresholdFrame"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.92, 0)
 mesh = SubResource("BoxMesh_header")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomThresholdBaseTrim" type="MeshInstance3D" parent="BackroomThresholdFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, -0.12)
+mesh = SubResource("BoxMesh_base_trim")
 surface_material_override/0 = ExtResource("2_metal")
 
 [node name="BackroomThresholdLeftReturn" type="MeshInstance3D" parent="."]
@@ -81,6 +107,49 @@ surface_material_override/0 = ExtResource("2_metal")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0.68)
 mesh = SubResource("BoxMesh_floor")
 surface_material_override/0 = ExtResource("3_floor")
+
+[node name="BackroomStorageRack" type="Node3D" parent="."]
+transform = Transform3D(0.984808, 0, -0.173648, 0, 1, 0, 0.173648, 0, 0.984808, -0.82, 0, 1.04)
+
+[node name="BackroomRackPostA" type="MeshInstance3D" parent="BackroomStorageRack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.42, 0.5, -0.2)
+mesh = SubResource("BoxMesh_rack_post")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomRackPostB" type="MeshInstance3D" parent="BackroomStorageRack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42, 0.5, -0.2)
+mesh = SubResource("BoxMesh_rack_post")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomRackLowerShelf" type="MeshInstance3D" parent="BackroomStorageRack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
+mesh = SubResource("BoxMesh_rack_shelf")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomRackUpperShelf" type="MeshInstance3D" parent="BackroomStorageRack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.74, 0)
+mesh = SubResource("BoxMesh_rack_shelf")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomOfficeDesk" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 0.86, 0.72, 1.04)
+mesh = SubResource("BoxMesh_office_desk")
+surface_material_override/0 = ExtResource("2_metal")
+
+[node name="BackroomOfficeMonitor" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 0.78, 0.94, 0.92)
+mesh = SubResource("BoxMesh_monitor")
+surface_material_override/0 = ExtResource("4_light")
+
+[node name="BackroomOfficeKeyboard" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 0.98, 0.8, 1.08)
+mesh = SubResource("BoxMesh_keyboard")
+surface_material_override/0 = ExtResource("5_paper")
+
+[node name="BackroomCalendarBoard" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.906308, 0, 0.422618, 0, 1, 0, -0.422618, 0, 0.906308, 1.16, 1.32, 1.42)
+mesh = SubResource("BoxMesh_calendar")
+surface_material_override/0 = ExtResource("5_paper")
 
 [node name="BackroomCoolLightBar" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.06, 0.08)

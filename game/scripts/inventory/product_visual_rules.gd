@@ -51,6 +51,7 @@ static func build_profile(product: ProductDefinition) -> Dictionary:
 	var completeness := _normalize(product.completeness if product != null else "")
 	var platform_family := _normalize(product.get_platform_family() if product != null else "")
 	var genre_id := _normalize(product.get_genre_id() if product != null else GENRE_GENERAL)
+	var product_id := _normalize(product.product_id if product != null else "")
 	var condition_cues := _get_condition_cues(product)
 
 	var container_variant := VARIANT_CASE
@@ -73,6 +74,7 @@ static func build_profile(product: ProductDefinition) -> Dictionary:
 		"container_variant": container_variant,
 		"media_variant": media_variant,
 		"state_variant": state_variant,
+		"product_art_key": _get_product_art_key(product_id, genre_id, media_variant),
 		"variant_keys": _unique_variants([container_variant, media_variant, state_variant]),
 		"case_size": _get_container_size(container_variant, media_variant),
 		"media_size": _get_media_size(media_variant),
@@ -107,6 +109,8 @@ static func build_profile(product: ProductDefinition) -> Dictionary:
 
 static func get_platform_color(platform_family: String) -> Color:
 	match _normalize(platform_family):
+		"vortex":
+			return Color(0.02, 0.43, 0.42, 1.0)
 		"nova_disc":
 			return Color(0.12, 0.48, 0.9, 1.0)
 		"orbit_classic":
@@ -121,6 +125,8 @@ static func get_platform_color(platform_family: String) -> Color:
 
 static func get_platform_accent_color(platform_family: String) -> Color:
 	match _normalize(platform_family):
+		"vortex":
+			return Color(0.98, 0.9, 0.72, 1.0)
 		"nova_disc":
 			return Color(0.78, 0.92, 1.0, 1.0)
 		"orbit_classic":
@@ -193,6 +199,12 @@ static func _get_media_variant(category: String, format: String) -> String:
 
 static func _get_container_size(container_variant: String, media_variant: String) -> Vector3:
 	if container_variant == VARIANT_BOX:
+		if media_variant == VARIANT_CONSOLE:
+			return Vector3(0.52, 0.34, 0.18)
+		if media_variant == VARIANT_CONTROLLER:
+			return Vector3(0.3, 0.34, 0.08)
+		if media_variant == VARIANT_ACCESSORY:
+			return Vector3(0.24, 0.3, 0.065)
 		return Vector3(0.26, 0.18, 0.07)
 	if container_variant == VARIANT_LOOSE:
 		if media_variant == VARIANT_DISC:
@@ -299,3 +311,17 @@ static func _get_condition_cues(product: ProductDefinition) -> Array[String]:
 
 static func _normalize(value: String) -> String:
 	return value.strip_edges().to_lower()
+
+
+static func _get_product_art_key(product_id: String, genre_id: String, media_variant: String) -> String:
+	if product_id == "new_footy_2002":
+		return "footy_2002"
+	if product_id == "new_critter_quest_ii":
+		return "critter_quest_ii"
+	if media_variant == VARIANT_CONSOLE:
+		return "vortex_console_box"
+	if media_variant == VARIANT_CONTROLLER:
+		return "vortex_controller_box"
+	if media_variant == VARIANT_ACCESSORY:
+		return "vortex_accessory_box"
+	return genre_id

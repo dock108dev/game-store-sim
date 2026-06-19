@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-19",
-  "current_phase": "visual_bible_packet_queue_ready_after_docs_cleanup",
-  "playtest_state": "paused_until_design_source_of_truth_baseline_approved",
+  "current_phase": "visual_bible_mvp_object_family_pass_ready_for_owner_review",
+  "playtest_state": "paused_until_owner_visual_review",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype. Core mechanics are working. The owner blocked the current visual direction as still too primitive. The current scene is frozen as a mechanics prototype. Old Packet 01-09 docs were removed from active routing. The active next step is MVP + first-store object-family implementation from the Visual Bible.",
+    "summary": "Broad validated first-person retail prototype with the first Visual Bible object-family implementation pass integrated. Core mechanics are working. Product art, fixture/display, shell, counter, receiving, and backroom kits have moved beyond the rejected graybox packet route and are ready for owner visual review before beta/tester prep.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -27,16 +27,19 @@
       "stockroom_backroom_workflows",
       "full_first_catalog",
       "decoration_upgrade_surface_hooks",
-      "hidden_thread_hooks"
+      "hidden_thread_hooks",
+      "visual_bible_product_art_kit",
+      "visual_bible_fixture_display_kit",
+      "visual_bible_shell_counter_backroom_kit"
     ],
-    "visual_read": "visual_bible_ready_for_mvp_art_rebuild",
+    "visual_read": "mvp_object_family_pass_integrated_pending_owner_review",
     "human_review_required": true
   },
   "validation": {
     "command": "scripts/validate_godot.sh",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 587,
-    "gut_asserts": 11859,
+    "gut_tests": 592,
+    "gut_asserts": 12263,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -44,8 +47,8 @@
       "threshold_percent": 80
     },
     "script_test_mapping": {
-      "covered": 54,
-      "total": 54,
+      "covered": 55,
+      "total": 55,
       "percent": 100.0,
       "threshold_percent": 80
     },
@@ -75,14 +78,13 @@
     "docs/visual-bible/"
   ],
   "blocking_reviews": [
-    "owner_design_source_of_truth_signoff",
-    "owner_opening_store_design_signoff",
+    "owner_mvp_object_family_visual_review",
     "manual_real_window_1280x720_walk_in_review"
   ],
   "next_decision": {
-    "question": "Implement the MVP product art kit first, then continue through the Visual Bible object-family packet queue.",
-    "approve_path": "create and implement MVP object-family packets in the Visual Bible order while preserving current mechanics",
-    "reject_path": "revise the Visual Bible family docs before implementing if any object-family target is wrong"
+    "question": "Review whether the first Visual Bible object-family pass is good enough to continue into beta-facing polish, or whether product/fixture/shell objects need another art pass.",
+    "approve_path": "continue from playable-store integration review into owner-directed polish and beta/tester preparation",
+    "reject_path": "revise the object-family packet docs and run another focused art-production pass before beta/tester work"
   },
   "active_docs": [
     "README.md",
@@ -111,6 +113,10 @@
     "docs/design-implementation/14-phase-implementation-roadmap.md",
     "docs/design-implementation/15-art-direction-reset-and-spike-plan.md",
     "docs/design-implementation/work-packets/00-packet-index.md",
+    "docs/design-implementation/work-packets/01-mvp-product-art-kit.md",
+    "docs/design-implementation/work-packets/02-mvp-fixture-display-kit.md",
+    "docs/design-implementation/work-packets/03-shell-counter-backroom-kit.md",
+    "docs/design-implementation/work-packets/04-playable-store-integration-review.md",
     "new_real_inspiration/README.md",
     "docs/production/04-backlog.md",
     "docs/production/06-validation.md",

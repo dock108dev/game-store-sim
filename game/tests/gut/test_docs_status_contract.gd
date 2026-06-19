@@ -8,11 +8,11 @@ const README_PATH := "res://../README.md"
 func test_docs_status_contract_names_design_reset_gate() -> void:
 	var status := _load_json(STATUS_PATH)
 
-	assert_eq(status.get("current_phase"), "visual_bible_packet_queue_ready_after_docs_cleanup")
-	assert_eq(status.get("playtest_state"), "paused_until_design_source_of_truth_baseline_approved")
+	assert_eq(status.get("current_phase"), "visual_bible_mvp_object_family_pass_ready_for_owner_review")
+	assert_eq(status.get("playtest_state"), "paused_until_owner_visual_review")
 	assert_eq(status.get("project"), "game-store-sim")
 	assert_true(status.get("playable_state", {}).get("human_review_required"))
-	assert_eq(status.get("playable_state", {}).get("visual_read"), "visual_bible_ready_for_mvp_art_rebuild")
+	assert_eq(status.get("playable_state", {}).get("visual_read"), "mvp_object_family_pass_integrated_pending_owner_review")
 	assert_string_contains(str(status.get("removed_doc_policy", "")), "deleted")
 
 
@@ -22,12 +22,12 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 	var scripts: Dictionary = _dictionary(validation.get("script_test_mapping"))
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
-	assert_eq(int(validation.get("gut_tests")), 587)
-	assert_eq(int(validation.get("gut_asserts")), 11859)
+	assert_eq(int(validation.get("gut_tests")), 592)
+	assert_eq(int(validation.get("gut_asserts")), 12263)
 	assert_eq(int(ui.get("automated")), 512)
 	assert_eq(int(ui.get("total")), 632)
-	assert_eq(int(scripts.get("covered")), 54)
-	assert_eq(int(scripts.get("total")), 54)
+	assert_eq(int(scripts.get("covered")), 55)
+	assert_eq(int(scripts.get("total")), 55)
 	assert_eq(int(validation.get("active_validation_tools")), 3)
 	assert_eq(int(validation.get("catalog_products")), 62)
 	assert_eq(validation.get("desktop_pack_smoke"), "passed")
@@ -71,6 +71,10 @@ func test_docs_status_contract_points_only_to_existing_active_docs() -> void:
 	assert_true(active_docs.has("docs/design-implementation/14-phase-implementation-roadmap.md"))
 	assert_true(active_docs.has("docs/design-implementation/15-art-direction-reset-and-spike-plan.md"))
 	assert_true(active_docs.has("docs/design-implementation/work-packets/00-packet-index.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/01-mvp-product-art-kit.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/02-mvp-fixture-display-kit.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/03-shell-counter-backroom-kit.md"))
+	assert_true(active_docs.has("docs/design-implementation/work-packets/04-playable-store-integration-review.md"))
 	assert_true(active_docs.has("new_real_inspiration/README.md"))
 	assert_true(active_docs.has("docs/production/04-backlog.md"))
 	assert_true(active_docs.has("docs/production/06-validation.md"))

@@ -423,14 +423,13 @@ func test_display_rack_slot_starts_empty() -> void:
 	assert_null(slot.get_occupied_item())
 
 
-func test_display_rack_has_three_slots() -> void:
-	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot001"))
-	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot002"))
-	assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot003"))
+func test_display_rack_has_twelve_stockable_slots() -> void:
+	for slot_index in range(1, 13):
+		assert_not_null(_store.get_node_or_null("GameDisplayRack/ShelfSlot%03d" % slot_index))
 
 
 func test_display_rack_slots_are_assigned_used_game_category() -> void:
-	for slot_name in ["ShelfSlot001", "ShelfSlot002", "ShelfSlot003"]:
+	for slot_name in _display_rack_slot_names():
 		var slot := _store.get_node("GameDisplayRack/%s" % slot_name) as ShelfSlot
 		assert_eq(slot.get_accepted_category(), "used_game")
 
@@ -2311,6 +2310,7 @@ func test_fixture_order_can_be_placed_in_main_scene() -> void:
 	assert_not_null(placed_rack.get_node_or_null("ShelfSlot001"))
 	assert_not_null(placed_rack.get_node_or_null("ShelfSlot002"))
 	assert_not_null(placed_rack.get_node_or_null("ShelfSlot003"))
+	assert_not_null(placed_rack.get_node_or_null("ShelfSlot012"))
 
 
 func test_supplier_order_delivers_items_to_main_scene_receiving_box() -> void:
@@ -2462,6 +2462,13 @@ func _flat_distance_xz(first: Vector3, second: Vector3) -> float:
 
 func _color_luma(color: Color) -> float:
 	return color.r * 0.2126 + color.g * 0.7152 + color.b * 0.0722
+
+
+func _display_rack_slot_names() -> Array[String]:
+	var names: Array[String] = []
+	for slot_index in range(1, 13):
+		names.append("ShelfSlot%03d" % slot_index)
+	return names
 
 
 func _collect_visible_labels(node: Node, labels: Array[Label3D]) -> void:

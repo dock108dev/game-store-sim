@@ -4,21 +4,17 @@ For current status and validation numbers, read `docs/CURRENT_STATE.md` and `doc
 
 ## Current Phase
 
-Design reset documentation is complete. Visual Bible documentation is complete. The next phase is implementation packet creation and execution for MVP object families.
+Design reset documentation is complete. Visual Bible documentation is complete. The first implementation pass for MVP object families is complete and ready for owner visual review.
 
 Goal: turn the owner-provided store/world brief, vertical slice spec, and 300-object asset inventory into implementation work that makes the opening store read as a small, independent, underfunded but functional 2002-2004 game store.
 
 ## Active Work
 
-1. Start implementation work from [Work Packet Index](../design-implementation/work-packets/00-packet-index.md).
-2. Assemble the MVP product art kit packet using [Agent Work Packet Template](../design-implementation/13-agent-work-packet-template.md).
-3. Implement Visual Bible packets in the order listed by the packet index.
-4. Preserve existing gameplay mechanics while replacing the visual/design surface.
-5. Keep `docs/design-source-of-truth/` and `docs/visual-bible/` as the owner-decision and art-quality authorities.
-6. Run focused tests for changed scene/doc contracts during implementation.
-7. Run `scripts/validate_godot.sh` before implementation completion.
-8. Review screenshots against [Screenshot Review](../qa/screenshot-review.md) and [Visual Bible Implementation Review](14-visual-bible-implementation-review.md).
-9. Capture owner corrections before moving to tester/beta readiness.
+1. Review the Visual Bible object-family pass from [Playable Store Integration Review](../design-implementation/work-packets/04-playable-store-integration-review.md).
+2. Compare screenshots against [Screenshot Review](../qa/screenshot-review.md) and [Visual Bible Implementation Review](14-visual-bible-implementation-review.md).
+3. Capture owner corrections before moving to tester/beta readiness.
+4. If approved, continue into owner-directed polish and beta/tester preparation.
+5. If rejected, revise the affected packet docs and run another focused object-family pass.
 
 ## Paused Work
 

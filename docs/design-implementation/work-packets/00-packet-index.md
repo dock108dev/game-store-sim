@@ -38,16 +38,12 @@ Hard lessons carried forward:
 
 ## Current Packet Queue
 
-| Order | Packet to create | Primary Visual Bible docs | Result |
-| ---: | --- | --- | --- |
-| 1 | MVP product art kit | `03-product-art-and-packaging.md`, `04-fictional-platforms-and-games.md`, `09-mvp-object-implementation-checklist.md` | Starter DVD cases, cover art, console/accessory packages, price stickers, stack language, close-up screenshot. |
-| 2 | MVP fixture and display kit | `02-fixtures-and-displays.md`, `09-mvp-object-implementation-checklist.md` | Shelves/racks/displays with 10-30 item capacity, empty slots, authored silhouettes, stocking compatibility. |
-| 3 | Store shell and mall interior kit | `01-store-shell-architecture.md`, `07-signage-marketing-and-store-identity.md` | Clean mall storefront, drywall, carpet, ceiling, storefront trim, modest neighboring context. |
-| 4 | Counter/register/trade-in kit | `05-counter-register-and-trade-in.md` | Straight counter, POS, scanner, bags, cash drawer, trade-in/intake staging, one queue route. |
-| 5 | Stockroom/receiving/office kit | `06-stockroom-receiving-office.md` | Real backroom, receiving area, clean storage racks, office desk/computer/calendar, day-one delivery state. |
-| 6 | Minimal signage/store identity kit | `07-signage-marketing-and-store-identity.md`, `04-fictional-platforms-and-games.md` | `Games4U`, grand-opening sign, shelf labels, legal-safe promos, readable but restrained copy. |
-| 7 | Playable store integration | All Visual Bible docs | Replace primitive visible objects in the playable route while preserving current mechanics. |
-| 8 | Owner review package | `08-art-production-pipeline.md`, production/QA docs | Screenshots, notes, validation, blocker update, approve/revise/block path. |
+| Order | Packet | Status | Primary Visual Bible docs | Result |
+| ---: | --- | --- | --- | --- |
+| 1 | `01-mvp-product-art-kit.md` | Ready for owner review | `03-product-art-and-packaging.md`, `04-fictional-platforms-and-games.md`, `09-mvp-object-implementation-checklist.md` | Starter DVD cases, cover art, console/accessory packages, price stickers, stack language, close-up screenshot. |
+| 2 | `02-mvp-fixture-display-kit.md` | Ready for owner review | `02-fixtures-and-displays.md`, `09-mvp-object-implementation-checklist.md` | Shelves/racks/displays with 10-30 item capacity, empty slots, authored silhouettes, stocking compatibility. |
+| 3 | `03-shell-counter-backroom-kit.md` | Ready for owner review | `01-store-shell-architecture.md`, `05-counter-register-and-trade-in.md`, `06-stockroom-receiving-office.md`, `07-signage-marketing-and-store-identity.md` | Shell, storefront, counter, register, trade-in, stockroom, receiving, office, and minimal sign module improvements. |
+| 4 | `04-playable-store-integration-review.md` | Ready for owner review | All Visual Bible docs and production/QA docs | Replaced first-pass object-family work in the playable route, preserved mechanics, and prepared owner review evidence. |
 
 ## Packet Creation Rules
 
@@ -75,3 +71,11 @@ scripts/validate_godot.sh
 ```
 
 The gate proves regression stability only. Owner visual review proves whether the 7.5/10 art target is met.
+
+Latest implementation gate:
+
+```text
+scripts/validate_godot.sh
+```
+
+Result: passed with 592 GUT tests, 12263 asserts, 512/632 UI automation coverage, 55/55 production script mappings, 62 catalog products, desktop pack smoke, performance smoke, screenshot sanity, contact sheet generation, and old-name scan.

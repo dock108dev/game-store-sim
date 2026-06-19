@@ -6,6 +6,7 @@ const KIT_SCENES := [
 	"res://scenes/world/kits/storefront/mall_concourse_slice.tscn",
 	"res://scenes/world/kits/storefront/storefront_facade_bay.tscn",
 	"res://scenes/world/kits/storefront/storefront_glass_door_open.tscn",
+	"res://scenes/world/kits/interior/store_shell_finish_kit.tscn",
 	"res://scenes/world/kits/interior/register_counter_kit.tscn",
 	"res://scenes/world/kits/fixtures/wall_shelf_bay_kit.tscn",
 	"res://scenes/world/kits/products/product_day_one_set.tscn",
@@ -33,6 +34,7 @@ func test_art_benchmark_scene_loads_with_required_kit_instances() -> void:
 		"MallConcourseSlice",
 		"StorefrontFacadeBay",
 		"StorefrontGlassDoorOpen",
+		"StoreShellFinishKit",
 		"RegisterCounterKit",
 		"WallShelfBayKit",
 		"DayOneProductSet",
@@ -51,10 +53,30 @@ func test_first_art_kit_scenes_expose_stable_anchors() -> void:
 			"StorefrontSignHousing",
 			"StorefrontGlassBay",
 			"StorefrontDoorFrame",
+			"StorefrontSignLeftMountBracket",
+			"StorefrontGlassBay/LeftGlassPaneInnerEdge",
+			"StorefrontDoorFrame/DoorFrameTopCloserRail",
+		],
+		"res://scenes/world/kits/storefront/storefront_glass_door_open.tscn": [
+			"OpenDoorGlassPanel",
+			"OpenDoorCloserBlock",
+			"OpenDoorInteriorPullBar",
+		],
+		"res://scenes/world/kits/interior/store_shell_finish_kit.tscn": [
+			"LowPileCarpetField",
+			"DrywallBackPanel",
+			"WallBaseboardBack",
+			"DrywallBackPanel/WallOutletPlateA",
+			"AcousticCeilingPanelLeft",
+			"FluorescentDiffuserEntry",
 		],
 		"res://scenes/world/kits/interior/register_counter_kit.tscn": [
 			"RegisterCounterBody",
 			"RegisterEquipmentCluster",
+			"RegisterCashDrawerSeam",
+			"RegisterEquipmentCluster/HandheldScannerHead",
+			"RegisterEquipmentCluster/ReceiptPrinterSlot",
+			"TradeInTrayFrontLip",
 		],
 		"res://scenes/world/kits/fixtures/wall_shelf_bay_kit.tscn": [
 			"WallShelfProductRows",
@@ -64,9 +86,15 @@ func test_first_art_kit_scenes_expose_stable_anchors() -> void:
 		],
 		"res://scenes/world/kits/backroom/receiving_intake_kit.tscn": [
 			"ReceivingIntakeSurface",
+			"OpenCartonLeftFlap",
+			"ReceivingRackFrame",
+			"InvoiceClipboardClip",
 		],
 		"res://scenes/world/kits/backroom/backroom_staff_threshold_kit.tscn": [
 			"BackroomThresholdFrame",
+			"BackroomStorageRack",
+			"BackroomOfficeDesk",
+			"BackroomCalendarBoard",
 		],
 	}
 
@@ -78,6 +106,33 @@ func test_first_art_kit_scenes_expose_stable_anchors() -> void:
 				assert_eq(kit.name, "DayOneProductSet")
 			else:
 				assert_not_null(kit.get_node_or_null(anchor_path), "%s:%s" % [scene_path, anchor_path])
+
+
+func test_day_one_product_kit_has_recognizable_product_art_language() -> void:
+	var kit := _instantiate_scene("res://scenes/world/kits/products/product_day_one_set.tscn")
+	add_child_autofree(kit)
+
+	for node_path in [
+		"Footy2002Stack/Footy2002StackCopy01",
+		"Footy2002Stack/Footy2002StackCopy02",
+		"Footy2002Stack/Footy2002StackBall",
+		"Footy2002Stack/Footy2002StackPlayerBody",
+		"CritterQuestIIStack/CritterQuestIIStackCopy01",
+		"CritterQuestIIStack/CritterQuestIIStackCritterBody",
+		"CritterQuestIIStack/CritterQuestIIStackQuestGem",
+		"CritterQuestIIStack/CritterQuestIIStackSequelMarker",
+		"VortexConsoleBoxStack/VortexConsoleBoxCopy01",
+		"VortexConsoleBoxStack/VortexConsoleBoxCopy02",
+		"VortexConsoleBoxStack/VortexConsoleBoxHandle",
+		"VortexConsoleBoxStack/VortexConsoleRenderBody",
+		"VortexControllerPackPair/VortexControllerPack01",
+		"VortexControllerPackPair/VortexControllerPack01Bridge",
+		"VortexControllerPackPair/VortexControllerPack02PriceSticker",
+	]:
+		var node := kit.get_node_or_null(node_path)
+		assert_not_null(node, node_path)
+		if node is Node3D:
+			assert_true((node as Node3D).visible, node_path)
 
 
 func test_first_art_kit_scenes_do_not_use_visible_csg_or_large_labels() -> void:
@@ -109,13 +164,22 @@ func test_store_world_instances_first_art_kit_route_without_replacing_mechanics(
 		"ApprovedArtKitRoute/ArtStorefrontFacadeBay/StorefrontSignHousing",
 		"ApprovedArtKitRoute/ArtStorefrontFacadeBay/StorefrontGlassBay",
 		"ApprovedArtKitRoute/ArtStorefrontFacadeBay/StorefrontDoorFrame",
+		"ApprovedArtKitRoute/ArtStorefrontFacadeBay/StorefrontSignLeftMountBracket",
 		"ApprovedArtKitRoute/ArtStorefrontGlassDoorOpen",
+		"ApprovedArtKitRoute/ArtStorefrontGlassDoorOpen/OpenDoorCloserBlock",
+		"ApprovedArtKitRoute/ArtStoreShellFinishKit/LowPileCarpetField",
+		"ApprovedArtKitRoute/ArtStoreShellFinishKit/DrywallBackPanel",
+		"ApprovedArtKitRoute/ArtStoreShellFinishKit/DrywallBackPanel/WallOutletPlateA",
 		"ApprovedArtKitRoute/ArtRegisterCounterKit/RegisterCounterBody",
 		"ApprovedArtKitRoute/ArtRegisterCounterKit/RegisterEquipmentCluster",
+		"ApprovedArtKitRoute/ArtRegisterCounterKit/RegisterEquipmentCluster/HandheldScannerHead",
+		"ApprovedArtKitRoute/ArtRegisterCounterKit/RegisterCashDrawerSeam",
 		"ApprovedArtKitRoute/ArtWallShelfBayKit/WallShelfProductRows",
 		"ApprovedArtKitRoute/ArtDayOneProductSet",
 		"ApprovedArtKitRoute/ArtReceivingIntakeKit/ReceivingIntakeSurface",
+		"ApprovedArtKitRoute/ArtReceivingIntakeKit/ReceivingRackFrame",
 		"ApprovedArtKitRoute/ArtBackroomStaffThresholdKit/BackroomThresholdFrame",
+		"ApprovedArtKitRoute/ArtBackroomStaffThresholdKit/BackroomOfficeDesk",
 	]:
 		assert_not_null(store.get_node_or_null(node_path), node_path)
 
