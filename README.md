@@ -11,8 +11,9 @@ Read these files first:
 1. [Source Master Plan](docs/MASTER_PLAN.md)
 2. [Product Brief](docs/00-product/product-brief.md)
 3. [Vertical Slice Contract](docs/01-design/vertical-slice-contract.md)
-4. [Engine Evaluation](docs/02-technical/engine-evaluation.md)
-5. [Local Validation Plan](docs/04-validation/local-validation-plan.md)
+4. [First 0.3% Visual Benchmark](docs/01-design/visual-benchmark-first-0.3.md)
+5. [Visual First Task List](docs/03-production/visual-first-task-list.md)
+6. [Local Validation Plan](docs/04-validation/local-validation-plan.md)
 
 ## Repository Roles
 
@@ -23,9 +24,11 @@ Read these files first:
 
 ## Current Build State
 
-As of this documentation pass, this repo contains design/reference material only. The engine project has not started yet.
+The repo has a Godot/macOS engine proof that validates the technical path: item state, pickup/stock/sale flow, customer state, save/load, local validation, macOS export, and exported app launch.
 
-The first implementation milestone is the 0.0%-0.3% vertical slice:
+The current active milestone is not more gameplay breadth. It is the visual benchmark for the first 0.3% of the game. The existing engine proof scene is technical scaffolding, not the production visual baseline.
+
+The first 0.3% vertical slice still covers:
 
 - enter the mall store
 - receive starter shipment
@@ -39,3 +42,14 @@ The first implementation milestone is the 0.0%-0.3% vertical slice:
 - read daily report
 - save and load
 
+Before those systems expand, the first store must visually lock:
+
+- mall storefront
+- empty understocked sales floor
+- receiving/backroom
+- counter/register
+- starter shipment
+- carried game case
+- shelf with about ten physical games
+- customer entering from mall
+- daily report presentation

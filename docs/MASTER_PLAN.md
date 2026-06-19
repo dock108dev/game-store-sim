@@ -40,6 +40,7 @@ These are locked until intentionally changed through a decision doc:
 - Pricing model: suggested pricing for used goods; new goods use fixed contract pricing while considered new.
 - Layout model: customization is available immediately.
 - Documentation model: Markdown in repo is the production source of truth.
+- Visual gate: the first 0.3% store experience must reach visual sign-off before new gameplay breadth is added.
 
 ## 3. Source Of Truth Order
 
@@ -76,6 +77,24 @@ It must prove the core retail language:
 14. Save/load restores the store state.
 
 Anything outside that list is optional for later.
+
+## 4.1 Current Production Gate
+
+The engine proof milestone has shown that Godot, macOS export, local validation, scripted item state, customer state, sale state, and save/load can work in this repo.
+
+That proof scene is not the visual foundation for the game.
+
+The active next milestone is the first 0.3% visual benchmark. Its job is to make the opening store look and feel like the game before feature work expands. Until this milestone is signed off, avoid adding new simulation systems except where they are necessary to stage, capture, or validate the benchmark.
+
+Current gate:
+
+1. Build the mall storefront, empty lease, receiving/backroom, counter, starter fixtures, starter shipment, carried case view, stocked shelf view, customer entry view, and daily-report view to visual benchmark quality.
+2. Capture the required screenshot set from a macOS build.
+3. Compare the results against the visual benchmark spec and reference extraction rules.
+4. Iterate until the first 0.3% has a stable visual scaffold.
+5. Only then continue feature expansion.
+
+See [First 0.3% Visual Benchmark](01-design/visual-benchmark-first-0.3.md) and [Visual First Task List](03-production/visual-first-task-list.md).
 
 ## 5. Scope Guardrails
 
@@ -228,6 +247,8 @@ Target:
 
 Do not copy real packaging, logos, platform names, storefronts, or game art.
 
+The current prototype art is placeholder-only. It should be replaced or heavily rebuilt during the visual benchmark phase rather than treated as production scaffolding.
+
 ## 12. Documentation Set
 
 The initial documentation pack contains:
@@ -240,12 +261,15 @@ The initial documentation pack contains:
 - [Store Layout And Customization](01-design/store-layout-and-customization.md)
 - [Customers And Day Flow](01-design/customers-and-day-flow.md)
 - [Art Direction](01-design/art-direction.md)
+- [First 0.3% Visual Benchmark](01-design/visual-benchmark-first-0.3.md)
 - [Engine Evaluation](02-technical/engine-evaluation.md)
 - [Technical Architecture](02-technical/architecture.md)
 - [Data Model](02-technical/data-model.md)
 - [macOS Build Requirements](02-technical/macos-build-requirements.md)
 - [Milestones And Backlog](03-production/milestones-and-backlog.md)
 - [Definition Of Done](03-production/definition-of-done.md)
+- [Engine Proof Milestone](03-production/engine-proof-milestone.md)
+- [Visual First Task List](03-production/visual-first-task-list.md)
 - [Local Validation Plan](04-validation/local-validation-plan.md)
 - [Manual Playtest Checklist](04-validation/manual-playtest-checklist.md)
 - [Inspiration Extraction](05-reference/inspiration-extraction.md)
@@ -264,4 +288,3 @@ Before writing first gameplay code:
 7. Add the validation harness before the slice grows.
 
 No code should be considered done without a matching validation path.
-

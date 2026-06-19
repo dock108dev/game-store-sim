@@ -17,6 +17,7 @@ A feature is done only when:
 
 The 0.0%-0.3% first playable is done when:
 
+- visual benchmark for the first 0.3% is signed off
 - player can complete the first day loop
 - starter shipment produces physical items
 - used items can be priced
@@ -31,6 +32,23 @@ The 0.0%-0.3% first playable is done when:
 - Mac build launches
 - local validation gate passes
 - manual playtest checklist passes
+
+## First 0.3% Visual Benchmark Done
+
+The first visual benchmark is done when:
+
+- mall storefront reads as a believable early-2000s mall unit
+- empty lease reads as understocked potential, not unfinished placeholder
+- receiving/backroom reads as a real operational space
+- counter/register reads as the store's business pressure point
+- starter fixtures have credible scale, materials, and density rules
+- physical cases/boxes support one-to-one stock readability
+- fictional product art direction is established without real IP
+- lighting, FOV, camera height, and object scale are comfortable on Mac
+- named benchmark screenshots are captured from a macOS build
+- automated screenshot sanity passes
+- manual visual review passes every required shot or records explicit deferrals
+- no additional gameplay breadth is introduced to bypass the visual gate
 
 ## Documentation Done
 
@@ -76,4 +94,3 @@ Validation is done when:
 - screenshot sanity exists for playable scenes
 - script/runtime errors are treated as failures
 - manual checklist is updated for player-facing changes
-

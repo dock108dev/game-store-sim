@@ -2,7 +2,7 @@
 
 ## Milestone 0: Documentation Baseline
 
-Status: current milestone.
+Status: complete.
 
 Done when:
 
@@ -14,6 +14,8 @@ Done when:
 - source-of-truth rules exist
 
 ## Milestone 1: Engine Proof
+
+Status: implemented and locally validated.
 
 Goal:
 
@@ -37,8 +39,41 @@ Exit criteria:
 - validation script passes
 - no script load errors
 - screenshot proves nonblank store view
+- macOS export can be produced and launched headlessly
 
-## Milestone 2: 0.0%-0.1% Opening Setup
+## Milestone 2: First 0.3% Visual Benchmark
+
+Status: active next milestone.
+
+Goal:
+
+Make the first 0.3% of the game visually correct before expanding gameplay breadth. The engine proof scene is allowed to be discarded, rebuilt, or used only as technical reference.
+
+Required:
+
+- visual benchmark scene for the opening mall store
+- mall concourse and storefront that read immediately
+- empty lease that feels understocked, not unfinished
+- receiving/backroom that feels operational
+- counter/register area with early-2000s retail language
+- starter fixtures with correct scale and shelf density
+- one-to-one physical case/box visuals that support stock counts
+- fictional product-box visual language
+- warm nostalgic lighting pass
+- camera height/FOV pass for Mac desktop play
+- screenshot capture path for named visual targets
+- macOS build export and launch
+- visual sign-off checklist
+
+Exit criteria:
+
+- required visual benchmark screenshots are captured from the build
+- screenshots are nonblank, correctly framed, and show the required spaces/states
+- manual visual review marks every required target pass or intentional defer
+- no new gameplay breadth has been added outside benchmark needs
+- repo docs and task list match the signed-off scaffold
+
+## Milestone 3: 0.0%-0.1% Opening Setup
 
 Goal:
 
@@ -53,7 +88,7 @@ Required:
 - fixture move/rotate/place
 - save/load of items and fixtures
 
-## Milestone 3: 0.3% First Sale
+## Milestone 4: 0.3% First Sale
 
 Goal:
 
@@ -68,7 +103,7 @@ Required:
 - register sale flow
 - transaction recording
 
-## Milestone 4: First Close
+## Milestone 5: First Close
 
 Goal:
 
@@ -83,7 +118,7 @@ Required:
 - inventory remaining summary
 - save after close
 
-## Milestone 5: First Playable Polish
+## Milestone 6: First Playable Polish
 
 Goal:
 
@@ -124,4 +159,3 @@ A feature should not move into implementation unless it has:
 - required data
 - validation path
 - definition of done
-

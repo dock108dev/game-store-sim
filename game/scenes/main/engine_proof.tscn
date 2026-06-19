@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://engineproofmain0001"]
+
+[ext_resource type="Script" path="res://scripts/systems/engine_proof_scene.gd" id="1_scene"]
+
+[node name="EngineProof" type="Node3D"]
+script = ExtResource("1_scene")

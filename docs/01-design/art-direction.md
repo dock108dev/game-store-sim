@@ -6,6 +6,8 @@ Hybrid stylized realism.
 
 The game should feel grounded in early-2000s retail while staying readable, performant, and slightly stylized like a modern simulator.
 
+The next production phase is visual-first. The first 0.3% of the game must look right before additional gameplay breadth is added.
+
 ## Mood
 
 Warm nostalgia:
@@ -114,6 +116,21 @@ UI:
 - save/load screen
 - layout mode ghost/valid/invalid feedback
 
+## First 0.3% Visual Gate
+
+The visual gate must establish:
+
+- storefront identity from the mall concourse
+- correct retail scale for player, cases, shelves, counter, and backroom
+- empty shelf capacity that reads as future growth instead of unfinished content
+- case rows that visibly communicate one-to-one stock without becoming noisy
+- warm nostalgic lighting that still has bright retail clarity
+- fictional product art that feels era-appropriate and legally clean
+- fixture language that can support future expansion without redesign
+- early UI presentation that feels like the game, not debug overlay
+
+The engine proof scene does not satisfy this gate. It only proves that the engine path works.
+
 ## Color Direction
 
 Avoid one-note palettes.
@@ -151,4 +168,3 @@ Do not make:
 - a showroom with no operational mess
 
 The store should feel like it can do business.
-

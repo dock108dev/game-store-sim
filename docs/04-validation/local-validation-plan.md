@@ -13,13 +13,20 @@ The gate should catch:
 - blank screenshots
 - missing required docs
 - accidental real-world IP strings
+- visual benchmark screenshot regressions once the visual benchmark scene exists
 
-## Future Command
+## Command
 
-Recommended command once the engine project exists:
+Run local validation with:
 
 ```bash
 scripts/validate_local.sh
+```
+
+Run validation plus macOS export and exported-app launch with:
+
+```bash
+GSS_EXPORT_MACOS=1 scripts/validate_local.sh
 ```
 
 ## Expected Output Location
@@ -27,8 +34,9 @@ scripts/validate_local.sh
 ```text
 artifacts/validation/latest/
   validation.log
-  engine-smoke.log
-  tests.log
+  engine-proof.log
+  main-scene-launch.log
+  macos-export-launch.log
   screenshots/
   summary.json
 ```
@@ -45,8 +53,6 @@ Verify required docs exist:
 - `docs/04-validation/manual-playtest-checklist.md`
 
 ### Engine Project Check
-
-Once created:
 
 - project file exists
 - project opens in headless or command-line mode
@@ -85,6 +91,22 @@ Screenshot check should fail if:
 - image dimensions are wrong
 - image is mostly one color
 
+### Visual Benchmark Check
+
+Once the visual benchmark scene exists, validation should capture named screenshots for:
+
+- mall storefront
+- empty sales floor
+- receiving/backroom
+- starter shipment
+- carried case
+- stocked shelf density
+- counter/register
+- customer entering from mall
+- daily report view
+
+The automated gate should verify presence, dimensions, nonblank content, and basic framing metadata. Human review remains required for whether the visuals are good enough.
+
 ### IP Policy Check
 
 Add a simple scanner for banned real-world terms once fictional naming begins.
@@ -116,4 +138,3 @@ Automated validation proves the build is not broken.
 Manual validation proves the game feels correct.
 
 Both are required for milestone completion.
-

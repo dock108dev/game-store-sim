@@ -4,7 +4,9 @@
 
 Default to Godot 4 for the first prototype unless a focused spike proves it cannot support the required physical item density, Mac build workflow, or validation needs.
 
-The project is not permanently married to Godot. The first engineering task should be an engine proof, not a full game commitment.
+The engine proof has passed for the current technical path: Godot 4.6.2 runs the project, local validation passes, macOS export succeeds, and the exported app launches headlessly.
+
+The project is still not permanently married to Godot for the full game. The next risk is visual quality, not basic engine viability.
 
 ## Requirements
 
@@ -72,7 +74,7 @@ The engine must support:
 
 ## Decision Criteria
 
-Before locking engine, build a proof that demonstrates:
+The completed engine proof demonstrates:
 
 1. first-person movement inside a mall store shell
 2. pick up one physical game case
@@ -102,4 +104,3 @@ If Godot is selected:
 - JSON or Godot resource serialization for saves, to be decided during prototype
 - GUT or equivalent for tests
 - shell validation wrapper for local gate
-

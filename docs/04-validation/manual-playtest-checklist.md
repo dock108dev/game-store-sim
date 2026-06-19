@@ -2,6 +2,8 @@
 
 Use this checklist for the first playable.
 
+For the active visual-first phase, use [First 0.3% Visual Benchmark](../01-design/visual-benchmark-first-0.3.md) as the stricter sign-off checklist. This general playtest checklist should not be used to approve visual direction by itself.
+
 ## Session Setup
 
 Record:
@@ -243,4 +245,3 @@ Top three issues:
 Best moment:
 
 Worst confusion:
-

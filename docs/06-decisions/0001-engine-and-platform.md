@@ -2,13 +2,13 @@
 
 ## Status
 
-Provisional.
+Accepted for prototype and first visual benchmark.
 
 ## Decision
 
 Target macOS first.
 
-Use Godot 4 as the default prototype engine unless the engine proof shows it is a poor fit for the core game.
+Use Godot 4 as the prototype engine through the first 0.3% visual benchmark.
 
 ## Rationale
 
@@ -21,11 +21,11 @@ Godot appears well-suited for:
 - macOS export
 - documentation-heavy repo workflow
 
-The team is not permanently committed until the engine proof passes.
+The engine proof passed. Full-game engine commitment remains subject to the visual benchmark and next production review.
 
-## Required Proof
+## Completed Proof
 
-Before fully committing:
+The current proof covers:
 
 - first-person store shell
 - physical item pickup
@@ -42,4 +42,3 @@ Before fully committing:
 - technical docs may assume Godot for now
 - engine-specific code should not be written before the proof
 - if Godot fails the proof, evaluate Unity next
-
