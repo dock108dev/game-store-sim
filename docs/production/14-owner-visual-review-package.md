@@ -20,7 +20,7 @@ The current scene is materially stronger than the original graybox: the player s
 
 The remaining problem is also clear: fixtures, counters, ceiling pieces, some prop groups, and parts of the mall shell still read as assembled primitive geometry. The store has the right functional anchors, but the art production method is not strong enough to keep polishing as the visual baseline.
 
-Current decision: freeze this scene as the mechanics prototype. Packet 09 has implemented a separate candidate art method using both `inspiration/` and `new_real_inspiration/`. Revision 2 specifically addresses owner feedback that the first spike had weird text, cluttered walls, too much color, and still felt too graybox.
+Current decision: freeze this scene as the mechanics prototype. Packet 09 has implemented a separate candidate art method using both `inspiration/` and `new_real_inspiration/`. Revision 2 addressed owner feedback that the first spike had weird text, cluttered walls, too much color, and still felt too graybox. Revision 3 clarifies that the review board is a pre-day-1 starter setup state, not a future/current fully stocked wall.
 
 ## Packet 09 Review
 
@@ -34,7 +34,7 @@ Individual Packet 09 screenshots:
 
 ```text
 artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png
-artifacts/validation/latest/screenshots/packet_09_shelf_density.png
+artifacts/validation/latest/screenshots/packet_09_starter_setup_fixture.png
 artifacts/validation/latest/screenshots/packet_09_storefront_frame.png
 ```
 
@@ -49,9 +49,10 @@ What changed versus Packet 08:
 
 - The spike is isolated from `store_world.tscn`; the playable scene remains a mechanics prototype.
 - The hero view is inside-looking-out through glass storefront framing.
-- The scene uses storefront mullions, door frame, fascia, mall corridor, drop ceiling grid, fluorescent panels, orderly product rows, restrained attached signage, price stickers, and a glass display counter.
+- The scene uses storefront mullions, door frame, fascia, mall corridor, drop ceiling grid, fluorescent panels, mostly empty fixture capacity, restrained attached signage, price stickers, and a glass display counter.
 - The spike removes loose `TextMesh` signage and random wall promo panels; signs are now flat bitmap-like panels, and the wall language is shopfit/slatwall detail first.
 - The material palette is calmer and less saturated: dark metal, warm cream sign panels, muted case covers, warmer fluorescents, and fewer accent colors.
+- The fixture view now reads as pre-day-1 setup: two upgraded starter game cases, one starter console box, one accessory box, many empty slots, and setup boxes.
 
 What still needs owner judgment:
 
@@ -59,6 +60,7 @@ What still needs owner judgment:
 - Whether the store should be rebuilt around this style or the spike needs another revision first.
 - Whether a stronger asset/Blender/third-party-pack workflow is required before rebuilding the playable store.
 - Whether the revised low-poly/procedural method is still too primitive despite the cleaner composition.
+- Whether the upgraded starter cases are enough of a direction, or whether game/product art needs a dedicated asset sprint before store rebuild.
 
 ## Validation Evidence
 
@@ -70,7 +72,7 @@ scripts/validate_godot.sh
 
 Current recorded result:
 
-- GUT: 587 tests, 11865 asserts, all passing.
+- GUT: 587 tests, 11870 asserts, all passing.
 - UI scenario automation: 512/632, or 81.0%.
 - Production script mapping: 54/54, or 100.0%.
 - Validation tools: 3 active standalone tools.
@@ -201,7 +203,7 @@ Please answer these during review:
 
 1. Does the Packet 09 inside-looking-out shot finally point in the right visual direction?
 2. Are the storefront glass/fascia/sign, mall corridor, ceiling, and counter directions acceptable enough to turn into production modules?
-3. Is the cleaner slatwall/product-wall language acceptable, or should shelves/cases/product art change before rebuilding?
+3. Is the cleaner empty slatwall/starter-stock language acceptable, or should shelves/cases/product art change before rebuilding?
 4. Should the next implementation pass rebuild the playable store from this method, revise the spike, or block the method?
 5. Is external beta/testing still blocked until the playable store is rebuilt from an approved visual method?
 

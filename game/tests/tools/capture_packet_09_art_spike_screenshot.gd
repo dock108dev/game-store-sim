@@ -59,6 +59,8 @@ func _select_view(scene: Node, view: String) -> void:
 
 	var camera_name := "InsideOutHeroCamera"
 	match view:
+		"starter_setup":
+			camera_name = "ShelfDensityCamera"
 		"shelf_density":
 			camera_name = "ShelfDensityCamera"
 		"storefront_frame":

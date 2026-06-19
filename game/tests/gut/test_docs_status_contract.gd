@@ -23,7 +23,7 @@ func test_docs_status_contract_records_validation_baseline() -> void:
 
 	assert_eq(validation.get("command"), "scripts/validate_godot.sh")
 	assert_eq(int(validation.get("gut_tests")), 587)
-	assert_eq(int(validation.get("gut_asserts")), 11865)
+	assert_eq(int(validation.get("gut_asserts")), 11870)
 	assert_eq(int(ui.get("automated")), 512)
 	assert_eq(int(ui.get("total")), 632)
 	assert_eq(int(scripts.get("covered")), 54)

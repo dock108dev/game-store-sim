@@ -9,7 +9,7 @@ Expected commit scope: reference extraction, asset workflow plan, isolated art-s
 
 ## Implementation Result
 
-Packet 09 is implemented as a separate, non-playable visual proof scene. It does not modify `store_world.tscn` or the current mechanics prototype. Revision 2 incorporates owner feedback that the first spike had weird text, cluttered walls, too much color, and still read too much like a graybox.
+Packet 09 is implemented as a separate, non-playable visual proof scene. It does not modify `store_world.tscn` or the current mechanics prototype. Revision 2 incorporates owner feedback that the first spike had weird text, cluttered walls, too much color, and still read too much like a graybox. Revision 3 clarifies screenshot intention: this is a pre-day-1 starter setup state, not a future/current fully stocked store.
 
 Implemented files:
 
@@ -22,7 +22,7 @@ Review artifacts:
 
 - `artifacts/validation/latest/packet-09-art-spike-review-board.png`
 - `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`
-- `artifacts/validation/latest/screenshots/packet_09_shelf_density.png`
+- `artifacts/validation/latest/screenshots/packet_09_starter_setup_fixture.png`
 - `artifacts/validation/latest/screenshots/packet_09_storefront_frame.png`
 
 Owner decision needed: approve, revise, or block the Packet 09 visual method before rebuilding the playable store visuals.
@@ -82,8 +82,8 @@ Owner decision needed: approve, revise, or block the Packet 09 visual method bef
 ## Deliverables
 
 1. Reference extraction notes from `inspiration/`: storefront glass rhythm, mall corridor framing, fascia/sign proportion, small-chain storefront composition.
-2. Period retail extraction notes from `new_real_inspiration/`: drop ceiling, slatwall, dense rows of case facings, yellow price stickers, acrylic/glass display surfaces, commercial tile/carpet.
-3. Asset workflow notes: procedural Godot proof with bitmap-like generated textures; loose `TextMesh` signage and random wall promo cards are removed; next approved production pass should convert this into authored reusable modules/assets rather than expanding the current primitive store scene.
+2. Period retail extraction notes from `new_real_inspiration/`: drop ceiling, slatwall, empty fixture capacity, restrained starter case facings, yellow price stickers, acrylic/glass display surfaces, commercial tile/carpet.
+3. Asset workflow notes: procedural Godot proof with bitmap-like generated textures; loose `TextMesh` signage and random wall promo cards are removed; visible stock is limited to two upgraded starter game cases, one console box, and one accessory box; next approved production pass should convert this into authored reusable modules/assets rather than expanding the current primitive store scene.
 4. Isolated spike scene or mockup: `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`.
 5. Owner-facing screenshot/review board: `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
 6. Decision handoff: approve, revise, or block.
@@ -101,6 +101,8 @@ Inside looking out:
 - no debug labels
 - minimal text, limited to flat bitmap sign panels
 - walls read as shopfit/slatwall architecture rather than random decoration
+- shelves are mostly empty, showing capacity the player will stock during pre-day-1 setup
+- visible game cases read as starter product direction, not finished full-catalog art
 
 ## Validation Required
 
@@ -140,10 +142,10 @@ Screenshot sanity is checked with `res://tests/tools/check_png.gd`; broader regr
 ## Final Handoff Requirements
 
 - Reference board path or notes: this document plus `artifacts/validation/latest/packet-09-art-spike-review-board.png`.
-- Real-life reference notes: extracted from `new_real_inspiration/` into dense shelving, drop ceiling, store tile/carpet, price stickers, and glass display counter choices.
+- Real-life reference notes: extracted from `new_real_inspiration/` into slatwall shelving capacity, drop ceiling, store tile/carpet, price stickers, and glass display counter choices.
 - Spike scene/mockup path: `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`.
 - Screenshot path: `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`.
 - Asset source/licensing notes: no third-party art pack used in this spike; the proof uses generated Godot geometry/materials and generated bitmap-like textures.
-- What improved versus current: cleaner storefront rhythm, stronger ceiling/material read, denser but more orderly product facings, flat bitmap sign panels instead of loose 3D text, calmer color palette, clean slatwall instead of random wall clutter, and an isolated scene that avoids touching mechanics.
-- What still fails: still not a finished production art kit; signage and product art are proof-level, not final authored assets; playable store has not been rebuilt around this method; owner may still decide the procedural/low-poly method is not enough.
+- What improved versus current: cleaner storefront rhythm, stronger ceiling/material read, mostly empty starter fixture capacity, upgraded starter game case silhouettes, flat bitmap sign panels instead of loose 3D text, calmer color palette, clean slatwall instead of random wall clutter, and an isolated scene that avoids touching mechanics.
+- What still fails: still not a finished production art kit; signage and product art are proof-level, not final authored assets; playable store has not been rebuilt around this method; product cases likely need a dedicated asset sprint before full-catalog expansion; owner may still decide the procedural/low-poly method is not enough.
 - Recommendation: owner review. Approve this method for playable-store rebuild, request specific revisions to the spike, or block and change the art-production approach again.

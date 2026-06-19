@@ -14,14 +14,14 @@ External playtest and broad visual expansion are paused.
 
 The owner selected the block path for the current visual direction. The current Godot scene is frozen as a mechanics prototype, not the visual baseline.
 
-Packet 09 now provides a separate inside-looking-out art spike for review. Revision 2 incorporates owner feedback that the first spike had weird text, cluttered walls, too much color, and still read as a graybox. It uses `inspiration/` for stylized scaffold and `new_real_inspiration/` for real period retail construction: storefront glass rhythm, mall corridor, drop ceiling, quieter walls, orderly slatwall case rows, flat bitmap sign panels, restrained price-sticker language, and a glass display counter. The spike may still need visual correction, but the next decision is owner review of this direction before the playable store is rebuilt.
+Packet 09 now provides a separate inside-looking-out art spike for review. Revision 3 keeps the improved architecture/material direction but clarifies the screenshot as a pre-day-1 starter setup state, not a future fully stocked store. It uses `inspiration/` for stylized scaffold and `new_real_inspiration/` for real period retail construction: storefront glass rhythm, mall corridor, drop ceiling, quieter walls, mostly empty slatwall capacity, two upgraded starter game cases, one starter console box, one accessory box, flat bitmap sign panels, restrained price-sticker language, and a glass display counter. The spike may still need visual correction, but the next decision is owner review of this direction before the playable store is rebuilt.
 
 Packet 09 artifacts:
 
 - Scene: `game/scenes/world/art_benchmark/packet_09_inside_out_art_spike.tscn`
 - Capture tool: `game/tests/tools/capture_packet_09_art_spike_screenshot.gd`
 - Review board: `artifacts/validation/latest/packet-09-art-spike-review-board.png`
-- Screenshots: `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`, `packet_09_shelf_density.png`, and `packet_09_storefront_frame.png`
+- Screenshots: `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`, `packet_09_starter_setup_fixture.png`, and `packet_09_storefront_frame.png`
 
 For design intent, read:
 
@@ -48,7 +48,7 @@ scripts/validate_godot.sh
 
 Current validation snapshot:
 
-- Current doc-contract expectation is 587 GUT tests and 11865 asserts.
+- Current doc-contract expectation is 587 GUT tests and 11870 asserts.
 - UI scenario automation coverage is 512/632, or 81.0%.
 - Production script mapping is 54/54, or 100.0%.
 - 3 standalone validation tools are active.

@@ -112,7 +112,7 @@ Review:
 - `docs/design-implementation/work-packets/09-art-direction-spike.md`
 - `artifacts/validation/latest/packet-09-art-spike-review-board.png`
 - `artifacts/validation/latest/screenshots/packet_09_inside_out_art_spike.png`
-- `artifacts/validation/latest/screenshots/packet_09_shelf_density.png`
+- `artifacts/validation/latest/screenshots/packet_09_starter_setup_fixture.png`
 - `artifacts/validation/latest/screenshots/packet_09_storefront_frame.png`
 
 The next decision is approve, revise, or block the Packet 09 art method. Do not rebuild the playable store visuals or resume beta/tester packaging until that decision is made.

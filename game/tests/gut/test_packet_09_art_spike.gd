@@ -18,7 +18,7 @@ func test_packet_09_spike_scene_loads_with_required_review_anchors() -> void:
 		"Packet09ArtRoot/StorefrontGlassSystem/FramedOpenGlassDoor",
 		"Packet09ArtRoot/InteriorFirstFifteenFeet",
 		"Packet09ArtRoot/DropCeilingGridWithFluorescents",
-		"Packet09ArtRoot/SlatwallProductBayDenseCaseRows",
+		"Packet09ArtRoot/SlatwallStarterSetupBayEmptyRails",
 		"Packet09ArtRoot/CheckoutDisplayCaseAnchor",
 		"Packet09ArtRoot/AttachedRetailSignageAndPriceLanguage",
 		"Packet09ArtRoot/BenchmarkCameras/InsideOutHeroCamera",
@@ -40,7 +40,8 @@ func test_packet_09_spike_records_reference_sources_and_rules() -> void:
 	assert_true(source_folders.has("inspiration"))
 	assert_true(source_folders.has("new_real_inspiration"))
 	assert_string_contains(" ".join(rules), "drop ceiling")
-	assert_string_contains(" ".join(rules), "orderly case rows")
+	assert_string_contains(" ".join(rules), "empty retail capacity")
+	assert_string_contains(" ".join(rules), "pre-day-one")
 	assert_string_contains(" ".join(rules), "less text")
 	assert_string_contains(" ".join(rules), "inside-looking-out")
 
@@ -59,7 +60,7 @@ func test_packet_09_spike_uses_bitmap_signs_not_loose_3d_text() -> void:
 
 	assert_eq(labels.size(), 0)
 	assert_eq(text_meshes.size(), 0)
-	assert_gte(bitmap_signs.size(), 8)
+	assert_gte(bitmap_signs.size(), 3)
 
 
 func test_packet_09_spike_keeps_walls_clean_of_random_promo_clutter() -> void:
@@ -76,22 +77,35 @@ func test_packet_09_spike_keeps_walls_clean_of_random_promo_clutter() -> void:
 	assert_lte(window_decals.size(), 2)
 
 
-func test_packet_09_spike_has_retail_density_and_material_breaks() -> void:
+func test_packet_09_spike_shows_empty_capacity_with_limited_upgraded_starter_stock() -> void:
 	var scene := _instantiate_scene(PACKET_09_SCENE)
 	add_child_autofree(scene)
 	await get_tree().process_frame
 
-	var product_facings: Array[Node] = []
-	var price_stickers: Array[Node] = []
+	var dense_current_stock_facings: Array[Node] = []
+	var starter_cases: Array[Node] = []
+	var empty_slot_guides: Array[Node] = []
+	var upgraded_cover_panels: Array[Node] = []
+	var rounded_case_spines: Array[Node] = []
+	var rounded_case_lips: Array[Node] = []
 	var ceiling_details: Array[Node] = []
 	var glass_nodes: Array[Node] = []
-	_collect_name_contains(scene, "DenseCaseFacing", product_facings)
-	_collect_name_contains(scene, "YellowPriceSticker", price_stickers)
+	_collect_name_contains(scene, "DenseCaseFacing", dense_current_stock_facings)
+	_collect_name_contains(scene, "StarterGameCase", starter_cases)
+	_collect_name_contains(scene, "EmptyShelfSlotGuide", empty_slot_guides)
+	_collect_name_contains(scene, "InsetCoverArtPanel", upgraded_cover_panels)
+	_collect_name_contains(scene, "RoundedLeftCaseSpine", rounded_case_spines)
+	_collect_name_contains(scene, "RoundedTopCaseLip", rounded_case_lips)
+	_collect_name_contains(scene, "RoundedBottomCaseLip", rounded_case_lips)
 	_collect_name_contains(scene, "CeilingGridRunner", ceiling_details)
 	_collect_name_contains(scene, "Glass", glass_nodes)
 
-	assert_gte(product_facings.size(), 80)
-	assert_gte(price_stickers.size(), 20)
+	assert_eq(dense_current_stock_facings.size(), 0)
+	assert_eq(starter_cases.size(), 2)
+	assert_gte(empty_slot_guides.size(), 70)
+	assert_eq(upgraded_cover_panels.size(), 2)
+	assert_eq(rounded_case_spines.size(), 2)
+	assert_eq(rounded_case_lips.size(), 4)
 	assert_gte(ceiling_details.size(), 9)
 	assert_gte(glass_nodes.size(), 8)
 

@@ -20,8 +20,9 @@ func _ready() -> void:
 func reference_rules() -> PackedStringArray:
 	return PackedStringArray([
 		"inspiration: small-chain mall storefront, glass rhythm, fascia, corridor frame",
-		"new_real_inspiration: quiet walls, drop ceiling, slatwall, dense but orderly case rows",
+		"new_real_inspiration: quiet walls, drop ceiling, slatwall, empty retail capacity, restrained starter stock",
 		"owner_review: less text, less color, no random wall clutter, stronger shopfit materials",
+		"owner_review: pre-day-one store starts empty-ish; player sets up two games, one console, one accessory",
 		"packet_09: inside-looking-out proof shot, no customers, no debug labels",
 	])
 
@@ -184,7 +185,7 @@ func _build_drop_ceiling(root: Node3D) -> void:
 
 func _build_slatwall_product_bay(root: Node3D) -> void:
 	var bay := Node3D.new()
-	bay.name = "SlatwallProductBayDenseCaseRows"
+	bay.name = "SlatwallStarterSetupBayEmptyRails"
 	root.add_child(bay)
 
 	_box(bay, "RightWallSlatwallPanel", Vector3(3.66, 1.34, 0.85), Vector3(0.08, 2.18, 4.5), _materials.slatwall)
@@ -193,25 +194,26 @@ func _build_slatwall_product_bay(root: Node3D) -> void:
 		_box(bay, "RightWallSlatwallGroove%02d" % [rail + 1], Vector3(3.565, y, 0.85), Vector3(0.07, 0.018, 4.35), _materials.slat_shadow)
 	for z_index in range(9):
 		var z := -1.08 + float(z_index) * 0.48
-		_box(bay, "RightWallShelfBracket%02dA" % [z_index + 1], Vector3(3.42, 0.64 + float(z_index % 4) * 0.37, z - 0.64), Vector3(0.28, 0.035, 0.04), _materials.dark_metal)
-		_box(bay, "RightWallShelfBracket%02dB" % [z_index + 1], Vector3(3.42, 0.64 + float(z_index % 4) * 0.37, z + 0.64), Vector3(0.28, 0.035, 0.04), _materials.dark_metal)
+		_rod_x(bay, "RightWallRoundedShelfBracket%02dA" % [z_index + 1], Vector3(3.42, 0.64 + float(z_index % 4) * 0.37, z - 0.64), 0.018, 0.30, _materials.dark_metal)
+		_rod_x(bay, "RightWallRoundedShelfBracket%02dB" % [z_index + 1], Vector3(3.42, 0.64 + float(z_index % 4) * 0.37, z + 0.64), 0.018, 0.30, _materials.dark_metal)
 
 	for shelf in range(4):
 		var y := 0.72 + float(shelf) * 0.38
 		_box(bay, "RightWallAcrylicShelf%02d" % [shelf + 1], Vector3(3.35, y, -0.05 + float(shelf) * 0.18), Vector3(0.42, 0.04, 3.25), _materials.acrylic)
-		_box(bay, "RightWallShelfHeaderRail%02d" % [shelf + 1], Vector3(3.15, y + 0.19, -0.06 + float(shelf) * 0.18), Vector3(0.08, 0.09, 3.05), _materials.shelf_label_rail)
-		_sign_panel(bay, "ShelfHeaderBitmap%02d" % [shelf + 1], _platform_name(shelf), Vector3(3.105, y + 0.235, -1.25 + float(shelf) * 0.18), Vector3(0.0, -90.0, 0.0), Vector2(0.5, 0.13), _materials.shelf_label_rail, _materials.sign_text)
+		_box(bay, "RightWallShelfHeaderRailPanel%02d" % [shelf + 1], Vector3(3.15, y + 0.19, -0.06 + float(shelf) * 0.18), Vector3(0.04, 0.06, 3.05), _materials.shelf_label_rail)
+		_rod_z(bay, "RightWallRoundedShelfFrontRail%02d" % [shelf + 1], Vector3(3.10, y + 0.04, -0.06 + float(shelf) * 0.18), 0.018, 3.22, _materials.dark_metal)
 
 	for shelf in range(4):
 		for row in range(2):
 			for slot in range(10):
 				var y := 0.83 + float(shelf) * 0.38 + float(row) * 0.115
 				var z := -1.17 + float(slot) * 0.265
-				var mat := _cover_materials[(shelf * 20 + row * 10 + slot) % _cover_materials.size()]
-				var game := _box(bay, "DenseCaseFacingS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.12, y, z), Vector3(0.052, 0.23, 0.16), mat)
-				game.rotation_degrees = Vector3(0.0, -0.7 + float(slot % 3) * 0.35, 0.0)
-				if slot % 4 == 0:
-					_box(bay, "YellowPriceStickerS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.078, y - 0.055, z + 0.045), Vector3(0.016, 0.034, 0.046), _materials.price_yellow)
+				if _is_day_one_starter_game_slot(shelf, row, slot):
+					var mat := _cover_materials[(shelf * 20 + row * 10 + slot) % _cover_materials.size()]
+					var game := _starter_game_case(bay, "StarterGameCaseS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.12, y, z), mat, shelf + slot)
+					game.rotation_degrees = Vector3(0.0, -0.3 + float(slot) * 0.2, 0.0)
+				else:
+					_rod_y(bay, "EmptyShelfSlotGuideS%02dR%02dN%02d" % [shelf + 1, row + 1, slot + 1], Vector3(3.102, y - 0.09, z), 0.010, 0.10, _materials.empty_slot_shadow)
 
 	var left_gondola := Node3D.new()
 	left_gondola.name = "LowGondolaCaseRun"
@@ -219,11 +221,23 @@ func _build_slatwall_product_bay(root: Node3D) -> void:
 	left_gondola.rotation_degrees = Vector3(0.0, 5.0, 0.0)
 	bay.add_child(left_gondola)
 	_box(left_gondola, "GondolaLaminateBase", Vector3(0.0, 0.33, 0.0), Vector3(1.4, 0.66, 2.15), _materials.dark_laminate)
-	_box(left_gondola, "GondolaWireRackBack", Vector3(0.0, 0.94, 0.0), Vector3(1.46, 0.72, 0.08), _materials.dark_metal)
-	for slot in range(10):
-		var z := -0.92 + float(slot) * 0.2
-		_box(left_gondola, "GondolaGameCase%02d" % [slot + 1], Vector3(-0.32 + float(slot % 2) * 0.55, 1.0, z), Vector3(0.38, 0.25, 0.05), _cover_materials[slot % _cover_materials.size()])
+	_rod_z(left_gondola, "GondolaWireRackBackTopRoundedRail", Vector3(0.0, 1.26, 0.0), 0.025, 2.0, _materials.dark_metal)
+	_rod_z(left_gondola, "GondolaWireRackBackMidRoundedRail", Vector3(0.0, 0.98, 0.0), 0.018, 2.0, _materials.dark_metal)
+	_rod_z(left_gondola, "GondolaWireRackBackBottomRoundedRail", Vector3(0.0, 0.74, 0.0), 0.018, 2.0, _materials.dark_metal)
+	for rack_post in [-0.62, 0.0, 0.62]:
+		_rod_y(left_gondola, "GondolaWireRackRoundedPost%02d" % int((rack_post + 0.7) * 100.0), Vector3(rack_post, 0.98, -0.98), 0.018, 0.68, _materials.dark_metal)
+	for slot in range(8):
+		var z := -0.84 + float(slot) * 0.22
+		_rod_x(left_gondola, "EmptyGondolaSlotGuide%02d" % [slot + 1], Vector3(-0.44 + float(slot % 2) * 0.88, 0.93, z), 0.012, 0.32, _materials.empty_slot_shadow)
+	_box(left_gondola, "StarterConsoleBoxForSetup", Vector3(-0.38, 0.98, -0.38), Vector3(0.46, 0.28, 0.34), _materials.console_box)
+	_box(left_gondola, "StarterConsoleBoxFaceStripe", Vector3(-0.38, 1.06, -0.565), Vector3(0.36, 0.065, 0.028), _materials.shelf_label_rail)
+	_box(left_gondola, "StarterAccessoryBoxForSetup", Vector3(0.42, 0.94, 0.12), Vector3(0.28, 0.21, 0.22), _materials.accessory_box)
+	_box(left_gondola, "StarterAccessoryHangTab", Vector3(0.42, 1.08, 0.0), Vector3(0.16, 0.06, 0.04), _materials.paper)
+	_box(left_gondola, "SetupTaskCardOnEmptyFixture", Vector3(0.0, 1.16, -0.92), Vector3(0.58, 0.18, 0.035), _materials.sign_cream)
 	_box(left_gondola, "LowGondolaPriceRail", Vector3(0.0, 0.77, -1.22), Vector3(1.5, 0.10, 0.08), _materials.shelf_label_rail)
+
+	_box(bay, "DayOneSetupBoxUnderFixtureA", Vector3(2.98, 0.16, 1.52), Vector3(0.44, 0.30, 0.36), _materials.cardboard)
+	_box(bay, "DayOneSetupBoxUnderFixtureB", Vector3(2.92, 0.20, 2.05), Vector3(0.34, 0.24, 0.30), _materials.cardboard_dark)
 
 
 func _build_counter_display_case(root: Node3D) -> void:
@@ -254,10 +268,8 @@ func _build_attached_signage(root: Node3D) -> void:
 	signage.name = "AttachedRetailSignageAndPriceLanguage"
 	root.add_child(signage)
 
-	_box(signage, "NewReleaseShelfRailAttached", Vector3(3.24, 1.96, -0.42), Vector3(0.07, 0.12, 1.42), _materials.shelf_label_rail)
-	_sign_panel(signage, "NewReleaseShelfLabelBitmap", "NEW", Vector3(3.198, 2.02, -0.74), Vector3(0.0, -90.0, 0.0), Vector2(0.42, 0.11), _materials.shelf_label_rail, _materials.sign_text)
-	_box(signage, "UsedGamesShelfRailAttached", Vector3(3.24, 1.76, 1.25), Vector3(0.07, 0.12, 1.22), _materials.shelf_label_rail)
-	_sign_panel(signage, "UsedShelfLabelBitmap", "USED", Vector3(3.198, 1.82, 1.02), Vector3(0.0, -90.0, 0.0), Vector2(0.48, 0.11), _materials.shelf_label_rail, _materials.sign_text)
+	_box(signage, "BlankStarterShelfRailAttachedA", Vector3(3.24, 1.96, -0.42), Vector3(0.07, 0.12, 1.42), _materials.shelf_label_rail)
+	_box(signage, "BlankStarterShelfRailAttachedB", Vector3(3.24, 1.76, 1.25), Vector3(0.07, 0.12, 1.22), _materials.shelf_label_rail)
 	_box(signage, "QuietTradeWindowDecal", Vector3(-2.72, 1.46, -2.43), Vector3(0.78, 0.30, 0.028), _materials.window_decal)
 	_sign_panel(signage, "TradeWindowDecalBitmap", "TRADE", Vector3(-3.02, 1.55, -2.468), Vector3(-90.0, 0.0, 0.0), Vector2(0.5, 0.12), _materials.window_decal, _materials.sign_text)
 	_box(signage, "SmallSaleStickerSheetOnCounter", Vector3(-0.1, 1.31, -0.55), Vector3(0.36, 0.02, 0.18), _materials.price_yellow)
@@ -280,8 +292,8 @@ func _build_cameras(root: Node3D) -> void:
 	shelf.name = "ShelfDensityCamera"
 	shelf.fov = 58.0
 	cameras.add_child(shelf)
-	shelf.global_position = Vector3(1.0, 1.22, -0.9)
-	shelf.look_at(Vector3(3.25, 1.22, 0.85), Vector3.UP)
+	shelf.global_position = Vector3(0.95, 1.18, -0.95)
+	shelf.look_at(Vector3(3.18, 1.08, 0.70), Vector3.UP)
 
 	var frame := Camera3D.new()
 	frame.name = "StorefrontFrameCamera"
@@ -322,6 +334,12 @@ func _build_materials() -> void:
 		"directory_blue": _mat("directory_blue", Color(0.36, 0.40, 0.40), 0.6),
 		"price_yellow": _mat("price_yellow", Color(0.82, 0.68, 0.36), 0.58),
 		"shelf_label_rail": _mat("shelf_label_rail", Color(0.09, 0.18, 0.20), 0.65),
+		"empty_slot_shadow": _mat("empty_slot_shadow", Color(0.52, 0.54, 0.49), 0.84),
+		"game_case_black": _mat("game_case_black", Color(0.015, 0.018, 0.018), 0.48),
+		"console_box": _mat("console_box", Color(0.38, 0.42, 0.40), 0.72, 0.0, _checker_texture(Color(0.31, 0.35, 0.34), Color(0.47, 0.49, 0.45), 24)),
+		"accessory_box": _mat("accessory_box", Color(0.68, 0.63, 0.50), 0.74),
+		"cardboard": _mat("cardboard", Color(0.53, 0.36, 0.18), 0.82),
+		"cardboard_dark": _mat("cardboard_dark", Color(0.36, 0.25, 0.14), 0.84),
 		"register_gray": _mat("register_gray", Color(0.3, 0.34, 0.35), 0.55),
 		"paper": _mat("paper", Color(0.86, 0.82, 0.68), 0.92),
 		"paper_blue": _mat("paper_blue", Color(0.62, 0.78, 0.84), 0.86),
@@ -365,6 +383,70 @@ func _box(parent: Node3D, node_name: String, position_value: Vector3, size: Vect
 	return node
 
 
+func _rod_x(parent: Node3D, node_name: String, position_value: Vector3, radius: float, length: float, material: StandardMaterial3D) -> MeshInstance3D:
+	return _cylinder(parent, node_name, position_value, radius, length, Vector3(0.0, 0.0, 90.0), material)
+
+
+func _rod_y(parent: Node3D, node_name: String, position_value: Vector3, radius: float, length: float, material: StandardMaterial3D) -> MeshInstance3D:
+	return _cylinder(parent, node_name, position_value, radius, length, Vector3.ZERO, material)
+
+
+func _rod_z(parent: Node3D, node_name: String, position_value: Vector3, radius: float, length: float, material: StandardMaterial3D) -> MeshInstance3D:
+	return _cylinder(parent, node_name, position_value, radius, length, Vector3(90.0, 0.0, 0.0), material)
+
+
+func _cylinder(parent: Node3D, node_name: String, position_value: Vector3, radius: float, length: float, rotation_value: Vector3, material: StandardMaterial3D) -> MeshInstance3D:
+	var mesh := CylinderMesh.new()
+	mesh.top_radius = radius
+	mesh.bottom_radius = radius
+	mesh.height = length
+	mesh.radial_segments = 8
+	mesh.rings = 1
+	mesh.material = material
+	var node := MeshInstance3D.new()
+	node.name = node_name
+	node.mesh = mesh
+	node.position = position_value
+	node.rotation_degrees = rotation_value
+	parent.add_child(node)
+	return node
+
+
+func _cover_face(parent: Node3D, node_name: String, position_value: Vector3, size_yz: Vector2, cover_material: StandardMaterial3D, variant: int) -> MeshInstance3D:
+	var mesh := QuadMesh.new()
+	mesh.size = Vector2(size_yz.y, size_yz.x)
+	var node := MeshInstance3D.new()
+	node.name = node_name
+	node.mesh = mesh
+	node.position = position_value
+	node.rotation_degrees = Vector3(0.0, -90.0, 0.0)
+	node.material_override = _case_cover_material("%sMaterial" % node_name, cover_material.albedo_color, variant)
+	parent.add_child(node)
+	return node
+
+
+func _case_cover_material(name: String, base: Color, variant: int) -> StandardMaterial3D:
+	var accent := _platform_case_band_material(variant + 1).albedo_color
+	var material := _mat(name, base, 0.64, 0.0, _case_cover_texture(base, accent, variant))
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return material
+
+
+func _starter_game_case(parent: Node3D, node_name: String, position_value: Vector3, cover_material: StandardMaterial3D, variant: int) -> Node3D:
+	var holder := Node3D.new()
+	holder.name = node_name
+	holder.position = position_value
+	parent.add_child(holder)
+
+	_box(holder, "BlackPlasticCaseShell", Vector3(0.0, 0.0, 0.0), Vector3(0.058, 0.255, 0.178), _materials.game_case_black)
+	_cover_face(holder, "InsetCoverArtPanel", Vector3(-0.036, 0.002, 0.006), Vector2(0.206, 0.132), cover_material, variant)
+	_rod_y(holder, "RoundedLeftCaseSpine", Vector3(-0.044, 0.0, -0.082), 0.009, 0.235, _platform_case_band_material(variant + 1))
+	_rod_y(holder, "RoundedRightCaseEdge", Vector3(-0.044, 0.0, 0.082), 0.006, 0.230, _materials.dark_metal)
+	_rod_z(holder, "RoundedTopCaseLip", Vector3(-0.044, 0.123, 0.0), 0.007, 0.170, _materials.game_case_black)
+	_rod_z(holder, "RoundedBottomCaseLip", Vector3(-0.044, -0.123, 0.0), 0.007, 0.170, _materials.game_case_black)
+	return holder
+
+
 func _sign_panel(
 	parent: Node3D,
 	node_name: String,
@@ -395,43 +477,43 @@ func _sign_panel(
 func _glyph_rows(letter: String) -> PackedStringArray:
 	match letter.to_upper():
 		"B":
-			return PackedStringArray(["###.", "#..#", "###.", "#..#", "###."])
+			return PackedStringArray(["####.", "#...#", "#...#", "####.", "#...#", "#...#", "####."])
 		"C":
-			return PackedStringArray(["####", "#...", "#...", "#...", "####"])
+			return PackedStringArray([".####", "#....", "#....", "#....", "#....", "#....", ".####"])
 		"D":
-			return PackedStringArray(["###.", "#..#", "#..#", "#..#", "###."])
+			return PackedStringArray(["####.", "#...#", "#...#", "#...#", "#...#", "#...#", "####."])
 		"G":
-			return PackedStringArray(["####", "#...", "#.##", "#..#", "####"])
+			return PackedStringArray([".####", "#....", "#....", "#.###", "#...#", "#...#", ".####"])
 		"A":
-			return PackedStringArray([".##.", "#..#", "####", "#..#", "#..#"])
+			return PackedStringArray([".###.", "#...#", "#...#", "#####", "#...#", "#...#", "#...#"])
 		"I":
-			return PackedStringArray(["####", ".##.", ".##.", ".##.", "####"])
+			return PackedStringArray(["#####", "..#..", "..#..", "..#..", "..#..", "..#..", "#####"])
 		"M":
-			return PackedStringArray(["#..#", "####", "####", "#..#", "#..#"])
+			return PackedStringArray(["#...#", "##.##", "#.#.#", "#...#", "#...#", "#...#", "#...#"])
 		"E":
-			return PackedStringArray(["####", "#...", "###.", "#...", "####"])
+			return PackedStringArray(["#####", "#....", "#....", "####.", "#....", "#....", "#####"])
 		"S":
-			return PackedStringArray(["####", "#...", "####", "...#", "####"])
+			return PackedStringArray([".####", "#....", "#....", ".###.", "....#", "....#", "####."])
 		"4":
-			return PackedStringArray(["#..#", "#..#", "####", "...#", "...#"])
+			return PackedStringArray(["#...#", "#...#", "#...#", "#####", "....#", "....#", "....#"])
 		"U":
-			return PackedStringArray(["#..#", "#..#", "#..#", "#..#", "####"])
+			return PackedStringArray(["#...#", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."])
 		"O":
-			return PackedStringArray(["####", "#..#", "#..#", "#..#", "####"])
+			return PackedStringArray([".###.", "#...#", "#...#", "#...#", "#...#", "#...#", ".###."])
 		"P":
-			return PackedStringArray(["####", "#..#", "####", "#...", "#..."])
+			return PackedStringArray(["####.", "#...#", "#...#", "####.", "#....", "#....", "#...."])
 		"R":
-			return PackedStringArray(["###.", "#..#", "###.", "#.#.", "#..#"])
+			return PackedStringArray(["####.", "#...#", "#...#", "####.", "#.#..", "#..#.", "#...#"])
 		"T":
-			return PackedStringArray(["####", ".##.", ".##.", ".##.", ".##."])
+			return PackedStringArray(["#####", "..#..", "..#..", "..#..", "..#..", "..#..", "..#.."])
 		"N":
-			return PackedStringArray(["#..#", "##.#", "#.##", "#..#", "#..#"])
+			return PackedStringArray(["#...#", "##..#", "#.#.#", "#..##", "#...#", "#...#", "#...#"])
 		"W":
-			return PackedStringArray(["#..#", "#..#", "####", "####", "#..#"])
+			return PackedStringArray(["#...#", "#...#", "#...#", "#.#.#", "#.#.#", "##.##", "#...#"])
 		"L":
-			return PackedStringArray(["#...", "#...", "#...", "#...", "####"])
+			return PackedStringArray(["#....", "#....", "#....", "#....", "#....", "#....", "#####"])
 		_:
-			return PackedStringArray(["....", "....", "....", "....", "...."])
+			return PackedStringArray([".....", ".....", ".....", ".....", ".....", ".....", "....."])
 
 
 func _mat(_name: String, color: Color, roughness: float, metallic: float = 0.0, texture: Texture2D = null) -> StandardMaterial3D:
@@ -492,10 +574,10 @@ func _sign_texture(background: Color, foreground: Color, text: String) -> ImageT
 			var vignette: float = 0.94 + 0.06 * (1.0 - abs(float(x) - 128.0) / 128.0)
 			image.set_pixel(x, y, background * vignette)
 
-	var glyph_width := 4
-	var glyph_height := 5
-	var pixel := 7
-	var gap := 4
+	var glyph_width := 5
+	var glyph_height := 7
+	var pixel := 5
+	var gap := 3
 	var total_width := 0
 	for letter in text:
 		if letter == " ":
@@ -542,13 +624,85 @@ func _cover_texture(base: Color, accent: Color, index: int) -> ImageTexture:
 	return ImageTexture.create_from_image(image)
 
 
-func _platform_name(index: int) -> String:
-	match index:
+func _case_cover_texture(base: Color, accent: Color, index: int) -> ImageTexture:
+	var image := Image.create(96, 144, false, Image.FORMAT_RGBA8)
+	var dark := Color(0.03, 0.035, 0.035)
+	for y in range(144):
+		for x in range(96):
+			var uv_x := float(x) / 95.0
+			var uv_y := float(y) / 143.0
+			var shade: float = 0.78 + 0.18 * (1.0 - abs(uv_x - 0.5) * 1.7)
+			var color: Color = base * shade
+			if y < 16:
+				color = accent.lerp(Color(0.98, 0.88, 0.58), 0.16)
+			elif y > 125:
+				color = dark
+			elif x < 10:
+				color = accent.darkened(0.24)
+			elif x > 78 and y > 22 and y < 112:
+				color = base.lightened(0.2)
+			image.set_pixel(x, y, color)
+
+	_draw_cover_art_shape(image, index)
+	_fill_rect(image, 12, 23, 68, 4, Color(0.90, 0.88, 0.74))
+	_fill_rect(image, 12, 31, 46, 3, Color(0.76, 0.74, 0.64))
+	_fill_rect(image, 67, 126, 20, 10, Color(0.90, 0.78, 0.43))
+	_fill_rect(image, 70, 129, 14, 2, dark)
+	return ImageTexture.create_from_image(image)
+
+
+func _draw_cover_art_shape(image: Image, index: int) -> void:
+	var palette: Array[Color] = [
+		Color(0.18, 0.36, 0.50),
+		Color(0.60, 0.37, 0.22),
+		Color(0.30, 0.47, 0.28),
+		Color(0.55, 0.49, 0.26),
+	]
+	var color_a := palette[index % palette.size()]
+	var color_b := palette[(index + 2) % palette.size()]
+	match index % 4:
 		0:
-			return "ORBIT"
+			_fill_ellipse(image, Vector2i(48, 72), Vector2i(25, 31), color_a)
+			_fill_ellipse(image, Vector2i(38, 66), Vector2i(9, 12), color_b.lightened(0.18))
+			_fill_ellipse(image, Vector2i(58, 80), Vector2i(8, 10), color_b.darkened(0.08))
 		1:
-			return "NOVA"
+			_fill_slanted_rect(image, Vector2i(24, 49), Vector2i(72, 91), color_a)
+			_fill_slanted_rect(image, Vector2i(31, 60), Vector2i(61, 101), color_b.lightened(0.12))
 		2:
-			return "POCKET"
+			_fill_ellipse(image, Vector2i(47, 71), Vector2i(30, 21), color_a.darkened(0.08))
+			_fill_rect(image, 33, 62, 29, 34, color_b.lightened(0.12))
 		_:
-			return "USED"
+			_fill_rect(image, 28, 48, 40, 54, color_a)
+			_fill_ellipse(image, Vector2i(50, 75), Vector2i(18, 18), color_b.lightened(0.16))
+
+
+func _fill_ellipse(image: Image, center: Vector2i, radius: Vector2i, color: Color) -> void:
+	for y in range(maxi(0, center.y - radius.y), mini(image.get_height(), center.y + radius.y)):
+		for x in range(maxi(0, center.x - radius.x), mini(image.get_width(), center.x + radius.x)):
+			var dx := float(x - center.x) / float(maxi(1, radius.x))
+			var dy := float(y - center.y) / float(maxi(1, radius.y))
+			if dx * dx + dy * dy <= 1.0:
+				image.set_pixel(x, y, color)
+
+
+func _fill_slanted_rect(image: Image, top_left: Vector2i, bottom_right: Vector2i, color: Color) -> void:
+	for y in range(maxi(0, top_left.y), mini(image.get_height(), bottom_right.y)):
+		var offset := int(float(y - top_left.y) * 0.22)
+		for x in range(maxi(0, top_left.x + offset), mini(image.get_width(), bottom_right.x + offset)):
+			image.set_pixel(x, y, color)
+
+
+func _platform_case_band_material(index: int) -> StandardMaterial3D:
+	match index % 4:
+		0:
+			return _materials.platform_blue
+		1:
+			return _materials.platform_green
+		2:
+			return _materials.platform_red
+		_:
+			return _materials.platform_purple
+
+
+func _is_day_one_starter_game_slot(shelf: int, row: int, slot: int) -> bool:
+	return (shelf == 0 and row == 0 and slot == 1) or (shelf == 0 and row == 0 and slot == 2)
