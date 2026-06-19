@@ -1,10 +1,12 @@
 # Work Packet: Hero Art Slice Proof
 
-Status: Active next implementation
+Status: Implemented, pending owner screenshot validation
 Owner decision required: Yes
 Target branch: `codex/hard-visual-benchmark-implementation`
 Primary docs: `docs/production/15-failed-visual-validation.md`, `docs/visual-bible/08-art-production-pipeline.md`
 Expected commit scope: one isolated visual proof scene and minimal capture/test support only
+Implemented scene: `game/scenes/world/art_benchmark/hero_art_slice.tscn`
+Owner review note: `docs/production/16-hero-art-slice-review.md`
 
 ## Goal
 
@@ -35,6 +37,8 @@ This is not a gameplay slice. This is not a full-store rebuild. This is the new 
 ## Required Slice
 
 Create one isolated art-proof scene, separate from the playable mechanics scene.
+
+Implementation note: this scene now exists as `res://scenes/world/art_benchmark/hero_art_slice.tscn`. The next action is owner visual validation of the screenshot, not broad implementation.
 
 The screenshot must include:
 

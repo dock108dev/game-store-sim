@@ -12,7 +12,7 @@ The active object-family art target is [Visual Bible](docs/visual-bible/README.m
 
 The active implementation entrypoint is [Design Implementation Index](docs/design-implementation/README.md). Agents should start there for execution order, packet rules, validation evidence, and handoff expectations.
 
-Current visual status: the first Visual Bible object-family pass is blocked as a failed visual validation. The next allowed work is one isolated [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md), backed by [Failed Visual Validation](docs/production/15-failed-visual-validation.md).
+Current visual status: the first Visual Bible object-family pass is blocked as a failed visual validation. The isolated [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md) now exists and is pending owner review through [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md), backed by [Failed Visual Validation](docs/production/15-failed-visual-validation.md).
 
 Older graybox, broad-production, beta, stockroom-production, hard-benchmark, old slice, and Packet 01-09 docs were removed from active routing when they conflicted with the Visual Bible reset.
 
@@ -36,6 +36,7 @@ Current art-reset entrypoints:
 - [Work Packet Index](docs/design-implementation/work-packets/00-packet-index.md)
 - [Hero Art Slice Proof](docs/design-implementation/work-packets/05-hero-art-slice-proof.md)
 - [Failed Visual Validation](docs/production/15-failed-visual-validation.md)
+- [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md)
 - [Art Direction Reset And Spike Plan](docs/design-implementation/15-art-direction-reset-and-spike-plan.md)
 
 Use [Design Source Of Truth](docs/design-source-of-truth/README.md) when a packet needs design intent, owner decisions, or quality-bar context.
@@ -54,7 +55,7 @@ The gate writes logs, screenshots, and the contact sheet to `artifacts/validatio
 
 Current validation snapshot:
 
-- Current doc-contract expectation: 592 GUT tests and 12273 GUT asserts.
+- Current doc-contract expectation: 594 GUT tests and 12286 GUT asserts.
 - UI scenario automation coverage: 512/632.
 - Production script mapping: 55/55.
 - 3 active standalone validation tools.
@@ -74,4 +75,5 @@ Current validation snapshot:
 - [Visual Blockers](docs/production/13-visual-blockers.md)
 - [Visual Bible Implementation Review](docs/production/14-visual-bible-implementation-review.md)
 - [Failed Visual Validation](docs/production/15-failed-visual-validation.md)
+- [Hero Art Slice Review](docs/production/16-hero-art-slice-review.md)
 - [QA](docs/qa/README.md)

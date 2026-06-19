@@ -14,6 +14,8 @@ The first Visual Bible object-family implementation pass is now integrated and v
 
 The playable scene remains a mechanics prototype. It is not the visual baseline.
 
+An isolated hero art slice now exists at `game/scenes/world/art_benchmark/hero_art_slice.tscn`. It is pending owner screenshot validation.
+
 The active visual target is now:
 
 - [Design Source Of Truth](design-source-of-truth/README.md)
@@ -23,7 +25,7 @@ The active visual target is now:
 
 ## Current Decision
 
-Block the current MVP object-family pass and pivot to one strict hero art slice before any more broad implementation. The store still targets a 2002-2004 independent specialty game shop, with legal-safe fictional products and visible room to grow.
+Block the current MVP object-family pass and validate the strict hero art slice before any more broad implementation. The store still targets a 2002-2004 independent specialty game shop, with legal-safe fictional products and visible room to grow.
 
 Visually failed implementation packets:
 
@@ -34,7 +36,7 @@ Visually failed implementation packets:
 
 Current checkpoint:
 
-1. Build one isolated hero art slice.
+1. Review the isolated hero art slice scene.
 2. Capture one screenshot that looks like the inspiration.
 3. Ask owner if the screenshot proves the visual method.
 4. Only then plan a constrained rebuild/integration path.
@@ -51,7 +53,7 @@ scripts/validate_godot.sh
 
 Current doc-contract expectation:
 
-- GUT: 592 tests, 12273 asserts.
+- GUT: 594 tests, 12286 asserts.
 - UI automation: 512/632, or 81.0%.
 - Production script mapping: 55/55, or 100.0%.
 - Active validation tools: 3.
@@ -72,11 +74,11 @@ Primary blockers:
 
 ## Review Plan
 
-Read [Failed Visual Validation](production/15-failed-visual-validation.md).
+Read [Failed Visual Validation](production/15-failed-visual-validation.md) and [Hero Art Slice Review](production/16-hero-art-slice-review.md).
 
 Next review focus:
 
-- one isolated hero art slice screenshot
+- one isolated hero art slice screenshot from `game/scenes/world/art_benchmark/hero_art_slice.tscn`
 - storefront/concourse read
 - first 15-20 feet of shop interior
 - one believable fixture
@@ -94,5 +96,6 @@ Old Packet 01-09 implementation docs, old slice specs, and old alpha/owner revie
 - `docs/production/13-visual-blockers.md`
 - `docs/production/14-visual-bible-implementation-review.md`
 - `docs/production/15-failed-visual-validation.md`
+- `docs/production/16-hero-art-slice-review.md`
 
 Do not use deleted packet names as implementation instructions.

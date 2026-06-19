@@ -2,10 +2,10 @@
   "schema": 2,
   "project": "game-store-sim",
   "status_date": "2026-06-19",
-  "current_phase": "visual_validation_failed_hero_art_slice_required",
+  "current_phase": "hero_art_slice_implemented_pending_owner_visual_validation",
   "playtest_state": "paused_until_hero_art_slice_approved",
   "playable_state": {
-    "summary": "Broad validated first-person retail prototype with working mechanics. The first Visual Bible object-family implementation pass is integrated but visually rejected: latest screenshots still read as primitive Godot box geometry instead of a convincing early-2000s game shop. The playable scene remains a mechanics prototype. Next work is a strict isolated hero art slice, not broad mechanics or playable-store polish.",
+    "summary": "Broad validated first-person retail prototype with working mechanics. The first Visual Bible object-family implementation pass is integrated but visually rejected: latest screenshots still read as primitive Godot box geometry instead of a convincing early-2000s game shop. The playable scene remains a mechanics prototype. An isolated hero art slice now exists and is pending owner screenshot validation before any broad mechanics or playable-store polish resumes.",
     "implemented_systems": [
       "first_person_movement",
       "click_first_interaction",
@@ -30,7 +30,8 @@
       "hidden_thread_hooks",
       "visual_bible_product_art_kit",
       "visual_bible_fixture_display_kit",
-      "visual_bible_shell_counter_backroom_kit"
+      "visual_bible_shell_counter_backroom_kit",
+      "isolated_hero_art_slice_scene"
     ],
     "visual_read": "object_family_pass_rejected_still_graybox_read",
     "human_review_required": true
@@ -39,8 +40,8 @@
     "command": "scripts/validate_godot.sh",
     "role": "regression_only_not_visual_progress",
     "artifact_root": "artifacts/validation/latest",
-    "gut_tests": 592,
-    "gut_asserts": 12273,
+    "gut_tests": 594,
+    "gut_asserts": 12286,
     "ui_automation": {
       "automated": 512,
       "total": 632,
@@ -68,7 +69,10 @@
       "artifacts/validation/latest/screenshots/packet_09_starter_setup_fixture.png",
       "artifacts/validation/latest/screenshots/packet_09_storefront_frame.png"
     ],
-    "old_name_scan": "passed"
+    "old_name_scan": "passed",
+    "hero_art_slice_scene": "game/scenes/world/art_benchmark/hero_art_slice.tscn",
+    "hero_art_slice_capture_tool": "game/tests/tools/capture_hero_art_slice_screenshot.gd",
+    "hero_art_slice_screenshot": "pending local GUI capture"
   },
   "visual_validation": {
     "status": "failed",
@@ -85,7 +89,7 @@
       "playable_store_polish",
       "more_broad_agent_passes"
     ],
-    "next_allowed_work": "isolated_hero_art_slice"
+    "next_allowed_work": "owner_visual_validation_of_isolated_hero_art_slice"
   },
   "source_inputs": [
     "Store Design & World Building Brief v1.0",
@@ -99,7 +103,7 @@
     "owner_hero_art_slice_visual_approval"
   ],
   "next_decision": {
-    "question": "Can one isolated hero art slice produce a screenshot that actually looks like the target inspiration before any broad implementation continues?",
+    "question": "Does the isolated hero art slice screenshot prove the visual method enough to continue into production integration?",
     "approve_path": "only after the hero art slice screenshot is approved, plan a constrained rebuild/integration path from the proven art method",
     "reject_path": "change art-production method, asset workflow, or engine/tooling before touching the playable mechanics prototype"
   },
@@ -141,6 +145,7 @@
     "docs/production/13-visual-blockers.md",
     "docs/production/14-visual-bible-implementation-review.md",
     "docs/production/15-failed-visual-validation.md",
+    "docs/production/16-hero-art-slice-review.md",
     "docs/qa/README.md",
     "docs/qa/smoke-playtest.md",
     "docs/qa/screenshot-review.md"
