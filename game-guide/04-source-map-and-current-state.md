@@ -14,7 +14,7 @@ Use this section when you need a fast answer during play.
 | 10% | Month-one shop: launch calendar and store identity begin. |
 | 25% | Reliable local store with multiple systems feeding each other. |
 | 50% | Mature first-era shop. You understand the 2002-2004 business. |
-| 75% | Destination shop with deep catalog, loyalty, and rare demand. |
+| 75% | Destination shop with expanded floor plan, loyalty, and rare demand. |
 | 100% | Complete store identity plus resolved or preserved secret history. |
 
 ## Daily Priority Order
@@ -48,6 +48,7 @@ When several customers need the counter:
 - Use store credit when a trade-in is good but cash is tight.
 - Hold launch allocation money before decorating.
 - A sold-out shelf is only good if tomorrow's receiving plan exists.
+- Do not buy the neighboring unit until your stock flow can fill it.
 
 ## Reputation Rules
 
@@ -58,7 +59,7 @@ Reputation rises when you:
 - handle returns calmly
 - complete services
 - recommend correctly
-- keep collector holds
+- keep launch-day promises
 - document or isolate suspicious goods
 
 Reputation falls when you:
@@ -67,7 +68,7 @@ Reputation falls when you:
 - miss promised launch copies
 - refuse legitimate returns
 - sell questionable goods as normal
-- break collector trust
+- break launch-day trust
 - let risky cash deals pile up
 
 ## Supplier Rules
@@ -78,7 +79,7 @@ Risky suppliers are tempting but create paperwork, provenance, and inspection pr
 
 Prestige suppliers reward strong reputation and launch performance. Do not waste their trust on careless allocation.
 
-## Secret Thread Rules
+## Secret Web Rules
 
 - Secrets are optional.
 - Clean records reduce long-term risk.
@@ -86,17 +87,16 @@ Prestige suppliers reward strong reputation and launch performance. Do not waste
 - Isolating goods buys time.
 - Reporting protects trust but can close supplier doors.
 - Selling anomalies as normal is the fastest risky route.
-- One save cannot reveal every secret ending.
+- One save cannot reveal every secret-web outcome.
 
 ## Best First 100% Route
 
 For a balanced first completion:
 
 1. Play clean through the first week.
-2. Build the used wall before over-expanding fixtures.
+2. Build your main stocked category before over-expanding fixtures.
 3. Learn release allocation by taking one controlled risk.
 4. Document suspicious items instead of selling them.
-5. Build collector trust.
+5. Build launch-day trust.
 6. Use supplier follow-ups sparingly.
-7. Finish as a Balanced Local Icon or Clean Records shop.
-
+7. Finish as a Balanced Local Icon with Clean Closure or Quiet Fixer secret-web records.

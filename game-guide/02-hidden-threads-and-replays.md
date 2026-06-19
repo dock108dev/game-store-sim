@@ -1,216 +1,136 @@
-# Hidden Threads And Replays
+# Secret Web Replays
 
-The hidden thread is an optional mystery layer inside the retail simulation. It is not required for progression, and the primary game must remain a store simulator before it is a mystery game.
+The secret web is optional. It is a surprise layer inside the store sim, not the main campaign. You can run a complete retail business without solving it.
 
-## Design Boundaries
+## How To Miss It
 
-The mystery follows these rules:
+You can miss the web by:
 
-- entirely optional
-- never required for store progression
-- discoverable through normal gameplay
-- grounded in gaming culture
-- no supernatural elements
-- no world-ending conspiracies
-- multiple possible outcomes
-- resolution occurs after years of in-game time
-- store operation continues after resolution
-- later playthroughs can reveal different variations
+- ignoring backroom records
+- refusing suspicious conversations
+- avoiding trade-ins
+- buying only from clean suppliers
+- never checking serials
+- keeping stock flow simple
 
-At first, hidden events look like harmless background details.
+This is not failure. The shop continues as a pure retail sim.
 
-## What Counts As A Clue
+## How To Notice It
 
-The major clue types are:
+The web becomes visible when ordinary business details repeat:
 
-- mismatched serial items
-- supplier messages
-- suspicious customer encounters
-- cash offers
-- impossible provenance
-- counterfeit or resealed goods
-- unusual collector rumors
-- security notes
-- backroom evidence records
+- multiple invoice issues from related suppliers
+- serial mismatches on similar goods
+- suspicious cash offers around the same product category
+- launch timing that does not add up
+- repeated customer complaints from one source
+- employee or backroom records that point to the same pattern
 
-## Discovery Channels
-
-The hidden thread can surface through:
-
-- trade-ins
-- inventory anomalies
-- rare products
-- customer interactions
-- employee behavior later
-- industry rumors
-- store records
-- supplier invoices/messages
-- backroom/security placeholders
-
-The strongest early channels are receiving, supplier paperwork, serial mismatches, suspicious customers, and backroom records.
-
-## Clue Surfaces
-
-The clue-surface catalog includes:
-
-| Surface | Location | What It Means |
-| --- | --- | --- |
-| Receiving invoice | Backroom receiving station | Count variance, serial notes, or suspicious receiving terms. |
-| Supplier note | Receiving box | Loose paperwork that hints at off-manifest stock. |
-| Serial lookup | Records tab | Compare recorded and expected item IDs. |
-| Supplier email | Management desk | Terms, provenance gaps, and no-return language. |
-| Customer comment | Sales floor conversation | Cash, bulk, or no-receipt pressure. |
-| Security clip | Backroom security monitor | Placeholder for suspicious handling/storage. |
-| Backroom artifact | Evidence shelf | Stored clue context for later reporting or isolation. |
-
-These are surfaces, not forced objectives. The player can ignore them and keep running the store.
-
-## Risk Rules
-
-The suspicion rules define six risk families:
-
-| Rule | Severity | Source | Meaning |
-| --- | --- | --- | --- |
-| Serial mismatch | High | Inventory | Recorded serial does not match expected metadata. |
-| Suspicious supplier | Medium | Supplier message | Invoice/message language suggests a receiving anomaly. |
-| Cash buyer | Medium | Customer | Quiet cash, bulk goods, or off-register terms. |
-| Impossible provenance | High | Records | Item history cannot match plausible retail source. |
-| Counterfeit goods | High | Inventory | Fake, resealed, altered, or uncertain authenticity. |
-| Hidden storage | Medium | Backroom | Suspicious goods are isolated, hidden, or moved into security storage. |
-
-The hidden layer asks: do you run a clean shop, chase profit, protect customers, protect suppliers, or document everything?
-
-## Choice Paths
-
-The major hidden choice paths are:
-
-| Choice | Stance | Best For |
-| --- | --- | --- |
-| Ignore for now | Passive | Players who want pure retail and minimal mystery. |
-| Document evidence | Cautious | Clean, records-heavy playthroughs. |
-| Sell as normal | Retail | Profit-first or willfully blind playthroughs. |
-| Isolate goods | Protective | Risk-control playthroughs. |
-| Report issue | Formal | Reputation and customer-trust playthroughs. |
-| Accept cash offer | Risky | Short-term cash and high-inspection-risk replays. |
-| Reject goods | Defensive | Clean inventory, lower supplier-risk playthroughs. |
-| Follow up supplier | Investigate | Supplier-thread and provenance-focused replays. |
-
-Some choices require context. For example, selling as normal needs a serial mismatch; accepting cash requires a suspicious customer; following up supplier requires a supplier thread.
-
-## Consequences
-
-Consequences affect more than money.
-
-| Choice | Cash | Reputation | Supplier Access | Customer Trust | Inspection Risk | Story State |
-| --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Ignore | 0 | 0 | 0 | 0 | +1 | ignored |
-| Document | 0 | +1 | 0 | +1 | -1 | documented |
-| Sell as normal | 0 | -2 | 0 | -1 | +2 | sold_as_normal |
-| Isolate goods | 0 | +1 | 0 | 0 | -2 | isolated |
-| Report issue | 0 | +2 | -2 | +1 | -3 | reported |
-| Accept cash offer | +$12.00 | -5 | 0 | -2 | +4 | cash_accepted |
-| Reject goods | 0 | +1 | -1 | +1 | -1 | goods_rejected |
-| Follow up supplier | 0 | 0 | +1 | 0 | -1 | supplier_follow_up |
-
-Use this table to understand the shape of each choice. Exact outcomes depend on your broader store history.
+One strange item is noise. Three related strange items are a pattern.
 
 ## Replay Routes
 
-### Replay 1: Clean Operator
+### Pure Retail Run
 
-Goal: build the store while avoiding hidden risk.
+Goal: never engage the web.
 
-Recommended behavior:
+Playstyle:
 
-1. Refuse suspicious cash offers.
-2. Reject suspicious goods.
-3. Report high-risk issues.
-4. Isolate questionable items before sale.
-5. Favor reputation and customer trust over short-term margin.
+- focus on stock, layout, customers, and expansion
+- refuse suspicious offers
+- ignore records unless they affect ordinary business
 
-Likely feel: slower growth, cleaner records, stronger trust, lower inspection risk, possible supplier friction.
+Outcome:
 
-### Replay 2: Cautious Documentarian
+- Nothing Happens or no secret resolution
 
-Goal: see the hidden thread without escalating too early.
+### Clean Operator Run
 
-Recommended behavior:
+Goal: resolve the web with minimal risk.
 
-1. Inspect invoices and supplier notes.
-2. Use records and serial lookup.
-3. Document evidence whenever available.
-4. Delay reports until patterns emerge.
-5. Keep suspicious goods isolated but not destroyed.
+Playstyle:
 
-Likely feel: maximum clue visibility with controlled risk.
+- document repeated clues
+- isolate questionable goods
+- report after patterns are clear
+- avoid no-receipt money
 
-### Replay 3: Profit-First Retailer
+Outcome:
 
-Goal: run a store that prioritizes cash and sell-through.
+- Clean Closure or Testify In Court
 
-Recommended behavior:
+### Risk Run
 
-1. Sell anomalous goods as normal when possible.
-2. Accept cash offers if the store needs money.
-3. Keep inventory moving.
-4. Treat paperwork as secondary.
-5. Watch for reputation and inspection-risk damage later.
+Goal: see the dangerous version.
 
-Likely feel: faster early money, more risk, worse trust, higher chance of hidden consequences.
+Playstyle:
 
-### Replay 4: Supplier Investigator
+- accept suspicious cash
+- sell questionable goods
+- protect supplier access over clean records
+- keep security light
 
-Goal: follow the supplier side of the mystery.
+Outcome:
 
-Recommended behavior:
+- Inspection, Robbery, You Get Arrested, or Quiet Compromise
 
-1. Order from multiple supplier lots.
-2. Read invoice notes and supplier messages.
-3. Follow up supplier when context unlocks.
-4. Compare delivery batches against calendar and known catalog.
-5. Use records tab to track provenance gaps.
+### Supplier Run
 
-Likely feel: slower, more backroom-heavy, better understanding of where anomalies enter the store.
+Goal: trace the web through deliveries and invoices.
 
-### Replay 5: Isolation And Evidence
+Playstyle:
 
-Goal: quarantine suspicious goods while keeping the store running.
+- order broadly
+- check invoices
+- track supplier notes
+- compare delivery timing against launch timing
+- follow up when patterns repeat
 
-Recommended behavior:
+Outcome:
 
-1. Move questionable items into evidence storage or isolation.
-2. Record security placeholders.
-3. Keep those goods out of ordinary sales flow.
-4. Continue normal retail progression.
-5. Resolve later through report or supplier follow-up.
+- Supplier Fallout, Clean Closure, or Quiet Compromise
 
-Likely feel: safest hidden route for players who want mystery without damaging the shop.
+### Staff Shield Run
 
-### Replay 6: Pure Retail
+Goal: explore what happens when a bigger shop delegates risky work.
 
-Goal: complete the store without engaging hidden content.
+Playstyle:
 
-Recommended behavior:
+- expand the store
+- hire or rely on staff when available
+- route questionable handling through employees
+- avoid direct owner involvement
 
-1. Ignore optional clues.
-2. Refuse suspicious customer interactions.
-3. Do not chase records-tab anomalies.
-4. Focus on catalog, releases, suppliers, services, and store growth.
+Outcome:
 
-Likely feel: the hidden thread remains background texture while the store stays fully playable.
+- Employee Gets Arrested, Inspection, or Quiet Compromise
 
-## Hidden 100% Completion
+### Security Failure Run
 
-A complete hidden-thread file includes:
+Goal: trigger the robbery branch.
 
-- finding each clue-surface type at least once
-- logging a serial mismatch
-- reading a supplier message
-- recording evidence
-- encountering the suspicious contact
-- trying each choice path across separate saves/replays
-- seeing each consequence family
-- resolving one clean route and one risky route
-- confirming store operation continues after resolution
+Playstyle:
 
-Do not try to force every hidden outcome into one save. The mystery is built for replays.
+- hold high-value questionable goods
+- underinvest in security
+- keep cash or rare stock exposed
+- let risky backroom patterns build
+
+Outcome:
+
+- Robbery
+
+## Completion Advice
+
+Do not chase every outcome in one save. The secret web is built for replays.
+
+For 100% secret completion, run at least:
+
+1. Pure Retail
+2. Clean Operator
+3. Risk
+4. Supplier
+5. Staff Shield
+6. Security Failure
+
+After each outcome, the store continues. Use the aftermath to study how the business absorbs the event.

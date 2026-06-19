@@ -13,17 +13,18 @@ The full game spans years of store operation:
 - opening setup
 - first sales
 - supplier access
-- used wall growth
+- used-game growth, if you build that kind of shop
 - launch calendar mastery
 - customer loyalty
 - services and returns
 - fixture and layout evolution
+- neighboring-unit buyouts and wall openings
 - catalog expansion
 - store identity
 - era transitions
 - rare inventory
 - high-trust community status
-- optional secret-thread routes across multiple replays
+- optional secret-web routes across multiple replays
 
 ## 0.0%: Empty Lease
 
@@ -73,7 +74,7 @@ You have only proven:
 - the ledger records activity
 - the daily loop can close
 
-They have not built a store identity, supplier network, customer reputation, catalog, or long-term progression.
+You have not built a store identity, supplier network, customer reputation, catalog, or long-term progression.
 
 ## 0.5%: First Close
 
@@ -133,7 +134,7 @@ Examples:
 
 - browsers respond to fair used prices
 - parents need recommendations
-- collectors care about release promises
+- launch-day regulars care about release promises
 - regulars notice odd stock
 - trade-in sellers test offer discipline
 - service customers test follow-through
@@ -146,8 +147,8 @@ The store has survived the novelty period.
 
 Expected state:
 
-- used wall has meaningful stock
-- new-release planning has begun
+- your chosen product mix has meaningful stock
+- new-release planning has begun if you sell new games
 - backroom computer is part of daily routine
 - supplier lots are understood
 - the player has seen enough customers to identify patterns
@@ -163,10 +164,13 @@ Possible identities:
 
 - used-game bargain shop
 - launch-day specialist
-- collector-friendly counter
+- rare-game specialist
 - service-and-repair local
 - family recommendation shop
 - high-risk cash-heavy operator
+- new-games-only retailer
+- no-trade-in clean shop
+- expanded mall destination
 
 The layout, stock, pricing, and customer history start reflecting your habits.
 
@@ -177,8 +181,8 @@ The store has a reliable daily loop and recognizable local role.
 Expected state:
 
 - multiple supplier sources
-- platform sections becoming legible
-- trade-ins feeding used inventory
+- product organization becoming legible
+- trade-ins feeding used inventory if you accept them
 - services and returns integrated
 - launch promises handled with planning
 - store fixtures improved beyond starter setup
@@ -203,10 +207,11 @@ Money alone does not unlock everything.
 
 At this stage, you are making real tradeoffs:
 
-- buy more common used stock or reserve cash for launch allocation
+- buy more common used stock, stay new-only, or reserve cash for launch allocation
 - expand accessories or deepen new releases
 - build a bargain bin or invest in premium display
 - keep questionable goods isolated or sell through for cash
+- save for a neighboring unit instead of buying more inventory
 
 ## 50%: Mature First-Era Store
 
@@ -214,13 +219,14 @@ The 2002-2004 version of the store is now mature.
 
 Expected state:
 
-- strong used wall
-- credible new-release area
-- platform sections for major fictional platforms
-- trade-in counter is a major business driver
+- strong identity for the product mix you chose
+- credible new-release operation if you sell new games
+- useful used-game operation if you accept trade-ins
+- platform/category organization that matches your layout
+- trade-in counter is a major business driver only if your store uses it
 - demo/guides/media/bargain support exists
 - backroom receiving and office work are routine
-- regulars and collectors have history with the shop
+- regulars and launch-day diehards have history with the shop
 - launch days are planned rather than improvised
 
 This is the halfway point because the first era is mastered, not because the whole game is almost done.
@@ -233,10 +239,11 @@ New platforms, customer expectations, supplier terms, and store density create p
 
 - old stock becomes legacy inventory
 - newer platforms demand display space
-- collectors want cleaner holds
+- launch-day regulars want cleaner holds
 - suppliers offer bigger but riskier lots
 - services can become a reputation pillar
 - store layout must adapt without losing identity
+- neighboring mall units can be bought out and opened into your shop
 
 Success has created complexity.
 
@@ -250,10 +257,11 @@ Expected state:
 - recognizable product and platform identity
 - strong customer loyalty
 - release calendar competence
-- deep used inventory
+- deep inventory in your chosen specialty
 - meaningful fixture and display choices
 - better supplier access
-- rare/collector demand
+- rare-game demand
+- expanded storefront footprint
 
 At 75%, the store is no longer just a local business. It is a destination within its niche.
 
@@ -264,7 +272,7 @@ The store has history.
 The world remembers:
 
 - missed or fulfilled launches
-- trusted or broken collector promises
+- trusted or broken launch promises
 - suspicious stock decisions
 - supplier relationships
 - service reputation
@@ -287,7 +295,7 @@ You have mastered the sim's major business layers:
 - catalog breadth
 - customer loyalty
 - reputation management
-- hidden-thread stance
+- secret-web stance
 
 The last 5% is not more tutorial. It is polish, completion, rare routes, and replay closure.
 
@@ -299,18 +307,19 @@ Core 100%:
 
 - stable multi-era store operation
 - mature, credible store layout
+- expanded floor plan or deliberately compact boutique layout
 - broad catalog access
 - strong customer identity
 - trusted or intentionally risky supplier network
 - launch-day competence
-- trade-ins/services/returns fully integrated
+- trade-ins or alternate sourcing, services, and returns fully integrated
 - visible growth from empty lease to destination shop
 
 Secret/replay 100%:
 
-- major secret threads resolved across multiple playthroughs
-- clean, risky, supplier, collector, isolation, and pure-retail routes explored
-- hidden outcomes layered on top of business endings
+- the secret web resolved across multiple playthroughs
+- oblivious, clean, risky, supplier, employee, court, robbery, and pure-retail outcomes explored
+- secret-web outcomes layered on top of business endings
 - store operation continues after any route
 
 The final achievement is not "you sold a lot." It is "this shop has a history, a reputation, and a personality that came from the way you ran it."

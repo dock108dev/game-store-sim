@@ -23,22 +23,38 @@ The core verbs are:
 
 ## Store Areas
 
-Your first store contains the major areas every successful shop depends on:
+Your first store contains the major functions every successful shop depends on. You choose where they live.
 
 - entrance/storefront
-- new releases
-- used games wall
-- platform sections
+- new releases, if you stock them
+- used games, if you accept trade-ins or buy used lots
+- platform/category organization arranged however you prefer
 - checkout counter
-- trade-in station at checkout
-- demo area
-- bargain bin
-- guides/media
+- trade-in station at checkout, if you run trade-ins
+- demo area, if you invest in it
+- bargain bin, if your store uses discount stock
+- guides/media, if you stock them
 - hardware/accessories
 - receiving/backroom
 - office/management desk
 
-Learn the store by walking it. If you know where receiving, checkout, used games, and new releases live, you know how the business flows.
+Learn the store by walking it. If you know where receiving, checkout, active stock, backstock, and customer traffic live, you know how the business flows. There is no single mandatory layout.
+
+## Store Day Clock
+
+Prep time is unlimited. Before you open, take as long as you want to receive boxes, move shelves, adjust prices, change signs, repaint, lay carpet, place displays, or reorganize the entire shop.
+
+Open hours are timed. A normal store day runs around 15-20 minutes of real time. Friday and Saturday run longer because traffic stays heavier. Sunday runs shorter and rewards efficient prep.
+
+When the open-hours timer ends:
+
+- no new customers enter
+- customers already inside keep browsing, buying, asking questions, or leaving
+- active trade-ins, returns, services, and checkout lines continue
+- you can keep working after the final customer leaves
+- the day advances only when you shut the register
+
+Closing is your choice. The clock stops new traffic, not your control of the store.
 
 ## Inventory
 
@@ -107,15 +123,15 @@ Customers validate the layout and business.
 
 | Archetype | Role | What They Teach |
 | --- | --- | --- |
-| Browser | Browses used games/accessories | Used wall quality and fair pricing. |
+| Browser | Browses active shelves/accessories | Product quality and fair pricing. |
 | Target Buyer | Wants a specific item | Duplicate pricing and shelf matching. |
 | Parent Gift Buyer | Needs help | Recommendations and gift-safe stock. |
-| Collector | Launch/preorder interest | Allocation and reputation. |
+| Launch Regular | Launch/preorder interest | Allocation and reputation. |
 | Regular | Repeat trust | Promise keeping and discoveries. |
 | Trade-In Seller | Brings goods | Offer quality and used-stock growth. |
 | Return Customer | Brings a complaint | Reputation protection. |
 | Service Customer | Needs repair/cleaning | Service bench workflow. |
-| Suspicious Contact | Optional hidden probe | Nonblocking mystery thread. |
+| Suspicious Contact | Optional secret-web probe | Nonblocking mystery route. |
 
 Normal customers queue and shop. Suspicious contacts stay outside the normal sales lane unless you choose to engage them.
 
@@ -133,7 +149,7 @@ The counter is the store's pressure point. Sales, returns, trade-ins, preorders,
 
 ## Trade-Ins
 
-Trade-ins are a major business driver.
+Trade-ins can be a major business driver, but they are optional. A clean new-games-only shop can refuse trade-ins entirely and build around launch planning, accessories, and services instead.
 
 The trade-in flow:
 
@@ -157,7 +173,7 @@ Handle returns at the counter. The backroom is for management and receiving, not
 
 Services add a steady trust-and-revenue line.
 
-Current service examples include:
+Common service jobs include:
 
 - disc resurfacing
 - cartridge cleaning
@@ -175,7 +191,7 @@ The service loop:
 
 Suppliers are how the store grows.
 
-Current supplier lot examples:
+Common supplier lots include:
 
 - Used Game Starter Lot from North Dock Wholesale.
 - New Release Sampler Lot from Clear Cart Distribution.
@@ -183,6 +199,22 @@ Current supplier lot examples:
 - Backstock Used Depth Lot from Harbor Bin Exchange.
 
 Supplier orders reserve cash, create pending deliveries, and eventually generate receiving batches. Supplier trust matters as much as money. You cannot buy your way into the whole catalog on day one.
+
+## Store Expansion
+
+The first store is only the first footprint.
+
+As profit, reputation, and rent history grow, neighboring mall units become available. You can buy out or lease adjacent spaces, then break through walls to expand the shop. Expansions create real layout choices:
+
+- widen the sales floor
+- add a dedicated service room
+- build a larger receiving/backstock zone
+- create a launch-event area
+- add a demo lounge
+- build a premium display room
+- keep the original shop compact and use the next unit mostly for storage
+
+Expansion is not just more square footage. Bigger stores need better signage, clearer paths, more fixtures, stronger stocking discipline, and enough traffic to justify the rent.
 
 ## Release Calendar And Launch Allocation
 
@@ -234,6 +266,6 @@ Save slots preserve your store's history:
 - reputation
 - services
 - management desk history
-- hidden choices and consequences
+- secret-web choices and consequences
 
 Save before major orders, launch commitments, and risky secret choices.

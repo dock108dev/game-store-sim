@@ -4,7 +4,7 @@ This chapter defines the long-form completion scale. The opening tutorial is a f
 
 ## Progression Metrics
 
-Use seven major metrics.
+Use eight major metrics.
 
 | Metric | What It Measures | Unlock Pressure |
 | --- | --- | --- |
@@ -12,9 +12,10 @@ Use seven major metrics.
 | Reputation | Public customer trust | Traffic quality, preorder confidence, complaint tolerance. |
 | Supplier Trust | Distributor confidence | Cleaner lots, larger allocations, rare stock, better terms. |
 | Store Quality | Visual/function buildout | Fixture capacity, display quality, dwell time, customer flow. |
-| Catalog Access | Product breadth | Platforms, categories, used depth, new releases, accessories. |
-| Customer Loyalty | Repeat relationship depth | Regulars, collector holds, referrals, special requests. |
-| Records Integrity | Hidden-thread cleanliness/risk | Secret routes, inspection outcomes, supplier consequences. |
+| Catalog Access | Product breadth | Platforms, categories, used options, new releases, accessories. |
+| Customer Loyalty | Repeat relationship depth | Regulars, launch-day trust, referrals, special requests. |
+| Records Integrity | Secret-web cleanliness/risk | Secret outcomes, inspection outcomes, supplier consequences. |
+| Footprint | Store size and buildout | Adjacent units, wall openings, larger backroom, event space. |
 
 Cash is necessary, but reputation, supplier trust, store quality, and records integrity decide whether the store is actually healthy.
 
@@ -42,8 +43,7 @@ Unlocks:
 
 Secret eligibility:
 
-- visual foreshadowing only
-- optional serial/supplier seeds can appear without demanding action
+- none beyond harmless background oddities
 
 ### 0.3-1%: First Week
 
@@ -51,7 +51,7 @@ Includes:
 
 - several sales
 - first close cycles
-- first trade-in
+- first trade-in opportunity, if you accept that path
 - first supplier order
 - first delivery
 - first pricing correction
@@ -59,16 +59,14 @@ Includes:
 Unlocks:
 
 - buyer variation
-- trade-in panel
+- trade-in panel, if your store uses it
 - simple supplier lots
 - daily summary interpretation
 - records tab visibility
 
 Secret eligibility:
 
-- serial mismatch
-- supplier note
-- document evidence
+- rare background oddities only; stay focused on learning the store
 
 ### 1-3%: Survival Store
 
@@ -76,7 +74,7 @@ Includes:
 
 - store can operate without constant tutorial support
 - player understands daily rhythm
-- used stock starts to matter
+- your chosen stock strategy starts to matter
 - returns/services begin
 
 Unlocks:
@@ -89,10 +87,7 @@ Unlocks:
 
 Secret eligibility:
 
-- suspicious event log
-- evidence storage
-- isolate goods
-- sell as normal
+- first suspicious detail can appear, but the secret web is still dormant
 
 ### 3-5%: Early Local Shop
 
@@ -107,15 +102,12 @@ Unlocks:
 
 - regular/customer loyalty patterns
 - service bench workflow
-- store-credit trade-ins
+- store-credit trade-ins, if your store uses them
 - supplier receiving lifecycle
 
 Secret eligibility:
 
-- suspicious supplier
-- suspicious customer seed
-- reject goods
-- follow up supplier
+- suspicious details can now be recorded, but no major branch has to be followed
 
 ### 5-10%: Month-One Shop
 
@@ -124,27 +116,25 @@ Includes:
 - first release-calendar decisions
 - preorder deposits
 - first launch-day fulfillment or shortage
-- platform sections begin forming
+- product organization begins forming
 
 Unlocks:
 
 - release calendar
 - allocation commitment
 - launch-day resolution
-- collector pressure
+- launch-day regular pressure
 - preorder reputation
 
 Secret eligibility:
 
-- impossible provenance
-- collector rumor
-- cash buyer path
+- first real secret-web seed can trigger after repeated receiving, launch, or trade-in activity
 
 ### 10-20%: Stable First-Era Business
 
 Includes:
 
-- used wall is a core driver
+- your chosen product mix is a core driver
 - supplier strategy matters
 - store identity becomes visible
 - fixtures are chosen for function
@@ -152,7 +142,7 @@ Includes:
 
 Unlocks:
 
-- deeper used lots
+- deeper used lots, if they fit your business model
 - accessory counter support
 - guide/media support
 - bargain-bin flow
@@ -161,9 +151,8 @@ Unlocks:
 
 Secret eligibility:
 
-- North Dock thread deepens
-- Backroom Shelf thread begins
-- security placeholders become useful
+- the secret web starts forming if suspicious records have accumulated
+- oblivious players can still miss it entirely
 
 ### 20-35%: Recognized Local Store
 
@@ -185,9 +174,9 @@ Unlocks:
 
 Secret eligibility:
 
-- Collector Network thread
-- Counterfeit Run seed
-- supplier investigation branches
+- launch rumor branch
+- counterfeit goods branch
+- supplier investigation branch
 
 ### 35-50%: Mature 2002-2004 Store
 
@@ -196,7 +185,7 @@ Includes:
 - strong first-era catalog
 - mature opening-era layout
 - strong launch competence
-- regular/collector ecosystem
+- regular and launch-day ecosystem
 - services and returns folded into reputation
 
 Unlocks:
@@ -209,7 +198,7 @@ Unlocks:
 
 Secret eligibility:
 
-- secret route branches begin locking from prior behavior
+- secret-web branches begin locking from prior behavior
 - report issue and supplier reckoning become meaningful
 
 ### 50-65%: Era Transition
@@ -233,7 +222,7 @@ Secret eligibility:
 
 - impossible launch/early-stock variants
 - counterfeit clusters
-- collector network consequences
+- rare-game rumor consequences
 
 ### 65-80%: Destination Shop
 
@@ -247,7 +236,8 @@ Includes:
 Unlocks:
 
 - premium display cases
-- rare/collector inventory paths
+- rare-game inventory paths
+- neighboring unit expansion
 - advanced service reputation
 - larger allocation negotiations
 - high-value storage
@@ -266,7 +256,7 @@ Includes:
 - mature store identity
 - high catalog breadth
 - multi-year record of business choices
-- hidden-thread history visible in records
+- secret-web history visible in records
 
 Unlocks:
 
@@ -278,7 +268,7 @@ Unlocks:
 
 Secret eligibility:
 
-- final hidden route resolutions
+- final secret-web resolutions
 - unresolved route preservation
 
 ### 95-100%: Completion And Replays
@@ -322,7 +312,7 @@ Unlocks: daily summary, basic reorder logic.
 
 Approx: 1%.
 
-Condition: several days completed, trade-in and supplier basics seen.
+Condition: several days completed, supplier basics seen, and the trade-in path either tested or deliberately declined.
 
 Unlocks: deeper customer rotation and receiving flow.
 
@@ -338,7 +328,7 @@ Unlocks: release calendar, preorders, returns, services.
 
 Approx: 10%.
 
-Condition: regulars and collectors start to care.
+Condition: regulars and launch-day customers start to care.
 
 Unlocks: customer loyalty and launch reputation pressure.
 
@@ -346,7 +336,7 @@ Unlocks: customer loyalty and launch reputation pressure.
 
 Approx: 25%.
 
-Condition: supplier network, used wall, store zones, and customer trust are established.
+Condition: supplier network, chosen departments, store layout, and customer trust are established.
 
 Unlocks: larger catalog and better fixtures.
 
@@ -382,7 +372,7 @@ Example:
 
 - Premium display case requires cash, store quality, and high-value stock access.
 - Better release allocation requires supplier trust, reputation, and prior launch performance.
-- Collector rare requests require customer loyalty, store quality, and clean promise history.
+- Rare-game requests require customer loyalty, store quality, and clean promise history.
 - Risky gray-market lots require supplier contact and low records discipline or intentional risky stance.
 
 ## Catalog Unlock Logic
@@ -418,7 +408,7 @@ Unlock range: 50-75%.
 - new platform generation
 - legacy used categories
 - stronger hardware launches
-- more collector pressure
+- more launch-day pressure
 - richer preorder campaigns
 
 ### Mature Catalog
@@ -430,6 +420,51 @@ Unlock range: 75-100%.
 - deep accessories
 - premium display stock
 - final completion items
+
+## Store Expansion Unlock Logic
+
+Expansion is one of the biggest long-term unlocks.
+
+### First Neighbor Offer
+
+Unlock range: 20-35%.
+
+Requirements:
+
+- reliable rent history
+- positive cash reserve
+- stable customer flow
+- enough inventory flow to justify more space
+
+Use cases:
+
+- larger sales floor
+- dedicated backroom
+- service bench room
+- better demo area
+
+### Wall Blowout
+
+Unlock range: 35-50%.
+
+After buying or leasing the adjacent unit, you can open the wall. This creates a construction period and a layout reset. Use prep time to move fixtures, repaint, rebuild signs, and re-route traffic before opening again.
+
+### Second Expansion
+
+Unlock range: 65-80%.
+
+The destination shop can absorb another neighboring unit or split the store into specialized areas:
+
+- main sales floor
+- used/retro room
+- launch/event area
+- repair/service room
+- backstock warehouse
+- premium display room
+
+### Compact Legend Route
+
+You never have to expand. A compact store can still reach 100% if it stays profitable, dense, readable, and trusted. Declining expansion is a valid identity, not a failure.
 
 ## Fixture Unlock Logic
 
@@ -456,7 +491,7 @@ Mature:
 - glass cases
 - premium hardware displays
 - rare-stock storage
-- high-density used wall
+- high-density category walls
 - stronger signage/header systems
 - upgraded service bench
 
@@ -468,7 +503,7 @@ Safe suppliers:
 
 - cleaner paperwork
 - lower margin
-- lower hidden risk
+- lower secret-web risk
 - steady trust growth
 
 Risky suppliers:
@@ -489,7 +524,7 @@ Supplier progression is one of the main long-term games.
 
 ## Secret Unlock Logic
 
-Hidden content unlocks from normal sim behavior:
+Secret-web content unlocks from normal sim behavior:
 
 - receiving suspicious goods
 - inspecting serial mismatches
@@ -502,4 +537,4 @@ Hidden content unlocks from normal sim behavior:
 - selling questionable stock
 - building enough record history
 
-The first seeds can appear early, but real secret-thread completion belongs to the long game.
+The first seeds can appear early, but real secret-web completion belongs to the long game.

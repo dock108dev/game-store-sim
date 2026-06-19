@@ -6,7 +6,7 @@ Read this chapter before planning a serious run. It explains what Game Store Sim
 
 Game Store Sim is a first-person retail life sim about opening a small independent game store in the early 2000s and slowly turning it from an understocked startup into the kind of local shop people remember years later.
 
-The game is not about becoming a giant chain. It is about operating one believable shop well:
+The game is not about becoming a giant chain. It is about operating one believable shop well, even if that shop eventually buys out neighboring mall units and opens the walls:
 
 - knowing what customers want
 - choosing what to buy with limited cash
@@ -39,7 +39,7 @@ The secret tone is quiet and plausible:
 - off-manifest stock
 - no-receipt cash offers
 - serial mismatches
-- collector rumors
+- launch rumors
 - supplier pressure
 - impossible timing
 
@@ -68,7 +68,7 @@ Possible identities:
 - careful neighborhood shop
 - high-volume used-game trader
 - launch-day specialist
-- collector-friendly rarity shop
+- rare-game specialist
 - service-and-repair trusted local
 - bargain-bin treasure cave
 - risky gray-market operator
@@ -78,7 +78,7 @@ Hybrids work, but the store reflects your habits.
 
 ## Progression Pillars
 
-Progression has seven axes:
+Progression has eight axes:
 
 1. Cash: can you afford the next risk?
 2. Reputation: do customers believe your promises?
@@ -86,7 +86,8 @@ Progression has seven axes:
 4. Store Quality: does the shop look and function like a better retailer?
 5. Catalog Access: do platforms, categories, and rare goods unlock?
 6. Customer Depth: do more demanding archetypes trust the store?
-7. Records Integrity: do your hidden-thread choices create clean, risky, or ambiguous history?
+7. Records Integrity: do your secret-web choices create clean, risky, or ambiguous history?
+8. Footprint: does the store stay compact by choice or expand into adjacent units?
 
 Cash is the loudest number but not the deepest progression. A rich store with poor reputation, bad suppliers, and suspicious records is unstable.
 
@@ -109,12 +110,12 @@ Core 100%:
 
 Optional 100%:
 
-- all customer archetypes resolved well
+- all relevant customer archetypes resolved well
 - all release-calendar patterns mastered
-- all supplier types used
-- all store zones built out
-- all hidden clue surfaces discovered
-- all major hidden routes resolved across replays
+- all supplier types understood or deliberately avoided
+- all chosen store functions built out
+- all secret-web clue surfaces discovered
+- all major secret-web outcomes resolved across replays
 
 The player can keep running the shop after any ending.
 
@@ -130,13 +131,13 @@ That means every secret unlock comes from a normal sim action:
 - pricing a strange trade-in
 - comparing serials
 - following up with a supplier
-- keeping a promise to a collector
+- keeping a launch-day promise
 - refusing a no-receipt deal
 - accepting a no-receipt deal
 - isolating goods instead of selling them
 - reviewing records after close
 
-No hidden thread requires pixel hunting outside the retail loop.
+No secret-web clue requires pixel hunting outside the retail loop.
 
 ## Canon Store Arc
 
@@ -156,13 +157,13 @@ Main question: can the business survive normal retail pressure?
 
 ### Act III: The Local Shop
 
-Regulars appear. Collectors ask about release promises. Parents need advice. Trade-ins become the used wall's lifeblood. Services and returns make the store feel human.
+Regulars appear. Launch-day customers ask about release promises. Parents need advice. Trade-ins can become a used-game shop's lifeblood, while no-trade-in stores lean harder on ordering, services, and launch trust. Services and returns make the store feel human.
 
 Main question: what kind of shop are you becoming?
 
 ### Act IV: Access And Pressure
 
-Better suppliers, rarer goods, launch days, and customer expectations scale together. Hidden-thread pressure also increases because more volume means more anomalies.
+Better suppliers, rarer goods, launch days, and customer expectations scale together. Secret-web pressure also increases because more volume means more anomalies.
 
 Main question: what are you willing to risk for growth?
 
@@ -178,7 +179,7 @@ Core endings describe the business, not the end of play:
 
 - Neighborhood Favorite: high trust, stable reputation, clean records.
 - Launch-Day Machine: strong release planning and high new-release revenue.
-- Used Wall Legend: strong trade-in loop, deep used catalog, collector interest.
+- Used Game Legend: strong trade-in or used-lot loop, deep used catalog, rare-game demand.
 - Service Staple: repair/service reputation drives repeat traffic.
 - High-Risk Operator: strong cash, weak trust, high inspection risk.
 - Balanced Local Icon: broad competence across all systems.

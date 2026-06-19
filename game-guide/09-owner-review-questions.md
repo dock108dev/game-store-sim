@@ -22,20 +22,20 @@ A cash-heavy day can still be a bad day if it came from:
 
 Read reputation, supplier trust, and records integrity alongside cash.
 
-## The Used Wall Is Your Heartbeat
+## Your Main Category Is Your Heartbeat
 
-New releases create spikes. Used games create rhythm.
+New releases create spikes. Used games create rhythm. Services build trust. Accessories add margin. Your store's heartbeat is whichever category your layout and buying habits support best.
 
-A strong used wall:
+A strong stocked category:
 
 - gives browsers something to do
 - keeps regulars checking in
 - feeds bargain-bin decisions
 - gives trade-ins visible purpose
-- creates collector surprises
+- creates rare-game surprises
 - makes the store feel local
 
-If the store feels dead, fix the used wall first.
+If the store feels dead, fix your most important stocked category first. That may be used games, new releases, accessories, services, or bargain goods depending on your build.
 
 ## Launch Days Are Reputation Tests
 
@@ -85,10 +85,11 @@ This route keeps options open and avoids locking into the riskiest endings too e
 
 For later runs, specialize:
 
-- Cash Habit run: accept every suspicious cash offer.
-- Archivist run: document and isolate but rarely report.
-- Supplier Reckoning run: chase invoices and supplier follow-ups.
-- Collector Confidence run: protect launch promises and rare holds.
+- Profit-First run: accept every suspicious cash offer.
+- Quiet Fixer run: document and isolate but rarely report.
+- Supplier Investigator run: chase invoices and supplier follow-ups.
+- Staff Shield run: let employees handle questionable goods after hiring.
+- Robbery run: let high-value risk build while underinvesting in security.
 - Pure Retail run: ignore secrets and prove the shop can thrive without them.
 
 ## Final Advice

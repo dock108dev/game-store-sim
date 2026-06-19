@@ -29,8 +29,8 @@ Do:
 
 1. Run several day loops.
 2. Adjust at least one price after customer behavior.
-3. Accept one trade-in.
-4. Decline or negotiate one trade-in.
+3. Try one trade-in or deliberately set a no-trade-in policy.
+4. Decline or negotiate one poor trade-in if you use that system.
 5. Place a starter supplier order.
 6. Receive and sort the delivery.
 7. Save and reload.
@@ -81,7 +81,7 @@ Do:
 3. Take one preorder.
 4. Fulfill or fail launch-day demand.
 5. Learn from reputation change.
-6. Improve a fixture or store zone.
+6. Improve a fixture or product area.
 
 Completion signal:
 
@@ -92,9 +92,9 @@ Completion signal:
 Do:
 
 1. Decide the store's early identity.
-2. Deepen the used wall.
+2. Deepen the store's main product identity.
 3. Add accessories or guide/media support.
-4. Improve bargain/new-release/platform zones.
+4. Improve the product areas your store actually uses.
 5. Use at least two supplier lot types.
 6. Keep services and returns from damaging trust.
 
@@ -115,22 +115,22 @@ Do:
 
 Completion signal:
 
-- regulars and collectors have reasons to come back.
+- regulars and launch-day customers have reasons to come back.
 
 Secret note:
 
-- choose a hidden-thread stance: clean records, cautious archive, risky profit, supplier investigation, or pure retail.
+- choose a secret-web stance: clean records, cautious archive, risky profit, supplier investigation, staff shield, security failure, or pure retail.
 
 ## 35-50%: Mature First-Era Store
 
 Do:
 
-1. Fill the first-era used wall with meaningful depth.
+1. Build meaningful depth in the product mix you chose.
 2. Run launch days confidently.
 3. Maintain service reputation.
 4. Keep returns under control.
 5. Use multiple supplier relationships intentionally.
-6. Build out demo, bargain, guide/media, hardware, and platform areas.
+6. Build out the demo, bargain, guide/media, hardware, and platform areas that fit your store.
 
 Completion signal:
 
@@ -145,6 +145,7 @@ Do:
 3. Rework layout without breaking customer flow.
 4. Decide which supplier relationships still fit.
 5. Use store quality to support larger catalog breadth.
+6. Buy out or lease a neighboring unit when the store can fill it.
 
 Completion signal:
 
@@ -154,11 +155,12 @@ Completion signal:
 
 Do:
 
-1. Build rare/collector inventory paths.
+1. Build rare-game inventory paths.
 2. Negotiate or earn better allocation access.
 3. Use premium fixtures for high-value stock.
 4. Keep the store dense but readable.
 5. Protect reputation through promises, services, and fair handling.
+6. Open the wall into an expanded shop or commit to a compact legend route.
 
 Completion signal:
 
@@ -171,7 +173,7 @@ Do:
 1. Resolve long-running supplier consequences.
 2. Complete major customer loyalty arcs.
 3. Establish final store identity.
-4. Review hidden records and decide what remains unresolved.
+4. Review secret-web records and decide what remains unresolved.
 5. Finish mature catalog and layout goals.
 
 Completion signal:
@@ -184,7 +186,7 @@ Do:
 
 1. Stabilize cash, reputation, supplier trust, store quality, catalog access, customer loyalty, and records integrity.
 2. Finish the business ending family.
-3. Resolve one secret ending family or intentionally keep the thread unresolved.
+3. Resolve one secret-web outcome or intentionally let the web pass by.
 4. Continue operating after the ending summary.
 
 Completion signal:
@@ -207,28 +209,36 @@ Aim for:
 Likely combined ending:
 
 - business ending: Balanced Local Icon
-- secret ending: Clean Records or Backroom Archivist
+- secret-web outcome: Clean Closure or Quiet Fixer
 
 ## Replay Routes For True Secret 100%
 
-True secret completion takes multiple stores.
+True secret-web completion takes multiple stores. The web is one optional mystery system with several outcomes; each route resolves, summarizes what happened, and returns you to normal store play.
 
-### Risk Route
+### Oblivious / Pure Retail Route
 
-Accept suspicious cash, sell some anomalies, use risky suppliers, and trigger Cash Habit or Audit outcomes.
+Ignore clues, refuse suspicious contacts, focus on stock and customers, and prove the store can thrive without mystery escalation.
 
-### Collector Route
+### Clean Operator / Court Route
 
-Fulfill launches, protect holds, build rare trust, and trigger Collector Confidence.
+Document suspicious goods, isolate inventory, reject risky cash, and report only when the pattern is clear. This can lead to clean closure or a testimony summary.
 
-### Supplier Investigator
+### Profit-First / Arrest Route
 
-Read every invoice, follow up supplier threads, reject suspicious goods, and trigger Supplier Reckoning.
+Accept suspicious cash, move anomalies as normal stock, and use risky suppliers until inspection pressure breaks. This can lead to the player arrest summary, but the business returns to normal afterward.
 
-### Pure Retail
+### Staff Shield Route
 
-Ignore records anomalies, refuse suspicious contacts, and prove the sim works without mystery escalation.
+Hire staff, route questionable handling through employees, and let the fallout land on the wrong person. This can trigger the employee arrest outcome.
 
-### Archive Route
+### Supplier Investigator Route
 
-Document, isolate, and preserve evidence without always reporting. Trigger Backroom Archivist.
+Read every invoice, follow up supplier messages, reject suspicious goods, and trigger supplier fallout or clean closure.
+
+### Security Failure / Robbery Route
+
+Let high-value questionable stock, weak security, and visible risk build together until the store is robbed. The loss hurts, the route resolves, and the normal business continues.
+
+### Quiet Fixer Route
+
+Document, isolate, and preserve evidence without always reporting. Trigger quiet compromise or archive-style closure.
