@@ -19,9 +19,9 @@ const SHOTS: Array[Dictionary] = [
     },
     {
         "filename": "03-receiving-backroom.png",
-        "camera": Vector3(-2.75, 1.45, -8.35),
-        "target": Vector3(-1.05, 0.92, -7.22),
-        "fov": 54.0,
+        "camera": Vector3(-2.70, 1.55, -6.55),
+        "target": Vector3(-0.10, 0.90, -7.45),
+        "fov": 60.0,
     },
     {
         "filename": "04-starter-shipment-open.png",
@@ -43,9 +43,9 @@ const SHOTS: Array[Dictionary] = [
     },
     {
         "filename": "07-counter-register.png",
-        "camera": Vector3(1.75, 1.45, 0.25),
-        "target": Vector3(3.05, 1.05, -0.75),
-        "fov": 48.0,
+        "camera": Vector3(1.45, 1.42, 0.55),
+        "target": Vector3(3.02, 1.03, -0.78),
+        "fov": 56.0,
     },
     {
         "filename": "08-customer-entering-from-mall.png",
