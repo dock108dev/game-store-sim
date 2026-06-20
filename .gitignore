@@ -4,3 +4,8 @@ game/.godot/
 game/build/
 game/builds/
 *.tmp
+*.blend1
+*.blend2
+*.blend@
+assets/blender/review-renders/tmp/
+.homebrew-cache/

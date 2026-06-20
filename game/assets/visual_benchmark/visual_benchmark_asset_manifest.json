@@ -1,0 +1,118 @@
+{
+  "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+  "generated_by": "assets/blender/scripts/generate_visual_benchmark_store.py",
+  "assets": [
+    {
+      "asset": "mall_store_shell",
+      "source_collection": "Store Shell",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/mall_store_shell.glb",
+      "godot_path": "game/assets/visual_benchmark/mall_store_shell.glb",
+      "description": "Mall concourse, storefront, sales floor shell, walls, ceiling lights, and core floor materials.",
+      "benchmark_targets": [
+        "01-storefront-from-mall.png",
+        "02-empty-sales-floor.png"
+      ]
+    },
+    {
+      "asset": "starter_shelving_pack",
+      "source_collection": "Shelving Pack",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/starter_shelving_pack.glb",
+      "godot_path": "game/assets/visual_benchmark/starter_shelving_pack.glb",
+      "description": "Wall shelf, freestanding gondola, readable shelf capacity states, category strips.",
+      "benchmark_targets": [
+        "02-empty-sales-floor.png",
+        "06-stocked-shelf-density.png"
+      ]
+    },
+    {
+      "asset": "checkout_counter_register",
+      "source_collection": "Counter Register",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/checkout_counter_register.glb",
+      "godot_path": "game/assets/visual_benchmark/checkout_counter_register.glb",
+      "description": "Checkout counter, register, scanner, cash drawer, receipt props, and counter clutter.",
+      "benchmark_targets": [
+        "07-counter-register.png"
+      ]
+    },
+    {
+      "asset": "receiving_backroom_pack",
+      "source_collection": "Receiving Backroom",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/receiving_backroom_pack.glb",
+      "godot_path": "game/assets/visual_benchmark/receiving_backroom_pack.glb",
+      "description": "Receiving table, starter shipment boxes, open box, invoice cue, backroom clutter.",
+      "benchmark_targets": [
+        "03-receiving-backroom.png",
+        "04-starter-shipment-open.png"
+      ]
+    },
+    {
+      "asset": "product_case_pack",
+      "source_collection": "Product Cases",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/product_case_pack.glb",
+      "godot_path": "game/assets/visual_benchmark/product_case_pack.glb",
+      "description": "Fictional new/used game cases, price stickers, grouped rows, held-case sample.",
+      "benchmark_targets": [
+        "05-picked-up-case.png",
+        "06-stocked-shelf-density.png"
+      ]
+    },
+    {
+      "asset": "signage_and_posters_pack",
+      "source_collection": "Signage Posters",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/signage_and_posters_pack.glb",
+      "godot_path": "game/assets/visual_benchmark/signage_and_posters_pack.glb",
+      "description": "Fictional storefront sign, open/closed sign, sale tags, shelf headers, promo poster surfaces.",
+      "benchmark_targets": [
+        "01-storefront-from-mall.png",
+        "06-stocked-shelf-density.png"
+      ]
+    },
+    {
+      "asset": "customer_placeholder",
+      "source_collection": "Customer Placeholder",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/customer_placeholder.glb",
+      "godot_path": "game/assets/visual_benchmark/customer_placeholder.glb",
+      "description": "Simple readable customer silhouette for mall-to-store entry staging.",
+      "benchmark_targets": [
+        "08-customer-entering-from-mall.png"
+      ]
+    },
+    {
+      "asset": "daily_report_computer",
+      "source_collection": "Daily Report Computer",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/daily_report_computer.glb",
+      "godot_path": "game/assets/visual_benchmark/daily_report_computer.glb",
+      "description": "Backroom computer with business-tool daily report screen and simple desk props.",
+      "benchmark_targets": [
+        "09-daily-report-view.png"
+      ]
+    },
+    {
+      "asset": "game_store_visual_benchmark_full",
+      "source_collection": "Full Benchmark Store",
+      "source_blend": "assets/blender/source/game_store_visual_benchmark_assets.blend",
+      "export_path": "assets/blender/exports/game_store_visual_benchmark_full.glb",
+      "godot_path": "game/assets/visual_benchmark/game_store_visual_benchmark_full.glb",
+      "description": "Complete assembled first 0.3% visual benchmark store scene.",
+      "benchmark_targets": [
+        "01-storefront-from-mall.png",
+        "02-empty-sales-floor.png",
+        "03-receiving-backroom.png",
+        "04-starter-shipment-open.png",
+        "05-picked-up-case.png",
+        "06-stocked-shelf-density.png",
+        "07-counter-register.png",
+        "08-customer-entering-from-mall.png",
+        "09-daily-report-view.png"
+      ]
+    }
+  ]
+}

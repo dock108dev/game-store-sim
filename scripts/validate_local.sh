@@ -6,7 +6,9 @@ GODOT_BIN="${GODOT_BIN:-/Users/michaelfuscoletti/.local/bin/godot}"
 ARTIFACT_DIR="$ROOT_DIR/artifacts/validation/latest"
 LOG_FILE="$ARTIFACT_DIR/validation.log"
 ENGINE_LOG="$ARTIFACT_DIR/engine-proof.log"
+ENGINE_GODOT_LOG="$ARTIFACT_DIR/engine-proof-godot.log"
 LAUNCH_LOG="$ARTIFACT_DIR/main-scene-launch.log"
+LAUNCH_GODOT_LOG="$ARTIFACT_DIR/main-scene-godot.log"
 SUMMARY_FILE="$ARTIFACT_DIR/summary.json"
 SCREENSHOT_FILE="$ARTIFACT_DIR/screenshots/engine-proof-state.png"
 
@@ -49,7 +51,12 @@ fi
 
 (
   cd "$ROOT_DIR/game"
-  GSS_VALIDATION_DIR="$ARTIFACT_DIR" "$GODOT_BIN" --headless --path "$ROOT_DIR/game" --script res://scripts/tools/run_validation.gd
+  "$GODOT_BIN" --headless --path "$ROOT_DIR/game" --import --quit
+) >>"$LOG_FILE" 2>&1
+
+(
+  cd "$ROOT_DIR/game"
+  GSS_VALIDATION_DIR="$ARTIFACT_DIR" "$GODOT_BIN" --headless --log-file "$ENGINE_GODOT_LOG" --path "$ROOT_DIR/game" --script res://scripts/tools/run_validation.gd
 ) >"$ENGINE_LOG" 2>&1 || {
   cat "$ENGINE_LOG" | tee -a "$LOG_FILE"
   exit 1
@@ -64,7 +71,7 @@ fi
 
 (
   cd "$ROOT_DIR/game"
-  "$GODOT_BIN" --headless --path "$ROOT_DIR/game" --quit-after 2
+  "$GODOT_BIN" --headless --log-file "$LAUNCH_GODOT_LOG" --path "$ROOT_DIR/game" --quit-after 2
 ) >"$LAUNCH_LOG" 2>&1 || {
   cat "$LAUNCH_LOG" | tee -a "$LOG_FILE"
   exit 1

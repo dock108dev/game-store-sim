@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://visualbenchmarkstore01"]
+
+[ext_resource type="PackedScene" path="res://assets/visual_benchmark/game_store_visual_benchmark_full.glb" id="1_store"]
+
+[sub_resource type="Environment" id="Environment_visual_benchmark"]
+background_mode = 1
+background_color = Color(0.08, 0.095, 0.105, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 0.91, 0.78, 1)
+ambient_light_energy = 0.32
+glow_enabled = true
+glow_intensity = 0.04
+
+[node name="VisualBenchmarkStore" type="Node3D"]
+
+[node name="BenchmarkStoreAsset" parent="." instance=ExtResource("1_store")]
+
+[node name="CameraReferences" type="Node3D" parent="."]
+
+[node name="StorefrontFromMallCamera" type="Camera3D" parent="CameraReferences"]
+transform = Transform3D(-0.906308, -0.115711, 0.406326, 0, 0.961836, 0.273627, -0.422618, 0.248344, -0.871731, 5.8, 1.65, 6.25)
+fov = 62.0
+current = true
+
+[node name="SalesFloorCamera" type="Camera3D" parent="CameraReferences"]
+transform = Transform3D(0.965926, -0.0669873, 0.25, 0, 0.965926, 0.258819, -0.258819, -0.25, 0.933013, -2.15, 1.62, 1.35)
+fov = 64.0
+
+[node name="BackroomCamera" type="Camera3D" parent="CameraReferences"]
+transform = Transform3D(0.766044, -0.133022, 0.628429, 0, 0.978148, 0.207912, -0.642788, -0.159345, 0.749292, -3.05, 1.55, -5.75)
+fov = 58.0
+
+[node name="RetailKeyLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.353553, 0.612372, 0, 0.866025, 0.5, -0.707107, -0.353553, 0.612372, 0, 0, 0)
+light_energy = 0.58
+shadow_enabled = true
+
+[node name="StoreWarmFill" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -1.9)
+light_color = Color(1, 0.88, 0.68, 1)
+light_energy = 1.05
+omni_range = 8.0
+
+[node name="BackroomFill" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 2.1, -7.2)
+light_color = Color(0.86, 0.94, 1, 1)
+light_energy = 0.75
+omni_range = 4.2
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_visual_benchmark")

@@ -2,6 +2,9 @@ extends SceneTree
 
 const EngineProofState = preload("res://scripts/systems/engine_proof_state.gd")
 
+const VISUAL_BENCHMARK_SCENE := "res://scenes/visual_benchmark/VisualBenchmarkStore.tscn"
+const VISUAL_BENCHMARK_MANIFEST := "res://assets/visual_benchmark/visual_benchmark_asset_manifest.json"
+
 var failures: Array[String] = []
 var validation_dir: String = ""
 
@@ -16,6 +19,7 @@ func _run() -> void:
     DirAccess.make_dir_recursive_absolute(validation_dir.path_join("screenshots"))
 
     _check_scene_loads()
+    _check_visual_benchmark_assets()
     var proof_save_path: String = validation_dir.path_join("engine_proof_save.json")
     var state: EngineProofState = EngineProofState.new()
     var proof: Dictionary = state.run_engine_proof(proof_save_path)
@@ -30,6 +34,9 @@ func _run() -> void:
         "screenshot": "screenshots/engine-proof-state.png",
         "checks": {
             "first_person_scene_loads": not failures.has("scene_loads"),
+            "visual_benchmark_scene_loads": not failures.has("visual_benchmark_scene_loads"),
+            "visual_benchmark_manifest_loads": not failures.has("visual_benchmark_manifest_loads"),
+            "visual_benchmark_assets_load": not failures.has("visual_benchmark_assets_load"),
             "physical_item_pickup_stock_sale": bool(proof["ok"]),
             "save_load_round_trip": _proof_step_ok(proof, "load_restores_sold_item"),
             "macos_export_preset": FileAccess.file_exists("res://export_presets.cfg")
@@ -48,6 +55,46 @@ func _check_scene_loads() -> void:
     if packed == null:
         failures.append("scene_loads")
         return
+
+    var benchmark: PackedScene = load(VISUAL_BENCHMARK_SCENE)
+    if benchmark == null:
+        failures.append("visual_benchmark_scene_loads")
+
+func _check_visual_benchmark_assets() -> void:
+    if not FileAccess.file_exists(VISUAL_BENCHMARK_MANIFEST):
+        failures.append("visual_benchmark_manifest_loads")
+        return
+
+    var file: FileAccess = FileAccess.open(VISUAL_BENCHMARK_MANIFEST, FileAccess.READ)
+    if file == null:
+        failures.append("visual_benchmark_manifest_loads")
+        return
+
+    var parsed: Variant = JSON.parse_string(file.get_as_text())
+    file.close()
+    if typeof(parsed) != TYPE_DICTIONARY or not parsed.has("assets"):
+        failures.append("visual_benchmark_manifest_loads")
+        return
+
+    var assets: Variant = parsed["assets"]
+    if typeof(assets) != TYPE_ARRAY:
+        failures.append("visual_benchmark_manifest_loads")
+        return
+
+    for asset: Variant in assets:
+        if typeof(asset) != TYPE_DICTIONARY or not asset.has("godot_path"):
+            failures.append("visual_benchmark_manifest_loads")
+            return
+        var godot_path: String = "res://%s" % String(asset["godot_path"]).trim_prefix("game/")
+        if not FileAccess.file_exists(godot_path):
+            failures.append("visual_benchmark_assets_load")
+            push_error("Missing visual benchmark asset: %s" % godot_path)
+            return
+        var loaded: Resource = load(godot_path)
+        if loaded == null:
+            failures.append("visual_benchmark_assets_load")
+            push_error("Unable to load visual benchmark asset: %s" % godot_path)
+            return
 
 func _expect(label: String, ok: bool) -> void:
     print("%s: %s" % [label, "PASS" if ok else "FAIL"])
