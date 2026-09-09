@@ -4,28 +4,46 @@ var data: Dictionary
 func _init():
  reset()
 func reset():
- data = {"version":4,"clock":0.0,"queue":[],"decisions":[],"day":1,"orders":[],"phase":"prep","received":false,"cash":55000,"items":{},"customers":{},"sales":[],"carried":""}
+ data = {"version":5,"clock":0.0,"queue":[],"decisions":[],"day":1,"orders":[],"phase":"prep","received":false,"cash":55000,"items":{},"customers":{},"sales":[],"carried":""}
+const PRODUCTS = ["curb", "tide", "orbit"]
+const CATALOG = {
+ "curb":{"name":"Curb Circuit 02","cost":800,"reference":2199,"art":"case"},
+ "tide":{"name":"Tidebound Atlas","cost":1200,"reference":2799,"art":"case-tide"},
+ "orbit":{"name":"Orbit Orchard","cost":500,"reference":1499,"art":"case-orbit"}}
+const CAPACITY = 4
+func preference(day: int, customer: String) -> String:
+ return PRODUCTS[(day-1+maxi(VISITORS.find(customer),0))%3]
 func receive() -> bool:
  if data.phase != "prep": return false
- if data.received:
-  for order in data.orders:
-   if not order.received and order.day + 1 == data.day:
-    order.received = true
-    for n in range(order.quantity):
-     data.items["order-%d-copy-%d" % [order.day,n+1]] = {"location":"backroom","owner":"","price":0,"cost":800}
-    return true
-  return false
- data.received = true
- for id in ["case-01","case-02","case-03"]:
-  data.items[id] = {"location":"backroom","owner":"","price":0,"cost":800}
- return true
-func order(quantity, expected_day: int) -> bool:
- if data.phase != "report" or data.day != expected_day or not quantity is int or quantity < 1 or quantity > 6: return false
+ if not data.received:
+  data.received=true
+  for n in range(3):
+   var product=PRODUCTS[n]
+   data.items["case-%02d"%(n+1)]={"product":product,"location":"backroom","owner":"","price":0,"cost":CATALOG[product].cost}
+  return true
  for row in data.orders:
-  if row.day == data.day: return false
- if quantity * 800 > data.cash: return false
- data.cash -= quantity * 800
- data.orders.append({"day":data.day,"quantity":quantity,"total":quantity*800,"received":false})
+  if not row.received and row.day+1==data.day:
+   row.received=true
+   for product in PRODUCTS:
+    for n in range(int(row.lines[product].quantity)):
+     data.items["order-%d-%s-%d"%[row.day,product,n+1]]={"product":product,"location":"backroom","owner":"","price":0,"cost":row.lines[product].cost}
+   return true
+ return false
+func order(quantities, expected_day: int) -> bool:
+ if data.phase != "report" or data.day != expected_day or not quantities is Dictionary or quantities.size()!=3: return false
+ for row in data.orders:
+  if row.day==data.day:return false
+ var total=0
+ var quantity=0
+ var lines={}
+ for product in PRODUCTS:
+  var q=quantities.get(product)
+  if not q is int or q<0 or q>6:return false
+  total+=q*CATALOG[product].cost;quantity+=q
+  lines[product]={"quantity":q,"cost":CATALOG[product].cost}
+ if quantity<1 or total>data.cash:return false
+ data.cash-=total
+ data.orders.append({"day":data.day,"quantity":quantity,"lines":lines,"total":total,"received":false})
  return true
 func advance(expected_day: int) -> bool:
  if data.phase != "report" or data.day != expected_day: return false
@@ -50,36 +68,46 @@ const VISITORS = ["visitor-1","visitor-2","visitor-3"]
 const NAMES = ["Alex","Blair","Casey"]
 func willingness(day: int, customer: String = "visitor-1") -> int:
  var index = VISITORS.find(customer)
- return REFERENCE * WILLINGNESS[(day-1+maxi(index,0)*2) % WILLINGNESS.size()] / 100
-func reprice(cents) -> bool:
+ return CATALOG[preference(day,customer)].reference * WILLINGNESS[(day-1+maxi(index,0)*2) % WILLINGNESS.size()] / 100
+func reprice(cents, product: String = "curb") -> bool:
  if data.phase != "prep" or not cents is int or cents < 100 or cents > 9999: return false
  var changed=false
  for item in data.items.values():
-  if item.location in ["shelf","backroom"]:
+  if item.product == product and item.location in ["shelf","backroom"]:
    item.price=cents;changed=true
  return changed
-func price(cents) -> bool:
+func price(cents, product: String = "curb") -> bool:
  if data.phase != "prep" or not data.received or not cents is int or cents < 100 or cents > 9999: return false
  var changed=false
  for item in data.items.values():
-  if item.location == "backroom":
+  if item.product == product and item.location == "backroom":
    item.price = cents
    changed=true
  return changed
-func stock() -> bool:
- if data.phase != "prep": return false
- var changed = false
+func shelf_used() -> int:
+ return count_at("shelf")+count_at("customer")
+func stock(product: String = "curb", quantity: int = 1) -> bool:
+ if data.phase != "prep" or product not in PRODUCTS or quantity<1:return false
+ var moved=0
  for item in data.items.values():
-  if item.location == "backroom" and item.price > 0:
-   item.location = "shelf"
-   changed = true
- return changed
+  if shelf_used()>=CAPACITY or moved>=quantity:break
+  if item.product==product and item.location=="backroom" and item.price>0:
+   item.location="shelf";moved+=1
+ return moved>0
+func unstock(product: String, quantity: int = 1) -> bool:
+ if data.phase != "prep" or quantity<1:return false
+ var moved=0
+ for item in data.items.values():
+  if moved>=quantity:break
+  if item.product==product and item.location=="shelf" and item.owner=="":
+   item.location="backroom";moved+=1
+ return moved>0
 func open() -> bool:
- if data.phase != "prep" or count_at("backroom") > 0 or not pending_shipment().is_empty() or not data.received: return false
+ if data.phase != "prep" or not pending_shipment().is_empty() or not data.received: return false
  data.phase = "open"
  for n in range(3):
   var id=VISITORS[n]
-  data.customers[id]={"name":NAMES[n],"arrival":n*5.0,"state":"waiting","position":[210.0,580.0],"elapsed":0.0,"settled":false,"item":"","copy":"","offer":0,"budget":willingness(data.day,id),"decision":"pending"}
+  data.customers[id]={"product":preference(data.day,id),"name":NAMES[n],"arrival":n*5.0,"state":"waiting","position":[210.0,580.0],"elapsed":0.0,"settled":false,"item":"","copy":"","offer":0,"budget":willingness(data.day,id),"decision":"pending"}
  return true
 func tick(delta: float):
  if data.phase == "open": data.clock += delta
@@ -96,14 +124,14 @@ func browse(customer: String) -> bool:
 func record_decision(customer: String, outcome: String):
  var c=data.customers[customer]
  c.decision=outcome
- data.decisions.append({"day":data.day,"customer":customer,"item":c.copy,"offer":c.offer,"budget":c.budget,"outcome":outcome})
+ data.decisions.append({"product":c.product,"day":data.day,"customer":customer,"item":c.copy,"offer":c.offer,"budget":c.budget,"outcome":outcome})
 func reserve(customer: String) -> bool:
  if data.phase not in ["open","closing"] or not data.customers.has(customer): return false
  var c=data.customers[customer]
  if c.state != "browsing" or c.decision != "pending": return false
  for id in data.items:
   var item = data.items[id]
-  if item.location == "shelf" and item.owner == "":
+  if item.product == c.product and item.location == "shelf" and item.owner == "":
    item.location="customer";item.owner=customer
    c.item=id;c.copy=id;c.offer=item.price;c.state="selected"
    return true
@@ -146,9 +174,9 @@ func sale(customer: String) -> bool:
  if c.state != "queued" or not c.settled or not data.items.has(c.item): return false
  var id=c.item
  var item=data.items[id]
- if item.location != "customer" or item.owner != customer or c.decision != "buy" or item.price != c.offer: return false
+ if item.product != c.product or item.location != "customer" or item.owner != customer or c.decision != "buy" or item.price != c.offer: return false
  data.cash += c.offer
- data.sales.append({"day":data.day,"customer":customer,"item":id,"price":c.offer,"cost":item.cost})
+ data.sales.append({"product":item.product,"day":data.day,"customer":customer,"item":id,"price":c.offer,"cost":item.cost})
  item.location="sold";item.owner=""
  if data.carried == id: data.carried=""
  c.item="";c.state="leaving";c.settled=false
@@ -171,51 +199,62 @@ func finalize() -> bool:
  if not can_finalize(): return false
  data.phase="report"
  return true
-func count_at(location: String) -> int:
+func count_at(location: String, product: String = "") -> int:
  var n = 0
  for item in data.items.values():
-  if item.location == location: n += 1
+  if item.location == location and (product=="" or item.product==product): n += 1
  return n
-func report() -> Dictionary:
+func report(product: String = "") -> Dictionary:
  var revenue = 0
  var cost = 0
  var daily_sold = 0
  for s in data.sales:
-  if s.day != data.day: continue
+  if s.day != data.day or (product!="" and s.product!=product): continue
   daily_sold += 1
   revenue += int(s.price)
   cost += int(s.cost)
  var unavailable=0
  var missed=0
  for d in data.decisions:
+  if product!="" and d.product!=product:continue
   if d.day == data.day and d.outcome == "decline": missed+=1
   if d.day == data.day and d.outcome == "unavailable": unavailable+=1
- return {"unavailable":unavailable,"missed":missed,"revenue":revenue,"cost":cost,"margin":revenue-cost,"cash":data.cash,"sold":daily_sold,"remaining":data.items.size()-data.sales.size()}
+ return {"unavailable":unavailable,"missed":missed,"revenue":revenue,"cost":cost,"margin":revenue-cost,"cash":data.cash,"sold":daily_sold,"remaining":count_at("shelf",product)+count_at("backroom",product)+count_at("customer",product)}
 func whole(value) -> bool:
  return (value is int or value is float) and is_finite(float(value)) and value == int(value)
 func valid() -> bool:
- if data.get("version") != 4 or data.get("phase") not in ["prep","open","closing","report"]: return false
+ if data.get("version") != 5 or data.get("phase") not in ["prep","open","closing","report"]: return false
  for key in ["items","customers"]:
   if not data.get(key) is Dictionary: return false
  if not data.get("sales") is Array or not data.get("received") is bool or not data.get("carried") is String: return false
  if not whole(data.get("day")) or data.day < 1 or not data.get("orders") is Array: return false
- var expected = ["case-01","case-02","case-03"] if data.received else []
+ var expected = {}
+ if data.received:
+  for n in range(3):expected["case-%02d"%(n+1)]={"product":PRODUCTS[n],"cost":CATALOG[PRODUCTS[n]].cost}
  var purchase_cost = 0
  var order_days = []
  for order_row in data.orders:
   if not order_row is Dictionary: return false
   if not whole(order_row.get("day")) or order_row.day < 1 or order_row.day > data.day or order_days.has(order_row.day): return false
-  if not whole(order_row.get("quantity")) or order_row.quantity < 1 or order_row.quantity > 6: return false
-  if order_row.get("total") != order_row.quantity * 800 or not order_row.get("received") is bool: return false
+  if not order_row.get("lines") is Dictionary or order_row.lines.size()!=3:return false
+  var total=0
+  var quantity=0
+  for product in PRODUCTS:
+   var line=order_row.lines.get(product)
+   if not line is Dictionary or not whole(line.get("quantity")) or line.quantity<0 or line.quantity>6 or line.get("cost")!=CATALOG[product].cost:return false
+   total+=line.quantity*line.cost;quantity+=line.quantity
+  if quantity<1 or order_row.get("quantity")!=quantity or order_row.get("total")!=total or not order_row.get("received") is bool:return false
   if order_row.received and order_row.day >= data.day: return false
   if not order_row.received and (order_row.day < data.day-1 or (order_row.day == data.day and data.phase != "report") or (order_row.day < data.day and data.phase != "prep")): return false
   order_days.append(order_row.day)
   purchase_cost += int(order_row.total)
   if order_row.received:
-   for n in range(int(order_row.quantity)): expected.append("order-%d-copy-%d" % [order_row.day,n+1])
+   for product in PRODUCTS:
+    for n in range(int(order_row.lines[product].quantity)):expected["order-%d-%s-%d"%[order_row.day,product,n+1]]={"product":product,"cost":order_row.lines[product].cost}
  if data.items.size() != expected.size(): return false
  for id in expected:
-  if not data.items.has(id): return false
+  if not data.items.has(id) or not data.items[id] is Dictionary or data.items[id].get("product")!=expected[id].product or data.items[id].get("cost")!=expected[id].cost: return false
+ if shelf_used()>CAPACITY:return false
  if data.phase != "prep" and not data.received: return false
  if data.phase == "prep" and not data.customers.is_empty(): return false
  if not data.get("queue") is Array or not (data.get("clock") is float or data.get("clock") is int) or not is_finite(float(data.clock)) or data.clock < 0: return false
@@ -229,6 +268,8 @@ func valid() -> bool:
   var key=str(int(d.day))+":"+d.customer
   if key in decision_keys: return false
   decision_keys.append(key)
+  if d.get("product")!=preference(int(d.day),d.customer):return false
+  if d.item!="" and (not data.items.has(d.item) or data.items[d.item].product!=d.product):return false
   if d.get("budget") != willingness(int(d.day),d.customer) or not whole(d.get("offer")): return false
   if d.get("outcome") in ["buy","decline"]:
    if not data.items.has(d.item) or d.offer < 100 or d.offer > 9999: return false
@@ -248,7 +289,7 @@ func valid() -> bool:
   if not data.decisions.any(func(d):return d.day == s.day and d.customer == s.get("customer") and d.item == s.item and d.offer == s.price and d.outcome == "buy"): return false
   var i = data.items[s.item]
   if not i is Dictionary: return false
-  if i.get("location") != "sold" or s.get("price") != i.get("price") or s.get("cost") != 800: return false
+  if i.get("location") != "sold" or s.get("price") != i.get("price") or s.get("cost") != i.get("cost") or s.get("product") != i.get("product"): return false
   var sale_key=str(int(s.day))+":"+s.customer
   if sale_key in sold_customers: return false
   sold_customers.append(sale_key)
@@ -259,9 +300,8 @@ func valid() -> bool:
   var item = data.items[id]
   if not item is Dictionary or item.get("location") not in ["backroom","shelf","customer","sold"]: return false
   if not item.get("price") is float and not item.get("price") is int: return false
-  if item.price != int(item.price) or item.price < 0 or item.price > 9999 or item.get("cost") != 800: return false
+  if item.price != int(item.price) or item.price < 0 or item.price > 9999 or item.get("product") not in PRODUCTS or not whole(item.get("cost")): return false
   if item.location != "backroom" and item.price < 100: return false
-  if data.phase != "prep" and item.location == "backroom": return false
   if item.location == "sold" and not sold.has(id): return false
   if item.location == "customer":
    if data.phase not in ["open","closing"] or not data.customers.has(item.get("owner")): return false
@@ -277,6 +317,7 @@ func valid() -> bool:
   var c=data.customers[id]
   var n=VISITORS.find(id)
   if not c is Dictionary or c.get("state") not in ["waiting","arriving","browsing","selected","queued","leaving","gone","cancelled"]: return false
+  if c.get("product")!=preference(data.day,id):return false
   if c.get("name") != NAMES[n] or c.get("arrival") != n*5.0 or c.get("budget") != willingness(data.day,id): return false
   if not c.get("position") is Array or c.position.size()!=2 or not c.get("settled") is bool: return false
   for v in c.position:
@@ -299,7 +340,7 @@ func valid() -> bool:
    if not matches.is_empty() or c.state == "queued": return false
   elif matches.size()!=1 or matches[0].item!=c.copy or matches[0].offer!=c.offer or matches[0].outcome!=c.decision: return false
   if c.state in ["selected","queued"]:
-   if not data.items.has(c.item) or c.item!=c.copy or data.items[c.item].owner!=id or data.items[c.item].location!="customer" or data.items[c.item].price!=c.offer: return false
+   if not data.items.has(c.item) or c.item!=c.copy or data.items[c.item].owner!=id or data.items[c.item].location!="customer" or data.items[c.item].price!=c.offer or data.items[c.item].product!=c.product: return false
   elif c.item!="": return false
   if (c.state == "queued") != (id in data.queue): return false
   if c.decision in ["decline","unavailable","departed"] and c.state not in ["leaving","gone"]: return false
@@ -330,6 +371,7 @@ func load_from(path: String) -> bool:
   c.offer=int(c.offer);c.budget=int(c.budget)
  for row in parsed.orders:
   row.day = int(row.day);row.quantity = int(row.quantity);row.total = int(row.total)
+  for line in row.lines.values():line.quantity=int(line.quantity);line.cost=int(line.cost)
  for item in parsed.items.values():
   item.price = int(item.price)
   item.cost = int(item.cost)

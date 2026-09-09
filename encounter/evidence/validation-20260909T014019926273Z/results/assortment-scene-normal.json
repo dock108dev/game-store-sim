@@ -1,0 +1,182 @@
+[
+  {
+    "check": "actual receiving",
+    "pass": true
+  },
+  {
+    "check": "mixed labels and shelf through controls",
+    "pass": true
+  },
+  {
+    "check": "scene reload stocking",
+    "pass": true
+  },
+  {
+    "check": "staggered first arrival",
+    "pass": true
+  },
+  {
+    "check": "scene reload arrival",
+    "pass": true
+  },
+  {
+    "check": "saved progress arrival visitor-1",
+    "pass": true
+  },
+  {
+    "check": "saved progress arrival visitor-2",
+    "pass": true
+  },
+  {
+    "check": "saved progress arrival visitor-3",
+    "pass": true
+  },
+  {
+    "check": "visible selection",
+    "pass": true
+  },
+  {
+    "check": "scene reload selection",
+    "pass": true
+  },
+  {
+    "check": "saved progress selection visitor-1",
+    "pass": true
+  },
+  {
+    "check": "saved progress selection visitor-2",
+    "pass": true
+  },
+  {
+    "check": "saved progress selection visitor-3",
+    "pass": true
+  },
+  {
+    "check": "three products queued",
+    "pass": true
+  },
+  {
+    "check": "queue readable",
+    "pass": true
+  },
+  {
+    "check": "scene reload closing",
+    "pass": true
+  },
+  {
+    "check": "saved progress closing visitor-1",
+    "pass": true
+  },
+  {
+    "check": "saved progress closing visitor-2",
+    "pass": true
+  },
+  {
+    "check": "saved progress closing visitor-3",
+    "pass": true
+  },
+  {
+    "check": "closing retains queue",
+    "pass": true
+  },
+  {
+    "check": "checkout drains",
+    "pass": true
+  },
+  {
+    "check": "mixed product totals",
+    "pass": true
+  },
+  {
+    "check": "scene reload report",
+    "pass": true
+  },
+  {
+    "check": "saved progress report visitor-1",
+    "pass": true
+  },
+  {
+    "check": "saved progress report visitor-2",
+    "pass": true
+  },
+  {
+    "check": "saved progress report visitor-3",
+    "pass": true
+  },
+  {
+    "check": "mixed order through dialog",
+    "pass": true
+  },
+  {
+    "check": "scene reload ordering",
+    "pass": true
+  },
+  {
+    "check": "saved progress ordering visitor-1",
+    "pass": true
+  },
+  {
+    "check": "saved progress ordering visitor-2",
+    "pass": true
+  },
+  {
+    "check": "saved progress ordering visitor-3",
+    "pass": true
+  },
+  {
+    "check": "four spaces enforce overflow",
+    "pass": true
+  },
+  {
+    "check": "return changes assortment",
+    "pass": true
+  },
+  {
+    "check": "scene reload day2 assortment",
+    "pass": true
+  },
+  {
+    "check": "day2 decisions",
+    "pass": true
+  },
+  {
+    "check": "day2 drains",
+    "pass": true
+  },
+  {
+    "check": "two day ledger",
+    "pass": true
+  },
+  {
+    "check": "sought item missing",
+    "pass": true
+  },
+  {
+    "check": "missing shift drains",
+    "pass": true
+  },
+  {
+    "check": "comparison leaves one unavailable",
+    "pass": true
+  },
+  {
+    "check": "product price refusal",
+    "pass": true
+  },
+  {
+    "check": "refusal drains",
+    "pass": true
+  },
+  {
+    "check": "routes avoid fixtures",
+    "pass": true
+  },
+  {
+    "check": "customers never overlap",
+    "pass": true
+  },
+  {
+    "check": "invariants throughout gameplay",
+    "pass": true
+  }
+]

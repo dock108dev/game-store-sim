@@ -1,0 +1,4 @@
+{
+  "accepted": false,
+  "reason": "All 4287 movie frames are identical; macOS background window did not redraw. Frame count alone is insufficient. Retained for diagnosis."
+}

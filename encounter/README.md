@@ -1,6 +1,6 @@
-# Replay Junction — R4 customer wave
+# Replay Junction — R5 assortment
 
-Owner R3 feedback **“build on.”** accepts the bounded pricing slice and authorizes R4. R4 owner acceptance remains pending. Existing animation limits remain.
+R4 owner feedback **“yes”** accepts handling several customers within scope. R5 adds three fictional games and stocking decisions. R5 owner acceptance remains pending.
 
 ## Play
 
@@ -10,43 +10,52 @@ Double-click **Launch Encounter.command**, or run:
 '/Users/michaelfuscoletti/Desktop/game-sim/encounter/Launch Encounter.command'
 ```
 
-Receive three prepaid copies → choose price → print labels → stock → open → watch three visitors browse → serve the numbered checkout queue → close admission → finish existing customers → finalize the day report.
+Receive one prepaid copy of each game. Choose each product in the shift desk, enter its price and press **Label / reprice this product**. Open **Assortment** to add individual copies to the four shelf spaces. **Return 1** puts an unsold copy in the backroom with its identity, price and purchase cost intact. Open the shop, serve the numbered queue, close admission, finish admitted visitors, then finalize the report.
 
-At the report, optionally order 1–6 copies at $8 each within available cash, advance, receive once, price and stock. Unsold copies retain their prices. During prep, **Apply price to unsold stock** relabels both shelf and backroom copies. Printing labels affects backroom copies only. Editing the field alone changes no stock. Prices are $1.00–$99.99; below $8 creates a per-copy loss.
+| Game | Purchase cost | Reference price | Package |
+| --- | --- | --- | --- |
+| Curb Circuit 02 | $8.00 | $21.99 | Blue / road |
+| Tidebound Atlas | $12.00 | $27.99 | Teal / sailboat |
+| Orbit Orchard | $5.00 | $14.99 | Plum / ringed fruit |
 
-Click controls/stations; WASD/arrows walk; E performs the guided action; K saves; L reloads. **Close admission** cancels unarrived visitors, while existing visitors can still buy. **Finalize day report** appears only after the floor and queue clear; it locks sales. Closing does not forcibly dismiss valid queued buyers.
+The reference is guidance, not a promised sale. Prices can be $1–$99.99. Editing the field alone changes no copy; confirming changes unsold copies of the selected product. Below purchase cost produces a loss. Shelf capacity includes copies temporarily reserved by shoppers; refused copies return to their reserved space. Excess inventory stays in the backroom and is unavailable to shoppers.
 
-## Reproducible wave
+At the finalized report, **Per-product report** shows sales, price misses, stock misses, revenue, sold-copy cost and gross profit for each game. Then **Order replenishment** lets you choose 0–6 of each product, previews total and remaining cash, and accepts one nonempty mixed order per day. Advance and receive that paid shipment exactly once. Buying stock reduces cash immediately; its historical cost enters gross profit when the copy sells. Unsold stock and prices carry forward.
 
-Alex, Blair and Casey arrive at 0, 5 and 10 simulation seconds, subject to a clear doorway. Their day-1 budgets are $24.18, $17.59 and $30.78. With three copies available, $16.99 sells to all three, $21.99 produces two purchases and one price refusal, and $26.99 sells only to Casey. **Compare Pricing.command** starts separately saved low/reference/high wave demonstrations. These are three-person R4 comparisons; the historical R3 five-visitor comparison remains in the R3 delivery evidence.
+Click stations/buttons; WASD/arrows walk; E follows the guided action; K saves; L reloads. Closing stops admission but lets existing customers finish. Finalize is available only after the floor and FIFO queue clear. Report locks all transactions except replenishment and day advance.
 
-Each visitor reserves a distinct free copy, locks its offer, and either buys or releases it. A visitor who finds no free copy records a stock miss rather than a price miss. The same visitor does not retry or reroll. Names and queue numbers identify the people you serve; only the settled queue head can pay. Budgets follow the existing five-entry daily cycle with fixed per-person offsets, without randomness or wall-clock inputs.
+## Reproducible assortment comparison
 
-Daily reports show sales, price misses, stock misses, revenue, sold-copy cost, gross profit, unsold copies and cash. Gross profit excludes overhead. Orders reduce cash once; their cost enters profit only when copies sell. Daily counters reset on advance; physical copies, cash and cumulative ledgers persist.
+Use **Compare Assortments.command**, separately from ordinary gameplay. Choose `stocked` or `missing`. Each reaches day 2 through the same completed first day and paid two-of-each shipment. Both fill all four shelf spaces at the same prices: Curb $21.99, Tide $19.99, Orbit $12.99. Separate checkpoint files keep the comparison out of ordinary play.
+
+Day 2: Alex seeks Tide, Blair seeks Orbit and Casey seeks Curb. Their budgets are $34.98, $14.24 and $24.18. Serve the queue, close admission, finish admitted customers and finalize:
+
+| Setup | Sales | Stock misses | Revenue | Sold-copy cost | Gross profit |
+| --- | --- | --- | --- | --- | --- |
+| 2 Curb / 1 Tide / 1 Orbit | 3 | 0 | $54.97 | $25.00 | $29.97 |
+| 2 Curb / 2 Tide; Orbit in backroom | 2 | 1 Orbit | $41.98 | $20.00 | $21.98 |
+
+The unavailable copy is retained, not lost. Both have zero price misses. To see a price refusal separately, use ordinary prep with Tide at its $27.99 reference on day 1: Blair declines the locked offer and releases the Tide copy.
+
+Day `d`, visitor index `i`: sought product is `[curb, tide, orbit][(d-1+i) mod 3]`; budget is the sought product's reference times `[110,125,80,95,140][(d-1+2i) mod 5]`, truncated to cents. No random or clock inputs. Each visitor seeks one product and makes one decision. No free shelf copy of that product at selection means a stock miss, with no price evaluation. Otherwise the visitor reserves the oldest available copy, locks its price and buys at or below budget; a higher offer is a price miss. No substitution, retries or multi-item baskets.
+
+The retained **Compare Pricing.command** is historical R3/R4 tooling; use the R5 assortment comparison for this candidate.
 
 ## Save and reload
 
-R4 uses `~/Library/Application Support/game-sim-r4-review-isolated/encounter.json`. R1–R3 saves remain untouched. Launch starts fresh; **Reload** restores your last explicit **Save** checkpoint. New practice shift confirms discarding unsaved progress and preserves the saved checkpoint.
+R5 uses `~/Library/Application Support/game-sim-r5-review-isolated/encounter.json`. Prior save namespaces remain untouched. Launch starts fresh; Reload restores the last explicit Save checkpoint. Schema 5 persists physical copies, product identities, historical costs, orders and line costs, roster preferences/budgets, offers, decisions, arrivals, positions, browse progress, FIFO order, phase and ledgers. No reroll or duplicate receiving/decisions occurs on reload. Restoring an earlier checkpoint replays later unsaved events naturally. Unconfirmed order-dialog edits are not saved orders. No earlier-schema migration.
 
-Schema 4 stores identities, individual budgets, arrival states and clock, browse progress, customer positions, decisions, copy ownership, locked offers, queue order, phase and accounting. Reload resumes those saved states without generating another roster or repeating a recorded arrival/decision. Replaying from a deliberately earlier saved checkpoint naturally replays later unsaved events. Animation poses and the player's route are not persisted; active-shift reload places Rowan at the cashier station. No earlier-schema migration is attempted.
+Animation poses and player routes are not saved. Active-shift reload places Rowan at the cashier. New practice shift discards unsaved progress after confirmation and preserves the saved checkpoint.
 
-## Evidence and reproduction
+## Validation and artwork
 
 ```sh
 cd '/Users/michaelfuscoletti/Desktop/game-sim/encounter'
 python3 scripts/validate.py --render --capture
 ```
 
-The runner imports a disposable copy with a unique save namespace. R4 state and scene suites carry forward applicable R1–R3 invariants and explicitly replace the obsolete single-visitor/immediate-close assumptions. Normal 1280×720 and Retina 2560×1440 operation are recorded separately. Scene tests use 3× simulation time; the gameplay movie runs at ordinary speed using the actual engine and an action adapter. It is agent-generated footage, not owner input.
+This creates a disposable project and unique save namespace, exercises R5 state and scene suites, normal 1280×720 and Retina 2560×1440 controls, and records engine footage of two days plus both assortment comparisons with an explicit draw before every recorded frame, including when the window is occluded. The two-day footage alone can be reproduced with `python3 scripts/capture_full_shift.py`; it checks frame counts and changing pixels. Scene tests run at 3× simulation time. Capture uses an action adapter, including prep allocation and report/order/advance operations; it is agent footage. See [R5 delivery](../docs/03-production/r5-delivery.md) for qualification status and exact evidence.
 
-See [R4 delivery](../docs/03-production/r4-delivery.md) and `evidence/r4/` for qualification, exact identity, preservation and handoff. Historical tests, samples and evidence are retained.
+Retail-v4 source masters, samples, old exports, fixtures and rigs are retained. New `source/case-tide.kra` and `source/case-orbit.kra` are three-layer editable Krita masters with transparent `art/` exports. Rebuild only these two with **scripts/Rebuild Assortment Art.command**. `build_assortment_art.py` extends the existing native painted package recipe; it saves/reopens each master and verifies identical PNG exports. Both are 152×208 (4× the logical 38×52 case). Import: lossless sRGB straight RGBA, alpha-border correction, no mipmaps, linear filtering; `.import` sidecars are retained. The original **Rebuild Art.command** remains for the unchanged fixtures and original case.
 
-## Art workflow
-
-Retail-v4 directional cutouts, context and pivots are copied unchanged into `art/`. Their editable masters and production recipe remain in `../samples/b-retail-v4/source/masters/` and `../samples/b-retail-v4/scripts/Rebuild Art.command`. Both standalone samples and the historical game are preserved.
-
-New layered masters: `source/counter.kra`, `case.kra`, `shipment.kra`, and `retail-shelf-empty.kra`. The latter derives from the retained shelf master by hiding its decorative case layer; the physical cases are separate runtime sprites. Rebuild using `scripts/Rebuild Art.command`; `scripts/build_art.py` is the deterministic native Krita recipe. It saves and reopens every new master, exports PNG, and verifies identical bytes. Run in a disposable copy when retaining prior build logs is important.
-
-PNG: sRGB, straight RGBA, lossless Godot import, linear filtering, mipmaps off, alpha-border correction on; committed-style `.import` sidecars are retained as uncommitted files. Source assets are authored at 4× logical size. Environment props display at .25; case display is .17 on shelf and .085 in hand. Shelf root (640,390), image offset (-125,-115); counter root (785,540), offset (-100,-110); shipment root (310,455), offset (-39,-62). Character feet and limb pivots are in `art/rig.json`, scaled to 110 logical pixels high. `actor.gd` adapts the existing directional rig/pose implementation to separate actors. The old authored-frame comparison remains only in the preserved samples.
-
-Known limits: rigid/deforming legs, abrupt turns/stops, straight-arm reach, possible foot sliding, mirrored lighting and enlarged outline/hidden-surface artifacts. Three named visitors reuse Rowan's rig with restrained warm, cool and olive tints; independent character artwork remains deferred. Hands do not animate a detailed cash/register exchange. Shelf/case lettering is decorative; essential price/stock text is 18+ logical pixels and report text is 16 logical pixels (world labels 16–17). Krita emits retained Fontconfig/profile/swap/tile warnings; successful reopened exports establish the bounded production result, not warning-free Krita operation.
+Inherited limits remain: rigid/deforming legs, abrupt turns/stops, straight reach, possible foot sliding, mirrored lighting, enlargement artifacts, reused/tinted rig and no detailed cash handoff. Decorative world lettering is not authoritative; essential product names and prices are in the shift desk/dialogs. The recorded capture-exit `ObjectDB instances leaked at exit` warning remains unresolved. Krita's retained Fontconfig/profile/swap/tile warnings are not claimed resolved by successful exports.

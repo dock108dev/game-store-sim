@@ -1,0 +1,77 @@
+[
+  {
+    "action": "close",
+    "ok": true,
+    "phase": "closing",
+    "report": {
+      "cash": 55000,
+      "cost": 0,
+      "margin": 0,
+      "missed": 0,
+      "remaining": 3,
+      "revenue": 0,
+      "sold": 0,
+      "unavailable": 0
+    }
+  },
+  {
+    "action": "sale",
+    "ok": true,
+    "phase": "closing",
+    "report": {
+      "cash": 57199,
+      "cost": 800,
+      "margin": 1399,
+      "missed": 0,
+      "remaining": 2,
+      "revenue": 2199,
+      "sold": 1,
+      "unavailable": 0
+    }
+  },
+  {
+    "action": "sale",
+    "ok": true,
+    "phase": "closing",
+    "report": {
+      "cash": 59198,
+      "cost": 2000,
+      "margin": 2198,
+      "missed": 0,
+      "remaining": 1,
+      "revenue": 4198,
+      "sold": 2,
+      "unavailable": 0
+    }
+  },
+  {
+    "action": "sale",
+    "ok": true,
+    "phase": "closing",
+    "report": {
+      "cash": 60697,
+      "cost": 2500,
+      "margin": 3197,
+      "missed": 0,
+      "remaining": 0,
+      "revenue": 5697,
+      "sold": 3,
+      "unavailable": 0
+    }
+  },
+  {
+    "action": "finalize",
+    "ok": true,
+    "phase": "report",
+    "report": {
+      "cash": 60697,
+      "cost": 2500,
+      "margin": 3197,
+      "missed": 0,
+      "remaining": 0,
+      "revenue": 5697,
+      "sold": 3,
+      "unavailable": 0
+    }
+  }
+]

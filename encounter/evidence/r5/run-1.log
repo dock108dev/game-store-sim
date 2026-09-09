@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/validate.py", line 23, in <module>
+    run('assortment-state',['--headless','--script','res://scripts/test_assortment.gd'])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/validate.py", line 21, in run
+    if result.returncode or 'SCRIPT ERROR:' in text or '\nERROR:' in text:raise RuntimeError(f'{name} failed: {out}')
+                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: assortment-state failed: /Users/michaelfuscoletti/Desktop/game-sim/encounter/evidence/validation-20260909T013606053395Z

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/capture_full_shift.py", line 18, in <module>
+    unique_frames=len({hashlib.sha256(p.read_bytes()).digest() for p in frames});assert unique_frames>500
+                                                                                        ^^^^^^^^^^^^^^^^^
+AssertionError

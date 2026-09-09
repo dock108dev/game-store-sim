@@ -1,0 +1,10 @@
+{
+  "pid": 82015,
+  "project": "/Users/michaelfuscoletti/Desktop/game-sim/encounter",
+  "command": [
+    "/Applications/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/Users/michaelfuscoletti/Desktop/game-sim/encounter"
+  ],
+  "save_namespace": "game-sim-r4-review-isolated"
+}

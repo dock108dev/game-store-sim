@@ -1,6 +1,6 @@
 # R4 — a small customer wave
 
-2026-09-08 local / 2026-09-09 UTC. Implementation complete; qualification in progress. **R4 owner acceptance remains pending.**
+2026-09-08 local / 2026-09-09 UTC. **Accepted within R4 scope.** **Owner accepted R4 within scope: “yes”, confirming that handling several customers is clear and enjoyable enough to build on. R5 is authorized; animation quality, complete-game and release acceptance are not implied.**
 
 ## Owner authority and scope
 
@@ -31,7 +31,13 @@ Warm, cool and muted olive runtime tints plus names distinguish the reused rig. 
 
 ## Verification and evidence
 
-Pending final qualification pointers. The executable R4 state and scene suites replace the obsolete single-visitor adapters in the validation runner. Historical R1–R3 tests and evidence remain preserved. R4 checks explicitly carry forward physical inventory/ownership, price bounds and inclusive budgets, locked offers, duplicate decisions/sales, malformed load rejection, paid orders, cash limits, unique receiving, daily reset and next-day persistence.
+Final passing evidence: [validation-20260909T005559543814Z](../../encounter/evidence/validation-20260909T005559543814Z/). **88 state checks and 60 scene checks pass**, with separate headless, actual normal 1280×720 and Retina 2560×1440 runs on Godot 4.6.2 / Apple M3 Pro. Scene tests use 3× simulation time. The scene checks continuously validate ownership/accounting and assert no customer/customer overlap or fixture collisions across complete full-stock, no-stock and mixed two-copy replenishment waves. State tests additionally cover competing selection, refusal/departure release, tampered offers, queued departure, inclusive budgets across all five days, insufficient cash and malformed save rejection.
+
+[Actual gameplay movie](../../encounter/evidence/validation-20260909T005559543814Z/r4-gameplay.mp4): 1280×720, 30 fps, 74.83 seconds. The ordinary-speed engine runs a reference-price mixed wave, closing admission, two checkouts, finalized report and reload, a paid three-copy order, next-day receiving/stocking and a second mixed wave/report. The final day-2 report shows two sales, one price miss, no stock misses, $43.98 revenue, $16 sold-copy cost, $27.98 gross profit, $613.96 cash and two unsold copies. [Action trace](../../encounter/evidence/validation-20260909T005559543814Z/gameplay-trace.json). The movie uses guided action routing plus direct order/advance/report-reload adapters; the rendered scene suites separately exercise visible dialogs and Save/Reload keyboard controls. This is agent footage, not owner operation.
+
+Agent inspected normal and Retina full-queue, mixed-outcome, browsing, no-stock and report captures. The report is kept clear of action buttons; names and queue numbers remain readable. The prior restored-player overlap with the last waiting visitor was repaired by restoring Rowan at the cashier during active shifts. Art appearance is unchanged. Capture exits with a retained `ObjectDB instances leaked at exit` warning; checks have no script errors. This capture shutdown limitation is not suppressed or described as warning-free operation.
+
+The final native review uses the same project in a copied Godot development bundle with a distinct app ID, allowing control without disturbing the earlier R3 process. Its engine was copied byte-for-byte before ad-hoc development signing; pre/post-signature identity and PID are in `evidence/r4/native-launch.json`. Native input received three copies, typed $21.99, printed labels, stocked and opened at actual Retina scale 2.0. The earlier fresh R4 launch created by this session was replaced; the retained R3 window was untouched. The ordinary launcher still uses the official installed Godot app. The executable R4 state and scene suites replace the obsolete single-visitor adapters in the validation runner. Historical R1–R3 tests and evidence remain preserved. R4 checks explicitly carry forward physical inventory/ownership, price bounds and inclusive budgets, locked offers, duplicate decisions/sales, malformed load rejection, paid orders, cash limits, unique receiving, daily reset and next-day persistence.
 
 Failures are retained. The first scene run exposed a blocked departing buyer behind a horizontal queue. Waiting positions and departure sequencing were repaired. A report text spacing failure was repaired. Rendered early-close validation was changed to wait for the actual arrival event rather than assume it occurred after one frame. No functional check was suppressed.
 
@@ -39,4 +45,10 @@ Failures are retained. The first scene run exposed a blocked departing buyer beh
 
 Inherited rigid/deforming legs, abrupt turns/stops, straight reach, possible foot sliding, mirrored lighting, enlargement artifacts, reused/tinted rig and no detailed cash handoff remain. Browsing uses the existing reach and pause. Floor routing and spaced waiting are bounded for three visitors. Decorative lettering on the carton, shelf and case is not authoritative; the shift desk is. No new artwork was needed, so all Krita sources and exports are retained byte-for-byte.
 
-Owner should operate the running shift and provide their own assessment. Automated checks, agent visual assessment and gameplay recording do not confer owner acceptance.
+The owner feedback recorded above supplies bounded R4 acceptance. R5 requires its own review; automated checks, agent visual assessment and gameplay recording do not confer that acceptance.
+
+## Exact identity and preservation
+
+The session started on `main` at `837bd4a8d33ec01fe48dec83bd16fedb9dfaaff1`. Two external local commits appeared during the session, ending at `4b91108fa3cd8d9a2829524c6cf5baed55a236d0`; the agent preserved them and performed no commit, push or publication. See `evidence/r4/pre-r4-status.txt`, `base.txt` and `final-status.txt`. Current source and assets are bound by `candidate-manifest.json` and `r4-source.tar.gz`; the validator's context matches all tested encounter source files. Documentation is bound separately by the candidate manifest.
+
+`pre-r4-manifest.json` and `pre-r4-source.tar.gz` preserve the incoming candidate. `preservation-result.json` verifies every pre-existing file: none missing, and only the explicitly listed R4 code/active-document changes differ. All prior gameplay footage, evidence, samples, historical game files, Krita masters, textures and the actor rig remain unchanged. The external tracker has before/after snapshots. Native review details and limits are in `native-review.md`.

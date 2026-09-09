@@ -1,0 +1,10 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M3 Pro
+
+R1_DISPLAY {"canvas_scale":"(1.0, 1.0)","screen_scale":2.0,"viewport":"(1280.0, 720.0)","window":"(1280, 720)"}
+R1_ACTION {"action":"close","ok":true,"phase":"closing","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":57696,"cost":1200,"margin":799,"missed":0,"remaining":5,"revenue":1999,"sold":1,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":58995,"cost":1700,"margin":1598,"missed":0,"remaining":4,"revenue":3298,"sold":2,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":61194,"cost":2500,"margin":2997,"missed":0,"remaining":3,"revenue":5497,"sold":3,"unavailable":0}}
+R1_ACTION {"action":"finalize","ok":true,"phase":"report","report":{"cash":61194,"cost":2500,"margin":2997,"missed":0,"remaining":3,"revenue":5497,"sold":3,"unavailable":0}}
+R5_CAPTURE res://evidence/frames/1788919678-00348

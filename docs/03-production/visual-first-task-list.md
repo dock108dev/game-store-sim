@@ -21,9 +21,14 @@ Updated 2026-09-08. Baseline: **B-ROWAN-01 / retail-v4**.
 - [x] Exclusive reservations, refusal versus unavailability, locked offers and FIFO checkout.
 - [x] Explicit closing versus finalized-report phase model.
 - [x] Persisted arrival, browse, queue and closing checkpoints.
-- [ ] Complete disposable R4 state and normal/Retina scene qualification.
-- [ ] Preserve actual gameplay footage, exact source/asset identity and unchanged historical work.
-- [ ] Launch the verified R4 candidate for owner operation.
-- [ ] R4 owner review and explicit acceptance.
+- [x] Complete disposable R4 state and normal/Retina scene qualification.
+- [x] Preserve actual gameplay footage, exact source/asset identity and unchanged historical work.
+- [x] Launch the verified R4 candidate for owner operation.
+- [x] R4 owner feedback **“yes”**: handling several customers is clear and enjoyable enough to build on. Bounded R4 accepted; R5 authorized.
+- [x] R5 three-product inventory, prices, assortment returns and deterministic preferences.
+- [x] R5 disposable state, rendered controls, normal/Retina and two-day validation.
+- [x] R5 editable art, footage, comparison, identity and preservation evidence.
+- [x] R5 ready for owner review, only after qualification.
+- [ ] R5 owner acceptance.
 
 Full-shop expansion, large catalogs/casts and broad animation polish are deferred. Existing animation limits remain in the R1 record and encounter README. No commit, push or publication.

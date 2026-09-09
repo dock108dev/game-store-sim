@@ -1,0 +1,65 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+R1_DISPLAY {"canvas_scale":"(1.0, 1.0)","screen_scale":1.0,"viewport":"(1280.0, 720.0)","window":"(0, 0)"}
+R1_ACTION {"action":"receive","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R5_STOCK_CONTROL [P: (538.0, 75.0), S: (110.0, 75.0)] window (215, 172) {"case-01":{"cost":800,"location":"shelf","owner":"","price":2199,"product":"curb"},"case-02":{"cost":1200,"location":"backroom","owner":"","price":1999,"product":"tide"},"case-03":{"cost":500,"location":"backroom","owner":"","price":1499,"product":"orbit"}}
+R5_STOCK_CONTROL [P: (538.0, 162.0), S: (110.0, 75.0)] window (215, 172) {"case-01":{"cost":800,"location":"shelf","owner":"","price":2199,"product":"curb"},"case-02":{"cost":1200,"location":"shelf","owner":"","price":1999,"product":"tide"},"case-03":{"cost":500,"location":"backroom","owner":"","price":1499,"product":"orbit"}}
+R5_STOCK_CONTROL [P: (538.0, 249.0), S: (110.0, 75.0)] window (215, 172) {"case-01":{"cost":800,"location":"shelf","owner":"","price":2199,"product":"curb"},"case-02":{"cost":1200,"location":"shelf","owner":"","price":1999,"product":"tide"},"case-03":{"cost":500,"location":"shelf","owner":"","price":1499,"product":"orbit"}}
+R1_ACTION {"action":"save","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"open","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"close","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":57199,"cost":800,"margin":1399,"missed":0,"remaining":2,"revenue":2199,"sold":1,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":59198,"cost":2000,"margin":2198,"missed":0,"remaining":1,"revenue":4198,"sold":2,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":60697,"cost":2500,"margin":3197,"missed":0,"remaining":0,"revenue":5697,"sold":3,"unavailable":0}}
+R1_ACTION {"action":"finalize","ok":true,"phase":"report","report":{"cash":60697,"cost":2500,"margin":3197,"missed":0,"remaining":0,"revenue":5697,"sold":3,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"report","report":{"cash":60697,"cost":2500,"margin":3197,"missed":0,"remaining":0,"revenue":5697,"sold":3,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"report","report":{"cash":60697,"cost":2500,"margin":3197,"missed":0,"remaining":0,"revenue":5697,"sold":3,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"report","report":{"cash":55697,"cost":2500,"margin":3197,"missed":0,"remaining":0,"revenue":5697,"sold":3,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"report","report":{"cash":55697,"cost":2500,"margin":3197,"missed":0,"remaining":0,"revenue":5697,"sold":3,"unavailable":0}}
+R1_ACTION {"action":"receive","ok":true,"phase":"prep","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"prep","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"prep","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"open","ok":true,"phase":"open","report":{"cash":55697,"cost":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"close","ok":true,"phase":"closing","report":{"cash":55697,"cost":0,"margin":0,"missed":1,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":57696,"cost":1200,"margin":799,"missed":1,"remaining":5,"revenue":1999,"sold":1,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":59895,"cost":2000,"margin":2198,"missed":1,"remaining":4,"revenue":4198,"sold":2,"unavailable":0}}
+R1_ACTION {"action":"finalize","ok":true,"phase":"report","report":{"cash":59895,"cost":2000,"margin":2198,"missed":1,"remaining":4,"revenue":4198,"sold":2,"unavailable":0}}
+R1_ACTION {"action":"reset","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":0,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"receive","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R5_STOCK_CONTROL [P: (538.0, 75.0), S: (110.0, 75.0)] window (215, 172) {"case-01":{"cost":800,"location":"shelf","owner":"","price":2199,"product":"curb"},"case-02":{"cost":1200,"location":"backroom","owner":"","price":1999,"product":"tide"},"case-03":{"cost":500,"location":"backroom","owner":"","price":1499,"product":"orbit"}}
+R5_STOCK_CONTROL [P: (538.0, 162.0), S: (110.0, 75.0)] window (215, 172) {"case-01":{"cost":800,"location":"shelf","owner":"","price":2199,"product":"curb"},"case-02":{"cost":1200,"location":"shelf","owner":"","price":1999,"product":"tide"},"case-03":{"cost":500,"location":"backroom","owner":"","price":1499,"product":"orbit"}}
+R1_ACTION {"action":"open","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"close","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":1}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":57199,"cost":800,"margin":1399,"missed":0,"remaining":2,"revenue":2199,"sold":1,"unavailable":1}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":59198,"cost":2000,"margin":2198,"missed":0,"remaining":1,"revenue":4198,"sold":2,"unavailable":1}}
+R1_ACTION {"action":"finalize","ok":true,"phase":"report","report":{"cash":59198,"cost":2000,"margin":2198,"missed":0,"remaining":1,"revenue":4198,"sold":2,"unavailable":1}}
+R1_ACTION {"action":"reset","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":0,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"receive","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"stock","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"stock","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"stock","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"open","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"close","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":1,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":57199,"cost":800,"margin":1399,"missed":1,"remaining":2,"revenue":2199,"sold":1,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":58698,"cost":1300,"margin":2398,"missed":1,"remaining":1,"revenue":3698,"sold":2,"unavailable":0}}
+R1_ACTION {"action":"finalize","ok":true,"phase":"report","report":{"cash":58698,"cost":1300,"margin":2398,"missed":1,"remaining":1,"revenue":3698,"sold":2,"unavailable":0}}
+R5_SCENE 54 checks normal

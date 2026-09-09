@@ -1,0 +1,10 @@
+{
+  "pid": 84135,
+  "bundle": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/r4-native-review-mejf3lgs/R4 Review.app",
+  "project": "/Users/michaelfuscoletti/Desktop/game-sim/encounter",
+  "engine_sha256": "e6b5cfdc226ffb7ec4f4950b0b12ddba4f040624724cff1acce9ae1241cf0034",
+  "official_engine_sha256": "e6b5cfdc226ffb7ec4f4950b0b12ddba4f040624724cff1acce9ae1241cf0034",
+  "reason": "Separate native app identity permits review controls without touching the earlier R3 process.",
+  "signed_engine_sha256": "e2b41fbc914ffc8cf5ad141f5b3a82d435114e600038630e7393b5b5794cf523",
+  "signing": "Ad-hoc development signature after assigning the review bundle a distinct application ID; payload is copied Godot 4.6.2."
+}

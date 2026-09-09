@@ -1,0 +1,13 @@
+{
+  "pass": true,
+  "report": {
+    "cash": 59895,
+    "cost": 2000,
+    "margin": 2198,
+    "missed": 0,
+    "remaining": 4,
+    "revenue": 4198,
+    "sold": 2,
+    "unavailable": 1
+  }
+}

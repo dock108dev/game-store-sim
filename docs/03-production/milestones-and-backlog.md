@@ -11,10 +11,11 @@ Updated 2026-09-08.
 | R1 encounter | Owner accepted bounded encounter: **“ready to build on.”** |
 | R2 repeatable day | Owner accepted bounded repeatable day: **“build on.”** |
 | R3 pricing consequences | Owner accepted bounded pricing slice: **“build on.”** |
-| R4 small customer wave | Implemented; qualification in progress. Owner acceptance pending. |
+| R4 small customer wave | Owner accepted within scope: **“yes”**. |
+| R5 assortment | Implemented, verified and ready for owner review; owner acceptance pending. Three products, four shelf positions, existing customer wave. |
 | V2 motion polish | Later, by gameplay impact. |
 
-R4 retains one product and the current fixtures, adding three individual visitors, visible browsing, exclusive reservations and a readable persisted queue. Closing stops admission and drains valid transactions. Finalized reports reject sales. See the [R4 phase contract and delivery](r4-delivery.md).
+Accepted R4 retained one product and the current fixtures, adding three individual visitors, visible browsing, exclusive reservations and a readable persisted queue. Closing stops admission and drains valid transactions. Finalized reports reject sales. See the [R4 phase contract and delivery](r4-delivery.md).
 
 D1 is explicitly split between closing (valid existing sales allowed) and report (all sales rejected). D2 exclusive reservation and D3 sold-reference clearing remain required. The historical game is unchanged; D4 belongs to its first-person adapter.
 

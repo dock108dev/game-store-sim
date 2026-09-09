@@ -1,0 +1,61 @@
+## main...origin/main [ahead 2]
+ M README.md
+ M docs/03-production/milestones-and-backlog.md
+ M docs/03-production/r4-delivery.md
+ M docs/03-production/visual-first-task-list.md
+ M docs/MASTER_PLAN.md
+ M encounter/README.md
+ M encounter/evidence/r4/run-4.log
+ M encounter/evidence/validation-20260909T005313474482Z/r4-gameplay.mp4
+ M encounter/main.gd
+ M encounter/project.godot
+ M encounter/scripts/validate.py
+ M encounter/state.gd
+?? docs/03-production/r5-delivery.md
+?? "encounter/Compare Assortments.command"
+?? encounter/art/case-orbit.png
+?? encounter/art/case-orbit.png.import
+?? encounter/art/case-tide.png
+?? encounter/art/case-tide.png.import
+?? encounter/evidence/r4/candidate-manifest.json
+?? encounter/evidence/r4/final-status.txt
+?? encounter/evidence/r4/native-launch.json
+?? encounter/evidence/r4/native-review.log
+?? encounter/evidence/r4/native-review.md
+?? encounter/evidence/r4/owner-launch.json
+?? encounter/evidence/r4/owner-launch.log
+?? encounter/evidence/r4/preservation-result.json
+?? encounter/evidence/r4/r4-source.tar.gz
+?? encounter/evidence/r4/run-5.log
+?? encounter/evidence/r4/tested-source-reconciliation.json
+?? encounter/evidence/r4/tracker-final.md
+?? encounter/evidence/r5-movie-20260909T015055466281Z/
+?? encounter/evidence/r5-movie-20260909T015346667091Z/
+?? encounter/evidence/r5-movie-20260909T015822944582Z/
+?? encounter/evidence/r5/
+?? encounter/evidence/validation-20260909T005313474482Z/gameplay-trace.json
+?? encounter/evidence/validation-20260909T005313474482Z/results/
+?? encounter/evidence/validation-20260909T005559543814Z/
+?? encounter/evidence/validation-20260909T013606053395Z/
+?? encounter/evidence/validation-20260909T013626145782Z/
+?? encounter/evidence/validation-20260909T013651728025Z/
+?? encounter/evidence/validation-20260909T013710974620Z/
+?? encounter/evidence/validation-20260909T013730845855Z/
+?? encounter/evidence/validation-20260909T013905234346Z/
+?? encounter/evidence/validation-20260909T014019926273Z/
+?? encounter/evidence/validation-20260909T014446959728Z/
+?? encounter/evidence/validation-20260909T020212870094Z/
+?? encounter/evidence/validation-20260909T020341424643Z/
+?? encounter/evidence/validation-20260909T020530374063Z/
+?? "encounter/scripts/Rebuild Assortment Art.command"
+?? encounter/scripts/build_assortment_art.py
+?? encounter/scripts/capture_full_shift.py
+?? encounter/scripts/test_assortment.gd
+?? encounter/scripts/test_assortment.gd.uid
+?? encounter/scripts/test_assortment_scene.gd
+?? encounter/scripts/test_assortment_scene.gd.uid
+?? encounter/scripts/test_price_request.gd
+?? encounter/scripts/test_wave.gd.uid
+?? encounter/scripts/test_wave_scene.gd.uid
+?? encounter/source/case-orbit.kra
+?? encounter/source/case-tide.kra

@@ -1,0 +1,13 @@
+{
+  "runtime_matches_launched_source": true,
+  "owner_pid": 58808,
+  "source_tree_sha256": "8eab769188f6cc4e3c3b5cfb11a71dc48fb3afae919c7bfdd84d6d507d889640",
+  "saved_phase": "open",
+  "saved_queue": [
+    "visitor-1",
+    "visitor-2",
+    "visitor-3"
+  ],
+  "native_reload_success": "owner-handoff.log",
+  "final_native_pixel_limitation": "See native-review.md; CUA returned stale/tiny images after relaunch."
+}
