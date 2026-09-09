@@ -93,6 +93,12 @@ func _initialize():
  check("closing during browsing cancels only unarrived",s.close() and s.data.customers["visitor-2"].state=="cancelled" and not s.arrive("visitor-2") and s.reserve("visitor-1") and s.queue("visitor-1"))
  s=roundtrip(s,"closing browsing transaction")
  check("valid closing transaction completes",pay(s,"visitor-1") and not s.finalize() and s.gone("visitor-1") and s.finalize() and s.valid())
+ s=prep();select(s,"visitor-1");select(s,"visitor-2");s.queue("visitor-1");s.queue("visitor-2")
+ check("queued departure releases copy and preserves FIFO",s.depart("visitor-1") and s.data.queue==["visitor-2"] and s.count_at("shelf")==2 and pay(s,"visitor-2") and s.valid())
+ s=prep();select(s,"visitor-1");s.queue("visitor-1")
+ var locked=s.data.customers["visitor-1"].offer
+ s.data.items[s.data.customers["visitor-1"].item].price=9999
+ check("tampered label cannot change checkout offer",not pay(s,"visitor-1") and s.data.customers["visitor-1"].offer==locked and s.data.sales.is_empty())
  # R3 inclusive willingness and below-cost loss across the authored cycle.
  for day in range(1,6):
   for id in State.VISITORS:

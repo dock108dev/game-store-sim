@@ -8,14 +8,11 @@ var player
 var customer
 var visitors = {}
 const BROWSE_SPOTS = [Vector2(490,330),Vector2(590,430),Vector2(820,380)]
-const QUEUE_SPOTS = [Vector2(830,590),Vector2(720,590),Vector2(610,590)]
+const QUEUE_SPOTS = [Vector2(830,590),Vector2(590,500),Vector2(430,520)]
 var world: Node2D
 var nav = AStarGrid2D.new()
 var path = PackedVector2Array()
-var customer_path = PackedVector2Array()
 var pending = ""
-var customer_stage = "absent"
-var browse_time = 0.0
 var ui: CanvasLayer
 var summary: Label
 var guide: Label
@@ -32,7 +29,6 @@ var save_button: Button
 var load_button: Button
 var close_button: Button
 var cases = []
-var carried_case: Sprite2D
 var box: Sprite2D
 var selected_action = "receive"
 var demo_price=0
@@ -102,7 +98,7 @@ func _ready():
  panel(Vector2(24,634),Vector2(1232,68),Color("293442"))
  feedback=label(ui,"Welcome, Rowan. Receive the three prepaid used games to begin.",Vector2(42,644),18,Color("fff6dc"))
  label(ui,"Click a station or the shift button • WASD / arrows walk • E interact • K save • L reload",Vector2(42,675),16,Color("e4dfd0"))
- shelf_label=label(ui,"",Vector2(520,400),17)
+ shelf_label=label(ui,"",Vector2(520,255),17)
  for id in visitors:
   visitors[id].label=label(ui,"",Vector2.ZERO,16)
   visitors[id].label.add_theme_color_override("font_shadow_color",Color("fff6dc"))
@@ -194,7 +190,7 @@ func perform(action: String):
  print("R1_ACTION ",JSON.stringify(trace.back()))
  refresh()
 func restore_view():
- path.clear();pending="";player.position=Vector2(420,500)
+ path.clear();pending="";player.position=Vector2(660,500) if state.data.phase in ["open","closing"] else Vector2(420,500)
  for id in visitors:
   visitors[id].actor.visible=false
   if state.data.customers.has(id):
@@ -202,6 +198,8 @@ func restore_view():
    visitors[id].actor.position=Vector2(c.position[0],c.position[1])
  if state.data.received:price_input.value=float(state.data.items["case-01"].price)/100.0 if state.data.items["case-01"].price>0 else 21.99
 func refresh():
+ details.add_theme_font_size_override("font_size",16 if state.data.phase=="report" else 18)
+ details.size=Vector2.ZERO
  var r=state.report()
  day_label.text=("PRICING DEMO • " if demo_price>0 else "")+"DAY %d  /  MALL SHOP • 2002" % state.data.day
  summary.text="%s   •   Cash %s" % [state.data.phase.to_upper(),money(r.cash)]
@@ -307,7 +305,9 @@ func update_wave(delta):
   v.actor.visible=c.state not in ["waiting","gone","cancelled"]
   var target=v.actor.position
   if c.state=="arriving":target=BROWSE_SPOTS[n]
-  elif c.state=="queued":target=QUEUE_SPOTS[state.data.queue.find(id)]
+  elif c.state=="queued":
+   target=QUEUE_SPOTS[state.data.queue.find(id)]
+   if state.data.customers.values().any(func(other):return other.state=="leaving"):target=v.actor.position
   elif c.state=="leaving":target=Vector2(210,580)
   var movement=Vector2.ZERO
   if v.actor.visible and v.actor.position.distance_to(target)>1:
@@ -339,7 +339,7 @@ func update_wave(delta):
    if c.state=="browsing" and c.elapsed>=1.5:state.reserve(id)
    if c.state=="selected" and c.elapsed>=4.0:state.queue(id)
    if c.state=="leaving":feedback.text=c.name+(": Over my budget. Copy returned to the shelf." if c.decision=="decline" else ": No copy available. No price decision made.")
-  elif c.state=="queued":c.settled=v.actor.position.distance_to(target)<1
+  elif c.state=="queued":c.settled=v.actor.position.distance_to(QUEUE_SPOTS[state.data.queue.find(id)])<1
   elif c.state=="leaving" and v.actor.position.distance_to(target)<1:state.gone(id)
   v.held.visible=c.item!="" and c.decision=="buy"
   v.label.visible=v.actor.visible

@@ -16,6 +16,14 @@ Updated 2026-09-08. Baseline: **B-ROWAN-01 / retail-v4**.
 - [x] Prep repricing, reference guidance and daily price-miss reporting.
 - [x] R3 disposable state and rendered interaction checks; inspect normal/Retina evidence.
 - [x] R3 footage, exact identity, preservation, launch and comparison instructions.
-- [ ] R3 owner review and explicit acceptance.
+- [x] Owner R3 feedback: **“build on.”** Bounded R3 accepted; R4 authorized.
+- [x] R4 stable three-customer roster, individual budgets and staggered arrivals.
+- [x] Exclusive reservations, refusal versus unavailability, locked offers and FIFO checkout.
+- [x] Explicit closing versus finalized-report phase model.
+- [x] Persisted arrival, browse, queue and closing checkpoints.
+- [ ] Complete disposable R4 state and normal/Retina scene qualification.
+- [ ] Preserve actual gameplay footage, exact source/asset identity and unchanged historical work.
+- [ ] Launch the verified R4 candidate for owner operation.
+- [ ] R4 owner review and explicit acceptance.
 
 Full-shop expansion, large catalogs/casts and broad animation polish are deferred. Existing animation limits remain in the R1 record and encounter README. No commit, push or publication.

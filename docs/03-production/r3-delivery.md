@@ -1,6 +1,8 @@
 # R3 — meaningful pricing consequences
 
-2026-09-08 local / 2026-09-09 UTC. **Implemented, verified and ready for owner review.** **R3 owner acceptance pending.**
+2026-09-08 local / 2026-09-09 UTC. **Accepted within scope.** Owner R3 feedback: **“build on.”** This accepts the bounded pricing slice and authorizes R4, a small customer wave. Existing animation limits remain; this is not full-game or release acceptance.
+
+The implementation and evidence below describe the preserved R3 candidate; R4 is documented separately in [R4 delivery](r4-delivery.md).
 
 ## Owner decision and scope
 

@@ -239,6 +239,7 @@ func valid() -> bool:
    if d.item != "" and not data.items.has(d.item): return false
   else: return false
   if d.day == data.day and (data.phase == "prep" or not data.customers.has(d.customer)): return false
+ var sold_customers=[]
  var sold = []
  var revenue = 0
  for s in data.sales:
@@ -248,6 +249,9 @@ func valid() -> bool:
   var i = data.items[s.item]
   if not i is Dictionary: return false
   if i.get("location") != "sold" or s.get("price") != i.get("price") or s.get("cost") != 800: return false
+  var sale_key=str(int(s.day))+":"+s.customer
+  if sale_key in sold_customers: return false
+  sold_customers.append(sale_key)
   sold.append(s.item)
   revenue += int(s.price)
  if data.get("cash") != 55000 + revenue - purchase_cost or data.cash < 0: return false
@@ -280,7 +284,11 @@ func valid() -> bool:
   if c.position[0]<180 or c.position[0]>890 or c.position[1]<300 or c.position[1]>610: return false
   if not (c.get("elapsed") is float or c.get("elapsed") is int) or not is_finite(float(c.elapsed)) or c.elapsed<0: return false
   if not whole(c.get("offer")) or not c.get("copy") is String or not c.get("item") is String: return false
-  if c.state in ["waiting","cancelled"] and (c.copy!="" or c.decision!="pending"): return false
+  if c.copy!="" and (not data.items.has(c.copy) or c.offer<100 or c.offer>9999): return false
+  if c.copy=="" and c.offer!=0: return false
+  if c.state in ["waiting","arriving","browsing","cancelled"] and (c.copy!="" or c.decision!="pending"): return false
+  if c.state in ["leaving","gone"] and c.decision=="pending": return false
+  if c.state=="queued" and c.decision!="buy": return false
   if c.state == "waiting" and data.phase != "open": return false
   if c.state == "cancelled" and data.phase not in ["closing","report"]: return false
   if c.state not in ["waiting","cancelled"] and data.clock < c.arrival: return false

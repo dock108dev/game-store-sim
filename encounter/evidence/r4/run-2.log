@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/validate.py", line 24, in <module>
+    run('wave-scene',['--headless','--fixed-fps','30','--script','res://scripts/test_wave_scene.gd'])
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/validate.py", line 21, in run
+    if result.returncode or 'SCRIPT ERROR:' in text or '\nERROR:' in text:raise RuntimeError(f'{name} failed: {out}')
+                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: wave-scene failed: /Users/michaelfuscoletti/Desktop/game-sim/encounter/evidence/validation-20260909T005104686756Z
