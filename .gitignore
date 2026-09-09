@@ -9,3 +9,7 @@ game/builds/
 *.blend@
 assets/blender/review-renders/tmp/
 .homebrew-cache/
+
+# Keep generated source archives and raw movie audio local.
+/encounter/evidence/**/*.tar.gz
+/encounter/evidence/**/frame.wav
