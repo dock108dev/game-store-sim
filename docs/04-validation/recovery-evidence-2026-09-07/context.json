@@ -1,0 +1,7 @@
+{
+  "baseline": "837bd4a8d33ec01fe48dec83bd16fedb9dfaaff1",
+  "disposable_checkout": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/gss-recovery-6fs85arw",
+  "isolation": "Unique Godot custom user directory in disposable project; validator save uses explicit artifact path",
+  "project_setting_only_change": "custom user directory",
+  "export": "not requested or tested"
+}

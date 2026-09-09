@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
+
 # Secret Web Unlocks
 
 Game Store Sim has one secret web, not a pile of separate questlines. It begins quietly, branches through normal retail choices, resolves through one of several outcomes, then drops you back into the store. The business continues.

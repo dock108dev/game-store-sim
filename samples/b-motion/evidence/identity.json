@@ -1,0 +1,10 @@
+{
+  "sample": "B-ROWAN-01 / review-v3",
+  "manifest_sha256": "46664fa479e83e417e3f6f25c52562ec05c85c49510ac8aab6aa2b9c122e620e",
+  "file_count": 81,
+  "base_commit": "837bd4a8d33ec01fe48dec83bd16fedb9dfaaff1",
+  "branch": "codex/restart-preparation",
+  "uncommitted": true,
+  "owner_feedback": "PENDING",
+  "visual_acceptance": "NOT DECLARED"
+}

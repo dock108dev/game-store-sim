@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
+
 # Premium Strategy Notes
 
 These are high-value tactics that separate a surviving shop from a legendary one.

@@ -1,0 +1,74 @@
+[
+  {
+    "check": "fresh / unavailable actions",
+    "pass": true
+  },
+  {
+    "check": "receive once",
+    "pass": true
+  },
+  {
+    "check": "price bounds",
+    "pass": true
+  },
+  {
+    "check": "stock depletion from backroom",
+    "pass": true
+  },
+  {
+    "check": "open once",
+    "pass": true
+  },
+  {
+    "check": "D2 competing customers reserve distinct copies",
+    "pass": true
+  },
+  {
+    "check": "selection is not queue",
+    "pass": true
+  },
+  {
+    "check": "D1 close releases all reservations",
+    "pass": true
+  },
+  {
+    "check": "D3 sale clears hand and customer ownership",
+    "pass": true
+  },
+  {
+    "check": "sale idempotency",
+    "pass": true
+  },
+  {
+    "check": "report",
+    "pass": true
+  },
+  {
+    "check": "atomic save",
+    "pass": true
+  },
+  {
+    "check": "reload sold invariants",
+    "pass": false
+  },
+  {
+    "check": "round trip prep",
+    "pass": false
+  },
+  {
+    "check": "round trip selected",
+    "pass": false
+  },
+  {
+    "check": "round trip queued",
+    "pass": false
+  },
+  {
+    "check": "malformed load preserves live state",
+    "pass": true
+  },
+  {
+    "check": "reset is truly fresh",
+    "pass": true
+  }
+]

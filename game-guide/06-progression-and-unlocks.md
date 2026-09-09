@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
+
 # Progression And Unlocks
 
 This chapter defines the long-form completion scale. The opening tutorial is a fraction of a percent. The first sale is exciting, but it is nowhere near meaningful completion.

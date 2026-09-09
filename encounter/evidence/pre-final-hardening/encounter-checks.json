@@ -1,0 +1,74 @@
+[
+  {
+    "check": "fresh readable overview",
+    "pass": true
+  },
+  {
+    "check": "world receiving click",
+    "pass": true
+  },
+  {
+    "check": "price entry stays clear",
+    "pass": true
+  },
+  {
+    "check": "price button input",
+    "pass": true
+  },
+  {
+    "check": "E stocks shelf with two visible cases",
+    "pass": true
+  },
+  {
+    "check": "counter click opens",
+    "pass": true
+  },
+  {
+    "check": "customer browses selects routes and queues",
+    "pass": true
+  },
+  {
+    "check": "reserved shelf depletion",
+    "pass": true
+  },
+  {
+    "check": "queued save reset reload",
+    "pass": true
+  },
+  {
+    "check": "button checkout updates money inventory",
+    "pass": true
+  },
+  {
+    "check": "close report readable",
+    "pass": true
+  },
+  {
+    "check": "report save reset reload",
+    "pass": true
+  },
+  {
+    "check": "walkable overlap viewpoint (630.0, 320.0)",
+    "pass": true
+  },
+  {
+    "check": "walkable overlap viewpoint (630.0, 440.0)",
+    "pass": true
+  },
+  {
+    "check": "walkable overlap viewpoint (790.0, 430.0)",
+    "pass": true
+  },
+  {
+    "check": "walkable overlap viewpoint (790.0, 590.0)",
+    "pass": true
+  },
+  {
+    "check": "physical D movement",
+    "pass": true
+  },
+  {
+    "check": "release stops",
+    "pass": true
+  }
+]

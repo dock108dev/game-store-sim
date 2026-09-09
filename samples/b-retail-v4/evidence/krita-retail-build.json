@@ -1,0 +1,16 @@
+{
+  "krita": "5.3.3 (git 858d352)",
+  "records": [
+    {
+      "authored_layers": [
+        "contact-A",
+        "passing-A",
+        "contact-B",
+        "passing-B",
+        "idle",
+        "reach"
+      ]
+    }
+  ],
+  "method": "native layered source revision; alpha-preserving cloth recolor; original QPainter retail illustration"
+}

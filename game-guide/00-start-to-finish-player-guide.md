@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
+
 # Start-To-Finish Player Guide
 
 This is the 0% to 100% player journey for Game Store Sim. The opening scene, tutorial, first sale, and first close are not 10-20% completion. They are the first fraction of a percent: you have learned how the store breathes, but have barely begun the business.

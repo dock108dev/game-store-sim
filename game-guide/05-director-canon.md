@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
+
 # The Store Fantasy
 
 Read this chapter before planning a serious run. It explains what Game Store Sim is really about.

@@ -1,0 +1,671 @@
+{
+  "checks": [
+    {
+      "check": "below cost sale records loss",
+      "pass": true
+    },
+    {
+      "check": "altered queued label cannot change charge",
+      "pass": true
+    },
+    {
+      "check": "before offer 1699/1",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 1699/1",
+      "pass": true
+    },
+    {
+      "check": "after decision 1699/1",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 1699/1",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 1699/2",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 1699/2",
+      "pass": true
+    },
+    {
+      "check": "after decision 1699/2",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 1699/2",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 1699/3",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 1699/3",
+      "pass": true
+    },
+    {
+      "check": "after decision 1699/3",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 1699/3",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 1699/4",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 1699/4",
+      "pass": true
+    },
+    {
+      "check": "after decision 1699/4",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 1699/4",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 1699/5",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 1699/5",
+      "pass": true
+    },
+    {
+      "check": "after decision 1699/5",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 1699/5",
+      "pass": true
+    },
+    {
+      "check": "before offer 2199/1",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2199/1",
+      "pass": true
+    },
+    {
+      "check": "after decision 2199/1",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2199/1",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2199/2",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2199/2",
+      "pass": true
+    },
+    {
+      "check": "after decision 2199/2",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2199/2",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2199/3",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2199/3",
+      "pass": true
+    },
+    {
+      "check": "after decision 2199/3",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "refusal releases without consuming stock",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2199/3",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2199/4",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2199/4",
+      "pass": true
+    },
+    {
+      "check": "after decision 2199/4",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "refusal releases without consuming stock",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2199/4",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2199/5",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2199/5",
+      "pass": true
+    },
+    {
+      "check": "after decision 2199/5",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2199/5",
+      "pass": true
+    },
+    {
+      "check": "before offer 2699/1",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2699/1",
+      "pass": true
+    },
+    {
+      "check": "after decision 2699/1",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "refusal releases without consuming stock",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2699/1",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2699/2",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2699/2",
+      "pass": true
+    },
+    {
+      "check": "after decision 2699/2",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2699/2",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2699/3",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2699/3",
+      "pass": true
+    },
+    {
+      "check": "after decision 2699/3",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "refusal releases without consuming stock",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2699/3",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2699/4",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2699/4",
+      "pass": true
+    },
+    {
+      "check": "after decision 2699/4",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "refusal releases without consuming stock",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2699/4",
+      "pass": true
+    },
+    {
+      "check": "daily reset",
+      "pass": true
+    },
+    {
+      "check": "before offer 2699/5",
+      "pass": true
+    },
+    {
+      "check": "reserve",
+      "pass": true
+    },
+    {
+      "check": "open price frozen",
+      "pass": true
+    },
+    {
+      "check": "before decision 2699/5",
+      "pass": true
+    },
+    {
+      "check": "after decision 2699/5",
+      "pass": true
+    },
+    {
+      "check": "decision idempotent",
+      "pass": true
+    },
+    {
+      "check": "buy at fixed offer",
+      "pass": true
+    },
+    {
+      "check": "daily accounting",
+      "pass": true
+    },
+    {
+      "check": "report 2699/5",
+      "pass": true
+    },
+    {
+      "check": "same scenarios tradeoff",
+      "pass": true
+    },
+    {
+      "check": "inclusive willingness boundary -1",
+      "pass": true
+    },
+    {
+      "check": "inclusive willingness boundary 0",
+      "pass": true
+    },
+    {
+      "check": "inclusive willingness boundary 1",
+      "pass": true
+    },
+    {
+      "check": "invalid price 0",
+      "pass": true
+    },
+    {
+      "check": "invalid price -1",
+      "pass": true
+    },
+    {
+      "check": "invalid price 99",
+      "pass": true
+    },
+    {
+      "check": "invalid price 10000",
+      "pass": true
+    },
+    {
+      "check": "invalid price 1.5",
+      "pass": true
+    },
+    {
+      "check": "invalid price 2199",
+      "pass": true
+    },
+    {
+      "check": "legal price endpoints",
+      "pass": true
+    },
+    {
+      "check": "duplicate decision load rejected atomically",
+      "pass": true
+    }
+  ],
+  "comparison": [
+    {
+      "margin": 4495,
+      "missed": 0,
+      "price": 1699,
+      "revenue": 8495,
+      "sales": 5
+    },
+    {
+      "margin": 4197,
+      "missed": 2,
+      "price": 2199,
+      "revenue": 6597,
+      "sales": 3
+    },
+    {
+      "margin": 3798,
+      "missed": 3,
+      "price": 2699,
+      "revenue": 5398,
+      "sales": 2
+    }
+  ]
+}

@@ -1,140 +1,52 @@
-# Local Validation Plan
+# Local validation — recovered baseline
 
-## Goal
+Read the [recovery review](../03-production/recovery-review-2026-09-07.md) for verified scope and four open defects. The baseline validator passes but is not a complete-game, visual or owner-acceptance gate.
 
-The repo should have a mandatory local validation gate from the start of implementation.
+## Current R1 encounter
 
-The gate should catch:
+The integrated overview is now in `encounter/`. See [R1 delivery](../03-production/r1-delivery.md) for separate transaction, input, rendered, production and acceptance records. From `encounter/`, run `python3 scripts/validate.py` to create a fresh disposable project and unique save namespace; `--render --capture` additionally retains normal/Retina screenshots and actual gameplay footage. Each run writes a new timestamped evidence directory and preserves prior results. The historical baseline procedure below remains unchanged for recovery evidence.
 
-- parse/script errors
-- broken project load
-- broken save/load
-- broken first playable flow
-- blank screenshots
-- missing required docs
-- accidental real-world IP strings
-- visual benchmark screenshot regressions once the visual benchmark scene exists
+## Safe baseline procedure
 
-## Command
+Use a disposable archive/copy, not the working project or an owner's save directory. Preserve existing outputs before any rerun: `scripts/validate_local.sh` deletes its copy's `artifacts/validation/latest`.
 
-Run local validation with:
+The recorded temporary checkout path and exact source commit are in [context.json](recovery-evidence-2026-09-07/context.json). The archived project's only settings modification was to add these keys under `[application]`:
 
-```bash
-scripts/validate_local.sh
+```ini
+config/use_custom_user_dir=true
+config/custom_user_dir_name="GSS-Recovery-<unique-run-id>"
 ```
 
-Run validation plus macOS export and exported-app launch with:
+Choose a new unique name on each reproduction. Godot logs/saves then use that isolated macOS Application Support directory; do not point it at owner data. The original validator additionally writes its proof save to its own artifact directory.
 
-```bash
-GSS_EXPORT_MACOS=1 scripts/validate_local.sh
+From the disposable checkout run:
+
+```sh
+bash scripts/validate_local.sh
 ```
 
-## Expected Output Location
+Preserve the exit code, validation log, engine/main-scene logs, summary and fixture output in a new evidence directory. Scan import as well as runtime logs for warnings/errors. Passing validates import/resource load, the 15-step one-sale happy path and a brief headless launch. It does not validate rendered graphics, real input feel or production save resilience.
 
-```text
-artifacts/validation/latest/
-  validation.log
-  engine-proof.log
-  main-scene-launch.log
-  macos-export-launch.log
-  screenshots/
-  summary.json
+Copy [recovery_probes.gd](recovery-evidence-2026-09-07/recovery_probes.gd) into the disposable `game/` folder, then run with absolute paths substituted:
+
+```sh
+GSS_PROBE_RESULTS=/absolute/new-evidence/probe-results.json /Users/michaelfuscoletti/.local/bin/godot --headless --path /absolute/disposable/game --script res://recovery_probes.gd
 ```
 
-## Required Checks
+Preserve stdout/stderr and exit status. The recorded baseline returns exit 1: six checks pass and four fail. These probes document gaps rather than weakening the original gate. Do not relabel their failures as successful acceptance tests.
 
-### Documentation Check
+## Launching the historical proof
 
-Verify required docs exist:
+For an explicitly requested hands-on review, launch the isolated project:
 
-- `docs/MASTER_PLAN.md`
-- `docs/01-design/vertical-slice-contract.md`
-- `docs/02-technical/architecture.md`
-- `docs/04-validation/manual-playtest-checklist.md`
+```sh
+/Users/michaelfuscoletti/.local/bin/godot --path /absolute/disposable/game
+```
 
-### Engine Project Check
+WASD movement (forward/backward direction has a recorded defect), click to capture mouse, Escape releases it; E picks up/places/sells, P sets used price to suggested maximum, F performs one preset shelf move, O opens, R closes/shows report, K saves, L loads. This is historical debug interaction, not the chosen restart UI. Headless handler checks are not a manual walkthrough.
 
-- project file exists
-- project opens in headless or command-line mode
-- no script load errors
-- no missing required scenes
+Optional export remains a separate operation, not executed in recovery review. An export preset's existence is not an exported-app pass.
 
-### Unit Tests
+## Visual evidence
 
-Required early tests:
-
-- pricing calculation
-- item location transition
-- shelf slot validation
-- register transaction
-- save/load round trip
-- day phase transition
-
-### Smoke Test
-
-Automated smoke should:
-
-- launch main scene
-- wait for scene ready
-- verify player/camera exists
-- verify starter shipment exists
-- verify at least one fixture exists
-- capture screenshot
-- exit cleanly
-
-### Screenshot Sanity
-
-Screenshot check should fail if:
-
-- image is missing
-- image is blank
-- image dimensions are wrong
-- image is mostly one color
-
-### Visual Benchmark Check
-
-Once the visual benchmark scene exists, validation should capture named screenshots for:
-
-- mall storefront
-- empty sales floor
-- receiving/backroom
-- starter shipment
-- carried case
-- stocked shelf density
-- counter/register
-- customer entering from mall
-- daily report view
-
-The automated gate should verify presence, dimensions, nonblank content, and basic framing metadata. Human review remains required for whether the visuals are good enough.
-
-### IP Policy Check
-
-Add a simple scanner for banned real-world terms once fictional naming begins.
-
-The scanner should catch obvious real product/platform/store names in first-party data and docs, with allowlist support for documentation discussions.
-
-## Failure Policy
-
-The gate fails on:
-
-- any script parse error
-- missing required scene
-- failed test
-- missing screenshot
-- blank screenshot
-- save/load round trip failure
-- accidental banned IP string in game data
-
-Warnings are allowed for:
-
-- incomplete later milestone docs
-- placeholder art
-- temporary unbalanced values
-
-## Manual Validation Relationship
-
-Automated validation proves the build is not broken.
-
-Manual validation proves the game feels correct.
-
-Both are required for milestone completion.
+`run_validation.gd::_write_proof_screenshot` paints pixels and does not capture the scene. Its output is a synthetic fixture. Successful imports, resource loads, PNG dimensions or compressed-byte variation do not establish good graphics. Future visual proof must follow the [V1 contract](../01-design/visual-benchmark-first-0.3.md): actual running-engine motion/captures at gameplay scale, editable sources, inspected alpha, repeatability and separate owner feedback.

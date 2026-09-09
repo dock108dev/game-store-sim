@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
+
 # Completion Checklist
 
 This checklist tracks 0% to 100% completion. Use it to separate core retail mastery from optional secret-web replay mastery.

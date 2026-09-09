@@ -1,0 +1,21 @@
+# Generation provenance
+
+Built-in image generation used twice in this continuation; no external paid API or service. Underlying model/version, seed and credit usage were unavailable. Raw outputs retained unchanged; outputs are original character candidates, not a guarantee of exclusivity or clearance. Primary commercial reference remains documentation-only.
+
+Identity master: `originals/rowan-master-v1.png`. Original tool output: `exec-dbdfd643-64cb-46f2-9e58-20b5021bdd8e.png` under the current Codex generated-images directory. All three cutout views derive from this single sheet. Rowan is a sample asset label, not permanent game canon.
+
+Prompt:
+
+> Create an original illustrated game character identity master turnaround on a truly transparent background. Three full body views evenly spaced in one wide 1536x1024 sheet: FRONT on left, RIGHT PROFILE in middle, BACK on right, exact same person and same height/baseline. Original friendly adult shop customer: short dark curly hair, warm brown skin, muted teal short sleeve overshirt with simple collar over ochre tee, charcoal straight trousers, rust sneakers. No bags, jewelry or asymmetric logos. Warm hand-inked contour, restrained flat painted shadows, subtle paper texture INSIDE figure only. Upright simplified proportions, slightly large head, about 5 heads tall, readable at 110 pixels. Fixed slightly elevated shop overview; show a little top of hair and shoes. Neutral separated arms angled slightly out, legs separated, complete hands and feet. Consistent proportions and clothing across all three views. No labels, no text, no floor, no shadows outside figure, no checkerboard. This is one preserved character master for subsequent cutout separation, not three different characters. Reference principle: Kardboard Kings clear upright customer silhouettes in an angled shop overview, but ORIGINAL design and smooth illustrated ink art, no copied character.
+
+Authored trial: `originals/rowan-authored-v1.png`. Original tool output: `exec-91b6fa52-7b13-4511-8f45-55fa422391bd.png`. Referenced image input was the identity master above.
+
+Prompt:
+
+> Use case identity-preserve. Use provided turnaround as STRICT character identity reference. Produce an animation sheet of the SAME original man walking RIGHT in exact profile. Six individually authored full-body poses in a 3 columns by 2 rows grid, all same scale and height, evenly spaced each inside a 512x512 cell in a 1536x1024 image. Pose sequence across rows: 1 right leg forward heel contact left leg back, 2 passing with left knee bent swinging forward right foot planted, 3 left leg forward heel contact right leg back, 4 passing with right knee bent swinging forward left foot planted, 5 neutral planted idle, 6 standing reaching horizontally to right at chest height then return to idle in animation. Preserve the short dark curls, brown skin, teal overshirt, ochre tee, charcoal trousers, rust sneakers, identical face and clothing; hand-inked restrained painted textures. Both feet complete and only two arms two legs each. Consistent head scale and body proportions across all poses. Generous blank margins. No text, no labels, no props, no ground shadow. Truly transparent background, not painted checkerboard. Original profile exactly as reference; no newly designed character.
+
+Both raw sheets had opaque backgrounds despite the transparency request; actual alpha inspection and Krita cleanup are recorded. Cleanup was scripted inside Krita with Qt paint layers and export APIs, not claimed as hand-painted work by the owner. Diagnostic contact sheets use Pillow only to inspect/composite existing exports; editable artwork and asset exports were created in Krita.
+
+## retail-v4 native revision
+
+No new image generation. Existing editable KRA sources were revised inside Krita's script runner using `scripts/krita_retail.py`. User brief: early-2000s mall game shop; ordinary employee/customer, commercial cases/shelving, used stickers, platform categories, promotional paper, bright retail materials and original fictional branding. Exact source-photo translation is in `reference/period/README.md`. Preserve source silhouette, joints, alpha and motion. New shelf/context use separate editable paint layers; all motif coordinates, lettering and color rules are recorded in the recipe. Space-opera appearance is not a reference.

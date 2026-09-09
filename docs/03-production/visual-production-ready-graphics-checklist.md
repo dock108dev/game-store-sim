@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
+
 # Visual Production Ready Graphics Checklist
 
 This checklist turns the current docs and `docs/game_store_sim_300_object_asset_inventory.xlsx` into a production gate for the first 0.3% visual benchmark.

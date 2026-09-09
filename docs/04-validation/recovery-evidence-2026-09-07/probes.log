@@ -1,0 +1,21 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+ISOLATED_USER_DIR=/Users/michaelfuscoletti/Library/Application Support/GSS-Recovery-gss-recovery-6fs85arw
+new_stock_price_locked: PASS
+occupied_slot_rejected: PASS
+duplicate_sale_rejected: PASS
+sale_accounting: PASS
+closed_store_rejects_sale: FAIL
+customers_reserve_distinct_stock: FAIL
+sold_item_not_still_carried: FAIL
+Engine proof ready. E pickup/place/sell, P price, F move shelf, O open, R report, K save, L load.
+forward_input_moves_toward_camera_forward: FAIL
+Store opened. Customer spawning from mall path.
+Customer browsed shelf and queued at register.
+runtime_customer_reaches_queue: PASS
+Sale complete: Sky Cart Rally. Cash now $569.99.
+Register closed.
+Saved engine proof state.
+Loaded engine proof state.
+scene_handlers_sale_report_reload: PASS
+RECOVERY_PROBES failures=4

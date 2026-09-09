@@ -1,55 +1,18 @@
 # Game Store Sim
 
-This repo is the source-of-truth documentation and future implementation repo for Game Store Sim.
+Current direction: an illustrated 2.5D early-2000s mall game shop, using Kardboard Kings as the primary composition reference and **B-ROWAN-01 / retail-v4** as the current visual baseline. The owner has given strong positive feedback on its appearance. The retail loop remains the product: receive, price, stock, serve, sell, close, review, and decide what comes next.
 
-Game Store Sim is a first-person, warm-nostalgic retail life sim about opening a small independent video game store in a mall and growing it from an understocked lease into a memorable local shop. The game uses fictional brands, fictional products, fictional platforms, and fictional suppliers. Real-world and other-game references are used for design extraction only, not for direct copying.
+## Start here
 
-## Start Here
+1. [Master plan](docs/MASTER_PLAN.md): current direction and scope.
+2. [Slices and backlog](docs/03-production/milestones-and-backlog.md): status, dependencies and completion criteria.
+3. [Task checklist](docs/03-production/visual-first-task-list.md): current actionable todos.
+4. [Owner feedback](docs/03-production/retail-v4-owner-feedback.md): exact response and its scope.
+5. [Retail-v4 sample and launch](samples/b-retail-v4/README.md): retained build report, source assets and evidence. Its pending-review wording is a frozen handoff; the owner-feedback record above is current.
+6. [Validation](docs/04-validation/local-validation-plan.md): baseline isolation and evidence rules.
 
-Read these files first:
+**R1 and R2 are accepted within scope.** Owner R2 feedback: **“build on.”** R3 adds reproducible price-sensitive buying/refusal, locked offers, prep repricing and daily price misses. R3 is verified and ready for owner review; R3 owner acceptance remains pending. [Launch and comparison](encounter/README.md), [R2 decision](docs/03-production/r2-delivery.md), [R3 evidence](docs/03-production/r3-delivery.md). This is not complete-game or release acceptance.
 
-1. [Source Master Plan](docs/MASTER_PLAN.md)
-2. [Product Brief](docs/00-product/product-brief.md)
-3. [Vertical Slice Contract](docs/01-design/vertical-slice-contract.md)
-4. [First 0.3% Visual Benchmark](docs/01-design/visual-benchmark-first-0.3.md)
-5. [Visual First Task List](docs/03-production/visual-first-task-list.md)
-6. [Local Validation Plan](docs/04-validation/local-validation-plan.md)
+Checkout branch: `main`, recovered from `837bd4a8d33ec01fe48dec83bd16fedb9dfaaff1`. Preparation, samples and documentation remain uncommitted. No publication has occurred.
 
-## Repository Roles
-
-- `docs/`: production, design, engineering, validation, and decision docs.
-- `game-guide/`: player-facing strategy-guide canon and validation reference. It is not frozen. If production docs need to change a canon rule, the change should be explicit and discussed.
-- `real_inspiration/`: real period retail references for extracting fixture, lighting, density, signage, and object rules.
-- `other_game_inspiration/`: game feel and simulator presentation references for extracting interaction, UI, and readability patterns.
-
-## Current Build State
-
-The repo has a Godot/macOS engine proof that validates the technical path: item state, pickup/stock/sale flow, customer state, save/load, local validation, macOS export, and exported app launch.
-
-The current active milestone is not more gameplay breadth. It is the visual benchmark for the first 0.3% of the game. The existing engine proof scene is technical scaffolding, not the production visual baseline.
-
-The first 0.3% vertical slice still covers:
-
-- enter the mall store
-- receive starter shipment
-- pick up physical inventory
-- price used stock with suggested pricing
-- stock shelves one physical item at a time
-- open the store
-- serve physical customers
-- complete first sale
-- close register
-- read daily report
-- save and load
-
-Before those systems expand, the first store must visually lock:
-
-- mall storefront
-- empty understocked sales floor
-- receiving/backroom
-- counter/register
-- starter shipment
-- carried game case
-- shelf with about ten physical games
-- customer entering from mall
-- daily report presentation
+The old samples and retail-state prototype are preserved separately. The new `encounter/` project integrates the retail-v4 overview with replacement transaction state. Historical documents and retained build reports are evidence, not current work orders. Keep `/Users/michaelfuscoletti/Desktop/game_sim_next_steps.md` synchronized with the master plan.

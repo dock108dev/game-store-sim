@@ -1,0 +1,2035 @@
+diff --git a/README.md b/README.md
+index ed5a0629..d4454ee9 100644
+--- a/README.md
++++ b/README.md
+@@ -1,55 +1,19 @@
+-# Game Store Sim
++# Game Store Sim — restart preparation
+ 
+-This repo is the source-of-truth documentation and future implementation repo for Game Store Sim.
++Preserve the retail gameplay loop: prepare → receive and price stock → stock shelves → open → serve and sell → close → review results → decide what to do next. All art, assets, camera, interface, presentation, and 2D/2.5D/3D choices are open. Existing code is optional reuse material.
+ 
+-Game Store Sim is a first-person, warm-nostalgic retail life sim about opening a small independent video game store in a mall and growing it from an understocked lease into a memorable local shop. The game uses fictional brands, fictional products, fictional platforms, and fictional suppliers. Real-world and other-game references are used for design extraction only, not for direct copying.
++## Start here
+ 
+-## Start Here
++1. [Current master plan](docs/MASTER_PLAN.md): direction, scope, and authority.
++2. [Recovery review](docs/03-production/recovery-review-2026-09-07.md): actual implementation, decisions, defects, and fresh evidence.
++3. [Visual direction milestone](docs/01-design/visual-benchmark-first-0.3.md): select an actual reference, then prove the hardest visual requirement in a tiny running sample.
++4. [Task list](docs/03-production/visual-first-task-list.md).
++5. [Baseline validation and safe launch](docs/04-validation/local-validation-plan.md).
+ 
+-Read these files first:
++Local preparation branch: `codex/restart-preparation`, based on `837bd4a8d33ec01fe48dec83bd16fedb9dfaaff1`. Preparation changes are uncommitted. No publishing is authorized.
+ 
+-1. [Source Master Plan](docs/MASTER_PLAN.md)
+-2. [Product Brief](docs/00-product/product-brief.md)
+-3. [Vertical Slice Contract](docs/01-design/vertical-slice-contract.md)
+-4. [First 0.3% Visual Benchmark](docs/01-design/visual-benchmark-first-0.3.md)
+-5. [Visual First Task List](docs/03-production/visual-first-task-list.md)
+-6. [Local Validation Plan](docs/04-validation/local-validation-plan.md)
++The current executable is an old first-person box/capsule technical proof, not the restart's chosen presentation. A separate static Blender/GLB benchmark also exists. The original validator passes; additional recovery probes expose four defects. No visual quality or owner acceptance is established.
+ 
+-## Repository Roles
++Documents labeled historical are retained for reference only. This includes the player guide, older decisions, and old architecture/backlog. Their locks, acceptance claims, completion percentages, and work orders do not define current intent. Git history preserves their originals.
+ 
+-- `docs/`: production, design, engineering, validation, and decision docs.
+-- `game-guide/`: player-facing strategy-guide canon and validation reference. It is not frozen. If production docs need to change a canon rule, the change should be explicit and discussed.
+-- `real_inspiration/`: real period retail references for extracting fixture, lighting, density, signage, and object rules.
+-- `other_game_inspiration/`: game feel and simulator presentation references for extracting interaction, UI, and readability patterns.
+-
+-## Current Build State
+-
+-The repo has a Godot/macOS engine proof that validates the technical path: item state, pickup/stock/sale flow, customer state, save/load, local validation, macOS export, and exported app launch.
+-
+-The current active milestone is not more gameplay breadth. It is the visual benchmark for the first 0.3% of the game. The existing engine proof scene is technical scaffolding, not the production visual baseline.
+-
+-The first 0.3% vertical slice still covers:
+-
+-- enter the mall store
+-- receive starter shipment
+-- pick up physical inventory
+-- price used stock with suggested pricing
+-- stock shelves one physical item at a time
+-- open the store
+-- serve physical customers
+-- complete first sale
+-- close register
+-- read daily report
+-- save and load
+-
+-Before those systems expand, the first store must visually lock:
+-
+-- mall storefront
+-- empty understocked sales floor
+-- receiving/backroom
+-- counter/register
+-- starter shipment
+-- carried game case
+-- shelf with about ten physical games
+-- customer entering from mall
+-- daily report presentation
++The Desktop handoff is `/Users/michaelfuscoletti/Desktop/game_sim_next_steps.md`. Keep it synchronized with the master plan after material decisions.
+diff --git a/assets/blender/exports/README.md b/assets/blender/exports/README.md
+index 74cae8da..e3e3a18e 100644
+--- a/assets/blender/exports/README.md
++++ b/assets/blender/exports/README.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../../../docs/MASTER_PLAN.md).
++
+ # Blender Exports
+ 
+ Accepted `.glb` exports generated from Blender source files live here.
+diff --git a/assets/blender/review-renders/README.md b/assets/blender/review-renders/README.md
+index c284e4ad..c21fba71 100644
+--- a/assets/blender/review-renders/README.md
++++ b/assets/blender/review-renders/README.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../../../docs/MASTER_PLAN.md).
++
+ # Blender Review Renders
+ 
+ Use this folder for intentional asset review renders.
+diff --git a/assets/blender/source/README.md b/assets/blender/source/README.md
+index 6ebf6446..54116f2a 100644
+--- a/assets/blender/source/README.md
++++ b/assets/blender/source/README.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../../../docs/MASTER_PLAN.md).
++
+ # Blender Source Assets
+ 
+ Production `.blend` files for first-party visual benchmark assets live here.
+diff --git a/docs/00-product/product-brief.md b/docs/00-product/product-brief.md
+index facb7c1e..e2d916ad 100644
+--- a/docs/00-product/product-brief.md
++++ b/docs/00-product/product-brief.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Product Brief
+ 
+ ## Working Title
+diff --git a/docs/01-design/art-direction.md b/docs/01-design/art-direction.md
+index 6331a112..a3f2f66c 100644
+--- a/docs/01-design/art-direction.md
++++ b/docs/01-design/art-direction.md
+@@ -1,170 +1,19 @@
+-# Art Direction
++# Art direction — illustrated 2.5D shop overview selected
+ 
+-## Art Target
++The [V1a reference board](../05-reference/presentation-choice-2026-09-07.md) records the owner’s exact selection “B”: Kardboard Kings illustrated 2.5D overview, using editable Krita masters/cleanup and Godot animation. Official motion examples are linked; their playback/timecodes are not verified.
+ 
+-Hybrid stylized realism.
++Only the retail loop is retained. The selected presentation is an illustrated 2.5D shop overview. Palette, era, original assets, environment, interface and exact camera treatment remain to be developed; the reference does not lock these details.
+ 
+-The game should feel grounded in early-2000s retail while staying readable, performant, and slightly stylized like a modern simulator.
++| Approach | Retail opportunity | Cost/risk to prove first |
++| --- | --- | --- |
++| Illustrated 2D | Clear customer silhouettes and composed shelf/counter views; stock and sales can use direct selection | Motion and directional identity at small scale; readable handling without relying on close-ups; layered cutout gaps or authored-frame workload |
++| Angled / 2.5D | Store overview makes shelf gaps and customer routes visible together | Feet staying planted, facing changes, sorting behind/in front of fixtures, depth consistency and product selection under overlap |
++| 3D | Spatial browsing, flexible viewpoints and close inspection can make stock handling tactile | Character rig/turn quality, consistent stylization and lighting at chosen distance, occlusion and camera usability; extra asset work must earn a gameplay advantage |
+ 
+-The next production phase is visual-first. The first 0.3% of the game must look right before additional gameplay breadth is added.
++These are alternatives; the board now recommends B without committing the owner. Camera choice remains independent: 3D does not imply first-person, and 2.5D must be specified precisely (for example, sprites in a 3D scene versus layered 2D).
+ 
+-## Mood
++Reference boards must use actual attributable images and motion clips, not style adjectives or generated aspirational mockups. For each candidate record source URL/file, creator/title, capture/timecode, what we would borrow as a principle, intended camera and character screen size, and how stocking, customers, and sales read. References are not permission to copy assets. Select one primary target with owner input before production.
+ 
+-Warm nostalgia:
++Record palette, linework, proportions, shading, texture, motion and camera rules from that reference. Existing Blender assets and inspiration folders are optional. The space-opera RPG experience informs test discipline only.
+ 
+-- bright mall lighting
+-- familiar retail materials
+-- clean but slightly busy surfaces
+-- colorful product faces
+-- visible shelf gaps early
+-- cardboard and plastic tactility
+-- inviting small-shop atmosphere
+-
+-## Real Reference Extraction
+-
+-Use `real_inspiration/` for:
+-
+-- wire-grid shelving
+-- acrylic case rows
+-- platform/category strips
+-- yellow price stickers
+-- fluorescent drop ceilings
+-- low commercial carpet
+-- tile/carpet transitions
+-- glass display cases
+-- console/accessory boxes on counters
+-- retail-specific counter clutter
+-- hanging posters and promo panels
+-- small-chain signage cues
+-
+-Do not copy exact brands, layouts, logos, products, or packaging.
+-
+-## Other Game Inspiration Extraction
+-
+-Use `other_game_inspiration/` for:
+-
+-- readable simulator UI
+-- first-person interaction pacing
+-- object placement affordances
+-- simple but clear store surfaces
+-- stylized prop readability
+-- customer flow visibility
+-- management overlay density
+-
+-Do not copy UI layout, specific art assets, streamer overlays, brand names, or product categories unrelated to this game.
+-
+-## Visual Language
+-
+-### Products
+-
+-Products create color.
+-
+-Cases, boxes, stickers, and shelf rows should be the main source of visual richness. The environment should support them rather than overpower them.
+-
+-### Fixtures
+-
+-Fixtures create structure.
+-
+-Shelves, racks, counters, and display cases should have readable silhouettes and predictable slot behavior.
+-
+-### Signage
+-
+-Signage creates final read.
+-
+-Use platform/category headers, sale labels, open/closed signs, and small shelf tags. Avoid walls filled with meaningless posters.
+-
+-## First Playable Asset Needs
+-
+-Environment:
+-
+-- mall concourse segment
+-- storefront glass and frame
+-- starter store shell
+-- backroom/receiving area
+-- counter/register
+-- backroom computer
+-- fluorescent ceiling lighting
+-- commercial carpet/floor material
+-
+-Fixtures:
+-
+-- wall shelf/rack
+-- freestanding shelf/gondola
+-- checkout counter
+-- receiving table or pallet area
+-- starter box
+-
+-Items:
+-
+-- fictional game cases
+-- fictional new game cases
+-- fictional used game cases
+-- price stickers
+-- optional accessory/box
+-
+-Customers:
+-
+-- 2-3 base customer body variants
+-- simple walk/browse/queue/exit animations
+-
+-UI:
+-
+-- interaction prompt
+-- pricing panel
+-- register sale confirmation
+-- daily report
+-- save/load screen
+-- layout mode ghost/valid/invalid feedback
+-
+-## First 0.3% Visual Gate
+-
+-The visual gate must establish:
+-
+-- storefront identity from the mall concourse
+-- correct retail scale for player, cases, shelves, counter, and backroom
+-- empty shelf capacity that reads as future growth instead of unfinished content
+-- case rows that visibly communicate one-to-one stock without becoming noisy
+-- warm nostalgic lighting that still has bright retail clarity
+-- fictional product art that feels era-appropriate and legally clean
+-- fixture language that can support future expansion without redesign
+-- early UI presentation that feels like the game, not debug overlay
+-
+-The engine proof scene does not satisfy this gate. It only proves that the engine path works.
+-
+-## Color Direction
+-
+-Avoid one-note palettes.
+-
+-The store should combine:
+-
+-- neutral commercial flooring
+-- light walls or muted paint
+-- black/metal/acrylic fixture materials
+-- yellow sale tags
+-- colorful fictional box art
+-- warm accent signage
+-
+-The game should not be dominated by purple, beige, dark blue, or brown/orange.
+-
+-## Scale And Readability
+-
+-Rules:
+-
+-- shelves must read from normal player distance
+-- price stickers need symbolic clarity, not tiny readable text everywhere
+-- cases should be chunky enough to handle
+-- rows should look dense without requiring expensive physics
+-- UI text must be legible on Mac laptop screens
+-
+-## Anti-Goals
+-
+-Do not make:
+-
+-- a sterile generic store
+-- a photoreal brand-copy store
+-- an overdecorated nostalgia museum
+-- a joke retail parody
+-- an unreadable clutter pile
+-- a showroom with no operational mess
+-
+-The store should feel like it can do business.
++See the [tiny proof contract](visual-benchmark-first-0.3.md) for source retention, alpha inspection, scale, repeatability, and feedback requirements.
+diff --git a/docs/01-design/core-loop-and-systems.md b/docs/01-design/core-loop-and-systems.md
+index 275d768a..bdc1f042 100644
+--- a/docs/01-design/core-loop-and-systems.md
++++ b/docs/01-design/core-loop-and-systems.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Core Loop And Systems
+ 
+ ## Core Loop
+diff --git a/docs/01-design/customers-and-day-flow.md b/docs/01-design/customers-and-day-flow.md
+index 2b045f9c..4b5f4a60 100644
+--- a/docs/01-design/customers-and-day-flow.md
++++ b/docs/01-design/customers-and-day-flow.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Customers And Day Flow
+ 
+ ## Customer Philosophy
+diff --git a/docs/01-design/inventory-pricing-and-fixtures.md b/docs/01-design/inventory-pricing-and-fixtures.md
+index 50775168..592022c2 100644
+--- a/docs/01-design/inventory-pricing-and-fixtures.md
++++ b/docs/01-design/inventory-pricing-and-fixtures.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Inventory, Pricing, And Fixtures
+ 
+ ## Inventory Philosophy
+diff --git a/docs/01-design/store-layout-and-customization.md b/docs/01-design/store-layout-and-customization.md
+index 48a7b596..c22af79e 100644
+--- a/docs/01-design/store-layout-and-customization.md
++++ b/docs/01-design/store-layout-and-customization.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Store Layout And Customization
+ 
+ ## Layout Philosophy
+diff --git a/docs/01-design/vertical-slice-contract.md b/docs/01-design/vertical-slice-contract.md
+index 5be444cf..6677e0b8 100644
+--- a/docs/01-design/vertical-slice-contract.md
++++ b/docs/01-design/vertical-slice-contract.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Vertical Slice Contract
+ 
+ This document defines the first implementation target. If a feature is not listed here, it is not required for the first playable.
+diff --git a/docs/01-design/visual-benchmark-first-0.3.md b/docs/01-design/visual-benchmark-first-0.3.md
+index 8338267a..d8f6ccba 100644
+--- a/docs/01-design/visual-benchmark-first-0.3.md
++++ b/docs/01-design/visual-benchmark-first-0.3.md
+@@ -1,344 +1,43 @@
+-# First 0.3% Visual Benchmark
++# Restart milestone V1 — reference selection and tiny visual proof
+ 
+-This document defines the visual benchmark for the first 0.3% of Game Store Sim.
++Status: V1a references presented; owner selection pending. V1b unstarted. See [reference board](../05-reference/presentation-choice-2026-09-07.md). This replaces the old nine-view benchmark. The filename is retained for existing links; no completion percentage is implied.
+ 
+-The engine proof proved that Godot, macOS export, validation, basic item state, customer state, sale state, and save/load can work. It did not prove the game looks right.
++## V1a — choose the target
+ 
+-The next production phase is visual-first. Do not expand gameplay breadth until this benchmark is signed off.
++Present at most three concrete reference candidates spanning illustrated 2D, angled/2.5D, and 3D. Include actual stills and a motion example where available, source attribution, intended gameplay framing, retail readability, production cost, and the hardest uncertainty. If motion evidence is unavailable, state that gap. Do not ask for an abstract style choice without showing the references.
+ 
+-## Goal
++Record the owner's primary reference selection and exact feedback. Define the chosen camera, needed directions, target displayed size/window scale, and a single hardest visual requirement. This is the only owner decision needed before the sample. No art generation before selection.
+ 
+-Build the visual scaffold for the opening store so future systems expand on a strong visual foundation instead of re-solving the look later.
++## V1b — one character, one repeatable motion test
+ 
+-The target player reaction is:
++Build a separate, minimal engine scene only after V1a. Use a plain floor, one customer, and one simple occluder/fixture silhouette if needed. No store scenery or expanded simulation. The character walks a short route, stops, turns through the directions required by the chosen view, and repeats. Include camera motion only if the selected presentation needs it. Record exact launch command and controls.
+ 
+-> This already feels like a warm early-2000s mall game shop, even before the full systems exist.
++For illustrated 2D, test illustrated character motion concretely: layered cutouts with AnimationPlayer are a candidate workflow, not a promised outcome. Isolate every moving limb and reconstruct hidden surfaces; inspect for duplicate silhouettes, gaps, drifting pivots, and foot sliding. For 2.5D additionally test depth, facing and occlusion. For 3D test the actual rigged character's turn/walk and stylization under representative lighting and camera distance. A capsule proves none of these.
+ 
+-## Scope
++Start near 100 pixels displayed character height where appropriate; derive the final test size from the selected reference and framing. Inspect animation at real gameplay size, plus magnified diagnostic views. Record window size, viewport size, Retina scaling, displayed character height, filtering, and any mipmap/alpha settings. The small view must carry the quality judgment.
+ 
+-This benchmark covers only the 0.0%-0.3% opening experience:
++## Required asset and evidence package
+ 
+-- mall concourse
+-- storefront
+-- empty lease/sales floor
+-- counter/register
+-- receiving/backroom
+-- starter shipment
+-- starter shelves/racks
+-- physical game cases and boxes
+-- carried item view
+-- first stocked shelf view
+-- first customer entering/browsing view
+-- first daily report view
++- Keep editable sources: layered `.kra` for illustrated masters, `.blend` or equivalent for a 3D source, plus rig/animation sources. Keep one character identity master, revision identities, exports and provenance/usage rights.
++- Inspect actual alpha-channel values and composite exports over contrasting backgrounds. A painted checkerboard is not transparency. Record alpha as not applicable for opaque assets rather than silently skipping the check.
++- Record dimensions, pivots, layer order, reconstructed hidden surfaces, world/display scale, export/import settings, engine version, and exact code/asset revisions.
++- Retain real engine captures and a short motion recording. Synthetic pixel-painted images and successful imports are technical artifacts only.
++- Re-export from the editable master, reimport, and relaunch the same scene once to demonstrate repeatability.
++- Let the owner operate the moving sample. Preserve exact feedback separately from defect results.
+ 
+-## Non-Goals
++## Four independent verdicts
+ 
+-Do not add:
++| Record | Required evidence |
++| --- | --- |
++| Technical behavior | Scene launches and repeats required movement/turns with correct depth/alpha and no relevant runtime errors |
++| Visual quality | Real motion at gameplay scale compared directly with the selected reference; named defects and assessment |
++| Production repeatability | Editable source → export → import → relaunch reproduced with recorded settings |
++| Owner feedback | Exact response to this revision; pending until received, never inferred from technical passes |
+ 
+-- trade-ins
+-- returns
+-- services
+-- supplier networks
+-- full secret web
+-- employees
+-- neighboring-unit expansion
+-- launch calendar
+-- rare inventory
+-- new customer archetype complexity
++If the sample fails, preserve the failed attempt and make one focused repair pass. If illustrated rigging still misses the target, test authored frames for the same character in this same bounded scene. Stop after that alternative assessment; if needed, name the demonstrated external dependency with exact views, animations, frame count/timing, dimensions, editable source/export requirements, rights, and engine constraints. Do not start an endless series of style changes or claim graphics are impossible without a concrete test.
+ 
+-Do not polish:
++Completion requires evidence in all four records and explicit owner agreement on the direction, with defects resolved or explicitly carried as limits. A still image, successful import, or favorable appearance comment cannot clear defective motion. No scenery expansion follows automatically.
+ 
+-- final character animation systems
+-- final UI flows beyond benchmark presentation
+-- final soundscape, unless simple ambience helps visual read
+-- full product catalog
+-
+-## Visual Pillars
+-
+-### Mall First
+-
+-The player must immediately understand the shop exists inside a mall.
+-
+-Required cues:
+-
+-- concourse outside storefront
+-- mall path left/right
+-- storefront glass
+-- store sign position
+-- threshold/entrance
+-- neighboring mall-space hints without requiring full adjacent shops
+-
+-### Understocked, Not Unfinished
+-
+-The first store is sparse, but it must look intentionally underfunded.
+-
+-Required cues:
+-
+-- clean but cheap starter fixtures
+-- visible shelf gaps
+-- boxed starter shipment
+-- operational counter
+-- enough product color to promise growth
+-- no giant empty debug-looking spaces
+-
+-### Physical Retail Scale
+-
+-The world must make sense at human scale.
+-
+-Required cues:
+-
+-- case size feels handleable
+-- shelves fit real case rows
+-- counter height feels usable
+-- backroom/receiving has plausible clearance
+-- player camera height does not make fixtures feel toy-like
+-
+-### Products Create Color
+-
+-The environment should not carry the whole visual identity. Fictional product boxes, case rows, price stickers, shelf headers, and promo surfaces provide the color.
+-
+-Required cues:
+-
+-- several fictional case-cover color families
+-- visible price sticker language
+-- platform/category strips
+-- new/used distinction
+-- no real IP or close parody
+-
+-### Fixtures Create Structure
+-
+-Fixtures must become reusable scaffolding for future expansion.
+-
+-Required cues:
+-
+-- wall shelf/rack
+-- freestanding shelf/gondola
+-- checkout counter
+-- receiving table/box area
+-- shelf capacity states that can scale from empty to dense
+-
+-### Signage Creates Final Read
+-
+-Signage should clarify the store without explaining the game.
+-
+-Required cues:
+-
+-- fictional storefront sign
+-- open/closed sign
+-- shelf category header
+-- simple price/sale tags
+-- no walls of meaningless posters
+-
+-## Required Visual Targets
+-
+-Each target needs a named screenshot from a macOS build.
+-
+-### 01 Storefront From Mall
+-
+-Filename:
+-
+-```text
+-01-storefront-from-mall.png
+-```
+-
+-Must show:
+-
+-- mall concourse
+-- glass storefront
+-- entrance threshold
+-- store sign or sign placeholder with final scale
+-- warm retail lighting through the glass
+-
+-Pass criteria:
+-
+-- reads as mall storefront in one glance
+-- not a generic exterior wall
+-- no debug-looking blank planes dominate
+-
+-### 02 Empty Sales Floor
+-
+-Filename:
+-
+-```text
+-02-empty-sales-floor.png
+-```
+-
+-Must show:
+-
+-- starter floor
+-- counter/register
+-- starter shelves
+-- visible empty capacity
+-- route to backroom or receiving
+-
+-Pass criteria:
+-
+-- sparse but intentional
+-- clear customer/player paths
+-- counter is identifiable
+-
+-### 03 Receiving And Backroom
+-
+-Filename:
+-
+-```text
+-03-receiving-backroom.png
+-```
+-
+-Must show:
+-
+-- starter shipment box
+-- receiving surface or staging area
+-- backroom computer or office hint
+-- operational clutter that is retail-specific
+-
+-Pass criteria:
+-
+-- looks like goods enter the business here
+-- not a random storage closet
+-
+-### 04 Starter Shipment Open
+-
+-Filename:
+-
+-```text
+-04-starter-shipment-open.png
+-```
+-
+-Must show:
+-
+-- open or staged shipment
+-- multiple physical items
+-- invoice/manifest surface or visual cue
+-- one harmless odd-detail surface if present
+-
+-Pass criteria:
+-
+-- item scale and quantity read clearly
+-- the box feels tactile, not a menu-only source
+-
+-### 05 Picked Up Case
+-
+-Filename:
+-
+-```text
+-05-picked-up-case.png
+-```
+-
+-Must show:
+-
+-- first-person carried case/box view
+-- readable fictional cover/color block
+-- store context behind it
+-
+-Pass criteria:
+-
+-- carried item does not block too much of the view
+-- case feels like a physical object
+-
+-### 06 Stocked Shelf Density
+-
+-Filename:
+-
+-```text
+-06-stocked-shelf-density.png
+-```
+-
+-Must show:
+-
+-- shelf with about ten physical game cases
+-- price tags/stickers or shelf labels
+-- empty nearby capacity if applicable
+-
+-Pass criteria:
+-
+-- one-to-one stock is visually believable
+-- ten-ish games reads as ten-ish games
+-- dense but not noisy
+-
+-### 07 Counter Register
+-
+-Filename:
+-
+-```text
+-07-counter-register.png
+-```
+-
+-Must show:
+-
+-- register/counter
+-- customer-facing side
+-- staff/player side cue
+-- retail-specific counter clutter
+-
+-Pass criteria:
+-
+-- counter reads as the store pressure point
+-- sale flow location is obvious without tutorial text
+-
+-### 08 Customer Entering From Mall
+-
+-Filename:
+-
+-```text
+-08-customer-entering-from-mall.png
+-```
+-
+-Must show:
+-
+-- customer crossing from mall into store
+-- storefront/entrance context
+-- enough body silhouette to read as a person, even if placeholder
+-
+-Pass criteria:
+-
+-- physical customer presence is credible
+-- customer path starts outside the store
+-
+-### 09 Daily Report View
+-
+-Filename:
+-
+-```text
+-09-daily-report-view.png
+-```
+-
+-Must show:
+-
+-- report UI or backroom computer report state
+-- store context or believable computer setting
+-- readable hierarchy
+-
+-Pass criteria:
+-
+-- report feels like a business tool
+-- not a debug dump
+-
+-## Visual Review Rubric
+-
+-Score each target:
+-
+-- `pass`: ready to build on
+-- `revise`: clear direction, needs iteration
+-- `fail`: does not match the game
+-- `defer`: intentionally postponed with reason
+-
+-Required sign-off:
+-
+-- all nine targets are `pass`, or
+-- any `defer` has a written reason and does not weaken the visual scaffold
+-
+-## Implementation Rules
+-
+-- Use simple geometry if needed, but it must have correct scale, lighting, material direction, and composition.
+-- Favor reusable fixture scaffolding over one-off decorative set dressing.
+-- Fictional product art can start as graphic blocks, but must already establish the visual grammar.
+-- Do not add broad gameplay systems to compensate for weak visuals.
+-- Do not treat the current engine proof scene as production art.
+-
+-## Validation Rules
+-
+-Automated validation should capture and sanity-check screenshots. Human review decides visual quality.
+-
+-The benchmark is not approved just because the local gate passes.
++## Following milestone, not current scope
+ 
++After the proof is reviewed, propose one tiny retail encounter: enter, browse one stocked shelf, reach the counter, buy, exit. Use the proven character and only enough fixture/product treatment to judge a coherent look. Reuse or replace the old state code, addressing its recorded defects before treating it as reliable. Recheck receive/price/stock/sale/report/save/load in disposable state. Define further work from that result.
+diff --git a/docs/02-technical/architecture.md b/docs/02-technical/architecture.md
+index e7b0bea9..f3c5e4f9 100644
+--- a/docs/02-technical/architecture.md
++++ b/docs/02-technical/architecture.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Technical Architecture
+ 
+ This architecture assumes Godot 4, but the system boundaries should survive if the engine changes.
+diff --git a/docs/02-technical/data-model.md b/docs/02-technical/data-model.md
+index 0d94b177..fedbbfa9 100644
+--- a/docs/02-technical/data-model.md
++++ b/docs/02-technical/data-model.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Data Model
+ 
+ This document defines the first-pass data model. Field names are provisional but should guide implementation.
+diff --git a/docs/02-technical/engine-evaluation.md b/docs/02-technical/engine-evaluation.md
+index aa6d1253..33c14127 100644
+--- a/docs/02-technical/engine-evaluation.md
++++ b/docs/02-technical/engine-evaluation.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Engine Evaluation
+ 
+ ## Current Recommendation
+diff --git a/docs/02-technical/macos-build-requirements.md b/docs/02-technical/macos-build-requirements.md
+index 5719b94b..d1fd3f0e 100644
+--- a/docs/02-technical/macos-build-requirements.md
++++ b/docs/02-technical/macos-build-requirements.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # macOS Build Requirements
+ 
+ ## Platform Target
+diff --git a/docs/03-production/definition-of-done.md b/docs/03-production/definition-of-done.md
+index 3c23c965..d7d57d83 100644
+--- a/docs/03-production/definition-of-done.md
++++ b/docs/03-production/definition-of-done.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Definition Of Done
+ 
+ ## Global Definition
+diff --git a/docs/03-production/engine-proof-milestone.md b/docs/03-production/engine-proof-milestone.md
+index c8daa6c5..e31a98a8 100644
+--- a/docs/03-production/engine-proof-milestone.md
++++ b/docs/03-production/engine-proof-milestone.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Engine Proof Milestone
+ 
+ ## Status
+diff --git a/docs/03-production/first-hi-fi-slice-audit.md b/docs/03-production/first-hi-fi-slice-audit.md
+index 35cad7ad..892f6aec 100644
+--- a/docs/03-production/first-hi-fi-slice-audit.md
++++ b/docs/03-production/first-hi-fi-slice-audit.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # First Hi-Fi Slice Audit
+ 
+ Date: 2026-06-20
+diff --git a/docs/03-production/milestones-and-backlog.md b/docs/03-production/milestones-and-backlog.md
+index 104d3653..2a351959 100644
+--- a/docs/03-production/milestones-and-backlog.md
++++ b/docs/03-production/milestones-and-backlog.md
+@@ -1,161 +1,8 @@
+-# Milestones And Backlog
++# Restart milestones
+ 
+-## Milestone 0: Documentation Baseline
++1. Recovery preparation — complete on 2026-09-07. Technical happy path passes; four additional probes fail. See recovery review.
++2. V1a reference choice — references presented; owner selection pending. See [three-reference board](../05-reference/presentation-choice-2026-09-07.md). Recommendation: B, Bear and Breakfast illustrated overview using Krita masters/cleanup and Godot animation. No selection or sample yet.
++3. V1b tiny motion proof — pending selection; use the bounded visual proof contract.
++4. Small retail encounter — outline only, to be scoped after proof review.
+ 
+-Status: complete.
+-
+-Done when:
+-
+-- master plan exists
+-- vertical slice contract exists
+-- engine evaluation exists
+-- technical architecture exists
+-- validation plan exists
+-- source-of-truth rules exist
+-
+-## Milestone 1: Engine Proof
+-
+-Status: implemented and locally validated.
+-
+-Goal:
+-
+-Prove the engine can support the core physical loop on macOS.
+-
+-Required:
+-
+-- create engine project
+-- basic mall/store shell
+-- first-person movement
+-- one pickup-able game case
+-- one shelf with valid slot
+-- one movable fixture
+-- one customer spawn path
+-- one save/load proof
+-- local validation script
+-
+-Exit criteria:
+-
+-- local Mac build runs
+-- validation script passes
+-- no script load errors
+-- screenshot proves nonblank store view
+-- macOS export can be produced and launched headlessly
+-
+-## Milestone 2: First 0.3% Visual Benchmark
+-
+-Status: active next milestone.
+-
+-Goal:
+-
+-Make the first 0.3% of the game visually correct before expanding gameplay breadth. The engine proof scene is allowed to be discarded, rebuilt, or used only as technical reference.
+-
+-Required:
+-
+-- visual benchmark scene for the opening mall store
+-- mall concourse and storefront that read immediately
+-- empty lease that feels understocked, not unfinished
+-- receiving/backroom that feels operational
+-- counter/register area with early-2000s retail language
+-- starter fixtures with correct scale and shelf density
+-- one-to-one physical case/box visuals that support stock counts
+-- fictional product-box visual language
+-- warm nostalgic lighting pass
+-- camera height/FOV pass for Mac desktop play
+-- screenshot capture path for named visual targets
+-- macOS build export and launch
+-- visual sign-off checklist
+-
+-Exit criteria:
+-
+-- required visual benchmark screenshots are captured from the build
+-- screenshots are nonblank, correctly framed, and show the required spaces/states
+-- manual visual review marks every required target pass or intentional defer
+-- no new gameplay breadth has been added outside benchmark needs
+-- repo docs and task list match the signed-off scaffold
+-
+-## Milestone 3: 0.0%-0.1% Opening Setup
+-
+-Goal:
+-
+-Player can enter closed store, receive shipment, price used stock, and stock shelves.
+-
+-Required:
+-
+-- starter shipment
+-- 10-20 physical item instances
+-- pricing panel
+-- shelf slot stocking
+-- fixture move/rotate/place
+-- save/load of items and fixtures
+-
+-## Milestone 4: 0.3% First Sale
+-
+-Goal:
+-
+-Player opens the store and completes the first sale with physical customers.
+-
+-Required:
+-
+-- customer director
+-- mall spawn points
+-- browser behavior
+-- target buyer behavior
+-- register sale flow
+-- transaction recording
+-
+-## Milestone 5: First Close
+-
+-Goal:
+-
+-Player closes the register and reads a useful daily report.
+-
+-Required:
+-
+-- closing phase
+-- floor-clear detection
+-- report generation
+-- cash/revenue/cost/margin summary
+-- inventory remaining summary
+-- save after close
+-
+-## Milestone 6: First Playable Polish
+-
+-Goal:
+-
+-The 0.0%-0.3% slice is coherent enough for manual playtest.
+-
+-Required:
+-
+-- sound placeholders
+-- readable UI
+-- stable controls
+-- basic customer animation states
+-- Mac build packaging
+-- manual checklist pass
+-
+-## Backlog After First Playable
+-
+-Potential next systems:
+-
+-- first supplier reorder
+-- multi-day progression
+-- trade-ins
+-- returns
+-- service counter
+-- launch calendar
+-- customer memory
+-- reputation
+-- supplier trust
+-- records integrity
+-- secret-web seed rules
+-- store expansion
+-
+-## Backlog Discipline
+-
+-A feature should not move into implementation unless it has:
+-
+-- design owner
+-- build scope
+-- required data
+-- validation path
+-- definition of done
++No other recovered backlog or progression band is active. Before reusing transaction code, resolve the recorded phase, reservation, and carried-item inconsistencies; replace the old movement adapter if it is retained. Further loop work should eventually close the report-to-next-day decision cycle, but it is not authorized in V1.
+diff --git a/docs/03-production/visual-first-task-list.md b/docs/03-production/visual-first-task-list.md
+index e6d4624c..2eca6368 100644
+--- a/docs/03-production/visual-first-task-list.md
++++ b/docs/03-production/visual-first-task-list.md
+@@ -1,275 +1,16 @@
+-# Visual First Task List
+-
+-This is the next-phase task list after the engine proof.
+-
+-The goal is to make the first 0.3% visually excellent before gameplay breadth expands.
+-
+-## Phase Rule
+-
+-No new gameplay systems unless they directly support staging, capturing, or validating the visual benchmark.
+-
+-Allowed:
+-
+-- camera/FOV/scale work
+-- scene composition
+-- lighting
+-- materials
+-- fixture scaffolding
+-- product visual language
+-- placeholder customer visual quality
+-- screenshot capture tooling
+-- validation updates
+-- narrow interaction tweaks needed to stage benchmark screenshots
+-
+-Not allowed:
+-
+-- trade-ins
+-- returns
+-- services
+-- supplier networks
+-- launch calendar
+-- secret web
+-- employees
+-- store expansion
+-- additional customer archetypes beyond benchmark needs
+-
+-## Task 1: Create Visual Benchmark Scene
+-
+-Owner: engineering/art.
+-
+-Output:
+-
+-- `game/scenes/main/visual_benchmark_03.tscn`, or equivalent agreed path
+-- scene launches from Godot
+-- can coexist with engine proof scene during transition
+-
+-Acceptance:
+-
+-- scene includes mall concourse, storefront, sales floor, counter, backroom, starter shipment, shelves, physical items, and one customer staging point
+-- scene can be launched on macOS
+-- no script load errors
+-
+-## Task 2: Establish Store Scale
+-
+-Owner: engineering/art.
+-
+-Output:
+-
+-- human-scale reference
+-- case-size reference
+-- shelf/counter/backroom scale pass
+-- camera height/FOV values
+-
+-Acceptance:
+-
+-- cases feel handleable
+-- shelves fit credible rows
+-- counter height feels usable
+-- camera does not make the store feel toy-sized or warehouse-sized
+-
+-## Task 3: Build Mall Storefront Read
+-
+-Owner: art/design.
+-
+-Output:
+-
+-- mall concourse segment
+-- glass storefront
+-- entrance threshold
+-- fictional sign placement
+-- left/right customer path cues
+-
+-Acceptance:
+-
+-- screenshot `01-storefront-from-mall.png` passes visual review
+-- the store reads as a mall unit immediately
+-
+-## Task 4: Build Empty Lease Sales Floor
+-
+-Owner: art/design.
+-
+-Output:
+-
+-- sparse but intentional starter floor
+-- initial fixture arrangement
+-- counter sightline
+-- visible receiving/backroom path
+-
+-Acceptance:
+-
+-- screenshot `02-empty-sales-floor.png` passes visual review
+-- empty capacity reads as future growth, not missing art
+-
+-## Task 5: Build Receiving And Backroom
+-
+-Owner: art/design.
+-
+-Output:
+-
+-- receiving zone
+-- starter shipment staging
+-- backroom computer/office cue
+-- operational clutter rules
+-
+-Acceptance:
+-
+-- screenshot `03-receiving-backroom.png` passes visual review
+-- screenshot `04-starter-shipment-open.png` passes visual review
+-
+-## Task 6: Define Fictional Product Visual Grammar
+-
+-Owner: art/design.
+-
+-Output:
+-
+-- fictional platform/category color rules
+-- case-cover blockout style
+-- new/used visual distinction
+-- price sticker style
+-- shelf/category strip style
+-
+-Acceptance:
+-
+-- no real IP
+-- at least 10 physical game cases can appear together and still read
+-- screenshot `06-stocked-shelf-density.png` passes visual review
+-
+-## Task 7: Improve Carried Item Presentation
+-
+-Owner: engineering/art.
+-
+-Output:
+-
+-- first-person held case framing
+-- carried item scale/material pass
+-- pickup view composition
+-
+-Acceptance:
+-
+-- screenshot `05-picked-up-case.png` passes visual review
+-- carried item supports inspection fantasy without blocking play
+-
+-## Task 8: Build Counter/Register Visual Standard
+-
+-Owner: art/design.
+-
+-Output:
+-
+-- counter materials
+-- register object
+-- small retail-specific clutter
+-- customer/player side readability
+-
+-Acceptance:
+-
+-- screenshot `07-counter-register.png` passes visual review
+-- counter reads as the business pressure point
+-
+-## Task 9: Stage Customer Entry Visual
+-
+-Owner: engineering/art.
+-
+-Output:
+-
+-- simple customer body/placeholder with better silhouette than debug capsule
+-- mall-to-store entry pose/path
+-- browse/queue staging if cheap
+-
+-Acceptance:
+-
+-- screenshot `08-customer-entering-from-mall.png` passes visual review
+-- customer clearly starts from the mall
+-
+-## Task 10: Establish Daily Report Presentation Direction
+-
+-Owner: UI/design.
+-
+-Output:
+-
+-- daily report view in business-tool style
+-- backroom computer or report context
+-- readable hierarchy
+-
+-Acceptance:
+-
+-- screenshot `09-daily-report-view.png` passes visual review
+-- report does not look like debug text
+-
+-## Task 11: Add Screenshot Capture Harness
+-
+-Owner: engineering.
+-
+-Output:
+-
+-- one command captures visual benchmark screenshots
+-- outputs named files under `artifacts/validation/latest/screenshots/visual-benchmark/`
+-- captures from macOS build or from a scene path that matches build framing
+-
+-Acceptance:
+-
+-- all nine required screenshot files are produced
+-- dimensions are stable
+-- nonblank sanity passes
+-
+-## Task 12: Update Validation Gate
+-
+-Owner: engineering.
+-
+-Output:
+-
+-- `scripts/validate_local.sh` checks visual benchmark screenshot presence and sanity once the benchmark scene exists
+-- export-enabled validation remains green
+-
+-Acceptance:
+-
+-- `scripts/validate_local.sh` passes
+-- `GSS_EXPORT_MACOS=1 scripts/validate_local.sh` passes
+-
+-## Task 13: Visual Review Pass
+-
+-Owner: lead/design.
+-
+-Output:
+-
+-- review notes for all nine screenshots
+-- pass/revise/fail/defer decision per screenshot
+-- explicit sign-off or revision list
+-
+-Acceptance:
+-
+-- all required visual targets pass or have intentional deferrals
+-- next gameplay phase is unblocked only after sign-off
+-
+-## Task 14: Retire Or Demote Engine Proof Scene
+-
+-Owner: engineering.
+-
+-Output:
+-
+-- keep engine proof as test fixture, or
+-- replace main scene with visual benchmark scene, or
+-- archive engine proof under a test/prototype path
+-
+-Acceptance:
+-
+-- repo entry point no longer implies placeholder visuals are production baseline
+-- validation still covers technical proof behavior
+-
+-## Completion Checklist
+-
+-- [ ] Visual benchmark scene exists.
+-- [ ] Store scale is locked for the first slice.
+-- [ ] Mall storefront screenshot passes.
+-- [ ] Empty sales floor screenshot passes.
+-- [ ] Receiving/backroom screenshot passes.
+-- [ ] Starter shipment screenshot passes.
+-- [ ] Picked-up case screenshot passes.
+-- [ ] Stocked shelf density screenshot passes.
+-- [ ] Counter/register screenshot passes.
+-- [ ] Customer entering screenshot passes.
+-- [ ] Daily report screenshot passes.
+-- [ ] Visual screenshot harness exists.
+-- [ ] Local validation passes.
+-- [ ] Export-enabled validation passes.
+-- [ ] Visual sign-off recorded.
+-
++# Current visual task list
++
++Preparation complete. No art or sample has been started.
++
++- [x] Verify recovered identity, history, implementation, and baseline with disposable state.
++- [x] Record fresh results and defects; reconcile active documentation.
++- [x] V1a reference board: [A Potion Craft, B Kardboard Kings, C Winkeltje](../05-reference/presentation-choice-2026-09-07.md), with inspected stills, linked official motion sources, retail implications and Godot/Krita production comparison. Motion playback/timecodes remain unverified.
++- [x] Owner selected B — Kardboard Kings illustrated 2.5D shop overview. Exact reply: “B”. Selection recorded; no assets or sample created.
++- [ ] Confirm the proposed camera, directions, gameplay scale, controls and hardest requirement against the owner selection; B proposal is recorded in the board.
++- [ ] V1b: produce only the minimal customer motion scene and editable sources.
++- [ ] Inspect real alpha, animation at gameplay scale, and depth/occlusion where relevant.
++- [ ] Reproduce export/import/launch and retain real captures plus motion recording.
++- [ ] Record technical, visual, repeatability, and owner-feedback verdicts separately.
++- [ ] Apply the bounded repair/alternative rule if needed; stop with an evidenced dependency if unresolved.
++
++The [proof contract](../01-design/visual-benchmark-first-0.3.md) defines the gate. The old nine-shot store build, placeholder-customer approval, and scenery-first work order are retired. No automatic transition to a larger build or publication.
+diff --git a/docs/03-production/visual-production-ready-graphics-checklist.md b/docs/03-production/visual-production-ready-graphics-checklist.md
+index bc892d39..7d39da3b 100644
+--- a/docs/03-production/visual-production-ready-graphics-checklist.md
++++ b/docs/03-production/visual-production-ready-graphics-checklist.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Visual Production Ready Graphics Checklist
+ 
+ This checklist turns the current docs and `docs/game_store_sim_300_object_asset_inventory.xlsx` into a production gate for the first 0.3% visual benchmark.
+diff --git a/docs/04-validation/local-validation-plan.md b/docs/04-validation/local-validation-plan.md
+index a0790b7a..0f7a355d 100644
+--- a/docs/04-validation/local-validation-plan.md
++++ b/docs/04-validation/local-validation-plan.md
+@@ -1,140 +1,48 @@
+-# Local Validation Plan
++# Local validation — recovered baseline
+ 
+-## Goal
++Read the [recovery review](../03-production/recovery-review-2026-09-07.md) for verified scope and four open defects. The baseline validator passes but is not a complete-game, visual or owner-acceptance gate.
+ 
+-The repo should have a mandatory local validation gate from the start of implementation.
++## Safe baseline procedure
+ 
+-The gate should catch:
++Use a disposable archive/copy, not the working project or an owner's save directory. Preserve existing outputs before any rerun: `scripts/validate_local.sh` deletes its copy's `artifacts/validation/latest`.
+ 
+-- parse/script errors
+-- broken project load
+-- broken save/load
+-- broken first playable flow
+-- blank screenshots
+-- missing required docs
+-- accidental real-world IP strings
+-- visual benchmark screenshot regressions once the visual benchmark scene exists
++The recorded temporary checkout path and exact source commit are in [context.json](recovery-evidence-2026-09-07/context.json). The archived project's only settings modification was to add these keys under `[application]`:
+ 
+-## Command
+-
+-Run local validation with:
+-
+-```bash
+-scripts/validate_local.sh
++```ini
++config/use_custom_user_dir=true
++config/custom_user_dir_name="GSS-Recovery-<unique-run-id>"
+ ```
+ 
+-Run validation plus macOS export and exported-app launch with:
+-
+-```bash
+-GSS_EXPORT_MACOS=1 scripts/validate_local.sh
+-```
++Choose a new unique name on each reproduction. Godot logs/saves then use that isolated macOS Application Support directory; do not point it at owner data. The original validator additionally writes its proof save to its own artifact directory.
+ 
+-## Expected Output Location
++From the disposable checkout run:
+ 
+-```text
+-artifacts/validation/latest/
+-  validation.log
+-  engine-proof.log
+-  main-scene-launch.log
+-  macos-export-launch.log
+-  screenshots/
+-  summary.json
++```sh
++bash scripts/validate_local.sh
+ ```
+ 
+-## Required Checks
+-
+-### Documentation Check
+-
+-Verify required docs exist:
+-
+-- `docs/MASTER_PLAN.md`
+-- `docs/01-design/vertical-slice-contract.md`
+-- `docs/02-technical/architecture.md`
+-- `docs/04-validation/manual-playtest-checklist.md`
+-
+-### Engine Project Check
+-
+-- project file exists
+-- project opens in headless or command-line mode
+-- no script load errors
+-- no missing required scenes
+-
+-### Unit Tests
+-
+-Required early tests:
+-
+-- pricing calculation
+-- item location transition
+-- shelf slot validation
+-- register transaction
+-- save/load round trip
+-- day phase transition
+-
+-### Smoke Test
++Preserve the exit code, validation log, engine/main-scene logs, summary and fixture output in a new evidence directory. Scan import as well as runtime logs for warnings/errors. Passing validates import/resource load, the 15-step one-sale happy path and a brief headless launch. It does not validate rendered graphics, real input feel or production save resilience.
+ 
+-Automated smoke should:
++Copy [recovery_probes.gd](recovery-evidence-2026-09-07/recovery_probes.gd) into the disposable `game/` folder, then run with absolute paths substituted:
+ 
+-- launch main scene
+-- wait for scene ready
+-- verify player/camera exists
+-- verify starter shipment exists
+-- verify at least one fixture exists
+-- capture screenshot
+-- exit cleanly
+-
+-### Screenshot Sanity
+-
+-Screenshot check should fail if:
+-
+-- image is missing
+-- image is blank
+-- image dimensions are wrong
+-- image is mostly one color
+-
+-### Visual Benchmark Check
+-
+-Once the visual benchmark scene exists, validation should capture named screenshots for:
+-
+-- mall storefront
+-- empty sales floor
+-- receiving/backroom
+-- starter shipment
+-- carried case
+-- stocked shelf density
+-- counter/register
+-- customer entering from mall
+-- daily report view
+-
+-The automated gate should verify presence, dimensions, nonblank content, and basic framing metadata. Human review remains required for whether the visuals are good enough.
+-
+-### IP Policy Check
+-
+-Add a simple scanner for banned real-world terms once fictional naming begins.
+-
+-The scanner should catch obvious real product/platform/store names in first-party data and docs, with allowlist support for documentation discussions.
+-
+-## Failure Policy
++```sh
++GSS_PROBE_RESULTS=/absolute/new-evidence/probe-results.json /Users/michaelfuscoletti/.local/bin/godot --headless --path /absolute/disposable/game --script res://recovery_probes.gd
++```
+ 
+-The gate fails on:
++Preserve stdout/stderr and exit status. The recorded baseline returns exit 1: six checks pass and four fail. These probes document gaps rather than weakening the original gate. Do not relabel their failures as successful acceptance tests.
+ 
+-- any script parse error
+-- missing required scene
+-- failed test
+-- missing screenshot
+-- blank screenshot
+-- save/load round trip failure
+-- accidental banned IP string in game data
++## Launching the historical proof
+ 
+-Warnings are allowed for:
++For an explicitly requested hands-on review, launch the isolated project:
+ 
+-- incomplete later milestone docs
+-- placeholder art
+-- temporary unbalanced values
++```sh
++/Users/michaelfuscoletti/.local/bin/godot --path /absolute/disposable/game
++```
+ 
+-## Manual Validation Relationship
++WASD movement (forward/backward direction has a recorded defect), click to capture mouse, Escape releases it; E picks up/places/sells, P sets used price to suggested maximum, F performs one preset shelf move, O opens, R closes/shows report, K saves, L loads. This is historical debug interaction, not the chosen restart UI. Headless handler checks are not a manual walkthrough.
+ 
+-Automated validation proves the build is not broken.
++Optional export remains a separate operation, not executed in recovery review. An export preset's existence is not an exported-app pass.
+ 
+-Manual validation proves the game feels correct.
++## Visual evidence
+ 
+-Both are required for milestone completion.
++`run_validation.gd::_write_proof_screenshot` paints pixels and does not capture the scene. Its output is a synthetic fixture. Successful imports, resource loads, PNG dimensions or compressed-byte variation do not establish good graphics. Future visual proof must follow the [V1 contract](../01-design/visual-benchmark-first-0.3.md): actual running-engine motion/captures at gameplay scale, editable sources, inspected alpha, repeatability and separate owner feedback.
+diff --git a/docs/04-validation/manual-playtest-checklist.md b/docs/04-validation/manual-playtest-checklist.md
+index 98ff6ce3..f814500e 100644
+--- a/docs/04-validation/manual-playtest-checklist.md
++++ b/docs/04-validation/manual-playtest-checklist.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Manual Playtest Checklist
+ 
+ Use this checklist for the first playable.
+diff --git a/docs/05-reference/inspiration-extraction.md b/docs/05-reference/inspiration-extraction.md
+index 89683d2e..2c29e218 100644
+--- a/docs/05-reference/inspiration-extraction.md
++++ b/docs/05-reference/inspiration-extraction.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Inspiration Extraction
+ 
+ ## Rule
+diff --git a/docs/05-reference/source-of-truth-policy.md b/docs/05-reference/source-of-truth-policy.md
+index a4bb2bc4..4743b9ce 100644
+--- a/docs/05-reference/source-of-truth-policy.md
++++ b/docs/05-reference/source-of-truth-policy.md
+@@ -1,70 +1,7 @@
+-# Source Of Truth Policy
++# Source-of-truth policy
+ 
+-## Purpose
++Current user direction takes precedence. Read `docs/MASTER_PLAN.md` for current production intent and the Desktop next-steps file for the synchronized handoff. README provides the entry route.
+ 
+-This repo is both documentation repo and future implementation repo.
+-
+-Markdown docs are the default source of truth for design, production, validation, and technical decisions.
+-
+-## Canon Layers
+-
+-### Current Production Truth
+-
+-`docs/MASTER_PLAN.md` and `docs/06-decisions/` define current production direction.
+-
+-### Build Specs
+-
+-`docs/01-design/`, `docs/02-technical/`, `docs/03-production/`, and `docs/04-validation/` define what to build and how to verify it.
+-
+-### Player-Facing Canon
+-
+-`game-guide/` describes the long-form intended player experience. It is a validation source, but not every word is final.
+-
+-### Inspiration
+-
+-`real_inspiration/` and `other_game_inspiration/` are references to extract from, not assets to copy.
+-
+-## Change Policy
+-
+-If a production doc conflicts with `game-guide/`:
+-
+-1. identify the conflict
+-2. decide whether guide or production doc should change
+-3. update the relevant doc
+-4. add a decision record if the change affects major direction
+-
+-## Decision Records
+-
+-Use `docs/06-decisions/` for decisions that are expensive to reverse.
+-
+-Examples:
+-
+-- engine choice
+-- platform target
+-- IP policy
+-- first playable scope
+-- save format
+-- rendering/art scale
+-- distribution path
+-
+-## File Format Policy
+-
+-Use Markdown for:
+-
+-- design docs
+-- technical plans
+-- validation checklists
+-- milestone plans
+-- decision records
+-- source maps
+-
+-Use other formats only when needed:
+-
+-- source images
+-- engine assets
+-- generated screenshots
+-- exported builds
+-- spreadsheets only if formulas become important
+-
+-If a PDF or Word-style artifact is needed later, generate it from Markdown instead of making it the source.
++Active supporting documents are explicitly listed by the master plan. Recovered documents bearing a historical notice are context only; their accepted/locked/complete labels describe an earlier direction. Old guides are not current player rules, implementation evidence, or acceptance criteria. Decision 0005 supersedes conflicting earlier decisions.
+ 
++Update the master plan and Desktop tracker together after a material decision. Adopt useful historical rules explicitly into the active milestone rather than treating them as implicit constraints. Tie technical and visual evidence to exact code and asset revisions; distinguish observation, source inspection, historical claims, and owner feedback.
+diff --git a/docs/06-decisions/0001-engine-and-platform.md b/docs/06-decisions/0001-engine-and-platform.md
+index 52447d62..7e091f54 100644
+--- a/docs/06-decisions/0001-engine-and-platform.md
++++ b/docs/06-decisions/0001-engine-and-platform.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Decision 0001: Engine And Platform Direction
+ 
+ ## Status
+diff --git a/docs/06-decisions/0002-fictional-ip-policy.md b/docs/06-decisions/0002-fictional-ip-policy.md
+index ddb6fd8a..295b7a25 100644
+--- a/docs/06-decisions/0002-fictional-ip-policy.md
++++ b/docs/06-decisions/0002-fictional-ip-policy.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Decision 0002: Fictional IP Policy
+ 
+ ## Status
+diff --git a/docs/06-decisions/0003-first-playable-scope.md b/docs/06-decisions/0003-first-playable-scope.md
+index 4d558d03..cf50e101 100644
+--- a/docs/06-decisions/0003-first-playable-scope.md
++++ b/docs/06-decisions/0003-first-playable-scope.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Decision 0003: First Playable Scope
+ 
+ ## Status
+diff --git a/docs/06-decisions/0004-visual-first-gate.md b/docs/06-decisions/0004-visual-first-gate.md
+index 0fc4d399..f8a97f58 100644
+--- a/docs/06-decisions/0004-visual-first-gate.md
++++ b/docs/06-decisions/0004-visual-first-gate.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
++
+ # Decision 0004: Visual First Gate
+ 
+ ## Status
+diff --git a/docs/MASTER_PLAN.md b/docs/MASTER_PLAN.md
+index d4499e27..e2c72a68 100644
+--- a/docs/MASTER_PLAN.md
++++ b/docs/MASTER_PLAN.md
+@@ -1,290 +1,31 @@
+-# Game Store Sim Source Master Plan
++# Game Store Sim — current master plan
+ 
+-This is the primary production reference for Game Store Sim. When implementation starts, this document should remain the first file engineers, designers, artists, and testers read.
++Updated: 2026-09-07. Restart preparation complete; visual direction B selected by owner.
+ 
+-The purpose of this plan is to turn the current game-guide canon and inspiration folders into an implementation-ready first playable without losing the larger game fantasy.
++## Intent
+ 
+-## 1. Product Thesis
++Recover the player loop: prepare the store, receive and price stock, stock shelves, open, serve customers, make sales, close, review results, and decide what to do next. Preserve meaningful choices and coherent inventory, money, and results. No existing implementation is mandatory.
+ 
+-Game Store Sim is a first-person retail life sim about operating one believable independent game store in an early-2000s mall.
++Art, assets, camera, interface, presentation, and dimensional approach can restart. First-person, 3D, mall setting, era, palette, one rendered object per stock item, and historical progression rules are not locked requirements. Illustrated 2D, 2.5D, and 3D must be evaluated on their merits. Logical stock identity can survive any rendering approach.
+ 
+-The game is not about becoming a giant chain, collecting real-world brands, or solving a separate mystery campaign. It is about touching the daily work of a small game shop:
++Godot 4.6.2 Standard with GDScript and Compatibility is the available starting tool, not a visual constraint. Choose tools according to the small proof's demonstrated needs.
+ 
+-- receiving stock
+-- checking invoices
+-- pricing used goods
+-- stocking visible shelves
+-- helping customers
+-- keeping launch promises
+-- handling returns and services
+-- ordering from suppliers
+-- reading daily reports
+-- deciding what kind of store this is becoming
++## Current facts
+ 
+-The long-term fantasy is:
++The recovered source has a one-day technical prototype and separate static visual benchmark assets. It does not implement a repeatable retail business. Read the [recovery review](03-production/recovery-review-2026-09-07.md) for exact scope and failures. Historical successful exports, screenshots, and completion claims are not current verification or acceptance.
+ 
+-> I opened this place myself. Every shelf tells me what I chose, what I missed, and what I am trying to become.
++## Active work order
+ 
+-## 2. Non-Negotiable Direction
++Preparation is complete. The [three-reference board](05-reference/presentation-choice-2026-09-07.md) is presented: A Potion Craft illustrated 2D counter/shop panels, B Kardboard Kings illustrated 2.5D overview, C Winkeltje 3D overview. Owner selected B with the exact reply “B”. Krita handles editable artwork and cleanup; Godot handles running animation. Next production task: the bounded B visual proof; no art or sample is built in this reference-selection task.
+ 
+-These are locked until intentionally changed through a decision doc:
++Then specify and run only the [tiny visual proof](01-design/visual-benchmark-first-0.3.md). Test the selected approach's hardest visual requirement before scenery. Do not preselect illustrated cutouts if a different approach wins. Space-opera RPG shows that illustrated character motion merits a concrete test; it supplies neither this game's style nor camera.
+ 
+-- Setting: mall storefront.
+-- View: first-person.
+-- Initial platform: macOS.
+-- Initial gameplay scope: 0.0%-0.3% first playable.
+-- Tone: warm nostalgia, grounded retail, lightly idealized but not sterile.
+-- IP policy: all brands, platforms, products, games, publishers, distributors, and store names are fictional.
+-- Inventory model: one physical stock item equals one actual in-game object.
+-- Customer model: customers are physically present NPCs who spawn from mall paths, may enter, browse, queue, buy, or leave.
+-- Pricing model: suggested pricing for used goods; new goods use fixed contract pricing while considered new.
+-- Layout model: customization is available immediately.
+-- Documentation model: Markdown in repo is the production source of truth.
+-- Visual gate: the first 0.3% store experience must reach visual sign-off before new gameplay breadth is added.
++After successful proof and explicit feedback, define one small retail encounter using that same visual treatment. No detailed scenery, full store, new simulation systems, or release work is part of the immediate milestone.
+ 
+-## 3. Source Of Truth Order
++## Authority and boundaries
+ 
+-Use these sources in this order when a conflict appears:
++Current user direction governs. This master plan is the repository production authority; the Desktop next-steps file is its synchronized handoff. Active supporting documents are the recovery review, art direction, tiny visual proof specification, visual task list, current milestones, source policy, and local validation plan. Decision 0005 records the restart.
+ 
+-1. `docs/MASTER_PLAN.md` for current production direction.
+-2. `docs/06-decisions/*.md` for explicit decisions.
+-3. `docs/01-design/*.md` for buildable game rules.
+-4. `docs/02-technical/*.md` for implementation architecture.
+-5. `game-guide/` for player-facing canon and long-range design validation.
+-6. `real_inspiration/` and `other_game_inspiration/` for extracted reference patterns.
++Every other recovered design, architecture, validation checklist, decision, guide, and asset/reference readme is historical context, not an active contract. A future milestone must explicitly adopt any useful rule. Do not revive rejected presentation or scope through an older document.
+ 
+-The `game-guide/` folder should remain valuable. It is allowed to be wrong or incomplete, but changes to its assumptions should be deliberate. Do not silently implement against it and then drift away.
+-
+-## 4. First Playable Definition
+-
+-The first playable covers 0.0%-0.3% completion only.
+-
+-It must prove the core retail language:
+-
+-1. Player enters the mall storefront before opening.
+-2. Starter shipment exists in receiving/backroom.
+-3. Player opens shipment and sees physical items.
+-4. Each stock item is a physical object that can be picked up.
+-5. Used items can be priced using suggested pricing.
+-6. New items have fixed prices while considered new.
+-7. Player stocks physical items onto shelves/racks/counter fixtures.
+-8. Store can be opened.
+-9. Customers spawn from mall paths and decide whether to enter.
+-10. Entering customers browse, react to products/prices, queue, or leave.
+-11. Player completes one or more sales at the register.
+-12. Player closes the register after customer flow ends.
+-13. Daily report summarizes what happened.
+-14. Save/load restores the store state.
+-
+-Anything outside that list is optional for later.
+-
+-## 4.1 Current Production Gate
+-
+-The engine proof milestone has shown that Godot, macOS export, local validation, scripted item state, customer state, sale state, and save/load can work in this repo.
+-
+-That proof scene is not the visual foundation for the game.
+-
+-The active next milestone is the first 0.3% visual benchmark. Its job is to make the opening store look and feel like the game before feature work expands. Until this milestone is signed off, avoid adding new simulation systems except where they are necessary to stage, capture, or validate the benchmark.
+-
+-Current gate:
+-
+-1. Build the mall storefront, empty lease, receiving/backroom, counter, starter fixtures, starter shipment, carried case view, stocked shelf view, customer entry view, and daily-report view to visual benchmark quality.
+-2. Capture the required screenshot set from a macOS build.
+-3. Compare the results against the visual benchmark spec and reference extraction rules.
+-4. Iterate until the first 0.3% has a stable visual scaffold.
+-5. Only then continue feature expansion.
+-
+-See [First 0.3% Visual Benchmark](01-design/visual-benchmark-first-0.3.md) and [Visual First Task List](03-production/visual-first-task-list.md).
+-
+-## 5. Scope Guardrails
+-
+-Do not build these in the first playable:
+-
+-- full supplier network
+-- neighboring-unit expansion
+-- employees
+-- deep services
+-- returns
+-- trade-ins, unless a later milestone explicitly pulls them forward
+-- rare-game economy
+-- full secret web
+-- court/arrest/inspection outcomes
+-- multi-year progression
+-- complete launch calendar
+-- online multiplayer
+-- real-world game/platform references
+-
+-It is acceptable to include one harmless odd detail in the starter shipment as atmosphere, but it must not trigger a secret quest, failure condition, or required investigation.
+-
+-## 6. Design Pillars
+-
+-### Physical Retail
+-
+-The store should be understood by walking through it. The player learns by handling inventory, seeing shelf gaps, reading price stickers, and watching customer behavior.
+-
+-### One Item, One Object
+-
+-Ten copies of a game are ten physical stock items. They may be represented with optimized meshes, grouped shelf visuals, or batched rendering, but the simulation must preserve item identity.
+-
+-### Consequences Over Exposition
+-
+-The game should not constantly explain its rules through tutorial panels. It should show consequences:
+-
+-- overpriced stock sits
+-- fair prices move
+-- bad layout slows customers
+-- empty shelves create missed demand
+-- clean records reduce risk later
+-- ignored reports lead to weak planning
+-
+-### Warm Nostalgia
+-
+-The store should feel specific to early-2000s retail without copying real businesses. Think fluorescent lights, commercial carpet, plastic cases, cardboard boxes, yellow sale stickers, wire-grid shelves, platform headers, mall concourse sounds, and posters that feel time-bound without using real IP.
+-
+-### Business First, Mystery Second
+-
+-The secret web exists because retail work produces records, anomalies, and pressure. It does not sit outside the store loop.
+-
+-## 7. Long-Term Game Shape
+-
+-The full game should grow through these bands:
+-
+-| Band | Player Meaning | Main Systems |
+-| --- | --- | --- |
+-| 0.0%-0.3% | Tutorial opening | receiving, pricing, stocking, first sale, first close |
+-| 0.3%-1% | First week | more sales, first supplier order, early report reading |
+-| 1%-3% | Survival store | returns/services begin, stock planning matters |
+-| 3%-5% | Early local shop | regulars, recommendations, basic customer memory |
+-| 5%-10% | Month-one shop | launch calendar, preorders, first meaningful supplier choice |
+-| 10%-20% | Stable first-era business | store identity, fixture choices, deeper product mix |
+-| 20%-35% | Recognized local store | catalog expansion, stronger repeat customers |
+-| 35%-50% | Mature first-era store | launch competence, broad stocked categories |
+-| 50%-65% | Era transition | new fictional platform generation pressure |
+-| 65%-80% | Destination shop | rare demand, neighboring-unit expansion |
+-| 80%-95% | Store legacy | mature identity, long-term records |
+-| 95%-100% | Completion and replay | ending families, secret route comparisons |
+-
+-## 8. Engine Direction
+-
+-Godot 4 is the default recommendation because it supports desktop-first 3D, has readable project structure, exports to macOS, and keeps development lightweight.
+-
+-This is not a permanent lock. The engine decision remains open until a prototype proves:
+-
+-- first-person movement feels right
+-- physical item pickup/placement is stable
+-- dense shelves are performant on Mac
+-- UI overlays and management screens are efficient to build
+-- macOS export workflow is acceptable
+-- validation can be automated locally
+-
+-See [Engine Evaluation](02-technical/engine-evaluation.md).
+-
+-## 9. First Technical Architecture
+-
+-The first implementation should use explicit systems instead of clever generality.
+-
+-Recommended major systems:
+-
+-- `GameState`: current save state and top-level access.
+-- `StoreDayManager`: prep/open/closed day phases.
+-- `InventoryManager`: item identity, ownership, locations, prices.
+-- `FixtureManager`: valid slots, shelf capacity, display state.
+-- `CustomerDirector`: mall spawn paths, enter decisions, customer flow.
+-- `RegisterSystem`: sale flow and transaction recording.
+-- `ReportSystem`: daily summary generation.
+-- `SaveSystem`: save/load serialization.
+-- `InteractionController`: raycast targeting, pickup/carry/place.
+-- `LayoutEditSystem`: immediate fixture movement and placement.
+-
+-The architecture should make systems testable before the final art exists.
+-
+-## 10. First Store Layout
+-
+-The first store is a small mall unit with:
+-
+-- glass storefront facing concourse
+-- one visible customer entrance
+-- two offscreen mall spawn directions
+-- starter sales floor
+-- checkout counter
+-- receiving/backroom
+-- backroom computer
+-- starter shelves/racks
+-- at least one movable fixture
+-- open/closed sign
+-
+-High-level layout:
+-
+-```mermaid
+-flowchart LR
+-    A["Mall path left"] --> B["Storefront glass"]
+-    C["Mall path right"] --> B
+-    B --> D["Entrance"]
+-    D --> E["Starter sales floor"]
+-    E --> F["Used shelf"]
+-    E --> G["New release shelf"]
+-    E --> H["Counter and register"]
+-    H --> I["Backroom door"]
+-    I --> J["Receiving area"]
+-    J --> K["Backroom computer"]
+-```
+-
+-## 11. Art Direction Summary
+-
+-The art direction is a hybrid of:
+-
+-- grounded early-2000s retail reference from `real_inspiration/`
+-- readable, slightly stylized simulator presentation from `other_game_inspiration/`
+-
+-Target:
+-
+-- clear silhouettes
+-- bright retail lighting
+-- slightly chunky, readable props
+-- dense product rows where it matters
+-- warm, inviting nostalgia
+-- no photorealistic clutter soup
+-
+-Do not copy real packaging, logos, platform names, storefronts, or game art.
+-
+-The current prototype art is placeholder-only. It should be replaced or heavily rebuilt during the visual benchmark phase rather than treated as production scaffolding.
+-
+-## 12. Documentation Set
+-
+-The initial documentation pack contains:
+-
+-- [Product Brief](00-product/product-brief.md)
+-- [Source Policy](05-reference/source-of-truth-policy.md)
+-- [Vertical Slice Contract](01-design/vertical-slice-contract.md)
+-- [Core Loop And Systems](01-design/core-loop-and-systems.md)
+-- [Inventory, Pricing, And Fixtures](01-design/inventory-pricing-and-fixtures.md)
+-- [Store Layout And Customization](01-design/store-layout-and-customization.md)
+-- [Customers And Day Flow](01-design/customers-and-day-flow.md)
+-- [Art Direction](01-design/art-direction.md)
+-- [First 0.3% Visual Benchmark](01-design/visual-benchmark-first-0.3.md)
+-- [Engine Evaluation](02-technical/engine-evaluation.md)
+-- [Technical Architecture](02-technical/architecture.md)
+-- [Data Model](02-technical/data-model.md)
+-- [macOS Build Requirements](02-technical/macos-build-requirements.md)
+-- [Milestones And Backlog](03-production/milestones-and-backlog.md)
+-- [Definition Of Done](03-production/definition-of-done.md)
+-- [Engine Proof Milestone](03-production/engine-proof-milestone.md)
+-- [Visual First Task List](03-production/visual-first-task-list.md)
+-- [Local Validation Plan](04-validation/local-validation-plan.md)
+-- [Manual Playtest Checklist](04-validation/manual-playtest-checklist.md)
+-- [Inspiration Extraction](05-reference/inspiration-extraction.md)
+-- decision records in `docs/06-decisions/`
+-
+-## 13. Working Agreement
+-
+-Before writing first gameplay code:
+-
+-1. Resolve the engine decision enough to create the project.
+-2. Confirm the first playable store layout.
+-3. Confirm the initial fictional platform/product naming scheme.
+-4. Confirm the first customer archetypes.
+-5. Confirm validation gate expectations.
+-6. Create the engine project.
+-7. Add the validation harness before the slice grows.
+-
+-No code should be considered done without a matching validation path.
++Preparation authorizes review, isolated baseline checks, a local branch, and documentation changes. It does not authorize art generation, rebuilding, feature expansion, commits/pushes, publication, or remote changes. Four recorded technical defects need attention if their code is reused; they do not require choosing a presentation today.
+diff --git a/game-guide/00-start-to-finish-player-guide.md b/game-guide/00-start-to-finish-player-guide.md
+index 0a464612..2732a7bf 100644
+--- a/game-guide/00-start-to-finish-player-guide.md
++++ b/game-guide/00-start-to-finish-player-guide.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Start-To-Finish Player Guide
+ 
+ This is the 0% to 100% player journey for Game Store Sim. The opening scene, tutorial, first sale, and first close are not 10-20% completion. They are the first fraction of a percent: you have learned how the store breathes, but have barely begun the business.
+diff --git a/game-guide/01-core-systems-guide.md b/game-guide/01-core-systems-guide.md
+index 5facac9e..2b9a5ca3 100644
+--- a/game-guide/01-core-systems-guide.md
++++ b/game-guide/01-core-systems-guide.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Core Systems
+ 
+ This chapter explains the systems you must master from your first box of stock to a fully mature local game shop.
+diff --git a/game-guide/02-hidden-threads-and-replays.md b/game-guide/02-hidden-threads-and-replays.md
+index 1b137fea..3d595cac 100644
+--- a/game-guide/02-hidden-threads-and-replays.md
++++ b/game-guide/02-hidden-threads-and-replays.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Secret Web Replays
+ 
+ The secret web is optional. It is a surprise layer inside the store sim, not the main campaign. You can run a complete retail business without solving it.
+diff --git a/game-guide/03-completion-checklist.md b/game-guide/03-completion-checklist.md
+index fcd935a4..2d4bdd61 100644
+--- a/game-guide/03-completion-checklist.md
++++ b/game-guide/03-completion-checklist.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Completion Checklist
+ 
+ This checklist tracks 0% to 100% completion. Use it to separate core retail mastery from optional secret-web replay mastery.
+diff --git a/game-guide/04-source-map-and-current-state.md b/game-guide/04-source-map-and-current-state.md
+index 35f0b567..741cfc9a 100644
+--- a/game-guide/04-source-map-and-current-state.md
++++ b/game-guide/04-source-map-and-current-state.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Quick Reference
+ 
+ Use this section when you need a fast answer during play.
+diff --git a/game-guide/05-director-canon.md b/game-guide/05-director-canon.md
+index f7bed134..f54f382d 100644
+--- a/game-guide/05-director-canon.md
++++ b/game-guide/05-director-canon.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # The Store Fantasy
+ 
+ Read this chapter before planning a serious run. It explains what Game Store Sim is really about.
+diff --git a/game-guide/06-progression-and-unlocks.md b/game-guide/06-progression-and-unlocks.md
+index e0381bf6..c9d9fce7 100644
+--- a/game-guide/06-progression-and-unlocks.md
++++ b/game-guide/06-progression-and-unlocks.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Progression And Unlocks
+ 
+ This chapter defines the long-form completion scale. The opening tutorial is a fraction of a percent. The first sale is exciting, but it is nowhere near meaningful completion.
+diff --git a/game-guide/07-secret-thread-unlocks.md b/game-guide/07-secret-thread-unlocks.md
+index 2383b14b..0e87e630 100644
+--- a/game-guide/07-secret-thread-unlocks.md
++++ b/game-guide/07-secret-thread-unlocks.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Secret Web Unlocks
+ 
+ Game Store Sim has one secret web, not a pile of separate questlines. It begins quietly, branches through normal retail choices, resolves through one of several outcomes, then drops you back into the store. The business continues.
+diff --git a/game-guide/08-full-completion-route.md b/game-guide/08-full-completion-route.md
+index 3898b11b..7559f0eb 100644
+--- a/game-guide/08-full-completion-route.md
++++ b/game-guide/08-full-completion-route.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Full Completion Route
+ 
+ This is the canonical route for a balanced first 100% business playthrough. It corrects the scale: the opening scene and first sale are tutorial progress, not early-game completion.
+diff --git a/game-guide/09-owner-review-questions.md b/game-guide/09-owner-review-questions.md
+index 831c5576..083f07ac 100644
+--- a/game-guide/09-owner-review-questions.md
++++ b/game-guide/09-owner-review-questions.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Premium Strategy Notes
+ 
+ These are high-value tactics that separate a surviving shop from a legendary one.
+diff --git a/game-guide/10-custom-store-builds.md b/game-guide/10-custom-store-builds.md
+index 3f273089..2322beae 100644
+--- a/game-guide/10-custom-store-builds.md
++++ b/game-guide/10-custom-store-builds.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Custom Store Builds
+ 
+ No two successful stores need to look the same. Game Store Sim rewards stores that make sense, not stores that copy a fixed layout.
+diff --git a/game-guide/README.md b/game-guide/README.md
+index 3936bbca..8fcd3cc4 100644
+--- a/game-guide/README.md
++++ b/game-guide/README.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Game Store Sim Official Strategy Guide
+ 
+ Premium Edition
+diff --git a/game/assets/visual_benchmark/README.md b/game/assets/visual_benchmark/README.md
+index 81f06fb3..a3a66b6e 100644
+--- a/game/assets/visual_benchmark/README.md
++++ b/game/assets/visual_benchmark/README.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../../../docs/MASTER_PLAN.md).
++
+ # Visual Benchmark Game Assets
+ 
+ This folder contains `.glb` assets ready for Godot import.
+diff --git a/real_inspiration/README.md b/real_inspiration/README.md
+index 34d862de..8282366d 100644
+--- a/real_inspiration/README.md
++++ b/real_inspiration/README.md
+@@ -1,3 +1,5 @@
++> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
++
+ # Real Period Retail Inspiration
+ 
+ This folder contains owner-added real-life reference images for early-2000s video game retail.

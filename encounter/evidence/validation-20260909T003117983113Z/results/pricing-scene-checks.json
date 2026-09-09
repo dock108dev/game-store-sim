@@ -1,0 +1,102 @@
+[
+  {
+    "check": "input clamps below minimum",
+    "pass": true
+  },
+  {
+    "check": "input clamps above maximum",
+    "pass": true
+  },
+  {
+    "check": "prep repricing control visible",
+    "pass": true
+  },
+  {
+    "check": "reload before browsing decision",
+    "pass": true
+  },
+  {
+    "check": "actual browse outcome 1699",
+    "pass": true
+  },
+  {
+    "check": "outcome reload no reroll",
+    "pass": true
+  },
+  {
+    "check": "report layout and price misses",
+    "pass": true
+  },
+  {
+    "check": "input clamps below minimum",
+    "pass": true
+  },
+  {
+    "check": "input clamps above maximum",
+    "pass": true
+  },
+  {
+    "check": "prep repricing control visible",
+    "pass": true
+  },
+  {
+    "check": "reload before browsing decision",
+    "pass": true
+  },
+  {
+    "check": "actual browse outcome 2199",
+    "pass": true
+  },
+  {
+    "check": "outcome reload no reroll",
+    "pass": true
+  },
+  {
+    "check": "report layout and price misses",
+    "pass": true
+  },
+  {
+    "check": "input clamps below minimum",
+    "pass": true
+  },
+  {
+    "check": "input clamps above maximum",
+    "pass": true
+  },
+  {
+    "check": "prep repricing control visible",
+    "pass": true
+  },
+  {
+    "check": "reload before browsing decision",
+    "pass": true
+  },
+  {
+    "check": "actual browse outcome 2699",
+    "pass": true
+  },
+  {
+    "check": "outcome reload no reroll",
+    "pass": true
+  },
+  {
+    "check": "readable refusal without carried stock",
+    "pass": true
+  },
+  {
+    "check": "report layout and price misses",
+    "pass": true
+  },
+  {
+    "check": "next decision reprices refused shelf copy",
+    "pass": true
+  },
+  {
+    "check": "repriced copy now bought",
+    "pass": true
+  },
+  {
+    "check": "next report correct",
+    "pass": true
+  }
+]

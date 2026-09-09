@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../docs/MASTER_PLAN.md).
+
 # Secret Web Replays
 
 The secret web is optional. It is a surprise layer inside the store sim, not the main campaign. You can run a complete retail business without solving it.

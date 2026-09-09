@@ -1,70 +1,7 @@
-# Source Of Truth Policy
+# Source-of-truth policy
 
-## Purpose
+Current user direction takes precedence. Read `docs/MASTER_PLAN.md` for current production intent and the Desktop next-steps file for the synchronized handoff. README provides the entry route.
 
-This repo is both documentation repo and future implementation repo.
+Active supporting documents are explicitly listed by the master plan. Recovered documents bearing a historical notice are context only; their accepted/locked/complete labels describe an earlier direction. Old guides are not current player rules, implementation evidence, or acceptance criteria. Decision 0005 supersedes conflicting earlier decisions.
 
-Markdown docs are the default source of truth for design, production, validation, and technical decisions.
-
-## Canon Layers
-
-### Current Production Truth
-
-`docs/MASTER_PLAN.md` and `docs/06-decisions/` define current production direction.
-
-### Build Specs
-
-`docs/01-design/`, `docs/02-technical/`, `docs/03-production/`, and `docs/04-validation/` define what to build and how to verify it.
-
-### Player-Facing Canon
-
-`game-guide/` describes the long-form intended player experience. It is a validation source, but not every word is final.
-
-### Inspiration
-
-`real_inspiration/` and `other_game_inspiration/` are references to extract from, not assets to copy.
-
-## Change Policy
-
-If a production doc conflicts with `game-guide/`:
-
-1. identify the conflict
-2. decide whether guide or production doc should change
-3. update the relevant doc
-4. add a decision record if the change affects major direction
-
-## Decision Records
-
-Use `docs/06-decisions/` for decisions that are expensive to reverse.
-
-Examples:
-
-- engine choice
-- platform target
-- IP policy
-- first playable scope
-- save format
-- rendering/art scale
-- distribution path
-
-## File Format Policy
-
-Use Markdown for:
-
-- design docs
-- technical plans
-- validation checklists
-- milestone plans
-- decision records
-- source maps
-
-Use other formats only when needed:
-
-- source images
-- engine assets
-- generated screenshots
-- exported builds
-- spreadsheets only if formulas become important
-
-If a PDF or Word-style artifact is needed later, generate it from Markdown instead of making it the source.
-
+Update the master plan and Desktop tracker together after a material decision. Adopt useful historical rules explicitly into the active milestone rather than treating them as implicit constraints. Tie technical and visual evidence to exact code and asset revisions; distinguish observation, source inspection, historical claims, and owner feedback.

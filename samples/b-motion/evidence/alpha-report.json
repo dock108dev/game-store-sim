@@ -1,0 +1,569 @@
+[
+  {
+    "path": "art/authored/0.png",
+    "dimensions": [
+      512,
+      512
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 227422,
+    "opaque_pixels": 32879,
+    "partial_alpha_pixels": 1843,
+    "alpha_bounds": [
+      151,
+      32,
+      376,
+      479
+    ],
+    "sha256": "557241ec8fa843973a8e694f578ac792ce7b11ae60e0d10dec237c2610a841a9"
+  },
+  {
+    "path": "art/authored/1.png",
+    "dimensions": [
+      512,
+      512
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 231353,
+    "opaque_pixels": 29201,
+    "partial_alpha_pixels": 1590,
+    "alpha_bounds": [
+      162,
+      32,
+      307,
+      479
+    ],
+    "sha256": "f6ced4cd4fa76acfa77a77208804da673d2ffbaefa30eca34d95b05d5788cd4b"
+  },
+  {
+    "path": "art/authored/2.png",
+    "dimensions": [
+      512,
+      512
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 227192,
+    "opaque_pixels": 33094,
+    "partial_alpha_pixels": 1858,
+    "alpha_bounds": [
+      135,
+      32,
+      377,
+      479
+    ],
+    "sha256": "f316cec302116397e6694735b537ea049f27c3a6bbb5503b8ff0737789b91007"
+  },
+  {
+    "path": "art/authored/3.png",
+    "dimensions": [
+      512,
+      512
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 228865,
+    "opaque_pixels": 31510,
+    "partial_alpha_pixels": 1769,
+    "alpha_bounds": [
+      166,
+      32,
+      359,
+      480
+    ],
+    "sha256": "77da5c84175f7f16bb8cce2923134947a630a32f6bc90312d9d7dab63a369b89"
+  },
+  {
+    "path": "art/authored/4.png",
+    "dimensions": [
+      512,
+      512
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 234951,
+    "opaque_pixels": 25973,
+    "partial_alpha_pixels": 1220,
+    "alpha_bounds": [
+      209,
+      32,
+      293,
+      481
+    ],
+    "sha256": "592da11eac207003b4f09395097270d06a746f917522415afb7e7f3158e1e5ac"
+  },
+  {
+    "path": "art/authored/5.png",
+    "dimensions": [
+      512,
+      512
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 230884,
+    "opaque_pixels": 29658,
+    "partial_alpha_pixels": 1602,
+    "alpha_bounds": [
+      212,
+      32,
+      437,
+      481
+    ],
+    "sha256": "915033a8708d97432ecea474bcc3e90e05798bcf508e3898810bcc03812e71b4"
+  },
+  {
+    "path": "art/back/assembled.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 423821,
+    "opaque_pixels": 190579,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      69,
+      38,
+      534,
+      961
+    ],
+    "sha256": "4749ea537dedd8a161a9cb9b18f8e7b9c71293b15a8f37fa65d4dd1912a4b758"
+  },
+  {
+    "path": "art/back/far_arm.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 601339,
+    "opaque_pixels": 13013,
+    "partial_alpha_pixels": 48,
+    "alpha_bounds": [
+      69,
+      260,
+      206,
+      609
+    ],
+    "sha256": "7a15f31a0502e13c1165dad258003ba85803ccf36c514156545e122933a552b7"
+  },
+  {
+    "path": "art/back/far_leg.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 574057,
+    "opaque_pixels": 40255,
+    "partial_alpha_pixels": 88,
+    "alpha_bounds": [
+      154,
+      516,
+      300,
+      960
+    ],
+    "sha256": "ab1cd9d4733e44b4ec158f7cec83ab8fd2859d367831eb0119782e352473f2fb"
+  },
+  {
+    "path": "art/back/head.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 595562,
+    "opaque_pixels": 18838,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      227,
+      38,
+      367,
+      209
+    ],
+    "sha256": "d962e27b5484f1932fc0eea0a3afb79956f9be2f886b53779fb403f637f3de0c"
+  },
+  {
+    "path": "art/back/near_arm.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 601522,
+    "opaque_pixels": 12824,
+    "partial_alpha_pixels": 54,
+    "alpha_bounds": [
+      403,
+      255,
+      534,
+      608
+    ],
+    "sha256": "b36a069d2988e09049081a9769c923e2911ecb75c84e44f532cc82292e302a1a"
+  },
+  {
+    "path": "art/back/near_leg.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 574855,
+    "opaque_pixels": 39455,
+    "partial_alpha_pixels": 90,
+    "alpha_bounds": [
+      300,
+      516,
+      438,
+      961
+    ],
+    "sha256": "515ea6ad5f4aa5fa9fc8447c46b2a10f58b2243f1e3132ec22cbf4eb7368c916"
+  },
+  {
+    "path": "art/back/torso.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 540663,
+    "opaque_pixels": 73737,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      183,
+      197,
+      418,
+      548
+    ],
+    "sha256": "8859c9893f88828ed455c29e5b169f7274ce3e14bb89fb28d5559e41a3170bf9"
+  },
+  {
+    "path": "art/front/assembled.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 420996,
+    "opaque_pixels": 193368,
+    "partial_alpha_pixels": 36,
+    "alpha_bounds": [
+      64,
+      40,
+      533,
+      962
+    ],
+    "sha256": "34cfb83afd7580f106cb0bcd9f5acce08d0700097c5562b6fd29f0a1df0bb0d4"
+  },
+  {
+    "path": "art/front/far_arm.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 598997,
+    "opaque_pixels": 15369,
+    "partial_alpha_pixels": 34,
+    "alpha_bounds": [
+      64,
+      260,
+      204,
+      608
+    ],
+    "sha256": "407a8fd05423d7ee879d99da1b1955dd183aeca8b539815ffb42b9c9acb3246c"
+  },
+  {
+    "path": "art/front/far_leg.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 573142,
+    "opaque_pixels": 41238,
+    "partial_alpha_pixels": 20,
+    "alpha_bounds": [
+      142,
+      515,
+      298,
+      961
+    ],
+    "sha256": "6de9edfd9e7be237c201a434279e8368c29de7e7b6a257888c4af7c192ac00cb"
+  },
+  {
+    "path": "art/front/head.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 592521,
+    "opaque_pixels": 21879,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      227,
+      40,
+      369,
+      249
+    ],
+    "sha256": "c8566afb9eb384fd5da0d55c9277f91afd0894a4c064aa7096b285f5d6423cd8"
+  },
+  {
+    "path": "art/front/near_arm.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 600036,
+    "opaque_pixels": 14338,
+    "partial_alpha_pixels": 26,
+    "alpha_bounds": [
+      405,
+      255,
+      533,
+      609
+    ],
+    "sha256": "ebd9adad4238b4595a456dec7c61fc4d9064cdf6e1c8afdb04b43b16f391b5f5"
+  },
+  {
+    "path": "art/front/near_leg.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 573070,
+    "opaque_pixels": 41310,
+    "partial_alpha_pixels": 20,
+    "alpha_bounds": [
+      299,
+      515,
+      456,
+      962
+    ],
+    "sha256": "6858391d42689b90aa78d3c337f9a20601e52705819042491346065e4ae8f3c6"
+  },
+  {
+    "path": "art/front/torso.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 544557,
+    "opaque_pixels": 69843,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      184,
+      215,
+      414,
+      555
+    ],
+    "sha256": "f9806f0a93a85b7a3659bded9ece04ff2cd8e9f86a2f7ea0852f71570728a76b"
+  },
+  {
+    "path": "art/side/assembled.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 506723,
+    "opaque_pixels": 107677,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      211,
+      42,
+      379,
+      965
+    ],
+    "sha256": "2c2f470e6fb48d6c085354872e033e32252563e0896d2c757fc647573dfeafde"
+  },
+  {
+    "path": "art/side/far_arm.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 589913,
+    "opaque_pixels": 24487,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      217,
+      259,
+      336,
+      624
+    ],
+    "sha256": "233a18d77f83b435f35e9f84c057b4382fb30d2df07a8dff819f05553cf8a280"
+  },
+  {
+    "path": "art/side/far_leg.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 570334,
+    "opaque_pixels": 43978,
+    "partial_alpha_pixels": 88,
+    "alpha_bounds": [
+      226,
+      513,
+      363,
+      965
+    ],
+    "sha256": "1129ced2b596dbec9229eea46d22721670d0faa01a5d8630b3763b00c5948bd9"
+  },
+  {
+    "path": "art/side/head.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 593411,
+    "opaque_pixels": 20989,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      223,
+      42,
+      379,
+      234
+    ],
+    "sha256": "d89c8aaa16799ace9d55b8a217004ffd981fd2560dd704fb50176f89b66d0721"
+  },
+  {
+    "path": "art/side/near_arm.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 589913,
+    "opaque_pixels": 24487,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      217,
+      259,
+      336,
+      624
+    ],
+    "sha256": "233a18d77f83b435f35e9f84c057b4382fb30d2df07a8dff819f05553cf8a280"
+  },
+  {
+    "path": "art/side/near_leg.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 570334,
+    "opaque_pixels": 43978,
+    "partial_alpha_pixels": 88,
+    "alpha_bounds": [
+      226,
+      513,
+      363,
+      965
+    ],
+    "sha256": "95077abb196d0b6b10c9713ffebf2f8bbdd80edeb11f01358893fa7862d57c64"
+  },
+  {
+    "path": "art/side/torso.png",
+    "dimensions": [
+      600,
+      1024
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "transparent_pixels": 569553,
+    "opaque_pixels": 44847,
+    "partial_alpha_pixels": 0,
+    "alpha_bounds": [
+      211,
+      205,
+      368,
+      543
+    ],
+    "sha256": "93a8c6f23602c90132083f75b045c0910ec1478210c1cd157054f560fd513ec6"
+  }
+]

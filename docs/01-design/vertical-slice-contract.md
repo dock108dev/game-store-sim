@@ -1,3 +1,5 @@
+> **Historical reference — superseded 2026-09-07.** This document is not an active specification, work order, or acceptance record for the restart. Its locks and completion claims do not define current intent. Read the [current master plan](../MASTER_PLAN.md).
+
 # Vertical Slice Contract
 
 This document defines the first implementation target. If a feature is not listed here, it is not required for the first playable.
