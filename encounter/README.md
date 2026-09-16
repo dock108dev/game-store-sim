@@ -49,12 +49,14 @@ Animation poses and player routes are not saved. Active-shift reload places Rowa
 
 ## Validation and artwork
 
+For setup, the default headless command, tool dependencies and output locations, see [local development](../docs/02-technical/local-development.md). For code and save-schema details, see [encounter architecture](../docs/02-technical/encounter-architecture.md). The following rendered/capture command is optional, not required for ordinary documentation changes.
+
 ```sh
 cd '/Users/michaelfuscoletti/Desktop/game-sim/encounter'
 python3 scripts/validate.py --render --capture
 ```
 
-This creates a disposable project and unique save namespace, exercises R5 state and scene suites, normal 1280×720 and Retina 2560×1440 controls, and records engine footage of two days plus both assortment comparisons with an explicit draw before every recorded frame, including when the window is occluded. The two-day footage alone can be reproduced with `python3 scripts/capture_full_shift.py`; it checks frame counts and changing pixels. Scene tests run at 3× simulation time. Capture uses an action adapter, including prep allocation and report/order/advance operations; it is agent footage. See [R5 delivery](../docs/03-production/r5-delivery.md) for qualification status and exact evidence.
+This creates a disposable project and unique save namespace, exercises R5 state and scene suites, normal 1280×720 and Retina 2560×1440 controls, and records engine footage of two days plus both assortment comparisons with an explicit draw before every recorded frame, including when the window is occluded. The separate `scripts/capture_full_shift.py` tool checks frame counts and changing pixels, but also copies Godot and ad-hoc signs a temporary app; it requires `ffmpeg` and `ffprobe` and is not a routine setup or validation step. Scene tests run at 3× simulation time. Capture uses an action adapter, including prep allocation and report/order/advance operations; it is agent footage. See [R5 delivery](../docs/03-production/r5-delivery.md) for qualification status and exact evidence.
 
 Retail-v4 source masters, samples, old exports, fixtures and rigs are retained. New `source/case-tide.kra` and `source/case-orbit.kra` are three-layer editable Krita masters with transparent `art/` exports. Rebuild only these two with **scripts/Rebuild Assortment Art.command**. `build_assortment_art.py` extends the existing native painted package recipe; it saves/reopens each master and verifies identical PNG exports. Both are 152×208 (4× the logical 38×52 case). Import: lossless sRGB straight RGBA, alpha-border correction, no mipmaps, linear filtering; `.import` sidecars are retained. The original **Rebuild Art.command** remains for the unchanged fixtures and original case.
 

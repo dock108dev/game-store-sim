@@ -1,10 +1,16 @@
-# Local validation — recovered baseline
+# Local validation — R5 and retained baseline
 
-Read the [recovery review](../03-production/recovery-review-2026-09-07.md) for verified scope and four open defects. The baseline validator passes but is not a complete-game, visual or owner-acceptance gate.
+## Current R5 encounter
 
-## Current R1 encounter
+From the repository root, run `python3 encounter/scripts/validate.py` for isolated headless import, `test_assortment.gd`, `test_price_request.gd` and `test_assortment_scene.gd`. See [local development](../02-technical/local-development.md) for requirements, outputs, side effects and optional `--render` / `--capture` checks. Older slice tests are retained, not the current suite selection.
 
-The integrated overview is now in `encounter/`. See [R1 delivery](../03-production/r1-delivery.md) for separate transaction, input, rendered, production and acceptance records. From `encounter/`, run `python3 scripts/validate.py` to create a fresh disposable project and unique save namespace; `--render --capture` additionally retains normal/Retina screenshots and actual gameplay footage. Each run writes a new timestamped evidence directory and preserves prior results. The historical baseline procedure below remains unchanged for recovery evidence.
+[R5 delivery](../03-production/r5-delivery.md) records the September 9 candidate's 110 state checks, 3 pending-label checks and 54 scene checks in each headless/normal/Retina run. Those are retained results, not a new pass on every checkout. [Current identity reconciliation](../MASTER_PLAN.md#checkout-and-evidence-reconciliation--2026-09-15) distinguishes the candidate manifest, validation context and later capture-tool revision. Owner acceptance remains pending. Headless checks do not establish visual quality, warning-free shutdown or release readiness.
+
+The September 16 tooling cleanup also passed the default headless gate (110 state, 3 pending-label, 54 scene checks) and four Python wrapper tests. See the [maintenance record](../MASTER_PLAN.md#maintenance-cleanup--2026-09-16) for exact evidence and limits. Rendered/capture checks were not repeated.
+
+## Historical first-person baseline
+
+The remaining procedure applies only to `game/` and root `scripts/`, not the active encounter. Read the [recovery review](../03-production/recovery-review-2026-09-07.md) for verified historical scope and four recorded defects. Its validator passes a limited happy path; it is not a complete-game or owner-acceptance gate.
 
 ## Safe baseline procedure
 
