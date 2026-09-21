@@ -1,22 +1,26 @@
-# Game Store Sim — current master plan
+# Game Store Sim — first-week beta master plan
 
-Updated 2026-09-16 (validation tooling cleanup; product scope unchanged). Illustrated 2.5D early-2000s mall game shop. Kardboard Kings is the composition reference; **B-ROWAN-01 / retail-v4** is the visual baseline. Godot 4.6.2 Standard/GDScript/Compatibility and retained Krita masters remain the workflow.
+Updated 2026-09-21. **Playable R5 prototype; first-week beta requirements defined; NOT BETA READY.**
 
-## Owner decision
+## Authoritative plan
 
-Owner R4 feedback: **“yes”**, confirming that handling several customers is clear and enjoyable enough to build on. R4 accepted within scope; R1–R3 acceptance remains. R5 — three products and stocking decisions — is authorized. No animation, full-game or release acceptance is implied.
+The [Desktop path to beta](/Users/michaelfuscoletti/Desktop/game_sim_next_steps.md) owns current scope, implemented/missing capabilities, issues, backlog, proposed seven-day pacing and B0–B10 completion conditions. It supersedes the former plan ending at R5 review. This update is planning only; no beta runtime work has started.
 
-## Current slice
+Confirmed target: the first week owning one expandable, rearrangeable shop; employees for stocking/checkout; rent and wages with bankruptcy risk; condition-based used-game buying/resale with haggling only when customers sell to the shop; new releases without preorders. Retain the illustrated retail-v4 style and improve animation. Seven in-game days is the planning interpretation of the owner's first-week request.
 
-R5 has retained technical qualification and is ready for owner review; owner acceptance remains pending. Three fictional products, the existing four-position shelf and three-customer wave. Separate prices, mixed paid orders, prep returns, retained backroom stock and per-product reporting. Preserve exclusive reservations, locked offers, FIFO and the R4 closing/report contract.
+Godot 4.6.2 Standard/GDScript/Compatibility and retained Krita masters remain the current workflow. The active runtime is `encounter/`; historical first-person material does not define the beta.
 
-[Active checklist](03-production/visual-first-task-list.md), [slice plan](03-production/milestones-and-backlog.md), [R4 delivery](03-production/r4-delivery.md), and [R5 delivery](03-production/r5-delivery.md) govern current work.
+## Current implementation and acceptance
 
-## Boundaries
+R1–R4 remain accepted within scope. R5 three-product assortment has retained technical qualification; R5 owner acceptance remains pending. Layout/growth, employees, used trading, full business expenses/failure and releases are future implementation, not features proven by R5 tests. Retained [R4 delivery](03-production/r4-delivery.md), [R5 delivery](03-production/r5-delivery.md) and [R1–R5 checklist](03-production/visual-first-task-list.md) describe bounded historical scope.
 
-Full-shop expansion, large catalogs/casts and broad V2 animation polish remain later work. The inherited rigid/deforming legs, abrupt turns/stops, straight reach, possible sliding, mirrored lighting, enlargement artifacts and reused customer rig remain documented.
+Current planning action is B1: a concrete first-week implementation packet, followed by integrated layout, economy/growth, staff, used trading, releases/content, presentation, balancing, packaging and whole-week owner review. Do not request another scope decision for confirmed requirements. Technical checks and prior slice approval do not imply beta acceptance.
 
-Preserve historical game, samples, prior evidence and unrelated work. No commit, push or publication. Automated qualification, agent visual assessment and owner acceptance are separate.
+## Current checkout and limits
+
+Before this planning edit, September 21 checkout was `main` at `ac4dfcb27cbed6c7c4ea2cb3d83421b426516fdf`, with an untracked preserved tracker snapshot. This edit changes planning documents only. No runtime tests, launch, commit, push or publication were performed. Preserve saves, masters and retained evidence; the motion and exit-warning limitations below remain unresolved.
+
+The following dated records retain prior qualification and maintenance context. Their old checkout identities and narrow scope do not override the current beta plan.
 
 ## Checkout and evidence reconciliation — 2026-09-15
 

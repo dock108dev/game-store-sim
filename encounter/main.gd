@@ -1,4 +1,5 @@
 extends Node2D
+const GlassUI=preload("res://glass_ui.gd")
 const State = preload("res://state.gd")
 const Actor = preload("res://actor.gd")
 var save_path = "user://encounter.json"
@@ -54,11 +55,10 @@ func label(parent: Node, text: String, pos: Vector2, size: int, color=Color("293
  var l=Label.new();l.text=text;l.position=pos;l.add_theme_font_size_override("font_size",size);l.add_theme_color_override("font_color",color);parent.add_child(l);return l
 func button(text: String,pos: Vector2,width: float,action: Callable) -> Button:
  var b=Button.new();b.text=text;b.position=pos;b.size=Vector2(width,44);b.add_theme_font_size_override("font_size",18);b.pressed.connect(action)
- for pair in [["normal","354d64"],["hover","476b88"],["pressed","a43d35"],["disabled","b8b4a9"],["focus","476b88"]]:
-  var style=StyleBoxFlat.new();style.bg_color=Color(pair[1]);style.set_corner_radius_all(4);b.add_theme_stylebox_override(pair[0],style)
- b.add_theme_color_override("font_color",Color("fff9e9"));ui.add_child(b);return b
-func panel(pos: Vector2,size: Vector2,color: Color):
- var p=ColorRect.new();p.position=pos;p.size=size;p.color=color;p.mouse_filter=Control.MOUSE_FILTER_IGNORE;ui.add_child(p)
+ b.theme=GlassUI.make_theme();ui.add_child(b);return b
+func panel(pos: Vector2,size: Vector2,_color: Color):
+ var p=Panel.new();p.position=pos;p.size=size;p.add_theme_stylebox_override("panel",GlassUI.panel_style());p.mouse_filter=Control.MOUSE_FILTER_IGNORE;ui.add_child(p)
+
 func _ready():
  get_viewport().gui_embed_subwindows=true
  RenderingServer.set_default_clear_color(Color("e8e2d5"))
@@ -87,17 +87,17 @@ func _ready():
  ui=CanvasLayer.new();add_child(ui)
  panel(Vector2(0,0),Vector2(1280,145),Color("f2eddf"))
  label(ui,"REPLAY JUNCTION",Vector2(40,24),32)
- day_label=label(ui,"SATURDAY, 2002  /  YOUR FIRST SHIFT",Vector2(42,68),16,Color("95423c"))
+ day_label=label(ui,"SATURDAY, 2002  /  YOUR FIRST SHIFT",Vector2(42,68),16,Color("416489"))
  summary=label(ui,"",Vector2(650,30),22)
  guide=label(ui,"",Vector2(42,108),20)
  panel(Vector2(922,158),Vector2(334,476),Color("f9f5e9"))
  label(ui,"SHIFT DESK",Vector2(944,168),21)
- product_select=OptionButton.new();product_select.position=Vector2(944,202);product_select.size=Vector2(288,36);product_select.add_theme_font_size_override("font_size",18)
+ product_select=OptionButton.new();product_select.theme=GlassUI.make_theme();product_select.position=Vector2(944,202);product_select.size=Vector2(288,36);product_select.add_theme_font_size_override("font_size",18)
  for product in State.PRODUCTS:product_select.add_item(State.CATALOG[product].name)
  product_select.item_selected.connect(func(index):selected_product=State.PRODUCTS[index];price_input.value=float(State.CATALOG[selected_product].reference)/100;refresh())
  ui.add_child(product_select)
  details=label(ui,"",Vector2(944,246),18)
- price_input=SpinBox.new();price_input.position=Vector2(944,390);price_input.size=Vector2(288,42);price_input.min_value=1;price_input.max_value=99.99;price_input.step=.01;price_input.value=21.99;price_input.prefix="$ ";price_input.add_theme_font_size_override("font_size",20);ui.add_child(price_input)
+ price_input=SpinBox.new();price_input.theme=GlassUI.make_theme();price_input.position=Vector2(944,390);price_input.size=Vector2(288,42);price_input.min_value=1;price_input.max_value=99.99;price_input.step=.01;price_input.value=21.99;price_input.prefix="$ ";price_input.add_theme_font_size_override("font_size",20);ui.add_child(price_input)
  price_input.tooltip_text="Prices apply to the selected product only. Editing alone changes no copy."
  reprice_button=button("Apply price to unsold stock",Vector2(944,340),288,func():request_action("reprice"))
  primary=button("",Vector2(944,440),288,func():request_action(selected_action))
@@ -108,8 +108,8 @@ func _ready():
  load_button=button("Reload",Vector2(1094,540),138,func():perform("load"))
  button("New practice shift",Vector2(944,590),288,confirm_reset)
  panel(Vector2(24,634),Vector2(1232,68),Color("293442"))
- feedback=label(ui,"Welcome, Rowan. Receive the three prepaid used games to begin.",Vector2(42,644),18,Color("fff6dc"))
- label(ui,"Click a station or the shift button • WASD / arrows walk • E interact • K save • L reload",Vector2(42,675),16,Color("e4dfd0"))
+ feedback=label(ui,"Welcome, Rowan. Receive the three prepaid used games to begin.",Vector2(42,644),18,Color("182338"))
+ label(ui,"Click a station or the shift button • WASD / arrows walk • E interact • K save • L reload",Vector2(42,675),16,Color("54647b"))
  shelf_label=label(ui,"",Vector2(520,255),17)
  for id in visitors:
   visitors[id].label=label(ui,"",Vector2.ZERO,16)
@@ -149,10 +149,10 @@ func setup_comparison():
  trace.append({"action":"comparison-prep","mode":assortment_demo,"data":state.data.duplicate(true)})
  state.open();restore_view()
 func confirm_reset():
- var dialog=ConfirmationDialog.new();dialog.dialog_text="Start a fresh practice shift?\nUnsaved progress will be discarded. Your saved shift stays available with Reload.";dialog.title="New practice shift";dialog.confirmed.connect(func():perform("reset"));dialog.confirmed.connect(dialog.queue_free);dialog.canceled.connect(dialog.queue_free);ui.add_child(dialog);dialog.popup_centered(Vector2i(520,150))
+ var dialog=ConfirmationDialog.new();dialog.theme=GlassUI.make_theme();dialog.dialog_text="Start a fresh practice shift?\nUnsaved progress will be discarded. Your saved shift stays available with Reload.";dialog.title="New practice shift";dialog.confirmed.connect(func():perform("reset"));dialog.confirmed.connect(dialog.queue_free);dialog.canceled.connect(dialog.queue_free);ui.add_child(dialog);dialog.popup_centered(Vector2i(520,150))
 func show_assortment():
  var dialog=AcceptDialog.new();dialog.title="Per-product results" if state.data.phase=="report" else "Assortment • four physical shelf spaces";dialog.min_size=Vector2i(850,330)
- dialog.theme=Theme.new();dialog.theme.default_font_size=18
+ dialog.theme=GlassUI.make_theme();dialog.theme.default_font_size=18
  var content=VBoxContainer.new();content.add_theme_constant_override("separation",12);dialog.add_child(content)
  var info=Label.new();content.add_child(info)
  var refresh_rows=[]
@@ -182,7 +182,7 @@ func show_order():
  if state.data.phase != "report": return
  var order_day=state.data.day
  var dialog=ConfirmationDialog.new();dialog.title="Replenish • compare three games";dialog.ok_button_text="Pay & place order"
- dialog.theme=Theme.new();dialog.theme.default_font_size=20
+ dialog.theme=GlassUI.make_theme();dialog.theme.default_font_size=20
  var content=VBoxContainer.new();content.add_theme_constant_override("separation",12);dialog.add_child(content)
  var fields={}
  for product in State.PRODUCTS:
@@ -207,7 +207,7 @@ func show_order():
 func show_advance():
  if state.data.phase != "report": return
  var closing_day = state.data.day
- var dialog = ConfirmationDialog.new();dialog.theme=Theme.new();dialog.theme.default_font_size=20;dialog.title="Start the next day"
+ var dialog = ConfirmationDialog.new();dialog.theme=GlassUI.make_theme();dialog.theme.default_font_size=20;dialog.title="Start the next day"
  dialog.dialog_text="Advance to day %d?\nUnsold stock, prices and cash carry forward.\nDaily sales reset; paid orders arrive at receiving." % (closing_day+1)
  dialog.confirmed.connect(func():
   var ok=state.advance(closing_day)

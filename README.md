@@ -32,3 +32,7 @@ It creates a disposable project and unique save namespace and retains timestampe
 `game/`, root `scripts/`, old guides and sample build reports are historical; they are not the current R5 setup or release workflow. No active network service, database, CI workflow or encounter export pipeline is included.
 
 Current source identity and maintenance checks are recorded in the [master plan](docs/MASTER_PLAN.md). Keep the linked Desktop tracker at `/Users/michaelfuscoletti/Desktop/game_sim_next_steps.md` synchronized with that plan.
+
+## Shared UI design
+
+See [UI design and templates](docs/ui-design.md) before changing this interface. The shared Desktop `UI Templates` folder defines the glass design baseline for future contributors; this repository keeps its own runtime styles and a portable copy of the requirements.

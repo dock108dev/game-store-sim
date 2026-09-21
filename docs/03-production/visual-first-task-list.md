@@ -1,6 +1,8 @@
-# Current slice checklist
+# R1–R5 slice checklist — retained implementation record
 
-Updated 2026-09-08. Baseline: **B-ROWAN-01 / retail-v4**.
+Current beta scope is in the [first-week plan](/Users/michaelfuscoletti/Desktop/game_sim_next_steps.md). This checklist retains R1–R5 completion/acceptance only and is not the full beta backlog.
+
+Original checklist updated 2026-09-08. Baseline: **B-ROWAN-01 / retail-v4**.
 
 - [x] R0 recovery and V1a–V1c direction, motion/art workflow.
 - [x] R1 transaction replacement, integrated encounter and technical evidence.
@@ -31,4 +33,4 @@ Updated 2026-09-08. Baseline: **B-ROWAN-01 / retail-v4**.
 - [x] R5 ready for owner review, only after qualification.
 - [ ] R5 owner acceptance.
 
-Full-shop expansion, large catalogs/casts and broad animation polish are deferred. Existing animation limits remain in the R1 record and encounter README. No commit, push or publication.
+The old slice deferred expansion/content/motion work; the current beta plan now requires one-shop growth and motion improvements plus the confirmed first-week systems. Existing animation limits remain in the R1 record and encounter README. No commit, push or publication.
