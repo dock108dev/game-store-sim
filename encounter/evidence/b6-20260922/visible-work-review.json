@@ -1,0 +1,152 @@
+{
+  "validation": "/Users/michaelfuscoletti/Desktop/game-sim/encounter/evidence/validation-20260923T003918484574Z",
+  "normal_reviewed": true,
+  "retina_reviewed": true,
+  "motion_reviewed": true,
+  "method": "Direct visual inspection of final-candidate screenshots and chronological rendered frame sequences; linked motion traces and scene checks establish physical progression. No owner interaction or audio qualification.",
+  "images": [
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-fresh-normal.png",
+      "sha256": "5191b5ac49f9bdc39e7f7d928fa4ba31dd2e7f0000c7b5831b8eb54d202dcdba",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-stocked-day6-normal.png",
+      "sha256": "fe2012ed1268494d8029092b622b46dcc77497b3a3d8a5d55a4865b239b1e2b5",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-order-day6-normal.png",
+      "sha256": "55a3ff254b7c91ecd9fec1f13bc0cf7c295adb505a84b0b243035c30e1db6c47",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-used-label-day4-normal.png",
+      "sha256": "46a8a8386504d684feb73fb1f43bef33d581c63b8bb6c4c2d66667c18120679f",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-report-day7-normal.png",
+      "sha256": "71ecca2d3a75697e82416c50459400692d45fbddbbe14497573d9a00b3c23adc",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-calendar-retina.png",
+      "sha256": "84d4c2baf4f36dba2f4725d4fa7f429d85555d655ec101e5d48be6b726f5ad50",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-order-day4-retina.png",
+      "sha256": "01957f5c2b40d15612f6f542d7c491b36b1b78f8d729ae9f39bbb849fc8b52fa",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-base-five-title-mix-normal.png",
+      "sha256": "d037d4249aafbef7750844099f4426691453a64fbc093f4c5508790cc50d1d2e",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/validation-20260923T003918484574Z/results/b6-base-report-retina.png",
+      "sha256": "2c8f938d08b2f17016d6afab1ff925892d0db5828e7e6be2d92e43abde4eba75",
+      "dimensions": [
+        2560,
+        1440
+      ]
+    },
+    {
+      "path": "encounter/evidence/b6-20260922/review-frames/breadth-00217.png",
+      "sha256": "cc1bedcff022f0c9e5a19880b2fbadc25527be48e94dbf78a4cb0b3f7269aba6",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/b6-20260922/review-frames/week-00624.png",
+      "sha256": "f93ab80059f131bc7540228be1c68cc78a8aa7051ba0568fca2926d22c890fb4",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/b6-20260922/review-frames/week-00618.png",
+      "sha256": "f6f97cf9c9074b4961d66fa40838e5343e1a48a7dd2551b9274c55dbfe8f2e44",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/b6-20260922/review-frames/breadth-00201.png",
+      "sha256": "3d5a22dc340b6ebde066114376e27298ea31f6ccf83ea06aecdd22930190797b",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/b6-20260922/review-frames/week-00612.png",
+      "sha256": "df7ee1ec9b8ff7a8aea30fb8143f8e642882271315096c08862a20afb4c8d20b",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/b6-20260922/review-frames/breadth-00225.png",
+      "sha256": "e6c83ec94c132e3b7b7bdffad81cf4e0d047e052c2b80307c2b7e91383398ef9",
+      "dimensions": [
+        1280,
+        720
+      ]
+    },
+    {
+      "path": "encounter/evidence/b6-20260922/appearances-probe.png",
+      "sha256": "51214bf4b1470ae49264c06ba2417031c8d558ce4c6be405eb23cf151d74135b",
+      "dimensions": [
+        1280,
+        720
+      ]
+    }
+  ],
+  "observations": [
+    "1280x720 header cash, supplier, calendar and staff controls remain readable.",
+    "2560x1440 calendar, day-4 disabled Rally supplier control and base report visibly reviewed.",
+    "Day-6 shelf displays retain original covers alongside Signal and Rally. Used Orbit row separates $4 historical acquisition cost from $8.40 proposed label.",
+    "Expanded frames 612/618/624 show Devon leaving after Signal sale, Ellis and Frankie progressing through browsing/queue, and Morgan moving to checkout; cash advances $602.20 to $632.20.",
+    "Base frames 201/217/225 show Rowan approaching checkout, release transactions, Frankie waiting with a $12 used-Curb offer, then departing after purchase; cash progresses $513 to $567 to $579.",
+    "Additional glasses, knit cap, headphones and garment distinctions appear on moving actors; front/side/back synthetic art contact sheet is separately labeled.",
+    "Final ordinary week report displays $570.40 cash, $364.40 margin, $130.40 operating result, zero liabilities. Base report displays $555, six sales, two price refusals."
+  ],
+  "limitations": [
+    "Some floor names overlap other names or nearby interface controls, and parked workers can be partly occluded by header elements. Primary controls remain operable; broad label and motion polish is B7.",
+    "Existing rigid limbs, abrupt turns and sliding/reach presentation are not owner-accepted animation.",
+    "All engine sessions use Dummy audio.",
+    "Integrated week uses automated UI inputs; breadth has a scripted empty-day prelude. Screenshots are not owner-fun or B8 balance acceptance."
+  ]
+}

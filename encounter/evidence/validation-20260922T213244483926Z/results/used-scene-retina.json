@@ -1,0 +1,1362 @@
+{
+  "checks": [
+    {
+      "check": "seller physically arrives at separate intake",
+      "pass": true
+    },
+    {
+      "check": "seller never joins buyer queue",
+      "pass": true
+    },
+    {
+      "check": "Rowan physically inspects",
+      "pass": true
+    },
+    {
+      "check": "accepted requires separate payment",
+      "pass": true
+    },
+    {
+      "check": "ordinary purchase exact debit and one copy",
+      "pass": true
+    },
+    {
+      "check": "completed seller walks out",
+      "pass": true
+    },
+    {
+      "check": "seller buyer worker close drains",
+      "pass": true
+    },
+    {
+      "check": "report valid",
+      "pass": true
+    },
+    {
+      "check": "purchase report distinguishes spending from margin",
+      "pass": true
+    },
+    {
+      "check": "confirmed hire morgan",
+      "pass": true
+    },
+    {
+      "check": "confirmed hire jules",
+      "pass": true
+    },
+    {
+      "check": "used individual labels visible",
+      "pass": true
+    },
+    {
+      "check": "explicit condition label chosen through controls",
+      "pass": true
+    },
+    {
+      "check": "Rowan stocks exact used copy",
+      "pass": true
+    },
+    {
+      "check": "role control morgan 2",
+      "pass": true
+    },
+    {
+      "check": "role control jules 2",
+      "pass": true
+    },
+    {
+      "check": "fixed-price used sale",
+      "pass": true
+    },
+    {
+      "check": "actual cost survives resale",
+      "pass": true
+    },
+    {
+      "check": "sale actor matches ordinary loop",
+      "pass": true
+    },
+    {
+      "check": "seller buyer worker close drains",
+      "pass": true
+    },
+    {
+      "check": "report valid",
+      "pass": true
+    },
+    {
+      "check": "scene reload used resale report",
+      "pass": true
+    },
+    {
+      "check": "saved progress used resale report visitor-1",
+      "pass": true
+    },
+    {
+      "check": "saved progress used resale report visitor-2",
+      "pass": true
+    },
+    {
+      "check": "saved progress used resale report visitor-3",
+      "pass": true
+    },
+    {
+      "check": "report merchandise margin uses acquisition cost",
+      "pass": true
+    },
+    {
+      "check": "seller physically arrives at separate intake",
+      "pass": true
+    },
+    {
+      "check": "seller never joins buyer queue",
+      "pass": true
+    },
+    {
+      "check": "Rowan physically inspects",
+      "pass": true
+    },
+    {
+      "check": "ordinary counter disclosure",
+      "pass": true
+    },
+    {
+      "check": "counter reload exact terms and progress",
+      "pass": true
+    },
+    {
+      "check": "accepted requires separate payment",
+      "pass": true
+    },
+    {
+      "check": "ordinary purchase exact debit and one copy",
+      "pass": true
+    },
+    {
+      "check": "completed seller walks out",
+      "pass": true
+    },
+    {
+      "check": "seller buyer worker close drains",
+      "pass": true
+    },
+    {
+      "check": "report valid",
+      "pass": true
+    },
+    {
+      "check": "purchase report distinguishes spending from margin",
+      "pass": true
+    },
+    {
+      "check": "confirmed hire morgan",
+      "pass": true
+    },
+    {
+      "check": "confirmed hire jules",
+      "pass": true
+    },
+    {
+      "check": "used individual labels visible",
+      "pass": true
+    },
+    {
+      "check": "explicit condition label chosen through controls",
+      "pass": true
+    },
+    {
+      "check": "role control morgan 1",
+      "pass": true
+    },
+    {
+      "check": "role control jules 1",
+      "pass": true
+    },
+    {
+      "check": "workers stock one used copy with exclusive claim",
+      "pass": true
+    },
+    {
+      "check": "single used stock commit",
+      "pass": true
+    },
+    {
+      "check": "role control morgan 0",
+      "pass": true
+    },
+    {
+      "check": "role control jules 0",
+      "pass": true
+    },
+    {
+      "check": "used fixed-price buyer queues",
+      "pass": true
+    },
+    {
+      "check": "fixed-price used sale",
+      "pass": true
+    },
+    {
+      "check": "actual cost survives resale",
+      "pass": true
+    },
+    {
+      "check": "sale actor matches ordinary loop",
+      "pass": true
+    },
+    {
+      "check": "seller buyer worker close drains",
+      "pass": true
+    },
+    {
+      "check": "report valid",
+      "pass": true
+    },
+    {
+      "check": "scene reload used resale report",
+      "pass": true
+    },
+    {
+      "check": "saved progress used resale report visitor-1",
+      "pass": true
+    },
+    {
+      "check": "saved progress used resale report visitor-2",
+      "pass": true
+    },
+    {
+      "check": "saved progress used resale report visitor-3",
+      "pass": true
+    },
+    {
+      "check": "report merchandise margin uses acquisition cost",
+      "pass": true
+    },
+    {
+      "check": "seller traveled visibly",
+      "pass": true
+    },
+    {
+      "check": "all actor separation",
+      "pass": true
+    },
+    {
+      "check": "all actor fixture clearance",
+      "pass": true
+    },
+    {
+      "check": "state invariants during ordinary loop",
+      "pass": true
+    }
+  ],
+  "frames": 0,
+  "outcomes": [
+    {
+      "carried": "",
+      "cash": 53128,
+      "clock": 37.4000000000003,
+      "customers": {
+        "visitor-1": {
+          "arrival": 0.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-0",
+          "budget": 1199,
+          "copy": "",
+          "decision": "unavailable",
+          "elapsed": 1.5,
+          "item": "",
+          "name": "Alex",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "settled": false,
+          "state": "gone"
+        },
+        "visitor-2": {
+          "arrival": 5.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-1",
+          "budget": 2462,
+          "copy": "used:1790112838.62279-663124:2:1",
+          "decision": "buy",
+          "elapsed": 4.0,
+          "item": "",
+          "name": "Blair",
+          "offer": 1759,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "settled": false,
+          "state": "gone"
+        },
+        "visitor-3": {
+          "arrival": 10.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-0",
+          "budget": 3498,
+          "copy": "",
+          "decision": "unavailable",
+          "elapsed": 1.5,
+          "item": "",
+          "name": "Casey",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "tide",
+          "settled": false,
+          "state": "gone"
+        }
+      },
+      "day": 3,
+      "decisions": [
+        {
+          "budget": 3498,
+          "customer": "visitor-1",
+          "day": 2,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "tide"
+        },
+        {
+          "budget": 1424,
+          "customer": "visitor-2",
+          "day": 2,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "orbit"
+        },
+        {
+          "budget": 2418,
+          "customer": "visitor-3",
+          "day": 2,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "curb"
+        },
+        {
+          "budget": 1199,
+          "customer": "visitor-1",
+          "day": 3,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "orbit"
+        },
+        {
+          "budget": 2462,
+          "customer": "visitor-2",
+          "day": 3,
+          "item": "used:1790112838.62279-663124:2:1",
+          "offer": 1759,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 3498,
+          "customer": "visitor-3",
+          "day": 3,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "tide"
+        }
+      ],
+      "employment": [
+        {
+          "day": 3,
+          "kind": "hire",
+          "staff": "morgan"
+        },
+        {
+          "day": 3,
+          "kind": "hire",
+          "staff": "jules"
+        }
+      ],
+      "events": [
+        {
+          "amount": 1231,
+          "day": 2,
+          "id": "trade:1790112838.62279-663124:2:1",
+          "kind": "used_purchase",
+          "reference": "seller:1790112838.62279-663124:2:1",
+          "seq": 1,
+          "status": "paid"
+        },
+        {
+          "amount": 1759,
+          "day": 3,
+          "id": "sale:1790112838.62279-663124:3:visitor-2",
+          "kind": "sale",
+          "reference": "used:1790112838.62279-663124:2:1",
+          "seq": 2,
+          "status": "paid"
+        },
+        {
+          "amount": 1200,
+          "day": 3,
+          "id": "wage:1790112838.62279-663124:3:jules",
+          "kind": "wage",
+          "reference": "jules",
+          "seq": 3,
+          "status": "paid"
+        },
+        {
+          "amount": 1200,
+          "day": 3,
+          "id": "wage:1790112838.62279-663124:3:morgan",
+          "kind": "wage",
+          "reference": "morgan",
+          "seq": 4,
+          "status": "paid"
+        }
+      ],
+      "fixture_events": [],
+      "fulfilled_requests": {
+
+      },
+      "items": {
+        "case-01": {
+          "acquisition_id": "starter:1790112838.62279-663124",
+          "acquisition_seq": 1,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 800,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-02": {
+          "acquisition_id": "starter:1790112838.62279-663124",
+          "acquisition_seq": 2,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 1200,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-03": {
+          "acquisition_id": "starter:1790112838.62279-663124",
+          "acquisition_seq": 3,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 500,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "case-04": {
+          "acquisition_id": "starter:1790112838.62279-663124",
+          "acquisition_seq": 4,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 800,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-05": {
+          "acquisition_id": "starter:1790112838.62279-663124",
+          "acquisition_seq": 5,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 1200,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-06": {
+          "acquisition_id": "starter:1790112838.62279-663124",
+          "acquisition_seq": 6,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 500,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "used:1790112838.62279-663124:2:1": {
+          "acquisition_id": "trade:1790112838.62279-663124:2:1",
+          "acquisition_seq": 1002,
+          "available_day": 3,
+          "condition": "good",
+          "cost": 1231,
+          "fixture_id": null,
+          "kind": "used",
+          "location": "sold",
+          "owner": "",
+          "price": 1759,
+          "product": "curb",
+          "slot_index": null
+        }
+      },
+      "jobs": [
+        {
+          "actor": "player",
+          "copy": "used:1790112838.62279-663124:2:1",
+          "customer": "",
+          "day": 3,
+          "fixture": "rack-0001",
+          "id": "job:1790112838.62279-663124:1",
+          "kind": "stock",
+          "reason": "",
+          "received": true,
+          "revision": 0,
+          "slot": 0,
+          "status": "committed"
+        },
+        {
+          "actor": "morgan",
+          "copy": "used:1790112838.62279-663124:2:1",
+          "customer": "visitor-2",
+          "day": 3,
+          "fixture": "checkout-01",
+          "id": "job:1790112838.62279-663124:2",
+          "kind": "sale",
+          "reached": true,
+          "reason": "",
+          "received": false,
+          "revision": 0,
+          "slot": -1,
+          "status": "committed"
+        }
+      ],
+      "layout": {
+        "fixtures": {
+          "checkout-01": {
+            "origin": [
+              690,
+              470
+            ],
+            "type": "counter"
+          },
+          "rack-0001": {
+            "origin": [
+              440,
+              330
+            ],
+            "type": "rack"
+          },
+          "receiving-01": {
+            "origin": [
+              270,
+              430
+            ],
+            "type": "receiving"
+          }
+        },
+        "space_level": 0
+      },
+      "layout_revision": 0,
+      "next_event_seq": 5,
+      "next_fixture_id": 2,
+      "next_job": 3,
+      "opening_cash": 55000,
+      "orders": [],
+      "phase": "report",
+      "queue": [],
+      "received": true,
+      "ruleset_id": "b5-used-1",
+      "run_id": "1790112838.62279-663124",
+      "sales": [
+        {
+          "cost": 1231,
+          "customer": "visitor-2",
+          "day": 3,
+          "event_id": "sale:1790112838.62279-663124:3:visitor-2",
+          "item": "used:1790112838.62279-663124:2:1",
+          "price": 1759,
+          "product": "curb"
+        }
+      ],
+      "sellers": [
+        {
+          "accepted": 1231,
+          "asking": 1231,
+          "condition": "good",
+          "day": 2,
+          "floor": 879,
+          "id": "seller:1790112838.62279-663124:2:1",
+          "inspected": true,
+          "motion": "gone",
+          "offers": [
+            1231
+          ],
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "resale": 1759,
+          "revision": 3,
+          "status": "completed"
+        },
+        {
+          "accepted": 0,
+          "asking": 629,
+          "condition": "fair",
+          "day": 3,
+          "floor": 449,
+          "id": "seller:1790112838.62279-663124:3:1",
+          "inspected": false,
+          "motion": "gone",
+          "offers": [],
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "resale": 899,
+          "revision": 1,
+          "status": "cancelled"
+        }
+      ],
+      "settlements": [
+        {
+          "day": 1,
+          "end_seq": 0,
+          "id": "finalize:1790112838.62279-663124:1",
+          "report": {
+            "cash": 55000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 1
+        },
+        {
+          "day": 2,
+          "end_seq": 1,
+          "id": "finalize:1790112838.62279-663124:2",
+          "report": {
+            "cash": 53769,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 6231,
+            "inventory_purchases": 1231,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 2
+        },
+        {
+          "day": 3,
+          "end_seq": 4,
+          "id": "finalize:1790112838.62279-663124:3",
+          "report": {
+            "cash": 53128,
+            "cost_of_sales": 1231,
+            "incurred_overhead": 2400,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 528,
+            "opening_cash": 53769,
+            "operating_result": -1872,
+            "paid_overhead": 2400,
+            "receipts": 1759,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 3
+        }
+      ],
+      "staff": {
+        "jules": {
+          "employed": true,
+          "role": "checkout"
+        },
+        "morgan": {
+          "employed": true,
+          "role": "checkout"
+        }
+      },
+      "terminal": null,
+      "version": 9,
+      "wage_commitments": [
+        {
+          "amount": 1200,
+          "day": 3,
+          "id": "wage:1790112838.62279-663124:3:morgan",
+          "staff_id": "morgan"
+        },
+        {
+          "amount": 1200,
+          "day": 3,
+          "id": "wage:1790112838.62279-663124:3:jules",
+          "staff_id": "jules"
+        }
+      ]
+    },
+    {
+      "carried": "",
+      "cash": 42941,
+      "clock": 35.7000000000002,
+      "customers": {
+        "visitor-1": {
+          "arrival": 0.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-0",
+          "budget": 1648,
+          "copy": "",
+          "decision": "unavailable",
+          "elapsed": 1.5,
+          "item": "",
+          "name": "Alex",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "settled": false,
+          "state": "gone"
+        },
+        "visitor-2": {
+          "arrival": 5.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-1",
+          "budget": 1055,
+          "copy": "used:1790112850.20248-12242783:5:1",
+          "decision": "buy",
+          "elapsed": 4.0,
+          "item": "",
+          "name": "Blair",
+          "offer": 1000,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "settled": false,
+          "state": "gone"
+        },
+        "visitor-3": {
+          "arrival": 10.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-0",
+          "budget": 3918,
+          "copy": "",
+          "decision": "unavailable",
+          "elapsed": 1.5,
+          "item": "",
+          "name": "Casey",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "tide",
+          "settled": false,
+          "state": "gone"
+        }
+      },
+      "day": 6,
+      "decisions": [
+        {
+          "budget": 3918,
+          "customer": "visitor-1",
+          "day": 5,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "tide"
+        },
+        {
+          "budget": 1873,
+          "customer": "visitor-2",
+          "day": 5,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "orbit"
+        },
+        {
+          "budget": 2089,
+          "customer": "visitor-3",
+          "day": 5,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "curb"
+        },
+        {
+          "budget": 1648,
+          "customer": "visitor-1",
+          "day": 6,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "orbit"
+        },
+        {
+          "budget": 1055,
+          "customer": "visitor-2",
+          "day": 6,
+          "item": "used:1790112850.20248-12242783:5:1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 3918,
+          "customer": "visitor-3",
+          "day": 6,
+          "item": "",
+          "offer": 0,
+          "outcome": "unavailable",
+          "product": "tide"
+        }
+      ],
+      "employment": [
+        {
+          "day": 6,
+          "kind": "hire",
+          "staff": "morgan"
+        },
+        {
+          "day": 6,
+          "kind": "hire",
+          "staff": "jules"
+        }
+      ],
+      "events": [
+        {
+          "amount": 10000,
+          "day": 5,
+          "id": "expansion:1790112850.20248-12242783:1",
+          "kind": "expansion",
+          "reference": "rack-0003",
+          "seq": 1,
+          "status": "paid"
+        },
+        {
+          "amount": 659,
+          "day": 5,
+          "id": "trade:1790112850.20248-12242783:5:1",
+          "kind": "used_purchase",
+          "reference": "seller:1790112850.20248-12242783:5:1",
+          "seq": 2,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 6,
+          "id": "sale:1790112850.20248-12242783:6:visitor-2",
+          "kind": "sale",
+          "reference": "used:1790112850.20248-12242783:5:1",
+          "seq": 3,
+          "status": "paid"
+        },
+        {
+          "amount": 1200,
+          "day": 6,
+          "id": "wage:1790112850.20248-12242783:6:jules",
+          "kind": "wage",
+          "reference": "jules",
+          "seq": 4,
+          "status": "paid"
+        },
+        {
+          "amount": 1200,
+          "day": 6,
+          "id": "wage:1790112850.20248-12242783:6:morgan",
+          "kind": "wage",
+          "reference": "morgan",
+          "seq": 5,
+          "status": "paid"
+        }
+      ],
+      "fixture_events": [],
+      "fulfilled_requests": {
+        "1790112850.20248-12242783:12322224:1": {
+          "fixture_id": "rack-0003",
+          "operation": "expand",
+          "revision": 1
+        }
+      },
+      "items": {
+        "case-01": {
+          "acquisition_id": "starter:1790112850.20248-12242783",
+          "acquisition_seq": 1,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 800,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-02": {
+          "acquisition_id": "starter:1790112850.20248-12242783",
+          "acquisition_seq": 2,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 1200,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-03": {
+          "acquisition_id": "starter:1790112850.20248-12242783",
+          "acquisition_seq": 3,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 500,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "case-04": {
+          "acquisition_id": "starter:1790112850.20248-12242783",
+          "acquisition_seq": 4,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 800,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-05": {
+          "acquisition_id": "starter:1790112850.20248-12242783",
+          "acquisition_seq": 5,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 1200,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-06": {
+          "acquisition_id": "starter:1790112850.20248-12242783",
+          "acquisition_seq": 6,
+          "available_day": 1,
+          "condition": "new",
+          "cost": 500,
+          "fixture_id": null,
+          "kind": "new",
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "used:1790112850.20248-12242783:5:1": {
+          "acquisition_id": "trade:1790112850.20248-12242783:5:1",
+          "acquisition_seq": 1005,
+          "available_day": 6,
+          "condition": "fair",
+          "cost": 659,
+          "fixture_id": null,
+          "kind": "used",
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        }
+      },
+      "jobs": [
+        {
+          "actor": "morgan",
+          "copy": "used:1790112850.20248-12242783:5:1",
+          "customer": "",
+          "day": 6,
+          "fixture": "rack-0001",
+          "id": "job:1790112850.20248-12242783:1",
+          "kind": "stock",
+          "reached": true,
+          "reason": "",
+          "received": true,
+          "revision": 1,
+          "slot": 0,
+          "status": "committed"
+        },
+        {
+          "actor": "player",
+          "copy": "used:1790112850.20248-12242783:5:1",
+          "customer": "visitor-2",
+          "day": 6,
+          "fixture": "checkout-01",
+          "id": "job:1790112850.20248-12242783:2",
+          "kind": "sale",
+          "reason": "",
+          "received": false,
+          "revision": 1,
+          "slot": -1,
+          "status": "committed"
+        }
+      ],
+      "layout": {
+        "fixtures": {
+          "checkout-01": {
+            "origin": [
+              690,
+              470
+            ],
+            "type": "counter"
+          },
+          "rack-0001": {
+            "origin": [
+              440,
+              330
+            ],
+            "type": "rack"
+          },
+          "rack-0003": {
+            "origin": [
+              440,
+              230
+            ],
+            "type": "rack"
+          },
+          "receiving-01": {
+            "origin": [
+              270,
+              430
+            ],
+            "type": "receiving"
+          }
+        },
+        "space_level": 1
+      },
+      "layout_revision": 1,
+      "next_event_seq": 6,
+      "next_fixture_id": 4,
+      "next_job": 3,
+      "opening_cash": 55000,
+      "orders": [],
+      "phase": "report",
+      "queue": [],
+      "received": true,
+      "ruleset_id": "b5-used-1",
+      "run_id": "1790112850.20248-12242783",
+      "sales": [
+        {
+          "cost": 659,
+          "customer": "visitor-2",
+          "day": 6,
+          "event_id": "sale:1790112850.20248-12242783:6:visitor-2",
+          "item": "used:1790112850.20248-12242783:5:1",
+          "price": 1000,
+          "product": "curb"
+        }
+      ],
+      "sellers": [
+        {
+          "accepted": 0,
+          "asking": 1231,
+          "condition": "good",
+          "day": 2,
+          "floor": 879,
+          "id": "seller:1790112850.20248-12242783:2:1",
+          "inspected": false,
+          "motion": "gone",
+          "offers": [],
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "resale": 1759,
+          "revision": 1,
+          "status": "cancelled"
+        },
+        {
+          "accepted": 0,
+          "asking": 629,
+          "condition": "fair",
+          "day": 3,
+          "floor": 449,
+          "id": "seller:1790112850.20248-12242783:3:1",
+          "inspected": false,
+          "motion": "gone",
+          "offers": [],
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "resale": 899,
+          "revision": 1,
+          "status": "cancelled"
+        },
+        {
+          "accepted": 0,
+          "asking": 1567,
+          "condition": "good",
+          "day": 4,
+          "floor": 1119,
+          "id": "seller:1790112850.20248-12242783:4:1",
+          "inspected": false,
+          "motion": "gone",
+          "offers": [],
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "tide",
+          "resale": 2239,
+          "revision": 1,
+          "status": "cancelled"
+        },
+        {
+          "accepted": 659,
+          "asking": 923,
+          "condition": "fair",
+          "day": 5,
+          "floor": 659,
+          "id": "seller:1790112850.20248-12242783:5:1",
+          "inspected": true,
+          "motion": "gone",
+          "offers": [
+            100,
+            659
+          ],
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "resale": 1319,
+          "revision": 4,
+          "status": "completed"
+        },
+        {
+          "accepted": 0,
+          "asking": 839,
+          "condition": "good",
+          "day": 6,
+          "floor": 599,
+          "id": "seller:1790112850.20248-12242783:6:1",
+          "inspected": false,
+          "motion": "gone",
+          "offers": [],
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "resale": 1199,
+          "revision": 1,
+          "status": "cancelled"
+        }
+      ],
+      "settlements": [
+        {
+          "day": 1,
+          "end_seq": 0,
+          "id": "finalize:1790112850.20248-12242783:1",
+          "report": {
+            "cash": 55000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 1
+        },
+        {
+          "day": 2,
+          "end_seq": 0,
+          "id": "finalize:1790112850.20248-12242783:2",
+          "report": {
+            "cash": 55000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 1
+        },
+        {
+          "day": 3,
+          "end_seq": 0,
+          "id": "finalize:1790112850.20248-12242783:3",
+          "report": {
+            "cash": 55000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 1
+        },
+        {
+          "day": 4,
+          "end_seq": 0,
+          "id": "finalize:1790112850.20248-12242783:4",
+          "report": {
+            "cash": 55000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 1
+        },
+        {
+          "day": 5,
+          "end_seq": 2,
+          "id": "finalize:1790112850.20248-12242783:5",
+          "report": {
+            "cash": 44341,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5659,
+            "inventory_purchases": 659,
+            "investment": 10000,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 3
+        },
+        {
+          "day": 6,
+          "end_seq": 5,
+          "id": "finalize:1790112850.20248-12242783:6",
+          "report": {
+            "cash": 42941,
+            "cost_of_sales": 659,
+            "incurred_overhead": 2400,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 341,
+            "opening_cash": 44341,
+            "operating_result": -2059,
+            "paid_overhead": 2400,
+            "receipts": 1000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 4
+        }
+      ],
+      "staff": {
+        "jules": {
+          "employed": true,
+          "role": "unassigned"
+        },
+        "morgan": {
+          "employed": true,
+          "role": "unassigned"
+        }
+      },
+      "terminal": null,
+      "version": 9,
+      "wage_commitments": [
+        {
+          "amount": 1200,
+          "day": 6,
+          "id": "wage:1790112850.20248-12242783:6:morgan",
+          "staff_id": "morgan"
+        },
+        {
+          "amount": 1200,
+          "day": 6,
+          "id": "wage:1790112850.20248-12242783:6:jules",
+          "staff_id": "jules"
+        }
+      ]
+    }
+  ],
+  "seller_distance": 6134.21314525604
+}

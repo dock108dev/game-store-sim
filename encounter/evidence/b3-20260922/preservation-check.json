@@ -1,0 +1,68 @@
+{
+  "head": "22ac1bcbf6f4cc65fd7425508a1f471e2306dff9",
+  "validation_context": "encounter/evidence/validation-20260922T201832905104Z/context.json",
+  "context_source_files": 127,
+  "context_mismatches": [],
+  "incoming_snapshot_mismatches": [],
+  "incoming_artwork_files": 81,
+  "incoming_artwork_mismatches": [],
+  "september21_artwork_files": 81,
+  "september21_artwork_mismatches": [],
+  "engine_exits": {
+    "growth-normal-exit.json": 0,
+    "price-request-exit.json": 0,
+    "import-exit.json": 0,
+    "layout-normal-exit.json": 0,
+    "assortment-state-exit.json": 0,
+    "layout-scene-exit.json": 0,
+    "layout-retina-exit.json": 0,
+    "growth-state-exit.json": 0,
+    "growth-retina-exit.json": 0,
+    "assortment-normal-exit.json": 0,
+    "layout-state-exit.json": 0,
+    "assortment-scene-exit.json": 0,
+    "assortment-retina-exit.json": 0,
+    "growth-scene-exit.json": 0
+  },
+  "warnings_or_errors": [],
+  "checks": {
+    "assortment-state.json": {
+      "count": 113,
+      "failed": 0
+    },
+    "layout-state.json": {
+      "count": 52,
+      "failed": 0
+    },
+    "growth-state.json": {
+      "count": 84,
+      "failed": 0
+    },
+    "assortment-scene-normal.json": {
+      "count": 54,
+      "failed": 0
+    },
+    "assortment-scene-retina.json": {
+      "count": 54,
+      "failed": 0
+    },
+    "layout-scene-normal.json": {
+      "count": 48,
+      "failed": 0
+    },
+    "layout-scene-retina.json": {
+      "count": 48,
+      "failed": 0
+    },
+    "growth-scene-normal.json": {
+      "count": 39,
+      "failed": 0
+    },
+    "growth-scene-retina.json": {
+      "count": 39,
+      "failed": 0
+    }
+  },
+  "owner_saves": "not accessed; all tests use unique isolated namespaces",
+  "git_actions": "no commit, push or publication"
+}

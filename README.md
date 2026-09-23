@@ -1,38 +1,36 @@
 # Game Store Sim
 
-An illustrated 2.5D early-2000s mall game shop, built in Godot. The active `encounter/` project implements R5: receive, price and allocate three fictional products across four shelf spaces, serve a three-customer wave, close, review per-product results, buy replenishment and advance to another day. The retail-v4 sample is the visual baseline; Kardboard Kings is the composition reference.
+Replay Junction is an illustrated Godot game about the first week running a mall game shop: stock and price games, hire staff, buy used copies, expand displays and pay bills across seven days.
 
-**R1–R4 are accepted within scope; R5 owner acceptance remains pending.** Retained R5 technical qualification is not full-game or release approval. See the [master plan](docs/MASTER_PLAN.md) and [R5 delivery record](docs/03-production/r5-delivery.md).
+**B1–B9 are technically complete. B10 owner review is in progress on the frozen B9 app; beta acceptance is pending.** Current `main` includes error-handling, security, SSOT and CI changes that are not in that app. [Master plan and source identity](docs/MASTER_PLAN.md).
 
-## Run and test
+## Play or develop
 
-On macOS, install Godot 4.6.2 Standard at `/Applications/Godot.app`. From this repository's root:
+The local [personal Mac app identified in B9](docs/03-production/b9-delivery.md) uses its own save namespace. See the [owner guide](encounter/MAC-OWNER-GUIDE.md) and [build instructions](encounter/MAC-BUILD.md). The app is a local artifact, not included in a fresh clone. The prepared owner guide describes B9 at delivery; the [B10 record](docs/03-production/b10-owner-review.md) owns current review status.
+
+For development, use Godot 4.6.2 Standard at `/Applications/Godot.app` and run from the repository root:
 
 ```sh
 zsh 'encounter/Launch Encounter.command'
 ```
 
-Click stations/buttons; WASD/arrows walk; E follows the guided action; K saves; L reloads. Launch starts fresh; Reload restores the explicit checkpoint. See [play, saves and comparisons](encounter/README.md).
+[Player controls and saves](encounter/README.md) · [Local setup, tools and side effects](docs/02-technical/local-development.md)
 
-With Python 3 available, the default isolated headless check is:
+## Validate
+
+With Python 3, the basic isolated headless checks are:
 
 ```sh
-python3 encounter/scripts/validate.py
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s encounter/scripts -p 'test_*.py' -v
+python3 encounter/scripts/validate.py --ci
 ```
 
-It creates a disposable project and unique save namespace and retains timestamped evidence. It does not require Krita, ffmpeg or a package install. [Local development](docs/02-technical/local-development.md) documents prerequisites, configuration, side effects and optional rendered/capture checks.
+The larger existing validation selection remains `python3 encounter/scripts/validate.py`. All use synthetic isolated saves. [GitHub CI and current validation evidence](docs/04-validation/ci-readiness.md) describe the exact scope and hosted limits; no signing or packaging runs in ordinary CI.
 
-## Engineering and status
+## Engineering references
 
-- [Architecture and schema 5](docs/02-technical/encounter-architecture.md): source map, transaction flow, saves and repository boundaries.
-- [Validation](docs/04-validation/local-validation-plan.md): current R5 checks versus historical prototype evidence.
-- [Slices](docs/03-production/milestones-and-backlog.md) and [checklist](docs/03-production/visual-first-task-list.md): accepted scope and pending owner decision.
-- [Source-of-truth policy](docs/05-reference/source-of-truth-policy.md): current direction versus retained history.
+- [Architecture](docs/02-technical/encounter-architecture.md) and [SSOT ownership](docs/02-technical/ssot.md)
+- [Save recovery](docs/02-technical/error-handling.md) and [local security](docs/02-technical/security.md)
+- [UI design](docs/ui-design.md) and [source-of-truth policy](docs/05-reference/source-of-truth-policy.md)
 
-`game/`, root `scripts/`, old guides and sample build reports are historical; they are not the current R5 setup or release workflow. No active network service, database, CI workflow or encounter export pipeline is included.
-
-Current source identity and maintenance checks are recorded in the [master plan](docs/MASTER_PLAN.md). Keep the linked Desktop tracker at `/Users/michaelfuscoletti/Desktop/game_sim_next_steps.md` synchronized with that plan.
-
-## Shared UI design
-
-See [UI design and templates](docs/ui-design.md) before changing this interface. The shared Desktop `UI Templates` folder defines the glass design baseline for future contributors; this repository keeps its own runtime styles and a portable copy of the requirements.
+`encounter/` is the active project. `game/`, root `scripts/`, samples and old guides are historical workflows, not current setup commands. Preserve artwork masters, frozen builds and retained evidence. Generated app bundles, ZIPs, videos and raw frame sequences remain local; Git retains source, reports, logs and still screenshots. Keep the master plan synchronized with the linked Desktop tracker. Disposable source-tool bytecode and Godot import caches are ignored; evidence snapshots remain retained.

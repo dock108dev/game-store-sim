@@ -1,0 +1,17 @@
+{
+  "incoming_files": 161,
+  "missing": [],
+  "changed": [
+    "encounter/state.gd",
+    "encounter/actor.gd",
+    "encounter/main.gd",
+    "encounter/README.md",
+    "encounter/scripts/test_week_scene.gd",
+    "encounter/scripts/validate.py",
+    "encounter/scripts/test_assortment_scene.gd",
+    "encounter/scripts/test_price_request.gd",
+    "encounter/scripts/test_breadth_scene.gd"
+  ],
+  "artwork_and_editable_originals": 103,
+  "all_artwork_originals_unchanged": true
+}

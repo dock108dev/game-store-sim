@@ -1,0 +1,11 @@
+{
+  "artifact": "/Users/michaelfuscoletti/Desktop/game-sim/artifacts/b9-personal-mac",
+  "artifact_sha256": "e257220d7c7c4c0081551375b10b6288b35d4bd6823c59eb2d9ab886c254c391",
+  "namespace": "b9-packaged-qa-20260923T025603780102Z",
+  "setup": "instrumented package; same frozen runtime/assets, test main-loop, isolated namespace; no automatic keyboard detours",
+  "script": "test_restart_flow.gd",
+  "strategy": "lean",
+  "normal_speed": false,
+  "retina": false,
+  "work": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/b9-packaged-qa-doi7i2ip/encounter"
+}

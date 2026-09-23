@@ -1,0 +1,58 @@
+name: Encounter CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: encounter-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  encounter:
+    name: Encounter checks
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            encounter
+            .github
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.14'
+      - name: Python syntax and unit tests
+        run: |
+          python -c "from pathlib import Path; [compile(p.read_text(), str(p), 'exec') for p in Path('encounter/scripts').glob('*.py')]"
+          python -m unittest discover -s encounter/scripts -p 'test_*.py' -v
+      - name: Install verified Godot 4.6.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 300 \
+            --output godot.zip \
+            https://github.com/godotengine/godot-builds/releases/download/4.6.2-stable/Godot_v4.6.2-stable_macos.universal.zip
+          echo '666b2a64e4b5c59db0e4974605b888eb72eb7d4e60e870d2be6cc19727b50807  godot.zip' | shasum -a 256 -c -
+          ditto -x -k godot.zip godot
+          "$RUNNER_TEMP/godot/Godot.app/Contents/MacOS/Godot" --version
+      - name: Headless import and source regressions
+        run: >-
+          python encounter/scripts/validate.py --ci
+          --engine "$RUNNER_TEMP/godot/Godot.app/Contents/MacOS/Godot"
+          --output "$RUNNER_TEMP/encounter-ci"
+      - name: Retain diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: encounter-ci-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/encounter-ci
+          if-no-files-found: warn
+          retention-days: 7

@@ -1,0 +1,9 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+ERROR: reload day2 report
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_assortment.gd:7)
+       [1] rt (res://scripts/test_assortment.gd:10)
+       [2] _initialize (res://scripts/test_assortment.gd:92)
+R5_STATE 113 checks

@@ -1,0 +1,78 @@
+{
+  "inspection": "Final normal stock/dialog and Retina checkout images inspected; controls readable and ordinary movement/committed jobs retained in video and traces.",
+  "counts": {
+    "normal": [
+      {
+        "run_id": "1790111501.99205-587396",
+        "committed": {
+          "morgan": {
+            "stock": 2,
+            "sale": 1
+          },
+          "jules": {
+            "stock": 1,
+            "sale": 2
+          },
+          "player": {
+            "stock": 1,
+            "sale": 0
+          }
+        }
+      },
+      {
+        "run_id": "1790111518.92641-17521717",
+        "committed": {
+          "morgan": {
+            "stock": 3,
+            "sale": 1
+          },
+          "jules": {
+            "stock": 3,
+            "sale": 2
+          },
+          "player": {
+            "stock": 0,
+            "sale": 0
+          }
+        }
+      }
+    ],
+    "retina": [
+      {
+        "run_id": "1790111539.89975-602967",
+        "committed": {
+          "morgan": {
+            "stock": 2,
+            "sale": 1
+          },
+          "jules": {
+            "stock": 1,
+            "sale": 2
+          },
+          "player": {
+            "stock": 1,
+            "sale": 0
+          }
+        }
+      },
+      {
+        "run_id": "1790111550.51122-11214424",
+        "committed": {
+          "morgan": {
+            "stock": 3,
+            "sale": 1
+          },
+          "jules": {
+            "stock": 3,
+            "sale": 2
+          },
+          "player": {
+            "stock": 0,
+            "sale": 0
+          }
+        }
+      }
+    ]
+  },
+  "qualification": "Scripted engineering interaction; synthetic setup/probes separately documented; not owner or audio acceptance."
+}

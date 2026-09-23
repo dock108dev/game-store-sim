@@ -1,0 +1,41 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+R1_DISPLAY {"canvas_scale":"(1.0, 1.0)","screen_scale":1.0,"viewport":"(1280.0, 720.0)","window":"(0, 0)"}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"investment":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"investment":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"investment":0,"margin":0,"missed":0,"remaining":6,"revenue":0,"sold":0,"unavailable":0}}
+ERROR: Attempting to make child window exclusive, but the parent window already has another exclusive child. This window: /root/MotionProof/@CanvasLayer@150/@ConfirmationDialog@263, parent window: /root, current exclusive child window: /root/MotionProof/@CanvasLayer@150/@AcceptDialog@254
+   at: _set_transient_exclusive_child (scene/main/window.cpp:1090)
+   GDScript backtrace (most recent call first):
+       [0] <anonymous lambda> (res://main.gd:733)
+       [1] press (res://scripts/test_assortment_scene.gd:52)
+       [2] frames (res://scripts/test_encounter.gd:8)
+ERROR: Attempting to make child window exclusive, but the parent window already has another exclusive child. This window: /root/MotionProof/@CanvasLayer@150/@ConfirmationDialog@342, parent window: /root, current exclusive child window: /root/MotionProof/@CanvasLayer@150/@AcceptDialog@333
+   at: _set_transient_exclusive_child (scene/main/window.cpp:1090)
+   GDScript backtrace (most recent call first):
+       [0] <anonymous lambda> (res://main.gd:733)
+       [1] press (res://scripts/test_assortment_scene.gd:52)
+       [2] frames (res://scripts/test_encounter.gd:8)
+ERROR: Attempting to make child window exclusive, but the parent window already has another exclusive child. This window: /root/MotionProof/@CanvasLayer@150/@AcceptDialog@447, parent window: /root, current exclusive child window: /root/MotionProof/@CanvasLayer@150/@AcceptDialog@412
+   at: _set_transient_exclusive_child (scene/main/window.cpp:1090)
+   GDScript backtrace (most recent call first):
+       [0] show_staff (res://main.gd:746)
+       [1] <anonymous lambda> (res://main.gd:737)
+       [2] staff_role (res://scripts/test_employees_scene.gd:35)
+       [3] frames (res://scripts/test_encounter.gd:8)
+ERROR: Attempting to make child window exclusive, but the parent window already has another exclusive child. This window: /root/MotionProof/@CanvasLayer@150/@AcceptDialog@517, parent window: /root, current exclusive child window: /root/MotionProof/@CanvasLayer@150/@AcceptDialog@482
+   at: _set_transient_exclusive_child (scene/main/window.cpp:1090)
+   GDScript backtrace (most recent call first):
+       [0] show_staff (res://main.gd:746)
+       [1] <anonymous lambda> (res://main.gd:737)
+       [2] staff_role (res://scripts/test_employees_scene.gd:35)
+       [3] frames (res://scripts/test_encounter.gd:8)
+R5_TIMEOUT {"carried":"","cash":55000,"clock":0.0,"customers":{},"day":3,"decisions":[],"employment":[{"day":3,"kind":"hire","staff":"morgan"},{"day":3,"kind":"hire","staff":"jules"}],"events":[],"fixture_events":[],"fulfilled_requests":{},"items":{"case-01":{"acquisition_id":"starter:1790110573.38144-307742","acquisition_seq":1,"cost":800,"fixture_id":"rack-0001","location":"shelf","owner":"","price":2199,"product":"curb","slot_index":0},"case-02":{"acquisition_id":"starter:1790110573.38144-307742","acquisition_seq":2,"cost":1200,"fixture_id":null,"location":"backroom","owner":"","price":1999,"product":"tide","slot_index":null},"case-03":{"acquisition_id":"starter:1790110573.38144-307742","acquisition_seq":3,"cost":500,"fixture_id":null,"location":"backroom","owner":"","price":1499,"product":"orbit","slot_index":null},"case-04":{"acquisition_id":"starter:1790110573.38144-307742","acquisition_seq":4,"cost":800,"fixture_id":null,"location":"backroom","owner":"","price":2199,"product":"curb","slot_index":null},"case-05":{"acquisition_id":"starter:1790110573.38144-307742","acquisition_seq":5,"cost":1200,"fixture_id":null,"location":"backroom","owner":"","price":1999,"product":"tide","slot_index":null},"case-06":{"acquisition_id":"starter:1790110573.38144-307742","acquisition_seq":6,"cost":500,"fixture_id":null,"location":"backroom","owner":"","price":1499,"product":"orbit","slot_index":null}},"jobs":[{"actor":"morgan","copy":"case-01","customer":"","day":3,"fixture":"rack-0001","id":"job:1790110573.38144-307742:1","kind":"stock","reached":true,"reason":"","received":true,"revision":0,"slot":0,"status":"committed"},{"actor":"jules","copy":"case-02","customer":"","day":3,"fixture":"rack-0001","id":"job:1790110573.38144-307742:2","kind":"stock","reason":"","received":true,"revision":0,"slot":1,"status":"claimed"},{"actor":"morgan","copy":"case-03","customer":"","day":3,"fixture":"rack-0001","id":"job:1790110573.38144-307742:3","kind":"stock","reason":"","received":false,"revision":0,"slot":2,"status":"claimed"}],"layout":{"fixtures":{"checkout-01":{"origin":[690,470],"type":"counter"},"rack-0001":{"origin":[440,330],"type":"rack"},"receiving-01":{"origin":[270,430],"type":"receiving"}},"space_level":0},"layout_revision":0,"next_event_seq":1,"next_fixture_id":2,"next_job":4,"opening_cash":55000,"orders":[],"phase":"prep","queue":[],"received":true,"ruleset_id":"b4-employees-1","run_id":"1790110573.38144-307742","sales":[],"settlements":[{"day":1,"end_seq":0,"id":"finalize:1790110573.38144-307742:1","report":{"cash":55000,"cost_of_sales":0,"incurred_overhead":0,"inventory_cost":5000,"inventory_purchases":0,"investment":0,"margin":0,"opening_cash":55000,"operating_result":0,"paid_overhead":0,"receipts":0,"unpaid_liabilities":0},"start_seq":1},{"day":2,"end_seq":0,"id":"finalize:1790110573.38144-307742:2","report":{"cash":55000,"cost_of_sales":0,"incurred_overhead":0,"inventory_cost":5000,"inventory_purchases":0,"investment":0,"margin":0,"opening_cash":55000,"operating_result":0,"paid_overhead":0,"receipts":0,"unpaid_liabilities":0},"start_seq":1}],"staff":{"jules":{"employed":true,"role":"stocking"},"morgan":{"employed":true,"role":"stocking"}},"terminal":null,"version":8,"wage_commitments":[{"amount":1200,"day":3,"id":"wage:1790110573.38144-307742:3:morgan","staff_id":"morgan"},{"amount":1200,"day":3,"id":"wage:1790110573.38144-307742:3:jules","staff_id":"jules"}]}
+ERROR: both workers physically stock
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_assortment_scene.gd:6)
+       [1] run (res://scripts/test_employees_scene.gd:68)
+       [2] wait_until (res://scripts/test_assortment_scene.gd:23)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+     at: cleanup (core/object/object.cpp:2641)

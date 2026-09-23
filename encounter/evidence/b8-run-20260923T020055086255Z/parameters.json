@@ -1,0 +1,6 @@
+{
+  "mode": "normal",
+  "strategy": "one_worker",
+  "pace": false,
+  "screen": false
+}

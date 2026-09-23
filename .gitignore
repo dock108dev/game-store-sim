@@ -13,3 +13,19 @@ assets/blender/review-renders/tmp/
 # Keep generated source archives and raw movie audio local.
 /encounter/evidence/**/*.tar.gz
 /encounter/evidence/**/frame.wav
+
+# Disposable source-tool bytecode; retained evidence copies remain trackable.
+/encounter/scripts/__pycache__/
+/assets/blender/scripts/__pycache__/
+/encounter/.godot/
+
+# Large generated evidence stays local; keep source, logs, reports and still screenshots.
+/encounter/evidence/**/*.app/
+/encounter/evidence/**/*.zip
+/encounter/evidence/**/*.mp4
+/encounter/evidence/**/pace/*.png
+/encounter/evidence/**/pace/*.jpg
+/encounter/evidence/**/pace/*.jpeg
+/encounter/evidence/**/frames/**/*.png
+/encounter/evidence/**/frames/**/*.jpg
+/encounter/evidence/**/frames/**/*.jpeg

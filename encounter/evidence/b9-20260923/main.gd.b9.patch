@@ -1,0 +1,56 @@
+--- incoming/encounter/main.gd
++++ encounter/main.gd
+@@ -501,8 +501,8 @@
+  if state.data.phase=="report":
+   shelf_label.text="Shop capacity: %d slots • Fixtures / expansion paid: %s"%[state.capacity(),money(r.investment)]
+   guide.text="Shift complete • Review finances, then advance to day %d." % (state.data.day+1)
+-  details.tooltip_text="Fixtures / expansion paid: "+money(r.investment)+". Revenue: today’s completed sales. Inventory cost: historical purchase cost of each sold copy. Gross profit: revenue minus that cost, before overhead. Orders reduce cash, not profit, until sold."
+-  details.text="DAY %d • %d sold • %d price misses\n%d stock misses\nRevenue              %s\nInventory cost     %s\nMerch. margin      %s\nUnsold copies       %d\nCash available      %s"%[state.data.day,r.sold,r.missed,r.unavailable,money(r.revenue),money(r.cost),money(r.margin),r.remaining,money(r.cash)]
++  details.tooltip_text="Fixtures / expansion paid: "+money(r.investment)+". Revenue: today’s completed sales. Sold-copy cost: historical purchase cost of each sold copy. Gross profit: revenue minus that cost, before overhead. Orders reduce cash, not profit, until sold."
++  details.text="DAY %d • %d sold • %d price misses\n%d stock misses\nRevenue              %s\nSold-copy cost     %s\nMerch. margin      %s\nUnsold copies       %d\nCash available      %s"%[state.data.day,r.sold,r.missed,r.unavailable,money(r.revenue),money(r.cost),money(r.margin),r.remaining,money(r.cash)]
+   primary.visible=true;primary.text="Advance to day %d" % (state.data.day+1);selected_action="advance"
+   return
+  primary.visible=true
+@@ -838,7 +838,7 @@
+  for v in visitors.values()+workers.values()+[seller_view]:
+   if v.actor.visible:result.append(v.actor)
+  return result
+-func dynamic_route(actor,target: Vector2) -> Dictionary:
++func dynamic_route(actor,target: Vector2,allow_staging: bool=true) -> Dictionary:
+  var cells=[]
+  for other in bodies():
+   if other==actor:continue
+@@ -848,7 +848,7 @@
+     var cell=Vector2i(x,y)
+     if nav.is_in_boundsv(cell) and Vector2(cell*10).distance_to(other.position)<28 and not nav.is_point_solid(cell):nav.set_point_solid(cell);cells.append(cell)
+  var result=route(actor.position,target)
+- if not result.reachable:
++ if not result.reachable and allow_staging:
+   # A occupied work port is a wait, not a remote arrival. Approach a free staging cell.
+   for offset in [Vector2(0,40),Vector2(-40,0),Vector2(40,0),Vector2(0,-40),Vector2(-40,40),Vector2(40,40)]:
+    var staging=target+offset
+@@ -998,13 +998,21 @@
+  dialog.dialog_text="\n".join(lines);ui.add_child(dialog);dialog.confirmed.connect(dialog.queue_free);dialog.popup_centered(Vector2i(800,430))
+ 
+ func yield_to_queue(actor) -> bool:
+- # A stable right of way prevents two automatic routes from chasing each other.
+- # Keep the lower-priority body still; the buyer routes around its real position.
++ # Yield only to a buyer that can actually advance. Otherwise a waiting Rowan
++ # can occupy the buyer's only escape from a rack, creating a permanent stalemate.
+  for id in state.data.customers:
+   var c=state.data.customers[id]
+   if (c.state=="leaving" or (c.state=="queued" and not c.settled)) and visitors.has(id):
+    var buyer=visitors[id].actor
+-   if buyer.visible and actor.position.distance_to(buyer.position)<90:return true
++   if not buyer.visible or actor.position.distance_to(buyer.position)>=90:continue
++   var target=Layout.ENTRY if c.state=="leaving" else Layout.queue_ports(state.data.layout)[state.data.queue.find(id)]
++   var routed=dynamic_route(buyer,target,false)
++   if not routed.reachable:continue
++   var points=routed.points
++   if points.size()>1 and buyer.position.distance_to(points[0])<8 and clear_segment(buyer,points[1]):points.remove_at(0)
++   if points.is_empty() or buyer.position.distance_to(points[0])<0.1:continue
++   var next=buyer.position.move_toward(points[0],2.0)
++   if clear_segment(buyer,next):return true
+  return false
+ 
+ func clear_segment(actor,to: Vector2) -> bool:

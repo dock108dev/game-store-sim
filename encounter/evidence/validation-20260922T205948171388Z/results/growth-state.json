@@ -1,0 +1,5086 @@
+{
+  "checks": [
+    {
+      "check": "schema8 six prepaid copies original references",
+      "pass": true
+    },
+    {
+      "check": "day1 expansion rejected unchanged",
+      "pass": true
+    },
+    {
+      "check": "day4 expansion rejected unchanged",
+      "pass": true
+    },
+    {
+      "check": "expanded preview pure",
+      "pass": true
+    },
+    {
+      "check": "expand without rack2",
+      "pass": true
+    },
+    {
+      "check": "north bay walkable and queue unchanged",
+      "pass": true
+    },
+    {
+      "check": "reload expanded",
+      "pass": true
+    },
+    {
+      "check": "same expansion request after reload inert",
+      "pass": true
+    },
+    {
+      "check": "new duplicate expansion rejected",
+      "pass": true
+    },
+    {
+      "check": "rack2 later costs60 keeps rack3",
+      "pass": true
+    },
+    {
+      "check": "reload late-rack",
+      "pass": true
+    },
+    {
+      "check": "move rack to obstruct future bay",
+      "pass": true
+    },
+    {
+      "check": "entire expanded layout checks blocked port without charge",
+      "pass": true
+    },
+    {
+      "check": "rearrange then expand with rack2",
+      "pass": true
+    },
+    {
+      "check": "survivor day1 reconciles",
+      "pass": true
+    },
+    {
+      "check": "reload survivor-day1",
+      "pass": true
+    },
+    {
+      "check": "settlement day1 cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "survivor day2 reconciles",
+      "pass": true
+    },
+    {
+      "check": "reload survivor-day2",
+      "pass": true
+    },
+    {
+      "check": "settlement day2 cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "overnight replenishment day2",
+      "pass": true
+    },
+    {
+      "check": "survivor day3 reconciles",
+      "pass": true
+    },
+    {
+      "check": "reload survivor-day3",
+      "pass": true
+    },
+    {
+      "check": "settlement day3 cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "overnight replenishment day3",
+      "pass": true
+    },
+    {
+      "check": "survivor day4 reconciles",
+      "pass": true
+    },
+    {
+      "check": "reload survivor-day4",
+      "pass": true
+    },
+    {
+      "check": "settlement day4 cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "overnight replenishment day4",
+      "pass": true
+    },
+    {
+      "check": "surviving route buys expansion",
+      "pass": true
+    },
+    {
+      "check": "survivor day5 reconciles",
+      "pass": true
+    },
+    {
+      "check": "reload survivor-day5",
+      "pass": true
+    },
+    {
+      "check": "settlement day5 cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "overnight replenishment day5",
+      "pass": true
+    },
+    {
+      "check": "survivor day6 reconciles",
+      "pass": true
+    },
+    {
+      "check": "reload survivor-day6",
+      "pass": true
+    },
+    {
+      "check": "settlement day6 cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "overnight replenishment day6",
+      "pass": true
+    },
+    {
+      "check": "survivor day7 reconciles",
+      "pass": true
+    },
+    {
+      "check": "reload survivor-day7",
+      "pass": true
+    },
+    {
+      "check": "settlement day7 cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "surviving B3 actual $325 and no wages",
+      "pass": true
+    },
+    {
+      "check": "terminal rejects all business mutations",
+      "pass": true
+    },
+    {
+      "check": "failure stock spending day1",
+      "pass": true
+    },
+    {
+      "check": "failure stock spending day2",
+      "pass": true
+    },
+    {
+      "check": "failure stock spending day3",
+      "pass": true
+    },
+    {
+      "check": "insufficient expansion cash unchanged",
+      "pass": true
+    },
+    {
+      "check": "actual B3 rent bankruptcy $40 cash $110 shortfall",
+      "pass": true
+    },
+    {
+      "check": "reload bankrupt",
+      "pass": true
+    },
+    {
+      "check": "restart blocks if terminal preservation fails",
+      "pass": true
+    },
+    {
+      "check": "restart preserves terminal before fresh checkpoint",
+      "pass": true
+    },
+    {
+      "check": "retained bankruptcy reload",
+      "pass": true
+    },
+    {
+      "check": "zero after full rent survives",
+      "pass": true
+    },
+    {
+      "check": "paid rent despite save failure cannot repeat",
+      "pass": true
+    },
+    {
+      "check": "paid rent save retry preserves one payment",
+      "pass": true
+    },
+    {
+      "check": "baseline checkpoint",
+      "pass": true
+    },
+    {
+      "check": "failed expansion save keeps exactly one live charge",
+      "pass": true
+    },
+    {
+      "check": "repeat failed-save confirmation inert",
+      "pass": true
+    },
+    {
+      "check": "save retry succeeds without duplicate charge",
+      "pass": true
+    },
+    {
+      "check": "settlement save failure leaves committed report",
+      "pass": true
+    },
+    {
+      "check": "failed save cannot repeat settlement",
+      "pass": true
+    },
+    {
+      "check": "settlement save retry",
+      "pass": true
+    },
+    {
+      "check": "advance save failure commits day once",
+      "pass": true
+    },
+    {
+      "check": "advance retry no duplicate day",
+      "pass": true
+    },
+    {
+      "check": "employment commitments once",
+      "pass": true
+    },
+    {
+      "check": "employment sorted wage settlement",
+      "pass": true
+    },
+    {
+      "check": "reload synthetic-wages",
+      "pass": true
+    },
+    {
+      "check": "synthetic low-cash expansion rejection",
+      "pass": true
+    },
+    {
+      "check": "synthetic wages paid before unpaid rent",
+      "pass": true
+    },
+    {
+      "check": "synthetic first unpaid wage records all remaining liabilities",
+      "pass": true
+    },
+    {
+      "check": "64 backroom limit includes paid inbound; excessive order atomic",
+      "pass": true
+    },
+    {
+      "check": "four inbound fit capacity",
+      "pass": true
+    },
+    {
+      "check": "reject malformed old schema",
+      "pass": true
+    },
+    {
+      "check": "refuse overwrite incompatible old schema",
+      "pass": true
+    },
+    {
+      "check": "reject malformed wrong ruleset",
+      "pass": true
+    },
+    {
+      "check": "refuse overwrite incompatible wrong ruleset",
+      "pass": true
+    },
+    {
+      "check": "reject malformed missing settlement",
+      "pass": true
+    },
+    {
+      "check": "reject malformed wrong report",
+      "pass": true
+    },
+    {
+      "check": "reject malformed wrong rent",
+      "pass": true
+    },
+    {
+      "check": "reject malformed terminal",
+      "pass": true
+    },
+    {
+      "check": "reject malformed event status",
+      "pass": true
+    },
+    {
+      "check": "reject malformed wage",
+      "pass": true
+    },
+    {
+      "check": "reject malformed day8",
+      "pass": true
+    },
+    {
+      "check": "reject malformed run path",
+      "pass": true
+    }
+  ],
+  "examples": {
+    "bankrupt": {
+      "carried": "",
+      "cash": 4000,
+      "clock": 0.0,
+      "customers": {
+        "visitor-1": {
+          "arrival": 0.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 2748,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Alex",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "settled": false,
+          "state": "cancelled"
+        },
+        "visitor-2": {
+          "arrival": 5.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 2659,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Blair",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "tide",
+          "settled": false,
+          "state": "cancelled"
+        },
+        "visitor-3": {
+          "arrival": 10.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 1648,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Casey",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "settled": false,
+          "state": "cancelled"
+        }
+      },
+      "day": 7,
+      "decisions": [],
+      "employment": [],
+      "events": [
+        {
+          "amount": 6000,
+          "day": 1,
+          "id": "fixture:1790110794.15428-971093:rack-0002",
+          "kind": "fixture_purchase",
+          "reference": "rack-0002",
+          "seq": 1,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 1,
+          "id": "supplier:1790110794.15428-971093:1",
+          "kind": "supplier",
+          "reference": "1",
+          "seq": 2,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 2,
+          "id": "supplier:1790110794.15428-971093:2",
+          "kind": "supplier",
+          "reference": "2",
+          "seq": 3,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 3,
+          "id": "supplier:1790110794.15428-971093:3",
+          "kind": "supplier",
+          "reference": "3",
+          "seq": 4,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 7,
+          "id": "rent:1790110794.15428-971093:7",
+          "kind": "rent",
+          "reference": "week-1",
+          "seq": 5,
+          "status": "due"
+        }
+      ],
+      "fixture_events": [
+        {
+          "amount": 6000,
+          "day": 1,
+          "fixture_id": "rack-0002",
+          "id": "fixture:1790110794.15428-971093:rack-0002",
+          "kind": "fixture_purchase",
+          "seq": 1
+        }
+      ],
+      "fulfilled_requests": {
+        "rack": {
+          "fixture_id": "rack-0002",
+          "operation": "buy",
+          "revision": 1
+        }
+      },
+      "items": {
+        "case-01": {
+          "acquisition_id": "starter:1790110794.15428-971093",
+          "acquisition_seq": 1,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-02": {
+          "acquisition_id": "starter:1790110794.15428-971093",
+          "acquisition_seq": 2,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-03": {
+          "acquisition_id": "starter:1790110794.15428-971093",
+          "acquisition_seq": 3,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "case-04": {
+          "acquisition_id": "starter:1790110794.15428-971093",
+          "acquisition_seq": 4,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-05": {
+          "acquisition_id": "starter:1790110794.15428-971093",
+          "acquisition_seq": 5,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-06": {
+          "acquisition_id": "starter:1790110794.15428-971093",
+          "acquisition_seq": 6,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-curb-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 24,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 25,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 26,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 27,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 28,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 29,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-orbit-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 36,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 37,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 38,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 39,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 40,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 41,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-tide-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 30,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 31,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 32,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 33,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 34,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:1",
+          "acquisition_seq": 35,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-curb-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 42,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 43,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 44,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 45,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 46,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 47,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-orbit-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 54,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 55,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 56,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 57,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 58,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 59,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-tide-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 48,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 49,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 50,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 51,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 52,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:2",
+          "acquisition_seq": 53,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-curb-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 60,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 61,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 62,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 63,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 64,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 65,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-orbit-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 72,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 73,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 74,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 75,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 76,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 77,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-tide-1": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 66,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-2": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 67,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-3": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 68,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-4": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 69,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-5": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 70,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-6": {
+          "acquisition_id": "supplier:1790110794.15428-971093:3",
+          "acquisition_seq": 71,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        }
+      },
+      "jobs": [],
+      "layout": {
+        "fixtures": {
+          "checkout-01": {
+            "origin": [
+              690,
+              470
+            ],
+            "type": "counter"
+          },
+          "rack-0001": {
+            "origin": [
+              440,
+              330
+            ],
+            "type": "rack"
+          },
+          "rack-0002": {
+            "origin": [
+              400,
+              430
+            ],
+            "type": "rack"
+          },
+          "receiving-01": {
+            "origin": [
+              270,
+              430
+            ],
+            "type": "receiving"
+          }
+        },
+        "space_level": 0
+      },
+      "layout_revision": 1,
+      "next_event_seq": 6,
+      "next_fixture_id": 3,
+      "next_job": 1,
+      "opening_cash": 55000,
+      "orders": [
+        {
+          "day": 1,
+          "event_id": "supplier:1790110794.15428-971093:1",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 2,
+          "event_id": "supplier:1790110794.15428-971093:2",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 3,
+          "event_id": "supplier:1790110794.15428-971093:3",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        }
+      ],
+      "phase": "bankrupt",
+      "queue": [],
+      "received": true,
+      "ruleset_id": "b4-employees-1",
+      "run_id": "1790110794.15428-971093",
+      "sales": [],
+      "settlements": [
+        {
+          "day": 1,
+          "end_seq": 1,
+          "id": "finalize:1790110794.15428-971093:1",
+          "report": {
+            "cash": 49000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 6000,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 2
+        },
+        {
+          "day": 2,
+          "end_seq": 2,
+          "id": "finalize:1790110794.15428-971093:2",
+          "report": {
+            "cash": 34000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 20000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 34000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 3
+        },
+        {
+          "day": 3,
+          "end_seq": 3,
+          "id": "finalize:1790110794.15428-971093:3",
+          "report": {
+            "cash": 19000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 35000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 19000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 4
+        },
+        {
+          "day": 4,
+          "end_seq": 4,
+          "id": "finalize:1790110794.15428-971093:4",
+          "report": {
+            "cash": 4000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 50000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 4000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 5
+        },
+        {
+          "day": 5,
+          "end_seq": 4,
+          "id": "finalize:1790110794.15428-971093:5",
+          "report": {
+            "cash": 4000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 50000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 4000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 5
+        },
+        {
+          "day": 6,
+          "end_seq": 4,
+          "id": "finalize:1790110794.15428-971093:6",
+          "report": {
+            "cash": 4000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 50000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 4000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 5
+        },
+        {
+          "day": 7,
+          "end_seq": 5,
+          "id": "finalize:1790110794.15428-971093:7",
+          "report": {
+            "cash": 4000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 15000,
+            "inventory_cost": 50000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 4000,
+            "operating_result": -15000,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 15000
+          },
+          "start_seq": 5
+        }
+      ],
+      "staff": {
+        "jules": {
+          "employed": false,
+          "role": "unassigned"
+        },
+        "morgan": {
+          "employed": false,
+          "role": "unassigned"
+        }
+      },
+      "terminal": {
+        "day": 7,
+        "due_event": "rent:1790110794.15428-971093:7",
+        "outcome": "bankrupt",
+        "shortfall": 11000,
+        "summary": {
+          "cash": 4000,
+          "cost_of_sales": 0,
+          "incurred_overhead": 15000,
+          "inventory_cost": 50000,
+          "inventory_purchases": 45000,
+          "investment": 6000,
+          "margin": 0,
+          "opening_cash": 55000,
+          "operating_result": -15000,
+          "paid_overhead": 0,
+          "receipts": 0,
+          "unpaid_liabilities": 15000
+        },
+        "unpaid": [
+          "rent:1790110794.15428-971093:7"
+        ]
+      },
+      "version": 8,
+      "wage_commitments": []
+    },
+    "paid_wages_unpaid_rent": {
+      "carried": "",
+      "cash": 3200,
+      "clock": 0.0,
+      "customers": {
+        "visitor-1": {
+          "arrival": 0.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 2748,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Alex",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "settled": false,
+          "state": "cancelled"
+        },
+        "visitor-2": {
+          "arrival": 5.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 2659,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Blair",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "tide",
+          "settled": false,
+          "state": "cancelled"
+        },
+        "visitor-3": {
+          "arrival": 10.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 1648,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Casey",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "settled": false,
+          "state": "cancelled"
+        }
+      },
+      "day": 7,
+      "decisions": [],
+      "employment": [
+        {
+          "day": 7,
+          "kind": "hire",
+          "staff": "morgan"
+        },
+        {
+          "day": 7,
+          "kind": "hire",
+          "staff": "jules"
+        }
+      ],
+      "events": [
+        {
+          "amount": 15000,
+          "day": 1,
+          "id": "supplier:1790110794.40396-1220771:1",
+          "kind": "supplier",
+          "reference": "1",
+          "seq": 1,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 2,
+          "id": "supplier:1790110794.40396-1220771:2",
+          "kind": "supplier",
+          "reference": "2",
+          "seq": 2,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 3,
+          "id": "supplier:1790110794.40396-1220771:3",
+          "kind": "supplier",
+          "reference": "3",
+          "seq": 3,
+          "status": "paid"
+        },
+        {
+          "amount": 4400,
+          "day": 4,
+          "id": "supplier:1790110794.40396-1220771:4",
+          "kind": "supplier",
+          "reference": "4",
+          "seq": 4,
+          "status": "paid"
+        },
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.40396-1220771:7:jules",
+          "kind": "wage",
+          "reference": "jules",
+          "seq": 5,
+          "status": "paid"
+        },
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.40396-1220771:7:morgan",
+          "kind": "wage",
+          "reference": "morgan",
+          "seq": 6,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 7,
+          "id": "rent:1790110794.40396-1220771:7",
+          "kind": "rent",
+          "reference": "week-1",
+          "seq": 7,
+          "status": "due"
+        }
+      ],
+      "fixture_events": [],
+      "fulfilled_requests": {
+
+      },
+      "items": {
+        "case-01": {
+          "acquisition_id": "starter:1790110794.40396-1220771",
+          "acquisition_seq": 1,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-02": {
+          "acquisition_id": "starter:1790110794.40396-1220771",
+          "acquisition_seq": 2,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-03": {
+          "acquisition_id": "starter:1790110794.40396-1220771",
+          "acquisition_seq": 3,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "case-04": {
+          "acquisition_id": "starter:1790110794.40396-1220771",
+          "acquisition_seq": 4,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-05": {
+          "acquisition_id": "starter:1790110794.40396-1220771",
+          "acquisition_seq": 5,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-06": {
+          "acquisition_id": "starter:1790110794.40396-1220771",
+          "acquisition_seq": 6,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-curb-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 24,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 25,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 26,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 27,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 28,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 29,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-orbit-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 36,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 37,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 38,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 39,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 40,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 41,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-tide-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 30,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 31,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 32,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 33,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 34,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:1",
+          "acquisition_seq": 35,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-curb-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 42,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 43,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 44,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 45,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 46,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 47,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-orbit-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 54,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 55,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 56,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 57,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 58,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 59,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-tide-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 48,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 49,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 50,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 51,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 52,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:2",
+          "acquisition_seq": 53,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-curb-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 60,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 61,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 62,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 63,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 64,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 65,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-orbit-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 72,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 73,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 74,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 75,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 76,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 77,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-tide-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 66,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 67,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 68,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-4": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 69,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-5": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 70,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-6": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:3",
+          "acquisition_seq": 71,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-4-curb-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:4",
+          "acquisition_seq": 78,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-4-tide-1": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:4",
+          "acquisition_seq": 84,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-4-tide-2": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:4",
+          "acquisition_seq": 85,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-4-tide-3": {
+          "acquisition_id": "supplier:1790110794.40396-1220771:4",
+          "acquisition_seq": 86,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        }
+      },
+      "jobs": [],
+      "layout": {
+        "fixtures": {
+          "checkout-01": {
+            "origin": [
+              690,
+              470
+            ],
+            "type": "counter"
+          },
+          "rack-0001": {
+            "origin": [
+              440,
+              330
+            ],
+            "type": "rack"
+          },
+          "receiving-01": {
+            "origin": [
+              270,
+              430
+            ],
+            "type": "receiving"
+          }
+        },
+        "space_level": 0
+      },
+      "layout_revision": 0,
+      "next_event_seq": 8,
+      "next_fixture_id": 2,
+      "next_job": 1,
+      "opening_cash": 55000,
+      "orders": [
+        {
+          "day": 1,
+          "event_id": "supplier:1790110794.40396-1220771:1",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 2,
+          "event_id": "supplier:1790110794.40396-1220771:2",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 3,
+          "event_id": "supplier:1790110794.40396-1220771:3",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 4,
+          "event_id": "supplier:1790110794.40396-1220771:4",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 1
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 0
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 3
+            }
+          },
+          "quantity": 4,
+          "received": true,
+          "total": 4400
+        }
+      ],
+      "phase": "bankrupt",
+      "queue": [],
+      "received": true,
+      "ruleset_id": "b4-employees-1",
+      "run_id": "1790110794.40396-1220771",
+      "sales": [],
+      "settlements": [
+        {
+          "day": 1,
+          "end_seq": 0,
+          "id": "finalize:1790110794.40396-1220771:1",
+          "report": {
+            "cash": 55000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 1
+        },
+        {
+          "day": 2,
+          "end_seq": 1,
+          "id": "finalize:1790110794.40396-1220771:2",
+          "report": {
+            "cash": 40000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 20000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 40000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 2
+        },
+        {
+          "day": 3,
+          "end_seq": 2,
+          "id": "finalize:1790110794.40396-1220771:3",
+          "report": {
+            "cash": 25000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 35000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 25000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 3
+        },
+        {
+          "day": 4,
+          "end_seq": 3,
+          "id": "finalize:1790110794.40396-1220771:4",
+          "report": {
+            "cash": 10000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 50000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 10000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 4
+        },
+        {
+          "day": 5,
+          "end_seq": 4,
+          "id": "finalize:1790110794.40396-1220771:5",
+          "report": {
+            "cash": 5600,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 54400,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 5600,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 5
+        },
+        {
+          "day": 6,
+          "end_seq": 4,
+          "id": "finalize:1790110794.40396-1220771:6",
+          "report": {
+            "cash": 5600,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 54400,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 5600,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 5
+        },
+        {
+          "day": 7,
+          "end_seq": 7,
+          "id": "finalize:1790110794.40396-1220771:7",
+          "report": {
+            "cash": 3200,
+            "cost_of_sales": 0,
+            "incurred_overhead": 17400,
+            "inventory_cost": 54400,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 5600,
+            "operating_result": -17400,
+            "paid_overhead": 2400,
+            "receipts": 0,
+            "unpaid_liabilities": 15000
+          },
+          "start_seq": 5
+        }
+      ],
+      "staff": {
+        "jules": {
+          "employed": true,
+          "role": "unassigned"
+        },
+        "morgan": {
+          "employed": true,
+          "role": "unassigned"
+        }
+      },
+      "terminal": {
+        "day": 7,
+        "due_event": "rent:1790110794.40396-1220771:7",
+        "outcome": "bankrupt",
+        "shortfall": 11800,
+        "summary": {
+          "cash": 3200,
+          "cost_of_sales": 0,
+          "incurred_overhead": 17400,
+          "inventory_cost": 54400,
+          "inventory_purchases": 49400,
+          "investment": 0,
+          "margin": 0,
+          "opening_cash": 55000,
+          "operating_result": -17400,
+          "paid_overhead": 2400,
+          "receipts": 0,
+          "unpaid_liabilities": 15000
+        },
+        "unpaid": [
+          "rent:1790110794.40396-1220771:7"
+        ]
+      },
+      "version": 8,
+      "wage_commitments": [
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.40396-1220771:7:morgan",
+          "staff_id": "morgan"
+        },
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.40396-1220771:7:jules",
+          "staff_id": "jules"
+        }
+      ]
+    },
+    "surviving": {
+      "carried": "",
+      "cash": 32500,
+      "clock": 30.0,
+      "customers": {
+        "visitor-1": {
+          "arrival": 0.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-0",
+          "budget": 2748,
+          "copy": "order-6-curb-1",
+          "decision": "buy",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Alex",
+          "offer": 1000,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "settled": false,
+          "state": "gone"
+        },
+        "visitor-2": {
+          "arrival": 5.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-0",
+          "budget": 2659,
+          "copy": "order-6-tide-1",
+          "decision": "buy",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Blair",
+          "offer": 1000,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "tide",
+          "settled": false,
+          "state": "gone"
+        },
+        "visitor-3": {
+          "arrival": 10.0,
+          "browse_fixture": "rack-0001",
+          "browse_port": "browse-0",
+          "budget": 1648,
+          "copy": "order-6-orbit-1",
+          "decision": "buy",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Casey",
+          "offer": 1000,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "settled": false,
+          "state": "gone"
+        }
+      },
+      "day": 7,
+      "decisions": [
+        {
+          "budget": 2418,
+          "customer": "visitor-1",
+          "day": 1,
+          "item": "case-01",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 2239,
+          "customer": "visitor-2",
+          "day": 1,
+          "item": "case-02",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "tide"
+        },
+        {
+          "budget": 2098,
+          "customer": "visitor-3",
+          "day": 1,
+          "item": "case-03",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "orbit"
+        },
+        {
+          "budget": 3498,
+          "customer": "visitor-1",
+          "day": 2,
+          "item": "case-05",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "tide"
+        },
+        {
+          "budget": 1424,
+          "customer": "visitor-2",
+          "day": 2,
+          "item": "case-06",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "orbit"
+        },
+        {
+          "budget": 2418,
+          "customer": "visitor-3",
+          "day": 2,
+          "item": "case-04",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 1199,
+          "customer": "visitor-1",
+          "day": 3,
+          "item": "order-2-orbit-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "orbit"
+        },
+        {
+          "budget": 3078,
+          "customer": "visitor-2",
+          "day": 3,
+          "item": "order-2-curb-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 3498,
+          "customer": "visitor-3",
+          "day": 3,
+          "item": "order-2-tide-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "tide"
+        },
+        {
+          "budget": 2089,
+          "customer": "visitor-1",
+          "day": 4,
+          "item": "order-3-curb-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 3078,
+          "customer": "visitor-2",
+          "day": 4,
+          "item": "order-3-tide-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "tide"
+        },
+        {
+          "budget": 1199,
+          "customer": "visitor-3",
+          "day": 4,
+          "item": "order-3-orbit-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "orbit"
+        },
+        {
+          "budget": 3918,
+          "customer": "visitor-1",
+          "day": 5,
+          "item": "order-4-tide-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "tide"
+        },
+        {
+          "budget": 1873,
+          "customer": "visitor-2",
+          "day": 5,
+          "item": "order-4-orbit-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "orbit"
+        },
+        {
+          "budget": 2089,
+          "customer": "visitor-3",
+          "day": 5,
+          "item": "order-4-curb-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 1648,
+          "customer": "visitor-1",
+          "day": 6,
+          "item": "order-5-orbit-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "orbit"
+        },
+        {
+          "budget": 1759,
+          "customer": "visitor-2",
+          "day": 6,
+          "item": "order-5-curb-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 3918,
+          "customer": "visitor-3",
+          "day": 6,
+          "item": "order-5-tide-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "tide"
+        },
+        {
+          "budget": 2748,
+          "customer": "visitor-1",
+          "day": 7,
+          "item": "order-6-curb-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "curb"
+        },
+        {
+          "budget": 2659,
+          "customer": "visitor-2",
+          "day": 7,
+          "item": "order-6-tide-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "tide"
+        },
+        {
+          "budget": 1648,
+          "customer": "visitor-3",
+          "day": 7,
+          "item": "order-6-orbit-1",
+          "offer": 1000,
+          "outcome": "buy",
+          "product": "orbit"
+        }
+      ],
+      "employment": [],
+      "events": [
+        {
+          "amount": 6000,
+          "day": 1,
+          "id": "fixture:1790110793.69805-514865:rack-0002",
+          "kind": "fixture_purchase",
+          "reference": "rack-0002",
+          "seq": 1,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 1,
+          "id": "sale:1790110793.69805-514865:1:visitor-1",
+          "kind": "sale",
+          "reference": "case-01",
+          "seq": 2,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 1,
+          "id": "sale:1790110793.69805-514865:1:visitor-2",
+          "kind": "sale",
+          "reference": "case-02",
+          "seq": 3,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 1,
+          "id": "sale:1790110793.69805-514865:1:visitor-3",
+          "kind": "sale",
+          "reference": "case-03",
+          "seq": 4,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 2,
+          "id": "sale:1790110793.69805-514865:2:visitor-1",
+          "kind": "sale",
+          "reference": "case-05",
+          "seq": 5,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 2,
+          "id": "sale:1790110793.69805-514865:2:visitor-2",
+          "kind": "sale",
+          "reference": "case-06",
+          "seq": 6,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 2,
+          "id": "sale:1790110793.69805-514865:2:visitor-3",
+          "kind": "sale",
+          "reference": "case-04",
+          "seq": 7,
+          "status": "paid"
+        },
+        {
+          "amount": 2500,
+          "day": 2,
+          "id": "supplier:1790110793.69805-514865:2",
+          "kind": "supplier",
+          "reference": "2",
+          "seq": 8,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 3,
+          "id": "sale:1790110793.69805-514865:3:visitor-1",
+          "kind": "sale",
+          "reference": "order-2-orbit-1",
+          "seq": 9,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 3,
+          "id": "sale:1790110793.69805-514865:3:visitor-2",
+          "kind": "sale",
+          "reference": "order-2-curb-1",
+          "seq": 10,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 3,
+          "id": "sale:1790110793.69805-514865:3:visitor-3",
+          "kind": "sale",
+          "reference": "order-2-tide-1",
+          "seq": 11,
+          "status": "paid"
+        },
+        {
+          "amount": 2500,
+          "day": 3,
+          "id": "supplier:1790110793.69805-514865:3",
+          "kind": "supplier",
+          "reference": "3",
+          "seq": 12,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 4,
+          "id": "sale:1790110793.69805-514865:4:visitor-1",
+          "kind": "sale",
+          "reference": "order-3-curb-1",
+          "seq": 13,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 4,
+          "id": "sale:1790110793.69805-514865:4:visitor-2",
+          "kind": "sale",
+          "reference": "order-3-tide-1",
+          "seq": 14,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 4,
+          "id": "sale:1790110793.69805-514865:4:visitor-3",
+          "kind": "sale",
+          "reference": "order-3-orbit-1",
+          "seq": 15,
+          "status": "paid"
+        },
+        {
+          "amount": 2500,
+          "day": 4,
+          "id": "supplier:1790110793.69805-514865:4",
+          "kind": "supplier",
+          "reference": "4",
+          "seq": 16,
+          "status": "paid"
+        },
+        {
+          "amount": 10000,
+          "day": 5,
+          "id": "expansion:1790110793.69805-514865:1",
+          "kind": "expansion",
+          "reference": "rack-0003",
+          "seq": 17,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 5,
+          "id": "sale:1790110793.69805-514865:5:visitor-1",
+          "kind": "sale",
+          "reference": "order-4-tide-1",
+          "seq": 18,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 5,
+          "id": "sale:1790110793.69805-514865:5:visitor-2",
+          "kind": "sale",
+          "reference": "order-4-orbit-1",
+          "seq": 19,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 5,
+          "id": "sale:1790110793.69805-514865:5:visitor-3",
+          "kind": "sale",
+          "reference": "order-4-curb-1",
+          "seq": 20,
+          "status": "paid"
+        },
+        {
+          "amount": 2500,
+          "day": 5,
+          "id": "supplier:1790110793.69805-514865:5",
+          "kind": "supplier",
+          "reference": "5",
+          "seq": 21,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 6,
+          "id": "sale:1790110793.69805-514865:6:visitor-1",
+          "kind": "sale",
+          "reference": "order-5-orbit-1",
+          "seq": 22,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 6,
+          "id": "sale:1790110793.69805-514865:6:visitor-2",
+          "kind": "sale",
+          "reference": "order-5-curb-1",
+          "seq": 23,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 6,
+          "id": "sale:1790110793.69805-514865:6:visitor-3",
+          "kind": "sale",
+          "reference": "order-5-tide-1",
+          "seq": 24,
+          "status": "paid"
+        },
+        {
+          "amount": 2500,
+          "day": 6,
+          "id": "supplier:1790110793.69805-514865:6",
+          "kind": "supplier",
+          "reference": "6",
+          "seq": 25,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 7,
+          "id": "sale:1790110793.69805-514865:7:visitor-1",
+          "kind": "sale",
+          "reference": "order-6-curb-1",
+          "seq": 26,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 7,
+          "id": "sale:1790110793.69805-514865:7:visitor-2",
+          "kind": "sale",
+          "reference": "order-6-tide-1",
+          "seq": 27,
+          "status": "paid"
+        },
+        {
+          "amount": 1000,
+          "day": 7,
+          "id": "sale:1790110793.69805-514865:7:visitor-3",
+          "kind": "sale",
+          "reference": "order-6-orbit-1",
+          "seq": 28,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 7,
+          "id": "rent:1790110793.69805-514865:7",
+          "kind": "rent",
+          "reference": "week-1",
+          "seq": 29,
+          "status": "paid"
+        }
+      ],
+      "fixture_events": [
+        {
+          "amount": 6000,
+          "day": 1,
+          "fixture_id": "rack-0002",
+          "id": "fixture:1790110793.69805-514865:rack-0002",
+          "kind": "fixture_purchase",
+          "seq": 1
+        }
+      ],
+      "fulfilled_requests": {
+        "expand": {
+          "fixture_id": "rack-0003",
+          "operation": "expand",
+          "revision": 2
+        },
+        "rack2": {
+          "fixture_id": "rack-0002",
+          "operation": "buy",
+          "revision": 1
+        }
+      },
+      "items": {
+        "case-01": {
+          "acquisition_id": "starter:1790110793.69805-514865",
+          "acquisition_seq": 1,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-02": {
+          "acquisition_id": "starter:1790110793.69805-514865",
+          "acquisition_seq": 2,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-03": {
+          "acquisition_id": "starter:1790110793.69805-514865",
+          "acquisition_seq": 3,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "case-04": {
+          "acquisition_id": "starter:1790110793.69805-514865",
+          "acquisition_seq": 4,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-05": {
+          "acquisition_id": "starter:1790110793.69805-514865",
+          "acquisition_seq": 5,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-06": {
+          "acquisition_id": "starter:1790110793.69805-514865",
+          "acquisition_seq": 6,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-curb-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:2",
+          "acquisition_seq": 42,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-orbit-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:2",
+          "acquisition_seq": 54,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-tide-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:2",
+          "acquisition_seq": 48,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-curb-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:3",
+          "acquisition_seq": 60,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-orbit-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:3",
+          "acquisition_seq": 72,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-tide-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:3",
+          "acquisition_seq": 66,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-4-curb-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:4",
+          "acquisition_seq": 78,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-4-orbit-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:4",
+          "acquisition_seq": 90,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-4-tide-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:4",
+          "acquisition_seq": 84,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-5-curb-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:5",
+          "acquisition_seq": 96,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-5-orbit-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:5",
+          "acquisition_seq": 108,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-5-tide-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:5",
+          "acquisition_seq": 102,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-6-curb-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:6",
+          "acquisition_seq": 114,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-6-orbit-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:6",
+          "acquisition_seq": 126,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-6-tide-1": {
+          "acquisition_id": "supplier:1790110793.69805-514865:6",
+          "acquisition_seq": 120,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "sold",
+          "owner": "",
+          "price": 1000,
+          "product": "tide",
+          "slot_index": null
+        }
+      },
+      "jobs": [],
+      "layout": {
+        "fixtures": {
+          "checkout-01": {
+            "origin": [
+              690,
+              470
+            ],
+            "type": "counter"
+          },
+          "rack-0001": {
+            "origin": [
+              440,
+              330
+            ],
+            "type": "rack"
+          },
+          "rack-0002": {
+            "origin": [
+              400,
+              430
+            ],
+            "type": "rack"
+          },
+          "rack-0003": {
+            "origin": [
+              440,
+              230
+            ],
+            "type": "rack"
+          },
+          "receiving-01": {
+            "origin": [
+              270,
+              430
+            ],
+            "type": "receiving"
+          }
+        },
+        "space_level": 1
+      },
+      "layout_revision": 2,
+      "next_event_seq": 30,
+      "next_fixture_id": 4,
+      "next_job": 1,
+      "opening_cash": 55000,
+      "orders": [
+        {
+          "day": 2,
+          "event_id": "supplier:1790110793.69805-514865:2",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 1
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 1
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 1
+            }
+          },
+          "quantity": 3,
+          "received": true,
+          "total": 2500
+        },
+        {
+          "day": 3,
+          "event_id": "supplier:1790110793.69805-514865:3",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 1
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 1
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 1
+            }
+          },
+          "quantity": 3,
+          "received": true,
+          "total": 2500
+        },
+        {
+          "day": 4,
+          "event_id": "supplier:1790110793.69805-514865:4",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 1
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 1
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 1
+            }
+          },
+          "quantity": 3,
+          "received": true,
+          "total": 2500
+        },
+        {
+          "day": 5,
+          "event_id": "supplier:1790110793.69805-514865:5",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 1
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 1
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 1
+            }
+          },
+          "quantity": 3,
+          "received": true,
+          "total": 2500
+        },
+        {
+          "day": 6,
+          "event_id": "supplier:1790110793.69805-514865:6",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 1
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 1
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 1
+            }
+          },
+          "quantity": 3,
+          "received": true,
+          "total": 2500
+        }
+      ],
+      "phase": "week_complete",
+      "queue": [],
+      "received": true,
+      "ruleset_id": "b4-employees-1",
+      "run_id": "1790110793.69805-514865",
+      "sales": [
+        {
+          "cost": 800,
+          "customer": "visitor-1",
+          "day": 1,
+          "event_id": "sale:1790110793.69805-514865:1:visitor-1",
+          "item": "case-01",
+          "price": 1000,
+          "product": "curb"
+        },
+        {
+          "cost": 1200,
+          "customer": "visitor-2",
+          "day": 1,
+          "event_id": "sale:1790110793.69805-514865:1:visitor-2",
+          "item": "case-02",
+          "price": 1000,
+          "product": "tide"
+        },
+        {
+          "cost": 500,
+          "customer": "visitor-3",
+          "day": 1,
+          "event_id": "sale:1790110793.69805-514865:1:visitor-3",
+          "item": "case-03",
+          "price": 1000,
+          "product": "orbit"
+        },
+        {
+          "cost": 1200,
+          "customer": "visitor-1",
+          "day": 2,
+          "event_id": "sale:1790110793.69805-514865:2:visitor-1",
+          "item": "case-05",
+          "price": 1000,
+          "product": "tide"
+        },
+        {
+          "cost": 500,
+          "customer": "visitor-2",
+          "day": 2,
+          "event_id": "sale:1790110793.69805-514865:2:visitor-2",
+          "item": "case-06",
+          "price": 1000,
+          "product": "orbit"
+        },
+        {
+          "cost": 800,
+          "customer": "visitor-3",
+          "day": 2,
+          "event_id": "sale:1790110793.69805-514865:2:visitor-3",
+          "item": "case-04",
+          "price": 1000,
+          "product": "curb"
+        },
+        {
+          "cost": 500,
+          "customer": "visitor-1",
+          "day": 3,
+          "event_id": "sale:1790110793.69805-514865:3:visitor-1",
+          "item": "order-2-orbit-1",
+          "price": 1000,
+          "product": "orbit"
+        },
+        {
+          "cost": 800,
+          "customer": "visitor-2",
+          "day": 3,
+          "event_id": "sale:1790110793.69805-514865:3:visitor-2",
+          "item": "order-2-curb-1",
+          "price": 1000,
+          "product": "curb"
+        },
+        {
+          "cost": 1200,
+          "customer": "visitor-3",
+          "day": 3,
+          "event_id": "sale:1790110793.69805-514865:3:visitor-3",
+          "item": "order-2-tide-1",
+          "price": 1000,
+          "product": "tide"
+        },
+        {
+          "cost": 800,
+          "customer": "visitor-1",
+          "day": 4,
+          "event_id": "sale:1790110793.69805-514865:4:visitor-1",
+          "item": "order-3-curb-1",
+          "price": 1000,
+          "product": "curb"
+        },
+        {
+          "cost": 1200,
+          "customer": "visitor-2",
+          "day": 4,
+          "event_id": "sale:1790110793.69805-514865:4:visitor-2",
+          "item": "order-3-tide-1",
+          "price": 1000,
+          "product": "tide"
+        },
+        {
+          "cost": 500,
+          "customer": "visitor-3",
+          "day": 4,
+          "event_id": "sale:1790110793.69805-514865:4:visitor-3",
+          "item": "order-3-orbit-1",
+          "price": 1000,
+          "product": "orbit"
+        },
+        {
+          "cost": 1200,
+          "customer": "visitor-1",
+          "day": 5,
+          "event_id": "sale:1790110793.69805-514865:5:visitor-1",
+          "item": "order-4-tide-1",
+          "price": 1000,
+          "product": "tide"
+        },
+        {
+          "cost": 500,
+          "customer": "visitor-2",
+          "day": 5,
+          "event_id": "sale:1790110793.69805-514865:5:visitor-2",
+          "item": "order-4-orbit-1",
+          "price": 1000,
+          "product": "orbit"
+        },
+        {
+          "cost": 800,
+          "customer": "visitor-3",
+          "day": 5,
+          "event_id": "sale:1790110793.69805-514865:5:visitor-3",
+          "item": "order-4-curb-1",
+          "price": 1000,
+          "product": "curb"
+        },
+        {
+          "cost": 500,
+          "customer": "visitor-1",
+          "day": 6,
+          "event_id": "sale:1790110793.69805-514865:6:visitor-1",
+          "item": "order-5-orbit-1",
+          "price": 1000,
+          "product": "orbit"
+        },
+        {
+          "cost": 800,
+          "customer": "visitor-2",
+          "day": 6,
+          "event_id": "sale:1790110793.69805-514865:6:visitor-2",
+          "item": "order-5-curb-1",
+          "price": 1000,
+          "product": "curb"
+        },
+        {
+          "cost": 1200,
+          "customer": "visitor-3",
+          "day": 6,
+          "event_id": "sale:1790110793.69805-514865:6:visitor-3",
+          "item": "order-5-tide-1",
+          "price": 1000,
+          "product": "tide"
+        },
+        {
+          "cost": 800,
+          "customer": "visitor-1",
+          "day": 7,
+          "event_id": "sale:1790110793.69805-514865:7:visitor-1",
+          "item": "order-6-curb-1",
+          "price": 1000,
+          "product": "curb"
+        },
+        {
+          "cost": 1200,
+          "customer": "visitor-2",
+          "day": 7,
+          "event_id": "sale:1790110793.69805-514865:7:visitor-2",
+          "item": "order-6-tide-1",
+          "price": 1000,
+          "product": "tide"
+        },
+        {
+          "cost": 500,
+          "customer": "visitor-3",
+          "day": 7,
+          "event_id": "sale:1790110793.69805-514865:7:visitor-3",
+          "item": "order-6-orbit-1",
+          "price": 1000,
+          "product": "orbit"
+        }
+      ],
+      "settlements": [
+        {
+          "day": 1,
+          "end_seq": 4,
+          "id": "finalize:1790110793.69805-514865:1",
+          "report": {
+            "cash": 52000,
+            "cost_of_sales": 2500,
+            "incurred_overhead": 0,
+            "inventory_cost": 2500,
+            "inventory_purchases": 0,
+            "investment": 6000,
+            "margin": 500,
+            "opening_cash": 55000,
+            "operating_result": 500,
+            "paid_overhead": 0,
+            "receipts": 3000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 5
+        },
+        {
+          "day": 2,
+          "end_seq": 7,
+          "id": "finalize:1790110793.69805-514865:2",
+          "report": {
+            "cash": 55000,
+            "cost_of_sales": 2500,
+            "incurred_overhead": 0,
+            "inventory_cost": 0,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 500,
+            "opening_cash": 52000,
+            "operating_result": 500,
+            "paid_overhead": 0,
+            "receipts": 3000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 8
+        },
+        {
+          "day": 3,
+          "end_seq": 11,
+          "id": "finalize:1790110793.69805-514865:3",
+          "report": {
+            "cash": 55500,
+            "cost_of_sales": 2500,
+            "incurred_overhead": 0,
+            "inventory_cost": 0,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 500,
+            "opening_cash": 52500,
+            "operating_result": 500,
+            "paid_overhead": 0,
+            "receipts": 3000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 12
+        },
+        {
+          "day": 4,
+          "end_seq": 15,
+          "id": "finalize:1790110793.69805-514865:4",
+          "report": {
+            "cash": 56000,
+            "cost_of_sales": 2500,
+            "incurred_overhead": 0,
+            "inventory_cost": 0,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 500,
+            "opening_cash": 53000,
+            "operating_result": 500,
+            "paid_overhead": 0,
+            "receipts": 3000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 16
+        },
+        {
+          "day": 5,
+          "end_seq": 20,
+          "id": "finalize:1790110793.69805-514865:5",
+          "report": {
+            "cash": 46500,
+            "cost_of_sales": 2500,
+            "incurred_overhead": 0,
+            "inventory_cost": 0,
+            "inventory_purchases": 0,
+            "investment": 10000,
+            "margin": 500,
+            "opening_cash": 53500,
+            "operating_result": 500,
+            "paid_overhead": 0,
+            "receipts": 3000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 21
+        },
+        {
+          "day": 6,
+          "end_seq": 24,
+          "id": "finalize:1790110793.69805-514865:6",
+          "report": {
+            "cash": 47000,
+            "cost_of_sales": 2500,
+            "incurred_overhead": 0,
+            "inventory_cost": 0,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 500,
+            "opening_cash": 44000,
+            "operating_result": 500,
+            "paid_overhead": 0,
+            "receipts": 3000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 25
+        },
+        {
+          "day": 7,
+          "end_seq": 29,
+          "id": "finalize:1790110793.69805-514865:7",
+          "report": {
+            "cash": 32500,
+            "cost_of_sales": 2500,
+            "incurred_overhead": 15000,
+            "inventory_cost": 0,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 500,
+            "opening_cash": 44500,
+            "operating_result": -14500,
+            "paid_overhead": 15000,
+            "receipts": 3000,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 29
+        }
+      ],
+      "staff": {
+        "jules": {
+          "employed": false,
+          "role": "unassigned"
+        },
+        "morgan": {
+          "employed": false,
+          "role": "unassigned"
+        }
+      },
+      "terminal": {
+        "day": 7,
+        "due_event": "",
+        "outcome": "survived",
+        "shortfall": 0,
+        "summary": {
+          "cash": 32500,
+          "cost_of_sales": 17500,
+          "incurred_overhead": 15000,
+          "inventory_cost": 0,
+          "inventory_purchases": 12500,
+          "investment": 16000,
+          "margin": 3500,
+          "opening_cash": 55000,
+          "operating_result": -11500,
+          "paid_overhead": 15000,
+          "receipts": 21000,
+          "unpaid_liabilities": 0
+        },
+        "unpaid": []
+      },
+      "version": 8,
+      "wage_commitments": []
+    },
+    "unpaid_wages_and_rent": {
+      "carried": "",
+      "cash": 800,
+      "clock": 0.0,
+      "customers": {
+        "visitor-1": {
+          "arrival": 0.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 2748,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Alex",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "curb",
+          "settled": false,
+          "state": "cancelled"
+        },
+        "visitor-2": {
+          "arrival": 5.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 2659,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Blair",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "tide",
+          "settled": false,
+          "state": "cancelled"
+        },
+        "visitor-3": {
+          "arrival": 10.0,
+          "browse_fixture": "",
+          "browse_port": "",
+          "budget": 1648,
+          "copy": "",
+          "decision": "pending",
+          "elapsed": 0.0,
+          "item": "",
+          "name": "Casey",
+          "offer": 0,
+          "position": [
+            210.0,
+            580.0
+          ],
+          "product": "orbit",
+          "settled": false,
+          "state": "cancelled"
+        }
+      },
+      "day": 7,
+      "decisions": [],
+      "employment": [
+        {
+          "day": 7,
+          "kind": "hire",
+          "staff": "morgan"
+        },
+        {
+          "day": 7,
+          "kind": "hire",
+          "staff": "jules"
+        }
+      ],
+      "events": [
+        {
+          "amount": 6000,
+          "day": 1,
+          "id": "fixture:1790110794.42021-1237018:rack-0002",
+          "kind": "fixture_purchase",
+          "reference": "rack-0002",
+          "seq": 1,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 1,
+          "id": "supplier:1790110794.42021-1237018:1",
+          "kind": "supplier",
+          "reference": "1",
+          "seq": 2,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 2,
+          "id": "supplier:1790110794.42021-1237018:2",
+          "kind": "supplier",
+          "reference": "2",
+          "seq": 3,
+          "status": "paid"
+        },
+        {
+          "amount": 15000,
+          "day": 3,
+          "id": "supplier:1790110794.42021-1237018:3",
+          "kind": "supplier",
+          "reference": "3",
+          "seq": 4,
+          "status": "paid"
+        },
+        {
+          "amount": 3200,
+          "day": 4,
+          "id": "supplier:1790110794.42021-1237018:4",
+          "kind": "supplier",
+          "reference": "4",
+          "seq": 5,
+          "status": "paid"
+        },
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.42021-1237018:7:jules",
+          "kind": "wage",
+          "reference": "jules",
+          "seq": 6,
+          "status": "due"
+        },
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.42021-1237018:7:morgan",
+          "kind": "wage",
+          "reference": "morgan",
+          "seq": 7,
+          "status": "due"
+        },
+        {
+          "amount": 15000,
+          "day": 7,
+          "id": "rent:1790110794.42021-1237018:7",
+          "kind": "rent",
+          "reference": "week-1",
+          "seq": 8,
+          "status": "due"
+        }
+      ],
+      "fixture_events": [
+        {
+          "amount": 6000,
+          "day": 1,
+          "fixture_id": "rack-0002",
+          "id": "fixture:1790110794.42021-1237018:rack-0002",
+          "kind": "fixture_purchase",
+          "seq": 1
+        }
+      ],
+      "fulfilled_requests": {
+        "rack": {
+          "fixture_id": "rack-0002",
+          "operation": "buy",
+          "revision": 1
+        }
+      },
+      "items": {
+        "case-01": {
+          "acquisition_id": "starter:1790110794.42021-1237018",
+          "acquisition_seq": 1,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-02": {
+          "acquisition_id": "starter:1790110794.42021-1237018",
+          "acquisition_seq": 2,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-03": {
+          "acquisition_id": "starter:1790110794.42021-1237018",
+          "acquisition_seq": 3,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "case-04": {
+          "acquisition_id": "starter:1790110794.42021-1237018",
+          "acquisition_seq": 4,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "case-05": {
+          "acquisition_id": "starter:1790110794.42021-1237018",
+          "acquisition_seq": 5,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "case-06": {
+          "acquisition_id": "starter:1790110794.42021-1237018",
+          "acquisition_seq": 6,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-curb-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 24,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 25,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 26,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 27,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 28,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-curb-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 29,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-1-orbit-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 36,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 37,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 38,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 39,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 40,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-orbit-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 41,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-1-tide-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 30,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 31,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 32,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 33,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 34,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-1-tide-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:1",
+          "acquisition_seq": 35,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-curb-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 42,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 43,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 44,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 45,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 46,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-curb-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 47,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-2-orbit-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 54,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 55,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 56,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 57,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 58,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-orbit-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 59,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-2-tide-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 48,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 49,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 50,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 51,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 52,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-2-tide-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:2",
+          "acquisition_seq": 53,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-curb-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 60,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 61,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 62,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 63,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 64,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-curb-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 65,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-3-orbit-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 72,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 73,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 74,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 75,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 76,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-orbit-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 77,
+          "cost": 500,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "orbit",
+          "slot_index": null
+        },
+        "order-3-tide-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 66,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 67,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 68,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 69,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-5": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 70,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-3-tide-6": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:3",
+          "acquisition_seq": 71,
+          "cost": 1200,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "tide",
+          "slot_index": null
+        },
+        "order-4-curb-1": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:4",
+          "acquisition_seq": 78,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-4-curb-2": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:4",
+          "acquisition_seq": 79,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-4-curb-3": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:4",
+          "acquisition_seq": 80,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        },
+        "order-4-curb-4": {
+          "acquisition_id": "supplier:1790110794.42021-1237018:4",
+          "acquisition_seq": 81,
+          "cost": 800,
+          "fixture_id": null,
+          "location": "backroom",
+          "owner": "",
+          "price": 0,
+          "product": "curb",
+          "slot_index": null
+        }
+      },
+      "jobs": [],
+      "layout": {
+        "fixtures": {
+          "checkout-01": {
+            "origin": [
+              690,
+              470
+            ],
+            "type": "counter"
+          },
+          "rack-0001": {
+            "origin": [
+              440,
+              330
+            ],
+            "type": "rack"
+          },
+          "rack-0002": {
+            "origin": [
+              400,
+              430
+            ],
+            "type": "rack"
+          },
+          "receiving-01": {
+            "origin": [
+              270,
+              430
+            ],
+            "type": "receiving"
+          }
+        },
+        "space_level": 0
+      },
+      "layout_revision": 1,
+      "next_event_seq": 9,
+      "next_fixture_id": 3,
+      "next_job": 1,
+      "opening_cash": 55000,
+      "orders": [
+        {
+          "day": 1,
+          "event_id": "supplier:1790110794.42021-1237018:1",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 2,
+          "event_id": "supplier:1790110794.42021-1237018:2",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 3,
+          "event_id": "supplier:1790110794.42021-1237018:3",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 6
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 6
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 6
+            }
+          },
+          "quantity": 18,
+          "received": true,
+          "total": 15000
+        },
+        {
+          "day": 4,
+          "event_id": "supplier:1790110794.42021-1237018:4",
+          "lines": {
+            "curb": {
+              "cost": 800,
+              "quantity": 4
+            },
+            "orbit": {
+              "cost": 500,
+              "quantity": 0
+            },
+            "tide": {
+              "cost": 1200,
+              "quantity": 0
+            }
+          },
+          "quantity": 4,
+          "received": true,
+          "total": 3200
+        }
+      ],
+      "phase": "bankrupt",
+      "queue": [],
+      "received": true,
+      "ruleset_id": "b4-employees-1",
+      "run_id": "1790110794.42021-1237018",
+      "sales": [],
+      "settlements": [
+        {
+          "day": 1,
+          "end_seq": 1,
+          "id": "finalize:1790110794.42021-1237018:1",
+          "report": {
+            "cash": 49000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 5000,
+            "inventory_purchases": 0,
+            "investment": 6000,
+            "margin": 0,
+            "opening_cash": 55000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 2
+        },
+        {
+          "day": 2,
+          "end_seq": 2,
+          "id": "finalize:1790110794.42021-1237018:2",
+          "report": {
+            "cash": 34000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 20000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 34000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 3
+        },
+        {
+          "day": 3,
+          "end_seq": 3,
+          "id": "finalize:1790110794.42021-1237018:3",
+          "report": {
+            "cash": 19000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 35000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 19000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 4
+        },
+        {
+          "day": 4,
+          "end_seq": 4,
+          "id": "finalize:1790110794.42021-1237018:4",
+          "report": {
+            "cash": 4000,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 50000,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 4000,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 5
+        },
+        {
+          "day": 5,
+          "end_seq": 5,
+          "id": "finalize:1790110794.42021-1237018:5",
+          "report": {
+            "cash": 800,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 53200,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 800,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 6
+        },
+        {
+          "day": 6,
+          "end_seq": 5,
+          "id": "finalize:1790110794.42021-1237018:6",
+          "report": {
+            "cash": 800,
+            "cost_of_sales": 0,
+            "incurred_overhead": 0,
+            "inventory_cost": 53200,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 800,
+            "operating_result": 0,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 0
+          },
+          "start_seq": 6
+        },
+        {
+          "day": 7,
+          "end_seq": 8,
+          "id": "finalize:1790110794.42021-1237018:7",
+          "report": {
+            "cash": 800,
+            "cost_of_sales": 0,
+            "incurred_overhead": 17400,
+            "inventory_cost": 53200,
+            "inventory_purchases": 0,
+            "investment": 0,
+            "margin": 0,
+            "opening_cash": 800,
+            "operating_result": -17400,
+            "paid_overhead": 0,
+            "receipts": 0,
+            "unpaid_liabilities": 17400
+          },
+          "start_seq": 6
+        }
+      ],
+      "staff": {
+        "jules": {
+          "employed": true,
+          "role": "unassigned"
+        },
+        "morgan": {
+          "employed": true,
+          "role": "unassigned"
+        }
+      },
+      "terminal": {
+        "day": 7,
+        "due_event": "wage:1790110794.42021-1237018:7:jules",
+        "outcome": "bankrupt",
+        "shortfall": 400,
+        "summary": {
+          "cash": 800,
+          "cost_of_sales": 0,
+          "incurred_overhead": 17400,
+          "inventory_cost": 53200,
+          "inventory_purchases": 48200,
+          "investment": 6000,
+          "margin": 0,
+          "opening_cash": 55000,
+          "operating_result": -17400,
+          "paid_overhead": 0,
+          "receipts": 0,
+          "unpaid_liabilities": 17400
+        },
+        "unpaid": [
+          "wage:1790110794.42021-1237018:7:jules",
+          "wage:1790110794.42021-1237018:7:morgan",
+          "rent:1790110794.42021-1237018:7"
+        ]
+      },
+      "version": 8,
+      "wage_commitments": [
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.42021-1237018:7:morgan",
+          "staff_id": "morgan"
+        },
+        {
+          "amount": 1200,
+          "day": 7,
+          "id": "wage:1790110794.42021-1237018:7:jules",
+          "staff_id": "jules"
+        }
+      ]
+    }
+  }
+}

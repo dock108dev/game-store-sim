@@ -1,6 +1,6 @@
 # Source-of-truth policy
 
-Current user direction takes precedence. Read `docs/MASTER_PLAN.md` for current production intent and the Desktop next-steps file for the synchronized handoff. README provides the entry route.
+Current user direction takes precedence. The linked Desktop next-steps tracker owns current scope and authorization; `docs/MASTER_PLAN.md` is its synchronized repository index. The B10 owner-review record owns candidate/session/acceptance facts. README provides the entry route. Current code-domain ownership and retired modes are documented in [SSOT enforcement](../02-technical/ssot.md). Dated delivery records remain evidence for their exact candidates, not competing current setup instructions.
 
 Active supporting documents are explicitly listed by the master plan. Recovered documents bearing a historical notice are context only; their accepted/locked/complete labels describe an earlier direction. Old guides are not current player rules, implementation evidence, or acceptance criteria. Decision 0005 supersedes conflicting earlier decisions.
 

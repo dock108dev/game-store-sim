@@ -1,0 +1,14 @@
+[
+  {
+    "check": "walking label request keeps original product and price",
+    "pass": true
+  },
+  {
+    "check": "later field edits do not change pending label offer",
+    "pass": true
+  },
+  {
+    "check": "pending label requests preserve inventory validity",
+    "pass": true
+  }
+]

@@ -1,0 +1,162 @@
+{
+  "checks": [
+    {
+      "check": "bills and schedule visible from day1",
+      "pass": true
+    },
+    {
+      "check": "expansion preview valid pure fixed included rack",
+      "pass": true
+    },
+    {
+      "check": "expansion cancel no cash mutation",
+      "pass": true
+    },
+    {
+      "check": "confirmed expansion committed while save failure visible",
+      "pass": true
+    },
+    {
+      "check": "ordinary save retry does not charge again",
+      "pass": true
+    },
+    {
+      "check": "scene reload B3 expansion",
+      "pass": true
+    },
+    {
+      "check": "expanded north floor and navigation",
+      "pass": true
+    },
+    {
+      "check": "rack2 later through controls",
+      "pass": true
+    },
+    {
+      "check": "B3 $10 labels through controls 0",
+      "pass": true
+    },
+    {
+      "check": "B3 $10 labels through controls 1",
+      "pass": true
+    },
+    {
+      "check": "B3 $10 labels through controls 2",
+      "pass": true
+    },
+    {
+      "check": "pointer rack selection rack-0003",
+      "pass": true
+    },
+    {
+      "check": "pointer rack selection rack-0002",
+      "pass": true
+    },
+    {
+      "check": "ordinary stocking reaches north bay",
+      "pass": true
+    },
+    {
+      "check": "pointer rack selection rack-0003",
+      "pass": true
+    },
+    {
+      "check": "expanded stocked rack moves with slots",
+      "pass": true
+    },
+    {
+      "check": "north bay customers queue",
+      "pass": true
+    },
+    {
+      "check": "buyers actually browsed expansion",
+      "pass": true
+    },
+    {
+      "check": "expanded room drains corrected B2 queue",
+      "pass": true
+    },
+    {
+      "check": "day5 paid sales settlement checkpoint",
+      "pass": true
+    },
+    {
+      "check": "day6 advance checkpoint",
+      "pass": true
+    },
+    {
+      "check": "day6 ordinary drain and settlement",
+      "pass": true
+    },
+    {
+      "check": "day7 ordinary drain and settlement",
+      "pass": true
+    },
+    {
+      "check": "terminal UI no advance or purchases",
+      "pass": true
+    },
+    {
+      "check": "scene reload B3 terminal",
+      "pass": true
+    },
+    {
+      "check": "saved progress B3 terminal visitor-1",
+      "pass": true
+    },
+    {
+      "check": "saved progress B3 terminal visitor-2",
+      "pass": true
+    },
+    {
+      "check": "saved progress B3 terminal visitor-3",
+      "pass": true
+    },
+    {
+      "check": "terminal preserved through confirmed restart",
+      "pass": true
+    },
+    {
+      "check": "rent bankruptcy visible and autosaved",
+      "pass": true
+    },
+    {
+      "check": "scene reload B3 bankruptcy",
+      "pass": true
+    },
+    {
+      "check": "saved progress B3 bankruptcy visitor-1",
+      "pass": true
+    },
+    {
+      "check": "saved progress B3 bankruptcy visitor-2",
+      "pass": true
+    },
+    {
+      "check": "saved progress B3 bankruptcy visitor-3",
+      "pass": true
+    },
+    {
+      "check": "expanded moving actors inspected",
+      "pass": true
+    },
+    {
+      "check": "B3 fixture routes",
+      "pass": true
+    },
+    {
+      "check": "B3 buyer separation",
+      "pass": true
+    },
+    {
+      "check": "B3 scene invariants",
+      "pass": true
+    }
+  ],
+  "distances": {
+    "visitor-1": 4536.85095953941,
+    "visitor-2": 1313.42362451553,
+    "visitor-3": 2374.49482035637
+  },
+  "movie_frames": 296
+}

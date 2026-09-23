@@ -1,0 +1,25 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+ERROR: first three admitted
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_week.gd:7)
+       [1] _initialize (res://scripts/test_week_regressions.gd:40)
+ERROR: leaving still occupies buyer cap
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_week.gd:7)
+       [1] _initialize (res://scripts/test_week_regressions.gd:42)
+ERROR: departed slot releases admission
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_week.gd:7)
+       [1] _initialize (res://scripts/test_week_regressions.gd:42)
+ERROR: drain and settle day 1
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_week.gd:7)
+       [1] finish (res://scripts/test_week.gd:23)
+       [2] day_to (res://scripts/test_week.gd:26)
+       [3] _initialize (res://scripts/test_week_regressions.gd:59)
+B6_REGRESSIONS 80

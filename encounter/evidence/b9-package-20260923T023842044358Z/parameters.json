@@ -1,0 +1,11 @@
+{
+  "artifact": "/Users/michaelfuscoletti/Desktop/game-sim/artifacts/b9-candidate1",
+  "artifact_sha256": "02fa30db896dcf87dcfc48f54bba6a9733a0f600ca248a099981ae654ace76cf",
+  "namespace": "b9-packaged-qa-20260923T023842044358Z",
+  "setup": "instrumented package; same frozen runtime/assets, test main-loop, isolated namespace; no automatic keyboard detours",
+  "script": "test_b9_navigation.gd",
+  "strategy": "lean",
+  "normal_speed": false,
+  "retina": false,
+  "work": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/b9-packaged-qa-59i5yqyg/encounter"
+}

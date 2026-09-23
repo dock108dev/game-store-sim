@@ -1,0 +1,68 @@
+[
+  {
+    "master": "encounter/source/case-rally.svg",
+    "export": "encounter/art/case-rally.png",
+    "sha256": "3462575a9687a5476bb6a884cec8b7e92d3c76edb4dae492bee4c5da92b64ea4",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/case-signal.svg",
+    "export": "encounter/art/case-signal.png",
+    "sha256": "6d83df92f81a29134918ac8badb460dca700f2c9c35f27540279af373b7a9646",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-3-back.svg",
+    "export": "encounter/art/customer-3-back.png",
+    "sha256": "8ea11c6ebfeb826706538e10da9352847ea7e0f42e220c058593f7e140e275a6",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-3-front.svg",
+    "export": "encounter/art/customer-3-front.png",
+    "sha256": "fe20d92f52788a5a6b5950611e06b44c99391dd1fbba2df7e3d22902acb1960e",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-3-side.svg",
+    "export": "encounter/art/customer-3-side.png",
+    "sha256": "67e0dc8a02270c89921d03efed8a7a2438880b49370e8ff0514f24a51429c776",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-4-back.svg",
+    "export": "encounter/art/customer-4-back.png",
+    "sha256": "997acc18ddd54bdc09e41e17270fa5e78c9f9f29ff306c7825c7e7ee77946c41",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-4-front.svg",
+    "export": "encounter/art/customer-4-front.png",
+    "sha256": "997acc18ddd54bdc09e41e17270fa5e78c9f9f29ff306c7825c7e7ee77946c41",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-4-side.svg",
+    "export": "encounter/art/customer-4-side.png",
+    "sha256": "997acc18ddd54bdc09e41e17270fa5e78c9f9f29ff306c7825c7e7ee77946c41",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-5-back.svg",
+    "export": "encounter/art/customer-5-back.png",
+    "sha256": "24a2bfd4cd0cfbe35e454b4965b88801b2cc7d5a3f598ed2a10a2a99b5ca4e8d",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-5-front.svg",
+    "export": "encounter/art/customer-5-front.png",
+    "sha256": "24a2bfd4cd0cfbe35e454b4965b88801b2cc7d5a3f598ed2a10a2a99b5ca4e8d",
+    "reexport_identical": true
+  },
+  {
+    "master": "encounter/source/customer-5-side.svg",
+    "export": "encounter/art/customer-5-side.png",
+    "sha256": "24a2bfd4cd0cfbe35e454b4965b88801b2cc7d5a3f598ed2a10a2a99b5ca4e8d",
+    "reexport_identical": true
+  }
+]

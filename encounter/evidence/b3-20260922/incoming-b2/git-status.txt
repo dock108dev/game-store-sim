@@ -1,0 +1,36 @@
+ M docs/02-technical/encounter-architecture.md
+ M docs/02-technical/local-development.md
+ M docs/03-production/milestones-and-backlog.md
+ M docs/04-validation/local-validation-plan.md
+ M docs/MASTER_PLAN.md
+ M encounter/README.md
+ M encounter/main.gd
+ M encounter/project.godot
+ M encounter/scripts/test_assortment_scene.gd
+ M encounter/scripts/test_encounter.gd
+ M encounter/scripts/test_validation_runner.py
+ M encounter/scripts/validate.py
+ M encounter/state.gd
+?? docs/03-production/b2-delivery.md
+?? docs/03-production/first-week-implementation-packet.md
+?? encounter/evidence/b2-20260922/
+?? encounter/evidence/b3-20260922/
+?? encounter/evidence/probe-20260922T193934/
+?? encounter/evidence/validation-20260922T192710737717Z/
+?? encounter/evidence/validation-20260922T192733549240Z/
+?? encounter/evidence/validation-20260922T192759735786Z/
+?? encounter/evidence/validation-20260922T192917068437Z/
+?? encounter/evidence/validation-20260922T192957283672Z/
+?? encounter/evidence/validation-20260922T193057971248Z/
+?? encounter/evidence/validation-20260922T193306323349Z/
+?? encounter/evidence/validation-20260922T193452569513Z/
+?? encounter/evidence/validation-20260922T193514339555Z/
+?? encounter/evidence/validation-20260922T193720936618Z/
+?? encounter/evidence/validation-20260922T193840697998Z/
+?? encounter/evidence/validation-20260922T194138380133Z/
+?? encounter/evidence/validation-20260922T194356495017Z/
+?? encounter/evidence/validation-20260922T194446951813Z/
+?? encounter/layout.gd
+?? encounter/scripts/__pycache__/
+?? encounter/scripts/test_layout.gd
+?? encounter/scripts/test_layout_scene.gd

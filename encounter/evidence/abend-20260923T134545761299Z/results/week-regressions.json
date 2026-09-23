@@ -1,0 +1,346 @@
+[
+  {
+    "check": "bad supplier command inert",
+    "pass": true
+  },
+  {
+    "check": "bad supplier command inert",
+    "pass": true
+  },
+  {
+    "check": "bad supplier command inert",
+    "pass": true
+  },
+  {
+    "check": "bad supplier command inert",
+    "pass": true
+  },
+  {
+    "check": "bad supplier command inert",
+    "pass": true
+  },
+  {
+    "check": "unaffordable order preflight",
+    "pass": true
+  },
+  {
+    "check": "capacity fill order",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 1",
+    "pass": true
+  },
+  {
+    "check": "capacity fill order",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 2",
+    "pass": true
+  },
+  {
+    "check": "capacity fill order",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 3",
+    "pass": true
+  },
+  {
+    "check": "sixty four copies reserve inbound capacity",
+    "pass": true
+  },
+  {
+    "check": "valid before save capacity-inbound",
+    "pass": true
+  },
+  {
+    "check": "save and resume capacity-inbound",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 4",
+    "pass": true
+  },
+  {
+    "check": "full backroom no payment",
+    "pass": true
+  },
+  {
+    "check": "inspection physical port",
+    "pass": true
+  },
+  {
+    "check": "legitimate full backroom rejects seller",
+    "pass": true
+  },
+  {
+    "check": "closing accepted trade cancels no purchase",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 5",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 1",
+    "pass": true
+  },
+  {
+    "check": "inspection physical port",
+    "pass": true
+  },
+  {
+    "check": "second below-floor offer refuses and cannot third",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 2",
+    "pass": true
+  },
+  {
+    "check": "inspection physical port",
+    "pass": true
+  },
+  {
+    "check": "explicit seller refusal no copy",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 3",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 1",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 2",
+    "pass": true
+  },
+  {
+    "check": "worker copy slot arbitration",
+    "pass": true
+  },
+  {
+    "check": "unfinished claim restore cancels without inventory move",
+    "pass": true
+  },
+  {
+    "check": "explicit takeover retained receiving prerequisite",
+    "pass": true
+  },
+  {
+    "check": "over budget reservation uses fixed label",
+    "pass": true
+  },
+  {
+    "check": "budget refusal returns exact copy and slot",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 3",
+    "pass": true
+  },
+  {
+    "check": "real wages due despite no sales",
+    "pass": true
+  },
+  {
+    "check": "live labels immutable",
+    "pass": true
+  },
+  {
+    "check": "FIFO cashier exclusivity",
+    "pass": true
+  },
+  {
+    "check": "reservation restore intact",
+    "pass": true
+  },
+  {
+    "check": "restored sale exactly once",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 1",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 2",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 3",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 4",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 5",
+    "pass": true
+  },
+  {
+    "check": "first three admitted",
+    "pass": true
+  },
+  {
+    "check": "first three admitted",
+    "pass": true
+  },
+  {
+    "check": "first three admitted",
+    "pass": true
+  },
+  {
+    "check": "fourth admission waits",
+    "pass": true
+  },
+  {
+    "check": "leaving still occupies buyer cap",
+    "pass": true
+  },
+  {
+    "check": "departed slot releases admission",
+    "pass": true
+  },
+  {
+    "check": "valid before save eight-roster",
+    "pass": true
+  },
+  {
+    "check": "save and resume eight-roster",
+    "pass": true
+  },
+  {
+    "check": "roster tamper rejected",
+    "pass": true
+  },
+  {
+    "check": "seller terms tamper rejected",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 1",
+    "pass": true
+  },
+  {
+    "check": "inspection physical port",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 2",
+    "pass": true
+  },
+  {
+    "check": "new first occurrence skips older used",
+    "pass": true
+  },
+  {
+    "check": "settled sale claim",
+    "pass": true
+  },
+  {
+    "check": "no remote sale",
+    "pass": true
+  },
+  {
+    "check": "exactly once physical commit",
+    "pass": true
+  },
+  {
+    "check": "repeat chooses oldest eligible acquisition",
+    "pass": true
+  },
+  {
+    "check": "settled sale claim",
+    "pass": true
+  },
+  {
+    "check": "no remote sale",
+    "pass": true
+  },
+  {
+    "check": "exactly once physical commit",
+    "pass": true
+  },
+  {
+    "check": "locked acquisition costs preserved",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 1",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 2",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 3",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 4",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 5",
+    "pass": true
+  },
+  {
+    "check": "oldest rack destination",
+    "pass": true
+  },
+  {
+    "check": "oldest physical copy selection",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 1",
+    "pass": true
+  },
+  {
+    "check": "failed checkpoint retains live settlement",
+    "pass": true
+  },
+  {
+    "check": "retry does not repeat settlement",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 2",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 3",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 4",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 5",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 6",
+    "pass": true
+  },
+  {
+    "check": "drain and settle day 7",
+    "pass": true
+  },
+  {
+    "check": "terminal archive before restart",
+    "pass": true
+  },
+  {
+    "check": "terminal archive preserved",
+    "pass": true
+  }
+]

@@ -1,0 +1,1552 @@
+{
+  "checks": [
+    {
+      "check": "release dropdown disabled day1",
+      "pass": true
+    },
+    {
+      "check": "ordinary second rack",
+      "pass": true
+    },
+    {
+      "check": "release boundary control day 1",
+      "pass": true
+    },
+    {
+      "check": "all authored arrivals physically drain day 1",
+      "pass": true
+    },
+    {
+      "check": "floor job seller drain",
+      "pass": true
+    },
+    {
+      "check": "daily close valid",
+      "pass": true
+    },
+    {
+      "check": "scene reload closed day 1",
+      "pass": true
+    },
+    {
+      "check": "saved progress closed day 1 buyer:1790121500.4878-209501:1:1",
+      "pass": true
+    },
+    {
+      "check": "saved progress closed day 1 buyer:1790121500.4878-209501:1:2",
+      "pass": true
+    },
+    {
+      "check": "saved progress closed day 1 buyer:1790121500.4878-209501:1:3",
+      "pass": true
+    },
+    {
+      "check": "release boundary control day 2",
+      "pass": true
+    },
+    {
+      "check": "seller ordinary disclosed floor",
+      "pass": true
+    },
+    {
+      "check": "seller ordinary exact payment",
+      "pass": true
+    },
+    {
+      "check": "all authored arrivals physically drain day 2",
+      "pass": true
+    },
+    {
+      "check": "floor job seller drain",
+      "pass": true
+    },
+    {
+      "check": "daily close valid",
+      "pass": true
+    },
+    {
+      "check": "scene reload closed day 2",
+      "pass": true
+    },
+    {
+      "check": "saved progress closed day 2 buyer:1790121500.4878-209501:2:1",
+      "pass": true
+    },
+    {
+      "check": "saved progress closed day 2 buyer:1790121500.4878-209501:2:2",
+      "pass": true
+    },
+    {
+      "check": "saved progress closed day 2 buyer:1790121500.4878-209501:2:3",
+      "pass": true
+    },
+    {
+      "check": "saved progress closed day 2 buyer:1790121500.4878-209501:2:4",
+      "pass": true
+    },
+    {
+      "check": "confirmed hire morgan",
+      "pass": true
+    },
+    {
+      "check": "role control morgan 1",
+      "pass": true
+    },
+    {
+      "check": "workers stock released and mixed copies",
+      "pass": false
+    }
+  ],
+  "state": {
+    "carried": "",
+    "cash": 60200,
+    "clock": 0.0,
+    "customers": {
+
+    },
+    "daily_content": {
+      "1": {
+        "buyer:1790121500.4878-209501:1:1": {
+          "accept_used": false,
+          "appearance": 0,
+          "arrival": 0.0,
+          "budget": 2200,
+          "name": "Alex",
+          "product": "curb"
+        },
+        "buyer:1790121500.4878-209501:1:2": {
+          "accept_used": false,
+          "appearance": 1,
+          "arrival": 18.0,
+          "budget": 2860,
+          "name": "Blair",
+          "product": "tide"
+        },
+        "buyer:1790121500.4878-209501:1:3": {
+          "accept_used": false,
+          "appearance": 2,
+          "arrival": 36.0,
+          "budget": 1540,
+          "name": "Casey",
+          "product": "orbit"
+        }
+      },
+      "2": {
+        "buyer:1790121500.4878-209501:2:1": {
+          "accept_used": false,
+          "appearance": 0,
+          "arrival": 0.0,
+          "budget": 2200,
+          "name": "Alex",
+          "product": "curb"
+        },
+        "buyer:1790121500.4878-209501:2:2": {
+          "accept_used": false,
+          "appearance": 1,
+          "arrival": 18.0,
+          "budget": 2860,
+          "name": "Blair",
+          "product": "tide"
+        },
+        "buyer:1790121500.4878-209501:2:3": {
+          "accept_used": false,
+          "appearance": 2,
+          "arrival": 36.0,
+          "budget": 1540,
+          "name": "Casey",
+          "product": "orbit"
+        },
+        "buyer:1790121500.4878-209501:2:4": {
+          "accept_used": true,
+          "appearance": 3,
+          "arrival": 54.0,
+          "budget": 2340,
+          "name": "Devon",
+          "product": "tide"
+        }
+      }
+    },
+    "day": 3,
+    "decisions": [
+      {
+        "budget": 2200,
+        "customer": "buyer:1790121500.4878-209501:1:1",
+        "day": 1,
+        "item": "case-01",
+        "offer": 2000,
+        "outcome": "buy",
+        "product": "curb"
+      },
+      {
+        "budget": 2860,
+        "customer": "buyer:1790121500.4878-209501:1:2",
+        "day": 1,
+        "item": "case-02",
+        "offer": 2600,
+        "outcome": "buy",
+        "product": "tide"
+      },
+      {
+        "budget": 1540,
+        "customer": "buyer:1790121500.4878-209501:1:3",
+        "day": 1,
+        "item": "case-03",
+        "offer": 1400,
+        "outcome": "buy",
+        "product": "orbit"
+      },
+      {
+        "budget": 2200,
+        "customer": "buyer:1790121500.4878-209501:2:1",
+        "day": 2,
+        "item": "case-04",
+        "offer": 2000,
+        "outcome": "buy",
+        "product": "curb"
+      },
+      {
+        "budget": 2860,
+        "customer": "buyer:1790121500.4878-209501:2:2",
+        "day": 2,
+        "item": "case-05",
+        "offer": 2600,
+        "outcome": "buy",
+        "product": "tide"
+      },
+      {
+        "budget": 1540,
+        "customer": "buyer:1790121500.4878-209501:2:3",
+        "day": 2,
+        "item": "case-06",
+        "offer": 1400,
+        "outcome": "buy",
+        "product": "orbit"
+      },
+      {
+        "budget": 2340,
+        "customer": "buyer:1790121500.4878-209501:2:4",
+        "day": 2,
+        "item": "",
+        "offer": 0,
+        "outcome": "unavailable",
+        "product": "tide"
+      }
+    ],
+    "employment": [
+      {
+        "day": 3,
+        "kind": "hire",
+        "staff": "morgan"
+      }
+    ],
+    "events": [
+      {
+        "amount": 6000,
+        "day": 1,
+        "id": "fixture:1790121500.4878-209501:rack-0002",
+        "kind": "fixture_purchase",
+        "reference": "rack-0002",
+        "seq": 1,
+        "status": "paid"
+      },
+      {
+        "amount": 2000,
+        "day": 1,
+        "id": "sale:1790121500.4878-209501:1:buyer:1790121500.4878-209501:1:1",
+        "kind": "sale",
+        "reference": "case-01",
+        "seq": 2,
+        "status": "paid"
+      },
+      {
+        "amount": 2600,
+        "day": 1,
+        "id": "sale:1790121500.4878-209501:1:buyer:1790121500.4878-209501:1:2",
+        "kind": "sale",
+        "reference": "case-02",
+        "seq": 3,
+        "status": "paid"
+      },
+      {
+        "amount": 1400,
+        "day": 1,
+        "id": "sale:1790121500.4878-209501:1:buyer:1790121500.4878-209501:1:3",
+        "kind": "sale",
+        "reference": "case-03",
+        "seq": 4,
+        "status": "paid"
+      },
+      {
+        "amount": 2000,
+        "day": 2,
+        "id": "sale:1790121500.4878-209501:2:buyer:1790121500.4878-209501:2:1",
+        "kind": "sale",
+        "reference": "case-04",
+        "seq": 5,
+        "status": "paid"
+      },
+      {
+        "amount": 2600,
+        "day": 2,
+        "id": "sale:1790121500.4878-209501:2:buyer:1790121500.4878-209501:2:2",
+        "kind": "sale",
+        "reference": "case-05",
+        "seq": 6,
+        "status": "paid"
+      },
+      {
+        "amount": 800,
+        "day": 2,
+        "id": "trade:1790121500.4878-209501:2:1",
+        "kind": "used_purchase",
+        "reference": "seller:1790121500.4878-209501:2:1",
+        "seq": 7,
+        "status": "paid"
+      },
+      {
+        "amount": 1400,
+        "day": 2,
+        "id": "sale:1790121500.4878-209501:2:buyer:1790121500.4878-209501:2:3",
+        "kind": "sale",
+        "reference": "case-06",
+        "seq": 8,
+        "status": "paid"
+      }
+    ],
+    "fixture_events": [
+      {
+        "amount": 6000,
+        "day": 1,
+        "fixture_id": "rack-0002",
+        "id": "fixture:1790121500.4878-209501:rack-0002",
+        "kind": "fixture_purchase",
+        "seq": 1
+      }
+    ],
+    "fulfilled_requests": {
+      "1790121500.4878-209501:319109:1": {
+        "fixture_id": "rack-0002",
+        "operation": "buy",
+        "revision": 1
+      }
+    },
+    "items": {
+      "case-01": {
+        "acquisition_id": "starter:1790121500.4878-209501",
+        "acquisition_seq": 1,
+        "available_day": 1,
+        "condition": "new",
+        "cost": 800,
+        "fixture_id": null,
+        "kind": "new",
+        "location": "sold",
+        "owner": "",
+        "price": 2000,
+        "product": "curb",
+        "slot_index": null
+      },
+      "case-02": {
+        "acquisition_id": "starter:1790121500.4878-209501",
+        "acquisition_seq": 2,
+        "available_day": 1,
+        "condition": "new",
+        "cost": 1200,
+        "fixture_id": null,
+        "kind": "new",
+        "location": "sold",
+        "owner": "",
+        "price": 2600,
+        "product": "tide",
+        "slot_index": null
+      },
+      "case-03": {
+        "acquisition_id": "starter:1790121500.4878-209501",
+        "acquisition_seq": 3,
+        "available_day": 1,
+        "condition": "new",
+        "cost": 500,
+        "fixture_id": null,
+        "kind": "new",
+        "location": "sold",
+        "owner": "",
+        "price": 1400,
+        "product": "orbit",
+        "slot_index": null
+      },
+      "case-04": {
+        "acquisition_id": "starter:1790121500.4878-209501",
+        "acquisition_seq": 4,
+        "available_day": 1,
+        "condition": "new",
+        "cost": 800,
+        "fixture_id": null,
+        "kind": "new",
+        "location": "sold",
+        "owner": "",
+        "price": 2000,
+        "product": "curb",
+        "slot_index": null
+      },
+      "case-05": {
+        "acquisition_id": "starter:1790121500.4878-209501",
+        "acquisition_seq": 5,
+        "available_day": 1,
+        "condition": "new",
+        "cost": 1200,
+        "fixture_id": null,
+        "kind": "new",
+        "location": "sold",
+        "owner": "",
+        "price": 2600,
+        "product": "tide",
+        "slot_index": null
+      },
+      "case-06": {
+        "acquisition_id": "starter:1790121500.4878-209501",
+        "acquisition_seq": 6,
+        "available_day": 1,
+        "condition": "new",
+        "cost": 500,
+        "fixture_id": null,
+        "kind": "new",
+        "location": "sold",
+        "owner": "",
+        "price": 1400,
+        "product": "orbit",
+        "slot_index": null
+      },
+      "used:1790121500.4878-209501:2:1": {
+        "acquisition_id": "trade:1790121500.4878-209501:2:1",
+        "acquisition_seq": 700,
+        "available_day": 3,
+        "condition": "good",
+        "cost": 800,
+        "fixture_id": null,
+        "kind": "used",
+        "location": "backroom",
+        "owner": "",
+        "price": 0,
+        "product": "curb",
+        "slot_index": null
+      }
+    },
+    "jobs": [
+      {
+        "actor": "player",
+        "copy": "case-01",
+        "customer": "",
+        "day": 1,
+        "fixture": "rack-0001",
+        "id": "job:1790121500.4878-209501:1",
+        "kind": "stock",
+        "reason": "",
+        "received": true,
+        "revision": 1,
+        "slot": 0,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-04",
+        "customer": "",
+        "day": 1,
+        "fixture": "rack-0001",
+        "id": "job:1790121500.4878-209501:2",
+        "kind": "stock",
+        "reason": "",
+        "received": true,
+        "revision": 1,
+        "slot": 1,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-02",
+        "customer": "",
+        "day": 1,
+        "fixture": "rack-0001",
+        "id": "job:1790121500.4878-209501:3",
+        "kind": "stock",
+        "reason": "",
+        "received": true,
+        "revision": 1,
+        "slot": 2,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-05",
+        "customer": "",
+        "day": 1,
+        "fixture": "rack-0001",
+        "id": "job:1790121500.4878-209501:4",
+        "kind": "stock",
+        "reason": "",
+        "received": true,
+        "revision": 1,
+        "slot": 3,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-03",
+        "customer": "",
+        "day": 1,
+        "fixture": "rack-0002",
+        "id": "job:1790121500.4878-209501:5",
+        "kind": "stock",
+        "reason": "",
+        "received": true,
+        "revision": 1,
+        "slot": 0,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-06",
+        "customer": "",
+        "day": 1,
+        "fixture": "rack-0002",
+        "id": "job:1790121500.4878-209501:6",
+        "kind": "stock",
+        "reason": "",
+        "received": true,
+        "revision": 1,
+        "slot": 1,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-01",
+        "customer": "buyer:1790121500.4878-209501:1:1",
+        "day": 1,
+        "fixture": "checkout-01",
+        "id": "job:1790121500.4878-209501:7",
+        "kind": "sale",
+        "reason": "",
+        "received": false,
+        "revision": 1,
+        "slot": -1,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-02",
+        "customer": "buyer:1790121500.4878-209501:1:2",
+        "day": 1,
+        "fixture": "checkout-01",
+        "id": "job:1790121500.4878-209501:8",
+        "kind": "sale",
+        "reason": "",
+        "received": false,
+        "revision": 1,
+        "slot": -1,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-03",
+        "customer": "buyer:1790121500.4878-209501:1:3",
+        "day": 1,
+        "fixture": "checkout-01",
+        "id": "job:1790121500.4878-209501:9",
+        "kind": "sale",
+        "reason": "",
+        "received": false,
+        "revision": 1,
+        "slot": -1,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-04",
+        "customer": "buyer:1790121500.4878-209501:2:1",
+        "day": 2,
+        "fixture": "checkout-01",
+        "id": "job:1790121500.4878-209501:10",
+        "kind": "sale",
+        "reason": "",
+        "received": false,
+        "revision": 1,
+        "slot": -1,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-05",
+        "customer": "buyer:1790121500.4878-209501:2:2",
+        "day": 2,
+        "fixture": "checkout-01",
+        "id": "job:1790121500.4878-209501:11",
+        "kind": "sale",
+        "reason": "",
+        "received": false,
+        "revision": 1,
+        "slot": -1,
+        "status": "committed"
+      },
+      {
+        "actor": "player",
+        "copy": "case-06",
+        "customer": "buyer:1790121500.4878-209501:2:3",
+        "day": 2,
+        "fixture": "checkout-01",
+        "id": "job:1790121500.4878-209501:12",
+        "kind": "sale",
+        "reason": "",
+        "received": false,
+        "revision": 1,
+        "slot": -1,
+        "status": "committed"
+      }
+    ],
+    "layout": {
+      "fixtures": {
+        "checkout-01": {
+          "origin": [
+            690,
+            470
+          ],
+          "type": "counter"
+        },
+        "rack-0001": {
+          "origin": [
+            440,
+            330
+          ],
+          "type": "rack"
+        },
+        "rack-0002": {
+          "origin": [
+            400,
+            430
+          ],
+          "type": "rack"
+        },
+        "receiving-01": {
+          "origin": [
+            270,
+            430
+          ],
+          "type": "receiving"
+        }
+      },
+      "space_level": 0
+    },
+    "layout_revision": 1,
+    "next_event_seq": 9,
+    "next_fixture_id": 3,
+    "next_job": 13,
+    "opening_cash": 55000,
+    "orders": [],
+    "phase": "prep",
+    "queue": [],
+    "received": true,
+    "ruleset_id": "b6-retail-1",
+    "run_id": "1790121500.4878-209501",
+    "sales": [
+      {
+        "cost": 800,
+        "customer": "buyer:1790121500.4878-209501:1:1",
+        "day": 1,
+        "event_id": "sale:1790121500.4878-209501:1:buyer:1790121500.4878-209501:1:1",
+        "item": "case-01",
+        "price": 2000,
+        "product": "curb"
+      },
+      {
+        "cost": 1200,
+        "customer": "buyer:1790121500.4878-209501:1:2",
+        "day": 1,
+        "event_id": "sale:1790121500.4878-209501:1:buyer:1790121500.4878-209501:1:2",
+        "item": "case-02",
+        "price": 2600,
+        "product": "tide"
+      },
+      {
+        "cost": 500,
+        "customer": "buyer:1790121500.4878-209501:1:3",
+        "day": 1,
+        "event_id": "sale:1790121500.4878-209501:1:buyer:1790121500.4878-209501:1:3",
+        "item": "case-03",
+        "price": 1400,
+        "product": "orbit"
+      },
+      {
+        "cost": 800,
+        "customer": "buyer:1790121500.4878-209501:2:1",
+        "day": 2,
+        "event_id": "sale:1790121500.4878-209501:2:buyer:1790121500.4878-209501:2:1",
+        "item": "case-04",
+        "price": 2000,
+        "product": "curb"
+      },
+      {
+        "cost": 1200,
+        "customer": "buyer:1790121500.4878-209501:2:2",
+        "day": 2,
+        "event_id": "sale:1790121500.4878-209501:2:buyer:1790121500.4878-209501:2:2",
+        "item": "case-05",
+        "price": 2600,
+        "product": "tide"
+      },
+      {
+        "cost": 500,
+        "customer": "buyer:1790121500.4878-209501:2:3",
+        "day": 2,
+        "event_id": "sale:1790121500.4878-209501:2:buyer:1790121500.4878-209501:2:3",
+        "item": "case-06",
+        "price": 1400,
+        "product": "orbit"
+      }
+    ],
+    "sellers": [
+      {
+        "accepted": 800,
+        "asking": 1100,
+        "condition": "good",
+        "day": 2,
+        "floor": 800,
+        "id": "seller:1790121500.4878-209501:2:1",
+        "inspected": true,
+        "motion": "gone",
+        "offers": [
+          100,
+          800
+        ],
+        "position": [
+          210.0,
+          580.0
+        ],
+        "product": "curb",
+        "resale": 1600,
+        "revision": 4,
+        "status": "completed"
+      }
+    ],
+    "settlements": [
+      {
+        "day": 1,
+        "end_seq": 4,
+        "id": "finalize:1790121500.4878-209501:1",
+        "report": {
+          "cash": 55000,
+          "cost_of_sales": 2500,
+          "incurred_overhead": 0,
+          "inventory_cost": 2500,
+          "inventory_purchases": 0,
+          "investment": 6000,
+          "margin": 3500,
+          "opening_cash": 55000,
+          "operating_result": 3500,
+          "paid_overhead": 0,
+          "receipts": 6000,
+          "unpaid_liabilities": 0
+        },
+        "start_seq": 5
+      },
+      {
+        "day": 2,
+        "end_seq": 8,
+        "id": "finalize:1790121500.4878-209501:2",
+        "report": {
+          "cash": 60200,
+          "cost_of_sales": 2500,
+          "incurred_overhead": 0,
+          "inventory_cost": 800,
+          "inventory_purchases": 800,
+          "investment": 0,
+          "margin": 3500,
+          "opening_cash": 55000,
+          "operating_result": 3500,
+          "paid_overhead": 0,
+          "receipts": 6000,
+          "unpaid_liabilities": 0
+        },
+        "start_seq": 9
+      }
+    ],
+    "staff": {
+      "jules": {
+        "employed": false,
+        "role": "unassigned"
+      },
+      "morgan": {
+        "employed": true,
+        "role": "stocking"
+      }
+    },
+    "terminal": null,
+    "version": 10,
+    "wage_commitments": [
+      {
+        "amount": 1200,
+        "day": 3,
+        "id": "wage:1790121500.4878-209501:3:morgan",
+        "staff_id": "morgan"
+      }
+    ]
+  },
+  "trace": [
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5415,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5430,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5445,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5460,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5475,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5490,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5505,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5520,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5535,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5550,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5565,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5580,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5595,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5610,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5625,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5640,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5655,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5670,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5685,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5700,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5715,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5730,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5745,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5760,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5775,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5790,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5805,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5820,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5835,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5850,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5865,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5880,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5895,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5910,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5925,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5940,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5955,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5970,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 5985,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    },
+    {
+      "actors": {
+        "morgan": [
+          240.0,
+          340.0
+        ]
+      },
+      "cash": 60200,
+      "clock": 0.0,
+      "day": 3,
+      "frame": 6000,
+      "jobs": 12,
+      "phase": "prep",
+      "player": [
+        660.0,
+        500.0
+      ],
+      "sold": 6
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "check": "action route finishes",
+    "pass": false
+  },
+  {
+    "check": "ordinary $10 label 0",
+    "pass": false
+  }
+]

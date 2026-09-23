@@ -1,0 +1,11 @@
+{
+  "artifact": "/Users/michaelfuscoletti/Desktop/game-sim/artifacts/b9-baseline",
+  "artifact_sha256": "3d316d5a7cdc5a674f3aa89458fc8aeb8f63c2f90965beb11c492c2f4ad9f5b2",
+  "namespace": "b9-packaged-qa-20260923T023238105142Z",
+  "setup": "instrumented package; same frozen runtime/assets, test main-loop, isolated namespace; no automatic keyboard detours",
+  "script": "test_balance_scene.gd",
+  "strategy": "lean",
+  "normal_speed": true,
+  "retina": false,
+  "work": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/b9-packaged-qa-oi1ae77w/encounter"
+}

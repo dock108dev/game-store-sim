@@ -1,0 +1,18 @@
+{
+  "pass": true,
+  "input": "Native macOS pointer and keyboard using cua_repl; no gameplay adapter",
+  "frames_observed": 1289,
+  "travel_pixels": {
+    "visitor-1": 1752.7163945201346,
+    "visitor-2": 1384.5015507343078,
+    "visitor-3": 776.3470037725372
+  },
+  "minimum_sampled_customer_distance": 98.21362321180669,
+  "fixture_intersections": [],
+  "final_cash": 51199,
+  "sold": 1,
+  "stock_misses": 2,
+  "layout_revision": 2,
+  "checkpoint": "native/checkpoint.json",
+  "exit": 0
+}

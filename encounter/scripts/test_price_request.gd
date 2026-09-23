@@ -1,6 +1,7 @@
 extends "res://scripts/test_encounter.gd"
 func run():
  scene=load("res://main.tscn").instantiate();root.add_child(scene);await frames(3)
+ scene.entry_menu.queue_free();scene.flow_paused=false # focused command regression, entry covered by week suite
  scene.perform("receive")
  scene.selected_product="curb";scene.price_input.value=21.99;scene.request_action("reprice")
  scene.selected_product="tide";scene.price_input.value=19.99

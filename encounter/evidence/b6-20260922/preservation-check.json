@@ -1,0 +1,98 @@
+{
+  "incoming_files": 525,
+  "final_files": 554,
+  "removed_incoming_files": [],
+  "original_art_and_sample_files_unchanged": 266,
+  "historical_delivery_documents_unchanged": [
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/03-production/b2-delivery.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/03-production/b3-delivery.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/03-production/b4-delivery.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/03-production/b5-delivery.md"
+  ],
+  "validation": "/Users/michaelfuscoletti/Desktop/game-sim/encounter/evidence/validation-20260923T003918484574Z",
+  "isolated_project": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/game-sim-b6-fdknokvt/encounter",
+  "namespace": "game-sim-b6-fdknokvt",
+  "engine": "4.6.2.stable.official.71f334935",
+  "source_changes_after_execution": [],
+  "executable_source_match": true,
+  "exits": {
+    "price-request-exit.json": 0,
+    "import-exit.json": 0,
+    "week-retina-exit.json": 0,
+    "week-normal-exit.json": 0,
+    "breadth-headless-exit.json": 0,
+    "week-headless-exit.json": 0,
+    "breadth-normal-exit.json": 0,
+    "week-regressions-exit.json": 0,
+    "week-state-exit.json": 0,
+    "breadth-retina-exit.json": 0
+  },
+  "results": {
+    "week-state": {
+      "checks": 706,
+      "all_pass": true
+    },
+    "week-regressions": {
+      "checks": 86,
+      "all_pass": true
+    },
+    "price-request": {
+      "checks": 3,
+      "all_pass": true
+    },
+    "week-scene-headless": {
+      "checks": 307,
+      "all_pass": true,
+      "cash": 57040,
+      "sales": 32,
+      "max_buyers": 3
+    },
+    "week-scene-normal": {
+      "checks": 307,
+      "all_pass": true,
+      "cash": 57040,
+      "sales": 32,
+      "max_buyers": 3
+    },
+    "week-scene-retina": {
+      "checks": 307,
+      "all_pass": true,
+      "cash": 57040,
+      "sales": 32,
+      "max_buyers": 3
+    },
+    "breadth-scene-headless": {
+      "checks": 98,
+      "all_pass": true,
+      "cash": 55500,
+      "max_buyers": 3
+    },
+    "breadth-scene-normal": {
+      "checks": 98,
+      "all_pass": true,
+      "cash": 55500,
+      "max_buyers": 3
+    },
+    "breadth-scene-retina": {
+      "checks": 98,
+      "all_pass": true,
+      "cash": 55500,
+      "max_buyers": 3
+    }
+  },
+  "warnings": {
+    "breadth-headless.log": [],
+    "week-retina.log": [],
+    "week-state.log": [],
+    "breadth-retina.log": [],
+    "price-request.log": [],
+    "week-headless.log": [],
+    "breadth-normal.log": [],
+    "week-regressions.log": [],
+    "week-normal.log": [],
+    "import.log": []
+  },
+  "audio": "Dummy; unqualified",
+  "owner_acceptance": "pending",
+  "stop": "B7 not started"
+}

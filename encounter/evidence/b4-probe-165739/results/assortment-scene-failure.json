@@ -1,0 +1,150 @@
+[
+  {
+    "check": "selected product priced through controls 0",
+    "pass": true
+  },
+  {
+    "check": "selected product priced through controls 1",
+    "pass": true
+  },
+  {
+    "check": "selected product priced through controls 2",
+    "pass": true
+  },
+  {
+    "check": "confirmed hire morgan",
+    "pass": true
+  },
+  {
+    "check": "confirmed hire jules",
+    "pass": true
+  },
+  {
+    "check": "role control morgan 1",
+    "pass": true
+  },
+  {
+    "check": "role control jules 1",
+    "pass": true
+  },
+  {
+    "check": "both workers physically stock",
+    "pass": true
+  },
+  {
+    "check": "role control morgan 2",
+    "pass": true
+  },
+  {
+    "check": "role control jules 0",
+    "pass": true
+  },
+  {
+    "check": "paid idle opening warning",
+    "pass": true
+  },
+  {
+    "check": "Morgan useful checkout",
+    "pass": true
+  },
+  {
+    "check": "role control morgan 0",
+    "pass": true
+  },
+  {
+    "check": "role control jules 2",
+    "pass": true
+  },
+  {
+    "check": "Jules useful checkout",
+    "pass": true
+  },
+  {
+    "check": "checkout drains on close",
+    "pass": true
+  },
+  {
+    "check": "employment wage settlement",
+    "pass": true
+  },
+  {
+    "check": "scene reload employee report",
+    "pass": true
+  },
+  {
+    "check": "saved progress employee report visitor-1",
+    "pass": true
+  },
+  {
+    "check": "saved progress employee report visitor-2",
+    "pass": true
+  },
+  {
+    "check": "saved progress employee report visitor-3",
+    "pass": true
+  },
+  {
+    "check": "ordinary north bay purchase",
+    "pass": true
+  },
+  {
+    "check": "selected product priced through controls 0",
+    "pass": true
+  },
+  {
+    "check": "selected product priced through controls 1",
+    "pass": true
+  },
+  {
+    "check": "selected product priced through controls 2",
+    "pass": true
+  },
+  {
+    "check": "confirmed hire morgan",
+    "pass": true
+  },
+  {
+    "check": "confirmed hire jules",
+    "pass": true
+  },
+  {
+    "check": "role control morgan 1",
+    "pass": true
+  },
+  {
+    "check": "role control jules 1",
+    "pass": true
+  },
+  {
+    "check": "both workers physically stock",
+    "pass": true
+  },
+  {
+    "check": "role control morgan 2",
+    "pass": true
+  },
+  {
+    "check": "role control jules 0",
+    "pass": true
+  },
+  {
+    "check": "paid idle opening warning",
+    "pass": true
+  },
+  {
+    "check": "Morgan useful checkout",
+    "pass": true
+  },
+  {
+    "check": "role control morgan 0",
+    "pass": true
+  },
+  {
+    "check": "role control jules 2",
+    "pass": true
+  },
+  {
+    "check": "Jules useful checkout",
+    "pass": false
+  }
+]

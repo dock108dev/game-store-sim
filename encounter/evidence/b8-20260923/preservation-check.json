@@ -1,0 +1,30 @@
+{
+  "incoming_files": 561,
+  "missing_incoming": [],
+  "changed_incoming_documents": [
+    "/Users/michaelfuscoletti/Desktop/game-sim/README.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/MASTER_PLAN.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/encounter/README.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/04-validation/local-validation-plan.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/03-production/first-week-implementation-packet.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/03-production/milestones-and-backlog.md",
+    "/Users/michaelfuscoletti/Desktop/game-sim/docs/02-technical/local-development.md",
+    "/Users/michaelfuscoletti/Desktop/game_sim_next_steps.md"
+  ],
+  "incoming_runtime_unchanged": true,
+  "preserved_art_and_master_count": 103,
+  "incoming_scripts_unchanged": true,
+  "prior_delivery_files_unchanged": true,
+  "new_files": [
+    "encounter/scripts/test_balance_scene.gd",
+    "encounter/scripts/capture_balance_pacing.py",
+    "encounter/scripts/test_balance_state.gd",
+    "encounter/scripts/b8_policy.gd",
+    "encounter/scripts/summarize_balance.py",
+    "encounter/scripts/evaluate_balance.py",
+    "docs/03-production/b8-delivery.md"
+  ],
+  "no_commit_push_publication": true,
+  "owner_save_access": false,
+  "rules": "schema 10 / b6-retail-1; all namespaces preserved"
+}

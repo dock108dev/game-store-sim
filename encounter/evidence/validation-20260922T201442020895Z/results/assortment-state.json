@@ -1,0 +1,454 @@
+[
+  {
+    "check": "fresh valid and gated",
+    "pass": true
+  },
+  {
+    "check": "receive starter once",
+    "pass": true
+  },
+  {
+    "check": "unique starter identity 0",
+    "pass": true
+  },
+  {
+    "check": "unique starter identity 1",
+    "pass": true
+  },
+  {
+    "check": "unique starter identity 2",
+    "pass": true
+  },
+  {
+    "check": "invalid price 0",
+    "pass": true
+  },
+  {
+    "check": "invalid price 99",
+    "pass": true
+  },
+  {
+    "check": "invalid price 10000",
+    "pass": true
+  },
+  {
+    "check": "invalid price 1.5",
+    "pass": true
+  },
+  {
+    "check": "invalid price 2199",
+    "pass": true
+  },
+  {
+    "check": "reload received unpriced",
+    "pass": true
+  },
+  {
+    "check": "independent prices",
+    "pass": true
+  },
+  {
+    "check": "prep return",
+    "pass": true
+  },
+  {
+    "check": "reload assortment return",
+    "pass": true
+  },
+  {
+    "check": "backroom allowed while open",
+    "pass": true
+  },
+  {
+    "check": "no prep changes while trading",
+    "pass": true
+  },
+  {
+    "check": "fixed product preferences",
+    "pass": true
+  },
+  {
+    "check": "reload roster before arrival",
+    "pass": true
+  },
+  {
+    "check": "staggered arrival",
+    "pass": true
+  },
+  {
+    "check": "identified stock miss before price",
+    "pass": true
+  },
+  {
+    "check": "other product reserved",
+    "pass": true
+  },
+  {
+    "check": "reload selection and stock miss",
+    "pass": true
+  },
+  {
+    "check": "exclusive ownership",
+    "pass": true
+  },
+  {
+    "check": "locked FIFO offers",
+    "pass": true
+  },
+  {
+    "check": "reload queue offers",
+    "pass": true
+  },
+  {
+    "check": "wrong product checkout rejected",
+    "pass": true
+  },
+  {
+    "check": "tampered offer rejected",
+    "pass": true
+  },
+  {
+    "check": "wrong reservation owner rejected",
+    "pass": true
+  },
+  {
+    "check": "closing drains accepted queue",
+    "pass": true
+  },
+  {
+    "check": "reload closing",
+    "pass": true
+  },
+  {
+    "check": "sale clears copy references",
+    "pass": true
+  },
+  {
+    "check": "sale once",
+    "pass": true
+  },
+  {
+    "check": "next FIFO sale",
+    "pass": true
+  },
+  {
+    "check": "day1 product sum sold",
+    "pass": true
+  },
+  {
+    "check": "day1 product sum revenue",
+    "pass": true
+  },
+  {
+    "check": "day1 product sum cost",
+    "pass": true
+  },
+  {
+    "check": "day1 product sum margin",
+    "pass": true
+  },
+  {
+    "check": "day1 product sum missed",
+    "pass": true
+  },
+  {
+    "check": "day1 product sum unavailable",
+    "pass": true
+  },
+  {
+    "check": "day1 product sum remaining",
+    "pass": true
+  },
+  {
+    "check": "day1 ledger valid",
+    "pass": true
+  },
+  {
+    "check": "final report locks transactions",
+    "pass": true
+  },
+  {
+    "check": "bad mixed order {  }",
+    "pass": true
+  },
+  {
+    "check": "bad mixed order { \"curb\": -1, \"tide\": 0, \"orbit\": 0 }",
+    "pass": true
+  },
+  {
+    "check": "bad mixed order { \"curb\": 7, \"tide\": 0, \"orbit\": 0 }",
+    "pass": true
+  },
+  {
+    "check": "bad mixed order { \"curb\": 1.5, \"tide\": 0, \"orbit\": 0 }",
+    "pass": true
+  },
+  {
+    "check": "bad mixed order { \"curb\": 0, \"tide\": 0, \"orbit\": 0 }",
+    "pass": true
+  },
+  {
+    "check": "mixed payment once",
+    "pass": true
+  },
+  {
+    "check": "reload paid mixed order",
+    "pass": true
+  },
+  {
+    "check": "advance once",
+    "pass": true
+  },
+  {
+    "check": "reload shipment pending",
+    "pass": true
+  },
+  {
+    "check": "receive mixed once",
+    "pass": true
+  },
+  {
+    "check": "reload mixed received",
+    "pass": true
+  },
+  {
+    "check": "capacity four and overflow",
+    "pass": true
+  },
+  {
+    "check": "assortment exchange",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost case-01",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost case-02",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost case-03",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost case-04",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost case-05",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost case-06",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost order-1-curb-1",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost order-1-curb-2",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost order-1-orbit-1",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost order-1-tide-1",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost order-1-tide-2",
+    "pass": true
+  },
+  {
+    "check": "historical copy cost order-1-tide-3",
+    "pass": true
+  },
+  {
+    "check": "reload full shelf with backroom",
+    "pass": true
+  },
+  {
+    "check": "second day preference rotates",
+    "pass": true
+  },
+  {
+    "check": "day2 sought product buys visitor-1",
+    "pass": true
+  },
+  {
+    "check": "day2 sought product buys visitor-2",
+    "pass": true
+  },
+  {
+    "check": "day2 sought product buys visitor-3",
+    "pass": true
+  },
+  {
+    "check": "day2 product sum sold",
+    "pass": true
+  },
+  {
+    "check": "day2 product sum revenue",
+    "pass": true
+  },
+  {
+    "check": "day2 product sum cost",
+    "pass": true
+  },
+  {
+    "check": "day2 product sum margin",
+    "pass": true
+  },
+  {
+    "check": "day2 product sum missed",
+    "pass": true
+  },
+  {
+    "check": "day2 product sum unavailable",
+    "pass": true
+  },
+  {
+    "check": "day2 product sum remaining",
+    "pass": true
+  },
+  {
+    "check": "day2 ledger valid",
+    "pass": true
+  },
+  {
+    "check": "reload day2 report",
+    "pass": true
+  },
+  {
+    "check": "two day cumulative cash",
+    "pass": true
+  },
+  {
+    "check": "reproducible assortment comparison",
+    "pass": true
+  },
+  {
+    "check": "price refusal is product-specific",
+    "pass": true
+  },
+  {
+    "check": "no duplicate refusal",
+    "pass": true
+  },
+  {
+    "check": "reload price decisions",
+    "pass": true
+  },
+  {
+    "check": "queued departure releases reservation",
+    "pass": true
+  },
+  {
+    "check": "early close keeps browsing and cancels absent",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d1 visitor-1",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d1 visitor-2",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d1 visitor-3",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d2 visitor-1",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d2 visitor-2",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d2 visitor-3",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d3 visitor-1",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d3 visitor-2",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d3 visitor-3",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d4 visitor-1",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d4 visitor-2",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d4 visitor-3",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d5 visitor-1",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d5 visitor-2",
+    "pass": true
+  },
+  {
+    "check": "inclusive budget d5 visitor-3",
+    "pass": true
+  },
+  {
+    "check": "insufficient cash atomic",
+    "pass": true
+  },
+  {
+    "check": "reload tamper baseline",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection preference",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection budget",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection copy identity",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection cost",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection queue",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection decision",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection phase",
+    "pass": true
+  },
+  {
+    "check": "malformed atomic rejection unknown copy",
+    "pass": true
+  }
+]

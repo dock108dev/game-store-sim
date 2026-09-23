@@ -1,0 +1,36 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+R1_DISPLAY {"canvas_scale":"(1.0, 1.0)","screen_scale":1.0,"viewport":"(1280.0, 720.0)","window":"(0, 0)"}
+R1_ACTION {"action":"receive","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"reprice","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"stock","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"stock","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"stock","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"prep","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"open","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"open","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"close","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"save","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"load","ok":true,"phase":"closing","report":{"cash":55000,"cost":0,"margin":0,"missed":0,"remaining":3,"revenue":0,"sold":0,"unavailable":0}}
+R1_ACTION {"action":"sale","ok":true,"phase":"closing","report":{"cash":57199,"cost":800,"margin":1399,"missed":0,"remaining":2,"revenue":2199,"sold":1,"unavailable":0}}
+R5_DRAIN_TIMEOUT {"carried":"","cash":57199,"clock":23.1000000000001,"customers":{"visitor-1":{"arrival":0.0,"browse_fixture":"rack-0001","browse_port":"browse-0","budget":2418,"copy":"case-01","decision":"buy","elapsed":4.0,"item":"","name":"Alex","offer":2199,"position":[800.0,580.0],"product":"curb","settled":false,"state":"leaving"},"visitor-2":{"arrival":5.0,"browse_fixture":"rack-0001","browse_port":"browse-1","budget":2239,"copy":"case-02","decision":"buy","elapsed":4.0,"item":"case-02","name":"Blair","offer":1999,"position":[720.0,580.0],"product":"tide","settled":false,"state":"queued"},"visitor-3":{"arrival":10.0,"browse_fixture":"rack-0001","browse_port":"browse-0","budget":2098,"copy":"case-03","decision":"buy","elapsed":4.0,"item":"case-03","name":"Casey","offer":1499,"position":[640.0,580.0],"product":"orbit","settled":false,"state":"queued"}},"day":1,"decisions":[{"budget":2418,"customer":"visitor-1","day":1,"item":"case-01","offer":2199,"outcome":"buy","product":"curb"},{"budget":2239,"customer":"visitor-2","day":1,"item":"case-02","offer":1999,"outcome":"buy","product":"tide"},{"budget":2098,"customer":"visitor-3","day":1,"item":"case-03","offer":1499,"outcome":"buy","product":"orbit"}],"fixture_events":[],"fulfilled_requests":{},"items":{"case-01":{"acquisition_id":"starter:1790105402.37242-163521","acquisition_seq":1,"cost":800,"fixture_id":null,"location":"sold","owner":"","price":2199,"product":"curb","slot_index":null},"case-02":{"acquisition_id":"starter:1790105402.37242-163521","acquisition_seq":2,"cost":1200,"fixture_id":"rack-0001","location":"customer","owner":"visitor-2","price":1999,"product":"tide","slot_index":1},"case-03":{"acquisition_id":"starter:1790105402.37242-163521","acquisition_seq":3,"cost":500,"fixture_id":"rack-0001","location":"customer","owner":"visitor-3","price":1499,"product":"orbit","slot_index":2}},"layout":{"fixtures":{"checkout-01":{"origin":[690,470],"type":"counter"},"rack-0001":{"origin":[440,330],"type":"rack"},"receiving-01":{"origin":[270,430],"type":"receiving"}},"space_level":0},"layout_revision":0,"next_event_seq":1,"next_fixture_id":2,"opening_cash":55000,"orders":[],"phase":"closing","queue":["visitor-2","visitor-3"],"received":true,"ruleset_id":"b2-layout-1","run_id":"1790105402.37242-163521","sales":[{"cost":800,"customer":"visitor-1","day":1,"item":"case-01","price":2199,"product":"curb"}],"version":6}
+ERROR: checkout drains
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_assortment_scene.gd:6)
+       [1] run (res://scripts/test_assortment_scene.gd:90)
+       [2] drain (res://scripts/test_assortment_scene.gd:38)
+ERROR: mixed product totals
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_assortment_scene.gd:6)
+       [1] run (res://scripts/test_assortment_scene.gd:91)
+       [2] drain (res://scripts/test_assortment_scene.gd:38)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+     at: cleanup (core/object/object.cpp:2641)

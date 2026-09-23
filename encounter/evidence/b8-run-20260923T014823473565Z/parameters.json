@@ -1,0 +1,6 @@
+{
+  "mode": "headless",
+  "strategy": "recovery",
+  "pace": false,
+  "screen": false
+}

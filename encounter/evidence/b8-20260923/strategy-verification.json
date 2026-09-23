@@ -1,0 +1,132 @@
+[
+  {
+    "path": "encounter/evidence/b8-run-20260923T012758133405Z/results/b8-growth-headless.json",
+    "strategy": "growth",
+    "mode": "headless",
+    "checks": 245,
+    "cash": 57040,
+    "operating_result": 13040,
+    "detours": 0,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T012820119864Z/results/b8-lean-headless.json",
+    "strategy": "lean",
+    "mode": "headless",
+    "checks": 273,
+    "cash": 79520,
+    "operating_result": 25520,
+    "detours": 0,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T012821298680Z/results/b8-recovery-headless.json",
+    "strategy": "recovery",
+    "mode": "headless",
+    "checks": 256,
+    "cash": 76080,
+    "operating_result": 22080,
+    "detours": 0,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T012858571729Z/results/b8-bankruptcy-headless.json",
+    "strategy": "bankruptcy",
+    "mode": "headless",
+    "checks": 112,
+    "cash": 7000,
+    "operating_result": -27000,
+    "detours": 0,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T012859720084Z/results/b8-one_worker-headless.json",
+    "strategy": "one_worker",
+    "mode": "headless",
+    "checks": 230,
+    "cash": 59440,
+    "operating_result": 15440,
+    "detours": 0,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T012900915780Z/results/b8-growth-normal.json",
+    "strategy": "growth",
+    "mode": "normal",
+    "checks": 247,
+    "cash": 57040,
+    "operating_result": 13040,
+    "detours": 0,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T014733730563Z/results/b8-lean-normal.json",
+    "strategy": "lean",
+    "mode": "normal",
+    "checks": 275,
+    "cash": 79520,
+    "operating_result": 25520,
+    "detours": 9,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T014823473563Z/results/b8-lean-headless.json",
+    "strategy": "lean",
+    "mode": "headless",
+    "checks": 275,
+    "cash": 79520,
+    "operating_result": 25520,
+    "detours": 10,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T014823473565Z/results/b8-recovery-headless.json",
+    "strategy": "recovery",
+    "mode": "headless",
+    "checks": 258,
+    "cash": 76080,
+    "operating_result": 22080,
+    "detours": 10,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T015718502006Z/results/b8-recovery-retina.json",
+    "strategy": "recovery",
+    "mode": "retina",
+    "checks": 258,
+    "cash": 76080,
+    "operating_result": 22080,
+    "detours": 10,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T015909402377Z/results/b8-growth-retina.json",
+    "strategy": "growth",
+    "mode": "retina",
+    "checks": 249,
+    "cash": 57040,
+    "operating_result": 13040,
+    "detours": 5,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T020055086255Z/results/b8-one_worker-normal.json",
+    "strategy": "one_worker",
+    "mode": "normal",
+    "checks": 232,
+    "cash": 59440,
+    "operating_result": 15440,
+    "detours": 5,
+    "all_runtime_hashes_match": true
+  },
+  {
+    "path": "encounter/evidence/b8-run-20260923T020240896991Z/results/b8-bankruptcy-normal.json",
+    "strategy": "bankruptcy",
+    "mode": "normal",
+    "checks": 114,
+    "cash": 7000,
+    "operating_result": -27000,
+    "detours": 0,
+    "all_runtime_hashes_match": true
+  }
+]

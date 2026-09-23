@@ -1,0 +1,5 @@
+{
+  "mode": "headless",
+  "strategy": "bankruptcy",
+  "pace": false
+}

@@ -1,0 +1,390 @@
+{
+  "artifact": "e257220d7c7c4c0081551375b10b6288b35d4bd6823c59eb2d9ab886c254c391",
+  "runs": [
+    {
+      "directory": "encounter/evidence/b9-package-20260923T024947872465Z",
+      "script": "test_b9_navigation.gd",
+      "strategy": "lean",
+      "retina": false,
+      "exit": 0,
+      "warnings": [],
+      "instrumented_zip_sha256": "ec2d5ab8f9d6150912c83664bc037b0dd1f0c98e6d7c3effb89405adc59c2ac5"
+    },
+    {
+      "directory": "encounter/evidence/b9-package-20260923T025013417987Z",
+      "script": "test_balance_scene.gd",
+      "strategy": "growth",
+      "retina": true,
+      "exit": 0,
+      "warnings": [],
+      "instrumented_zip_sha256": "8ff7e0b286f444d3e97b9709574998f803e7e18ff11da0e09ec12cea472c0f4e"
+    },
+    {
+      "directory": "encounter/evidence/b9-package-20260923T025209120331Z",
+      "script": "test_balance_scene.gd",
+      "strategy": "lean",
+      "retina": false,
+      "exit": 0,
+      "warnings": [],
+      "instrumented_zip_sha256": "b765ac57397bad5fb17e468e01f706c4a058310d1c232928892b00628cc6fb82"
+    },
+    {
+      "directory": "encounter/evidence/b9-package-20260923T025411570644Z",
+      "script": "test_balance_scene.gd",
+      "strategy": "bankruptcy",
+      "retina": false,
+      "exit": 0,
+      "warnings": [],
+      "instrumented_zip_sha256": "05b8ed3ad6c79392fd87f344ccdd560a917e6f49efaf715783a4ae1b94da19c9"
+    },
+    {
+      "directory": "encounter/evidence/b9-package-20260923T025532139871Z",
+      "script": "test_presentation.gd",
+      "strategy": "lean",
+      "retina": false,
+      "exit": 0,
+      "warnings": [],
+      "instrumented_zip_sha256": "eedfa6279431acffa97adc8c564b1808ff8492a6aa768b3f39f5803a0b9ee3f2"
+    },
+    {
+      "directory": "encounter/evidence/b9-package-20260923T025547727109Z",
+      "script": "test_presentation.gd",
+      "strategy": "lean",
+      "retina": true,
+      "exit": 0,
+      "warnings": [],
+      "instrumented_zip_sha256": "95df98361b79f4f1b9562dcc32e14d2e779cf2a518cb5fa0df63c8a73d33b508"
+    },
+    {
+      "directory": "encounter/evidence/b9-package-20260923T025603780102Z",
+      "script": "test_restart_flow.gd",
+      "strategy": "lean",
+      "retina": false,
+      "exit": 0,
+      "warnings": [],
+      "instrumented_zip_sha256": "bc1d2f8d48b652ba100a9bd80077234fb9dce9a5b0f3202b8bbe2478f1f9739c"
+    }
+  ],
+  "arithmetic": {
+    "growth": {
+      "checks": 249,
+      "no_helper_detours": true,
+      "final": {
+        "cash": 57040,
+        "cost_of_sales": 29200,
+        "incurred_overhead": 23400,
+        "inventory_cost": 0,
+        "inventory_purchases": 24200,
+        "investment": 16000,
+        "margin": 36440,
+        "opening_cash": 55000,
+        "operating_result": 13040,
+        "paid_overhead": 23400,
+        "receipts": 65640,
+        "unpaid_liabilities": 0
+      },
+      "days": [
+        {
+          "day": 1,
+          "cash": 55000,
+          "receipts": 6000,
+          "sold_copy_cost": 2500,
+          "ending_inventory_cost": 2500,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 2,
+          "cash": 60200,
+          "receipts": 6000,
+          "sold_copy_cost": 2500,
+          "ending_inventory_cost": 800,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 3,
+          "cash": 63700,
+          "receipts": 7600,
+          "sold_copy_cost": 3300,
+          "ending_inventory_cost": 400,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 4,
+          "cash": 65640,
+          "receipts": 9840,
+          "sold_copy_cost": 4500,
+          "ending_inventory_cost": 2600,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 5,
+          "cash": 62520,
+          "receipts": 11080,
+          "sold_copy_cost": 5100,
+          "ending_inventory_cost": 500,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 6,
+          "cash": 64420,
+          "receipts": 12600,
+          "sold_copy_cost": 5600,
+          "ending_inventory_cost": 3200,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 7,
+          "cash": 57040,
+          "receipts": 12520,
+          "sold_copy_cost": 5700,
+          "ending_inventory_cost": 0,
+          "report_matches_original_copies_and_events": true
+        }
+      ],
+      "terminal": {
+        "day": 7,
+        "due_event": "",
+        "outcome": "survived",
+        "shortfall": 0,
+        "summary": {
+          "cash": 57040,
+          "cost_of_sales": 29200,
+          "incurred_overhead": 23400,
+          "inventory_cost": 0,
+          "inventory_purchases": 24200,
+          "investment": 16000,
+          "margin": 36440,
+          "opening_cash": 55000,
+          "operating_result": 13040,
+          "paid_overhead": 23400,
+          "receipts": 65640,
+          "unpaid_liabilities": 0
+        },
+        "unpaid": []
+      }
+    },
+    "lean": {
+      "checks": 275,
+      "no_helper_detours": true,
+      "final": {
+        "cash": 79520,
+        "cost_of_sales": 37600,
+        "incurred_overhead": 15000,
+        "inventory_cost": 0,
+        "inventory_purchases": 32600,
+        "investment": 6000,
+        "margin": 40520,
+        "opening_cash": 55000,
+        "operating_result": 25520,
+        "paid_overhead": 15000,
+        "receipts": 78120,
+        "unpaid_liabilities": 0
+      },
+      "days": [
+        {
+          "day": 1,
+          "cash": 54400,
+          "receipts": 5400,
+          "sold_copy_cost": 2500,
+          "ending_inventory_cost": 2500,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 2,
+          "cash": 60940,
+          "receipts": 7740,
+          "sold_copy_cost": 3700,
+          "ending_inventory_cost": 0,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 3,
+          "cash": 65600,
+          "receipts": 8460,
+          "sold_copy_cost": 3800,
+          "ending_inventory_cost": 0,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 4,
+          "cash": 71500,
+          "receipts": 11700,
+          "sold_copy_cost": 5800,
+          "ending_inventory_cost": 0,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 5,
+          "cash": 78400,
+          "receipts": 13500,
+          "sold_copy_cost": 6600,
+          "ending_inventory_cost": 0,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 6,
+          "cash": 86460,
+          "receipts": 15660,
+          "sold_copy_cost": 7600,
+          "ending_inventory_cost": 0,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 7,
+          "cash": 79520,
+          "receipts": 15660,
+          "sold_copy_cost": 7600,
+          "ending_inventory_cost": 0,
+          "report_matches_original_copies_and_events": true
+        }
+      ],
+      "terminal": {
+        "day": 7,
+        "due_event": "",
+        "outcome": "survived",
+        "shortfall": 0,
+        "summary": {
+          "cash": 79520,
+          "cost_of_sales": 37600,
+          "incurred_overhead": 15000,
+          "inventory_cost": 0,
+          "inventory_purchases": 32600,
+          "investment": 6000,
+          "margin": 40520,
+          "opening_cash": 55000,
+          "operating_result": 25520,
+          "paid_overhead": 15000,
+          "receipts": 78120,
+          "unpaid_liabilities": 0
+        },
+        "unpaid": []
+      }
+    },
+    "bankruptcy": {
+      "checks": 114,
+      "no_helper_detours": true,
+      "final": {
+        "cash": 7000,
+        "cost_of_sales": 0,
+        "incurred_overhead": 27000,
+        "inventory_cost": 35000,
+        "inventory_purchases": 30000,
+        "investment": 6000,
+        "margin": 0,
+        "opening_cash": 55000,
+        "operating_result": -27000,
+        "paid_overhead": 12000,
+        "receipts": 0,
+        "unpaid_liabilities": 15000
+      },
+      "days": [
+        {
+          "day": 1,
+          "cash": 34000,
+          "receipts": 0,
+          "sold_copy_cost": 0,
+          "ending_inventory_cost": 20000,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 2,
+          "cash": 19000,
+          "receipts": 0,
+          "sold_copy_cost": 0,
+          "ending_inventory_cost": 35000,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 3,
+          "cash": 16600,
+          "receipts": 0,
+          "sold_copy_cost": 0,
+          "ending_inventory_cost": 35000,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 4,
+          "cash": 14200,
+          "receipts": 0,
+          "sold_copy_cost": 0,
+          "ending_inventory_cost": 35000,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 5,
+          "cash": 11800,
+          "receipts": 0,
+          "sold_copy_cost": 0,
+          "ending_inventory_cost": 35000,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 6,
+          "cash": 9400,
+          "receipts": 0,
+          "sold_copy_cost": 0,
+          "ending_inventory_cost": 35000,
+          "report_matches_original_copies_and_events": true
+        },
+        {
+          "day": 7,
+          "cash": 7000,
+          "receipts": 0,
+          "sold_copy_cost": 0,
+          "ending_inventory_cost": 35000,
+          "report_matches_original_copies_and_events": true
+        }
+      ],
+      "terminal": {
+        "day": 7,
+        "due_event": "rent:1790132065.80793-490499:7",
+        "outcome": "bankrupt",
+        "shortfall": 8000,
+        "summary": {
+          "cash": 7000,
+          "cost_of_sales": 0,
+          "incurred_overhead": 27000,
+          "inventory_cost": 35000,
+          "inventory_purchases": 30000,
+          "investment": 6000,
+          "margin": 0,
+          "opening_cash": 55000,
+          "operating_result": -27000,
+          "paid_overhead": 12000,
+          "receipts": 0,
+          "unpaid_liabilities": 15000
+        },
+        "unpaid": [
+          "rent:1790132065.80793-490499:7"
+        ]
+      }
+    }
+  },
+  "ordinary_logs": {
+    "final-ordinary-new.log": {
+      "CoreAudio_startup": true,
+      "teardown": true,
+      "warnings": []
+    },
+    "final-ordinary-resume.log": {
+      "CoreAudio_startup": true,
+      "teardown": true,
+      "warnings": []
+    },
+    "final-ordinary-navigation.log": {
+      "CoreAudio_startup": true,
+      "teardown": true,
+      "warnings": []
+    },
+    "final-ordinary-invalid-retry.log": {
+      "CoreAudio_startup": true,
+      "teardown": true,
+      "warnings": []
+    },
+    "final-ordinary-terminal.log": {
+      "CoreAudio_startup": true,
+      "teardown": true,
+      "warnings": []
+    }
+  }
+}

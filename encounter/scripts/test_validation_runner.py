@@ -31,6 +31,33 @@ class ValidationRunnerTests(unittest.TestCase):
                 self.assertEqual((output / 'probe.log').read_text(), message)
                 self.assertEqual(json.loads((output / 'probe-exit.json').read_text()), {'exit': status})
 
+    def test_abnormal_process_attempts_retain_safe_status(self):
+        for error, status in [
+            (subprocess.TimeoutExpired(['private-command'], 900), 'timeout'),
+            (FileNotFoundError('private-path'), 'launch_failed'),
+            (KeyboardInterrupt(), 'interrupted'),
+        ]:
+            with self.subTest(status=status), tempfile.TemporaryDirectory() as folder:
+                output = Path(folder)
+                def execute(command, **kwargs):
+                    kwargs['stdout'].write('partial log\n')
+                    raise error
+                with patch.object(validate.subprocess, 'run', side_effect=execute):
+                    with self.assertRaises(type(error)):
+                        validate.run_check(output, output, 'probe', [])
+                self.assertEqual(json.loads((output / 'probe-exit.json').read_text()),
+                                 {'exit': None, 'status': status})
+                self.assertEqual((output / 'probe.log').read_text(), 'partial log\n')
+
+    def test_basic_selection_is_headless_and_excludes_full_week(self):
+        with patch.object(validate, 'run_check') as run:
+            validate.run_basic_checks(Path('/synthetic/project'), Path('/synthetic/output'))
+        names = [call.args[2] for call in run.call_args_list]
+        self.assertEqual(names, ['import', 'week-state', 'week-regressions', 'ssot',
+                                 'security', 'storage', 'price-request',
+                                 'presentation-headless', 'restart-flow'])
+        self.assertTrue(all('--headless' in call.args[3] for call in run.call_args_list))
+
     def test_warning_alone_is_not_an_error(self):
         with tempfile.TemporaryDirectory() as folder:
             def execute(command, **kwargs):
@@ -64,7 +91,14 @@ class ValidationRunnerTests(unittest.TestCase):
     def test_changed_namespace_or_disabled_custom_directory_stops_isolation(self):
         for settings in (
             'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="unexpected"\n',
+            'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="game-sim-first-week-dev-v6"\n',
+            'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="game-sim-first-week-dev-v7"\n',
+            'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="game-sim-first-week-dev-v8"\n',
+            'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="game-sim-first-week-dev-v9"\n',
             f'config/custom_user_dir_name="{validate.REVIEW_NAMESPACE}"\n',
+            'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="game-sim-r5-review-isolated"\n',
+            f'config/use_custom_user_dir=true\nconfig/custom_user_dir_name="{validate.REVIEW_NAMESPACE}"\nconfig/custom_user_dir_name="owner"\n',
+            f'config/use_custom_user_dir=true\nconfig/use_custom_user_dir=false\nconfig/custom_user_dir_name="{validate.REVIEW_NAMESPACE}"\n',
         ):
             with self.subTest(settings=settings), tempfile.TemporaryDirectory() as folder:
                 root = Path(folder)

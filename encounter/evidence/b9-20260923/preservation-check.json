@@ -1,0 +1,18 @@
+{
+  "incoming_files": 567,
+  "changed": [
+    "README.md",
+    "docs/MASTER_PLAN.md",
+    "encounter/main.gd",
+    "encounter/README.md",
+    "encounter/project.godot",
+    "docs/04-validation/local-validation-plan.md",
+    "docs/03-production/first-week-implementation-packet.md",
+    "docs/03-production/milestones-and-backlog.md",
+    "docs/02-technical/local-development.md",
+    "docs/02-technical/encounter-architecture.md"
+  ],
+  "missing": [],
+  "unchanged_art_files": 103,
+  "unchanged_business_sources": true
+}

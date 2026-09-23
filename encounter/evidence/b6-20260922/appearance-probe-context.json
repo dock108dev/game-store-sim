@@ -1,0 +1,18 @@
+{
+  "kind": "synthetic art inspection; scripted actor placement, not ordinary gameplay",
+  "engine": "Godot 4.6.2",
+  "muted": true,
+  "source": {
+    "encounter/actor.gd": "768d3dca4172e2a8b093aa1bc41be5049bf101bd2f38251a66eb887adf57bd2e",
+    "encounter/evidence/b6-20260922/appearance-probe.gd": "eddd9cca3710eb23e292859a16c02dd8f04f2425abc3aafcceca337db988d1df",
+    "encounter/art/customer-4-back.png": "997acc18ddd54bdc09e41e17270fa5e78c9f9f29ff306c7825c7e7ee77946c41",
+    "encounter/art/customer-5-back.png": "24a2bfd4cd0cfbe35e454b4965b88801b2cc7d5a3f598ed2a10a2a99b5ca4e8d",
+    "encounter/art/customer-3-back.png": "8ea11c6ebfeb826706538e10da9352847ea7e0f42e220c058593f7e140e275a6",
+    "encounter/art/customer-5-side.png": "24a2bfd4cd0cfbe35e454b4965b88801b2cc7d5a3f598ed2a10a2a99b5ca4e8d",
+    "encounter/art/customer-4-side.png": "997acc18ddd54bdc09e41e17270fa5e78c9f9f29ff306c7825c7e7ee77946c41",
+    "encounter/art/customer-4-front.png": "997acc18ddd54bdc09e41e17270fa5e78c9f9f29ff306c7825c7e7ee77946c41",
+    "encounter/art/customer-3-front.png": "fe20d92f52788a5a6b5950611e06b44c99391dd1fbba2df7e3d22902acb1960e",
+    "encounter/art/customer-3-side.png": "67e0dc8a02270c89921d03efed8a7a2438880b49370e8ff0514f24a51429c776",
+    "encounter/art/customer-5-front.png": "24a2bfd4cd0cfbe35e454b4965b88801b2cc7d5a3f598ed2a10a2a99b5ca4e8d"
+  }
+}

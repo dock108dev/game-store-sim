@@ -1,0 +1,20 @@
+{
+  "verified_at_utc": "2026-09-23T13:34:27.108036+00:00",
+  "app_path": "/Users/michaelfuscoletti/Desktop/game-sim/artifacts/b9-personal-mac/Replay Junction Personal Beta.app",
+  "identity_sha256": "a38a0250ce25ddc473c4c9c1065336f883082f22f6cf342ea7e7871ea5400cfc",
+  "zip_sha256": "e257220d7c7c4c0081551375b10b6288b35d4bd6823c59eb2d9ab886c254c391",
+  "expected_zip_sha256": "e257220d7c7c4c0081551375b10b6288b35d4bd6823c59eb2d9ab886c254c391",
+  "bundle_files": {
+    "Replay Junction Personal Beta.app/Contents/Info.plist": "40ff4b9c20c15735ecc9227e6fb53ecf652e840a148eb74f106a706b793638f0",
+    "Replay Junction Personal Beta.app/Contents/MacOS/Replay Junction Personal Beta": "1111abd995768d05aac7561401ce7df5619a1244a9d0e9cf747889a2f4e9d2ce",
+    "Replay Junction Personal Beta.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "Replay Junction Personal Beta.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "Replay Junction Personal Beta.app/Contents/Resources/Replay Junction Personal Beta.pck": "cad53259b856092f0a7059f518802f6600435df58e8f4642aea419089ab201e1",
+    "Replay Junction Personal Beta.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "Replay Junction Personal Beta.app/Contents/_CodeSignature/CodeResources": "b79ea8dec7d0ef26edda0e20e9ef12eea9b30e8c0537da21f194c0022846921b"
+  },
+  "bundle_matches_retained_identity": true,
+  "zip_matches": true,
+  "symlinks": [],
+  "pass": true
+}

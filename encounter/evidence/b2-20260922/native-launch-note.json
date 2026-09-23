@@ -1,0 +1,6 @@
+{
+  "initial_launch": "A short-lived launcher process ended before opening the game; its PID is retained separately.",
+  "completed_launch": "Foreground executable in exec session 72854; same isolated project and observer as native-context.json.",
+  "completed_exit": 0,
+  "gameplay_input": "cua_repl native macOS pointer and keyboard"
+}

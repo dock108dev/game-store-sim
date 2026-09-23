@@ -1,0 +1,9 @@
+RUN ['python3', 'encounter/scripts/evaluate_balance.py', '--strategy', 'lean', '--mode', 'normal', '--pace']
+/Users/michaelfuscoletti/Desktop/game-sim/encounter/evidence/b8-run-20260923T013601651034Z
+Traceback (most recent call last):
+  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/evaluate_balance.py", line 14, in <module>
+    validate.run_check(w,o,'screen' if a.screen else 'scene',['--headless','--script','res://scripts/test_balance_state.gd'] if a.screen else options)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/validate.py", line 67, in run_check
+    raise RuntimeError(f'{name} failed: {output}')
+RuntimeError: scene failed: /Users/michaelfuscoletti/Desktop/game-sim/encounter/evidence/b8-run-20260923T013601651034Z

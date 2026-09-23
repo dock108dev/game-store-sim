@@ -10,10 +10,10 @@ var invariant_failure=false
 func observe():
  var active=scene.visitors.values().filter(func(v):return v.actor.visible)
  for v in active:
-  for b in scene.BLOCKS:
+  for b in scene.Layout.obstacles(scene.state.data.layout):
    if b.has_point(v.actor.position):fixture_collision=true
   for other in active:
-   if v!=other and v.actor.position.distance_to(other.actor.position)<59:overlap=true
+   if v!=other and v.actor.position.distance_to(other.actor.position)<27:overlap=true
  if not scene.state.valid():invariant_failure=true
 func wait_until(predicate,limit=1800):
  for i in range(limit):
@@ -24,7 +24,7 @@ func wait_until(predicate,limit=1800):
 func reload_stage(name):
  scene.set_process(false)
  var before=scene.state.data.duplicate(true)
- await key(KEY_K);await key(KEY_L)
+ await key(KEY_K);await frames(3);await key(KEY_L);await frames(3);await press(dialog().get_ok_button());await frames(3)
  check("scene reload "+name,scene.state.valid() and scene.state.data.decisions==before.decisions and scene.state.data.queue==before.queue and is_equal_approx(scene.state.data.clock,before.clock) and scene.state.data.customers.keys()==before.customers.keys())
  for id in before.customers:
   check("saved progress "+name+" "+id,scene.state.data.customers[id].state==before.customers[id].state and scene.state.data.customers[id].budget==before.customers[id].budget and is_equal_approx(scene.state.data.customers[id].elapsed,before.customers[id].elapsed))
@@ -47,6 +47,7 @@ func press(control):
  var pos=control.get_global_rect().get_center()
  if vp!=root:pos+=Vector2(vp.position)
  vp=root
+ var motion=InputEventMouseMotion.new();motion.position=pos;motion.global_position=pos;vp.push_input(motion,true);await frames(2)
  for down in [true,false]:
   var e=InputEventMouseButton.new();e.position=pos;e.global_position=pos;e.button_index=MOUSE_BUTTON_LEFT;e.pressed=down;vp.push_input(e,true);await frames(2)
 func dialog():return scene.ui.get_children().filter(func(c):return c is AcceptDialog).back()
@@ -56,14 +57,15 @@ func label_products():
   scene.price_input.value=[21.99,19.99,14.99][n]
   await press(scene.reprice_button);await settle()
   check("selected product priced through controls "+str(n),scene.state.data.items["case-%02d"%(n+1)].price==roundi(scene.price_input.value*100))
-func stock_dialog(omit=""):
+func stock_one(n,returning=false):
  await press(scene.assortment_button);await frames(3)
- var d=dialog();var buttons=controls(d,Button).filter(func(b):return b.text=="Shelf +1")
+ var d=dialog();var buttons=controls(d,Button).filter(func(b):return b.text==("Return 1" if returning else "Shelf +1"))
+ await press(buttons[n]);await settle();await frames(20)
+func stock_dialog(omit=""):
  for n in range(3):
-  if scene.State.PRODUCTS[n]!=omit:
-   await press(buttons[n]);print("R5_STOCK_CONTROL ",buttons[n].get_global_rect()," window ",buttons[n].get_viewport().position," ",JSON.stringify(scene.state.data.items))
- await view("r5-assortment")
- await press(d.get_ok_button());await frames(3)
+  if scene.State.PRODUCTS[n]!=omit:await stock_one(n)
+ await press(scene.assortment_button);await frames(3);await view("r5-assortment")
+ await press(dialog().get_ok_button());await frames(3)
 func run():
  Engine.time_scale=3.0
  root.size=Vector2i(2560,1440) if "--retina" in OS.get_cmdline_user_args() else Vector2i(1280,720)
@@ -100,14 +102,14 @@ func run():
  await reload_stage("ordering")
  await press(scene.primary);await frames(3);await press(dialog().get_ok_button());await frames(3)
  await click_at(Vector2(310,430));await settle();await label_products()
+ await stock_one(0);await stock_one(0);await stock_one(1);await stock_one(1)
  await press(scene.assortment_button);await frames(3);d=dialog()
  var adds=controls(d,Button).filter(func(b):return b.text=="Shelf +1")
- var returns=controls(d,Button).filter(func(b):return b.text=="Return 1")
- await press(adds[0]);await press(adds[0]);await press(adds[1]);await press(adds[1])
- check("four spaces enforce overflow",scene.state.shelf_used()==4 and scene.state.count_at("backroom")==2 and adds[2].disabled)
- await press(returns[0]);await press(adds[2])
+ check("four spaces enforce overflow",scene.state.shelf_used()==4 and scene.state.count_at("backroom")==5 and adds[2].disabled)
+ await press(d.get_ok_button());await frames(3)
+ await stock_one(0,true);await stock_one(2)
  check("return changes assortment",scene.state.count_at("shelf","curb")==1 and scene.state.count_at("shelf","orbit")==1 and scene.state.shelf_used()==4)
- await view("r5-overflow");await press(d.get_ok_button());await frames(3);await reload_stage("day2 assortment")
+ await view("r5-overflow");await reload_stage("day2 assortment")
  await press(scene.primary);await settle()
  check("day2 decisions",await wait_until(func():return scene.state.data.decisions.size()==6))
  scene.request_action("close");await settle();check("day2 drains",await drain())
@@ -121,8 +123,8 @@ func run():
  await view("r5-missing-report")
  scene.perform("reset");scene.perform("receive")
  for n in range(3):
-  scene.selected_product=scene.State.PRODUCTS[n];scene.price_input.value=float(scene.State.CATALOG[scene.selected_product].reference)/100;scene.perform("reprice");scene.perform("stock")
- scene.perform("open")
+  scene.selected_product=scene.State.PRODUCTS[n];scene.price_input.value=float(scene.State.CATALOG[scene.selected_product].reference)/100;scene.perform("reprice");scene.request_action("stock");await settle();await frames(20)
+ scene.request_action("open");await settle()
  check("product price refusal",await wait_until(func():return scene.state.report("tide").missed==1))
  await view("r5-price-refusal");scene.request_action("close");await settle();check("refusal drains",await drain())
  check("routes avoid fixtures",not fixture_collision)

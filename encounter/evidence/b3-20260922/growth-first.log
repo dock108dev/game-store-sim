@@ -1,0 +1,137 @@
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+ERROR: reload expanded
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:48)
+ERROR: same expansion request after reload inert
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:50)
+ERROR: rack2 later costs60 keeps rack3
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:52)
+ERROR: reload late-rack
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:53)
+ERROR: reload survivor-day1
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:64)
+ERROR: reload survivor-day2
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:64)
+ERROR: overnight replenishment day2
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:68)
+ERROR: reload survivor-day3
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:64)
+ERROR: overnight replenishment day3
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:68)
+ERROR: reload survivor-day4
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:64)
+ERROR: overnight replenishment day4
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:68)
+ERROR: surviving route buys expansion
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:61)
+ERROR: reload survivor-day5
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:64)
+ERROR: overnight replenishment day5
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:68)
+ERROR: reload survivor-day6
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:64)
+ERROR: overnight replenishment day6
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:68)
+ERROR: reload survivor-day7
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:64)
+ERROR: surviving B3 actual $325 and no wages
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:70)
+ERROR: terminal rejects all business mutations
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:73)
+ERROR: reload bankrupt
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:82)
+ERROR: restart blocks if terminal preservation fails
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:84)
+ERROR: restart preserves terminal before fresh checkpoint
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:85)
+ERROR: retained bankruptcy reload
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] _initialize (res://scripts/test_growth.gd:86)
+ERROR: reload synthetic-wages
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] check (res://scripts/test_growth.gd:8)
+       [1] rt (res://scripts/test_growth.gd:24)
+       [2] _initialize (res://scripts/test_growth.gd:120)
+SCRIPT ERROR: Invalid access of index '0' on a base object of type: 'Array'.
+          at: _initialize (res://scripts/test_growth.gd:128)
+          GDScript backtrace (most recent call first):
+              [0] _initialize (res://scripts/test_growth.gd:128)
