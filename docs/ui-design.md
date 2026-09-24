@@ -1,10 +1,10 @@
 # Game Store Sim UI design
 
-Updated September 21, 2026. Shared Glass UI Starter 01; presentation-only adoption.
+Updated September 23, 2026. Shared Glass UI Starter 02 guidance; presentation-only adaptation of the existing native theme.
 
 ## For future contributors
 
-Start with [local design requirements](ui-design-requirements.md), then review the shared [UI Templates gallery](../../UI%20Templates/index.html) and [template guide](../../UI%20Templates/README.md). The source folder on the owner's Mac is `/Users/michaelfuscoletti/Desktop/UI Templates`. It contains dashboard, list/table, form/setup, settings, detail, state/dialog, and native Godot starters.
+Start with [local design requirements](ui-design-requirements.md), then review the shared [UI Templates gallery](../../ui-templates/index.html) and [template guide](../../ui-templates/README.md). The source folder on the owner's Mac is `/Users/michaelfuscoletti/Desktop/ui-templates`. It contains dashboard, list/table, form/setup, settings, detail, state/dialog, and native Godot starters.
 
 Use light cool glass, slate text, blue actions, restrained depth, rounded controls, and system typography as the default. Do not reintroduce the generic beige/green/yellow template. Preserve explicit semantic success, caution, error, unavailable, and unknown states. Readability and the task's layout outrank decoration.
 
@@ -23,3 +23,7 @@ See [UI adoption verification](ui-verification.md). Source changes and technical
 ## B7 adaptation
 
 B7 retains the local glass theme and illustrated originals. Bills and rack capacity now share stable header positions in base and expanded layouts; actor labels are above bodies with separation. Decorative labels/panels ignore input. Entry, recovery and help dialogs use the same theme and keyboard focus. Normal/Retina technical review is recorded in [B7 delivery](03-production/b7-delivery.md); it does not establish owner acceptance.
+
+## September 23 clarity pass
+
+Price entry precedes Apply; the main shop action uses blue emphasis. Rack IDs are translated only for display. Finances leads with cash, operating result and unpaid bills, with full arithmetic behind Calculation details. Copy records have a keyboard-accessible disclosure; ordinary rows preserve condition, availability, actual cost and unset prices. Supplier blockers and release dates remain visible. Existing screen structure, shop footprint, gameplay and saved values are unchanged. See the matched review in [UI verification](ui-verification.md#september-23-clarity-review).

@@ -71,3 +71,7 @@ Active player/setup/architecture/validation guides now distinguish basic headles
 ## Authorized main publication repair — 2026-09-23
 
 The owner authorized rebuilding the three unpublished commits after generated evidence prevented normal GitHub publication. Their complete original history remains under local recovery ref `refs/archive/main-before-publish-20260923` (`52bb8117413e4a0df9d7b62bbac32c3f8ea2c49f`); `.git/publish-recovery-20260923.json` records excluded paths. Only new generated app bundles, ZIPs, videos and raw pace/frame sequences were excluded from Git tracking; every file remains on disk. Source, editable masters, existing remote history, reports/logs and still screenshots remain tracked. A fresh clone cannot reproduce local-only media links without the retained local evidence. Main now contains the latest consolidated source; no force push or app rebuild is required. Earlier unpublished hashes identify retained historical execution, not the new publication commit.
+
+## Source presentation cleanup — September 23
+
+The authorized clarity pass updates the active encounter HUD, price-entry order, copy list, supplier feedback and financial summary using Starter 02 guidance. [Matched views and checks](ui-verification.md#september-23-clarity-review) identify synthetic source evidence and remaining keyboard verification. Business rules, persistence and artwork remain unchanged. No package replacement, owner-save access, commit, push or B10 acceptance occurred.

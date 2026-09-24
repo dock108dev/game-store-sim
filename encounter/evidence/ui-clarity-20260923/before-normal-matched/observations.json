@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Receive 6 copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Label NEW copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Label NEW copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Label NEW copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Assortment · 4 slots",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Assortment · 4 slots",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Assortment · 4 slots",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Open the shop",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Close admission",
+      "pass": true
+    },
+    {
+      "check": "shop drains",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    }
+  ],
+  "measurements": [
+    {
+      "dialog_position": "(210, 210)",
+      "dialog_size": "(860, 300)",
+      "screen": "entry"
+    },
+    {
+      "dialog_position": "(265, 157)",
+      "dialog_size": "(750, 405)",
+      "screen": "supplier"
+    },
+    {
+      "dialog_position": "(215, 180)",
+      "dialog_size": "(850, 360)",
+      "screen": "history-empty"
+    },
+    {
+      "dialog_position": "(170, 83)",
+      "dialog_size": "(940, 554)",
+      "screen": "finances"
+    },
+    {
+      "dialog_position": "(120, 128)",
+      "dialog_size": "(1040, 464)",
+      "screen": "copies"
+    },
+    {
+      "dialog_position": "(215, 180)",
+      "dialog_size": "(850, 360)",
+      "screen": "history"
+    },
+    {
+      "dialog_position": "(210, 210)",
+      "dialog_size": "(860, 300)",
+      "screen": "save-failed"
+    },
+    {
+      "dialog_position": "(170, 68)",
+      "dialog_size": "(940, 583)",
+      "screen": "week-finances"
+    },
+    {
+      "dialog_position": "(215, 83)",
+      "dialog_size": "(850, 554)",
+      "screen": "week-history"
+    },
+    {
+      "terminal_tab_focus": false
+    }
+  ]
+}

@@ -50,3 +50,13 @@ static func make_theme() -> Theme:
  theme.set_stylebox("panel", "AcceptDialog", panel_style())
  theme.set_color("font_color", "Label", Color("182338"))
  return theme
+
+# Starter 02 adaptation: one clear primary action without changing focus behavior.
+static func emphasize(button: Button) -> void:
+ for state in ["normal", "hover", "pressed"]:
+  var box=panel_style()
+  box.bg_color=Color("0969df") if state=="normal" else Color("0757bd")
+  box.set_corner_radius_all(12)
+  button.add_theme_stylebox_override(state,box)
+ for key in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+  button.add_theme_color_override(key,Color.WHITE)

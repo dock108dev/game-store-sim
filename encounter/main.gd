@@ -122,7 +122,7 @@ func _ready():
  customer=visitors.values()[0].actor
  ui=CanvasLayer.new();add_child(ui)
  panel(Vector2(0,0),Vector2(1280,145),Color("f2eddf"))
- label(ui,"REPLAY JUNCTION",Vector2(40,24),32)
+ label(ui,"Replay Junction",Vector2(40,24),28)
  day_label=label(ui,"SATURDAY, 2002  /  YOUR FIRST SHIFT",Vector2(42,68),16,Color("416489"))
  summary=label(ui,"",Vector2(650,18),18)
  guide=label(ui,"",Vector2(42,118),18)
@@ -133,10 +133,11 @@ func _ready():
  product_select.item_selected.connect(func(index):selected_product=State.PRODUCTS[index];price_input.value=float(State.CATALOG[selected_product].reference)/100;refresh())
  ui.add_child(product_select)
  details=label(ui,"",Vector2(944,246),18)
- price_input=SpinBox.new();price_input.theme=GlassUI.make_theme();price_input.position=Vector2(944,390);price_input.size=Vector2(288,42);price_input.min_value=1;price_input.max_value=99.99;price_input.step=.01;price_input.value=20.0;price_input.prefix="$ ";price_input.add_theme_font_size_override("font_size",20);ui.add_child(price_input)
+ price_input=SpinBox.new();price_input.theme=GlassUI.make_theme();price_input.position=Vector2(944,340);price_input.size=Vector2(288,42);price_input.min_value=1;price_input.max_value=99.99;price_input.step=.01;price_input.value=20.0;price_input.prefix="$ ";price_input.add_theme_font_size_override("font_size",20);ui.add_child(price_input)
  price_input.tooltip_text="These labels apply to NEW copies of the selected product only. Used copies have individual labels in Copies / labels. Editing alone changes no copy."
- reprice_button=button("Apply price to unsold stock",Vector2(944,340),288,func():request_action("reprice"))
+ reprice_button=button("Apply price to new copies",Vector2(944,390),288,func():request_action("reprice"))
  primary=button("",Vector2(944,440),288,func():request_action(selected_action))
+ GlassUI.emphasize(primary)
  assortment_button=button("Assortment · 4 shelf spaces",Vector2(944,490),288,show_assortment)
  close_button=button("Close admission",Vector2(944,490),288,func():request_action("close"))
  order_button=button("Supplier",Vector2(900,24),190,show_order)
@@ -225,31 +226,41 @@ func confirm_reset(return_path: String=""):
 func save_feedback() -> String:
  return "Saved: "+state.last_checkpoint_label+"." if not state.save_pending else "SAVE FAILED — progress remains live. Save retries without repeating charges."
 func show_finances():
- var d=AcceptDialog.new();d.theme=GlassUI.make_theme();d.title="Business finances • day "+str(state.data.day)
- var r=state.business_report();var today=state.business_report(state.data.day)
- d.dialog_text="Rent: $150 due day 7 close. Wage commitments are shown before opening.\nNorth bay: $100 from day 5 preparation, includes four-slot rack.\n\nWEEK TO DATE\nSales receipts %s • Inventory purchases %s • Cost of sales %s\nMerchandise margin %s • Incurred overhead %s • Operating result %s\nPaid overhead %s • Unpaid liabilities %s • Investment %s\nInventory at cost %s • Cash %s\n\nTODAY’S CASH\nOpening %s + receipts %s − stock %s − investment %s − paid bills %s = %s\nSupplier purchases are paid during preparation; close snapshots include that spending.\nDaily close snapshots retained: %d"%[money(r.receipts),money(r.inventory_purchases),money(r.cost_of_sales),money(r.margin),money(r.incurred_overhead),money(r.operating_result),money(r.paid_overhead),money(r.unpaid_liabilities),money(r.investment),money(r.inventory_cost),money(r.cash),money(today.opening_cash),money(today.receipts),money(today.inventory_purchases),money(today.investment),money(today.paid_overhead),money(today.cash),state.data.settlements.size()]
- var wages=state.data.wage_commitments.reduce(func(total,c):return total+int(c.amount),0)
- var rent=state.data.events.filter(func(e):return e.kind=="rent").reduce(func(total,e):return total+int(e.amount),0)
- d.dialog_text+="\nWages incurred %s • Rent incurred %s (unpaid amounts included above)."%[money(wages),money(rent)]
- d.dialog_text+="\nStock purchases use cash now; only sold copies become cost of sales.\nMargin = receipts − cost of sales. Operating result = margin − wages − rent.\nInvestment buys fixtures/space; it is separate from operating result."
- if state.data.phase=="week_complete":d.dialog_text+="\nSURVIVED: all due bills paid. This does not imply an operating profit."
+ var d=AcceptDialog.new();d.theme=GlassUI.make_theme();d.title="Finances · day "+str(state.data.day)
+ var r=state.business_report()
+ d.dialog_text="Cash available %s   ·   Operating result %s\nUnpaid bills %s\n\nThis week: Sales %s − sold-copy cost %s = margin %s\nWages and rent charged %s · Already paid %s\nStock purchases %s · Shop improvements %s\n\nRent: $150 at day 7 close. Stock purchases use cash immediately;\nonly sold copies count against margin. Survival does not mean a profit."%[money(r.cash),money(r.operating_result),money(r.unpaid_liabilities),money(r.receipts),money(r.cost_of_sales),money(r.margin),money(r.incurred_overhead),money(r.paid_overhead),money(r.inventory_purchases),money(r.investment)]
+ if state.data.phase=="week_complete":d.dialog_text="Week complete: all due bills paid.\n\n"+d.dialog_text
  if state.data.phase=="bankrupt":
   var due=state.data.events.filter(func(e):return e.id==state.data.terminal.due_event)
-  d.dialog_text+="\nBANKRUPT: could not pay "+due[0].kind+" ("+money(due[0].amount)+"). Cash shortfall "+money(state.data.terminal.shortfall)+".\nInventory cannot pay cash bills; no automatic liquidation. Menu offers a preserved restart."
+  d.dialog_text="Business ended: could not pay "+due[0].kind+" ("+money(due[0].amount)+"). Shortfall "+money(state.data.terminal.shortfall)+".\nStock cannot pay cash bills. Restart from Menu to preserve this result.\n\n"+d.dialog_text
  d.add_button("Daily closes",true,"history")
- d.custom_action.connect(func(_action):show_daily_reports())
- d.confirmed.connect(d.queue_free);ui.add_child(d);d.popup_centered(Vector2i(940,420))
+ d.add_button("Calculation details",true,"details")
+ d.custom_action.connect(func(action):
+  d.hide()
+  var detail_dialog=show_daily_reports() if action=="history" else show_finance_details()
+  var restore=func():
+   if is_instance_valid(d):d.popup_centered();d.get_ok_button().grab_focus()
+  detail_dialog.confirmed.connect(restore)
+  detail_dialog.canceled.connect(restore))
+ d.confirmed.connect(d.queue_free);ui.add_child(d);d.popup_centered(Vector2i(940,330))
+func show_finance_details():
+ var r=state.business_report();var today=state.business_report(state.data.day)
+ var wages=state.data.wage_commitments.reduce(func(total,c):return total+int(c.amount),0)
+ var rent=state.data.events.filter(func(e):return e.kind=="rent").reduce(func(total,e):return total+int(e.amount),0)
+ var d=AcceptDialog.new();d.theme=GlassUI.make_theme();d.title="How finances are calculated"
+ d.dialog_text="Today’s cash\nOpening %s + sales %s − stock %s − improvements %s − paid bills %s = %s\n\nThis week’s operating result\nSales %s − sold-copy cost %s = merchandise margin %s\nMargin − wages %s − rent %s = operating result %s\nWages and rent include unpaid amounts. Unpaid bills: %s.\n\nUnsold inventory at purchase cost: %s. It is not available cash.\nShop improvements: %s, separate from operating result.\nSupplier purchases are included in the day’s cash and closing snapshot."%[money(today.opening_cash),money(today.receipts),money(today.inventory_purchases),money(today.investment),money(today.paid_overhead),money(today.cash),money(r.receipts),money(r.cost_of_sales),money(r.margin),money(wages),money(rent),money(r.operating_result),money(r.unpaid_liabilities),money(r.inventory_cost),money(r.investment)]
+ d.confirmed.connect(d.queue_free);ui.add_child(d);d.popup_centered(Vector2i(940,360));return d
 func show_daily_reports():
  var d=AcceptDialog.new();d.theme=GlassUI.make_theme();d.title="Daily closing snapshots"
- var rows=["Frozen after all trading and due bills.","Cash and merchandise margin are different measures.",""]
+ var rows=["Saved at each day’s close, after trading and bills. Margin excludes wages and rent.",""]
  for row in state.data.settlements:
   var r=row.report
   rows.append("Day %d: Cash %s | Receipts %s | Stock bought %s | Cost sold %s\nMargin %s | Wages/rent %s | Unpaid %s | Investment %s"%[row.day,money(r.cash),money(r.receipts),money(r.inventory_purchases),money(r.cost_of_sales),money(r.margin),money(r.incurred_overhead),money(r.unpaid_liabilities),money(r.investment)])
- if state.data.settlements.is_empty():rows.append("No days settled yet.")
- d.dialog_text="\n".join(rows);d.confirmed.connect(d.queue_free);ui.add_child(d);d.popup_centered(Vector2i(850,360))
+ if state.data.settlements.is_empty():rows.append("No completed days yet. Close the shop and finish serving, then finalize the day.")
+ d.dialog_text="\n".join(rows);d.confirmed.connect(d.queue_free);ui.add_child(d);d.popup_centered(Vector2i(850,360));return d
 func show_assortment():
  if not draft.is_empty():return
- var dialog=AcceptDialog.new();dialog.title="Per-product results" if state.data.phase=="report" else "Assortment • "+selected_rack+" • "+str(state.capacity())+" total slots";dialog.min_size=Vector2i(850,330)
+ var dialog=AcceptDialog.new();dialog.title="Per-product results" if state.data.phase=="report" else "Shelf stock • "+rack_name(selected_rack)+" • "+str(state.capacity())+" total slots";dialog.min_size=Vector2i(850,330)
  dialog.theme=GlassUI.make_theme();dialog.theme.default_font_size=18
  var content=VBoxContainer.new();content.add_theme_constant_override("separation",12);dialog.add_child(content)
  var info=Label.new();content.add_child(info)
@@ -272,7 +283,7 @@ func show_assortment():
    selected_product=product;request_action("stock");dialog.queue_free())
   remove.pressed.connect(func():
    selected_product=product;request_action("return");dialog.queue_free())
- info.text="Selected: "+selected_rack+" • Four slots per rack. Choose a copy, then Rowan walks to the rack.\nReturn keeps the copy’s price and cost. Select racks on the shop toolbar."
+ info.text=rack_name(selected_rack)+" · Four spaces. Shelf +1 stocks a copy; Return 1 keeps its price and cost.\nStocking needs a priced backroom copy and a free space. Returns are preparation-only."
  if state.data.phase=="report":info.text="Day %d • Revenue %s • Gross profit %s • Cash %s\nReview sales and misses; supplier purchases resume next preparation."%[state.data.day,money(state.report().revenue),money(state.report().margin),money(state.data.cash)]
  for_update(refresh_rows)
  dialog.confirmed.connect(dialog.queue_free);dialog.canceled.connect(dialog.queue_free);ui.add_child(dialog);dialog.popup_centered()
@@ -281,28 +292,35 @@ func for_update(callbacks):
 func show_order():
  if state.data.phase != "prep": return
  var order_day=state.data.day
- var dialog=ConfirmationDialog.new();dialog.title="Supplier • five-title release calendar";dialog.ok_button_text="Pay & place order"
+ var dialog=ConfirmationDialog.new();dialog.title="Order new games";dialog.ok_button_text="Pay & place order"
  dialog.theme=GlassUI.make_theme();dialog.theme.default_font_size=20
  var content=VBoxContainer.new();content.add_theme_constant_override("separation",12);dialog.add_child(content)
  var fields={}
  for product in State.PRODUCTS:
   var row=HBoxContainer.new();content.add_child(row)
-  var info=Label.new();info.text="%s  • Buy %s / Ref %s"%[State.CATALOG[product].name,money(State.CATALOG[product].cost),money(State.CATALOG[product].reference)];info.custom_minimum_size.x=540;row.add_child(info)
+  var info=Label.new();info.text="%s  · Cost %s / Suggested %s"%[State.CATALOG[product].name,money(State.CATALOG[product].cost),money(State.CATALOG[product].reference)];info.custom_minimum_size.x=540;info.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;row.add_child(info)
   var quantity=SpinBox.new();quantity.min_value=0;quantity.max_value=6;quantity.step=1;quantity.custom_minimum_size=Vector2(110,44);quantity.editable=State.Week.released(product,order_day);row.add_child(quantity);fields[product]=quantity
-  if not quantity.editable:info.text+=" · DAY %d"%State.CATALOG[product].release;quantity.max_value=0
+  if not quantity.editable:info.text+="\nAvailable from day %d"%State.CATALOG[product].release;quantity.max_value=0
  var total_label=Label.new();content.add_child(total_label)
  var update=func(_v=0):
   var total=0;var quantity=0
   for product in State.PRODUCTS:total+=int(fields[product].value)*State.CATALOG[product].cost;quantity+=int(fields[product].value)
   total_label.text="Cash %s • Total %s • After payment %s\nReceive today (day %d) • One mixed order per preparation"%[money(state.data.cash),money(total),money(state.data.cash-total),order_day]
   dialog.get_ok_button().disabled=total==0 or total>state.data.cash or state.backroom_committed()+quantity>64 or state.data.orders.any(func(o):return o.day==order_day) or not state.data.received
+  var reason=""
+  if not state.data.received:reason="Receive your prepaid shipment first."
+  elif state.data.orders.any(func(o):return o.day==order_day):reason="Today’s order is already placed. Order again next preparation."
+  elif total>state.data.cash:reason="Not enough cash. Reduce the quantities."
+  elif state.backroom_committed()+quantity>64:reason="Backroom limit: 64 copies, including deliveries. Reduce the quantities."
+  elif total==0:reason="Choose a quantity beside an available game."
+  if reason!="":total_label.text+="\n"+reason
  for field in fields.values():field.value_changed.connect(update)
  update.call()
  dialog.confirmed.connect(func():
   var quantities={}
   for product in State.PRODUCTS:quantities[product]=int(fields[product].value)
   var ok=state.order(quantities,order_day)
-  feedback.text="Mixed order paid once. Receive it before opening." if ok else "Order rejected. Check release date, daily limit, cash and backroom capacity."
+  feedback.text="Order paid. Receive it before opening." if ok else "Order rejected. Check release date, daily limit, cash and backroom capacity."
   trace.append({"action":"order","ok":ok,"quantities":quantities,"cash":state.data.cash});refresh();dialog.queue_free())
  dialog.canceled.connect(dialog.queue_free);ui.add_child(dialog);dialog.popup_centered(Vector2i(750,300))
 func show_advance():
@@ -401,7 +419,7 @@ func perform(action: String, product: String = "", cents: int = 0):
   "reset":
    ok=state.restart(save_path)
    if ok:restore_view()
- feedback.text={"inspect":"Seller inspected. Offers are separate from payment confirmation.","copy_price":"Individual copy labeled. Its acquisition cost is unchanged.","return":"Copy returned to backroom; cost and label retained.","receive":"Shipment received once. Price the new copies at the shift desk.","reprice":"New copies repriced. Used labels stay separate; buyers may decline.","price":"Price labels ready. Stock the priced copies on the display.","stock":"Priced copies on display. Open the shop when you’re ready.","open":"OPEN. Today’s authored roster arrives at 18-second intervals.","sale":"Sale complete. Remaining stock and cash updated.","close":"Admission closed. Existing customers may finish browsing and buying.","finalize":"Day finalized. Sales are now locked; review the report.","save":"Shift saved. Reload restores this exact business state.","load":"Saved shift restored. Inventory, reservations and cash agree.","reset":"New week started. Terminal results retained."}.get(action,action) if ok else ("Cannot load: malformed or unsupported checkpoint. This build supports schema 10 only; New practice shift is separate." if action=="load" else "Restart/save failed; current progress retained. Check access and retry." if action=="reset" else "Cannot do that now. Follow the current shift step.")
+ feedback.text={"inspect":"Seller inspected. Offers are separate from payment confirmation.","copy_price":"Price applied to this copy. Its purchase cost is unchanged.","return":"Copy returned to backroom; cost and label retained.","receive":"Shipment received. Price the new copies, then stock a rack.","reprice":"New copies repriced. Used labels stay separate; buyers may decline.","price":"Price labels ready. Stock the priced copies on the display.","stock":"Priced copies on display. Open the shop when you’re ready.","open":"Shop open. Shoppers arrive every 18 seconds.","sale":"Sale complete. Remaining stock and cash updated.","close":"Admission closed. Existing customers may finish browsing and buying.","finalize":"Day finalized. Sales are now locked; review the report.","save":"Shift saved. Reload restores this exact business state.","load":"Saved progress restored. You can continue playing.","reset":"New week started. Terminal results retained."}.get(action,action) if ok else ("Cannot read this save. It may be damaged or from an incompatible version. New week keeps it in a separate file." if action=="load" else "Restart/save failed; current progress retained. Check access and retry." if action=="reset" else "Cannot do that now. Follow the current shift step.")
  if action=="finalize" and ok and state.data.phase in ["week_complete","bankrupt"]:feedback.text="Week complete. Review finances or restart." if state.data.phase=="week_complete" else "Business ended: a due bill could not be paid. Review finances or restart."
  if action in ["finalize","reset"] and ok:feedback.text+=" "+save_feedback()
  if action=="save" and ok:feedback.text=save_feedback()
@@ -453,7 +471,7 @@ func refresh():
  var rent_status="day 7 close"
  for event in state.data.events:
   if event.kind=="rent":rent_status="PAID" if event.status=="paid" else "UNPAID"
- bills_label.text="Day %d / 7 · "%state.data.day+"Rent $150 · "+rent_status+"  |  Today’s wage commitments "+money(wages)+"  |  North bay $100 · day 5"
+ bills_label.text="Day %d of 7 · "%state.data.day+"Rent $150 · "+rent_status+"  |  Today’s wages "+money(wages)
  expand_button.visible=draft.is_empty() and state.data.phase=="prep"
  expand_button.disabled=state.data.phase!="prep" or state.data.day<5 or state.data.layout.space_level==1
  save_button.text="Retry save" if state.save_pending else "Save"
@@ -462,8 +480,8 @@ func refresh():
  for control in [arrange_button,buy_button,rack_select,expand_button,confirm_button,cancel_button]:control.position.y=170
  day_label.visible=false
  day_label.text=("ASSORTMENT COMPARISON · "+assortment_demo.to_upper()+" • " if assortment_demo!="" else "")+"DAY %d  /  MALL SHOP • 2002" % state.data.day
- summary.text="%s\nCash %s" % [state.data.phase.replace("_"," ").to_upper(),money(r.cash)]
- shelf_label.text="%s: %d / 4 occupied • Shop total: %d / %d slots"%[selected_rack,state.data.items.values().filter(func(i):return i.fixture_id==selected_rack).size(),state.shelf_used(),state.capacity()]
+ summary.text="%s\nCash %s" % [{"prep":"Preparation","open":"Shop open","closing":"Closing","report":"Day complete","week_complete":"Week complete","bankrupt":"Business ended"}.get(state.data.phase,state.data.phase),money(r.cash)]
+ shelf_label.text="%s: %d / 4 occupied • Shop total: %d / %d slots"%[rack_name(selected_rack),state.data.items.values().filter(func(i):return i.fixture_id==selected_rack).size(),state.shelf_used(),state.capacity()]
  arrange_button.visible=state.data.phase=="prep";buy_button.visible=arrange_button.visible;rack_select.visible=arrange_button.visible
  confirm_button.visible=not draft.is_empty();cancel_button.visible=confirm_button.visible
  arrange_button.disabled=not draft.is_empty();buy_button.disabled=not draft.is_empty();rack_select.disabled=not draft.is_empty()
@@ -479,7 +497,7 @@ func refresh():
  product_select.visible=state.data.phase=="prep"
  assortment_button.visible=state.data.phase in ["prep","report"]
  assortment_button.position.y=390 if state.data.phase=="report" else 490
- assortment_button.text="Per-product report" if state.data.phase=="report" else "Assortment · "+str(state.capacity())+" slots"
+ assortment_button.text="Per-product report" if state.data.phase=="report" else "Shelf stock · "+str(state.capacity())+" slots"
  details.position.y=210 if state.data.phase!="prep" else 246
  product_select.disabled=not draft.is_empty()
  price_input.editable=draft.is_empty()
@@ -492,6 +510,9 @@ func refresh():
  load_button.tooltip_text=state.last_checkpoint_label+". Reload discards progress after this successful checkpoint."
  order_button.visible=state.data.phase=="prep"
  order_button.disabled=not draft.is_empty() or not state.data.received or state.data.orders.any(func(o):return o.day==state.data.day)
+ order_button.text="Receive stock first" if not state.data.received else "Order placed today" if state.data.orders.any(func(o):return o.day==state.data.day) else "Supplier"
+ expand_button.text="North bay bought" if state.data.layout.space_level==1 else "Bay $100 · day 5" if state.data.day<5 else "North bay · $100"
+ expand_button.tooltip_text="Available from day 5 preparation: $100 for more space and a four-slot rack."
  if state.data.phase in ["week_complete","bankrupt"]:
   var week=state.business_report()
   guide.text="Survived: all due bills paid. Survival is not profit. Review finances or Menu." if state.data.phase=="week_complete" else "Bankrupt • A due bill could not be paid. Review liabilities or restart."
@@ -503,7 +524,7 @@ func refresh():
   shelf_label.text="Shop capacity: %d slots • Fixtures / expansion paid: %s"%[state.capacity(),money(r.investment)]
   guide.text="Shift complete • Review finances, then advance to day %d." % (state.data.day+1)
   details.tooltip_text="Fixtures / expansion paid: "+money(r.investment)+". Revenue: today’s completed sales. Sold-copy cost: historical purchase cost of each sold copy. Gross profit: revenue minus that cost, before overhead. Orders reduce cash, not profit, until sold."
-  details.text="DAY %d • %d sold • %d price misses\n%d stock misses\nRevenue              %s\nSold-copy cost     %s\nMerch. margin      %s\nUnsold copies       %d\nCash available      %s"%[state.data.day,r.sold,r.missed,r.unavailable,money(r.revenue),money(r.cost),money(r.margin),r.remaining,money(r.cash)]
+  details.text="DAY %d • %d sold • %d price misses\n%d stock misses\nRevenue              %s\nSold-copy cost     %s\nMerchandise margin %s\nUnsold copies       %d\nCash available      %s"%[state.data.day,r.sold,r.missed,r.unavailable,money(r.revenue),money(r.cost),money(r.margin),r.remaining,money(r.cash)]
   primary.visible=true;primary.text="Advance to day %d" % (state.data.day+1);selected_action="advance"
   return
  primary.visible=true
@@ -513,7 +534,7 @@ func refresh():
  prices.sort()
  var price_text="Unpriced" if prices.is_empty() else money(prices[0])+" each"
  if prices.size()>1:price_text=money(prices[0])+" – "+money(prices.back())+" labels"
- details.text="New %s • Cost %s\nRef %s · new copies\nShelf %d  •  Backroom %d"%[price_text,money(State.CATALOG[selected_product].cost),money(State.CATALOG[selected_product].reference),state.count_at("shelf",selected_product),state.count_at("backroom",selected_product)]
+ details.text="New %s · Cost %s\nSuggested price %s\nShelf %d  ·  Backroom %d"%[price_text,money(State.CATALOG[selected_product].cost),money(State.CATALOG[selected_product].reference),state.count_at("shelf",selected_product),state.count_at("backroom",selected_product)]
  if state.data.phase in ["open","closing"]:
   var lines=[]
   for id in state.data.customers:
@@ -535,13 +556,13 @@ func refresh():
    selected_action="close";primary.text="Close admission"
   else:selected_action="wait";primary.text="Customers browsing…"
   guide.text="Admission closed • Finish existing customers, then finalize the day." if state.data.phase=="closing" else "%d shoppers today • At most three inside • Close admission whenever you choose."%state.data.customers.size()
- elif not state.data.received or not state.pending_shipment().is_empty():selected_action="receive";primary.text="Receive %d copies" % (6 if not state.data.received else state.pending_shipment().quantity);guide.text="1 / 7  •  Receive the shipment at the box."
+ elif not state.data.received or not state.pending_shipment().is_empty():selected_action="receive";primary.text="Receive %d copies" % (6 if not state.data.received else state.pending_shipment().quantity);guide.text="Receive the prepaid shipment at the box, then price and stock your games."
  else:
   selected_action="open";primary.text="Open the shop"
-  reprice_button.text="Label NEW copies"
-  guide.text="Prep • Supplier → receive → label → stock. Calendar shows today’s interests."
-  if state.data.items.values().any(func(i):return i.location=="backroom" and i.price==0 and i.available_day<=state.data.day):guide.text="Next: choose a title and Label NEW copies; use Copies / labels for used stock."
-  elif state.shelf_used()==0:guide.text="Next: Stock → Shelf +1. Choose the selected rack; Rowan receives and carries the copy."
+  reprice_button.text="Apply price to new copies"
+  guide.text="Ready to open? Check prices and shelf stock. The calendar shows today’s shoppers."
+  if state.data.items.values().any(func(i):return i.location=="backroom" and i.price==0 and i.available_day<=state.data.day):guide.text="Choose a game, enter its price, then apply it. Price used games in Copies / labels."
+  elif state.shelf_used()==0:guide.text="Stock the selected rack: choose Stock, then Shelf +1 beside a game."
  guide.visible=help_visible
 func move_actor(who,points: PackedVector2Array,delta: float,speed: float) -> Vector2:
  if points.is_empty():return Vector2.ZERO
@@ -739,12 +760,15 @@ func rebuild_layout():
   if f.type=="rack":
    for n in range(4):cases.append({"fixture_id":id,"slot_index":n,"sprite":sprite(node,"case",Layout.SLOT_ANCHORS[n]-Vector2(0,definition.size.y),.17)})
  nav=Layout.navigation(state.data.layout)
+func rack_name(id: String) -> String:
+ return "Rack "+str(int(id.get_slice("-",1)))
+
 func update_rack_select():
  if rack_select==null:return
  var ids=Layout.racks(state.data.layout)
  if selected_rack not in ids:selected_rack=ids[0]
  rack_select.clear()
- for id in ids:rack_select.add_item(id)
+ for id in ids:rack_select.add_item(rack_name(id))
  rack_select.select(ids.find(selected_rack))
 func begin_layout(operation: String):
  if state.data.phase!="prep":feedback.text="Arrange only during preparation.";return
@@ -959,17 +983,22 @@ func show_seller():
 
 func show_copies():
  if not draft.is_empty():return
- var d=AcceptDialog.new();d.title="Individual copies · labels and provenance";d.theme=GlassUI.make_theme();d.min_size=Vector2i(1040,440)
+ var d=AcceptDialog.new();d.title="Copies and prices";d.theme=GlassUI.make_theme();d.min_size=Vector2i(1040,440)
  var scroll=ScrollContainer.new();scroll.custom_minimum_size=Vector2(1010,400);d.add_child(scroll)
- var box_ui=VBoxContainer.new();box_ui.size_flags_horizontal=Control.SIZE_EXPAND_FILL;box_ui.add_theme_constant_override("separation",12);scroll.add_child(box_ui)
- var info=Label.new();info.text="Each row is one copy. New product labels never change used labels. Used stock unlocks next prep.\nShelf +1 uses the selected rack and the same work claims as employees.";box_ui.add_child(info)
+ var box_ui=VBoxContainer.new();box_ui.size_flags_horizontal=Control.SIZE_EXPAND_FILL;box_ui.add_theme_constant_override("separation",8);scroll.add_child(box_ui)
+ var info=Label.new();info.text="Price each copy here. Buying used stock unlocks it next preparation.\nShelf +1 stocks the selected rack. Pricing and returns are preparation-only.";box_ui.add_child(info)
+ var records=d.add_button("Show copy records",true,"records");records.toggle_mode=true
+ records.toggled.connect(func(expanded):records.text="Hide copy records" if expanded else "Show copy records")
  var ids=state.ordered_copy_ids().filter(func(id):return state.data.items[id].location!="sold")
+ if ids.is_empty():info.text="No unsold copies. Receive stock or order from Supplier during preparation."
  ids.sort_custom(func(a,b):return state.data.items[a].kind=="used" and state.data.items[b].kind!="used")
  for id in ids:
   var item=state.data.items[id];var row=HBoxContainer.new();box_ui.add_child(row)
-  var detail=Label.new();detail.custom_minimum_size.x=600;detail.add_theme_font_size_override("font_size",15);row.add_child(detail)
-  detail.text="%s · %s / %s · %s\n%s · Cost %s · Label %s%s"%[State.CATALOG[item.product].name,item.kind.to_upper(),item.condition,item.location,id,money(item.cost),money(item.price)," · available day "+str(int(item.available_day)) if item.available_day>state.data.day else ""]
-  detail.tooltip_text="Immutable acquisition: "+item.acquisition_id+" · copy "+id
+  var detail=Label.new();detail.custom_minimum_size.x=600;detail.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;detail.add_theme_font_size_override("font_size",16);row.add_child(detail)
+  detail.text="%s · %s · %s\nCost %s · Price %s%s"%[State.CATALOG[item.product].name,"New" if item.kind=="new" else "Used, "+item.condition,item.location.capitalize(),money(item.cost),money(item.price) if item.price>0 else "Not set"," · available day "+str(int(item.available_day)) if item.available_day>state.data.day else ""]
+  detail.tooltip_text="Purchase record: "+item.acquisition_id+" · copy "+id
+  var plain_text=detail.text
+  records.toggled.connect(func(visible_records):detail.text=plain_text+("\nCopy "+id+"\nPurchase "+item.acquisition_id if visible_records else ""))
   var field=SpinBox.new();field.min_value=1;field.max_value=99.99;field.step=.01;field.prefix="$ ";field.value=float(item.price if item.price>0 else int(State.CATALOG[item.product].reference*State.Used.GRADES.get(item.condition,100)/100))/100;row.add_child(field)
   var apply=Button.new();apply.text="Label";apply.disabled=state.data.phase!="prep" or item.location not in ["backroom","shelf"] or item.available_day>state.data.day;row.add_child(apply)
   apply.pressed.connect(func():request_action("copy_price",id,roundi(field.value*100));d.queue_free())

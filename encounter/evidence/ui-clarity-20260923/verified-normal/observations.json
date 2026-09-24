@@ -1,0 +1,186 @@
+{
+  "checks": [
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Receive 6 copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Calculation details",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "copy records keyboard disclosure",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Show copy records",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Apply price to new copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Apply price to new copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Apply price to new copies",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Shelf stock · 4 slots",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Shelf stock · 4 slots",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Shelf stock · 4 slots",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Open the shop",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated Close admission",
+      "pass": true
+    },
+    {
+      "check": "shop drains",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "synthetic failure reaches bankruptcy",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    },
+    {
+      "check": "ordinary button activated (closed dialog)",
+      "pass": true
+    }
+  ],
+  "measurements": [
+    {
+      "dialog_position": "(210, 210)",
+      "dialog_size": "(860, 300)",
+      "screen": "entry"
+    },
+    {
+      "dialog_position": "(265, 127)",
+      "dialog_size": "(750, 466)",
+      "screen": "supplier"
+    },
+    {
+      "dialog_position": "(215, 180)",
+      "dialog_size": "(850, 360)",
+      "screen": "history-empty"
+    },
+    {
+      "dialog_position": "(170, 195)",
+      "dialog_size": "(940, 330)",
+      "screen": "finances"
+    },
+    {
+      "dialog_position": "(170, 170)",
+      "dialog_size": "(940, 380)",
+      "screen": "calculation-details"
+    },
+    {
+      "dialog_position": "(120, 128)",
+      "dialog_size": "(1040, 464)",
+      "screen": "copies"
+    },
+    {
+      "dialog_position": "(120, 128)",
+      "dialog_size": "(1040, 464)",
+      "screen": "copy-records"
+    },
+    {
+      "dialog_position": "(215, 180)",
+      "dialog_size": "(850, 360)",
+      "screen": "history"
+    },
+    {
+      "dialog_position": "(210, 210)",
+      "dialog_size": "(860, 300)",
+      "screen": "save-failed"
+    },
+    {
+      "dialog_position": "(170, 170)",
+      "dialog_size": "(940, 380)",
+      "screen": "week-finances"
+    },
+    {
+      "dialog_position": "(215, 97)",
+      "dialog_size": "(850, 525)",
+      "screen": "week-history"
+    },
+    {
+      "dialog_position": "(170, 155)",
+      "dialog_size": "(940, 409)",
+      "screen": "bankruptcy-finances"
+    },
+    {
+      "dialog_position": "(120, 128)",
+      "dialog_size": "(1040, 464)",
+      "screen": "copies-empty"
+    },
+    {
+      "terminal_tab_focus": false
+    }
+  ]
+}
