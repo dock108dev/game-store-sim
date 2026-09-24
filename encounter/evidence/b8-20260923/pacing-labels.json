@@ -1,9 +1,0 @@
-{
-  "automation": "Agent-authored control driver; no human play or owner judgment",
-  "setup": "Fresh New week in a temporary copied project and unique save namespace; no grants, state preludes or teleports",
-  "growth_normal": "1x day 1; 3x days 2-7; variable real-time frame delta; raw frames retained",
-  "lean_normal": "1x days 1 and 6; 3x other days; variable real-time frame delta; video segments use measured wall timestamps",
-  "other_scene_runs": "Engine.time_scale=3 with --fixed-fps 30; wall duration is not player pacing",
-  "save_resume": "Pause at current state, save, reload exactly that checkpoint; no rollback of setback",
-  "audio": "Dummy, not qualified"
-}

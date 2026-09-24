@@ -1,6 +1,0 @@
-{
-  "project": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/game-sim-b2-e2biol55/encounter",
-  "namespace": "game-sim-b2-e2biol55",
-  "runtime_context": "../validation-20260922T194446951813Z/context.json",
-  "input": "Native macOS pointer and keyboard via cua_repl; observer records only, supplies no gameplay input"
-}

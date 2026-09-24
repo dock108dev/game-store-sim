@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/capture_full_shift.py", line 13, in <module>
-    log=(out/(name+'.log')).read_text();assert result.returncode==0 and 'SCRIPT ERROR:' not in log and '\nERROR:' not in log
-                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError

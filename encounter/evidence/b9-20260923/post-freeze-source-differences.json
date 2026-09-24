@@ -1,8 +1,0 @@
-{
-  "delivered_source": "/Users/michaelfuscoletti/Desktop/game-sim/artifacts/b9-personal-mac/source.tar.gz",
-  "current_encounter_differences": [
-    "README.md",
-    "scripts/qualify_mac.py"
-  ],
-  "explanation": "README reflects B9 completion; qualifier uses a distinct instrumented bundle ID and fails explicitly on errors. Neither is shipped runtime. All runtime, artwork, project settings and preset bytes match the final artifact source."
-}

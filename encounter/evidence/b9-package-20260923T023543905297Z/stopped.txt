@@ -1,1 +1,0 @@
-Stopped after focused packaged normal-speed fixture reproduced the exact B8 deadlock. This full normal-speed replay is incomplete, not qualifying evidence. No helper detours were enabled.

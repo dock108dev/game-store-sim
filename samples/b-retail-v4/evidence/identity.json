@@ -1,7 +1,0 @@
-{
-  "sample": "B-ROWAN-01 / retail-v4",
-  "manifest_sha256": "a685b81eebfc0ef6936de8ecd3986368c846a55ea6de8d5688a002af6251d918",
-  "file_count": 94,
-  "baseline": "837bd4a8d33ec01fe48dec83bd16fedb9dfaaff1",
-  "uncommitted": true
-}

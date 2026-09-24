@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/validate.py", line 27, in <module>
-    run('assortment-retina',['--fixed-fps','30','--script','res://scripts/test_assortment_scene.gd','--','--retina'])
-    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/michaelfuscoletti/Desktop/game-sim/encounter/scripts/validate.py", line 21, in run
-    if result.returncode or 'SCRIPT ERROR:' in text or '\nERROR:' in text:raise RuntimeError(f'{name} failed: {out}')
-                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-RuntimeError: assortment-retina failed: /Users/michaelfuscoletti/Desktop/game-sim/encounter/evidence/validation-20260909T013905234346Z

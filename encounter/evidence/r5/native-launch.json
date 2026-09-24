@@ -1,8 +1,0 @@
-{
-  "pid": 26117,
-  "bundle": "/var/folders/2k/njrlmfj97sv5pjrqxl22hq8w0000gn/T/r5-native-jc70vhc8/R5 Review.app",
-  "project": "/Users/michaelfuscoletti/Desktop/game-sim/encounter",
-  "engine_original_sha256": "e6b5cfdc226ffb7ec4f4950b0b12ddba4f040624724cff1acce9ae1241cf0034",
-  "signed_engine_sha256": "89970a8e2cac4b2edb4754bd7ab378ae882169c3c6fda7dc2e2ecceae9603688",
-  "signing": "Ad-hoc development signature for separate R5 native identity; copied official Godot 4.6.2. Prior review processes untouched."
-}

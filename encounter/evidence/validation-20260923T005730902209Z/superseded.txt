@@ -1,1 +1,0 @@
-Stopped after visual review found base capacity strip/worker label overlap. Header positions corrected in main.gd. Partial rendered evidence is not final qualification.

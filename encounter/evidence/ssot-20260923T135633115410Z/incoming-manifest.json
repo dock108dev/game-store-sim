@@ -1,7 +1,0 @@
-{
-  "encounter/main.gd": "326f2ffe7eed1e26ebf4295c656000434af37aced1701c48564663d19c444abb",
-  "encounter/state.gd": "cfaaf0097bd2701da5c7a27de02317bd4761dd7f6eb8dbbee9a3225ae08b620f",
-  "encounter/Compare Pricing.command": "d3ce0e9e8b0fe9b3f4b18ba6844bc56427d93f0bc7acc7f7bccf9e527cb60e13",
-  "encounter/scripts/test_security.gd": "66cef971c95591aa239a8d23ab60aa8a09b5aec093ca582b5c10ac7c3d705a58",
-  "encounter/scripts/validate.py": "3039ce0704cb02997f50f7fd44b5f759d4bcb519d10cda7b1fd6ba0f43b57766"
-}
