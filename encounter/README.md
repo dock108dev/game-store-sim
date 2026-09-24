@@ -1,10 +1,10 @@
 # Replay Junction — first-week retail
 
-Run a game shop for seven days: arrange and expand displays, price new and used games, serve shoppers, negotiate seller purchases, hire staff, order stock and pay wages and rent. The five-title catalog includes new releases during the week. Technical delivery and owner acceptance are separate; the [owner-review record](../docs/03-production/b10-owner-review.md) holds the pending beta decision.
+Run a game shop for seven days: arrange and expand displays, price new and used games, serve shoppers, negotiate seller purchases, hire staff, order stock and pay wages and rent. The five-title catalog includes new releases during the week.
 
 ## Personal Mac delivery
 
-The identified [personal Mac app](../docs/03-production/b9-delivery.md) is the frozen candidate for the ongoing owner review. Read the [prepared owner guide](MAC-OWNER-GUIDE.md), [build instructions](MAC-BUILD.md) and [package qualification record](../docs/03-production/b9-delivery.md). Technical checks do not establish beta acceptance. The launcher below runs the separate development source.
+Run from source with the launcher below, or see [Mac build instructions](MAC-BUILD.md) to create an app bundle. Packaged builds are not included in a fresh clone.
 
 ## Play
 
@@ -83,11 +83,11 @@ The new copy is unpriced in backroom and unlocks next preparation. Open **Copies
 
 Days 2–7 offer Curb good, Orbit fair, Tide good, Curb fair, Orbit good and Rally worn. Suggested resale is 80%/60%/40% of the final new reference. Authored ask/floor pairs are $11/$8, $6/$4, $14/$10, $8/$5 and $8/$6. Day-7 worn Rally uses $9.60 resale, $6.72 ask and $4.80 floor. Acquisitions preserve the exact accepted payment. The late day-7 copy cannot be resold within this week. No authored seller brings Signal; generic copy/label/report paths accept all catalog IDs, but ordinary used Signal resale is not an available first-week route.
 
-Finances separates inventory cash spending from the actual acquisition cost of sold stock and merchandise margin. Daily used acquisition does not itself create a merchandise loss. Saves retain disclosed terms and completed trades; reload cancels unfinished employee/player execution claims while preserving copies and buyer reservations. Reloading an older checkpoint discards later unsaved progress, as before. Full displays do not block buying when the 64-copy backroom (including paid inbound reservations) has room. No trade credit, refurbishment or preorders. [First-week delivery](../docs/03-production/b6-delivery.md) records the exact source and isolated evidence. The [personal Mac delivery](../docs/03-production/b9-delivery.md) retains these economic rules; owner acceptance remains pending.
+Finances separates inventory cash spending from the actual acquisition cost of sold stock and merchandise margin. Daily used acquisition does not itself create a merchandise loss. Saves retain disclosed terms and completed trades; reload cancels unfinished employee/player execution claims while preserving copies and buyer reservations. Reloading an older checkpoint discards later unsaved progress, as before. Full displays do not block buying when the 64-copy backroom (including paid inbound reservations) has room. No trade credit, refurbishment or preorders. [First-week delivery](../docs/03-production/b6-delivery.md) records the exact source and isolated evidence. The [personal Mac delivery](../docs/03-production/b9-delivery.md) retains these economic rules.
 
 ## Player flow
 
-Launch opens New week, Continue (last successful checkpoint), Controls/help and Quit. F1 reopens optional guidance; Escape opens Menu / Quit. K saves visibly; L asks before reload. Save and quit and the window close button preserve progress or offer retry. Malformed/incompatible originals are retained; a separate new week has an active-file locator. Schema 10 and the first-week economy remain unchanged. See [player-flow verification](../docs/03-production/b7-delivery.md), [balance evaluation](../docs/03-production/b8-delivery.md) and [package qualification](../docs/03-production/b9-delivery.md) for exact evidence and limits. Sound content remains intentionally absent; owner review is pending.
+Launch opens New week, Continue (last successful checkpoint), Controls/help and Quit. F1 reopens optional guidance; Escape opens Menu / Quit. K saves visibly; L asks before reload. Save and quit and the window close button preserve progress or offer retry. Malformed/incompatible originals are retained; a separate new week has an active-file locator. Schema 10 and the first-week economy remain unchanged. See [player-flow verification](../docs/03-production/b7-delivery.md), [balance evaluation](../docs/03-production/b8-delivery.md) and [package qualification](../docs/03-production/b9-delivery.md) for exact evidence and limits. Sound content remains intentionally absent.
 
 ## Balance evidence and limits
 

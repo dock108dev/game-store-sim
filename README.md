@@ -1,36 +1,34 @@
-# Game Store Sim
+# Replay Junction
 
-Replay Junction is an illustrated Godot game about the first week running a mall game shop: stock and price games, hire staff, buy used copies, expand displays and pay bills across seven days.
+An illustrated Godot game about the first week running a mall game shop: stock and price games, hire staff, buy used copies, expand displays and pay bills across seven days.
 
-A personal Mac build has completed its recorded technical checks; owner review is in progress and beta acceptance is pending. Current source includes maintenance changes that are not in that frozen app. See the [delivered build identity](docs/03-production/b9-delivery.md) and [owner-review record](docs/03-production/b10-owner-review.md).
+## Play from source
 
-## Play or develop
-
-The local [personal Mac app](docs/03-production/b9-delivery.md) uses its own save namespace. See the [prepared owner guide](encounter/MAC-OWNER-GUIDE.md) and [build instructions](encounter/MAC-BUILD.md). The app is a local artifact, not included in a fresh clone. The prepared guide describes the delivered build; the [owner-review record](docs/03-production/b10-owner-review.md) holds current review status.
-
-For development, use Godot 4.6.2 Standard at `/Applications/Godot.app` and run from the repository root:
+Use Godot **4.6.2 Standard**. On macOS, with Godot installed at `/Applications/Godot.app`, run from the repository root:
 
 ```sh
 zsh 'encounter/Launch Encounter.command'
 ```
 
-[Player controls and saves](encounter/README.md) · [Local setup, tools and side effects](docs/02-technical/local-development.md)
+Alternatively, import `encounter/project.godot` in Godot. `encounter/` is the active game; `game/` and the root scripts contain earlier prototypes.
+
+See [controls and saves](encounter/README.md), [local development](docs/02-technical/local-development.md), and [Mac build instructions](encounter/MAC-BUILD.md). App bundles are not included in a fresh clone. The game currently has no sound content.
 
 ## Validate
 
-With Python 3, the basic isolated headless checks are:
+Requires Python 3 and the installed Godot engine:
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s encounter/scripts -p 'test_*.py' -v
 python3 encounter/scripts/validate.py --ci
 ```
 
-The larger existing validation selection remains `python3 encounter/scripts/validate.py`. All use synthetic isolated saves. [GitHub CI and current validation evidence](docs/04-validation/ci-readiness.md) describe the exact scope and hosted limits; no signing or packaging runs in ordinary CI.
+The validator uses isolated synthetic saves. See [local development](docs/02-technical/local-development.md#validation) for the larger check set, engine overrides and output locations.
 
-## Engineering references
+## Development guides
 
-- [Architecture](docs/02-technical/encounter-architecture.md) and [SSOT ownership](docs/02-technical/ssot.md)
-- [Save recovery](docs/02-technical/error-handling.md) and [local security](docs/02-technical/security.md)
-- [UI design](docs/ui-design.md) and [source-of-truth policy](docs/05-reference/source-of-truth-policy.md)
+- [Architecture](docs/02-technical/encounter-architecture.md) and [module ownership](docs/02-technical/ssot.md)
+- [Save recovery](docs/02-technical/error-handling.md) and [security](docs/02-technical/security.md)
+- [UI design](docs/ui-design.md)
 
-`encounter/` is the active project. `game/`, root `scripts/`, samples and old guides are historical workflows, not current setup commands. Preserve artwork masters, frozen builds and retained evidence. Generated app bundles, ZIPs, videos and raw frame sequences remain local; Git retains source, reports, logs and still screenshots. Keep the master plan synchronized with the linked Desktop tracker. Disposable source-tool bytecode and Godot import caches are ignored; evidence snapshots remain retained.
+Source assets are versioned. Generated app bundles, videos, raw frame sequences and import caches stay local.

@@ -1,13 +1,11 @@
-# Shared UI design requirements
-
-Glass Starter 02 · September 23, 2026
+# Replay Junction UI design requirements
 
 ## Start with the task
 
-Each screen should make its purpose, current result or state, and next useful action easy to find. Start from the working examples in [the gallery](../../ui-templates/index.html). The default is one compact heading, useful content, and a clear action. Add descriptions, panels, and statuses only when they help a decision.
+Each screen should make its purpose, current result or state, and next useful action easy to find. The default is one compact heading, useful content, and a clear action. Add descriptions, panels, and statuses only when they help a decision.
 
-- Use familiar words and sentence case. “Choose a game” is clearer than “Choose an adapter.” “Finish the current action to save” explains more than “Save · idle boundary.”
-- Keep useful labels, units, dates, and status distinctions. A short sentence often beats a chain of badges. A longer field label such as “Scan length (seconds)” can be easier to understand than “Seconds.”
+- Use familiar words and sentence case. “Apply price” is clearer than “Execute action”. Explain blocked actions in terms of what the player or user can do next.
+- Keep useful labels, units, dates and status distinctions. “Price per copy” is clearer than “Value”.
 - Remove repeated titles, filler, decorative category labels, and explanations of obvious controls. Keep teaching, narrative, and consequential explanations that serve the product.
 - Show the result or working area early. Prefer compact rows for comparisons and related facts together. Keep controls close to their result. Do not force every value into its own card.
 - Put advanced setup, full history, technical identifiers, and lengthy explanations behind named secondary controls. Keep current blockers, meaningful uncertainty, freshness, costs, and destructive consequences visible where they matter.
@@ -15,9 +13,9 @@ Each screen should make its purpose, current result or state, and next useful ac
 
 ## Appearance and accessibility
 
-Retain the cool, light glass direction: system typography, slate text, blue actions, restrained translucency and depth. Use `assets/glass.css` and the native Godot theme as starting points. Adapt the layout to the app instead of copying the gallery's sample content.
+Retain the cool, light glass direction: system typography, slate text, blue actions, restrained translucency and depth. Use `encounter/glass_ui.gd` for the implemented theme.
 
-Default body text is 16px on the web; primary controls are at least 44px high. Use compact spacing, not tiny type or cramped targets. Compact headers replace giant hero sections. Avoid widespread uppercase, widely spaced labels, and pills for ordinary information.
+Use readable text at the supported game window sizes; primary controls are at least 44px high. Use compact spacing, not tiny type or cramped targets. Compact headers replace giant hero sections. Avoid widespread uppercase, widely spaced labels, and pills for ordinary information.
 
 Blue indicates action or selection. Success, caution, and errors have meaningful text as well as color. Preserve negative, zero, unknown, stale, and unavailable states. Essential information must not depend on an unexplained icon, clipped text, color, or hover alone.
 
@@ -29,4 +27,4 @@ Compare representative before/after states at the same viewport and with the sam
 
 Confirm the important result and action are easier to find without losing meaning or adding routine task steps. Word counts and pixel measurements support the review; they do not establish usability by themselves.
 
-Copy assets into each adopting repository and update its existing design note with the version and adaptations. Keep data contracts, calculations, permissions, persistence, and game rules intact. Preserve existing work, owner state, evidence, and frozen candidates. Template verification, app verification, owner acceptance, and release approval are separate records.
+Keep design guidance consistent with the implementation. Preserve data contracts, calculations, permissions, persistence and game rules.

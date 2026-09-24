@@ -6,7 +6,7 @@ From the repository root, run:
 python3 encounter/scripts/build_mac.py --output artifacts/my-personal-mac-build
 ```
 
-The output directory must not already exist. The script copies the active `encounter/` source (including uncommitted assets), imports it in a temporary project, then uses **Personal Mac** from `encounter/export_presets.cfg`. It does not run the game or access saves. It requires `/Applications/Godot.app` version **4.6.2.stable.official.71f334935** and matching `4.6.2.stable/macos.zip` export templates under the local Godot application-support directory. B9 used Python 3, macOS `ditto`, and Godot’s built-in ad-hoc signing; no identity credentials or notarization service are needed.
+The output directory must not already exist. The script copies the active `encounter/` source (including uncommitted assets), imports it in a temporary project, then uses **Personal Mac** from `encounter/export_presets.cfg`. It does not run the game or access saves. It requires `/Applications/Godot.app` version **4.6.2.stable.official.71f334935** and matching `4.6.2.stable/macos.zip` export templates under the local Godot application-support directory. The build uses Python 3, macOS `ditto`, and Godot’s built-in ad-hoc signing; no identity credentials or notarization service are needed.
 
 Outputs: launchable universal app, ZIP, full source snapshot and SHA-256 manifest, engine/template hashes, bundle-file hashes, import/export logs and `identity.json`. The ZIP hash identifies a particular export; ZIP timestamps/signing mean repeated exports need not have identical hashes. Archive each tested artifact instead of overwriting it.
 
