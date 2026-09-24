@@ -1,6 +1,6 @@
 # Current sources of truth
 
-September 23 maintenance source: `/Users/michaelfuscoletti/.codex/worktrees/abend-handling/game-sim`, HEAD `8b84f8f621af0613b08fbb9051ee6aec0548d51c` plus the preceding error-handling/security work and this uncommitted pass. The original checkout and frozen B9 app remain unchanged; B10 review continues on that app. Source checks are not replacement-artifact qualification or owner acceptance.
+This maps the authoritative modules in the current source checkout. The frozen personal Mac app remains separate; see its [delivery identity](../03-production/b9-delivery.md) and [owner-review record](../03-production/b10-owner-review.md). Source checks do not qualify a replacement artifact or supply owner acceptance.
 
 ## Domain ownership
 
@@ -77,13 +77,13 @@ Known callers: documented default command and balance evaluation via its helpers
 | `demo_price`, pricing mode parser and `Compare Pricing.command` | Only the retired launcher, historical R3 documentation and the prior security test called the mode. It set legacy low/reference/high values; its reference was $21.99 versus current Curb reference $20.00. No current validator selected it. | **Delete.** Remove the launcher, variable, setup and supported option. A development `--pricing-demo=…` now returns a specific error and exits 2 before play. The personal-feature boundary continues to ignore development flags. Ordinary labels and pending-label tests remain. |
 | Assortment comparison and `--capture` | `Compare Assortments.command` and `capture_full_shift.py` remain explicit retained review workflows; main supplies their adapters. | **Keep with rationale.** They execute state commands with separate development checkpoint paths; their staged histories/prices are diagnostic inputs, not alternative catalog rules. Their historical results are not current week qualification. No capture run performed here. |
 | Historical `game/`, root shell scripts, sample projects and old slice tests | These have separate historical entry points and retained evidence/assets. The current README and validator exclude them. | **Preserve/defer risky removal.** They are not current setup/build/test commands. Do not erase historical evidence or native sources as a cleanup shortcut. A later archival pass can relocate executable historical tools after identifying retained reproduction requirements. |
-| Old B10-next/no-export text in active guides | Contradicted current Desktop tracker, B10 record and existing personal export preset. | **Correct.** Current index/setup describe B10 in progress and separate maintenance source. Dated delivery/evidence records remain unchanged. |
+| Export and owner-review status | Personal export exists; owner review remains pending on its frozen artifact. | Keep current setup separate from artifact-specific delivery and review records. |
 
 The persistence loader's `incompatible` stage is the UI-facing classification for wrong schema/ruleset. Other read/parse/integrity failures remain safe failures with originals retained. The menu no longer owns a second acceptance policy. Existing bounded reads, locator recovery, exactly-once business checks and release-mode isolation remain intact.
 
 ## Supported paths and retained limits
 
-Run the encounter through its launcher, or validate through `python3 encounter/scripts/validate.py`. The current state/content is schema 10 / B6 rules, with later presentation improvements. New ordinary product prices remain player choices; no automatic economic rebalance occurred.
+Run the encounter through its launcher, or validate through `python3 encounter/scripts/validate.py`. The current state/content is schema 10 / `b6-retail-1` rules, with later presentation improvements. New ordinary product prices remain player choices; no automatic economic rebalance occurred.
 
 `--pricing-demo` is unsupported. Do not use a historical delivery's comparison instructions as current setup. Current optional development modes are assortment comparison (`stocked`/`missing`) and capture. Personal packaging is a separate explicitly authorized workflow; this pass does not run it. Development and personal save directories must remain distinct.
 

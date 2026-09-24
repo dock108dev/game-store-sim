@@ -2,11 +2,11 @@
 
 Replay Junction is an illustrated Godot game about the first week running a mall game shop: stock and price games, hire staff, buy used copies, expand displays and pay bills across seven days.
 
-**B1–B9 are technically complete. B10 owner review is in progress on the frozen B9 app; beta acceptance is pending.** Current `main` includes error-handling, security, SSOT and CI changes that are not in that app. [Master plan and source identity](docs/MASTER_PLAN.md).
+A personal Mac build has completed its recorded technical checks; owner review is in progress and beta acceptance is pending. Current source includes maintenance changes that are not in that frozen app. See the [delivered build identity](docs/03-production/b9-delivery.md) and [owner-review record](docs/03-production/b10-owner-review.md).
 
 ## Play or develop
 
-The local [personal Mac app identified in B9](docs/03-production/b9-delivery.md) uses its own save namespace. See the [owner guide](encounter/MAC-OWNER-GUIDE.md) and [build instructions](encounter/MAC-BUILD.md). The app is a local artifact, not included in a fresh clone. The prepared owner guide describes B9 at delivery; the [B10 record](docs/03-production/b10-owner-review.md) owns current review status.
+The local [personal Mac app](docs/03-production/b9-delivery.md) uses its own save namespace. See the [prepared owner guide](encounter/MAC-OWNER-GUIDE.md) and [build instructions](encounter/MAC-BUILD.md). The app is a local artifact, not included in a fresh clone. The prepared guide describes the delivered build; the [owner-review record](docs/03-production/b10-owner-review.md) holds current review status.
 
 For development, use Godot 4.6.2 Standard at `/Applications/Godot.app` and run from the repository root:
 

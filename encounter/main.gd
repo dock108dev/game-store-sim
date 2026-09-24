@@ -1053,7 +1053,7 @@ func clear_segment(actor,to: Vector2) -> bool:
   if not Layout.walkable(state.data.layout,actor.position.lerp(to,float(n)/steps)):return false
  return true
 
-# B7: presentation/session state is deliberately not part of schema 10.
+# Presentation/session state is deliberately not part of schema 10.
 static func development_options(args: PackedStringArray, personal: bool) -> Dictionary:
  var options={"assortment":"","capture":false,"error":""}
  # The personal export never consumes fixture/capture switches, even on debug builds.

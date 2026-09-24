@@ -1,5 +1,5 @@
 extends RefCounted
-# B6 authored first-week content. Materialize once at Open; no random demand.
+# Authored first-week content. Materialize once at Open; no random demand.
 const PRODUCTS=["curb","tide","orbit","signal","rally"]
 const CATALOG={
  "curb":{"name":"Curb Circuit 02","cost":800,"reference":2000,"release":1,"art":"case"},

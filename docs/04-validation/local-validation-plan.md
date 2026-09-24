@@ -1,8 +1,8 @@
-# Local validation — B6 and retained baselines
+# Local validation and retained baselines
 
 ## Current source validation
 
-The maintenance source and frozen B9 app are distinct candidates. Use the repository-root commands in [local development](../02-technical/local-development.md); [CI readiness](ci-readiness.md) records the latest basic source run and the unverified hosted boundary.
+The maintenance source and frozen personal Mac app are distinct candidates. Use the repository-root commands in [local development](../02-technical/local-development.md); [CI readiness](ci-readiness.md) records the latest basic source run and the unverified hosted boundary.
 
 | Command | Selection and prerequisites |
 | --- | --- |
@@ -14,9 +14,9 @@ The maintenance source and frozen B9 app are distinct candidates. Use the reposi
 
 All engine validation uses a disposable project and synthetic save namespace, with Dummy audio. `--engine` supplies an explicit executable; `--output` requires a new evidence directory. Do not run every historical `test_*.gd` as a current matrix. Counts and source hashes belong to each retained run, not automatically to later edits. No application checks were rerun for this documentation-only accuracy pass.
 
-## Frozen B9 package evidence
+## Frozen personal Mac package evidence
 
-[B9 delivery](../03-production/b9-delivery.md) binds historical source/package results to the exact app under [B10 review](../03-production/b10-owner-review.md). Separate instrumented release exports and ordinary delivered-app checks establish only their recorded scope, including real audio-device startup and native exit/recovery behavior. See [Mac build and testing](../../encounter/MAC-BUILD.md). Those results do not qualify the changed maintenance source. The prepared owner guide reflects B9 delivery-time status; the B10 record owns current session and acceptance status. No engineering result supplies owner acceptance.
+[Package delivery](../03-production/b9-delivery.md) binds historical source/package results to the exact app under [owner review](../03-production/b10-owner-review.md). Separate instrumented release exports and ordinary delivered-app checks establish only their recorded scope, including real audio-device startup and native exit/recovery behavior. See [Mac build and testing](../../encounter/MAC-BUILD.md). Those results do not qualify changed source. The prepared owner guide reflects delivery-time status; the owner-review record owns session and acceptance status.
 
 ## Retained earlier source results
 

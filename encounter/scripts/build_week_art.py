@@ -1,4 +1,4 @@
-"""B6 editable vector masters. Original Krita masters/exports are never modified.
+"""First-week editable vector masters. Original Krita masters/exports are never modified.
 Render the SVGs with Sharp (the bundled image runtime) to produce PNG exports.
 """
 from pathlib import Path

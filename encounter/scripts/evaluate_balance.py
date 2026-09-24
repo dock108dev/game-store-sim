@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Isolated B8 policy screening / ordinary-control scene evidence; never owner data."""
+"""Isolated balance-policy screening / ordinary-control scene evidence; never owner data."""
 import argparse,datetime,json,shutil
 from pathlib import Path
 import validate

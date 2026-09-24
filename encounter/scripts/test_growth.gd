@@ -55,7 +55,7 @@ func _initialize():
  check("move rack to obstruct future bay",blocked.commit_fixture(cmd(blocked,"move",[440,310],"rack-0001","blocking")).ok)
  rejected(blocked,cmd(blocked),"entire expanded layout checks blocked port without charge")
  check("rearrange then expand with rack2",blocked.commit_fixture(cmd(blocked,"move",[440,330],"rack-0001","unblock")).ok and blocked.commit_fixture(cmd(blocked,"buy",[400,430],"rack-0001","rack2")).ok and blocked.commit_fixture(cmd(blocked)).ok and blocked.capacity()==12 and blocked.valid())
- # Actual B3 surviving run: $10 labels, three shoppers/day; buy growth, replenish overnight.
+ # Historical growth-only surviving run: $10 labels, three shoppers/day; buy growth, replenish overnight.
  var survivor=State.new();survivor.receive();survivor.commit_fixture(cmd(survivor,"buy",[400,430],"rack-0001","rack2"))
  for day in range(1,8):
   if day==5:check("surviving route buys expansion",survivor.commit_fixture(cmd(survivor)).ok)
@@ -124,7 +124,7 @@ func _initialize():
  wage.open();finish(wage)
  check("employment sorted wage settlement",wage.valid() and wage.data.cash==52600 and wage.data.events[0].reference=="jules" and wage.data.events[1].reference=="morgan")
  wage=rt(wage,"synthetic-wages")
- # Synthetic B4 inability pays wages by staff ID, then leaves all remaining bills due.
+ # Synthetic inability pays wages by staff ID, then leaves all remaining bills due.
  var wage_failure=State.new();wage_failure.receive()
  for day in range(1,7):
   wage_failure.open();finish(wage_failure)

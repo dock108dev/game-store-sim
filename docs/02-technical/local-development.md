@@ -58,38 +58,38 @@ python3 encounter/scripts/validate.py --render
 python3 encounter/scripts/validate.py --render --capture
 ```
 
-`--render` adds normal and Retina full-week/breadth scene runs, screenshots and interaction videos; it requires a graphical session and `ffmpeg`. `--capture` selects the same B6 rendered scenarios. Tests use `--audio-driver Dummy`: muted checks do not qualify sound. Full-week controls use viewport input plus ordinary field/dropdown signals and paused save/resume boundaries. The separate breadth scenario explicitly records its empty-day state setup. Neither is owner play, B8 balance exploration or B10 acceptance.
+`--render` adds normal and Retina full-week/breadth scene runs, screenshots and interaction videos; it requires a graphical session and `ffmpeg`. `--capture` selects the same first-week rendered scenarios. Tests use `--audio-driver Dummy`: muted checks do not qualify sound. Full-week controls use viewport input plus ordinary field/dropdown signals and paused save/resume boundaries. The separate breadth scenario explicitly records its empty-day state setup. Neither establishes owner play, balance evaluation or beta acceptance.
 
-`capture_full_shift.py` is a separate historical capture tool: it copies Godot into a temporary app, changes its bundle metadata and runs ad-hoc `codesign`, then uses `ffmpeg` and `ffprobe`. It now uses the same fail-closed `isolate_project` helper as the validator; its signed-app capture path was not run for B6. It is not a basic test or setup requirement; do not invoke it as a routine docs check. Root `scripts/validate_local.sh` and `scripts/export_macos.sh` target the historical `game/` project; follow the [disposable baseline procedure](../04-validation/local-validation-plan.md) for any intentional reproduction.
+`capture_full_shift.py` is a separate historical capture tool: it copies Godot into a temporary app, changes its bundle metadata and runs ad-hoc `codesign`, then uses `ffmpeg` and `ffprobe`. It now uses the same fail-closed `isolate_project` helper as the validator; its signed-app capture path was not part of the retained first-week qualification. It is not a basic test or setup requirement; do not invoke it as a routine docs check. Root `scripts/validate_local.sh` and `scripts/export_macos.sh` target the historical `game/` project; follow the [disposable baseline procedure](../04-validation/local-validation-plan.md) for any intentional reproduction.
 
 ## Artwork and operations
 
 `encounter/source/` holds editable Krita masters; `art/` holds runtime exports, rigs and import sidecars. The rebuild launchers require `/Applications/krita.app/Contents/MacOS/kritarunner`, with Krita's Python/PyQt5 modules. They install a runner module under `~/Library/Application Support/kritarunner/pykrita` and overwrite their named masters, exports and roundtrip evidence. `Rebuild Assortment Art.command` targets Tide/Orbit; `Rebuild Art.command` targets the original case/fixtures and reads the retained retail-v4 shelf master. Preserve existing sources/evidence before intentional rebuild work. These are not plain system-Python scripts.
 
-There is no deployed server, scheduled task, account integration or operational service to start/stop. Quit the Godot window to stop local play; explicitly save first if the checkpoint is wanted. The current personal export is documented in the B9 section below. Public distribution and power-loss recovery remain unqualified.
+There is no deployed server, scheduled task, account integration or operational service to start/stop. Quit the Godot window to stop local play; explicitly save first if the checkpoint is wanted. The current personal export is documented in the personal Mac delivery section below. Public distribution and power-loss recovery remain unqualified.
 
 
-## Gameplay and retained slice tests
+## Gameplay and retained tests
 
 Employee controls, used trading and daily reports are documented in the [player guide](../../encounter/README.md). State ownership and physical job rules are documented in [architecture](encounter-architecture.md); this setup guide does not duplicate those rules.
 
-B5's state/scene suites and evidence remain historical. B6 replaces their interim content assertions with `test_week.gd`, `test_week_regressions.gd`, `test_week_scene.gd` and `test_breadth_scene.gd`, retaining pending-price verification. Consult [B6 delivery](../03-production/b6-delivery.md) for the selected current checks, failure investigations and exact evidence.
+Earlier state/scene suites and their evidence remain historical. Current first-week coverage uses `test_week.gd`, `test_week_regressions.gd`, `test_week_scene.gd` and `test_breadth_scene.gd`, retaining pending-price verification. Consult the [delivery record](../03-production/b6-delivery.md) for original failure investigations and exact evidence, and the current validator for the selected checks.
 
-## B7 session verification
+## Session verification
 
-The isolated validator includes presentation recovery at normal/Retina sizes, guarded reload, save retry, mid-day process quit/relaunch and terminal restart probes in addition to the current B6 suites. It never launches against the owner namespace. `active-week.txt` is a presentation locator for separately created `week-*.json` files, not a schema change. See [B7 delivery](../03-production/b7-delivery.md).
+The isolated validator includes presentation recovery at normal/Retina sizes, guarded reload, save retry, mid-day process quit/relaunch and terminal restart probes in addition to the current first-week suites. It never launches against the owner namespace. `active-week.txt` is a presentation locator for separately created `week-*.json` files, not a schema change. See [Player-flow delivery record](../03-production/b7-delivery.md).
 
-### B8 isolated balance evaluation
+### Isolated balance evaluation
 
-`python3 encounter/scripts/evaluate_balance.py --screen` screens eight policies. `--strategy lean --mode normal --pace` demonstrates a complete manual week with normal-speed days 1 and 6; `--strategy recovery --mode retina` demonstrates the pricing setback and surviving finish. Supported scene strategies also include `growth`, `one_worker` and `bankruptcy`. Each run retains exact source/parameters, unique copied-project namespace, logs, snapshots, action/queue telemetry and screenshots; pacing runs encode timestamped sampled clips. See [B8 delivery](../03-production/b8-delivery.md) for the final evidence and failed attempt. No runtime parameters changed. The controller's ordinary keyboard aisle correction is explicit; it is not an automatic navigation repair. That B8 record predates B9 package qualification; current B10 owner judgment remains pending.
+`python3 encounter/scripts/evaluate_balance.py --screen` screens eight policies. `--strategy lean --mode normal --pace` demonstrates a complete manual week with normal-speed days 1 and 6; `--strategy recovery --mode retina` demonstrates the pricing setback and surviving finish. Supported scene strategies also include `growth`, `one_worker` and `bankruptcy`. Each run retains exact source/parameters, unique copied-project namespace, logs, snapshots, action/queue telemetry and screenshots; pacing runs encode timestamped sampled clips. See [Balance evaluation record](../03-production/b8-delivery.md) for the final evidence and failed attempt. No runtime parameters changed. The controller's ordinary keyboard aisle correction is explicit; it is not an automatic navigation repair. That record predates package qualification; owner judgment remains pending.
 
-## B9 personal Mac delivery
+## Personal Mac delivery
 
-The encounter-specific [export preset](../../encounter/export_presets.cfg) and [build instructions](../../encounter/MAC-BUILD.md) produce the local personal app. Feature `personal_beta` overrides only the app name and save namespace to `game-sim-personal-beta-v10`; development remains v10 in its own namespace. No schema or business migration occurs. B9’s [delivery](../03-production/b9-delivery.md) distinguishes the frozen release app, source launches and instrumented package probes, including actual local security/audio behavior.
+The encounter-specific [export preset](../../encounter/export_presets.cfg) and [build instructions](../../encounter/MAC-BUILD.md) produce the local personal app. Feature `personal_beta` overrides only the app name and save namespace to `game-sim-personal-beta-v10`; development remains v10 in its own namespace. No schema or business migration occurs. The [delivery record](../03-production/b9-delivery.md) distinguishes the frozen release app, source launches and instrumented package probes, including actual local security/audio behavior.
 
 ## September 23 error-handling maintenance
 
-See [error handling and recovery](error-handling.md) for storage diagnostics, locator partial-success behavior, timeout/interruption records and focused source validation. The default validator now includes `test_storage.gd`; its expected failure diagnostics are checked by assertions. This separate source checkout does not replace the B9 app in the ongoing B10 review.
+See [error handling and recovery](error-handling.md) for storage diagnostics, locator partial-success behavior, timeout/interruption records and focused source validation. The default validator now includes `test_storage.gd`; its expected failure diagnostics are checked by assertions. This separate source checkout does not replace the frozen app in the ongoing owner review.
 
 ## Security boundaries
 

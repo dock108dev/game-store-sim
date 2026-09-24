@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently reconcile retained B8 cents and summarize observed workload."""
+"""Independently reconcile retained balance-evaluation cents and summarize observed workload."""
 from pathlib import Path
 import collections,hashlib,json
 root=Path(__file__).resolve().parents[1];base=root/'evidence/b8-20260923'

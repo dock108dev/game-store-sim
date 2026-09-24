@@ -115,7 +115,7 @@ func _initialize():
   check("no open orders",not s.order(counts(1),day))
   finish(s);check("no report orders",not s.order(counts(1),day))
   if day<7:s.advance(day)
- # B2 geometry, copy/slot and atomic layout regressions.
+ # Layout geometry, copy/slot and atomic layout regressions.
  s=State.new();s.receive();var before=s.data.duplicate(true)
  check("invalid layout no payment",not s.commit_fixture(cmd(s,"buy",[690,470])).ok and s.data==before)
  var buy=cmd(s);check("rack request idempotent",s.commit_fixture(buy).ok and s.commit_fixture(buy).ok and s.data.cash==49000 and s.capacity()==8)
@@ -125,7 +125,7 @@ func _initialize():
  for id in s.buyer_ids():s.arrive(id)
  check("oldest rack waits for free browse port",s.data.customers.values().filter(func(c):return c.state=="arriving").size()==2 and s.data.customers[s.buyer_ids()[2]].state=="waiting")
  finish(s)
- # B5 exact accepted terms / bounds / payment rejection / immutable provenance.
+ # Seller exact accepted terms / bounds / payment rejection / immutable provenance.
  for day in range(2,8):
   s=State.new();day_to(s,day);s.open();var row=intake(s);var terms=State.Used.terms(s,day)
   check("authored terms "+str(day),row.asking==[1100,600,1400,800,800,672][day-2] and row.floor==[800,400,1000,500,600,480][day-2])

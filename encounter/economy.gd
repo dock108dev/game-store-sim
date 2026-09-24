@@ -91,7 +91,7 @@ static func valid(d: Dictionary) -> bool:
   if before.phase in ["week_complete","bankrupt"]:
    if day!=d.day or before.phase!=d.phase or not equivalent(before.terminal,d.terminal) or row.end_seq!=d.events.size():return false
   elif day==d.day and (d.phase!="report" or d.terminal!=null):return false
-  # B6 closes are final: all supplier purchases precede opening.
+  # Daily closes are final: all supplier purchases precede opening.
   for e in d.events.slice(int(row.end_seq)):
    if e.day==day:return false
   prior_end=int(row.end_seq)

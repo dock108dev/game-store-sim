@@ -1,6 +1,6 @@
 # Encounter architecture and state
 
-This describes the active B6 business rules with B7–B9 presentation and the separate September 23 maintenance source in `encounter/`. The older [architecture](architecture.md) and [data model](data-model.md) are retained historical proposals, not the encounter's module layout or save schema. See [local development](local-development.md) for setup and configuration, and the [player guide](../../encounter/README.md) for product rules and controls.
+This describes the current first-week business rules, presentation and maintenance source in `encounter/`. The older [architecture](architecture.md) and [data model](data-model.md) are retained historical proposals, not the encounter's module layout or save schema. See [local development](local-development.md) for setup and configuration, and the [player guide](../../encounter/README.md) for product rules and controls.
 
 ## Runtime map
 
@@ -17,7 +17,7 @@ This describes the active B6 business rules with B7–B9 presentation and the se
 | `encounter/actor.gd` | Builds and animates the illustrated rigs from `art/rig.json` and textures. |
 | `encounter/scripts/validate.py` | Import-safe entry point with separate project isolation, source manifest, process/log checks and optional capture helpers. |
 | `encounter/scripts/test_validation_runner.py` | Standard-library tests for isolated saves and engine failure detection. |
-| `encounter/scripts/test_week.gd`, `test_week_regressions.gd` | Current business-state and shared-invariant checks under B6 content rules. |
+| `encounter/scripts/test_week.gd`, `test_week_regressions.gd` | Current business-state and shared-invariant checks under the first-week content rules. |
 | `encounter/scripts/test_week_scene.gd`, `test_breadth_scene.gd` | Larger optional validation selection; ordinary controls, full-week and breadth scenarios. |
 | `encounter/scripts/test_price_request.gd` | Captures product and cents when a label action is requested, before Rowan finishes walking. |
 
@@ -52,7 +52,7 @@ Closing cancels waiting visitors and permits admitted transactions. `finalize()`
 
 | Directory | Status |
 | --- | --- |
-| `encounter/` | Active B6 runtime, editable Krita sources, exports, local validators and retained evidence. |
+| `encounter/` | Active encounter runtime, editable Krita sources, exports, local validators and retained evidence. |
 | `samples/b-retail-v4/`, `samples/b-motion/` | Retained art/motion samples and their own Godot projects/tools; not the active retail state. |
 | `game/`, root `scripts/` | Historical first-person engine proof, its validator and macOS export preset. These do not build/test the active encounter. |
 | `assets/blender/` | Retained source/export/review assets from the earlier workflow. |
@@ -60,24 +60,24 @@ Closing cancels waiting visitors and permits admitted transactions. `finalize()`
 | `real_inspiration/`, `other_game_inspiration/` | Reference material, not runtime integration. |
 | `artifacts/`, `encounter/evidence/` | Generated or retained validation material. Historical success applies to its recorded candidate only. |
 
-Older encounter tests (`test_state`, `test_days`, `test_pricing`, `test_wave`, `test_encounter` and older scene variants) remain as slice history; the current validator selects `test_week`, `test_week_regressions`, pending-price, `test_week_scene` and `test_breadth_scene`; the B6 suites preserve relevant layout, growth, staff and used invariants under the new content contract. Do not run every `test_*.gd` as a current test matrix. No removal is required to preserve this boundary.
+Older encounter tests (`test_state`, `test_days`, `test_pricing`, `test_wave`, `test_encounter` and older scene variants) remain as historical coverage; the current validator selects `test_week`, `test_week_regressions`, pending-price, `test_week_scene` and `test_breadth_scene`; the first-week suites preserve relevant layout, growth, staff and used invariants under the new content contract. Do not run every `test_*.gd` as a current test matrix. No removal is required to preserve this boundary.
 
 ## Limits and follow-up decisions
 
-B3 retains three products/reference prices and three visitors, with four/eight/twelve capacity. It adds six prepaid copies, a 64-copy backroom/inbound limit, $100 expansion from day 5 and rent/terminal progression. [B3 delivery](../03-production/b3-delivery.md) records the intermediate ruleset and evidence. B4 connects employment and dismissal/open commitments to `commit_wage(staff_id, amount=1200)`, extends drain to execution claims and retains exactly-once events. B5 now adds used trading. B6 now replaces the interim references, roster, seller timing and supplier ordering; see [B6 delivery](../03-production/b6-delivery.md). Historical motion and scripted exit-warning limits remain. B9 separately qualified personal packaging/audio startup; complete-week owner acceptance remains pending.
+The active runtime uses the five-title catalog and seven-day rosters described above, together with shared layout, growth, employment and used-trading rules. Intermediate content and verification are retained in [production records](../03-production/b6-delivery.md). The [personal Mac delivery](../03-production/b9-delivery.md) separately records packaging and audio-backend startup; sound content is absent and complete-week owner acceptance remains pending.
 
-Maintenance decision (2026-09-16): keep the state rules and schema validation together in `state.gd`; preserve the scene and its comparison/capture adapters in `main.gd` during this tooling pass. Extracting them would change the pending review runtime without a demonstrated need for this cleanup. Historical slice tests and art/capture tools are retained evidence workflows, not unused experiments to delete. No size-only split is warranted.
+Keep business-state rules and schema validation together in `state.gd`, and keep physical movement and scene presentation in `main.gd`. Historical tests and art/capture tools are retained evidence workflows. Extraction should address a demonstrated maintenance problem, not file size alone.
 
 
-## B4 employees
+## Employees
 
 Morgan and Jules are available from day-3 preparation via **Employees**. Confirm **Hire · $12 today**, then choose Unassigned, Stocking or Checkout. Hiring owes that day's $12 even if dismissed immediately. Existing staff owe a new day's wage when Open is confirmed; dismiss during preparation before opening to avoid it. Reassignment and idle time never cancel an existing commitment. Opening with unassigned staff displays a warning.
 
 Stocking uses one priced backroom copy and a free shelf slot in prep/open. Workers walk through receiving and then the rack before committing. Checkout claims the settled FIFO head and cashier, then walks/reaches before selling. Keep aisles and work ports clear; Rowan blocks workers just as other bodies do. **Stock** keeps player stocking available while open. **Employees → Take over** transfers unfinished work to Rowan, who must travel normally. A completed sale cannot be reversed.
 
-Arrangement pauses workers and releases unfinished jobs. Closing releases unfinished stock jobs and starts no new ones; checkout staff keep draining. Reload preserves employment, wage commitments, inventory and buyer reservations, cancels saved unfinished execution claims and rebuilds routes from legal separated spawns. Finances and Daily closes include actual wages, paid overhead and full unpaid wage/rent liabilities. Technical evidence, source identity and limitations are in [B4 delivery](../03-production/b4-delivery.md).
+Arrangement pauses workers and releases unfinished jobs. Closing releases unfinished stock jobs and starts no new ones; checkout staff keep draining. Reload preserves employment, wage commitments, inventory and buyer reservations, cancels saved unfinished execution claims and rebuilds routes from legal separated spawns. Finances and Daily closes include actual wages, paid overhead and full unpaid wage/rent liabilities. Technical evidence, source identity and limitations are in [Employment delivery record](../03-production/b4-delivery.md).
 
-## B5 used business
+## Used business
 
 `used.gd` defines final authored seller terms, bounded negotiation, purchase preflight/commit and independent reconstruction of used acquisition provenance. `state.gd` delegates these transitions and retains shared inventory, claims, buyer reservations and sales. `main.gd` supplies visible seller entry/intake/exit, physical Rowan inspection and offer/payment/copy dialogs. `layout.gd` protects seller intake (850,420) and Rowan inspection (810,420), distinct from buyer/cashier ports; all actors share dynamic clearance.
 
@@ -85,17 +85,17 @@ Persisted `sellers` retain day/ID, product, condition, reference/ask/floor, offe
 
 Product-wide labels affect new copies only. `price_copy` captures exact copy state and rejects reserved, claimed, sold, stale or not-yet-eligible copies; ordinary labeling travels through receiving. Condition factors (good 80%, fair 60%, worn 40%) affect suggested resale and generic seller terms. Five authored sellers override ask/floor; worn day-7 Rally uses generic terms. Buyer budgets stay based on NEW references regardless of selected condition. First title occurrences accept only new; repeats accept used. Stable acquisition order uses event sequence ×100 plus within-shipment index (starter sequences 1–6), then copy ID. Historical costs never change with references or labels. Buyer IDs in jobs validate against their own day/run roster. No shopper negotiation is added.
 
-`Economy.summary` treats supplier and used purchases as cash inventory spending and inventory-at-cost additions. Only sold copies contribute their actual immutable cost to cost of sales/margin. Purchase, wage and rent events remain separate. Closing cancels every unpaid trade, drains visible sellers and admitted buyers, preserves paid purchases, then permits existing staff/bill settlement. See [B5 delivery](../03-production/b5-delivery.md) for exact evidence, intermediate rules and B6 handoff.
+`Economy.summary` treats supplier and used purchases as cash inventory spending and inventory-at-cost additions. Only sold copies contribute their actual immutable cost to cost of sales/margin. Purchase, wage and rent events remain separate. Closing cancels every unpaid trade, drains visible sellers and admitted buyers, preserves paid purchases, then permits existing staff/bill settlement. See [Used-business delivery record](../03-production/b5-delivery.md) for exact evidence, intermediate rules and later content handoff.
 
 
-## B6 arrival and artwork integration
+## Arrival and artwork integration
 
-Eight scene actor slots are rekeyed by run/day/ordinal on advance/reload; at most three buyers are visible/admitted. Worker and seller bodies are separate. All movement preserves shared clearance and requires actual station arrival to commit work. Automatic player/worker travel yields to nearby queued/exiting buyers, preventing reciprocal route oscillation; grid waypoints are reached before advancing, avoiding unsafe corner shortcuts. Appearance overlays retain original rigs and motion limitations. Source SVG groups are editable separately for case/platform, illustration and title. See B6 delivery for current visual checks and limitations.
+Eight scene actor slots are rekeyed by run/day/ordinal on advance/reload; at most three buyers are visible/admitted. Worker and seller bodies are separate. All movement preserves shared clearance and requires actual station arrival to commit work. Automatic player/worker travel yields to nearby queued/exiting buyers, preventing reciprocal route oscillation; grid waypoints are reached before advancing, avoiding unsafe corner shortcuts. Appearance overlays retain original rigs and motion limitations. Source SVG groups are editable separately for case/platform, illustration and title. See the [first-week delivery record](../03-production/b6-delivery.md) for candidate-specific visual checks and limitations.
 
-## B9 packaging and traffic repair
+## Packaging and traffic movement
 
-[B9 delivery](../03-production/b9-delivery.md) adds an encounter-only Mac preset and personal export feature without changing schema-10 state or B6 economics. Development and personal save directories remain separate; there is no migration. The traffic yield predicate now checks whether a nearby queued/leaving shopper can actually take a collision-clear next step. A blocked shopper no longer freezes the player/worker that must vacate its route. Static geometry, body clearance and physical work/transaction checks remain. The daily panel names the existing `r.cost` value Sold-copy cost. Source and packaged checks, retained failure evidence and exact candidate hashes are in B9.
+The encounter-only Mac preset uses a personal export feature without changing schema-10 state or first-week economics. Development and personal save directories remain separate; there is no migration. The traffic yield predicate checks whether a nearby queued/leaving shopper can take a collision-clear next step. A blocked shopper cannot freeze the player/worker needed to vacate its route. Static geometry, body clearance and physical transaction checks remain. The daily panel labels `r.cost` as Sold-copy cost. [Package qualification](../03-production/b9-delivery.md) retains the source/package checks, original failure and exact candidate hashes.
 
 ## Current SSOT enforcement
 
-[SSOT ownership](ssot.md) records current domains/callers and the retired pricing mode. `State.SCHEMA_VERSION` and `State.RULESET_ID` own persistence identity; entry/reload probes now call `load_from` once and use its failure stage, instead of separately parsing and checking compatibility. Historical slice tests and review evidence remain preserved outside the selected current validation matrix. The dated September 16 decision above describes that tooling pass; this separately authorized pass removes only the obsolete pricing adapter and retains the used assortment/capture workflows.
+[SSOT ownership](ssot.md) records current domains and callers. `State.SCHEMA_VERSION` and `State.RULESET_ID` own persistence identity; entry/reload probes call `load_from` once and use its failure stage. Historical tests and review evidence remain outside the selected current validation matrix. The obsolete pricing adapter is removed; used-assortment and capture workflows remain.

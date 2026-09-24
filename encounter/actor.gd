@@ -70,7 +70,7 @@ func build_rig(view: String) -> void:
   sprite.centered = false
   sprite.position = -pivot
   node.add_child(sprite)
-  # B6 adds authored outfit/accessory variants to the retained illustrated rig.
+  # Authored outfit/accessory variants share the retained illustrated rig.
   if appearance>=3:
    if part=="torso":sprite.modulate=[Color("b594d8"),Color("75b9a0"),Color("dea266")][appearance-3]
    if part=="head":

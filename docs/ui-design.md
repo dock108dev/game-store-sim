@@ -20,9 +20,9 @@ Implementation: encounter/glass_ui.gd; encounter/main.gd.
 
 See [UI adoption verification](ui-verification.md). Source changes and technical/visual checks do not establish owner acceptance, a new release, live-data qualification, or acceptance of an older frozen candidate. Existing project-specific gates remain separate.
 
-## B7 adaptation
+## Player-flow adaptation
 
-B7 retains the local glass theme and illustrated originals. Bills and rack capacity now share stable header positions in base and expanded layouts; actor labels are above bodies with separation. Decorative labels/panels ignore input. Entry, recovery and help dialogs use the same theme and keyboard focus. Normal/Retina technical review is recorded in [B7 delivery](03-production/b7-delivery.md); it does not establish owner acceptance.
+The interface retains the local glass theme and illustrated originals. Bills and rack capacity now share stable header positions in base and expanded layouts; actor labels are above bodies with separation. Decorative labels/panels ignore input. Entry, recovery and help dialogs use the same theme and keyboard focus. Normal/Retina technical review is recorded in [Player-flow delivery record](03-production/b7-delivery.md); it does not establish owner acceptance.
 
 ## September 23 clarity pass
 

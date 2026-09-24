@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import and exercise an isolated B7 project, retaining evidence for each run."""
+"""Import and exercise an isolated encounter project, retaining evidence for each run."""
 
 import argparse
 import datetime

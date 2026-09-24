@@ -1,6 +1,6 @@
 # Error handling and recovery
 
-This describes the September 23 source maintenance checkout based on `8b84f8f621af0613b08fbb9051ee6aec0548d51c`. It is **not included in the frozen B9 app under B10 owner review**. The separate checkout is `/Users/michaelfuscoletti/.codex/worktrees/abend-handling/game-sim`. No schema, economy, owner save, artifact or acceptance status changed.
+This describes current source recovery behavior. It is **not included in the frozen personal Mac app under owner review**. See [package identity](../03-production/b9-delivery.md) and [owner-review status](../03-production/b10-owner-review.md). Source maintenance does not change that artifact, its saves or acceptance status.
 
 ## Runtime contract
 
@@ -48,4 +48,4 @@ Historical Blender tools still include an EEVEE-to-Workbench broad fallback and 
 | Terminal restart and malformed-save flow | 10 recorded checks passed |
 | Python validation wrapper | 5 tests passed, including timeout, interruption and launch-failure records |
 
-All six Godot processes exited zero with no engine/script errors or warnings. Storage-failure records are expected injected failures. Python syntax and whitespace checks passed. No rendered/Retina run, full-week scene suite, packaged app, real-audio, power-loss/disk-full hardware simulation or owner acceptance was performed. A future replacement app needs separate packaging qualification and an identified resumed owner review; the existing B10 candidate remains unchanged.
+All six Godot processes exited zero with no engine/script errors or warnings. Storage-failure records are expected injected failures. Python syntax and whitespace checks passed. No rendered/Retina run, full-week scene suite, packaged app, real-audio, power-loss/disk-full hardware simulation or owner acceptance was performed. A future replacement app needs separate packaging qualification and an identified resumed owner review; the existing owner-review candidate remains unchanged.

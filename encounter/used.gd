@@ -1,5 +1,5 @@
 extends RefCounted
-# B6 authored five-title seller roster. Integer cents; persisted history is authoritative.
+# Authored five-title seller roster. Integer cents; persisted history is authoritative.
 const GRADES={"good":80,"fair":60,"worn":40}
 const ROWS=[["curb","good"],["orbit","fair"],["tide","good"],["curb","fair"],["orbit","good"],["rally","worn"]]
 const DONE=["completed","refused","cancelled"]
